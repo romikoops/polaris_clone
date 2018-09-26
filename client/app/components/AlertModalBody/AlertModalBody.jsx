@@ -1,4 +1,5 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './AlertModalBody.scss'
 import { trim, ROW } from '../../classNames'
@@ -6,12 +7,13 @@ import { trim, ROW } from '../../classNames'
 const LOGO_BOX = 'https://assets.itsmycargo.com/assets/logos/logo_box.png'
 const CONTAINER = 'ALERT_MODAL_BODY layout row layout-align-center'
 
-export function AlertModalBody (props) {
+function AlertModalBody (props) {
   const {
     message,
     maxWidth,
     logo,
-    toggleAlertModal
+    toggleAlertModal,
+    t
   } = props
 
   const Icon = (
@@ -51,7 +53,7 @@ export function AlertModalBody (props) {
             <span style={{
               fontSize: '10px', marginRight: '2px'
             }}
-            >Powered by</span>
+            >{t('footer:poweredBy')}</span>
 
             <img
               src={LOGO_BOX}
@@ -66,7 +68,7 @@ export function AlertModalBody (props) {
               color: 'rgb(100, 100, 100)',
               fontSize: '14px'
             }}
-            >ItsMyCargo</span>
+            >{t('imc:imc')}</span>
           </div>
         </div>
       </div>
@@ -76,6 +78,7 @@ export function AlertModalBody (props) {
 
 AlertModalBody.propTypes = {
   logo: PropTypes.string.isRequired,
+  t: PropTypes.string.isRequired,
   maxWidth: PropTypes.string,
   message: PropTypes.string.isRequired,
   toggleAlertModal: PropTypes.func.isRequired
@@ -85,4 +88,4 @@ AlertModalBody.defaultProps = {
   maxWidth: null
 }
 
-export default AlertModalBody
+export default translate(['footer', 'imc'])(AlertModalBody)

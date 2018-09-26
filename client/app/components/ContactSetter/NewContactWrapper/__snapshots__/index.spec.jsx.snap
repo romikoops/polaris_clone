@@ -18,6 +18,7 @@ exports[`compName !== AddressBook 1`] = `
   >
     <ContactSetterNewContactWrapperTitle
       contactType="FOO"
+      t={[Function]}
     />
   </div>
   <div
@@ -53,6 +54,7 @@ exports[`contactType === notifyee && compName === ShipmentContactForm 1`] = `
   >
     <ContactSetterNewContactWrapperTitle
       contactType="notifyee"
+      t={[Function]}
     />
   </div>
   <div
@@ -79,6 +81,7 @@ exports[`shallow render 1`] = `
   >
     <ContactSetterNewContactWrapperTitle
       contactType="FOO"
+      t={[Function]}
     />
   </div>
   <div

@@ -1,4 +1,5 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import fetch from 'isomorphic-fetch'
 import Truncate from 'react-truncate'
 import { Promise } from 'es6-promise-promise'
@@ -96,7 +97,8 @@ class DocumentsMultiForm extends React.Component {
       tooltip,
       text,
       documents,
-      deleteFn
+      deleteFn,
+      t
     } = this.props
     const tooltipId = v4()
     const errorStyle = this.state.error ? styles.error : ''
@@ -122,6 +124,7 @@ class DocumentsMultiForm extends React.Component {
             <Truncate lines={1}>{d.text} </Truncate>
           </p>
         )
+
         return (
           <div className="flex-100 layout-row layout-align-start-center">
             {link}
@@ -135,6 +138,7 @@ class DocumentsMultiForm extends React.Component {
       })
       : []
     const heightVal = existingDocuments.length * 35 + 35
+
     return (
       <div className={`${styles.form} flex-100 layout-row layout-align-none-center layout-wrap`} style={{ height: `${heightVal}px` }}>
         <div className={`${styles.form_label} flex-40 layout-row layout-align-start-start`}>
@@ -143,7 +147,7 @@ class DocumentsMultiForm extends React.Component {
         <div className="flex-60 layout-row layout-align-center-center layout-wrap">
           {existingDocuments}
           <div className="flex-100 layout-row layout-align-start-center">
-            <p className="flex">Upload another file</p>
+            <p className="flex">{t('doc:uploadAnother')}</p>
             <div
               className={`flex-none layout-row layout-align-end-center ${
                 styles.upload_btn_wrapper
@@ -174,7 +178,7 @@ class DocumentsMultiForm extends React.Component {
         <div
           className={`${styles.file_error} ${errorStyle} flex-100 layout-row layout-align-center`}
         >
-          <p className="flex-100">Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed</p>
+          <p className="flex-100">{t('doc:restrictions')}</p>
         </div>
       </div>
     )
@@ -184,6 +188,7 @@ class DocumentsMultiForm extends React.Component {
 DocumentsMultiForm.propTypes = {
   url: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   dispatchFn: PropTypes.func,
   uploadFn: PropTypes.func,
@@ -203,4 +208,4 @@ DocumentsMultiForm.defaultProps = {
   deleteFn: null
 }
 
-export default DocumentsMultiForm
+export default translate('doc')(DocumentsMultiForm)

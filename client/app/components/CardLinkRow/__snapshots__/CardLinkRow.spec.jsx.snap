@@ -13,6 +13,7 @@ exports[`shallow render 1`] = `
     options={Object {}}
     path="FOO_URL1"
     selectedType="FOO_SELECTED_TYPE"
+    t={[Function]}
     text="FOO_NAME1"
     theme={
       Object {
@@ -32,6 +33,7 @@ exports[`shallow render 1`] = `
     options={Object {}}
     path="FOO_URL2"
     selectedType="FOO_SELECTED_TYPE"
+    t={[Function]}
     text="FOO_NAME2"
     theme={
       Object {

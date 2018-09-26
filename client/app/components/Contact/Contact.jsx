@@ -1,10 +1,14 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './Contact.scss'
 import { nameToDisplay } from '../../helpers'
 
-export default function Contact (props) {
-  const { contact, textStyle, contactType } = props
+function Contact (props) {
+  const {
+    contact, textStyle, contactType, t
+  } = props
+
   return (
     <div className="flex-45 layout-row">
       <div className="flex-10 layout-column layout-align-start-center">
@@ -23,7 +27,7 @@ export default function Contact (props) {
           </div>
           <div className="flex-100 layout-row layout-align-space-between-start layout-wrap">
             <p className={`${styles.contact_text} ${styles.address_buffer} flex-100 center`}>
-              Address
+              {t('common:address')}
             </p>
 
             <address className={` ${styles.address} flex-100 center`}>
@@ -44,6 +48,7 @@ export default function Contact (props) {
 
 Contact.propTypes = {
   contact: PropTypes.objectOf(PropTypes.any).isRequired,
+  t: PropTypes.func.isRequired,
   contactType: PropTypes.string.isRequired,
   textStyle: PropTypes.objectOf(PropTypes.string)
 }
@@ -51,3 +56,5 @@ Contact.propTypes = {
 Contact.defaultProps = {
   textStyle: {}
 }
+
+export default translate()(Contact)

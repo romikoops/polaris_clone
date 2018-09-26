@@ -7,9 +7,9 @@ import defaults from '../../styles/default_classes.scss'
 import styles from './BookingDetails.scss'
 // eslint-disable-next-line no-named-as-default
 import CargoDetails from '../CargoDetails/CargoDetails'
-import { ContactSetter } from '../ContactSetter/ContactSetter'
+import ContactSetter from '../ContactSetter/ContactSetter'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
+import RouteHubBox from '../RouteHubBox/RouteHubBox'
 import { isEmpty } from '../../helpers/objectTools'
 
 import {

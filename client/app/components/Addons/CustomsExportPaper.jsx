@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from '../CargoDetails/CargoDetails.scss'
-import { TextHeading } from '../TextHeading/TextHeading'
-import { Checkbox } from '../Checkbox/Checkbox'
+import TextHeading from '../TextHeading/TextHeading'
+import Checkbox from '../Checkbox/Checkbox'
 
 class CustomsExportPaper extends PureComponent {
   constructor (props) {
@@ -15,7 +16,7 @@ class CustomsExportPaper extends PureComponent {
     this.setState({ addonView: bool }, () => this.props.toggleCustomAddon('customs_export_paper'))
   }
   render () {
-    const { tenant, addon } = this.props
+    const { tenant, addon, t } = this.props
     const charge = addon.fees.total
     const { theme } = tenant.data
     const acceptedBox = (
@@ -28,22 +29,18 @@ class CustomsExportPaper extends PureComponent {
           <p className="flex-90">
             <strong>
               {' '}
-              When you ship goods from Germany the Customs Export Paper is required to pass through customs
+              {t('shipment:customsExportPaper:')}
             </strong>
           </p>
           <p className="flex-90">
-            {`
-              Küster Speedtrans Übersee Spedition GmbH will organise the ABD on your
-              behalf. Initially USD 75.00 will be added to your booking.
-              This includes 1 customs tariff number. For each more we will charge you
-              USD 12.50 per customs tariff number.`}
+            {t('shipment:kusterOne')}{t('shipment:kusterTwo')}{t('shipment:kusterThree')}
           </p>
         </div>
         <div
           className={` ${styles.prices} flex-20 layout-row layout-wrap layout-align-start-start`}
         >
           <div className={`${styles.customs_total} flex-100 layout-row  layout-align-end-center`}>
-            <p className="flex-none">Total</p>
+            <p className="flex-none">{t('common:total')}</p>
             <h6 className="flex-none center">
               {' '}
               {charge.currency} {Number(charge.value).toFixed(2)}
@@ -62,10 +59,10 @@ class CustomsExportPaper extends PureComponent {
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
           <p className="flex-100">
             <b>
-              {`A Customs Export Paper (ADB) is mandatory for all shipments when exporting from Germany. If you choose to secure your Customs Export Paper on your own, ${
+              {`${t('shipment:customsExportPaperTwo')} ${t('shipment:customsExportPaperThree')}${
                 tenant.data.name
               }
-              will need a copy of the Customs Export Paper.`}
+              ${t('shipment:customsExportPaperFour')}`}
             </b>
           </p>
         </div>
@@ -79,7 +76,7 @@ class CustomsExportPaper extends PureComponent {
         >
           <div className="flex-100 layout-row layout-align-space-between-start layout-wrap">
             <div className="flex-none layout-row layout-align-space-around-center">
-              <TextHeading theme={theme} size={2} text="Customs Export Paper" />
+              <TextHeading theme={theme} size={2} text={t('shipment:adb')} />
             </div>
 
             <div
@@ -88,7 +85,7 @@ class CustomsExportPaper extends PureComponent {
               <div className="flex-100 layout-row layout-align-end-center">
                 <div className="flex-90 layout-row layout-align-start-center">
                   <p className="flex-none" style={{ marginRight: '5px' }}>
-                    {`Yes, I want ${tenant.data.name} to secure my Customs Export Paper (ADB)`}
+                    {`${t('cargo:clearanceHead')} ${tenant.data.name} ${t('shipment:customsExportPaperFive')}`}
                   </p>
                 </div>
                 <div className="flex-10 layout-row layout-align-end-center">
@@ -102,7 +99,7 @@ class CustomsExportPaper extends PureComponent {
               <div className="flex-100 layout-row layout-align-end-center">
                 <div className="flex-90 layout-row layout-align-start-center">
                   <p className="flex-none" style={{ marginRight: '5px' }}>
-                    {`No, I do not want ${tenant.data.name} to secure my Customs Export Paper (ADB)`}
+                    {`${t('cargo:clearanceNoHead')} ${tenant.data.name} ${t('shipment:customsExportPaperFive')}`}
                   </p>
                 </div>
                 <div className="flex-10 layout-row layout-align-end-center">
@@ -127,6 +124,7 @@ class CustomsExportPaper extends PureComponent {
 
 CustomsExportPaper.propTypes = {
   tenant: PropTypes.tenant,
+  t: PropTypes.func.isRequired,
   addon: PropTypes.objectOf(PropTypes.any),
   toggleCustomAddon: PropTypes.func
 }
@@ -136,4 +134,4 @@ CustomsExportPaper.defaultProps = {
   toggleCustomAddon: false
 }
 
-export default CustomsExportPaper
+export default translate(['cargo', 'shipment'])(CustomsExportPaper)

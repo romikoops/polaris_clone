@@ -13,7 +13,7 @@ import {
 } from './'
 import { RoundButton } from '../../RoundButton/RoundButton'
 import { adminActions } from '../../../actions'
-import { TextHeading } from '../../TextHeading/TextHeading'
+import TextHeading from '../../TextHeading/TextHeading'
 // import {v4} from 'uuid';
 
 class AdminWizard extends Component {

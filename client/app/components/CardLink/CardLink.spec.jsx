@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { mount, shallow } from 'enzyme'
-import { CardLink } from './CardLink'
+// eslint-disable-next-line
+import CardLink from './CardLink'
 
 import { theme, identity } from '../../mocks'
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from '../../prop-types'
-import { CardLink } from '../CardLink/CardLink'
 import styles from './CardLinkRow.scss'
+import CardLink from '../CardLink/CardLink'
 
 export function CardLinkRow ({
   cards, handleClick, theme, selectedType, allowedCargoTypes
@@ -20,6 +20,7 @@ export function CardLinkRow ({
       options={card.options}
     />
   ))
+
   return (
     <div className={`${styles.card_link_row} layout-row flex-100 layout-align-space-around-center`}>
       {cardLinks}

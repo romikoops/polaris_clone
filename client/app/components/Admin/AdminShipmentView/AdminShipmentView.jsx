@@ -4,7 +4,7 @@ import { translate } from 'react-i18next'
 import { pick, uniqWith } from 'lodash'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
-import { CargoItemGroup } from '../../Cargo/Item/Group'
+import CargoItemGroup from '../../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../../Cargo/Item/Group/Aggregated'
 import PropTypes from '../../../prop-types'
 import { moment, documentTypes } from '../../../constants'
@@ -19,11 +19,11 @@ import {
   switchIcon,
   totalPrice
 } from '../../../helpers'
-import { CargoContainerGroup } from '../../Cargo/Container/Group'
+import CargoContainerGroup from '../../Cargo/Container/Group'
 import { AdminShipmentContent } from './AdminShipmentContent'
 import { ShipmentQuotationContent } from '../../UserAccount/ShipmentQuotationContent'
 
-export class AdminShipmentView extends Component {
+class AdminShipmentView extends Component {
   static sumCargoFees (cargos) {
     let total = 0.0
     let curr = ''
@@ -455,15 +455,15 @@ export class AdminShipmentView extends Component {
           wrapperClassName={`
           layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25
           ${adminStyles.header_margin_buffer} ${styles.status_box_requested}`}
-        gradient={gradientBorderStyle}
-        className="layout-row flex-100 layout-align-center-center"
-        content={(
-          <p className="layout-align-center-center layout-row"> {t('common:requested')} </p>
-        )}
-      />
-    ) : (
-      ''
-    )
+          gradient={gradientBorderStyle}
+          className="layout-row flex-100 layout-align-center-center"
+          content={(
+            <p className="layout-align-center-center layout-row"> {t('common:requested')} </p>
+          )}
+        />
+      ) : (
+        ''
+      )
 
     const statusInProcess = (shipment.status === 'confirmed') ? (
       <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box_process}`}>

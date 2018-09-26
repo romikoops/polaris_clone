@@ -507,6 +507,7 @@ exports[`shallow render 1`] = `
               }
             }
             size="full"
+            t={[Function]}
             target="quotations"
             theme={
               Object {

@@ -1,4 +1,5 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import fetch from 'isomorphic-fetch'
 import { Link } from 'react-router-dom'
 import Truncate from 'react-truncate'
@@ -36,14 +37,12 @@ class FileTile extends React.Component {
     this.handleDenialForm = this.handleDenialForm.bind(this)
   }
   onFormSubmit (e) {
-    e.preventDefault() // Stop form submit
+    e.preventDefault()
     this.fileUpload(this.state.file)
   }
   onChange (e) {
-    // this.setState({file: e.target.files[0]});
     this.fileUpload(e.target.files[0])
   }
-  // Delete the file
   deleteFile () {
     const { doc, deleteFn } = this.props
     deleteFn(doc.id)
@@ -73,6 +72,7 @@ class FileTile extends React.Component {
       this.uploaderInput.value = ''
     }
     const uploadUrl = getApiHost() + url
+
     return fetch(uploadUrl, requestOptions).then(FileTile.handleResponse)
   }
   handleDeny () {
@@ -97,7 +97,7 @@ class FileTile extends React.Component {
       this.uploaderInput.click()
     }
     const {
-      theme, type, doc, isAdmin
+      theme, type, doc, isAdmin, t
     } = this.props
     const { showDenialDetails, denial } = this.state
     const textStyle = {
@@ -135,7 +135,7 @@ class FileTile extends React.Component {
         >
           <div className="flex-100 layout-row layout-align-start-center">
             <h3 className="flex-none clip" style={textStyle}>
-              Reject document
+              {t('doc:reject')}
             </h3>
           </div>
           <div className={`flex-100 layout-row layout-align-start-center ${styles.input_box}`}>
@@ -151,7 +151,7 @@ class FileTile extends React.Component {
               <RoundButton
                 theme={theme}
                 size="small"
-                text="Deny"
+                text={t('common:deny')}
                 iconClass="fa-times"
                 handleNext={this.handleDeny}
               />
@@ -229,6 +229,7 @@ class FileTile extends React.Component {
       </div>
     )
     const bottomRow = isAdmin ? adminRow : userRow
+
     return (
       <div className={`flex-none layout-row layout-wrap layout-align-center-start ${styles.tile} `}>
         {showDenialDetails ? denyDetails : ''}
@@ -239,7 +240,7 @@ class FileTile extends React.Component {
                 styles.file_header
               }`}
             >
-              <p className="flex-100">Title</p>
+              <p className="flex-100">{t('common:title')}</p>
             </div>
             <div
               className={`flex-100 layout-row layout-wrap layout-align-center-start ${
@@ -257,7 +258,7 @@ class FileTile extends React.Component {
                 styles.file_header
               }`}
             >
-              <p className="flex-100">Type</p>
+              <p className="flex-100">{t('doc:type')}</p>
             </div>
             <div
               className={`flex-100 layout-row layout-wrap layout-align-center-start ${
@@ -273,7 +274,7 @@ class FileTile extends React.Component {
                 styles.file_header
               }`}
             >
-              <p className="flex-100">Uploaded</p>
+              <p className="flex-100">{t('doc:uploaded')}</p>
             </div>
             <div
               className={`flex-100 layout-row layout-wrap layout-align-center-start ${
@@ -289,14 +290,14 @@ class FileTile extends React.Component {
                 styles.file_header
               }`}
             >
-              <p className="flex-100">Status</p>
+              <p className="flex-100">{t('common:status')}</p>
             </div>
             <div
               className={`flex-100 layout-row layout-wrap layout-align-center-start ${
                 styles.file_text
               } ${statusStyle}`}
             >
-              <p className="flex-100">{doc.approved ? doc.approved : 'Pending'}</p>
+              <p className="flex-100">{doc.approved ? doc.approved : t('common:pending')}</p>
             </div>
           </div>
         </div>
@@ -308,6 +309,7 @@ class FileTile extends React.Component {
 
 FileTile.propTypes = {
   type: PropTypes.string.isRequired,
+  t: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool,
   theme: PropTypes.theme,
   dispatchFn: PropTypes.func.isRequired,
@@ -325,4 +327,4 @@ FileTile.defaultProps = {
   isAdmin: false
 }
 
-export default FileTile
+export default translate(['common', 'doc'])(FileTile)

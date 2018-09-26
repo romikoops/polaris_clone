@@ -229,7 +229,7 @@ exports[`containers.dangerous_goods is true 1`] = `
               }
             />
           </div>
-          <Checkbox
+          <[object Object]
             checked={true}
             disabled={true}
             onChange={[Function]}
@@ -473,7 +473,7 @@ exports[`containers.dangerous_goods is true 1`] = `
                 }
               />
             </div>
-            <Checkbox
+            <[object Object]
               checked={false}
               disabled={true}
               onChange={[Function]}
@@ -725,7 +725,7 @@ exports[`nextStageAttempt is true 1`] = `
               }
             />
           </div>
-          <Checkbox
+          <[object Object]
             checked={false}
             disabled={true}
             onChange={[Function]}
@@ -969,7 +969,7 @@ exports[`nextStageAttempt is true 1`] = `
                 }
               />
             </div>
-            <Checkbox
+            <[object Object]
               checked={false}
               disabled={true}
               onChange={[Function]}
@@ -1221,7 +1221,7 @@ exports[`scope.dangerous_goods is true 1`] = `
               }
             />
           </div>
-          <Checkbox
+          <[object Object]
             checked={false}
             disabled={false}
             onChange={[Function]}
@@ -1465,7 +1465,7 @@ exports[`scope.dangerous_goods is true 1`] = `
                 }
               />
             </div>
-            <Checkbox
+            <[object Object]
               checked={false}
               disabled={false}
               onChange={[Function]}
@@ -1717,7 +1717,7 @@ exports[`shallow rendering 1`] = `
               }
             />
           </div>
-          <Checkbox
+          <[object Object]
             checked={false}
             disabled={true}
             onChange={[Function]}
@@ -1961,7 +1961,7 @@ exports[`shallow rendering 1`] = `
                 }
               />
             </div>
-            <Checkbox
+            <[object Object]
               checked={false}
               disabled={true}
               onChange={[Function]}

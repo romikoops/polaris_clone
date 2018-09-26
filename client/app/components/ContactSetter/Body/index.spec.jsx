@@ -51,18 +51,3 @@ const propsBase = {
 test('shallow render', () => {
   expect(shallow(<ShipmentContactsBox {...propsBase} />)).toMatchSnapshot()
 })
-
-// test('props.direction === export', () => {
-//   const props = {
-//     ...propsBase,
-//     direction: 'export'
-//   }
-//   expect(shallow(<ContactSetter {...props} />)).toMatchSnapshot()
-// })
-
-// test('state.showModal is true', () => {
-//   const wrapper = shallow(<ContactSetter {...propsBase} />)
-//   wrapper.setState({ showModal: true })
-
-//   expect(wrapper).toMatchSnapshot()
-// })

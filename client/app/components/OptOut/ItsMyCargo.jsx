@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 import { RoundButton } from '../RoundButton/RoundButton'
 import styles from './index.scss'
@@ -14,45 +15,42 @@ class OptOutItsMyCargo extends Component {
     userDispatch.optOut(user.id, 'itsmycargo')
   }
   render () {
-    const { theme, tenant } = this.props
+    const { theme, tenant, t } = this.props
     if (!tenant.data) {
       return ''
     }
+
     return (
       <div className={`${styles.container} flex-none layout-row layout-align-center-center layout-wrap`}>
         <div className="flex-100 layout-row layout-align-start-center">
-          <h3 className="flex-none">ItsMyCargo GMBH Terms & Conditions</h3>
+          <h3 className="flex-none">{t('imc:imcTerms')}</h3>
         </div>
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
           <p className="flex-100">
-            {` Use of any ItsMyCargo webshop requires accepting the terms and
-             conditions laid out on the Terms and Conditions page.`}
+            {t('optout:useOfAny')}{t('optout:useRequiredIMC')}
           </p>
           <p className="flex-100">
-            As such if you decide to withdraw your agreement to the terms and conditions
-             you will not be
-             able to continue using the shop and we will have to close the window
+            {t('optout:withdrawWarningHead')}{t('optout:withdrawWarningTail')}
           </p>
           <p className="flex-100">
-            {`Should you wish to resume using one of the ItsMyCargo Shops you will need to agree to the 
-            terms and conditions again`}
+            {t('optout:agreeAgainHead')}{t('optout:agreeAgainGeneral')}
           </p>
         </div>
         <div className="flex-100 layout-row layout-wrap layout-aling-center-center">
           <p className="flex-100">
-            By clicking the Opt Out button below the following will happen:
+            {t('optout:optOutActionHead')}
           </p>
           <ul className="flex-100">
-            <li> {`Your user account will be marked as not agreeing to the ItsMyCargo GMBH terms and conditions`}</li>
-            <li> You will be logged out and returned to the landing page</li>
+            <li>{t('optout:accountMarked')}{t('imc:imcTerms')}</li>
+            <li>{t('optout:optOutActionTail')}</li>
           </ul>
         </div>
         <div className="flex-100 layout-row layout-align-space-around-center">
           <div className="flex-60 layout-row layout-align-start-center">
-            <h4 className="flex-none">Are you sure?</h4>
+            <h4 className="flex-none">{t('common:areYouSure')}</h4>
           </div>
           <div className="flex-40 layout-row layout-align-start-center">
-            <RoundButton theme={theme} handleNext={this.handleOptOut} active text="Opt Out" />
+            <RoundButton theme={theme} handleNext={this.handleOptOut} active text={t('common:optOut')} />
           </div>
         </div>
       </div>
@@ -62,6 +60,7 @@ class OptOutItsMyCargo extends Component {
 
 OptOutItsMyCargo.propTypes = {
   user: PropTypes.user.isRequired,
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   tenant: PropTypes.tenant,
   userDispatch: PropTypes.shape({
@@ -74,4 +73,4 @@ OptOutItsMyCargo.defaultProps = {
   tenant: {}
 }
 
-export default OptOutItsMyCargo
+export default translate(['common', 'optout', 'imc'])(OptOutItsMyCargo)

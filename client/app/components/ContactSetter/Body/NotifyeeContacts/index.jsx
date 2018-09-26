@@ -1,11 +1,12 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import styles from '../Body.scss'
 import ContactSetterBodyNotifyeeContactsContactCard from './ContactCard'
 import ContactSetterBodyNotifyeeContactsAddContactButton from './AddContactButton'
 import PropTypes from '../../../../prop-types'
 
-export default function ContactSetterBodyNotifyeeContacts ({
-  theme, notifyees, showAddressBook, removeFunc, showEditContact
+function ContactSetterBodyNotifyeeContacts ({
+  theme, notifyees, showAddressBook, removeFunc, showEditContact, t
 }) {
   const notifyeeContacts = notifyees.map((notifyee, i) => (
     <div className={`flex-40 ${i % 2 === 0 ? 'offset-5' : ''}`} style={{ marginBottom: '20px' }}>
@@ -30,7 +31,7 @@ export default function ContactSetterBodyNotifyeeContacts ({
       <div className="flex-100 layout-row layout-wrap layout-align-start-center">
         <div className="flex-100 layout-row layout-align-start">
           <h3>
-            NOTIFYEES <span className={styles.subtext}> (Optional) </span>
+            {t('common:notifyees').toUpperCase()} <span className={styles.subtext}> ({t('common:optional')}) </span>
           </h3>
         </div>
         <div className={
@@ -46,6 +47,7 @@ export default function ContactSetterBodyNotifyeeContacts ({
 }
 ContactSetterBodyNotifyeeContacts.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   notifyees: PropTypes.arrayOf(PropTypes.shape({
     contact: PropTypes.object,
     location: PropTypes.object
@@ -59,3 +61,5 @@ ContactSetterBodyNotifyeeContacts.defaultProps = {
   theme: null,
   showEditContact: null
 }
+
+export default translate('common')(ContactSetterBodyNotifyeeContacts)

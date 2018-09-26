@@ -15,7 +15,8 @@ exports[`shallow render 1`] = `
       <div
         className="flex-5"
       />
-      Shipment Reference:
+      Shipment Reference
+      :
       <div
         className="flex-5"
       />
@@ -60,6 +61,7 @@ exports[`shallow render 1`] = `
             client={null}
             key="RANDOM_KEY_0"
             message="FOO_MESSAGE"
+            t={[Function]}
             tenant={
               Object {
                 "data": Object {
@@ -113,6 +115,7 @@ exports[`shallow render 1`] = `
             client={null}
             key="RANDOM_KEY_1"
             message="BAR_MESSAGE"
+            t={[Function]}
             tenant={
               Object {
                 "data": Object {
@@ -240,7 +243,8 @@ exports[`state.showDetails is true 1`] = `
       <div
         className="flex-5"
       />
-      Shipment Reference:
+      Shipment Reference
+      :
       <div
         className="flex-5"
       />
@@ -290,6 +294,7 @@ exports[`state.showDetails is true 1`] = `
           "status": "FOO_STATUS",
         }
       }
+      t={[Function]}
       theme={
         Object {
           "colors": Object {
@@ -333,7 +338,8 @@ exports[`theme is falsy 1`] = `
       <div
         className="flex-5"
       />
-      Shipment Reference:
+      Shipment Reference
+      :
       <div
         className="flex-5"
       />
@@ -378,6 +384,7 @@ exports[`theme is falsy 1`] = `
             client={null}
             key="RANDOM_KEY_2"
             message="FOO_MESSAGE"
+            t={[Function]}
             tenant={
               Object {
                 "data": Object {
@@ -424,6 +431,7 @@ exports[`theme is falsy 1`] = `
             client={null}
             key="RANDOM_KEY_3"
             message="BAR_MESSAGE"
+            t={[Function]}
             tenant={
               Object {
                 "data": Object {
@@ -544,7 +552,8 @@ exports[`with admin user 1`] = `
       <div
         className="flex-5"
       />
-      Shipment Reference:
+      Shipment Reference
+      :
       <div
         className="flex-5"
       />
@@ -589,6 +598,7 @@ exports[`with admin user 1`] = `
             client={null}
             key="RANDOM_KEY_8"
             message="FOO_MESSAGE"
+            t={[Function]}
             tenant={
               Object {
                 "data": Object {
@@ -642,6 +652,7 @@ exports[`with admin user 1`] = `
             client={null}
             key="RANDOM_KEY_9"
             message="BAR_MESSAGE"
+            t={[Function]}
             tenant={
               Object {
                 "data": Object {

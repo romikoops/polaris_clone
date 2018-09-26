@@ -3,9 +3,9 @@ import { translate } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from '../../prop-types'
-import { NavDropdown } from '../NavDropdown/NavDropdown'
+import NavDropdown from '../NavDropdown/NavDropdown'
+import LoginRegistrationWrapper from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
 import styles from './Header.scss'
-import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
 import { LoginPage } from '../../containers/LoginPage/LoginPage'
 import { Modal } from '../Modal/Modal'
 import {
@@ -15,7 +15,7 @@ import {
   authenticationActions,
   shipmentActions
 } from '../../actions'
-import { FlashMessages } from '../FlashMessages/FlashMessages'
+import FlashMessages from '../FlashMessages/FlashMessages'
 
 class Header extends Component {
   constructor (props) {
@@ -137,7 +137,7 @@ class Header extends Component {
         user={user}
         isLanding={isLanding}
         toggleShowLogin={this.toggleShowLogin}
-        loginText={tenant.data.scope.closed_registration ? 'Log In' : 'Log In / Register'}
+        loginText={tenant.data.scope.closed_registration ? t('common:logIn') : `${t('common:logIn')} / ${t('common:register')}`}
       />
     )
     const hasErrors = error && error[currentStage] && error[currentStage].length > 0

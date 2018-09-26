@@ -1,1 +1,8 @@
-{"signOut":"Sign out","loginPage":"LoginPage","registrationPage":"RegistrationPage","account":"Account","searchAddress":"Search for address"}
+{
+  "signOut": "Sign out",
+  "loginPage": "LoginPage",
+  "registrationPage": "RegistrationPage",
+  "account": "Account",
+  "searchAddress": "Search for address",
+  "noDetailsAvailable": "No details available for input:"
+}

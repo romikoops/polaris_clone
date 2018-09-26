@@ -2,7 +2,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme, shipment, locations } from '../../mocks'
 
-import { RouteHubBox } from './RouteHubBox'
+import RouteHubBox from './RouteHubBox'
 
 const editedShipment = {
   ...shipment,

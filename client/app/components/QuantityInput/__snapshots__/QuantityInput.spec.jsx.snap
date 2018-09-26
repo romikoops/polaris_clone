@@ -111,6 +111,7 @@ exports[`with cargoItem.quantity 1`] = `
               "nonNegative": [Function],
             }
           }
+          value={3}
           wrapperClassName="flex-100"
         />
       </div>

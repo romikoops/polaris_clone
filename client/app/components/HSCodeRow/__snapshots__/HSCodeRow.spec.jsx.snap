@@ -89,7 +89,7 @@ exports[`cargoItems is falsy 1`] = `
             <p
               className="flex-100 cell_header"
             >
-               Gross Weight
+              Gross Weight
             </p>
             <p
               className="flex-100"
@@ -104,7 +104,8 @@ exports[`cargoItems is falsy 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Dangerous Goods: 
+              Dangerous Goods
+              : 
             </p>
             <p
               className="flex-100"
@@ -255,7 +256,7 @@ exports[`cont.dangerousGoods is true 1`] = `
             <p
               className="flex-100 cell_header"
             >
-               Gross Weight
+              Gross Weight
             </p>
             <p
               className="flex-100"
@@ -270,7 +271,8 @@ exports[`cont.dangerousGoods is true 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Dangerous Goods: 
+              Dangerous Goods
+              : 
             </p>
             <p
               className="flex-100"
@@ -355,7 +357,7 @@ exports[`cont.dangerousGoods is true 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Payload
+              Payload​​
             </p>
             <p
               className="flex-100"
@@ -411,7 +413,8 @@ exports[`cont.dangerousGoods is true 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Dangerous Goods: 
+              Dangerous Goods
+              : 
             </p>
             <p
               className="flex-100"
@@ -426,6 +429,7 @@ exports[`cont.dangerousGoods is true 1`] = `
               className="flex-100 cell_header"
             >
               Copy/Paste: 
+               
             </p>
             <div
               className="flex-100 layout-row"
@@ -563,7 +567,7 @@ exports[`containers is falsy 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Payload
+              Payload​​
             </p>
             <p
               className="flex-100"
@@ -619,7 +623,8 @@ exports[`containers is falsy 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Dangerous Goods: 
+              Dangerous Goods
+              : 
             </p>
             <p
               className="flex-100"
@@ -634,6 +639,7 @@ exports[`containers is falsy 1`] = `
               className="flex-100 cell_header"
             >
               Copy/Paste: 
+               
             </p>
             <div
               className="flex-100 layout-row"
@@ -783,7 +789,7 @@ exports[`shallow render 1`] = `
             <p
               className="flex-100 cell_header"
             >
-               Gross Weight
+              Gross Weight
             </p>
             <p
               className="flex-100"
@@ -798,7 +804,8 @@ exports[`shallow render 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Dangerous Goods: 
+              Dangerous Goods
+              : 
             </p>
             <p
               className="flex-100"
@@ -883,7 +890,7 @@ exports[`shallow render 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Payload
+              Payload​​
             </p>
             <p
               className="flex-100"
@@ -939,7 +946,8 @@ exports[`shallow render 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Dangerous Goods: 
+              Dangerous Goods
+              : 
             </p>
             <p
               className="flex-100"
@@ -954,6 +962,7 @@ exports[`shallow render 1`] = `
               className="flex-100 cell_header"
             >
               Copy/Paste: 
+               
             </p>
             <div
               className="flex-100 layout-row"
@@ -1103,7 +1112,7 @@ exports[`state.showPaste is true 1`] = `
             <p
               className="flex-100 cell_header"
             >
-               Gross Weight
+              Gross Weight
             </p>
             <p
               className="flex-100"
@@ -1118,7 +1127,8 @@ exports[`state.showPaste is true 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Dangerous Goods: 
+              Dangerous Goods
+              : 
             </p>
             <p
               className="flex-100"
@@ -1216,7 +1226,7 @@ exports[`state.showPaste is true 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Payload
+              Payload​​
             </p>
             <p
               className="flex-100"
@@ -1272,7 +1282,8 @@ exports[`state.showPaste is true 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Dangerous Goods: 
+              Dangerous Goods
+              : 
             </p>
             <p
               className="flex-100"
@@ -1287,6 +1298,7 @@ exports[`state.showPaste is true 1`] = `
               className="flex-100 cell_header"
             >
               Copy/Paste: 
+               
             </p>
             <div
               className="flex-100 layout-row"
@@ -1422,7 +1434,7 @@ exports[`theme is falsy 1`] = `
             <p
               className="flex-100 cell_header"
             >
-               Gross Weight
+              Gross Weight
             </p>
             <p
               className="flex-100"
@@ -1437,7 +1449,8 @@ exports[`theme is falsy 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Dangerous Goods: 
+              Dangerous Goods
+              : 
             </p>
             <p
               className="flex-100"
@@ -1522,7 +1535,7 @@ exports[`theme is falsy 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Payload
+              Payload​​
             </p>
             <p
               className="flex-100"
@@ -1578,7 +1591,8 @@ exports[`theme is falsy 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Dangerous Goods: 
+              Dangerous Goods
+              : 
             </p>
             <p
               className="flex-100"
@@ -1593,6 +1607,7 @@ exports[`theme is falsy 1`] = `
               className="flex-100 cell_header"
             >
               Copy/Paste: 
+               
             </p>
             <div
               className="flex-100 layout-row"
@@ -1742,7 +1757,7 @@ exports[`variable textInputBool is true 1`] = `
             <p
               className="flex-100 cell_header"
             >
-               Gross Weight
+              Gross Weight
             </p>
             <p
               className="flex-100"
@@ -1757,7 +1772,8 @@ exports[`variable textInputBool is true 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Dangerous Goods: 
+              Dangerous Goods
+              : 
             </p>
             <p
               className="flex-100"
@@ -1841,7 +1857,7 @@ exports[`variable textInputBool is true 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Payload
+              Payload​​
             </p>
             <p
               className="flex-100"
@@ -1897,7 +1913,8 @@ exports[`variable textInputBool is true 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Dangerous Goods: 
+              Dangerous Goods
+              : 
             </p>
             <p
               className="flex-100"
@@ -1912,6 +1929,7 @@ exports[`variable textInputBool is true 1`] = `
               className="flex-100 cell_header"
             >
               Copy/Paste: 
+               
             </p>
             <div
               className="flex-100 layout-row"

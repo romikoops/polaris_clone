@@ -683,6 +683,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
               }
             }
             shipment={Object {}}
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -711,6 +712,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
               }
             }
             shipment={Object {}}
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -1455,6 +1457,7 @@ exports[`shipmentData.documents is present 1`] = `
               }
               isRequired={false}
               multiple={false}
+              t={[Function]}
               text=""
               theme={
                 Object {
@@ -1490,6 +1493,7 @@ exports[`shipmentData.documents is present 1`] = `
               }
               isRequired={false}
               multiple={false}
+              t={[Function]}
               text=""
               theme={
                 Object {

@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Switch, Route, withRouter } from 'react-router-dom'
 import {
-  UserProfile,
   UserDashboard,
   UserShipments,
   UserShipmentView,
@@ -11,6 +10,7 @@ import {
   UserBilling,
   UserContacts
 } from '../../components/UserAccount'
+import UserProfile from '../../components/UserAccount/UserProfile'
 // eslint-disable-next-line import/no-named-as-default
 import UserShipmentsGroup from '../../components/User/Shipments/Group'
 import { userActions, authenticationActions, appActions } from '../../actions'
@@ -19,7 +19,7 @@ import PropTypes from '../../prop-types'
 import Header from '../../components/Header/Header'
 import Loading from '../../components/Loading/Loading'
 import SideNav from '../../components/SideNav/SideNav'
-import { Footer } from '../../components/Footer/Footer'
+import Footer from '../../components/Footer/Footer'
 import defs from '../../styles/default_classes.scss'
 import styles from './UserAccount.scss'
 import NavBar from '../Nav'

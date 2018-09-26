@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
-import { ValidatedInput } from '../ValidatedInput/ValidatedInput'
+import ValidatedInput from '../ValidatedInput/ValidatedInput'
 import styles from './QuantityInput.scss'
 
-export default class QuantityInput extends PureComponent {
+class QuantityInput extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {
@@ -34,7 +35,8 @@ export default class QuantityInput extends PureComponent {
       cargoItem,
       i,
       nextStageAttempt,
-      handleDelta
+      handleDelta,
+      t
     } = this.props
 
     const { pressedUp, pressedDown } = this.state
@@ -53,7 +55,7 @@ export default class QuantityInput extends PureComponent {
               className="flex-100 layout-row layout-align-center-start"
               style={{ margin: '0 0 4px 0' }}
             >
-              Quantity
+              {t('common:quantity')}
             </p>
             <div className="flex-100 layout-row">
               <ValidatedInput
@@ -64,7 +66,7 @@ export default class QuantityInput extends PureComponent {
                 type="number"
                 min="1"
                 step="any"
-                placeholder="Quantity"
+                placeholder={t('common:quantity')}
                 onChange={handleDelta}
                 errorStyles={{
                   fontSize: '10px',
@@ -72,7 +74,7 @@ export default class QuantityInput extends PureComponent {
                   bottom: 'unset'
                 }}
                 validations={{ nonNegative: (values, value) => value > 0 }}
-                validationErrors={{ nonNegative: 'Must be greater than 0' }}
+                validationErrors={{ nonNegative: t('errors:nonNegative') }}
                 firstRenderInputs
                 setFirstRenderInputs={this.setFirstRenderInputs}
                 nextStageAttempt={nextStageAttempt}
@@ -87,6 +89,7 @@ export default class QuantityInput extends PureComponent {
 }
 QuantityInput.propTypes = {
   cargoItem: PropTypes.objectOf(PropTypes.any),
+  t: PropTypes.func.isRequired,
   i: PropTypes.integer,
   handleDelta: PropTypes.func,
   nextStageAttempt: PropTypes.bool
@@ -98,3 +101,5 @@ QuantityInput.defaultProps = {
   handleDelta: null,
   nextStageAttempt: false
 }
+
+export default translate(['common', 'errors'])(QuantityInput)

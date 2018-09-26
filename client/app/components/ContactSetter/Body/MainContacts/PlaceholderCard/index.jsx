@@ -1,11 +1,12 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import styles from '../../Body.scss'
 import errors from '../../../../../styles/errors.scss'
 import PropTypes from '../../../../../prop-types'
 import { capitalize, nameToDisplay } from '../../../../../helpers'
 
-export default function ShipmentContactsBoxMainContactsPlaceholderCard ({
-  contactType, theme, showAddressBook
+function ShipmentContactsBoxMainContactsPlaceholderCard ({
+  contactType, theme, showAddressBook, t
 }) {
   const showError = false // TBD - finishBookingAttempted
   const requiredSpanStyles = {
@@ -17,9 +18,10 @@ export default function ShipmentContactsBoxMainContactsPlaceholderCard ({
       className={errors.error_message}
       style={requiredSpanStyles}
     >
-      * Required
+      * {t('common:required')}
     </span>
   )
+
   return (
     <div
       className={
@@ -31,7 +33,7 @@ export default function ShipmentContactsBoxMainContactsPlaceholderCard ({
     >
       <div className="flex-100 layout-row layout-align-center-center">
         <h3>
-          Choose a  <br />
+          {t('account:chooseA')}<br />
           <span className={styles.contact_type}> { capitalize(nameToDisplay(contactType)) } </span>
         </h3>
       </div>
@@ -43,7 +45,8 @@ export default function ShipmentContactsBoxMainContactsPlaceholderCard ({
 ShipmentContactsBoxMainContactsPlaceholderCard.propTypes = {
   theme: PropTypes.theme,
   contactType: PropTypes.string,
-  showAddressBook: PropTypes.func
+  showAddressBook: PropTypes.func,
+  t: PropTypes.func.isRequired
 }
 
 ShipmentContactsBoxMainContactsPlaceholderCard.defaultProps = {
@@ -51,3 +54,5 @@ ShipmentContactsBoxMainContactsPlaceholderCard.defaultProps = {
   contactType: '',
   showAddressBook: null
 }
+
+export default translate(['common', 'account'])(ShipmentContactsBoxMainContactsPlaceholderCard)

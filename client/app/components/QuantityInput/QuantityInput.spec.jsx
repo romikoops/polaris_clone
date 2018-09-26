@@ -21,5 +21,5 @@ test('with cargoItem.quantity', () => {
     cargoItem: { quantity: 3 }
   }
 
-  expect(shallow(<QuantityInput {...propsBase} />)).toMatchSnapshot()
+  expect(shallow(<QuantityInput {...props} />)).toMatchSnapshot()
 })

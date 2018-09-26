@@ -1,4 +1,5 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import fetch from 'isomorphic-fetch'
 import Truncate from 'react-truncate'
 import { Promise } from 'es6-promise-promise'
@@ -121,7 +122,8 @@ class DocumentsForm extends React.Component {
       isRequired,
       displayOnly,
       multiple,
-      viewer
+      viewer,
+      t
     } = this.props
     const { showConfirm } = this.state
     const tooltipId = v4()
@@ -151,21 +153,21 @@ class DocumentsForm extends React.Component {
     const missingFile = isRequired ? (
       <p className={`${styles.missing}`}>
         <i className="fa fa-exclamation-triangle" />
-        Missing File
+        {t('doc:missingFile')}
       </p>
     ) : (
       <p className={`${styles.optional}`}>
         <i className="fa fa-exclamation-triangle" />
-        Optional
+        {t('common:optional')}
       </p>
     )
     const iconRowStyle = viewer && !multiple ? styles.viewer_row : styles.icon_row
     const confirmModal = showConfirm
       ? (<AdminPromptConfirm
         theme={theme}
-        heading="Delete this document?"
-        text="Are you sure you wish to delete this document? It cannot be undone."
-        confirm={e => this.deleteFile(e)}
+        heading={t('doc:deleteThisDoc')}
+        text={t('doc:areYouSure')}
+        confirm={() => this.deleteFile()}
         deny={() => this.toggleShowConfim()}
       />) : ''
 
@@ -244,7 +246,7 @@ class DocumentsForm extends React.Component {
           layout-row layout-align-center`}
         >
           <p className="flex-100">
-            Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed
+            {t('doc:restrictions')}
           </p>
         </div>
       </div>
@@ -255,6 +257,7 @@ class DocumentsForm extends React.Component {
 DocumentsForm.propTypes = {
   url: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   dispatchFn: PropTypes.func,
   uploadFn: PropTypes.func,
@@ -282,4 +285,4 @@ DocumentsForm.defaultProps = {
   viewer: false
 }
 
-export default DocumentsForm
+export default translate(['common', 'doc'])(DocumentsForm)

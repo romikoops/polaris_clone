@@ -5,9 +5,9 @@ import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import adminStyles from '../Admin/Admin.scss'
 import styles from '../Admin/AdminShipments.scss'
-import { CargoItemGroup } from '../Cargo/Item/Group'
+import CargoItemGroup from '../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
-import { CargoContainerGroup } from '../Cargo/Container/Group'
+import CargoContainerGroup from '../Cargo/Container/Group'
 import { moment, documentTypes } from '../../constants'
 import {
   gradientTextGenerator,

@@ -7,7 +7,7 @@ jest.mock('../Header/Header', () =>
   ({ children }) => <header>{children}</header>)
 
 // eslint-disable-next-line
-import { LandingTop } from './LandingTop'
+import LandingTop from './LandingTop'
 
 const editedTenant = {
   data: {

@@ -142,7 +142,7 @@ exports[`shallow render 1`] = `
             }
           >
              
-            Date of Departure
+            Date of Depature
           </h4>
         </div>
         <div
@@ -179,7 +179,7 @@ exports[`shallow render 1`] = `
             }
           >
              
-            ETA terminal
+            ETA terminal :
           </h4>
         </div>
         <div
@@ -215,7 +215,7 @@ exports[`shallow render 1`] = `
               }
             }
           >
-            Shipment Type:
+            Shipment Type :
           </h4>
         </div>
         <div
@@ -248,7 +248,7 @@ exports[`shallow render 1`] = `
               }
             }
           >
-            IncoTerm:
+            IncoTerm :
           </h4>
         </div>
         <div
@@ -276,7 +276,7 @@ exports[`shallow render 1`] = `
               }
             }
           >
-            MoT:
+            MoT :
           </h4>
         </div>
         <div
@@ -304,7 +304,7 @@ exports[`shallow render 1`] = `
               }
             }
           >
-            Pre-carrage:
+            Pre-carriage :
           </h4>
         </div>
         <div
@@ -333,7 +333,7 @@ exports[`shallow render 1`] = `
               }
             }
           >
-            On-carriage:
+            On-carriage :
           </h4>
         </div>
         <div

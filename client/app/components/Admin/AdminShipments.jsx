@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from '../../prop-types'
 import { AdminShipmentsIndex } from './'
-import { AdminShipmentView } from './AdminShipmentView/AdminShipmentView'
+import AdminShipmentView from './AdminShipmentView/AdminShipmentView'
 import { adminActions } from '../../actions'
 import { AdminShipmentsGroup } from './Shipments/Group'
 

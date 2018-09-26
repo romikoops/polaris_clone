@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import styles from './index.scss'
 import PropTypes from '../../../prop-types'
 import AdminPromptConfirm from '../Prompt/Confirm'
-import { Checkbox } from '../../Checkbox/Checkbox'
+import Checkbox from '../../Checkbox/Checkbox'
 import { gradientTextGenerator } from '../../../helpers'
 
 class MandatoryChargeBox extends PureComponent {

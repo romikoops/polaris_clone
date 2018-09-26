@@ -6,7 +6,7 @@ import { AdminHubTile } from '../'
 import { history } from '../../../helpers'
 import { RoundButton } from '../../RoundButton/RoundButton'
 import FileUploader from '../../../components/FileUploader/FileUploader'
-import { TextHeading } from '../../TextHeading/TextHeading'
+import TextHeading from '../../TextHeading/TextHeading'
 
 export class AdminWizardHubs extends Component {
   static back () {

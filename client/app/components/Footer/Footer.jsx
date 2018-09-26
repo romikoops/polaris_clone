@@ -1,10 +1,11 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import styles from './Footer.scss'
 import defs from '../../styles/default_classes.scss'
 import PropTypes from '../../prop-types'
 
-export function Footer ({
-  theme, tenant, isShop, width
+function Footer ({
+  theme, tenant, isShop, width, t
 }) {
   if (!tenant) {
     return ''
@@ -84,7 +85,7 @@ export function Footer ({
                 target="_blank"
                 href={links && links.about ? links.about : defaultLinks.about}
               >
-                About Us
+                {t('footer:about')}
               </a>
             </div>
             <div className="flex-15 layout-row layout-align-center-center">
@@ -92,7 +93,7 @@ export function Footer ({
                 target="_blank"
                 href={links && links.privacy ? links.privacy : defaultLinks.privacy}
               >
-                Privacy Policy
+                {t('footer:privacy')}
               </a>
             </div>
             <div className="flex-15 layout-row layout-align-center-center">
@@ -100,7 +101,7 @@ export function Footer ({
                 target="_blank"
                 href={termsLink}
               >
-                Terms and Conditions
+                {t('footer:terms')}
               </a>
             </div>
             <div className="flex-15 layout-row layout-align-center-center">
@@ -108,7 +109,7 @@ export function Footer ({
                 target="_blank"
                 href={links && links.legal ? links.legal : defaultLinks.legal}
               >
-                Legal
+                {t('footer:legal')}
               </a>
             </div>
           </div>
@@ -120,6 +121,7 @@ export function Footer ({
 
 Footer.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   tenant: PropTypes.tenant,
   isShop: PropTypes.bool,
   width: PropTypes.number
@@ -132,4 +134,4 @@ Footer.defaultProps = {
   width: null
 }
 
-export default Footer
+export default translate('footer')(Footer)

@@ -3,19 +3,19 @@ import { translate } from 'react-i18next'
 import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../prop-types'
 import styles from './CargoDetails.scss'
-import { Checkbox } from '../Checkbox/Checkbox'
+import Checkbox from '../Checkbox/Checkbox'
 import DocumentsForm from '../Documents/Form'
 import DocumentsMultiForm from '../Documents/MultiForm'
 import defaults from '../../styles/default_classes.scss'
 import { converter } from '../../helpers'
 import { currencyOptions, tooltips } from '../../constants'
 import FormsyInput from '../FormsyInput/FormsyInput'
-import { TextHeading } from '../TextHeading/TextHeading'
+import TextHeading from '../TextHeading/TextHeading'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import FormsyTextarea from '../FormsyTextarea/FormsyTextarea'
 import CustomsExportPaper from '../Addons/CustomsExportPaper'
 
-export class CargoDetails extends Component {
+class CargoDetails extends Component {
   static displayCustomsFee (customsData, target, customs, t) {
     if (target === 'total') {
       let newTotal = 0
@@ -801,7 +801,6 @@ CargoDetails.propTypes = {
   tenant: PropTypes.objectOf(PropTypes.any),
   shipmentData: PropTypes.shipmentData.isRequired,
   handleChange: PropTypes.func.isRequired,
-  t: PropTypes.func.isRequired,
   handleInsurance: PropTypes.func.isRequired,
   cargoNotes: PropTypes.string.isRequired,
   totalGoodsValue: PropTypes.number.isRequired,

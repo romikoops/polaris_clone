@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import styled from 'styled-components'
 import styles from './Messaging.scss'
 import { moment } from '../../constants'
 import PropTypes from '../../prop-types'
 
-export class Message extends Component {
+class Message extends Component {
   constructor (props) {
     super(props)
     this.checkAdmin = this.checkAdmin.bind(this)
@@ -23,12 +24,13 @@ export class Message extends Component {
     if (!client && message.sender_id !== user.id) {
       return Admin
     }
+
     return ''
   }
 
   render () {
     const {
-      message, theme, tenant, user, client
+      message, theme, tenant, user, client, t
     } = this.props
     const isAdmin = user.role && user.role.name === 'admin'
     const messageStyle =
@@ -77,21 +79,22 @@ export class Message extends Component {
         </p>
       ) : (
         <p className={`flex-none ${styles.timestamp}`}>
-          You @ {moment(message.updated_at).format('lll')}
+          {t('common:you')} @ {moment(message.updated_at).format('lll')}
         </p>
       )
     const userMeta =
       message.sender_id === user.id ? (
         <p className={`flex-none ${styles.timestamp}`}>
-          You @ {moment(message.updated_at).format('lll')}
+          {t('common:you')} @ {moment(message.updated_at).format('lll')}
         </p>
       ) : (
         <p className={`flex-none ${styles.timestamp}`}>
-          {tenant.data.name} Admin @ {moment(message.updated_at).format('lll')}
+          {tenant.data.name} {t('account:admin')} @ {moment(message.updated_at).format('lll')}
         </p>
       )
     const meta = isAdmin ? adminMeta : userMeta
     const Comp = this.checkAdmin(UserMessage, AdminMessage)
+
     return (
       <div className={`flex-100 layout-row ${styles.message_wrapper}`}>
         {message.sender_id === message.user_id ? (
@@ -119,6 +122,7 @@ export class Message extends Component {
 
 Message.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   user: PropTypes.user.isRequired,
   tenant: PropTypes.tenant.isRequired,
   client: PropTypes.client,
@@ -135,4 +139,4 @@ Message.defaultProps = {
   client: null
 }
 
-export default Message
+export default translate(['common', 'account'])(Message)

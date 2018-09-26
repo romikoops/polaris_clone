@@ -9,7 +9,7 @@ import { theme, shipment, identity } from '../../mocks'
  */
 
 // eslint-disable-next-line
-import { ConvoTile } from './ConvoTile'
+import ConvoTile from './ConvoTile'
 
 const propsBase = {
   theme,

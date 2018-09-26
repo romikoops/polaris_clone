@@ -26,7 +26,7 @@ exports[`shallow render 1`] = `
     disabled={false}
     handleDisabled={null}
     handleNext={[Function]}
-    text="accept"
+    text="Accept"
     theme={
       Object {
         "colors": Object {
@@ -41,7 +41,7 @@ exports[`shallow render 1`] = `
     disabled={false}
     handleDisabled={null}
     handleNext={[Function]}
-    text="decline"
+    text="Decline"
     theme={
       Object {
         "colors": Object {
@@ -71,6 +71,7 @@ exports[`state.showModal is true 1`] = `
       >
         <p>
           We use cookies to enhance your user experience. 
+           
           <br />
           <br />
           The consent is not mandatory but necessary to continue using our website. Are you sure you want to decline the usage of cookies?
@@ -129,7 +130,7 @@ exports[`state.showModal is true 1`] = `
     disabled={false}
     handleDisabled={null}
     handleNext={[Function]}
-    text="accept"
+    text="Accept"
     theme={
       Object {
         "colors": Object {
@@ -144,7 +145,7 @@ exports[`state.showModal is true 1`] = `
     disabled={false}
     handleDisabled={null}
     handleNext={[Function]}
-    text="decline"
+    text="Decline"
     theme={
       Object {
         "colors": Object {

@@ -13,7 +13,7 @@ jest.mock('uuid', () => {
   return { v4 }
 })
 // eslint-disable-next-line
-import { Conversation } from './Conversation'
+import Conversation from './Conversation'
 
 const regularUser = {
   ...user,

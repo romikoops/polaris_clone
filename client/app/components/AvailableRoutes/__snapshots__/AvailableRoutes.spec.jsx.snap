@@ -9,6 +9,7 @@ exports[`shallow render 1`] = `
       "bar",
     ]
   }
+  t={[Function]}
   theme={
     Object {
       "colors": Object {

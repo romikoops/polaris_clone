@@ -1,6 +1,6 @@
 import React from 'react'
 import { Modal } from '../Modal/Modal'
-import { AlertModalBody } from '../AlertModalBody/AlertModalBody'
+import AlertModalBody from '../AlertModalBody/AlertModalBody'
 
 function modalJSX (name, modal, theme, toggleFunc) {
   return (

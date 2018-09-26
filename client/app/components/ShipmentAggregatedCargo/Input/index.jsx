@@ -1,7 +1,7 @@
 import React from 'react'
 import { translate } from 'react-i18next'
 import PropTypes from '../../../prop-types'
-import { ValidatedInput } from '../../ValidatedInput/ValidatedInput'
+import ValidatedInput from '../../ValidatedInput/ValidatedInput'
 
 function ShipmentAggregatedCargoInput ({
   value, name, handleDelta, nextStageAttempt, maxValue, t

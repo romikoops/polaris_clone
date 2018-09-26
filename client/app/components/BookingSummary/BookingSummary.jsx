@@ -1,4 +1,5 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import Truncate from 'react-truncate'
@@ -8,7 +9,7 @@ import { dashedGradient, switchIcon, numberSpacing } from '../../helpers'
 
 function BookingSummary (props) {
   const {
-    theme, totalWeight, totalVolume, cities, nexuses, trucking, modeOfTransport, loadType
+    theme, totalWeight, totalVolume, cities, nexuses, trucking, modeOfTransport, loadType, t
   } = props
   const dashedLineStyles = {
     marginTop: '6px',
@@ -37,10 +38,10 @@ function BookingSummary (props) {
         </div>
         <div className="flex-50 layout-row layout-align-space-between">
           <div className="flex-50 layout-row layout-align-center-center">
-            <h4>From</h4>
+            <h4>{t('common:from')}</h4>
           </div>
           <div className="flex-50 layout-row layout-align-center-center">
-            <h4>To</h4>
+            <h4>{t('common:to')}</h4>
           </div>
         </div>
         <div className="flex-50 layout-row layout-align-space-between">
@@ -55,7 +56,7 @@ function BookingSummary (props) {
                 (
                   (cities.origin && trucking.pre_carriage.truck_type) ||
                   (nexuses.origin && !trucking.pre_carriage.truck_type)
-                ) && `${(trucking.pre_carriage.truck_type ? 'with' : 'without')} pick-up`
+                ) && `${(trucking.pre_carriage.truck_type ? t('common:withPickup') : t('common:withoutPickup'))}`
               }
             </p>
           </div>
@@ -68,14 +69,15 @@ function BookingSummary (props) {
                 (
                   (cities.destination && trucking.on_carriage.truck_type) ||
                   (nexuses.destination && !trucking.on_carriage.truck_type)
-                ) && `${(trucking.on_carriage.truck_type ? 'with' : 'without')} Delivery`
+                ) && `${(trucking.on_carriage.truck_type ? t('common:with') : t('common:without'))} 
+                ${t('shipment:delivery').toLowerCase()}`
               }
             </p>
           </div>
         </div>
       </div>
       <div className="flex layout-column layout-align-stretch">
-        <h4 className="flex-50 layout-row layout-align-center-center">Total Weight</h4>
+        <h4 className="flex-50 layout-row layout-align-center-center">{t('cargo:totalWeight')}</h4>
         <p className="flex-50 layout-row layout-align-center-start">
           { numberSpacing(totalWeight, 1) } kg
         </p>
@@ -83,7 +85,7 @@ function BookingSummary (props) {
       {
         loadType === 'cargo_item' && (
           <div className="flex layout-column layout-align-stretch">
-            <h4 className="flex-50 layout-row layout-align-center-center">Total Volume</h4>
+            <h4 className="flex-50 layout-row layout-align-center-center">{t('cargo:totalVolume')}</h4>
             <p className="flex-50 layout-row layout-align-center-start">
               { numberSpacing(totalVolume, 3) } m³
             </p>
@@ -96,6 +98,7 @@ function BookingSummary (props) {
 
 BookingSummary.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   modeOfTransport: PropTypes.string,
   totalWeight: PropTypes.number,
   totalVolume: PropTypes.number,
@@ -141,4 +144,4 @@ function mapStateToProps (state) {
   return { ...bookingSummary, theme }
 }
 
-export default withRouter(connect(mapStateToProps)(BookingSummary))
+export default translate(['cargo', 'common', 'shipment'])(withRouter(connect(mapStateToProps)(BookingSummary)))

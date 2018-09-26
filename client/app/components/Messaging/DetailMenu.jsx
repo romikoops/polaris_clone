@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import styles from './DetailMenu.scss'
 
-export default class DetailMenu extends Component {
+class DetailMenu extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -17,12 +18,13 @@ export default class DetailMenu extends Component {
 
   render () {
     const {
-      Comp
+      Comp, t
     } = this.props
     const Title = styled.div`
             letter-spacing: 3px;
         `
     const currentStyle = this.state.expand ? styles.open : styles.closed
+
     return (
       <div className={`flex-none layout-row layout-wrap layout-align-center-start ${styles.wrapper}`}>
         <Title
@@ -30,7 +32,7 @@ export default class DetailMenu extends Component {
           onClick={this.toggleMenu}
         >
           <div className="flex layout-row layout-align-start-center">
-            <h4 className="flex-none no_m">MENU</h4>
+            <h4 className="flex-none no_m">{t('common:menu').toUpperCase()}</h4>
           </div>
         </Title>
         <div className={`flex-100 layout-row ${styles.menu_content} ${currentStyle}`}>
@@ -43,5 +45,8 @@ export default class DetailMenu extends Component {
 }
 
 DetailMenu.propTypes = {
-  Comp: PropTypes.node.isRequired
+  Comp: PropTypes.node.isRequired,
+  t: PropTypes.func.isRequired
 }
+
+export default translate('common')(DetailMenu)
