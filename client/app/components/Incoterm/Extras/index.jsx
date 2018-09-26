@@ -3,7 +3,7 @@ import styles from './index.scss'
 import PropTypes from '../../../prop-types'
 import { gradientTextGenerator } from '../../../helpers'
 
-export function IncotermExtras ({
+function IncotermExtras ({
   theme, shipment, feeHash, tenant
 }) {
   const selectedStyle =

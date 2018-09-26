@@ -3,7 +3,7 @@ import Formsy from 'formsy-react'
 import PropTypes from 'prop-types'
 import ValidatedInputFormsy from '../ValidatedInputFormsy/ValidatedInputFormsy'
 
-export function ValidatedInput (props) {
+function ValidatedInput (props) {
   return (
     <Formsy className={props.wrapperClassName}>
       <ValidatedInputFormsy {...props} />

@@ -10,7 +10,7 @@ exports[`shallow render 1`] = `
     <p
       className="sec_header_text flex-none"
     >
-       Notes 
+      Notes
     </p>
     <div
       className="flex-10 layout-row alyout-align-center-center pointy"

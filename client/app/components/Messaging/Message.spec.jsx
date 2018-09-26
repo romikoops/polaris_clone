@@ -12,7 +12,7 @@ jest.mock('../../constants', () => {
   return { moment }
 })
 // eslint-disable-next-line
-import { Message } from './Message'
+import Message from './Message'
 
 const propsBase = {
   theme,

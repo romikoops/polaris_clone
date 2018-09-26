@@ -3,7 +3,7 @@ import PropTypes from '../../prop-types'
 import styles from './Checkbox.scss'
 import { gradientTextGenerator } from '../../helpers'
 
-export class Checkbox extends PureComponent {
+class Checkbox extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './RouteResult.scss'
 import { moment } from '../../constants'
@@ -6,7 +7,7 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import { Price } from '../Price/Price'
 import { switchIcon, capitalize } from '../../helpers'
 
-export class RouteResult extends Component {
+class RouteResult extends Component {
   static returnHubType (hub) {
     let hubType = ''
     switch (hub.hub_type) {
@@ -41,7 +42,7 @@ export class RouteResult extends Component {
   }
   render () {
     const {
-      theme, schedule, pickup, truckingTime
+      theme, schedule, pickup, truckingTime, t
     } = this.props
     const adjustedTruckingTime = truckingTime + 86400
 
@@ -102,7 +103,7 @@ export class RouteResult extends Component {
           <div className="flex-100 layout-row layout-align-start-center">
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <h4 className={styles.date_title}>{pickup ? 'Pickup Date' : 'Closing Date'}</h4>
+                <h4 className={styles.date_title}>{pickup ? t('common:pickupDate') : t('common:closingDate')}</h4>
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -137,13 +138,13 @@ export class RouteResult extends Component {
             </div>
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <h4 className={styles.date_title}> Estimated T/T <sup>*</sup></h4>
+                <h4 className={styles.date_title}>{t('shipment:estimatedTransitTime')}<sup>*</sup></h4>
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
-                  {moment(schedule.eta).diff(schedule.etd, 'days')}
-                  {' Days'}
+                  {moment(schedule.eta).diff(schedule.etd, t('common:days'))}
+                  {t('common:days')}
                 </p>
               </div>
             </div>
@@ -151,7 +152,7 @@ export class RouteResult extends Component {
         </div>
         <div className="flex-30 layout-row layout-wrap layout-align-center">
           <div className="flex-90 layout-row layout-align-space-between-center layout-wrap">
-            <p className="flex-none">Total price: </p>
+            <p className="flex-none">{t('shipment:totalPrice')}</p>
             <Price
               value={schedule.total_price.value}
               currency={schedule.total_price.currency}
@@ -159,7 +160,7 @@ export class RouteResult extends Component {
           </div>
           <div className="flex-90 layout-row layout-align-space-between-center layout-wrap">
             <RoundButton
-              text="Choose"
+              text={t('common:choose')}
               size="full"
               handleNext={this.selectRoute}
               theme={theme}
@@ -173,6 +174,7 @@ export class RouteResult extends Component {
 }
 RouteResult.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   schedule: PropTypes.schedule.isRequired,
   selectResult: PropTypes.func.isRequired,
   pickup: PropTypes.bool,
@@ -184,4 +186,4 @@ RouteResult.defaultProps = {
   truckingTime: 0
 }
 
-export default RouteResult
+export default translate(['common', 'shipment'])(RouteResult)

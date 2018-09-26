@@ -6,8 +6,8 @@ import '../../styles/day-picker-custom.css'
 import { moment, LOAD_TYPES } from '../../constants'
 import { switchIcon, capitalize, gradientTextGenerator } from '../../helpers'
 import styles from './RouteFilterBox.scss'
-import { TextHeading } from '../TextHeading/TextHeading'
-import { Checkbox } from '../Checkbox/Checkbox'
+import TextHeading from '../TextHeading/TextHeading'
+import Checkbox from '../Checkbox/Checkbox'
 
 export class RouteFilterBox extends Component {
   constructor (props) {

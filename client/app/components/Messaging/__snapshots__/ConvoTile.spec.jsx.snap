@@ -29,7 +29,8 @@ exports[`convoKey is truthy 1`] = `
       <p
         className="flex-none"
       >
-        Shipment Ref.:
+        Shipment Reference
+        :
       </p>
       <div
         className="flex-5"
@@ -46,7 +47,8 @@ exports[`convoKey is truthy 1`] = `
     <div
       className="flex-95 layout-row layout-align-start-center"
     >
-      STATUS:
+      STATUS
+      :
       <div
         className="flex-5"
       />
@@ -103,7 +105,8 @@ exports[`shallow render 1`] = `
       <p
         className="flex-none"
       >
-        Shipment Ref.:
+        Shipment Reference
+        :
       </p>
       <div
         className="flex-5"
@@ -120,7 +123,8 @@ exports[`shallow render 1`] = `
     <div
       className="flex-95 layout-row layout-align-start-center"
     >
-      STATUS:
+      STATUS
+      :
       <div
         className="flex-5"
       />
@@ -177,7 +181,8 @@ exports[`shipment.status === confirmed 1`] = `
       <p
         className="flex-none"
       >
-        Shipment Ref.:
+        Shipment Reference
+        :
       </p>
       <div
         className="flex-5"
@@ -194,7 +199,8 @@ exports[`shipment.status === confirmed 1`] = `
     <div
       className="flex-95 layout-row layout-align-start-center"
     >
-      STATUS:
+      STATUS
+      :
       <div
         className="flex-5"
       />
@@ -251,7 +257,8 @@ exports[`shipment.status === requested 1`] = `
       <p
         className="flex-none"
       >
-        Shipment Ref.:
+        Shipment Reference
+        :
       </p>
       <div
         className="flex-5"
@@ -268,7 +275,8 @@ exports[`shipment.status === requested 1`] = `
     <div
       className="flex-95 layout-row layout-align-start-center"
     >
-      STATUS:
+      STATUS
+      :
       <div
         className="flex-5"
       />

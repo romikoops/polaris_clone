@@ -5,18 +5,18 @@ import { v4 } from 'uuid'
 import { pick, uniqWith } from 'lodash'
 import { moment, documentTypes, shipmentStatii } from '../../constants'
 import styles from './BookingConfirmation.scss'
-import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
+import RouteHubBox from '../RouteHubBox/RouteHubBox'
 import { RoundButton } from '../RoundButton/RoundButton'
 import defaults from '../../styles/default_classes.scss'
-import { TextHeading } from '../TextHeading/TextHeading'
+import TextHeading from '../TextHeading/TextHeading'
 import { gradientTextGenerator, totalPriceString, totalPrice, numberSpacing } from '../../helpers'
-import { Checkbox } from '../Checkbox/Checkbox'
-import { CargoItemGroup } from '../Cargo/Item/Group'
+import Checkbox from '../Checkbox/Checkbox'
+import CargoItemGroup from '../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
 import DocumentsForm from '../Documents/Form'
 import Contact from '../Contact/Contact'
-import { IncotermRow } from '../Incoterm/Row'
-import { IncotermExtras } from '../Incoterm/Extras'
+import IncotermRow from '../Incoterm/Row'
+import IncotermExtras from '../Incoterm/Extras'
 
 import {
   ALIGN_AROUND_CENTER,
@@ -33,7 +33,7 @@ import {
   ROW,
   WRAP_ROW
 } from '../../classNames'
-import { CargoContainerGroup } from '../Cargo/Container/Group'
+import CargoContainerGroup from '../Cargo/Container/Group'
 
 const ACCEPT = `${ROW(33)} height_100`
 
@@ -731,13 +731,6 @@ function getDocs ({
   const docChecker = {
     packing_sheet: false,
     commercial_invoice: false
-    // customs_declaration: false,
-    // customs_value_declaration: false,
-    // eori: false,
-    // certificate_of_origin: false,
-    // dangerous_goods: false,
-    // bill_of_lading: false,
-    // invoice: false
   }
   const docView = []
   const missingDocs = []

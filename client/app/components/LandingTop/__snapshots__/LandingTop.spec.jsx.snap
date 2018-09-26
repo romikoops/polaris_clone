@@ -63,7 +63,7 @@ exports[`theme has truthy properties 1`] = `
             className="flex-none"
           >
             <b>
-              Welcome to the 
+              Welcome to the
             </b>
              
             <br />
@@ -91,9 +91,11 @@ exports[`theme has truthy properties 1`] = `
               className="flex-none"
             >
               Enjoy the most advanced and easy to use 
+               
               <b>
                 booking system
               </b>
+               
                in the market. Finally, shipping is as simple as it should be.
             </h3>
           </div>
@@ -142,7 +144,8 @@ exports[`theme has truthy properties 1`] = `
               <h4
                 className="flex-none"
               >
-                powered by      
+                powered by
+                      
               </h4>
               <div
                 className="flex-5"
@@ -226,7 +229,7 @@ exports[`user.role_id is 1 1`] = `
             className="flex-none"
           >
             <b>
-              Welcome to the 
+              Welcome to the
             </b>
              
             <br />
@@ -254,9 +257,11 @@ exports[`user.role_id is 1 1`] = `
               className="flex-none"
             >
               Enjoy the most advanced and easy to use 
+               
               <b>
                 booking system
               </b>
+               
                in the market. Finally, shipping is as simple as it should be.
             </h3>
           </div>
@@ -301,7 +306,8 @@ exports[`user.role_id is 1 1`] = `
               <h4
                 className="flex-none"
               >
-                powered by      
+                powered by
+                      
               </h4>
               <div
                 className="flex-5"
@@ -385,7 +391,7 @@ exports[`user.role_id is 2 1`] = `
             className="flex-none"
           >
             <b>
-              Welcome to the 
+              Welcome to the
             </b>
              
             <br />
@@ -413,9 +419,11 @@ exports[`user.role_id is 2 1`] = `
               className="flex-none"
             >
               Enjoy the most advanced and easy to use 
+               
               <b>
                 booking system
               </b>
+               
                in the market. Finally, shipping is as simple as it should be.
             </h3>
           </div>
@@ -460,7 +468,8 @@ exports[`user.role_id is 2 1`] = `
               <h4
                 className="flex-none"
               >
-                powered by      
+                powered by
+                      
               </h4>
               <div
                 className="flex-5"

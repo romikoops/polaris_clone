@@ -1,11 +1,12 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import NotesCard from '../Card'
 import styles from './index.scss'
 import adminStyles from '../../Admin/Admin.scss'
 
 const NotesRow = ({
-  notes, theme, toggleNotesEdit, textStyle
+  notes, theme, toggleNotesEdit, textStyle, t
 }) => {
   const noteCards = notes.map(n =>
     <NotesCard note={n} theme={theme} />)
@@ -15,7 +16,7 @@ const NotesRow = ({
       <div
         className={`flex-100 layout-row layout-start-center ${adminStyles.sec_header}`}
       >
-        <p className={`${adminStyles.sec_header_text} flex-none`}> Notes </p>
+        <p className={`${adminStyles.sec_header_text} flex-none`}>{t('common:notes')}</p>
         <div
           className="flex-10 layout-row alyout-align-center-center pointy"
           onClick={toggleNotesEdit}
@@ -33,6 +34,7 @@ const NotesRow = ({
 
 NotesRow.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.any),
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   toggleNotesEdit: PropTypes.func,
   textStyle: PropTypes.objectOf(PropTypes.style)
@@ -45,4 +47,4 @@ NotesRow.defaultProps = {
   textStyle: {}
 }
 
-export default NotesRow
+export default translate('common')(NotesRow)

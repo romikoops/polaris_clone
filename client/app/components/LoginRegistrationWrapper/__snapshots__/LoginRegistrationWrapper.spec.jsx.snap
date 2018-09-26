@@ -23,3 +23,7 @@ exports[`shallow render 1`] = `
   </div>
 </div>
 `;
+
+exports[`translation working on togglePrompt 1`] = `"Register"`;
+
+exports[`translation working on togglePrompt 2`] = `"Log In"`;

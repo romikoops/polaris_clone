@@ -1,4 +1,5 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Promise } from 'es6-promise-promise'
@@ -14,6 +15,7 @@ class DocumentsDownloader extends React.Component {
     if (!response.ok) {
       return Promise.reject(response.statusText)
     }
+
     return response.json()
   }
   constructor (props) {
@@ -63,18 +65,16 @@ class DocumentsDownloader extends React.Component {
     if (downloadUrls[target]) {
       window.open(downloadUrls[target], '_blank')
     }
-    // this.setState({ requested: false })
   }
   render () {
     const {
-      theme, loading, tooltip, square, size
+      theme, loading, tooltip, square, size, t
     } = this.props
     const { requested } = this.state
     const tooltipId = v4()
-    // const errorStyle = this.state.error ? styles.error : ''
     const start = square ? (
       <SquareButton
-        text="Request"
+        text={t('common:request')}
         theme={theme}
         size={size}
         handleNext={() => this.requestDocument()}
@@ -83,7 +83,7 @@ class DocumentsDownloader extends React.Component {
       />
     ) : (
       <RoundButton
-        text="Request"
+        text={t('common:request')}
         theme={theme}
         size={size}
         handleNext={() => this.requestDocument()}
@@ -92,13 +92,13 @@ class DocumentsDownloader extends React.Component {
     )
     const loadingBox = (
       <div className="flex-100 layout-column layout-align-space-around-center">
-        <p className="flex-none">Your document is being generated.</p>
-        <p className="flex-none">Please wait....</p>
+        <p className="flex-none">{t('doc:generated')}</p>
+        <p className="flex-none">{t('doc:pleaseWait')}</p>
       </div>
     )
     const ready = square ? (
       <SquareButton
-        text="Download"
+        text={t('doc:download')}
         theme={theme}
         size={size}
         handleNext={() => this.downloadFile()}
@@ -107,7 +107,7 @@ class DocumentsDownloader extends React.Component {
       />
     ) : (
       <RoundButton
-        text="Download"
+        text={t('doc:download')}
         theme={theme}
         size={size}
         handleNext={() => this.downloadFile()}
@@ -122,6 +122,7 @@ class DocumentsDownloader extends React.Component {
     } else if (!loading && requested) {
       button = ready
     }
+
     return (
       <div
         className={`flex-none layout-row layout-align-center-center ${styles.upload_btn_wrapper} `}
@@ -137,6 +138,7 @@ class DocumentsDownloader extends React.Component {
 DocumentsDownloader.propTypes = {
   theme: PropTypes.theme,
   documentDispatch: PropTypes.func,
+  t: PropTypes.func.isRequired,
   downloadUrls: PropTypes.objectOf(PropTypes.any),
   tooltip: PropTypes.string,
   square: PropTypes.bool,
@@ -162,6 +164,7 @@ function mapStateToProps (state) {
   const { authentication, tenant, document } = state
   const { user, loggedIn } = authentication
   const { downloadUrls, viewer, loading } = document
+
   return {
     user,
     tenant,
@@ -177,4 +180,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DocumentsDownloader)
+export default translate(['common', 'doc'])(connect(mapStateToProps, mapDispatchToProps)(DocumentsDownloader))

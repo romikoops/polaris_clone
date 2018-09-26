@@ -4,13 +4,13 @@ import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import PropTypes from '../../prop-types'
 import { moment } from '../../constants'
-import { LandingTop } from '../../components/LandingTop/LandingTop'
+import LandingTop from '../../components/LandingTop/LandingTop'
 import styles from './Landing.scss'
 import { RoundButton } from '../../components/RoundButton/RoundButton'
 import Loading from '../../components/Loading/Loading'
 import { userActions, adminActions, authenticationActions } from '../../actions'
 import { gradientTextGenerator } from '../../helpers'
-import { Footer } from '../../components/Footer/Footer'
+import Footer from '../../components/Footer/Footer'
 
 class Landing extends Component {
   shouldComponentUpdate (nextProps) {

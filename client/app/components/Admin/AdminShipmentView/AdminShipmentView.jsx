@@ -4,7 +4,7 @@ import { translate } from 'react-i18next'
 import { pick, uniqWith } from 'lodash'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
-import { CargoItemGroup } from '../../Cargo/Item/Group'
+import CargoItemGroup from '../../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../../Cargo/Item/Group/Aggregated'
 import PropTypes from '../../../prop-types'
 import { moment, documentTypes } from '../../../constants'
@@ -20,7 +20,7 @@ import {
   totalPrice,
   isRequested
 } from '../../../helpers'
-import { CargoContainerGroup } from '../../Cargo/Container/Group'
+import CargoContainerGroup from '../../Cargo/Container/Group'
 import { AdminShipmentContent } from './AdminShipmentContent'
 import { ShipmentQuotationContent } from '../../UserAccount/ShipmentQuotationContent'
 

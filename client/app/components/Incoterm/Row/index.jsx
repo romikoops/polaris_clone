@@ -3,7 +3,7 @@ import styles from './index.scss'
 import PropTypes from '../../../prop-types'
 import { gradientTextGenerator, determineSpecialism, switchIcon } from '../../../helpers'
 
-export function IncotermRow ({
+function IncotermRow ({
   theme,
   onCarriage,
   preCarriage,

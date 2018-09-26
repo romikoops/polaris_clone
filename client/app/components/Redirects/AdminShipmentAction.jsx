@@ -56,6 +56,7 @@ class AdminShipmentAction extends Component {
         parentToggle={this.toggleShowLogin}
       />
     )
+
     return <div className="layout-fill">{this.props.showModal && !loading ? loginModal : ''}</div>
   }
 }

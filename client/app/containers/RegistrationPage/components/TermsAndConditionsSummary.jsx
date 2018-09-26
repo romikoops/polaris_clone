@@ -1,7 +1,7 @@
 import React from 'react'
 import { v4 } from 'uuid'
 import styles from '../RegistrationPage.scss'
-import { Checkbox } from '../../../components/Checkbox/Checkbox'
+import Checkbox from '../../../components/Checkbox/Checkbox'
 import PropTypes from '../../../prop-types'
 import termsAndConditionsSummaryBullets from '../../../static/termsAndConditionsSummaryBullets'
 import { capitalize } from '../../../helpers'

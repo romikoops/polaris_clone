@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
 import styles from './RouteHubBox.scss'
 import { moment } from '../../constants'
 
-export class RouteHubBox extends Component {
+class RouteHubBox extends Component {
   static faIcon (sched) {
     if (sched) {
       const faKeywords = {
@@ -38,7 +39,7 @@ export class RouteHubBox extends Component {
   }
   render () {
     const {
-      theme, shipment
+      theme, shipment, t
     } = this.props
     const startHub = shipment.origin_hub
     const endHub = shipment.destination_hub
@@ -77,7 +78,7 @@ export class RouteHubBox extends Component {
       shipment.pickup_address ? (
         <div className={`flex-100 layout-row layout-align-center-start layout-wrap ${styles.address_padding}`}>
           <div className="flex-100 layout-row layout-align-center-center">
-            <p className="flex-none">With Pickup From:</p>
+            <p className="flex-none">{t('common:withPickupFrom')}:</p>
           </div>
           <address className={` ${styles.itinerary_address} flex-none`}>
             {`${shipment.pickup_address.street_number || ''} ${shipment.pickup_address.street || ''}`}, <br />
@@ -93,7 +94,7 @@ export class RouteHubBox extends Component {
       shipment.delivery_address ? (
         <div className={`flex-100 layout-row layout-align-center-start layout-wrap ${styles.address_padding}`}>
           <div className="flex-100 layout-row layout-align-center-center">
-            <p className="flex-none">With Delivery To:</p>
+            <p className="flex-none">{t('common:withDeliveryTo')}:</p>
           </div>
           <address className={` ${styles.itinerary_address} flex-none`}>
             {`${shipment.delivery_address.street_number || ''} ${shipment.delivery_address.street || ''}`}, <br />
@@ -113,11 +114,11 @@ export class RouteHubBox extends Component {
         >
           <h4 className="no_m center" style={{ marginBottom: '10px' }}>
             {' '}
-            Estimated Transit Time
+            {t('shipment:estimatedTransitTime')}
           </h4>
           <p className="flex-100 no_m center">
             {' '}
-            {moment(shipment.planned_eta).diff(moment(shipment.planned_etd), 'days')} days{' '}
+            {moment(shipment.planned_eta).diff(moment(shipment.planned_etd), t('common:days'))} days{' '}
           </p>
         </div>
       ) : (
@@ -128,7 +129,7 @@ export class RouteHubBox extends Component {
       <div className={` ${styles.outer_box} flex-100 layout-row layout-align-center-center`}>
         <div className={`flex-none ${defs.content_width} layout-row layout-align-start-start`}>
           <div className="flex layout-row layout-wrap layout-align-center-start">
-            <h3 className={`flex-100 ${styles.rhb_header}`}>ORIGIN</h3>
+            <h3 className={`flex-100 ${styles.rhb_header}`}>{t('shipment:origin').toUpperCase()}</h3>
             <div className={`flex-100 ${styles.hub_card} layout-row`} style={bg1}>
               <div className={styles.fade} />
               <div className={`${styles.content} layout-row`}>
@@ -137,7 +138,6 @@ export class RouteHubBox extends Component {
                 </div>
                 <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                   <h6 className="flex-100"> {startHub.name} </h6>
-                  {/* <p className="flex-100">{startHub.location.geocoded_address}</p> */}
                 </div>
               </div>
             </div>
@@ -162,7 +162,7 @@ export class RouteHubBox extends Component {
           </div>
 
           <div className="flex layout-row layout-wrap layout-align-center-start">
-            <h3 className={`flex-100 ${styles.rhb_header}`}> DESTINATION</h3>
+            <h3 className={`flex-100 ${styles.rhb_header}`}>{t('shipment:destination').toUpperCase()}</h3>
             <div className={`flex-100 ${styles.hub_card} layout-row`} style={bg2}>
               <div className={styles.fade} />
               <div className={`${styles.content} layout-row`}>
@@ -171,7 +171,6 @@ export class RouteHubBox extends Component {
                 </div>
                 <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                   <h6 className="flex-100"> {endHub.name} </h6>
-                  {/* <p className="flex-100">{endHub.location.geocoded_address}</p> */}
                 </div>
               </div>
             </div>
@@ -184,10 +183,11 @@ export class RouteHubBox extends Component {
 }
 RouteHubBox.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   shipment: PropTypes.shipment.isRequired
 }
 RouteHubBox.defaultProps = {
   theme: null
 }
 
-export default RouteHubBox
+export default translate(['common', 'shipment'])(RouteHubBox)

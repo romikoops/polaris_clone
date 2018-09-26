@@ -1,15 +1,17 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 
-export function Infobox (convoKey, eta, etd, origin, totalprice, status) {
+function Infobox (convoKey, eta, etd, origin, totalprice, status, t) {
   return (
-    <p className="flex-none">Shipment Reference: {convoKey}</p>
+    <p className="flex-none">{t('bookconf:shipmentReference')}: {convoKey}</p>
   )
 }
 
 Infobox.PropTypes = {
   id: PropTypes.number.isRequired,
-  shipments: PropTypes.object.isRequired
+  shipments: PropTypes.object.isRequired,
+  t: PropTypes.func.isRequired
 }
 
-export default Infobox
+export default translate('bookconf')(Infobox)

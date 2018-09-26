@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import { v4 } from 'uuid'
 import '../../../../styles/react-toggle.scss'
 import styles from './CargoContainerGroup.scss'
 import PropTypes from '../../../../prop-types'
-// import { HsCodeViewer } from '../../../HsCodes/HsCodeViewer'
 import CargoContainerGroupAggregated from './Aggregated'
 import { LOAD_TYPES, cargoGlossary } from '../../../../constants'
 import { gradientTextGenerator } from '../../../../helpers'
 
-export class CargoContainerGroup extends Component {
+class CargoContainerGroup extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -34,7 +34,7 @@ export class CargoContainerGroup extends Component {
   }
   render () {
     const {
-      group, shipment, theme
+      group, shipment, theme, t
     } = this.props
     const gradientTextStyle =
       theme && theme.colors
@@ -49,21 +49,21 @@ export class CargoContainerGroup extends Component {
         } flex-100 layout-row layout-wrap layout-align-none-center`}
       >
         <div className="flex-10 layout-row layout-align-center-center">
-          <p className="flex-none" style={{ fontSize: '10px' }}>Single Item</p>
+          <p className="flex-none" style={{ fontSize: '10px' }}>{t('cargo:singleItem')}</p>
         </div>
 
         <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center">
               <span>{group.items[0].weight_class}</span>&nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">Weight Class</p>
+            <p className="flex-none layout-row layout-align-center-center">{t('cargo:weightClass')}</p>
           </div>
         </div>
         <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center">
               <span>{group.items[0].payload_in_kg}</span>&nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">Cargo Gross Weight</p>
+            <p className="flex-none layout-row layout-align-center-center">{t('cargo:cargoGrossWeight')}</p>
           </div>
         </div>
 
@@ -73,18 +73,17 @@ export class CargoContainerGroup extends Component {
               <span>
                 {(group.items[0].gross_weight)}
               </span> &nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">Gross Weight</p>
+            <p className="flex-none layout-row layout-align-center-center">{t('cargo:grossWeight')}</p>
           </div>
         </div>
         <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center"><span>{parseFloat(group.items[0].tare_weight)}</span> &nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">Tare Weight</p>
+            <p className="flex-none layout-row layout-align-center-center">{t('cargo:tareWeight')}</p>
           </div>
         </div>
       </div>
     )
-    // const unitStyle = unitView ? styles.open_panel : styles.closed_panel
     const aggStyle = unitView ? styles.closed_panel : styles.open_panel
     const imgLCL = { backgroundImage: `url(${LOAD_TYPES[0].img})` }
     const imgFCL = { backgroundImage: `url(${LOAD_TYPES[1].img})` }
@@ -117,7 +116,7 @@ export class CargoContainerGroup extends Component {
           <div className={`flex-20 layout-row layout-align-center-center ${styles.side_border}`}>
             <div className="layout-column">
               <p className="flex-none layout-row layout-align-center-center"><span className={styles.cargo_type}>{cargoCategory}</span></p>
-              <p className="flex-none layout-row layout-align-center-center">Cargo type</p>
+              <p className="flex-none layout-row layout-align-center-center">{t('cargo:type')}</p>
             </div>
           </div>
           <div className="flex-55 layout-row">
@@ -137,36 +136,20 @@ export class CargoContainerGroup extends Component {
             {unitArr}
           </div>
         </div>
-        {/* {viewHSCodes ? (
-          <div className="flex-100 layout-row layout-wrap" onClick={this.viewHsCodes}>
-            <i className="fa fa-eye clip flex-none" style={textStyle} />
-            <p className="offset-5 flex-none">View Hs Codes</p>
-          </div>
-        ) : (
-          ''
-        )}
-        {viewer ? (
-          <HsCodeViewer item={group} hsCodes={hsCodes} theme={theme} close={this.viewHsCodes} />
-        ) : (
-          ''
-        )}
-        {styleTagJSX} */}
       </div>
     )
   }
 }
 CargoContainerGroup.propTypes = {
   group: PropTypes.objectOf(PropTypes.any).isRequired,
-  // viewHSCodes: PropTypes.bool,
-  // hsCodes: PropTypes.arrayOf(PropTypes.string).isRequired,
+  t: PropTypes.func.isRequired,
   shipment: PropTypes.objectOf(PropTypes.any),
   theme: PropTypes.theme
 }
 
 CargoContainerGroup.defaultProps = {
-  // viewHSCodes: false,
   shipment: {},
   theme: null
 }
 
-export default CargoContainerGroup
+export default translate(['cargo', 'common'])(CargoContainerGroup)

@@ -6,7 +6,7 @@ import { CardLinkRow } from '../CardLinkRow/CardLinkRow'
 import { LOAD_TYPES } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { capitalize, gradientTextGenerator, hexToRGB, humanizedMotAndLoadType } from '../../helpers'
-import { TextHeading } from '../TextHeading/TextHeading'
+import TextHeading from '../TextHeading/TextHeading'
 
 export class ChooseShipment extends Component {
   constructor (props) {

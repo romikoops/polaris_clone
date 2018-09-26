@@ -26,7 +26,7 @@ jest.mock('../Price/Price', () => ({
 }))
 
 // eslint-disable-next-line
-import { MessageShipmentData } from './MessageShipmentData'
+import MessageShipmentData from './MessageShipmentData'
 
 const editedShipment = {
   ...shipmentData.shipment,

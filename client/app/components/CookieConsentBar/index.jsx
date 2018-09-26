@@ -1,4 +1,5 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { authenticationActions } from '../../actions'
@@ -53,26 +54,26 @@ class CookieConsentBar extends React.PureComponent {
       theme,
       tenant,
       loggedIn,
-      authDispatch
+      authDispatch,
+      t
     } = this.props
 
     const modal = (
       <Modal
         component={
           <div className={styles.cookie_modal} >
-            <p>We use cookies to enhance your user experience. <br /><br />
-            The consent is not mandatory but necessary to continue using our website.
-            Are you sure you want to decline the usage of cookies?</p>
+            <p>{t('common:cookieHead')} <br /><br />
+              {t('common:cookieTail')}</p>
             <ConsentButton
               theme={theme}
               handleNext={() => handleAccept(user, tenant, loggedIn, authDispatch)}
-              text="ok, accept"
+              text={t('common:ok')}
               active
             />
             <ConsentButton
               theme={theme}
               handleNext={() => { window.open('https://www.itsmycargo.com/') }}
-              text="cookies policy"
+              text={t('common:cookiesPolicy')}
               active
             />
           </div>
@@ -100,13 +101,13 @@ class CookieConsentBar extends React.PureComponent {
         <ConsentButton
           theme={theme}
           handleNext={() => handleAccept(user, tenant, loggedIn, authDispatch)}
-          text="accept"
+          text={t('common:accept')}
           active
         />
         <ConsentButton
           theme={theme}
           handleNext={this.handleDecline}
-          text="decline"
+          text={t('common:decline')}
           active
         />
       </div>
@@ -117,6 +118,7 @@ class CookieConsentBar extends React.PureComponent {
 CookieConsentBar.propTypes = {
   theme: PropTypes.theme,
   user: PropTypes.user,
+  t: PropTypes.func.isRequired,
   loggedIn: PropTypes.bool,
   authDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   tenant: PropTypes.tenant
@@ -135,4 +137,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(null, mapDispatchToProps)(CookieConsentBar)
+export default translate('common')(connect(null, mapDispatchToProps)(CookieConsentBar))

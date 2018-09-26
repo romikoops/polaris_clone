@@ -188,6 +188,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 },
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -214,7 +215,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 <p
                   className="flex-70 "
                 >
-                  NO_TRANSLATION | key "bookconf:expectedDropoff":
+                  Expected Time of Dropoff:
                 </p>
                 <p
                   className="flex-30  center"
@@ -643,11 +644,13 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             <Contact
               contactType="Shipper"
               key="RANDOM_KEY_22"
+              t={[Function]}
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
               key="RANDOM_KEY_23"
+              t={[Function]}
               textStyle="#333"
             />
           </div>
@@ -709,6 +712,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                   "foo": 1,
                 }
               }
+              t={[Function]}
             />
           </div>
         </div>
@@ -1297,6 +1301,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 },
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -1323,7 +1328,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 <p
                   className="flex-70 "
                 >
-                  NO_TRANSLATION | key "bookconf:expectedDropoff":
+                  Expected Time of Dropoff:
                 </p>
                 <p
                   className="flex-30  center"
@@ -1752,11 +1757,13 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             <Contact
               contactType="Shipper"
               key="RANDOM_KEY_28"
+              t={[Function]}
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
               key="RANDOM_KEY_29"
+              t={[Function]}
               textStyle="#333"
             />
           </div>
@@ -2009,6 +2016,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 }
                 isRequired={false}
                 multiple={false}
+                t={[Function]}
                 text=""
                 theme={
                   Object {
@@ -2044,6 +2052,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 }
                 isRequired={false}
                 multiple={false}
+                t={[Function]}
                 text=""
                 theme={
                   Object {
@@ -2463,6 +2472,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 },
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -2489,7 +2499,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 <p
                   className="flex-70 "
                 >
-                  NO_TRANSLATION | key "bookconf:expectedDropoff":
+                  Expected Time of Dropoff:
                 </p>
                 <p
                   className="flex-30  center"
@@ -2918,11 +2928,13 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             <Contact
               contactType="Shipper"
               key="RANDOM_KEY_34"
+              t={[Function]}
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
               key="RANDOM_KEY_35"
+              t={[Function]}
               textStyle="#333"
             />
           </div>
@@ -3684,6 +3696,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 },
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -3710,7 +3723,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 <p
                   className="flex-70 "
                 >
-                  NO_TRANSLATION | key "bookconf:expectedDropoff":
+                  Expected Time of Dropoff:
                 </p>
                 <p
                   className="flex-30  center"
@@ -3774,7 +3787,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 <p
                   className="flex-70 "
                 >
-                  NO_TRANSLATION | key "bookconf:expectedDelivery":
+                  Expected Time of Delivery:
                 </p>
                 <p
                   className="flex-30 center"
@@ -4157,11 +4170,13 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             <Contact
               contactType="Shipper"
               key="RANDOM_KEY_49"
+              t={[Function]}
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
               key="RANDOM_KEY_50"
+              t={[Function]}
               textStyle="#333"
             />
           </div>
@@ -4797,6 +4812,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 },
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -4823,7 +4839,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 <p
                   className="flex-70 "
                 >
-                  NO_TRANSLATION | key "bookconf:expectedPickup":
+                  Expected Time of Pickup:
                 </p>
                 <p
                   className="flex-30  center"
@@ -5268,11 +5284,13 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             <Contact
               contactType="Shipper"
               key="RANDOM_KEY_43"
+              t={[Function]}
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
               key="RANDOM_KEY_44"
+              t={[Function]}
               textStyle="#333"
             />
           </div>
@@ -5908,6 +5926,7 @@ exports[`shallow render 1`] = `
                 },
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -5934,7 +5953,7 @@ exports[`shallow render 1`] = `
                 <p
                   className="flex-70 "
                 >
-                  NO_TRANSLATION | key "bookconf:expectedDropoff":
+                  Expected Time of Dropoff:
                 </p>
                 <p
                   className="flex-30  center"
@@ -6363,11 +6382,13 @@ exports[`shallow render 1`] = `
             <Contact
               contactType="Shipper"
               key="RANDOM_KEY_0"
+              t={[Function]}
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
               key="RANDOM_KEY_1"
+              t={[Function]}
               textStyle="#333"
             />
           </div>
@@ -7003,6 +7024,7 @@ exports[`with cargo items 1`] = `
                 },
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -7029,7 +7051,7 @@ exports[`with cargo items 1`] = `
                 <p
                   className="flex-70 "
                 >
-                  NO_TRANSLATION | key "bookconf:expectedDropoff":
+                  Expected Time of Dropoff:
                 </p>
                 <p
                   className="flex-30  center"
@@ -7458,11 +7480,13 @@ exports[`with cargo items 1`] = `
             <Contact
               contactType="Shipper"
               key="RANDOM_KEY_16"
+              t={[Function]}
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
               key="RANDOM_KEY_17"
+              t={[Function]}
               textStyle="#333"
             />
           </div>
@@ -7655,6 +7679,7 @@ exports[`with cargo items 1`] = `
                   },
                 }
               }
+              t={[Function]}
               theme={
                 Object {
                   "colors": Object {
@@ -7827,6 +7852,7 @@ exports[`with cargo items 1`] = `
                   },
                 }
               }
+              t={[Function]}
               theme={
                 Object {
                   "colors": Object {
@@ -8417,6 +8443,7 @@ exports[`with containers 1`] = `
                 },
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -8443,7 +8470,7 @@ exports[`with containers 1`] = `
                 <p
                   className="flex-70 "
                 >
-                  NO_TRANSLATION | key "bookconf:expectedDropoff":
+                  Expected Time of Dropoff:
                 </p>
                 <p
                   className="flex-30  center"
@@ -8872,11 +8899,13 @@ exports[`with containers 1`] = `
             <Contact
               contactType="Shipper"
               key="RANDOM_KEY_8"
+              t={[Function]}
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
               key="RANDOM_KEY_9"
+              t={[Function]}
               textStyle="#333"
             />
           </div>
@@ -9051,6 +9080,7 @@ exports[`with containers 1`] = `
                   },
                 }
               }
+              t={[Function]}
               theme={
                 Object {
                   "colors": Object {
@@ -9199,6 +9229,7 @@ exports[`with containers 1`] = `
                   },
                 }
               }
+              t={[Function]}
               theme={
                 Object {
                   "colors": Object {

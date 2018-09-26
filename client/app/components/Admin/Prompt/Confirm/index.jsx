@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styles from './index.scss'
-import { TextHeading } from '../../../TextHeading/TextHeading'
+import TextHeading from '../../../TextHeading/TextHeading'
 import { RoundButton } from '../../../RoundButton/RoundButton'
 
 export default function AdminPromptConfirm ({

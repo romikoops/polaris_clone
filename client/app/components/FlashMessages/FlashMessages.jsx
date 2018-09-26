@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { CSSTransition } from 'react-transition-group'
 import PropTypes from 'prop-types'
-import { Alert } from '../Alert/Alert'
+import Alert from '../Alert/Alert'
 
-export class FlashMessages extends Component {
+class FlashMessages extends Component {
   constructor (props) {
     super(props)
     this.state = { messages: props.messages }

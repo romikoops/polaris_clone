@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styles from './TextHeading.scss'
 
-export class TextHeading extends Component {
+class TextHeading extends Component {
   constructor (props) {
     super(props)
     this.state = {}

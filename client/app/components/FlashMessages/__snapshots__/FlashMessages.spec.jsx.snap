@@ -18,12 +18,14 @@ exports[`shallow render 1`] = `
         key="0"
         message="FOO"
         onClose={[Function]}
+        t={[Function]}
         timeout={10000}
       />
       <Alert
         key="1"
         message="BAR"
         onClose={[Function]}
+        t={[Function]}
         timeout={10000}
       />
     </div>

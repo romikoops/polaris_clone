@@ -20,6 +20,6 @@ const propsBase = {
   options: {}
 }
 
-test.skip('shallow render', () => {
+test('shallow render', () => {
   expect(shallow(<PlaceSearch {...propsBase} />)).toMatchSnapshot()
 })

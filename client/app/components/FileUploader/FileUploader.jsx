@@ -1,4 +1,5 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import fetch from 'isomorphic-fetch'
 import { Promise } from 'es6-promise-promise'
 import ReactTooltip from 'react-tooltip'
@@ -29,13 +30,12 @@ class FileUploader extends React.Component {
     this.fileUpload = this.fileUpload.bind(this)
   }
   onFormSubmit (e) {
-    e.preventDefault() // Stop form submit
+    e.preventDefault()
     if (this.state.file) {
       this.fileUpload(this.state.file)
     }
   }
   onChange (e) {
-    // this.setState({file: e.target.files[0]});
     this.fileUpload(e.target.files[0])
   }
   fileUpload (baseFile) {
@@ -46,17 +46,6 @@ class FileUploader extends React.Component {
     if (!file) {
       return ''
     }
-    // const fileNameSplit = file.name.split('.')
-    // const fileExt = fileNameSplit[fileNameSplit.length - 1]
-    // if (
-    //   fileExt === 'docx' ||
-    //   fileExt === 'doc' ||
-    //   fileExt === 'jpeg' ||
-    //   fileExt === 'jpg' ||
-    //   fileExt === 'tiff' ||
-    //   fileExt === 'png' ||
-    //   fileExt === 'pdf'
-    // ) {
     if (dispatchFn) {
       if (type) {
         file.doc_type = type
@@ -65,6 +54,7 @@ class FileUploader extends React.Component {
       if (this.uploaderInput.files.length) {
         this.uploaderInput.value = ''
       }
+
       return null
     }
     if (uploadFn) {
@@ -83,9 +73,8 @@ class FileUploader extends React.Component {
     if (this.uploaderInput.files.length) {
       this.uploaderInput.value = ''
     }
+
     return null
-    // }
-    // return this.showFileTypeError()
   }
   showFileTypeError () {
     this.setState({ error: true })
@@ -97,11 +86,11 @@ class FileUploader extends React.Component {
   }
   render () {
     const {
-      theme, type, tooltip, square, size
+      theme, type, tooltip, square, size, t
     } = this.props
     const tooltipId = v4()
     const errorStyle = this.state.error ? styles.error : ''
-    console.log(errorStyle)
+
     return (
       <div
         className={`flex-none layout-row ${styles.upload_btn_wrapper} `}
@@ -111,7 +100,7 @@ class FileUploader extends React.Component {
         <form>
           {square ? (
             <SquareButton
-              text="Upload"
+              text={t('common:upload')}
               theme={theme}
               size={size}
               handleNext={e => this.clickUploaderInput(e)}
@@ -120,7 +109,7 @@ class FileUploader extends React.Component {
             />
           ) : (
             <RoundButton
-              text="Upload"
+              text={t('common:upload')}
               theme={theme}
               size={size}
               handleNext={e => this.clickUploaderInput(e)}
@@ -138,9 +127,6 @@ class FileUploader extends React.Component {
             }}
           />
         </form>
-        {/* <div className={`${styles.file_error} ${errorStyle} layout-row layout-align-center`}>
-          <p className="flex-100">Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed</p>
-        </div> */}
       </div>
     )
   }
@@ -148,6 +134,7 @@ class FileUploader extends React.Component {
 
 FileUploader.propTypes = {
   url: PropTypes.string.isRequired,
+  t: PropTypes.func.isRequired,
   square: PropTypes.bool,
   type: PropTypes.string.isRequired,
   theme: PropTypes.theme,
@@ -166,4 +153,4 @@ FileUploader.defaultProps = {
   size: 'small'
 }
 
-export default FileUploader
+export default translate('common')(FileUploader)

@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './LoginRegistrationWrapper.scss'
 import { LoginPage } from '../../containers/LoginPage/LoginPage'
@@ -9,14 +10,15 @@ export class LoginRegistrationWrapper extends PureComponent {
     super(props)
     this.state = {}
     this.components = { LoginPage, RegistrationPage }
+    const { t } = this.props
     this.togglePrompt = {
       LoginPage: {
-        promptText: 'New account?',
-        linkText: 'Register'
+        promptText: t('account:newAccount'),
+        linkText: t('common:register')
       },
       RegistrationPage: {
-        promptText: 'Already have an account?',
-        linkText: 'Login'
+        promptText: t('account:existingAccount'),
+        linkText: t('common:logIn')
       }
     }
   }
@@ -60,6 +62,7 @@ LoginRegistrationWrapper.propTypes = {
   initialCompName: PropTypes.string.isRequired,
   LoginPageProps: PropTypes.objectOf(PropTypes.any),
   RegistrationPageProps: PropTypes.objectOf(PropTypes.any),
+  t: PropTypes.func.isRequired,
   updateDimensions: PropTypes.func
 }
 
@@ -69,4 +72,4 @@ LoginRegistrationWrapper.defaultProps = {
   updateDimensions: null
 }
 
-export default LoginRegistrationWrapper
+export default translate(['common', 'account'])(LoginRegistrationWrapper)

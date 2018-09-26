@@ -2,7 +2,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 
 // eslint-disable-next-line
-import { NavDropdown } from './NavDropdown'
+import NavDropdown from './NavDropdown'
 
 const linkOptionBase = {
   key: 'FOO_KEY',

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import { NamedAsync } from '../NamedSelect/NamedAsync'
 import { authHeader } from '../../helpers'
@@ -9,10 +10,10 @@ import {
   getApiHost
 } from '../../constants'
 import { Tooltip } from '../Tooltip/Tooltip'
-import { TextHeading } from '../TextHeading/TextHeading'
+import TextHeading from '../TextHeading/TextHeading'
 // import defs from '../../styles/default_classes.scss';
 const containerDescriptions = CONTAINER_DESCRIPTIONS
-export class HSCodeRow extends Component {
+class HSCodeRow extends Component {
   static reduceCargos (arr) {
     const results = []
     const uuids = {}
@@ -22,6 +23,7 @@ export class HSCodeRow extends Component {
         results.push(c)
       }
     })
+
     return results
   }
   constructor (props) {
@@ -54,7 +56,7 @@ export class HSCodeRow extends Component {
 
   render () {
     const {
-      containers, cargoItems, hsCodes, theme, tenant, hsTexts
+      containers, cargoItems, hsCodes, theme, tenant, hsTexts, t
     } = this.props
     const { showPaste } = this.state
     const containersAdded = []
@@ -67,6 +69,7 @@ export class HSCodeRow extends Component {
         headers: { ...authHeader() },
         body: formData
       }
+
       return window
         .fetch(`${getApiHost()}/search/hscodes`, requestOptions)
         .then(response => response.json())
@@ -100,26 +103,26 @@ export class HSCodeRow extends Component {
             style={{ zIndex: `${200 - i}` }}
           >
             <div className="flex-15 layout-row layout-align-start-center layout-wrap">
-              <p className={`flex-100 ${styles.cell_header}`}> Container Size</p>
+              <p className={`flex-100 ${styles.cell_header}`}>{t('common:containerSize')}</p>
               <p className="flex-100">{containerDescriptions[cont.size_class]}</p>
             </div>
             <div className="flex-15 layout-row layout-align-start-center layout-wrap">
-              <p className={`flex-100 ${styles.cell_header}`}>Net Weight</p>
+              <p className={`flex-100 ${styles.cell_header}`}>{t('common:netWeight')}</p>
               <p className="flex-100">{cont.payload_in_kg} kg</p>
             </div>
             <div className="flex-15 layout-row layout-align-start-center layout-wrap">
-              <p className={`flex-100 ${styles.cell_header}`}> Gross Weight</p>
+              <p className={`flex-100 ${styles.cell_header}`}>{t('common:grossWeight')}</p>
               <p className="flex-100">
                 {parseInt(cont.payload_in_kg, 10) + parseInt(cont.tare_weight, 10)} kg
               </p>
             </div>
             <div className="flex-10 layout-row layout-align-start-center layout-wrap">
-              <p className={`flex-100 ${styles.cell_header}`}>Dangerous Goods: </p>
+              <p className={`flex-100 ${styles.cell_header}`}>{t('common:dangerousGoods')}: </p>
 
-              <p className="flex-100">{cont.dangerousGoods ? 'Yes' : 'No'}</p>
+              <p className="flex-100">{cont.dangerousGoods ? t('common:yes') : t('common:no')}</p>
             </div>
             <div className="flex-15 layout-row layout-align-start-center layout-wrap">
-              <p className={`flex-100 ${styles.cell_header}`}>Copy/Paste: </p>
+              <p className={`flex-100 ${styles.cell_header}`}>{t('common:copyPaste')}</p>
 
               <div className="flex-100 layout-row" style={{ margin: '1em 0' }}>
                 <div
@@ -183,31 +186,31 @@ export class HSCodeRow extends Component {
             style={{ zIndex: `${200 - i}` }}
           >
             <div className="flex-10 layout-row layout-align-center-center layout-wrap">
-              <p className={`flex-100 ${styles.cell_header}`}>Cargo Group</p>
+              <p className={`flex-100 ${styles.cell_header}`}>{t('common:cargoGroup')}</p>
               <p className="flex-100">{i + 1}</p>
             </div>
             <div className="flex-15 layout-row layout-align-center-center layout-wrap">
-              <p className={`flex-100 ${styles.cell_header}`}>Payload</p>
+              <p className={`flex-100 ${styles.cell_header}`}>{t('common:payload')}</p>
               <p className="flex-100">{cont.payload_in_kg} kg</p>
             </div>
             <div className="flex-15 layout-row layout-align-center-center layout-wrap">
-              <p className={`flex-100 ${styles.cell_header}`}>Depth</p>
+              <p className={`flex-100 ${styles.cell_header}`}>{t('common:depth')}</p>
               <p className="flex-100">{cont.dimension_y} cm</p>
             </div>
             <div className="flex-15 layout-row layout-align-center-center layout-wrap">
-              <p className={`flex-100 ${styles.cell_header}`}>Width</p>
+              <p className={`flex-100 ${styles.cell_header}`}>{t('common:width')}</p>
               <p className="flex-100">{cont.dimension_x} cm</p>
             </div>
             <div className="flex-15 layout-row layout-align-center-center layout-wrap">
-              <p className={`flex-100 ${styles.cell_header}`}>Height</p>
+              <p className={`flex-100 ${styles.cell_header}`}>{t('common:height')}</p>
               <p className="flex-100">{cont.dimension_z} cm</p>
             </div>
             <div className="flex-15 layout-row layout-align-center-center layout-wrap">
-              <p className={`flex-100 ${styles.cell_header}`}>Dangerous Goods: </p>
-              <p className="flex-100">{cont.dangerousGoods ? 'Yes' : 'No'}</p>
+              <p className={`flex-100 ${styles.cell_header}`}>{t('common:dangerousGoods')}: </p>
+              <p className="flex-100">{cont.dangerousGoods ? t('common:yes') : t('common:no')}</p>
             </div>
             <div className="flex-15 layout-row layout-align-start-center layout-wrap">
-              <p className={`flex-100 ${styles.cell_header}`}>Copy/Paste: </p>
+              <p className={`flex-100 ${styles.cell_header}`}>{t('common:copyPaste')} </p>
 
               <div className="flex-100 layout-row" style={{ margin: '1em 0' }}>
                 <div
@@ -265,7 +268,7 @@ export class HSCodeRow extends Component {
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
             <div className="layout-row flex-100 layout-align-start-center">
               <div className="flex-none">
-                <TextHeading theme={theme} size={2} text="HS Codes" />
+                <TextHeading theme={theme} size={2} text={t('common:hsCodes')} />
               </div>
               <Tooltip theme={theme} icon="fa-info-circle" text="hs_code" />
             </div>
@@ -282,6 +285,7 @@ export class HSCodeRow extends Component {
 
 HSCodeRow.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   tenant: PropTypes.objectOf(PropTypes.any),
   hsCodes: PropTypes.arrayOf(PropTypes.string),
   setCode: PropTypes.func.isRequired,
@@ -304,4 +308,4 @@ HSCodeRow.defaultProps = {
   hsTexts: {},
   handleHsTextChange: null
 }
-export default HSCodeRow
+export default translate('common')(HSCodeRow)
