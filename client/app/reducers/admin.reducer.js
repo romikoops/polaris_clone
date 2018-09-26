@@ -517,10 +517,10 @@ export default function admin (state = {}, action) {
         state.dashboard && state.dashboard.shipments && state.dashboard.shipments.rejected
           ? state.dashboard.shipments.rejected
           : []
+      
       rejected.push(action.payload)
       dashRejected.push(action.payload)
-
-      return {
+      const newState = {
         ...state,
         dashboard: {
           ...state.dashboard,
@@ -537,6 +537,11 @@ export default function admin (state = {}, action) {
         },
         loading: false
       }
+      if (state.shipment && state.shipment.shipment && state.shipment.shipment.id === action.payload.id) {
+        newState.shipment.shipment = action.payload
+      }
+
+      return newState
     }
     case adminConstants.DENY_SHIPMENT_FAILURE:
       return {

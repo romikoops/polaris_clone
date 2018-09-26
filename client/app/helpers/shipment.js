@@ -45,3 +45,6 @@ export function checkOnCarriage (shipment, action) {
     date: shipment.planned_destination_collection_date
   }
 }
+export function isRequested (status) {
+  return ['requested', 'requested_by_unconfirmed_account'].includes(status)
+}

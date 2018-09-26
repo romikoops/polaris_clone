@@ -17,13 +17,14 @@ import {
   gradientGenerator,
   gradientBorderGenerator,
   switchIcon,
-  totalPrice
+  totalPrice,
+  isRequested
 } from '../../../helpers'
 import { CargoContainerGroup } from '../../Cargo/Container/Group'
 import { AdminShipmentContent } from './AdminShipmentContent'
 import { ShipmentQuotationContent } from '../../UserAccount/ShipmentQuotationContent'
 
-export class AdminShipmentView extends Component {
+class AdminShipmentView extends Component {
   static sumCargoFees (cargos) {
     let total = 0.0
     let curr = ''
@@ -116,6 +117,7 @@ export class AdminShipmentView extends Component {
       }
     }
     this.handleDeny = this.handleDeny.bind(this)
+    this.handleArchive = this.handleArchive.bind(this)
     this.handleAccept = this.handleAccept.bind(this)
     this.handleFinished = this.handleFinished.bind(this)
     this.toggleEditPrice = this.toggleEditPrice.bind(this)
@@ -140,9 +142,13 @@ export class AdminShipmentView extends Component {
     window.scrollTo(0, 0)
   }
   handleDeny () {
-    const { shipmentData, handleShipmentAction, adminDispatch } = this.props
+    const { shipmentData, handleShipmentAction } = this.props
     handleShipmentAction(shipmentData.shipment.id, 'decline')
-    adminDispatch.getShipments(true)
+  }
+  handleArchive () {
+    const { shipmentData, handleShipmentAction, adminDispatch } = this.props
+    handleShipmentAction(shipmentData.shipment.id, 'archive')
+    adminDispatch.getShipments({}, 1, true)
   }
 
   handleCurrencySelect (selection) {
@@ -450,20 +456,20 @@ export class AdminShipmentView extends Component {
     }
 
     const statusRequested =
-      (['requested', 'requested_by_unconfirmed_account'].includes(shipment.status)) ? (
+      (isRequested(shipment.status)) ? (
         <GradientBorder
           wrapperClassName={`
           layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25
           ${adminStyles.header_margin_buffer} ${styles.status_box_requested}`}
-        gradient={gradientBorderStyle}
-        className="layout-row flex-100 layout-align-center-center"
-        content={(
-          <p className="layout-align-center-center layout-row"> {t('common:requested')} </p>
-        )}
-      />
-    ) : (
-      ''
-    )
+          gradient={gradientBorderStyle}
+          className="layout-row flex-100 layout-align-center-center"
+          content={(
+            <p className="layout-align-center-center layout-row"> {t('common:requested')} </p>
+          )}
+        />
+      ) : (
+        ''
+      )
 
     const statusInProcess = (shipment.status === 'confirmed') ? (
       <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box_process}`}>
@@ -750,6 +756,38 @@ export class AdminShipmentView extends Component {
 
     const cargoCount = Object.keys(feeHash.cargo).length - 2
     const dnrEditKeys = ['in_process', 'finished', 'confirmed']
+    const renderActionButtons = ({ status }) => {
+      switch (status) {
+        case isRequested(status):
+          return (
+            <div className={`layout-row flex-none layout-align-space-around-center ${adminStyles.border_box} ${adminStyles.action_icons}`}>
+              <i className={`fa fa-check ${styles.light_green}`} onClick={this.handleAccept} />
+              <i className={`fa fa-trash ${styles.light_red}`} onClick={this.handleDeny} />
+            </div>
+          )
+        case 'confirmed':
+          return (
+            <div className={`layout-row flex-none layout-align-space-around-center ${adminStyles.border_box} ${adminStyles.action_icons}`}>
+              <i className={`fa fa-check ${styles.light_green}`} onClick={this.handleFinished} />
+            </div>
+          )
+        case 'declined':
+          return (
+            <div className={`layout-row flex-none layout-align-space-around-center ${adminStyles.border_box} ${adminStyles.action_icons}`}>
+              <i className={`fa fa-archive ${styles.light_orange}`} onClick={this.handleArchive} />
+            </div>
+          )
+        case 'finished':
+          return (
+            <div className={`layout-row flex-none layout-align-space-around-center ${adminStyles.border_box} ${adminStyles.action_icons}`}>
+              <i className={`fa fa-archive ${styles.light_orange}`} onClick={this.handleArchive} />
+            </div>
+          )
+
+        default:
+          return ''
+      }
+    }
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start header_buffer">
@@ -762,19 +800,7 @@ export class AdminShipmentView extends Component {
           {statusInProcess}
           {statusFinished}
           {statusRejected}
-          <div className={`layout-row flex-none layout-align-space-around-center ${adminStyles.border_box} ${adminStyles.action_icons}`}>
-            {shipment.status === 'requested' ? (
-              <i className={`fa fa-check ${styles.light_green}`} onClick={this.handleAccept} />
-            ) : (
-              ''
-            )}
-            {shipment.status === 'confirmed' ? (
-              <i className={`fa fa-check ${styles.light_green}`} onClick={this.handleFinished} />
-            ) : (
-              ''
-            )}
-            <i className={`fa fa-trash ${styles.light_red}`} onClick={this.handleDeny} />
-          </div>
+          {renderActionButtons({ status: shipment.status })}
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">
           {shipment.status !== 'quoted' ? (
@@ -832,7 +858,7 @@ export class AdminShipmentView extends Component {
 
         </div>
 
-        {['requested', 'requested_by_unconfirmed_account'].includes(shipment.status) ? (
+        {isRequested(shipment.status) ? (
           <div className={`flex-100 layout-row layout-align-center-center ${adminStyles.button_row}`}>
             <button style={gradientStyle} onClick={this.handleAccept}>{t('common:accept')}</button>
             <button onClick={this.handleDeny}>{t('common:refuse')}</button>
@@ -858,7 +884,6 @@ AdminShipmentView.propTypes = {
   }).isRequired,
   match: PropTypes.match.isRequired,
   t: PropTypes.func
-  // tenant: PropTypes.tenant
 }
 
 AdminShipmentView.defaultProps = {
