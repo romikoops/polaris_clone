@@ -664,7 +664,11 @@ export class ShipmentDetails extends Component {
     }
 
     if (this.state.aggregated) {
-      // TBD
+      if (Object.values(this.state.aggregatedCargoErrors).some(error => error)) {
+        this.incrementNextStageAttemps()
+
+        return
+      }
     } else {
       const { shipment } = this.state
       const loadType = camelize(shipment.load_type)
