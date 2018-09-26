@@ -262,7 +262,7 @@ export class UserShipmentView extends Component {
     const docView = []
     const missingDocs = []
 
-    const statusRequested = (shipment.status === 'requested') ? (
+    const statusRequested = (['requested', 'requested_by_unconfirmed_account'].includes(shipment.status)) ? (
       <GradientBorder
         wrapperClassName={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 ${adminStyles.header_margin_buffer}  ${styles.status_box_requested}`}
         gradient={gradientBorderStyle}
