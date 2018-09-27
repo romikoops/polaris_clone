@@ -42,8 +42,7 @@ module DocumentTools
       text:      file_name,
       doc_type:  type,
       user:      user,
-      tenant:    user.tenant,
-      quotation: nil
+      tenant:    user.tenant
     )
   end
 
