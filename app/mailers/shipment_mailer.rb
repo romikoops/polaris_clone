@@ -22,13 +22,14 @@ class ShipmentMailer < ApplicationMailer
 
     create_pdf_attachment(@shipment)
     attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
-
-    mail(
+    mail_options = {
       to:      tenant.email_for(:sales, shipment.mode_of_transport),
       # to: TESTING_EMAIL,
       bcc:     'warwick@itsmycargo.com',
-      subject: 'Your booking through ItsMyCargo', &:html
-    )
+      subject: 'Your booking through ItsMyCargo'
+    }
+
+    mail(mail_options, &:html)
   end
 
   def shipper_notification(user, shipment)
@@ -39,13 +40,14 @@ class ShipmentMailer < ApplicationMailer
     create_pdf_attachment(@shipment)
     attachments.inline['logo.png']       = URI.open(tenant.theme['logoLarge']).read
     attachments.inline['logo_small.png'] = URI.try(:open, tenant.theme['logoSmall']).try(:read)
-
-    mail(
+    mail_options = {
       to:      user.email.blank? ? 'itsmycargodev@gmail.com' : user.email,
       # to: TESTING_EMAIL,
       bcc:     ['bookingemails@itsmycargo.com', 'warwick@itsmycargo.com'],
-      subject: 'Your booking through ItsMyCargo', &:html
-    )
+      subject: 'Your booking through ItsMyCargo'
+    }
+
+    mail(mail_options, &:html)
   end
 
   def shipper_confirmation(user, shipment)
@@ -56,13 +58,14 @@ class ShipmentMailer < ApplicationMailer
     create_pdf_attachment(@shipment)
     attachments.inline['logo.png']       = URI.open(tenant.theme['logoLarge']).read
     attachments.inline['logo_small.png'] = try(:open, tenant.theme['logoSmall']).try(:read)
-
-    mail(
+    mail_options = {
       to:      user.email.blank? ? 'itsmycargodev@gmail.com' : user.email,
       # to: TESTING_EMAIL,
       bcc:     ['bookingemails@itsmycargo.com', 'warwick@itsmycargo.com'],
-      subject: 'Your booking through ItsMyCargo', &:html
-    )
+      subject: 'Your booking through ItsMyCargo'
+    }
+
+    mail(mail_options, &:html)
   end
 
   private
