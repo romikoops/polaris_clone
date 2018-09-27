@@ -18,10 +18,7 @@ class Admin::DashboardController < Admin::AdminBaseController
   def initialize_variables
     @shipments = Shipment.where(tenant_id: current_user.tenant_id)
     @requested_shipments = requested_shipments
-    @open_shipments = open_shipments
-    @rejected_shipments = rejected_shipments
     @quoted_shipments = quoted_shipments
-    @finished_shipments = finished_shipments
     @detailed_itineraries = detailed_itin_json
     hubs = current_user.tenant.hubs
     @hubs = hubs.limit(8).map do |hub|
@@ -36,15 +33,12 @@ class Admin::DashboardController < Admin::AdminBaseController
     {
       quoted:   @quoted_shipments
     } : {
-      requested: @requested_shipments,
-      open:      @open_shipments,
-      rejected:  @rejected_shipments,
-      finished:  @finished_shipments
+      requested: @requested_shipments
     }
   end
 
   def requested_shipments
-    @shipments.requested.order_booking_desc.map(&:with_address_options_json)
+    @shipments.requested.order_booking_desc.limit(3).map(&:with_address_options_json)
   end
 
   def open_shipments
