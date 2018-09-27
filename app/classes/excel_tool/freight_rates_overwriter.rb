@@ -107,7 +107,7 @@ module ExcelTool
     end
 
     def pricing_rows
-      first_sheet.parse(
+      rows = first_sheet.parse(
         customer_id:     "CUSTOMER_ID",
         mot:             "MOT",
         cargo_type:      "CARGO_TYPE",
@@ -130,6 +130,11 @@ module ExcelTool
         nested:          "NESTED",
         wm_rate:         "WM_RATE"
       )
+      rows.each do |row|
+        row[:cargo_type].strip!
+        row[:origin].strip!
+        row[:destination].strip!
+      end
     end
 
     def set_dates(row)
