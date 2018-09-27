@@ -141,7 +141,8 @@
         "addA": "Add a ",
         "comingSoon": "Coming Soon",
         "with": "with",
-        "without": "without"
+        "without": "without",
+        "moreInfo": "More info"
       },
       "admin": {
         "lowerLimit": "Lower Limit",
@@ -427,7 +428,7 @@
         "addressDetails": "Address Details",
         "changeMyPassword": "Change my Password",
         "checkForPassword": "Please check your email for a link to change your password.",
-        "gdprYourData": "GDPR - Your Darta"
+        "yourData": "Your Data"
       },
       "imc": {
         "imcTerms": "ItsMyCargo GMBH Terms and Conditions",

@@ -28,7 +28,7 @@ function GreyBox ({
     >
       <div className={contentClassName}>
         {title || titleAction ? (
-          <div className={`layout-align-space-between-center flex layout-row ${adminStyles.title_grey}`}>
+          <div className="layout-align-space-between-center layout-row">
             {title ? <p className={`layout-align-start-center flex layout-row ${adminStyles.title_grey}`}>{title}</p> : ''}
             {titleAction || ''}
           </div>
