@@ -22,7 +22,11 @@ service:
 
 ingress:
   enabled: true
-  auth_url: "https://auth.flotilla.itsmycargo.tech"
+  # auth_url: "https://auth.flotilla.itsmycargo.tech"
+  auth:
+    username: imcqa
+    # APR1 crypted password (shipmetimbers)
+    password: $apr1$mqAfDcxF$hV5dmBnbRFzBstFn6/egO0
 
 credentialsName: services
 

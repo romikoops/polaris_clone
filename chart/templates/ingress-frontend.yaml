@@ -20,6 +20,11 @@ metadata:
     nginx.ingress.kubernetes.io/auth-url: "{{ .Values.ingress.auth_url }}/oauth2/auth"
     nginx.ingress.kubernetes.io/auth-signin: "{{ .Values.ingress.auth_url }}/oauth2/start?rd=$scheme://$http_host$request_uri"
     {{- end }}
+    {{- if .Values.ingress.auth }}
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: {{ include "app.fullname" . }}
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - QA@IMC'
+    {{- end }}
 spec:
   rules:
   - host: "*.{{ include "hostname" .Values.service.url }}"
