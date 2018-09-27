@@ -21,7 +21,7 @@ function ShipmentAggregatedCargo ({
         <ShipmentAggregatedCargoInput
           value={aggregatedCargo.volume}
           name="volume"
-          maxValue={15}
+          maxValue={35}
           {...sharedProps}
         />
         <div className="flex-10 layout-row layout-align-center-center">
