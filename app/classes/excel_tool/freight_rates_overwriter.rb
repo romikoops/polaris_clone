@@ -163,8 +163,8 @@ module ExcelTool
     end
 
     def find_nexus(string, tenant_id)
-      nexus = Nexus.find_by(name: string.strip, tenant_id: tenant_id)
-      nexus || Nexus.where("name ILIKE ? AND tenant_id = ?", "%#{string.strip}%", tenant_id).first
+      nexus = Nexus.find_by(name: string, tenant_id: tenant_id)
+      nexus || Nexus.where("name ILIKE ? AND tenant_id = ?", "%#{string}%", tenant_id).first
     end
 
     def tenant_vehicle(row)

@@ -4,7 +4,8 @@ module MultiTenantTools
   include ExcelTools
   require "#{Rails.root}/db/seed_classes/vehicle_seeder.rb"
   require "#{Rails.root}/db/seed_classes/pricing_seeder.rb"
-
+  API_URL = 'https://api2.itsmycargo.com'
+  DEV_API_URL = 'https://gamma.itsmycargo.com'
   def update_indexes
     Tenant.all.each do |tenant|
       title = tenant.name + " | ItsMyCargo"
@@ -30,7 +31,7 @@ module MultiTenantTools
       objKey = tenant["subdomain"] + ".html"
       newHtml = indexHtml.to_html
       # Replace API Host and tenantName
-      newHtml.gsub!('__API_URL__', 'https://api2.itsmycargo.com')
+      newHtml.gsub!('__API_URL__', API_URL)
       newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
       File.open("blank.html", "w") { |file| file.write(newHtml) }
       upFile = open("blank.html")
@@ -64,7 +65,7 @@ module MultiTenantTools
       objKey = tenant["subdomain"] + ".html"
       newHtml = indexHtml.to_html
       # Replace API Host and tenantName
-      newHtml.gsub!('__API_URL__', 'https://gamma.itsmycargo.com')
+      newHtml.gsub!('__API_URL__', DEV_API_URL)
       newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
       File.open("blank.html", "w") { |file| file.write(newHtml) }
       upFile = open("blank.html")
@@ -279,7 +280,7 @@ module MultiTenantTools
     objKey = tenant.subdomain + ".html"
     newHtml = indexHtml.to_html
     # Replace API Host and tenantName
-    newHtml.gsub!('__API_URL__', 'https://api2.itsmycargo.com')
+    newHtml.gsub!('__API_URL__', API_URL)
     newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
     File.open("blank.html", "w") do |file|
       file.write(newHtml)
