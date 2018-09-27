@@ -132,6 +132,32 @@ module ShippingTools
     }
   end
 
+  def self.generate_and_upload_shipment_pdf(shipment)
+    cargo_count = shipment.cargo_units.count
+    load_type = ''
+    if shipment.load_type == 'cargo_item' && cargo_count > 1
+      load_type = 'Cargo Items'
+    elsif shipment.load_type == 'cargo_item' && cargo_count == 1
+      load_type = 'Cargo Item'
+    elsif shipment.load_type == 'container' && cargo_count > 1
+      load_type = 'Containers'
+    elsif shipment.load_type == 'container' && cargo_count === 1
+      load_type = 'Container'
+    end
+
+    shipment_recap = PdfHandler.new(
+      layout:    'pdfs/simple.pdf.html.erb',
+      template:  'shipments/pdfs/shipment_recap.pdf.html.erb',
+      margin:    { top: 10, bottom: 5, left: 8, right: 8 },
+      shipment:  shipment,
+      load_type: load_type,
+      name:      'shipment_recap'
+    )
+
+    shipment_recap.generate
+    shipment_recap.upload
+  end
+
   def create_document(file, shipment, type, user)
     if type != 'miscellaneous'
       existing_document = shipment.documents.where(doc_type: type).first
@@ -635,10 +661,6 @@ module ShippingTools
         shipment
       ).deliver_later
     end
-  end
-
-  def self.save_pdf_shipment(shipment)
-    ShipmentMailer.generate_and_upload_shipment_pdf(shipment)
   end
 
   def self.last_trip(user)
