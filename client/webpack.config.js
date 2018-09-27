@@ -17,7 +17,8 @@ babelrc.plugins.push('react-hot-loader/babel')
 module.exports = {
   entry: './app/index.jsx',
   devServer: {
-    historyApiFallback: true
+    historyApiFallback: true,
+    host: '0.0.0.0'
   },
   output: {
     publicPath: '/',
