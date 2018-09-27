@@ -49,6 +49,9 @@ class DocumentsDownloader extends React.Component {
       case 'gdpr':
         documentDispatch.downloadGdpr(options)
         break
+      case 'shipment_recap':
+        documentDispatch.downloadShipment(options)
+        break
       case 'quotations':
         documentDispatch.downloadQuotations(options)
         break

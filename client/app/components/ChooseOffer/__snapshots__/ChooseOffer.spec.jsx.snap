@@ -501,11 +501,6 @@ exports[`shallow render 1`] = `
                 },
               }
             }
-            shipmentDispatch={
-              Object {
-                "goTo": [Function],
-              }
-            }
             size="full"
             t={[Function]}
             target="quotations"

@@ -468,7 +468,6 @@ export class ChooseOffer extends Component {
                     options={{ quotes: this.state.selectedOffers, shipment }}
                     size="full"
                     shipment={shipment}
-                    shipmentDispatch={shipmentDispatch}
                   />
                   <div className={styles.send_email}>
                     <Formsy>

@@ -57,18 +57,18 @@ export class ShipmentThankYou extends Component {
                   {t('bookconf:contactUs')}
                 </p>
               </div>
-            </div>
 
-            <hr className={`${styles.sec_break} flex-100`} />
-            <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-              <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
-                <RoundButton
-                  theme={theme}
-                  text="Back to dashboard"
-                  back
-                  iconClass="fa-angle0-left"
-                  handleNext={() => shipmentDispatch.toDashboard(user.id)}
-                />
+              <hr className={`${styles.sec_break} flex-100`} />
+              <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
+                  <RoundButton
+                    theme={theme}
+                    text="Back to dashboard"
+                    back
+                    iconClass="fa-angle0-left"
+                    handleNext={() => shipmentDispatch.toDashboard(user.id)}
+                  />
+                </div>
               </div>
             </div>
           </div>

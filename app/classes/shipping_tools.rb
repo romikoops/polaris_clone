@@ -132,6 +132,32 @@ module ShippingTools
     }
   end
 
+  def self.generate_and_upload_shipment_pdf(shipment)
+    cargo_count = shipment.cargo_units.count
+    load_type = ''
+    if shipment.load_type == 'cargo_item' && cargo_count > 1
+      load_type = 'Cargo Items'
+    elsif shipment.load_type == 'cargo_item' && cargo_count == 1
+      load_type = 'Cargo Item'
+    elsif shipment.load_type == 'container' && cargo_count > 1
+      load_type = 'Containers'
+    elsif shipment.load_type == 'container' && cargo_count === 1
+      load_type = 'Container'
+    end
+
+    shipment_recap = PdfHandler.new(
+      layout:    'pdfs/simple.pdf.html.erb',
+      template:  'shipments/pdfs/shipment_recap.pdf.html.erb',
+      margin:    { top: 10, bottom: 5, left: 8, right: 8 },
+      shipment:  shipment,
+      load_type: load_type,
+      name:      'shipment_recap'
+    )
+
+    shipment_recap.generate
+    shipment_recap.upload
+  end
+
   def create_document(file, shipment, type, user)
     if type != 'miscellaneous'
       existing_document = shipment.documents.where(doc_type: type).first
@@ -585,21 +611,6 @@ module ShippingTools
     aggregated_cargo_json.delete('id')
     aggregated_cargo_json.delete('shipment_id')
     shipment.aggregated_cargo.create!(aggregated_cargo_json)
-  end
-
-  def self.tenant_notification_email(user, shipment)
-    ShipmentMailer.tenant_notification(user, shipment).deliver_later
-  end
-
-  def self.shipper_notification_email(user, shipment)
-    ShipmentMailer.shipper_notification(user, shipment).deliver_later
-  end
-
-  def self.shipper_confirmation_email(user, shipment)
-    ShipmentMailer.shipper_confirmation(
-      user,
-      shipment
-    ).deliver_later
   end
 
   def get_shipment_pdf(params)

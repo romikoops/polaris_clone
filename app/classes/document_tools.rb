@@ -37,12 +37,12 @@ module DocumentTools
     Document.upload_doc(bucket: ENV['AWS_BUCKET'], key: obj_key, file: file, content_type: 'application/pdf', acl: 'private')
 
     Document.create!(
-      url:      obj_key,
-      shipment: shipment,
-      text:     file_name,
-      doc_type: type,
-      user:     user,
-      tenant:   user.tenant
+      url:       obj_key,
+      shipment:  shipment,
+      text:      file_name,
+      doc_type:  type,
+      user:      user,
+      tenant:    user.tenant
     )
   end
 
