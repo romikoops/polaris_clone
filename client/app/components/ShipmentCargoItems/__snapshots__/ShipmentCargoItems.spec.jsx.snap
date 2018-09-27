@@ -350,13 +350,13 @@ exports[`shallow rendering 1`] = `
               className="flex-10"
             />
             <div
-              className="layout-row flex-30 layout-wrap layout-align-start-center"
+              className="layout-row flex-40 layout-wrap layout-align-start-center"
             >
               <div
                 className="flex-85 layout-row input_box"
               >
                 <div
-                  className="flex-40 layout-row layout-align-center-center"
+                  className="flex-60 layout-row layout-align-center-center"
                 >
                   Gross Weight
                 </div>
@@ -789,13 +789,13 @@ exports[`shallow rendering 1`] = `
                 className="flex-10"
               />
               <div
-                className="layout-row flex-30 layout-wrap layout-align-start-center"
+                className="layout-row flex-40 layout-wrap layout-align-start-center"
               >
                 <div
                   className="flex-85 layout-row input_box"
                 >
                   <div
-                    className="flex-40 layout-row layout-align-center-center"
+                    className="flex-60 layout-row layout-align-center-center"
                   >
                     Gross Weight
                   </div>
