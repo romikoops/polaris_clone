@@ -343,8 +343,35 @@ class Shipment < ApplicationRecord
     as_json(new_options)
   end
 
+  def as_index_json(options={})
+    new_options = options.reverse_merge(
+      methods: %i(total_price mode_of_transport),
+      include: [
+        :destination_nexus,
+        :origin_nexus,
+        {
+          destination_hub: {
+            include: { location: { only: %i(geocoded_address latitude longitude) } }
+          }
+        },
+        {
+          origin_hub: {
+            include: { location: { only: %i(geocoded_address latitude longitude) } }
+          }
+        }
+      ]
+    )
+    as_json(new_options)
+  end
+
   def with_address_options_json(options={})
     as_options_json(options).merge(
+      pickup_address:   pickup_address_with_country,
+      delivery_address: delivery_address_with_country
+    )
+  end
+  def with_address_index_json(options={})
+    as_index_json(options).merge(
       pickup_address:   pickup_address_with_country,
       delivery_address: delivery_address_with_country
     )

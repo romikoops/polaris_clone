@@ -5,7 +5,7 @@ import styles from './LoginRegistrationWrapper.scss'
 import { LoginPage } from '../../containers/LoginPage/LoginPage'
 import { RegistrationPage } from '../../containers/RegistrationPage/RegistrationPage'
 
-export class LoginRegistrationWrapper extends PureComponent {
+class LoginRegistrationWrapper extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {}

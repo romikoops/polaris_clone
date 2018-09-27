@@ -268,7 +268,7 @@ export class AdminShipmentContent extends Component {
                             </p>
                           </div>
                             : ''}
-                            {showEditServicePrice && shipment.selected_offer.export ? (
+                          {showEditServicePrice && shipment.selected_offer.export ? (
                             <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
                               <span
                                 className={
@@ -316,7 +316,7 @@ export class AdminShipmentContent extends Component {
                             </p>
                           </div>
                             : ''}
-                            {showEditServicePrice && shipment.selected_offer.import ? (
+                          {showEditServicePrice && shipment.selected_offer.import ? (
                             <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
                               <span
                                 className={
@@ -697,9 +697,9 @@ AdminShipmentContent.propTypes = {
   gradientStyle: PropTypes.style,
   etdJSX: PropTypes.node,
   etaJSX: PropTypes.node,
-  pickupTime: PropTypes.node,
-  deliveryTime: PropTypes.node,
-  originDropOffTime: PropTypes.node,
+  pickupDate: PropTypes.node,
+  deliveryDate: PropTypes.node,
+  originDropOffDate: PropTypes.node,
   destinationCollectionDate: PropTypes.node,
   shipment: PropTypes.shipment,
   bg1: PropTypes.style,
@@ -721,8 +721,11 @@ AdminShipmentContent.propTypes = {
   showEditServicePrice: PropTypes.bool,
   newPrices: PropTypes.objectOf(PropTypes.any),
   toggleEditServicePrice: PropTypes.func,
+<<<<<<< HEAD
   uploadClientDocument: PropTypes.func,
   handlePriceChangeOn: PropTypes.func,
+=======
+>>>>>>> IMC-479 - caching main choke points + small fe fixes
   accountHolder: PropTypes.user
 }
 
@@ -732,13 +735,16 @@ AdminShipmentContent.defaultProps = {
   gradientStyle: {},
   etdJSX: null,
   etaJSX: null,
-  pickupTime: null,
-  deliveryTime: null,
-  originDropOffTime: null,
+  pickupDate: null,
+  deliveryDate: null,
+  originDropOffDate: null,
   destinationCollectionDate: null,
   toggleEditServicePrice: null,
+<<<<<<< HEAD
   handlePriceChangeOn: null,
   uploadClientDocument: null,
+=======
+>>>>>>> IMC-479 - caching main choke points + small fe fixes
   shipment: {},
   bg1: {},
   bg2: {},

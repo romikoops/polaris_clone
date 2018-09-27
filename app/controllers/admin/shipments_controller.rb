@@ -190,21 +190,24 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def get_quote_index
-    q_shipments = quoted_shipments
-    
-    per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
-    num_pages = {
-      quoted:  (q_shipments.count / per_page).ceil
-    }
-    response_handler(
-      quoted:          q_shipments.order(:updated_at)
-        .paginate(page: params[:quoted_page], per_page: per_page)
-        .map(&:with_address_options_json),
-      pages:              {
-        quoted:      params[:quoted_page]
-      },
-      num_shipment_pages: num_pages
-    )
+    response = Rails.cache.fetch("#{quoted_shipments.cache_key}/quote_index", expires_in: 12.hours) do
+      q_shipments = quoted_shipments
+      
+      per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
+      num_pages = {
+        quoted:  (q_shipments.count / per_page).ceil
+      }
+      {
+        quoted:          q_shipments.order(:updated_at)
+          .paginate(page: params[:quoted_page], per_page: per_page)
+          .map(&:with_address_options_json),
+        pages:              {
+          quoted:      params[:quoted_page]
+        },
+        num_shipment_pages: num_pages
+      }
+      end
+      response_handler(response)
   end
 
   def resp_error

@@ -5,12 +5,15 @@ class Admin::DashboardController < Admin::AdminBaseController
   before_action :initialize_variables, only: :index
 
   def index
-    response_handler(
-      itineraries: @detailed_itineraries,
-      hubs:        @hubs,
-      shipments:   shipments_hash,
-      mapData:     @map_data
-    )
+    response = Rails.cache.fetch("#{@shipments.cache_key}/dashboard_index", expires_in: 12.hours) do
+      {
+        itineraries: @detailed_itineraries,
+        hubs:        @hubs,
+        shipments:   shipments_hash,
+        mapData:     @map_data
+      }
+    end
+    response_handler(response)
   end
 
   private
@@ -38,7 +41,7 @@ class Admin::DashboardController < Admin::AdminBaseController
   end
 
   def requested_shipments
-    @shipments.requested.order_booking_desc.limit(3).map(&:with_address_options_json)
+    @shipments.requested.order_booking_desc.limit(3).map(&:with_address_index_json)
   end
 
   def open_shipments
