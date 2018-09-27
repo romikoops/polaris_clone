@@ -39,7 +39,7 @@ class Shipments::BookingProcessController < ApplicationController
 
   def download_shipment
     shipment = Shipment.find(params[:shipment_id])
-    url = ShippingTools.save_pdf_shipment(shipment)
+    url = ShippingTools.generate_and_upload_shipment_pdf(shipment)
     response_handler(key: 'shipment_recap', url: url)
   end
 
