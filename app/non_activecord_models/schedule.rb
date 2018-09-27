@@ -92,6 +92,25 @@ class Schedule
     end
   end
 
+  def self.from_trips(trips)
+    trips.map do |trip|
+      Schedule.new({
+        id:                SecureRandom.uuid,
+        mode_of_transport:  trip.itinerary.mode_of_transport,
+        eta:                trip.end_date,
+        etd:                trip.start_date,
+        closing_date:       trip.closing_date,
+        origin_hub_id:      trip.itinerary.first_stop.hub.id,
+        destination_hub_id: trip.itinerary.last_stop.hub.id,
+        origin_hub_name:      trip.itinerary.first_stop.hub.name,
+        destination_hub_name: trip.itinerary.last_stop.hub.name,
+        vehicle_name:       trip.tenant_vehicle.name,
+        carrier_name:       trip.tenant_vehicle&.carrier&.name,
+        trip_id:            trip.id
+      }).to_detailed_hash
+    end
+  end
+
   private
 
   def detailed_hash_hub_data_for(target)

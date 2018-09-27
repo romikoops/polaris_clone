@@ -10,7 +10,6 @@ module ShippingTools
 
   def self.create_shipments_from_quotation(shipment, results)
     main_quote = Quotation.create(user_id: shipment.user_id)
-    binding.pry
     results.each do |result|
       schedule = result['schedules'].first
       trip = Trip.find(schedule['trip_id'])
@@ -412,8 +411,9 @@ module ShippingTools
 
     shipment.user_id =        current_user.id
     shipment.customs_credit = params[:customs_credit]
-
     shipment.trip_id =      params[:schedule]['trip_id']
+    copy_charge_breakdowns(shipment, params[:schedule][:charge_trip_id], params[:schedule]['trip_id'])
+   
     @schedule =             params[:schedule].as_json
 
     shipment.itinerary = Trip.find(@schedule['trip_id']).itinerary
@@ -596,6 +596,27 @@ module ShippingTools
       new_shipment.shipment_contacts.create!(new_contact_json)
     end
   end
+  
+  def self.view_more_schedules(trip_id, delta)
+    trip = Trip.find(trip_id)
+    if delta.to_i > 0
+      trips = trip.itinerary.trips
+                  .where("tenant_vehicle_id = ? AND start_date > ?", trip.tenant_vehicle_id, trip.start_date)
+                  .order(start_date: :asc)
+                  .limit(5)
+    else
+      trips = trip.itinerary.trips
+                  .where("tenant_vehicle_id = ? AND start_date < ? AND start_date > ?",
+                    trip.tenant_vehicle_id,
+                    trip.start_date,
+                    Date.today + 5.days)
+                  .order(start_date: :asc)
+                  .limit(5)
+      trips.sort_by{ |trip| trip.start_date }
+    end
+      schedules = Schedule.from_trips(trips)
+      {schedules: schedules, itinerary_id: trip.itinerary_id, tenant_vehicle_id: trip.tenant_vehicle_id}
+  end
 
   def self.reuse_aggregrated_cargo(shipment, aggregated_cargo)
     aggregated_cargo_json = aggregated_cargo.clone.as_json
@@ -702,4 +723,30 @@ module ShippingTools
     end
     results
   end
+
+  def self.copy_charge_breakdowns(shipment, original_trip_id, new_trip_id)
+    shipment.charge_breakdowns.find_by(trip_id: new_trip_id) && return
+    charge_breakdown = shipment.charge_breakdowns.find_by(trip_id: original_trip_id)
+    new_charge_breakdown = charge_breakdown.dup
+    new_charge_breakdown.trip_id = new_trip_id
+    new_charge_breakdown_grand_total = charge_breakdown.grand_total.dup
+    new_charge_breakdown.grand_total = new_charge_breakdown_grand_total
+    charges = charge_breakdown.grand_total.children.each_with_object([]) do |charge, arr|
+      new_charge = charge.dup
+      new_charge.update(parent: new_charge_breakdown_grand_total)
+      arr << new_charge
+      charge.children.each do |child|
+        new_child = child.dup
+        new_child.update(parent: new_charge)
+        arr << new_child
+        child.children.each do |grandchild|
+          new_grandchild = grandchild.dup
+          new_grandchild.update(parent: new_child)
+          arr << new_grandchild
+        end
+      end
+    end
+    new_charge_breakdown.save!
+  end
+ 
 end

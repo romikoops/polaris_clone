@@ -353,30 +353,36 @@ class ShipmentLocationBox extends Component {
     }
   }
 
+  setRouteError (origin, destination) {
+    const { shipmentDispatch, t } = this.props
+    const errors = []
+    if (isDefined(origin) && isDefined(destination)) {
+      errors.push({
+        type: 'error',
+        text: `${t('errors:noRoutesBetween')} ${origin} ${t('common:and')} ${destination}`
+      })
+    } else if (isDefined(origin) && !isDefined(destination)) {
+      errors.push({
+        type: 'error',
+        text: `${t('errors:noRoutesFrom')} ${origin}`
+      })
+    } else if (!origin && destination) {
+      errors.push({
+        type: 'error',
+        text: `${t('errors:noRoutesTo')} ${destination}`
+      })
+    } else {
+      errors.push({
+        type: 'error',
+        text: `${t('errors:noRoutesFound')}`
+      })
+    }
+    shipmentDispatch.setError({ stage: 'stage2', errors })
+  }
+
   getPlace (placeId, callback) {
     const service = new this.props.gMaps.places.PlacesService(this.state.map)
     service.getDetails({ placeId }, place => callback(place))
-  }
-
-  selectedRoute (route) {
-    const origin = {
-      city: '',
-      country: '',
-      fullAddress: '',
-      nexus_id: route.origin_id,
-      nexus_name: route.origin_nexus
-    }
-    const destination = {
-      city: '',
-      country: '',
-      fullAddress: '',
-      nexus_id: route.origin_id,
-      nexus_name: route.origin_nexus
-    }
-    this.setState({ origin, destination })
-    this.setState({ showModal: !this.state.showModal })
-    this.setState({ locationFromModal: !this.state.locationFromModal })
-    this.setNexusesFromRoute(route)
   }
 
   initMap () {
@@ -746,31 +752,26 @@ class ShipmentLocationBox extends Component {
       this.prepForSelect('origin')
     })
   }
-  setRouteError (origin, destination) {
-    const { shipmentDispatch, t } = this.props
-    const errors = []
-    if (isDefined(origin) && isDefined(destination)) {
-      errors.push({
-        type: 'error',
-        text: `${t('errors:noRoutesBetween')} ${origin} ${t('common:and')} ${destination}`
-      })
-    } else if (isDefined(origin) && !isDefined(destination)) {
-      errors.push({
-        type: 'error',
-        text: `${t('errors:noRoutesFrom')} ${origin}`
-      })
-    } else if (!origin && destination) {
-      errors.push({
-        type: 'error',
-        text: `${t('errors:noRoutesTo')} ${destination}`
-      })
-    } else {
-      errors.push({
-        type: 'error',
-        text: `${t('errors:noRoutesFound')}`
-      })
+
+  selectedRoute (route) {
+    const origin = {
+      city: '',
+      country: '',
+      fullAddress: '',
+      nexus_id: route.origin_id,
+      nexus_name: route.origin_nexus
     }
-    shipmentDispatch.setError({ stage: 'stage2', errors })
+    const destination = {
+      city: '',
+      country: '',
+      fullAddress: '',
+      nexus_id: route.origin_id,
+      nexus_name: route.origin_nexus
+    }
+    this.setState({ origin, destination })
+    this.setState({ showModal: !this.state.showModal })
+    this.setState({ locationFromModal: !this.state.locationFromModal })
+    this.setNexusesFromRoute(route)
   }
   loadReusedShipment () {
     const { reusedShipment, shipmentData } = this.props

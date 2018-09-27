@@ -147,6 +147,16 @@
   .fee_tile {
     height: 20px;
   }
+  .disabled {
+    opacity: 0.4;
+  }
+  .date_btn {
+    cursor: pointer;
+    padding: 10px;
+    i {
+      padding: 0 5px;
+    }
+  }
   .origin_destination {
     hyphens: auto;
     font-size: 17px;
@@ -170,6 +180,9 @@
   }
   .deselected_text {
     opacity: 0.25;
+  }
+  .date_btns {
+    padding: 10px 5px;
   }
   .view_switch {
     opacity: 1;

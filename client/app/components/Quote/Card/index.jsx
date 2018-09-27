@@ -44,7 +44,10 @@ class QuoteCard extends PureComponent {
     this.state = {
       expander: {},
       isChecked: false,
-      showSchedules: true
+      showSchedules: (props.result &&
+        props.result.schedules &&
+        props.result.schedules.length > 0 &&
+        props.result.schedules[0].etd !== null)
     }
     this.handleClickChecked = this.handleClickChecked.bind(this)
   }
@@ -81,7 +84,58 @@ class QuoteCard extends PureComponent {
 
   selectSchedule (schedule) {
     const { result, selectResult } = this.props
-    selectResult({ schedule, total: result.quote.total })
+    const ammendedSchedule = {
+      ...schedule,
+      charge_trip_id: result.meta.charge_trip_id
+    }
+
+    selectResult({ schedule: ammendedSchedule, total: result.quote.total })
+  }
+
+  handleSchedulesRequest (delta) {
+    const { result, handleScheduleRequest } = this.props
+    const { schedules } = result
+    const tripId = delta > 0 ? schedules[schedules.length - 1].trip_id : schedules[0].trip_id
+    handleScheduleRequest({ tripId, delta })
+  }
+
+  buttonToDisplay () {
+    const { tenant, result } = this.props
+    const { scope } = tenant.data
+    const { showSchedules } = this.state
+    const showPriceBreakdownBtn = (
+      <div
+        className={`flex layout-row layout-align-start-center pointy ${styles.view_switch}`}
+        onClick={() => this.toggleShowSchedules('prices')}
+      >
+        <p className="flex-none">View Price Breakdown</p>
+      </div>
+    )
+    const showSchedulesBtn = (
+      <div
+        className={`flex layout-row layout-align-start-center pointy ${styles.view_switch}`}
+        onClick={() => this.toggleShowSchedules('schedules')}
+      >
+        <p className="flex-none">View Schedules</p>
+      </div>
+    )
+    if (scope.detailed_billing && result.schedules.length > 1) {
+      return (
+        <div className="flex-50 layout-row layout-align-start-center" style={{ textAlign: 'left' }}>
+          {showSchedules ? showPriceBreakdownBtn : showSchedulesBtn}
+        </div>
+      )
+    } else if (!scope.detailed_billing && result.schedules.length > 1) {
+      return (
+        <div className="flex-50 layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
+      )
+    } else if (!scope.detailed_billing && (!result.schedules || result.schedules.length < 1)) {
+      return (
+        <div className="flex-50 layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
+      )
+    }
+
+    return ''
   }
 
   render () {
@@ -104,7 +158,6 @@ class QuoteCard extends PureComponent {
     } = this.state
     const originHub = result.meta.origin_hub
     const destinationHub = result.meta.destination_hub
-    const hasDates = result.schedules && result.schedules.length > 0 && result.schedules[0].etd !== null
     const gradientStyle = gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
     const calcPayload = cargo.reduce((a, b) => ({ total: a.payload_in_kg + b.payload_in_kg }))
     const pricesArr = Object.keys(quote).splice(2).length !== 0 ? (
@@ -199,24 +252,7 @@ class QuoteCard extends PureComponent {
       </div>
     </div>))
 
-    const showPriceBreakdownBtn = (
-      <div
-        className={`flex layout-row layout-align-start-center pointy ${styles.view_switch}`}
-        onClick={() => this.toggleShowSchedules('prices')}
-      >
-        <p className="flex-none">View Price Breakdown</p>
-      </div>
-    )
-    const showSchedulesBtn = hasDates ? (
-      <div
-        className={`flex layout-row layout-align-start-center pointy ${styles.view_switch}`}
-        onClick={() => this.toggleShowSchedules('schedules')}
-      >
-        <p className="flex-none">View Schedules</p>
-      </div>
-    ) : (<div
-      className="flex layout-row layout-align-center-center"
-    />)
+    const showEarlierBtn = moment(schedules[0].closing_date).diff(moment(), 'days') > 5
 
     return (
       <div
@@ -255,7 +291,7 @@ class QuoteCard extends PureComponent {
             </div>
           </div>
         </div>
-        <div className="flex-100 layout-row layout-align-space-around-center" style={{ paddingBottom: '18px' }}>
+        <div className="flex-100 layout-row layout-align-start-center" style={{ paddingBottom: '18px' }}>
 
           { result.meta.carrier_name ? <div className="flex-50 layout-row layout-align-center-center">
             <i className="flex-none fa fa-ship" style={{ paddingRight: '7px' }} />
@@ -290,6 +326,34 @@ class QuoteCard extends PureComponent {
               </div>
 
               {schedulesArr}
+              <div className={`flex-100 layout-row layout-align-space-around-center ${styles.date_btns}`}>
+                <div
+                  className={`flex-30 layout-row layout-align-center-center
+                   ${showEarlierBtn ? '' : styles.disabled} ${styles.date_btn}`}
+                  onClick={showEarlierBtn ? () => this.handleSchedulesRequest(-1) : null}
+                >
+                  <div className="flex-none layout-row layout-align-space-around-center">
+                    <i className="flex-none fa fa-chevron-left" />
+                    <p className="flex-none">Earlier Departures</p>
+                  </div>
+                </div>
+                <div className="flex-40 layout-row layout-align-center">
+                  <p className="flex-100 center">
+                    {`${moment(result.schedules[0].closing_date).format('ll')} - 
+                      ${moment(result.schedules[result.schedules.length - 1].closing_date).format('ll')}
+                    `}
+                  </p>
+                </div>
+                <div
+                  className={`flex-30 layout-row layout-align-center-center ${styles.date_btn}`}
+                  onClick={() => this.handleSchedulesRequest(1)}
+                >
+                  <div className="flex-none layout-row layout-align-space-around-center">
+                    <p className="flex-none">Later Departures</p>
+                    <i className="flex-none fa fa-chevron-right" />
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         />
@@ -299,11 +363,7 @@ class QuoteCard extends PureComponent {
         />
         <div className="flex-100 layout-wrap layout-align-start-stretch">
           <div className={`flex-100 layout-row layout-align-space-between-stretch ${styles.total_row}`}>
-            {!isQuotationTool ? (
-              <div className="flex-50 layout-row layout-align-start-center" style={{ textAlign: 'left' }}>
-                {showSchedules ? showPriceBreakdownBtn : showSchedulesBtn}
-              </div>
-            ) : ''}
+            {this.buttonToDisplay()}
             <div className={`${isQuotationTool ? 'flex' : 'flex-10'} layout-row layout-align-start-center`}>
               <span style={{ textAlign: 'right' }}>Total</span>
             </div>
@@ -336,6 +396,7 @@ QuoteCard.propTypes = {
   handleInputChange: PropTypes.func,
   handleClick: PropTypes.func,
   selectResult: PropTypes.func,
+  handleScheduleRequest: PropTypes.func,
   pickup: PropTypes.bool,
   isQuotationTool: PropTypes.bool
 }
@@ -348,6 +409,7 @@ QuoteCard.defaultProps = {
   cargo: [],
   handleInputChange: null,
   selectResult: null,
+  handleScheduleRequest: null,
   handleClick: null,
   pickup: false,
   isQuotationTool: false

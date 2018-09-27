@@ -37,6 +37,14 @@ function getShipment (id) {
 
   return fetch(`${getApiHost()}/shipments/${id}`, requestOptions).then(handleResponse)
 }
+function getSchedulesForResult (args) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch(`${getApiHost()}/shipments/${args.shipmentId}/view_more_schedules?trip_id=${args.tripId}&delta=${args.delta}`, requestOptions).then(handleResponse)
+}
 
 function newShipment (details) {
   const requestOptions = {
@@ -170,7 +178,8 @@ export const shipmentService = {
   uploadDocument,
   requestShipment,
   updateCurrency,
-  getNotes
+  getNotes,
+  getSchedulesForResult
 }
 
 export default shipmentService

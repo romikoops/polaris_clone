@@ -8,9 +8,10 @@ module OfferCalculatorService
       sorted_schedules = sort_schedules(route_objs)
       detailed_schedules = []
       sorted_schedules.each do |_key, schedules|
+        charge_schedule = schedules.first
         grand_total_charge =
           ChargeCalculator.new(
-            schedule:      schedules.first,
+            schedule:      charge_schedule,
             trucking_data: trucking_data,
             shipment:      @shipment,
             user:          user
@@ -19,12 +20,15 @@ module OfferCalculatorService
           quote: grand_total_charge.deconstruct_tree_into_schedule_charge,
           schedules: schedules.map(&:to_detailed_hash),
           meta: {
-            mode_of_transport: schedules.first.mode_of_transport,
-            name: schedules.first.trip.itinerary.name,
-            service_level: schedules.first.vehicle_name,
-            carrier_name: schedules.first.carrier_name,
-            origin_hub: schedules.first.origin_hub,
-            destination_hub: schedules.first.destination_hub
+            mode_of_transport: charge_schedule.mode_of_transport,
+            name: charge_schedule.trip.itinerary.name,
+            service_level: charge_schedule.vehicle_name,
+            carrier_name: charge_schedule.carrier_name,
+            origin_hub: charge_schedule.origin_hub,
+            tenant_vehicle_id: charge_schedule.trip.tenant_vehicle_id,
+            itinerary_id: charge_schedule.trip.itinerary_id,
+            destination_hub: charge_schedule.destination_hub,
+            charge_trip_id: charge_schedule.trip_id
           }
         }
         next if result[:quote].dig(:total, :value).blank?

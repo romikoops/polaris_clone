@@ -124,6 +124,7 @@ Rails.application.routes.draw do
       %w(choose_offer get_offers update_shipment request_shipment send_quotes).each do |action|
         post action, controller: 'shipments/booking_process', action: action
       end
+      get 'view_more_schedules', controller:  'shipments/booking_process', action: 'view_more_schedules'
       post 'quotations/download', controller: 'shipments/booking_process', action: 'download_quotations'
       post 'shipment/download', controller: 'shipments/booking_process', action: 'download_shipment'
     end

@@ -25,7 +25,6 @@ class OfferCalculator
       @route_objs         = @quote_route_builder.perform(@routes)
       @detailed_schedules = @detailed_quote_builder.perform(@route_objs, @trucking_data, @user)
     else
-      @route_objs         = @quote_route_builder.perform(@routes)
       @schedules          = @schedule_finder.perform(@routes, @delay, @hubs)
       @detailed_schedules = @detailed_schedules_builder.perform(@schedules, @trucking_data, @user)
     end

@@ -61,6 +61,7 @@ export class ChooseOffer extends Component {
     this.emailValue = this.emailValue.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.toggleLimits = this.toggleLimits.bind(this)
+    this.handleScheduleRequest = this.handleScheduleRequest.bind(this)
   }
   componentDidMount () {
     const { prevRequest, setStage } = this.props
@@ -117,6 +118,16 @@ export class ChooseOffer extends Component {
       isChecked: e.target.checked
     })
   }
+
+  handleScheduleRequest (args) {
+    const { shipmentDispatch, shipmentData } = this.props
+    const req = {
+      ...args,
+      shipmentId: shipmentData.shipment.id
+    }
+    shipmentDispatch.getSchedulesForResult(req)
+  }
+
   handleInputChange () {
     this.setState(prevState => ({
       isChecked: !prevState.isChecked
@@ -229,41 +240,40 @@ export class ChooseOffer extends Component {
     const focusRoutestoRender = focusRoutes
       .sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
       .map(s => (
-        <div className="margin_bottom flex-100">
+        <div key={v4()} className="margin_bottom flex-100">
           <QuoteCard
             theme={theme}
             tenant={tenant}
             isQuotationTool={isQuotationTool}
             pickup={shipment.has_pre_carriage}
+            startDate={shipment.desired_start_date}
             result={s}
             handleClick={e => this.handleClick(e, s)}
             cargo={shipmentData.cargoUnits}
             selectResult={this.chooseResult}
+            handleScheduleRequest={this.handleScheduleRequest}
             truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
           />
         </div>
       ))
     const closestRoutestoRender = closestRoutes.map(s => (
 
-      <div className="margin_bottom flex-100">
+      <div key={v4()} className="margin_bottom flex-100">
         <QuoteCard
           theme={theme}
           tenant={tenant}
           isQuotationTool={isQuotationTool}
           pickup={shipment.has_pre_carriage}
+          startDate={shipment.desired_start_date}
           result={s}
           handleClick={e => this.handleClick(e, s)}
           selectResult={this.chooseResult}
           cargo={shipmentData.cargoUnits}
+          handleScheduleRequest={this.handleScheduleRequest}
           truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
         />
       </div>
     ))
-
-    const lastResultDate = results[results.length - 1].etd
-    const firstResultDate = results[0].etd
-    const showLaterDepButton = Math.abs(moment(lastTripDate).diff(lastResultDate, 'days')) > 5
-    const showEarlierDepButton = Math.abs(moment().diff(firstResultDate, 'days')) > 10
 
     return (
       <div
@@ -326,37 +336,6 @@ export class ChooseOffer extends Component {
           </div>
           <div className="flex  offset-5 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-wrap">
-              <div className="flex-100 layout-row layout-align-space-between-center">
-                <div
-                  className="flex-none layout-row layout-align-space-around-center pointy"
-                  onClick={() => this.shiftDepartureDate('subtract', 5)}
-
-                >
-                  <i
-                    style={!showEarlierDepButton ? { display: 'none' } : { margin: '0 5px' }}
-                    className="flex-none fa fa-angle-double-left"
-                  />
-                  <p
-                    style={!showEarlierDepButton ? { display: 'none' } : {}}
-                    className="flex-none no_m"
-                  >Show earlier departures
-                  </p>
-                </div>
-                <div
-                  className="flex-none layout-row layout-align-space-around-center pointy"
-                  onClick={() => this.shiftDepartureDate('add', 5)}
-                >
-                  <p
-                    style={!showLaterDepButton ? { display: 'none' } : {}}
-                    className="flex-none no_m"
-                  >Show later departures
-                  </p>
-                  <i
-                    style={!showLaterDepButton ? { display: 'none' } : { margin: '0 5px' }}
-                    className="flex-none fa fa-angle-double-right"
-                  />
-                </div>
-              </div>
               <div
                 className={`flex-100 layout-row layout-align-space-between-center ${
                   styles.route_header
@@ -371,11 +350,7 @@ export class ChooseOffer extends Component {
                       text="These are best quotations for the specific route"
                     />
                   ) : (
-                    <TextHeading
-                      theme={theme}
-                      size={3}
-                      text="This is the closest departure to the specified date"
-                    />
+                    ''
                   )}
                 </div>
                 <div className="flex-30 layout-row layout-align-end-center">
@@ -395,29 +370,7 @@ export class ChooseOffer extends Component {
               {closestRoutestoRender}
             </div>
             <div className="flex-100 layout-row layout-wrap">
-              {isQuotationTool ? '' : (
-                <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
-                  <div className="flex-none">
-                    <TextHeading theme={theme} size={3} text="Alternative departures" />
-                  </div>
-                </div>
-              )}
-
               {focusRoutestoRender}
-
-              <div className="flex-100 layout-row layout-align-center-center">
-                <div
-                  className="flex-33 pointy layout-row layout-align-space-around-center"
-                  onClick={() => this.showMore()}
-                >
-                  <i className="flex-none fa fa-angle-double-down" />
-                  <div className="flex-5" />
-                  <p className="flex-none">More Departures</p>
-                  <div className="flex-5" />
-                  <i className="flex-none fa fa-angle-double-down" />
-                </div>
-              </div>
-
             </div>
           </div>
           {isQuotationTool ? (
