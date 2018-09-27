@@ -10,6 +10,8 @@ echo "Target Branch: ${TARGET_BRANCH:-dev}"
 echo "    Formatter: ${FORMATTER}"
 echo ""
 
+echo "Installing NPM packages..."
 (cd client/; npm install)
 
+echo "Running Pronto..."
 pronto run -f ${FORMATTER} -c origin/${TARGET_BRANCH:-dev}

@@ -14,6 +14,9 @@ code_quality:
   retry: 1
   tags:
     - itsmycargo
+  cache:
+    paths:
+      - client/node_modules
 
   script:
     - scripts/pronto
@@ -51,6 +54,9 @@ api:
   retry: 1
   tags:
     - itsmycargo
+  cache:
+    paths:
+      - vendor/ruby
   variables:
     POSTGRES_DB: imcr_test
     DATABASE_URL: postgis://postgres:@localhost/imcr_test
@@ -80,7 +86,6 @@ client:
   retry: 1
 
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
     paths:
     - client/node_modules/
 
