@@ -86,6 +86,7 @@ export const shipmentStatii = {
   finished: 'Finished',
   open: 'Open',
   rejected: 'Rejected',
+  archived: 'Archived',
   requested: 'Requested'
 }
 

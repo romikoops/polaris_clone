@@ -39,10 +39,10 @@ export class ShipmentsCompUser extends Component {
     window.removeEventListener('resize', this.determinePerPage)
   }
 
-  getShipmentsFromPage (open, requested, finished, rejected) {
+  getShipmentsFromPage (open, requested, finished, rejected, archived) {
     const { perPage } = this.state
     const { userDispatch } = this.props
-    userDispatch.getShipments(open, requested, finished, rejected, perPage, false)
+    userDispatch.getShipments(open, requested, finished, rejected, archived, perPage, false)
   }
   getTargetShipmentsFromPage (target, page) {
     const { perPage } = this.state
@@ -167,7 +167,7 @@ export class ShipmentsCompUser extends Component {
         .map(sh => ShipmentsCompUser.prepShipment(sh, user))
     })
     const keysToRender = statusKeys.includes('quoted')
-      ? statusKeys : ['requested', 'open', 'finished', 'rejected']
+      ? statusKeys : ['requested', 'open', 'finished', 'rejected', 'archived']
 
     const listView = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">

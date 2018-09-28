@@ -463,12 +463,18 @@ export default function admin (state = {}, action) {
           ? state.dashboard.shipments.rejected.filter(x => x.id !== action.payload.id)
           : []
       const finished = state.shipments && state.shipments.finished ? state.shipments.finished : []
+      const archived = state.shipments && state.shipments.archived ? state.shipments.archived : []
       const dashFinished =
+        state.dashboard && state.dashboard.shipments && state.dashboard.shipments.finished
+          ? state.dashboard.shipments.finished
+          : []
+      const dashArchived =
         state.dashboard && state.dashboard.shipments && state.dashboard.shipments.finished
           ? state.dashboard.shipments.finished
           : []
       finished.push(action.payload)
       dashFinished.push(action.payload)
+      dashArchived.push(action.payload)
       const shipment = state.shipment && state.shipment.shipment ? state.shipment.shipment : {}
       if (shipment) {
         shipment.status = 'finished'
@@ -482,12 +488,14 @@ export default function admin (state = {}, action) {
             ...state.dashboard.shipments,
             finished: dashFinished,
             open: dashReq,
+            archived: dashArchived,
             rejected: dashRejected
           }
         },
         shipments: {
           ...state.shipments,
           finished,
+          archived,
           open: req,
           rejected
         },

@@ -489,6 +489,14 @@ class AdminShipmentView extends Component {
     ) : (
       ''
     )
+    
+    const statusArchived = (shipment.status === 'archived') ? (
+      <div className={`${adminStyles.border_box} layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box}`}>
+        <p className="layout-align-center-center layout-row"> {t('common:archived')} </p>
+      </div>
+    ) : (
+      ''
+    )
 
     const statusRejected = (shipment.status === 'ignored') ? (
       <GradientBorder
@@ -803,6 +811,7 @@ class AdminShipmentView extends Component {
           {statusInProcess}
           {statusFinished}
           {statusRejected}
+          {statusArchived}
           {renderActionButtons({ status: shipment.status })}
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">

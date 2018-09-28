@@ -187,6 +187,7 @@ export const shipments = {
   finished: [],
   open: [],
   requested: [],
+  archived: [],
   rejected: []
 }
 

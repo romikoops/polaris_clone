@@ -357,6 +357,23 @@ class UserAccount extends Component {
                       />
                     )}
                   />
+                  <Route
+                    exact
+                    path="/account/shipments/archived"
+                    render={props => (
+                      <UserShipmentsGroup
+                        setNav={this.setNavLink}
+                        theme={theme}
+                        hubHash={hubHash}
+                        user={user}
+                        target="archived"
+                        title="Archived"
+                        {...props}
+                        shipments={dashboard.shipments}
+                        userDispatch={userDispatch}
+                      />
+                    )}
+                  />
                 </Switch>
               </GenericError >
             </div>

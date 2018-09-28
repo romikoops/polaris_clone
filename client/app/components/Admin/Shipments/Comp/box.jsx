@@ -96,7 +96,6 @@ export class AdminShipmentsBox extends Component {
                     `}
             onClick={parseInt(page, 10) > 1 ? prevPage : null}
           >
-            {/* style={page === 1 ? { display: 'none' } : {}} */}
             <i className="fa fa-chevron-left" />
             <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
           </div>
