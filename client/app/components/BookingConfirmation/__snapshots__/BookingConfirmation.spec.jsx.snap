@@ -7623,7 +7623,7 @@ exports[`with cargo items 1`] = `
                   ],
                   "payload_in_kg": 1000,
                   "quantity": 5,
-                  "volume": 0.18,
+                  "volume": "0.12",
                 }
               }
               key="RANDOM_KEY_14"
@@ -7796,7 +7796,7 @@ exports[`with cargo items 1`] = `
                   ],
                   "payload_in_kg": 700,
                   "quantity": 7,
-                  "volume": 1.75,
+                  "volume": "2.45",
                 }
               }
               key="RANDOM_KEY_15"
