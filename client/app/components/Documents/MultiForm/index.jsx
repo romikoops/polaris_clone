@@ -141,7 +141,7 @@ class DocumentsMultiForm extends React.Component {
 
     return (
       <div className={`${styles.form} flex-100 layout-row layout-align-none-center layout-wrap`} style={{ height: `${heightVal}px` }}>
-        <div className={`${styles.form_label} flex-40 layout-row layout-align-start-start`}>
+        <div className={`${styles.form_label} flex-40 layout-row layout-align-start-center`}>
           <p className="flex-none">{text}</p>
         </div>
         <div className="flex-60 layout-row layout-align-center-center layout-wrap">

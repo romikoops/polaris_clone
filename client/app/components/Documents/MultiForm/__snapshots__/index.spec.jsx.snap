@@ -10,7 +10,7 @@ exports[`documents is falsy 1`] = `
   }
 >
   <div
-    className="form_label flex-40 layout-row layout-align-start-start"
+    className="form_label flex-40 layout-row layout-align-start-center"
   >
     <p
       className="flex-none"
@@ -83,7 +83,7 @@ exports[`shallow render 1`] = `
   }
 >
   <div
-    className="form_label flex-40 layout-row layout-align-start-start"
+    className="form_label flex-40 layout-row layout-align-start-center"
   >
     <p
       className="flex-none"
@@ -239,7 +239,7 @@ exports[`theme is falsy 1`] = `
   }
 >
   <div
-    className="form_label flex-40 layout-row layout-align-start-start"
+    className="form_label flex-40 layout-row layout-align-start-center"
   >
     <p
       className="flex-none"
