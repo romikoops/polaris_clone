@@ -721,11 +721,8 @@ AdminShipmentContent.propTypes = {
   showEditServicePrice: PropTypes.bool,
   newPrices: PropTypes.objectOf(PropTypes.any),
   toggleEditServicePrice: PropTypes.func,
-<<<<<<< HEAD
   uploadClientDocument: PropTypes.func,
   handlePriceChangeOn: PropTypes.func,
-=======
->>>>>>> IMC-479 - caching main choke points + small fe fixes
   accountHolder: PropTypes.user
 }
 
@@ -740,11 +737,8 @@ AdminShipmentContent.defaultProps = {
   originDropOffDate: null,
   destinationCollectionDate: null,
   toggleEditServicePrice: null,
-<<<<<<< HEAD
   handlePriceChangeOn: null,
   uploadClientDocument: null,
-=======
->>>>>>> IMC-479 - caching main choke points + small fe fixes
   shipment: {},
   bg1: {},
   bg2: {},
