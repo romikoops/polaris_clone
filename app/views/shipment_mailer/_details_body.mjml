@@ -158,6 +158,11 @@
 </mj-wrapper>
 
 <mj-spacer height="15px" />
+<mj-wrapper full-width="full-width" padding="0px">
+  <%= render "cargo_details" %>
+</mj-wrapper>
+
+<mj-spacer height="15px" />
 
 <mj-wrapper full-width="full-width" padding="0px">
   <mj-section padding="0px">
