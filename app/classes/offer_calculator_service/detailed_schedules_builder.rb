@@ -9,13 +9,13 @@ module OfferCalculatorService
       detailed_schedules = []
       sorted_schedules.each do |_key, schedules|
         charge_schedule = schedules.first
-        grand_total_charge =
-          ChargeCalculator.new(
-            schedule:      charge_schedule,
-            trucking_data: trucking_data,
-            shipment:      @shipment,
-            user:          user
-          ).perform
+        grand_total_charge = ChargeCalculator.new(
+          schedule:      charge_schedule,
+          trucking_data: trucking_data,
+          shipment:      @shipment,
+          user:          user
+        ).perform
+
         result = {
           quote: grand_total_charge.deconstruct_tree_into_schedule_charge,
           schedules: schedules.map(&:to_detailed_hash),

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "quote_calculator"
+require_relative 'quote_calculator'
 
 module OfferCalculatorService
   class DetailedQuoteBuilder < Base
@@ -9,13 +9,13 @@ module OfferCalculatorService
       detailed_schedules = []
       sorted_schedules.each do |_key, schedules|
         charge_schedule = schedules.first
-        grand_total_charge =
-          ChargeCalculator.new(
-            schedule:      charge_schedule,
-            trucking_data: trucking_data,
-            shipment:      @shipment,
-            user:          user
-          ).perform
+        grand_total_charge = ChargeCalculator.new(
+          schedule:      charge_schedule,
+          trucking_data: trucking_data,
+          shipment:      @shipment,
+          user:          user
+        ).perform
+
         result = {
           quote: grand_total_charge.deconstruct_tree_into_schedule_charge,
           schedules: schedules.map(&:to_detailed_hash),
@@ -32,7 +32,7 @@ module OfferCalculatorService
           }
         }
         next if result[:quote].dig(:total, :value).blank?
-        
+
         detailed_schedules << result
       end
 
@@ -41,15 +41,15 @@ module OfferCalculatorService
 
       compacted_detailed_schedules
     end
-    
+
     def sort_schedules(schedules)
-          results = {}
-          schedules.each do |schedule|
-            schedule_key = "#{schedule.mode_of_transport}_#{schedule.vehicle_name}_#{schedule.carrier_name}"
-            results[schedule_key] = [] unless results[schedule_key]
-            results[schedule_key] << schedule
-          end
-          results
-        end
+      results = {}
+      schedules.each do |schedule|
+        schedule_key = "#{schedule.mode_of_transport}_#{schedule.vehicle_name}_#{schedule.carrier_name}"
+        results[schedule_key] = [] unless results[schedule_key]
+        results[schedule_key] << schedule
+      end
+      results
+    end
   end
 end

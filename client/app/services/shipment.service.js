@@ -1,6 +1,6 @@
 import { Promise } from 'es6-promise-promise'
 import getApiHost from '../constants/api.constants'
-import { authHeader } from '../helpers'
+import { authHeader, toQueryString } from '../helpers'
 
 const { fetch, localStorage, FormData } = window
 
@@ -37,13 +37,16 @@ function getShipment (id) {
 
   return fetch(`${getApiHost()}/shipments/${id}`, requestOptions).then(handleResponse)
 }
+
 function getSchedulesForResult (args) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
+  const url = `${getApiHost()}/shipments/${args.shipmentId}/view_more_schedules`
+  const params = { trip_id: args.tripId, delta: args.delta }
 
-  return fetch(`${getApiHost()}/shipments/${args.shipmentId}/view_more_schedules?trip_id=${args.tripId}&delta=${args.delta}`, requestOptions).then(handleResponse)
+  return fetch(`${url}?${toQueryString(params)}`, requestOptions).then(handleResponse)
 }
 
 function newShipment (details) {

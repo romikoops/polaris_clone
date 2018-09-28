@@ -94,6 +94,15 @@ class Charge < ApplicationRecord
     edited_price.save!
   end
 
+  def dup_tree(charge_breakdown:, parent: nil)
+    charge = dup
+    charge.update(parent: parent, charge_breakdown: charge_breakdown)
+
+    children.each do |child|
+      child.dup_tree(charge_breakdown: charge_breakdown, parent: charge)
+    end
+  end
+
   private
 
   def set_detail_level
