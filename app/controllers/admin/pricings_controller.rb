@@ -9,11 +9,8 @@ class Admin::PricingsController < Admin::AdminBaseController
     tenant = current_user.tenant
     @itineraries = tenant.itineraries
     response = Rails.cache.fetch("#{@itineraries.cache_key}/pricings_index", expires_in: 12.hours) do
-
       @transports = TransportCategory.all.uniq
-     
 
-     
       mots = tenant.scope['modes_of_transport'].keys.reject do |key|
         !tenant.scope['modes_of_transport'][key]['container'] &&
           !tenant.scope['modes_of_transport'][key]['cargo_item']
@@ -27,7 +24,7 @@ class Admin::PricingsController < Admin::AdminBaseController
                                     .paginate(page: params[mot] || 1)
                                     .map(&:as_pricing_json)
 
-        mot_page_counts[mot] = (mot_itineraries.count / 12.0).ceil
+        mot_page_counts[mot] = detailed_itineraries[mot].total_pages
       end
       last_updated = @itineraries.first ? @itineraries.first.updated_at : DateTime.now
       {
@@ -60,7 +57,7 @@ class Admin::PricingsController < Admin::AdminBaseController
     last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
     response_handler(
       detailedItineraries: detailed_itineraries,
-      numItineraryPages:   (itineraries.count / 12.0).ceil,
+      numItineraryPages:   detailed_itineraries.total_pages,
       transportCategories: @transports,
       lastUpdate:          last_updated,
       mode_of_transport:   params[:mot]

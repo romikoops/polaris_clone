@@ -4,6 +4,12 @@ class Admin::DashboardController < Admin::AdminBaseController
   include ItineraryTools
   before_action :initialize_variables, only: :index
 
+  # Number of shipments to be displayed on dashboard
+  DASH_SHIPMENTS = 3
+
+  # Number of itienaries to be displayed on dashboard
+  DASH_ITINERARIES = 30
+
   def index
     response = Rails.cache.fetch("#{@shipments.cache_key}/dashboard_index", expires_in: 12.hours) do
       {
@@ -32,7 +38,7 @@ class Admin::DashboardController < Admin::AdminBaseController
   end
 
   def shipments_hash
-    current_user.tenant.quotation_tool ? 
+    current_user.tenant.quotation_tool ?
     {
       quoted:   @quoted_shipments
     } : {
@@ -41,7 +47,7 @@ class Admin::DashboardController < Admin::AdminBaseController
   end
 
   def requested_shipments
-    @shipments.requested.order_booking_desc.limit(3).map(&:with_address_index_json)
+    @shipments.requested.order_booking_desc.limit(DASH_SHIPMENTS).map(&:with_address_index_json)
   end
 
   def open_shipments
@@ -61,7 +67,6 @@ class Admin::DashboardController < Admin::AdminBaseController
   end
 
   def detailed_itin_json
-    Itinerary.for_tenant(current_user.tenant_id).limit(40).map(&:as_options_json)
+    Itinerary.for_tenant(current_user.tenant_id).limit(DASH_ITINERARIES).map(&:as_options_json)
   end
-
 end

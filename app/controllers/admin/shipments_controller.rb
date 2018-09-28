@@ -22,10 +22,10 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     end
     per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
     shipments = shipment_association.order(booking_placed_at: :desc).paginate(page: params[:page], per_page: per_page)
-      .map(&:with_address_options_json)
+      
     response_handler(
-      shipments:          shipments,
-      num_shipment_pages: (shipment_association.count / per_page).ceil,
+      shipments:          shipments.map(&:with_address_options_json),
+      num_shipment_pages: shipments.total_pages,
       target:             params[:target],
       page:               params[:page]
     )
@@ -76,10 +76,10 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       sanitize_params:   true
     )) || return
     per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
-    shipments = filterrific.find.paginate(page: params[:page], per_page: per_page).map(&:with_address_options_json)
+    shipments = filterrific.find.paginate(page: params[:page], per_page: per_page)
     response_handler(
-      shipments:          shipments,
-      num_shipment_pages: (filterrific.find.count / per_page).ceil,
+      shipments:          shipments.map(&:with_address_options_json),
+      num_shipment_pages: shipments.total_pages,
       target:             params[:target],
       page:               params[:page]
     )
@@ -157,26 +157,23 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def get_booking_index
     response = Rails.cache.fetch("#{requested_shipments.cache_key}/shipment_index", expires_in: 12.hours) do
-      r_shipments = requested_shipments
-      o_shipments = open_shipments
-      f_shipments = finished_shipments
-      rj_shipments = rejected_shipments
       per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
+      r_shipments = requested_shipments.order(booking_placed_at: :desc).paginate(page: params[:requested_page], per_page: per_page)
+      o_shipments = open_shipments.order(booking_placed_at: :desc).paginate(page: params[:open_page], per_page: per_page)
+      f_shipments = finished_shipments.order(booking_placed_at: :desc).paginate(page: params[:finished_page], per_page: per_page)
+      rj_shipments = rejected_shipments.order(booking_placed_at: :desc).paginate(page: params[:rejected_page], per_page: per_page)
+     
       num_pages = {
-        finished:  (f_shipments.count / per_page).ceil,
-        requested: (r_shipments.count / per_page).ceil,
-        open:      (o_shipments.count / per_page).ceil,
-        rejected:  (rj_shipments.count / per_page).ceil
+        finished:  f_shipments.total_pages,
+        requested: r_shipments.total_pages,
+        open:      o_shipments.total_pages,
+        rejected:  rj_shipments.total_pages
       }
       {
-        requested:          requested_shipments.order(booking_placed_at: :desc).paginate(page: params[:requested_page], per_page: per_page)
-          .map(&:with_address_options_json),
-        open:               open_shipments.order(booking_placed_at: :desc).paginate(page: params[:open_page], per_page: per_page)
-          .map(&:with_address_options_json),
-        finished:           finished_shipments.order(booking_placed_at: :desc).paginate(page: params[:finished_page], per_page: per_page)
-          .map(&:with_address_options_json),
-        rejected:           rejected_shipments.order(booking_placed_at: :desc).paginate(page: params[:rejected_page], per_page: per_page)
-        .map(&:with_address_options_json),
+        requested:          r_shipments.map(&:with_address_options_json),
+        open:               o_shipments.map(&:with_address_options_json),
+        finished:           f_shipments.map(&:with_address_options_json),
+        rejected:           rj_shipments.map(&:with_address_options_json),
         pages:              {
           open:      params[:open_page],
           finished:  params[:finished_page],
@@ -191,16 +188,16 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def get_quote_index
     response = Rails.cache.fetch("#{quoted_shipments.cache_key}/quote_index", expires_in: 12.hours) do
-      q_shipments = quoted_shipments
       
       per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
+      
+      quoted = quoted_shipments.order(:updated_at)
+      .paginate(page: params[:quoted_page], per_page: per_page)
       num_pages = {
-        quoted:  (q_shipments.count / per_page).ceil
+        quoted:  quoted.total_pages
       }
       {
-        quoted:          q_shipments.order(:updated_at)
-          .paginate(page: params[:quoted_page], per_page: per_page)
-          .map(&:with_address_options_json),
+        quoted:         quoted.map(&:with_address_options_json),
         pages:              {
           quoted:      params[:quoted_page]
         },
