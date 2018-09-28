@@ -159,16 +159,7 @@ module ShippingTools
   end
 
   def create_document(file, shipment, type, user)
-    if type != 'miscellaneous'
-      existing_document = shipment.documents.where(doc_type: type).first
-      if existing_document
-        existing_document.update_file(file, shipment, type, user)
-      else
-        DocumentTools.new_upload(file, shipment, type, user)
-      end
-    else
-      DocumentTools.new_upload(file, shipment, type, user)
-    end
+    DocumentTools.new_upload(file, shipment, type, user)
   end
 
   def self.update_shipment(params, current_user)

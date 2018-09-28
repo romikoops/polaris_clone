@@ -5,11 +5,13 @@ import Tab from '../../Tabs/Tab'
 import styles from '../AdminShipments.scss'
 import adminStyles from '../Admin.scss'
 import GradientBorder from '../../GradientBorder'
-import { moment } from '../../../constants'
+import { moment, docOptions } from '../../../constants'
 import { formattedPriceValue, totalPrice } from '../../../helpers'
 import ShipmentOverviewShowCard from './ShipmentOverviewShowCard'
 import ContactDetailsRow from './ContactDetailsRow'
 import GreyBox from '../../GreyBox/GreyBox'
+import { NamedSelect } from '../../NamedSelect/NamedSelect';
+import FileUploader from '../../FileUploader/FileUploader';
 
 export class AdminShipmentContent extends Component {
   static checkSelectedOffer (service) {
@@ -25,18 +27,16 @@ export class AdminShipmentContent extends Component {
     super(props)
 
     this.state = {
-      newPrices: {
-        trucking_pre: AdminShipmentContent.checkSelectedOffer(this.props.shipment.selected_offer.trucking_pre),
-        trucking_on: AdminShipmentContent.checkSelectedOffer(this.props.shipment.selected_offer.trucking_on),
-        cargo: AdminShipmentContent.checkSelectedOffer(this.props.shipment.selected_offer.cargo),
-        insurance: AdminShipmentContent.checkSelectedOffer(this.props.shipment.selected_offer.insurance),
-        customs: AdminShipmentContent.checkSelectedOffer(this.props.shipment.selected_offer.customs),
-        import: AdminShipmentContent.checkSelectedOffer(this.props.shipment.selected_offer.import),
-        export: AdminShipmentContent.checkSelectedOffer(this.props.shipment.selected_offer.export)
-      }
+      fileType: { label: 'Packing Sheet', value: 'packing_sheet' },
+      upUrl: `/shipments/${this.props.shipment.id}/upload/packing_sheet`
     }
+    this.setFileType = this.setFileType.bind(this)
   }
-
+  setFileType (ev) {
+    const shipmentId = this.props.shipment.id
+    const url = `/shipments/${shipmentId}/upload/${ev.value}`
+    this.setState({ fileType: ev, upUrl: url })
+  }
   render () {
     const {
       theme,
@@ -70,8 +70,14 @@ export class AdminShipmentContent extends Component {
       missingDocs,
       docView,
       saveNewEditedPrice,
-      handlePriceChange
+      handlePriceChange,
+      uploadClientDocument
     } = this.props
+
+    const {
+      fileType,
+      upUrl
+    } = this.state
 
     return (
       <Tabs
@@ -640,6 +646,29 @@ export class AdminShipmentContent extends Component {
               contentClassName="flex"
               content={(
                 <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${adminStyles.padding_left}`}>
+                <div className="flex-100 layout-row layout-wrap layout-align-start-center ">
+                  <div className="flex-50 layout-align-start-center layout-row">
+                    <p className={`${styles.sec_subheader_text} flex-none letter_3`}>
+                    Upload New Document
+                    </p>
+                    <NamedSelect
+                      name="file-type"
+                      className={`${styles.select} flex-50`}
+                      value={fileType}
+                      options={docOptions}
+                      onChange={this.setFileType}
+                    />
+                  </div>
+                  <div className="flex-50 layout-align-end-center layout-row padd_10">
+                    <FileUploader
+                      theme={theme}
+                      url={upUrl}
+                      type={fileType.value}
+                      text={fileType.label}
+                      uploadFn={uploadClientDocument}
+                    />
+                  </div>
+                </div>
                   <div
                     className="flex-100 layout-row layout-wrap layout-align-start-center"
                     style={{ marginTop: '5px' }}
@@ -692,7 +721,7 @@ AdminShipmentContent.propTypes = {
   showEditServicePrice: PropTypes.bool,
   newPrices: PropTypes.objectOf(PropTypes.any),
   toggleEditServicePrice: PropTypes.func,
-  handlePriceChangePre: PropTypes.func,
+  uploadClientDocument: PropTypes.func,
   handlePriceChangeOn: PropTypes.func,
   accountHolder: PropTypes.user
 }
@@ -709,7 +738,7 @@ AdminShipmentContent.defaultProps = {
   destinationCollectionDate: null,
   toggleEditServicePrice: null,
   handlePriceChangeOn: null,
-  handlePriceChangePre: null,
+  uploadClientDocument: null,
   shipment: {},
   bg1: {},
   bg2: {},

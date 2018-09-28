@@ -218,15 +218,7 @@ export class UserShipmentView extends Component {
       aggregatedCargo
       // accountHolder
     } = shipmentData
-    const docOptions = [
-      { label: 'Packing Sheet', value: 'packing_sheet' },
-      { label: 'Commercial Invoice', value: 'commercial_invoice' },
-      { label: 'Customs Declaration', value: 'customs_declaration' },
-      { label: 'Customs Value Declaration', value: 'customs_value_declaration' },
-      { label: 'EORI', value: 'eori' },
-      { label: 'Certificate Of Origin', value: 'certificate_of_origin' },
-      { label: 'Dangerous Goods', value: 'dangerous_goods' }
-    ]
+    
     const createdDate = shipment
       ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
       : moment().format('DD-MM-YYYY | HH:mm A')
