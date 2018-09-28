@@ -35,8 +35,8 @@ class Shipment < ApplicationRecord
 
   # ActiveRecord Callbacks
   before_validation :assign_uuid, :generate_imc_reference,
-    :set_default_trucking, :set_tenant,
-    on: :create
+                    :set_default_trucking, :set_tenant,
+                    on: :create
   before_validation :update_carriage_properties!, :sync_nexuses, :set_default_destination_dates
 
   # ActiveRecord associations
@@ -46,10 +46,10 @@ class Shipment < ApplicationRecord
   has_many :documents
   has_many :shipment_contacts
   has_many :contacts, through: :shipment_contacts
-  belongs_to :origin_nexus, class_name: "Nexus", optional: true
-  belongs_to :destination_nexus, class_name: "Nexus", optional: true
-  belongs_to :origin_hub, class_name: "Hub", optional: true
-  belongs_to :destination_hub, class_name: "Hub", optional: true
+  belongs_to :origin_nexus, class_name: 'Nexus', optional: true
+  belongs_to :destination_nexus, class_name: 'Nexus', optional: true
+  belongs_to :origin_hub, class_name: 'Hub', optional: true
+  belongs_to :destination_hub, class_name: 'Hub', optional: true
   belongs_to :route, optional: true
   belongs_to :itinerary, optional: true
   belongs_to :trip, optional: true
@@ -72,69 +72,66 @@ class Shipment < ApplicationRecord
   accepts_nested_attributes_for :documents, allow_destroy: true
   filterrific(
     default_filter_params: { sorted_by: 'booking_placed_at_desc' },
-    available_filters: [
-      :user_name,
-      :company_name,
-      :reference_number,
-      :sorted_by,
-      :user_search,
-      :requested,
-      :open,
-      :finished,
-      :rejected,
-      :for_tenant
-    ]
+    available_filters: %i(
+      user_name
+      company_name
+      reference_number
+      sorted_by
+      user_search
+      requested
+      open
+      finished
+      rejected
+      for_tenant
+    )
   )
   # Scopes
   scope :has_pre_carriage, -> { where(has_pre_carriage: true) }
   scope :has_on_carriage,  -> { where(has_on_carriage:  true) }
   scope :order_booking_desc, -> { order(booking_placed_at: :desc) }
   scope :requested, -> { where(status: %w(requested requested_by_unconfirmed_account)) }
-  scope :requested_by_unconfirmed_account, -> { where(status: "requested_by_unconfirmed_account") }
+  scope :requested_by_unconfirmed_account, -> { where(status: 'requested_by_unconfirmed_account') }
   scope :open, -> { where(status: %w(in_progress confirmed)) }
   scope :rejected, -> { where(status: %w(ignored declined)) }
-  scope :finished, -> { where(status: "finished") }
-  scope :quoted, -> { where(status: "quoted") }
+  scope :finished, -> { where(status: 'finished') }
+  scope :quoted, -> { where(status: 'quoted') }
 
-  scope :user_name, lambda { |query| 
-    user_ids = User.where("first_name ILIKE ? OR last_name ILIKE ?", "%#{query}%", "%#{query}%").ids
+  scope :user_name, lambda { |query|
+    user_ids = User.where('first_name ILIKE ? OR last_name ILIKE ?', "%#{query}%", "%#{query}%").ids
     where(user_id: user_ids)
   }
 
   scope :company_name, lambda { |query|
-    user_ids = User.where("company_name ILIKE ? ", "%#{query}%").ids
+    user_ids = User.where('company_name ILIKE ? ', "%#{query}%").ids
     where(user_id: user_ids)
   }
 
   scope :reference_number, lambda { |query|
-    where("imc_reference ILIKE ? ", "%#{query}%")
+    where('imc_reference ILIKE ? ', "%#{query}%")
   }
 
   scope :hub_names, lambda { |query|
-    hub_ids = Hub.where("name ILIKE ?", "%#{query}%").ids
-    where("origin_hub_id IN (?) OR destination_hub_id IN (?)", hub_ids, hub_ids)
+    hub_ids = Hub.where('name ILIKE ?', "%#{query}%").ids
+    where('origin_hub_id IN (?) OR destination_hub_id IN (?)', hub_ids, hub_ids)
   }
 
-  scope :for_tenant, lambda { |query|
+  scope :for_tenant, lambda { |_query|
     tenant = Tenant.find_by_subdomain
     tenant.shipments
   }
 
   scope :user_search, lambda { |query|
     user_name(query).or(Shipment.company_name(query)).or(Shipment.reference_number(query))
-      .or(Shipment.hub_names(query))
+                    .or(Shipment.hub_names(query))
   }
-
-
 
   # STATUSES.each do |status|
   #   scope status, -> { where(status: status) }
   # end
- 
+
   %i(ocean air rail).each do |mot|
-    scope mot, -> { joins(:itinerary).where("itineraries.mode_of_transport = ?", mot) }
+    scope mot, -> { joins(:itinerary).where('itineraries.mode_of_transport = ?', mot) }
   end
-  
 
   # Class methods
 
@@ -143,7 +140,7 @@ class Shipment < ApplicationRecord
   def total_price
     return nil if selected_offer.nil?
 
-    selected_offer["total"]
+    selected_offer['total']
   end
 
   def origin_layover
@@ -174,18 +171,18 @@ class Shipment < ApplicationRecord
   end
 
   def set_trip_using_layover(layover)
-    raise "Trip Mismatch" unless trip_id.nil? || layover.trip.id == trip_id
+    raise 'Trip Mismatch' unless trip_id.nil? || layover.trip.id == trip_id
 
     self.trip      ||= layover.trip
     self.itinerary ||= layover.trip.itinerary
   end
 
   def pickup_address
-    Location.where(id: trucking.dig("pre_carriage", "location_id")).first
+    Location.where(id: trucking.dig('pre_carriage', 'location_id')).first
   end
 
   def delivery_address
-    Location.where(id: trucking.dig("on_carriage", "location_id")).first
+    Location.where(id: trucking.dig('on_carriage', 'location_id')).first
   end
 
   def pickup_address_with_country
@@ -197,23 +194,23 @@ class Shipment < ApplicationRecord
   end
 
   def import?
-    direction == "import"
+    direction == 'import'
   end
 
   def export?
-    direction == "export"
+    direction == 'export'
   end
 
   def shipper
-    find_contacts("shipper").first
+    find_contacts('shipper').first
   end
 
   def consignee
-    find_contacts("consignee").first
+    find_contacts('consignee').first
   end
 
   def notifyees
-    find_contacts("notifyee")
+    find_contacts('notifyee')
   end
 
   def cargo_units
@@ -259,11 +256,11 @@ class Shipment < ApplicationRecord
   end
 
   def has_on_carriage=(_value)
-    raise "This property is read only. Please write to the trucking property instead."
+    raise 'This property is read only. Please write to the trucking property instead.'
   end
 
   def has_pre_carriage=(_value)
-    raise "This property is read only. Please write to the trucking property instead."
+    raise 'This property is read only. Please write to the trucking property instead.'
   end
 
   def has_on_carriage?
@@ -279,31 +276,31 @@ class Shipment < ApplicationRecord
   end
 
   def has_customs?
-    !!selected_offer.dig("customs")
+    !!selected_offer.dig('customs')
   end
 
   def has_insurance?
-    !!selected_offer.dig("insurance")
+    !!selected_offer.dig('insurance')
   end
 
   def accept!
-    update!(status: "confirmed")
+    update!(status: 'confirmed')
   end
 
   def finish!
-    update!(status: "finished")
+    update!(status: 'finished')
   end
 
   def decline!
-    update!(status: "declined")
+    update!(status: 'declined')
   end
 
   def ignore!
-    update!(status: "ignored")
+    update!(status: 'ignored')
   end
 
   def archive!
-    update!(status: "archived")
+    update!(status: 'archived')
   end
 
   def etd
@@ -322,7 +319,7 @@ class Shipment < ApplicationRecord
     awesome_print charge_breakdowns[index].to_nested_hash
   end
 
-  def as_options_json(options={})
+  def as_options_json(options = {})
     new_options = options.reverse_merge(
       methods: %i(selected_offer mode_of_transport),
       include: [
@@ -343,7 +340,7 @@ class Shipment < ApplicationRecord
     as_json(new_options)
   end
 
-  def as_index_json(options={})
+  def as_index_json(options = {})
     new_options = options.reverse_merge(
       methods: %i(total_price mode_of_transport),
       include: [
@@ -364,13 +361,14 @@ class Shipment < ApplicationRecord
     as_json(new_options)
   end
 
-  def with_address_options_json(options={})
+  def with_address_options_json(options = {})
     as_options_json(options).merge(
       pickup_address:   pickup_address_with_country,
       delivery_address: delivery_address_with_country
     )
   end
-  def with_address_index_json(options={})
+
+  def with_address_index_json(options = {})
     as_index_json(options).merge(
       pickup_address:   pickup_address_with_country,
       delivery_address: delivery_address_with_country
@@ -379,18 +377,18 @@ class Shipment < ApplicationRecord
 
   def create_charge_breakdowns_from_schedules_charges!
     schedules_charges.map do |hub_route_key, schedule_charges|
-      origin_hub_id, destination_hub_id = *hub_route_key.split("-").map(&:to_i)
+      origin_hub_id, destination_hub_id = *hub_route_key.split('-').map(&:to_i)
       next unless origin_hub_id == origin_hub_id && destination_hub_id == destination_hub_id
 
       charge_breakdown = ChargeBreakdown.create!(shipment: self, trip: trip)
       Charge.create_from_schedule_charges(schedule_charges, charge_breakdown)
-      charge_breakdown.charge("cargo").update_price!
+      charge_breakdown.charge('cargo').update_price!
     end
   end
 
   def self.create_all_empty_charge_breakdowns!
     where.not(id: ChargeBreakdown.pluck(:shipment_id).uniq, schedules_charges: {})
-      .each(&:create_charge_breakdowns_from_schedules_charges!)
+         .each(&:create_charge_breakdowns_from_schedules_charges!)
   end
 
   def self.update_refactor_shipments
@@ -398,8 +396,8 @@ class Shipment < ApplicationRecord
       itinerary = s.itinerary
       s.destination_nexus = itinerary.last_stop.hub.nexus
       s.origin_nexus = itinerary.first_stop.hub.nexus
-      s.trucking["on_carriage"]["location_id"] ||= itinerary.last_stop.hub.id if s.has_on_carriage
-      s.trucking["pre_carriage"]["location_id"] ||= itinerary.first_stop.hub.id if s.has_pre_carriage
+      s.trucking['on_carriage']['location_id'] ||= itinerary.last_stop.hub.id if s.has_on_carriage
+      s.trucking['pre_carriage']['location_id'] ||= itinerary.first_stop.hub.id if s.has_pre_carriage
       s.save!
     end
   end
@@ -419,7 +417,7 @@ class Shipment < ApplicationRecord
 
   def update_carriage_properties!
     %w(on_carriage pre_carriage).each do |carriage|
-      self["has_#{carriage}"] = !trucking.dig(carriage, "truck_type").blank?
+      self["has_#{carriage}"] = !trucking.dig(carriage, 'truck_type').blank?
     end
   end
 
@@ -440,17 +438,17 @@ class Shipment < ApplicationRecord
 
   def generate_imc_reference
     now = DateTime.now
-    day_of_the_year = now.strftime("%d%m")
-    hour_as_letter = ("A".."Z").to_a[now.hour - 1]
+    day_of_the_year = now.strftime('%d%m')
+    hour_as_letter = ('A'..'Z').to_a[now.hour - 1]
     year = now.year.to_s[-2..-1]
     first_part = day_of_the_year + hour_as_letter + year
-    last_shipment_in_this_hour = Shipment.where("imc_reference LIKE ?", first_part + "%").last
+    last_shipment_in_this_hour = Shipment.where('imc_reference LIKE ?', first_part + '%').last
     if last_shipment_in_this_hour
       last_serial_number = last_shipment_in_this_hour.imc_reference[first_part.length..-1].to_i
       new_serial_number = last_serial_number + 1
-      serial_code = new_serial_number.to_s.rjust(5, "0")
+      serial_code = new_serial_number.to_s.rjust(5, '0')
     else
-      serial_code = "1".rjust(5, "0")
+      serial_code = '1'.rjust(5, '0')
     end
 
     self.imc_reference = first_part + serial_code
@@ -472,16 +470,16 @@ class Shipment < ApplicationRecord
 
   def planned_pickup_date_is_a_datetime?
     return if planned_pickup_date.nil?
-    errors.add(:planned_pickup_date, "must be a DateTime") unless planned_pickup_date.is_a?(ActiveSupport::TimeWithZone)
+    errors.add(:planned_pickup_date, 'must be a DateTime') unless planned_pickup_date.is_a?(ActiveSupport::TimeWithZone)
   end
 
   def desired_start_date_is_a_datetime?
     return if desired_start_date.nil?
-    errors.add(:desired_start_date, "must be a DateTime") unless desired_start_date.is_a?(ActiveSupport::TimeWithZone)
+    errors.add(:desired_start_date, 'must be a DateTime') unless desired_start_date.is_a?(ActiveSupport::TimeWithZone)
   end
 
   def set_default_trucking
-    self.trucking ||= { on_carriage: { truck_type: "" }, pre_carriage: { truck_type: "" } }
+    self.trucking ||= { on_carriage: { truck_type: '' }, pre_carriage: { truck_type: '' } }
   end
 
   def set_tenant

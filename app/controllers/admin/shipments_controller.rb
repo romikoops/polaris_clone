@@ -22,7 +22,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     end
     per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
     shipments = shipment_association.order(booking_placed_at: :desc).paginate(page: params[:page], per_page: per_page)
-      
+
     response_handler(
       shipments:          shipments.map(&:with_address_options_json),
       num_shipment_pages: shipments.total_pages,
@@ -162,7 +162,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       o_shipments = open_shipments.order(booking_placed_at: :desc).paginate(page: params[:open_page], per_page: per_page)
       f_shipments = finished_shipments.order(booking_placed_at: :desc).paginate(page: params[:finished_page], per_page: per_page)
       rj_shipments = rejected_shipments.order(booking_placed_at: :desc).paginate(page: params[:rejected_page], per_page: per_page)
-     
+
       num_pages = {
         finished:  f_shipments.total_pages,
         requested: r_shipments.total_pages,
@@ -182,17 +182,16 @@ class Admin::ShipmentsController < Admin::AdminBaseController
         },
         num_shipment_pages: num_pages
       }
-      end
-      response_handler(response)
+    end
+    response_handler(response)
   end
 
   def get_quote_index
     response = Rails.cache.fetch("#{quoted_shipments.cache_key}/quote_index", expires_in: 12.hours) do
-      
       per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
-      
+
       quoted = quoted_shipments.order(:updated_at)
-      .paginate(page: params[:quoted_page], per_page: per_page)
+                               .paginate(page: params[:quoted_page], per_page: per_page)
       num_pages = {
         quoted:  quoted.total_pages
       }
@@ -203,8 +202,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
         },
         num_shipment_pages: num_pages
       }
-      end
-      response_handler(response)
+    end
+    response_handler(response)
   end
 
   def resp_error
@@ -277,22 +276,22 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def new_planned_origin_drop_off_date
-    return if params[:timeObj]['newOriginDropOffDate'] == "Invalid date"
+    return if params[:timeObj]['newOriginDropOffDate'] == 'Invalid date'
     DateTime.parse(params[:timeObj]['newOriginDropOffDate'])
   end
 
   def new_planned_destination_collection_date
-    return if params[:timeObj]['newDestinationCollectionDate'] == "Invalid date"
+    return if params[:timeObj]['newDestinationCollectionDate'] == 'Invalid date'
     DateTime.parse(params[:timeObj]['newDestinationCollectionDate'])
   end
 
   def new_planned_delivery_date
-    return if params[:timeObj]['newDeliveryDate'] == "Invalid date"
+    return if params[:timeObj]['newDeliveryDate'] == 'Invalid date'
     DateTime.parse(params[:timeObj]['newDeliveryDate'])
   end
 
   def new_planned_pickup_date
-    return if params[:timeObj]['newPickupDate'] == "Invalid date"
+    return if params[:timeObj]['newPickupDate'] == 'Invalid date'
     DateTime.parse(params[:timeObj]['newPickupDate'])
   end
 
