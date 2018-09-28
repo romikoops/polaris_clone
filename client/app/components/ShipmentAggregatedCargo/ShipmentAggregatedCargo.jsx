@@ -3,11 +3,14 @@ import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './ShipmentAggregatedCargo.scss'
 import ShipmentAggregatedCargoInput from './Input'
+import { calcMaxDimensionsToApply } from '../../helpers'
 
 function ShipmentAggregatedCargo ({
-  theme, aggregatedCargo, handleDelta, nextStageAttempt, t
+  theme, aggregatedCargo, handleDelta, nextStageAttempt, maxDimensions, availableMotsForRoute, t
 }) {
   const sharedProps = { handleDelta, nextStageAttempt }
+
+  const maxDimensionsToApply = calcMaxDimensionsToApply(availableMotsForRoute, maxDimensions)
 
   return (
     <div
@@ -21,7 +24,7 @@ function ShipmentAggregatedCargo ({
         <ShipmentAggregatedCargoInput
           value={aggregatedCargo.volume}
           name="volume"
-          maxValue={35}
+          maxValue={+maxDimensionsToApply.volume || 35}
           {...sharedProps}
         />
         <div className="flex-10 layout-row layout-align-center-center">
@@ -35,7 +38,7 @@ function ShipmentAggregatedCargo ({
         <ShipmentAggregatedCargoInput
           value={aggregatedCargo.weight}
           name="weight"
-          maxValue={35000}
+          maxValue={+maxDimensionsToApply.payloadInKg || 35000}
           {...sharedProps}
         />
         <div className="flex-10 layout-row layout-align-center-center">
@@ -54,8 +57,9 @@ ShipmentAggregatedCargo.propTypes = {
     weight: PropTypes.number
   }),
   handleDelta: PropTypes.func.isRequired,
-  nextStageAttempt: PropTypes.bool
-  // stackeableGoodsConfirmed: PropTypes.bool
+  nextStageAttempt: PropTypes.bool,
+  availableMotsForRoute: PropTypes.bool.isRequired,
+  maxDimensions: PropTypes.objectOf(PropTypes.objectOf(PropTypes.string)).isRequired
 }
 
 ShipmentAggregatedCargo.defaultProps = {
@@ -65,7 +69,6 @@ ShipmentAggregatedCargo.defaultProps = {
     weight: 0
   },
   nextStageAttempt: false
-  // stackeableGoodsConfirmed: false
 }
 
 export default translate('cargo')(ShipmentAggregatedCargo)

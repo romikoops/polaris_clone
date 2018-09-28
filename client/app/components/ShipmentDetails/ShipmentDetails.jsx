@@ -810,6 +810,8 @@ export class ShipmentDetails extends Component {
           theme={theme}
           scope={scope}
           stackableGoodsConfirmed={this.state.stackableGoodsConfirmed}
+          availableMotsForRoute={this.state.availableMotsForRoute}
+          maxDimensions={this.props.shipmentData.maxAggregateDimensions}
         />
       )
     } else if (shipmentData.shipment.load_type === 'container') {

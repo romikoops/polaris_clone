@@ -11,7 +11,24 @@ const propsBase = {
     weight: 100
   },
   handleDelta: identity,
-  nextStageAttempt: false
+  nextStageAttempt: false,
+  maxDimensions: {
+    general: {
+      dimensionX: '0',
+      dimensionY: '0',
+      dimensionZ: '0',
+      payloadInKg: '0',
+      chargeableWeight: '0'
+    },
+    air: {
+      dimensionX: '0',
+      dimensionY: '0',
+      dimensionZ: '0',
+      payloadInKg: '1000',
+      chargeableWeight: '1000'
+    }
+  },
+  availableMotsForRoute: ['ocean', 'air']
 }
 
 test('shallow rendering', () => {

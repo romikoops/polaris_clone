@@ -4,7 +4,13 @@ import ValidatedInput from '../ValidatedInput/ValidatedInput'
 import Checkbox from '../Checkbox/Checkbox'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import { Tooltip } from '../Tooltip/Tooltip'
-import { switchIcon, chargeableWeight, volume, numberSpacing } from '../../helpers'
+import {
+ switchIcon,
+  chargeableWeight,
+  volume, 
+  numberSpacing,
+   calcMaxDimensionsToApply 
+} from '../../helpers'
 import styles from './ShipmentCargoItems.scss'
 
 /**
@@ -55,9 +61,7 @@ export default function getInputs (
     !firstRenderInputs && nextStageAttempt &&
     (!cargoItemTypes[i] || !cargoItemTypes[i].label)
 
-  const maxDimensionsKey = availableMotsForRoute.some(mot => mot !== 'air') || availableMotsForRoute.length === 0
-    ? 'general' : 'air'
-  const maxDimensionsToApply = maxDimensions[maxDimensionsKey]
+  const maxDimensionsToApply = calcMaxDimensionsToApply(availableMotsForRoute, maxDimensions)
 
   inputs.colliType = (
     <div className="layout-row flex-40 layout-wrap layout-align-start-center colli_type" >
