@@ -35,10 +35,6 @@ class Header extends Component {
     }
   }
   componentDidMount () {
-    const { messageDispatch, messages } = this.props
-    if (!messages) {
-      messageDispatch.getUserConversations()
-    }
     document.addEventListener('scroll', this.checkIsTop)
   }
   componentWillReceiveProps (nextProps) {
