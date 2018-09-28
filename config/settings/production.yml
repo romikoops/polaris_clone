@@ -11,9 +11,9 @@ google:
   api_key: <%= Rails.application.credentials.production_google_api_key %>
 
 smtp:
-  host: sendgrid.net
+  host: smtp.sendgrid.net
   domain: itsmycargo.com
-  username: itsmycargo
+  username: apikey
   password: <%= Rails.application.credentials.production_smtp_password %>
 
 mailer:
