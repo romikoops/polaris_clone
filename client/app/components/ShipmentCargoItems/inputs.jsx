@@ -76,9 +76,9 @@ export default function getInputs (
   )
 
   inputs.grossWeight = (
-    <div className="layout-row flex-30 layout-wrap layout-align-start-center" >
+    <div className="layout-row flex-40 layout-wrap layout-align-start-center" >
       <div className={`flex-85 layout-row ${styles.input_box}`}>
-        <div className="flex-40 layout-row layout-align-center-center">
+        <div className="flex-60 layout-row layout-align-center-center">
           {t('common:grossWeight')}
         </div>
         {
