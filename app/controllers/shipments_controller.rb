@@ -33,7 +33,7 @@ class ShipmentsController < ApplicationController
                                          .order(booking_placed_at: :desc)
                                          .paginate(page: params[:page], per_page: per_page)
     end
-    per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
+    per_page = params.fetch(:per_page, 4).to_f
     shipments = shipment_association.map(&:with_address_options_json)
 
     response_handler(
@@ -70,7 +70,7 @@ class ShipmentsController < ApplicationController
     when 'quoted'
       shipment_association = current_user.shipments.quoted.order(booking_placed_at: :desc)
     end
-    per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
+    per_page = params.fetch(:per_page, 4).to_f
 
     (filterrific = initialize_filterrific(
       shipment_association,
@@ -137,7 +137,7 @@ class ShipmentsController < ApplicationController
 
   def get_booking_index
     response = Rails.cache.fetch("#{requested_shipments.cache_key}/shipment_index", expires_in: 12.hours) do
-      per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
+      per_page = params.fetch(:per_page, 4).to_f
       r_shipments = requested_shipments.order(booking_placed_at: :desc).paginate(page: params[:requested_page], per_page: per_page)
       o_shipments = open_shipments.order(booking_placed_at: :desc).paginate(page: params[:open_page], per_page: per_page)
       f_shipments = finished_shipments.order(booking_placed_at: :desc).paginate(page: params[:finished_page], per_page: per_page)
@@ -168,7 +168,7 @@ class ShipmentsController < ApplicationController
 
   def get_quote_index
     response = Rails.cache.fetch("#{quoted_shipments.cache_key}/shipment_index", expires_in: 12.hours) do
-      per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
+      per_page = params.fetch(:per_page, 4).to_f
 
       quoted = quoted_shipments.order(:updated_at)
                                .paginate(page: params[:quoted_page], per_page: per_page)
