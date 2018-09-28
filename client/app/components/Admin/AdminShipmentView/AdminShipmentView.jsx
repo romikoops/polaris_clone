@@ -115,7 +115,9 @@ class AdminShipmentView extends Component {
         customs: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.customs),
         import: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.import),
         export: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.export)
-      }
+      },
+      fileType: { label: 'Packing Sheet', value: 'packing_sheet' },
+      upUrl: `/shipments/${shipment.id}/upload/packing_sheet`
     }
     this.handleDeny = this.handleDeny.bind(this)
     this.handleArchive = this.handleArchive.bind(this)
@@ -392,7 +394,7 @@ class AdminShipmentView extends Component {
   }
   render () {
     const {
-      theme, hubs, shipmentData, clients, t
+      theme, hubs, shipmentData, clients, t, adminDispatch
     } = this.props
 
     if (!shipmentData || !hubs || !clients) {
@@ -839,6 +841,7 @@ class AdminShipmentView extends Component {
               accountHolder={accountHolder}
               handlePriceChange={this.handlePriceChange}
               saveNewEditedPrice={this.saveNewEditedPrice}
+              uploadClientDocument={adminDispatch.uploadDocument}
             />
           ) : (
             <ShipmentQuotationContent

@@ -86,38 +86,7 @@ exports[`loading is true 1`] = `
           19
         </p>
       }
-      docOptions={
-        Array [
-          Object {
-            "label": "Packing Sheet",
-            "value": "packing_sheet",
-          },
-          Object {
-            "label": "Commercial Invoice",
-            "value": "commercial_invoice",
-          },
-          Object {
-            "label": "Customs Declaration",
-            "value": "customs_declaration",
-          },
-          Object {
-            "label": "Customs Value Declaration",
-            "value": "customs_value_declaration",
-          },
-          Object {
-            "label": "EORI",
-            "value": "eori",
-          },
-          Object {
-            "label": "Certificate Of Origin",
-            "value": "certificate_of_origin",
-          },
-          Object {
-            "label": "Dangerous Goods",
-            "value": "dangerous_goods",
-          },
-        ]
-      }
+      docOptions={Array []}
       docView={Array []}
       etaJSX={
         <p
@@ -522,38 +491,7 @@ exports[`shallow render 1`] = `
           19
         </p>
       }
-      docOptions={
-        Array [
-          Object {
-            "label": "Packing Sheet",
-            "value": "packing_sheet",
-          },
-          Object {
-            "label": "Commercial Invoice",
-            "value": "commercial_invoice",
-          },
-          Object {
-            "label": "Customs Declaration",
-            "value": "customs_declaration",
-          },
-          Object {
-            "label": "Customs Value Declaration",
-            "value": "customs_value_declaration",
-          },
-          Object {
-            "label": "EORI",
-            "value": "eori",
-          },
-          Object {
-            "label": "Certificate Of Origin",
-            "value": "certificate_of_origin",
-          },
-          Object {
-            "label": "Dangerous Goods",
-            "value": "dangerous_goods",
-          },
-        ]
-      }
+      docOptions={Array []}
       docView={Array []}
       etaJSX={
         <p
@@ -1019,38 +957,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
           19
         </p>
       }
-      docOptions={
-        Array [
-          Object {
-            "label": "Packing Sheet",
-            "value": "packing_sheet",
-          },
-          Object {
-            "label": "Commercial Invoice",
-            "value": "commercial_invoice",
-          },
-          Object {
-            "label": "Customs Declaration",
-            "value": "customs_declaration",
-          },
-          Object {
-            "label": "Customs Value Declaration",
-            "value": "customs_value_declaration",
-          },
-          Object {
-            "label": "EORI",
-            "value": "eori",
-          },
-          Object {
-            "label": "Certificate Of Origin",
-            "value": "certificate_of_origin",
-          },
-          Object {
-            "label": "Dangerous Goods",
-            "value": "dangerous_goods",
-          },
-        ]
-      }
+      docOptions={Array []}
       docView={Array []}
       etaJSX={
         <p
@@ -1503,38 +1410,7 @@ exports[`shipmentData.contacts is present 1`] = `
           19
         </p>
       }
-      docOptions={
-        Array [
-          Object {
-            "label": "Packing Sheet",
-            "value": "packing_sheet",
-          },
-          Object {
-            "label": "Commercial Invoice",
-            "value": "commercial_invoice",
-          },
-          Object {
-            "label": "Customs Declaration",
-            "value": "customs_declaration",
-          },
-          Object {
-            "label": "Customs Value Declaration",
-            "value": "customs_value_declaration",
-          },
-          Object {
-            "label": "EORI",
-            "value": "eori",
-          },
-          Object {
-            "label": "Certificate Of Origin",
-            "value": "certificate_of_origin",
-          },
-          Object {
-            "label": "Dangerous Goods",
-            "value": "dangerous_goods",
-          },
-        ]
-      }
+      docOptions={Array []}
       docView={Array []}
       etaJSX={
         <p
@@ -1939,38 +1815,7 @@ exports[`shipmentData.documents is present 1`] = `
           19
         </p>
       }
-      docOptions={
-        Array [
-          Object {
-            "label": "Packing Sheet",
-            "value": "packing_sheet",
-          },
-          Object {
-            "label": "Commercial Invoice",
-            "value": "commercial_invoice",
-          },
-          Object {
-            "label": "Customs Declaration",
-            "value": "customs_declaration",
-          },
-          Object {
-            "label": "Customs Value Declaration",
-            "value": "customs_value_declaration",
-          },
-          Object {
-            "label": "EORI",
-            "value": "eori",
-          },
-          Object {
-            "label": "Certificate Of Origin",
-            "value": "certificate_of_origin",
-          },
-          Object {
-            "label": "Dangerous Goods",
-            "value": "dangerous_goods",
-          },
-        ]
-      }
+      docOptions={Array []}
       docView={
         Array [
           <div
