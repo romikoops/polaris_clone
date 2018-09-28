@@ -67,7 +67,6 @@ exports[`loading is true 1`] = `
           19
         </p>
       }
-      deliveryTime={null}
       deselectedStyle={
         Object {
           "0": "#",
@@ -169,7 +168,6 @@ exports[`loading is true 1`] = `
           19
         </p>
       }
-      originDropOffTime={null}
       pickupDate={
         <p
           className="flex-none letter_3 date"
@@ -177,7 +175,6 @@ exports[`loading is true 1`] = `
           19
         </p>
       }
-      pickupTime={null}
       scope={
         Object {
           "closed_quotation_tool": true,
@@ -472,7 +469,6 @@ exports[`shallow render 1`] = `
           19
         </p>
       }
-      deliveryTime={null}
       deselectedStyle={
         Object {
           "0": "#",
@@ -574,7 +570,6 @@ exports[`shallow render 1`] = `
           19
         </p>
       }
-      originDropOffTime={null}
       pickupDate={
         <p
           className="flex-none letter_3 date"
@@ -582,7 +577,6 @@ exports[`shallow render 1`] = `
           19
         </p>
       }
-      pickupTime={null}
       scope={
         Object {
           "closed_quotation_tool": true,
@@ -938,7 +932,6 @@ exports[`shipmentData.cargoItems is present 1`] = `
           19
         </p>
       }
-      deliveryTime={null}
       deselectedStyle={
         Object {
           "0": "#",
@@ -1040,7 +1033,6 @@ exports[`shipmentData.cargoItems is present 1`] = `
           19
         </p>
       }
-      originDropOffTime={null}
       pickupDate={
         <p
           className="flex-none letter_3 date"
@@ -1048,7 +1040,6 @@ exports[`shipmentData.cargoItems is present 1`] = `
           19
         </p>
       }
-      pickupTime={null}
       scope={
         Object {
           "closed_quotation_tool": true,
@@ -1391,7 +1382,6 @@ exports[`shipmentData.contacts is present 1`] = `
           19
         </p>
       }
-      deliveryTime={null}
       deselectedStyle={
         Object {
           "0": "#",
@@ -1493,7 +1483,6 @@ exports[`shipmentData.contacts is present 1`] = `
           19
         </p>
       }
-      originDropOffTime={null}
       pickupDate={
         <p
           className="flex-none letter_3 date"
@@ -1501,7 +1490,6 @@ exports[`shipmentData.contacts is present 1`] = `
           19
         </p>
       }
-      pickupTime={null}
       scope={
         Object {
           "closed_quotation_tool": true,
@@ -1796,7 +1784,6 @@ exports[`shipmentData.documents is present 1`] = `
           19
         </p>
       }
-      deliveryTime={null}
       deselectedStyle={
         Object {
           "0": "#",
@@ -1973,7 +1960,6 @@ exports[`shipmentData.documents is present 1`] = `
           19
         </p>
       }
-      originDropOffTime={null}
       pickupDate={
         <p
           className="flex-none letter_3 date"
@@ -1981,7 +1967,6 @@ exports[`shipmentData.documents is present 1`] = `
           19
         </p>
       }
-      pickupTime={null}
       scope={
         Object {
           "closed_quotation_tool": true,
