@@ -254,8 +254,8 @@ export class AdminPricingRouteView extends Component {
         </div>
 
         {scope.show_beta_features ? <div
-         className="flex-95 layout-row layout-wrap layout-align-center-center buffer_10"
-       >
+          className="flex-95 layout-row layout-wrap layout-align-center-center buffer_10"
+        >
           <div className="layout-padding flex-100 layout-align-start-center greyBg">
             <span><b>Dedicated Pricings</b></span>
           </div>
