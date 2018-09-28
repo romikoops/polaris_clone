@@ -610,9 +610,8 @@ module ShippingTools
                     trip.tenant_vehicle_id,
                     trip.start_date,
                     Date.today + 5.days)
-                  .order(start_date: :asc)
-                  .limit(5)
-      trips.sort_by{ |trip| trip.start_date }
+                  .order(start_date: :desc)
+                  .limit(5).sort_by{ |trip| trip.start_date }
     end
       schedules = Schedule.from_trips(trips)
       {schedules: schedules, itinerary_id: trip.itinerary_id, tenant_vehicle_id: trip.tenant_vehicle_id}
