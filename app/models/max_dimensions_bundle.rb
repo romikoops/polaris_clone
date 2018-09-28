@@ -47,8 +47,8 @@ class MaxDimensionsBundle < ApplicationRecord
       dimension_x:       0,
       dimension_y:       0,
       dimension_z:       0,
-      payload_in_kg:     1_500.0,
-      chargeable_weight: 1_500.0
+      payload_in_kg:     1_000.0,
+      chargeable_weight: 1_000.0
     }
   }.freeze
 
