@@ -453,10 +453,10 @@ export class UserShipmentContent extends Component {
                   <div className={`layout-row flex-100 flex-sm-100 flex-xs-100 ${styles.column_info}`}>
                     <div className={`flex-33 layout-row offset-5 layout-align-start-center layout-wrap ${styles.border_right}`}>
                       {shipment.total_goods_value ? (
-                        <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
-                          <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Total Value of Goods:</span>
+                        <div className="flex-100 layout-xs-column layout-row layout-align-start-center">
+                          <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Total Value <br/> of Goods:</span>
                           <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
-                            {shipment.total_goods_value.value}
+                            {shipment.total_goods_value.value}&nbsp;
                             {shipment.total_goods_value.currency}
                           </p>
                         </div>
@@ -488,14 +488,14 @@ export class UserShipmentContent extends Component {
                     </div>
                     <div className="flex-33 layout-row offset-5 layout-align-center-center layout-wrap">
                       {shipment.incoterm_text ? (
-                        <div className="flex-100 layout-column layout-align-center-start">
+                        <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
                           <span className="flex-40 flex-xs-100 layout-align-center-center layout-row">Incoterm:</span>
                           <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
                             {shipment.incoterm_text}
                           </p>
                         </div>
                       ) : (
-                        <div className="flex-100 layout-column layout-align-start-start">
+                        <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
                           <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Incoterm:</span>
                           <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
                         -
@@ -505,24 +505,24 @@ export class UserShipmentContent extends Component {
                     </div>
                   </div>
                   <div className={`layout-column flex-100 flex-sm-100 flex-xs-100 ${styles.column_info}`}>
-                    <div className={`${styles.border_bottom} flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap`}>
+                    <div className={`${styles.border_bottom} padding_top_sm padding_bottom_sm flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap`}>
                       {shipment.cargo_notes ? (
                         <div className="flex-100 layout-row layout-align-start-center">
-                          <span className="flex-30 layout-row">Description of Goods:</span>
+                          <span className="flex-20 layout-row">Description of Goods:</span>
                           <p className="flex-80 layout-padding layout-row">
                             {shipment.cargo_notes}
                           </p>
                         </div>
                       ) : (
                         <div className="flex-100 layout-row layout-align-start-center">
-                          <span className="flex-30 layout-row">Description of Goods:</span>
+                          <span className="flex-20 layout-row">Description of Goods:</span>
                           <p className="flex-80 layout-padding layout-row">
                         -
                           </p>
                         </div>
                       )}
                     </div>
-                    <div className="flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap">
+                    <div className="flex-100 flex-sm-100 padding_top_sm padding_bottom_sm flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap">
                       {shipment.notes ? (
                         <div className="flex-100 layout-row layout-align-start-center">
                           <span className="flex-20 layout-row">Notes:</span>
