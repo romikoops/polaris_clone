@@ -862,7 +862,7 @@ class AdminShipmentView extends Component {
 
         </div>
 
-        {scope.show_beta_feautures && shipment.status !== 'quoted' ? (
+        {scope.show_beta_features && shipment.status !== 'quoted' ? (
           <div className="flex-100 layout-row layout-wrap">
             <div className="layout-row flex-100 layout-wrap layout-align-center-center" style={{ paddingTop: '30px' }}>
               <p
