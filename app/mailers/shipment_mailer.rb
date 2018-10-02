@@ -37,7 +37,7 @@ class ShipmentMailer < ApplicationMailer
     tenant = user.tenant
     @shipment = shipment
 
-    # create_pdf_attachment(@shipment)
+    create_pdf_attachment(@shipment)
     attachments.inline['logo.png']       = URI.open(tenant.theme['logoLarge']).read
     attachments.inline['logo_small.png'] = URI.try(:open, tenant.theme['logoSmall']).try(:read)
     mail_options = {
