@@ -46,11 +46,9 @@ export class ShipmentQuotationContent extends Component {
       theme,
       gradientBorderStyle,
       gradientStyle,
-      etdJSX,
-      etaJSX,
+      et,
       shipment,
-      bg1,
-      bg2,
+      bg,
       selectedStyle,
       deselectedStyle,
       scope,
@@ -119,12 +117,12 @@ export class ShipmentQuotationContent extends Component {
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
-                      et={shipment.pickup_address ? etdJSX : null}
+                      et={shipment.pickup_address ? et.etdJSX : null}
                       text="ETD"
                       shipment={shipment}
                       theme={theme}
                       hub={shipment.origin_hub}
-                      bg={bg1}
+                      bg={bg.bg1}
                     />
                   </div>
                 )}
@@ -154,9 +152,9 @@ export class ShipmentQuotationContent extends Component {
                       text="ETA"
                       shipment={shipment}
                       theme={theme}
-                      et={shipment.delivery_address ? etaJSX : null}
+                      et={shipment.delivery_address ? et.etaJSX : null}
                       hub={shipment.destination_hub}
-                      bg={bg2}
+                      bg={bg.bg2}
                     />
                   </div>
                 )}
@@ -408,11 +406,9 @@ ShipmentQuotationContent.propTypes = {
   theme: PropTypes.theme,
   gradientBorderStyle: PropTypes.style,
   gradientStyle: PropTypes.style,
-  etdJSX: PropTypes.node,
-  etaJSX: PropTypes.node,
+  et: PropTypes.objectOf(PropTypes.node),
   shipment: PropTypes.shipment,
-  bg1: PropTypes.style,
-  bg2: PropTypes.style,
+  bg: PropTypes.objectOf(PropTypes.style),
   selectedStyle: PropTypes.style,
   deselectedStyle: PropTypes.style,
   scope: PropTypes.objectOf(PropTypes.any),
@@ -424,11 +420,9 @@ ShipmentQuotationContent.defaultProps = {
   theme: null,
   gradientBorderStyle: {},
   gradientStyle: {},
-  etdJSX: null,
-  etaJSX: null,
+  et: {},
   shipment: {},
-  bg1: {},
-  bg2: {},
+  bg: {},
   selectedStyle: {},
   deselectedStyle: {},
   scope: {},

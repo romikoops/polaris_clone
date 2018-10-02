@@ -5,15 +5,31 @@ import Tab from '../../Tabs/Tab'
 import styles from '../AdminShipments.scss'
 import adminStyles from '../Admin.scss'
 import GradientBorder from '../../GradientBorder'
-import { moment, docOptions } from '../../../constants'
+import { moment, docOptions, documentTypes } from '../../../constants'
 import { formattedPriceValue, totalPrice } from '../../../helpers'
 import ShipmentOverviewShowCard from './ShipmentOverviewShowCard'
+import DocumentsForm from '../../Documents/Form'
 import ContactDetailsRow from './ContactDetailsRow'
 import GreyBox from '../../GreyBox/GreyBox'
-import { NamedSelect } from '../../NamedSelect/NamedSelect';
-import FileUploader from '../../FileUploader/FileUploader';
+import { NamedSelect } from '../../NamedSelect/NamedSelect'
+import FileUploader from '../../FileUploader/FileUploader'
 
 export class AdminShipmentContent extends Component {
+  static calcCargoLoad (feeHash, loadType) {
+    const cargoCount = Object.keys(feeHash.cargo).length
+    let noun = ''
+    if (loadType === 'cargo_item' && cargoCount > 3) {
+      noun = 'Cargo Items'
+    } else if (loadType === 'cargo_item' && cargoCount === 3) {
+      noun = 'Cargo Item'
+    } else if (loadType === 'container' && cargoCount > 3) {
+      noun = 'Containers'
+    } else if (loadType === 'container' && cargoCount === 3) {
+      noun = 'Container'
+    }
+
+    return `${noun}`
+  }
   static checkSelectedOffer (service) {
     let obj = {}
     if (service && service.total) {
@@ -42,11 +58,8 @@ export class AdminShipmentContent extends Component {
       theme,
       gradientBorderStyle,
       gradientStyle,
-      etdJSX,
-      etaJSX,
-      shipment,
-      bg1,
-      bg2,
+      et,
+      bg,
       switchIcon,
       dnrEditKeys,
       pickupDate,
@@ -55,29 +68,69 @@ export class AdminShipmentContent extends Component {
       destinationCollectionDate,
       showEditTime,
       saveNewTime,
+      shipmentData,
       toggleEditTime,
       showEditServicePrice,
       toggleEditServicePrice,
       newPrices,
-      accountHolder,
       feeHash,
       selectedStyle,
       deselectedStyle,
       cargoCount,
       cargoView,
-      calcCargoLoad,
-      contacts,
-      missingDocs,
-      docView,
       saveNewEditedPrice,
       handlePriceChange,
       uploadClientDocument
     } = this.props
 
     const {
+      contacts,
+      shipment,
+      documents,
+      accountHolder
+    } = shipmentData
+
+    const {
       fileType,
       upUrl
     } = this.state
+    
+    const docChecker = {
+      packing_sheet: false,
+      commercial_invoice: false
+    }
+
+    const docView = []
+    const missingDocs = []
+
+    if (documents) {
+      documents.forEach((doc) => {
+        docChecker[doc.doc_type] = true
+        docView.push(<div className="flex-xs-100 flex-sm-45 flex-33 flex-gt-lg-25 layout-align-start-center layout-row" style={{ padding: '10px' }}>
+          <DocumentsForm
+            theme={theme}
+            type={doc.doc_type}
+            dispatchFn={file => this.fileFn(file)}
+            text={documentTypes[doc.doc_type]}
+            doc={doc}
+            viewer
+            deleteFn={file => this.deleteDoc(file)}
+          />
+        </div>)
+      })
+    }
+    Object.keys(docChecker).forEach((key) => {
+      if (!docChecker[key]) {
+        missingDocs.push(<div className={`flex-25 layout-padding layout-row layout-align-start-center ${adminStyles.no_doc}`}>
+          <div className="flex-none layout-row layout-align-center-center">
+            <i className="flex-none fa fa-ban" />
+          </div>
+          <div className="flex layout-align-start-center layout-row">
+            <p className="flex-none">{`${documentTypes[key]}: Not Uploaded`}</p>
+          </div>
+        </div>)
+      }
+    })
 
     return (
       <Tabs
@@ -97,14 +150,14 @@ export class AdminShipmentContent extends Component {
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
-                      estimatedTime={etdJSX}
+                      estimatedTime={et.etdJSX}
                       carriage={pickupDate}
                       noCarriage={originDropOffDate}
                       text="ETD"
                       theme={theme}
                       hub={shipment.origin_hub}
                       shipment={shipment}
-                      bg={bg1}
+                      bg={bg.bg1}
                       editTime={showEditTime}
                       handleSaveTime={saveNewTime}
                       toggleEditTime={toggleEditTime}
@@ -130,13 +183,13 @@ export class AdminShipmentContent extends Component {
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
-                      estimatedTime={etaJSX}
+                      estimatedTime={et.etaJSX}
                       carriage={deliveryDate}
                       noCarriage={destinationCollectionDate}
                       text="ETA"
                       theme={theme}
                       hub={shipment.destination_hub}
-                      bg={bg2}
+                      bg={bg.bg2}
                       shipment={shipment}
                       editTime={showEditTime}
                       handleSaveTime={saveNewTime}
@@ -487,7 +540,7 @@ export class AdminShipmentContent extends Component {
                   <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
                     <div className="layout-align-start-center layout-row flex">
                       <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>x&nbsp;{cargoCount}</span>
-                      <p className="layout-align-sm-end-center layout-align-xs-end-center">{calcCargoLoad}</p>
+                      <p className="layout-align-sm-end-center layout-align-xs-end-center">{AdminShipmentContent.calcCargoLoad(feeHash, shipment.load_type)}</p>
                     </div>
                   </div>
                   <h2 className="layout-align-start-center layout-row flex">
@@ -646,29 +699,29 @@ export class AdminShipmentContent extends Component {
               contentClassName="flex"
               content={(
                 <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${adminStyles.padding_left}`}>
-                <div className="flex-100 layout-row layout-wrap layout-align-start-center ">
-                  <div className="flex-50 layout-align-start-center layout-row">
-                    <p className={`${styles.sec_subheader_text} flex-none letter_3`}>
+                  <div className="flex-100 layout-row layout-wrap layout-align-start-center ">
+                    <div className="flex-50 layout-align-start-center layout-row">
+                      <p className={`${styles.sec_subheader_text} flex-none letter_3`}>
                     Upload New Document
-                    </p>
-                    <NamedSelect
-                      name="file-type"
-                      className={`${styles.select} flex-50`}
-                      value={fileType}
-                      options={docOptions}
-                      onChange={this.setFileType}
-                    />
+                      </p>
+                      <NamedSelect
+                        name="file-type"
+                        className={`${styles.select} flex-50`}
+                        value={fileType}
+                        options={docOptions}
+                        onChange={this.setFileType}
+                      />
+                    </div>
+                    <div className="flex-50 layout-align-end-center layout-row padd_10">
+                      <FileUploader
+                        theme={theme}
+                        url={upUrl}
+                        type={fileType.value}
+                        text={fileType.label}
+                        uploadFn={uploadClientDocument}
+                      />
+                    </div>
                   </div>
-                  <div className="flex-50 layout-align-end-center layout-row padd_10">
-                    <FileUploader
-                      theme={theme}
-                      url={upUrl}
-                      type={fileType.value}
-                      text={fileType.label}
-                      uploadFn={uploadClientDocument}
-                    />
-                  </div>
-                </div>
                   <div
                     className="flex-100 layout-row layout-wrap layout-align-start-center"
                     style={{ marginTop: '5px' }}
@@ -695,24 +748,18 @@ AdminShipmentContent.propTypes = {
   theme: PropTypes.theme,
   gradientBorderStyle: PropTypes.style,
   gradientStyle: PropTypes.style,
-  etdJSX: PropTypes.node,
-  etaJSX: PropTypes.node,
+  et: PropTypes.objectOf(PropTypes.node),
   pickupDate: PropTypes.node,
   deliveryDate: PropTypes.node,
   originDropOffDate: PropTypes.node,
   destinationCollectionDate: PropTypes.node,
   shipment: PropTypes.shipment,
-  bg1: PropTypes.style,
-  bg2: PropTypes.style,
+  bg: PropTypes.objectOf(PropTypes.style),
   selectedStyle: PropTypes.style,
   deselectedStyle: PropTypes.style,
-  contacts: PropTypes.arrayOf(PropTypes.contact),
   feeHash: PropTypes.objectOf(PropTypes.any),
-  docView: PropTypes.arrayOf(PropTypes.node),
   cargoCount: PropTypes.number,
-  missingDocs: PropTypes.arrayOf(PropTypes.node),
   cargoView: PropTypes.node,
-  calcCargoLoad: PropTypes.number,
   switchIcon: PropTypes.func,
   dnrEditKeys: PropTypes.arrayOf(PropTypes.string),
   showEditTime: PropTypes.bool,
@@ -721,44 +768,36 @@ AdminShipmentContent.propTypes = {
   showEditServicePrice: PropTypes.bool,
   newPrices: PropTypes.objectOf(PropTypes.any),
   toggleEditServicePrice: PropTypes.func,
-  uploadClientDocument: PropTypes.func,
-  handlePriceChangeOn: PropTypes.func,
-  accountHolder: PropTypes.user
+  saveNewEditedPrice: PropTypes.func,
+  uploadClientDocument: PropTypes.func
 }
 
 AdminShipmentContent.defaultProps = {
   theme: null,
   gradientBorderStyle: {},
   gradientStyle: {},
-  etdJSX: null,
-  etaJSX: null,
+  et: {},
   pickupDate: null,
   deliveryDate: null,
   originDropOffDate: null,
   destinationCollectionDate: null,
   toggleEditServicePrice: null,
-  handlePriceChangeOn: null,
   uploadClientDocument: null,
+  saveNewEditedPrice: null,
   shipment: {},
-  bg1: {},
-  bg2: {},
+  bg: {},
   selectedStyle: {},
   deselectedStyle: {},
-  contacts: [],
   feeHash: {},
-  docView: [],
   cargoCount: 0,
-  missingDocs: [],
   cargoView: null,
-  calcCargoLoad: 0,
   switchIcon: null,
   dnrEditKeys: [],
   showEditTime: false,
   saveNewTime: null,
   toggleEditTime: null,
   showEditServicePrice: false,
-  newPrices: {},
-  accountHolder: {}
+  newPrices: {}
 }
 
 export default AdminShipmentContent

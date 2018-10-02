@@ -7,10 +7,9 @@ import { formatDate, parseDate } from 'react-day-picker/moment'
 import CargoItemGroup from '../../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../../Cargo/Item/Group/Aggregated'
 import PropTypes from '../../../prop-types'
-import { moment, documentTypes } from '../../../constants'
+import { moment } from '../../../constants'
 import adminStyles from '../Admin.scss'
 import styles from '../AdminShipments.scss'
-import DocumentsForm from '../../Documents/Form'
 import GradientBorder from '../../GradientBorder'
 import DocumentsDownloader from '../../Documents/Downloader'
 import {
@@ -52,21 +51,6 @@ class AdminShipmentView extends Component {
     }
 
     return { currency: curr, total: total.toFixed(2) }
-  }
-  static calcCargoLoad (feeHash, loadType) {
-    const cargoCount = Object.keys(feeHash.cargo).length
-    let noun = ''
-    if (loadType === 'cargo_item' && cargoCount > 3) {
-      noun = 'Cargo Items'
-    } else if (loadType === 'cargo_item' && cargoCount === 3) {
-      noun = 'Cargo Item'
-    } else if (loadType === 'container' && cargoCount > 3) {
-      noun = 'Containers'
-    } else if (loadType === 'container' && cargoCount === 3) {
-      noun = 'Container'
-    }
-
-    return `${noun}`
   }
   static checkSelectedOffer (service) {
     let obj = {}
@@ -115,9 +99,7 @@ class AdminShipmentView extends Component {
         customs: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.customs),
         import: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.import),
         export: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.export)
-      },
-      fileType: { label: 'Packing Sheet', value: 'packing_sheet' },
-      upUrl: `/shipments/${shipment.id}/upload/packing_sheet`
+      }
     }
     this.handleDeny = this.handleDeny.bind(this)
     this.handleArchive = this.handleArchive.bind(this)
@@ -402,7 +384,6 @@ class AdminShipmentView extends Component {
     const {
       contacts,
       shipment,
-      documents,
       cargoItems,
       containers,
       aggregatedCargo,
@@ -429,6 +410,10 @@ class AdminShipmentView extends Component {
           backgroundImage:
             'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'
         }
+    const bg = {
+      bg1,
+      bg2
+    }
     const gradientStyle =
       theme && theme.colors
         ? gradientGenerator(theme.colors.primary, theme.colors.secondary)
@@ -445,7 +430,7 @@ class AdminShipmentView extends Component {
         ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
         : { background: 'black' }
 
-    const docView = []
+    
     let cargoView = ''
     if (containers) {
       cargoView = this.prepContainerGroups(containers)
@@ -511,39 +496,7 @@ class AdminShipmentView extends Component {
     ) : (
       ''
     )
-    const docChecker = {
-      packing_sheet: false,
-      commercial_invoice: false
-    }
-    const missingDocs = []
-    if (documents) {
-      documents.forEach((doc) => {
-        docChecker[doc.doc_type] = true
-        docView.push(<div className="flex-xs-100 flex-sm-45 flex-33 flex-gt-lg-25 layout-align-start-center layout-row" style={{ padding: '10px' }}>
-          <DocumentsForm
-            theme={theme}
-            type={doc.doc_type}
-            dispatchFn={file => this.fileFn(file)}
-            text={documentTypes[doc.doc_type]}
-            doc={doc}
-            viewer
-            deleteFn={file => this.deleteDoc(file)}
-          />
-        </div>)
-      })
-    }
-    Object.keys(docChecker).forEach((key) => {
-      if (!docChecker[key]) {
-        missingDocs.push(<div className={`flex-25 layout-padding layout-row layout-align-start-center ${adminStyles.no_doc}`}>
-          <div className="flex-none layout-row layout-align-center-center">
-            <i className="flex-none fa fa-ban" />
-          </div>
-          <div className="flex layout-align-start-center layout-row">
-            <p className="flex-none">{`${documentTypes[key]}: Not Uploaded`}</p>
-          </div>
-        </div>)
-      }
-    })
+    
     const feeHash = shipment.selected_offer
 
     const dayPickerPropsPickupDate = {
@@ -721,6 +674,10 @@ class AdminShipmentView extends Component {
         {`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
+    const et = {
+      etdJSX,
+      etaJSX
+    }
 
     const destinationCollectionDate = showEditTime && shipment.planned_destination_collection_date ? (
       <div className="layout-row flex-100">
@@ -820,16 +777,13 @@ class AdminShipmentView extends Component {
               gradientBorderStyle={gradientBorderStyle}
               gradientStyle={gradientStyle}
               switchIcon={switchIcon}
-              etdJSX={etdJSX}
-              etaJSX={etaJSX}
+              et={et}
               pickupDate={pickupDate}
               deliveryDate={deliveryDate}
               originDropOffDate={originDropOffDate}
               destinationCollectionDate={destinationCollectionDate}
               totalPrice={totalPrice}
-              shipment={shipment}
-              bg1={bg1}
-              bg2={bg2}
+              bg={bg}
               dnrEditKeys={dnrEditKeys}
               showEditTime={this.state.showEditTime}
               saveNewTime={this.saveNewTime}
@@ -842,11 +796,7 @@ class AdminShipmentView extends Component {
               deselectedStyle={deselectedStyle}
               cargoCount={cargoCount}
               cargoView={cargoView}
-              calcCargoLoad={AdminShipmentView.calcCargoLoad(feeHash, shipment.load_type)}
-              contacts={contacts}
-              missingDocs={missingDocs}
-              docView={docView}
-              accountHolder={accountHolder}
+              shipmentData={shipmentData}
               handlePriceChange={this.handlePriceChange}
               saveNewEditedPrice={this.saveNewEditedPrice}
               uploadClientDocument={adminDispatch.uploadDocument}
@@ -856,11 +806,9 @@ class AdminShipmentView extends Component {
               theme={theme}
               gradientBorderStyle={gradientBorderStyle}
               gradientStyle={gradientStyle}
-              etdJSX={etdJSX}
-              etaJSX={etaJSX}
+              et={et}
               shipment={shipment}
-              bg1={bg1}
-              bg2={bg2}
+              bg={bg}
               selectedStyle={selectedStyle}
               deselectedStyle={deselectedStyle}
               feeHash={feeHash}
