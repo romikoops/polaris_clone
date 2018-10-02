@@ -46,7 +46,7 @@
           <div class="row">
             <i class="col-xs-1 fa fa-check check-square" style="color: <%= precarriage_color %>"></i>
             <h4 class="col-xs-11">
-              Pick-up on <%= shipment.planned_pickup_date.try(:strftime, "%d/%m/%Y at %I:%M%p") %>
+              Pick-up on <%= shipment.planned_pickup_date.try(:strftime, "%d/%m/%Y at %H:%M") %>
             </h4>
           </div>
 
@@ -69,7 +69,7 @@
           <div class="row">
             <i class="col-xs-1 fa fa-check check-square" style="color: <%= oncarriage_color %>"></i>
             <h4 class="col-xs-11">
-              Delivery on <%= shipment.planned_delivery_date.try(:strftime, "%d/%m/%Y at %I:%M%p") %>
+              Delivery on <%= shipment.planned_delivery_date.try(:strftime, "%d/%m/%Y at %H:%M") %>
             </h4>
           </div>
           <div class="row">
