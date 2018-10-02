@@ -75,7 +75,7 @@ module PricingTools
                  cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
                end
       return_h[:quantity] += cargo_unit.quantity unless cargo_unit.quantity.nil?
-      return_h[:volume]          += cargo_unit.try(:volume) * (cargo_unit.quantity || 1) || 0
+      return_h[:volume]          += (cargo_unit.try(:volume) || 1) * (cargo_unit.quantity || 1) || 0
       return_h[:weight]          += (cargo_unit.try(:weight) || weight)
     end
 
