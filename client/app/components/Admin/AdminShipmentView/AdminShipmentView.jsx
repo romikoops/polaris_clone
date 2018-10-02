@@ -394,7 +394,7 @@ class AdminShipmentView extends Component {
   }
   render () {
     const {
-      theme, hubs, shipmentData, clients, t, adminDispatch
+      theme, hubs, shipmentData, clients, t, adminDispatch, scope
     } = this.props
 
     if (!shipmentData || !hubs || !clients) {
@@ -834,7 +834,6 @@ class AdminShipmentView extends Component {
               deselectedStyle={deselectedStyle}
               cargoCount={cargoCount}
               cargoView={cargoView}
-              totalPrice={totalPrice}
               calcCargoLoad={AdminShipmentView.calcCargoLoad(feeHash, shipment.load_type)}
               contacts={contacts}
               missingDocs={missingDocs}
@@ -863,7 +862,7 @@ class AdminShipmentView extends Component {
 
         </div>
 
-        {/* {shipment.status !== 'quoted' ? (
+        {scope.show_beta_feautures && shipment.status !== 'quoted' ? (
           <div className="flex-100 layout-row layout-wrap">
             <div className="layout-row flex-100 layout-wrap layout-align-center-center" style={{ paddingTop: '30px' }}>
               <p
@@ -883,7 +882,7 @@ class AdminShipmentView extends Component {
           </div>
         ) : (
           ''
-        )} */}
+        )}
 
       </div>
     )
@@ -901,7 +900,8 @@ AdminShipmentView.propTypes = {
     getShipment: PropTypes.func
   }).isRequired,
   match: PropTypes.match.isRequired,
-  t: PropTypes.func
+  t: PropTypes.func,
+  scope: PropTypes.objectOf(PropTypes.any)
 }
 
 AdminShipmentView.defaultProps = {
@@ -910,7 +910,8 @@ AdminShipmentView.defaultProps = {
   clients: [],
   shipmentData: null,
   loading: false,
-  t: null
+  t: null,
+  scope: {}
 }
 
 export default translate('common')(AdminShipmentView)
