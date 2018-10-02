@@ -602,8 +602,8 @@ module ShippingTools
   def get_shipment_pdf(params)
     shipment = Shipment.find_by_id(params[:shipment_id])
     pdf_string = render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_shipper.pdf', locals: { shipment: shipment })
-    shipper_pdf = WickedPdf.new.pdf_from_string(pdf_string, margin: { top: 10, bottom: 5, left: 20, right: 20 })
-    send_data shipper_pdf, filename: 'Booking_' + shipment.imc_reference + '.pdf'
+    shipper_pdf = BreezyPDFLite::RenderRequest.new(pdf_string).submit
+    send_data shipper_pdf.body, filename: 'Booking_' + shipment.imc_reference + '.pdf'
   end
 
   def self.save_pdf_quotes(shipment, tenant, schedules)
@@ -660,27 +660,29 @@ module ShippingTools
       locals:   { shipment: args[:shipment] }
     )
 
-    doc_string = WickedPdf.new.pdf_from_string(
-      doc_erb.render,
-      margin: args[:margin]
-    )
+    response =  BreezyPDFLite::RenderRequest.new(
+      doc_erb.render
+    ).submit
+    if response.code.to_i == 201
+      doc_name = "#{args[:name]}_#{args[:shipment].imc_reference}.pdf"
 
-    doc_name = "#{args[:name]}_#{args[:shipment].imc_reference}.pdf"
+      File.open('tmp/' + doc_name, 'wb') { |file| file.write(response.body) }
+      doc_pdf = File.open('tmp/' + doc_name)
 
-    File.open('tmp/' + doc_name, 'wb') { |file| file.write(doc_string) }
-    doc_pdf = File.open('tmp/' + doc_name)
+      doc = DocumentTools.new_upload_backend(doc_pdf, args[:shipment], args[:name], current_user)
+      doc_url = doc.get_signed_url
 
-    doc = DocumentTools.new_upload_backend(doc_pdf, args[:shipment], args[:name], current_user)
-    doc_url = doc.get_signed_url
-
-    { name: doc_name, url: doc_url }
+      { name: doc_name, url: doc_url }
+    else
+      Raise
+    end
   end
 
   def send_booking_emails(shipment)
-    shipper_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_shipper.pdf', locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
-    trucker_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_trucker.pdf', locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
-    consolidator_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_consolidator.pdf', locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
-    receiver_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_receiver.pdf', locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
+    shipper_pdf = BreezyPDFLite::RenderRequest.new(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_shipper.pdf', locals: { shipment: shipment })).submit.body
+    trucker_pdf = BreezyPDFLite::RenderRequest.new(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_trucker.pdf', locals: { shipment: shipment })).submit.body
+    consolidator_pdf = BreezyPDFLite::RenderRequest.new(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_consolidator.pdf', locals: { shipment: shipment })).submit.body
+    receiver_pdf = BreezyPDFLite::RenderRequest.new(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_receiver.pdf', locals: { shipment: shipment })).submit.body
     ShipmentMailer.summary_mail_shipper(shipment, 'Booking_' + shipment.imc_reference + '.pdf', shipper_pdf).deliver_now
     ShipmentMailer.summary_mail_trucker(shipment, 'Booking_' + shipment.imc_reference + '.pdf', trucker_pdf).deliver_now
     ShipmentMailer.summary_mail_consolidator(shipment, 'Booking_' + shipment.imc_reference + '.pdf', consolidator_pdf).deliver_now
