@@ -201,7 +201,7 @@ class UserShipmentView extends Component {
           backgroundImage:
             'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'
         }
-    const bg = {
+    const background = {
       bg1,
       bg2
     }
@@ -282,7 +282,7 @@ class UserShipmentView extends Component {
         {`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
-    const et = {
+    const estimatedTimes = {
       etdJSX,
       etaJSX
     }
@@ -305,8 +305,8 @@ class UserShipmentView extends Component {
               theme={theme}
               gradientBorderStyle={gradientBorderStyle}
               gradientStyle={gradientStyle}
-              et={et}
-              bg={bg}
+              estimatedTimes={estimatedTimes}
+              background={background}
               selectedStyle={selectedStyle}
               deselectedStyle={deselectedStyle}
               scope={scope}
@@ -322,9 +322,9 @@ class UserShipmentView extends Component {
               theme={theme}
               gradientBorderStyle={gradientBorderStyle}
               gradientStyle={gradientStyle}
-              et={et}
+              estimatedTimes={estimatedTimes}
               shipment={shipment}
-              bg={bg}
+              background={background}
               selectedStyle={selectedStyle}
               deselectedStyle={deselectedStyle}
               scope={scope}

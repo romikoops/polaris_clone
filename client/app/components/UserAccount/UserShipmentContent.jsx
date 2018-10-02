@@ -70,8 +70,8 @@ export class UserShipmentContent extends Component {
       user,
       gradientBorderStyle,
       gradientStyle,
-      et,
-      bg,
+      estimatedTimes,
+      background,
       selectedStyle,
       deselectedStyle,
       scope,
@@ -181,14 +181,14 @@ export class UserShipmentContent extends Component {
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
-                      estimatedTime={et.etdJSX}
+                      estimatedTime={estimatedTimes.etdJSX}
                       text="ETD"
                       theme={theme}
                       carriage={pickupDate}
                       noCarriage={originDropOffDate}
                       shipment={shipment}
                       hub={shipment.origin_hub}
-                      bg={bg.bg1}
+                      background={background.bg1}
                     />
                   </div>
                 )}
@@ -210,14 +210,14 @@ export class UserShipmentContent extends Component {
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
-                      estimatedTime={et.etaJSX}
+                      estimatedTime={estimatedTimes.etaJSX}
                       carriage={deliveryDate}
                       shipment={shipment}
                       text="ETA"
                       theme={theme}
                       noCarriage={destinationCollectionDate}
                       hub={shipment.destination_hub}
-                      bg={bg.bg2}
+                      background={background.bg2}
                     />
                   </div>
                 )}
@@ -515,8 +515,8 @@ UserShipmentContent.propTypes = {
   }).isRequired,
   gradientBorderStyle: PropTypes.style,
   gradientStyle: PropTypes.style,
-  et: PropTypes.objectOf(PropTypes.node),
-  bg: PropTypes.objectOf(PropTypes.style),
+  estimatedTimes: PropTypes.objectOf(PropTypes.node),
+  background: PropTypes.objectOf(PropTypes.style),
   match: PropTypes.match.isRequired,
   selectedStyle: PropTypes.style,
   deselectedStyle: PropTypes.style,
@@ -532,8 +532,8 @@ UserShipmentContent.defaultProps = {
   user: null,
   gradientBorderStyle: {},
   gradientStyle: {},
-  et: {},
-  bg: {},
+  estimatedTimes: {},
+  background: {},
   selectedStyle: {},
   deselectedStyle: {},
   scope: {},

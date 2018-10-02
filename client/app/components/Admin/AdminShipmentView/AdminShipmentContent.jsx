@@ -59,8 +59,8 @@ export class AdminShipmentContent extends Component {
       theme,
       gradientBorderStyle,
       gradientStyle,
-      et,
-      bg,
+      estimatedTimes,
+      background,
       switchIcon,
       dnrEditKeys,
       pickupDate,
@@ -151,14 +151,14 @@ export class AdminShipmentContent extends Component {
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
-                      estimatedTime={et.etdJSX}
+                      estimatedTime={estimatedTimes.etdJSX}
                       carriage={pickupDate}
                       noCarriage={originDropOffDate}
                       text="ETD"
                       theme={theme}
                       hub={shipment.origin_hub}
                       shipment={shipment}
-                      bg={bg.bg1}
+                      background={background.bg1}
                       editTime={showEditTime}
                       handleSaveTime={saveNewTime}
                       toggleEditTime={toggleEditTime}
@@ -184,13 +184,13 @@ export class AdminShipmentContent extends Component {
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
-                      estimatedTime={et.etaJSX}
+                      estimatedTime={estimatedTimes.etaJSX}
                       carriage={deliveryDate}
                       noCarriage={destinationCollectionDate}
                       text="ETA"
                       theme={theme}
                       hub={shipment.destination_hub}
-                      bg={bg.bg2}
+                      background={background.bg2}
                       shipment={shipment}
                       editTime={showEditTime}
                       handleSaveTime={saveNewTime}
@@ -644,13 +644,13 @@ AdminShipmentContent.propTypes = {
   theme: PropTypes.theme,
   gradientBorderStyle: PropTypes.style,
   gradientStyle: PropTypes.style,
-  et: PropTypes.objectOf(PropTypes.node),
+  estimatedTimes: PropTypes.objectOf(PropTypes.node),
   pickupDate: PropTypes.node,
   deliveryDate: PropTypes.node,
   originDropOffDate: PropTypes.node,
   destinationCollectionDate: PropTypes.node,
   shipment: PropTypes.shipment,
-  bg: PropTypes.objectOf(PropTypes.style),
+  background: PropTypes.objectOf(PropTypes.style),
   selectedStyle: PropTypes.style,
   deselectedStyle: PropTypes.style,
   feeHash: PropTypes.objectOf(PropTypes.any),
@@ -674,7 +674,7 @@ AdminShipmentContent.defaultProps = {
   gradientBorderStyle: {},
   gradientStyle: {},
   shipmentData: null,
-  et: {},
+  estimatedTimes: {},
   pickupDate: null,
   deliveryDate: null,
   originDropOffDate: null,
@@ -683,7 +683,7 @@ AdminShipmentContent.defaultProps = {
   uploadClientDocument: null,
   saveNewEditedPrice: null,
   shipment: {},
-  bg: {},
+  background: {},
   selectedStyle: {},
   deselectedStyle: {},
   feeHash: {},

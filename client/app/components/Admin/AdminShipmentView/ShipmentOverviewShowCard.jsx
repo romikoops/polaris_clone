@@ -1,15 +1,14 @@
 import React from 'react'
 import styles from '../AdminShipments.scss'
 import PropTypes from '../../../prop-types'
-import { moment } from '../../../constants'
-import { checkPreCarriage, checkOnCarriage, gradientTextGenerator } from '../../../helpers'
+import { gradientTextGenerator } from '../../../helpers'
 
 export default function ShipmentOverviewShowCard ({
   estimatedTime,
   carriage,
   noCarriage,
   hub,
-  bg,
+  background,
   editTime,
   handleSaveTime,
   toggleEditTime,
@@ -151,7 +150,7 @@ export default function ShipmentOverviewShowCard ({
           )}
 
       </div>
-      <div className={`layout-column flex-40 ${styles.image}`} style={bg} />
+      <div className={`layout-column flex-40 ${styles.image}`} style={background} />
     </div>
   )
 }
@@ -161,7 +160,7 @@ ShipmentOverviewShowCard.propTypes = {
   carriage: PropTypes.node.isRequired,
   noCarriage: PropTypes.node.isRequired,
   hub: PropTypes.hub.isRequired,
-  bg: PropTypes.objectOf(PropTypes.string),
+  background: PropTypes.objectOf(PropTypes.string),
   shipment: PropTypes.objectOf(PropTypes.any),
   editTime: PropTypes.bool,
   theme: PropTypes.theme,
@@ -172,7 +171,7 @@ ShipmentOverviewShowCard.propTypes = {
 }
 
 ShipmentOverviewShowCard.defaultProps = {
-  bg: {},
+  background: {},
   shipment: {},
   text: '',
   editTime: false,

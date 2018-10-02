@@ -408,7 +408,7 @@ class AdminShipmentView extends Component {
           backgroundImage:
             'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'
         }
-    const bg = {
+    const background = {
       bg1,
       bg2
     }
@@ -671,7 +671,7 @@ class AdminShipmentView extends Component {
         {`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
-    const et = {
+    const estimatedTimes = {
       etdJSX,
       etaJSX
     }
@@ -774,13 +774,13 @@ class AdminShipmentView extends Component {
               gradientBorderStyle={gradientBorderStyle}
               gradientStyle={gradientStyle}
               switchIcon={switchIcon}
-              et={et}
+              estimatedTimes={estimatedTimes}
               pickupDate={pickupDate}
               deliveryDate={deliveryDate}
               originDropOffDate={originDropOffDate}
               destinationCollectionDate={destinationCollectionDate}
               totalPrice={totalPrice}
-              bg={bg}
+              background={background}
               dnrEditKeys={dnrEditKeys}
               showEditTime={this.state.showEditTime}
               saveNewTime={this.saveNewTime}
@@ -803,9 +803,9 @@ class AdminShipmentView extends Component {
               theme={theme}
               gradientBorderStyle={gradientBorderStyle}
               gradientStyle={gradientStyle}
-              et={et}
+              estimatedTimes={estimatedTimes}
               shipment={shipment}
-              bg={bg}
+              background={background}
               selectedStyle={selectedStyle}
               deselectedStyle={deselectedStyle}
               feeHash={feeHash}
