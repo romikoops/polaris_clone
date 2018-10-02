@@ -149,9 +149,8 @@ class AdminShipmentView extends Component {
     handleShipmentAction(shipmentData.shipment.id, 'decline')
   }
   handleArchive () {
-    const { shipmentData, handleShipmentAction, adminDispatch } = this.props
+    const { shipmentData, handleShipmentAction } = this.props
     handleShipmentAction(shipmentData.shipment.id, 'archive')
-    adminDispatch.getShipments({}, 1, true)
   }
 
   handleCurrencySelect (selection) {

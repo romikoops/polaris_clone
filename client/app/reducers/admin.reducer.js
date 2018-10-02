@@ -463,18 +463,12 @@ export default function admin (state = {}, action) {
           ? state.dashboard.shipments.rejected.filter(x => x.id !== action.payload.id)
           : []
       const finished = state.shipments && state.shipments.finished ? state.shipments.finished : []
-      const archived = state.shipments && state.shipments.archived ? state.shipments.archived : []
       const dashFinished =
-        state.dashboard && state.dashboard.shipments && state.dashboard.shipments.finished
-          ? state.dashboard.shipments.finished
-          : []
-      const dashArchived =
         state.dashboard && state.dashboard.shipments && state.dashboard.shipments.finished
           ? state.dashboard.shipments.finished
           : []
       finished.push(action.payload)
       dashFinished.push(action.payload)
-      dashArchived.push(action.payload)
       const shipment = state.shipment && state.shipment.shipment ? state.shipment.shipment : {}
       if (shipment) {
         shipment.status = 'finished'
@@ -488,14 +482,12 @@ export default function admin (state = {}, action) {
             ...state.dashboard.shipments,
             finished: dashFinished,
             open: dashReq,
-            archived: dashArchived,
             rejected: dashRejected
           }
         },
         shipments: {
           ...state.shipments,
           finished,
-          archived,
           open: req,
           rejected
         },
@@ -525,7 +517,7 @@ export default function admin (state = {}, action) {
         state.dashboard && state.dashboard.shipments && state.dashboard.shipments.rejected
           ? state.dashboard.shipments.rejected
           : []
-      
+
       rejected.push(action.payload)
       dashRejected.push(action.payload)
       const newState = {
@@ -557,6 +549,39 @@ export default function admin (state = {}, action) {
         error: { shipments: action.error },
         loading: false
       }
+
+    case adminConstants.ARCHIVE_SHIPMENT_SUCCESS: {
+      const archived = state.shipments && state.shipments.archived ? state.shipments.archived : []
+      const dashArchived =
+        state.dashboard && state.dashboard.shipments && state.dashboard.shipments.archived
+          ? state.dashboard.shipments.archived
+          : []
+      dashArchived.push(action.payload)
+      
+      const shipment = state.shipment && state.shipment.shipment ? state.shipment.shipment : {}
+      if (shipment) {
+        shipment.status = 'archived'
+      }
+
+      return {
+        ...state,
+        dashboard: {
+          ...state.dashboard,
+          shipments: {
+            archived: dashArchived
+          }
+        },
+        shipments: {
+          ...state.shipments,
+          archived
+        },
+        shipment: {
+          ...state.shipment,
+          shipment
+        },
+        loading: false
+      }
+    }
 
     case adminConstants.ADMIN_UPLOAD_DOCUMENT_REQUEST:
       return state
