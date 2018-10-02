@@ -464,7 +464,6 @@ module ShippingTools
     if containers.present?
       cargoKey = containers.first.size_class.dup
       customsKey = cargoKey.dup
-      customsKey.slice! customsKey.rindex('f')
       cargos = containers
     else
       cargoKey = 'lcl'
@@ -495,7 +494,6 @@ module ShippingTools
     total_fees = { total: { value: 0, currency: current_user.currency } }
     total_fees[:total][:value] += import_fees['total'][:value] if import_fees['total'] && import_fees['total'][:value]
     total_fees[:total][:value] += export_fees['total'][:value] if export_fees['total'] && export_fees['total'][:value]
-
     customs_fee = {
       import: destination_customs_fee ? import_fees : { unknown: true },
       export: origin_customs_fee ? export_fees : { unknown: true },
