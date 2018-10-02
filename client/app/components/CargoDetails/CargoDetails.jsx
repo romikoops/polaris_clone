@@ -7,13 +7,14 @@ import Checkbox from '../Checkbox/Checkbox'
 import DocumentsForm from '../Documents/Form'
 import DocumentsMultiForm from '../Documents/MultiForm'
 import defaults from '../../styles/default_classes.scss'
-import { converter } from '../../helpers'
+import { converter, gradientGenerator } from '../../helpers'
 import { currencyOptions, tooltips } from '../../constants'
 import FormsyInput from '../FormsyInput/FormsyInput'
 import TextHeading from '../TextHeading/TextHeading'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import FormsyTextarea from '../FormsyTextarea/FormsyTextarea'
 import CustomsExportPaper from '../Addons/CustomsExportPaper'
+import { Modal } from '../Modal/Modal'
 
 class CargoDetails extends Component {
   static displayCustomsFee (customsData, target, customs, t) {
@@ -56,7 +57,8 @@ class CargoDetails extends Component {
       totalGoodsCurrency: {
         label: 'EUR',
         value: 'EUR'
-      }
+      },
+      showModal: false
     }
 
     this.calcCustomsFee = this.calcCustomsFee.bind(this)
@@ -156,6 +158,11 @@ class CargoDetails extends Component {
   handleChange (event) {
     this.props.handleChange(event)
   }
+  toggleIncotermModal () {
+    this.setState(prevState => ({
+      showModal: !prevState.showModal
+    }))
+  }
   handleTotalGoodsCurrency (selection) {
     this.setState({ totalGoodsCurrency: selection })
     this.props.handleTotalGoodsCurrency(selection.value)
@@ -206,12 +213,28 @@ class CargoDetails extends Component {
         </div>
       </div>
     )
+    const gradientStyle =
+      theme && theme.colors
+        ? gradientGenerator(theme.colors.primary, theme.colors.secondary)
+        : { background: 'black' }
     const fadedPreCarriageText = shipment.has_pre_carriage ? '' : styles.faded_text
     const fadedOnCarriageText = shipment.has_on_carriage ? '' : styles.faded_text
     const textComp = (
       <b style={{ fontWeight: 'normal', fontSize: '.83em' }}>
         ({t('cargo:ifApplicable')})
       </b>
+    )
+
+    const modal = (
+      <Modal
+        flexOptions="flex-80"
+        component={(
+          <div className="lol">lol</div>
+        )}
+        verticalPadding="30px"
+        horizontalPadding="40px"
+        parentToggle={() => this.toggleIncotermModal()}
+      />
     )
 
     const handleText = `${t('cargo:handleHead')} ${tenant.data.name} ${t('cargo:handleTail')}:`
@@ -291,7 +314,7 @@ class CargoDetails extends Component {
               <div className="flex-33 layout-row layout-wrap">
                 <div className="flex-100">
                   <TextHeading theme={theme} size={3} text="EORI" Comp={textComp} />
-                  
+
                 </div>
                 <div className="flex-100 input_box">
                   <input
@@ -394,6 +417,7 @@ class CargoDetails extends Component {
 
     return (
       <div name="cargoDetailsBox" className="flex-100 layout-row layout-wrap padd_top">
+        {this.state.showModal ? modal : ''}
         <div className="flex-100 layout-row layout-align-center">
           <div className={`flex-none ${defaults.content_width} layout-row layout-wrap`}>
             <div className="flex-100 layout-row layout-align-space-between-center">
@@ -503,7 +527,14 @@ class CargoDetails extends Component {
                   <div className="flex-100">
                     <div className={`flex-none layout-row layout-wrap ${styles.f_header}`}>
                       {' '}
-                      <h4 className="no_m flex-100">Incoterms</h4>
+                      <h4 className="no_m flex-90">Incoterms</h4>
+                      <div
+                        className={`pointy ${styles.incoterm_info}`}
+                        style={gradientStyle}
+                        onClick={() => this.toggleIncotermModal()}
+                      >
+                        INFO
+                      </div>
                       <p className="flex-90">
                         2010 by the International Chamber of Commerce (ICC) (Optional)
                       </p>
