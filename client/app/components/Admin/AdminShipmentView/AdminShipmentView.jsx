@@ -406,7 +406,8 @@ class AdminShipmentView extends Component {
       documents,
       cargoItems,
       containers,
-      aggregatedCargo
+      aggregatedCargo,
+      accountHolder
     } = shipmentData
     const {
       showEditTime, showEditServicePrice, newTimes, newPrices
