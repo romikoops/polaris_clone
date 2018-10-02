@@ -382,12 +382,10 @@ class AdminShipmentView extends Component {
       return <h1>NO DATA</h1>
     }
     const {
-      contacts,
       shipment,
       cargoItems,
       containers,
-      aggregatedCargo,
-      accountHolder
+      aggregatedCargo
     } = shipmentData
     const {
       showEditTime, showEditServicePrice, newTimes, newPrices
@@ -430,7 +428,6 @@ class AdminShipmentView extends Component {
         ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
         : { background: 'black' }
 
-    
     let cargoView = ''
     if (containers) {
       cargoView = this.prepContainerGroups(containers)
@@ -496,7 +493,7 @@ class AdminShipmentView extends Component {
     ) : (
       ''
     )
-    
+
     const feeHash = shipment.selected_offer
 
     const dayPickerPropsPickupDate = {
