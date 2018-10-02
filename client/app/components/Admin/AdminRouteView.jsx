@@ -80,9 +80,9 @@ export class AdminRouteView extends Component {
     if (!itineraryData) {
       return ''
     }
-    const { panelViewer, confirm, editNotes } = this.state
+    const { confirm, editNotes } = this.state
     const {
-      itinerary, hubs, schedules, layovers, notes
+      itinerary, hubs, schedules, notes
     } = itineraryData
     const textStyle =
       theme && theme.colors
