@@ -7,8 +7,12 @@
       padding: 20px 25px;
     }
     .dates_container {
-      padding: 0 25px 25px 25px;
+      padding: 8px 25px;
+      border-bottom: 1px solid #EEEEEE;
     }
+  }
+  .dates_header {
+    background: #F8F8F8;
   }
   .wrapper_gradient {
     position: relative;
@@ -28,11 +32,11 @@
   }
   .dates_row {
     h4 {
-      font-size: 12px;
+      font-size: 13px;
       margin: 5px 0;
     }
     p {
-      font-size: 10px;
+      font-size: 14px;
     }
   }
   .gradient {
@@ -143,6 +147,16 @@
   .fee_tile {
     height: 20px;
   }
+  .disabled {
+    opacity: 0.4;
+  }
+  .date_btn {
+    cursor: pointer;
+    padding: 10px;
+    i {
+      padding: 0 5px;
+    }
+  }
   .origin_destination {
     hyphens: auto;
     font-size: 17px;
@@ -166,5 +180,23 @@
   }
   .deselected_text {
     opacity: 0.25;
+  }
+  .date_btns {
+    padding: 10px 5px;
+  }
+  .view_switch {
+    opacity: 1;
+    transition: 0.5s opacity ease-in, 0.8s transform ease;
+    position: relative;
+    top: 0;
+    z-index: 100;
+    text-shadow: 0 0 0;
+    p {
+      padding-left: 20px;
+      font-size: 12px;
+      &:hover {
+        color: #828282
+      }
+    }
   }
 }

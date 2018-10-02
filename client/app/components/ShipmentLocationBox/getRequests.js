@@ -36,7 +36,6 @@ function findAvailability (lat, lng, tenantId, loadType, carriage, availableHubI
       } else {
         callback(false, [], [], {})
       }
-      
     })
   })
 }

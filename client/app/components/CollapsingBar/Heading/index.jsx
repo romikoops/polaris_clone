@@ -4,7 +4,6 @@ import styles from './CollapsingHeading.scss'
 
 export default function CollapsingHeading ({
   text,
-  theme,
   collapsed,
   handleCollapser,
   faClass,

@@ -108,6 +108,36 @@ export default function shipment (state = {}, action) {
         },
         loading: false
       }
+    case shipmentConstants.SHIPMENT_GET_SCHEDULES_REQUEST: {
+      return state
+    }
+    case shipmentConstants.SHIPMENT_GET_SCHEDULES_SUCCESS: {
+      const { results } = state.response.stage2
+      const targetResult = results.filter(r => (r.meta.itinerary_id === action.payload.itinerary_id) &&
+        (r.meta.tenant_vehicle_id === action.payload.tenant_vehicle_id))[0]
+      const targetIndex = results.indexOf(targetResult)
+      results[targetIndex].schedules = action.payload.schedules
+
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          stage2: {
+            ...state.response.stage2,
+            results
+          }
+        }
+      }
+    }
+    case shipmentConstants.SHIPMENT_GET_SCHEDULES_FAILURE:
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          stage2: [action.error]
+        },
+        loading: false
+      }
     case shipmentConstants.GET_NEW_DATE_OFFERS_REQUEST: {
       const originalSelectedDay = state.originalSelectedDay ||
         state.request.stage2.shipment.selected_day
@@ -166,7 +196,6 @@ export default function shipment (state = {}, action) {
         loading: true
       }
     case shipmentConstants.CHOOSE_OFFER_SUCCESS:
-
       return {
         ...state,
         response: {

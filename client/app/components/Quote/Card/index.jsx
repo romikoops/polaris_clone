@@ -5,6 +5,8 @@ import { moment } from '../../../constants'
 import { switchIcon, gradientTextGenerator, numberSpacing, capitalize } from '../../../helpers'
 import { ChargeIcons } from './ChargeIcons'
 import CollapsingBar from '../../CollapsingBar/CollapsingBar'
+import { RoundButton } from '../../RoundButton/RoundButton'
+import CollapsingContent from '../../CollapsingBar/Content'
 
 class QuoteCard extends PureComponent {
   static returnHubType (hub) {
@@ -41,9 +43,21 @@ class QuoteCard extends PureComponent {
     super(props)
     this.state = {
       expander: {},
-      isChecked: false
+      isChecked: false,
+      showSchedules: (props.result &&
+        props.result.schedules &&
+        props.result.schedules.length > 0 &&
+        props.result.schedules[0].etd !== null)
     }
     this.handleClickChecked = this.handleClickChecked.bind(this)
+  }
+  componentWillMount () {
+    const { isQuotationTool } = this.props
+    if (isQuotationTool) {
+      this.setState({
+        showSchedules: false
+      })
+    }
   }
   toggleExpander (key) {
     this.setState({
@@ -61,23 +75,89 @@ class QuoteCard extends PureComponent {
 
     return handleClick(e, value)
   }
+  toggleShowSchedules (key) {
+    this.setState(prevState => ({
+      showSchedules: !prevState.showSchedules
+    }
+    ), () => this.toggleExpander(key))
+  }
+
+  selectSchedule (schedule) {
+    const { result, selectResult } = this.props
+    const ammendedSchedule = {
+      ...schedule,
+      charge_trip_id: result.meta.charge_trip_id
+    }
+
+    selectResult({ schedule: ammendedSchedule, total: result.quote.total })
+  }
+
+  handleSchedulesRequest (delta) {
+    const { result, handleScheduleRequest } = this.props
+    const { schedules } = result
+    const tripId = delta > 0 ? schedules[schedules.length - 1].trip_id : schedules[0].trip_id
+    handleScheduleRequest({ tripId, delta })
+  }
+
+  buttonToDisplay () {
+    const { tenant, result } = this.props
+    const { scope } = tenant.data
+    const { showSchedules } = this.state
+    const showPriceBreakdownBtn = (
+      <div
+        className={`flex layout-row layout-align-start-center pointy ${styles.view_switch}`}
+        onClick={() => this.toggleShowSchedules('prices')}
+      >
+        <p className="flex-none">View Price Breakdown</p>
+      </div>
+    )
+    const showSchedulesBtn = (
+      <div
+        className={`flex layout-row layout-align-start-center pointy ${styles.view_switch}`}
+        onClick={() => this.toggleShowSchedules('schedules')}
+      >
+        <p className="flex-none">View Schedules</p>
+      </div>
+    )
+    if (scope.detailed_billing && result.schedules.length > 1) {
+      return (
+        <div className="flex-50 layout-row layout-align-start-center" style={{ textAlign: 'left' }}>
+          {showSchedules ? showPriceBreakdownBtn : showSchedulesBtn}
+        </div>
+      )
+    } else if (!scope.detailed_billing && result.schedules.length > 1) {
+      return (
+        <div className="flex-50 layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
+      )
+    } else if (!scope.detailed_billing && (!result.schedules || result.schedules.length < 1)) {
+      return (
+        <div className="flex-50 layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
+      )
+    }
+
+    return ''
+  }
 
   render () {
     const {
       theme,
       tenant,
-      schedule,
+      result,
       cargo,
       handleInputChange,
       pickup,
-      truckingTime
+      truckingTime,
+      isQuotationTool
     } = this.props
     const {
-      quote
-    } = schedule
-    const originHub = schedule.origin_hub
-    const destinationHub = schedule.destination_hub
-    const hasDates = !(!schedule.eta && !schedule.etd && !schedule.closing_date)
+      quote,
+      schedules
+    } = result
+    const {
+      showSchedules
+    } = this.state
+    const originHub = result.meta.origin_hub
+    const destinationHub = result.meta.destination_hub
     const gradientStyle = gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
     const calcPayload = cargo.reduce((a, b) => ({ total: a.payload_in_kg + b.payload_in_kg }))
     const pricesArr = Object.keys(quote).splice(2).length !== 0 ? (
@@ -124,6 +204,56 @@ class QuoteCard extends PureComponent {
       />))
     ) : ''
 
+    const schedulesArr = schedules.map(schedule => (<div className={`flex-100 layout-row layout-align-start-center ${styles.dates_container}`}>
+      <div className={`flex-75 layout-row ${styles.dates_row}`}>
+        <div className="flex-25 layout-wrap layout-row layout-align-center-center">
+          <div className="flex-100 layout-row">
+            <p className={`flex-none ${styles.sched_elem}`}>
+              {' '}
+              {pickup
+                ? moment(schedule.closing_date).subtract(truckingTime, 'seconds').format('DD-MM-YYYY')
+                : moment(schedule.closing_date).format('DD-MM-YYYY')}{' '}
+            </p>
+          </div>
+        </div>
+        <div className="flex-25 layout-wrap layout-row layout-align-center-center">
+          <div className="flex-100 layout-row">
+            <p className={`flex-none ${styles.sched_elem}`}>
+              {' '}
+              {moment(schedule.etd).format('DD-MM-YYYY')}{' '}
+            </p>
+          </div>
+        </div>
+        <div className="flex-25 layout-wrap layout-row layout-align-center-center">
+          <div className="flex-100 layout-row">
+            <p className={`flex-none ${styles.sched_elem}`}>
+              {' '}
+              {moment(schedule.eta).format('DD-MM-YYYY')}{' '}
+            </p>
+          </div>
+        </div>
+        <div className="flex-25 layout-wrap layout-row layout-align-center-center">
+          <div className="flex-100 layout-row">
+            <p className={`flex-none ${styles.sched_elem}`}>
+              {' '}
+              {moment(schedule.eta).diff(schedule.etd, 'days')}
+              {' Days'}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="flex-25 layout-row layout-wrap" style={{ textAlign: 'right' }}>
+        <RoundButton
+          size="small"
+          handleNext={() => this.selectSchedule(schedule)}
+          theme={theme}
+          text="Select"
+        />
+      </div>
+    </div>))
+
+    const showEarlierBtn = moment(schedules[0].closing_date).diff(moment(), 'days') > 5
+
     return (
       <div
         className={`flex-100 layout-row layout-wrap ${styles.wrapper} ${this.state.isChecked ? styles.wrapper_selected : ''}`}
@@ -135,7 +265,7 @@ class QuoteCard extends PureComponent {
         ) : ''}
         <div className={`flex-100 layout-row layout-align-start-center ${styles.container}`}>
           <div className={`flex-10 layout-row layout-align-center-center ${styles.mot_icon}`}>
-            {switchIcon(schedule.mode_of_transport, gradientStyle)}
+            {switchIcon(result.meta.mode_of_transport, gradientStyle)}
           </div>
           <div className={`flex-60 layout-row layout-align-start-center ${styles.origin_destination}`}>
             <div className="layout-column layout-align-center-start">
@@ -161,95 +291,94 @@ class QuoteCard extends PureComponent {
             </div>
           </div>
         </div>
-        {hasDates ? (
-          <div className={`flex-100 layout-row layout-align-start-center ${styles.dates_container}`}>
-            <div className={`flex-75 layout-row ${styles.dates_row}`}>
-              <div className="flex-25 layout-wrap layout-row layout-align-center-center">
-                <div className="flex-100 layout-row">
-                  <h4 className={styles.date_title}>{pickup ? 'Pickup Date' : 'Closing Date'}</h4>
-                </div>
-                <div className="flex-100 layout-row">
-                  <p className={`flex-none ${styles.sched_elem}`}>
-                    {' '}
-                    {pickup
-                      ? moment(schedule.closing_date).subtract(truckingTime, 'seconds').format('DD-MM-YYYY')
-                      : moment(schedule.closing_date).format('DD-MM-YYYY')}{' '}
-                  </p>
-                </div>
-              </div>
-              <div className="flex-25 layout-wrap layout-row layout-align-center-center">
-                <div className="flex-100 layout-row">
-                  <h4 className={styles.date_title}>{`ETD ${QuoteCard.returnHubType(originHub)}`}</h4>
-                </div>
-                <div className="flex-100 layout-row">
-                  <p className={`flex-none ${styles.sched_elem}`}>
-                    {' '}
-                    {moment(schedule.etd).format('DD-MM-YYYY')}{' '}
-                  </p>
-                </div>
-              </div>
-              <div className="flex-25 layout-wrap layout-row layout-align-center-center">
-                <div className="flex-100 layout-row">
-                  <h4 className={styles.date_title}>{`ETA ${QuoteCard.returnHubType(destinationHub)} `}</h4>
-                </div>
-                <div className="flex-100 layout-row">
-                  <p className={`flex-none ${styles.sched_elem}`}>
-                    {' '}
-                    {moment(schedule.eta).format('DD-MM-YYYY')}{' '}
-                  </p>
-                </div>
-              </div>
-              <div className="flex-25 layout-wrap layout-row layout-align-center-center">
-                <div className="flex-100 layout-row">
-                  <h4 className={styles.date_title}> Estimated T/T </h4>
-                </div>
-                <div className="flex-100 layout-row">
-                  <p className={`flex-none ${styles.sched_elem}`}>
-                    {' '}
-                    {moment(schedule.eta).diff(schedule.etd, 'days')}
-                    {' Days'}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="flex-25 layout-row layout-wrap" style={{ textAlign: 'right' }}>
-              { schedule.carrier_name ? <div className="flex-100 layout-row layout-align-end-center">
-                <i className="flex-none fa fa-ship" style={{ paddingRight: '7px' }} />
-                <p className="layout-row layout-align-end-center no_m">{schedule.carrier_name}</p>
-              </div> : '' }
-              { schedule.vehicle_name ? <div className="flex-100 layout-row layout-align-end-center">
-                <i className="flex-none fa fa-bell-o" style={{ paddingRight: '7px' }} />
-                <p className="layout-row layout-align-end-center no_m">{capitalize(schedule.vehicle_name)}</p>
-              </div> : '' }
-            </div>
-          </div>
-        ) : (
-          <div className="flex-100 layout-row layout-align-space-around-center">
+        <div className="flex-100 layout-row layout-align-start-center" style={{ paddingBottom: '18px' }}>
 
-            { schedule.carrier_name ? <div className="flex-50 layout-row layout-align-center-center">
-              <i className="flex-none fa fa-ship" style={{ paddingRight: '7px' }} />
-              <p className="layout-row layout-align-end-center margin_5">{`Carrier: ${schedule.carrier_name}`}</p>
-            </div> : '' }
-            { schedule.vehicle_name ? <div className="flex-50 layout-row layout-align-center-center">
-              <i className="flex-none fa fa-bell-o" style={{ paddingRight: '7px' }} />
-              <p className="layout-row layout-align-end-center margin_5">{`Service: ${capitalize(schedule.vehicle_name)}`}</p>
-            </div> : '' }
-          </div>)}
-        {pricesArr}
-        <div className="flex-100 layout-wrap layout-align-start-stretch">
-          <div className={`flex-100 layout-row layout-align-start-stretch ${styles.total_row}`}>
-            <div className="flex-50 layout-row layout-align-start-center">
-              <span>Total</span>
+          { result.meta.carrier_name ? <div className="flex-50 layout-row layout-align-center-center">
+            <i className="flex-none fa fa-ship" style={{ paddingRight: '7px' }} />
+            <p className="layout-row layout-align-end-center margin_5">{`Carrier: ${result.meta.carrier_name}`}</p>
+          </div> : '' }
+          { result.meta.service_level ? <div className="flex-50 layout-row layout-align-center-center">
+            <i className="flex-none fa fa-bell-o" style={{ paddingRight: '7px' }} />
+            <p className="layout-row layout-align-end-center margin_5">{`Service: ${capitalize(result.meta.service_level)}`}</p>
+          </div> : '' }
+        </div>
+
+        <CollapsingContent
+          collapsed={!showSchedules}
+          content={(
+            <div className="flex-100 layout-wrap layout-row">
+              <div className={`flex-100 layout-row ${styles.dates_row} ${styles.dates_container} ${styles.dates_header}`}>
+                <div className="flex-75 layout-row">
+                  <div className="flex-25 layout-row">
+                    <h4 className={styles.date_title}>{pickup ? 'Pickup Date' : 'Closing Date'}</h4>
+                  </div>
+                  <div className="flex-25 layout-row">
+                    <h4 className={styles.date_title}>{`ETD ${QuoteCard.returnHubType(originHub)}`}</h4>
+                  </div>
+                  <div className="flex-25 layout-row">
+                    <h4 className={styles.date_title}>{`ETA ${QuoteCard.returnHubType(destinationHub)} `}</h4>
+                  </div>
+                  <div className="flex-25 layout-row">
+                    <h4 className={styles.date_title}> Estimated T/T </h4>
+                  </div>
+                </div>
+                <div className="flex-25 layout-row" />
+              </div>
+
+              {schedulesArr}
+              <div className={`flex-100 layout-row layout-align-space-around-center ${styles.date_btns}`}>
+                <div
+                  className={`flex-30 layout-row layout-align-center-center
+                   ${showEarlierBtn ? '' : styles.disabled} ${styles.date_btn}`}
+                  onClick={showEarlierBtn ? () => this.handleSchedulesRequest(-1) : null}
+                >
+                  <div className="flex-none layout-row layout-align-space-around-center">
+                    <i className="flex-none fa fa-chevron-left" />
+                    <p className="flex-none">Earlier Departures</p>
+                  </div>
+                </div>
+                <div className="flex-40 layout-row layout-align-center">
+                  <p className="flex-100 center">
+                    {`${moment(result.schedules[0].closing_date).format('ll')} - 
+                      ${moment(result.schedules[result.schedules.length - 1].closing_date).format('ll')}
+                    `}
+                  </p>
+                </div>
+                <div
+                  className={`flex-30 layout-row layout-align-center-center ${styles.date_btn}`}
+                  onClick={() => this.handleSchedulesRequest(1)}
+                >
+                  <div className="flex-none layout-row layout-align-space-around-center">
+                    <p className="flex-none">Later Departures</p>
+                    <i className="flex-none fa fa-chevron-right" />
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="flex-50 layout-row layout-align-end-center">
-              <p>{numberSpacing(quote.total.value, 2)}&nbsp;{quote.total.currency}</p>
-              <input
-                className="pointy"
-                name="checked"
-                type="checkbox"
-                onClick={e => this.handleClickChecked(e, schedule)}
-                onChange={handleInputChange}
-              />
+          )}
+        />
+        <CollapsingContent
+          collapsed={showSchedules}
+          content={pricesArr}
+        />
+        <div className="flex-100 layout-wrap layout-align-start-stretch">
+          <div className={`flex-100 layout-row layout-align-space-between-stretch ${styles.total_row}`}>
+            {this.buttonToDisplay()}
+            <div className={`${isQuotationTool ? 'flex' : 'flex-10'} layout-row layout-align-start-center`}>
+              <span style={{ textAlign: 'right' }}>Total</span>
+            </div>
+            <div className="flex-35 layout-row layout-align-end-center">
+              <p style={!isQuotationTool ? { paddingRight: '18px' } : {}}>{numberSpacing(quote.total.value, 2)}&nbsp;{quote.total.currency}</p>
+              {isQuotationTool ? (
+                <input
+                  className="pointy"
+                  name="checked"
+                  type="checkbox"
+                  onClick={e => this.handleClickChecked(e, result)}
+                  onChange={handleInputChange}
+                />
+              ) : ''}
+
             </div>
           </div>
         </div>
@@ -262,22 +391,28 @@ QuoteCard.propTypes = {
   theme: PropTypes.theme,
   tenant: PropTypes.tenant,
   truckingTime: PropTypes.number,
-  schedule: PropTypes.objectOf(PropTypes.any),
+  result: PropTypes.objectOf(PropTypes.any),
   cargo: PropTypes.arrayOf(PropTypes.any),
   handleInputChange: PropTypes.func,
   handleClick: PropTypes.func,
-  pickup: PropTypes.bool
+  selectResult: PropTypes.func,
+  handleScheduleRequest: PropTypes.func,
+  pickup: PropTypes.bool,
+  isQuotationTool: PropTypes.bool
 }
 
 QuoteCard.defaultProps = {
   theme: null,
   truckingTime: 0,
   tenant: {},
-  schedule: {},
+  result: {},
   cargo: [],
   handleInputChange: null,
+  selectResult: null,
+  handleScheduleRequest: null,
   handleClick: null,
-  pickup: false
+  pickup: false,
+  isQuotationTool: false
 }
 
 export default QuoteCard

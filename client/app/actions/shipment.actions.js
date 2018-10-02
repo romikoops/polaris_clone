@@ -528,6 +528,32 @@ function updateContact (req) {
   }
 }
 
+function getSchedulesForResult (req) {
+  function request () {
+    return { type: shipmentConstants.SHIPMENT_GET_SCHEDULES_REQUEST }
+  }
+  function success (scheduleData) {
+    return { type: shipmentConstants.SHIPMENT_GET_SCHEDULES_SUCCESS, payload: scheduleData.data }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.SHIPMENT_GET_SCHEDULES_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    shipmentService.getSchedulesForResult(req).then(
+      (data) => {
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function toDashboard (id) {
   return (dispatch) => {
     dispatch(userActions.getDashboard(id, true))
@@ -579,7 +605,8 @@ export const shipmentActions = {
   getOffersForNewDate,
   updateContact,
   delete: _delete,
-  setError
+  setError,
+  getSchedulesForResult
 }
 
 export default shipmentActions

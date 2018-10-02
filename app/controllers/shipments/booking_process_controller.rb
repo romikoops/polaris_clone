@@ -43,6 +43,12 @@ class Shipments::BookingProcessController < ApplicationController
     response_handler(key: 'shipment_recap', url: url)
   end
 
+  def view_more_schedules
+    response = ShippingTools.view_more_schedules(params[:trip_id], params[:delta])
+
+    response_handler(response)
+  end
+
   def request_shipment
     resp = ShippingTools.request_shipment(params, current_user)
     ShippingTools.tenant_notification_email(resp.user, resp)

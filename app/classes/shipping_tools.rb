@@ -8,16 +8,17 @@ module ShippingTools
   extend DocumentTools
   extend NotificationTools
 
-  def self.create_shipments_from_quotation(shipment, schedules)
+  def self.create_shipments_from_quotation(shipment, results)
     main_quote = Quotation.create(user_id: shipment.user_id)
-    schedules.each do |schedule|
+    results.each do |result|
+      schedule = result['schedules'].first
       trip = Trip.find(schedule['trip_id'])
-      on_carriage_hash = !!schedule['quote']['trucking_on'] ?
+      on_carriage_hash = !!result['quote']['trucking_on'] ?
       {
         truck_type: '',
         location_id: Location.geocoded_location(shipment.delivery_address).id
       } : nil
-      pre_carriage_hash = !!schedule['quote']['trucking_pre'] ?
+      pre_carriage_hash = !!result['quote']['trucking_pre'] ?
       {
         truck_type: '',
         location_id: Location.geocoded_location(shipment.pickup_address).id
@@ -44,26 +45,9 @@ module ShippingTools
       new_shipment.cargo_items = shipment.cargo_items
       shipment.charge_breakdowns.each do |charge_breakdown|
         new_charge_breakdown = charge_breakdown.dup
-        new_charge_breakdown_grand_total = charge_breakdown.grand_total.dup
-        new_charge_breakdown.grand_total = new_charge_breakdown_grand_total
-        charges = charge_breakdown.grand_total.children.each_with_object([]) do |charge, arr|
-          new_charge = charge.dup
-          new_charge.update(parent: new_charge_breakdown_grand_total)
-          arr << new_charge
-          charge.children.each do |child|
-            new_child = child.dup
-            new_child.update(parent: new_charge)
-            arr << new_child
-            child.children.each do |grandchild|
-              new_grandchild = grandchild.dup
-              new_grandchild.update(parent: new_child)
-              arr << new_grandchild
-            end
-          end
-        end
+        new_charge_breakdown.update(shipment: new_shipment)
 
-        new_charge_breakdown.charges += charges
-        new_shipment.charge_breakdowns << new_charge_breakdown
+        new_charge_breakdown.dup_charges(charge_breakdown: charge_breakdown)
       end
     end
     main_quote
@@ -124,7 +108,7 @@ module ShippingTools
     last_trip_date = last_trip(current_user)
     {
       shipment:        offer_calculator.shipment,
-      schedules:       offer_calculator.detailed_schedules,
+      results:         offer_calculator.detailed_schedules,
       originHubs:      offer_calculator.hubs[:origin],
       destinationHubs: offer_calculator.hubs[:destination],
       cargoUnits:      offer_calculator.shipment.cargo_units,
@@ -408,11 +392,12 @@ module ShippingTools
   def self.choose_offer(params, current_user)
     shipment = Shipment.find(params[:shipment_id])
 
-    shipment.user_id =        current_user.id
+    shipment.user_id = current_user.id
     shipment.customs_credit = params[:customs_credit]
+    shipment.trip_id = params[:schedule]['trip_id']
+    copy_charge_breakdowns(shipment, params[:schedule][:charge_trip_id], params[:schedule]['trip_id'])
 
-    shipment.trip_id =      params[:schedule]['trip_id']
-    @schedule =             params[:schedule].as_json
+    @schedule = params[:schedule].as_json
 
     shipment.itinerary = Trip.find(@schedule['trip_id']).itinerary
     case shipment.load_type
@@ -595,6 +580,17 @@ module ShippingTools
     end
   end
 
+  def self.view_more_schedules(trip_id, delta)
+    trip = Trip.find(trip_id)
+    trips = delta.to_i.positive? ? trip.later_trips : trip.ealier_trips.sort_by(&:start_date)
+
+    {
+      schedules: Schedule.from_trips(trips),
+      itinerary_id: trip.itinerary_id,
+      tenant_vehicle_id: trip.tenant_vehicle_id
+    }
+  end
+
   def self.reuse_aggregrated_cargo(shipment, aggregated_cargo)
     aggregated_cargo_json = aggregated_cargo.clone.as_json
     aggregated_cargo_json.delete('id')
@@ -699,5 +695,15 @@ module ShippingTools
       results[hs['_id']] = hs
     end
     results
+  end
+
+  def self.copy_charge_breakdowns(shipment, original_trip_id, new_trip_id)
+    shipment.charge_breakdowns.find_by(trip_id: new_trip_id) && return
+
+    charge_breakdown = shipment.charge_breakdowns.find_by(trip_id: original_trip_id)
+    new_charge_breakdown = charge_breakdown.dup
+    new_charge_breakdown.update(trip_id: new_trip_id)
+
+    new_charge_breakdown.dup_charges(charge_breakdown: charge_breakdown)
   end
 end

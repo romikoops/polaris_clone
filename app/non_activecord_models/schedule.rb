@@ -5,7 +5,8 @@ class Schedule
 
   attr_accessor :id, :origin_hub_id, :destination_hub_id,
                 :origin_hub_name, :destination_hub_name, :mode_of_transport,
-                :total_price, :eta, :etd, :closing_date, :vehicle_name, :trip_id, :quote, :carrier_name
+                :total_price, :eta, :etd, :closing_date, :vehicle_name, :trip_id,
+                :quote, :carrier_name
 
   def origin_hub
     Hub.find origin_hub_id
@@ -89,6 +90,29 @@ class Schedule
     )
     ActiveRecord::Base.connection.exec_query(sanitized_query).map do |attributes|
       Schedule.new(attributes.merge(id: SecureRandom.uuid))
+    end
+  end
+
+  def self.from_trip(trip)
+    new(
+      id:                   SecureRandom.uuid,
+      mode_of_transport:    trip.itinerary.mode_of_transport,
+      eta:                  trip.end_date,
+      etd:                  trip.start_date,
+      closing_date:         trip.closing_date,
+      origin_hub_id:        trip.itinerary.first_stop.hub.id,
+      destination_hub_id:   trip.itinerary.last_stop.hub.id,
+      origin_hub_name:      trip.itinerary.first_stop.hub.name,
+      destination_hub_name: trip.itinerary.last_stop.hub.name,
+      vehicle_name:         trip.tenant_vehicle.name,
+      carrier_name:         trip.tenant_vehicle&.carrier&.name,
+      trip_id:              trip.id
+    )
+  end
+
+  def self.from_trips(trips)
+    trips.map do |trip|
+      from_trip(trip).to_detailed_hash
     end
   end
 
