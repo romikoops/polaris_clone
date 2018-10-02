@@ -18,7 +18,7 @@
   </div>
   <hr class="hr-shipment" style="border-color: <%= primary_color %>">
   <div class="row">
-    <p class="ref col-xs-6">Placed on&nbsp;<span><%= shipment.updated_at.strftime("%m/%d/%Y at %I:%M%p") %></span></p>
+    <p class="ref col-xs-6">Placed on&nbsp;<span><%= shipment.updated_at.strftime("%m/%d/%Y") %></span></p>
     <p class="ref col-xs-6"></span></p>
   </div>
   <div class="overview">
@@ -46,7 +46,7 @@
           <div class="row">
             <i class="col-xs-1 fa fa-check check-square" style="color: <%= precarriage_color %>"></i>
             <h4 class="col-xs-11">
-              Pick-up on <%= shipment.planned_pickup_date.try(:strftime, "%d/%m/%Y at %H:%M") %>
+              Pick-up on <%= shipment.planned_pickup_date.try(:strftime, "%d/%m/%Y") %>
             </h4>
           </div>
 
@@ -69,7 +69,7 @@
           <div class="row">
             <i class="col-xs-1 fa fa-check check-square" style="color: <%= oncarriage_color %>"></i>
             <h4 class="col-xs-11">
-              Delivery on <%= shipment.planned_delivery_date.try(:strftime, "%d/%m/%Y at %H:%M") %>
+              Delivery on <%= shipment.planned_delivery_date.try(:strftime, "%d/%m/%Y") %>
             </h4>
           </div>
           <div class="row">
@@ -93,7 +93,7 @@
       <h4 class="date-title"><%= shipment.has_pre_carriage ? 'Pick-up Date' : 'Closing Date' %></h4>
       <p class="sched-elem">
         <% if shipment.has_pre_carriage %>
-          <%= (shipment.closing_date - shipment.trucking["pre_carriage"]["trucking_time_in_seconds"]).strftime("%m/%d/%Y at %I:%M%p") %>
+          <%= (shipment.closing_date - shipment.trucking["pre_carriage"]["trucking_time_in_seconds"]).strftime("%m/%d/%Y") %>
         <% else %>
           <%= shipment.closing_date %>
         <% end %>
@@ -102,13 +102,13 @@
     <div class="col-xs-3">
       <h4 class="date-title">ETD</h4>
       <p class="sched-elem">
-        <%= shipment.etd.strftime("%m/%d/%Y at %I:%M%p") %>
+        <%= shipment.etd.strftime("%m/%d/%Y") %>
       </p>
     </div>
     <div class="col-xs-3">
       <h4 class="date-title">ETA</h4>
       <p class="sched-elem">
-        <%= shipment.eta.strftime("%m/%d/%Y at %I:%M%p") %>
+        <%= shipment.eta.strftime("%m/%d/%Y") %>
       </p>
     </div>
     <div class="col-xs-3">
