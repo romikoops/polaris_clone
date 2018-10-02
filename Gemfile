@@ -67,8 +67,8 @@ gem 'os'
 # Use Wicked PDF to generate PDFs from HTML
 # The obligatory wkhtmltopdf binaries are here: [Rails.root]/bin/wkhtmltopdf
 gem 'wicked_pdf'
-gem 'wkhtmltopdf-binary-edge', '~> 0.12.5'
-# gem 'wkhtmltopdf-binary', '~> 0.12.4'
+# gem 'wkhtmltopdf-binary-edge', '~> 0.12.5'
+gem 'wkhtmltopdf-binary', '~> 0.12.4'
 
 # MongoDB gems
 gem 'mongo', '~> 2.4'
