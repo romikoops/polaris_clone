@@ -94,7 +94,7 @@ export class AdminShipmentContent extends Component {
       fileType,
       upUrl
     } = this.state
-    
+
     const docChecker = {
       packing_sheet: false,
       commercial_invoice: false
@@ -694,32 +694,34 @@ export class AdminShipmentContent extends Component {
         >
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
             <GreyBox
-
-              wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right} margin_bottom `}
+              wrapperClassName="layout-row flex-100 padd_20 margin_bottom"
               contentClassName="flex"
               content={(
                 <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${adminStyles.padding_left}`}>
-                  <div className="flex-100 layout-row layout-wrap layout-align-start-center ">
-                    <div className="flex-50 layout-align-start-center layout-row">
-                      <p className={`${styles.sec_subheader_text} flex-none letter_3`}>
-                    Upload New Document
+                  <div className="flex-100 layout-row layout-wrap layout-align-start-center padding_bottom">
+                    <div className="flex-50 layout-align-start-center layout-wrap layout-row">
+                      <p className={`${styles.sec_subheader_text} flex-100 padding_bottom_sm padding_top`}>
+                    Upload New Document:
                       </p>
-                      <NamedSelect
-                        name="file-type"
-                        className={`${styles.select} flex-50`}
-                        value={fileType}
-                        options={docOptions}
-                        onChange={this.setFileType}
-                      />
-                    </div>
-                    <div className="flex-50 layout-align-end-center layout-row padd_10">
-                      <FileUploader
-                        theme={theme}
-                        url={upUrl}
-                        type={fileType.value}
-                        text={fileType.label}
-                        uploadFn={uploadClientDocument}
-                      />
+                      <div className="flex-100 layout-align-start-center layout-row padding_bottom">
+                        <NamedSelect
+                          name="file-type"
+                          className={`${styles.select} flex-50`}
+                          value={fileType}
+                          options={docOptions}
+                          onChange={this.setFileType}
+                        />
+                        <div className="flex-50 layout-align-center-center layout-row padd_10">
+                          <FileUploader
+                            theme={theme}
+                            formClasses="flex-100 layout-row layout-align-center-center"
+                            url={upUrl}
+                            type={fileType.value}
+                            text={fileType.label}
+                            uploadFn={uploadClientDocument}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div
@@ -760,6 +762,7 @@ AdminShipmentContent.propTypes = {
   feeHash: PropTypes.objectOf(PropTypes.any),
   cargoCount: PropTypes.number,
   cargoView: PropTypes.node,
+  shipmentData: PropTypes.shipmentData,
   switchIcon: PropTypes.func,
   dnrEditKeys: PropTypes.arrayOf(PropTypes.string),
   showEditTime: PropTypes.bool,
@@ -776,6 +779,7 @@ AdminShipmentContent.defaultProps = {
   theme: null,
   gradientBorderStyle: {},
   gradientStyle: {},
+  shipmentData: null,
   et: {},
   pickupDate: null,
   deliveryDate: null,

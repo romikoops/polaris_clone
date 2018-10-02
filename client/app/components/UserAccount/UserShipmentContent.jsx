@@ -117,7 +117,7 @@ export class UserShipmentContent extends Component {
     if (documents) {
       documents.forEach((doc) => {
         docChecker[doc.doc_type] = true
-        docView.push(<div className="flex-100 flex-md-45 flex-gt-md-30 layout-row" style={{ padding: '10px' }}>
+        docView.push(<div className="flex-xs-100 flex-sm-45 flex-33 flex-gt-lg-25 layout-align-start-center layout-row" style={{ padding: '10px' }}>
           <DocumentsForm
             theme={theme}
             type={doc.doc_type}
@@ -133,7 +133,7 @@ export class UserShipmentContent extends Component {
 
     Object.keys(docChecker).forEach((key) => {
       if (!docChecker[key]) {
-        missingDocs.push(<div className={`flex-25 layout-row layout-align-start-center ${styles.no_doc}`}>
+        missingDocs.push(<div className={`flex-25 layout-row layout-align-start-center layout-padding ${adminStyles.no_doc}`}>
           <div className="flex-none layout-row layout-align-center-center">
             <i className="flex-none fa fa-ban" />
           </div>
@@ -552,15 +552,14 @@ export class UserShipmentContent extends Component {
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
 
             <GreyBox
-              title="Documents"
-              wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right} margin_bottom`}
+              wrapperClassName="layout-row flex-100 padd_20 margin_bottom"
               contentClassName={`layout-row layout-wrap flex ${styles.min_height}`}
               content={(
-                <div className={`flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center ${adminStyles.padding_left}`}>
+                <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${adminStyles.padding_left}`}>
                   <div className="flex-100 layout-row layout-wrap layout-align-start-center ">
                     <div className="flex-50 layout-align-start-center layout-wrap layout-row margin_bottom">
-                      <p className={`${styles.sec_subheader_text} flex-100`}>
-                    Upload New Document
+                      <p className={`${styles.sec_subheader_text} flex-100 padding_bottom_sm padding_top`}>
+                    Upload New Document:
                       </p>
                       <div className="flex-100 layout-align-start-center layout-row">
                         <StyledSelect
@@ -570,7 +569,7 @@ export class UserShipmentContent extends Component {
                           options={docOptions}
                           onChange={this.setFileType}
                         />
-                        <div className="flex-50 layout-align-center-center layout-row">
+                        <div className="flex-50 layout-align-center-center layout-row padd_10">
                           <FileUploader
                             theme={theme}
                             url={upUrl}
@@ -584,10 +583,18 @@ export class UserShipmentContent extends Component {
                     </div>
 
                   </div>
-                  <div className="flex-100 layout-row layout-wrap layout-align-start-center ">
+                  <div
+                    className="flex-100 layout-row layout-wrap layout-align-start-center"
+                    style={{ marginTop: '5px' }}
+                  >
                     {docView}
                   </div>
-                  {missingDocs}
+                  <div
+                    className="flex-100 layout-row layout-wrap layout-align-start-center"
+                    style={{ marginTop: '5px' }}
+                  >
+                    {missingDocs}
+                  </div>
                 </div>
               )}
             />
