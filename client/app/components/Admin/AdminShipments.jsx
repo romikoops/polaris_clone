@@ -90,6 +90,7 @@ class AdminShipments extends Component {
                 adminDispatch={adminDispatch}
                 loading={loading}
                 hubs={hubs}
+                scope={tenant.data.scope}
                 handleShipmentAction={this.handleShipmentAction}
                 shipmentData={shipment}
                 clients={clients}
