@@ -17,17 +17,17 @@ import FileUploader from '../../FileUploader/FileUploader'
 import ShipmentNotes from '../../ShipmentNotes'
 
 class AdminShipmentContent extends Component {
-  static calcCargoLoad (feeHash, loadType) {
+  static calcCargoLoad (feeHash, loadType, t) {
     const cargoCount = Object.keys(feeHash.cargo).length
     let noun = ''
-    if (loadType === 'cargo_item' && cargoCount > 3) {
-      noun = 'Cargo Items'
-    } else if (loadType === 'cargo_item' && cargoCount === 3) {
-      noun = 'Cargo Item'
-    } else if (loadType === 'container' && cargoCount > 3) {
-      noun = 'Containers'
-    } else if (loadType === 'container' && cargoCount === 3) {
-      noun = 'Container'
+    if (loadType === 'cargo_item' && cargoCount > 1) {
+      noun = `${t('cargo:cargoItems')}`
+    } else if (loadType === 'cargo_item' && cargoCount === 1) {
+      noun = `${t('cargo:cargoItem')}`
+    } else if (loadType === 'container' && cargoCount > 1) {
+      noun = `${t('cargo:containers')}`
+    } else if (loadType === 'container' && cargoCount === 1) {
+      noun = `${t('cargo:container')}`
     }
 
     return `${noun}`
@@ -45,7 +45,7 @@ class AdminShipmentContent extends Component {
     super(props)
 
     this.state = {
-      fileType: { label: 'Packing Sheet', value: 'packing_sheet' },
+      fileType: { label: `${this.props.t('common:packingSheet')}`, value: 'packing_sheet' },
       documentUrl: `/shipments/${this.props.shipment.id}/upload/packing_sheet`
     }
     this.setFileType = this.setFileType.bind(this)
@@ -541,7 +541,7 @@ class AdminShipmentContent extends Component {
                   <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
                     <div className="layout-align-start-center layout-row flex">
                       <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>x&nbsp;{cargoCount}</span>
-                      <p className="layout-align-sm-end-center layout-align-xs-end-center">{AdminShipmentContent.calcCargoLoad(feeHash, shipment.load_type)}</p>
+                      <p className="layout-align-sm-end-center layout-align-xs-end-center">{AdminShipmentContent.calcCargoLoad(feeHash, shipment.load_type, t)}</p>
                     </div>
                   </div>
                   <h2 className="layout-align-start-center layout-row flex">

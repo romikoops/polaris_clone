@@ -6,7 +6,9 @@ exports[`shallow render 1`] = `
   data-for="RANDOM_KEY_0"
   data-tip="FOO_TOOLTIP"
 >
-  <form>
+  <form
+    className=""
+  >
     <RoundButton
       active={true}
       back={false}
@@ -50,7 +52,9 @@ exports[`square is true 1`] = `
   data-for="RANDOM_KEY_1"
   data-tip="FOO_TOOLTIP"
 >
-  <form>
+  <form
+    className=""
+  >
     <SquareButton
       active={true}
       back={false}
@@ -94,7 +98,9 @@ exports[`state.error is true 1`] = `
   data-for="RANDOM_KEY_3"
   data-tip="FOO_TOOLTIP"
 >
-  <form>
+  <form
+    className=""
+  >
     <RoundButton
       active={true}
       back={false}
