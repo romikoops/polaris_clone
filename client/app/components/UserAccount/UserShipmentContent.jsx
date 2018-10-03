@@ -14,7 +14,8 @@ import { moment, documentTypes, docOptions } from '../../constants'
 import {
   switchIcon,
   formattedPriceValue,
-  totalPrice
+  totalPrice,
+  formattedDate
 } from '../../helpers'
 import ContactDetailsRow from '../Admin/AdminShipmentView/ContactDetailsRow'
 import GreyBox from '../GreyBox/GreyBox'
@@ -91,22 +92,22 @@ class UserShipmentContent extends Component {
     } = shipmentData
     const originDropOffDate = (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${moment(shipment.planned_origin_drop_off_date).format('DD/MM/YYYY | HH:mm')}`}
+        {`${formattedDate(shipment.planned_origin_drop_off_date)}`}
       </p>
     )
     const destinationCollectionDate = (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${moment(shipment.planned_destination_collection_date).format('DD/MM/YYYY | HH:mm')}`}
+        {`${formattedDate(shipment.planned_destination_collection_date)}`}
       </p>
     )
     const pickupDate = (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${moment(shipment.planned_pickup_date).format('DD/MM/YYYY | HH:mm')}`}
+        {`${formattedDate(shipment.planned_pickup_date)}`}
       </p>
     )
     const deliveryDate = (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${moment(shipment.planned_delivery_date).format('DD/MM/YYYY | HH:mm')}`}
+        {`${formattedDate(shipment.planned_delivery_date)}`}
       </p>
     )
 

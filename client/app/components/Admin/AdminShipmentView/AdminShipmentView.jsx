@@ -18,7 +18,8 @@ import {
   gradientBorderGenerator,
   switchIcon,
   totalPrice,
-  isRequested
+  isRequested,
+  formattedDate
 } from '../../../helpers'
 import CargoContainerGroup from '../../Cargo/Container/Group'
 import AdminShipmentContent from './AdminShipmentContent'
@@ -605,7 +606,7 @@ class AdminShipmentView extends Component {
       </div>
     ) : (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${moment(shipment.planned_pickup_date).format('DD/MM/YYYY | HH:mm')}`}
+        {`${formattedDate(shipment.planned_pickup_date)}`}
       </p>
     )
 
@@ -626,7 +627,7 @@ class AdminShipmentView extends Component {
       </div>
     ) : (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${moment(shipment.planned_origin_drop_off_date).format('DD/MM/YYYY | HH:mm')}`}
+        {`${formattedDate(shipment.planned_origin_drop_off_date)}`}
       </p>
     )
 
@@ -647,7 +648,7 @@ class AdminShipmentView extends Component {
       </div>
     ) : (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}
+        {`${formattedDate(shipment.planned_etd)}`}
       </p>
     )
 
@@ -668,7 +669,7 @@ class AdminShipmentView extends Component {
       </div>
     ) : (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}
+        {`${formattedDate(shipment.planned_eta)}`}
       </p>
     )
     const estimatedTimes = {
@@ -714,7 +715,7 @@ class AdminShipmentView extends Component {
       </div>
     ) : (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${moment(shipment.planned_delivery_date).format('DD/MM/YYYY | HH:mm')}`}
+        {`${formattedDate(shipment.planned_delivery_date)}`}
       </p>
     )
 

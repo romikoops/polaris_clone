@@ -1,4 +1,4 @@
-import { shipmentConstants } from "../constants";
+import { shipmentConstants, moment } from "../constants";
 
 export function totalPrice (shipment) {
   const selectedOffer = shipment.selected_offer
@@ -12,6 +12,10 @@ export function totalPriceString (shipment) {
   const { currency, value } = totalPrice(shipment)
 
   return `${currency} ${(+value).toFixed(2)}`
+}
+
+export function formattedDate (date) {
+  moment(date).format('DD/MM/YYYY | HH:mm')
 }
 
 export function formattedPriceValue (num) {
