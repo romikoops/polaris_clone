@@ -2,7 +2,10 @@
 <html>
   <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
-    <%= wicked_pdf_stylesheet_link_tag "pdfs" %>
+    <style>
+      <%= Rails.application.assets['pdfs'].to_s.html_safe %>
+    </style>
+    <%# <%= stylesheet_link_tag "pdfs" %> 
     <%= stylesheet_link_tag "https://use.fontawesome.com/releases/v5.2.0/css/all.css", media: "all", "data-turbolinks-track" => true %>
   </head>
   <body>

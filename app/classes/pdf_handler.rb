@@ -34,6 +34,7 @@ class PdfHandler
         tenant:    @shipment.tenant
       }
     )
+    File.open('tmp/render_+result.html', 'wb') { |file| file.write(doc_erb.render) }
     response =  BreezyPDFLite::RenderRequest.new(
       doc_erb.render
     ).submit
