@@ -44,6 +44,7 @@
   "rejectWarningTail": "This shipment can still be recovered after being ignored",
   "rejectedByAdmin": "Rejected by Admin",
   "rejected": "Rejected",
+  "archived": "Archived",
   "adb":"Customs Export Paper",
   "customsExportPaper": "When you ship goods from Germany the Customs Export Paper is required to pass through customs",
   "customsExportPaperTwo": "A Customs Export Paper (ADB) is mandatory for all shipments when exporting from Germany.",

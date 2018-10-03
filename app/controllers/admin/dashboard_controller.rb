@@ -54,16 +54,8 @@ class Admin::DashboardController < Admin::AdminBaseController
     @shipments.open.order_booking_desc.map(&:with_address_options_json)
   end
 
-  def rejected_shipments
-    @shipments.rejected.order_booking_desc.map(&:with_address_options_json)
-  end
-
   def quoted_shipments
     @shipments.quoted.order_booking_desc.map(&:with_address_options_json)
-  end
-
-  def finished_shipments
-    @shipments.finished.order_booking_desc.map(&:with_address_options_json)
   end
 
   def detailed_itin_json

@@ -180,6 +180,26 @@ class AdminShipments extends Component {
               />
             )}
           />
+          <Route
+            exact
+            path="/admin/shipments/archived"
+            render={props => (
+              <AdminShipmentsGroup
+                theme={theme}
+                title="Archived"
+                target="archived"
+                adminDispatch={adminDispatch}
+                loading={loading}
+                hubs={hubs}
+                handleShipmentAction={this.handleShipmentAction}
+                shipments={shipments}
+                hubHash={hubHash}
+                clients={clients}
+                viewShipment={this.viewShipment}
+                {...props}
+              />
+            )}
+          />
         </Switch>
       </div>
     )

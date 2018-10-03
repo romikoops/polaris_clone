@@ -28,6 +28,10 @@ class ShipmentsController < ApplicationController
       shipment_association = current_user.shipments.finished
                                          .order(booking_placed_at: :desc)
                                          .paginate(page: params[:page], per_page: per_page)
+    when 'archived'
+      shipment_association = current_user.shipments.archived
+                                         .order(booking_placed_at: :desc)
+                                         .paginate(page: params[:page], per_page: per_page)
     when 'quoted'
       shipment_association = current_user.shipments.quoted
                                          .order(booking_placed_at: :desc)
@@ -67,6 +71,8 @@ class ShipmentsController < ApplicationController
       shipment_association = current_user.shipments.finished.order(booking_placed_at: :desc)
     when 'rejected'
       shipment_association = current_user.shipments.rejected.order(booking_placed_at: :desc)
+    when 'archived'
+      shipment_association = current_user.shipments.archived.order(booking_placed_at: :desc)
     when 'quoted'
       shipment_association = current_user.shipments.quoted.order(booking_placed_at: :desc)
     end
@@ -142,23 +148,27 @@ class ShipmentsController < ApplicationController
       o_shipments = open_shipments.order(booking_placed_at: :desc).paginate(page: params[:open_page], per_page: per_page)
       f_shipments = finished_shipments.order(booking_placed_at: :desc).paginate(page: params[:finished_page], per_page: per_page)
       rj_shipments = rejected_shipments.order(booking_placed_at: :desc).paginate(page: params[:rejected_page], per_page: per_page)
-     
+      a_shipments = archived_shipments.order(booking_placed_at: :desc).paginate(page: params[:archived_page], per_page: per_page)
+
       num_pages = {
         finished:  f_shipments.total_pages,
         requested: r_shipments.total_pages,
         open:      o_shipments.total_pages,
-        rejected:  rj_shipments.total_pages
+        rejected:  rj_shipments.total_pages,
+        archived:  a_shipments.total_pages
       }
       {
         requested:          r_shipments.map(&:with_address_options_json),
         open:               o_shipments.map(&:with_address_options_json),
         finished:           f_shipments.map(&:with_address_options_json),
         rejected:           rj_shipments.map(&:with_address_options_json),
+        archived:           a_shipments.map(&:with_address_options_json),
         pages:              {
           open:      params[:open_page],
           finished:  params[:finished_page],
           requested: params[:requested_page],
-          rejected: params[:rejected_page]
+          rejected: params[:rejected_page],
+          archived: params[:archived_page]
         },
         num_shipment_pages: num_pages
       }
@@ -200,6 +210,10 @@ class ShipmentsController < ApplicationController
 
   def rejected_shipments
     @rejected_shipments ||= current_user.shipments.rejected
+  end
+
+  def archived_shipments
+    @archived_shipments ||= current_user.shipments.archived
   end
 
   def finished_shipments

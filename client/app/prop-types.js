@@ -51,6 +51,7 @@ PropTypes.shipments = PropTypes.shape({
   open: PropTypes.array,
   requested: PropTypes.array,
   finished: PropTypes.array,
+  archived: PropTypes.array,
   rejected: PropTypes.array
 })
 

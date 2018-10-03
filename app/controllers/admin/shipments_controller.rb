@@ -19,6 +19,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       shipment_association = tenant_shipment.finished
     when 'rejected'
       shipment_association = tenant_shipment.rejected
+    when 'archived'
+      shipment_association = tenant_shipment.archived
     end
     per_page = params.fetch(:per_page, 4).to_f
     shipments = shipment_association.order(booking_placed_at: :desc).paginate(page: params[:page], per_page: per_page)
@@ -66,6 +68,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       shipment_association = quoted_shipments
     when 'rejected'
       shipment_association = rejected_shipments
+    when 'archived'
+      shipment_association = archived_shipments
     end
     (filterrific = initialize_filterrific(
       shipment_association,
@@ -162,23 +166,27 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       o_shipments = open_shipments.order(booking_placed_at: :desc).paginate(page: params[:open_page], per_page: per_page)
       f_shipments = finished_shipments.order(booking_placed_at: :desc).paginate(page: params[:finished_page], per_page: per_page)
       rj_shipments = rejected_shipments.order(booking_placed_at: :desc).paginate(page: params[:rejected_page], per_page: per_page)
+      a_shipments = archived_shipments.order(booking_placed_at: :desc).paginate(page: params[:archived_page], per_page: per_page)
 
       num_pages = {
         finished:  f_shipments.total_pages,
         requested: r_shipments.total_pages,
         open:      o_shipments.total_pages,
-        rejected:  rj_shipments.total_pages
+        rejected:  rj_shipments.total_pages,
+        archived:  a_shipments.total_pages
       }
       {
         requested:          r_shipments.map(&:with_address_options_json),
         open:               o_shipments.map(&:with_address_options_json),
         finished:           f_shipments.map(&:with_address_options_json),
         rejected:           rj_shipments.map(&:with_address_options_json),
+        archived:           a_shipments.map(&:with_address_options_json),
         pages:              {
           open:      params[:open_page],
           finished:  params[:finished_page],
           requested: params[:requested_page],
-          rejected: params[:rejected_page]
+          rejected: params[:rejected_page],
+          archived: params[:archived_page]
         },
         num_shipment_pages: num_pages
       }
@@ -415,12 +423,17 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     @rejected_shipments ||= tenant_shipment.rejected
   end
 
+  def archived_shipments
+    @archived_shipments ||= tenant_shipment.archived
+  end
+
   def documents
     @documents ||= {
       'requested_shipments' => Document.get_documents_for_array(tenant_shipment.requested),
       'open_shipments'      => Document.get_documents_for_array(tenant_shipment.open),
       'finished_shipments'  => Document.get_documents_for_array(tenant_shipment.finished),
-      'rejected_shipments'  => Document.get_documents_for_array(tenant_shipment.rejected)
+      'rejected_shipments'  => Document.get_documents_for_array(tenant_shipment.rejected),
+      'archived_shipments'  => Document.get_documents_for_array(tenant_shipment.archived)
     }
   end
 
