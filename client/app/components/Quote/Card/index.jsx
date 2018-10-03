@@ -148,7 +148,8 @@ class QuoteCard extends PureComponent {
       handleInputChange,
       pickup,
       truckingTime,
-      isQuotationTool
+      isQuotationTool,
+      aggregatedCargo
     } = this.props
     const {
       quote,
@@ -160,13 +161,13 @@ class QuoteCard extends PureComponent {
     const originHub = result.meta.origin_hub
     const destinationHub = result.meta.destination_hub
     const gradientStyle = gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-    const calcPayload = cargo.reduce((a, b) => {
+    const calcPayload = aggregatedCargo.id ? aggregatedCargo.weight : cargo.reduce((a, b) => {
       const aPayload = parseFloat(a.payload_in_kg) * parseInt(a.quantity, 10)
       const bPayload = parseFloat(b.payload_in_kg) * parseInt(b.quantity, 10)
 
-      return { payload_in_kg: aPayload + bPayload }
+      return aPayload + bPayload
     })
-
+    
     const pricesArr = Object.keys(quote).splice(2).length !== 0 ? (
       Object.keys(quote).splice(2).map(key => (<CollapsingBar
         showArrow
@@ -293,7 +294,7 @@ class QuoteCard extends PureComponent {
             </div>
             <div className={`flex-100 layout-row layout-wrap layout-align-end-center ${styles.unit_info}`}>
               <p className="flex-100 layout-row layout-align-end-center">
-                Kg:&nbsp; <span>{`${numberSpacing(calcPayload.payload_in_kg, 1)} kg`}</span>
+                Kg:&nbsp; <span>{`${numberSpacing(calcPayload, 1)} kg`}</span>
               </p>
             </div>
           </div>
@@ -405,7 +406,8 @@ QuoteCard.propTypes = {
   selectResult: PropTypes.func,
   handleScheduleRequest: PropTypes.func,
   pickup: PropTypes.bool,
-  isQuotationTool: PropTypes.bool
+  isQuotationTool: PropTypes.bool,
+  aggregatedCargo: PropTypes.objectOf(PropTypes.string)
 }
 
 QuoteCard.defaultProps = {
@@ -419,7 +421,8 @@ QuoteCard.defaultProps = {
   handleScheduleRequest: null,
   handleClick: null,
   pickup: false,
-  isQuotationTool: false
+  isQuotationTool: false,
+  aggregatedCargo: {}
 }
 
 export default QuoteCard

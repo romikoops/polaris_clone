@@ -112,6 +112,7 @@ module ShippingTools
       originHubs:      offer_calculator.hubs[:origin],
       destinationHubs: offer_calculator.hubs[:destination],
       cargoUnits:      offer_calculator.shipment.cargo_units,
+      aggregatedCargo: offer_calculator.shipment.aggregated_cargo,
       lastTripDate:    last_trip_date
     }
   end

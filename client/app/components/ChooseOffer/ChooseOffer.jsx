@@ -197,10 +197,11 @@ export class ChooseOffer extends Component {
     } = this.props
     if (!shipmentData) return ''
     const { scope } = tenant.data
+
     const { currentCurrency } = this.state
     const isQuotationTool = scope.closed_quotation_tool || scope.open_quotation_tool || scope.quotation_tool
     const {
-      shipment, results, lastTripDate
+      shipment, results, lastTripDate, aggregatedCargo
     } = shipmentData
     if (!shipment || !results) return ''
 
@@ -251,11 +252,13 @@ export class ChooseOffer extends Component {
             handleClick={e => this.handleClick(e, s)}
             cargo={shipmentData.cargoUnits}
             selectResult={this.chooseResult}
+            aggregatedCargo={aggregatedCargo}
             handleScheduleRequest={this.handleScheduleRequest}
             truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
           />
         </div>
       ))
+      
     const closestRoutestoRender = closestRoutes.map(s => (
 
       <div key={v4()} className="margin_bottom flex-100">
@@ -269,6 +272,7 @@ export class ChooseOffer extends Component {
           handleClick={e => this.handleClick(e, s)}
           selectResult={this.chooseResult}
           cargo={shipmentData.cargoUnits}
+          aggregatedCargo={aggregatedCargo}
           handleScheduleRequest={this.handleScheduleRequest}
           truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
         />
