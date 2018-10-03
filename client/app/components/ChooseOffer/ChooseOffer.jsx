@@ -238,7 +238,7 @@ export class ChooseOffer extends Component {
       altRoutes.push(...scheduleObj[key])
     })
     const focusRoutestoRender = focusRoutes
-      .sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
+      .sort((a, b) => parseFloat(a.quote.total.value) - parseFloat(b.quote.total.value))
       .map(s => (
         <div key={v4()} className="margin_bottom flex-100">
           <QuoteCard
@@ -337,11 +337,11 @@ export class ChooseOffer extends Component {
           <div className="flex  offset-5 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-wrap">
               <div
-                className={`flex-100 layout-row layout-align-space-between-center ${
+                className={`flex-100 layout-row layout-align-space-between-center margin_bottom ${
                   styles.route_header
                 }`}
               >
-                <div className="flex-none">
+                <div className="flex-none padd_10">
                   {isQuotationTool ? (
                     <TextHeading
 
