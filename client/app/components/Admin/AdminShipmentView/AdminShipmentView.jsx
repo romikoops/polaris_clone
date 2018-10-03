@@ -21,8 +21,8 @@ import {
   isRequested
 } from '../../../helpers'
 import CargoContainerGroup from '../../Cargo/Container/Group'
-import { AdminShipmentContent } from './AdminShipmentContent'
-import { ShipmentQuotationContent } from '../../UserAccount/ShipmentQuotationContent'
+import AdminShipmentContent from './AdminShipmentContent'
+import ShipmentQuotationContent from '../../UserAccount/ShipmentQuotationContent'
 
 class AdminShipmentView extends Component {
   static sumCargoFees (cargos) {

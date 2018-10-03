@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import styled from 'styled-components'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
@@ -20,7 +21,7 @@ import GreyBox from '../GreyBox/GreyBox'
 import FileUploader from '../FileUploader/FileUploader'
 import ShipmentNotes from '../ShipmentNotes'
 
-export class UserShipmentContent extends Component {
+class UserShipmentContent extends Component {
   static calcCargoLoad (feeHash, loadType) {
     const cargoCount = Object.keys(feeHash.cargo).length
     let noun = ''
@@ -41,7 +42,7 @@ export class UserShipmentContent extends Component {
 
     this.state = {
       fileType: { label: 'Packing Sheet', value: 'packing_sheet' },
-      upUrl: `/shipments/${this.props.match.params.id}/upload/packing_sheet`
+      documentUrl: `/shipments/${this.props.match.params.id}/upload/packing_sheet`
     }
 
     this.setFileType = this.setFileType.bind(this)
@@ -50,7 +51,7 @@ export class UserShipmentContent extends Component {
   setFileType (ev) {
     const shipmentId = this.props.shipmentData.shipment.id
     const url = `/shipments/${shipmentId}/upload/${ev.value}`
-    this.setState({ fileType: ev, upUrl: url })
+    this.setState({ fileType: ev, documentUrl: url })
   }
   deleteDoc (doc) {
     const { userDispatch } = this.props
@@ -79,9 +80,10 @@ export class UserShipmentContent extends Component {
       feeHash,
       userDispatch,
       cargoCount,
-      cargoView
+      cargoView,
+      t
     } = this.props
-    const { fileType, upUrl } = this.state
+    const { fileType, documentUrl } = this.state
     const {
       contacts,
       shipment,
@@ -139,7 +141,7 @@ export class UserShipmentContent extends Component {
             <i className="flex-none fa fa-ban" />
           </div>
           <div className="flex layout-align-start-center layout-row">
-            <p className="flex-none">{`${documentTypes[key]}: Not Uploaded`}</p>
+            <p className="flex-none">{`${documentTypes[key]}: ${t('doc:notUploaded')}`}</p>
           </div>
         </div>)
       }
@@ -169,7 +171,7 @@ export class UserShipmentContent extends Component {
         wrapperTabs="layout-row flex-100 margin_bottom"
       >
         <Tab
-          tabTitle="Overview"
+          tabTitle={t('common:overview')}
           theme={theme}
         >
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
@@ -182,7 +184,7 @@ export class UserShipmentContent extends Component {
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
                       estimatedTime={estimatedTimes.etdJSX}
-                      text="ETD"
+                      text={t('common:etd')}
                       theme={theme}
                       carriage={pickupDate}
                       noCarriage={originDropOffDate}
@@ -198,8 +200,8 @@ export class UserShipmentContent extends Component {
                   <div className="layout-align-center-center layout-row" style={gradientStyle}>
                     {switchIcon(shipment)}
                   </div>
-                  <p className="">Estimated time delivery</p>
-                  <h5>{moment(shipment.planned_eta).diff(moment(shipment.planned_etd), 'days')} days{' '}</h5>
+                  <p>{t('shipment:estimatedTimeDelivery')}</p>
+                  <h5>{moment(shipment.planned_eta).diff(moment(shipment.planned_etd), `${t('common:days')}`)} {t('common:days')}</h5>
                 </div>
               </div>
 
@@ -213,7 +215,7 @@ export class UserShipmentContent extends Component {
                       estimatedTime={estimatedTimes.etaJSX}
                       carriage={deliveryDate}
                       shipment={shipment}
-                      text="ETA"
+                      text={t('common:eta')}
                       theme={theme}
                       noCarriage={destinationCollectionDate}
                       hub={shipment.destination_hub}
@@ -226,20 +228,20 @@ export class UserShipmentContent extends Component {
           </div>
         </Tab>
         <Tab
-          tabTitle="Freight"
+          tabTitle={t('shipment:freight')}
           theme={theme}
         >
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
             <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}>
               <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
                 <div className="layout-column flex-100">
-                  <h3>Freight, Duties & Carriage:</h3>
+                  <h3>{t('shipment:freightDutiesAndCarriage')}</h3>
                   <div className="layout-wrap layout-row flex">
                     <div className="flex-45 margin_bottom">
                       <div className="layout-row flex-100">
                         <div className="flex-none layout-row">
                           <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
-                          <p>Pickup</p>
+                          <p>{t('shipment:pickUp')}</p>
                         </div>
                         {scope.detailed_billing && feeHash.trucking_pre ? <div className="flex layout-row layout-align-end-center">
                           <p>
@@ -260,7 +262,7 @@ export class UserShipmentContent extends Component {
                             className="fa fa-truck clip flex-none layout-align-center-center"
                             style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
                           />
-                          <p>Delivery</p>
+                          <p>{t('shipment:delivery')}</p>
                         </div>
                         {scope.detailed_billing && feeHash.trucking_on ? <div className="flex layout-row layout-align-end-center">
                           <p>
@@ -283,8 +285,7 @@ export class UserShipmentContent extends Component {
                             style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle}
                           />
                           <p>
-                      Origin<br />
-                      Documentation
+                            {t('shipment:originDocumentation')}
                           </p>
                         </div>
                         {scope.detailed_billing && feeHash.export ? <div className="flex layout-row layout-align-end-center">
@@ -309,8 +310,7 @@ export class UserShipmentContent extends Component {
                             style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
                           />
                           <p>
-                      Destination<br />
-                      Documentation
+                            {t('shipment:destinationDocumentation')}
                           </p>
                         </div>
                         {scope.detailed_billing && feeHash.import ? <div className="flex layout-row layout-align-end-center">
@@ -332,7 +332,7 @@ export class UserShipmentContent extends Component {
                             className="fa fa-ship clip flex-none layout-align-center-center"
                             style={selectedStyle}
                           />
-                          <p>Freight</p>
+                          <p>{t('shipment:freight')}</p>
                         </div>
                         {scope.detailed_billing && feeHash.cargo
                           ? <div className="flex layout-row layout-align-end-center">
@@ -353,13 +353,13 @@ export class UserShipmentContent extends Component {
               </div>
               <div className={`flex-25 layout-row flex-sm-100 flex-xs-100 ${styles.additional_services} ${styles.services_box} ${styles.border_right}`}>
                 <div className="flex-80">
-                  <h3>Additional Services</h3>
+                  <h3>{t('shipment:additionalServices')}</h3>
                   <div className="">
                     <div className="flex-100 margin_bottom">
                       <div className="layout-row flex-100">
                         <div className="layout-row flex-none">
                           <i className="fa fa-id-card clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
-                          <p>Customs</p>
+                          <p>{t('shipment:customs')}</p>
                         </div>
                         {scope.detailed_billing && feeHash.customs
                           ? <div className="flex layout-row layout-align-end-center">
@@ -378,7 +378,7 @@ export class UserShipmentContent extends Component {
                       <div className="layout-row flex-100">
                         <div className="layout-row flex-none">
                           <i className="fa fa-umbrella clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
-                          <p>Insurance</p>
+                          <p>{t('shipment:insurance')}</p>
                         </div>
                         {scope.detailed_billing && feeHash.insurance && (feeHash.insurance.value || feeHash.insurance.edited_total)
                           ? <div className="flex layout-row layout-align-end-center">
@@ -396,7 +396,7 @@ export class UserShipmentContent extends Component {
                           : '' }
                         {scope.detailed_billing && feeHash.insurance && !feeHash.insurance.value && !feeHash.insurance.edited_total
                           ? <div className="flex layout-row layout-align-end-center">
-                            <p>Requested  </p>
+                            <p>{t('shipment:requested')}</p>
                           </div> : ''}
                       </div>
                     </div>
@@ -421,7 +421,7 @@ export class UserShipmentContent extends Component {
 
         </Tab>
         <Tab
-          tabTitle="Contacts"
+          tabTitle={t('account:contacts')}
           theme={theme}
         >
           <div className="flex-100 layout-row layout-wrap layout-align-center-center padding_top">
@@ -434,12 +434,11 @@ export class UserShipmentContent extends Component {
           </div>
         </Tab>
         <Tab
-          tabTitle="Cargo Details"
+          tabTitle={t('cargo:cargoDetails')}
           theme={theme}
         >
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
             <GreyBox
-              title="Cargo Details"
               wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right}`}
               contentClassName="layout-column flex"
               content={cargoView}
@@ -448,7 +447,7 @@ export class UserShipmentContent extends Component {
           </div>
         </Tab>
         <Tab
-          tabTitle="Documents"
+          tabTitle={t('common:documents')}
           theme={theme}
         >
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
@@ -461,7 +460,7 @@ export class UserShipmentContent extends Component {
                   <div className="flex-100 layout-row layout-wrap layout-align-start-center ">
                     <div className="flex-50 layout-align-start-center layout-wrap layout-row margin_bottom">
                       <p className={`${styles.sec_subheader_text} flex-100 padding_bottom_sm padding_top`}>
-                    Upload New Document:
+                        {t('doc:uploadNewDocument')}
                       </p>
                       <div className="flex-100 layout-align-start-center layout-row">
                         <StyledSelect
@@ -474,7 +473,7 @@ export class UserShipmentContent extends Component {
                         <div className="flex-50 layout-align-center-center layout-row padd_10">
                           <FileUploader
                             theme={theme}
-                            url={upUrl}
+                            url={documentUrl}
                             formClasses="flex-100 layout-row layout-align-center-center"
                             type={fileType.value}
                             text={fileType.label}
@@ -510,6 +509,7 @@ export class UserShipmentContent extends Component {
 UserShipmentContent.propTypes = {
   theme: PropTypes.theme,
   user: PropTypes.user,
+  t: PropTypes.func.isRequired,
   userDispatch: PropTypes.shape({
     deleteDocument: PropTypes.func
   }).isRequired,
@@ -542,4 +542,4 @@ UserShipmentContent.defaultProps = {
   cargoView: null
 }
 
-export default UserShipmentContent
+export default translate(['common', 'shipment', 'doc', 'cargo', 'account'])(UserShipmentContent)

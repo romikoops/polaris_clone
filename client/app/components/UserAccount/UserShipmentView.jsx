@@ -17,8 +17,8 @@ import {
 import '../../styles/select-css-custom.css'
 import DocumentsDownloader from '../Documents/Downloader'
 import GradientBorder from '../GradientBorder'
-import { UserShipmentContent } from './UserShipmentContent'
-import { ShipmentQuotationContent } from './ShipmentQuotationContent'
+import UserShipmentContent from './UserShipmentContent'
+import ShipmentQuotationContent from './ShipmentQuotationContent'
 
 class UserShipmentView extends Component {
   static sumCargoFees (cargos) {
@@ -300,7 +300,7 @@ class UserShipmentView extends Component {
           {statusFinished}
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">
-          {shipment.status !== 'quoted' ? (
+          {shipment.status !== 'quoted' && !tenant.data.scope.quotation_tool ? (
             <UserShipmentContent
               theme={theme}
               gradientBorderStyle={gradientBorderStyle}

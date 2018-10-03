@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
@@ -17,11 +18,11 @@ import GreyBox from '../GreyBox/GreyBox'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import ShipmentNotes from '../ShipmentNotes'
 
-export class ShipmentQuotationContent extends Component {
+class ShipmentQuotationContent extends Component {
   static determineSubKey (key) {
     switch (key) {
       case 'trucking_lcl' || 'trucking_fcl':
-        return 'Trucking Rate'
+        return this.props.t('shipment:truckingRate')
 
       default:
         return key
@@ -53,6 +54,7 @@ export class ShipmentQuotationContent extends Component {
       deselectedStyle,
       scope,
       feeHash,
+      t,
       cargoView
     } = this.props
 
@@ -70,10 +72,10 @@ export class ShipmentQuotationContent extends Component {
             <div className="flex-none layout-row layout-align-start-center" />
             <div className="flex-45 layout-row layout-align-start-center">
               {key === 'trucking_pre' ? (
-                <span>Pick-up</span>
+                <span>{t('shipment:pickUp')}</span>
               ) : ''}
               {key === 'trucking_on' ? (
-                <span>Delivery</span>
+                <span>{t('shipment:delivery')}</span>
               ) : ''}
               <span>{key === 'trucking_pre' || key === 'trucking_on' ? '' : capitalize(key)}</span>
             </div>
@@ -88,7 +90,7 @@ export class ShipmentQuotationContent extends Component {
           .filter(value => value.length !== 1).map((price) => {
             const subPrices = (<div className={`flex-100 layout-row layout-align-start-center ${quoteStyles.sub_price_row}`}>
               <div className="flex-45 layout-row layout-align-start-center">
-                <span>{key === 'cargo' ? 'Freight rate' : ShipmentQuotationContent.determineSubKey(price[0])}</span>
+                <span>{key === 'cargo' ? `${t('shipment:freightRate')}` : ShipmentQuotationContent.determineSubKey(price[0])}</span>
               </div>
               <div className="flex-50 layout-row layout-align-end-center">
                 <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{shipment.selected_offer.total.currency}</p>
@@ -118,7 +120,7 @@ export class ShipmentQuotationContent extends Component {
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
                       et={shipment.pickup_address ? estimatedTimes.etdJSX : null}
-                      text="ETD"
+                      text={t('common:etd')}
                       shipment={shipment}
                       theme={theme}
                       hub={shipment.origin_hub}
@@ -134,8 +136,8 @@ export class ShipmentQuotationContent extends Component {
                   </div>
                   {shipment.planned_eta && shipment.planned_etd ? (
                     <div className="flex-100 layout-align-center-center layout-wrap layout-row">
-                      <p>Estimated time delivery</p>
-                      <h5>{moment(shipment.planned_eta).diff(moment(shipment.planned_etd), 'days')} days{' '}</h5>
+                      <p className="flex-100 layout-row layout-align-center-center">{t('shipment:estimatedTimeDelivery')}</p>
+                      <h5>{moment(shipment.planned_eta).diff(moment(shipment.planned_etd), `${t('common:days')}`)} {t('common:days')}</h5>
                     </div>
                   ) : ''}
 
@@ -149,7 +151,7 @@ export class ShipmentQuotationContent extends Component {
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
-                      text="ETA"
+                      text={t('common:eta')}
                       shipment={shipment}
                       theme={theme}
                       et={shipment.delivery_address ? estimatedTimes.etaJSX : null}
@@ -163,20 +165,20 @@ export class ShipmentQuotationContent extends Component {
           </div>
         </Tab>
         <Tab
-          tabTitle="Freight"
+          tabTitle={t('shipment:freight')}
           theme={theme}
         >
           <div className="flex-100 layout-row layout-align-start-start padding_top card_margin_right">
             <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-60`}>
               <div className={`flex-70 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
                 <div className="layout-column flex-100">
-                  <h3>Freight, Duties & Carriage:</h3>
+                  <h3>{t('shipment:freightDutiesAndCarriage')}</h3>
                   <div className="layout-wrap layout-row flex">
                     <div className="flex-45 margin_bottom">
                       <div className="layout-row flex-100">
                         <div className="flex-none layout-row">
                           <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.trucking.has_pre_carriage ? selectedStyle : deselectedStyle} />
-                          <p>Pickup</p>
+                          <p>{t('shipment:pickUp')}</p>
                         </div>
                       </div>
                     </div>
@@ -187,7 +189,7 @@ export class ShipmentQuotationContent extends Component {
                             className="fa fa-truck clip flex-none layout-align-center-center"
                             style={shipment.trucking.has_on_carriage ? selectedStyle : deselectedStyle}
                           />
-                          <p>Delivery</p>
+                          <p>{t('shipment:delivery')}</p>
                         </div>
                       </div>
                     </div>
@@ -199,8 +201,7 @@ export class ShipmentQuotationContent extends Component {
                             style={shipment.trucking.has_pre_carriage ? selectedStyle : deselectedStyle}
                           />
                           <p>
-                      Origin<br />
-                      Documentation
+                            {t('shipment:originDocumentation')}
                           </p>
                         </div>
                       </div>
@@ -215,8 +216,7 @@ export class ShipmentQuotationContent extends Component {
                             style={shipment.trucking.has_on_carriage ? selectedStyle : deselectedStyle}
                           />
                           <p>
-                      Destination<br />
-                      Documentation
+                            {t('shipment:destinationDocumentation')}
                           </p>
                         </div>
                       </div>
@@ -228,7 +228,7 @@ export class ShipmentQuotationContent extends Component {
                             className="fa fa-ship clip flex-none layout-align-center-center"
                             style={selectedStyle}
                           />
-                          <p>Freight</p>
+                          <p>{t('shipment:freight')}</p>
                         </div>
                       </div>
 
@@ -238,13 +238,13 @@ export class ShipmentQuotationContent extends Component {
               </div>
               <div className={`flex-30 layout-row flex-sm-100 flex-xs-100 ${styles.additional_services} ${styles.services_box}`}>
                 <div className="flex-80">
-                  <h3>Additional Services</h3>
+                  <h3>{t('shipment:additionalServices')}</h3>
                   <div className="">
                     <div className="flex-100 margin_bottom">
                       <div className="layout-row flex-100">
                         <div className="layout-row flex-none">
                           <i className="fa fa-id-card clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
-                          <p>Customs</p>
+                          <p>{t('shipment:customs')}</p>
                         </div>
                       </div>
                     </div>
@@ -252,11 +252,11 @@ export class ShipmentQuotationContent extends Component {
                       <div className="layout-row flex-100">
                         <div className="layout-row flex-none">
                           <i className="fa fa-umbrella clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
-                          <p>Insurance</p>
+                          <p>{t('shipment:insurance')}</p>
                         </div>
                         {scope.detailed_billing && feeHash.insurance && !feeHash.insurance.value && !feeHash.insurance.edited_total
                           ? <div className="flex layout-row layout-align-end-center">
-                            <p>Requested  </p>
+                            <p>{t('shipment:requested')}</p>
                           </div> : ''}
                       </div>
                     </div>
@@ -271,11 +271,11 @@ export class ShipmentQuotationContent extends Component {
                 {pricesArr}
                 <div className="flex-100 layout-wrap layout-align-start-stretch">
                   <div className={`flex-100 layout-row layout-align-start-stretch ${quoteStyles.total_row}`}>
-                    <div className="flex-50 layout-row layout-align-start-center">
-                      <span>Total</span>
+                    <div className="flex-20 layout-row layout-align-start-center">
+                      <span>{t('common:total')}</span>
                     </div>
-                    <div className="flex-50 layout-row layout-align-end-center">
-                      <p>{numberSpacing(shipment.selected_offer.total.value, 2)}&nbsp;{shipment.selected_offer.total.currency}</p>
+                    <div className="flex-80 layout-row layout-align-end-center">
+                      <p className="card_padding_right">{numberSpacing(shipment.selected_offer.total.value, 2)}&nbsp;{shipment.selected_offer.total.currency}</p>
                     </div>
                   </div>
                 </div>
@@ -285,12 +285,11 @@ export class ShipmentQuotationContent extends Component {
 
         </Tab>
         <Tab
-          tabTitle="Cargo Details"
+          tabTitle={t('cargo:cargoDetails')}
           theme={theme}
         >
-          <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
+          <div className="flex-100 layout-row layout-wrap layout-align-center-center padding_top">
             <GreyBox
-              title="Cargo Details"
               wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right}`}
               contentClassName="layout-column flex"
               content={cargoView}
@@ -306,6 +305,7 @@ export class ShipmentQuotationContent extends Component {
 ShipmentQuotationContent.propTypes = {
   theme: PropTypes.theme,
   gradientBorderStyle: PropTypes.style,
+  t: PropTypes.func.isRequired,
   gradientStyle: PropTypes.style,
   estimatedTimes: PropTypes.objectOf(PropTypes.node),
   shipment: PropTypes.shipment,
@@ -331,4 +331,4 @@ ShipmentQuotationContent.defaultProps = {
   cargoView: null
 }
 
-export default ShipmentQuotationContent
+export default translate(['common', 'shipment', 'cargo'])(ShipmentQuotationContent)
