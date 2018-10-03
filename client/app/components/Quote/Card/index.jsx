@@ -195,7 +195,7 @@ class QuoteCard extends PureComponent {
                 <span>{key === 'cargo' ? 'Freight rate' : QuoteCard.determineSubKey(price[0])}</span>
               </div>
               <div className="flex-50 layout-row layout-align-end-center">
-                <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{quote.total.currency}</p>
+                <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{(price[1].currency || price[1].total.currency)}</p>
               </div>
             </div>)
 
