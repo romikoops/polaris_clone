@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
+import { translate } from 'react-i18next'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import PropTypes from '../../prop-types'
-import { AdminTripPanel, AdminHubTile } from './'
+import { AdminHubTile } from './'
 import styles from './Admin.scss'
 import { gradientTextGenerator } from '../../helpers'
 import { RoundButton } from '../RoundButton/RoundButton'
@@ -74,9 +75,9 @@ export class AdminRouteView extends Component {
   }
   render () {
     const {
-      theme, itineraryData, hubHash, adminDispatch
+      theme, itineraryData, hubHash, adminDispatch, t
     } = this.props
-    // ;s
+
     if (!itineraryData) {
       return ''
     }
@@ -92,7 +93,7 @@ export class AdminRouteView extends Component {
       <AdminPromptConfirm
         theme={theme}
         heading="Are you sure?"
-        text="This will delete the route and all related data (pricings, schedules etc)"
+        text={t('admin:confirmDeleteRoute')}
         confirm={() => this.deleteItinerary(itinerary.id)}
         deny={() => this.closeConfirm()}
       />
@@ -113,32 +114,32 @@ export class AdminRouteView extends Component {
     })
     const columns = [
       {
-        Header: 'Closing Date',
+        Header: t('common:closingDate'),
         accessor: 'closing_date',
         Cell: row => (
           moment(row.value).format('ll')
         )
       },
       {
-        Header: 'ETD',
+        Header: t('common:eta'),
         accessor: 'start_date',
         Cell: row => (
           moment(row.value).format('ll')
         )
       },
       {
-        Header: 'ETA',
+        Header: t('common:etd'),
         accessor: 'end_date',
         Cell: row => (
           moment(row.value).format('ll')
         )
       },
       {
-        Header: 'Voyage Code',
+        Header: t('common:voyageCode'),
         accessor: 'voyage_code'
       },
       {
-        Header: 'Vessel Name',
+        Header: t('common:vesselName'),
         accessor: 'vessel'
       }
     ]
@@ -163,14 +164,14 @@ export class AdminRouteView extends Component {
                 theme={theme}
                 className="flex-100"
                 options={navOptions}
-                placeholder="Jump to..."
+                placeholder={t('admin:jumpTo')}
                 onChange={e => this.handleNavChange(e)}
               />
             </div>
             <div className="flex-25 layout-row layout-align-end-center">
               <RoundButton
                 theme={theme}
-                text="Delete"
+                text={t('common:delete')}
                 iconClass="fa-trash"
                 size="small"
                 handleNext={() => this.confirmDelete()}
@@ -182,7 +183,7 @@ export class AdminRouteView extends Component {
           <div
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
           >
-            <p className={` ${styles.sec_header_text} flex-none`}> Route Stops</p>
+            <p className={` ${styles.sec_header_text} flex-none`}> {t('admin:routeStops')}</p>
           </div>
           <div className="flex-100 layout-row layout-wrap layout-align-start-start">{hubArr}</div>
         </div>
@@ -190,7 +191,7 @@ export class AdminRouteView extends Component {
           <div
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
           >
-            <p className={` ${styles.sec_header_text} flex-none`}> Schedules </p>
+            <p className={` ${styles.sec_header_text} flex-none`}> {t('admin:schedules')} </p>
           </div>
           <div className="layout-row flex-95 layout-wrap layout-align-start-center">
             <ReactTable
@@ -231,7 +232,8 @@ AdminRouteView.propTypes = {
     getHub: PropTypes.func,
     getLayovers: PropTypes.func
   }).isRequired,
-  itineraryData: PropTypes.objectOf(PropTypes.any).isRequired
+  itineraryData: PropTypes.objectOf(PropTypes.any).isRequired,
+  t: PropTypes.func.isRequired
 }
 
 AdminRouteView.defaultProps = {
@@ -239,4 +241,4 @@ AdminRouteView.defaultProps = {
   hubHash: {}
 }
 
-export default AdminRouteView
+export default translate(['common', 'admin'])(AdminRouteView)

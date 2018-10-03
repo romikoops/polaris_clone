@@ -140,5 +140,7 @@
   "comingSoon": "Coming Soon",
   "with": "with",
   "without": "without",
-  "moreInfo": "More info"
+  "moreInfo": "More info",
+  "voyageCode": "Voyage Code",
+  "vesselName": "Vessel Name"
 }

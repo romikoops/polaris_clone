@@ -142,7 +142,9 @@
         "comingSoon": "Coming Soon",
         "with": "with",
         "without": "without",
-        "moreInfo": "More info"
+        "moreInfo": "More info",
+        "voyageCode": "Voyage Code",
+        "vesselName": "Vessel Name"
       },
       "admin": {
         "lowerLimit": "Lower Limit",
@@ -166,7 +168,11 @@
         "lowerLimitDistance" :"Lower limit distance",
         "upperLimitDistance" :"Upper limit distance",
         "upperDistance" :"Upper Distance",
-        "findCities": "Find Cities"
+        "findCities": "Find Cities",
+        "jumpTo": "Jump To...",
+        "routeStops": "Route Stops",
+        "schedules": "Schedules",
+        "confirmDeleteRoute": "This will delete the route and all related data (pricings, schedules etc)"
       },
       "itbox": {
         "component": "IncotermBox",
