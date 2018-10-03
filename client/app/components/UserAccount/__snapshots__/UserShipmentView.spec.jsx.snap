@@ -201,6 +201,7 @@ exports[`loading is true 1`] = `
           },
         }
       }
+      t={[Function]}
       theme={
         Object {
           "colors": Object {
@@ -432,6 +433,7 @@ exports[`shallow render 1`] = `
           },
         }
       }
+      t={[Function]}
       theme={
         Object {
           "colors": Object {
@@ -737,6 +739,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
           },
         }
       }
+      t={[Function]}
       theme={
         Object {
           "colors": Object {
@@ -1014,6 +1017,7 @@ exports[`shipmentData.contacts is present 1`] = `
           },
         }
       }
+      t={[Function]}
       theme={
         Object {
           "colors": Object {
@@ -1254,6 +1258,7 @@ exports[`shipmentData.documents is present 1`] = `
           },
         }
       }
+      t={[Function]}
       theme={
         Object {
           "colors": Object {
