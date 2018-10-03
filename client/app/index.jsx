@@ -9,7 +9,11 @@ import { configureStore, history } from './store/configureStore'
 import Root from './containers/Root'
 import './index.scss'
 
-Sentry.init({ dsn: window.keel.sentryUrl })
+Sentry.init({
+  dsn: window.keel.sentryUrl,
+  environment: window.keel.environment,
+  release: process.env.RELEASE
+ })
 
 const store = configureStore()
 

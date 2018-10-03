@@ -1,6 +1,10 @@
+# Builder Image
 FROM node:8 AS build
 
 ARG SENTRY_AUTH_TOKEN=""
+ARG SENTRY_URL=https://sentry.itsmycargo.tech
+ARG SENTRY_ORG=itsmycargo
+ARG SENTRY_PROJECT=frontend
 ARG RELEASE=""
 
 RUN set -ex \
@@ -18,11 +22,17 @@ RUN npm install
 
 COPY . .
 
-ENV SENTRY_URL=https://sentry.itsmycargo.tech
-ENV SENTRY_ORG=itsmycargo
-ENV SENTRY_PROJECT=imc-frontend
-RUN SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN RELEASE=$RELEASE npm run build
+RUN \
+    SENTRY_URL=$SENTRY_URL \
+    SENTRY_ORG=$SENTRY_ORG \
+    SENTRY_PROJECT=$SENTRY_PROJECT \
+    SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN \
+    RELEASE=$RELEASE \
+    npm run build
+# Clear out source-maps
+RUN rm -v dist/*.js.map
 
+# Deployment Image
 FROM nginx:alpine
 
 ENV DOCKERIZE_VERSION v0.6.1
