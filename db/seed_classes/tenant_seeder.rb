@@ -2024,7 +2024,11 @@ class TenantSeeder
           primary: '#e10f21',
           secondary: '#1d1d1b',
           brightPrimary: '#e10f21',
-          brightSecondary: '#1d1d1b'
+          brightSecondary: '#1d1d1b',
+          primaryRGB: 'rgb(255, 15, 33)',
+          secondaryRGB: 'rgb(29, 29, 27)',
+          brightPrimaryRGB: 'rgb(255, 15, 33)',
+          brightSecondaryRGB: 'rgb(29, 29, 27)'
         },
         logoLarge: 'https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png',
         logoSmall: 'https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png',
