@@ -38,7 +38,7 @@ class ShipmentsController < ApplicationController
                                          .paginate(page: params[:page], per_page: per_page)
     end
     per_page = params.fetch(:per_page, 4).to_f
-    shipments = shipment_association.map(&:with_address_options_json)
+    shipments = shipment_association.map(&:with_address_index_json)
 
     response_handler(
       shipments:          shipments,
@@ -87,7 +87,7 @@ class ShipmentsController < ApplicationController
     shipments = filterrific.find.paginate(page: params[:page], per_page: per_page)
 
     response_handler(
-      shipments:          shipments.map(&:with_address_options_json),
+      shipments:          shipments.map(&:with_address_index_json),
       num_shipment_pages: shipment.total_pages,
       target:             params[:target],
       page:               params[:page]
@@ -158,11 +158,10 @@ class ShipmentsController < ApplicationController
         archived:  a_shipments.total_pages
       }
       {
-        requested:          r_shipments.map(&:with_address_options_json),
-        open:               o_shipments.map(&:with_address_options_json),
-        finished:           f_shipments.map(&:with_address_options_json),
-        rejected:           rj_shipments.map(&:with_address_options_json),
-        archived:           a_shipments.map(&:with_address_options_json),
+        requested:          r_shipments.map(&:with_address_index_json),
+        open:               o_shipments.map(&:with_address_index_json),
+        finished:           f_shipments.map(&:with_address_index_json),
+        rejected:           rj_shipments.map(&:with_address_index_json),
         pages:              {
           open:      params[:open_page],
           finished:  params[:finished_page],
@@ -186,7 +185,7 @@ class ShipmentsController < ApplicationController
         quoted:  quoted.total_pages
       }
       {
-        quoted:         quoted.map(&:with_address_options_json),
+        quoted:         quoted.map(&:with_address_index_json),
         pages:              {
           quoted:      params[:quoted_page]
         },

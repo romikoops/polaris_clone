@@ -301,17 +301,10 @@ class AdminShipmentCard extends Component {
           </div>
           <div className="layout-row flex layout-align-end-end">
             <span className={`${styles.bigText} ${styles.price_style}`}>
-              <span> {totalPrice(shipment).currency} </span>
-
-              {shipment.total_price ? (
-                <span>
-                  {parseFloat(shipment.total_price.value).toFixed(2)}&nbsp;{shipment.total_price.currency}
-                </span>
-              ) : (
-                <span>
-                  {formattedPriceValue(totalPrice(shipment).value)}
-                </span>
-              )}
+              <span> {shipment.total_price.currency} </span>
+              <span>
+                {parseFloat(shipment.total_price.value).toFixed(2)}
+              </span> 
             </span>
           </div>
         </div>

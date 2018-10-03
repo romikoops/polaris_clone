@@ -44,9 +44,9 @@ class UserShipmentCard extends Component {
     const destinationHubObj = splitName(shipment.destination_hub.name)
     const originHubObj = splitName(shipment.origin_hub.name)
     const timeRow = !!plannedDate && !!shipment.planned_etd && !!shipment.planned_eta
-    ? (<div className={`layout-row flex-100 layout-align-start-center
+      ? (<div className={`layout-row flex-100 layout-align-start-center
     ${styles.middle_bottom_box} ${styles.smallText}`}
-      >
+    >
         <div className="flex-20 layout-align-center-start">
           <span className="flex-100"><b>{t('common:pickupDate')}</b><br />
             <span className={`${styles.grey}`}>
@@ -213,9 +213,9 @@ class UserShipmentCard extends Component {
           </div>
           <div className="layout-row flex layout-align-end-end">
             <span className={`${styles.bigText} ${styles.price_style}`}>
-              <span> {totalPrice(shipment).currency} </span>
+              <span> {shipment.total_price.currency} </span>
               <span>
-                {formattedPriceValue(totalPrice(shipment).value)}
+                {parseFloat(shipment.total_price.value).toFixed(2)}
               </span>
             </span>
           </div>
