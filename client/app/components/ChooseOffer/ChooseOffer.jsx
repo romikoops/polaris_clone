@@ -197,10 +197,11 @@ export class ChooseOffer extends Component {
     } = this.props
     if (!shipmentData) return ''
     const { scope } = tenant.data
+
     const { currentCurrency } = this.state
     const isQuotationTool = scope.closed_quotation_tool || scope.open_quotation_tool || scope.quotation_tool
     const {
-      shipment, results, lastTripDate
+      shipment, results, lastTripDate, aggregatedCargo
     } = shipmentData
     if (!shipment || !results) return ''
 
@@ -238,7 +239,7 @@ export class ChooseOffer extends Component {
       altRoutes.push(...scheduleObj[key])
     })
     const focusRoutestoRender = focusRoutes
-      .sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
+      .sort((a, b) => parseFloat(a.quote.total.value) - parseFloat(b.quote.total.value))
       .map(s => (
         <div key={v4()} className="margin_bottom flex-100">
           <QuoteCard
@@ -251,11 +252,13 @@ export class ChooseOffer extends Component {
             handleClick={e => this.handleClick(e, s)}
             cargo={shipmentData.cargoUnits}
             selectResult={this.chooseResult}
+            aggregatedCargo={aggregatedCargo}
             handleScheduleRequest={this.handleScheduleRequest}
             truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
           />
         </div>
       ))
+      
     const closestRoutestoRender = closestRoutes.map(s => (
 
       <div key={v4()} className="margin_bottom flex-100">
@@ -269,6 +272,7 @@ export class ChooseOffer extends Component {
           handleClick={e => this.handleClick(e, s)}
           selectResult={this.chooseResult}
           cargo={shipmentData.cargoUnits}
+          aggregatedCargo={aggregatedCargo}
           handleScheduleRequest={this.handleScheduleRequest}
           truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
         />
@@ -337,11 +341,11 @@ export class ChooseOffer extends Component {
           <div className="flex  offset-5 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-wrap">
               <div
-                className={`flex-100 layout-row layout-align-space-between-center ${
+                className={`flex-100 layout-row layout-align-space-between-center margin_bottom ${
                   styles.route_header
                 }`}
               >
-                <div className="flex-none">
+                <div className="flex-none padd_10">
                   {isQuotationTool ? (
                     <TextHeading
 
