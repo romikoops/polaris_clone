@@ -64,10 +64,7 @@ gem 'nokogiri'
 # Use os to get information about the operating system
 gem 'os'
 
-# Use Wicked PDF to generate PDFs from HTML
-# The obligatory wkhtmltopdf binaries are here: [Rails.root]/bin/wkhtmltopdf
-# gem 'wicked_pdf'
-# gem 'wkhtmltopdf-binary', '~> 0.12.4'
+# Use BreezyPdf to generate PDFs from HTML
 gem 'breezy_pdf_lite'
 
 # MongoDB gems
@@ -81,6 +78,8 @@ gem 'write_xlsx'
 
 # Usee http for simple requests
 gem 'http'
+
+gem "font-awesome-rails"
 
 # Use chronic for parsing dates
 gem 'chronic'

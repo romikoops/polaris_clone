@@ -21,11 +21,11 @@
             <% if s.itinerary.mode_of_transport == "ocean" %>
               <% mot = "anchor" %>
             <% elsif s.itinerary.mode_of_transport == "air" %>
-              <% mot = "paper-plane" %>
+              <% mot = "plane" %>
             <% else %>
               <% mot = "truck" %>
             <% end %>
-            <i class="fas fa-<%= mot %> mot-icon" style="color: <%= primary_color %>"></i>
+            <i class="fa fa-<%= mot %> mot-icon" style="color: <%= primary_color %>"></i>
             <div class="shipment-info">
               <p>From:&nbsp;<span><%= s.origin_hub.name %></span></p>
               <p>To:&nbsp;<span><%= s.destination_hub.name %></span></p>
@@ -33,7 +33,7 @@
             <div class="text-right cargo-info">
               <div class="charge-icons">
                 <i class="fa fa-truck" style="color: <%= precarriage_color %>"></i>
-                <i class="fa fa-file-alt" style="color: <%= origin_fee_color %>"></i>
+                <i class="fa fa-file-o" style="color: <%= origin_fee_color %>"></i>
                 <i class="fa fa-anchor" style="color: <%= primary_color %>"></i>
                 <i class="fa fa-file" style="color: <%= destination_fee_color %>"></i>
                 <i class="fa fa-truck flip" style="color: <%= oncarriage_color %>"></i>

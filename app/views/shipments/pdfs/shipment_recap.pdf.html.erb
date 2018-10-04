@@ -23,11 +23,11 @@
       <% if shipment.itinerary.mode_of_transport == "ocean" %>
         <% mot = "anchor" %>
       <% elsif shipment.itinerary.mode_of_transport == "air" %>
-        <% mot = "paper-plane" %>
+        <% mot = "plane" %>
       <% else %>
         <% mot = "truck" %>
       <% end %>
-      <i class="fas fa-<%= mot %> mot-icon" style="color: <%= primary_color %>"></i>
+      <i class="fa fa-<%= mot %> mot-icon" style="color: <%= primary_color %>"></i>
       <div class="shipment-info">
         <p>From:&nbsp;<span><%= shipment.origin_hub.name %></span></p>
         <p>To:&nbsp;<span><%= shipment.destination_hub.name %></span></p>
@@ -210,7 +210,7 @@
               <div class="display-flex-center">
                 <div class="display-flex flex-grow margin-bottom">
                   <i
-                    class="fa fa-file-import"
+                    class="fa fa-file-o"
                     style="color: <%= shipment.has_pre_carriage ? primary_color : '#E0E0E0' %>"
                   ></i>
                   <p>
@@ -220,7 +220,7 @@
                 </div>
                 <div class="display-flex flex-grow margin-bottom">
                   <i
-                    class="fa fa-file-export"
+                    class="fa fa-file"
                     style="color: <%= shipment.has_on_carriage ? primary_color : '#E0E0E0' %>">
                   </i>
                   <p>
@@ -245,7 +245,7 @@
         <div>
 
           <div class="display-flex margin-bottom">
-            <i class="fa fa-id-card" style="color: <%= shipment.selected_offer["customs"] ? primary_color : '#E0E0E0' %>"></i>
+            <i class="fa fa-user" style="color: <%= shipment.selected_offer["customs"] ? primary_color : '#E0E0E0' %>"></i>
             <p>Customs</p>
           </div>
 

@@ -742,6 +742,8 @@ GEM
       multipart-post (>= 1.2, < 3)
     ffi (1.9.25)
     filterrific (5.0.1)
+    font-awesome-rails (4.7.0.4)
+      railties (>= 3.2, < 6.0)
     foundation_emails (2.2.1.0)
     fuubar (2.3.2)
       rspec-core (~> 3.0)
@@ -1049,6 +1051,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   filterrific
+  font-awesome-rails
   fuubar
   geocoder
   google-api-client (~> 0.23.7)
