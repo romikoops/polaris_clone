@@ -3,6 +3,7 @@ const reactI18next = require('react-i18next')
 const { en } = require('../translations/all.json')
 
 module.exports = {
+  // this mock makes sure any components using the translate HoC receive the t function as a prop
   translate: () => (Component, o) => {
     Component.defaultProps = {
       ...Component.defaultProps,

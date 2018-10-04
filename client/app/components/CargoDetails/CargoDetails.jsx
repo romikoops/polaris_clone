@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { translate, Trans } from 'react-i18next'
 import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../prop-types'
 import styles from './CargoDetails.scss'
@@ -186,7 +186,6 @@ class CargoDetails extends Component {
       documents,
       shipment
     } = shipmentData
-    const insuranceBoxText = `${t('cargo:insuranceHead')} ${tenant.data.name} ${t('cargo:insuranceTail')}`
 
     const insuranceBox = (
       <div
@@ -202,7 +201,7 @@ class CargoDetails extends Component {
             </strong>
           </p>
           <p className="flex-90">
-            {insuranceBoxText}
+            {t('cargo:insuranceContact', { tenantName: tenant.data.name })}
           </p>
         </div>
       </div>

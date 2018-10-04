@@ -86,6 +86,28 @@ export const user = {
   phone: '6345789'
 }
 
+export const users = {
+  contactOne: {
+    role: { name: 'shipper' },
+    company_name: 'FOO_COMPANY',
+    currency: 'EUR',
+    email: 'foo2@bar.baz',
+    first_name: 'John',
+    guest: false,
+    last_name: 'Doe',
+    phone: '6345789'
+  },
+  contactTwo: {
+    role: { name: 'shipper' },
+    company_name: 'FOO_COMPANY',
+    currency: 'EUR',
+    email: 'foo2@bar.baz',
+    first_name: 'John',
+    guest: false,
+    last_name: 'Doe',
+    phone: '6345789'
+  }
+}
 export const history = {
   push: identity
 }

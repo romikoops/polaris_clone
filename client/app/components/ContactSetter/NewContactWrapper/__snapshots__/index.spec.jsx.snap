@@ -11,7 +11,8 @@ exports[`compName !== AddressBook 1`] = `
     <i
       className="fa fa-arrow-left"
     />
-     Back to Address Book
+     
+    Back to Address Book
   </div>
   <div
     className="title_sec layout-row layout-align-center"
@@ -47,7 +48,8 @@ exports[`contactType === notifyee && compName === ShipmentContactForm 1`] = `
     <i
       className="fa fa-arrow-left"
     />
-     Back to Address Book
+     
+    Back to Address Book
   </div>
   <div
     className="title_sec layout-row layout-align-center"
