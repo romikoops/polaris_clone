@@ -427,6 +427,7 @@ module ExcelTool
 
       if geometry.nil?
         geocoder_results = Geocoder.search(idents_and_country.values.join(" "))
+        raise "no geometry found for #{idents_and_country.values.join(', ')}" if geocoder_results.first.nil?
         coordinates = geocoder_results.first.geometry["location"]
         geometry = Geometry.find_by_coordinates(coordinates["lat"], coordinates["lng"])
       end

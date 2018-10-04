@@ -1189,7 +1189,6 @@ class ShipmentLocationBox extends Component {
           theme={this.props.theme}
           t={t}
           map={this.state.map}
-
           input={this.state.autoText.origin}
           hasErrors={originFieldsHaveErrors}
           handlePlaceSelect={place => this.handlePlaceChange(place, 'origin')}
