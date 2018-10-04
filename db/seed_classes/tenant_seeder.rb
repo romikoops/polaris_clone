@@ -2024,11 +2024,7 @@ class TenantSeeder
           primary: '#e10f21',
           secondary: '#1d1d1b',
           brightPrimary: '#e10f21',
-          brightSecondary: '#1d1d1b',
-          primaryRGB: 'rgb(255, 15, 33)',
-          secondaryRGB: 'rgb(29, 29, 27)',
-          brightPrimaryRGB: 'rgb(255, 15, 33)',
-          brightSecondaryRGB: 'rgb(29, 29, 27)'
+          brightSecondary: '#1d1d1b'
         },
         logoLarge: 'https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png',
         logoSmall: 'https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png',
@@ -2336,109 +2332,6 @@ class TenantSeeder
           FOB
           FAS
         )
-      }
-    },
-    {
-      theme: {
-        colors: {
-          primary: "#e10f21",
-          secondary: "#1d1d1b",
-          brightPrimary: "#e10f21",
-          brightSecondary: "#1d1d1b"
-        },
-        logoLarge: "https://assets.itsmycargo.com/assets/tenants/fivestar/fivestar_logo.png",
-        logoSmall: "https://assets.itsmycargo.com/assets/tenants/fivestar/fivestar_logo.png",
-        background: "https://assets.itsmycargo.com/assets/logos/air_bg_1.jpg"
-      },
-      addresses: {
-        components: [],
-        main:"Niendorfer Str. 170, 22848 Norderstedt, Germany"
-      },
-      phones:{
-        main:"+49 (0)40 56008073",
-        support: "+49 (0)40 56008073"
-      },
-      emails: {
-        sales: {
-          general: "infoham@fivestar-services.de"
-        },
-        support: {
-          general: "infoham@fivestar-services.de"
-        }
-      },
-      subdomain: "fivestar",
-      name: "Fivestar Services GmbH",
-      currency: 'USD',
-      scope: {
-        modes_of_transport: {
-          ocean: {
-            container: false,
-            cargo_item: true
-          },
-          rail: {
-            container: false,
-            cargo_item: false
-          },
-          air: {
-            container: false,
-            cargo_item: false
-          }
-        },
-        dangerous_goods: true,
-        links: {
-          about: '',
-          legal: ''
-        },
-        detailed_billing: false,
-        closed_quotation_tool: true,
-        open_quotation_tool: false,
-        consolidate_cargo: false,
-        require_full_address: true,
-        fixed_exchange_rates: true,
-        closed_shop: true,
-        closed_registration: false,
-        customs_export_paper: false,
-        fixed_currency: false,
-        incoterm_info_level: 'text',
-        cargo_info_level: 'text',
-        has_insurance: false,
-        has_customs: false,
-        terms: [
-          "You verify that all the information provided above is true",
-          "You agree to the presented terms and conditions.",
-          "Fivestar Services GmbH is to discuss the validity of the presented prices with the product owners."
-
-        ],
-        carriage_options: {
-          on_carriage: {
-            import: 'mandatory',
-            export: 'optional'
-          },
-          pre_carriage: {
-            import: 'optional',
-            export: 'mandatory'
-          }
-        }
-      },
-      # The following data is not a attribute of the Tenant model
-      # only being used for seeding purposes
-      other_data: {
-        cargo_item_types: [
-          "Pallet",
-          "Carton",
-          "Crate",
-          "Bottle",
-          "Stack",
-          "Drum",
-          "Skid",
-          "Barrel"
-        ],
-        incoterms: %w[
-          EXW
-          FCA
-          FOB
-          FAS
-        ]
       }
     }
   ].freeze

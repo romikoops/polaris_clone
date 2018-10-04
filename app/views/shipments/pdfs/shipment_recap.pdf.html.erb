@@ -40,18 +40,18 @@
     <div class="carriage-row border-bottom">
 
       <% if shipment.pickup_address && shipment.has_pre_carriage %>
-        <div class="">
-          <div class="">
+        <div>
+          <div>
             <i class=" fa fa-check check-square" style="color: <%= precarriage_color %>"></i>
             <h4 class="1">
               Pick-up on <%= shipment.planned_pickup_date.try(:strftime, "%d/%m/%Y") %>
             </h4>
           </div>
 
-          <div class="">
-            <div class=""></div>
+          <div>
+            <div></div>
             <% if shipment.pickup_address %>
-              <p class="">
+              <p>
                 <%= shipment.pickup_address.street %> 
                 <%= shipment.pickup_address.street_number %>
                 <%= shipment.pickup_address.city %>
@@ -63,15 +63,15 @@
       <% end %>
 
       <% if shipment.delivery_address && shipment.has_on_carriage %>
-        <div class="">
-          <div class="">
+        <div>
+          <div>
             <i class=" fa fa-check check-square" style="color: <%= oncarriage_color %>"></i>
             <h4 class="1">
               Delivery on <%= shipment.planned_delivery_date.try(:strftime, "%d/%m/%Y") %>
             </h4>
           </div>
-          <div class="">
-            <div class=""></div>
+          <div>
+            <div></div>
               <% if shipment.delivery_address %>
                 <p class="1">
                   <%= shipment.delivery_address.street %> 
@@ -87,7 +87,7 @@
   <% end %>
           
   <div class="dates margin-bottom">
-    <div class="">
+    <div>
       <h4 class="date-title"><%= shipment.has_pre_carriage ? 'Pick-up Date' : 'Closing Date' %></h4>
       <p class="sched-elem">
         <% if shipment.has_pre_carriage %>
@@ -97,19 +97,19 @@
         <% end %>
       </p>
     </div>
-    <div class="">
+    <div>
       <h4 class="date-title">ETD</h4>
       <p class="sched-elem">
         <%= shipment.etd.strftime("%d/%m/%Y") %>
       </p>
     </div>
-    <div class="">
+    <div>
       <h4 class="date-title">ETA</h4>
       <p class="sched-elem">
         <%= shipment.eta.strftime("%d/%m/%Y") %>
       </p>
     </div>
-    <div class="">
+    <div>
       <h4 class="date-title"> Estimated T/T <sup>*</sup></h4>
       <p class="sched-elem">
         <%= ((shipment.eta - shipment.etd) / 100000).ceil %>
@@ -121,26 +121,26 @@
   <div class="padding-top contacts-row">
     <div class="display-flex">
 
-      <div class="">
+      <div>
         <div class="basic-info">
           <div class="display-flex-center">
             <i class="fa fa-user " style="color: <%= primary_color%>"></i>
-            <h1 class=""><%= shipper.first_name %> <%= shipper.last_name %></h1>
+            <h1><%= shipper.first_name %> <%= shipper.last_name %></h1>
           </div>
           <div class="margin-bottom display-flex-center">
             <i class="fa fa-building " style="color: <%= primary_color%>"></i>
-            <h2 class=""><%= shipper.company_name %></h2>
+            <h2><%= shipper.company_name %></h2>
           </div>
         </div>
         
         <div class="contact-info">
           <div class="display-flex-center">
             <i class="fa fa-envelope " style="color: <%= primary_color%>"></i>
-            <h3 class=""><%= shipper.email %></h3>
+            <h3><%= shipper.email %></h3>
           </div>
           <div class="display-flex-center">
             <i class="fa fa-phone " style="color: <%= primary_color%>"></i>
-            <h3 class=""><%= shipper.phone %></h3>
+            <h3><%= shipper.phone %></h3>
           </div>
         </div>
           <h3>
@@ -155,26 +155,26 @@
     </div>
     
     <div class="display-flex">
-      <div class="">
+      <div>
         <div class="basic-info">
           <div class="display-flex-center">
             <i class="fa fa-user " style="color: <%= primary_color%>"></i>
-            <h1 class=""><%= consignee.first_name %> <%= consignee.last_name %></h1>
+            <h1><%= consignee.first_name %> <%= consignee.last_name %></h1>
           </div>
           <div class="display-flex-center margin-bottom">
             <i class="fa fa-building " style="color: <%= primary_color%>"></i>
-            <h2 class=""><%= consignee.company_name %></h2>
+            <h2><%= consignee.company_name %></h2>
           </div>
         </div>
         
         <div class="contact-info">
           <div class="display-flex-center">
             <i class="fa fa-envelope " style="color: <%= primary_color%>"></i>
-            <h3 class=""><%= consignee.email %></h3>
+            <h3><%= consignee.email %></h3>
           </div>
           <div class="display-flex-center">
             <i class="fa fa-phone " style="color: <%= primary_color%>"></i>
-            <h3 class=""><%= consignee.phone %></h3>
+            <h3><%= consignee.phone %></h3>
           </div>
         </div>
         <h3>
@@ -189,9 +189,9 @@
   <div class="padding-top-double">
     <div class="border-box display-flex-center margin-bottom">
       <div class="services-box">
-        <div class="">
+        <div>
           <h3>Freight, Duties & Carriage:</h3>
-            <div class="">
+            <div>
 
               <div class="display-flex-center">
                 <div class="display-flex flex-grow margin-bottom">
@@ -213,7 +213,7 @@
                     class="fa fa-file-import"
                     style="color: <%= shipment.has_pre_carriage ? primary_color : '#E0E0E0' %>"
                   ></i>
-                  <p class="">
+                  <p>
                 Origin<br />
                 Documentation
                   </p>
@@ -223,7 +223,7 @@
                     class="fa fa-file-export"
                     style="color: <%= shipment.has_on_carriage ? primary_color : '#E0E0E0' %>">
                   </i>
-                  <p class="">
+                  <p>
                 Destination<br />
                 Documentation
                   </p>
@@ -233,7 +233,7 @@
               <div class="display-flex flex-grow margin-bottom">
                   <i
                     class="fa fa-ship" style="color: <%= primary_color %>"></i>
-                <p class="">Freight</p>
+                <p>Freight</p>
               </div>
 
           </div>
@@ -242,7 +242,7 @@
       <div class="additional-services">
 
         <h3>Additional Services</h3>
-        <div class="">
+        <div>
 
           <div class="display-flex margin-bottom">
             <i class="fa fa-id-card" style="color: <%= shipment.selected_offer["customs"] ? primary_color : '#E0E0E0' %>"></i>
@@ -345,8 +345,8 @@
         </div>
         <div class="column-info notes-lower">
           <div class="border-bottom display-flex">
-            <span class="">Description of Goods: </span>
-            <p class="">
+            <span>Description of Goods: </span>
+            <p>
               <%= shipment.cargo_notes %>
             </p>
           </div>
