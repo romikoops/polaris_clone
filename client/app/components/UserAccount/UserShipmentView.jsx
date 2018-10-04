@@ -351,22 +351,22 @@ class UserShipmentView extends Component {
     )
     const pickupDate = (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${moment(shipment.planned_pickup_date).format('DD/MM/YYYY | HH:mm')}`}
+        on {`${moment(shipment.planned_pickup_date).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
     const deliveryDate = (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${moment(shipment.planned_delivery_date).format('DD/MM/YYYY | HH:mm')}`}
+        from {`${moment(shipment.planned_delivery_date).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
     const originDropOffDate = (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${moment(shipment.planned_origin_drop_off_date).format('DD/MM/YYYY | HH:mm')}`}
+        on {`${moment(shipment.planned_origin_drop_off_date).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
     const destinationCollectionDate = (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${moment(shipment.planned_destination_collection_date).format('DD/MM/YYYY | HH:mm')}`}
+        from {`${moment(shipment.planned_destination_collection_date).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
 
