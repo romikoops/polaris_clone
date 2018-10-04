@@ -4,7 +4,8 @@ module DataParser
   class BaseParser
     attr_reader :results, :stats, :hub, :tenant, :path, :hub_id
     include AwsConfig
-    def initialize(args={ _user: current_user })
+    
+    def initialize(args = { _user: current_user })
       params = args[:params]
       @stats = _stats
       @results = _results
@@ -12,8 +13,8 @@ module DataParser
         @hub_id = args[:hub_id]
         @hub = Hub.find(@hub_id)
       end
-      
-      signed_url = get_file_url(args[:path], "assets.itsmycargo.com")
+
+      signed_url = get_file_url(args[:path], 'assets.itsmycargo.com')
       @xlsx = open_file(signed_url)
       post_initialize(args)
     end
@@ -30,7 +31,7 @@ module DataParser
 
     def _stats
       {
-        type: "trucking"
+        type: 'trucking'
       }.merge(local_stats)
     end
 
@@ -43,7 +44,7 @@ module DataParser
     end
 
     def open_json(path)
-      JSON.parse(File.read("#{Rails.root}#{path.to_s}"))
+      JSON.parse(File.read("#{Rails.root}#{path}"))
     end
 
     def open_file(path)
@@ -57,6 +58,5 @@ module DataParser
     def debug_message(message)
       puts message if DEBUG
     end
-
   end
 end
