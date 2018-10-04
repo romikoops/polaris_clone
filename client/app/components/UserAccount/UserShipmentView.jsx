@@ -12,8 +12,7 @@ import { moment } from '../../constants'
 import {
   gradientTextGenerator,
   gradientGenerator,
-  gradientBorderGenerator,
-  formattedDate
+  gradientBorderGenerator
 } from '../../helpers'
 import '../../styles/select-css-custom.css'
 import DocumentsDownloader from '../Documents/Downloader'
@@ -274,13 +273,13 @@ class UserShipmentView extends Component {
     const feeHash = shipment.selected_offer
     const etdJSX = (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${formattedDate(shipment.planned_etd)}`}
+        {moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}
       </p>
     )
     const cargoCount = Object.keys(feeHash.cargo).length - 2
     const etaJSX = (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${formattedDate(shipment.planned_eta)}`}
+        {moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}
       </p>
     )
     const estimatedTimes = {
