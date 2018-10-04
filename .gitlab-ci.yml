@@ -142,7 +142,7 @@ review:
     - itsmycargo
 
   script:
-    - deploy || delete
+    - deploy
 
   environment:
     name: review/$CI_COMMIT_REF_NAME
@@ -155,7 +155,7 @@ review:
     - dev
 
 stop_review:
-  stage: cleanup
+  stage: review
   image: eu.gcr.io/itsmycargo-main/deploy:latest
   tags:
     - itsmycargo
@@ -197,6 +197,19 @@ stop_review:
   }
 
   function deploy() {
+    _helm_deploy || (delete && exit 1)
+  }
+
+  function delete() {
+    name="$CI_ENVIRONMENT_SLUG"
+
+    if [[ -n "$(helm ls -q "^$name$")" ]]; then
+      helm delete --purge "$name"
+      kubectl --namespace=${REVIEW_NAMESPACE} delete persistentvolumeclaims "${CI_ENVIRONMENT_SLUG}-postgresql" || true
+    fi
+  }
+
+  function _helm_deploy() {
     helm upgrade --install \
       --wait \
       --timeout 600 \
@@ -207,15 +220,6 @@ stop_review:
       --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
       "$CI_ENVIRONMENT_SLUG" \
       $DEVOPS_CHART
-  }
-
-  function delete() {
-    name="$CI_ENVIRONMENT_SLUG"
-
-    if [[ -n "$(helm ls -q "^$name$")" ]]; then
-      helm delete --purge "$name"
-      kubectl --namespace=${REVIEW_NAMESPACE} delete persistentvolumeclaims "${CI_ENVIRONMENT_SLUG}-postgresql" || true
-    fi
   }
 
 before_script:
