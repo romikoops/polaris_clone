@@ -95,7 +95,7 @@ class CookieConsentBar extends React.PureComponent {
       >
         { this.state.showModal && modal}
         <p className={styles.cookie_text}>
-          This website uses cookies to enhance your user experience. <a href="https://www.itsmycargo.com/en/privacy" target="_blank">Learn more</a>
+          {t('common:useCookies')} <a href="https://www.itsmycargo.com/en/privacy" target="_blank"> {t('common:learnMore')}</a>
         </p>
 
         <ConsentButton

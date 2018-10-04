@@ -2309,7 +2309,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
             <p
               className="flex-90"
             >
-              Please contact your local undefined office for more info.
+              Please contact your local {{tenantName}} office for more info.
             </p>
           </div>
         </div>
@@ -5052,7 +5052,7 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
             <p
               className="flex-90"
             >
-              Please contact your local undefined office for more info.
+              Please contact your local {{tenantName}} office for more info.
             </p>
           </div>
         </div>

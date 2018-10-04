@@ -28,6 +28,7 @@
   "packingSheet": "Packing Sheet",
   "priceLocalRegulations": "Price subject to local regulations",
   "quoteInsuranceHead": "Yes, I want",
+  "insuranceContact": "Please contact your local {{tenantName}} office for more info.",
   "quoteInsuranceNoHead": "No, I do not want",
   "quoteInsuranceNoTail": "to quote insurance for my cargo",
   "quoteInsuranceTail": "to quote insurance for my cargo",

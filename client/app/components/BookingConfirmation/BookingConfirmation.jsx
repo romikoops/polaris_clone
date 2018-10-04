@@ -164,7 +164,7 @@ class BookingConfirmation extends Component {
       tenant
     } = this.props
 
-    if (!shipmentData) return <h1>Loading</h1>
+    if (!shipmentData) return <h1>{t('bookconf:loading')}</h1>
     const {
       aggregatedCargo,
       cargoItemTypes,
@@ -226,7 +226,8 @@ class BookingConfirmation extends Component {
       documents,
       theme,
       dispatchFn: this.fileFn,
-      deleteFn: this.deleteDoc
+      deleteFn: this.deleteDoc,
+      t
     })
 
     const HeadingFactory = HeadingFactoryFn(theme)
@@ -726,7 +727,8 @@ function getDocs ({
   documents,
   theme,
   dispatchFn,
-  deleteFn
+  deleteFn,
+  t
 }) {
   const docChecker = {
     packing_sheet: false,
@@ -760,7 +762,7 @@ function getDocs ({
           <i className="flex-none fa fa-ban" />
         </div>
         <div className="flex layout-align-start-center layout-row">
-          <p className="flex-none">{`${documentTypes[key]}: Not Uploaded`}</p>
+          <p className="flex-none">{`${documentTypes[key]}: ${t('bookconf:notUploaded')}`}</p>
         </div>
       </div>)
     }
