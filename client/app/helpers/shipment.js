@@ -15,7 +15,9 @@ export function totalPriceString (shipment) {
 }
 
 export function formattedDate (date) {
-  moment(date).format('DD/MM/YYYY | HH:mm')
+  const e = moment(date)
+  
+  return e.format('DD/MM/YYYY | HH:mm')
 }
 
 export function formattedPriceValue (num) {
