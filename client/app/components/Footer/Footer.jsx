@@ -69,8 +69,9 @@ function Footer ({
           <div className={`flex-100 ${styles.buttons} ${styles.upper_footer} layout-row layout-align-space-around-center`}>
             <div className="flex-35 layout-row layout-align-center-center">
               <div className="flex-none layout-row layout-align-center-center">
-                <h4 className="flex-none">powered by&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                <div className="flex-5" />
+                <h4 className={`flex-none ${styles.powered_by_padding}`}>
+                  {t('footer:poweredBy')}
+                </h4>                <div className="flex-5" />
                 <a href="https://www.itsmycargo.com/" target="_blank">
                   <img
                     src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
