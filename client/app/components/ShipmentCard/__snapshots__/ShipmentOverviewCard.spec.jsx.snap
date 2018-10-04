@@ -63,6 +63,10 @@ exports[`admin is true 1`] = `
                 "planned_etd": 789,
                 "schedule_set": Array [],
                 "status": "FOO_STATUS",
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": "200.99",
+                },
               }
             }
             t={[Function]}
@@ -135,6 +139,10 @@ exports[`shallow rendering 1`] = `
                 "planned_etd": 789,
                 "schedule_set": Array [],
                 "status": "FOO_STATUS",
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": "200.99",
+                },
               }
             }
             t={[Function]}

@@ -180,6 +180,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
         open:               o_shipments.map(&:with_address_index_json),
         finished:           f_shipments.map(&:with_address_index_json),
         rejected:           rj_shipments.map(&:with_address_index_json),
+        archived:           a_shipments.map(&:with_address_index_json),
         pages:              {
           open:      params[:open_page],
           finished:  params[:finished_page],
