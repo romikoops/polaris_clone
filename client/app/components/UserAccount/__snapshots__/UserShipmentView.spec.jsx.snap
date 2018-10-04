@@ -64,6 +64,7 @@ exports[`loading is true 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          from 
           19
         </p>
       }
@@ -82,6 +83,7 @@ exports[`loading is true 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          from 
           19
         </p>
       }
@@ -165,6 +167,7 @@ exports[`loading is true 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          on 
           19
         </p>
       }
@@ -172,6 +175,7 @@ exports[`loading is true 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          on 
           19
         </p>
       }
@@ -332,6 +336,7 @@ exports[`shallow render 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          from 
           19
         </p>
       }
@@ -350,6 +355,7 @@ exports[`shallow render 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          from 
           19
         </p>
       }
@@ -433,6 +439,7 @@ exports[`shallow render 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          on 
           19
         </p>
       }
@@ -440,6 +447,7 @@ exports[`shallow render 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          on 
           19
         </p>
       }
@@ -661,6 +669,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          from 
           19
         </p>
       }
@@ -679,6 +688,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          from 
           19
         </p>
       }
@@ -762,6 +772,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          on 
           19
         </p>
       }
@@ -769,6 +780,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          on 
           19
         </p>
       }
@@ -977,6 +989,7 @@ exports[`shipmentData.contacts is present 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          from 
           19
         </p>
       }
@@ -995,6 +1008,7 @@ exports[`shipmentData.contacts is present 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          from 
           19
         </p>
       }
@@ -1078,6 +1092,7 @@ exports[`shipmentData.contacts is present 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          on 
           19
         </p>
       }
@@ -1085,6 +1100,7 @@ exports[`shipmentData.contacts is present 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          on 
           19
         </p>
       }
@@ -1245,6 +1261,7 @@ exports[`shipmentData.documents is present 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          from 
           19
         </p>
       }
@@ -1263,6 +1280,7 @@ exports[`shipmentData.documents is present 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          from 
           19
         </p>
       }
@@ -1421,6 +1439,7 @@ exports[`shipmentData.documents is present 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          on 
           19
         </p>
       }
@@ -1428,6 +1447,7 @@ exports[`shipmentData.documents is present 1`] = `
         <p
           className="flex-none letter_3 date"
         >
+          on 
           19
         </p>
       }
