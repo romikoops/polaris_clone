@@ -70,10 +70,11 @@ exports[`shallow render 1`] = `
             className="flex-none layout-row layout-align-center-center"
           >
             <h4
-              className="flex-none"
+              className="flex-none powered_by_padding"
             >
-              powered by      
+              Powered by
             </h4>
+                            
             <div
               className="flex-5"
             />
@@ -205,10 +206,11 @@ exports[`theme is falsy 1`] = `
             className="flex-none layout-row layout-align-center-center"
           >
             <h4
-              className="flex-none"
+              className="flex-none powered_by_padding"
             >
-              powered by      
+              Powered by
             </h4>
+                            
             <div
               className="flex-5"
             />

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import Raven from 'raven-js'
 import PropTypes from '../../prop-types'
 import styles from './errors.scss'
@@ -17,21 +18,21 @@ class GenericError extends Component {
   }
 
   render () {
-    const { theme } = this.props
+    const { theme, t } = this.props
     if (this.state.hasError) {
       // You can render any custom fallback UI
       return (
         <div className="layout-fill layout-row layout-wrap layout-align-center-center">
           <div className={`flex-none layout-row layout-wrap layout-padding ${styles.error_box}`}>
             <div className="flex-100 layout-row layout-align-center-center">
-              <img className="flex-none" src={theme.logoLarge} alt={theme.logoSmall}/>
+              <img className="flex-none" src={theme.logoLarge} alt={theme.logoSmall} />
             </div>
             <div className="flex-100 layout-row layout-align-center-center">
-              <h1 className="flex-none">Oh no!</h1>
+              <h1 className="flex-none">{t('errors:ohNo')}</h1>
             </div>
             <div className="flex-100 layout-row layout-wrap layout-align-center-center">
-              <p className="flex-100">Something has gone wrong! A message has been sent to the support team and will be addressed shortly!</p>
-              <p className="flex-100">Please retry and if this error keeps happening please contact your store representative</p>
+              <p className="flex-100">{t('errors:somethingWrong')}</p>
+              <p className="flex-100">{t('errors:pleaseRetry')}</p>
             </div>
           </div>
         </div>
@@ -44,6 +45,7 @@ class GenericError extends Component {
 
 GenericError.propTypes = {
   children: PropTypes.node,
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme
 }
 
@@ -52,4 +54,4 @@ GenericError.defaultProps = {
   theme: {}
 }
 
-export default GenericError
+export default translate('errors')(GenericError)

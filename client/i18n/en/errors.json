@@ -20,5 +20,8 @@
   "invalidResetPasswordTwo": "If you wish to reset your password, ", 
   "invalidResetPasswordThree": "please follow a valid link sent to your email.",
   "mustMatchPassword": "Must match password",
-  "errorOccured": "An Error Occured"
+  "errorOccured": "An Error Occured",
+  "ohNo": "Oh no!",
+  "somethingWrong": "Something has gone wrong! A message has been sent to the support team and will be addressed shortly!",
+  "pleaseRetry": "Please retry and if this error keeps happening please contact your store representative"
 }
