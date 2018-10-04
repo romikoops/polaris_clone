@@ -315,8 +315,13 @@
           <div class="display-flex">
             <span>Total Value of Goods:</span>
             <p class="info-values">
-                <%#= shipment.total_goods_value["value"] %>
-                <%#= shipment.total_goods_value["currency"] %>
+                <% if shipment.total_goods_value.is_a? Integer %>
+                  <%= shipment.total_goods_value %>
+                  <%= shipment.selected_offer["total"]["currency"] %>
+                <% else %>
+                  <%= shipment.total_goods_value["value"] %>
+                  <%= shipment.total_goods_value["currency"] %>
+                <% end %>
             </p>
           </div>
             
