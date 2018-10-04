@@ -6,23 +6,20 @@
 <% neutral_color = '#C4C4C4' %>
 <% precarriage_color = shipment.has_pre_carriage ? primary_color : neutral_color %>
 <% oncarriage_color = shipment.has_on_carriage ? primary_color : neutral_color %>
-<div class="wrapper-quotations wrapper wrapper-shipments">
-  <div class="row">
-    <div class="col-xs-6 title-shipments" style="font-size: 150%; text-align: left;">
+<div class="wrapper-quotations">
+  <div class="main-title-shipment">
+    <div class="title-shipments" style="text-align: left;">
       <h1>Shipment <%= shipment.imc_reference %></h1>
       
     </div>
-    <div class="col-xs-6 tenant-shipments" style="font-size: 60px; text-align: right;">
+    <div class="text-right tenant-shipments">
       <h1><%= shipment.tenant.name %></h1>
     </div>
   </div>
   <hr class="hr-shipment" style="border-color: <%= primary_color %>">
-  <div class="row">
-    <p class="ref col-xs-6">Placed on&nbsp;<span><%= shipment.updated_at.strftime("%m/%d/%Y") %></span></p>
-    <p class="ref col-xs-6"></span></p>
-  </div>
+  <p class="ref">Placed on&nbsp;<span><%= shipment.updated_at.strftime("%d/%m/%Y") %></span></p>
   <div class="overview">
-    <div class="info border-none row">
+    <div class="info overview-child border-none">
       <% if shipment.itinerary.mode_of_transport == "ocean" %>
         <% mot = "anchor" %>
       <% elsif shipment.itinerary.mode_of_transport == "air" %>
@@ -30,30 +27,31 @@
       <% else %>
         <% mot = "truck" %>
       <% end %>
-      <i class="fas fa-<%= mot %> col-xs-2" style="color: <%= primary_color %>"></i>
-      <div class="col-xs-7">
+      <i class="fas fa-<%= mot %> mot-icon" style="color: <%= primary_color %>"></i>
+      <div class="shipment-info">
         <p>From:&nbsp;<span><%= shipment.origin_hub.name %></span></p>
         <p>To:&nbsp;<span><%= shipment.destination_hub.name %></span></p>
       </div>
+      <div></div>
     </div>
   </div>
 
   <% if shipment.has_on_carriage || shipment.has_pre_carriage && (shipment.pickup_address || shipment.delivery_address) %>
-    <div class="carriage-row row border-bottom">
+    <div class="carriage-row border-bottom">
 
       <% if shipment.pickup_address && shipment.has_pre_carriage %>
-        <div class="col-xs-6">
-          <div class="row">
-            <i class="col-xs-1 fa fa-check check-square" style="color: <%= precarriage_color %>"></i>
-            <h4 class="col-xs-11">
+        <div class="">
+          <div class="">
+            <i class=" fa fa-check check-square" style="color: <%= precarriage_color %>"></i>
+            <h4 class="1">
               Pick-up on <%= shipment.planned_pickup_date.try(:strftime, "%d/%m/%Y") %>
             </h4>
           </div>
 
-          <div class="row">
-            <div class="col-xs-1"></div>
+          <div class="">
+            <div class=""></div>
             <% if shipment.pickup_address %>
-              <p class="col-xs-11">
+              <p class="">
                 <%= shipment.pickup_address.street %> 
                 <%= shipment.pickup_address.street_number %>
                 <%= shipment.pickup_address.city %>
@@ -65,17 +63,17 @@
       <% end %>
 
       <% if shipment.delivery_address && shipment.has_on_carriage %>
-        <div class="col-xs-6">
-          <div class="row">
-            <i class="col-xs-1 fa fa-check check-square" style="color: <%= oncarriage_color %>"></i>
-            <h4 class="col-xs-11">
+        <div class="">
+          <div class="">
+            <i class=" fa fa-check check-square" style="color: <%= oncarriage_color %>"></i>
+            <h4 class="1">
               Delivery on <%= shipment.planned_delivery_date.try(:strftime, "%d/%m/%Y") %>
             </h4>
           </div>
-          <div class="row">
-            <div class="col-xs-1"></div>
+          <div class="">
+            <div class=""></div>
               <% if shipment.delivery_address %>
-                <p class="col-xs-11">
+                <p class="1">
                   <%= shipment.delivery_address.street %> 
                   <%= shipment.delivery_address.street_number %>,
                   <%= shipment.delivery_address.city %>,
@@ -88,30 +86,30 @@
     </div>
   <% end %>
           
-  <div class="row dates margin-bottom">
-    <div class="col-xs-3">
+  <div class="dates margin-bottom">
+    <div class="">
       <h4 class="date-title"><%= shipment.has_pre_carriage ? 'Pick-up Date' : 'Closing Date' %></h4>
       <p class="sched-elem">
         <% if shipment.has_pre_carriage %>
-          <%= (shipment.closing_date - shipment.trucking["pre_carriage"]["trucking_time_in_seconds"]).strftime("%m/%d/%Y") %>
+          <%= (shipment.closing_date - shipment.trucking["pre_carriage"]["trucking_time_in_seconds"]).strftime("%d/%m/%Y") %>
         <% else %>
-          <%= shipment.closing_date %>
+          <%= shipment.closing_date.strftime("%d/%m/%Y") %>
         <% end %>
       </p>
     </div>
-    <div class="col-xs-3">
+    <div class="">
       <h4 class="date-title">ETD</h4>
       <p class="sched-elem">
-        <%= shipment.etd.strftime("%m/%d/%Y") %>
+        <%= shipment.etd.strftime("%d/%m/%Y") %>
       </p>
     </div>
-    <div class="col-xs-3">
+    <div class="">
       <h4 class="date-title">ETA</h4>
       <p class="sched-elem">
-        <%= shipment.eta.strftime("%m/%d/%Y") %>
+        <%= shipment.eta.strftime("%d/%m/%Y") %>
       </p>
     </div>
-    <div class="col-xs-3">
+    <div class="">
       <h4 class="date-title"> Estimated T/T <sup>*</sup></h4>
       <p class="sched-elem">
         <%= ((shipment.eta - shipment.etd) / 100000).ceil %>
@@ -120,188 +118,144 @@
     </div>
   </div>
 
-  <div class="padding-top contacts-row row">
-    <div class="col-xs-5">
-      <div class="row">
-        <div class="col-xs-3"></div>
-        <div class="col-xs-9 margin-left-negative row">
-          <div class="col-xs-4">
-            <i class="fa fa-user" style="font-size: 150px; color: #B7B7B7; padding-top: 30px;"></i>
+  <div class="padding-top contacts-row">
+    <div class="display-flex">
+
+      <div class="">
+        <div class="basic-info">
+          <div class="display-flex-center">
+            <i class="fa fa-user " style="color: <%= primary_color%>"></i>
+            <h1 class=""><%= shipper.first_name %> <%= shipper.last_name %></h1>
           </div>
-          <div class="col-xs-8">
-            <div class="basic-info">
-              <div class="row">
-                <i class="fa fa-user col-xs-1" style="color: <%= primary_color%>"></i>
-                <h1 class="col-xs-11"><%= shipper.first_name %> <%= shipper.last_name %></h1>
-              </div>
-              <div class="row margin-bottom">
-                <i class="fa fa-building col-xs-1" style="color: <%= primary_color%>"></i>
-                <h2 class="col-xs-11"><%= shipper.company_name %></h2>
-              </div>
-            </div>
-            
-            <div class="contact-info">
-              <div class="row">
-                <i class="fa fa-envelope col-xs-1" style="color: <%= primary_color%>"></i>
-                <h3 class="col-xs-11"><%= shipper.email %></h3>
-              </div>
-              <div class="row">
-                <i class="fa fa-phone col-xs-1" style="color: <%= primary_color%>"></i>
-                <h3 class="col-xs-11"><%= shipper.phone %></h3>
-              </div>
-            </div>
-             <h3>
-                <%= shipper.location.street %> <%= shipper.location.street_number %>,
-                <%= shipper.location.zip_code %> <%= shipper.location.city %>
-              </h3>
+          <div class="margin-bottom display-flex-center">
+            <i class="fa fa-building " style="color: <%= primary_color%>"></i>
+            <h2 class=""><%= shipper.company_name %></h2>
           </div>
         </div>
+        
+        <div class="contact-info">
+          <div class="display-flex-center">
+            <i class="fa fa-envelope " style="color: <%= primary_color%>"></i>
+            <h3 class=""><%= shipper.email %></h3>
+          </div>
+          <div class="display-flex-center">
+            <i class="fa fa-phone " style="color: <%= primary_color%>"></i>
+            <h3 class=""><%= shipper.phone %></h3>
+          </div>
+        </div>
+          <h3>
+            <%= shipper.location.street %> <%= shipper.location.street_number %>,
+            <%= shipper.location.zip_code %> <%= shipper.location.city %>
+          </h3>
       </div>
     </div>
 
-    <div class="col-xs-2 text-center arrow-circle">
+    <div class="text-center arrow-circle">
       <i class="fa fa-arrow-right"></i>
     </div>
     
-
-    <div class="col-xs-5">
-      <div class="row">
-        <div class="col-xs-3"></div>
-        <div class="col-xs-9 row">
-          <div class="col-xs-4">
-            <i class="fa fa-user" style="font-size: 150px; color: #B7B7B7; padding-top: 30px;"></i>
+    <div class="display-flex">
+      <div class="">
+        <div class="basic-info">
+          <div class="display-flex-center">
+            <i class="fa fa-user " style="color: <%= primary_color%>"></i>
+            <h1 class=""><%= consignee.first_name %> <%= consignee.last_name %></h1>
           </div>
-          <div class="col-xs-8">
-            <div class="basic-info">
-              <div class="row">
-                <i class="fa fa-user col-xs-1" style="color: <%= primary_color%>"></i>
-                <h1 class="col-xs-11"><%= consignee.first_name %> <%= consignee.last_name %></h1>
-              </div>
-              <div class="row margin-bottom">
-                <i class="fa fa-building col-xs-1" style="color: <%= primary_color%>"></i>
-                <h2 class="col-xs-11"><%= consignee.company_name %></h2>
-              </div>
-            </div>
-            
-            <div class="contact-info">
-              <div class="row">
-                <i class="fa fa-envelope col-xs-1" style="color: <%= primary_color%>"></i>
-                <h3 class="col-xs-11"><%= consignee.email %></h3>
-              </div>
-              <div class="row">
-                <i class="fa fa-phone col-xs-1" style="color: <%= primary_color%>"></i>
-                <h3 class="col-xs-11"><%= consignee.phone %></h3>
-              </div>
-            </div>
-            <h3>
-              <%= consignee.location.street %> <%= consignee.location.street_number %>,
-              <%= consignee.location.zip_code %> <%= consignee.location.city %>
-            </h3>
+          <div class="display-flex-center margin-bottom">
+            <i class="fa fa-building " style="color: <%= primary_color%>"></i>
+            <h2 class=""><%= consignee.company_name %></h2>
           </div>
-          
         </div>
+        
+        <div class="contact-info">
+          <div class="display-flex-center">
+            <i class="fa fa-envelope " style="color: <%= primary_color%>"></i>
+            <h3 class=""><%= consignee.email %></h3>
+          </div>
+          <div class="display-flex-center">
+            <i class="fa fa-phone " style="color: <%= primary_color%>"></i>
+            <h3 class=""><%= consignee.phone %></h3>
+          </div>
+        </div>
+        <h3>
+          <%= consignee.location.street %> <%= consignee.location.street_number %>,
+          <%= consignee.location.zip_code %> <%= consignee.location.city %>
+        </h3>
       </div>
+      
     </div>
   </div>
 
   <div class="padding-top-double">
-    <div class="border-box row margin-bottom">
-      <div class="services-box col-xs-6">
+    <div class="border-box display-flex-center margin-bottom">
+      <div class="services-box">
         <div class="">
           <h3>Freight, Duties & Carriage:</h3>
             <div class="">
 
-              <div class="row">
-                <div class="col-xs-6">
-                  <div class="row margin-bottom">
-                    <div class="col-xs-3">
-                      <i class="fa fa-truck flip" style="color: <%= shipment.has_pre_carriage ? primary_color : '#E0E0E0' %>"></i>
-                    </div>
-                    <p class="col-xs-9">Pick-up</p>
-                  </div>
+              <div class="display-flex-center">
+                <div class="display-flex flex-grow margin-bottom">
+                  <i class="fa fa-truck" style="color: <%= shipment.has_pre_carriage ? primary_color : '#E0E0E0' %>"></i>
+                  <p>Pick-up</p>
                 </div>
-                <div class="col-xs-6">
-                   <div class="row margin-bottom">
-                    <div class="col-xs-3">
-                      <i
-                        class="fa fa-truck"
-                        style="color: <%= shipment.has_on_carriage ? primary_color : '#E0E0E0' %>"
-                      ></i>
-                    </div>
-                    <p class="col-xs-9">Delivery</p>
-                  </div>
+                <div class="display-flex flex-grow margin-bottom">
+                  <i
+                    class="fa fa-truck flip"
+                    style="color: <%= shipment.has_on_carriage ? primary_color : '#E0E0E0' %>"
+                  ></i>
+                  <p>Delivery</p>
                 </div>
               </div>
               
-              <div class="row">
-                <div class="col-xs-6">
-                  <div class="row margin-bottom">
-                    <div class="col-xs-3">
-                      <i
-                        class="fa fa-file-import"
-                        style="color: <%= shipment.has_pre_carriage ? primary_color : '#E0E0E0' %>"
-                      ></i>
-                    </div>
-                    <p class="col-xs-9">
-                  Origin<br />
-                  Documentation
-                    </p>
-                  </div>
+              <div class="display-flex-center">
+                <div class="display-flex flex-grow margin-bottom">
+                  <i
+                    class="fa fa-file-import"
+                    style="color: <%= shipment.has_pre_carriage ? primary_color : '#E0E0E0' %>"
+                  ></i>
+                  <p class="">
+                Origin<br />
+                Documentation
+                  </p>
                 </div>
-                <div class="col-xs-6">
-                  <div class="row margin-bottom">
-                    <div class="col-xs-3">
-                      <i
-                        class="fa fa-file-export"
-                        style="color: <%= shipment.has_on_carriage ? primary_color : '#E0E0E0' %>">
-                      </i>
-                    </div>
-                    <p class="col-xs-9">
-                  Destination<br />
-                  Documentation
-                    </p>
-                  </div>
+                <div class="display-flex flex-grow margin-bottom">
+                  <i
+                    class="fa fa-file-export"
+                    style="color: <%= shipment.has_on_carriage ? primary_color : '#E0E0E0' %>">
+                  </i>
+                  <p class="">
+                Destination<br />
+                Documentation
+                  </p>
                 </div>
               </div>
 
-
-              <div class="row">
-                <div class="col-xs-6">
-                  <div class="row margin-bottom">
-                    <div class="col-xs-3">
-                      <i
-                        class="fa fa-ship" style="color: <%= primary_color %>"></i>
-                    </div>
-                    <p class="col-xs-9">Freight</p>
-                  </div>
-                </div>
-                <div class="col-xs-6"></div>
+              <div class="display-flex flex-grow margin-bottom">
+                  <i
+                    class="fa fa-ship" style="color: <%= primary_color %>"></i>
+                <p class="">Freight</p>
               </div>
 
           </div>
         </div>
       </div>
-      <div class="additional-services services-box col-xs-4">
+      <div class="additional-services">
 
         <h3>Additional Services</h3>
         <div class="">
 
-          <div class="row margin-bottom">
-            <div class="col-xs-2">
-              <i class="fa fa-id-card" style="color: <%= shipment.selected_offer["customs"] ? primary_color : '#E0E0E0' %>"></i>
-            </div>
-            <p class="col-xs-10">Customs</p>
+          <div class="display-flex margin-bottom">
+            <i class="fa fa-id-card" style="color: <%= shipment.selected_offer["customs"] ? primary_color : '#E0E0E0' %>"></i>
+            <p>Customs</p>
           </div>
 
-          <div class="row margin-bottom">
-            <div class="col-xs-2">
-              <i class="fa fa-umbrella" style="color: <%= shipment.selected_offer["insurance"] ? primary_color : '#E0E0E0' %>"></i>
-            </div>
-            <p class="col-xs-10">Insurance</p>
+          <div class="display-flex margin-bottom">
+            <i class="fa fa-umbrella" style="color: <%= shipment.selected_offer["insurance"] ? primary_color : '#E0E0E0' %>"></i>
+            <p>Insurance</p>
           </div>
         </div>
       </div>
-      <div class="services-box col-xs-2 total-section">      
+      <div class="total-section">      
         <p><span>x<%= shipment.selected_offer["cargo"].count %>&nbsp;</span><%= load_type %></p>
         <h2>
           <%= (shipment.selected_offer["total"]["value"] * 100).floor / 100.0 %>
@@ -311,7 +265,7 @@
     </div>
   </div>
 
-  <div class="padding-top-half cargo-details-all">
+  <div class="cargo-details-all">
     <div class="border-box">
       <div class="cargo-details-title">
         <h1>Cargo Details</h1>
@@ -319,110 +273,93 @@
 
       <% shipment.cargo_items.each_with_index do |cargo, i| %>
 
-        <div class="first-cargo-row text-center border-bottom">
-          <div class="row">
-            <div class="side-border cargo-index col-xs-1">
-              <p class="cargo-value"><%= i + 1 %></p>
-            </div>
-            <div class="side-border cargo-items col-xs-2">
-              <p class="cargo-subtitle"><strong>x <%= cargo.quantity %></strong> <%= load_type %></p>
-            </div>
-            <div class="side-border col-xs-2">
-              <div class="">
-                <p class="cargo-value"><span class="cargo_type"><%= cargo.cargo_item_type.description %></span></p>
-                <p class="cargo-subtitle">Cargo type</p>
-              </div>
-            </div>
-            <div class="col-xs-2">
-              <p class="cargo-value"><span class="cargo-type"><%= cargo.payload_in_kg || cargo.weight %></span> &nbsp;kg </p>
-              <p class="cargo-subtitle">Gross Weight</p>
-            </div>
-
-            <div class="col-xs-2">
-              <p class="cargo-value">
-                <span class="cargo-type">
-                  <%= cargo.volume %>
-                </span> &nbsp;m<sup>3</sup>
-              </p>
-              <p class="cargo-subtitle">Volume</p>
-            </div>
-            <div class="col-xs-2">
-              <p class="cargo-value">
-                <span class="cargo-type">
-                  <%= cargo.chargeable_weight %>
-                </span>
-                &nbsp;kg
-              </p>
-              <p class="cargo-subtitle">Chargeable Weight</p>
-            </div>
+        <div class="first-cargo-row display-flex-center text-center border-bottom">
+          <div class="cargo-index cargo-section">
+            <p class="cargo-value"><%= i + 1 %></p>
           </div>
-          
+          <div class="cargo-items cargo-section">
+            <p class="cargo-subtitle"><strong>x <%= cargo.quantity %></strong> <%= load_type %></p>
+          </div>
+          <div class="cargo-section">
+            <p class="cargo-value"><span class="cargo_type"><%= cargo.cargo_item_type.description %></span></p>
+            <p class="cargo-subtitle">Cargo type</p>
+          </div>
+          <div class="cargo-section">
+            <p class="cargo-value"><span class="cargo-type"><%= cargo.payload_in_kg || cargo.weight %></span> &nbsp;kg </p>
+            <p class="cargo-subtitle">Gross Weight</p>
+          </div>
+
+          <div class="cargo-section">
+            <p class="cargo-value">
+              <span class="cargo-type">
+                <%= cargo.volume %>
+              </span> &nbsp;m<sup>3</sup>
+            </p>
+            <p class="cargo-subtitle">Volume</p>
+          </div>
+          <div class="cargo-section cargo-section-last">
+            <p class="cargo-value">
+              <span class="cargo-type">
+                <%= cargo.chargeable_weight %>
+              </span>
+              &nbsp;kg
+            </p>
+            <p class="cargo-subtitle">Chargeable Weight</p>
+          </div>          
         </div>     
         
       <% end %>
 
       <div class="notes-row">
-        <div class="column-info border-bottom notes-upper row">
-          <div class="col-xs-4">
-            
-              <div class="">
-                <span class="">Total Value of Goods:</span>
-                <p class="info-values">
-                    <%= shipment.total_goods_value["value"] %>
-                    <%= shipment.total_goods_value["currency"] %>
-                </p>
-              </div>
+        <div class="column-info display-flex border-bottom notes-upper">
+          <div class="display-flex">
+            <span>Total Value of Goods:</span>
+            <p class="info-values">
+                <%#= shipment.total_goods_value["value"] %>
+                <%#= shipment.total_goods_value["currency"] %>
+            </p>
           </div>
-          <div class="col-xs-4">
             
-              <div class="">
-                <span class="">EORI number:</span>
-                <p class="info-values">
-                  <% if shipment.eori %>
-                    <%= shipment.eori %>
-                  <% else %>
-                    -
-                  <% end %>
-                </p>
-              </div>
+          <div class="display-flex">
+            <span>EORI number:</span>
+            <p class="info-values">
+              <% if shipment.eori %>
+                <%= shipment.eori %>
+              <% else %>
+                -
+              <% end %>
+            </p>
           </div>
-          <div class="col-xs-4">
             
-              <div class="">
-                <span class="">Incoterm:</span>
-                <p class="">
-                  <%= shipment.incoterm_text %>
-                  <% if shipment.incoterm_text %>
-                    <%= shipment.incoterm_text %>
-                  <% else %>
-                    -
-                  <% end %>
-                </p>
-              </div>
+          <div class="display-flex">
+            <span>Incoterm:</span>
+            <p>
+              <%= shipment.incoterm_text %>
+              <% if shipment.incoterm_text %>
+                <%= shipment.incoterm_text %>
+              <% else %>
+                -
+              <% end %>
+            </p>
           </div>
         </div>
         <div class="column-info notes-lower">
-          <div class="border-bottom">
-            
-              <div class="">
-                <span class="">Description of Goods:</span>
-                <p class="">
-                  <%= shipment.cargo_notes %>
-                </p>
-              </div>
+          <div class="border-bottom display-flex">
+            <span class="">Description of Goods: </span>
+            <p class="">
+              <%= shipment.cargo_notes %>
+            </p>
           </div>
-          <div class="">
             
-              <div class="">
-                <span class="">Notes:</span>
-                <p class="">
-                  <% if shipment.notes %>
-                    <%= shipment.notes %>
-                  <% else %>
-                    -
-                  <% end %>
-                </p>
-              </div>
+          <div class="display-flex">
+            <span>Notes: </span>
+            <p>
+              <% if shipment.notes %>
+                <%= shipment.notes %>
+              <% else %>
+                -
+              <% end %>
+            </p>
           </div>
         </div>
       </div>
