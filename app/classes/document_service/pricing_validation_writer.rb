@@ -18,7 +18,6 @@ module DocumentService
     def perform
       @data.each do |page, column_hash|
         @row = 0
-        # binding.pry
         next if column_hash.values.empty?
         header_data = build_header_rows(column_hash)
         new_worksheet_hash = add_worksheet_to_workbook(@workbook, [], page)
@@ -157,6 +156,7 @@ module DocumentService
         data = column_hash[column_id][:data]
         case header
         when 'ITINERARY'
+          p data[:itinerary][:name]
           3.times do
             row << data[:itinerary][:name]
           end

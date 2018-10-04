@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DataValidator
-  class PricingValidator < DataValidator::BaseValidator
+  class AllPricingsValidator < DataValidator::BaseValidator
     attr_reader :path, :user, :port_object
     include OfferCalculatorService
     include AwsConfig
@@ -10,53 +10,174 @@ module DataValidator
 
     def post_initialize(args)
       signed_url = get_file_url(args[:key], "assets.itsmycargo.com")
-      # signed_url = File.open("#{Rails.root}/app/classes/data_validator/greencarrier_pricing_test_approved.xlsx")
-      @xlsx = open_file(signed_url)
+      @default_values = JSON.parse(File.open("#{Rails.root}/app/classes/data_validator/default_values.json").read).deep_symbolize_keys!
+      # @default_values = JSON.parse(open(signed_url).read).deep_symbolize_keys!
       @shipment_ids_to_destroy = []
       @user = args[:user] ||= @tenant.users.shipper.first
-      @dummy_data = args[:data]
+      @dummy_data = 
       @validation_results = {}
       @row_keys = {}
       @cargo_unit_keys = []
       @fee_keys = {}
       @examples = []
       @sheet_rows = []
+      @local_charges = {}
+      @hubs = {}
+      @itineraries = {}
+      @pricings = {}
+      @args = args.deep_symbolize_keys
+      
     end
 
-    def perform
-      @xlsx.each_with_pagename do |sheet_name, sheet|
-        @sheet = sheet
-        begin
-          @examples = []
-          create_sheet_rows
-          create_cargo_key_hash
-          create_fees_key_hash('import')
-          create_fees_key_hash('export')
-          create_fees_key_hash('freight')
-          create_example_results
-          calculate(sheet_name)
-        rescue Exception => e # bad code.....
-          binding.pry
-        end
-       
-      end
-
+    def perform()
+      prep_itineraries(@args)
+      generate_dummy_examples(@args)
+      prep_local_charges(@args)
+      assign_keys
+      calculate()
       Shipment.where(id: @shipment_ids_to_destroy).destroy_all
       print_results
     end
 
-    def calculate(sheet_name)
+    def calculate()
       @examples.each do |example|
-        @example = example
+        @example = example.dup
         @load_type = @example[:data][:load_type]
-        price_check(@example, sheet_name)
+        price_check(@example, sheet_name(example))
       end
     end
 
     private
 
-    def open_file(file)
-      Roo::Spreadsheet.open(file)
+    def sheet_name(example)
+      str = "#{example[:data][:itinerary][:name]} - #{example[:data][:service_level]}"
+      if str.length > 31
+        name_acronym = example[:data][:itinerary][:name]
+          .split(' - ')
+          .map {|str|
+            if str.include?(' ')
+              new_str = str.split(' ').map{|str| str[0].upcase}
+              .join('')
+            else
+              new_str = str
+            end
+            new_str
+          }
+          .join(' - ')
+          
+        return "#{name_acronym} - #{example[:data][:service_level]}"
+      else
+        return str
+      end
+    end
+
+    def assign_keys
+      @examples.each do |example|
+        pricing = Pricing.find(example[:data][:pricing_id])
+        if example[:expected][:pickup_address] || @hubs[pricing.itinerary_id][:origin].mandatory_charge.export_charges
+          @local_charges.dig(pricing.itinerary_id, example[:data][:tenant_vehicle_id])[:export]&.fees.each do |fee_key, fee|
+            example[:expected][:export] = {} unless example[:expected][:export]
+            example[:expected][:export][fee_key.to_sym] = {}
+          end
+        end
+        if example[:expected][:delivery_address] || @hubs[pricing.itinerary_id][:destination].mandatory_charge.import_charges
+          @local_charges.dig(pricing.itinerary_id, example[:data][:tenant_vehicle_id])[:import]&.fees.each do |fee_key, fee|
+            example[:expected][:import] = {} unless example[:expected][:import]
+            example[:expected][:import][fee_key.to_sym] = {}
+          end
+        end
+      end
+    end
+
+    def prep_local_charges(args)
+      
+      @pricings.each do |itinerary_id, pricings|
+        itinerary = @itineraries[itinerary_id]
+        start_hub = itinerary.first_stop.hub
+        end_hub =  itinerary.last_stop.hub
+        @hubs[itinerary_id] = {} unless @hubs[itinerary_id]
+        @hubs[itinerary_id][:origin] = start_hub
+        @hubs[itinerary_id][:destination] = end_hub
+        pricings.each do |pricing|
+          @local_charges[itinerary_id] = {} unless @local_charges[itinerary_id]
+          @local_charges[itinerary_id][pricing.tenant_vehicle_id] = {} unless @local_charges[itinerary_id][pricing.tenant_vehicle_id]
+          @local_charges[itinerary_id][pricing.tenant_vehicle_id][:export] = 
+            start_hub.local_charges.find_by(
+              load_type: args[:load_type],
+              counterpart_hub_id: end_hub.id,
+              direction: 'export',
+              tenant_vehicle_id: pricing.tenant_vehicle_id
+            )
+          @local_charges[itinerary_id][pricing.tenant_vehicle_id][:export] ||= 
+            start_hub.local_charges.find_by(
+              load_type: args[:load_type],
+              direction: 'export',
+              tenant_vehicle_id: pricing.tenant_vehicle_id)
+          @local_charges[itinerary_id][pricing.tenant_vehicle_id][:import] = 
+            end_hub.local_charges.find_by(
+              load_type: args[:load_type],
+              direction: 'import',
+              counterpart_hub_id: start_hub.id,
+              tenant_vehicle_id: pricing.tenant_vehicle_id
+            )
+          @local_charges[itinerary_id][pricing.tenant_vehicle_id][:import] ||= 
+            end_hub.local_charges.find_by(
+              load_type: args[:load_type],
+              direction: 'import',
+              tenant_vehicle_id: pricing.tenant_vehicle_id)
+        end
+      end
+    end
+
+    def generate_dummy_examples(args)
+      @pricings.each do |itinerary_id, pricings|
+        pricings.each do |pricing|
+          assign_default_values(args[:load_type].to_sym, pricing)  
+        end
+      end
+    end
+
+    def assign_default_values(load_type, pricing)
+      new_examples = []
+      result_index = 1
+       @default_values[load_type].each do |dv|
+        new_example = dv.deep_dup
+        itinerary = @itineraries[pricing.itinerary_id]
+        new_example[:data][:service_level] = pricing.tenant_vehicle.name
+        new_example[:data][:tenant_vehicle_id] = pricing.tenant_vehicle_id
+        new_example[:data][:carrier] = pricing.tenant_vehicle&.carrier&.name
+        new_example[:data][:itinerary] = itinerary.as_options_json.deep_symbolize_keys
+        new_example[:data][:mode_of_transport] = itinerary.mode_of_transport
+        new_example[:data][:pricing_id] = pricing.id
+        new_example[:result_index] = result_index
+        new_examples << new_example
+        result_index += 1
+      end
+      new_examples.each do |n_ex|
+        @examples << n_ex
+      end
+    end
+
+    def prep_itineraries(args)
+      if args[:user_pricing_id]
+        user_pricing_id = args[:user_pricing_id]
+        itinerary_ids = @tenant.itineraries.ids.each do |id|
+          pricing = Pricing.where(itinerary_id: id, user_id: user_pricing_id).for_load_type(load_type)
+          next if pricing.empty?
+          @itineraries[id] = Itinerary.find(id)
+          @pricings[id] = [] unless @pricings[id]
+          @pricings[id] << pricing
+        end
+      else
+
+        @tenant.itineraries.each do |itin|
+          @itineraries[itin.id] = itin
+          itin.pricings.each do |pricing|
+            @pricings[itin.id] = [] unless @pricings[itin.id]
+            @pricings[itin.id] << pricing
+          end
+        end
+      end
     end
 
     def create_sheet_rows
@@ -170,7 +291,6 @@ module DataValidator
         end
         cargos << new_cargo
       end
-      # binding.pry
       cargos
     end
 
@@ -187,8 +307,8 @@ module DataValidator
     end
 
     def price_check(example, sheet_name)
-      @destination_hub = example[:data][:itinerary].last_stop.hub
-      @origin_hub = example[:data][:itinerary].first_stop.hub
+      @destination_hub = @hubs[example[:data][:itinerary][:id]][:destination]
+      @origin_hub = @hubs[example[:data][:itinerary][:id]][:origin]
       @shipment = Shipment.create!(
         user: @user,
         tenant: @tenant,
@@ -200,9 +320,9 @@ module DataValidator
       )
       @shipment_ids_to_destroy << @shipment.id
       @shipment.cargo_units = prep_cargo_units(example)
-      @hubs = { origin: [@origin_hub], destination: [@destination_hub] }
+      hubs = { origin: [@origin_hub], destination: [@destination_hub] }
       @trucking_data_builder = OfferCalculatorService::TruckingDataBuilder.new(@shipment)
-      @trucking_data = @trucking_data_builder.perform(@hubs)
+      @trucking_data = @trucking_data_builder.perform(hubs)
       @data_for_price_checker = @example[:data]
       @data_for_price_checker[:trucking] = @trucking_data
       @data_for_price_checker[:has_on_carriage] = example[:data][:delivery_address]
@@ -213,7 +333,7 @@ module DataValidator
         mode_of_transport: @example[:data][:mode_of_transport]
       )
       @data_for_price_checker[:cargo_units] = example[:data][:cargo_units]
-      validate_prices(sheet_name, example[:data][:itinerary], @data_for_price_checker, example[:expected], example[:result_index], example[:data])
+      validate_prices(sheet_name, @itineraries[example[:data][:itinerary][:id]], @data_for_price_checker, example[:expected], example[:result_index], example[:data])
     end
 
     def prep_cargo_units(example)
