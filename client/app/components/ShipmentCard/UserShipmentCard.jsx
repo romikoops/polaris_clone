@@ -8,8 +8,7 @@ import adminStyles from '../Admin/Admin.scss'
 import {
   gradientTextGenerator,
   switchIcon,
-  totalPrice,
-  formattedPriceValue,
+  numberSpacing,
   splitName
 } from '../../helpers'
 
@@ -215,7 +214,7 @@ class UserShipmentCard extends Component {
             <span className={`${styles.bigText} ${styles.price_style}`}>
               <span> {shipment.total_price.currency} </span>
               <span>
-                {parseFloat(shipment.total_price.value).toFixed(2)}
+                {numberSpacing(shipment.total_price.value, 2)}
               </span>
             </span>
           </div>
