@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { translate } from 'react-i18next'
-import Raven from 'raven-js'
+import * as Sentry from '@sentry/browser'
 import PropTypes from '../../prop-types'
 import styles from './errors.scss'
 
@@ -14,7 +14,7 @@ class GenericError extends Component {
     // Display fallback UI
     this.setState({ hasError: true, error })
     // You can also log the error to an error reporting service
-    Raven.captureException(error, { extra: info })
+    Sentry.captureException(error, { extra: info })
   }
 
   render () {
