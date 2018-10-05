@@ -58,15 +58,6 @@ exports[`loading is true 1`] = `
       }
       cargoCount={-2}
       cargoView={Array []}
-      contacts={Array []}
-      deliveryDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          from 
-          19
-        </p>
-      }
       deselectedStyle={
         Object {
           "0": "#",
@@ -78,29 +69,19 @@ exports[`loading is true 1`] = `
           "6": "C",
         }
       }
-      destinationCollectionDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          from 
-          19
-        </p>
-      }
-      docOptions={Array []}
-      docView={Array []}
-      etaJSX={
-        <p
-          className="flex-none letter_3 date"
-        >
-          19
-        </p>
-      }
-      etdJSX={
-        <p
-          className="flex-none letter_3 date"
-        >
-          19
-        </p>
+      estimatedTimes={
+        Object {
+          "etaJSX": <p
+            className="flex-none letter_3 date"
+          >
+            19
+          </p>,
+          "etdJSX": <p
+            className="flex-none letter_3 date"
+          >
+            19
+          </p>,
+        }
       }
       feeHash={
         Object {
@@ -112,65 +93,10 @@ exports[`loading is true 1`] = `
       }
       gradientBorderStyle="#333"
       gradientStyle="#333"
-      missingDocs={
-        Array [
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>,
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>,
-        ]
-      }
-      originDropOffDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          on 
-          19
-        </p>
-      }
-      pickupDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          on 
-          19
-        </p>
+      match={
+        Object {
+          "params": Object {},
+        }
       }
       scope={
         Object {
@@ -364,15 +290,6 @@ exports[`shallow render 1`] = `
       }
       cargoCount={-2}
       cargoView={Array []}
-      contacts={Array []}
-      deliveryDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          from 
-          19
-        </p>
-      }
       deselectedStyle={
         Object {
           "0": "#",
@@ -384,29 +301,19 @@ exports[`shallow render 1`] = `
           "6": "C",
         }
       }
-      destinationCollectionDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          from 
-          19
-        </p>
-      }
-      docOptions={Array []}
-      docView={Array []}
-      etaJSX={
-        <p
-          className="flex-none letter_3 date"
-        >
-          19
-        </p>
-      }
-      etdJSX={
-        <p
-          className="flex-none letter_3 date"
-        >
-          19
-        </p>
+      estimatedTimes={
+        Object {
+          "etaJSX": <p
+            className="flex-none letter_3 date"
+          >
+            19
+          </p>,
+          "etdJSX": <p
+            className="flex-none letter_3 date"
+          >
+            19
+          </p>,
+        }
       }
       feeHash={
         Object {
@@ -418,65 +325,10 @@ exports[`shallow render 1`] = `
       }
       gradientBorderStyle="#333"
       gradientStyle="#333"
-      missingDocs={
-        Array [
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>,
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>,
-        ]
-      }
-      originDropOffDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          on 
-          19
-        </p>
-      }
-      pickupDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          on 
-          19
-        </p>
+      match={
+        Object {
+          "params": Object {},
+        }
       }
       scope={
         Object {
@@ -731,15 +583,6 @@ exports[`shipmentData.cargoItems is present 1`] = `
           />,
         ]
       }
-      contacts={Array []}
-      deliveryDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          from 
-          19
-        </p>
-      }
       deselectedStyle={
         Object {
           "0": "#",
@@ -751,29 +594,19 @@ exports[`shipmentData.cargoItems is present 1`] = `
           "6": "C",
         }
       }
-      destinationCollectionDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          from 
-          19
-        </p>
-      }
-      docOptions={Array []}
-      docView={Array []}
-      etaJSX={
-        <p
-          className="flex-none letter_3 date"
-        >
-          19
-        </p>
-      }
-      etdJSX={
-        <p
-          className="flex-none letter_3 date"
-        >
-          19
-        </p>
+      estimatedTimes={
+        Object {
+          "etaJSX": <p
+            className="flex-none letter_3 date"
+          >
+            19
+          </p>,
+          "etdJSX": <p
+            className="flex-none letter_3 date"
+          >
+            19
+          </p>,
+        }
       }
       feeHash={
         Object {
@@ -785,65 +618,10 @@ exports[`shipmentData.cargoItems is present 1`] = `
       }
       gradientBorderStyle="#333"
       gradientStyle="#333"
-      missingDocs={
-        Array [
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>,
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>,
-        ]
-      }
-      originDropOffDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          on 
-          19
-        </p>
-      }
-      pickupDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          on 
-          19
-        </p>
+      match={
+        Object {
+          "params": Object {},
+        }
       }
       scope={
         Object {
@@ -1050,63 +828,6 @@ exports[`shipmentData.contacts is present 1`] = `
       }
       cargoCount={-2}
       cargoView={Array []}
-      contacts={
-        Array [
-          Object {
-            "contact": Object {
-              "first_name": "FOO_FIRST_NAME",
-              "last_name": "FOO_LAST_NAME",
-            },
-            "type": "notifyee",
-          },
-          Object {
-            "contact": Object {
-              "first_name": "BAR_FIRST_NAME",
-              "last_name": "BAR_LAST_NAME",
-            },
-            "location": Object {
-              "city": "FOO_CITY",
-              "country": "Germany",
-              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
-              "id": 246,
-              "primary": true,
-              "street": "FOO_STREET",
-              "streetNumber": 579,
-              "street_number": 579,
-              "zipCode": "22456",
-              "zip_code": "22456",
-            },
-            "type": "shipper",
-          },
-          Object {
-            "contact": Object {
-              "first_name": "BAZ_FIRST_NAME",
-              "last_name": "BAZ_LAST_NAME",
-            },
-            "location": Object {
-              "city": "FOO_CITY",
-              "country": "Germany",
-              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
-              "id": 246,
-              "primary": true,
-              "street": "FOO_STREET",
-              "streetNumber": 579,
-              "street_number": 579,
-              "zipCode": "22456",
-              "zip_code": "22456",
-            },
-            "type": "consignee",
-          },
-        ]
-      }
-      deliveryDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          from 
-          19
-        </p>
-      }
       deselectedStyle={
         Object {
           "0": "#",
@@ -1118,29 +839,19 @@ exports[`shipmentData.contacts is present 1`] = `
           "6": "C",
         }
       }
-      destinationCollectionDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          from 
-          19
-        </p>
-      }
-      docOptions={Array []}
-      docView={Array []}
-      etaJSX={
-        <p
-          className="flex-none letter_3 date"
-        >
-          19
-        </p>
-      }
-      etdJSX={
-        <p
-          className="flex-none letter_3 date"
-        >
-          19
-        </p>
+      estimatedTimes={
+        Object {
+          "etaJSX": <p
+            className="flex-none letter_3 date"
+          >
+            19
+          </p>,
+          "etdJSX": <p
+            className="flex-none letter_3 date"
+          >
+            19
+          </p>,
+        }
       }
       feeHash={
         Object {
@@ -1152,65 +863,10 @@ exports[`shipmentData.contacts is present 1`] = `
       }
       gradientBorderStyle="#333"
       gradientStyle="#333"
-      missingDocs={
-        Array [
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>,
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>,
-        ]
-      }
-      originDropOffDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          on 
-          19
-        </p>
-      }
-      pickupDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          on 
-          19
-        </p>
+      match={
+        Object {
+          "params": Object {},
+        }
       }
       scope={
         Object {
@@ -1450,15 +1106,6 @@ exports[`shipmentData.documents is present 1`] = `
       }
       cargoCount={-2}
       cargoView={Array []}
-      contacts={Array []}
-      deliveryDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          from 
-          19
-        </p>
-      }
       deselectedStyle={
         Object {
           "0": "#",
@@ -1470,24 +1117,10 @@ exports[`shipmentData.documents is present 1`] = `
           "6": "C",
         }
       }
-      destinationCollectionDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          from 
-          19
-        </p>
-      }
-      docOptions={Array []}
-      docView={
-        Array [
-          <div
-            className="flex-100 flex-md-45 flex-gt-md-30 layout-row"
-            style={
-              Object {
-                "padding": "10px",
-              }
-            }
+      estimatedTimes={
+        Object {
+          "etaJSX": <p
+            className="flex-none letter_3 date"
           >
             19
           </p>,
@@ -1508,65 +1141,10 @@ exports[`shipmentData.documents is present 1`] = `
       }
       gradientBorderStyle="#333"
       gradientStyle="#333"
-      missingDocs={
-        Array [
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>,
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>,
-        ]
-      }
-      originDropOffDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          on 
-          19
-        </p>
-      }
-      pickupDate={
-        <p
-          className="flex-none letter_3 date"
-        >
-          on 
-          19
-        </p>
+      match={
+        Object {
+          "params": Object {},
+        }
       }
       scope={
         Object {
