@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   skip_before_action :require_non_guest_authentication!, only: %i(update set_currency currencies)
 
   def home
-    response = Rails.cache.fetch("#{current_user.cache_key}/dashboard_index", expires_in: 12.hours) do
+    response = Rails.cache.fetch("#{current_user.shipments.cache_key}/dashboard_index", expires_in: 12.hours) do
       
       @contacts = current_user.contacts.where(alias: false).map do |contact|
         contact.as_json(
