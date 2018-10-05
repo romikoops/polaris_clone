@@ -19,21 +19,14 @@ import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import ShipmentNotes from '../ShipmentNotes'
 
 class ShipmentQuotationContent extends Component {
-  static determineSubKey (key) {
-    switch (key) {
-      case 'trucking_lcl' || 'trucking_fcl':
-        return this.props.t('shipment:truckingRate')
 
-      default:
-        return key
-    }
-  }
   constructor (props) {
     super(props)
     this.state = {
       expander: {}
     }
   }
+  
   toggleExpander (key) {
     this.setState({
       expander: {
@@ -42,6 +35,17 @@ class ShipmentQuotationContent extends Component {
       }
     })
   }
+
+  determineSubKey (key) {
+    switch (key) {
+      case 'trucking_lcl' || 'trucking_fcl':
+        return this.props.t('shipment:truckingRate')
+
+      default:
+        return key
+    }
+  }
+
   render () {
     const {
       theme,
@@ -90,7 +94,7 @@ class ShipmentQuotationContent extends Component {
           .filter(value => value.length !== 1).map((price) => {
             const subPrices = (<div className={`flex-100 layout-row layout-align-start-center ${quoteStyles.sub_price_row}`}>
               <div className="flex-45 layout-row layout-align-start-center">
-                <span>{key === 'cargo' ? `${t('shipment:freightRate')}` : ShipmentQuotationContent.determineSubKey(price[0])}</span>
+                <span>{key === 'cargo' ? `${t('shipment:freightRate')}` : this.determineSubKey(price[0])}</span>
               </div>
               <div className="flex-50 layout-row layout-align-end-center">
                 <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{shipment.selected_offer.total.currency}</p>

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import GreyBox from '../GreyBox/GreyBox'
 import UserShipmentCard from './UserShipmentCard'
 import AdminShipmentCard from './AdminShipmentCard'
-import { ShipmentQuotationCard } from './ShipmentQuotationCard'
+import ShipmentQuotationCard from './ShipmentQuotationCard'
 import styles from './ShipmentOverviewCard.scss'
 import adminStyles from '../Admin/Admin.scss'
 

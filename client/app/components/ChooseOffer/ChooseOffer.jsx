@@ -50,7 +50,7 @@ class ChooseOffer extends Component {
       },
       outerLimit: 20,
       selectedOffers: [],
-      isChecked: false,
+      isChecked: {},
       email: '',
       showModal: false
     }
@@ -104,8 +104,8 @@ class ChooseOffer extends Component {
   bookNow () {
     this.props.goTo('/booking')
   }
-  handleClick (e, value) {
-    if (e.target.checked) {
+  handleClick (checked, value) {
+    if (checked) {
       this.state.selectedOffers.push(value)
       this.setState({
         selectedOffers: this.state.selectedOffers
@@ -116,7 +116,10 @@ class ChooseOffer extends Component {
       })
     }
     this.setState({
-      isChecked: e.target.checked
+      isChecked: {
+        ...this.state.isChecked,
+        [value.meta.charge_trip_id]: checked
+      }
     })
   }
 
@@ -199,7 +202,7 @@ class ChooseOffer extends Component {
     if (!shipmentData) return ''
     const { scope } = tenant.data
 
-    const { currentCurrency } = this.state
+    const { currentCurrency, isChecked } = this.state
     const isQuotationTool = scope.closed_quotation_tool || scope.open_quotation_tool || scope.quotation_tool
     const {
       shipment, results, lastTripDate, aggregatedCargo
@@ -250,6 +253,7 @@ class ChooseOffer extends Component {
             pickup={shipment.has_pre_carriage}
             startDate={shipment.desired_start_date}
             result={s}
+            isChecked={isChecked[s.meta.charge_trip_id]}
             handleClick={e => this.handleClick(e, s)}
             cargo={shipmentData.cargoUnits}
             selectResult={this.chooseResult}
@@ -270,6 +274,7 @@ class ChooseOffer extends Component {
           pickup={shipment.has_pre_carriage}
           startDate={shipment.desired_start_date}
           result={s}
+          isChecked={isChecked[s.meta.charge_trip_id]}
           handleClick={e => this.handleClick(e, s)}
           selectResult={this.chooseResult}
           cargo={shipmentData.cargoUnits}
@@ -385,7 +390,7 @@ class ChooseOffer extends Component {
                 this.state.selectedOffers.map(offer =>
                   (<div className={`flex-100 layout-row layout-align-start-center ${styles.selected_offer}`}>
                     <span>{numberSpacing(offer.quote.total.value, 2)}&nbsp;{shipmentData.results[0].quote.total.currency}</span>
-                    <i className="fa fa-times pointy layout-row layout-align-end-center" onClick={e => this.handleClick(e, offer)} />
+                    <i className="fa fa-times pointy layout-row layout-align-end-center" onClick={() => this.handleClick(false, offer)} />
                   </div>))
               ) : ''}
               <div className={`flex-100 layout-row layout-align-center-center ${styles.download_button}`}>

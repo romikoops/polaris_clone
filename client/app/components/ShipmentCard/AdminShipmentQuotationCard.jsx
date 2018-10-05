@@ -8,8 +8,7 @@ import AdminPromptConfirm from '../Admin/Prompt/Confirm'
 import {
   gradientTextGenerator,
   switchIcon,
-  totalPrice,
-  formattedPriceValue,
+  numberSpacing,
   splitName
 } from '../../helpers'
 
@@ -24,7 +23,7 @@ function shouldRenderAnimation (confirmShipmentData, id, dispatches) {
     confirmShipmentData.action === 'accept'
 }
 
-export class AdminShipmentQuotationCard extends Component {
+class AdminShipmentQuotationCard extends Component {
   constructor (props) {
     super(props)
 
@@ -298,9 +297,9 @@ export class AdminShipmentQuotationCard extends Component {
           </div>
           <div className="layout-row flex layout-align-end-end">
             <span className={`${styles.bigText} ${styles.price_style}`}>
-              <span> {totalPrice(shipment).currency} </span>
+              <span> {shipment.total_price.currency} </span>
               <span>
-                {formattedPriceValue(totalPrice(shipment).value)}
+                {numberSpacing(shipment.total_price.value, 2)}
               </span>
             </span>
           </div>
