@@ -35,6 +35,31 @@ subdomains.each do |sub|
   ExcelTool::OverwriteLocalCharges.new(params: req, user: shipper).perform
   # #   # # # # # # Overwrite trucking data from excel sheet
 
+  puts "# Overwrite Trucking  From Sheet"
+  
+  puts "! Shanghai Port"
+  hub = tenant.hubs.find_by_name('Shanghai Port')
+  trucking = "data/normanglobal/normanglobal__trucking_ltl__china_default.xlsx"
+  req = { 'key' => trucking }
+  ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
+
+  puts "! Dalian Port"
+  hub = tenant.hubs.find_by_name('Dalian Port')
+  trucking = "data/normanglobal/normanglobal__trucking_ltl__china_default.xlsx"
+  req = { 'key' => trucking }
+  ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
+
+  puts "! Qingdao Port"
+  hub = tenant.hubs.find_by_name('Qingdao Port')
+  trucking = "data/normanglobal/normanglobal__trucking_ltl__china_default.xlsx"
+  req = { 'key' => trucking }
+  ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
+
+  puts "! Shenzhen Port"
+  hub = tenant.hubs.find_by_name('Shenzhen Port')
+  trucking = "data/normanglobal/normanglobal__trucking_ltl__china_default.xlsx"
+  req = { 'key' => trucking }
+  ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
 
 
 end
