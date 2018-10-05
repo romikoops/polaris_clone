@@ -44,7 +44,7 @@ class QuoteCard extends PureComponent {
     super(props)
     this.state = {
       expander: {},
-      isChecked: false,
+      isChecked: props.isChecked,
       showSchedules: (props.result &&
         props.result.schedules &&
         props.result.schedules.length > 0 &&
@@ -68,13 +68,11 @@ class QuoteCard extends PureComponent {
       }
     })
   }
-  handleClickChecked (e, value) {
+  handleClickChecked (e) {
     const { handleClick } = this.props
-    this.setState({
-      isChecked: e.target.checked
-    })
-
-    return handleClick(e, value)
+    this.setState(prevState => ({
+      isChecked: !prevState.isChecked
+    }), () => handleClick(this.state.isChecked))
   }
   toggleShowSchedules (key) {
     this.setState(prevState => ({
@@ -379,8 +377,8 @@ class QuoteCard extends PureComponent {
                   className="pointy"
                   name="checked"
                   type="checkbox"
-                  onClick={e => this.handleClickChecked(e, result)}
-                  onChange={handleInputChange}
+                  onClick={e => this.handleClickChecked(e)}
+                  checked={this.props.isChecked}
                 />
               ) : ''}
 
@@ -403,6 +401,7 @@ QuoteCard.propTypes = {
   selectResult: PropTypes.func,
   handleScheduleRequest: PropTypes.func,
   pickup: PropTypes.bool,
+  isChecked: PropTypes.bool,
   isQuotationTool: PropTypes.bool,
   aggregatedCargo: PropTypes.objectOf(PropTypes.string)
 }
@@ -419,6 +418,7 @@ QuoteCard.defaultProps = {
   handleClick: null,
   pickup: false,
   isQuotationTool: false,
+  isChecked: false,
   aggregatedCargo: {}
 }
 

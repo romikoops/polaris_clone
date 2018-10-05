@@ -19,21 +19,14 @@ import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import ShipmentNotes from '../ShipmentNotes'
 
 class ShipmentQuotationContent extends Component {
-  static determineSubKey (key) {
-    switch (key) {
-      case 'trucking_lcl' || 'trucking_fcl':
-        return this.props.t('shipment:truckingRate')
 
-      default:
-        return key
-    }
-  }
   constructor (props) {
     super(props)
     this.state = {
       expander: {}
     }
   }
+  
   toggleExpander (key) {
     this.setState({
       expander: {
@@ -42,6 +35,17 @@ class ShipmentQuotationContent extends Component {
       }
     })
   }
+
+  determineSubKey (key) {
+    switch (key) {
+      case 'trucking_lcl' || 'trucking_fcl':
+        return this.props.t('shipment:truckingRate')
+
+      default:
+        return key
+    }
+  }
+
   render () {
     const {
       theme,

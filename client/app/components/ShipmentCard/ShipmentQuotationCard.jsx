@@ -7,13 +7,12 @@ import adminStyles from '../Admin/Admin.scss'
 import {
   gradientTextGenerator,
   switchIcon,
-  totalPrice,
-  formattedPriceValue,
+  numberSpacing,
   splitName,
   humanizeSnakeCase
 } from '../../helpers'
 
-export class ShipmentQuotationCard extends Component {
+class ShipmentQuotationCard extends Component {
   constructor (props) {
     super(props)
 
@@ -111,9 +110,9 @@ export class ShipmentQuotationCard extends Component {
           </div>
           <div className="layout-row flex layout-align-end-end">
             <span className={`${styles.bigText} ${styles.price_style}`}>
-              <span> {totalPrice(shipment).currency} </span>
+              <span> {shipment.total_price.currency} </span>
               <span>
-                {formattedPriceValue(totalPrice(shipment).value)}
+                {numberSpacing(shipment.total_price.value, 2)}
               </span>
             </span>
           </div>
