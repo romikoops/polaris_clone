@@ -65,5 +65,6 @@
   "selectedOffers": "Selected Offers",
   "import": "import",
   "export": "export",
-  "chooseDirection": "I am {{commercialAction}} ({{direction}})"
+  "chooseDirection": "I am {{commercialAction}} ({{direction}})",
+  "serviceLevel": "Service Level"
 }

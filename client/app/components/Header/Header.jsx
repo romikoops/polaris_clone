@@ -295,4 +295,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default translate('nav')(connect(mapStateToProps, mapDispatchToProps)(Header))
+export default translate(['nav', 'common'])(connect(mapStateToProps, mapDispatchToProps)(Header))

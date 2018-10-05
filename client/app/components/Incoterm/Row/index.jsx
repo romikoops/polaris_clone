@@ -1,4 +1,5 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import styles from './index.scss'
 import PropTypes from '../../../prop-types'
 import { gradientTextGenerator, determineSpecialism, switchIcon } from '../../../helpers'
@@ -10,7 +11,8 @@ function IncotermRow ({
   originFees,
   destinationFees,
   feeHash,
-  tenant
+  tenant,
+  t
 }) {
   const speciality = determineSpecialism(tenant.data.scope.modes_of_transport)
 
@@ -59,7 +61,7 @@ function IncotermRow ({
           ''
         )}
         <p className="flex-none no_m letter_3 center">
-          {feeHash.export.total ? `${parseFloat(feeHash.export.total.value).toFixed(2)}` : 'None'}
+          {feeHash.export.total ? `${parseFloat(feeHash.export.total.value).toFixed(2)}` : t('common:none')}
         </p>
       </div>
     ) : (
@@ -78,7 +80,7 @@ function IncotermRow ({
           ''
         )}
         <p className="flex-none no_m letter_3 center">
-          {feeHash.import.total ? `${parseFloat(feeHash.import.total.value).toFixed(2)}` : 'None'}
+          {feeHash.import.total ? `${parseFloat(feeHash.import.total.value).toFixed(2)}` : t('common:none')}
         </p>
       </div>
     ) : (
@@ -99,7 +101,7 @@ function IncotermRow ({
         <p className="flex-none no_m letter_3 center">
           {feeHash.trucking_pre.total
             ? `${parseFloat(feeHash.trucking_pre.total.value).toFixed(2)}`
-            : 'None'}
+            : t('common:none')}
         </p>
       </div>
     ) : (
@@ -120,7 +122,7 @@ function IncotermRow ({
         <p className="flex-none no_m letter_3 center">
           {feeHash.trucking_on.total
             ? `${parseFloat(feeHash.trucking_on.total.value).toFixed(2)}`
-            : 'None'}
+            : t('common:none')}
         </p>
       </div>
     ) : (
@@ -134,7 +136,7 @@ function IncotermRow ({
       <div
         className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
       >
-        <p className={`flex-none no_m ${preCarriageTextStyle}`}>Pick-up</p>
+        <p className={`flex-none no_m ${preCarriageTextStyle}`}>{t('shipment:pickUp')}</p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? preCarriageFeesValue : ''}
     </div>
@@ -147,7 +149,7 @@ function IncotermRow ({
       <div
         className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
       >
-        <p className={`flex-none no_m ${onCarriageTextStyle}`}>Delivery</p>
+        <p className={`flex-none no_m ${onCarriageTextStyle}`}>{t('shipment:delivery')}</p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? onCarriageFeesValue : ''}
     </div>
@@ -161,7 +163,7 @@ function IncotermRow ({
         className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
       >
         <p className={`flex-none no_m center ${originDocumentTextStyle}`}>
-          Origin <br /> Documentation
+          {t('shipment:origin')} <br /> {t('shipment:documentation')}
         </p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? originFeesValue : ''}
@@ -176,7 +178,7 @@ function IncotermRow ({
         className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
       >
         <p className={`flex-none no_m center ${destinationDocumentTextStyle}`}>
-          Destination <br /> Documentation
+          {t('shipment:destination')} <br /> {t('shipment:documentation')}
         </p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? destinationFeesValue : ''}
@@ -186,16 +188,16 @@ function IncotermRow ({
     <div className={`${styles.fee_tile} flex layout-column layout-align-none-center`}>
       <div className="flex layout-row layout-align-center-start width_100">
         {switchIcon(speciality, freightStyle)}
-        {/* <i className="fa fa-ship  flex-none" style={freightStyle} /> */}
       </div>
       <div
         className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
       >
-        <p className="flex-none no_m">Freight</p>
+        <p className="flex-none no_m">{t('shipment:freight')}</p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? freightFeesValue : ''}
     </div>
   )
+
   return (
     <div className={`flex-100 layout-row layout-align-start-start  ${styles.incoterm_wrapper}`}>
       {preCarriageFeesTile} {originFeesTile}
@@ -212,7 +214,8 @@ IncotermRow.propTypes = {
   originFees: PropTypes.bool,
   destinationFees: PropTypes.bool,
   feeHash: PropTypes.objectOf(PropTypes.any),
-  tenant: PropTypes.tenant
+  tenant: PropTypes.tenant,
+  t: PropTypes.bool.isRequired
 }
 
 IncotermRow.defaultProps = {
@@ -225,4 +228,4 @@ IncotermRow.defaultProps = {
   tenant: {}
 }
 
-export default IncotermRow
+export default translate(['common', 'shipment'])(IncotermRow)

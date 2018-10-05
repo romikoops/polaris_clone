@@ -440,6 +440,7 @@ exports[`state.viewer is true 1`] = `
         "payload_in_kg": 56,
       }
     }
+    t={[Function]}
     theme={
       Object {
         "colors": Object {

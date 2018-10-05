@@ -3,7 +3,7 @@ import { translate } from 'react-i18next'
 import { CONTAINER_DESCRIPTIONS } from '../../constants'
 import styles from './ContainerDetails.scss'
 import PropTypes from '../../prop-types'
-import { HsCodeViewer } from '../HsCodes/HsCodeViewer'
+import HsCodeViewer from '../HsCodes/HsCodeViewer'
 
 export class ContainerDetails extends Component {
   constructor (props) {

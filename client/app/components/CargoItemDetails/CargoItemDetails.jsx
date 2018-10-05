@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styles from './CargoItemDetails.scss'
 import PropTypes from '../../prop-types'
-import { HsCodeViewer } from '../HsCodes/HsCodeViewer'
+import HsCodeViewer from '../HsCodes/HsCodeViewer'
 
 export class CargoItemDetails extends Component {
   constructor (props) {
