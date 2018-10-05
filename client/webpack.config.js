@@ -16,14 +16,14 @@ const babelrc = Object.assign({}, JSON.parse(fs.readFileSync('./.babelrc', 'utf-
 babelrc.plugins.push('react-hot-loader/babel')
 module.exports = {
   entry: './app/index.jsx',
+  devtool: NodeEnvPlugin.isProduction ? 'source-map' : 'eval-cheap-module-source-map',
   devServer: {
     historyApiFallback: true,
     host: '0.0.0.0'
   },
   output: {
     publicPath: '/',
-    filename: NodeEnvPlugin.isProduction ? '[name]-[hash].min.js' : '[name].js',
-    sourceMapFilename: "[name].js.map"
+    filename: NodeEnvPlugin.isProduction ? '[name]-[hash].min.js' : '[name].js'
   },
   module: {
     rules: [
@@ -102,14 +102,14 @@ module.exports = {
     new DotenvWebpack({
       path: './.node-env'
     }),
-    new webpack.EnvironmentPlugin(['RELEASE'])
-    // , NodeEnvPlugin.isProduction && process.env.SENTRY_AUTH_TOKEN
-    // ? new SentryCliPlugin({
-    //   release: process.env.RELEASE,
-    //   include: 'dist/',
-    //   ignoreFile: '.sentrycliignore',
-    //   ignore: ['config.js']
-    // })
-    // : false
+    new webpack.EnvironmentPlugin(['RELEASE']),
+    NodeEnvPlugin.isProduction && process.env.SENTRY_AUTH_TOKEN
+      ? new SentryCliPlugin({
+        release: process.env.RELEASE,
+        include: 'dist/',
+        ignoreFile: '.sentrycliignore',
+        ignore: ['config.js']
+      })
+      : false
   ].filter(Boolean)
 }
