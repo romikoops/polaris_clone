@@ -9,8 +9,7 @@ import AdminPromptConfirm from '../Admin/Prompt/Confirm'
 import {
   gradientTextGenerator,
   switchIcon,
-  totalPrice,
-  formattedPriceValue,
+  numberSpacing,
   splitName
 } from '../../helpers'
 
@@ -79,7 +78,8 @@ class AdminShipmentCard extends Component {
       shipment,
       theme,
       confirmShipmentData,
-      t
+      t,
+      isDashboard
     } = this.props
 
     const gradientFontStyle =
@@ -127,9 +127,9 @@ class AdminShipmentCard extends Component {
       </div>
     )
     const timeRow = plannedDate && shipment.planned_etd && shipment.planned_eta
-    ? (<div className={`layout-row flex-100 layout-align-start-center
+      ? (<div className={`layout-row flex-100 layout-align-start-center
     ${styles.middle_bottom_box} ${styles.smallText}`}
-      >
+    >
         <div className="flex-20 layout-align-center-start">
           <span className="flex-100"><b>{t('common:pickupDate')}</b><br />
             <span className={`${styles.grey}`}>
@@ -300,10 +300,10 @@ class AdminShipmentCard extends Component {
           </div>
           <div className="layout-row flex layout-align-end-end">
             <span className={`${styles.bigText} ${styles.price_style}`}>
-              <span> {totalPrice(shipment).currency} </span>
+              <span> {shipment.total_price.currency} </span>
               <span>
-                {formattedPriceValue(totalPrice(shipment).value)}
-              </span>
+                {numberSpacing(shipment.total_price.value, 2)}
+              </span> 
             </span>
           </div>
         </div>

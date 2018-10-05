@@ -21,7 +21,8 @@ jest.mock('../../helpers', () => ({
   switchIcon: x => x,
   splitName: x => x,
   formattedPriceValue: () => 1034,
-  totalPrice: () => ({ currency: 'CNY' })
+  totalPrice: () => ({ currency: 'CNY' }),
+  numberSpacing: x => x
 }))
 jest.mock('moment', () => {
   const format = () => 19

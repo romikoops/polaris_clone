@@ -221,7 +221,11 @@ export const shipment = {
   clientName: 'FOO_CLIENT_NAME',
   planned_etd: 789,
   imc_reference: 'FOO_IMC_REFERENCE',
-  schedule_set: []
+  schedule_set: [],
+  total_price: {
+    value: '200.99',
+    currency: 'USD'
+  }
 }
 
 export const location = {

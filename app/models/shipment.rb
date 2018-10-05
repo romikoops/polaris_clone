@@ -140,9 +140,11 @@ class Shipment < ApplicationRecord
   # Instance methods
 
   def total_price
-    return nil if selected_offer.nil?
+    return nil if trip_id.nil?
 
-    selected_offer['total']
+    price = charge_breakdowns.where(trip_id: trip_id).first.charge('grand_total').price
+    
+    {value: price.value, currency: price.currency}
   end
 
   def origin_layover
@@ -349,14 +351,10 @@ class Shipment < ApplicationRecord
         :destination_nexus,
         :origin_nexus,
         {
-          destination_hub: {
-            include: { location: { only: %i(geocoded_address latitude longitude) } }
-          }
+          destination_hub: {}
         },
         {
-          origin_hub: {
-            include: { location: { only: %i(geocoded_address latitude longitude) } }
-          }
+          origin_hub: {}
         }
       ]
     )
