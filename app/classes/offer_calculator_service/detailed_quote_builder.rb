@@ -31,7 +31,7 @@ module OfferCalculatorService
             charge_trip_id: charge_schedule.trip_id
           }
         }
-        next if result[:quote].dig(:total, :value).blank?
+        next if result[:quote].dig(:total, :value).blank? || result[:quote].dig(:total, :value).to_i.zero?
 
         detailed_schedules << result
       end
