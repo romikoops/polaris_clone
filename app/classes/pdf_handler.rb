@@ -34,15 +34,19 @@ class PdfHandler
         tenant:    @shipment.tenant
       }
     )
-    @raw_pdf_string = WickedPdf.new.pdf_from_string(
-      doc_erb.render,
-      margin: @margin
-    )
-
-    File.open('tmp/' + @full_name, 'wb') { |file| file.write(@raw_pdf_string) }
-    @path = 'tmp/' + @full_name
-    @pdf  = File.open(@path)
-    self
+    File.open('tmp/render_+result.html', 'wb') { |file| file.write(doc_erb.render) }
+    response = BreezyPDFLite::RenderRequest.new(
+      doc_erb.render
+    ).submit
+    
+    if response.code.to_i == 201
+      File.open('tmp/' + @full_name, 'wb') { |file| file.write(response.body) }
+      @path = 'tmp/' + @full_name
+      @pdf  = File.open(@path)
+      self
+    else
+      Raise
+    end
   end
 
   def upload

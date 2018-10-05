@@ -30,6 +30,7 @@ gem 'aws-sdk-sqs'
 gem 'bootstrap-sass', '~> 3.3.5.1'
 gem 'rufo'
 gem 'shoryuken'
+gem 'font-awesome-rails'
 
 gem 'activerecord-postgis-adapter'
 gem 'rgeo-geojson'
@@ -64,10 +65,8 @@ gem 'nokogiri'
 # Use os to get information about the operating system
 gem 'os'
 
-# Use Wicked PDF to generate PDFs from HTML
-# The obligatory wkhtmltopdf binaries are here: [Rails.root]/bin/wkhtmltopdf
-gem 'wicked_pdf'
-gem 'wkhtmltopdf-binary', '~> 0.12.4'
+# Use BreezyPdf to generate PDFs from HTML
+gem 'breezy_pdf_lite'
 
 # MongoDB gems
 gem 'mongo', '~> 2.4'

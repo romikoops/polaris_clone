@@ -69,8 +69,8 @@ module MultiTenantTools
       newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
       File.open("blank.html", "w") { |file| file.write(newHtml) }
       upFile = open("blank.html")
-      # s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
-      # invalidate(tenant.web["cloudfront"], tenant.subdomain) if tenant.web && tenant.web["cloudfront"]
+      s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
+      invalidate(tenant.web["cloudfront"], tenant.subdomain) if tenant.web && tenant.web["cloudfront"]
     end
   end
 
