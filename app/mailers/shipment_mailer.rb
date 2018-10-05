@@ -20,7 +20,7 @@ class ShipmentMailer < ApplicationMailer
 
     @redirects_base_url = base_url + "redirects/shipments/#{@shipment.id}?action="
 
-    create_pdf_attachment(@shipment) if tenant.scope['show_beta_features']
+    create_pdf_attachment(@shipment)
     attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
     mail_options = {
       to:      tenant.email_for(:sales, shipment.mode_of_transport),
@@ -55,7 +55,7 @@ class ShipmentMailer < ApplicationMailer
     tenant = user.tenant
     @shipment = shipment
 
-    create_pdf_attachment(@shipment) if tenant.scope['show_beta_features']
+    create_pdf_attachment(@shipment)
     attachments.inline['logo.png']       = URI.open(tenant.theme['logoLarge']).read
     attachments.inline['logo_small.png'] = try(:open, tenant.theme['logoSmall']).try(:read)
     mail_options = {
