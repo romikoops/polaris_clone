@@ -368,6 +368,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
@@ -514,6 +515,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                     },
                   }
                 }
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
@@ -1481,6 +1483,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
@@ -1627,6 +1630,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                     },
                   }
                 }
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
@@ -2652,6 +2656,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
@@ -2798,6 +2803,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                     },
                   }
                 }
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
@@ -3894,6 +3900,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 onCarriage={true}
                 originFees={false}
                 preCarriage={false}
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
@@ -4040,6 +4047,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                     },
                   }
                 }
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
@@ -5008,6 +5016,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 onCarriage={false}
                 originFees={false}
                 preCarriage={true}
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
@@ -5154,6 +5163,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                     },
                   }
                 }
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
@@ -6106,6 +6116,7 @@ exports[`shallow render 1`] = `
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
@@ -6252,6 +6263,7 @@ exports[`shallow render 1`] = `
                     },
                   }
                 }
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
@@ -7204,6 +7216,7 @@ exports[`with cargo items 1`] = `
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
@@ -7350,6 +7363,7 @@ exports[`with cargo items 1`] = `
                     },
                   }
                 }
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
@@ -8623,6 +8637,7 @@ exports[`with containers 1`] = `
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
@@ -8769,6 +8784,7 @@ exports[`with containers 1`] = `
                     },
                   }
                 }
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {

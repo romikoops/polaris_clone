@@ -205,6 +205,7 @@ exports[`state.viewer is true 1`] = `
         "size_class": "FOO_SIZE_CLASS",
       }
     }
+    t={[Function]}
     theme={
       Object {
         "colors": Object {

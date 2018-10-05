@@ -53,9 +53,11 @@ exports[`destinationFees is true 1`] = `
       <p
         className="flex-none no_m center deselected_text"
       >
-        Origin 
+        Origin
+         
         <br />
-         Documentation
+         
+        Documentation
       </p>
     </div>
     <div
@@ -118,9 +120,11 @@ exports[`destinationFees is true 1`] = `
       <p
         className="flex-none no_m center "
       >
-        Destination 
+        Destination
+         
         <br />
-         Documentation
+         
+        Documentation
       </p>
     </div>
     <div
@@ -224,9 +228,11 @@ exports[`feeHash is empty object 1`] = `
       <p
         className="flex-none no_m center deselected_text"
       >
-        Origin 
+        Origin
+         
         <br />
-         Documentation
+         
+        Documentation
       </p>
     </div>
   </div>
@@ -269,9 +275,11 @@ exports[`feeHash is empty object 1`] = `
       <p
         className="flex-none no_m center deselected_text"
       >
-        Destination 
+        Destination
+         
         <br />
-         Documentation
+         
+        Documentation
       </p>
     </div>
   </div>
@@ -357,9 +365,11 @@ exports[`firstStep is true 1`] = `
       <p
         className="flex-none no_m center deselected_text"
       >
-        Origin 
+        Origin
+         
         <br />
-         Documentation
+         
+        Documentation
       </p>
     </div>
     <div
@@ -423,9 +433,11 @@ exports[`firstStep is true 1`] = `
       <p
         className="flex-none no_m center deselected_text"
       >
-        Destination 
+        Destination
+         
         <br />
-         Documentation
+         
+        Documentation
       </p>
     </div>
     <div
@@ -529,9 +541,11 @@ exports[`onCarriage is true 1`] = `
       <p
         className="flex-none no_m center deselected_text"
       >
-        Origin 
+        Origin
+         
         <br />
-         Documentation
+         
+        Documentation
       </p>
     </div>
     <div
@@ -595,9 +609,11 @@ exports[`onCarriage is true 1`] = `
       <p
         className="flex-none no_m center deselected_text"
       >
-        Destination 
+        Destination
+         
         <br />
-         Documentation
+         
+        Documentation
       </p>
     </div>
     <div
@@ -699,9 +715,11 @@ exports[`preCarriage is true 1`] = `
       <p
         className="flex-none no_m center deselected_text"
       >
-        Origin 
+        Origin
+         
         <br />
-         Documentation
+         
+        Documentation
       </p>
     </div>
     <div
@@ -765,9 +783,11 @@ exports[`preCarriage is true 1`] = `
       <p
         className="flex-none no_m center deselected_text"
       >
-        Destination 
+        Destination
+         
         <br />
-         Documentation
+         
+        Documentation
       </p>
     </div>
     <div
@@ -871,9 +891,11 @@ exports[`shallow render 1`] = `
       <p
         className="flex-none no_m center deselected_text"
       >
-        Origin 
+        Origin
+         
         <br />
-         Documentation
+         
+        Documentation
       </p>
     </div>
     <div
@@ -937,9 +959,11 @@ exports[`shallow render 1`] = `
       <p
         className="flex-none no_m center deselected_text"
       >
-        Destination 
+        Destination
+         
         <br />
-         Documentation
+         
+        Documentation
       </p>
     </div>
     <div

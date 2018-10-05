@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import styles from './HsCodeViewer.scss'
 import PropTypes from '../../prop-types'
 
-export class HsCodeViewer extends Component {
+class HsCodeViewer extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -19,7 +20,12 @@ export class HsCodeViewer extends Component {
     })
   }
   render () {
-    const { item, hsCodes, theme } = this.props
+    const {
+      item,
+      hsCodes,
+      theme,
+      t
+    } = this.props
     const { viewer } = this.state
     const textStyle = {
       background:
@@ -34,6 +40,7 @@ export class HsCodeViewer extends Component {
       ) : (
         <i className="fa fa-chevron-down clip" style={textStyle} />
       )
+
       return (
         <div key={hs} className={`flex-100 layout-row layout-wrap ${styles.hs_cell}`}>
           <div
@@ -49,6 +56,7 @@ export class HsCodeViewer extends Component {
         </div>
       )
     })
+
     return (
       <div
         className={`${styles.backdrop} layout-row flex-none layout-wrap layout-align-center-center`}
@@ -58,7 +66,7 @@ export class HsCodeViewer extends Component {
         >
           <div className="flex-100 layout-row layout-align-space-between-center">
             <h2 className="flex-none clip" style={textStyle}>
-              HS Codes
+              {t('common:hsCodes')}
             </h2>
             <div
               className="flex-10 layout-row layout-align-center-center"
@@ -75,6 +83,7 @@ export class HsCodeViewer extends Component {
   }
 }
 HsCodeViewer.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   close: PropTypes.func.isRequired,
   item: PropTypes.shape({
@@ -88,4 +97,4 @@ HsCodeViewer.defaultProps = {
   theme: null
 }
 
-export default HsCodeViewer
+export default translate('common')(HsCodeViewer)
