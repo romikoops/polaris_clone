@@ -6,7 +6,7 @@ stages:
   - test
   - build
   - review
-  - cleanup
+  - review_cleanup
 
 code_quality:
   stage: test
@@ -135,7 +135,7 @@ docker:
     - master
     - dev
 
-review:
+deploy:
   stage: review
   image: eu.gcr.io/itsmycargo-main/deploy:latest
   tags:
@@ -143,6 +143,11 @@ review:
 
   script:
     - deploy
+    - echo -e -n "$CI_ENVIRONMENT_SLUG" > ci_environment_slug.txt
+
+  artifacts:
+    paths:
+    - ci_environment_slug.txt
 
   environment:
     name: review/$CI_COMMIT_REF_NAME
@@ -154,8 +159,32 @@ review:
     - master
     - dev
 
+reset_database:
+  stage: review_cleanup
+  image: eu.gcr.io/itsmycargo-main/deploy:latest
+  tags:
+    - itsmycargo
+  variables:
+    GIT_STRATEGY: none
+    REVIEW_NAMESPACE: default
+
+  script:
+    - export CI_ENVIRONMENT_SLUG=$(cat ci_environment_slug.txt)
+    - kubectl -n $REVIEW_NAMESPACE exec $(kubectl -n $REVIEW_NAMESPACE get pods -l app=postgresql,release=${CI_ENVIRONMENT_SLUG} -o jsonpath='{.items[].metadata.name}') /usr/local/bin/reset.sh full_anon
+    - kubectl -n $REVIEW_NAMESPACE delete pods -l app=imc-app,release=${CI_ENVIRONMENT_SLUG}
+
+  when: manual
+  allow_failure: true
+  only:
+    - branches
+  except:
+    - master
+    - dev
+  dependencies:
+    - deploy
+
 stop_review:
-  stage: review
+  stage: review_cleanup
   image: eu.gcr.io/itsmycargo-main/deploy:latest
   tags:
     - itsmycargo
