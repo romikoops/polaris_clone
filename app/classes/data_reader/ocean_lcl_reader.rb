@@ -16,20 +16,16 @@ module DataReader
         destination
         carrier
         service_level
-        load_type
         transit_time
         range_min
         range_max
-        nested
-        mot
         wm_ratio
-        fee
         currency
         rate_basis
         rate_min
         rate
-        hw_threshold
         hw_rate_basis
+        hw_threshold
       )
 
       # Order needs to be maintained in order to be valid

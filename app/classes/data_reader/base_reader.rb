@@ -7,7 +7,7 @@ module DataReader
     def initialize(args = { user: current_user })
       # FOR DEBUGGING------------------------------------------
       # In console run e.g. `x = DataReader::OceanFclReader.new({})`
-      path = Rails.root.join('app', 'classes', 'data_reader', 'test_FCL.xlsx').to_s
+      path = Rails.root.join('app', 'classes', 'data_reader', 'test_AIR.xlsx').to_s
       args = args.merge(path: path)
       # /FOR DEBUGGING-----------------------------------------
 
