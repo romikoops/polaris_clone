@@ -7,10 +7,38 @@ module DataReader
     def post_initialize
     end
 
-    def build_row_obj(headers, row_data)
-      row = parse_row_data(row_data)
+    def validate_headers(headers, sheet_name)
+      valid_headers = %i(
+        effective_date
+        expiration_date
+        customer_email
+        origin
+        destination
+        carrier
+        service_level
+        load_type
+        transit_time
+        range_min
+        range_max
+        nested
+        mot
+        wm_ratio
+        fee
+        currency
+        rate_basis
+        rate_min
+        rate
+        hw_threshold
+        hw_rate_basis
+      )
 
-      headers.zip(row).to_h
+      # Order needs to be maintained in order to be valid
+      headers_are_valid = headers == valid_headers
+      raise StandardError, "The headers of sheet \"#{sheet_name}\" are not valid." unless headers_are_valid
+    end
+
+    def build_row_obj(headers, parsed_row)
+      headers.zip(parsed_row).to_h
     end
 
     def local_stats

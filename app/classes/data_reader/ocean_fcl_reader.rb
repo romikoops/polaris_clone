@@ -2,22 +2,38 @@
 
 module DataReader
   class OceanFclReader < DataReader::BaseReader
-    VALUE_TO_SPLIT_HEADERS_AFTER = :currency
-
     private
 
     def post_initialize
     end
 
-    def build_row_obj(headers, row_data)
-      row = parse_row_data(row_data)
+    def validate_headers(headers, sheet_name)
+      valid_headers = %i(
+        effective_date
+        expiration_date
+        customer_email
+        origin
+        destination
+        mot
+        carrier
+        service_level
+        load_type
+        transit_time
+        currency
+      )
 
+      # Order needs to be maintained in order to be valid
+      headers_are_valid = valid_headers.each_with_index.map { |el, i| el == headers[i] }.all?
+      raise StandardError, "The headers of sheet \"#{sheet_name}\" are not valid." unless headers_are_valid
+    end
+
+    def build_row_obj(headers, parsed_row)
       # Seperate the fees into their own hash and nest them into result
       ## Split headers and rows
-      standard_headers, fee_headers = headers.slice_after(VALUE_TO_SPLIT_HEADERS_AFTER).to_a
+      standard_headers, fee_headers = headers.slice_after(:currency).to_a
       split_index = standard_headers.length
-      row_until_fees = row[0...split_index]
-      row_just_fees = row[split_index..-1]
+      row_until_fees = parsed_row[0...split_index]
+      row_just_fees = parsed_row[split_index..-1]
 
       ## Build hash objects, and merge them
       standard_part = standard_headers.zip(row_until_fees).to_h
