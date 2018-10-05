@@ -35,14 +35,18 @@ class PdfHandler
       }
     )
     File.open('tmp/render_+result.html', 'wb') { |file| file.write(doc_erb.render) }
-    response =  BreezyPDFLite::RenderRequest.new(
+    response = BreezyPDFLite::RenderRequest.new(
       doc_erb.render
     ).submit
-
-    File.open('tmp/' + @full_name, 'wb') { |file| file.write(response.body) }
-    @path = 'tmp/' + @full_name
-    @pdf  = File.open(@path)
-    self
+    
+    if response.code.to_i == 201
+      File.open('tmp/' + @full_name, 'wb') { |file| file.write(response.body) }
+      @path = 'tmp/' + @full_name
+      @pdf  = File.open(@path)
+      self
+    else
+      Raise
+    end
   end
 
   def upload

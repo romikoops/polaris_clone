@@ -30,6 +30,7 @@ gem 'aws-sdk-sqs'
 gem 'bootstrap-sass', '~> 3.3.5.1'
 gem 'rufo'
 gem 'shoryuken'
+gem 'font-awesome-rails'
 
 gem 'activerecord-postgis-adapter'
 gem 'rgeo-geojson'
@@ -78,8 +79,6 @@ gem 'write_xlsx'
 
 # Usee http for simple requests
 gem 'http'
-
-gem "font-awesome-rails"
 
 # Use chronic for parsing dates
 gem 'chronic'
