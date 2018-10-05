@@ -217,7 +217,7 @@
         <mj-text align="center">
           <h2 style="margin: 0;">
             <span>
-              <%= format_to_price(@shipment.total_price) %>
+              <%= format_to_price(@shipment.total_price[:value], @shipment.total_price[:currency]) %>
             </span>
           </h2>
         </mj-text>

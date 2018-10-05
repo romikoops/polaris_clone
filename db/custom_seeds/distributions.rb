@@ -11,7 +11,12 @@ subdomains = [
   { cloudfront: 'E2IQ14Z9Z5JEGN', subdomain: 'greencarrier-sandbox' },
   { cloudfront: 'E1AMKNHZUXL589', subdomain: 'speedtrans' },
   { cloudfront: 'EMDO0NOOSGVWK', subdomain: 'trucking' },
-  { cloudfront: 'E4GVOGV46JUC2', subdomain: 'speedtrans-sandbox' }
+  { cloudfront: 'E4GVOGV46JUC2', subdomain: 'speedtrans-sandbox' },
+  { cloudfront: 'E2JGC82SATBA4', subdomain: 'fivestar' },
+  { cloudfront: 'EP3724MQWNMFU', subdomain: 'gateway' },
+  { cloudfront: 'E1FB49BKWKCE7D', subdomain: 'normanglobal' },
+  { cloudfront: 'E1LH7CIJ17ZFOV', subdomain: 'saco' },
+  { cloudfront: 'EFYAT2X9Z0TQY', subdomain: 'schryver' }
 ]
 
 puts "Seeding Distributions..."
