@@ -57,4 +57,4 @@ Contact.defaultProps = {
   textStyle: {}
 }
 
-export default translate()(Contact)
+export default translate('common')(Contact)

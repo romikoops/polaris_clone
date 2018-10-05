@@ -115,6 +115,7 @@ docker:
   variables:
     DOCKER_HOST: tcp://localhost:2375/
     DOCKER_DRIVER: overlay2
+    SENTRY_AUTH_TOKEN: 099b9abd2844497db3dace7307576c12fadc7d47bd68416584cdb4b90709de95
   services:
     - docker:dind
 
@@ -124,7 +125,7 @@ docker:
     /usr/bin/habitus -env REGISTRY=eu.gcr.io/itsmycargo-main -env TAG=${CI_COMMIT_SHA}
     /usr/bin/habitus -env REGISTRY=eu.gcr.io/itsmycargo-main -env TAG=${CI_COMMIT_SHA} \
       -build RELEASE=${CI_COMMIT_SHA} \
-      -build SENTRY_AUTH_TOKEN=99d1e01c60204a9ea79d8d69e89cb92c378870f30bd642d4b77117cf25461c64 \
+      -build SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN} \
       -d client/
     docker push eu.gcr.io/itsmycargo-main/imc/api:${CI_COMMIT_SHA}
     docker push eu.gcr.io/itsmycargo-main/imc/client:${CI_COMMIT_SHA}
@@ -141,7 +142,7 @@ review:
     - itsmycargo
 
   script:
-    - deploy || delete
+    - deploy
 
   environment:
     name: review/$CI_COMMIT_REF_NAME
@@ -154,7 +155,7 @@ review:
     - dev
 
 stop_review:
-  stage: cleanup
+  stage: review
   image: eu.gcr.io/itsmycargo-main/deploy:latest
   tags:
     - itsmycargo
@@ -196,6 +197,19 @@ stop_review:
   }
 
   function deploy() {
+    _helm_deploy || (delete && exit 1)
+  }
+
+  function delete() {
+    name="$CI_ENVIRONMENT_SLUG"
+
+    if [[ -n "$(helm ls -q "^$name$")" ]]; then
+      helm delete --purge "$name"
+      kubectl --namespace=${REVIEW_NAMESPACE} delete persistentvolumeclaims "${CI_ENVIRONMENT_SLUG}-postgresql" || true
+    fi
+  }
+
+  function _helm_deploy() {
     helm upgrade --install \
       --wait \
       --timeout 600 \
@@ -206,15 +220,6 @@ stop_review:
       --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
       "$CI_ENVIRONMENT_SLUG" \
       $DEVOPS_CHART
-  }
-
-  function delete() {
-    name="$CI_ENVIRONMENT_SLUG"
-
-    if [[ -n "$(helm ls -q "^$name$")" ]]; then
-      helm delete --purge "$name"
-      kubectl --namespace=${REVIEW_NAMESPACE} delete persistentvolumeclaims "${CI_ENVIRONMENT_SLUG}-postgresql" || true
-    fi
   }
 
 before_script:

@@ -3,17 +3,18 @@ import React from 'react'
 import { render } from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import { I18nextProvider } from 'react-i18next'
-import Raven from 'raven-js'
+import * as Sentry from '@sentry/browser'
 import i18n from './i18next'
 import { configureStore, history } from './store/configureStore'
 import Root from './containers/Root'
 import './index.scss'
 
-Raven
-  .config(window.keel.sentryUrl, {
-    release: process.env.RELEASE
-  })
-  .install()
+Sentry.init({
+  dsn: window.keel.sentryUrl,
+  environment: window.keel.environment,
+  release: process.env.RELEASE
+ })
+
 const store = configureStore()
 
 render(

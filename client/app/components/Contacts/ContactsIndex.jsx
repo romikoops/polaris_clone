@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import { v4 } from 'uuid'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -92,7 +93,8 @@ class ContactsIndex extends Component {
       placeholder,
       tooltip,
       showTooltip,
-      contactsData
+      contactsData,
+      t
     } = this.props
     const { contacts, numContactPages, page } = contactsData
 
@@ -117,7 +119,7 @@ class ContactsIndex extends Component {
             <input
               type="text"
               name="search"
-              placeholder={placeholder || 'Search contacts'}
+              placeholder={placeholder || t('account:searchContacts')}
               onChange={this.handleSearchChange}
             />
           </div>
@@ -134,7 +136,9 @@ class ContactsIndex extends Component {
             onClick={parseInt(page, 10) > 1 ? this.prevPage : null}
           >
             <i className="fa fa-chevron-left" />
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
+            <p className={`${styles.back}`}>
+              {t('common:basicBack')}
+            </p>
           </div>
           <p>{page} / {numContactPages} </p>
           <div
@@ -144,7 +148,9 @@ class ContactsIndex extends Component {
             `}
             onClick={parseInt(page, 10) < numContactPages ? this.nextPage : null}
           >
-            <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
+            <p className={`${styles.forward}`}>
+              {t('common:next')}
+            </p>
             <i className="fa fa-chevron-right" />
           </div>
         </div>
@@ -165,8 +171,7 @@ ContactsIndex.propTypes = {
   theme: PropTypes.theme,
   showTooltip: PropTypes.bool,
   tooltip: PropTypes.string,
-  hideFilters: PropTypes.bool,
-  title: PropTypes.string
+  t: PropTypes.func.isRequired
 }
 
 ContactsIndex.defaultProps = {
@@ -177,9 +182,7 @@ ContactsIndex.defaultProps = {
   showTooltip: false,
   tooltip: '',
   placeholder: '',
-  userDispatch: null,
-  hideFilters: false,
-  title: ''
+  userDispatch: null
 }
 function mapStateToProps (state) {
   const {
@@ -204,4 +207,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContactsIndex)
+export default translate(['common', 'account'])(connect(mapStateToProps, mapDispatchToProps)(ContactsIndex))

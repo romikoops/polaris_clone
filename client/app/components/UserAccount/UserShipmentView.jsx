@@ -8,7 +8,7 @@ import styles from '../Admin/AdminShipments.scss'
 import CargoItemGroup from '../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
 import CargoContainerGroup from '../Cargo/Container/Group'
-import { moment, documentTypes, docOptions } from '../../constants'
+import { moment } from '../../constants'
 import {
   gradientTextGenerator,
   gradientGenerator,
@@ -16,10 +16,9 @@ import {
 } from '../../helpers'
 import '../../styles/select-css-custom.css'
 import DocumentsDownloader from '../Documents/Downloader'
-import DocumentsForm from '../Documents/Form'
 import GradientBorder from '../GradientBorder'
-import { UserShipmentContent } from './UserShipmentContent'
-import { ShipmentQuotationContent } from './ShipmentQuotationContent'
+import UserShipmentContent from './UserShipmentContent'
+import ShipmentQuotationContent from './ShipmentQuotationContent'
 
 class UserShipmentView extends Component {
   static sumCargoFees (cargos) {
@@ -32,29 +31,12 @@ class UserShipmentView extends Component {
 
     return { currency: curr, total: total.toFixed(2) }
   }
-  static calcCargoLoad (feeHash, loadType) {
-    const cargoCount = Object.keys(feeHash.cargo).length
-    let noun = ''
-    if (loadType === 'cargo_item' && cargoCount > 3) {
-      noun = 'Cargo Items'
-    } else if (loadType === 'cargo_item' && cargoCount === 3) {
-      noun = 'Cargo Item'
-    } else if (loadType === 'container' && cargoCount > 3) {
-      noun = 'Containers'
-    } else if (loadType === 'container' && cargoCount === 3) {
-      noun = 'Container'
-    }
-
-    return `${noun}`
-  }
   constructor (props) {
     super(props)
     this.state = {
-      fileType: { label: 'Packing Sheet', value: 'packing_sheet' },
-      upUrl: `/shipments/${this.props.match.params.id}/upload/packing_sheet`,
       collapser: {}
     }
-    this.setFileType = this.setFileType.bind(this)
+
     this.back = this.back.bind(this)
   }
   componentDidMount () {
@@ -74,11 +56,7 @@ class UserShipmentView extends Component {
     window.scrollTo(0, 0)
     this.props.setCurrentUrl('/account/shipments')
   }
-  setFileType (ev) {
-    const shipmentId = this.props.shipmentData.shipment.id
-    const url = `/shipments/${shipmentId}/upload/${ev.value}`
-    this.setState({ fileType: ev, upUrl: url })
-  }
+
   handleCollapser (key) {
     this.setState({
       collapser: {
@@ -90,10 +68,6 @@ class UserShipmentView extends Component {
   back () {
     const { userDispatch } = this.props
     userDispatch.goBack()
-  }
-  deleteDoc (doc) {
-    const { userDispatch } = this.props
-    userDispatch.deleteDocument(doc.id)
   }
   prepCargoItemGroups (cargos) {
     const { theme, shipmentData } = this.props
@@ -134,13 +108,6 @@ class UserShipmentView extends Component {
     })
 
     return resultArray
-  }
-  fileFn (file) {
-    const { shipmentData, userDispatch } = this.props
-    const { shipment } = shipmentData
-    const type = file.doc_type
-    const url = `/shipments/${shipment.id}/upload/${type}`
-    userDispatch.uploadDocument(file, type, url)
   }
   prepContainerGroups (cargos) {
     const { theme, shipmentData } = this.props
@@ -210,15 +177,13 @@ class UserShipmentView extends Component {
     }
     const { scope } = tenant.data
     const {
-      contacts,
       shipment,
-      documents,
       cargoItems,
       containers,
       aggregatedCargo
       // accountHolder
     } = shipmentData
-    
+
     const createdDate = shipment
       ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
       : moment().format('DD-MM-YYYY | HH:mm A')
@@ -236,6 +201,10 @@ class UserShipmentView extends Component {
           backgroundImage:
             'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'
         }
+    const background = {
+      bg1,
+      bg2
+    }
     const gradientStyle =
       theme && theme.colors
         ? gradientGenerator(theme.colors.primary, theme.colors.secondary)
@@ -251,9 +220,6 @@ class UserShipmentView extends Component {
       theme && theme.colors
         ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
         : { background: 'black' }
-
-    const docView = []
-    const missingDocs = []
 
     const statusRequested = (['requested', 'requested_by_unconfirmed_account'].includes(shipment.status)) ? (
       <GradientBorder
@@ -278,7 +244,7 @@ class UserShipmentView extends Component {
       ''
     )
     const reuseShipment = (
-      <div style={gradientStyle} onClick={() => this.reuseShipment()} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy ${adminStyles.shipment_view_margin_buffer}  ${styles.reuse_shipment_box}`}>
+      <div style={gradientStyle} onClick={() => this.reuseShipment()} className={`layout-row flex-15 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy ${adminStyles.shipment_view_margin_buffer}  ${styles.reuse_shipment_box}`}>
         <p className="layout-align-center-center layout-row">
           {t('shipment:reuseShipment')}
         </p>
@@ -304,71 +270,22 @@ class UserShipmentView extends Component {
       cargoView = <CargoItemGroupAggregated group={aggregatedCargo} />
     }
 
-    const docChecker = {
-      packing_sheet: false,
-      commercial_invoice: false
-    }
-
-    if (documents) {
-      documents.forEach((doc) => {
-        docChecker[doc.doc_type] = true
-        docView.push(<div className="flex-100 flex-md-45 flex-gt-md-30 layout-row" style={{ padding: '10px' }}>
-          <DocumentsForm
-            theme={theme}
-            type={doc.doc_type}
-            dispatchFn={file => this.fileFn(file)}
-            text={documentTypes[doc.doc_type]}
-            doc={doc}
-            viewer
-            deleteFn={file => this.deleteDoc(file)}
-          />
-        </div>)
-      })
-    }
-    Object.keys(docChecker).forEach((key) => {
-      if (!docChecker[key]) {
-        missingDocs.push(<div className={`flex-25 layout-row layout-align-start-center ${styles.no_doc}`}>
-          <div className="flex-none layout-row layout-align-center-center">
-            <i className="flex-none fa fa-ban" />
-          </div>
-          <div className="flex layout-align-start-center layout-row">
-            <p className="flex-none">{`${documentTypes[key]}: Not Uploaded`}</p>
-          </div>
-        </div>)
-      }
-    })
     const feeHash = shipment.selected_offer
     const etdJSX = (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}
+        {moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}
       </p>
     )
     const cargoCount = Object.keys(feeHash.cargo).length - 2
     const etaJSX = (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}
+        {moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}
       </p>
     )
-    const pickupDate = (
-      <p className={`flex-none letter_3 ${styles.date}`}>
-        on {`${moment(shipment.planned_pickup_date).format('DD/MM/YYYY | HH:mm')}`}
-      </p>
-    )
-    const deliveryDate = (
-      <p className={`flex-none letter_3 ${styles.date}`}>
-        from {`${moment(shipment.planned_delivery_date).format('DD/MM/YYYY | HH:mm')}`}
-      </p>
-    )
-    const originDropOffDate = (
-      <p className={`flex-none letter_3 ${styles.date}`}>
-        on {`${moment(shipment.planned_origin_drop_off_date).format('DD/MM/YYYY | HH:mm')}`}
-      </p>
-    )
-    const destinationCollectionDate = (
-      <p className={`flex-none letter_3 ${styles.date}`}>
-        from {`${moment(shipment.planned_destination_collection_date).format('DD/MM/YYYY | HH:mm')}`}
-      </p>
-    )
+    const estimatedTimes = {
+      etdJSX,
+      etaJSX
+    }
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top extra_padding">
@@ -383,46 +300,31 @@ class UserShipmentView extends Component {
           {statusFinished}
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">
-          {shipment.status !== 'quoted' ? (
+          {shipment.status !== 'quoted' && !tenant.data.scope.quotation_tool ? (
             <UserShipmentContent
               theme={theme}
               gradientBorderStyle={gradientBorderStyle}
               gradientStyle={gradientStyle}
-              etdJSX={etdJSX}
-              etaJSX={etaJSX}
-              pickupDate={pickupDate}
-              deliveryDate={deliveryDate}
-              originDropOffDate={originDropOffDate}
-              destinationCollectionDate={destinationCollectionDate}
-              shipment={shipment}
-              bg1={bg1}
-              bg2={bg2}
+              estimatedTimes={estimatedTimes}
+              background={background}
               selectedStyle={selectedStyle}
               deselectedStyle={deselectedStyle}
               scope={scope}
-              contacts={contacts}
-              user={user}
-              upUrl={this.state.upUrl}
-              fileType={this.state.fileType}
-              setFileType={this.setFileType}
+              match={this.props.match}
               feeHash={feeHash}
-              docOptions={docOptions}
-              userDispatch={userDispatch}
-              docView={docView}
-              cargoCount={cargoCount}
-              missingDocs={missingDocs}
               cargoView={cargoView}
-              calcCargoLoad={UserShipmentView.calcCargoLoad(feeHash, shipment.load_type)}
+              shipmentData={shipmentData}
+              user={user}
+              userDispatch={userDispatch}
+              cargoCount={cargoCount}
             />) : (
             <ShipmentQuotationContent
               theme={theme}
               gradientBorderStyle={gradientBorderStyle}
               gradientStyle={gradientStyle}
-              etdJSX={etdJSX}
-              etaJSX={etaJSX}
+              estimatedTimes={estimatedTimes}
               shipment={shipment}
-              bg1={bg1}
-              bg2={bg2}
+              background={background}
               selectedStyle={selectedStyle}
               deselectedStyle={deselectedStyle}
               scope={scope}

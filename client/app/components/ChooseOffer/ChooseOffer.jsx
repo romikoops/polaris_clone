@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
+import { translate } from 'react-i18next'
 import Formsy from 'formsy-react'
 import PropTypes from '../../prop-types'
 import { RouteFilterBox } from '../RouteFilterBox/RouteFilterBox'
@@ -15,7 +16,7 @@ import QuoteCard from '../Quote/Card'
 import FormsyInput from '../FormsyInput/FormsyInput'
 import { Modal } from '../Modal/Modal'
 
-export class ChooseOffer extends Component {
+class ChooseOffer extends Component {
   static dynamicSort (property) {
     let sortOrder = 1
     let prop
@@ -193,7 +194,7 @@ export class ChooseOffer extends Component {
   }
   render () {
     const {
-      shipmentData, user, shipmentDispatch, theme, tenant, originalSelectedDay
+      shipmentData, user, shipmentDispatch, theme, tenant, originalSelectedDay, t
     } = this.props
     if (!shipmentData) return ''
     const { scope } = tenant.data
@@ -258,7 +259,7 @@ export class ChooseOffer extends Component {
           />
         </div>
       ))
-      
+
     const closestRoutestoRender = closestRoutes.map(s => (
 
       <div key={v4()} className="margin_bottom flex-100">
@@ -292,15 +293,15 @@ export class ChooseOffer extends Component {
                   <circle className={`${styles.svg_path} ${styles.svg_circle}`} fill="none" stroke="#73AF55" strokeWidth="6" strokeMiterlimit="10" cx="65.1" cy="65.1" r="62.1" />
                   <polyline className={`${styles.svg_path} ${styles.svg_check}`} fill="none" stroke="#73AF55" strokeWidth="6" strokeLinecap="round" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
                 </svg>
-                <h4>Your email has been successfully sent.</h4>
-                <p className={styles.thanks}>Thank you for using our service.</p>
+                <h4>{t('account:emailSuccess')}</h4>
+                <p className={styles.thanks}>{t('account:thankYouService')}</p>
                 <div className="layout-row flex-100 layout-align-center-center">
                   <div className="layout-row flex-50" style={{ marginRight: '10px' }}>
                     <RoundButton
                       theme={theme}
                       size="small"
                       active
-                      text="find rates"
+                      text={t('landing:callToAction')}
                       handleNext={() => this.bookNow()}
                     />
                   </div>
@@ -309,7 +310,7 @@ export class ChooseOffer extends Component {
                       theme={theme}
                       size="small"
                       active
-                      text="dashboard"
+                      text={t('account:dashboard')}
                       handleNext={() => this.toAccount()}
                     />
                   </div>
@@ -351,7 +352,7 @@ export class ChooseOffer extends Component {
 
                       theme={theme}
                       size={3}
-                      text="These are best quotations for the specific route"
+                      text={t('shipment:bestQuotations')}
                     />
                   ) : (
                     ''
@@ -365,7 +366,7 @@ export class ChooseOffer extends Component {
                       className="flex-100"
                       options={currencyOptions}
                       value={currentCurrency}
-                      placeholder="Select Currency"
+                      placeholder={t('common:selectCurrency')}
                       onChange={e => this.handleCurrencyUpdate(e)}
                     />
                   )}
@@ -379,7 +380,7 @@ export class ChooseOffer extends Component {
           </div>
           {isQuotationTool ? (
             <div className={`flex-20 offset-5  layout-wrap layout-align-center-start ${styles.download_section}`}>
-              <p className={`flex-100 layout-row ${styles.offer_title}`} >Selected Offers</p>
+              <p className={`flex-100 layout-row ${styles.offer_title}`} >{t('shipment:selectedOffers')}</p>
               {this.state.selectedOffers !== 0 ? (
                 this.state.selectedOffers.map(offer =>
                   (<div className={`flex-100 layout-row layout-align-start-center ${styles.selected_offer}`}>
@@ -409,7 +410,7 @@ export class ChooseOffer extends Component {
                         theme={theme}
                         size="full"
                         active
-                        text="Send via email"
+                        text={t('account:sendViaEmail')}
                         handleNext={() => this.selectQuotes(shipment, this.state.selectedOffers, this.state.email)}
                       />
                     </Formsy>
@@ -429,7 +430,7 @@ export class ChooseOffer extends Component {
             <div className="content_width_booking flex-none layout-row layout-align-start-center">
               <RoundButton
                 theme={theme}
-                text="Back to dashboard"
+                text={t('common:back')}
                 back
                 iconClass="fa-angle0-left"
                 handleNext={() => shipmentDispatch.goTo('/account')}
@@ -444,6 +445,7 @@ export class ChooseOffer extends Component {
 ChooseOffer.propTypes = {
   theme: PropTypes.theme,
   user: PropTypes.user.isRequired,
+  t: PropTypes.func.isRequired,
   shipmentData: PropTypes.shipmentData.isRequired,
   chooseOffer: PropTypes.func,
   modal: PropTypes.bool,
@@ -470,4 +472,4 @@ ChooseOffer.defaultProps = {
   originalSelectedDay: false
 }
 
-export default ChooseOffer
+export default translate(['account', 'landing', 'common'])(ChooseOffer)

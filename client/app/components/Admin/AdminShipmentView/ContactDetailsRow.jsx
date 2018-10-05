@@ -1,14 +1,16 @@
 import React from 'react'
 import { v4 } from 'uuid'
+import { translate } from 'react-i18next'
 import styles from '../AdminShipments.scss'
 import adminStyles from '../Admin.scss'
 import PropTypes from '../../../prop-types'
 import GreyBox from '../../GreyBox/GreyBox'
 
-export default function ContactDetailsRow ({
+function ContactDetailsRow ({
   contacts,
   accountId,
   style,
+  t,
   user
 }) {
   const nArray = []
@@ -115,7 +117,7 @@ export default function ContactDetailsRow ({
     })
   }
   const actionButton = (<div className={`flex-none layout-row layout-align-center-center ${styles.account_holder}`}>
-    <p className="flex-none">Account Holder</p>
+    <p className="flex-none">{t('account:accountHolder')}</p>
   </div>)
   const accountContact = (
     <div className={`${styles.contact_box} flex-100 layout-wrap layout-column`}>
@@ -149,7 +151,7 @@ export default function ContactDetailsRow ({
     <div className={`layout-row flex-100 layout-wrap margin_bottom ${adminStyles.margin_box_right}`}>
       {isAccountHolder === '' ? <div className={`flex-100 ${flexSize} layout-row layout-align-center card_padding_right margin_bottom`}>
         <GreyBox
-          title="Account Holder"
+          title={t('account:accountHolder')}
           wrapperClassName="layout-row flex-100 layout-align-start-start"
           contentClassName="layout-row layout-wrap flex-100"
           content={accountContact}
@@ -158,7 +160,7 @@ export default function ContactDetailsRow ({
       </div> : '' }
       <div className={`flex-100 ${flexSize} layout-row layout-align-center card_padding_right margin_bottom`}>
         <GreyBox
-          title="Shipper"
+          title={t('account:shipper')}
           titleAction={isAccountHolder === 'shipper' ? actionButton : false}
           wrapperClassName="layout-row flex-100 layout-align-start-start"
           contentClassName="layout-row layout-wrap flex-100"
@@ -168,7 +170,7 @@ export default function ContactDetailsRow ({
       </div>
       <div className={`flex-100 ${flexSize} layout-row layout-align-center card_padding_right margin_bottom`}>
         <GreyBox
-          title="Consignee"
+          title={t('account:consignee')}
           wrapperClassName="layout-row flex-100 layout-align-start-start"
           titleAction={isAccountHolder === 'consignee' ? actionButton : false}
           contentClassName="layout-row layout-wrap flex-100"
@@ -178,7 +180,7 @@ export default function ContactDetailsRow ({
       </div>
       <div className="flex-100 flex-gt-sm-20 layout-row layout-align-center margin_bottom">
         <GreyBox
-          title="Notifyees"
+          title={t('account:notifyees')}
           wrapperClassName="layout-row flex-100 height_100 layout-align-start-start"
           contentClassName="layout-row layout-wrap flex-100"
           content={nArray}
@@ -191,6 +193,7 @@ export default function ContactDetailsRow ({
 
 ContactDetailsRow.propTypes = {
   contacts: PropTypes.arrayOf(PropTypes.contact).isRequired,
+  t: PropTypes.func.isRequired,
   style: PropTypes.objectOf(PropTypes.string),
   accountId: PropTypes.number,
   user: PropTypes.user
@@ -201,3 +204,5 @@ ContactDetailsRow.defaultProps = {
   accountId: null,
   user: {}
 }
+
+export default translate('account')(ContactDetailsRow)

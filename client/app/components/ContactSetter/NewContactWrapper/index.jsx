@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import styles from './NewContactWrapper.scss'
 import ContactSetterNewContactWrapperTitle from './Title'
 import ShipmentContactForm from '../../ShipmentContactForm/ShipmentContactForm'
 import AddressBook from '../../AddressBook/AddressBook'
 
-export default class ContactSetterNewContactWrapper extends PureComponent {
+class ContactSetterNewContactWrapper extends PureComponent {
   constructor (props) {
     super(props)
 
@@ -21,7 +22,7 @@ export default class ContactSetterNewContactWrapper extends PureComponent {
   }
 
   render () {
-    const { contactType } = this.props
+    const { contactType, t } = this.props
 
     const { compName } = this.state
     const Comp = this.components[compName]
@@ -33,7 +34,7 @@ export default class ContactSetterNewContactWrapper extends PureComponent {
     } else {
       backArrow = (
         <div onClick={() => this.toggleCompName()} className={styles.back_arrow}>
-          <i className="fa fa-arrow-left" /> Back to Address Book
+          <i className="fa fa-arrow-left" /> {t('account:backToAddressBook')}
         </div>
       )
     }
@@ -59,10 +60,13 @@ export default class ContactSetterNewContactWrapper extends PureComponent {
 
 ContactSetterNewContactWrapper.propTypes = {
   contactType: PropTypes.string,
-  updateDimensions: PropTypes.func
+  updateDimensions: PropTypes.func,
+  t: PropTypes.func.isRequired
 }
 
 ContactSetterNewContactWrapper.defaultProps = {
   contactType: '',
   updateDimensions: null
 }
+
+export default translate('account')(ContactSetterNewContactWrapper)

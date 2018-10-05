@@ -2,7 +2,7 @@
 
 exports[`props.shipmentData is falsy 1`] = `
 <h1>
-  Loading
+   Loading
 </h1>
 `;
 

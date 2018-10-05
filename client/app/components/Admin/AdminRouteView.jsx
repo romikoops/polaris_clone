@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
+import { translate } from 'react-i18next'
+import ReactTable from 'react-table'
+import 'react-table/react-table.css'
 import PropTypes from '../../prop-types'
-import { AdminTripPanel, AdminHubTile } from './'
+import { AdminHubTile } from './'
 import styles from './Admin.scss'
 import { gradientTextGenerator } from '../../helpers'
 import { RoundButton } from '../RoundButton/RoundButton'
@@ -9,6 +12,7 @@ import { NamedSelect } from '../NamedSelect/NamedSelect'
 import AdminPromptConfirm from './Prompt/Confirm'
 import NotesWriter from '../../containers/Notes/Writer'
 import NotesRow from '../Notes/Row'
+import { moment } from '../../constants'
 
 export class AdminRouteView extends Component {
   constructor (props) {
@@ -71,15 +75,15 @@ export class AdminRouteView extends Component {
   }
   render () {
     const {
-      theme, itineraryData, hubHash, adminDispatch
+      theme, itineraryData, hubHash, adminDispatch, t
     } = this.props
-    // ;s
+
     if (!itineraryData) {
       return ''
     }
-    const { panelViewer, confirm, editNotes } = this.state
+    const { confirm, editNotes } = this.state
     const {
-      itinerary, hubs, schedules, layovers, notes
+      itinerary, hubs, schedules, notes
     } = itineraryData
     const textStyle =
       theme && theme.colors
@@ -88,41 +92,58 @@ export class AdminRouteView extends Component {
     const confimPrompt = confirm ? (
       <AdminPromptConfirm
         theme={theme}
-        heading="Are you sure?"
-        text="This will delete the route and all related data (pricings, schedules etc)"
+        heading={t('common: areYouSure')}
+        text={t('admin:confirmDeleteRoute')}
         confirm={() => this.deleteItinerary(itinerary.id)}
         deny={() => this.closeConfirm()}
       />
     ) : (
       ''
     )
-    const hubArr = hubs.map(hubObj => (
-      <AdminHubTile
+    const hubArr = []
+    hubs.forEach((hubObj, i) => {
+      if (i > 0) {
+        hubArr.push(<div className="flex-5" />)
+      }
+      hubArr.push(<AdminHubTile
         key={v4()}
         hub={hubHash[hubObj.id]}
         theme={theme}
         handleClick={() => adminDispatch.getHub(hubObj.id, true)}
-      />
-    ))
-
-    const schedArr = schedules.map((trip, i) => {
-      if (i <= this.state.scheduleLimit) {
-        return (
-          <AdminTripPanel
-            key={v4()}
-            trip={trip}
-            showPanel={panelViewer[trip.trip_id]}
-            toggleShowPanel={this.toggleShowPanel}
-            layovers={layovers}
-            adminDispatch={adminDispatch}
-            itinerary={itinerary}
-            hubs={hubs}
-            theme={theme}
-          />
-        )
-      }
-      return ''
+      />)
     })
+    const columns = [
+      {
+        Header: t('common:closingDate'),
+        accessor: 'closing_date',
+        Cell: row => (
+          moment(row.value).format('ll')
+        )
+      },
+      {
+        Header: t('common:eta'),
+        accessor: 'start_date',
+        Cell: row => (
+          moment(row.value).format('ll')
+        )
+      },
+      {
+        Header: t('common:etd'),
+        accessor: 'end_date',
+        Cell: row => (
+          moment(row.value).format('ll')
+        )
+      },
+      {
+        Header: t('common:voyageCode'),
+        accessor: 'voyage_code'
+      },
+      {
+        Header: t('common:vesselName'),
+        accessor: 'vessel'
+      }
+    ]
+
     const navOptions = [
       { value: 'pricings', label: 'Pricings' },
       { value: 'schedules', label: 'Schedules' }
@@ -143,14 +164,14 @@ export class AdminRouteView extends Component {
                 theme={theme}
                 className="flex-100"
                 options={navOptions}
-                placeholder="Jump to..."
+                placeholder={t('admin:jumpTo')}
                 onChange={e => this.handleNavChange(e)}
               />
             </div>
             <div className="flex-25 layout-row layout-align-end-center">
               <RoundButton
                 theme={theme}
-                text="Delete"
+                text={t('common:delete')}
                 iconClass="fa-trash"
                 size="small"
                 handleNext={() => this.confirmDelete()}
@@ -162,7 +183,7 @@ export class AdminRouteView extends Component {
           <div
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
           >
-            <p className={` ${styles.sec_header_text} flex-none`}> Route Stops</p>
+            <p className={` ${styles.sec_header_text} flex-none`}> {t('admin:routeStops')}</p>
           </div>
           <div className="flex-100 layout-row layout-wrap layout-align-start-start">{hubArr}</div>
         </div>
@@ -170,9 +191,22 @@ export class AdminRouteView extends Component {
           <div
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
           >
-            <p className={` ${styles.sec_header_text} flex-none`}> Schedules </p>
+            <p className={` ${styles.sec_header_text} flex-none`}> {t('admin:schedules')} </p>
           </div>
-          {schedArr}
+          <div className="layout-row flex-95 layout-wrap layout-align-start-center">
+            <ReactTable
+              className="flex-100 height_100"
+              data={schedules}
+              columns={columns}
+              defaultSorted={[
+                {
+                  id: 'closing_date',
+                  desc: true
+                }
+              ]}
+              defaultPageSize={20}
+            />
+          </div>
         </div>
         <div className="flex-95 layout-row layout-align-space-between-center layout-wrap">
           <div className="flex-100 layout-row">
@@ -198,7 +232,8 @@ AdminRouteView.propTypes = {
     getHub: PropTypes.func,
     getLayovers: PropTypes.func
   }).isRequired,
-  itineraryData: PropTypes.objectOf(PropTypes.any).isRequired
+  itineraryData: PropTypes.objectOf(PropTypes.any).isRequired,
+  t: PropTypes.func.isRequired
 }
 
 AdminRouteView.defaultProps = {
@@ -206,4 +241,4 @@ AdminRouteView.defaultProps = {
   hubHash: {}
 }
 
-export default AdminRouteView
+export default translate(['common', 'admin'])(AdminRouteView)

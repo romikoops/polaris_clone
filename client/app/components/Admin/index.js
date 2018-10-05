@@ -35,7 +35,8 @@ export * from './AdminTruckingIndex'
 
 export * from './AdminRouteForm'
 export * from './AdminRouteTile'
-export * from './AdminRouteView'
+
+export { default as AdminRouteView } from './AdminRouteView'
 export * from './AdminRoutesIndex'
 
 export * from './AdminClientTile'

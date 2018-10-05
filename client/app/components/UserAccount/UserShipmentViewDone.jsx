@@ -313,7 +313,7 @@ export class UserShipmentView extends Component {
       ''
     )
     const reuseShipment = (
-      <div style={gradientStyle} onClick={() => this.reuseShipment()} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy ${adminStyles.shipment_view_margin_buffer}  ${styles.reuse_shipment_box}`}>
+      <div style={gradientStyle} onClick={() => this.reuseShipment()} className={`layout-row flex-15 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy ${adminStyles.shipment_view_margin_buffer}  ${styles.reuse_shipment_box}`}>
         <p className="layout-align-center-center layout-row">
           {t('shipment:reuseShipment')}
         </p>

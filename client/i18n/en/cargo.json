@@ -28,6 +28,7 @@
   "packingSheet": "Packing Sheet",
   "priceLocalRegulations": "Price subject to local regulations",
   "quoteInsuranceHead": "Yes, I want",
+  "insuranceContact": "Please contact your local {{tenantName}} office for more info.",
   "quoteInsuranceNoHead": "No, I do not want",
   "quoteInsuranceNoTail": "to quote insurance for my cargo",
   "quoteInsuranceTail": "to quote insurance for my cargo",
@@ -55,5 +56,8 @@
   "widthDataTipTwo": "Width is automatically set by 'Collie Type'",
   "lengthDataTip": "Please note that the maximum length for items in Air Freight shipments is",
   "lengthDataTipTwo": "Length is automatically set by 'Collie Type'",
-  "cargoItem": "Cargo Item"
+  "container": "Container",
+  "containers": "Containers",
+  "cargoItem": "Cargo Item",
+  "cargoItems": "Cargo Items"
 }

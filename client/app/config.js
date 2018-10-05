@@ -1,3 +1,4 @@
 window.keel = {
-  sentryUrl: 'http://5cdbf33b746b4207b5f1675cf9d494af@ec2-52-29-81-197.eu-central-1.compute.amazonaws.com/8'
+  environment: 'production',
+  sentryUrl: 'https://16d43a033af648da8b2f2933f6e62717@sentry.itsmycargo.tech/3'
 }

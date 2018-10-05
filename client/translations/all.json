@@ -30,8 +30,7 @@
         "cookieTail": "The consent is not mandatory but necessary to continue using our website. Are you sure you want to decline the usage of cookies?",
         "numberContainers": "No. of Containers",
         "address": "Address",
-        "availabilitiesHead": "Availabilities will be shown for all applicable",
-        "availabilitiesTail": " modes of transport for your shipment",
+        "availabilities": "Availabilities will be shown for all applicable modes of transport for your shipment",
         "itemsOrContainers": "Are you shipping cargo items or containers?",
         "importOrExport": "Are you importing or exporting?",
         "nextStep": "Next Step",
@@ -66,6 +65,7 @@
         "documents": "Documents",
         "faresFees": "Fares & Fees",
         "fastestRoute": "Fastest route",
+        "bestDeal":"bestDeal",
         "from": "From",
         "greaterZero": "Must be greater than 0",
         "incoterm": "Incoterm",
@@ -142,7 +142,9 @@
         "comingSoon": "Coming Soon",
         "with": "with",
         "without": "without",
-        "moreInfo": "More info"
+        "moreInfo": "More info",
+        "voyageCode": "Voyage Code",
+        "vesselName": "Vessel Name"
       },
       "admin": {
         "lowerLimit": "Lower Limit",
@@ -166,7 +168,11 @@
         "lowerLimitDistance" :"Lower limit distance",
         "upperLimitDistance" :"Upper limit distance",
         "upperDistance" :"Upper Distance",
-        "findCities": "Find Cities"
+        "findCities": "Find Cities",
+        "jumpTo": "Jump To...",
+        "routeStops": "Route Stops",
+        "schedules": "Schedules",
+        "confirmDeleteRoute": "This will delete the route and all related data (pricings, schedules etc)"
       },
       "itbox": {
         "component": "IncotermBox",
@@ -233,7 +239,12 @@
         "newAccount": "New account?",
         "existingAccount": "Already have an account?",
         "setContact": "Set Contact Details",
-        "chooseA": "Choose a"
+        "chooseA": "Choose a",
+        "emailSuccess": "Your email has been successfully sent.",
+        "thankYouService": "Thank you for using our service.",
+        "sendViaEmail": "Send Via Email",
+        "searchContacts": "Search Contacts",
+        "backToAddressBook": "Back to Address Book"
       },
       "cargo": {
         "cargoDetails": "Cargo Details",
@@ -257,8 +268,7 @@
         "handleHead":"I would like",
         "handleTail":"to handle",
         "ifApplicable": "if applicable",
-        "insuranceHead": "Please contact your local",
-        "insuranceTail": "office for more info.",
+        "insuranceContact": "Please contact your local {{tenantName}} office for more info.",
         "noCustomsHead": "A customs declaration is mandatory to pass a national border when exporting or importing. If you choose to handle the customs clearance on your own,",
         "noCustomsTail": "will need a copy of the customs declaration.",
         "notesOptional": "Notes (Optional)",
@@ -325,7 +335,8 @@
         "emailAssociated": "email associated with this account is validated.",
         "followLink": "To confirm your email, please follow the link sent via email upon registration",
         "contactUs": "Do not hesitate to contact us either through the message center or your account manager",
-        "showDetails": "Show Details"
+        "showDetails": "Show Details",
+        "notUploaded": "Not Uploaded"
       },
       "landing": {
         "adminDashboard": "Admin Dashboard",
@@ -403,7 +414,15 @@
         "customsExportPaperFive": "to secure my Customs Export Paper (ADB)",
         "kusterOne": "Küster Speedtrans Übersee Spedition GmbH will organise the ABD on your behalf.",
         "kusterTwo": "Initially USD 75.00 will be added to your booking. This includes 1 customs tariff number.",
-        "kusterThree": "For each extra we will charge you USD 12.50 per customs tariff number."
+        "kusterThree": "For each extra we will charge you USD 12.50 per customs tariff number.",
+        "bestQuotations": "These are the best quotations for the specific route.",
+        "closestDepature": "This is the closest departure to the specific date",
+        "alternativeDepartures": "Alternative Departures",
+        "moreDepartures": "More Departures",
+        "selectedOffers": "Selected Offers",
+        "import": "import",
+        "export": "export",
+        "chooseDirection": "I am {{commercialAction}} ({{direction}})"
       },
       "user": {
         "newAlias": "New Alias",
@@ -460,7 +479,10 @@
         "invalidResetPasswordTwo": "If you wish to reset your password, ", 
         "invalidResetPasswordThree": "please follow a valid link sent to your email.",
         "mustMatchPassword": "Must match password",
-        "errorOccured": "An Error Occured"
+        "errorOccured": "An Error Occured",
+        "ohNo": "Oh no!",
+        "somethingWrong": "Something has gone wrong! A message has been sent to the support team and will be addressed shortly!",
+        "pleaseRetry": "Please retry and if this error keeps happening please contact your store representative"
       },
       "trucking": {
         "isNotAvailableLocal": " is not available in ",

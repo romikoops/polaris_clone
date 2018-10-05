@@ -42,6 +42,10 @@ exports[`props.shipment is truthy 1`] = `
               },
             ],
             "status": "FOO_STATUS",
+            "total_price": Object {
+              "currency": "USD",
+              "value": "200.99",
+            },
           },
         ]
       }
