@@ -338,14 +338,23 @@
   .padding_bottom {
     padding-bottom: 25px;
   }
+  .padding_bottom_sm {
+    padding-bottom: 10px;
+  }
   .padding_top {
     padding-top: 25px;
+  }
+  .padding_top_sm {
+    padding-top: 10px;
   }
   .card_padding{
     padding: 8px;
   }
   .card_padding_right{
     padding-right: 25px;
+  }
+  .padding_right_sm {
+    padding-right: 12px;
   }
   .card_margin_right{
     > * {

@@ -56,5 +56,8 @@
   "widthDataTipTwo": "Width is automatically set by 'Collie Type'",
   "lengthDataTip": "Please note that the maximum length for items in Air Freight shipments is",
   "lengthDataTipTwo": "Length is automatically set by 'Collie Type'",
-  "cargoItem": "Cargo Item"
+  "container": "Container",
+  "containers": "Containers",
+  "cargoItem": "Cargo Item",
+  "cargoItems": "Cargo Items"
 }

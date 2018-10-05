@@ -86,7 +86,7 @@ class FileUploader extends React.Component {
   }
   render () {
     const {
-      theme, type, tooltip, square, size, t
+      theme, type, tooltip, square, size, t, formClasses
     } = this.props
     const tooltipId = v4()
     const errorStyle = this.state.error ? styles.error : ''
@@ -97,7 +97,7 @@ class FileUploader extends React.Component {
         data-tip={tooltip}
         data-for={tooltipId}
       >
-        <form>
+        <form className={formClasses || ''}>
           {square ? (
             <SquareButton
               text={t('common:upload')}
@@ -141,6 +141,7 @@ FileUploader.propTypes = {
   dispatchFn: PropTypes.func,
   uploadFn: PropTypes.func,
   tooltip: PropTypes.string,
+  formClasses: PropTypes.string,
   size: PropTypes.string
 }
 
@@ -150,6 +151,7 @@ FileUploader.defaultProps = {
   dispatchFn: null,
   theme: null,
   tooltip: '',
+  formClasses: '',
   size: 'small'
 }
 
