@@ -7,30 +7,28 @@ export default function shipment (state = {}, action) {
         ...state,
         loading: false
       }
-    case shipmentConstants.CLEAR_ERRORS: {
-      const { error } = state
-      delete error[action.payload]
-
-      return {
-        ...state,
-        error
-      }
-    }
     case shipmentConstants.REUSE_SHIPMENT_REQUEST:
       return {
         reusedShipment: action.payload,
         loading: true,
         currentStage: 'stage1'
       }
-    case shipmentConstants.NEW_SHIPMENT_REQUEST:
-      return {
+    case shipmentConstants.NEW_SHIPMENT_REQUEST: {
+      const newState = {
         ...state,
         request: {
           stage1: action.shipmentData
         },
         loading: true,
-        currentStage: 'stage1'
+        currentStage: 'stage1',
+        error: {}
       }
+      if (!action.isReused) {
+        newState.reusedShipment = false
+      }
+
+      return newState
+    }
     case shipmentConstants.NEW_SHIPMENT_SUCCESS:
       return {
         ...state,
@@ -110,6 +108,36 @@ export default function shipment (state = {}, action) {
         },
         loading: false
       }
+    case shipmentConstants.SHIPMENT_GET_SCHEDULES_REQUEST: {
+      return state
+    }
+    case shipmentConstants.SHIPMENT_GET_SCHEDULES_SUCCESS: {
+      const { results } = state.response.stage2
+      const targetResult = results.filter(r => (r.meta.itinerary_id === action.payload.itinerary_id) &&
+        (r.meta.tenant_vehicle_id === action.payload.tenant_vehicle_id))[0]
+      const targetIndex = results.indexOf(targetResult)
+      results[targetIndex].schedules = action.payload.schedules
+
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          stage2: {
+            ...state.response.stage2,
+            results
+          }
+        }
+      }
+    }
+    case shipmentConstants.SHIPMENT_GET_SCHEDULES_FAILURE:
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          stage2: [action.error]
+        },
+        loading: false
+      }
     case shipmentConstants.GET_NEW_DATE_OFFERS_REQUEST: {
       const originalSelectedDay = state.originalSelectedDay ||
         state.request.stage2.shipment.selected_day
@@ -132,7 +160,6 @@ export default function shipment (state = {}, action) {
           schedules.push(sched)
         }
       })
-      // shipmentToEdit.selected_day = state.originalSelectedDay
       const adjustedShipmentData = {
         ...action.shipmentData,
         shipment: shipmentToEdit,
@@ -171,7 +198,6 @@ export default function shipment (state = {}, action) {
     case shipmentConstants.CHOOSE_OFFER_SUCCESS:
       return {
         ...state,
-        contacts: action.shipmentData.contacts,
         response: {
           ...state.response,
           stage3: action.shipmentData
@@ -183,6 +209,38 @@ export default function shipment (state = {}, action) {
     case shipmentConstants.CHOOSE_OFFER_FAILURE:
       return {
         ...state,
+        error: {
+          ...state.error,
+          stage3: [action.error]
+        },
+        loading: false
+      }
+    case shipmentConstants.SEND_QUOTES_REQUEST:
+
+      return {
+        ...state,
+        modal: false,
+        request: {
+          ...state.request,
+          stage3: action.shipmentData
+        },
+        loading: true
+      }
+    case shipmentConstants.SEND_QUOTES_SUCCESS:
+      return {
+        ...state,
+        modal: true,
+        response: {
+          ...state.response,
+          stage3: action.shipmentData
+        },
+        currentStage: 'stage4',
+        loading: false
+      }
+    case shipmentConstants.SEND_QUOTES_FAILURE:
+      return {
+        ...state,
+        modal: false,
         error: {
           ...state.error,
           stage3: [action.error]
@@ -417,6 +475,12 @@ export default function shipment (state = {}, action) {
         loading: false,
         error: { hubs: action.error }
       }
+    case '@@router/LOCATION_CHANGE': {
+      return {
+        ...state,
+        error: null
+      }
+    }
     default:
       return state
   }

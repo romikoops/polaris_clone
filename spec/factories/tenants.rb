@@ -19,15 +19,19 @@ FactoryBot.define do
             cargo_item: true
           }
         },
+        closed_shop: false,
+        closed_registration: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: true,
         dangerous_goods: false,
         detailed_billing: false,
+        require_full_address: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'text',
         has_insurance: true,
         has_customs: true,
+        fixed_exchange_rates: true,
         terms: [
           'You verify that all the information provided above is true',
           'You agree to the presented terms and conditions.',
@@ -43,7 +47,8 @@ FactoryBot.define do
             export: 'mandatory'
           }
         },
-        quotation_tool: true
+        open_quotation_tool: true,
+        closed_quotation_tool: true
       }
     end
 

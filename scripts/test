@@ -28,10 +28,17 @@ def yellow(msg)
   "\033[0;33m#{msg}\033[0m"
 end
 
+def bundle!
+  install_cmd = 'bundle install -j $(nproc)'
+  install_cmd += ' --path vendor' if ENV['CI']
+
+  system('bundle check') || system!(install_cmd)
+end
+
 def runner(dir:, name:)
   FileUtils.chdir dir do
     puts yellow("--- Preparing test for #{name} ---")
-    system('bundle check') || system!('bundle install')
+    bundle!
     code = true
     if File.directory?('spec')
       puts yellow("--- Running specs for #{name} ---")
@@ -74,7 +81,7 @@ puts "Spec Options: #{ENV['SPEC_OPTS']}"
 puts "Coverage Dir: #{ENV['COVERAGE_DIR']}"
 
 puts yellow('*** Preparing test environment ***')
-system('bundle check') || system!('bundle install')
+bundle!
 
 # Always ensure we have clean database
 tasks = {
@@ -100,7 +107,7 @@ runner(dir: APP_ROOT, name: 'api')
 
 @results.each do |name, result|
   puts format(
-    "%#{(ENGINES + LIBRARIES + %w{api}).map(&:length).max}s: %s",
+    "%#{(ENGINES + LIBRARIES + %w(api)).map(&:length).max}s: %s",
     name,
     (result ? green('SUCCESS') : red('FAILED'))
   )

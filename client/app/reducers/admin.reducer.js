@@ -255,7 +255,6 @@ export default function admin (state = {}, action) {
     }
 
     case adminConstants.ADMIN_GET_SHIPMENTS_REQUEST: {
-
       return {
         ...state,
         loading: true
@@ -455,6 +454,14 @@ export default function admin (state = {}, action) {
         state.dashboard && state.dashboard.shipments && state.dashboard.shipments.open
           ? state.dashboard.shipments.open.filter(x => x.id !== action.payload.id)
           : []
+      const rejected =
+        state.shipments && state.shipments.rejected
+          ? state.shipments.rejected.filter(x => x.id !== action.payload.id)
+          : []
+      const dashRejected =
+        state.dashboard && state.dashboard.shipments && state.dashboard.shipments.rejected
+          ? state.dashboard.shipments.rejected.filter(x => x.id !== action.payload.id)
+          : []
       const finished = state.shipments && state.shipments.finished ? state.shipments.finished : []
       const dashFinished =
         state.dashboard && state.dashboard.shipments && state.dashboard.shipments.finished
@@ -474,13 +481,15 @@ export default function admin (state = {}, action) {
           shipments: {
             ...state.dashboard.shipments,
             finished: dashFinished,
-            open: dashReq
+            open: dashReq,
+            rejected: dashRejected
           }
         },
         shipments: {
           ...state.shipments,
           finished,
-          open: req
+          open: req,
+          rejected
         },
         shipment: {
           ...state.shipment,
@@ -503,22 +512,36 @@ export default function admin (state = {}, action) {
         state.dashboard && state.dashboard.shipments && state.dashboard.shipments.requested
           ? state.dashboard.shipments.requested.filter(x => x.id !== action.payload.id)
           : []
+      const rejected = state.shipments && state.shipments.rejected ? state.shipments.rejected : []
+      const dashRejected =
+        state.dashboard && state.dashboard.shipments && state.dashboard.shipments.rejected
+          ? state.dashboard.shipments.rejected
+          : []
 
-      return {
+      rejected.push(action.payload)
+      dashRejected.push(action.payload)
+      const newState = {
         ...state,
         dashboard: {
           ...state.dashboard,
           shipments: {
             ...state.dashboard.shipments,
-            requested: denDashReq
+            requested: denDashReq,
+            rejected: dashRejected
           }
         },
         shipments: {
           ...state.shipments,
-          requested: denReq
+          requested: denReq,
+          rejected
         },
         loading: false
       }
+      if (state.shipment && state.shipment.shipment && state.shipment.shipment.id === action.payload.id) {
+        newState.shipment.shipment = action.payload
+      }
+
+      return newState
     }
     case adminConstants.DENY_SHIPMENT_FAILURE:
       return {
@@ -526,6 +549,39 @@ export default function admin (state = {}, action) {
         error: { shipments: action.error },
         loading: false
       }
+
+    case adminConstants.ARCHIVE_SHIPMENT_SUCCESS: {
+      const archived = state.shipments && state.shipments.archived ? state.shipments.archived : []
+      const dashArchived =
+        state.dashboard && state.dashboard.shipments && state.dashboard.shipments.archived
+          ? state.dashboard.shipments.archived
+          : []
+      dashArchived.push(action.payload)
+      
+      const shipment = state.shipment && state.shipment.shipment ? state.shipment.shipment : {}
+      if (shipment) {
+        shipment.status = 'archived'
+      }
+
+      return {
+        ...state,
+        dashboard: {
+          ...state.dashboard,
+          shipments: {
+            archived: dashArchived
+          }
+        },
+        shipments: {
+          ...state.shipments,
+          archived
+        },
+        shipment: {
+          ...state.shipment,
+          shipment
+        },
+        loading: false
+      }
+    }
 
     case adminConstants.ADMIN_UPLOAD_DOCUMENT_REQUEST:
       return state

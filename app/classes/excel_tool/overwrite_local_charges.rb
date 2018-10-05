@@ -21,6 +21,7 @@ module ExcelTool
         if hub
           rows = parse_sheet(first_sheet)
           next if rows.empty?
+          sanitize_rows(rows)
           hash = build_hash(rows, hub_fees, customs, hub)
           counterparts = hash[:counterparts]
           tenant_vehicles = hash[:tenant_vehicles]
@@ -135,6 +136,12 @@ module ExcelTool
     def create_vehicle_from_name(row, name = nil)
       name ||= row[:service_level]
       Vehicle.create_from_name(name, row[:mot].downcase, user.tenant_id, row[:carrier]).id
+    end
+
+    def sanitize_rows(rows)
+      rows.each do |row|
+        row[:load_type].strip!
+      end
     end
 
     def build_hash(rows, hub_fees, customs, hub)
@@ -295,7 +302,6 @@ module ExcelTool
       when "PER_X_KG_FLAT"
         charge = { currency: row[:currency], value: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], base: row[:base] }
       end
-
       charge[:expiration_date] = row[:expiration_date]
       charge[:effective_date] = row[:effective_date]
       charge

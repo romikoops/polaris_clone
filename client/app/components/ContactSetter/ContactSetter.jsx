@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './ContactSetter.scss'
 import defs from '../../styles/default_classes.scss'
@@ -8,7 +9,7 @@ import ContactSetterNewContactWrapper from './NewContactWrapper'
 // eslint-disable-next-line no-named-as-default
 import ShipmentContactForm from '../ShipmentContactForm/ShipmentContactForm'
 
-export class ContactSetter extends Component {
+class ContactSetter extends Component {
   constructor (props) {
     super(props)
 
@@ -130,7 +131,7 @@ export class ContactSetter extends Component {
 
   render () {
     const {
-      theme, shipper, consignee, notifyees
+      theme, shipper, consignee, notifyees, t
     } = this.props
     const { showModal, modal } = this.state
 
@@ -149,7 +150,7 @@ export class ContactSetter extends Component {
             onClick={null}
           >
 
-            <h1> Set Contact Details</h1>
+            <h1>{t('account:setContact')}</h1>
             <hr className={styles.main_hr} />
           </div>
           <div
@@ -178,6 +179,7 @@ export class ContactSetter extends Component {
 
 ContactSetter.propTypes = {
   contacts: PropTypes.arrayOf(PropTypes.any).isRequired,
+  t: PropTypes.func.isRequired,
   shipper: PropTypes.objectOf(PropTypes.any),
   consignee: PropTypes.objectOf(PropTypes.any),
   notifyees: PropTypes.arrayOf(PropTypes.any),
@@ -196,4 +198,4 @@ ContactSetter.defaultProps = {
   finishBookingAttempted: false
 }
 
-export default ContactSetter
+export default translate()(ContactSetter)

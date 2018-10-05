@@ -1,10 +1,16 @@
 import React from 'react'
 import ReactTooltip from 'react-tooltip'
-import { ValidatedInput } from '../ValidatedInput/ValidatedInput'
-import { Checkbox } from '../Checkbox/Checkbox'
+import ValidatedInput from '../ValidatedInput/ValidatedInput'
+import Checkbox from '../Checkbox/Checkbox'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import { Tooltip } from '../Tooltip/Tooltip'
-import { switchIcon, chargeableWeight, volume, numberSpacing } from '../../helpers'
+import {
+ switchIcon,
+  chargeableWeight,
+  volume, 
+  numberSpacing,
+   calcMaxDimensionsToApply 
+} from '../../helpers'
 import styles from './ShipmentCargoItems.scss'
 
 /**
@@ -55,9 +61,7 @@ export default function getInputs (
     !firstRenderInputs && nextStageAttempt &&
     (!cargoItemTypes[i] || !cargoItemTypes[i].label)
 
-  const maxDimensionsKey = availableMotsForRoute.some(mot => mot !== 'air') || availableMotsForRoute.length === 0
-    ? 'general' : 'air'
-  const maxDimensionsToApply = maxDimensions[maxDimensionsKey]
+  const maxDimensionsToApply = calcMaxDimensionsToApply(availableMotsForRoute, maxDimensions)
 
   inputs.colliType = (
     <div className="layout-row flex-40 layout-wrap layout-align-start-center colli_type" >
@@ -76,6 +80,47 @@ export default function getInputs (
   )
 
   inputs.grossWeight = (
+    <div className="layout-row flex-40 layout-wrap layout-align-start-center" >
+      <div className={`flex-85 layout-row ${styles.input_box}`}>
+        <div className="flex-60 layout-row layout-align-center-center">
+          {t('common:grossWeight')}
+        </div>
+        {
+          cargoItem ? (
+            <ValidatedInput
+              wrapperClassName="flex-60"
+              name={`${i}-payload_in_kg`}
+              value={cargoItem.payload_in_kg || ''}
+              type="number"
+              onChange={handleDelta}
+              firstRenderInputs={firstRenderInputs}
+              setFirstRenderInputs={this.setFirstRenderInputs}
+              nextStageAttempt={nextStageAttempt}
+              errorStyles={{
+                fontSize: '10px',
+                bottom: '-14px'
+              }}
+              validations={{
+                nonNegative: (values, value) => value > 0,
+                maxDimension: (values, value) => value <= +maxDimensionsToApply.payloadInKg
+              }}
+              validationErrors={{
+                isDefaultRequiredValue: t('common:greaterZero'),
+                nonNegative: t('common:greaterZero'),
+                maxDimension: `${t('errors:maxWeight')} ${maxDimensionsToApply.payloadInKg}`
+              }}
+              required
+            />
+          ) : placeholderInput
+        }
+        <div className="flex-20 layout-row layout-align-center-center">
+          kg
+        </div>
+      </div>
+      <Tooltip theme={theme} icon="fa-info-circle" text="payload_in_kg" />
+    </div>
+  )
+  inputs.collectiveWeight = (
     <div className="layout-row flex-30 layout-wrap layout-align-start-center" >
       <div className={`flex-85 layout-row ${styles.input_box}`}>
         <div className="flex-40 layout-row layout-align-center-center">
@@ -85,8 +130,8 @@ export default function getInputs (
           cargoItem ? (
             <ValidatedInput
               wrapperClassName="flex-60"
-              name={`${i}-payload_in_kg`}
-              value={cargoItem.payload_in_kg || ''}
+              name={`${i}-collectiveWeight`}
+              value={cargoItem.payload_in_kg * cargoItem.quantity || ''}
               type="number"
               onChange={handleDelta}
               firstRenderInputs={firstRenderInputs}

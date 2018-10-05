@@ -1,19 +1,6 @@
-import { getSubdomain } from '../helpers/subdomain'
+import getConfig from '../constants/config.constants'
+import getSubdomain from '../helpers/subdomain'
 
-let url
-
-const subdomainKey = getSubdomain()
-if (process.env.NODE_ENV === 'production') {
-  url = 'https://api2.itsmycargo.com'
-  // url = 'https://devapi.itsmycargo.com'
-} else {
-  url = 'http://localhost:3000'
-  // url = 'https://api2.itsmycargo.com'
-  // url = 'https://devapi.itsmycargo.com'
-  // url = 'http://192.168.178.91:3000'
-  // url = 'http://imc-beta.eu-central-1.elasticbeanstalk.com/'
-  // url = 'http://imcr-staging.edrmpdsn2j.eu-central-1.elasticbeanstalk.com';178
+export default function getApiHost () {
+  return `${getConfig().api_url}/subdomain/${getSubdomain()}`
 }
-export const BASE_URL = `${url}/subdomain/${subdomainKey}`
-
-export default BASE_URL

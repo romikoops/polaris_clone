@@ -1,10 +1,11 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import { v4 } from 'uuid'
 import styles from './AddContactButton.scss'
 import PropTypes from '../../../../../prop-types'
 
-export default function ContactSetterBodyNotifyeeContactsAddContactButton ({
-  onClick
+function ContactSetterBodyNotifyeeContactsAddContactButton ({
+  onClick, t
 }) {
   return (
     <div
@@ -13,9 +14,9 @@ export default function ContactSetterBodyNotifyeeContactsAddContactButton ({
       onClick={onClick}
     >
       <h3>
-        Add a <br />
+        {t('common:addA')}<br />
         <span>
-          NOTIFYEE
+          {t('common:notifyee').toUpperCase()}
         </span>
       </h3>
     </div>
@@ -23,9 +24,12 @@ export default function ContactSetterBodyNotifyeeContactsAddContactButton ({
 }
 
 ContactSetterBodyNotifyeeContactsAddContactButton.propTypes = {
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  t: PropTypes.func.isRequired
 }
 
 ContactSetterBodyNotifyeeContactsAddContactButton.defaultProps = {
   onClick: null
 }
+
+export default translate('common')(ContactSetterBodyNotifyeeContactsAddContactButton)

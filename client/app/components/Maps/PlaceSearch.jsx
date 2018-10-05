@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './Maps.scss'
 import { colorSVG } from '../../helpers'
@@ -12,7 +13,7 @@ const baseMapStyle = {
   borderRadius: '3px',
   boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
 }
-export class PlaceSearch extends Component {
+class PlaceSearch extends Component {
   constructor (props) {
     super(props)
 
@@ -76,12 +77,9 @@ export class PlaceSearch extends Component {
       map.setCenter(bounds.getCenter())
       map.setZoom(14)
     }
-
-    // map.fitBounds(bounds);
   }
 
   handleAuto (event) {
-    console.log(event.target)
     const { name, value } = event.target
     this.setState({ autoText: { [name]: value } })
   }
@@ -126,9 +124,10 @@ export class PlaceSearch extends Component {
     autocomplete.addListener('place_changed', () => {
       infowindow.close()
       marker.setVisible(false)
+      const { t } = this.props
       const place = autocomplete.getPlace()
       if (!place.geometry) {
-        window.alert(`No details available for input: '${place.name}'`)
+        window.alert(`${t('common:noDetailsAvailable')} '${place.name}'`)
 
         return
       }
@@ -149,6 +148,7 @@ export class PlaceSearch extends Component {
   }
 
   render () {
+    const { t } = this.props
     const autoInputStyles = {}
     const mapStyle = Object.assign({}, baseMapStyle)
     if (this.props.hideMap) {
@@ -173,7 +173,7 @@ export class PlaceSearch extends Component {
           type="string"
           onChange={this.handleAuto}
           value={this.state.autoText.location}
-          placeholder="Search for address"
+          placeholder={t('nav:searchAddress')}
           style={this.props.inputStyles}
         />
       </div>
@@ -190,6 +190,7 @@ export class PlaceSearch extends Component {
 
 PlaceSearch.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   handlePlaceChange: PropTypes.func.isRequired,
   gMaps: PropTypes.gMaps.isRequired,
   hideMap: PropTypes.bool,
@@ -206,4 +207,4 @@ PlaceSearch.defaultProps = {
   location: {}
 }
 
-export default PlaceSearch
+export default translate('nav')(PlaceSearch)

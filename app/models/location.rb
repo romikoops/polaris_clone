@@ -110,7 +110,7 @@ class Location < ApplicationRecord
   def self.create_and_geocode(raw_location_params)
     location = Location.find_or_create_by(location_params(raw_location_params))
     location.geocode_from_address_fields! if location.geocoded_address.nil?
-    location.reverse_geocode
+    location.reverse_geocode if location.zip_code.nil?
     location
   end
 
@@ -232,15 +232,15 @@ class Location < ApplicationRecord
   end
 
   def closest_location_with_distance
-    locations = Location.where(location_type: "nexus")
-    distances = locations.map do |location|
+    nexuses = Nexus.all
+    distances = nexuses.map do |nexus|
       Geocoder::Calculations.distance_between(
         [latitude, longitude],
-        [location.latitude, location.longitude]
+        [nexus.latitude, nexus.longitude]
       )
     end
     lowest_distance = distances.reject(&:nan?).min
-    [locations[distances.find_index(lowest_distance)], lowest_distance]
+    [nexuses[distances.find_index(lowest_distance)], lowest_distance]
   end
 
   def closest_hubs

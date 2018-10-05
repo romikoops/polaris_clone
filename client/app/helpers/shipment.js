@@ -1,3 +1,5 @@
+import { shipmentConstants, moment } from "../constants";
+
 export function totalPrice (shipment) {
   const selectedOffer = shipment.selected_offer
 
@@ -10,6 +12,12 @@ export function totalPriceString (shipment) {
   const { currency, value } = totalPrice(shipment)
 
   return `${currency} ${(+value).toFixed(2)}`
+}
+
+export function formattedDate (date) {
+  const e = moment(date)
+  
+  return e.format('DD/MM/YYYY | HH:mm')
 }
 
 export function formattedPriceValue (num) {
@@ -28,4 +36,21 @@ export function checkPreCarriage (shipment, action) {
     type: action,
     date: shipment.planned_origin_drop_off_date
   }
+}
+
+export function checkOnCarriage (shipment, action) {
+  if (shipmentConstants.has_on_carriage && action === 'Delivery') {
+    return {
+      type: action,
+      date: shipment.planned_delivery_date
+    }
+  }
+
+  return {
+    type: action,
+    date: shipment.planned_destination_collection_date
+  }
+}
+export function isRequested (status) {
+  return ['requested', 'requested_by_unconfirmed_account'].includes(status)
 }

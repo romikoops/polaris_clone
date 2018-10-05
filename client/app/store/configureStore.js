@@ -4,6 +4,8 @@ import { routerMiddleware } from 'react-router-redux'
 import thunkMiddleware from 'redux-thunk'
 import throttle from 'lodash/throttle'
 import { createLogger } from 'redux-logger'
+import * as Sentry from '@sentry/browser'
+import createSentryMiddleware from '../helpers/sentry-middleware'
 
 import { saveState, loadState } from '../helpers'
 import rootReducer from '../reducers'
@@ -19,8 +21,8 @@ export function configureStore () {
     compose(
       applyMiddleware(...[
         routerMiddleware(history),
-        createLogger(),
-        thunkMiddleware
+        thunkMiddleware,
+        createLogger()
       ].filter(Boolean)),
       DevTools.instrument()
     )
@@ -29,8 +31,9 @@ export function configureStore () {
       rootReducer,
       loadState(),
       compose(applyMiddleware(...[
-        routerMiddleware(history),
-        thunkMiddleware
+        createSentryMiddleware(Sentry),
+        thunkMiddleware,
+        routerMiddleware(history)
       ].filter(Boolean)))
     )
   store.subscribe(

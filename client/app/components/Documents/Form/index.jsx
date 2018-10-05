@@ -1,11 +1,12 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import fetch from 'isomorphic-fetch'
 import Truncate from 'react-truncate'
 import { Promise } from 'es6-promise-promise'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
-import { BASE_URL } from '../../../constants'
+import getApiHost from '../../../constants/api.constants'
 import { authHeader, gradientTextGenerator } from '../../../helpers'
 import styles from './index.scss'
 import AdminPromptConfirm from '../../Admin/Prompt/Confirm'
@@ -35,7 +36,6 @@ class DocumentsForm extends React.Component {
     }
   }
   onChange (e) {
-    // this.setState({file: e.target.files[0]});
     this.fileUpload(e.target.files[0])
   }
   fileUpload (baseFile) {
@@ -55,6 +55,8 @@ class DocumentsForm extends React.Component {
       fileExt === 'jpg' ||
       fileExt === 'tiff' ||
       fileExt === 'png' ||
+      fileExt === 'xls' ||
+      fileExt === 'xlsx' ||
       fileExt === 'pdf'
     ) {
       if (dispatchFn) {
@@ -75,7 +77,7 @@ class DocumentsForm extends React.Component {
         headers: { ...authHeader() },
         body: formData
       }
-      const uploadUrl = BASE_URL + url
+      const uploadUrl = getApiHost() + url
 
       return fetch(uploadUrl, requestOptions).then(DocumentsForm.handleResponse)
     }
@@ -99,7 +101,8 @@ class DocumentsForm extends React.Component {
   toggleShowConfim () {
     this.setState(prevState => ({ showConfirm: !prevState.showConfirm }))
   }
-  deleteFile () {
+  deleteFile (e) {
+    e.preventDefault()
     const { deleteFn } = this.props
     const { docToDelete } = this.state
     if (this.uploaderInput.files.length) {
@@ -107,6 +110,7 @@ class DocumentsForm extends React.Component {
     }
     this.setState({ file: null })
     deleteFn(docToDelete)
+    this.toggleShowConfim()
   }
   render () {
     const {
@@ -118,7 +122,8 @@ class DocumentsForm extends React.Component {
       isRequired,
       displayOnly,
       multiple,
-      viewer
+      viewer,
+      t
     } = this.props
     const { showConfirm } = this.state
     const tooltipId = v4()
@@ -148,20 +153,20 @@ class DocumentsForm extends React.Component {
     const missingFile = isRequired ? (
       <p className={`${styles.missing}`}>
         <i className="fa fa-exclamation-triangle" />
-        Missing File
+        {t('doc:missingFile')}
       </p>
     ) : (
       <p className={`${styles.optional}`}>
         <i className="fa fa-exclamation-triangle" />
-        Optional
+        {t('common:optional')}
       </p>
     )
     const iconRowStyle = viewer && !multiple ? styles.viewer_row : styles.icon_row
     const confirmModal = showConfirm
       ? (<AdminPromptConfirm
         theme={theme}
-        heading="Delete this document?"
-        text="Are you sure you wish to delete this docuemnt? It cannot be undone."
+        heading={t('doc:deleteThisDoc')}
+        text={t('doc:areYouSure')}
         confirm={() => this.deleteFile()}
         deny={() => this.toggleShowConfim()}
       />) : ''
@@ -241,7 +246,7 @@ class DocumentsForm extends React.Component {
           layout-row layout-align-center`}
         >
           <p className="flex-100">
-            Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed
+            {t('doc:restrictions')}
           </p>
         </div>
       </div>
@@ -252,6 +257,7 @@ class DocumentsForm extends React.Component {
 DocumentsForm.propTypes = {
   url: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   dispatchFn: PropTypes.func,
   uploadFn: PropTypes.func,
@@ -279,4 +285,4 @@ DocumentsForm.defaultProps = {
   viewer: false
 }
 
-export default DocumentsForm
+export default translate(['common', 'doc'])(DocumentsForm)

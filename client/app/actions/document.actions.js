@@ -14,17 +14,16 @@ function uploadPricings (file, loadType, open) {
   function failure (error) {
     return { type: documentConstants.UPLOAD_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
     documentService.uploadPricings(file, loadType, open).then(
       (data) => {
-        dispatch(alertActions.success('Uploading successful'))
         dispatch(success(data))
         dispatch(adminActions.getPricings(false))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -41,17 +40,16 @@ function uploadHubs (file) {
   function failure (error) {
     return { type: documentConstants.UPLOAD_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
     documentService.uploadHubs(file).then(
       (data) => {
-        dispatch(alertActions.success('Uploading successful'))
         dispatch(success(data))
         dispatch(adminActions.getHubs(false))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -68,16 +66,15 @@ function downloadPricings (options) {
   function failure (error) {
     return { type: documentConstants.DOWNLOAD_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
     documentService.downloadPricings(options).then(
       (data) => {
-        dispatch(alertActions.success('Downloading Successful successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -94,16 +91,15 @@ function downloadLocalCharges (options) {
   function failure (error) {
     return { type: documentConstants.DOWNLOAD_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
     documentService.downloadLocalCharges(options).then(
       (data) => {
-        dispatch(alertActions.success('Downloading Successful successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -120,16 +116,63 @@ function downloadSchedules (options) {
   function failure (error) {
     return { type: documentConstants.DOWNLOAD_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
     documentService.downloadSchedules(options).then(
       (data) => {
-        dispatch(alertActions.success('Downloading Successful successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function downloadQuotations (options) {
+  function request (downloadData) {
+    return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
+  }
+  function success (downloadData) {
+    return { type: documentConstants.DOWNLOAD_SUCCESS, payload: downloadData.data }
+  }
+  function failure (error) {
+    return { type: documentConstants.DOWNLOAD_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+    documentService.downloadQuotations(options).then(
+      (response) => {
+        dispatch(success(response))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function downloadShipment (options) {
+  function request (downloadData) {
+    return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
+  }
+  function success (downloadData) {
+    return { type: documentConstants.DOWNLOAD_SUCCESS, payload: downloadData.data }
+  }
+  function failure (error) {
+    return { type: documentConstants.DOWNLOAD_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+    documentService.downloadShipment(options).then(
+      (response) => {
+        dispatch(success(response))
+      },
+      (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -146,16 +189,15 @@ function downloadTrucking (options) {
   function failure (error) {
     return { type: documentConstants.DOWNLOAD_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
     documentService.downloadTrucking(options).then(
       (data) => {
-        dispatch(alertActions.success('Downloading Trucking successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -172,6 +214,7 @@ function downloadHubs () {
   function failure (error) {
     return { type: documentConstants.DOWNLOAD_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -181,7 +224,6 @@ function downloadHubs () {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -198,16 +240,15 @@ function downloadGdpr (options) {
   function failure (error) {
     return { type: documentConstants.DOWNLOAD_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
     documentService.downloadGdpr(options.userId).then(
       (data) => {
-        dispatch(alertActions.success('Downloading Successful successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -224,17 +265,16 @@ function uploadSchedules (file, target) {
   function failure (error) {
     return { type: documentConstants.UPLOAD_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
     documentService.uploadSchedules(file, target).then(
       (data) => {
-        dispatch(alertActions.success('Uploading successful'))
         dispatch(success(data))
         dispatch(adminActions.getSchedules(false))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -251,17 +291,16 @@ function uploadItinerarySchedules (file, target) {
   function failure (error) {
     return { type: documentConstants.UPLOAD_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
     documentService.uploadItinerarySchedules(file, target).then(
       (data) => {
-        dispatch(alertActions.success('Uploading successful'))
         dispatch(success(data))
         dispatch(adminActions.getSchedules(false))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -278,17 +317,15 @@ function uploadLocalCharges (file) {
   function failure (error) {
     return { type: documentConstants.UPLOAD_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
     documentService.uploadLocalCharges(file).then(
       (data) => {
-        dispatch(alertActions.success('Uploading successful'))
         dispatch(success(data))
-        // dispatch(adminActions.getHubs(false))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -320,7 +357,9 @@ export const documentActions = {
   uploadSchedules,
   uploadItinerarySchedules,
   downloadTrucking,
-  downloadGdpr
+  downloadGdpr,
+  downloadShipment,
+  downloadQuotations
 }
 
 export default documentActions

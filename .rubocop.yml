@@ -3,6 +3,7 @@ AllCops:
   Exclude:
     - 'bin/*'
     - 'client/**/*'
+    - 'db/schema.rb'
     - 'lib/*/bin/*'
     - Rakefile
 
@@ -14,7 +15,7 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Max: 25
   Exclude:
-    - config/routes.rb
+    - config/**/*.rb
     - db/migrate/*.rb
     - spec/**/*_spec.rb
 
@@ -29,8 +30,19 @@ Metrics/MethodLength:
     - db/migrate/*.rb
     - spec/**/*_spec.rb
 
+Naming/FileName:
+  Exclude:
+    - config/initializers/*.rb
+
 Style/Documentation:
   Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Style/IfUnlessModifier:
+  Exclude:
+    - danger/*/Dangerfile
 
 # do / end blocks should be used for side effects,
 # methods that run a block for side effects and have
@@ -53,6 +65,3 @@ Style/PreferredHashMethods:
 
 Style/SingleLineMethods:
   AllowIfMethodIsEmpty: false
-
-Style/EmptyMethod:
-  EnforcedStyle: expanded

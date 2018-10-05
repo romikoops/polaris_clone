@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import styled from 'styled-components'
 import PropTypes from '../../prop-types'
 import styles from './LandingTop.scss'
@@ -17,7 +18,7 @@ const StyledTop = styled.div`
   position: relative;
 `
 
-export class LandingTop extends Component {
+class LandingTop extends Component {
   constructor (props) {
     super(props)
     this.toAccount = this.toAccount.bind(this)
@@ -26,17 +27,46 @@ export class LandingTop extends Component {
   toAccount () {
     this.props.goTo('/account')
   }
-  toAdmin (target) {
+  toAdmin () {
     this.props.toAdmin(true)
+  }
+  showLogin () {
+    const { authDispatch } = this.props
+    authDispatch.showLogin()
+  }
+  buttonsToDisplay (components) {
+    const { user, tenant } = this.props
+    const isClosed = tenant && tenant.data && tenant.data.scope && tenant.data.scope.closed_quotation_tool
+    if (!user) {
+      if (!isClosed) {
+        return [components.rates, components.login]
+      }
+
+      return [components.login]
+    }
+    if (['shipper', 'agent', 'agency_manager'].includes(user.role.name)) {
+      if (user.guest) {
+        return [components.rates]
+      } else if (!isClosed) {
+        return [components.rates, components.account]
+      }
+
+      return [components.account]
+    }
+    if (['admin', 'sub_admin', 'super_admin'].includes(user.role.name)) {
+      return [components.admin]
+    }
+
+    return []
   }
   render () {
     const {
-      theme, user, tenant, bookNow
+      theme, user, tenant, bookNow, t
     } = this.props
     const myAccount = (
       <div className="layout-row flex-50 flex-md-100 margin_bottom">
         <SquareButton
-          text="My Account"
+          text={t('common:accountTitle')}
           theme={theme}
           handleNext={() => this.toAccount()}
           size="small"
@@ -47,7 +77,7 @@ export class LandingTop extends Component {
     const toAdmin = (
       <div className="layout-row flex-50 flex-md-100 margin_bottom">
         <SquareButton
-          text="Admin Dashboard"
+          text={t('landing:adminDashboard')}
           theme={theme}
           handleNext={() => this.toAdmin()}
           size="small"
@@ -57,9 +87,10 @@ export class LandingTop extends Component {
     )
     const findRates = (
       <div className="layout-row flex-50 flex-md-100 margin_bottom">
-        <SquareButton text="Find Rates" theme={theme} handleNext={bookNow} size="small" active />
+        <SquareButton text={t('landing:callToAction')} theme={theme} handleNext={bookNow} size="small" active />
       </div>
     )
+
     const backgroundImage =
       theme && theme.background
         ? theme.background
@@ -67,7 +98,7 @@ export class LandingTop extends Component {
 
     const largeLogo = theme && theme.logoLarge ? theme.logoLarge : ''
     const whiteLogo = theme && theme.logoWhite ? theme.logoWhite : largeLogo
-    const welcomeText = theme && theme.welcome_text ? theme.welcome_text : 'shop for online freight'
+    const welcomeText = theme && theme.welcome_text ? theme.welcome_text : t('landing:welcomeTextTail')
 
     return (
       <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
@@ -84,7 +115,7 @@ export class LandingTop extends Component {
                   className={`flex-none ${styles.tenant_logo_landing}`}
                 />
                 <h2 className="flex-none">
-                  <b>Welcome to the </b> <br />
+                  <b>{t('landing:welcomeTextHead')}</b> <br />
                   <i> {tenant.data.name} </i> <b> <br />
                     {welcomeText}</b>
                 </h2>
@@ -93,30 +124,30 @@ export class LandingTop extends Component {
                 </div>
                 <div className={styles.wrapper_h3}>
                   <h3 className="flex-none">
-                    Enjoy the most advanced and easy to use <b>booking system</b> in the market.
-                    Finally, shipping is as simple as it should be.
+                    {t('landing:descriptionHead')} <b>{t('landing:descriptionMiddle')}</b> {t('landing:descriptionTail')}
                   </h3>
                 </div>
-                <div
-                  className={
-                    `layout-row layout-wrap layout-align-start-start ${styles.wrapper_btns} flex-md-100 flex-75 `
-                  }
-                >
-                  {((user && user.role && user.role.name === 'shipper') || !user) && findRates}
-                  {user && !user.guest && user.role && user.role.name === 'shipper' && myAccount}
-                  {user && user.role && user.role.name === 'admin' && toAdmin}
-                  <div className={`flex layout-row flex-100 ${styles.banner_text}`}>
-                    <div className="flex-none layout-row layout-align-start-center">
-                      <h4 className="flex-none">powered by&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                      <div className="flex-5" />
-                      <a className="layout-row layout-align-center-center" href="https://www.itsmycargo.com/" target="_blank">
-                        <img
-                          src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                          alt=""
-                          className={`flex-none pointy ${styles.powered_by_logo}`}
-                        />
-                      </a>
-                    </div>
+              </div>
+              <div
+                className={
+                  `layout-row layout-align-start-center ${styles.wrapper_btns} flex-70 `
+                }
+              >
+                {this.buttonsToDisplay({ admin: toAdmin, account: myAccount, rates: findRates })}
+
+              </div>
+              <div className={`flex-70 ${styles.banner_text}`}>
+                <div className={`flex layout-row flex-100 ${styles.banner_text}`}>
+                  <div className="flex-none layout-row layout-align-start-center">
+                    <h4 className="flex-none">{t('landing:poweredBy')}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                    <div className="flex-5" />
+                    <a className="layout-row layout-align-center-center" href="https://www.itsmycargo.com/" target="_blank">
+                      <img
+                        src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+                        alt=""
+                        className={`flex-none pointy ${styles.powered_by_logo}`}
+                      />
+                    </a>
                   </div>
                 </div>
               </div>
@@ -134,7 +165,9 @@ LandingTop.propTypes = {
   toAdmin: PropTypes.func.isRequired,
   user: PropTypes.user,
   tenant: PropTypes.tenant,
-  bookNow: PropTypes.func
+  t: PropTypes.func.isRequired,
+  bookNow: PropTypes.func,
+  authDispatch: PropTypes.objectOf(PropTypes.func).isRequired
 }
 
 LandingTop.defaultProps = {
@@ -144,4 +177,4 @@ LandingTop.defaultProps = {
   bookNow: null
 }
 
-export default LandingTop
+export default translate(['common', 'landing'])(LandingTop)

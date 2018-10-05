@@ -4,13 +4,15 @@ module MultiTenantTools
   include ExcelTools
   require "#{Rails.root}/db/seed_classes/vehicle_seeder.rb"
   require "#{Rails.root}/db/seed_classes/pricing_seeder.rb"
-
+  API_URL = 'https://api2.itsmycargo.com'
+  DEV_API_URL = 'https://gamma.itsmycargo.com'
   def update_indexes
     Tenant.all.each do |tenant|
       title = tenant.name + " | ItsMyCargo"
       favicon = "https://assets.itsmycargo.com/assets/favicon.ico"
       # indexHtml = Nokogiri::HTML(open("https://demo.itsmycargo.com/index.html"))
       indexHtml = Nokogiri::HTML(open(Rails.root.to_s + "/client/dist/index.html"))
+      
       titles = indexHtml.xpath("//title")
       titles[0].content = title
       links = indexHtml.xpath("//link")
@@ -22,12 +24,15 @@ module MultiTenantTools
       end
 
       s3 = Aws::S3::Client.new(
-        access_key_id:     ENV["AWS_ACCESS_KEY_ID"],
-        secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
+        access_key_id:     Settings.aws.access_key_id,
+        secret_access_key: Settings.aws.secret_access_key,
         region:            "us-east-1"
       )
       objKey = tenant["subdomain"] + ".html"
       newHtml = indexHtml.to_html
+      # Replace API Host and tenantName
+      newHtml.gsub!('__API_URL__', API_URL)
+      newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
       File.open("blank.html", "w") { |file| file.write(newHtml) }
       upFile = open("blank.html")
       s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
@@ -53,12 +58,15 @@ module MultiTenantTools
       end
 
       s3 = Aws::S3::Client.new(
-        access_key_id:     ENV["AWS_ACCESS_KEY_ID"],
-        secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
+        access_key_id:     Settings.aws.access_key_id,
+        secret_access_key: Settings.aws.secret_access_key,
         region:            "us-east-1"
       )
       objKey = tenant["subdomain"] + ".html"
       newHtml = indexHtml.to_html
+      # Replace API Host and tenantName
+      newHtml.gsub!('__API_URL__', DEV_API_URL)
+      newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
       File.open("blank.html", "w") { |file| file.write(newHtml) }
       upFile = open("blank.html")
       s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
@@ -232,8 +240,8 @@ module MultiTenantTools
     end
 
     s3 = Aws::S3::Client.new(
-      access_key_id:     ENV["AWS_ACCESS_KEY_ID"],
-      secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
+      access_key_id:     Settings.aws.access_key_id,
+      secret_access_key: Settings.aws.secret_access_key,
       region:            "us-east-1"
     )
     objKey = tenant[:subdomain] + ".html"
@@ -265,12 +273,15 @@ module MultiTenantTools
     end
 
     s3 = Aws::S3::Client.new(
-      access_key_id:     ENV["AWS_ACCESS_KEY_ID"],
-      secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
+      access_key_id:     Settings.aws.access_key_id,
+      secret_access_key: Settings.aws.secret_access_key,
       region:            "us-east-1"
     )
     objKey = tenant.subdomain + ".html"
     newHtml = indexHtml.to_html
+    # Replace API Host and tenantName
+    newHtml.gsub!('__API_URL__', API_URL)
+    newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
     File.open("blank.html", "w") do |file|
       file.write(newHtml)
     end
@@ -282,9 +293,9 @@ module MultiTenantTools
 
   def create_distribution(subd)
     cloudfront = Aws::CloudFront::Client.new(
-      access_key_id:     ENV["AWS_ACCESS_KEY_ID"],
-      secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
-      region:            ENV["AWS_REGION"]
+      access_key_id:     Settings.aws.access_key_id,
+      secret_access_key: Settings.aws.secret_access_key,
+      region:            Settings.aws.region
     )
     caller_reference = subd
     path = "#{subd}.html"
@@ -362,9 +373,9 @@ module MultiTenantTools
 
   def new_record(domain, cf_name)
     client = Aws::Route53::Client.new(
-      access_key_id:     ENV["AWS_ACCESS_KEY_ID"],
-      secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
-      region:            ENV["AWS_REGION"]
+      access_key_id:     Settings.aws.access_key_id,
+      secret_access_key: Settings.aws.secret_access_key,
+      region:            Settings.aws.region
     )
     resp = client.change_resource_record_sets(
       hosted_zone_id: "Z3TZQVG8RI9CYN", # required
@@ -561,11 +572,11 @@ module MultiTenantTools
 
   def invalidate(cfId, subdomain)
     cloudfront = Aws::CloudFront::Client.new(
-      access_key_id:     ENV["AWS_ACCESS_KEY_ID"],
-      secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
-      region:            ENV["AWS_REGION"]
+      access_key_id:     Settings.aws.access_key_id,
+      secret_access_key: Settings.aws.secret_access_key,
+      region:            Settings.aws.region
     )
-    invalArray = ["/#{subdomain}.html"]
+    invalArray = ["/#{subdomain}.html", "/config.js"]
     invalStr = Time.now.to_i.to_s + "_subdomain"
     resp = cloudfront.create_invalidation(
       distribution_id:    cfId, # required

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import styles from './Messaging.scss'
 import { moment } from '../../constants'
 import { Price } from '../Price/Price'
@@ -6,7 +7,7 @@ import { Tooltip } from '../Tooltip/Tooltip'
 import PropTypes from '../../prop-types'
 import { switchIcon, totalPrice } from '../../helpers'
 
-export class MessageShipmentData extends Component {
+class MessageShipmentData extends Component {
   static switchIcon (sched) {
     let icon
     switch (sched.mode_of_transport) {
@@ -40,7 +41,7 @@ export class MessageShipmentData extends Component {
 
   render () {
     const {
-      theme, shipmentData, closeInfo
+      theme, shipmentData, closeInfo, t
     } = this.props
     if (!shipmentData) {
       return ''
@@ -102,7 +103,7 @@ export class MessageShipmentData extends Component {
             <div className="flex-50 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row layout-align-center">
                 <h4 className={styles.date_title} style={gradientFontStyle}>
-                  Pick-up Date
+                  {t('common:pickupDate')}
                 </h4>
               </div>
               <div className="flex-100 layout-row layout-align-center">
@@ -120,7 +121,7 @@ export class MessageShipmentData extends Component {
               <div className="flex-100 layout-row layout-align-center">
                 <h4 className={styles.date_title} style={gradientFontStyle}>
                   {' '}
-                  Date of Departure
+                  {t('common:dateOfDeparture')}
                 </h4>
               </div>
               <div className="flex-100 layout-row layout-align-center">
@@ -138,7 +139,7 @@ export class MessageShipmentData extends Component {
               <div className="flex-100 layout-row layout-align-center">
                 <h4 className={styles.date_title} style={gradientFontStyle}>
                   {' '}
-                  ETA terminal
+                  {t('shipment:etaTerminal')}
                 </h4>
               </div>
               <div className="flex-100 layout-row layout-align-center">
@@ -157,7 +158,7 @@ export class MessageShipmentData extends Component {
             >
               <div className="flex-100 layout-row layout-align-center">
                 <h4 className={styles.date_title} style={gradientFontStyle}>
-                  Shipment Type:
+                  {t('shipment:shipmentType')}
                 </h4>
               </div>
               <div className="flex-100 layout-row layout-align-center">
@@ -172,7 +173,7 @@ export class MessageShipmentData extends Component {
             >
               <div className="flex-100 layout-row layout-align-center">
                 <h4 className={styles.date_title} style={gradientFontStyle}>
-                  IncoTerm:
+                  {t('shipment:incoterm')}
                 </h4>
               </div>
               <div className="flex-100 layout-row layout-align-center">
@@ -184,7 +185,7 @@ export class MessageShipmentData extends Component {
             >
               <div className="flex-100 layout-row layout-align-center">
                 <h4 className={styles.date_title} style={gradientFontStyle}>
-                  MoT:
+                  {t('shipment:MoT')}
                 </h4>
               </div>
               <div className="flex-100 layout-row layout-align-center">
@@ -197,11 +198,11 @@ export class MessageShipmentData extends Component {
             >
               <div className="flex-100 layout-row layout-align-center">
                 <h4 className={styles.date_title} style={gradientFontStyle}>
-                  Pre-carrage:
+                  {t('shipment:preCarriage')}
                 </h4>
               </div>
               <div className="flex-100 layout-row layout-align-center">
-                <p className="flex-none"> {shipment.has_pre_carriage ? 'Yes' : 'No'} </p>
+                <p className="flex-none"> {shipment.has_pre_carriage ? t('common:yes') : t('common:no')} </p>
               </div>
             </div>
             <div
@@ -210,7 +211,7 @@ export class MessageShipmentData extends Component {
             >
               <div className="flex-100 layout-row layout-align-center">
                 <h4 className={styles.date_title} style={gradientFontStyle}>
-                  On-carriage:
+                  {t('shipment:onCarriage')}
                 </h4>
               </div>
               <div className="flex-100 layout-row layout-align-center">
@@ -225,7 +226,7 @@ export class MessageShipmentData extends Component {
               } flex-none layout-row layout-align-space-between-center`}
               style={gradientFontStyle}
             >
-              <p>Total Price:</p>{' '}
+              <p>{t('shipment:totalPrice')}</p>{' '}
               <Tooltip theme={theme} icon="fa-info-circle" color="white" text="total_price" />
               <Price value={totalPrice(shipment).value} currency={totalPrice(shipment).currency} />
             </div>
@@ -237,7 +238,7 @@ export class MessageShipmentData extends Component {
             >
               <i className="flex-none fa fa-angle-double-up" />
               <div className="flex-5" />
-              <p className="flex-none">Hide</p>
+              <p className="flex-none">{t('common:hide')}</p>
               <div className="flex-5" />
               <i className="flex-none fa fa-angle-double-up" />
             </div>
@@ -250,6 +251,7 @@ export class MessageShipmentData extends Component {
 
 MessageShipmentData.propTypes = {
   name: PropTypes.string,
+  t: PropTypes.func.isRequired,
   onChange: PropTypes.func,
   theme: PropTypes.theme,
   shipmentData: PropTypes.shipmentData.isRequired,
@@ -263,4 +265,4 @@ MessageShipmentData.defaultProps = {
   onChange: null
 }
 
-export default MessageShipmentData
+export default translate(['common', 'shipment'])(MessageShipmentData)

@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import adminStyles from '../../Admin.scss'
 import { adminDashboard as adminTip } from '../../../../constants'
-import { filters } from '../../../../helpers'
+import { filters, capitalize } from '../../../../helpers'
 import Tabs from '../../../Tabs/Tabs'
 import Tab from '../../../Tabs/Tab'
 import { userActions, appActions } from '../../../../actions'
@@ -40,10 +39,10 @@ export class ShipmentsCompUser extends Component {
     window.removeEventListener('resize', this.determinePerPage)
   }
 
-  getShipmentsFromPage (open, requested, finished) {
+  getShipmentsFromPage (open, requested, finished, rejected, archived) {
     const { perPage } = this.state
     const { userDispatch } = this.props
-    userDispatch.getShipments(open, requested, finished, perPage, false)
+    userDispatch.getShipments(open, requested, finished, rejected, archived, perPage, false)
   }
   getTargetShipmentsFromPage (target, page) {
     const { perPage } = this.state
@@ -53,11 +52,12 @@ export class ShipmentsCompUser extends Component {
   determinePerPage () {
     const { perPage } = this.state
     const { userDispatch, shipments } = this.props
-    const { open, requested, finished } = shipments.pages
+    if (!shipments) return
+    const { pages } = shipments
     const width = window.innerWidth
     const newPerPage = width >= 1920 ? 6 : 4
     if (newPerPage !== perPage) {
-      userDispatch.getShipments(open, requested, finished, newPerPage, false)
+      userDispatch.getShipments(pages, newPerPage, false)
     }
     this.setState({ perPage: newPerPage })
   }
@@ -112,8 +112,8 @@ export class ShipmentsCompUser extends Component {
   handleFilters () {
     this.setState((prevState) => {
       const { perPage } = this.state
-      const { open, requested, finished } = this.props.shipments.pages
-      this.getShipmentsFromPage(open, requested, finished, perPage)
+      const { pages } = this.props.shipments
+      this.getShipmentsFromPage(pages, perPage)
 
       return { page: prevState.page }
     })
@@ -150,83 +150,48 @@ export class ShipmentsCompUser extends Component {
       user,
       userDispatch
     } = this.props
-    const { pages } = shipments
+
     const { search } = this.state
     if (!shipments || !hubs || !clients) {
       return ''
     }
+    const { pages } = shipments
     const clientHash = {}
     clients.forEach((cl) => {
       clientHash[cl.id] = cl
     })
-    const mergedOpenShipments = filters.sortByDate(shipments.open, 'booking_placed_at')
-      .map(sh => ShipmentsCompUser.prepShipment(sh, user))
-    const mergedReqShipments = filters.sortByDate(shipments.requested, 'booking_placed_at')
-      .map(sh => ShipmentsCompUser.prepShipment(sh, user))
-    const mergedFinishedShipments = filters.sortByDate(shipments.finished, 'booking_placed_at')
-      .map(sh => ShipmentsCompUser.prepShipment(sh, user))
+    const statusKeys = Object.keys(pages)
+    const mergedShipments = {}
+    statusKeys.forEach((status) => {
+      mergedShipments[status] = filters.sortByDate(shipments[status], 'booking_placed_at')
+        .map(sh => ShipmentsCompUser.prepShipment(sh, user))
+    })
+    const keysToRender = statusKeys.includes('quoted')
+      ? statusKeys : ['requested', 'open', 'finished', 'rejected', 'archived']
 
     const listView = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <Tabs>
-          <Tab
-            tabTitle="Requested"
+          {keysToRender.map(status => (<Tab
+            tabTitle={capitalize(status)}
             theme={theme}
           >
             <AdminShipmentsBox
               handleClick={this.viewShipment}
               dispatches={userDispatch}
-              shipments={mergedReqShipments}
+              shipments={mergedShipments[status]}
               theme={theme}
               userView
-              searchText={search.requested}
-              tooltip={adminTip.requested}
-              page={pages.requested}
-              numPages={numShipmentsPages.requested}
-              prevPage={() => this.prevPage('requested')}
-              nextPage={() => this.nextPage('requested')}
-              handleSearchChange={e => this.handleSearchQuery(e, 'requested')}
+              searchText={search[status]}
+              tooltip={adminTip[status]}
+              page={pages[status]}
+              numPages={numShipmentsPages[status]}
+              prevPage={() => this.prevPage(status)}
+              nextPage={() => this.nextPage(status)}
+              handleSearchChange={e => this.handleSearchQuery(e, status)}
             />
-          </Tab>
-          <Tab
-            tabTitle="Open"
-            theme={theme}
-          >
-            <AdminShipmentsBox
-              handleClick={this.viewShipment}
-              dispatches={userDispatch}
-              shipments={mergedOpenShipments}
-              theme={theme}
-              userView
-              searchText={search.open}
-              tooltip={adminTip.open}
-              page={pages.open}
-              numPages={numShipmentsPages.open}
-              prevPage={() => this.prevPage('open')}
-              nextPage={() => this.nextPage('open')}
-              handleSearchChange={e => this.handleSearchQuery(e, 'open')}
-            />
-          </Tab>
-          <Tab
-            tabTitle="Finished"
-            theme={theme}
-          >
-            <AdminShipmentsBox
-              handleClick={this.viewShipment}
-              dispatches={userDispatch}
-              shipments={mergedFinishedShipments}
-              theme={theme}
-              userView
-              searchText={search.finished}
-              page={pages.finished}
-              tooltip={adminTip.finished}
-              seeAll={false}
-              numPages={numShipmentsPages.finished}
-              prevPage={() => this.prevPage('finished')}
-              nextPage={() => this.nextPage('finished')}
-              handleSearchChange={e => this.handleSearchQuery(e, 'finished')}
-            />
-          </Tab>
+          </Tab>))}
+
         </Tabs>
       </div>
     )
@@ -250,7 +215,7 @@ ShipmentsCompUser.propTypes = {
 ShipmentsCompUser.defaultProps = {
   theme: null,
   hubs: [],
-  shipments: {},
+  shipments: null,
   clients: [],
   user: {},
   userDispatch: {},

@@ -1,6 +1,7 @@
 import { Promise } from 'es6-promise-promise'
 import { push } from 'react-router-redux'
-import { BASE_URL, appConstants } from '../constants'
+import { appConstants } from '../constants'
+import getApiHost from '../constants/api.constants'
 import { appService } from '../services'
 import {
   alertActions,
@@ -11,8 +12,7 @@ import {
   documentActions,
   tenantActions
 } from './'
-import { getSubdomain } from '../helpers'
-// import { Promise } from 'es6-promise-promise';
+import getSubdomain from '../helpers/subdomain'
 
 const { fetch } = window
 
@@ -32,7 +32,6 @@ function fetchCurrencies (type) {
     appService.fetchCurrencies(type).then(
       (resp) => {
         const currData = resp.data
-        dispatch(alertActions.success('Fetching Currency successful'))
         dispatch(success(currData))
       },
       (error) => {
@@ -59,7 +58,6 @@ function fetchCountries () {
     appService.fetchCountries().then(
       (resp) => {
         const currData = resp.data
-        dispatch(alertActions.success('Fetching Countries successful'))
         dispatch(success(currData))
       },
       (error) => {
@@ -86,7 +84,6 @@ function refreshRates (type) {
     appService.refreshRates(type).then(
       (resp) => {
         const currData = resp.data
-        dispatch(alertActions.success('Fetching Currency successful'))
         dispatch(success(currData))
       },
       (error) => {
@@ -114,7 +111,6 @@ function fetchCurrenciesForBase (base) {
     appService.fetchCurrenciesForBase(base).then(
       (resp) => {
         const currData = resp.data
-        dispatch(alertActions.success('Fetching Currencies successful'))
         dispatch(success(currData))
       },
       (error) => {
@@ -146,7 +142,6 @@ function setCurrency (type, req) {
         if (req) {
           dispatch(shipmentActions.getOffers(req, false))
         }
-        dispatch(alertActions.success('Fetching Currency successful'))
       },
       (error) => {
         error.then((data) => {
@@ -174,7 +169,6 @@ function toggleTenantCurrencyMode () {
         dispatch(success(resp.data.rates))
         dispatch(tenantActions
           .receiveTenant(resp.data.tenant.subdomain, resp.data.tenant))
-        dispatch(alertActions.success('Toggle Currency Mode successful'))
       },
       (error) => {
         error.then((data) => {
@@ -254,7 +248,7 @@ function fetchTenant (subdomain) {
       subdomainToFetch = subdomain
     }
 
-    return fetch(`${BASE_URL}/tenants/${subdomainToFetch}`)
+    return fetch(`${getApiHost()}/tenants/${subdomainToFetch}`)
       .then(response => response.json())
       .then(
         json => dispatch(receiveTenant(subdomainToFetch, json)),
@@ -267,7 +261,7 @@ function fetchTenants () {
     return { type: appConstants.RECEIVE_TENANT_ERROR, error }
   }
 
-  return dispatch => fetch(`${BASE_URL}/tenants`)
+  return dispatch => fetch(`${getApiHost()}/tenants`)
     .then(response => response.json())
     .then(json => dispatch(receiveTenants(json)), err => dispatch(failure(err)))
 }

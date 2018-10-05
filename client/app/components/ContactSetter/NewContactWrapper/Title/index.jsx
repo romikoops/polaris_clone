@@ -1,21 +1,25 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import { nameToDisplay } from '../../../../helpers'
 import styles from './Title.scss'
 import PropTypes from '../../../../prop-types'
 
-export default function ContactSetterNewContactWrapperTitle ({ contactType }) {
+function ContactSetterNewContactWrapperTitle ({ contactType, t }) {
   return (
     <h3 className={styles.title}>
-      Choose a  <br />
+      {t('account:chooseA')}<br />
       <span className={styles.contact_type}> { nameToDisplay(contactType) } </span>
     </h3>
   )
 }
 
 ContactSetterNewContactWrapperTitle.propTypes = {
-  contactType: PropTypes.string
+  contactType: PropTypes.string,
+  t: PropTypes.func.isRequired
 }
 
 ContactSetterNewContactWrapperTitle.defaultProps = {
   contactType: ''
 }
+
+export default translate('account')(ContactSetterNewContactWrapperTitle)

@@ -8,17 +8,37 @@ i18n
   .use(LngDetector)
   .use(reactI18nextModule)
   .init({
-    fallbackLng: 'en-US',
-    defaultLng: 'en-US',
+    fallbackLng: 'en',
+    defaultLng: 'en',
     defaultNS: 'common',
-    ns: ['landing', 'common'],
+    ns: ['account',
+      'admin',
+      'bookconf',
+      'cargo',
+      'cookies',
+      'dangerousGoods',
+      'doc',
+      'errors',
+      'footer',
+      'help',
+      'imc',
+      'itbox',
+      'landing',
+      'common',
+      'nav',
+      'optout',
+      'shipment',
+      'trucking',
+      'user'],
     debug: true,
     backend: {
       loadPath: '/{{lng}}/{{ns}}.json',
       crossDomain: true
     },
     interpolation: {
-      escapeValue: false
+      escapeValue: false,
+      prefix: '{{',
+      suffix: '}}'
     },
     react: {
       wait: true,
@@ -26,7 +46,6 @@ i18n
       bindStore: 'added removed',
       nsMode: 'default'
     }
-
   })
 
 export default i18n

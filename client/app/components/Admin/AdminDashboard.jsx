@@ -35,13 +35,10 @@ export class AdminDashboard extends Component {
     window.scrollTo(0, 0)
     this.determinePerPage()
     window.addEventListener('resize', this.determinePerPage)
+    this.props.setCurrentUrl(this.props.match.url)
   }
   componentWillUnmount () {
     window.removeEventListener('resize', this.determinePerPage)
-  }
-
-  componentDidMount () {
-    this.props.setCurrentUrl(this.props.match.url)
   }
 
   handleRouteHover (id) {
@@ -64,7 +61,7 @@ export class AdminDashboard extends Component {
 
   handleViewShipments () {
     const { adminDispatch } = this.props
-    adminDispatch.getShipments(1, 1, 1, true)
+    adminDispatch.getShipments(1, 1, 1, 4, true)
   }
   handleShipmentAction (id, action) {
     const { adminDispatch } = this.props
@@ -93,7 +90,8 @@ export class AdminDashboard extends Component {
       dashData,
       confirmShipmentData,
       adminDispatch,
-      theme
+      theme,
+      scope
     } = this.props
     const { hoverId, perPage } = this.state
 
@@ -111,8 +109,9 @@ export class AdminDashboard extends Component {
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
-
-    const preparedRequestedShipments = shipments.requested ? shipments.requested.slice(0, perPage)
+    const isQuote = scope && (scope.closed_quotation_tool || scope.open_quotation_tool)
+    const shipmentsToDisplay = isQuote ? shipments.quoted : shipments.requested
+    const preppedShipments = shipmentsToDisplay ? shipmentsToDisplay.slice(0, perPage)
       .map(s => AdminDashboard.prepShipment(s, clientHash, hubHash)) : []
 
     const mapComponent = (
@@ -155,7 +154,7 @@ export class AdminDashboard extends Component {
           </div>
         </div>
         <div className="layout-padding flex-100 layout-align-start-center greyBg">
-          <span><b>Requested Shipments</b></span>
+          <span><b>{isQuote ? 'Quoted Shipments' : 'Requested Shipments' }</b></span>
         </div>
         <ShipmentOverviewCard
           admin
@@ -163,7 +162,7 @@ export class AdminDashboard extends Component {
           confirmShipmentData={confirmShipmentData}
           handleSelect={this.handleClick}
           dispatches={adminDispatch}
-          shipments={preparedRequestedShipments}
+          shipments={preppedShipments}
           theme={theme}
           hubs={hubHash}
           handleAction={this.handleShipmentAction}
@@ -211,6 +210,7 @@ AdminDashboard.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.any,
   theme: PropTypes.theme,
+  scope: PropTypes.scope,
   dashData: PropTypes.shape({
     schedules: PropTypes.array
   }),
@@ -234,6 +234,7 @@ AdminDashboard.propTypes = {
 
 AdminDashboard.defaultProps = {
   theme: null,
+  scope: {},
   confirmShipmentData: {},
   user: {},
   dashData: null,

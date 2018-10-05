@@ -1,4 +1,8 @@
 import React from 'react'
+import { translate } from 'react-i18next'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { authenticationActions } from '../../actions'
 import PropTypes from '../../prop-types'
 import styles from './CookieConsentBar.scss'
 import ConsentButton from './ConsentButton'
@@ -27,7 +31,7 @@ function handleAccept (user, tenant, loggedIn, authDispatch) {
   }
 }
 
-export default class CookieConsentBar extends React.PureComponent {
+class CookieConsentBar extends React.PureComponent {
   constructor (props) {
     super(props)
     this.state = {
@@ -50,26 +54,26 @@ export default class CookieConsentBar extends React.PureComponent {
       theme,
       tenant,
       loggedIn,
-      authDispatch
+      authDispatch,
+      t
     } = this.props
 
     const modal = (
       <Modal
         component={
           <div className={styles.cookie_modal} >
-            <p>We use cookies to enhance your user experience. <br /><br />
-            The consent is not mandatory but necessary to continue using our website.
-            Are you sure you want to decline the usage of cookies?</p>
+            <p>{t('common:cookieHead')} <br /><br />
+              {t('common:cookieTail')}</p>
             <ConsentButton
               theme={theme}
               handleNext={() => handleAccept(user, tenant, loggedIn, authDispatch)}
-              text="ok, accept"
+              text={t('common:ok')}
               active
             />
             <ConsentButton
               theme={theme}
               handleNext={() => { window.open('https://www.itsmycargo.com/') }}
-              text="cookies policy"
+              text={t('common:cookiesPolicy')}
               active
             />
           </div>
@@ -91,19 +95,19 @@ export default class CookieConsentBar extends React.PureComponent {
       >
         { this.state.showModal && modal}
         <p className={styles.cookie_text}>
-          This website uses cookies to enhance your user experience. <a href="https://www.itsmycargo.com/en/privacy" target="_blank">Learn more</a>
+          {t('common:useCookies')} <a href="https://www.itsmycargo.com/en/privacy" target="_blank"> {t('common:learnMore')}</a>
         </p>
 
         <ConsentButton
           theme={theme}
           handleNext={() => handleAccept(user, tenant, loggedIn, authDispatch)}
-          text="accept"
+          text={t('common:accept')}
           active
         />
         <ConsentButton
           theme={theme}
           handleNext={this.handleDecline}
-          text="decline"
+          text={t('common:decline')}
           active
         />
       </div>
@@ -114,6 +118,7 @@ export default class CookieConsentBar extends React.PureComponent {
 CookieConsentBar.propTypes = {
   theme: PropTypes.theme,
   user: PropTypes.user,
+  t: PropTypes.func.isRequired,
   loggedIn: PropTypes.bool,
   authDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   tenant: PropTypes.tenant
@@ -126,6 +131,10 @@ CookieConsentBar.defaultProps = {
   theme: {}
 }
 
-// buttonText = {< i className = {`${styles.cookie_exit_icon} fa fa-times`} />}
-// buttonStyle = {{ color: 'white', background: 'unset' }}
-//
+function mapDispatchToProps (dispatch) {
+  return {
+    authDispatch: bindActionCreators(authenticationActions, dispatch)
+  }
+}
+
+export default translate('common')(connect(null, mapDispatchToProps)(CookieConsentBar))

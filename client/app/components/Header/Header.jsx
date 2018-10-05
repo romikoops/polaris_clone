@@ -3,9 +3,10 @@ import { translate } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from '../../prop-types'
-import { NavDropdown } from '../NavDropdown/NavDropdown'
+import NavDropdown from '../NavDropdown/NavDropdown'
+import LoginRegistrationWrapper from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
 import styles from './Header.scss'
-import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
+import { LoginPage } from '../../containers/LoginPage/LoginPage'
 import { Modal } from '../Modal/Modal'
 import {
   appActions,
@@ -14,7 +15,7 @@ import {
   authenticationActions,
   shipmentActions
 } from '../../actions'
-import { FlashMessages } from '../FlashMessages/FlashMessages'
+import FlashMessages from '../FlashMessages/FlashMessages'
 
 class Header extends Component {
   constructor (props) {
@@ -25,7 +26,6 @@ class Header extends Component {
     }
     this.goHome = this.goHome.bind(this)
     this.toggleShowLogin = this.toggleShowLogin.bind(this)
-    this.clearErrors = this.clearErrors.bind(this)
     this.toggleShowMessages = this.toggleShowMessages.bind(this)
     this.checkIsTop = this.checkIsTop.bind(this)
   }
@@ -35,10 +35,6 @@ class Header extends Component {
     }
   }
   componentDidMount () {
-    const { messageDispatch, messages } = this.props
-    if (!messages) {
-      messageDispatch.getUserConversations()
-    }
     document.addEventListener('scroll', this.checkIsTop)
   }
   componentWillReceiveProps (nextProps) {
@@ -77,10 +73,6 @@ class Header extends Component {
     const { messageDispatch } = this.props
     messageDispatch.showMessageCenter()
   }
-  clearErrors () {
-    const { shipmentDispatch, currentStage } = this.props
-    shipmentDispatch.clearErrors(currentStage)
-  }
   render () {
     const {
       component,
@@ -88,13 +80,11 @@ class Header extends Component {
       error,
       invert,
       isLanding,
-      noMessages,
       req,
       scrollable,
       t,
       tenant,
       theme,
-      unread,
       user
     } = this.props
     const { isTop } = this.state
@@ -121,17 +111,6 @@ class Header extends Component {
       }
     ]
 
-    const alertStyle = unread > 0 ? styles.unread : styles.all_read
-    const mail = (
-      <div
-        className={`flex-none layout-row layout-align-center-center ${styles.mail_box}`}
-        onClick={this.toggleShowMessages}
-      >
-        <span className={`${alertStyle} flex-none`}>{unread}</span>
-        <i className="fa fa-envelope-o" />
-      </div>
-    )
-
     let logoUrl = ''
     const logoDisplay = {
       display: `${isTop && invert ? 'none' : 'block'}`
@@ -154,6 +133,7 @@ class Header extends Component {
         user={user}
         isLanding={isLanding}
         toggleShowLogin={this.toggleShowLogin}
+        loginText={tenant.data.scope.closed_registration ? t('common:logIn') : `${t('common:logIn')} / ${t('common:register')}`}
       />
     )
     const hasErrors = error && error[currentStage] && error[currentStage].length > 0
@@ -161,27 +141,30 @@ class Header extends Component {
     const dropDowns = (
       <div className="layout-row layout-align-space-around-center">
         {dropDown}
-        {!noMessages ? mail : ''}
       </div>
     )
-    const registrationOrLogin = this.props.showRegistration
-      ? t('nav:registrationPage')
-      : t('nav:loginPage')
+
+    const loginComponent = tenant.data.scope.closed_registration ? (
+      <LoginPage
+        theme={theme}
+        req={req}
+      />
+    ) : (
+      <LoginRegistrationWrapper
+        LoginPageProps={{ theme, req }}
+        RegistrationPageProps={{
+          theme,
+          tenant,
+          req,
+          user
+        }}
+        initialCompName={this.props.showRegistration ? 'RegistrationPage' : 'LoginPage'}
+      />
+    )
 
     const loginModal = (
       <Modal
-        component={
-          <LoginRegistrationWrapper
-            LoginPageProps={{ theme, req }}
-            RegistrationPageProps={{
-              theme,
-              tenant,
-              req,
-              user
-            }}
-            initialCompName={registrationOrLogin}
-          />
-        }
+        component={loginComponent}
         verticalPadding="30px"
         horizontalPadding="40px"
         parentToggle={this.toggleShowLogin}
@@ -221,7 +204,7 @@ class Header extends Component {
         </div>
         { hasErrors
           ? <div className={`flex-none layout-row ${styles.error_messages}`}>
-            <FlashMessages messages={error[currentStage]} onClose={this.clearErrors} />
+            <FlashMessages messages={error[currentStage]} />
           </div> : '' }
       </div>
     )
@@ -244,13 +227,10 @@ Header.propTypes = {
   }).isRequired,
   messages: PropTypes.arrayOf(PropTypes.object),
   showRegistration: PropTypes.bool,
-  unread: PropTypes.number,
   req: PropTypes.req,
   scrollable: PropTypes.bool,
   appDispatch: PropTypes.func.isRequired,
   authenticationDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
-  shipmentDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
-  noMessages: PropTypes.bool,
   component: PropTypes.node,
   showModal: PropTypes.bool,
   error: PropTypes.objectOf(PropTypes.any),
@@ -269,10 +249,8 @@ Header.defaultProps = {
   loginAttempt: false,
   messages: null,
   showRegistration: false,
-  unread: 0,
   req: null,
   scrollable: false,
-  noMessages: false,
   component: null,
   showModal: false,
   error: null,
@@ -317,4 +295,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default translate('nav')(connect(mapStateToProps, mapDispatchToProps)(Header))
+export default translate(['nav', 'common'])(connect(mapStateToProps, mapDispatchToProps)(Header))

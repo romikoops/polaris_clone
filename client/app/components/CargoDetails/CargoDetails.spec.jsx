@@ -212,5 +212,6 @@ test('tenant.data.scope.has_insurance is true', () => {
     ...propsBase,
     tenant
   }
+
   expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
 })

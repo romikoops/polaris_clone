@@ -2,12 +2,16 @@
 
 class ContactsController < ApplicationController
   include Response
-  before_action :require_login
 
   def index
-    contacts = current_user.contacts
-    paginated_contacts = current_user.contacts.paginate(page: params[:page]).map(&:as_options_json)
-    response_handler(contacts: paginated_contacts)
+    paginated_contacts = contacts.paginate(pagination_options)
+
+    response_handler(
+      pagination_options.merge(
+        contacts: paginated_contacts.map(&:as_options_json),
+        numContactPages: paginated_contacts.total_pages
+      )
+    )
   end
 
   def show
@@ -57,6 +61,20 @@ class ContactsController < ApplicationController
     contact.update_attributes(edited_contact_data)
     contact.save!
     response_handler(contact.as_options_json)
+  end
+
+  def search_contacts
+    # TODO: Handle invalid query
+    return if filterrific.nil?
+
+    paginated_contacts = filterrific.find.paginate(pagination_options)
+
+    response_handler(
+      pagination_options.merge(
+        contacts:        paginated_contacts.map(&:as_options_json),
+        numContactPages: paginated_contacts.total_pages
+      )
+    )
   end
 
   def update_contact_address
@@ -126,7 +144,7 @@ class ContactsController < ApplicationController
     new_loc = Location.create!(ncl)
     ncd[:location_id] = new_loc.id
     contact = current_user.contacts.create!(ncd)
-    response_handler(contact)
+    response_handler(contact.as_options_json)
   end
 
   def is_valid
@@ -136,9 +154,27 @@ class ContactsController < ApplicationController
 
   private
 
-  def require_login
-    unless user_signed_in? && current_user && current_user.tenant_id == Tenant.find_by_subdomain(params[:subdomain_id]).id
-      redirect_to root_path
-    end
+  def contacts
+    @contacts ||= current_user.contacts.order(updated_at: :desc)
+  end
+
+  def pagination_options
+    {
+      page:     current_page,
+      per_page: params[:per_page]&.to_f
+    }.compact
+  end
+
+  def filterrific
+    @filterrific ||= initialize_filterrific(
+      contacts,
+      { contacts_query: params[:query] },
+      available_filters: %i(contacts_query),
+      sanitize_params: true
+    )
+  end
+
+  def current_page
+    params[:page]&.to_i || 1
   end
 end

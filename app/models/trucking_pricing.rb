@@ -27,17 +27,17 @@ class TruckingPricing < ApplicationRecord
     tt = Tenant.find_by_subdomain(to_tenant)
     ft.trucking_pricings.each do |tp|
       temp_tp = tp.as_json
-      temp_tp.delete("id")
+      temp_tp.delete('id')
       hub_id = Hub.find_by(name: Hub.find(tp.hub_id).name, tenant_id: tt.id).id
 
-      temp_tp["tenant_id"] = tt.id
+      temp_tp['tenant_id'] = tt.id
       ntp = TruckingPricing.create!(temp_tp)
       hts = tp.hub_truckings
       nhts = hts.map do |ht|
         temp_ht = ht.as_json
-        temp_ht.delete("id")
-        temp_ht["hub_id"] = hub_id
-        temp_ht["trucking_pricing_id"] = ntp.id
+        temp_ht.delete('id')
+        temp_ht['hub_id'] = hub_id
+        temp_ht['trucking_pricing_id'] = ntp.id
         HubTrucking.create!(temp_ht)
       end
     end
@@ -61,7 +61,7 @@ class TruckingPricing < ApplicationRecord
     hub.hub_truckings.delete_all
   end
 
-  def self.find_by_filter(args={})
+  def self.find_by_filter(args = {})
     FindByFilter.new(args.merge(klass: self)).perform
   end
 
@@ -97,7 +97,7 @@ class TruckingPricing < ApplicationRecord
     ").values.first.try(:first)
   end
 
-  def as_options_json(options={})
+  def as_options_json(options = {})
     as_json(options.reverse_merge(methods: SCOPING_ATTRIBUTE_NAMES))
   end
 end

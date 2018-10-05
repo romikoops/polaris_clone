@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './ChooseShipment.scss'
 import defs from '../../styles/default_classes.scss'
@@ -6,9 +7,9 @@ import { CardLinkRow } from '../CardLinkRow/CardLinkRow'
 import { LOAD_TYPES } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { capitalize, gradientTextGenerator, hexToRGB, humanizedMotAndLoadType } from '../../helpers'
-import { TextHeading } from '../TextHeading/TextHeading'
+import TextHeading from '../TextHeading/TextHeading'
 
-export class ChooseShipment extends Component {
+class ChooseShipment extends Component {
   constructor (props) {
     super(props)
     this.state = {}
@@ -38,7 +39,7 @@ export class ChooseShipment extends Component {
     this.props.selectLoadType({ loadType, direction })
   }
   render () {
-    const { theme, scope } = this.props
+    const { theme, scope, t } = this.props
     const allowedCargoTypeCount = { cargo_item: 0, container: 0 }
     const allowedCargoTypes = { cargo_item: false, container: false }
     Object.keys(scope.modes_of_transport).forEach((mot) => {
@@ -71,7 +72,7 @@ export class ChooseShipment extends Component {
           <div className="flex-80 layout-row layout-align-space-between-center">
             <p className="flex-none">
               {' '}
-              I am {commercialAction[dir]} ({capitalize(dir)})
+              {t('shipment:chooseDirection', { commercialAction: commercialAction[dir], direction: capitalize(dir) })}
             </p>
             {direction === dir ? (
               <i className="flex-none fa fa-check clip" style={gradientStyle} />
@@ -88,7 +89,7 @@ export class ChooseShipment extends Component {
         size="small"
         active
         handleNext={this.nextStep}
-        text="Next Step"
+        text={t('common:nextStep')}
         iconClass="fa-chevron-right"
       />
     )
@@ -105,7 +106,7 @@ export class ChooseShipment extends Component {
         >
           <div className="flex-100 layout-row layout-align-space-around-center layout-wrap">
             <div className="flex-100 layout-row layout-align-start-center">
-              <TextHeading theme={theme} size={4} text="Are you importing or exporting?" />
+              <TextHeading theme={theme} size={4} text={t('common:importOrExport')} />
             </div>
             {directionButtons}
           </div>
@@ -119,7 +120,7 @@ export class ChooseShipment extends Component {
               <TextHeading
                 theme={theme}
                 size={4}
-                text="Are you shipping cargo items or containers?"
+                text={t('common:itemsOrContainers')}
               />
             </div>
             <CardLinkRow
@@ -141,22 +142,11 @@ export class ChooseShipment extends Component {
                 color: `${theme && hexToRGB(theme.colors.primary, 0.8)}`
               }}
             >
-              {/* <div className="flex-100 layout-row layout-align-center">
-                <h3>Search results will include the following modes of transport</h3>
-              </div>
-              <div
-                className={
-                  `${styles.mot_icons} flex-20 layout-row ` + 'layout-align-space-around-center'
-                }
-              >
-                {modesOfTransportJSX}
-              </div> */}
               <div className={`${styles.next_step_btn_sec} flex-100 layout-row layout-align-end`}>
                 <div className="flex-none layout-column layout-align-center-center">
                   <div className="flex-none layout-row layout-align-center-start">
                     <p className={styles.mot_note}>
-                      Availabilities will be shown for all applicable<br /> modes of transport for
-                      your shipment
+                      {t('common:availabilities')}
                     </p>
                     {loadType && direction ? activeBtn : disabledBtn}
                   </div>
@@ -172,6 +162,7 @@ export class ChooseShipment extends Component {
 
 ChooseShipment.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   selectLoadType: PropTypes.func.isRequired,
   scope: PropTypes.objectOf(PropTypes.any).isRequired
 }
@@ -180,4 +171,4 @@ ChooseShipment.defaultProps = {
   theme: null
 }
 
-export default ChooseShipment
+export default translate('shipment')(ChooseShipment)

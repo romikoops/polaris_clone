@@ -2,7 +2,12 @@
 <html>
   <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
-    <%= wicked_pdf_stylesheet_link_tag "pdfs" %>
+    <style>
+      <%= Rails.application.assets['application'].to_s.html_safe %>
+      <%= Rails.application.assets['pdfs'].to_s.html_safe %>
+    </style>
+    <meta name="breezy-pdf-displayBackground" content="true">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
   </head>
   <body>
       <%= yield %>

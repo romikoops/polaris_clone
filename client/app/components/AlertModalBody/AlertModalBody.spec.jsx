@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { mount, shallow } from 'enzyme'
-import { AlertModalBody } from './AlertModalBody'
+import AlertModalBody from './AlertModalBody'
 
 const propsBase = {
   logo: 'LOGO_URL_ADDRESS',

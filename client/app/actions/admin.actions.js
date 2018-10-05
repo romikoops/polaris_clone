@@ -20,14 +20,12 @@ function getHubs (redirect, page, hubType, country, status) {
 
     adminService.getHubs(page, hubType, country, status).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Hubs successful'))
         if (redirect) {
           dispatch(push('/admin/hubs'))
         }
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -50,11 +48,9 @@ function getAllHubs () {
 
     adminService.getAllHubs().then(
       (data) => {
-        dispatch(alertActions.success('Fetching Hubs successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -77,11 +73,9 @@ function searchHubs (text, page, hubType, country, status) {
 
     adminService.searchHubs(text, page, hubType, country, status).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Hubs successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -104,11 +98,9 @@ function searchShipments (text, target, page, perPage) {
 
     adminService.searchShipments(text, target, page, perPage).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Hubs successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -132,14 +124,12 @@ function getHub (id, redirect) {
 
     adminService.getHub(id).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Hubs successful'))
         dispatch(success(data))
         if (redirect) {
           dispatch(push(`/admin/hubs/${id}`))
         }
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -162,11 +152,9 @@ function editHub (id, object) {
 
     adminService.editHub(id, object).then(
       (data) => {
-        dispatch(alertActions.success('Editing Hubs successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -190,11 +178,9 @@ function wizardHubs (file) {
 
     adminService.wizardHubs(file).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Hubs successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -218,11 +204,9 @@ function wizardSCharge (file) {
 
     adminService.wizardSCharge(file).then(
       (data) => {
-        dispatch(alertActions.success('Wizard Service Charges successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -246,11 +230,9 @@ function wizardPricings (file) {
 
     adminService.wizardPricings(file).then(
       (data) => {
-        dispatch(alertActions.success('Wizard Pricings successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -274,11 +256,9 @@ function wizardTrucking (type, file) {
 
     adminService.wizardTrucking(type, file).then(
       (data) => {
-        dispatch(alertActions.success('Wizard Trucking successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -302,11 +282,9 @@ function wizardOpenPricings (file) {
 
     adminService.wizardOpenPricings(file).then(
       (data) => {
-        dispatch(alertActions.success('Wizard Open Pricings successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -330,7 +308,6 @@ function getServiceCharges (redirect) {
 
     adminService.getServiceCharges().then(
       (data) => {
-        dispatch(alertActions.success('Fetching Service Charges successful'))
         if (redirect) {
           dispatch(push('/admin/service_charges'))
         }
@@ -359,7 +336,6 @@ function getPricings (redirect, pages) {
     dispatch(getTrucking())
     adminService.getPricings(pages).then(
       (response) => {
-        dispatch(alertActions.success('Fetching Prices successful'))
         if (redirect) {
           dispatch(push('/admin/pricings'))
         }
@@ -389,11 +365,9 @@ function searchPricings (text, page, mot) {
 
     adminService.searchPricings(text, page, mot).then(
       (response) => {
-        dispatch(alertActions.success('Pricings Search successful'))
         dispatch(success(response.data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -417,7 +391,6 @@ function getPricingsTest (req) {
     dispatch(getTrucking())
     adminService.getPricingsTest(req).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Prices successful'))
         dispatch(success(data))
       },
       (error) => {
@@ -442,7 +415,6 @@ function deletePricing (pricing) {
     dispatch(request(pricing))
     adminService.deletePricing(pricing).then(
       () => {
-        dispatch(alertActions.success('Deleting Pricing'))
         dispatch(success(pricing))
       },
       (error) => {
@@ -470,14 +442,12 @@ function getClientPricings (id, redirect) {
 
     adminService.getClientPricings(id).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Client Prices successful'))
         if (redirect) {
           dispatch(push(`/admin/pricings/clients/${id}`))
         }
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -502,14 +472,12 @@ function getItineraryPricings (id, redirect) {
     dispatch(getTrucking())
     adminService.getItineraryPricings(id).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Route Prices successful'))
         if (redirect) {
           dispatch(push(`/admin/pricings/routes/${id}`))
         }
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -534,7 +502,6 @@ function updatePricing (id, req) {
     adminService.updatePricing(id, req).then(
       (data) => {
         dispatch(success(data.data))
-        dispatch(alertActions.success('Updating Pricing successful'))
       },
       (error) => {
         dispatch(failure(error))
@@ -561,7 +528,6 @@ function assignDedicatedPricings (pricing, clientIds) {
     adminService.assignDedicatedPricings(pricing, clientIds).then(
       (data) => {
         dispatch(success(data.data))
-        dispatch(alertActions.success('Updating Pricing successful'))
       },
       (error) => {
         dispatch(failure(error))
@@ -591,7 +557,6 @@ function getSchedules (redirect) {
         if (redirect) {
           dispatch(push('/admin/schedules'))
         }
-        dispatch(alertActions.success('Fetching Schedules successful'))
       },
       (error) => {
         dispatch(failure(error))
@@ -617,14 +582,12 @@ function getTrucking (redirect) {
 
     adminService.getTrucking().then(
       (data) => {
-        dispatch(alertActions.success('Fetching Trucking successful'))
         if (redirect) {
           dispatch(push('/admin/trucking'))
         }
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -632,7 +595,7 @@ function getTrucking (redirect) {
   }
 }
 
-function getShipments (requestedPage, openPage, finishedPage, perPage, redirect) {
+function getShipments (pages, perPage, redirect) {
   function request (shipmentData) {
     return { type: adminConstants.ADMIN_GET_SHIPMENTS_REQUEST, payload: shipmentData }
   }
@@ -646,16 +609,14 @@ function getShipments (requestedPage, openPage, finishedPage, perPage, redirect)
   return (dispatch) => {
     dispatch(request())
 
-    adminService.getShipments(requestedPage, openPage, finishedPage, perPage).then(
+    adminService.getShipments(pages, perPage).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Shipments successful'))
         dispatch(success(data))
         if (redirect) {
           dispatch(push('/admin/shipments'))
         }
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -679,11 +640,9 @@ function deltaShipmentsPage (target, page, perPage) {
 
     adminService.deltaShipmentsPage(target, page, perPage).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Shipments successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -706,11 +665,9 @@ function getDashShipments () {
 
     adminService.getShipments().then(
       (data) => {
-        dispatch(alertActions.success('Fetching Shipments successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -734,14 +691,12 @@ function getShipment (id, redirect) {
 
     adminService.getShipment(id).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Shipment successful'))
         dispatch(success(data))
         if (redirect) {
           dispatch(push(`/admin/shipments/view/${id}`))
         }
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -765,7 +720,6 @@ function getClients (redirect) {
 
     adminService.getClients().then(
       (data) => {
-        dispatch(alertActions.success('Fetching Clients successful'))
         if (redirect) {
           dispatch(push('/admin/clients'))
         }
@@ -773,7 +727,6 @@ function getClients (redirect) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -797,7 +750,6 @@ function getClient (id, redirect) {
 
     adminService.getClient(id).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Clients successful'))
         if (redirect) {
           dispatch(push(`/admin/clients/${id}`))
         }
@@ -805,7 +757,6 @@ function getClient (id, redirect) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -829,11 +780,9 @@ function getVehicleTypes (itineraryId) {
 
     adminService.getVehicleTypes(itineraryId).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Vehicle Types successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -857,14 +806,12 @@ function getDashboard (redirect) {
 
     adminService.getDashboard().then(
       (data) => {
-        dispatch(alertActions.success('Fetching Dashboard successful'))
         if (redirect) {
           dispatch(push('/admin/dashboard'))
         }
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -888,11 +835,9 @@ function editTruckingPrice (price) {
 
     adminService.editTruckingPrice(price).then(
       (data) => {
-        dispatch(alertActions.success('Editing Trucking Price successful'))
         dispatch(success(data.data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -916,12 +861,10 @@ function autoGenSchedules (data) {
 
     adminService.autoGenSchedules(data).then(
       (schedData) => {
-        dispatch(alertActions.success('Generating Schedules successful'))
         dispatch(success(schedData))
         dispatch(documentActions.setStats(schedData.data.stats))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -953,6 +896,12 @@ function confirmShipment (id, action, redirect) {
       payload: shipmentData
     }
   }
+  function successArchive (shipmentData) {
+    return {
+      type: adminConstants.ARCHIVE_SHIPMENT_SUCCESS,
+      payload: shipmentData
+    }
+  }
   function failure (error) {
     return { type: adminConstants.CONFIRM_SHIPMENT_FAILURE, error, payload: { id } }
   }
@@ -962,20 +911,21 @@ function confirmShipment (id, action, redirect) {
     adminService.confirmShipment(id, action).then(
       (resp) => {
         const shipmentData = resp.data
-
         if (action === 'accept') {
           dispatch(successAccept(shipmentData))
         } else if (action === 'finished') {
           dispatch(successFinished(shipmentData))
-        } else {
+        } else if (action === 'decline') {
           dispatch(successDeny(shipmentData))
-          dispatch(getShipments(1, 1, 1, true))
+        } else if (action === 'archive') {
+          dispatch(successArchive(shipmentData))
+        } else {
+          dispatch(successArchive(shipmentData))
         }
 
         if (redirect) {
           dispatch(getShipment(id, true))
         }
-        dispatch(alertActions.success('Shipment Action Set successful'))
       },
       (error) => {
         error.then((data) => {
@@ -1001,14 +951,12 @@ function getItineraries (redirect) {
 
     adminService.getItineraries().then(
       (data) => {
-        dispatch(alertActions.success('Fetching Routes successful'))
         dispatch(success(data))
         if (redirect) {
           dispatch(push('/admin/routes'))
         }
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -1032,11 +980,9 @@ function getLayovers (itineraryId, target) {
 
     adminService.getLayovers(itineraryId).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Layovers successful'))
         dispatch(success(data.data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -1058,11 +1004,9 @@ function saveItineraryNotes (itineraryId, notes) {
     dispatch(request())
     adminService.saveItineraryNotes(itineraryId, notes).then(
       (data) => {
-        dispatch(alertActions.success('Saving Itinerary Notes successful'))
         dispatch(success(data.data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -1086,14 +1030,12 @@ function getItinerary (id, redirect) {
 
     adminService.getItinerary(id).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Route successful'))
         dispatch(success(data))
         if (redirect) {
           dispatch(push(`/admin/routes/${id}`))
         }
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -1117,11 +1059,9 @@ function newRoute (data) {
 
     adminService.newRoute(data).then(
       (newData) => {
-        dispatch(alertActions.success('Creating Route successful'))
         dispatch(success(newData))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -1146,12 +1086,9 @@ function updateServiceCharge (id, req) {
 
     adminService.updateServiceCharge(id, req).then(
       (data) => {
-        dispatch(alertActions.success('Updating Pricing successful'))
-
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -1175,7 +1112,6 @@ function newClient (data) {
 
     adminService.newClient(data).then(
       (newData) => {
-        dispatch(alertActions.success('Saving New Client successful'))
         dispatch(success(newData))
       },
       (error) => {
@@ -1202,7 +1138,6 @@ function activateHub (hubId) {
 
     adminService.activateHub(hubId).then(
       (data) => {
-        dispatch(alertActions.success('Activating Hub successful'))
         dispatch(getClients(false))
         dispatch(success(data))
       },
@@ -1230,7 +1165,6 @@ function deleteHub (hubId, redirect) {
 
     adminService.deleteHub(hubId).then(
       (data) => {
-        dispatch(alertActions.success('Deleting Hub successful'))
         if (redirect) {
           dispatch(push(`/admin/hubs`))
         }
@@ -1260,7 +1194,6 @@ function deleteItinerary (id, redirect) {
 
     adminService.deleteItinerary(id).then(
       (data) => {
-        dispatch(alertActions.success('Deleting Itinerary successful'))
         if (redirect) {
           dispatch(push(`/admin/routes`))
         }
@@ -1290,7 +1223,6 @@ function deleteTrip (id, redirect) {
 
     adminService.deleteTrip(id).then(
       (data) => {
-        dispatch(alertActions.success('Deleting Trip successful'))
         if (redirect) {
           dispatch(push(`/admin/schedules`))
         }
@@ -1320,7 +1252,6 @@ function deleteClient (id, redirect) {
 
     adminService.deleteClient(id).then(
       (data) => {
-        dispatch(alertActions.success('Deleting Client successful'))
         if (redirect) {
           dispatch(push(`/admin/clients`))
         }
@@ -1350,7 +1281,6 @@ function documentAction (docId, action) {
 
     adminService.documentAction(docId, action).then(
       (data) => {
-        dispatch(alertActions.success('Document Action successful'))
         dispatch(success(data))
       },
       (error) => {
@@ -1376,7 +1306,6 @@ function deleteDocument (docId) {
 
     adminService.deleteDocument(docId).then(
       (data) => {
-        dispatch(alertActions.success('Document Action successful'))
         dispatch(success(data))
       },
       (error) => {
@@ -1403,9 +1332,7 @@ function saveNewHub (hub, location) {
 
     adminService.saveNewHub(hub, location).then(
       (data) => {
-        // dispatch(getHubs(true))
         dispatch(success(data))
-        dispatch(alertActions.success('Hew Hub successful'))
       },
       (error) => {
         dispatch(failure(error))
@@ -1431,7 +1358,6 @@ function saveNewTrucking (obj) {
 
     adminService.saveNewTrucking(obj).then(
       (data) => {
-        dispatch(alertActions.success('New Trucking successful'))
         dispatch(viewTrucking(data.data.truckingHubId))
       },
       (error) => {
@@ -1457,7 +1383,6 @@ function editShipmentPrice (id, priceObj) {
 
     adminService.editShipmentPrice(id, priceObj).then(
       (data) => {
-        dispatch(alertActions.success('Edit Time successful'))
         dispatch(success(data))
       },
       (error) => {
@@ -1478,7 +1403,6 @@ function editShipmentServicePrice (id, data) {
   return (dispatch) => {
     adminService.editShipmentServicePrice(id, data).then(
       (res) => {
-        dispatch(alertActions.success('Edit Time successful'))
         dispatch(success(res))
       },
       (error) => {
@@ -1504,7 +1428,6 @@ function editLocalCharges (data) {
 
     adminService.editLocalCharges(data).then(
       (resp) => {
-        dispatch(alertActions.success('Edit Local Charges successful'))
         dispatch(success(resp))
       },
       (error) => {
@@ -1530,7 +1453,6 @@ function editCustomsFees (data) {
 
     adminService.editLocalCharges(data).then(
       (resp) => {
-        dispatch(alertActions.success('Edit Local Charges successful'))
         dispatch(success(resp))
       },
       (error) => {
@@ -1556,7 +1478,6 @@ function editShipmentTime (id, timeObj) {
 
     adminService.editShipmentTime(id, timeObj).then(
       (data) => {
-        dispatch(alertActions.success('New Trucking successful'))
         dispatch(success(data))
       },
       (error) => {
@@ -1583,7 +1504,6 @@ function assignManager (obj) {
 
     adminService.assignManager(obj).then(
       (data) => {
-        dispatch(alertActions.success('New Trucking successful'))
         dispatch(success(data))
       },
       (error) => {
@@ -1610,7 +1530,6 @@ function viewTrucking (truckingHub) {
 
     adminService.viewTrucking(truckingHub).then(
       (data) => {
-        dispatch(alertActions.success('Fetch Trucking successful'))
         dispatch(success(data))
         dispatch(push(`/admin/pricings/trucking/${truckingHub}`))
       },
@@ -1637,7 +1556,6 @@ function loadItinerarySchedules (id, redirect) {
     dispatch(request())
     adminService.loadItinerarySchedules(id).then(
       (data) => {
-        dispatch(alertActions.success('Fetch Schedules successful'))
         dispatch(success(data))
         if (redirect) {
           dispatch(push(`/admin/schedules/${id}`))
@@ -1669,7 +1587,6 @@ function uploadTrucking (url, file, direction) {
       (data) => {
         dispatch(documentActions.setStats(data.data))
         dispatch(success(data))
-        dispatch(alertActions.success('Fetch Trucking successful'))
       },
       (error) => {
         dispatch(failure(error))
@@ -1696,7 +1613,6 @@ function newHubImage (id, file) {
     adminService.newHubImage(id, file).then(
       (data) => {
         dispatch(success(data))
-        dispatch(alertActions.success('Uploading Image successful'))
       },
       (error) => {
         dispatch(failure(error))
@@ -1722,7 +1638,6 @@ function updateHubMandatoryCharges (id, charges) {
     adminService.updateHubMandatoryCharges(id, charges).then(
       (data) => {
         dispatch(success(data))
-        dispatch(alertActions.success('Updating Mandaotry Charge successful'))
       },
       (error) => {
         dispatch(failure(error))
@@ -1747,11 +1662,9 @@ function uploadDocument (doc, type, url) {
 
     adminService.uploadDocument(doc, type, url).then(
       (data) => {
-        dispatch(alertActions.success('Uploading Document successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }

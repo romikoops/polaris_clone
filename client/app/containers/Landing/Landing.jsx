@@ -4,22 +4,15 @@ import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import PropTypes from '../../prop-types'
 import { moment } from '../../constants'
-import { LandingTop } from '../../components/LandingTop/LandingTop'
+import LandingTop from '../../components/LandingTop/LandingTop'
 import styles from './Landing.scss'
 import { RoundButton } from '../../components/RoundButton/RoundButton'
 import Loading from '../../components/Loading/Loading'
 import { userActions, adminActions, authenticationActions } from '../../actions'
 import { gradientTextGenerator } from '../../helpers'
-import { Footer } from '../../components/Footer/Footer'
+import Footer from '../../components/Footer/Footer'
 
 class Landing extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      showLogin: false
-    }
-  }
-
   shouldComponentUpdate (nextProps) {
     const { loggingIn, registering, loading } = nextProps
 
@@ -27,10 +20,12 @@ class Landing extends Component {
   }
   bookNow () {
     const {
-      tenant, loggedIn, authDispatch, userDispatch
+      tenant, loggedIn, authDispatch, userDispatch, user
     } = this.props
 
-    if (loggedIn) {
+    if (tenant.data.scope.closed_shop && (!user || user.guest || !loggedIn)) {
+      authDispatch.showLogin()
+    } else if (loggedIn) {
       userDispatch.goTo('/booking')
     } else {
       const unixTimeStamp = moment().unix().toString()
@@ -53,21 +48,16 @@ class Landing extends Component {
     }
   }
 
-  toggleShowLogin () {
-    this.setState({
-      showLogin: !this.state.showLogin
-    })
-  }
-
   render () {
     const {
-      loggedIn, theme, user, tenant, userDispatch, authDispatch, adminDispatch, loggingIn
+      loggedIn, theme, user, tenant, userDispatch, authDispatch, adminDispatch
     } = this.props
     const textStyle1 =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
-    const loadingScreen = this.props.loading || loggingIn ? <Loading theme={theme} /> : ''
+
+    const loadingScreen = this.props.loading ? <Loading theme={theme} /> : ''
 
     const minHeightForFooter = window.innerHeight - 350
     const footerStyle = { minHeight: `${minHeightForFooter}px`, position: 'relative', paddingBottom: '230px' }
@@ -82,9 +72,7 @@ class Landing extends Component {
             theme={theme}
             goTo={userDispatch.goTo}
             toAdmin={adminDispatch.getDashboard}
-            loggedIn={loggedIn}
             tenant={tenant}
-            toggleShowLogin={() => this.toggleShowLogin()}
             authDispatch={authDispatch}
             bookNow={() => this.bookNow()}
           />

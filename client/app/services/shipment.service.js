@@ -1,6 +1,6 @@
 import { Promise } from 'es6-promise-promise'
-import { BASE_URL } from '../constants'
-import { authHeader } from '../helpers'
+import getApiHost from '../constants/api.constants'
+import { authHeader, toQueryString } from '../helpers'
 
 const { fetch, localStorage, FormData } = window
 
@@ -26,7 +26,7 @@ function getAll () {
     headers: authHeader()
   }
 
-  return fetch(`${BASE_URL}/shipments`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/shipments`, requestOptions).then(handleResponse)
 }
 
 function getShipment (id) {
@@ -35,7 +35,18 @@ function getShipment (id) {
     headers: authHeader()
   }
 
-  return fetch(`${BASE_URL}/shipments/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/shipments/${id}`, requestOptions).then(handleResponse)
+}
+
+function getSchedulesForResult (args) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  const url = `${getApiHost()}/shipments/${args.shipmentId}/view_more_schedules`
+  const params = { trip_id: args.tripId, delta: args.delta }
+
+  return fetch(`${url}?${toQueryString(params)}`, requestOptions).then(handleResponse)
 }
 
 function newShipment (details) {
@@ -44,7 +55,7 @@ function newShipment (details) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ details })
   }
-  const url = `${BASE_URL}/create_shipment`
+  const url = `${getApiHost()}/create_shipment`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -55,7 +66,7 @@ function getOffers (data) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }
-  const url = `${BASE_URL}/shipments/${data.shipment.id}/get_offers`
+  const url = `${getApiHost()}/shipments/${data.shipment.id}/get_offers`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -66,7 +77,17 @@ function chooseOffer (data) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }
-  const url = `${BASE_URL}/shipments/${data.id}/choose_offer`
+  const url = `${getApiHost()}/shipments/${data.id}/choose_offer`
+
+  return fetch(url, requestOptions).then(handleResponse)
+}
+function sendQuotes (data) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }
+  const url = `${getApiHost()}/shipments/${data.shipment.id}/send_quotes`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -77,7 +98,7 @@ function setShipmentContacts (data) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }
-  const url = `${BASE_URL}/shipments/${data.shipment.id}/update_shipment`
+  const url = `${getApiHost()}/shipments/${data.shipment.id}/update_shipment`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -86,7 +107,7 @@ function requestShipment (id) {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
-  const url = `${BASE_URL}/shipments/${id}/request_shipment`
+  const url = `${getApiHost()}/shipments/${id}/request_shipment`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -96,7 +117,7 @@ function getNotes (noteIds) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(noteIds)
   }
-  const url = `${BASE_URL}/notes/fetch`
+  const url = `${getApiHost()}/notes/fetch`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -111,7 +132,7 @@ function uploadDocument (doc, type, url) {
     body: formData
   }
 
-  return fetch(BASE_URL + url, requestOptions).then(handleResponse)
+  return fetch(getApiHost() + url, requestOptions).then(handleResponse)
 }
 
 function updateCurrency (currency) {
@@ -120,7 +141,7 @@ function updateCurrency (currency) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ currency })
   }
-  const url = `${BASE_URL}/currencies/set`
+  const url = `${getApiHost()}/currencies/set`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -131,7 +152,7 @@ function deleteDocument (documentId) {
     headers: authHeader()
   }
 
-  return fetch(`${BASE_URL}/documents/delete/${documentId}`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/documents/delete/${documentId}`, requestOptions).then(handleResponse)
 }
 
 function updateContact (data) {
@@ -143,7 +164,7 @@ function updateContact (data) {
     body: formData
   }
 
-  return fetch(`${BASE_URL}/contacts/${data.id}`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/contacts/${data.id}`, requestOptions).then(handleResponse)
 }
 
 export const shipmentService = {
@@ -152,6 +173,7 @@ export const shipmentService = {
   getAll,
   getShipment,
   chooseOffer,
+  sendQuotes,
   deleteDocument,
   getOffers,
   getStoredShipment,
@@ -159,7 +181,8 @@ export const shipmentService = {
   uploadDocument,
   requestShipment,
   updateCurrency,
-  getNotes
+  getNotes,
+  getSchedulesForResult
 }
 
 export default shipmentService

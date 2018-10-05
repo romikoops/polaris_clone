@@ -107,7 +107,7 @@ module ExcelTool
     end
 
     def pricing_rows
-      first_sheet.parse(
+      rows = first_sheet.parse(
         customer_id:     "CUSTOMER_ID",
         mot:             "MOT",
         cargo_type:      "CARGO_TYPE",
@@ -130,6 +130,11 @@ module ExcelTool
         nested:          "NESTED",
         wm_rate:         "WM_RATE"
       )
+      rows.each do |row|
+        row[:cargo_type].strip!
+        row[:origin].strip!
+        row[:destination].strip!
+      end
     end
 
     def set_dates(row)
@@ -355,9 +360,9 @@ module ExcelTool
           user = aux_data[it_key][:customer]
           next unless itinerary.id
           pricing = itinerary.pricings.find_or_create_by!(
-            transport_category: transport_category, 
-            tenant: tenant, 
-            user: user, 
+            transport_category: transport_category,
+            tenant: tenant,
+            user: user,
             tenant_vehicle_id: aux_data[it_key][:tenant_vehicle].id
           )
           pricing_details = new_pricing_data.delete(:data)

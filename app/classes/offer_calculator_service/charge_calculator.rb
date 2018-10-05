@@ -131,7 +131,7 @@ module OfferCalculatorService
 
         create_charges_from_fees_data!(charge_result, children_charge_category, charge_category, parent_charge)
       end
-
+      
       parent_charge.update_price!
     end
 

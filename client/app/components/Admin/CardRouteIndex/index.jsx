@@ -67,23 +67,9 @@ export default class CardRoutesIndex extends Component {
     let itinerariesArr = []
     const sliceStartIndex = (page - 1) * numPerPage
     const sliceEndIndex = (page * numPerPage)
-    // if (itineraries && itineraries.length > 0) {
-    //   itinerariesArr = this.updateSearch(itineraries, mot)
-    //     .slice(sliceStartIndex, sliceEndIndex)
-    //     .filter(itinerary => itinerary.mode_of_transport === mot)
-    //     .map((rt, i) => (
-    //       <CardRoutes
-    //         key={v4()}
-    //         hubs={hubs}
-    //         itinerary={rt}
-    //         theme={theme}
-    //         handleClick={this.handleClick}
-    //       />
-    //     ))
-    // } else if (this.props.itineraries && this.props.itineraries.length > 0) {
+
     itinerariesArr = this.updateSearch(itineraries)
       .slice(sliceStartIndex, sliceEndIndex)
-      // .filter(itinerary => itinerary.mode_of_transport === mot)
       .map((rt, i) => (
         <CardRoutes
           key={v4()}
@@ -93,7 +79,7 @@ export default class CardRoutesIndex extends Component {
           handleClick={this.handleClick}
         />
       ))
-    // }
+
     if (itinerariesArr.length < 1) {
       itinerariesArr.push(<h3 className="flex-none">No routes to display</h3>)
     }
@@ -184,7 +170,7 @@ export default class CardRoutesIndex extends Component {
               target={mot}
             />
             {sideMenuNodes}
-            {toggleNew ? <PricingButton
+            {toggleNew && scope.show_beta_features ? <PricingButton
               onClick={toggleNew}
               text={newText}
               onDisabledClick={() => console.log('this button is disabled')}

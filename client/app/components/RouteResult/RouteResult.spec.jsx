@@ -2,7 +2,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme, user, hub, schedule, identity } from '../../mocks'
 
-import { RouteResult } from './RouteResult'
+import RouteResult from './RouteResult'
 
 const editedSchedule = {
   ...schedule,

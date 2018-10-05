@@ -14,7 +14,7 @@ module OfferCalculatorService
       if trucking_time != 0
         @shipment.trucking["pre_carriage"]["trucking_time_in_seconds"] = [trucking_time, 129600].max
       end
-      @shipment.selected_day + trucking_time
+      @shipment.desired_start_date + trucking_time
     end
 
     def longest_trucking_time(hubs)
@@ -23,7 +23,7 @@ module OfferCalculatorService
       google_directions = GoogleDirections.new(
         @shipment.pickup_address.lat_lng_string,
         @shipment.pickup_address.furthest_hub(hubs[:origin]).lat_lng_string,
-        @shipment.planned_pickup_date.to_i
+        @shipment.desired_start_date.to_i
       )
 
       driving_time = google_directions.driving_time_in_seconds

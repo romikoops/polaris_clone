@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-// import styled from 'styled-components'
-// import Select from 'react-select'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
-import UserLocations from './'
+import UserLocations from './UserLocations'
+import ProfileBox from './ProfileBox'
+import EditProfileBox from './EditProfileBox'
 import { AdminClientTile } from '../Admin'
 import { RoundButton } from '../RoundButton/RoundButton'
 import '../../styles/select-css-custom.css'
@@ -11,225 +12,23 @@ import {
   gradientTextGenerator,
   authHeader
 } from '../../helpers'
+import getApiHost from '../../constants/api.constants'
+import { currencyOptions } from '../../constants'
 import DocumentsDownloader from '../Documents/Downloader'
 import { Modal } from '../Modal/Modal'
-import { BASE_URL } from '../../constants'
 import GreyBox from '../GreyBox/GreyBox'
-import {
-  OptOutCookies,
-  OptOutTenant,
-  OptOutItsMyCargo
-} from '../OptOut'
-import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
+import OptOutCookies from '../OptOut/Cookies'
+import OptOutTenant from '../OptOut/Tenant'
+import OptOutItsMyCargo from '../OptOut/ItsMyCargo'
+import { NamedSelect } from '../NamedSelect/NamedSelect'
 
 const { fetch } = window
-
-const ProfileBox = ({ user, style, edit }) => (
-  <div
-    className={`flex-100 layout-row layout-align-start-start
-    layout-wrap section_padding relative ${styles.content_details}`}
-  >
-    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-      <div className="flex-100 layout-row layout-align-start-start ">
-        <sup style={style} className="clip flex-none">
-          Company
-        </sup>
-      </div>
-      <div className="flex-100 layout-row layout-align-start-center ">
-        <p className="flex-none"> {user.company_name}</p>
-      </div>
-    </div>
-    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-      <div className="flex-100 layout-row layout-align-start-start ">
-        <sup style={style} className="clip flex-none">
-          Email
-        </sup>
-      </div>
-      <div className="flex-100 layout-row layout-align-start-center ">
-        <p className="flex-none"> {user.email}</p>
-      </div>
-    </div>
-    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-      <div className="flex-100 layout-row layout-align-start-start ">
-        <sup style={style} className="clip flex-none">
-          Phone
-        </sup>
-      </div>
-      <div className="flex-100 layout-row layout-align-start-center ">
-        <p className="flex-none"> {user.phone}</p>
-      </div>
-    </div>
-    <div className={`flex-none layout-row layout-align-center-center ${styles.profile_edit_icon}`} onClick={edit} >
-      <i className="fa fa-pencil flex-none" />
-    </div>
-  </div>
-)
-
-ProfileBox.propTypes = {
-  user: PropTypes.user.isRequired,
-  edit: PropTypes.func.isRequired,
-  style: PropTypes.objectOf(PropTypes.string)
-}
-
-ProfileBox.defaultProps = {
-  style: {}
-}
 
 const EditNameBox = () => (
   <div className={`${styles.set_size} layout-row flex-100`} />
 )
 
-const EditProfileBox = ({
-  user, handleChange, onSave, close, style, theme, handlePasswordChange, passwordResetSent, passwordResetRequested
-}) => (
-  <div className={`flex-100 layout-row layout-align-start-start layout-wrap section_padding ${styles.content_details}`}>
-    <div className="layout-row flex-90" />
-    <div className="flex-10 layout-row layout-align-end-center layout-wrap">
-      <span className="layout-row flex-100 layout-align-center-stretch">
-        <div
-          onClick={onSave}
-          className={`layout-row flex-50 ${styles.save} layout-align-center-center`}
-        >
-          <i className="fa fa-check" />
-        </div>
-        <div
-          onClick={close}
-          className={`layout-row flex-50 ${styles.cancel} layout-align-center-center`}
-        >
-          <i className="fa fa-times" />
-        </div>
-      </span>
-    </div>
-    <div
-      className={`flex-100 layout-row layout-align-start-start layout-wrap
-      ${styles.margin_top} margin_bottom`}
-    >
-      <div className="flex-100 layout-row layout-align-start-start ">
-        <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
-          Company
-        </sup>
-      </div>
-      <div className="input_box flex-100 layout-row layout-align-start-center ">
-        <input
-          className={`flex-90 ${styles.input_style}`}
-          type="text"
-          value={user.company_name}
-          onChange={handleChange}
-          name="company_name"
-        />
-      </div>
-    </div>
-    <div className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom">
-      <div className="flex-100 layout-row layout-align-start-start ">
-        <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
-            First Name
-        </sup>
-      </div>
-      <div className="input_box flex-100 layout-row layout-align-start-center ">
-        <input
-          className={`flex-none ${styles.input_style}`}
-          type="text"
-          value={user.first_name}
-          onChange={handleChange}
-          name="first_name"
-        />
-      </div>
-    </div>
-    <div className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom">
-      <div className="flex-100 layout-row layout-align-start-start ">
-        <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
-            Last Name
-        </sup>
-      </div>
-      <div className="input_box flex-100 layout-row layout-align-start-center ">
-        <input
-          className={`flex-none ${styles.input_style}`}
-          type="text"
-          value={user.last_name}
-          onChange={handleChange}
-          name="last_name"
-        />
-      </div>
-    </div>
-    <div className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom">
-      <div className="flex-100 layout-row layout-align-start-start ">
-        <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
-          Email
-        </sup>
-      </div>
-      <div className="input_box flex-100 layout-row layout-align-start-center ">
-        <input
-          className={`flex-none ${styles.input_style}`}
-          type="text"
-          value={user.email}
-          onChange={handleChange}
-          name="email"
-        />
-      </div>
-    </div>
-    <div className="flex-50 layout-row layout-align-start-start layout-wrap">
-      <div className="flex-100 layout-row layout-align-start-start ">
-        <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
-          Phone
-        </sup>
-      </div>
-      <div className="input_box flex-100 layout-row layout-align-start-center ">
-        <input
-          className={`flex-none ${styles.input_style}`}
-          type="text"
-          value={user.phone}
-          onChange={handleChange}
-          name="phone"
-        />
-      </div>
-    </div>
-    <div
-      className={`flex-100 layout-row layout-align-center layout-wrap padding_top ${styles.form_group_submit_btn}`}
-    >
-      <div className="flex-50 layout-row layout-align-start-center">
-        <RoundButton
-          theme={theme}
-          size="medium"
-          active
-          text="Change my Password"
-          handleNext={handlePasswordChange}
-        />
-      </div>
-      <div className={`${styles.spinner} flex-50 layout-row layout-align-start-start`}>
-        {passwordResetRequested &&
-        <LoadingSpinner
-          size="extra_small"
-        />}
-      </div>
-      { passwordResetSent && (
-        <div className="flex-100 layout-row layout-align-center-start padding_top">
-          <p>
-            Please check your email for a link to change your password.
-          </p>
-        </div>
-      )}
-    </div>
-  </div>
-)
-
-EditProfileBox.propTypes = {
-  user: PropTypes.user.isRequired,
-  theme: PropTypes.theme,
-  handleChange: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  close: PropTypes.func.isRequired,
-  style: PropTypes.objectOf(PropTypes.string),
-  handlePasswordChange: PropTypes.func.isRequired,
-  passwordResetSent: PropTypes.bool.isRequired,
-  passwordResetRequested: PropTypes.bool.isRequired
-}
-
-EditProfileBox.defaultProps = {
-  style: {},
-  theme: null
-}
-
-export class UserProfile extends Component {
+class UserProfile extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -239,10 +38,7 @@ export class UserProfile extends Component {
       newAliasBool: false,
       passwordResetSent: false,
       passwordResetRequested: false,
-      currencySelect: {
-        label: this.props.user ? this.props.user.currency : 'EUR',
-        value: this.props.user ? this.props.user.currency : 'EUR'
-      }
+      currentCurrency: {}
     }
     this.makePrimary = this.makePrimary.bind(this)
     this.editProfile = this.editProfile.bind(this)
@@ -260,7 +56,6 @@ export class UserProfile extends Component {
   componentDidMount () {
     this.props.setNav('profile')
     window.scrollTo(0, 0)
-    this.props.setCurrentUrl(this.props.match.url)
   }
 
   setCurrency (event) {
@@ -269,6 +64,13 @@ export class UserProfile extends Component {
   saveCurrency () {
     const { appDispatch } = this.props
     appDispatch.setCurrency(this.state.currencySelect.value)
+  }
+
+  handleCurrencyUpdate (e) {
+    const { value } = e
+    const { appDispatch } = this.props
+    this.setState({ currentCurrency: e })
+    appDispatch.setCurrency(value)
   }
 
   makePrimary (locationId) {
@@ -309,7 +111,7 @@ export class UserProfile extends Component {
       email: this.props.user.email,
       redirect_url: ''
     }
-    fetch(`${BASE_URL}/auth/password`, {
+    fetch(`${getApiHost()}/auth/password`, {
       method: 'POST',
       headers: { ...authHeader(), 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -391,7 +193,7 @@ export class UserProfile extends Component {
   }
   render () {
     const {
-      user, aliases, locations, theme, userDispatch, tenant
+      user, aliases, locations, theme, userDispatch, tenant, t
     } = this.props
     if (!user) {
       return ''
@@ -403,10 +205,38 @@ export class UserProfile extends Component {
     const contactArr = aliases.map(cont => (
       <AdminClientTile client={cont} theme={theme} deleteable deleteFn={this.deleteAlias} flexClasses="flex-45" />
     ))
-
     const textStyle = theme && theme.colors
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }
+
+    const currencySection = (
+      <div className={`flex-40 layout-row layout-align-center-center layout-wrap ${styles.currency_box}`}>
+        <div className="flex-75 layout-row layout-align-end-center layout-wrap">
+          <div className={`flex-100 layout-row layout-align-center-center layout-wrap ${styles.currency_grey}`}>
+            <p className="flex-none">{t('common:currency')}:</p>
+            <span><strong>{user.currency}</strong></span>
+          </div>
+        </div>
+        <div className="flex-75 layout-row layout-align-space-around-center layout-wrap" />
+      </div>
+    )
+
+    const toggleEditCurrency = !tenant.data.scope.fixed_currency ? (
+      <div className={`flex-40 layout-row layout-align-center-center layout-wrap ${styles.currency_box}`}>
+        <div className="flex-75 layout-row layout-align-end-center layout-wrap">
+          <div className="flex-100 layout-row layout-align-center-center ">
+            <p className="flex-none">{t('common:currency')}:</p>
+            <NamedSelect
+              className="flex-100"
+              options={currencyOptions}
+              value={this.state.currentCurrency}
+              placeholder="Select Currency"
+              onChange={e => this.handleCurrencyUpdate(e)}
+            />
+          </div>
+        </div>
+      </div>
+    ) : currencySection
 
     const newAliasBox = (
       <div
@@ -429,11 +259,13 @@ export class UserProfile extends Component {
             className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center margin-bottom`}
           >
             <i className="fa fa-user flex-10" style={textStyle} />
-            <p className="flex-none">New Alias</p>
+            <p className="flex-none">
+              {t('user:newAlias')}
+            </p>
           </div>
           <div className="flex-100 layout-row layout-align-center-center input_box_label relative">
             <label htmlFor="companyName">
-              Company Name
+              {t('user:companyName')}
             </label>
             <input
               className="flex"
@@ -441,13 +273,13 @@ export class UserProfile extends Component {
               value={newAlias.companyName}
               name="companyName"
               id="companyName"
-              placeholder="Company Name"
+              placeholder={t('user:companyName')}
               onChange={this.handleFormChange}
             />
           </div>
           <div className="flex-50 layout-row layout-align-center-center input_box_label relative">
             <label htmlFor="firstName">
-              First Name
+              {t('user:firstName')}
             </label>
             <input
               className="flex"
@@ -455,13 +287,13 @@ export class UserProfile extends Component {
               value={newAlias.firstName}
               name="firstName"
               id="firstName"
-              placeholder="First Name"
+              placeholder={t('user:firstName')}
               onChange={this.handleFormChange}
             />
           </div>
           <div className="flex-50 layout-row layout-align-center-center input_box_label relative">
             <label htmlFor="lastName">
-              Last Name
+              {t('user:lastName')}
             </label>
             <input
               className="flex"
@@ -469,13 +301,13 @@ export class UserProfile extends Component {
               value={newAlias.lastName}
               name="lastName"
               id="lastName"
-              placeholder="Last Name"
+              placeholder={t('user:lastName')}
               onChange={this.handleFormChange}
             />
           </div>
           <div className="flex-50 layout-row layout-align-center-center input_box_label relative">
             <label htmlFor="email">
-              Email
+              {t('user:email')}
             </label>
             <input
               className="flex"
@@ -483,13 +315,13 @@ export class UserProfile extends Component {
               value={newAlias.email}
               name="email"
               id="email"
-              placeholder="Email"
+              placeholder={t('user:email')}
               onChange={this.handleFormChange}
             />
           </div>
           <div className="flex-50 layout-row layout-align-center-center input_box_label relative">
             <label htmlFor="phone">
-              Phone
+              {t('user:phone')}
             </label>
             <input
               className="flex"
@@ -497,13 +329,13 @@ export class UserProfile extends Component {
               value={newAlias.phone}
               name="phone"
               id="phone"
-              placeholder="Phone"
+              placeholder={t('user:phone')}
               onChange={this.handleFormChange}
             />
           </div>
           <div className="flex-75 layout-row layout-align-center-center input_box_label relative">
             <label htmlFor="street">
-              Street
+              {t('user:street')}
             </label>
             <input
               className="flex"
@@ -511,13 +343,13 @@ export class UserProfile extends Component {
               value={newAlias.street}
               name="street"
               id="street"
-              placeholder="Street"
+              placeholder={t('user:street')}
               onChange={this.handleFormChange}
             />
           </div>
           <div className="flex-25 layout-row layout-align-center-center input_box_label relative">
             <label htmlFor="number">
-              Number
+              {t('user:number')}
             </label>
             <input
               className="flex"
@@ -525,13 +357,13 @@ export class UserProfile extends Component {
               value={newAlias.number}
               name="number"
               id="number"
-              placeholder="Number"
+              placeholder={t('user:number')}
               onChange={this.handleFormChange}
             />
           </div>
           <div className="flex-20 layout-row layout-align-center-center input_box_label relative">
             <label htmlFor="zipCode">
-              Zip Code
+              {t('user:postalCode')}
             </label>
             <input
               className="flex"
@@ -539,13 +371,13 @@ export class UserProfile extends Component {
               value={newAlias.zipCode}
               name="zipCode"
               id="zipCode"
-              placeholder="Postal Code"
+              placeholder={t('user:postalCode')}
               onChange={this.handleFormChange}
             />
           </div>
           <div className="flex-40 layout-row layout-align-center-center input_box_label relative">
             <label htmlFor="city">
-              city
+              {t('user:city')}
             </label>
             <input
               className="flex"
@@ -553,13 +385,13 @@ export class UserProfile extends Component {
               value={newAlias.city}
               name="city"
               id="city"
-              placeholder="City"
+              placeholder={t('user:city')}
               onChange={this.handleFormChange}
             />
           </div>
           <div className="flex-40 layout-row layout-align-center-center input_box_label relative">
             <label htmlFor="country">
-              Country
+              {t('user:country')}
             </label>
             <input
               className="flex"
@@ -567,7 +399,7 @@ export class UserProfile extends Component {
               value={newAlias.country}
               name="country"
               id="country"
-              placeholder="Country"
+              placeholder={t('user:country')}
               onChange={this.handleFormChange}
             />
           </div>
@@ -602,7 +434,9 @@ export class UserProfile extends Component {
                 <i className={`fa fa-user clip ${styles.bigProfile}`} style={textStyle} />
               </div>
               <div className="layout-align-start-center layout-row flex">
-                <p>Hello,&nbsp;</p>
+                <p>
+                  {t('common:greeting')}&nbsp;
+                </p>
                 <h1 className="flex-none cli">
                   {user.first_name} {user.last_name}
                 </h1>
@@ -619,74 +453,40 @@ export class UserProfile extends Component {
               contentClassName="layout-row flex"
               content={(
                 <div className="layout-row flex-100">
-                  {editBool ? (
-                    <EditProfileBox
-                      user={editObj}
-                      style={textStyle}
-                      theme={theme}
-                      handleChange={this.handleChange}
-                      handlePasswordChange={this.handlePasswordChange}
-                      onSave={this.saveEdit}
-                      close={this.closeEdit}
-                      passwordResetSent={passwordResetSent}
-                      passwordResetRequested={passwordResetRequested}
-                    />
-                  ) : (
-                    <ProfileBox user={user} style={textStyle} theme={theme} edit={this.editProfile} />
-                  )}
-                  <div className={`flex-40 layout-row layout-align-center-center layout-wrap ${styles.currency_box}`}>
-                    <div className="flex-75 layout-row layout-align-end-center layout-wrap">
-                      {/* <div className="flex-100 layout-row layout-align-end-center layout-wrap">
-                        <h3 className="flex-none"> Currency Settings:</h3>
-                      </div> */}
-                      <div className={`flex-100 layout-row layout-align-center-center layout-wrap ${styles.currency_grey}`}>
-                        <p className="flex-none">Currency:</p>
-                        <span><strong>{user.currency}</strong></span>
-                      </div>
-                    </div>
-                    <div className="flex-75 layout-row layout-align-space-around-center layout-wrap">
-                      {/* <StyledSelect
-                        name="currency"
-                        className={`${styles.select}`}
-                        value={this.state.currencySelect}
-                        options={currencyOptions}
-                        onChange={this.setCurrency}
-                        clearable={false}
-                      />
-                      <div
-                        onClick={this.saveCurrency}
-                        className={`layout-row flex-25 ${styles.save} layout-align-center-center`}
-                      >
-                        <i className="fa fa-check" /> Save
-                      </div> */}
-                      {/* <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row} ${styles.btn_alignment}`}>
-                        <RoundButton
-                          theme={theme}
-                          size="small"
-                          active
-                          text="Save"
-                          handleNext={this.saveCurrency}
-                          iconClass="fa-floppy-o"
-                        />
-                      </div> */}
-                    </div>
-                  </div>
+                  <EditProfileBox
+                    hide={!editBool}
+                    user={editObj}
+                    style={textStyle}
+                    theme={theme}
+                    handleChange={this.handleChange}
+                    handlePasswordChange={this.handlePasswordChange}
+                    onSave={this.saveEdit}
+                    close={this.closeEdit}
+                    passwordResetSent={passwordResetSent}
+                    passwordResetRequested={passwordResetRequested}
+                  />
+                  <ProfileBox hide={editBool} user={user} style={textStyle} theme={theme} edit={this.editProfile} />
+                  {!editBool ? currencySection : toggleEditCurrency}
                 </div>
               )}
             />
             <GreyBox
-              title="GDPR - Your Data"
-              wrapperClassName="flex-gt-sm-35 flex-100 layout-row layout-align-start-start"
-              contentClassName="layout-column flex"
+              title={t('user:yourData')}
+              wrapperClassName="flex-gt-sm-35 flex-100 layout-row layout-align-stretch"
+              contentClassName="layout-row layout-wrap flex layout-align-start-start"
               content={(
-                <div className={`layout-row layout-wrap ${styles.conditions_box}`}>
+                <div className={`flex-100 layout-row layout-wrap ${styles.conditions_box}`}>
+                  <div className="flex-100">
+                    <p
+                      className="emulate_link blue_link"
+                      onClick={() => window.open('https://gdpr-info.eu/', '_blank')}
+                    >
+                      {t('common:moreInfo')}</p>
+                  </div>
                   <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
                     <div className="flex-66 layout-row layout-align-start-center">
-                      {/* <p className="flex-none">
-                        Here you can download all the data that ItsMyCargo has related to your account.
-                      </p> */}
                       <p className="flex-none">
-                        Download all data from ItsMyCargo
+                        {t('common:downloadAllData')}
                       </p>
                     </div>
                     <div className="flex-33 layout-row layout-align-center-center ">
@@ -701,7 +501,14 @@ export class UserProfile extends Component {
                   <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
                     <div className="flex-66 layout-row layout-align-start-center">
                       <p className="flex-none">
-                        {`${tenant && tenant.data ? tenant.data.name : ''} Terms and Conditions`}
+                        { tenant && tenant.data && tenant.data.name }
+                        {' '}
+                        <span
+                          onClick={() => window.open('/terms_and_conditions', '_blank')}
+                          className="emulate_link blue_link"
+                        >
+                          { t('footer:terms') }
+                        </span>
                       </p>
                     </div>
                     <div className="flex-33 layout-row layout-align-center-center ">
@@ -709,7 +516,7 @@ export class UserProfile extends Component {
                         theme={theme}
                         size="full"
                         active
-                        text="Opt Out"
+                        text={t('common:optOut')}
                         handleNext={() => this.optOut('tenant')}
                       />
                     </div>
@@ -717,18 +524,22 @@ export class UserProfile extends Component {
                   <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
                     <div className="flex-66 layout-row layout-align-start-center">
                       <p className="flex-none">
-                        {`ItsMyCargo GMBH Terms and Conditions`}
+                        ItsMyCargo
+                        {' '}
+                        <span
+                          onClick={() => window.open('https://www.itsmycargo.com/en/terms', '_blank')}
+                          className="emulate_link blue_link"
+                        >
+                          { t('footer:terms') }
+                        </span>
                       </p>
-                      {/* <p className="flex-none">
-                        {`To opt out of the ItsMyCargo GMBH Terms and Conditions click the "Opt Out" button to the right`}
-                      </p> */}
                     </div>
                     <div className="flex-33 layout-row layout-align-center-center ">
                       <RoundButton
                         theme={theme}
                         size="full"
                         active
-                        text="Opt Out"
+                        text={t('common:optOut')}
                         handleNext={() => this.optOut('itsmycargo')}
                       />
                     </div>
@@ -736,18 +547,15 @@ export class UserProfile extends Component {
                   <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
                     <div className="flex-66 layout-row layout-align-start-center">
                       <p className="flex-none">
-                        {`ItsMyCargo's use of cookies`}
+                        {t('imc:imcCookies')}
                       </p>
-                      {/* <p className="flex-none">
-                        {`To opt out of the ItsMyCargo's use of cookies click the "Opt Out" button to the right`}
-                      </p> */}
                     </div>
                     <div className="flex-33 layout-row layout-align-center-center ">
                       <RoundButton
                         theme={theme}
                         size="full"
                         active
-                        text="Opt Out"
+                        text={t('common:optOut')}
                         handleNext={() => this.optOut('cookies')}
                       />
                     </div>
@@ -766,7 +574,7 @@ export class UserProfile extends Component {
             <div
               className="flex-100 layout-align-start-center greyBg"
             >
-              <span><b>Aliases</b></span>
+              <span><b>{t('user:aliases')}</b></span>
             </div>
             <div className="flex-100 layout-row layout-wrap layout-align-space-between-stretch">
               <div
@@ -784,7 +592,9 @@ export class UserProfile extends Component {
                   </div>
 
                   <div className="layout-row layout-align-center flex-100">
-                    <h3>Add Alias</h3>
+                    <h3>
+                      {t('user:addAlias')}
+                    </h3>
                   </div>
                 </div>
               </div>
@@ -800,7 +610,7 @@ export class UserProfile extends Component {
             <div
               className="flex-100 layout-align-start-center greyBg"
             >
-              <span><b>Saved Locations</b></span>
+              <span><b>{t('user:savedLocations')}</b></span>
             </div>
             <UserLocations
               setNav={() => {}}
@@ -821,8 +631,8 @@ export class UserProfile extends Component {
 
 UserProfile.propTypes = {
   user: PropTypes.user.isRequired,
+  t: PropTypes.func.isRequired,
   setNav: PropTypes.func.isRequired,
-  setCurrentUrl: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   appDispatch: PropTypes.shape({
     setCurrency: PropTypes.func
@@ -847,4 +657,4 @@ UserProfile.defaultProps = {
   tenant: {}
 }
 
-export default UserProfile
+export default translate(['common', 'footer', 'user', 'imc'])(UserProfile)

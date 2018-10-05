@@ -9,8 +9,7 @@ import AdminPromptConfirm from '../Admin/Prompt/Confirm'
 import {
   gradientTextGenerator,
   switchIcon,
-  totalPrice,
-  formattedPriceValue,
+  numberSpacing,
   splitName
 } from '../../helpers'
 
@@ -79,7 +78,8 @@ class AdminShipmentCard extends Component {
       shipment,
       theme,
       confirmShipmentData,
-      t
+      t,
+      isDashboard
     } = this.props
 
     const gradientFontStyle =
@@ -126,6 +126,67 @@ class AdminShipmentCard extends Component {
         </div>
       </div>
     )
+    const timeRow = plannedDate && shipment.planned_etd && shipment.planned_eta
+      ? (<div className={`layout-row flex-100 layout-align-start-center
+    ${styles.middle_bottom_box} ${styles.smallText}`}
+    >
+        <div className="flex-20 layout-align-center-start">
+          <span className="flex-100"><b>{t('common:pickupDate')}</b><br />
+            <span className={`${styles.grey}`}>
+              {moment(plannedDate).format('DD/MM/YYYY')}
+            </span>
+          </span>
+        </div>
+        <div className="flex-20 layout-align-center-start">
+          <span className="flex-100"><b>{t('common:etd')}</b><br />
+            <span className={`${styles.grey}`}>
+              {moment(shipment.planned_etd).format('DD/MM/YYYY')}
+            </span>
+          </span>
+        </div>
+        <div className="flex-20 layout-align-center-start">
+          <span className="flex-100"><b>{t('common:eta')}</b><br />
+            <span className={`${styles.grey}`}>
+              {moment(shipment.planned_eta).format('DD/MM/YYYY')}
+            </span>
+          </span>
+        </div>
+        <div className={`flex-40 layout-align-start-end ${styles.carriages}`}>
+          <div className="layout-row layout-align-end-end">
+            <i
+              className={shipment.has_pre_carriage ? 'fa fa-check clip' : 'fa fa-times'}
+              style={shipment.has_pre_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
+            />
+            <p>{t('shipment:preCarriageBase')}</p>
+          </div>
+          <div className="layout-row layout-align-end-end">
+            <i
+              className={shipment.has_on_carriage ? 'fa fa-check clip' : 'fa fa-times'}
+              style={shipment.has_on_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
+            />
+            <p>{t('shipment:onCarriageBase')}</p>
+          </div>
+        </div>
+      </div>) : (
+        <div className={`layout-row flex-100 layout-align-start-center
+      ${styles.middle_bottom_box} ${styles.smallText}`}
+        >
+          <div className="layout-row flex-50 layout-align-center-center">
+            <i
+              className={shipment.has_pre_carriage ? 'fa fa-check clip' : 'fa fa-times'}
+              style={shipment.has_pre_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
+            />
+            <p>{t('shipment:preCarriageBase')}</p>
+          </div>
+          <div className="layout-row flex-50 layout-align-center-center">
+            <i
+              className={shipment.has_on_carriage ? 'fa fa-check clip' : 'fa fa-times'}
+              style={shipment.has_on_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
+            />
+            <p>{t('shipment:onCarriageBase')}</p>
+          </div>
+        </div>
+      )
 
     return (
       <div
@@ -169,7 +230,7 @@ class AdminShipmentCard extends Component {
           <div className="layout-row flex-35 layout-align-center-center">
             <div className="flex-100">
               <b className={styles.ref_row_card}>{t('common:ref')}:&nbsp;{shipment.imc_reference}</b>
-              <p>{t('shipment:placedAt')}&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY - hh:mm')}</p>
+              <p>{t('shipment:placedAt')}&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY - HH:mm')}</p>
             </div>
           </div>
 
@@ -198,49 +259,7 @@ class AdminShipmentCard extends Component {
 
         </div>
 
-        {shipment.status !== 'finished' ? (
-          <div className={`layout-row flex-100 layout-align-start-center
-            ${styles.middle_bottom_box} ${styles.smallText}`}
-          >
-            <div className="flex-20 layout-align-center-start">
-              <span className="flex-100"><b>{t('common:pickupDate')}</b><br />
-                <span className={`${styles.grey}`}>
-                  {moment(plannedDate).format('DD/MM/YYYY')}
-                </span>
-              </span>
-            </div>
-            <div className="flex-20 layout-align-center-start">
-              <span className="flex-100"><b>{t('common:etd')}</b><br />
-                <span className={`${styles.grey}`}>
-                  {moment(shipment.planned_etd).format('DD/MM/YYYY')}
-                </span>
-              </span>
-            </div>
-            <div className="flex-20 layout-align-center-start">
-              <span className="flex-100"><b>{t('common:eta')}</b><br />
-                <span className={`${styles.grey}`}>
-                  {moment(shipment.planned_eta).format('DD/MM/YYYY')}
-                </span>
-              </span>
-            </div>
-            <div className={`flex-40 layout-align-start-end ${styles.carriages}`}>
-              <div className="layout-row layout-align-end-end">
-                <i
-                  className={shipment.has_pre_carriage ? 'fa fa-check clip' : 'fa fa-times'}
-                  style={shipment.has_pre_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
-                />
-                <p>{t('shipment:preCarriageBase')}</p>
-              </div>
-              <div className="layout-row layout-align-end-end">
-                <i
-                  className={shipment.has_on_carriage ? 'fa fa-check clip' : 'fa fa-times'}
-                  style={shipment.has_on_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
-                />
-                <p>{t('shipment:onCarriageBase')}</p>
-              </div>
-            </div>
-          </div>
-        ) : (
+        {shipment.status !== 'finished' ? timeRow : (
           <div className={`layout-row flex-40 layout-align-start-stretch
             ${styles.middle_bottom_box} ${styles.smallText}`}
           >
@@ -267,24 +286,24 @@ class AdminShipmentCard extends Component {
             <span className="flex-25 layout-row">
               <i
                 className="fa fa-check-square clip"
-                style={shipment.pickup_address ? gradientFontStyle : deselectedStyle}
+                style={shipment.has_pre_carriage ? gradientFontStyle : deselectedStyle}
               />
               <p>{t('shipment:pickUp')}</p>
             </span>
             <span className="flex-25 layout row">
               <i
                 className="fa fa-check-square clip"
-                style={shipment.delivery_address ? gradientFontStyle : deselectedStyle}
+                style={shipment.has_on_carriage ? gradientFontStyle : deselectedStyle}
               />
               <p>{t('shipment:delivery')}</p>
             </span>
           </div>
           <div className="layout-row flex layout-align-end-end">
             <span className={`${styles.bigText} ${styles.price_style}`}>
-              <span> {totalPrice(shipment).currency} </span>
+              <span> {shipment.total_price.currency} </span>
               <span>
-                {formattedPriceValue(totalPrice(shipment).value)}
-              </span>
+                {numberSpacing(shipment.total_price.value, 2)}
+              </span> 
             </span>
           </div>
         </div>

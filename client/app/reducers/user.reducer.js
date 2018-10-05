@@ -1,6 +1,6 @@
 import merge from 'lodash/merge'
 import { userConstants } from '../constants'
-import { getSubdomain } from '../helpers/subdomain'
+import getSubdomain from '../helpers/subdomain'
 
 const { localStorage } = window
 
@@ -49,7 +49,6 @@ export default function users (state = initialState, action) {
           if (newUserData.id === action.id) {
             // make copy of user without 'deleting:true' property
             const { deleting, ...userCopy } = newUserData
-            console.log(deleting)
 
             // return copy of user with 'deleteError:[error]' property
             return { ...userCopy, deleteError: action.error }
@@ -277,10 +276,9 @@ export default function users (state = initialState, action) {
       return state
     }
     case userConstants.GET_CONTACTS_SUCCESS: {
-      const cData = action.payload.data.contacts
       return {
         ...state,
-        contactsData: cData,
+        contactsData: action.payload.data,
         num_contact_pages: state.dashboard.num_contact_pages,
         loading: false
       }
@@ -295,23 +293,14 @@ export default function users (state = initialState, action) {
     }
 
     case userConstants.NEW_CONTACT_REQUEST: {
-      const reqNewContact = merge({}, state, {
-        loading: true
-      })
-
-      return reqNewContact
-    }
-    case userConstants.NEW_CONTACT_SUCCESS: {
-      const contacts = state.dashboard.contacts.filter(c => c.id !== action.payload.data.id)
-      contacts.push(action.payload.data)
-
       return {
         ...state,
-        dashboard: {
-          ...state.dashboard,
-          contacts
-        },
-        contactData: action.payload.data,
+        loading: true
+      }
+    }
+    case userConstants.NEW_CONTACT_SUCCESS: {
+      return {
+        ...state,
         loading: false
       }
     }

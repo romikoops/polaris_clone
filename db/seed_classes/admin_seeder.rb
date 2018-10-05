@@ -18,11 +18,11 @@ class AdminSeeder
   end
 
   def self.find_admin_for_tenant(tenant)
-    tenant.users.find_by(email: "admin@#{tenant.subdomain}.#{tld(tenant)}")
+    tenant.users.find_by(uid: "#{tenant.id}***admin@#{tenant.subdomain}.#{tld(tenant)}")
   end
 
   def self.find_sub_admin_for_tenant(tenant)
-    tenant.users.find_by(email: "subadmin@#{tenant.subdomain}.#{tld(tenant)}")
+    tenant.users.find_by(uid: "#{tenant.id}***subadmin@#{tenant.subdomain}.#{tld(tenant)}")
   end
 
   def self.new_admin(tenant)

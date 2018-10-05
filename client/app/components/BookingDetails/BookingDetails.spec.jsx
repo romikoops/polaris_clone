@@ -9,7 +9,7 @@ import {
   tenant,
   user
 } from '../../mocks'
-
+// eslint-disable-next-line
 import BookingDetails from './BookingDetails'
 
 const editedShipmentData = {

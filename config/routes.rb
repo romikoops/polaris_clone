@@ -99,6 +99,7 @@ Rails.application.routes.draw do
       get 'hubs', to: 'hubs#index'
       get 'search/hubs', to: 'hubs#search'
       get 'search/pricings', to: 'pricings#search'
+      get 'search/contacts', to: 'contacts#search'
       get 'dashboard', to: 'dashboard#index'
     end
 
@@ -120,9 +121,12 @@ Rails.application.routes.draw do
     resources :shipments, only: %i[index show] do
       get 'test_email'
       get 'reuse_booking_data', as: :reuse_booking
-      %w(choose_offer get_offers update_shipment request_shipment).each do |action|
+      %w(choose_offer get_offers update_shipment request_shipment send_quotes).each do |action|
         post action, controller: 'shipments/booking_process', action: action
       end
+      get 'view_more_schedules', controller:  'shipments/booking_process', action: 'view_more_schedules'
+      post 'quotations/download', controller: 'shipments/booking_process', action: 'download_quotations'
+      post 'shipment/download', controller: 'shipments/booking_process', action: 'download_shipment'
     end
 
     resources :trucking_availability, only: [:index]
@@ -135,7 +139,7 @@ Rails.application.routes.draw do
     get 'currencies/refresh/:currency', to: 'currencies#refresh_for_base'
     resources :contacts, only: %i[index show create update]
     post 'contacts/update_contact_address/:id', to: 'contacts#update_contact_address'
-
+    get 'search/contacts', to: 'contacts#search_contacts'
     post 'contacts/new_alias', to: 'contacts#new_alias'
     post 'contacts/delete_alias/:id', to: 'contacts#delete_alias'
     get 'contacts/validations/form', to: 'contacts#is_valid'

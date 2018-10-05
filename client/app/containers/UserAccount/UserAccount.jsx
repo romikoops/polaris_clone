@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Switch, Route, withRouter } from 'react-router-dom'
 import {
-  UserProfile,
   UserDashboard,
   UserShipments,
   UserShipmentView,
@@ -11,6 +10,7 @@ import {
   UserBilling,
   UserContacts
 } from '../../components/UserAccount'
+import UserProfile from '../../components/UserAccount/UserProfile'
 // eslint-disable-next-line import/no-named-as-default
 import UserShipmentsGroup from '../../components/User/Shipments/Group'
 import { userActions, authenticationActions, appActions } from '../../actions'
@@ -19,10 +19,11 @@ import PropTypes from '../../prop-types'
 import Header from '../../components/Header/Header'
 import Loading from '../../components/Loading/Loading'
 import SideNav from '../../components/SideNav/SideNav'
-import { Footer } from '../../components/Footer/Footer'
+import Footer from '../../components/Footer/Footer'
 import defs from '../../styles/default_classes.scss'
 import styles from './UserAccount.scss'
 import NavBar from '../Nav'
+import GenericError from '../../components/ErrorHandling/Generic'
 
 class UserAccount extends Component {
   constructor (props) {
@@ -74,30 +75,24 @@ class UserAccount extends Component {
     const { userDispatch, user } = this.props
     switch (target) {
       case 'pricing':
-        // this.setState({ activeLink: target })
         userDispatch.getPricings(user.id, true)
         break
       case 'chooseRoutes':
         this.toggleModal()
         break
       case 'shipments':
-        // this.setState({ activeLink: target })
         userDispatch.getShipments(true)
         break
       case 'contacts':
-        // this.setState({ activeLink: target })
-        userDispatch.getContacts(true, 1)
+        userDispatch.getContacts({ page: 1 }, true)
         break
       case 'dashboard':
-        // this.setState({ activeLink: target })
         userDispatch.getDashboard(user.id, true)
         break
       case 'locations':
-        // this.setState({ activeLink: target })
         userDispatch.getLocations(user.id, true)
         break
       case 'profile':
-        // this.setState({ activeLink: target })
         userDispatch.goTo('/account/profile')
         break
       default:
@@ -125,13 +120,13 @@ class UserAccount extends Component {
       tenant
     } = this.props
     if (!users || !user) {
-      return ''
+      return <Loading theme={theme} text="loading..." />
     }
     const {
       shipments, hubs, shipment, dashboard, loading
     } = users
     if (!dashboard) {
-      return ''
+      return <Loading theme={theme} text="loading..." />
     }
 
     const hubHash = {}
@@ -149,198 +144,241 @@ class UserAccount extends Component {
     return (
       <div className="layout-row flex-100 hundred">
         {loadingScreen}
-        {menu}
-        <Header theme={theme} shipments={users.dashboard.shipments} scrollable />
+        <GenericError theme={theme}>
+          {menu}
+        </GenericError >
+        <GenericError theme={theme}>
+          <Header theme={theme} shipments={users.dashboard.shipments} scrollable />
+        </GenericError >
         <div
           className="layout-row flex layout-wrap layout-align-center-start"
           style={footerStyle}
         >
-          <NavBar className={`${styles.top_margin}`} />
+          <GenericError theme={theme}>
+            <NavBar className={`${styles.top_margin}`} />
+          </GenericError >
           <div
             className={`flex-100 ${defs.spacing_md_bottom} ${
               styles.top_margin
             } layout-row flex-none `}
           >
             <div className="layout-row flex-100 height_100">
-              <Switch className="flex">
-                <Route
-                  exact
-                  path="/account"
-                  render={props => (
-                    <UserDashboard
-                      setNav={this.setNavLink}
-                      theme={theme}
-                      {...props}
-                      user={user}
-                      setCurrentUrl={this.setCurrentUrl}
-                      dashboard={dashboard}
-                      hubs={hubHash}
-                      navFn={this.setUrl}
-                      userDispatch={userDispatch}
-                    />
-                  )}
-                />
-                <Route
-                  path="/account/routesavailable"
-                  render={props => (
-                    <UserLocations
-                      setNav={this.setNavLink}
-                      theme={theme}
-                      setCurrentUrl={this.setCurrentUrl}
-                      {...props}
-                      locations={users.dashboard.locations}
-                      getLocations={this.getLocations}
-                      destroyLocation={this.destroyLocation}
-                      makePrimary={this.makePrimary}
-                    />
-                  )}
-                />
-                <Route
-                  path="/account/locations"
-                  render={props => (
-                    <UserLocations
-                      setNav={this.setNavLink}
-                      theme={theme}
-                      setCurrentUrl={this.setCurrentUrl}
-                      {...props}
-                      user={user}
-                      locations={users.dashboard.locations}
-                      getLocations={this.getLocations}
-                      destroyLocation={this.destroyLocation}
-                      makePrimary={this.makePrimary}
-                    />
-                  )}
-                />
-                <Route
-                  path="/account/profile"
-                  render={props => (
-                    <UserProfile
-                      appDispatch={appDispatch}
-                      setNav={this.setNavLink}
-                      currencies={currencies}
-                      setCurrentUrl={this.setCurrentUrl}
-                      theme={theme}
-                      user={user}
-                      tenant={tenant}
-                      aliases={dashboard.aliases}
-                      {...props}
-                      locations={dashboard.locations}
-                      userDispatch={userDispatch}
-                      authDispatch={authDispatch}
-                    />
-                  )}
-                />
-                <Route
-                  path="/account/contacts"
-                  render={props => (
-                    <UserContacts
-                      setNav={this.setNavLink}
-                      setCurrentUrl={this.setCurrentUrl}
-                      theme={theme}
-                      user={user}
-                      aliases={dashboard.aliases}
-                      {...props}
-                      locations={dashboard.locations}
-                      userDispatch={userDispatch}
-                      authDispatch={authDispatch}
-                    />
-                  )}
-                />
-                <Route
-                  path="/account/billing"
-                  render={props => (
-                    <UserBilling setNav={this.setNavLink} theme={theme} user={user} {...props} />
-                  )}
-                />
-                <Route
-                  exact
-                  path="/account/shipments"
-                  render={props => (
-                    <UserShipments
-                      setNav={this.setNavLink}
-                      setCurrentUrl={this.setCurrentUrl}
-                      theme={theme}
-                      hubs={hubHash}
-                      tenant={tenant}
-                      user={user}
-                      {...props}
-                      shipments={shipments}
-                      userDispatch={userDispatch}
-                    />
-                  )}
-                />
-                <Route
-                  path="/account/shipments/view/:id"
-                  render={props => (
-                    <UserShipmentView
-                      setNav={this.setNavLink}
-                      setCurrentUrl={this.setCurrentUrl}
-                      theme={theme}
-                      hubs={hubs}
-                      user={user}
-                      loading={loading}
-                      {...props}
-                      tenant={tenant}
-                      shipmentData={shipment}
-                      userDispatch={userDispatch}
-                    />
-                  )}
-                />
-                <Route
-                  exact
-                  path="/account/shipments/open"
-                  render={props => (
-                    <UserShipmentsGroup
-                      setNav={this.setNavLink}
-                      theme={theme}
-                      hubHash={hubHash}
-                      user={user}
-                      target="open"
-                      title="Open"
-                      {...props}
-                      shipments={dashboard.shipments}
-                      userDispatch={userDispatch}
-                    />
-                  )}
-                />
-                <Route
-                  exact
-                  path="/account/shipments/requested"
-                  render={props => (
-                    <UserShipmentsGroup
-                      setNav={this.setNavLink}
-                      theme={theme}
-                      hubHash={hubHash}
-                      user={user}
-                      target="requested"
-                      title="Requested"
-                      {...props}
-                      shipments={dashboard.shipments}
-                      userDispatch={userDispatch}
-                    />
-                  )}
-                />
-                <Route
-                  exact
-                  path="/account/shipments/finished"
-                  render={props => (
-                    <UserShipmentsGroup
-                      setNav={this.setNavLink}
-                      theme={theme}
-                      hubHash={hubHash}
-                      user={user}
-                      target="finished"
-                      title="Finished"
-                      {...props}
-                      shipments={dashboard.shipments}
-                      userDispatch={userDispatch}
-                    />
-                  )}
-                />
-              </Switch>
+              <GenericError theme={theme}>
+                <Switch className="flex">
+                  <Route
+                    exact
+                    path="/account"
+                    render={props => (
+                      <UserDashboard
+                        setNav={this.setNavLink}
+                        theme={theme}
+                        {...props}
+                        user={user}
+                        scope={tenant.data.scope}
+                        setCurrentUrl={this.setCurrentUrl}
+                        dashboard={dashboard}
+                        hubs={hubHash}
+                        navFn={this.setUrl}
+                        userDispatch={userDispatch}
+                      />
+                    )}
+                  />
+                  <Route
+                    path="/account/routesavailable"
+                    render={props => (
+                      <UserLocations
+                        setNav={this.setNavLink}
+                        theme={theme}
+                        setCurrentUrl={this.setCurrentUrl}
+                        {...props}
+                        locations={users.dashboard.locations}
+                        getLocations={this.getLocations}
+                        destroyLocation={this.destroyLocation}
+                        makePrimary={this.makePrimary}
+                      />
+                    )}
+                  />
+                  <Route
+                    path="/account/locations"
+                    render={props => (
+                      <UserLocations
+                        setNav={this.setNavLink}
+                        theme={theme}
+                        setCurrentUrl={this.setCurrentUrl}
+                        {...props}
+                        user={user}
+                        locations={users.dashboard.locations}
+                        getLocations={this.getLocations}
+                        destroyLocation={this.destroyLocation}
+                        makePrimary={this.makePrimary}
+                      />
+                    )}
+                  />
+                  <Route
+                    path="/account/profile"
+                    render={props => (
+                      <UserProfile
+                        appDispatch={appDispatch}
+                        setNav={this.setNavLink}
+                        currencies={currencies}
+                        setCurrentUrl={this.setCurrentUrl}
+                        theme={theme}
+                        user={user}
+                        tenant={tenant}
+                        aliases={dashboard.aliases}
+                        {...props}
+                        locations={dashboard.locations}
+                        userDispatch={userDispatch}
+                        authDispatch={authDispatch}
+                      />
+                    )}
+                  />
+                  <Route
+                    path="/account/contacts"
+                    render={props => (
+                      <UserContacts
+                        setNav={this.setNavLink}
+                        setCurrentUrl={this.setCurrentUrl}
+                        theme={theme}
+                        user={user}
+                        aliases={dashboard.aliases}
+                        {...props}
+                        locations={dashboard.locations}
+                        userDispatch={userDispatch}
+                        authDispatch={authDispatch}
+                      />
+                    )}
+                  />
+                  <Route
+                    path="/account/billing"
+                    render={props => (
+                      <UserBilling setNav={this.setNavLink} theme={theme} user={user} {...props} />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/account/shipments"
+                    render={props => (
+                      <UserShipments
+                        setNav={this.setNavLink}
+                        setCurrentUrl={this.setCurrentUrl}
+                        theme={theme}
+                        hubs={hubHash}
+                        tenant={tenant}
+                        user={user}
+                        {...props}
+                        shipments={shipments}
+                        userDispatch={userDispatch}
+                      />
+                    )}
+                  />
+                  <Route
+                    path="/account/shipments/view/:id"
+                    render={props => (
+                      <UserShipmentView
+                        setNav={this.setNavLink}
+                        setCurrentUrl={this.setCurrentUrl}
+                        theme={theme}
+                        hubs={hubs}
+                        user={user}
+                        loading={loading}
+                        {...props}
+                        tenant={tenant}
+                        shipmentData={shipment}
+                        userDispatch={userDispatch}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/account/shipments/open"
+                    render={props => (
+                      <UserShipmentsGroup
+                        setNav={this.setNavLink}
+                        theme={theme}
+                        hubHash={hubHash}
+                        user={user}
+                        target="open"
+                        title="Open"
+                        {...props}
+                        shipments={dashboard.shipments}
+                        userDispatch={userDispatch}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/account/shipments/requested"
+                    render={props => (
+                      <UserShipmentsGroup
+                        setNav={this.setNavLink}
+                        theme={theme}
+                        hubHash={hubHash}
+                        user={user}
+                        target="requested"
+                        title="Requested"
+                        {...props}
+                        shipments={dashboard.shipments}
+                        userDispatch={userDispatch}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/account/shipments/finished"
+                    render={props => (
+                      <UserShipmentsGroup
+                        setNav={this.setNavLink}
+                        theme={theme}
+                        hubHash={hubHash}
+                        user={user}
+                        target="finished"
+                        title="Finished"
+                        {...props}
+                        shipments={dashboard.shipments}
+                        userDispatch={userDispatch}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/account/shipments/rejected"
+                    render={props => (
+                      <UserShipmentsGroup
+                        setNav={this.setNavLink}
+                        theme={theme}
+                        hubHash={hubHash}
+                        user={user}
+                        target="rejected"
+                        title="Rejected"
+                        {...props}
+                        shipments={dashboard.shipments}
+                        userDispatch={userDispatch}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/account/shipments/archived"
+                    render={props => (
+                      <UserShipmentsGroup
+                        setNav={this.setNavLink}
+                        theme={theme}
+                        hubHash={hubHash}
+                        user={user}
+                        target="archived"
+                        title="Archived"
+                        {...props}
+                        shipments={dashboard.shipments}
+                        userDispatch={userDispatch}
+                      />
+                    )}
+                  />
+                </Switch>
+              </GenericError >
             </div>
           </div>
-          <Footer isShop tenant={tenant} />
+          <Footer isShop tenant={tenant.data} />
         </div>
       </div>
     )

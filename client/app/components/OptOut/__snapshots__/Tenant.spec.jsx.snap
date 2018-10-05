@@ -10,7 +10,7 @@ exports[`shallow rendering 1`] = `
     <h3
       className="flex-none"
     >
-       Terms & Conditions
+      Terms and Conditions
     </h3>
   </div>
   <div
@@ -19,19 +19,19 @@ exports[`shallow rendering 1`] = `
     <p
       className="flex-100"
     >
-       Use of the undefined ItsMyCargo webshop requires
-             accepting the terms and conditions laid out by undefined.
+      Use of the undefined  ItsMyCargo webshop requires accepting the terms and conditions laid out by undefined.
     </p>
     <p
       className="flex-100"
     >
-      As such if you decide to withdraw your agreement to the terms and conditions you will not be able to continue using the shop and we will have to close the window
+      As such if you decide to withdraw your agreement to the terms and conditions you will not
+       
+      be able to continue using the shop and we will have to close the window
     </p>
     <p
       className="flex-100"
     >
-      Should you wish to resume using one of the undefined ItsMyCargo Shop you will need to 
-            agree to the terms and conditions again
+      Should you wish to resume using one of the undefined ItsMyCargo Shop you will need to agree to the terms and conditions again
     </p>
   </div>
   <div
@@ -40,17 +40,16 @@ exports[`shallow rendering 1`] = `
     <p
       className="flex-100"
     >
-      By clicking the Opt Out button below the follwoing will happen:
+      By clicking the Opt Out button below the following will happen:
     </p>
     <ul
       className="flex-100"
     >
       <li>
-         
-        Your user account will be marked as not agreeing to the undefined terms and conditions
+        Your user account will be marked as not agreeing to the undefined Terms and Conditions
       </li>
       <li>
-         You will be logged out and returned to the landing page
+        You will be logged out and returned to the landing page
       </li>
     </ul>
   </div>

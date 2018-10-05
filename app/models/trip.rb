@@ -4,12 +4,12 @@ class Trip < ApplicationRecord
   has_many :layovers, dependent: :destroy
   belongs_to :tenant_vehicle
   belongs_to :itinerary
-  validates :itinerary_id, uniqueness: { 
+  validates :itinerary_id, uniqueness: {
     scope:   %i(start_date end_date closing_date tenant_vehicle_id),
-    message: "Trip must be unique to add."
+    message: 'Trip must be unique to add.'
   }
 
-  scope :lastday_today, -> { where("closing_date > ?", Date.today) }
+  scope :lastday_today, -> { where('closing_date > ?', Date.today) }
   def self.update_times
     trips = Trip.all
     trips.each do |t|
@@ -24,7 +24,7 @@ class Trip < ApplicationRecord
   def self.clear_dupes
     Trip.all.each do |trip|
       t = trip.as_json
-      t.delete("id")
+      t.delete('id')
       dupes = Trip.where(t)
       dupes.each do |d|
         d.destroy if d.id != trip.id
@@ -34,5 +34,21 @@ class Trip < ApplicationRecord
 
   def vehicle
     tenant_vehicle.vehicle
+  end
+
+  def later_trips
+    itinerary.trips
+             .where(tenant_vehicle: tenant_vehicle)
+             .where('start_date > ?', start_date)
+             .order(start_date: :asc)
+             .limit(5)
+  end
+
+  def ealier_trips(min_date: Date.today + 5.days)
+    itinerary.trips
+             .where(tenant_vehicle: tenant_vehicle)
+             .where('start_date < ? AND start_date > ?', start_date, min_date)
+             .order(start_date: :desc)
+             .limit(5)
   end
 end

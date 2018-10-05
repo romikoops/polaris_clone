@@ -17,7 +17,7 @@ class TenantSeeder
   #   background: "https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg"
   # },
   # addresses: {
-    # components: [],
+  # components: [],
   #   main:"Torgny Segerstedtsgatan 80 426 77 Västra Frölunda"
   # },
   # phones:{
@@ -113,7 +113,7 @@ class TenantSeeder
       },
       addresses: {
         main: 'Torgny Segerstedtsgatan 80 426 77 Västra Frölunda',
-        components: ['Torgny Segerstedtsgatan 80', 'P.O Box 1037','SE-405 22 Gothenburg', 'Visiting adress: Redegatan 1B']
+        components: ['Torgny Segerstedtsgatan 80', 'P.O Box 1037', 'SE-405 22 Gothenburg', 'Visiting adress: Redegatan 1B']
       },
       phones: {
         main: '+46 31-85 32 00',
@@ -176,10 +176,15 @@ class TenantSeeder
           about: 'https://freightservices.greencarrier.com/about-us/',
           legal: 'https://freightservices.greencarrier.com/contact/'
         },
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: true,
+        fixed_exchange_rates: true,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -205,7 +210,7 @@ class TenantSeeder
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
       other_data: {
-        cargo_item_types: %w[
+        cargo_item_types: %w(
           Pallet
           Carton
           Crate
@@ -214,13 +219,13 @@ class TenantSeeder
           Drum
           Skid
           Barrel
-        ],
-        incoterms: %w[
+        ),
+        incoterms: %w(
           EXW
           CFR
           DDP
           FAS
-        ]
+        )
       }
     },
     {
@@ -298,10 +303,16 @@ class TenantSeeder
           about: '',
           legal: ''
         },
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        show_beta_features: true,
+        open_quotation_tool: false,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -327,7 +338,7 @@ class TenantSeeder
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
       other_data: {
-        cargo_item_types: %w[
+        cargo_item_types: %w(
           Pallet
           Carton
           Crate
@@ -336,7 +347,7 @@ class TenantSeeder
           Drum
           Skid
           Barrel
-        ]
+        )
       }
     },
     {
@@ -388,10 +399,15 @@ class TenantSeeder
             cargo_item: true
           }
         },
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -470,10 +486,15 @@ class TenantSeeder
             cargo_item: false
           }
         },
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -553,10 +574,15 @@ class TenantSeeder
           about: '',
           legal: ''
         },
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -631,10 +657,15 @@ class TenantSeeder
             cargo_item: true
           }
         },
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -711,10 +742,15 @@ class TenantSeeder
             cargo_item: false
           }
         },
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -789,10 +825,15 @@ class TenantSeeder
             cargo_item: false
           }
         },
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -867,10 +908,15 @@ class TenantSeeder
             cargo_item: false
           }
         },
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -948,10 +994,15 @@ class TenantSeeder
             cargo_item: false
           }
         },
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -982,7 +1033,7 @@ class TenantSeeder
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
       other_data: {
-        cargo_item_types: %w[
+        cargo_item_types: %w(
           Pallet
           Carton
           Crate
@@ -991,7 +1042,7 @@ class TenantSeeder
           Drum
           Skid
           Barrel
-        ]
+        )
       }
     },
     {
@@ -1049,10 +1100,15 @@ class TenantSeeder
           about: '',
           legal: ''
         },
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: true,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -1079,7 +1135,7 @@ class TenantSeeder
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
       other_data: {
-        cargo_item_types: %w[
+        cargo_item_types: %w(
           Pallet
           Carton
           Crate
@@ -1088,7 +1144,7 @@ class TenantSeeder
           Drum
           Skid
           Barrel
-        ]
+        )
       }
     },
     {
@@ -1144,10 +1200,15 @@ class TenantSeeder
             cargo_item: true
           }
         },
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -1176,7 +1237,7 @@ class TenantSeeder
         }
       },
       other_data: {
-        cargo_item_types: %w[
+        cargo_item_types: %w(
           Pallet
           Carton
           Crate
@@ -1185,13 +1246,13 @@ class TenantSeeder
           Drum
           Skid
           Barrel
-        ],
-        incoterms: %w[
+        ),
+        incoterms: %w(
           EXW
           CFR
           DDP
           FAS
-        ]
+        )
       }
     },
     {
@@ -1247,10 +1308,15 @@ class TenantSeeder
             cargo_item: true
           }
         },
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -1279,7 +1345,7 @@ class TenantSeeder
         }
       },
       other_data: {
-        cargo_item_types: %w[
+        cargo_item_types: %w(
           Pallet
           Carton
           Crate
@@ -1288,13 +1354,13 @@ class TenantSeeder
           Drum
           Skid
           Barrel
-        ],
-        incoterms: %w[
+        ),
+        incoterms: %w(
           EXW
           CFR
           DDP
           FAS
-        ]
+        )
       }
     },
     {
@@ -1352,10 +1418,15 @@ class TenantSeeder
           about: '',
           legal: ''
         },
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -1379,7 +1450,7 @@ class TenantSeeder
         }
       },
       other_data: {
-        cargo_item_types: %w[
+        cargo_item_types: %w(
           Pallet
           Carton
           Crate
@@ -1388,13 +1459,13 @@ class TenantSeeder
           Drum
           Skid
           Barrel
-        ],
-        incoterms: %w[
+        ),
+        incoterms: %w(
           EXW
           CFR
           DDP
           FAS
-        ]
+        )
       }
     },
     {
@@ -1447,10 +1518,15 @@ class TenantSeeder
             cargo_item: false
           }
         },
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -1480,7 +1556,7 @@ class TenantSeeder
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
       other_data: {
-        cargo_item_types: %w[
+        cargo_item_types: %w(
           Pallet
           Carton
           Crate
@@ -1489,7 +1565,7 @@ class TenantSeeder
           Drum
           Skid
           Barrel
-        ]
+        )
       }
     },
     {
@@ -1568,10 +1644,15 @@ class TenantSeeder
           about: 'http://www.speedtrans.com/ueberuns.php',
           legal: 'http://www.speedtrans.com/impressum.php'
         },
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: false,
         consolidate_cargo: true,
         customs_export_paper: true,
         fixed_currency: true,
+        fixed_exchange_rates: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -1601,7 +1682,7 @@ class TenantSeeder
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
       other_data: {
-        cargo_item_types: %w[
+        cargo_item_types: %w(
           Pallet
           Carton
           Crate
@@ -1610,67 +1691,67 @@ class TenantSeeder
           Drum
           Skid
           Barrel
-        ],
-        incoterms: %w[
+        ),
+        incoterms: %w(
           EXW
           CFR
           DDP
           FAS
-        ]
+        )
       }
     },
     {
       theme: {
         colors: {
-          primary: "#0D5BA9",
-          secondary: "#23802A",
-          brightPrimary: "#2491FD",
-          brightSecondary: "#25ED36"
+          primary: '#0D5BA9',
+          secondary: '#23802A',
+          brightPrimary: '#2491FD',
+          brightSecondary: '#25ED36'
         },
         logoLarge: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
         logoSmall: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
         logoWide: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png',
         logoWhite: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png',
-        background: "https://assets.itsmycargo.com/assets/logos/trucking/trucking_background.jpg"
+        background: 'https://assets.itsmycargo.com/assets/logos/trucking/trucking_background.jpg'
       },
       addresses: {
         components: [],
-        main:"Brooktorkai 7, 20457 Hamburg, Germany"
+        main: 'Brooktorkai 7, 20457 Hamburg, Germany'
       },
-      phones:{
-        main:"+46 31-85 32 00",
-        support: "0173042031020"
+      phones: {
+        main: '+46 31-85 32 00',
+        support: '0173042031020'
       },
       emails: {
         sales: {
-          general: "sales@trucking.com",
-          air: "sales@trucking.com",
-          ocean: "sales@trucking.com",
-          rail: "sales@trucking.com"
+          general: 'sales@trucking.com',
+          air: 'sales@trucking.com',
+          ocean: 'sales@trucking.com',
+          rail: 'sales@trucking.com'
         },
         support: {
-          general: "support@trucking.com",
-          air: "imc.air@trucking.com",
-          ocean: "imc.sea@trucking.com",
-          rail: "imc.rail@trucking.com"
+          general: 'support@trucking.com',
+          air: 'imc.air@trucking.com',
+          ocean: 'imc.sea@trucking.com',
+          rail: 'imc.rail@trucking.com'
         }
       },
       email_links: {
         confirmation_instructions: [
           {
-            href: "www.example.com",
-            link_text: "Nordic Association of Freight Forwarders",
-            text: "All assignments will be performed in accordance with the General Conditions of the Nordic Association of Freight Forwarders (NSAB 2015)"
+            href: 'www.example.com',
+            link_text: 'Nordic Association of Freight Forwarders',
+            text: 'All assignments will be performed in accordance with the General Conditions of the Nordic Association of Freight Forwarders (NSAB 2015)'
           },
           {
-            href: "www.example2.com",
-            link_text: "example2",
-            text: "This is just an example2."
+            href: 'www.example2.com',
+            link_text: 'example2',
+            text: 'This is just an example2.'
           }
         ]
       },
-      subdomain: "trucking",
-      name: "Trucking",
+      subdomain: 'trucking',
+      name: 'Trucking',
       scope: {
         modes_of_transport: {
           truck: {
@@ -1690,10 +1771,15 @@ class TenantSeeder
             cargo_item: false
           }
         },
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -1705,9 +1791,9 @@ class TenantSeeder
           legal: ''
         },
         terms: [
-          "You verify that all the information provided above is true",
-          "You agree to the presented terms and conditions.",
-          "Trucking is to discuss the validity of the presented prices with the product owners."
+          'You verify that all the information provided above is true',
+          'You agree to the presented terms and conditions.',
+          'Trucking is to discuss the validity of the presented prices with the product owners.'
         ],
         carriage_options: {
           on_carriage: {
@@ -1723,48 +1809,48 @@ class TenantSeeder
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
       other_data: {
-        cargo_item_types: [
-          "Pallet",
-          "Carton",
-          "Crate",
-          "Bottle",
-          "Stack",
-          "Drum",
-          "Skid",
-          "Barrel"
-        ]
+        cargo_item_types: %w(
+          Pallet
+          Carton
+          Crate
+          Bottle
+          Stack
+          Drum
+          Skid
+          Barrel
+        )
       }
     },
     {
       theme: {
         colors: {
-          primary: "#687F93",
-          secondary: "#F3f3f3",
-          brightPrimary: "#C1C9D0",
-          brightSecondary: "#7D8C9A"
+          primary: '#687F93',
+          secondary: '#F3f3f3',
+          brightPrimary: '#C1C9D0',
+          brightSecondary: '#7D8C9A'
         },
-        logoLarge: "https://assets.itsmycargo.com/assets/logos/german-shipping/German_Shipping_logo.png",
-        logoSmall: "https://assets.itsmycargo.com/assets/logos/german-shipping/German_Shipping_logo.png",
-        background: "https://assets.itsmycargo.com/assets/logos/truck_bg_1.jpg"
+        logoLarge: 'https://assets.itsmycargo.com/assets/logos/german-shipping/German_Shipping_logo.png',
+        logoSmall: 'https://assets.itsmycargo.com/assets/logos/german-shipping/German_Shipping_logo.png',
+        background: 'https://assets.itsmycargo.com/assets/logos/truck_bg_1.jpg'
       },
       addresses: {
         components: [],
-        main:"Marlowring 19, 22525 Hamburg"
+        main: 'Marlowring 19, 22525 Hamburg'
       },
-      phones:{
-        main:"+49 40 370 89 188",
-        support: "+49 40 370 89 188"
+      phones: {
+        main: '+49 40 370 89 188',
+        support: '+49 40 370 89 188'
       },
       emails: {
         sales: {
-          general: "info@german-shipping.com"
+          general: 'info@german-shipping.com'
         },
         support: {
-          general: "info@german-shipping.com"
+          general: 'info@german-shipping.com'
         }
       },
-      subdomain: "german-shipping",
-      name: "German Shipping GmbH & Co. KG",
+      subdomain: 'german-shipping',
+      name: 'German Shipping GmbH & Co. KG',
       currency: 'USD',
       scope: {
         modes_of_transport: {
@@ -1786,10 +1872,15 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'text',
@@ -1800,9 +1891,9 @@ class TenantSeeder
           legal: ''
         },
         terms: [
-          "You verify that all the information provided above is true",
-          "You agree to the presented terms and conditions.",
-          "German Shipping GmbH & Co. KG is to discuss the validity of the presented prices with the product owners."
+          'You verify that all the information provided above is true',
+          'You agree to the presented terms and conditions.',
+          'German Shipping GmbH & Co. KG is to discuss the validity of the presented prices with the product owners.'
         ],
         carriage_options: {
           on_carriage: {
@@ -1818,48 +1909,48 @@ class TenantSeeder
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
       other_data: {
-        cargo_item_types: [
-          "Pallet",
-          "Carton",
-          "Crate",
-          "Bottle",
-          "Stack",
-          "Drum",
-          "Skid",
-          "Barrel"
-        ]
+        cargo_item_types: %w(
+          Pallet
+          Carton
+          Crate
+          Bottle
+          Stack
+          Drum
+          Skid
+          Barrel
+        )
       }
     },
     {
       theme: {
         colors: {
-          primary: "#2458AB",
-          secondary: "#5496f9",
-          brightPrimary: "#3586BA",
-          brightSecondary: "#1C98FC"
+          primary: '#2458AB',
+          secondary: '#5496f9',
+          brightPrimary: '#3586BA',
+          brightSecondary: '#1C98FC'
         },
-        logoLarge: "https://assets.itsmycargo.com/assets/logos/austral/Austral_Logo.png",
-        logoSmall: "https://assets.itsmycargo.com/assets/logos/austral/Austral_Logo.png",
-        background: "https://assets.itsmycargo.com/assets/logos/air_bg_1.jpg"
+        logoLarge: 'https://assets.itsmycargo.com/assets/logos/austral/Austral_Logo.png',
+        logoSmall: 'https://assets.itsmycargo.com/assets/logos/austral/Austral_Logo.png',
+        background: 'https://assets.itsmycargo.com/assets/logos/air_bg_1.jpg'
       },
       addresses: {
         components: [],
-        main:"Südportal 3, 6th floor, 22848 Norderstedt"
+        main: 'Südportal 3, 6th floor, 22848 Norderstedt'
       },
-      phones:{
-        main:"+49 40 94362200",
-        support: "+49 40 94362200"
+      phones: {
+        main: '+49 40 94362200',
+        support: '+49 40 94362200'
       },
       emails: {
         sales: {
-          general: "service@austral-logistics.de"
+          general: 'service@austral-logistics.de'
         },
         support: {
-          general: "service@austral-logistics.de"
+          general: 'service@austral-logistics.de'
         }
       },
-      subdomain: "austral-logistics",
-      name: "Austral Logistics GmbH",
+      subdomain: 'austral-logistics',
+      name: 'Austral Logistics GmbH',
       currency: 'USD',
       scope: {
         modes_of_transport: {
@@ -1878,10 +1969,15 @@ class TenantSeeder
         },
         dangerous_goods: false,
         detailed_billing: false,
-        quotation_tool: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'text',
         has_insurance: true,
@@ -1891,9 +1987,9 @@ class TenantSeeder
           legal: ''
         },
         terms: [
-          "You verify that all the information provided above is true",
-          "You agree to the presented terms and conditions.",
-          "Austral Logistics GmbH is to discuss the validity of the presented prices with the product owners."
+          'You verify that all the information provided above is true',
+          'You agree to the presented terms and conditions.',
+          'Austral Logistics GmbH is to discuss the validity of the presented prices with the product owners.'
 
         ],
         carriage_options: {
@@ -1910,48 +2006,48 @@ class TenantSeeder
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
       other_data: {
-        cargo_item_types: [
-          "Pallet",
-          "Carton",
-          "Crate",
-          "Bottle",
-          "Stack",
-          "Drum",
-          "Skid",
-          "Barrel"
-        ]
+        cargo_item_types: %w(
+          Pallet
+          Carton
+          Crate
+          Bottle
+          Stack
+          Drum
+          Skid
+          Barrel
+        )
       }
     },
     {
       theme: {
         colors: {
-          primary: "#e10f21",
-          secondary: "#1d1d1b",
-          brightPrimary: "#ffffff",
-          brightSecondary: "#9d9d9c"
+          primary: '#e10f21',
+          secondary: '#1d1d1b',
+          brightPrimary: '#e10f21',
+          brightSecondary: '#1d1d1b'
         },
-        logoLarge: "https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png",
-        logoSmall: "https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png",
-        background: "https://assets.itsmycargo.com/assets/logos/air_bg_1.jpg"
+        logoLarge: 'https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png',
+        logoSmall: 'https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png',
+        background: 'https://assets.itsmycargo.com/assets/logos/air_bg_1.jpg'
       },
       addresses: {
         components: [],
-        main:"Niendorfer Str. 170, 22848 Norderstedt, Germany"
+        main: 'Niendorfer Str. 170, 22848 Norderstedt, Germany'
       },
-      phones:{
-        main:"+49 (0)40 85 40 68-0",
-        support: "+49 (0)40 85 40 68-0"
+      phones: {
+        main: '+49 (0)40 85 40 68-0',
+        support: '+49 (0)40 85 40 68-0'
       },
       emails: {
         sales: {
-          general: "cglitscher@gatewaycargo.de"
+          general: 'cglitscher@gatewaycargo.de'
         },
         support: {
-          general: "cglitscher@gatewaycargo.de"
+          general: 'cglitscher@gatewaycargo.de'
         }
       },
-      subdomain: "gateway",
-      name: "Gateway Cargo Systems GmbH",
+      subdomain: 'gateway',
+      name: 'Gateway Cargo Systems GmbH',
       currency: 'USD',
       scope: {
         modes_of_transport: {
@@ -1973,19 +2069,29 @@ class TenantSeeder
           about: '',
           legal: ''
         },
+        quote_notes: "1) Prices subject to change
+        2) All fees are converted at the time of quotation
+        using that day's European Central bank exchange rates and are an approximation
+        of the final amount ot be paid. The amount paid at the time of settlement
+        will reflect the exchange rates of the day.",
         detailed_billing: false,
-        quotation_tool: true,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: true,
+        open_quotation_tool: false,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'text',
         has_insurance: false,
         has_customs: false,
         terms: [
-          "You verify that all the information provided above is true",
-          "You agree to the presented terms and conditions.",
-          "Gateway Cargo Systems GmbH is to discuss the validity of the presented prices with the product owners."
+          'You verify that all the information provided above is true',
+          'You agree to the presented terms and conditions.',
+          'Gateway Cargo Systems GmbH is to discuss the validity of the presented prices with the product owners.'
 
         ],
         carriage_options: {
@@ -2002,55 +2108,55 @@ class TenantSeeder
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
       other_data: {
-        cargo_item_types: [
-          "Pallet",
-          "Carton",
-          "Crate",
-          "Bottle",
-          "Stack",
-          "Drum",
-          "Skid",
-          "Barrel"
-        ],
-        incoterms: %w[
+        cargo_item_types: %w(
+          Pallet
+          Carton
+          Crate
+          Bottle
+          Stack
+          Drum
+          Skid
+          Barrel
+        ),
+        incoterms: %w(
           EXW
           FCA
           FOB
           FAS
-        ]
+        )
       }
     },
     {
       theme: {
         colors: {
-          primary: "#192673",
-          secondary: "#FFA514",
-          brightPrimary: "#1A31B1",
-          brightSecondary: "#FCB645"
+          primary: '#192673',
+          secondary: '#FFA514',
+          brightPrimary: '#1A31B1',
+          brightSecondary: '#FCB645'
         },
-        logoLarge: "https://assets.itsmycargo.com/assets/tenants/schryver/schryver_logo_dark.png",
-        logoSmall: "https://assets.itsmycargo.com/assets/tenants/schryver/schryver_logo_dark.png",
-        logoWhite: "https://assets.itsmycargo.com/assets/tenants/schryver/schryver_white.png",
-        background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
+        logoLarge: 'https://assets.itsmycargo.com/assets/tenants/schryver/schryver_logo_dark.png',
+        logoSmall: 'https://assets.itsmycargo.com/assets/tenants/schryver/schryver_logo_dark.png',
+        logoWhite: 'https://assets.itsmycargo.com/assets/tenants/schryver/schryver_white.png',
+        background: 'https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg'
       },
       addresses: {
         components: [],
-        main:"Sachsenstrasse 5, 20097, Hamburg, Germany "
+        main: 'Sachsenstrasse 5, 20097, Hamburg, Germany '
       },
-      phones:{
-        main:"+49-40-2 36 33- 272",
-        support: "+49-40-2 36 33- 272"
+      phones: {
+        main: '+49-40-2 36 33- 272',
+        support: '+49-40-2 36 33- 272'
       },
       emails: {
         sales: {
-          general: "support@schryver.com"
+          general: 'support@schryver.com'
         },
         support: {
-          general: "support@schryver.com"
+          general: 'support@schryver.com'
         }
       },
-      subdomain: "schryver",
-      name: "Schryver International Freight Forwarders GmbH",
+      subdomain: 'schryver',
+      name: 'Schryver International Freight Forwarders GmbH',
       currency: 'EUR',
       scope: {
         modes_of_transport: {
@@ -2073,18 +2179,23 @@ class TenantSeeder
         },
         dangerous_goods: false,
         detailed_billing: false,
-        quotation_tool: false,
+        closed_shop: true,
+        closed_registration: true,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
+        fixed_exchange_rates: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'text',
         has_insurance: false,
         has_customs: false,
         terms: [
-          "You verify that all the information provided above is true",
-          "You agree to the presented terms and conditions.",
-          "Schryver International Freight Forwarders GmbH is to discuss the validity of the presented prices with the product owners."
+          'You verify that all the information provided above is true',
+          'You agree to the presented terms and conditions.',
+          'Schryver International Freight Forwarders GmbH is to discuss the validity of the presented prices with the product owners.'
 
         ],
         carriage_options: {
@@ -2101,22 +2212,126 @@ class TenantSeeder
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
       other_data: {
-        cargo_item_types: [
-          "Pallet",
-          "Carton",
-          "Crate",
-          "Bottle",
-          "Stack",
-          "Drum",
-          "Skid",
-          "Barrel"
-        ],
-        incoterms: %w[
+        cargo_item_types: %w(
+          Pallet
+          Carton
+          Crate
+          Bottle
+          Stack
+          Drum
+          Skid
+          Barrel
+        ),
+        incoterms: %w(
           EXW
           FCA
           FOB
           FAS
-        ]
+        )
+      }
+    },
+    {
+      theme: {
+        colors: {
+          primary: '#30317C',
+          secondary: '#7A8AC2',
+          brightPrimary: '#30317C',
+          brightSecondary: '#7A8AC2'
+        },
+        logoLarge: 'https://assets.itsmycargo.com/assets/tenants/normanglobal/normanglobal_logo.png',
+        logoSmall: 'https://assets.itsmycargo.com/assets/tenants/normanglobal/normanglobal_logo.png',
+        logoWhite: 'https://assets.itsmycargo.com/assets/tenants/normanglobal/normanglobal_logo_white.png',
+        background: 'https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg'
+      },
+      addresses: {
+        components: [],
+        main: 'Norman Global Logistics, Tower 1, 8/F, Unit 811, Cheung Sha Wan Plaza, 833 Cheung Sha Wan Rd, Kowloon, Hong Kong S.A.R'
+      },
+      phones: {
+        main: '+852 3582 3440',
+        support: '+852 3582 3440'
+      },
+      emails: {
+        sales: {
+          general: 'test_hongkong@normanglobal.com'
+        },
+        support: {
+          general: 'test_hongkong@normanglobal.com'
+        }
+      },
+      subdomain: 'normanglobal',
+      name: 'Norman Global Logistics',
+      currency: 'EUR',
+      scope: {
+        modes_of_transport: {
+          ocean: {
+            container: true,
+            cargo_item: true
+          },
+          rail: {
+            container: false,
+            cargo_item: false
+          },
+          air: {
+            container: false,
+            cargo_item: false
+          }
+        },
+        links: {
+          about: '',
+          legal: ''
+        },
+        dangerous_goods: false,
+        detailed_billing: false,
+        closed_shop: false,
+        closed_registration: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
+        require_full_address: true,
+        consolidate_cargo: false,
+        customs_export_paper: false,
+        fixed_currency: false,
+        fixed_exchange_rates: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'text',
+        has_insurance: false,
+        has_customs: false,
+        terms: [
+          'You verify that all the information provided above is true',
+          'You agree to the presented terms and conditions.',
+          'Norman Global Logistics is to discuss the validity of the presented prices with the product owners.'
+
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'optional',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'optional'
+          }
+        }
+      },
+      # The following data is not a attribute of the Tenant model
+      # only being used for seeding purposes
+      other_data: {
+        cargo_item_types: %w(
+          Pallet
+          Carton
+          Crate
+          Bottle
+          Stack
+          Drum
+          Skid
+          Barrel
+        ),
+        incoterms: %w(
+          EXW
+          FCA
+          FOB
+          FAS
+        )
       }
     }
   ].freeze
@@ -2147,7 +2362,7 @@ class TenantSeeder
   end
 
   def self.perform(filter = {})
-    puts "Seeding Tenants..."
+    puts 'Seeding Tenants...'
     TENANT_DATA.each do |tenant_attr|
       next unless should_perform?(tenant_attr, filter)
 
@@ -2172,7 +2387,7 @@ class TenantSeeder
       tenant_attr_value = tenant_attr[filter_key]
 
       tenant_attr_value == filter_value ||
-      (filter_value.is_a?(Array) && filter_value.include?(tenant_attr_value))
+        (filter_value.is_a?(Array) && filter_value.include?(tenant_attr_value))
     end
   end
 
@@ -2230,8 +2445,8 @@ class TenantSeeder
   end
 
   def self.update_max_dimensions!(tenant)
-    modes_of_transport = %i[general]
-    modes_of_transport += %i[air ocean rail].select do |mot|
+    modes_of_transport = %i(general)
+    modes_of_transport += %i(air ocean rail).select do |mot|
       tenant.mode_of_transport_in_scope? mot
     end
     MaxDimensionsBundle.create_defaults_for(

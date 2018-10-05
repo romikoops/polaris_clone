@@ -15,10 +15,11 @@ import InsuranceDetails from '../../components/InsuranceDetails/InsuranceDetails
 import { appActions, authenticationActions, userActions } from '../../actions'
 import { defaultTheme, moment } from '../../constants'
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
-import { getSubdomain } from '../../helpers'
+import getSubdomain from '../../helpers/subdomain'
 import MessageCenter from '../../containers/MessageCenter/MessageCenter'
 import ResetPasswordForm from '../../components/ResetPasswordForm'
 import CookieConsentBar from '../../components/CookieConsentBar'
+import GenericError from '../../components/ErrorHandling/Generic'
 
 class App extends Component {
   componentWillMount () {
@@ -37,7 +38,6 @@ class App extends Component {
     this.isUserExpired()
   }
   componentDidUpdate (prevProps) {
-    // this.isUserExpired()
     if ((this.props.selectedSubdomain !== prevProps.selectedSubdomain ||
       (!this.props.tenant && !this.props.isFetching) ||
     (this.props.tenant && !this.props.tenant.data && !this.props.isFetching))) {
@@ -58,25 +58,36 @@ class App extends Component {
   }
   render () {
     const {
-      tenant, isFetching, user, loggedIn, showMessages, sending, authDispatch
+      tenant,
+      isFetching,
+      user,
+      loggedIn,
+      showMessages,
+      sending,
+      loading,
+      loggingIn
     } = this.props
     if (!tenant || (tenant && !tenant.data)) {
       return <Loading theme={defaultTheme} text="loading..." />
     }
     const { theme } = tenant.data
 
+    // Update document title
+    if (tenant.data.name) {
+      document.title = `${tenant.data.name} | ItsMyCargo`
+    }
+
     return (
       <div className="layout-fill layout-row layout-wrap layout-align-start hundred text-break">
         <CookieConsentBar
           user={user}
           theme={theme}
-          authDispatch={authDispatch}
           tenant={tenant}
           loggedIn={loggedIn}
         />
         <div className="flex-100 mc layout-row  layout-align-start">
           {showMessages || sending ? <MessageCenter /> : ''}
-          {isFetching ? <Loading theme={theme} text="loading..." /> : ''}
+          {isFetching || loading ? <Loading theme={theme} text="loading..." /> : ''}
           {user &&
           user.id &&
           tenant &&
@@ -88,52 +99,63 @@ class App extends Component {
             ) : (
               ''
             )}
-          <Switch className="flex">
-            <Route exact path="/" render={props => <Landing theme={theme} {...props} />} />
+          <GenericError theme={theme}>
+            <Switch className="flex">
 
-            <Route
-              exact
-              path="/terms_and_conditions"
-              render={() => <TermsAndConditions tenant={tenant} user={user} theme={theme} />}
-            />
-            <Route
-              exact
-              path="/insurance"
-              render={() => <InsuranceDetails tenant={tenant} user={user} theme={theme} />}
-            />
-            <Route
-              exact
-              path="/password_reset"
-              render={props => <ResetPasswordForm user={user} theme={theme} {...props} />}
-            />
-            <PrivateRoute
-              path="/booking"
-              component={Shop}
-              user={user}
-              loggedIn={loggedIn}
-              theme={theme}
-            />
-            <AdminPrivateRoute
-              path="/admin"
-              component={Admin}
-              user={user}
-              loggedIn={loggedIn}
-              theme={theme}
-            />
-            <Route path="/signout" render={props => <SignOut theme={theme} {...props} />} />
-            <Route
-              exact
-              path="/redirects/shipments/:uuid"
-              render={props => <AdminShipmentAction theme={theme} {...props} />}
-            />
-            <PrivateRoute
-              path="/account"
-              component={UserAccount}
-              user={user}
-              loggedIn={loggedIn}
-              theme={theme}
-            />
-          </Switch>
+              <Route exact path="/" render={props => <Landing theme={theme} {...props} />} />
+
+              <Route
+                exact
+                path="/terms_and_conditions"
+                render={() => <TermsAndConditions tenant={tenant} user={user} theme={theme} />}
+              />
+
+              <Route
+                exact
+                path="/insurance"
+                render={() => <InsuranceDetails tenant={tenant} user={user} theme={theme} />}
+              />
+
+              <Route
+                exact
+                path="/password_reset"
+                render={props => <ResetPasswordForm user={user} theme={theme} {...props} />}
+              />
+
+              <PrivateRoute
+                path="/booking"
+                component={Shop}
+                user={user}
+                loggedIn={loggedIn}
+                theme={theme}
+              />
+
+              <AdminPrivateRoute
+                path="/admin"
+                component={Admin}
+                user={user}
+                loggedIn={loggedIn}
+                theme={theme}
+              />
+
+              <Route path="/signout" render={props => <SignOut theme={theme} {...props} />} />
+
+              <Route
+                exact
+                path="/redirects/shipments/:uuid"
+                render={props => <AdminShipmentAction theme={theme} {...props} />}
+              />
+
+              <PrivateRoute
+                path="/account"
+                component={UserAccount}
+                user={user}
+                loggedIn={loggedIn}
+                theme={theme}
+              />
+
+            </Switch>
+          </GenericError >
         </div>
       </div>
     )
@@ -165,24 +187,25 @@ App.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    selectedSubdomain, tenant, authentication, messaging
+    selectedSubdomain, tenant, authentication, messaging, admin, users
   } = state
   const { showMessages, sending } = messaging
-  const { user, loggedIn } = authentication
-  // const { currencies } = app;
+  const { user, loggedIn, loggingIn } = authentication
   const { isFetching } = tenant || {
     isFetching: true
   }
+  const loading = admin.loading || users.loading
 
   return {
     selectedSubdomain,
     tenant,
     user,
     loggedIn,
+    loggingIn,
     isFetching,
     showMessages,
-    sending
-    // currencies
+    sending,
+    loading
   }
 }
 function mapDispatchToProps (dispatch) {

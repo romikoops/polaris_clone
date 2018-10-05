@@ -8,7 +8,7 @@ import styles from './index.scss'
 // } from '../../AdminSearchables'
 import { documentGlossary } from '../../../../constants'
 import { history } from '../../../../helpers'
-import { TextHeading } from '../../../TextHeading/TextHeading'
+import TextHeading from '../../../TextHeading/TextHeading'
 import { RoundButton } from '../../../RoundButton/RoundButton'
 
 export class AdminUploadsSuccess extends Component {

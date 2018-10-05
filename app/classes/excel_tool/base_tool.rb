@@ -81,7 +81,6 @@ module ExcelTool
            !all_charges[counterpart_hub_id][tenant_vehicle_id] ||
            !all_charges[counterpart_hub_id][tenant_vehicle_id][direction] ||
            !all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]
-
         end
         all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]] = charge
       end

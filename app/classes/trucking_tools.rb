@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module TruckingTools
-  include MongoTools
 
   module_function
 
@@ -53,6 +52,7 @@ module TruckingTools
 
     case fee[:rate_basis]
     when 'PER_KG'
+
       val = cargo['weight'] * fee[:value]
       min = fee[:min_value] || 0
       res = [val, min].max
@@ -96,6 +96,11 @@ module TruckingTools
       cbm_value = cargo['volume'] * (fee[:value] || fee[:cbm])
       min = fee[:min_value] || 0
       return_value = [cbm_value, min].max
+      return { currency: fee[:currency], value: return_value, key: key }
+    when 'PER_WM'
+      value = (cargo['weight'] / 1000) * fee[:value]
+      min = fee[:min_value] || 0
+      return_value = [value, min].max
       return { currency: fee[:currency], value: return_value, key: key }
     when 'PER_CBM_KG'
       cbm_value = cargo['volume'] * fee[:cbm]
@@ -150,6 +155,11 @@ module TruckingTools
       trucking_pricing['rates']['cbm'].each do |rate|
         next unless cargo_values['volume'] <= rate['max_cbm'].to_d && cargo_values['volume'] >= rate['min_cbm'].to_d
 
+        rate['rate']['min_value'] = rate['min_value']
+        return { rate: rate['rate'], fees: trucking_pricing['fees'] }
+      end
+    when 'wm'
+      trucking_pricing['rates']['wm'].each do |rate|
         rate['rate']['min_value'] = rate['min_value']
         return { rate: rate['rate'], fees: trucking_pricing['fees'] }
       end
@@ -247,6 +257,7 @@ module TruckingTools
   end
 
   def determine_load_meterage(trucking_pricing, cargo_object, cargo)
+
     if trucking_pricing.load_meterage && trucking_pricing.load_meterage['ratio']
       if cargo.is_a? AggregatedCargo
         calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
@@ -284,7 +295,8 @@ module TruckingTools
   end
 
   def calc_cargo_load_meterage_height(trucking_pricing, cargo_object, cargo)
-    load_meterage = (cargo.dimension_x * cargo.dimension_y * cargo.quantity) / 24_000
+
+    load_meterage = (cargo.dimension_x * cargo.dimension_y) / 24_000
     load_meter_weight = load_meterage * trucking_pricing.load_meterage['ratio']
     trucking_chargeable_weight = load_meter_weight > cargo.payload_in_kg ? load_meter_weight : cargo.payload_in_kg
     cargo_object['non_stackable']['weight'] += trucking_chargeable_weight * cargo.quantity

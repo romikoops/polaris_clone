@@ -50,7 +50,9 @@ PropTypes.match = PropTypes.shape({
 PropTypes.shipments = PropTypes.shape({
   open: PropTypes.array,
   requested: PropTypes.array,
-  finished: PropTypes.array
+  finished: PropTypes.array,
+  archived: PropTypes.array,
+  rejected: PropTypes.array
 })
 
 PropTypes.shipment = PropTypes.shape({

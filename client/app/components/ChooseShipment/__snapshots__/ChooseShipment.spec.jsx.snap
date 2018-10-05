@@ -38,11 +38,7 @@ exports[`messages.length === 0 1`] = `
             className="flex-none"
           >
              
-            I am 
-            Selling
-             (
-            export
-            )
+            I am {{commercialAction}} ({{direction}})
           </p>
         </div>
       </div>
@@ -57,11 +53,7 @@ exports[`messages.length === 0 1`] = `
             className="flex-none"
           >
              
-            I am 
-            Buying
-             (
-            import
-            )
+            I am {{commercialAction}} ({{direction}})
           </p>
         </div>
       </div>
@@ -153,9 +145,7 @@ exports[`messages.length === 0 1`] = `
               <p
                 className="mot_note"
               >
-                Availabilities will be shown for all applicable
-                <br />
-                 modes of transport for your shipment
+                Availabilities will be shown for all applicable modes of transport for your shipment
               </p>
               <RoundButton
                 active={false}
@@ -224,11 +214,7 @@ exports[`shallow render 1`] = `
             className="flex-none"
           >
              
-            I am 
-            Selling
-             (
-            export
-            )
+            I am {{commercialAction}} ({{direction}})
           </p>
         </div>
       </div>
@@ -243,11 +229,7 @@ exports[`shallow render 1`] = `
             className="flex-none"
           >
              
-            I am 
-            Buying
-             (
-            import
-            )
+            I am {{commercialAction}} ({{direction}})
           </p>
         </div>
       </div>
@@ -339,9 +321,7 @@ exports[`shallow render 1`] = `
               <p
                 className="mot_note"
               >
-                Availabilities will be shown for all applicable
-                <br />
-                 modes of transport for your shipment
+                Availabilities will be shown for all applicable modes of transport for your shipment
               </p>
               <RoundButton
                 active={false}
@@ -410,11 +390,7 @@ exports[`state.direction && state.loadType 1`] = `
             className="flex-none"
           >
              
-            I am 
-            Selling
-             (
-            export
-            )
+            I am {{commercialAction}} ({{direction}})
           </p>
           <i
             className="flex-none fa fa-check clip"
@@ -433,11 +409,7 @@ exports[`state.direction && state.loadType 1`] = `
             className="flex-none"
           >
              
-            I am 
-            Buying
-             (
-            import
-            )
+            I am {{commercialAction}} ({{direction}})
           </p>
         </div>
       </div>
@@ -529,9 +501,7 @@ exports[`state.direction && state.loadType 1`] = `
               <p
                 className="mot_note"
               >
-                Availabilities will be shown for all applicable
-                <br />
-                 modes of transport for your shipment
+                Availabilities will be shown for all applicable modes of transport for your shipment
               </p>
               <RoundButton
                 active={true}
@@ -600,11 +570,7 @@ exports[`state.direction === export 1`] = `
             className="flex-none"
           >
              
-            I am 
-            Selling
-             (
-            export
-            )
+            I am {{commercialAction}} ({{direction}})
           </p>
           <i
             className="flex-none fa fa-check clip"
@@ -623,11 +589,7 @@ exports[`state.direction === export 1`] = `
             className="flex-none"
           >
              
-            I am 
-            Buying
-             (
-            import
-            )
+            I am {{commercialAction}} ({{direction}})
           </p>
         </div>
       </div>
@@ -719,9 +681,7 @@ exports[`state.direction === export 1`] = `
               <p
                 className="mot_note"
               >
-                Availabilities will be shown for all applicable
-                <br />
-                 modes of transport for your shipment
+                Availabilities will be shown for all applicable modes of transport for your shipment
               </p>
               <RoundButton
                 active={false}
@@ -783,11 +743,7 @@ exports[`theme is falsy 1`] = `
             className="flex-none"
           >
              
-            I am 
-            Selling
-             (
-            export
-            )
+            I am {{commercialAction}} ({{direction}})
           </p>
         </div>
       </div>
@@ -802,11 +758,7 @@ exports[`theme is falsy 1`] = `
             className="flex-none"
           >
              
-            I am 
-            Buying
-             (
-            import
-            )
+            I am {{commercialAction}} ({{direction}})
           </p>
         </div>
       </div>
@@ -884,9 +836,7 @@ exports[`theme is falsy 1`] = `
               <p
                 className="mot_note"
               >
-                Availabilities will be shown for all applicable
-                <br />
-                 modes of transport for your shipment
+                Availabilities will be shown for all applicable modes of transport for your shipment
               </p>
               <RoundButton
                 active={false}

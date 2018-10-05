@@ -8,6 +8,7 @@ import { AdminSearchableClients } from '../Admin/AdminSearchables'
 import ShipmentOverviewCard from '../ShipmentCard/ShipmentOverviewCard'
 import { gradientTextGenerator } from '../../helpers'
 import SquareButton from '../SquareButton'
+import Loading from '../Loading/Loading'
 
 export class UserDashboard extends Component {
   static prepShipment (baseShipment, user) {
@@ -21,6 +22,7 @@ export class UserDashboard extends Component {
   static limitArray (shipments, limit) {
     return limit ? shipments.slice(0, limit) : shipments
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -33,6 +35,7 @@ export class UserDashboard extends Component {
     this.determinePerPage = this.determinePerPage.bind(this)
     this.seeAll = this.seeAll.bind(this)
   }
+
   componentDidMount () {
     this.props.setNav('dashboard')
     window.scrollTo(0, 0)
@@ -40,17 +43,21 @@ export class UserDashboard extends Component {
     window.addEventListener('resize', this.determinePerPage)
     this.props.setCurrentUrl(this.props.match.url)
   }
+
   componentWillUnmount () {
     window.removeEventListener('resize', this.determinePerPage)
   }
+
   viewShipment (shipment) {
     const { userDispatch } = this.props
     userDispatch.getShipment(shipment.id, true)
   }
+
   viewClient (client) {
     const { userDispatch } = this.props
     userDispatch.getContact(client.id, true)
   }
+
   determinePerPage () {
     const width = window.innerWidth
     const perPage = width >= 1920 ? 3 : 2
@@ -60,10 +67,12 @@ export class UserDashboard extends Component {
   startBooking () {
     this.props.userDispatch.goTo('/booking')
   }
+
   makePrimary (locationId) {
     const { userDispatch, user } = this.props
     userDispatch.makePrimary(user.id, locationId)
   }
+  
   seeAll () {
     const { userDispatch, seeAll } = this.props
     if (seeAll) {
@@ -72,16 +81,23 @@ export class UserDashboard extends Component {
       userDispatch.goTo('/account/shipments')
     }
   }
+
+  handleViewShipments () {
+    const { userDispatch } = this.props
+    userDispatch.getShipments({}, 4, true)
+  }
+
   render () {
     const {
       theme,
       dashboard,
       user,
       userDispatch,
+      scope,
       t
     } = this.props
     if (!user || !dashboard) {
-      return <h1>{t('common:noData')}</h1>
+      return <Loading theme={theme} text="loading..." />
     }
     const { perPage } = this.state
     const {
@@ -90,13 +106,11 @@ export class UserDashboard extends Component {
       locations
     } = dashboard
 
-    const mergedRequestedShipments =
-      shipments && shipments.requested
-        ? shipments.requested
-          .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
-          .slice(0, perPage)
-          .map(sh => UserDashboard.prepShipment(sh, user))
-        : false
+    const isQuote = scope.closed_quotation_tool || scope.open_quotation_tool
+    const shipmentsToDisplay = isQuote ? shipments.quoted : shipments.requested
+    const preppedShipments = shipmentsToDisplay ? shipmentsToDisplay.slice(0, perPage)
+      .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
+      .map(s => UserDashboard.prepShipment(s, user)) : []
     const gradientFontStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -129,22 +143,30 @@ export class UserDashboard extends Component {
                   {t('common:welcomeBack')}&nbsp; <b>{user.first_name}</b>
                 </div>
               </div>
-              <SquareButton
-                theme={theme}
-                handleNext={this.startBooking}
-                active
-                border
-                size="large"
-                text="Find Rates"
-                iconClass="fa-archive"
-              />
+              <div className="flex-40 layout-row layout-align-end-center">
+                <SquareButton
+                  theme={theme}
+                  handleNext={this.startBooking}
+                  active
+                  border
+                  size="large"
+                  text="Find Rates"
+                  iconClass="fa-archive"
+                />
+              </div>
+
             </div>
+          </div>
+          <div className="layout-padding flex-100 layout-align-start-center greyBg">
+            <span><b>{isQuote ? 'Quoted Shipments' : 'Requested Shipments' }</b></span>
           </div>
           <ShipmentOverviewCard
             dispatches={userDispatch}
-            shipments={mergedRequestedShipments}
+            noTitle
+            shipments={preppedShipments}
             theme={theme}
-          />  <div className={`layout-row flex-100 layout-align-center-center ${ustyles.space}`}>
+          />
+          <div className={`layout-row flex-100 layout-align-center-center ${ustyles.space}`}>
             <span className="flex-15" onClick={() => this.handleViewShipments()}>
               <u><b>{t('shipment:seeMoreShipments')}</b></u>
             </span>
@@ -161,7 +183,7 @@ export class UserDashboard extends Component {
               placeholder="Search Contacts"
               title="Most used Contacts"
               handleClick={this.viewClient}
-              seeAll={() => userDispatch.getContacts(true, 1)}
+              seeAll={() => userDispatch.getContacts({ page: 1 }, true)}
             />
           </div>
         </div>
@@ -198,12 +220,15 @@ export class UserDashboard extends Component {
 }
 UserDashboard.propTypes = {
   setNav: PropTypes.func.isRequired,
+  scope: PropTypes.objectOf(PropTypes.bool),
   setCurrentUrl: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
-  match: PropTypes.match.isRequired,
   userDispatch: PropTypes.shape({
     getShipment: PropTypes.func,
     goTo: PropTypes.func
+  }).isRequired,
+  match: PropTypes.shape({
+    url: PropTypes.string
   }).isRequired,
   seeAll: PropTypes.func,
   theme: PropTypes.theme,
@@ -218,6 +243,7 @@ UserDashboard.propTypes = {
 
 UserDashboard.defaultProps = {
   seeAll: null,
+  scope: null,
   dashboard: null,
   theme: null
 }

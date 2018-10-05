@@ -1,33 +1,31 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
+import { translate } from 'react-i18next'
 import { pick, uniqWith } from 'lodash'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
-import { CargoItemGroup } from '../../Cargo/Item/Group'
+import CargoItemGroup from '../../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../../Cargo/Item/Group/Aggregated'
 import PropTypes from '../../../prop-types'
-import { moment, documentTypes } from '../../../constants'
+import { moment } from '../../../constants'
 import adminStyles from '../Admin.scss'
 import styles from '../AdminShipments.scss'
-import DocumentsForm from '../../Documents/Form'
 import GradientBorder from '../../GradientBorder'
-import ShipmentOverviewShowCard from './ShipmentOverviewShowCard'
-import ContactDetailsRow from './ContactDetailsRow'
-import GreyBox from '../../GreyBox/GreyBox'
+import DocumentsDownloader from '../../Documents/Downloader'
 import {
   gradientTextGenerator,
   gradientGenerator,
   gradientBorderGenerator,
   switchIcon,
   totalPrice,
-  formattedPriceValue,
-  checkPreCarriage
+  isRequested,
+  formattedDate
 } from '../../../helpers'
-import { CargoContainerGroup } from '../../Cargo/Container/Group'
-import Tabs from '../../Tabs/Tabs'
-import Tab from '../../Tabs/Tab'
+import CargoContainerGroup from '../../Cargo/Container/Group'
+import AdminShipmentContent from './AdminShipmentContent'
+import ShipmentQuotationContent from '../../UserAccount/ShipmentQuotationContent'
 
-export class AdminShipmentView extends Component {
+class AdminShipmentView extends Component {
   static sumCargoFees (cargos) {
     let total = 0.0
     let curr = ''
@@ -55,21 +53,6 @@ export class AdminShipmentView extends Component {
 
     return { currency: curr, total: total.toFixed(2) }
   }
-  static calcCargoLoad (feeHash, loadType) {
-    const cargoCount = Object.keys(feeHash.cargo).length
-    let noun = ''
-    if (loadType === 'cargo_item' && cargoCount > 3) {
-      noun = 'Cargo Items'
-    } else if (loadType === 'cargo_item' && cargoCount === 3) {
-      noun = 'Cargo Item'
-    } else if (loadType === 'container' && cargoCount > 3) {
-      noun = 'Containers'
-    } else if (loadType === 'container' && cargoCount === 3) {
-      noun = 'Container'
-    }
-
-    return `${noun}`
-  }
   static checkSelectedOffer (service) {
     let obj = {}
     if (service && service.total) {
@@ -95,6 +78,18 @@ export class AdminShipmentView extends Component {
         },
         etd: {
           day: new Date(moment(shipment.planned_etd).format())
+        },
+        pickupDate: {
+          day: new Date(moment(shipment.planned_pickup_date).format())
+        },
+        originDropOffDate: {
+          day: new Date(moment(shipment.planned_origin_drop_off_date).format())
+        },
+        deliveryDate: {
+          day: new Date(moment(shipment.planned_delivery_date).format())
+        },
+        destinationCollectionDate: {
+          day: new Date(moment(shipment.planned_destination_collection_date).format())
         }
       },
       newPrices: {
@@ -102,10 +97,13 @@ export class AdminShipmentView extends Component {
         trucking_on: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.trucking_on),
         cargo: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.cargo),
         insurance: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.insurance),
-        customs: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.customs)
+        customs: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.customs),
+        import: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.import),
+        export: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.export)
       }
     }
     this.handleDeny = this.handleDeny.bind(this)
+    this.handleArchive = this.handleArchive.bind(this)
     this.handleAccept = this.handleAccept.bind(this)
     this.handleFinished = this.handleFinished.bind(this)
     this.toggleEditPrice = this.toggleEditPrice.bind(this)
@@ -118,6 +116,7 @@ export class AdminShipmentView extends Component {
     this.handleCurrencySelect = this.handleCurrencySelect.bind(this)
     this.handleDayChange = this.handleDayChange.bind(this)
     this.handleTimeChange = this.handleTimeChange.bind(this)
+    this.handlePriceChange = this.handlePriceChange.bind(this)
   }
   componentDidMount () {
     const {
@@ -129,9 +128,12 @@ export class AdminShipmentView extends Component {
     window.scrollTo(0, 0)
   }
   handleDeny () {
-    const { shipmentData, handleShipmentAction, adminDispatch } = this.props
+    const { shipmentData, handleShipmentAction } = this.props
     handleShipmentAction(shipmentData.shipment.id, 'decline')
-    adminDispatch.getShipments(true)
+  }
+  handleArchive () {
+    const { shipmentData, handleShipmentAction } = this.props
+    handleShipmentAction(shipmentData.shipment.id, 'archive')
   }
 
   handleCurrencySelect (selection) {
@@ -299,11 +301,35 @@ export class AdminShipmentView extends Component {
     const newEtd = moment(newTimes.etd.day)
       .startOf('day')
       .format('lll')
+    const newPickupDate = moment(newTimes.pickupDate.day)
+      .startOf('day')
+      .format('lll')
+    const newOriginDropOffDate = moment(newTimes.originDropOffDate.day)
+      .startOf('day')
+      .format('lll')
+    const newDeliveryDate = moment(newTimes.deliveryDate.day)
+      .startOf('day')
+      .format('lll')
+    const newDestinationCollectionDate = moment(newTimes.destinationCollectionDate.day)
+      .startOf('day')
+      .format('lll')
 
-    const timeObj = { newEta, newEtd }
+    const timeObj = {
+      newEta,
+      newEtd,
+      newPickupDate,
+      newOriginDropOffDate,
+      newDeliveryDate,
+      newDestinationCollectionDate
+
+    }
+
     shipment.planned_eta = moment(newTimes.eta.day)
     shipment.planned_etd = moment(newTimes.etd.day)
-
+    shipment.planned_pickup_date = moment(newTimes.pickupDate.day)
+    shipment.planned_origin_drop_off_date = moment(newTimes.originDropOffDate.day)
+    shipment.planned_delivery_date = moment(newTimes.deliveryDate.day)
+    shipment.planned_destination_collection_date = moment(newTimes.destinationCollectionDate.day)
     adminDispatch.editShipmentTime(shipmentData.shipment.id, timeObj)
     this.toggleEditTime()
   }
@@ -350,20 +376,17 @@ export class AdminShipmentView extends Component {
   }
   render () {
     const {
-      theme, hubs, shipmentData, clients
+      theme, hubs, shipmentData, clients, t, adminDispatch, scope
     } = this.props
 
     if (!shipmentData || !hubs || !clients) {
       return <h1>NO DATA</h1>
     }
     const {
-      contacts,
       shipment,
-      documents,
       cargoItems,
       containers,
-      aggregatedCargo,
-      accountHolder
+      aggregatedCargo
     } = shipmentData
     const {
       showEditTime, showEditServicePrice, newTimes, newPrices
@@ -386,6 +409,10 @@ export class AdminShipmentView extends Component {
           backgroundImage:
             'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'
         }
+    const background = {
+      bg1,
+      bg2
+    }
     const gradientStyle =
       theme && theme.colors
         ? gradientGenerator(theme.colors.primary, theme.colors.secondary)
@@ -402,7 +429,6 @@ export class AdminShipmentView extends Component {
         ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
         : { background: 'black' }
 
-    const docView = []
     let cargoView = ''
     if (containers) {
       cargoView = this.prepContainerGroups(containers)
@@ -414,24 +440,25 @@ export class AdminShipmentView extends Component {
       cargoView = <CargoItemGroupAggregated group={aggregatedCargo} />
     }
 
-    const statusRequested = (shipment.status === 'requested') ? (
-      <GradientBorder
-        wrapperClassName={`
+    const statusRequested =
+      (isRequested(shipment.status)) ? (
+        <GradientBorder
+          wrapperClassName={`
           layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25
           ${adminStyles.header_margin_buffer} ${styles.status_box_requested}`}
-        gradient={gradientBorderStyle}
-        className="layout-row flex-100 layout-align-center-center"
-        content={(
-          <p className="layout-align-center-center layout-row"> {shipment.status} </p>
-        )}
-      />
-    ) : (
-      ''
-    )
+          gradient={gradientBorderStyle}
+          className="layout-row flex-100 layout-align-center-center"
+          content={(
+            <p className="layout-align-center-center layout-row"> {t('common:requested')} </p>
+          )}
+        />
+      ) : (
+        ''
+      )
 
     const statusInProcess = (shipment.status === 'confirmed') ? (
       <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box_process}`}>
-        <p className="layout-align-center-center layout-row"> In process </p>
+        <p className="layout-align-center-center layout-row"> {t('common:inProcess')} </p>
       </div>
     ) : (
       ''
@@ -439,59 +466,71 @@ export class AdminShipmentView extends Component {
 
     const statusFinished = (shipment.status === 'finished') ? (
       <div className={`${adminStyles.border_box} layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box}`}>
-        <p className="layout-align-center-center layout-row"> {shipment.status} </p>
+        <p className="layout-align-center-center layout-row"> {t('common:finished')} </p>
+      </div>
+    ) : (
+      ''
+    )
+    
+    const statusArchived = (shipment.status === 'archived') ? (
+      <div className={`${adminStyles.border_box} layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box}`}>
+        <p className="layout-align-center-center layout-row"> {t('common:archived')} </p>
       </div>
     ) : (
       ''
     )
 
-    const docChecker = {
-      packing_sheet: false,
-      commercial_invoice: false
-      // ,
-      // customs_declaration: false,
-      // customs_value_declaration: false,
-      // eori: false,
-      // certificate_of_origin: false,
-      // dangerous_goods: false,
-      // bill_of_lading: false,
-      // invoice: false
-    }
-    const missingDocs = []
-    if (documents) {
-      documents.forEach((doc) => {
-        docChecker[doc.doc_type] = true
-        docView.push(<div className="flex-xs-100 flex-sm-45 flex-33 flex-gt-lg-25 layout-align-start-center layout-row" style={{ padding: '10px' }}>
-          <DocumentsForm
-            theme={theme}
-            type={doc.doc_type}
-            dispatchFn={file => this.fileFn(file)}
-            text={documentTypes[doc.doc_type]}
-            doc={doc}
-            viewer
-            deleteFn={file => this.deleteDoc(file)}
-          />
-        </div>)
-      })
-    }
-    Object.keys(docChecker).forEach((key) => {
-      if (!docChecker[key]) {
-        missingDocs.push(<div className={`flex-25 layout-padding layout-row layout-align-start-center ${adminStyles.no_doc}`}>
-          <div className="flex-none layout-row layout-align-center-center">
-            <i className="flex-none fa fa-ban" />
-          </div>
-          <div className="flex layout-align-start-center layout-row">
-            <p className="flex-none">{`${documentTypes[key]}: Not Uploaded`}</p>
-          </div>
-        </div>)
-      }
-    })
+    const statusRejected = (shipment.status === 'ignored') ? (
+      <GradientBorder
+        wrapperClassName={`
+          layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25
+          ${adminStyles.header_margin_buffer} ${styles.status_box_requested}`}
+        gradient={gradientBorderStyle}
+        className="layout-row flex-100 layout-align-center-center"
+        content={(
+          <p className="layout-align-center-center layout-row"> {t('common:rejected')} </p>
+        )}
+      />
+    ) : (
+      ''
+    )
+
     const feeHash = shipment.selected_offer
+
+    const dayPickerPropsPickupDate = {
+      disabledDays: {
+        after: newTimes.etd.day
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
+
+    const dayPickerPropsOriginDropOffDate = {
+      disabledDays: {
+        after: newTimes.etd.day
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
 
     const dayPickerPropsEtd = {
       disabledDays: {
         after: newTimes.eta.day,
-        before: new Date()
+        before: (newTimes.originDropOffDate.day || newTimes.pickupDate.day)
       },
       month: new Date(
         moment()
@@ -506,7 +545,8 @@ export class AdminShipmentView extends Component {
 
     const dayPickerPropsEta = {
       disabledDays: {
-        before: newTimes.etd.day < new Date() ? new Date() : newTimes.etd.day
+        before: newTimes.etd.day,
+        after: (newTimes.destinationCollectionDate.day || newTimes.deliveryDate.day)
       },
       month: new Date(
         moment()
@@ -518,6 +558,78 @@ export class AdminShipmentView extends Component {
       ),
       name: 'dayPicker'
     }
+
+    const dayPickerPropsDestinationCollectionDate = {
+      disabledDays: {
+        before: newTimes.eta.day
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
+
+    const dayPickerPropsDeliveryDate = {
+      disabledDays: {
+        before: newTimes.eta.day
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
+
+    const pickupDate = showEditTime && shipment.planned_pickup_date ? (
+      <div className="layout-row flex-100">
+        <div className="flex-65 layout-row">
+          <DayPickerInput
+            name="dayPicker"
+            placeholder="DD/MM/YYYY"
+            format="DD/MM/YYYY"
+            formatDate={formatDate}
+            parseDate={parseDate}
+            value={newTimes.pickupDate.day}
+            onDayChange={e => this.handleDayChange(e, 'pickupDate')}
+            dayPickerProps={dayPickerPropsPickupDate}
+          />
+        </div>
+      </div>
+    ) : (
+      <p className={`flex-none letter_3 ${styles.date}`}>
+        {`${formattedDate(shipment.planned_pickup_date)}`}
+      </p>
+    )
+
+    const originDropOffDate = showEditTime && shipment.planned_origin_drop_off_date ? (
+      <div className="layout-row flex-100">
+        <div className="flex-65 layout-row">
+          <DayPickerInput
+            name="dayPicker"
+            placeholder="DD/MM/YYYY"
+            format="DD/MM/YYYY"
+            formatDate={formatDate}
+            parseDate={parseDate}
+            value={newTimes.originDropOffDate.day}
+            onDayChange={e => this.handleDayChange(e, 'originDropOffDate')}
+            dayPickerProps={dayPickerPropsOriginDropOffDate}
+          />
+        </div>
+      </div>
+    ) : (
+      <p className={`flex-none letter_3 ${styles.date}`}>
+        {`${formattedDate(shipment.planned_origin_drop_off_date)}`}
+      </p>
+    )
 
     const etdJSX = showEditTime ? (
       <div className="layout-row flex-100">
@@ -536,7 +648,7 @@ export class AdminShipmentView extends Component {
       </div>
     ) : (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}
+        {`${formattedDate(shipment.planned_etd)}`}
       </p>
     )
 
@@ -557,14 +669,93 @@ export class AdminShipmentView extends Component {
       </div>
     ) : (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}
+        {`${formattedDate(shipment.planned_eta)}`}
       </p>
     )
+    const estimatedTimes = {
+      etdJSX,
+      etaJSX
+    }
+
+    const destinationCollectionDate = showEditTime && shipment.planned_destination_collection_date ? (
+      <div className="layout-row flex-100">
+        <div className="flex-65 layout-row">
+          <DayPickerInput
+            name="dayPicker"
+            placeholder="DD/MM/YYYY"
+            format="DD/MM/YYYY"
+            formatDate={formatDate}
+            parseDate={parseDate}
+            value={newTimes.destinationCollectionDate.day}
+            onDayChange={e => this.handleDayChange(e, 'destinationCollectionDate')}
+            dayPickerProps={dayPickerPropsDestinationCollectionDate}
+          />
+        </div>
+      </div>
+    ) : (
+      <p className={`flex-none letter_3 ${styles.date}`}>
+        from {`${moment(shipment.planned_destination_collection_date).format('DD/MM/YYYY | HH:mm')}`}
+      </p>
+    )
+
+    const deliveryDate = showEditTime && shipment.planned_delivery_date ? (
+      <div className="layout-row flex-100">
+        <div className="flex-65 layout-row">
+          <DayPickerInput
+            name="dayPicker"
+            placeholder="DD/MM/YYYY"
+            format="DD/MM/YYYY"
+            formatDate={formatDate}
+            parseDate={parseDate}
+            value={newTimes.deliveryTime.day}
+            onDayChange={e => this.handleDayChange(e, 'deliveryTime')}
+            dayPickerProps={dayPickerPropsDeliveryDate}
+          />
+        </div>
+      </div>
+    ) : (
+      <p className={`flex-none letter_3 ${styles.date}`}>
+        {`${formattedDate(shipment.planned_delivery_date)}`}
+      </p>
+    )
+
     const cargoCount = Object.keys(feeHash.cargo).length - 2
     const dnrEditKeys = ['in_process', 'finished', 'confirmed']
+    const renderActionButtons = ({ status }) => {
+      switch (status) {
+        case isRequested(status):
+          return (
+            <div className={`layout-row flex-none layout-align-space-around-center ${adminStyles.border_box} ${adminStyles.action_icons}`}>
+              <i className={`fa fa-check ${styles.light_green}`} onClick={this.handleAccept} />
+              <i className={`fa fa-trash ${styles.light_red}`} onClick={this.handleDeny} />
+            </div>
+          )
+        case 'confirmed':
+          return (
+            <div className={`layout-row flex-none layout-align-space-around-center ${adminStyles.border_box} ${adminStyles.action_icons}`}>
+              <i className={`fa fa-check ${styles.light_green}`} onClick={this.handleFinished} />
+            </div>
+          )
+        case 'declined':
+          return (
+            <div className={`layout-row flex-none layout-align-space-around-center ${adminStyles.border_box} ${adminStyles.action_icons}`}>
+              <i className={`fa fa-archive ${styles.light_orange}`} onClick={this.handleArchive} />
+            </div>
+          )
+        case 'finished':
+          return (
+            <div className={`layout-row flex-none layout-align-space-around-center ${adminStyles.border_box} ${adminStyles.action_icons}`}>
+              <i className={`fa fa-archive ${styles.light_orange}`} onClick={this.handleArchive} />
+            </div>
+          )
+
+        default:
+          return ''
+      }
+    }
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start header_buffer">
         <div className={`${adminStyles.margin_box_right} layout-row flex-100 layout-align-center-stretch margin_bottom`}>
           <div className={`layout-row flex layout-align-space-between-center ${adminStyles.title_shipment_grey}`}>
             <p className="layout-align-start-center layout-row">Ref:&nbsp; <span>{shipment.imc_reference}</span></p>
@@ -573,590 +764,75 @@ export class AdminShipmentView extends Component {
           {statusRequested}
           {statusInProcess}
           {statusFinished}
-          <div className={`layout-row flex-none layout-align-space-around-center ${adminStyles.border_box} ${adminStyles.action_icons}`}>
-            {shipment.status === 'requested' ? (
-              <i className={`fa fa-check ${styles.light_green}`} onClick={this.handleAccept} />
-            ) : (
-              ''
-            )}
-            {shipment.status === 'confirmed' ? (
-              <i className={`fa fa-check ${styles.light_green}`} onClick={this.handleFinished} />
-            ) : (
-              ''
-            )}
-            <i className={`fa fa-trash ${styles.light_red}`} onClick={this.handleDeny} />
-          </div>
+          {statusRejected}
+          {statusArchived}
+          {renderActionButtons({ status: shipment.status })}
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">
-          <Tabs
-            wrapperTabs="layout-row flex-100 margin_bottom"
-          >
-            <Tab
-              tabTitle="Overview"
+          {shipment.status !== 'quoted' ? (
+            <AdminShipmentContent
               theme={theme}
-            >
-              <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
-                <div className="layout-row flex-100 margin_bottom">
-
-                  <GradientBorder
-                    wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
-                    gradient={gradientBorderStyle}
-                    className="layout-row flex"
-                    content={(
-                      <div className="layout-row flex-100">
-                        <ShipmentOverviewShowCard
-                          et={etdJSX}
-                          text="ETD"
-                          theme={theme}
-                          hub={shipment.origin_hub}
-                          shipment={shipment}
-                          bg={bg1}
-                          editTime={this.state.showEditTime}
-                          handleSaveTime={this.saveNewTime}
-                          toggleEditTime={this.toggleEditTime}
-                          isAdmin={!dnrEditKeys.includes(shipment.status)}
-                        />
-                      </div>
-                    )}
-                  />
-                  <div className="layout-row flex-20 layout-align-center-center">
-                    <div className={`layout-column flex layout-align-center-center ${styles.font_adjustaments}`}>
-                      <div className="layout-align-center-center layout-row" style={gradientStyle}>
-                        {switchIcon()}
-                      </div>
-                      <p className="">Estimated time delivery</p>
-                      <h5>{moment(shipment.planned_eta).diff(moment(shipment.planned_etd), 'days')} days{' '}</h5>
-                    </div>
-                  </div>
-
-                  <GradientBorder
-                    wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
-                    gradient={gradientBorderStyle}
-                    className="layout-row flex"
-                    content={(
-                      <div className="layout-row flex-100">
-                        <ShipmentOverviewShowCard
-                          et={etaJSX}
-                          text="ETA"
-                          theme={theme}
-                          hub={shipment.destination_hub}
-                          bg={bg2}
-                          shipment={shipment}
-                          editTime={this.state.showEditTime}
-                          handleSaveTime={this.saveNewTime}
-                          toggleEditTime={this.toggleEditTime}
-                          isAdmin={!dnrEditKeys.includes(shipment.status)}
-                        />
-                      </div>
-                    )}
-                  />
-                </div>
-              </div>
-            </Tab>
-            <Tab
-              tabTitle="Freight"
+              gradientBorderStyle={gradientBorderStyle}
+              gradientStyle={gradientStyle}
+              switchIcon={switchIcon}
+              estimatedTimes={estimatedTimes}
+              pickupDate={pickupDate}
+              deliveryDate={deliveryDate}
+              originDropOffDate={originDropOffDate}
+              destinationCollectionDate={destinationCollectionDate}
+              totalPrice={totalPrice}
+              background={background}
+              dnrEditKeys={dnrEditKeys}
+              showEditTime={this.state.showEditTime}
+              saveNewTime={this.saveNewTime}
+              toggleEditTime={this.toggleEditTime}
+              feeHash={feeHash}
+              toggleEditServicePrice={this.toggleEditServicePrice}
+              showEditServicePrice={showEditServicePrice}
+              newPrices={newPrices}
+              selectedStyle={selectedStyle}
+              deselectedStyle={deselectedStyle}
+              cargoCount={cargoCount}
+              cargoView={cargoView}
+              shipmentData={shipmentData}
+              handlePriceChange={this.handlePriceChange}
+              saveNewEditedPrice={this.saveNewEditedPrice}
+              uploadClientDocument={adminDispatch.uploadDocument}
+            />
+          ) : (
+            <ShipmentQuotationContent
               theme={theme}
-            >
-              <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
-                <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100 `}>
-                  <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
-                    <div className="layout-column flex-100">
-                      <h3>Freight, Duties & Carriage:</h3>
-                      <div className="layout-wrap layout-row flex">
-                        <div className="flex-45 margin_bottom">
-                          <div className="layout-row flex-100">
-                            <div className="flex-100 layout-wrap layout-row">
-                              <div className="flex-100 layout-row">
-                                <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
-                                <p>Pick-up</p>
-                              </div>
-                              {feeHash.trucking_pre ? <div className="flex-100 layout-row layout-align-end-center">
-                                <p>
-                                  {feeHash.trucking_pre ? feeHash.trucking_pre.total.currency : ''}
-                                  { ' ' }
-                                  {feeHash.trucking_pre.edited_total
-                                    ? parseFloat(feeHash.trucking_pre.edited_total.value).toFixed(2)
-                                    : parseFloat(feeHash.trucking_pre.total.value).toFixed(2)}
-                                </p>
-                              </div>
-                                : '' }
-                              {showEditServicePrice && shipment.selected_offer.trucking_pre ? (
-                                <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
-                                  <span
-                                    className={
-                                      `layout-row flex-100 layout-padding
-                          layout-align-center-center ${styles.greybg}`
-                                    }
-                                  >
-                                    {newPrices.trucking_pre.currency}
-                                  </span>
-                                  <input
-                                    type="number"
-                                    onChange={e => this.handlePriceChange('trucking_pre', e.target.value)}
-                                    value={Number(newPrices.trucking_pre.value).toFixed(2)}
-                                    className="layout-padding flex-70 layout-row flex-initial"
-                                  />
-                                </div>
-                              ) : (
-                                ''
-                              )}
-                            </div>
+              gradientBorderStyle={gradientBorderStyle}
+              gradientStyle={gradientStyle}
+              estimatedTimes={estimatedTimes}
+              shipment={shipment}
+              background={background}
+              selectedStyle={selectedStyle}
+              deselectedStyle={deselectedStyle}
+              feeHash={feeHash}
+              cargoView={cargoView}
+            />
+          )}
 
-                          </div>
-                        </div>
-                        <div className="flex-offset-10 flex-45 margin_bottom">
-                          <div className="layout-row flex-100">
-                            <div className="flex-100 layout-wrap layout-row">
-                              <div className="flex-100 layout-row">
-                                <i
-                                  className="fa fa-truck clip flex-none layout-align-center-center"
-                                  style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
-                                />
-                                <p>Delivery</p>
-                              </div>
-                              {feeHash.trucking_on ? <div className="flex-100 layout-row layout-align-end-center">
-                                <p>
-                                  {feeHash.trucking_on ? feeHash.trucking_on.total.currency : ''}
-                                  { ' ' }
-                                  {feeHash.trucking_on.edited_total
-                                    ? parseFloat(feeHash.trucking_on.edited_total.value).toFixed(2)
-                                    : parseFloat(feeHash.trucking_on.total.value).toFixed(2)}
-                                </p>
-                              </div>
-                                : ''}
-                              {showEditServicePrice && shipment.selected_offer.trucking_on ? (
-                                <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
-                                  <span
-                                    className={
-                                      `layout-row flex-100 layout-padding
-                          layout-align-center-center ${styles.greybg}`
-                                    }
-                                  >
-                                    {newPrices.trucking_on.currency}
-                                  </span>
-                                  <input
-                                    type="number"
-                                    onChange={e => this.handlePriceChange('trucking_on', e.target.value)}
-                                    value={Number(newPrices.trucking_on.value).toFixed(2)}
-                                    className="layout-padding layout-row flex-70 flex-initial"
-                                  />
-                                </div>
-                              ) : (
-                                ''
-                              )}
-                            </div>
-
-                          </div>
-
-                        </div>
-                        <div className="flex-45 margin_bottom">
-                          <div className="layout-row flex-100">
-                            <div className="flex-100 layout-wrap layout-row">
-                              <div className="layout-row flex-100">
-                                <i
-                                  className="fa fa-file-text clip flex-none layout-align-center-center"
-                                  style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle}
-                                />
-                                <p>
-                                Origin<br />
-                                Documentation
-                                </p>
-                              </div>
-                              {feeHash.export ? <div className="flex-100 layout-row layout-align-end-center">
-                                <p>
-                                  {feeHash.export ? feeHash.export.total.currency : ''}
-                                  { ' ' }
-                                  {feeHash.export.edited_total
-                                    ? parseFloat(feeHash.export.edited_total.value).toFixed(2)
-                                    : parseFloat(feeHash.export.total.value).toFixed(2)}
-                                </p>
-                              </div>
-                                : ''}
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="flex-offset-10 flex-45 margin_bottom"
-                        >
-                          <div className="layout-row flex-100">
-                            <div className="layout-row flex-100 layout-wrap">
-                              <div className="flex-100 layout-row">
-                                <i
-                                  className="fa fa-file-text-o clip flex-none layout-align-center-center"
-                                  style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
-                                />
-                                <p>
-                      Destination<br />
-                      Documentation
-                                </p>
-                              </div>
-                              {feeHash.import ? <div className="flex-100 layout-row layout-align-end-center">
-                                <p>
-                                  {feeHash.import ? feeHash.import.total.currency : ''}
-                                  { ' ' }
-                                  {feeHash.import.edited_total
-                                    ? parseFloat(feeHash.import.edited_total.value).toFixed(2)
-                                    : parseFloat(feeHash.import.total.value).toFixed(2)}
-                                </p>
-                              </div>
-                                : ''}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex-45 margin_bottom">
-                          <div className="layout-row flex-100">
-                            <div className="layout-row layout-wrap flex-100">
-                              <div className="flex-100 layout-row">
-                                <i
-                                  className="fa fa-ship clip flex-none layout-align-center-center"
-                                  style={selectedStyle}
-                                />
-                                <p>Freight</p>
-                              </div>
-                              {feeHash.cargo
-                                ? <div className="flex-100 layout-row layout-align-end-center">
-                                  <p>
-                                    {feeHash.cargo ? feeHash.cargo.total.currency : ''}
-                                    { ' ' }
-                                    {feeHash.cargo.edited_total
-                                      ? parseFloat(feeHash.cargo.edited_total.value).toFixed(2)
-                                      : parseFloat(feeHash.cargo.total.value).toFixed(2)}
-                                  </p>
-                                </div>
-                                : ''}
-                              {showEditServicePrice && shipment.selected_offer.cargo ? (
-                                <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
-                                  <span
-                                    className={
-                                      `layout-row flex-100 layout-padding
-                          layout-align-center-center ${styles.greybg}`
-                                    }
-                                  >
-                                    {newPrices.cargo.currency}
-                                  </span>
-                                  <input
-                                    type="number"
-                                    onChange={e => this.handlePriceChange('cargo', e.target.value)}
-                                    value={Number(newPrices.cargo.value).toFixed(2)}
-                                    className="layout-padding layout-row flex-70 flex-initial"
-                                  />
-                                </div>
-                              ) : (
-                                ''
-                              )}
-                            </div>
-
-                          </div>
-
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className={`flex-25 layout-row flex-sm-100 flex-xs-100 ${styles.additional_services} ${styles.services_box} ${styles.border_right}`}>
-                    <div className="layout-column flex-80">
-                      <h3>Additional Services</h3>
-                      <div className="">
-                        <div className="flex-100 margin_bottom">
-                          <div className="layout-row flex-100">
-                            <div className="layout-row flex-100 layout-wrap">
-                              <div className="flex-100 layout-row">
-                                <i className="fa fa-id-card clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
-                                <p>Customs</p>
-                              </div>
-                              {feeHash.customs
-                                ? <div className="flex-100 layout-row layout-align-end-center">
-                                  <p>
-                                    {feeHash.customs ? feeHash.customs.total.currency : ''}
-                                    { ' ' }
-                                    {feeHash.customs.edited_total
-                                      ? parseFloat(feeHash.customs.edited_total.value).toFixed(2)
-                                      : parseFloat(feeHash.customs.total.value).toFixed(2)}
-                                  </p>
-                                </div>
-                                : '' }
-                            </div>
-
-                          </div>
-
-                        </div>
-                        <div className="flex-100 margin_bottom">
-                          <div className="layout-row flex-100">
-                            <div className="layout-row flex-100 layout-wrap">
-                              <div className="flex-100 layout-row">
-                                <i className="fa fa-umbrella clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
-                                <p>Insurance</p>
-                              </div>
-                              {feeHash.insurance && (feeHash.insurance.value || feeHash.insurance.edited_total)
-                                ? <div className="flex-100 layout-row layout-align-end-center">
-                                  <p>
-                                    {feeHash.insurance ? feeHash.insurance.currency : ''}
-                                    { ' ' }
-                                    {feeHash.insurance.edited_total
-                                      ? parseFloat(feeHash.insurance.edited_total.value).toFixed(2)
-                                      : ''}
-                                    {feeHash.insurance.value
-                                      ? parseFloat(feeHash.insurance.value).toFixed(2)
-                                      : ''}
-                                  </p>
-                                </div>
-                                : '' }
-                              {feeHash.insurance && !feeHash.insurance.value && !feeHash.insurance.edited_total
-                                ? <div className="flex-100 layout-row layout-align-end-center">
-                                  <p>Requested  </p>
-                                </div> : ''}
-                              {showEditServicePrice && shipment.selected_offer.insurance ? (
-                                <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
-                                  <span
-                                    className={
-                                      `layout-row flex-100 layout-padding
-                          layout-align-center-center ${styles.greybg}`
-                                    }
-                                  >
-                                    {newPrices.insurance.currency}
-                                  </span>
-                                  <input
-                                    type="number"
-                                    onChange={e => this.handlePriceChange('insurance', e.target.value)}
-                                    value={Number(newPrices.insurance.value).toFixed(2)}
-                                    className="layout-padding layout-row flex-70 flex-initial"
-                                  />
-                                </div>
-                              ) : (
-                                ''
-                              )}
-                            </div>
-
-                          </div>
-
-                        </div>
-                      </div>
-                    </div>
-                    <div className="layout-row layout-padding flex-20 layout-align-center-start">
-                      {showEditServicePrice ? (
-                        <div className="layout-column layout-align-center-center">
-                          <div className={`layout-row layout-align-center-center ${styles.save}`}>
-                            <i onClick={this.saveNewEditedPrice} className="fa fa-check" />
-                          </div>
-                          <div className={`layout-row layout-align-center-center ${styles.cancel}`}>
-                            <i onClick={this.toggleEditServicePrice} className="fa fa-trash" />
-                          </div>
-                        </div>
-                      ) : (
-                        <i onClick={this.toggleEditServicePrice} className={`fa fa-edit ${styles.editIcon}`} />
-                      )}
-                    </div>
-                  </div>
-                  <div className={`flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding ${styles.services_box}`}>
-                    <div className="layout-column flex-100">
-                      <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
-                        <div className="layout-align-start-center layout-row flex">
-                          <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>x&nbsp;{cargoCount}</span>
-                          <p className="layout-align-sm-end-center layout-align-xs-end-center">{AdminShipmentView.calcCargoLoad(feeHash, shipment.load_type)}</p>
-                        </div>
-                      </div>
-                      <h2 className="layout-align-start-center layout-row flex">
-                        {formattedPriceValue(totalPrice(shipment).value)} {totalPrice(shipment).currency}
-                      </h2>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </Tab>
-            <Tab
-              tabTitle="Contacts"
-              theme={theme}
-            >
-              <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
-                <ContactDetailsRow
-                  contacts={contacts}
-                  style={selectedStyle}
-                  accountId={shipment.user_id}
-                  user={accountHolder}
-                />
-              </div>
-            </Tab>
-            <Tab
-              tabTitle="Cargo Details"
-              theme={theme}
-            >
-              <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
-                <GreyBox
-
-                  wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right}`}
-                  contentClassName="layout-column flex"
-                  content={cargoView}
-                />
-                <GreyBox
-                  wrapperClassName={`layout-row layout-wrap layout-sm-column layout-xs-column flex-100
-            ${styles.no_border_top} margin_bottom ${adminStyles.no_margin_box_right}`}
-                  contentClassName="layout-row flex-100"
-                  content={(
-                    <div className="layout-column flex-100">
-                      <div className={`layout-row flex-100 flex-sm-100 flex-xs-100 ${styles.column_info}`}>
-                        <div className={`flex-33 layout-row offset-5 layout-align-start-center layout-wrap ${styles.border_right}`}>
-                          {shipment.total_goods_value ? (
-                            <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
-                              <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Total Value of Goods:</span>
-                              <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
-                                {shipment.total_goods_value.value}
-                                {shipment.total_goods_value.currency}
-                              </p>
-                            </div>
-                          ) : (
-                            <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
-                              <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Total Value of Goods:</span>
-                              <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
-                          -
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                        <div className={`flex-33 layout-row offset-5 layout-align-start-center layout-wrap ${styles.border_right}`}>
-                          {shipment.eori ? (
-                            <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
-                              <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">EORI number:</span>
-                              <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
-                                {shipment.eori}
-                              </p>
-                            </div>
-                          ) : (
-                            <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
-                              <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">EORI number:</span>
-                              <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
-                          -
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex-33 layout-row offset-5 layout-align-center-center layout-wrap">
-                          {shipment.incoterm_text ? (
-                            <div className="flex-100 layout-column layout-align-center-start">
-                              <span className="flex-40 flex-xs-100 layout-align-center-center layout-row">Incoterm:</span>
-                              <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
-                                {shipment.incoterm_text}
-                              </p>
-                            </div>
-                          ) : (
-                            <div className="flex-100 layout-column layout-align-start-start">
-                              <span
-                                className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
-                              >
-                        Incoterm:
-                              </span>
-                              <p
-                                className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row"
-                              >
-                          -
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      <div className={`layout-column flex-100 flex-sm-100 flex-xs-100 ${styles.column_info}`}>
-                        <div
-                          className={`${styles.border_bottom}
-                  flex-100 flex-sm-100 flex-xs-100 layout-row offset-5
-                  layout-align-start-start layout-wrap`}
-                        >
-                          {shipment.cargo_notes ? (
-                            <div className="flex-100 layout-row layout-align-start-center">
-                              <span className="flex-30 layout-row">Description of Goods:</span>
-                              <p className="flex-80 layout-padding layout-row">
-                                {shipment.cargo_notes}
-                              </p>
-                            </div>
-                          ) : (
-                            <div className="flex-100 layout-row layout-align-start-center">
-                              <span className="flex-30 layout-row">Description of Goods:</span>
-                              <p className="flex-80 layout-padding layout-row">
-                          -
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap">
-                          {shipment.notes ? (
-                            <div className="flex-100 layout-row layout-align-start-center">
-                              <span className="flex-20 layout-row">Notes:</span>
-                              <p className="flex-80 layout-padding layout-row">
-                                {shipment.notes}
-                              </p>
-                            </div>
-                          ) : (
-                            <div className="flex-100 layout-row layout-align-start-center">
-                              <span className="flex-20 layout-row">Notes:</span>
-                              <p className="flex-80 layout-padding layout-row">
-                          -
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                  )}
-                />
-              </div>
-            </Tab>
-            <Tab
-              tabTitle="Documents"
-              theme={theme}
-            >
-              <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
-                <GreyBox
-
-                  wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right} margin_bottom `}
-                  contentClassName="flex"
-                  content={(
-                    <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${adminStyles.padding_left}`}>
-                      <div
-                        className="flex-100 layout-row layout-wrap layout-align-start-center"
-                        style={{ marginTop: '5px' }}
-                      >
-                        {docView}
-                      </div>
-                      <div
-                        className="flex-100 layout-row layout-wrap layout-align-start-center"
-                        style={{ marginTop: '5px' }}
-                      >
-                        {missingDocs}
-                      </div>
-                    </div>
-                  )}
-                />
-              </div>
-            </Tab>
-          </Tabs>
         </div>
 
-        {/* <ShipmentCard
-          headingText="Documents"
-          theme={theme}
-          collapsed={collapser.documents}
-          handleCollapser={() => this.handleCollapser('documents')}
-          content={
-            <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-              <div
-                className="flex-100 layout-row layout-wrap layout-align-start-center"
-                style={{ marginTop: '5px' }}
+        {shipment.status !== 'quoted' ? (
+          <div className="flex-100 layout-row layout-wrap">
+            <div className="layout-row flex-100 layout-wrap layout-align-center-center" style={{ paddingTop: '30px' }}>
+              <p
+                className="flex-100 layout-row layout-align-center-center"
+                style={{ paddingRight: '15px', paddingBottom: '14px', textAlign: 'center' }}
               >
-                {docView}
-              </div>
-              <div
-                className="flex-100 layout-row layout-wrap layout-align-start-center"
-                style={{ marginTop: '5px' }}
-              >
-                {missingDocs}
-              </div>
+                Download shipment pdf
+              </p>
+              <DocumentsDownloader
+                theme={theme}
+                target="shipment_recap"
+                options={{ shipment }}
+                size="full"
+                shipment={shipment}
+              />
             </div>
-          }
-        /> */}
-
-        {shipment.status === 'requested' ? (
-          <div className={`flex-100 layout-row layout-align-center-center ${adminStyles.button_row}`}>
-            <button style={gradientStyle} onClick={this.handleAccept}>Accept</button>
-            <button onClick={this.handleDeny}>Refuse</button>
           </div>
         ) : (
           ''
@@ -1177,8 +853,9 @@ AdminShipmentView.propTypes = {
   adminDispatch: PropTypes.shape({
     getShipment: PropTypes.func
   }).isRequired,
-  match: PropTypes.match.isRequired
-  // tenant: PropTypes.tenant
+  match: PropTypes.match.isRequired,
+  t: PropTypes.func,
+  scope: PropTypes.objectOf(PropTypes.any)
 }
 
 AdminShipmentView.defaultProps = {
@@ -1186,8 +863,9 @@ AdminShipmentView.defaultProps = {
   hubs: [],
   clients: [],
   shipmentData: null,
-  loading: false
-  // tenant: {}
+  loading: false,
+  t: null,
+  scope: {}
 }
 
-export default AdminShipmentView
+export default translate('common')(AdminShipmentView)

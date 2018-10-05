@@ -8,9 +8,9 @@ import { alertActions, userActions, appActions } from './'
 // const subdomainKey = getSubdomain()
 // const cookieKey = `${subdomainKey}_user`
 // const userData = JSON.parse(window.localStorage.getItem(cookieKey))
-function newShipment (type, redirect) {
-  function request (shipmentData) {
-    return { type: shipmentConstants.NEW_SHIPMENT_REQUEST, shipmentData }
+function newShipment (type, redirect, reused) {
+  function request (shipmentData, isReused) {
+    return { type: shipmentConstants.NEW_SHIPMENT_REQUEST, shipmentData, isReused }
   }
   function success (shipmentData) {
     return { type: shipmentConstants.NEW_SHIPMENT_SUCCESS, shipmentData }
@@ -20,11 +20,10 @@ function newShipment (type, redirect) {
   }
 
   return (dispatch) => {
-    dispatch(request(type))
+    dispatch(request(type, reused))
     shipmentService.newShipment(type).then(
       (resp) => {
         const shipmentData = resp.data
-        dispatch(alertActions.success('Fetching New Shipment successful'))
         dispatch(success(shipmentData))
         if (redirect) {
           dispatch(push(`/booking/${shipmentData.shipment.id}/shipment_details`))
@@ -49,7 +48,7 @@ function reuseShipment (shipment) {
 
   return (dispatch) => {
     dispatch(request(shipment))
-    dispatch(newShipment(newShipmentRequest, true))
+    dispatch(newShipment(newShipmentRequest, true, true))
   }
 }
 
@@ -79,7 +78,6 @@ function getOffers (data, redirect) {
         if (redirect) {
           dispatch(push(`/booking/${shipmentData.shipment.id}/choose_offer`))
         }
-        dispatch(alertActions.success('Set Shipment Details successful'))
       },
       (error) => {
         error.then((newData) => {
@@ -119,7 +117,6 @@ function getOffersForNewDate (data, redirect) {
         if (redirect) {
           dispatch(push(`/booking/${shipmentData.shipment.id}/choose_offer`))
         }
-        dispatch(alertActions.success('Set Shipment Details successful'))
       },
       (error) => {
         error.then((newData) => {
@@ -159,7 +156,39 @@ function chooseOffer (data) {
         const shipmentData = resp.data
         dispatch(success(shipmentData))
         dispatch(push(`/booking/${shipmentData.shipment.id}/final_details`))
-        dispatch(alertActions.success('Set Shipment Route successful'))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
+function sendQuotes (data) {
+  function request (shipmentData) {
+    return {
+      type: shipmentConstants.SEND_QUOTES_REQUEST,
+      shipmentData
+    }
+  }
+  function success (shipmentData) {
+    return {
+      type: shipmentConstants.SEND_QUOTES_SUCCESS,
+      shipmentData
+    }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.SEND_QUOTES_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request(data))
+
+    shipmentService.sendQuotes(data).then(
+      (resp) => {
+        const shipmentData = resp.data
+        dispatch(success(shipmentData))
       },
       (error) => {
         dispatch(failure(error))
@@ -194,7 +223,6 @@ function setShipmentContacts (data) {
         const shipmentData = resp.data
         dispatch(success(shipmentData))
         dispatch(push(`/booking/${shipmentData.shipment.id}/finish_booking`))
-        dispatch(alertActions.success('Set Shipment Contacts successful'))
       },
       (error) => {
         dispatch(failure(error))
@@ -228,7 +256,6 @@ function requestShipment (id) {
         const shipmentData = resp.data
         dispatch(success(shipmentData))
         dispatch(push(`/booking/${id}/thank_you`))
-        dispatch(alertActions.success('Confirm Shipment successful'))
       },
       (error) => {
         dispatch(failure(error))
@@ -402,7 +429,6 @@ function uploadDocument (doc, type, url) {
 
     shipmentService.uploadDocument(doc, type, url).then(
       (data) => {
-        dispatch(alertActions.success('Uploading Document successful'))
         dispatch(success(data))
       },
       (error) => {
@@ -430,7 +456,6 @@ function deleteDocument (id) {
 
     shipmentService.deleteDocument(id).then(
       () => {
-        dispatch(alertActions.success('Deleting Document successful'))
         dispatch(success(id))
       },
       (error) => {
@@ -457,7 +482,6 @@ function getNotes (noteIds) {
 
     shipmentService.getNotes(noteIds).then(
       (response) => {
-        dispatch(alertActions.success('Fetching Notes successful'))
         dispatch(success(response.data))
       },
       (error) => {
@@ -494,7 +518,32 @@ function updateContact (req) {
 
     shipmentService.updateContact(req).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Contact successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
+function getSchedulesForResult (req) {
+  function request () {
+    return { type: shipmentConstants.SHIPMENT_GET_SCHEDULES_REQUEST }
+  }
+  function success (scheduleData) {
+    return { type: shipmentConstants.SHIPMENT_GET_SCHEDULES_SUCCESS, payload: scheduleData.data }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.SHIPMENT_GET_SCHEDULES_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    shipmentService.getSchedulesForResult(req).then(
+      (data) => {
         dispatch(success(data))
       },
       (error) => {
@@ -518,10 +567,6 @@ function setError (payload) {
   return { type: shipmentConstants.SET_ERROR, payload }
 }
 
-function clearErrors (stage) {
-  return { type: shipmentConstants.CLEAR_ERRORS, payload: stage }
-}
-
 function logOut () {
   return {
     type: shipmentConstants.CLEAR_SHIPMENTS,
@@ -539,6 +584,7 @@ export const shipmentActions = {
   reuseShipment,
   newShipment,
   chooseOffer,
+  sendQuotes,
   getOffers,
   setShipmentContacts,
   fetchShipment,
@@ -559,8 +605,8 @@ export const shipmentActions = {
   getOffersForNewDate,
   updateContact,
   delete: _delete,
-  clearErrors,
-  setError
+  setError,
+  getSchedulesForResult
 }
 
 export default shipmentActions

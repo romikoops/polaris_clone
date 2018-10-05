@@ -1,0 +1,111 @@
+{{- $postgresName := printf "%s-%s" .Release.Name "postgresql" -}}
+{{- $databaseUrl := printf "postgis://%s:%s@%s/%s" .Values.postgresql.postgresUser .Values.postgresql.postgresPassword $postgresName .Values.postgresql.postgresDatabase -}}
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ include "app.fullname" . }}
+  labels:
+    app: {{ include "app.name" . }}
+    chart: {{ include "app.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "app.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "app.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      initContainers:
+      - name: migrate
+        image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+        imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+        args:
+        - dockerize
+        - -wait=tcp://{{ $postgresName }}:5432
+        - -timeout=5m
+        - bin/rails
+        - db:migrate
+        env:
+        - name: RAILS_ENV
+          value: review
+        - name: DATABASE_URL
+          value: {{ $databaseUrl | quote }}
+        - name: RAILS_MASTER_KEY
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: master.key
+      containers:
+      - name: backend
+        image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+        imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+        args:
+        - dockerize
+        - -wait=tcp://{{ $postgresName }}:5432
+        - -timeout=5m
+        - bin/puma
+        - -C
+        - config/puma.rb
+        env:
+        - name: RAILS_ENV
+          value: review
+        - name: RAILS_MAX_THREADS
+          value: "5"
+        - name: DATABASE_URL
+          value: {{ $databaseUrl | quote }}
+        - name: CORS_ORIGINS
+          value: "https:\\/\\/.*\\.{{ include "hostname" .Values.service.url | replace "." "\\\\." }}"
+        - name: RAILS_MASTER_KEY
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: master.key
+        ports:
+        - name: http-backend
+          containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http-backend
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http-backend
+          initialDelaySeconds: 60
+          periodSeconds: 30
+      - name: frontend
+        image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+        imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
+        env:
+        - name: API_URL
+          value: "https://api.{{ include "hostname" .Values.service.url }}"
+        ports:
+        - name: http-frontend
+          containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http-frontend
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http-frontend
+          initialDelaySeconds: 60
+          periodSeconds: 30
+      volumes:
+      - name: credentials
+        secret:
+          secretName: {{ .Values.credentialsName }}
+          items:
+          - key: credentials.json
+            path: credentials.json

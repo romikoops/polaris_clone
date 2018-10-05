@@ -1,0 +1,172 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-align-center padd_top"
+>
+  <div
+    className="flex-none content_width layout-row layout-wrap section_padding"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-start layout-wrap"
+    >
+      <div
+        className="flex-none layout-row layout-align-space-around-center"
+      >
+        <TextHeading
+          color=""
+          size={2}
+          text="Customs Export Paper"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-33 layout-wrap layout-row layout-align-space-around-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-end-center"
+        >
+          <div
+            className="flex-90 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none"
+              style={
+                Object {
+                  "marginRight": "5px",
+                }
+              }
+            >
+              Yes, I want undefined to secure my Customs Export Paper (ADB)
+            </p>
+          </div>
+          <div
+            className="flex-10 layout-row layout-align-end-center"
+          >
+            <Checkbox
+              checked={false}
+              className=""
+              disabled={false}
+              onChange={[Function]}
+              onClick={null}
+              size={null}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-end-center"
+        >
+          <div
+            className="flex-90 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none"
+              style={
+                Object {
+                  "marginRight": "5px",
+                }
+              }
+            >
+              No, I do not want undefined to secure my Customs Export Paper (ADB)
+            </p>
+          </div>
+          <div
+            className="flex-10 layout-row layout-align-end-center"
+          >
+            <Checkbox
+              checked={true}
+              className=""
+              disabled={false}
+              onChange={[Function]}
+              onClick={null}
+              size={null}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap customs_box  box_content hidden"
+    >
+      <div
+        className="flex-80 layout-row layout-wrap"
+      >
+        <p
+          className="flex-90"
+        >
+          <strong>
+             
+            When you ship goods from Germany the Customs Export Paper is required to pass through customs
+          </strong>
+        </p>
+        <p
+          className="flex-90"
+        >
+          Küster Speedtrans Übersee Spedition GmbH will organise the ABD on your behalf.
+          Initially USD 75.00 will be added to your booking. This includes 1 customs tariff number.
+          For each extra we will charge you USD 12.50 per customs tariff number.
+        </p>
+      </div>
+      <div
+        className=" prices flex-20 layout-row layout-wrap layout-align-start-start"
+      >
+        <div
+          className="customs_total flex-100 layout-row  layout-align-end-center"
+        >
+          <p
+            className="flex-none"
+          >
+            Total
+          </p>
+          <h6
+            className="flex-none center"
+          >
+             
+             
+            NaN
+          </h6>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center layout-wrap no_customs_box show"
+    >
+      <div
+        className="flex-100 layout-row layout-align-start-center layout-wrap"
+      >
+        <p
+          className="flex-100"
+        >
+          <b>
+            A Customs Export Paper (ADB) is mandatory for all shipments when exporting from Germany. If you choose to secure your Customs Export Paper on your own,undefined
+              will need a copy of the Customs Export Paper.
+          </b>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;

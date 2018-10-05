@@ -1,0 +1,34 @@
+# frozen_string_literal: true
+
+# Support multiple JIRA projects
+jira_keys = 'IMC'
+jira_keys_regexp = Regexp.new(/((?:#{jira_keys})-[0-9]+)/)
+
+jira_issues = []
+
+# Search Commits
+jira_issues << git.commits.map { |commit| commit.message.scan(jira_keys_regexp) }.compact
+
+message = ''
+if jira_issues.flatten.uniq.empty?
+  message += <<~MESSAGE
+    This Merge Request does not mention any JIRA tickets in any of its commit messages.
+
+    Please consider to rebase and rewording your commit messages to start with JIRA Ticket, as
+    it helps to pinpoint reasoning for any changes in the future, especially if there is regression.
+  MESSAGE
+end
+
+if gitlab.mr_title.scan(jira_keys_regexp).empty?
+  message += <<~MESSAGE
+    This Merge Request does not mention JIRA Ticket in its title.
+
+    Please consider to editing Merge Request and adding JIRA Ticket to its title
+    as this makes it easy to track open merge requests and keep JIRA Board in sync,
+    as well to make sure we always deploy most important code to production at right time.
+  MESSAGE
+end
+
+unless message.empty?
+  warn message
+end

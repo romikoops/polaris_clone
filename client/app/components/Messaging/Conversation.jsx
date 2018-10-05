@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import { v4 } from 'uuid'
 import Scroll from 'react-scroll'
 import styles from './Messaging.scss'
 import defStyles from '../../styles/default_classes.scss'
-import { Message, MessageShipmentData } from './'
+import MessageShipmentData from './MessageShipmentData'
+import Message from './Message'
 import PropTypes from '../../prop-types'
 
-export class Conversation extends Component {
+class Conversation extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -61,7 +63,7 @@ export class Conversation extends Component {
   }
   render () {
     const {
-      conversation, theme, shipment, user, tenant, clients
+      conversation, theme, shipment, user, tenant, clients, t
     } = this.props
     const { message, title, showDetails } = this.state
     const { Element } = Scroll
@@ -69,6 +71,7 @@ export class Conversation extends Component {
     const messages = isAdmin
       ? conversation.messages.map((msg) => {
         const client = clients.filter(c => c.id === msg.user_id)[0]
+
         return (
           <Message
             tenant={tenant}
@@ -105,11 +108,11 @@ export class Conversation extends Component {
       closeInfo={this.toggleDetails}
     />)
     const messageView = (
-      <div className="flex-100 layout-column layout-align-start-start" ref>
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start" ref>
         <div
           id="messageList"
           className={`${styles.message_scroll}
-          flex-70 layout-row layout-align-start-start layout-wrap `}
+          flex-100 layout-row layout-align-start-start layout-wrap `}
         >
           <div className="flex-70 layout-row layout-align-start-start layout-wrap" >
             { messages }
@@ -118,7 +121,7 @@ export class Conversation extends Component {
           <Element name="messagesEnd" />
         </div>
         <form
-          className={`${styles.msg_form} ${defStyles.border_divider} flex-30 width_100 layout-row layout-align-start-center`}
+          className={`${styles.msg_form} ${defStyles.border_divider} flex-100  layout-row layout-align-start-center`}
           onSubmit={this.reply}
         >
           <div
@@ -129,7 +132,7 @@ export class Conversation extends Component {
                 type="text"
                 name="title"
                 className={`flex-90 ${styles.text_input}`}
-                placeholder="Type your message title here...."
+                placeholder={t('account:typeTitle')}
                 value={title}
                 onChange={this.handleReplyChange}
               />
@@ -137,7 +140,7 @@ export class Conversation extends Component {
             <div className="flex-95 layout-row layout-align-center-center">
               <textarea
                 name="message"
-                placeholder="Type your message text here...."
+                placeholder={t('account:typeMessage')}
                 id=""
                 className={`flex-90 ${styles.text_area}`}
                 value={message}
@@ -160,19 +163,17 @@ export class Conversation extends Component {
         <div ref={(el) => { this.el = el }} />
       </div>
     )
-    //  const showDetailView = this.state.showDetails ? styles.detail_wrapper_open
-    //    : styles.detail_wrapper_closed
-    // const detailStyle = showDetails ? menuStyles.open : menuStyles.closed
+
     return (
-      <div className={`flex-100 layout-column layout-align-start-start ${styles.convo_wrapper}`}>
+      <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.convo_wrapper}`}>
         <div
           className={`${styles.summary_wrapper}
-          flex-15 layout-row layout-wrap layout-align-start-center `}
+          flex-100 layout-row layout-wrap layout-align-start-center `}
           onClick={this.toggleDetails}
         >
           <div className="flex-70 layout-wrap layout-row layout-align-start-center">
             <div className="flex-5" />
-           Shipment Reference:
+            {t('bookconf:shipmentReference')}:
             <div className="flex-5" />
             <b>
               {conversation.shipmentRef}
@@ -181,18 +182,14 @@ export class Conversation extends Component {
           <div
             className="flex-30 layout-align-center-center layout-row"
           >
-            <h4 className="flex-none no_m">Show Details</h4>
+            <h4 className="flex-none no_m">{t('bookconf:showDetails')}</h4>
             <div className="flex-5" />
             { showDetails
               ? <i className="fa fa-times clip" style={btnStyle} />
               : <i className="fa fa-info clip" style={btnStyle} /> }
           </div>
         </div>
-        {/* <div className={`flex-90 layout-column layout-align-start-start
-        ${menuStyles.menu_content} ${detailStyle}`}>
-          { detailView }
-        </div> */}
-        <div className={`flex-90 layout-column layout-align-start-start ${styles.messageView}`}>
+        <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.messageView}`}>
           { showDetails ? detailView : messageView }
         </div>
       </div>
@@ -202,6 +199,7 @@ export class Conversation extends Component {
 
 Conversation.propTypes = {
   sendMessage: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
   conversation: PropTypes.shape({
     messages: PropTypes.array
   }).isRequired,
@@ -220,4 +218,4 @@ Conversation.defaultProps = {
   shipmentRef: ''
 }
 
-export default Conversation
+export default translate(['account', 'bookconf'])(Conversation)

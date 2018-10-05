@@ -88,6 +88,10 @@ class Tenant < ApplicationRecord
     end
   end
 
+  def quotation_tool
+    scope['open_quotation_tool'] || scope['closed_quotation_tool']
+  end
+
   def mode_of_transport_in_scope?(mode_of_transport, load_type=nil)
     return scope.dig("modes_of_transport", mode_of_transport.to_s).values.any? if load_type.nil?
 

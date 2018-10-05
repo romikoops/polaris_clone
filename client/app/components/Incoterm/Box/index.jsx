@@ -1,16 +1,16 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import Select from 'react-select'
 import styled from 'styled-components'
 import styles from './index.scss'
-import { TextHeading } from '../../TextHeading/TextHeading'
+import TextHeading from '../../TextHeading/TextHeading'
 import PropTypes from '../../../prop-types'
 import { gradientTextGenerator } from '../../../helpers'
 import { incoterms } from '../../../constants'
 import '../../../styles/select-css-custom.css'
 
-export function IncotermBox ({
+function IncotermBox ({
   theme,
-  shipment,
   onCarriage,
   preCarriage,
   tenantScope,
@@ -19,7 +19,8 @@ export function IncotermBox ({
   errorStyles,
   showIncotermError,
   nextStageAttempt,
-  direction
+  direction,
+  t
 }) {
   const selectedStyle =
     theme && theme.colors
@@ -27,71 +28,69 @@ export function IncotermBox ({
       : { color: 'black' }
   const textSwitch = () => {
     if (preCarriage && onCarriage) {
-      return 'Door to Door'
+      return t('itbox:doorToDoor')
     }
     if (!preCarriage && onCarriage) {
-      return 'Port to Door'
+      return t('itbox:portToDoor')
     }
     if (preCarriage && !onCarriage) {
-      return 'Door to Port'
+      return t('itbox:doorToPort')
     }
-    if (!preCarriage && !onCarriage) {
-      return 'Port to Port'
-    }
-    return 'Port to Port'
+
+    return t('itbox:portToPort')
   }
   const simpleOptions = [
     {
-      label: 'Door to Destination Port',
+      label: t('itbox:doorToDestination'),
       value: 'DTP',
       direction: 'export',
       preCarriage: true,
       onCarriage: false
     },
     {
-      label: 'Door to Door',
+      label: t('itbox:doorToDoor'),
       value: 'DTD',
       direction: 'export',
       preCarriage: true,
       onCarriage: true
     },
     {
-      label: 'Origin Port to Door',
+      label: t('itbox:originToDoor'),
       value: 'PTD',
       direction: 'export',
       preCarriage: true,
       onCarriage: true
     },
     {
-      label: 'Origin Port to Destination Port',
+      label: t('itbox:originToDestination'),
       value: 'PTP',
       direction: 'export',
       preCarriage: false,
       onCarriage: false
     },
     {
-      label: 'Origin Port to Door',
+      label: t('itbox:originToDoor'),
       value: 'PTD',
       direction: 'import',
       preCarriage: false,
       onCarriage: true
     },
     {
-      label: 'Door to Destination Port',
+      label: t('itbox:doorToDestination'),
       value: 'DTP',
       direction: 'import',
       preCarriage: true,
       onCarriage: false
     },
     {
-      label: 'Door to Door',
+      label: t('itbox:doorToDoor'),
       value: 'DTD',
       direction: 'import',
       preCarriage: true,
       onCarriage: true
     },
     {
-      label: 'Origin Port to Destination Port',
+      label: t('itbox:originToDestination'),
       value: 'PTP',
       direction: 'import',
       preCarriage: false,
@@ -127,7 +126,7 @@ export function IncotermBox ({
     <div className="flex-100 layout-row layout-align-end-center layout-wrap">
       <div className="flex-100 layout-row layout-align-end-center">
         <div className="flex-none letter_2">
-          <TextHeading theme={theme} text="Service Level" size={3} />
+          <TextHeading theme={theme} text={t('shipment:serviceLevel')} size={3} />
         </div>
       </div>
       <div className="flex-100 layout-row layout-align-end-center">
@@ -146,7 +145,7 @@ export function IncotermBox ({
     <div className="flex-100 layout-row layout-align-end-center layout-wrap">
       <div className="flex-100 layout-row layout-align-end-center">
         <div className="flex-none letter_2">
-          <TextHeading theme={theme} text="Select Incoterm:" size={3} />
+          <TextHeading theme={theme} text={t('common:selectIncoterm')} size={3} />
         </div>
       </div>
       <div className="flex-80" name="incoterms" style={{ position: 'relative' }}>
@@ -158,7 +157,7 @@ export function IncotermBox ({
           onChange={setIncoTerm}
         />
         <span className={errorStyles.error_message}>
-          {showIncotermError ? 'Must not be blank' : ''}
+          {showIncotermError ? t('common:noBlank') : ''}
         </span>
       </div>
     </div>
@@ -168,7 +167,7 @@ export function IncotermBox ({
     <div className="flex-100 layout-row layout-align-end-center layout-wrap">
       <div className="flex-100 layout-row layout-align-end-center">
         <div className="flex-none letter_2">
-          <TextHeading theme={theme} text="Select Incoterm:" size={3} />
+          <TextHeading theme={theme} text={t('common:selectIncoterm')} size={3} />
         </div>
       </div>
       <div className="flex-80" name="incoterms" style={{ position: 'relative' }}>
@@ -180,7 +179,7 @@ export function IncotermBox ({
           onChange={setIncoTerm}
         />
         <span className={errorStyles.error_message}>
-          {showIncotermError ? 'Must not be blank' : ''}
+          {showIncotermError ? t('common:noBlank') : ''}
         </span>
       </div>
     </div>
@@ -201,6 +200,7 @@ export function IncotermBox ({
     default:
       break
   }
+
   return (
     <div className={`flex-100 layout-row layout-align-start-start  ${styles.incoterm_wrapper}`}>
       {boxView}
@@ -210,9 +210,9 @@ export function IncotermBox ({
 
 IncotermBox.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   onCarriage: PropTypes.bool,
   preCarriage: PropTypes.bool,
-  shipment: PropTypes.objectOf(PropTypes.any).isRequired,
   tenantScope: PropTypes.objectOf(PropTypes.any),
   incoterm: PropTypes.string,
   setIncoTerm: PropTypes.func,
@@ -237,4 +237,4 @@ IncotermBox.defaultProps = {
   direction: ''
 }
 
-export default IncotermBox
+export default translate(['common', 'itbox', 'shipment'])(IncotermBox)

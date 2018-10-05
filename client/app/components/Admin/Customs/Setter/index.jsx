@@ -18,7 +18,7 @@ import {
   rateBasisSchema,
   moment
 } from '../../../../constants'
-import { TextHeading } from '../../../TextHeading/TextHeading'
+import TextHeading from '../../../TextHeading/TextHeading'
 
 const chargeGloss = chargeGlossary
 const rateOpts = rateBasises

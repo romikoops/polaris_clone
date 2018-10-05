@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import PropTypes from '../../prop-types'
 import adminStyles from '../Admin/Admin.scss'
 import styles from '../Admin/AdminShipments.scss'
-import { CargoItemGroup } from '../Cargo/Item/Group'
+import CargoItemGroup from '../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
 import { CargoContainerGroup } from '../Cargo/Container/Group'
 import { moment, documentTypes } from '../../constants'
@@ -313,7 +313,7 @@ export class UserShipmentView extends Component {
       ''
     )
     const reuseShipment = (
-      <div style={gradientStyle} onClick={() => this.reuseShipment()} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy ${adminStyles.shipment_view_margin_buffer}  ${styles.reuse_shipment_box}`}>
+      <div style={gradientStyle} onClick={() => this.reuseShipment()} className={`layout-row flex-15 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy ${adminStyles.shipment_view_margin_buffer}  ${styles.reuse_shipment_box}`}>
         <p className="layout-align-center-center layout-row">
           {t('shipment:reuseShipment')}
         </p>

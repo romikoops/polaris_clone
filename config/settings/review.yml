@@ -1,0 +1,17 @@
+aws:
+  access_key_id: <%= Rails.application.credentials.review_aws_access_key_id %>
+  secret_access_key: <%= Rails.application.credentials.review_aws_secret_access_key %>
+  region: eu-central-1
+  bucket: imcdev
+
+fixer:
+  api_key: <%= Rails.application.credentials.review_fixer_api_key %>
+
+google:
+  api_key: <%= Rails.application.credentials.review_google_api_key %>
+
+smtp:
+  host: smtp.sendgrid.net
+  domain: itsmycargo.com
+  username: apikey
+  password: <%= Rails.application.credentials.review_smtp_password %>

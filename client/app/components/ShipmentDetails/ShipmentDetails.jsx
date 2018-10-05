@@ -17,11 +17,11 @@ import ShipmentLocationBox from '../ShipmentLocationBox/ShipmentLocationBox'
 import ShipmentContainers from '../ShipmentContainers/ShipmentContainers'
 import ShipmentCargoItems from '../ShipmentCargoItems/ShipmentCargoItems'
 import ShipmentAggregatedCargo from '../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
-import { TextHeading } from '../TextHeading/TextHeading'
-import { IncotermRow } from '../Incoterm/Row'
-import { IncotermBox } from '../Incoterm/Box'
+import TextHeading from '../TextHeading/TextHeading'
+import IncotermRow from '../Incoterm/Row'
+import IncotermBox from '../Incoterm/Box'
 import { camelize, isEmpty, chargeableWeight } from '../../helpers'
-import { Checkbox } from '../Checkbox/Checkbox'
+import Checkbox from '../Checkbox/Checkbox'
 import NotesRow from '../Notes/Row'
 import '../../styles/select-css-custom.css'
 import getModals from './getModals'
@@ -45,9 +45,23 @@ export class ShipmentDetails extends Component {
       offset: -180
     })
   }
+
   static errorsAt (errorsObjects) {
     return errorsObjects.findIndex(errorsObj => Object.values(errorsObj).some(error => error))
   }
+
+  static handleCollectiveWeightChange (cargoItem, suffixName, value) {
+    const cargo = cargoItem
+    const prevCollectiveWeight = cargo.payload_in_kg * cargo.quantity
+    if (suffixName === 'quantity') {
+      cargo.payload_in_kg = prevCollectiveWeight / value
+      cargo.quantity = value
+    } else {
+      cargo.payload_in_kg = value / cargo.quantity
+    }
+    return cargo
+  }
+  
   constructor (props) {
     super(props)
     this.state = {
@@ -125,14 +139,14 @@ export class ShipmentDetails extends Component {
     if (this.props.shipmentData && this.props.shipmentData.shipment) {
       /* eslint-disable camelcase */
       const {
-        planned_pickup_date, planned_origin_drop_off_date, has_on_carriage, has_pre_carriage
+        desired_start_date, has_on_carriage, has_pre_carriage
       } = this.props.shipmentData.shipment
-      this.state.selectedDay = planned_pickup_date
+      this.state.selectedDay = desired_start_date
       this.state = {
         ...this.state,
         has_on_carriage,
         has_pre_carriage,
-        selectedDay: has_pre_carriage ? planned_pickup_date : planned_origin_drop_off_date
+        selectedDay: desired_start_date
       }
       /* eslint-enable camelcase */
     }
@@ -436,9 +450,12 @@ export class ShipmentDetails extends Component {
     this.setState({ [target]: cargoArr })
     this.setState({ [`${target}Errors`]: errorsArr })
   }
-  handleSelectLocation (bool) {
+  handleSelectLocation (target, bool) {
     this.setState({
-      addressFormsHaveErrors: bool
+      addressFormsHaveErrors: {
+        ...this.state.addressFormsHaveErrors,
+        [target]: bool
+      }
     })
   }
   handleAddressChange (event) {
@@ -521,20 +538,26 @@ export class ShipmentDetails extends Component {
     const { name, value } = event.target
     const [index, suffixName] = name.split('-')
     const { cargoItems, cargoItemsErrors } = this.state
+    const { scope } = this.props.tenant.data
 
     if (!cargoItems[index] || !cargoItemsErrors[index]) return
     if (typeof value === 'boolean') {
       cargoItems[index][suffixName] = value
+    } else if (scope.consolidate_cargo && ['collectiveWeight', 'quantity'].includes(suffixName)) {
+      cargoItems[index] = ShipmentDetails.handleCollectiveWeightChange(cargoItems[index], suffixName, value)
     } else {
       cargoItems[index][suffixName] = value ? +value : 0
     }
+    const adjustedSuffix = suffixName === 'collectiveWeight' ? 'payload_in_kg' : suffixName
 
-    this.updateAirMaxDimensionsTooltips(value, divRef, suffixName)
+    this.updateAirMaxDimensionsTooltips(value, divRef, adjustedSuffix)
 
     const excessChargeableWeightText =
       this.updatedExcessChargeableWeightText(cargoItems)
 
-    if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError
+    if (hasError !== undefined) {
+      cargoItemsErrors[index][adjustedSuffix] = hasError
+    }
     this.setState({ cargoItems, cargoItemsErrors, excessChargeableWeightText })
   }
 
@@ -611,12 +634,15 @@ export class ShipmentDetails extends Component {
     const {
       origin, destination, selectedDay, incoterm
     } = this.state
+    const { scope } = this.props.tenant.data
+    const requiresFullAddress = scope.require_full_address
     if (
       (!origin.nexus_id && !this.state.has_pre_carriage) ||
       (!destination.nexus_id && !this.state.has_on_carriage) ||
-      (!addressFieldsAreValid(origin) && this.state.has_pre_carriage) ||
-      (!addressFieldsAreValid(destination) && this.state.has_on_carriage) ||
-      this.state.addressFormsHaveErrors
+      (!addressFieldsAreValid(origin, requiresFullAddress) && this.state.has_pre_carriage) ||
+      (!addressFieldsAreValid(destination, requiresFullAddress) && this.state.has_on_carriage) ||
+      (this.state.addressFormsHaveErrors.origin && this.state.has_pre_carriage) ||
+      (this.state.addressFormsHaveErrors.destination && this.state.has_on_carriage)
     ) {
       this.incrementNextStageAttemps()
       ShipmentDetails.scrollTo('map')
@@ -638,7 +664,11 @@ export class ShipmentDetails extends Component {
     }
 
     if (this.state.aggregated) {
-      // TBD
+      if (Object.values(this.state.aggregatedCargoErrors).some(error => error)) {
+        this.incrementNextStageAttemps()
+
+        return
+      }
     } else {
       const { shipment } = this.state
       const loadType = camelize(shipment.load_type)
@@ -780,6 +810,8 @@ export class ShipmentDetails extends Component {
           theme={theme}
           scope={scope}
           stackableGoodsConfirmed={this.state.stackableGoodsConfirmed}
+          availableMotsForRoute={this.state.availableMotsForRoute}
+          maxDimensions={this.props.shipmentData.maxAggregateDimensions}
         />
       )
     } else if (shipmentData.shipment.load_type === 'container') {

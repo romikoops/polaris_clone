@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import Fuse from 'fuse.js'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import { RouteOption } from '../RouteOption/RouteOption'
 import styles from './RouteSelector.scss'
 import defs from '../../styles/default_classes.scss'
-import { TextHeading } from '../TextHeading/TextHeading'
+import TextHeading from '../TextHeading/TextHeading'
 
 export class RouteSelector extends Component {
   constructor (props) {
@@ -29,6 +30,7 @@ export class RouteSelector extends Component {
       this.setState({
         routes: this.props.routes
       })
+
       return
     }
 
@@ -44,6 +46,7 @@ export class RouteSelector extends Component {
         keys: [key]
       }
       const fuse = new Fuse(this.props.routes, options)
+
       return fuse.search(event.target.value)
     }
 
@@ -62,20 +65,19 @@ export class RouteSelector extends Component {
   }
 
   render () {
-    const { theme } = this.props
+    const { theme, t } = this.props
     const routes = this.state.routes ? this.state.routes : this.props.routes
-    // console.log(routes)
     if (!routes) {
-      console.log('(!) No Routes Found (!)')
       return (
         <div className={`flex-100 layout-row layout-align-center-start ${styles.selector}`}>
-          No Routes Found
+          {t('errors:noRoutesFound')}
         </div>
       )
     }
     const routesOptions = routes.map(route => (
       <RouteOption key={v4()} theme={theme} route={route} routeSelected={this.routeSelected} />
     ))
+
     return (
       <div className={`flex-100 layout-row layout-align-center-start ${styles.selector}`}>
         <div className={`${defs.content_width} layout-row layout-wrap`}>
@@ -104,6 +106,7 @@ export class RouteSelector extends Component {
 }
 RouteSelector.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   routeSelected: PropTypes.func.isRequired,
   routes: PropTypes.arrayOf(PropTypes.route).isRequired
 }
@@ -112,4 +115,4 @@ RouteSelector.defaultProps = {
   theme: null
 }
 
-export default RouteSelector
+export default translate()(RouteSelector)

@@ -5,7 +5,7 @@ import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
 import { AdminNexusTile } from '../'
 import { Tooltip } from '../../Tooltip/Tooltip'
-import { TextHeading } from '../../TextHeading/TextHeading'
+import TextHeading from '../../TextHeading/TextHeading'
 import { adminClicked as clickTip, adminTrucking as truckTip } from '../../../constants'
 
 export class AdminSearchableTruckings extends Component {

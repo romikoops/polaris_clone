@@ -79,6 +79,7 @@ exports[`shallow render 1`] = `
           removeFunc={[Function]}
           showAddressBook={[Function]}
           showEditContact={null}
+          t={[Function]}
           theme={
             Object {
               "colors": Object {

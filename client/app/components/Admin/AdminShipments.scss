@@ -26,7 +26,12 @@
     }
   }
   .carriage_row {
-    padding-left: 15px;
+    h4 {
+      margin-bottom: 5px;
+    }
+    p {
+      font-size: 13px !important;
+    }
   }
   .status_box {
     p {
@@ -98,6 +103,9 @@
   }
   .light_green {
     color: #6FCF97;
+  }
+  .light_orange {
+    color: #F48A00;
   }
   .light_red {
     color: #EB5757;
@@ -205,7 +213,7 @@
       margin-top: 8px;
       font-size: 22px;
     }
-    div {
+    div:first-child {
       width: 70px;
       height: 70px;
       i {
@@ -276,11 +284,19 @@
   .border_right {
     border-right: 2px solid #E0E0E0;
   }
+  .additional-services {
+    min-height: 100% !important;
+  }
   .border_bottom {
     border-bottom: 2px solid #E0E0E0;
   }
   .check_square {
     font-size: 32px !important;
+  }
+
+  .check_square_sm {
+    font-size: 15px !important;
+    padding-top: 24px;
   }
   .carriage_address p {
     font-size: 12px;

@@ -2,7 +2,7 @@ import { push } from 'react-router-redux'
 import { authenticationConstants } from '../constants'
 import { authenticationService } from '../services'
 import { alertActions, shipmentActions, adminActions, userActions, tenantActions } from './'
-import { getSubdomain } from '../helpers/subdomain'
+import getSubdomain from '../helpers/subdomain'
 
 const { localStorage } = window
 const subdomainKey = getSubdomain()
@@ -98,7 +98,6 @@ function register (user, target) {
     authenticationService.register(user).then(
       (response) => {
         dispatch(success(response))
-        dispatch(alertActions.success('Registration successful'))
         if (user.guest) {
           target && dispatch(push(target))
         } else if (response.data.role.name === 'admin') {
@@ -121,8 +120,8 @@ function setUser (user) {
 }
 
 function updateUser (user, req, shipmentReq) {
-  function request (userRequest) {
-    return { type: authenticationConstants.UPDATE_USER_REQUEST, user: userRequest }
+  function request (payload) {
+    return { type: authenticationConstants.UPDATE_USER_REQUEST, payload }
   }
   function success (response) {
     return { type: authenticationConstants.UPDATE_USER_SUCCESS, user: response.data.user }
@@ -132,16 +131,13 @@ function updateUser (user, req, shipmentReq) {
   }
 
   return (dispatch) => {
-    dispatch(request(user))
+    dispatch(request(!req))
 
     authenticationService.updateUser(user, req).then(
       (response) => {
         dispatch(success(response))
         if (shipmentReq) {
           dispatch(shipmentActions.chooseOffer(shipmentReq))
-          dispatch(alertActions.success('Registration successful'))
-        } else {
-          dispatch(alertActions.success('Update successful'))
         }
       },
       (error) => {

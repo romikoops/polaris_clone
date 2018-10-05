@@ -18,7 +18,7 @@ Rails.application.configure do
 
   # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]
   # or in config/master.key. This key is used to decrypt credentials (and other encrypted files).
-  # config.require_master_key = true
+  config.require_master_key = true
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
@@ -44,7 +44,7 @@ Rails.application.configure do
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
-  config.log_level = :debug
+  config.log_level = :info
 
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
@@ -54,8 +54,7 @@ Rails.application.configure do
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
   config.active_job.queue_adapter = :shoryuken
-  # config.active_job.queue_name_prefix = "imcr_#{Rails.env}"
-  config.action_mailer.deliver_later_queue_name = 'https://sqs.eu-central-1.amazonaws.com/003688427525/mailers'
+  config.action_mailer.deliver_later_queue_name = Settings.mailer.queue
 
   config.action_mailer.perform_caching = false
 
@@ -90,12 +89,12 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: 'smtp.sendgrid.net',
+    address: Settings.smtp.host,
     port: 587,
-    domain: Rails.application.secrets.mailer_domain,
+    domain: Settings.smtp.domain,
     authentication: 'plain',
     enable_starttls_auto: true,
-    user_name: Rails.application.secrets.sendgrid_username,
-    password: Rails.application.secrets.sendgrid_password
+    user_name: Settings.smtp.username,
+    password: Settings.smtp.password
   }
 end

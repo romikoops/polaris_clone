@@ -28,11 +28,11 @@ const propsBase = {
   location
 }
 
-test.skip('shallow rendering', () => {
+test('shallow rendering', () => {
   expect(shallow(<AdminShipmentAction {...propsBase} />)).toMatchSnapshot()
 })
 
-test.skip('loading is true', () => {
+test('loading is true', () => {
   const props = {
     ...propsBase,
     loading: true

@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import { Redirect } from 'react-router'
 import PropTypes from '../../prop-types'
-// import { Link } from 'react'
 import styles from './CardLink.scss'
-// import { connect } from 'react-redux';
 import { tenantDefaults } from '../../constants'
 import { gradientTextGenerator } from '../../helpers'
 
-export class CardLink extends Component {
+class CardLink extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -16,7 +15,7 @@ export class CardLink extends Component {
   }
   render () {
     const {
-      text, img, path, options, code, selectedType, allowedCargoTypes
+      text, img, path, options, code, selectedType, allowedCargoTypes, t
     } = this.props
     if (this.state.redirect) {
       return <Redirect push to={this.props.path} />
@@ -33,9 +32,10 @@ export class CardLink extends Component {
     const inActive = !allowedCargoTypes[code]
       ? (
         <div className={`${styles.inactive} flex-none layout-row layout-align-center-end`}>
-          <h3 className="flex-none">Coming Soon</h3>
+          <h3 className="flex-none">{t('common:comingSoon')}</h3>
         </div>
       ) : ''
+
     return (
       <div
         className={`${styles.card_link}  layout-column flex-none ${buttonStyle}`}
@@ -64,6 +64,7 @@ export class CardLink extends Component {
 
 CardLink.propTypes = {
   text: PropTypes.string.isRequired,
+  t: PropTypes.func.isRequired,
   img: PropTypes.string.isRequired,
   theme: PropTypes.theme,
   path: PropTypes.string.isRequired,
@@ -84,4 +85,4 @@ CardLink.defaultProps = {
   allowedCargoTypes: {}
 }
 
-export default CardLink
+export default translate('common')(CardLink)

@@ -1,4 +1,4 @@
-
+<% primary_color = @shipment.tenant.theme["colors"]["primary"] %>
 
 <mj-wrapper full-width="full-width"  padding="0px">
   <mj-section padding="0 5%">
@@ -25,7 +25,7 @@
               <% end %>  
             <% end %>  
           <% else %>
-            <span><%= @shipment.origin_nexus.city_country %></span>
+            <span><%= @shipment.origin_hub.name %></span>
           <% end %>
         </p>
       </mj-text>
@@ -41,7 +41,7 @@
                 <% end %>  
               <% end %>  
             <% else %>
-              <span><%= @shipment.destination_nexus.city_country %></span>
+              <span><%= @shipment.destination_hub.name %></span>
             <% end %>
           </p>
         </mj-text>
@@ -102,7 +102,7 @@
         <% cargo_type = @shipment.load_type == 'cargo_item' ? 'Cargo Items' : 'Containers'%>
           <td style="padding: 0 15px 0 0;"> <%= cargo_type %>:</td>
           <td style="padding: 0 15px;">
-            <%= @shipment.cargo_items.count %> 
+            <%= @shipment.cargo_units.count %> 
           </td>
         </tr>
         <tr>
@@ -155,6 +155,11 @@
       </mj-table>
     </mj-column>
   </mj-section>
+</mj-wrapper>
+
+<mj-spacer height="15px" />
+<mj-wrapper full-width="full-width" padding="0px">
+  <%= render "cargo_details" %>
 </mj-wrapper>
 
 <mj-spacer height="15px" />
@@ -212,10 +217,15 @@
         <mj-text align="center">
           <h2 style="margin: 0;">
             <span>
-              <%= format_to_price(@shipment.total_price) %>
+              <%= format_to_price(@shipment.total_price[:value], @shipment.total_price[:currency]) %>
             </span>
           </h2>
         </mj-text>
       </mj-column>
     </mj-section>
 </mj-wrapper>
+<mj-section full-width="full-width">
+      <mj-column>
+        <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
+      </mj-column>
+    </mj-section>

@@ -13,6 +13,11 @@ gem 'pg', '~> 0.21'
 gem 'puma', '~> 3.11'
 # Use activerecord-import for bulk insertion
 gem 'activerecord-import'
+# Strong Migrations - Prevent Non Zero-Down time Migrations
+gem 'strong_migrations'
+
+# Setup RailsConfig for easier secret management
+gem 'config'
 
 gem 'devise_token_auth', '~> 0.1.43'
 gem 'omniauth'
@@ -25,6 +30,7 @@ gem 'aws-sdk-sqs'
 gem 'bootstrap-sass', '~> 3.3.5.1'
 gem 'rufo'
 gem 'shoryuken'
+gem 'font-awesome-rails'
 
 gem 'activerecord-postgis-adapter'
 gem 'rgeo-geojson'
@@ -59,10 +65,8 @@ gem 'nokogiri'
 # Use os to get information about the operating system
 gem 'os'
 
-# Use Wicked PDF to generate PDFs from HTML
-# The obligatory wkhtmltopdf binaries are here: [Rails.root]/bin/wkhtmltopdf
-gem 'wicked_pdf'
-gem 'wkhtmltopdf-binary', '~> 0.12.4'
+# Use BreezyPdf to generate PDFs from HTML
+gem 'breezy_pdf_lite'
 
 # MongoDB gems
 gem 'mongo', '~> 2.4'
@@ -88,6 +92,9 @@ gem 'filterrific'
 # Pagination library
 gem 'will_paginate', '~> 3.1.5'
 
+# Email support
+gem 'recipient_interceptor'
+
 # Easier CSS for emails
 gem 'inky-rb', require: 'inky'
 gem 'premailer-rails'
@@ -103,12 +110,13 @@ gem 'google-cloud-translate'
 gem 'googleauth'
 gem 'signet'
 # New email gem
-gem 'mjml-rails'
+gem 'mjml-rails', '~> 4.1'
 
 gem 'pry-rails'
 
 group :development, :test do
-  gem 'dotenv-rails' # set environment variables
+  # set environment variables - enforce loading environment right away
+  gem 'dotenv-rails', require: 'dotenv/rails-now'
   gem 'factory_bot_rails'
   gem 'fuubar'
   gem 'rails-erd'
@@ -137,9 +145,10 @@ group :test do
   gem 'webmock'
 end
 
-group :development, :staging do
+group :development do
   gem 'google-api-client', '~> 0.23.7'
   gem 'google-cloud-storage'
+  gem 'letter_opener', '~> 1.6'
 
   gem 'listen', '>= 3.0.5', '< 3.2'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

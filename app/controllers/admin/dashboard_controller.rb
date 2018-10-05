@@ -4,17 +4,22 @@ class Admin::DashboardController < Admin::AdminBaseController
   include ItineraryTools
   before_action :initialize_variables, only: :index
 
+  # Number of shipments to be displayed on dashboard
+  DASH_SHIPMENTS = 3
+
+  # Number of itienaries to be displayed on dashboard
+  DASH_ITINERARIES = 30
+
   def index
-    response_handler(
-      itineraries: @detailed_itineraries,
-      hubs:        @hubs,
-      shipments:   {
-        requested: @requested_shipments,
-        open:      @open_shipments,
-        finished:  @finished_shipments
-      },
-      mapData:     @map_data
-    )
+    response = Rails.cache.fetch("#{@shipments.cache_key}/dashboard_index", expires_in: 12.hours) do
+      {
+        itineraries: @detailed_itineraries,
+        hubs:        @hubs,
+        shipments:   shipments_hash,
+        mapData:     @map_data
+      }
+    end
+    response_handler(response)
   end
 
   private
@@ -22,8 +27,7 @@ class Admin::DashboardController < Admin::AdminBaseController
   def initialize_variables
     @shipments = Shipment.where(tenant_id: current_user.tenant_id)
     @requested_shipments = requested_shipments
-    @open_shipments = open_shipments
-    @finished_shipments = finished_shipments
+    @quoted_shipments = quoted_shipments
     @detailed_itineraries = detailed_itin_json
     hubs = current_user.tenant.hubs
     @hubs = hubs.limit(8).map do |hub|
@@ -33,20 +37,28 @@ class Admin::DashboardController < Admin::AdminBaseController
     @tenant = Tenant.find(current_user.tenant_id)
   end
 
+  def shipments_hash
+    current_user.tenant.quotation_tool ?
+    {
+      quoted:   @quoted_shipments
+    } : {
+      requested: @requested_shipments
+    }
+  end
+
   def requested_shipments
-    @shipments.requested.order_booking_desc.map(&:with_address_options_json)
+    @shipments.requested.order_booking_desc.limit(DASH_SHIPMENTS).map(&:with_address_index_json)
   end
 
   def open_shipments
     @shipments.open.order_booking_desc.map(&:with_address_options_json)
   end
 
-  def finished_shipments
-    @shipments.finished.order_booking_desc.map(&:with_address_options_json)
+  def quoted_shipments
+    @shipments.quoted.order_booking_desc.map(&:with_address_index_json)
   end
 
   def detailed_itin_json
-    Itinerary.for_tenant(current_user.tenant_id).limit(40).map(&:as_options_json)
+    Itinerary.for_tenant(current_user.tenant_id).limit(DASH_ITINERARIES).map(&:as_options_json)
   end
-
 end

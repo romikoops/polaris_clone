@@ -2,7 +2,7 @@
 
 exports[`props.shipmentData is falsy 1`] = `
 <h1>
-  Loading
+   Loading
 </h1>
 `;
 
@@ -179,12 +179,16 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                   "value": 12,
                 },
                 "trucking": Object {
+                  "on_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                   "pre_carriage": Object {
                     "trucking_time_in_seconds": 55,
                   },
                 },
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -203,36 +207,64 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             }
           >
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
-                  Expected Time of Departure:
+                  Expected Time of Dropoff:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-30  center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Departure
+                </p>
+                <p
+                  className="flex-30  center"
                 >
                   19
                 </p>
               </div>
             </div>
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-30 center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Collection:
+                </p>
+                <p
+                  className="flex-30 center"
                 >
                   19
                 </p>
@@ -336,12 +368,14 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -429,12 +463,66 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                     },
                   }
                 }
+                shipment={
+                  Object {
+                    "cargo_notes": "FOO_CARGO_NOTES",
+                    "eori": 1234,
+                    "has_on_carriage": false,
+                    "has_pre_carriage": false,
+                    "incoterm_text": "FOO_INCOTERM_TEXT",
+                    "load_type": "OCEAN_LOAD_TYPE",
+                    "notes": "FOO_NOTES",
+                    "schedules_charges": Object {
+                      "AIR_HUB_ROUTE_KEY": Object {
+                        "total": 200,
+                      },
+                      "OCEAN_HUB_ROUTE_KEY": Object {
+                        "total": 40,
+                      },
+                      "RAIL_HUB_ROUTE_KEY": Object {
+                        "total": 125,
+                      },
+                      "TRUCK_HUB_ROUTE_KEY": Object {
+                        "total": 75,
+                      },
+                    },
+                    "selected_offer": Object {
+                      "customs": Object {
+                        "val": 12,
+                      },
+                      "insurance": Object {
+                        "val": 5,
+                      },
+                      "total": Object {
+                        "value": 87,
+                      },
+                    },
+                    "total_goods_value": Object {
+                      "currency": "USD",
+                      "value": 15,
+                    },
+                    "total_price": Object {
+                      "currency": "USD",
+                      "value": 12,
+                    },
+                    "trucking": Object {
+                      "on_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                      "pre_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                    },
+                  }
+                }
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -558,11 +646,13 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             <Contact
               contactType="Shipper"
               key="RANDOM_KEY_22"
+              t={[Function]}
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
               key="RANDOM_KEY_23"
+              t={[Function]}
               textStyle="#333"
             />
           </div>
@@ -624,6 +714,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                   "foo": 1,
                 }
               }
+              t={[Function]}
             />
           </div>
         </div>
@@ -1203,12 +1294,16 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                   "value": 12,
                 },
                 "trucking": Object {
+                  "on_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                   "pre_carriage": Object {
                     "trucking_time_in_seconds": 55,
                   },
                 },
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -1227,36 +1322,64 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             }
           >
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
-                  Expected Time of Departure:
+                  Expected Time of Dropoff:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-30  center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Departure
+                </p>
+                <p
+                  className="flex-30  center"
                 >
                   19
                 </p>
               </div>
             </div>
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-30 center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Collection:
+                </p>
+                <p
+                  className="flex-30 center"
                 >
                   19
                 </p>
@@ -1360,12 +1483,14 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -1453,12 +1578,66 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                     },
                   }
                 }
+                shipment={
+                  Object {
+                    "cargo_notes": "FOO_CARGO_NOTES",
+                    "eori": 1234,
+                    "has_on_carriage": false,
+                    "has_pre_carriage": false,
+                    "incoterm_text": "FOO_INCOTERM_TEXT",
+                    "load_type": "OCEAN_LOAD_TYPE",
+                    "notes": "FOO_NOTES",
+                    "schedules_charges": Object {
+                      "AIR_HUB_ROUTE_KEY": Object {
+                        "total": 200,
+                      },
+                      "OCEAN_HUB_ROUTE_KEY": Object {
+                        "total": 40,
+                      },
+                      "RAIL_HUB_ROUTE_KEY": Object {
+                        "total": 125,
+                      },
+                      "TRUCK_HUB_ROUTE_KEY": Object {
+                        "total": 75,
+                      },
+                    },
+                    "selected_offer": Object {
+                      "customs": Object {
+                        "val": 12,
+                      },
+                      "insurance": Object {
+                        "val": 5,
+                      },
+                      "total": Object {
+                        "value": 87,
+                      },
+                    },
+                    "total_goods_value": Object {
+                      "currency": "USD",
+                      "value": 15,
+                    },
+                    "total_price": Object {
+                      "currency": "USD",
+                      "value": 12,
+                    },
+                    "trucking": Object {
+                      "on_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                      "pre_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                    },
+                  }
+                }
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -1582,11 +1761,13 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             <Contact
               contactType="Shipper"
               key="RANDOM_KEY_28"
+              t={[Function]}
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
               key="RANDOM_KEY_29"
+              t={[Function]}
               textStyle="#333"
             />
           </div>
@@ -1839,6 +2020,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 }
                 isRequired={false}
                 multiple={false}
+                t={[Function]}
                 text=""
                 theme={
                   Object {
@@ -1874,6 +2056,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 }
                 isRequired={false}
                 multiple={false}
+                t={[Function]}
                 text=""
                 theme={
                   Object {
@@ -2284,12 +2467,16 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                   "value": 12,
                 },
                 "trucking": Object {
+                  "on_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                   "pre_carriage": Object {
                     "trucking_time_in_seconds": 55,
                   },
                 },
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -2308,36 +2495,64 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             }
           >
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
-                  Expected Time of Departure:
+                  Expected Time of Dropoff:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-30  center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Departure
+                </p>
+                <p
+                  className="flex-30  center"
                 >
                   19
                 </p>
               </div>
             </div>
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-30 center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Collection:
+                </p>
+                <p
+                  className="flex-30 center"
                 >
                   19
                 </p>
@@ -2441,12 +2656,14 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -2534,12 +2751,66 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                     },
                   }
                 }
+                shipment={
+                  Object {
+                    "cargo_notes": "FOO_CARGO_NOTES",
+                    "eori": 1234,
+                    "has_on_carriage": false,
+                    "has_pre_carriage": false,
+                    "incoterm_text": "FOO_INCOTERM_TEXT",
+                    "load_type": "OCEAN_LOAD_TYPE",
+                    "notes": "FOO_NOTES",
+                    "schedules_charges": Object {
+                      "AIR_HUB_ROUTE_KEY": Object {
+                        "total": 200,
+                      },
+                      "OCEAN_HUB_ROUTE_KEY": Object {
+                        "total": 40,
+                      },
+                      "RAIL_HUB_ROUTE_KEY": Object {
+                        "total": 125,
+                      },
+                      "TRUCK_HUB_ROUTE_KEY": Object {
+                        "total": 75,
+                      },
+                    },
+                    "selected_offer": Object {
+                      "customs": Object {
+                        "val": 12,
+                      },
+                      "insurance": Object {
+                        "val": 5,
+                      },
+                      "total": Object {
+                        "value": 87,
+                      },
+                    },
+                    "total_goods_value": Object {
+                      "currency": "USD",
+                      "value": 15,
+                    },
+                    "total_price": Object {
+                      "currency": "USD",
+                      "value": 12,
+                    },
+                    "trucking": Object {
+                      "on_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                      "pre_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                    },
+                  }
+                }
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -2663,11 +2934,13 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             <Contact
               contactType="Shipper"
               key="RANDOM_KEY_34"
+              t={[Function]}
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
               key="RANDOM_KEY_35"
+              t={[Function]}
               textStyle="#333"
             />
           </div>
@@ -3420,12 +3693,16 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                   "value": 12,
                 },
                 "trucking": Object {
+                  "on_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                   "pre_carriage": Object {
                     "trucking_time_in_seconds": 55,
                   },
                 },
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -3444,42 +3721,56 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             }
           >
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
-                  Expected Time of Departure:
+                  Expected Time of Dropoff:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-30  center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Departure
+                </p>
+                <p
+                  className="flex-30  center"
                 >
                   19
                 </p>
               </div>
             </div>
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-30 center"
                 >
                   19
                 </p>
               </div>
               <div
-                className="flex-100 layout-row layout-align-center-center"
+                className="flex-100 layout-row layout-align-center-center buffer_10"
               >
                 <address
                   className="flex-none"
@@ -3492,10 +3783,23 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                   , 
                   <br />
                   845321
-                  , 
-                  <br />
-                  China
+                  ,
+                   China
                 </address>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Delivery:
+                </p>
+                <p
+                  className="flex-30 center"
+                >
+                  19
+                </p>
               </div>
             </div>
           </div>
@@ -3596,12 +3900,14 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 onCarriage={true}
                 originFees={false}
                 preCarriage={false}
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -3689,12 +3995,66 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                     },
                   }
                 }
+                shipment={
+                  Object {
+                    "cargo_notes": "FOO_CARGO_NOTES",
+                    "eori": 1234,
+                    "has_on_carriage": true,
+                    "has_pre_carriage": false,
+                    "incoterm_text": "FOO_INCOTERM_TEXT",
+                    "load_type": "OCEAN_LOAD_TYPE",
+                    "notes": "FOO_NOTES",
+                    "schedules_charges": Object {
+                      "AIR_HUB_ROUTE_KEY": Object {
+                        "total": 200,
+                      },
+                      "OCEAN_HUB_ROUTE_KEY": Object {
+                        "total": 40,
+                      },
+                      "RAIL_HUB_ROUTE_KEY": Object {
+                        "total": 125,
+                      },
+                      "TRUCK_HUB_ROUTE_KEY": Object {
+                        "total": 75,
+                      },
+                    },
+                    "selected_offer": Object {
+                      "customs": Object {
+                        "val": 12,
+                      },
+                      "insurance": Object {
+                        "val": 5,
+                      },
+                      "total": Object {
+                        "value": 87,
+                      },
+                    },
+                    "total_goods_value": Object {
+                      "currency": "USD",
+                      "value": 15,
+                    },
+                    "total_price": Object {
+                      "currency": "USD",
+                      "value": 12,
+                    },
+                    "trucking": Object {
+                      "on_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                      "pre_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                    },
+                  }
+                }
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -3818,11 +4178,13 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             <Contact
               contactType="Shipper"
               key="RANDOM_KEY_49"
+              t={[Function]}
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
               key="RANDOM_KEY_50"
+              t={[Function]}
               textStyle="#333"
             />
           </div>
@@ -4449,12 +4811,16 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                   "value": 12,
                 },
                 "trucking": Object {
+                  "on_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                   "pre_carriage": Object {
                     "trucking_time_in_seconds": 55,
                   },
                 },
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -4473,54 +4839,80 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             }
           >
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
-                  Expected Time of Collection:
+                  Expected Time of Pickup:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-30  center"
                 >
                   19
                 </p>
               </div>
               <div
-                className="flex-100 layout-row layout-align-center-center"
+                className="flex-100 layout-row layout-align-center-center buffer_10"
               >
                 <address
                   className="flex-none"
                 >
                   7 FOO_STREET
                   ,
-                  <br />
-                  FOO_CITY
+                   FOO_CITY
                   , 
                   <br />
                   21177
-                  , 
-                  <br />
-                  Germany
+                  ,
+                   Germany
                 </address>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Departure
+                </p>
+                <p
+                  className="flex-30  center"
+                >
+                  19
+                </p>
               </div>
             </div>
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-30 center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Collection:
+                </p>
+                <p
+                  className="flex-30 center"
                 >
                   19
                 </p>
@@ -4624,12 +5016,14 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 onCarriage={false}
                 originFees={false}
                 preCarriage={true}
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -4717,12 +5111,66 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                     },
                   }
                 }
+                shipment={
+                  Object {
+                    "cargo_notes": "FOO_CARGO_NOTES",
+                    "eori": 1234,
+                    "has_on_carriage": false,
+                    "has_pre_carriage": true,
+                    "incoterm_text": "FOO_INCOTERM_TEXT",
+                    "load_type": "OCEAN_LOAD_TYPE",
+                    "notes": "FOO_NOTES",
+                    "schedules_charges": Object {
+                      "AIR_HUB_ROUTE_KEY": Object {
+                        "total": 200,
+                      },
+                      "OCEAN_HUB_ROUTE_KEY": Object {
+                        "total": 40,
+                      },
+                      "RAIL_HUB_ROUTE_KEY": Object {
+                        "total": 125,
+                      },
+                      "TRUCK_HUB_ROUTE_KEY": Object {
+                        "total": 75,
+                      },
+                    },
+                    "selected_offer": Object {
+                      "customs": Object {
+                        "val": 12,
+                      },
+                      "insurance": Object {
+                        "val": 5,
+                      },
+                      "total": Object {
+                        "value": 87,
+                      },
+                    },
+                    "total_goods_value": Object {
+                      "currency": "USD",
+                      "value": 15,
+                    },
+                    "total_price": Object {
+                      "currency": "USD",
+                      "value": 12,
+                    },
+                    "trucking": Object {
+                      "on_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                      "pre_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                    },
+                  }
+                }
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -4846,11 +5294,13 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             <Contact
               contactType="Shipper"
               key="RANDOM_KEY_43"
+              t={[Function]}
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
               key="RANDOM_KEY_44"
+              t={[Function]}
               textStyle="#333"
             />
           </div>
@@ -5477,12 +5927,16 @@ exports[`shallow render 1`] = `
                   "value": 12,
                 },
                 "trucking": Object {
+                  "on_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                   "pre_carriage": Object {
                     "trucking_time_in_seconds": 55,
                   },
                 },
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -5501,36 +5955,64 @@ exports[`shallow render 1`] = `
             }
           >
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
-                  Expected Time of Departure:
+                  Expected Time of Dropoff:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-30  center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Departure
+                </p>
+                <p
+                  className="flex-30  center"
                 >
                   19
                 </p>
               </div>
             </div>
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-30 center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Collection:
+                </p>
+                <p
+                  className="flex-30 center"
                 >
                   19
                 </p>
@@ -5634,12 +6116,14 @@ exports[`shallow render 1`] = `
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -5727,12 +6211,66 @@ exports[`shallow render 1`] = `
                     },
                   }
                 }
+                shipment={
+                  Object {
+                    "cargo_notes": "FOO_CARGO_NOTES",
+                    "eori": 1234,
+                    "has_on_carriage": false,
+                    "has_pre_carriage": false,
+                    "incoterm_text": "FOO_INCOTERM_TEXT",
+                    "load_type": "OCEAN_LOAD_TYPE",
+                    "notes": "FOO_NOTES",
+                    "schedules_charges": Object {
+                      "AIR_HUB_ROUTE_KEY": Object {
+                        "total": 200,
+                      },
+                      "OCEAN_HUB_ROUTE_KEY": Object {
+                        "total": 40,
+                      },
+                      "RAIL_HUB_ROUTE_KEY": Object {
+                        "total": 125,
+                      },
+                      "TRUCK_HUB_ROUTE_KEY": Object {
+                        "total": 75,
+                      },
+                    },
+                    "selected_offer": Object {
+                      "customs": Object {
+                        "val": 12,
+                      },
+                      "insurance": Object {
+                        "val": 5,
+                      },
+                      "total": Object {
+                        "value": 87,
+                      },
+                    },
+                    "total_goods_value": Object {
+                      "currency": "USD",
+                      "value": 15,
+                    },
+                    "total_price": Object {
+                      "currency": "USD",
+                      "value": 12,
+                    },
+                    "trucking": Object {
+                      "on_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                      "pre_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                    },
+                  }
+                }
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -5856,11 +6394,13 @@ exports[`shallow render 1`] = `
             <Contact
               contactType="Shipper"
               key="RANDOM_KEY_0"
+              t={[Function]}
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
               key="RANDOM_KEY_1"
+              t={[Function]}
               textStyle="#333"
             />
           </div>
@@ -6487,12 +7027,16 @@ exports[`with cargo items 1`] = `
                   "value": 12,
                 },
                 "trucking": Object {
+                  "on_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                   "pre_carriage": Object {
                     "trucking_time_in_seconds": 55,
                   },
                 },
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -6511,36 +7055,64 @@ exports[`with cargo items 1`] = `
             }
           >
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
-                  Expected Time of Departure:
+                  Expected Time of Dropoff:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-30  center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Departure
+                </p>
+                <p
+                  className="flex-30  center"
                 >
                   19
                 </p>
               </div>
             </div>
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-30 center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Collection:
+                </p>
+                <p
+                  className="flex-30 center"
                 >
                   19
                 </p>
@@ -6644,12 +7216,14 @@ exports[`with cargo items 1`] = `
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -6737,12 +7311,66 @@ exports[`with cargo items 1`] = `
                     },
                   }
                 }
+                shipment={
+                  Object {
+                    "cargo_notes": "FOO_CARGO_NOTES",
+                    "eori": 1234,
+                    "has_on_carriage": false,
+                    "has_pre_carriage": false,
+                    "incoterm_text": "FOO_INCOTERM_TEXT",
+                    "load_type": "OCEAN_LOAD_TYPE",
+                    "notes": "FOO_NOTES",
+                    "schedules_charges": Object {
+                      "AIR_HUB_ROUTE_KEY": Object {
+                        "total": 200,
+                      },
+                      "OCEAN_HUB_ROUTE_KEY": Object {
+                        "total": 40,
+                      },
+                      "RAIL_HUB_ROUTE_KEY": Object {
+                        "total": 125,
+                      },
+                      "TRUCK_HUB_ROUTE_KEY": Object {
+                        "total": 75,
+                      },
+                    },
+                    "selected_offer": Object {
+                      "customs": Object {
+                        "val": 12,
+                      },
+                      "insurance": Object {
+                        "val": 5,
+                      },
+                      "total": Object {
+                        "value": 87,
+                      },
+                    },
+                    "total_goods_value": Object {
+                      "currency": "USD",
+                      "value": 15,
+                    },
+                    "total_price": Object {
+                      "currency": "USD",
+                      "value": 12,
+                    },
+                    "trucking": Object {
+                      "on_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                      "pre_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                    },
+                  }
+                }
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -6866,11 +7494,13 @@ exports[`with cargo items 1`] = `
             <Contact
               contactType="Shipper"
               key="RANDOM_KEY_16"
+              t={[Function]}
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
               key="RANDOM_KEY_17"
+              t={[Function]}
               textStyle="#333"
             />
           </div>
@@ -7007,7 +7637,7 @@ exports[`with cargo items 1`] = `
                   ],
                   "payload_in_kg": 1000,
                   "quantity": 5,
-                  "volume": 0.18,
+                  "volume": "0.12",
                 }
               }
               key="RANDOM_KEY_14"
@@ -7054,12 +7684,16 @@ exports[`with cargo items 1`] = `
                     "value": 12,
                   },
                   "trucking": Object {
+                    "on_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
                     "pre_carriage": Object {
                       "trucking_time_in_seconds": 55,
                     },
                   },
                 }
               }
+              t={[Function]}
               theme={
                 Object {
                   "colors": Object {
@@ -7176,7 +7810,7 @@ exports[`with cargo items 1`] = `
                   ],
                   "payload_in_kg": 700,
                   "quantity": 7,
-                  "volume": 1.75,
+                  "volume": "2.45",
                 }
               }
               key="RANDOM_KEY_15"
@@ -7223,12 +7857,16 @@ exports[`with cargo items 1`] = `
                     "value": 12,
                   },
                   "trucking": Object {
+                    "on_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
                     "pre_carriage": Object {
                       "trucking_time_in_seconds": 55,
                     },
                   },
                 }
               }
+              t={[Function]}
               theme={
                 Object {
                   "colors": Object {
@@ -7810,12 +8448,16 @@ exports[`with containers 1`] = `
                   "value": 12,
                 },
                 "trucking": Object {
+                  "on_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                   "pre_carriage": Object {
                     "trucking_time_in_seconds": 55,
                   },
                 },
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -7834,36 +8476,64 @@ exports[`with containers 1`] = `
             }
           >
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
-                  Expected Time of Departure:
+                  Expected Time of Dropoff:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-30  center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Departure
+                </p>
+                <p
+                  className="flex-30  center"
                 >
                   19
                 </p>
               </div>
             </div>
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-30 center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Collection:
+                </p>
+                <p
+                  className="flex-30 center"
                 >
                   19
                 </p>
@@ -7967,12 +8637,14 @@ exports[`with containers 1`] = `
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -8060,12 +8732,66 @@ exports[`with containers 1`] = `
                     },
                   }
                 }
+                shipment={
+                  Object {
+                    "cargo_notes": "FOO_CARGO_NOTES",
+                    "eori": 1234,
+                    "has_on_carriage": false,
+                    "has_pre_carriage": false,
+                    "incoterm_text": "FOO_INCOTERM_TEXT",
+                    "load_type": "OCEAN_LOAD_TYPE",
+                    "notes": "FOO_NOTES",
+                    "schedules_charges": Object {
+                      "AIR_HUB_ROUTE_KEY": Object {
+                        "total": 200,
+                      },
+                      "OCEAN_HUB_ROUTE_KEY": Object {
+                        "total": 40,
+                      },
+                      "RAIL_HUB_ROUTE_KEY": Object {
+                        "total": 125,
+                      },
+                      "TRUCK_HUB_ROUTE_KEY": Object {
+                        "total": 75,
+                      },
+                    },
+                    "selected_offer": Object {
+                      "customs": Object {
+                        "val": 12,
+                      },
+                      "insurance": Object {
+                        "val": 5,
+                      },
+                      "total": Object {
+                        "value": 87,
+                      },
+                    },
+                    "total_goods_value": Object {
+                      "currency": "USD",
+                      "value": 15,
+                    },
+                    "total_price": Object {
+                      "currency": "USD",
+                      "value": 12,
+                    },
+                    "trucking": Object {
+                      "on_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                      "pre_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                    },
+                  }
+                }
+                t={[Function]}
                 tenant={
                   Object {
                     "data": Object {
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -8189,11 +8915,13 @@ exports[`with containers 1`] = `
             <Contact
               contactType="Shipper"
               key="RANDOM_KEY_8"
+              t={[Function]}
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
               key="RANDOM_KEY_9"
+              t={[Function]}
               textStyle="#333"
             />
           </div>
@@ -8359,12 +9087,16 @@ exports[`with containers 1`] = `
                     "value": 12,
                   },
                   "trucking": Object {
+                    "on_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
                     "pre_carriage": Object {
                       "trucking_time_in_seconds": 55,
                     },
                   },
                 }
               }
+              t={[Function]}
               theme={
                 Object {
                   "colors": Object {
@@ -8504,12 +9236,16 @@ exports[`with containers 1`] = `
                     "value": 12,
                   },
                   "trucking": Object {
+                    "on_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
                     "pre_carriage": Object {
                       "trucking_time_in_seconds": 55,
                     },
                   },
                 }
               }
+              t={[Function]}
               theme={
                 Object {
                   "colors": Object {

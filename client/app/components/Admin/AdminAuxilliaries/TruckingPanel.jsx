@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 import { PanelBox } from './'
 // import styles from '../Admin.scss'
@@ -53,6 +54,7 @@ export class TruckingPanel extends Component {
       handleMinimumChange,
       truckingBasis,
       cellUpperKey,
+      t,
       cellLowerKey
     } = this.props
     const { globalFeeData, shrinkView } = this.state
@@ -95,7 +97,7 @@ export class TruckingPanel extends Component {
       <div className="flex-100 layout-row layout-align-start-center layout-wrap">
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
           <p className="flex-none">
-            {truckType === 'chassis' ? 'Chassis Truck' : 'Sidelifter Truck'}
+            {truckType === 'chassis' ? t('admin:chassisTruck') : t('admin:sidelifterTruck')}
           </p>
         </div>
 
@@ -119,11 +121,12 @@ export class TruckingPanel extends Component {
         </div>
       </div>
     ))
+
     return (
       <div className="flex-100 layout-row layout-align-start-center layout-wrap">
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
           <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-            <p className="flex-none">Global Fees</p>
+            <p className="flex-none">{t('admin:globalFees')}</p>
           </div>
           {globalFeePanel}
         </div>
@@ -144,6 +147,7 @@ TruckingPanel.propTypes = {
   globalFees: PropTypes.objectOf(PropTypes.any).isRequired,
   handleRateChange: PropTypes.func.isRequired,
   handleMinimumChange: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
   saveGlobalFees: PropTypes.func.isRequired,
   cellUpperKey: PropTypes.string.isRequired,
   cellLowerKey: PropTypes.string.isRequired
@@ -151,4 +155,4 @@ TruckingPanel.propTypes = {
 TruckingPanel.defaultProps = {
   theme: {}
 }
-export default TruckingPanel
+export default translate('admin')(TruckingPanel)

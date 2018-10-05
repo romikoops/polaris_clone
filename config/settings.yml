@@ -1,0 +1,30 @@
+aws:
+  access_key_id:
+  secret_access_key:
+  region: eu-central-1
+  bucket:
+
+breezy:
+  secret: iqY!O}_LOnP]A-]bkBq$WJRXSn9t%0-(
+  url: https://breezypdf.itsmycargo.tech
+
+cors:
+  origins: <%= ENV['CORS_ORIGINS'] %>
+
+fixer:
+  api_key:
+
+google:
+  api_key:
+
+smtp:
+  host:
+  domain:
+  username:
+  password:
+
+mailer:
+  queue:
+
+sentry:
+  dsn: 'https://d25ea82032c14d0a83892dd95bccbdc5:6b0c931c2de24da489b5bbd959ead860@sentry.itsmycargo.tech/2'

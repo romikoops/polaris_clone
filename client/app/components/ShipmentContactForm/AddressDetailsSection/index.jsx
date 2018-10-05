@@ -4,7 +4,7 @@ import PropTypes from '../../../prop-types'
 import GmapsWrapper from '../../../hocs/GmapsWrapper'
 import FormsyInput from '../../FormsyInput/FormsyInput'
 import styles from '../ShipmentContactForm.scss'
-import { PlaceSearch } from '../../Maps/PlaceSearch'
+import PlaceSearch from '../../Maps/PlaceSearch'
 import IconLable from '../IconLable'
 
 class AddressDetailsSection extends PureComponent {

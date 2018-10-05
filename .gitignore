@@ -105,8 +105,6 @@ typings/
 # /config/database.yml
 .idea
 .DS_Store
-db/.DS_Store
-db/dummydata/.DS_Store
 
 # Ignore Excel lock files
 *~*.xls*
@@ -117,3 +115,7 @@ blank.html
 lib/*/Gemfile.lock
 rspec.xml
 /client/junit.xml
+
+config/settings.local.yml
+config/settings/*.local.yml
+config/environments/*.local.yml

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { mount } from 'enzyme'
-import { Alert } from './Alert'
+import Alert from './Alert'
 
 /**
  * NOTE: No snapshot due to need of complex mock

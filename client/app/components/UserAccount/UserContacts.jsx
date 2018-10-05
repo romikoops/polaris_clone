@@ -36,12 +36,8 @@ class UserContacts extends Component {
     this.backToIndex = this.backToIndex.bind(this)
     this.handleClientAction = this.handleClientAction.bind(this)
     this.toggleNewContact = this.toggleNewContact.bind(this)
-    this.viewContacts = this.viewContacts.bind(this)
     this.handleValidSubmit = this.handleValidSubmit.bind(this)
     this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
-  }
-  componentWillMount () {
-    this.viewContacts()
   }
 
   componentDidMount () {
@@ -65,10 +61,6 @@ class UserContacts extends Component {
   toggleNewContact () {
     this.setState({ newContactBool: !this.state.newContactBool })
   }
-  viewContacts () {
-    const { userDispatch } = this.props
-    userDispatch.getContacts(true, 1)
-  }
 
   handleValidSubmit (contact, reset, invalidate) {
     this.setState({ submitAttempted: true })
@@ -79,8 +71,9 @@ class UserContacts extends Component {
         return
       }
 
-      const { userDispatch } = this.props
+      const { userDispatch, contactsData } = this.props
       userDispatch.newContact(contact)
+      userDispatch.getContacts({ page: 1, per_page: contactsData.per_page })
       this.toggleNewContact()
     }
 
@@ -96,7 +89,7 @@ class UserContacts extends Component {
       newContact, newContactBool, submitAttempted
     } = this.state
     const {
-      theme, hubs, contactData, contactsData, userDispatch, loading, numPages, t
+      theme, hubs, contactData, userDispatch, loading, t
     } = this.props
 
     const mailCheckCallback = suggestion => (
@@ -154,7 +147,7 @@ class UserContacts extends Component {
             render={props => (
               <UserContactsIndex
                 theme={theme}
-                loading={loading}
+                toggleNewContact={this.toggleNewContact}
                 newContactBox={newContactBool && (
                   <div
                     className={`flex-none layout-row layout-wrap layout-align-center-center ${
@@ -221,7 +214,7 @@ class UserContacts extends Component {
                         type="text"
                         value={newContact.companyName}
                         name="companyName"
-                        placeholder={t('user:comapanyName')}
+                        placeholder={t('user:companyName')}
                         validations="minLength:2"
                         validationErrors={{
                           isDefaultRequiredValue: t('errors:notBlank'),
@@ -334,14 +327,6 @@ class UserContacts extends Component {
                     </Formsy>
                   </div>
                 )}
-                toggleNewContact={this.toggleNewContact}
-                handleClientAction={this.handleClientAction}
-                contacts={contactsData}
-                hubs={hubs}
-                numPages={numPages}
-                userDispatch={userDispatch}
-                viewContact={this.viewContact}
-                {...props}
               />
             )}
           />
@@ -401,16 +386,14 @@ function mapStateToProps (state) {
   const { authentication, tenant, users } = state
   const { user, loggedIn } = authentication
   const {
-    contactData, contactsData, dashboard, hubs, loading
+    contactData, contactsData, hubs, loading
   } = users
-  const { num_contact_pages } = dashboard // eslint-disable-line
 
   return {
     user,
     tenant,
     loggedIn,
     hubs,
-    numPages: num_contact_pages,
     contactData,
     contactsData,
     loading

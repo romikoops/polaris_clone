@@ -17,16 +17,6 @@ jest.mock('uuid', () => {
 
   return { v4 }
 })
-jest.mock('../../constants', () => {
-  const moment = () => ({
-    format: () => 19,
-    subtract: () => ({ format: () => 20 }),
-    diff: () => 17
-  })
-  const documentTypes = x => x
-
-  return { moment, documentTypes }
-})
 jest.mock('../../helpers', () => ({
   gradientTextGenerator: x => x,
   checkPreCarriage: x => x,
@@ -39,7 +29,7 @@ jest.mock('../../helpers', () => ({
 jest.mock('../GradientBorder', x => x)
 
 // eslint-disable-next-line
-import UserShipmentView from './UserShipmentViewDone'
+import UserShipmentView from './UserShipmentView'
 
 const propsBase = {
   theme,
@@ -55,6 +45,17 @@ const propsBase = {
   setCurrentUrl: identity,
   tenant
 }
+
+jest.mock('../../constants', () => {
+  const moment = () => ({
+    format: () => 19,
+    subtract: () => ({ format: () => 20 }),
+    diff: () => 17
+  })
+  const documentTypes = x => x
+
+  return { moment, documentTypes }
+})
 
 test('shallow render', () => {
   expect(shallow(<UserShipmentView {...propsBase} />)).toMatchSnapshot()

@@ -160,7 +160,6 @@ export default class CardPricingIndex extends Component {
                     `}
                 onClick={page > 1 ? () => this.deltaPage(-1) : null}
               >
-                {/* style={page === 1 ? { display: 'none' } : {}} */}
                 <i className="fa fa-chevron-left" />
                 <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
               </div>
@@ -253,13 +252,13 @@ export default class CardPricingIndex extends Component {
                       </div>
                     )}
                   />
-                  <CollapsingBar
+                  { scope.show_beta_features ? <CollapsingBar
                     showArrow
                     collapsed={!expander.new}
                     theme={theme}
                     styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                     handleCollapser={() => this.toggleExpander('new')}
-                    text="Create New Client"
+                    text="Create New Pricing"
                     faClass="fa fa-plus-circle"
                     content={(
                       <div
@@ -270,7 +269,7 @@ export default class CardPricingIndex extends Component {
                         {newButton}
                       </div>
                     )}
-                  />
+                  /> : '' }
                 </div>
               }
             />

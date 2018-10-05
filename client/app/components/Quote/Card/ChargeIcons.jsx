@@ -63,6 +63,7 @@ export function ChargeIcons ({
       </div>
     </div>
   )
+
   return (
     <div className={`flex-100 layout-row layout-align-start-start  ${styles.incoterm_wrapper}`}>
       {preCarriageFeesTile} {originFeesTile}

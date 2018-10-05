@@ -3,9 +3,17 @@
 module PricingTools
   include CurrencyTools
 
-  def get_user_price(itinerary_id, transport_category_id, user, shipment_date)
-    pricing = Pricing.find_by(itinerary_id: itinerary_id, user_id: user.id, transport_category_id: transport_category_id)
-    pricing ||= Pricing.find_by(itinerary_id: itinerary_id, transport_category_id: transport_category_id)
+  def get_user_price(schedule, transport_category_id, user, shipment_date)
+    pricing = Pricing.find_by(
+      itinerary_id: schedule.trip.itinerary.id,
+      user_id: user.id, transport_category_id: transport_category_id,
+      tenant_vehicle_id: schedule.trip.tenant_vehicle_id
+      )
+    pricing ||= Pricing.find_by(
+      itinerary_id: schedule.trip.itinerary.id,
+      transport_category_id: transport_category_id,
+      tenant_vehicle_id: schedule.trip.tenant_vehicle_id
+      )
 
     return if pricing.nil?
 
@@ -75,7 +83,7 @@ module PricingTools
                  cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
                end
       return_h[:quantity] += cargo_unit.quantity unless cargo_unit.quantity.nil?
-      return_h[:volume]          += cargo_unit.try(:volume) * (cargo_unit.quantity || 1) || 0
+      return_h[:volume]          += (cargo_unit.try(:volume) || 1) * (cargo_unit.quantity || 1) || 0
       return_h[:weight]          += (cargo_unit.try(:weight) || weight)
     end
 
@@ -126,7 +134,7 @@ module PricingTools
     transport_category = transport_category(cargo, schedule)
     return nil if transport_category.nil?
     transport_category_id = transport_category.id
-    pricing = get_user_price(schedule.trip.itinerary.id, transport_category_id, user, shipment_date)
+    pricing = get_user_price(schedule, transport_category_id, user, shipment_date)
     
     return nil if pricing.nil?
     totals = { "total" => {} }
@@ -155,7 +163,7 @@ module PricingTools
 
   def determine_container_price(container, schedule, user, _quantity, shipment_date, mot)
     transport_category_id = transport_category(container, schedule).id
-    pricing = get_user_price(schedule.trip.itinerary.id, transport_category_id, user, shipment_date)
+    pricing = get_user_price(schedule, transport_category_id, user, shipment_date)
     return if pricing.nil?
     totals = { "total" => {} }
 
@@ -281,7 +289,6 @@ module PricingTools
   end
 
   def fee_value(fee, cargo_hash)
-    
     case fee["rate_basis"]
     when "PER_SHIPMENT", "PER_BILL"
       fee["value"].to_d
@@ -319,6 +326,7 @@ module PricingTools
     when /RANGE/
       handle_range_fare(fee, cargo_hash)
     end
+
   end
 
   def get_cargo_hash(cargo, mot)

@@ -6,32 +6,33 @@ class Admin::PricingsController < Admin::AdminBaseController
   include ItineraryTools
 
   def index
-    @transports = TransportCategory.all.uniq
     tenant = current_user.tenant
+    @itineraries = tenant.itineraries
+    response = Rails.cache.fetch("#{@itineraries.cache_key}/pricings_index", expires_in: 12.hours) do
+      @transports = TransportCategory.all.uniq
 
-    itineraries = tenant.itineraries
-    mots = tenant.scope['modes_of_transport'].keys.reject do |key|
-      !tenant.scope['modes_of_transport'][key]['container'] &&
-        !tenant.scope['modes_of_transport'][key]['cargo_item']
+      mots = tenant.scope['modes_of_transport'].keys.reject do |key|
+        !tenant.scope['modes_of_transport'][key]['container'] &&
+          !tenant.scope['modes_of_transport'][key]['cargo_item']
+      end
+      detailed_itineraries = {}
+      mot_page_counts = {}
+      mots.each do |mot|
+        mot_itineraries = @itineraries
+                          .where(mode_of_transport: mot)
+                          .paginate(page: params[mot] || 1)
+        detailed_itineraries[mot] = mot_itineraries.map(&:as_pricing_json)
+        mot_page_counts[mot] = mot_itineraries.total_pages
+      end
+      last_updated = @itineraries.first ? @itineraries.first.updated_at : DateTime.now
+      {
+        detailedItineraries: detailed_itineraries,
+        numItineraryPages:   mot_page_counts,
+        transportCategories: @transports,
+        lastUpdate:          last_updated
+      }
     end
-    detailed_itineraries = {}
-    mot_page_counts = {}
-    mots.each do |mot|
-      mot_itineraries = itineraries
-                        .where(mode_of_transport: mot)
-      detailed_itineraries[mot] = mot_itineraries
-                                  .paginate(page: params[mot] || 1)
-                                  .map(&:as_pricing_json)
-
-      mot_page_counts[mot] = (mot_itineraries.count / 12.0).ceil
-    end
-    last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
-    response_handler(
-      detailedItineraries: detailed_itineraries,
-      numItineraryPages:   mot_page_counts,
-      transportCategories: @transports,
-      lastUpdate:          last_updated
-    )
+    response_handler(response)
   end
 
   def client
@@ -50,11 +51,11 @@ class Admin::PricingsController < Admin::AdminBaseController
     itineraries = Itinerary.where(query).order('name ASC')
     itinerary_results = itineraries.where('name ILIKE ?', "%#{params[:text]}%")
     @transports = TransportCategory.all.uniq
-    detailed_itineraries = itinerary_results.paginate(page: params[:page]).map(&:as_pricing_json)
+    detailed_itineraries = itinerary_results.paginate(page: params[:page])
     last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
     response_handler(
-      detailedItineraries: detailed_itineraries,
-      numItineraryPages:   (itineraries.count / 12.0).ceil,
+      detailedItineraries: detailed_itineraries.map(&:as_pricing_json),
+      numItineraryPages:   detailed_itineraries.total_pages,
       transportCategories: @transports,
       lastUpdate:          last_updated,
       mode_of_transport:   params[:mot]

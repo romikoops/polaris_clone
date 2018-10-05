@@ -10,7 +10,8 @@ jest.mock('../../helpers', () => ({
   switchIcon: x => x,
   splitName: x => x,
   totalPrice: () => ({ currency: 'DZD' }),
-  formattedPriceValue: () => 975
+  formattedPriceValue: () => 975,
+  numberSpacing: x => x
 }))
 jest.mock('uuid', () => {
   let counter = -1

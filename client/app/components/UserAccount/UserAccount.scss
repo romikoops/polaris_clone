@@ -153,6 +153,9 @@
   }
   .content_details {
     padding: 18px 18px 18px 4vw;
+    > div {
+      padding: 12px;
+    }
   }
   .edit_icon {
     cursor: pointer;
@@ -182,6 +185,10 @@
   }
   .loc_info {
     height: 220px;
+  }
+  .paginate_box {
+    height: 550px;
+    margin: 15px 0;
   }
   .overlay_auto {
     position: absolute;
@@ -224,7 +231,7 @@
     box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.5);
   }
   .conditions_box {
-    padding: 2px 20px;
+    padding: 10px 20px;
     p {
       font-size: 12px !important;
     }

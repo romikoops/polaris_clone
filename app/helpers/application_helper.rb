@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
+  include FontAwesome::Rails::IconHelper
+  
   def asset_data_base64(path)
     asset = (Rails.application.assets || ::Sprockets::Railtie.build_environment(Rails.application)).find_asset(path)
     throw "Could not find asset '#{path}'" if asset.nil?

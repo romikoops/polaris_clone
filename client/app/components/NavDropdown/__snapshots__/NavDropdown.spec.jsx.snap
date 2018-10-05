@@ -15,7 +15,9 @@ exports[`shallow rendering 1`] = `
         }
       }
     >
+       
       Log In / Register
+       
     </a>
   </div>
 </div>
@@ -36,7 +38,9 @@ exports[`when linkOptions doesn't provide url 1`] = `
         }
       }
     >
+       
       Log In / Register
+       
     </a>
   </div>
 </div>

@@ -1,10 +1,11 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import styled from 'styled-components'
 import styles from './Messaging.scss'
 import PropTypes from '../../prop-types'
 
-export function ConvoTile ({
-  theme, conversation, viewConvo, convoKey, shipment
+function ConvoTile ({
+  theme, conversation, viewConvo, convoKey, shipment, t
 }) {
   const ConvoTileDiv = styled.div`
             
@@ -55,6 +56,7 @@ export function ConvoTile ({
         color.color = '#A19F9F'
         break
     }
+
     return <i className={icon} style={color} />
   }
   const showStatus = shipmentStatus()
@@ -68,21 +70,21 @@ export function ConvoTile ({
             : <i className="flex-none clip fa fa-truck" style={iconStyle} /> }
         </div>
         <div className="flex-5" />
-        <p className="flex-none">Shipment Ref.:</p>
+        <p className="flex-none">{t('bookconf:shipmentReference')}:</p>
         <div className="flex-5" />
         <b>{convoKey}</b>
       </div>
       <div className="flex-95 layout-row layout-align-start-center">
         { shipment.convoKey ? `${shipment.origin} - ${shipment.destination}`
-          : 'Rejected by Admin' }
+          : t('shipment:rejectedByAdmin') }
       </div>
       <div className="flex-95 layout-row layout-align-start-center">
-        STATUS:
+        {t('common:status').toUpperCase()}:
         <div className="flex-5" />
         <i>
           <b>
             { shipment.convoKey ? shipment.status.toUpperCase()
-              : 'REJECTED' }
+              : t('shipment:rejected').toUpperCase() }
           </b>
         </i>
         <div className="flex-5" />
@@ -91,6 +93,7 @@ export function ConvoTile ({
       <p className="flex-none" />
     </ConvoTileDiv>
   )
+
   return (
     <div
       className={`flex-100 layout-row layout-align-start-start  ${styles.convo_tile_wrapper}`}
@@ -105,6 +108,7 @@ ConvoTile.propTypes = {
   theme: PropTypes.theme,
   viewConvo: PropTypes.func.isRequired,
   convoKey: PropTypes.string.isRequired,
+  t: PropTypes.func.isRequired,
   conversation: PropTypes.shape({
     messages: PropTypes.array
   }).isRequired,
@@ -115,4 +119,4 @@ ConvoTile.defaultProps = {
   theme: null
 }
 
-export default ConvoTile
+export default translate(['bookconf', 'shipment', 'common'])(ConvoTile)

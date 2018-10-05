@@ -1,23 +1,24 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './LoginRegistrationWrapper.scss'
-import defs from '../../styles/default_classes.scss'
 import { LoginPage } from '../../containers/LoginPage/LoginPage'
 import { RegistrationPage } from '../../containers/RegistrationPage/RegistrationPage'
 
-export class LoginRegistrationWrapper extends Component {
+class LoginRegistrationWrapper extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {}
     this.components = { LoginPage, RegistrationPage }
+    const { t } = this.props
     this.togglePrompt = {
       LoginPage: {
-        promptText: 'New account?',
-        linkText: 'Register'
+        promptText: t('account:newAccount'),
+        linkText: t('common:register')
       },
       RegistrationPage: {
-        promptText: 'Already have an account?',
-        linkText: 'Login'
+        promptText: t('account:existingAccount'),
+        linkText: t('common:logIn')
       }
     }
   }
@@ -34,20 +35,21 @@ export class LoginRegistrationWrapper extends Component {
     const compName = this.state.compName ? this.state.compName : this.props.initialCompName
     const Comp = this.components[compName]
     const compProps = this.props[`${compName}Props`]
-    const textStyling =
-      navigator.userAgent.indexOf('MSIE') !== -1 || !!document.documentMode === true
-        ? `${styles.ie_11} layout-row layout-align-space-between`
-        : 'layout-row layout-align-space-between'
+
+    let togglePromptClasses = `${styles.toggle_prompt} layout-row layout-align-space-between`
+    if (navigator.userAgent.indexOf('MSIE') !== -1 || document.documentMode) {
+      togglePromptClasses += ` ${styles.ie_11}`
+    }
 
     return (
-      <div style={{ color: 'black' }}>
+      <div>
         <div>
           <Comp {...compProps} />
         </div>
         <hr className={styles.toggle_prompt_separator} />
-        <div className={textStyling}>
+        <div className={togglePromptClasses}>
           <div>{this.togglePrompt[compName].promptText}</div>
-          <div className={`${defs.emulate_link}`} onClick={() => this.toggleComp(compName)}>
+          <div className="emulate_link" onClick={() => this.toggleComp(compName)}>
             {this.togglePrompt[compName].linkText}
           </div>
         </div>
@@ -60,6 +62,7 @@ LoginRegistrationWrapper.propTypes = {
   initialCompName: PropTypes.string.isRequired,
   LoginPageProps: PropTypes.objectOf(PropTypes.any),
   RegistrationPageProps: PropTypes.objectOf(PropTypes.any),
+  t: PropTypes.func.isRequired,
   updateDimensions: PropTypes.func
 }
 
@@ -69,4 +72,4 @@ LoginRegistrationWrapper.defaultProps = {
   updateDimensions: null
 }
 
-export default LoginRegistrationWrapper
+export default translate(['common', 'account'])(LoginRegistrationWrapper)

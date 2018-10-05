@@ -36,6 +36,18 @@ export class AdminShipmentStatus extends Component {
             </span><br />
             <span className={`${styles.amounttitle}`}>Requested</span>
           </div>
+          <div className="layout-column flex-33 layout-wrap layout-align-center-center">
+            <span className={`${styles.amount}`}>
+              {this.state.shipments.rejected ? this.state.shipments.rejected.length : 0}
+            </span><br />
+            <span className={`${styles.amounttitle}`}>Rejected</span>
+          </div>
+          <div className="layout-column flex-33 layout-wrap layout-align-center-center">
+            <span className={`${styles.amount}`}>
+              {this.state.shipments.archived ? this.state.shipments.archived.length : 0}
+            </span><br />
+            <span className={`${styles.amounttitle}`}>Archived</span>
+          </div>
         </div>
       </div>
     )
@@ -46,7 +58,9 @@ AdminShipmentStatus.propTypes = {
   shipments: PropTypes.shape({
     open: PropTypes.arrayOf(PropTypes.shipment),
     requested: PropTypes.arrayOf(PropTypes.shipment),
-    finished: PropTypes.arrayOf(PropTypes.shipment)
+    finished: PropTypes.arrayOf(PropTypes.shipment),
+    archived: PropTypes.arrayOf(PropTypes.shipment),
+    rejected: PropTypes.arrayOf(PropTypes.shipment)
   })
 }
 

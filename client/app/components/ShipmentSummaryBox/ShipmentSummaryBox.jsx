@@ -11,9 +11,9 @@ import {
   gradientGenerator,
   gradientTextGenerator
 } from '../../helpers'
-import { TextHeading } from '../TextHeading/TextHeading'
+import TextHeading from '../TextHeading/TextHeading'
 
-export class ShipmentSummaryBox extends Component {
+class ShipmentSummaryBox extends Component {
   static switchIcon (sched) {
     let icon
     switch (sched.mode_of_transport) {

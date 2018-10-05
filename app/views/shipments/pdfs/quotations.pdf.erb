@@ -1,0 +1,102 @@
+<div class="wrapper-quotations">
+  <% primary_color = tenant.theme["colors"]["primary"] %>
+  <% neutral_color = '#C4C4C4' %>
+  <% tenant_logo_asset = "logoLarge_" + tenant["subdomain"] + ".png" %>
+  <% tenant_logo_url = tenant.theme["logoLarge"] %>
+  <% precarriage_color = shipment.has_pre_carriage ? primary_color : neutral_color %>
+  <% oncarriage_color = shipment.has_on_carriage ? primary_color : neutral_color %>
+
+  <div class="title text-center">
+    <h1>QUOTATIONS</h1>
+    <hr style="border-color: <%= primary_color %>">
+    <p><%= tenant.name %></p>
+  </div>
+
+    <% shipments.map do |s| %>
+      <% origin_fee_color = s.selected_offer["export"] ? primary_color : neutral_color %>
+      <% destination_fee_color = s.selected_offer["import"] ? primary_color : neutral_color %>
+      <div class="all-row">
+        <div class="main-container">
+          <div class="info">
+            <% if s.itinerary.mode_of_transport == "ocean" %>
+              <% mot = "anchor" %>
+            <% elsif s.itinerary.mode_of_transport == "air" %>
+              <% mot = "plane" %>
+            <% else %>
+              <% mot = "truck" %>
+            <% end %>
+            <i class="fa fa-<%= mot %> mot-icon" style="color: <%= primary_color %>"></i>
+            <div class="shipment-info">
+              <p>From:&nbsp;<span><%= s.origin_hub.name %></span></p>
+              <p>To:&nbsp;<span><%= s.destination_hub.name %></span></p>
+            </div>
+            <div class="text-right cargo-info">
+              <div class="charge-icons">
+                <i class="fa fa-truck" style="color: <%= precarriage_color %>"></i>
+                <i class="fa fa-file-o" style="color: <%= origin_fee_color %>"></i>
+                <i class="fa fa-anchor" style="color: <%= primary_color %>"></i>
+                <i class="fa fa-file" style="color: <%= destination_fee_color %>"></i>
+                <i class="fa fa-truck flip" style="color: <%= oncarriage_color %>"></i>
+              </div>
+              <p>
+                <strong>Kg:</strong>
+                <%= shipment.cargo_items.inject(0) {|sum, hash| sum + hash[:payload_in_kg].to_f} %>&nbsp;kg
+              </p>
+            </div>
+          </div>
+        </div>
+
+      <% s.selected_offer.each do |k, v| %>
+          <div class="sub-prices">
+            <% if k != "total" && k != "edited_total" %>
+              <div class="total-price-single">
+                <% if k == "trucking_pre" %>
+                  <h4>Pick-up</h4>
+                <% end %>
+                <% if k == "trucking_on" %>
+                  <h4>Delivery</h4>
+                <% end %>
+                <% if k != "trucking_on" && k != "trucking_pre" %>
+                  <h4><%= k %></h4>
+                <% end %>
+                <h3><%= v["total"]["value"].to_f.truncate(2) %>&nbsp;<%= v["total"]["currency"] %></h3>
+              </div>
+              <div class="subtotal-price-group">
+                <% v.each do |a, b| %>
+                  <% if a != "total" && a != "edited_total" %>
+                    <div class="subtotal-price-single">
+                    <% if a == "trucking_lcl" %>
+                      <h4>Lcl</h4>
+                    <% end %>
+                    <% if a == "trucking_fcl" %>
+                      <h4>Fcl</h4>
+                    <% end %>
+                    <% if k == "cargo" %>
+                      <h4>Cargo</h4>
+                    <% end %>
+                    <% if k != "cargo" && a != "trucking_lcl" && a != "trucking_fcl" %>
+                      <h4><%= a %></h4>
+                    <% end %>
+                      <h3> <%= b["value"] || b["total"]["value"].to_f.truncate(2).to_s %>&nbsp;<%= b["currency"] || b["total"]["currency"] %></h3>
+                    </div>
+                  <% end %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+
+        <div class="total-row">
+          <h4>Total</h4>
+          <p class="quote"><%= s.selected_offer["total"]["value"].to_f.truncate(2) %>
+            &nbsp;<%= s.selected_offer["total"]["currency"] %>
+          </p>
+        </div>
+        <p class="notes">
+          <%= tenant.scope["quote_notes"] || "" %>
+        </p>
+      </div>
+      
+    <% end %>
+  
+</div>

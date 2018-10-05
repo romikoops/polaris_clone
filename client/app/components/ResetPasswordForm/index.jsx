@@ -1,11 +1,12 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import Formsy from 'formsy-react'
 import PropTypes from '../../prop-types'
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
 import { RoundButton } from '../RoundButton/RoundButton'
 import styles from './ResetPasswordForm.scss'
 import FormsyInput from '../FormsyInput/FormsyInput'
-import { BASE_URL } from '../../constants'
+import getApiHost from '../../constants/api.constants'
 import { queryStringToObj } from '../../helpers'
 import Header from '../Header/Header'
 
@@ -15,23 +16,26 @@ function buildHeaders (data) {
   const headers = { 'Content-Type': 'application/json' }
   const headerKeys = ['access-token', 'client', 'uid']
   Object.keys(data).forEach((k) => { if (headerKeys.includes(k)) headers[k] = data[k] })
+
   return headers
 }
 
-export default class ResetPasswordForm extends React.PureComponent {
+class ResetPasswordForm extends React.PureComponent {
   constructor (props) {
     super(props)
     this.state = { focus: {}, settingPassword: false }
   }
   handleSubmit (model) {
     const queryString = this.props.location.search.substring(1)
+    const { t } = this.props
 
     if (queryString === '') {
       window.alert((
-        'You attempted to submit an invalid reset password request. ' +
-        'If you wish to reset your password, ' +
-        'please follow a valid link sent to your email.'
+        t('errors:invalidResetPasswordOne') +
+        t('errors:invalidResetPasswordTwo') +
+        t('errors:invalidResetPasswordThree')
       ))
+
       return
     }
 
@@ -39,7 +43,7 @@ export default class ResetPasswordForm extends React.PureComponent {
 
     this.setState({ settingPassword: true })
 
-    fetch(`${BASE_URL}/auth/password`, {
+    fetch(`${getApiHost()}/auth/password`, {
       method: 'PUT',
       headers: buildHeaders(queryStringData),
       body: JSON.stringify(model)
@@ -64,7 +68,7 @@ export default class ResetPasswordForm extends React.PureComponent {
   }
 
   render () {
-    const { theme, user } = this.props
+    const { theme, user, t } = this.props
     const { settingPassword } = this.state
     const focusStyles = {
       borderColor: theme && theme.colors ? theme.colors.primary : 'black',
@@ -72,6 +76,7 @@ export default class ResetPasswordForm extends React.PureComponent {
       borderRadius: '2px',
       margin: '-1px 0 29px 0'
     }
+
     return (
       <div className="flex-100 layout-row layout-wrap">
         <Header user={user} theme={theme} noMessages />
@@ -96,8 +101,8 @@ export default class ResetPasswordForm extends React.PureComponent {
                   submitAttempted={this.state.submitAttempted}
                   validations={{ minLength: 8 }}
                   validationErrors={{
-                    minLength: 'Min. 8 characters',
-                    isDefaultRequiredValue: 'Must not be blank'
+                    minLength: t('errors:eightChars'),
+                    isDefaultRequiredValue: t('errors:notBlank')
                   }}
                   errorMessageStyles={{
                     fontSize: '12px',
@@ -120,7 +125,7 @@ export default class ResetPasswordForm extends React.PureComponent {
                   id="password_confirmation"
                   submitAttempted={this.state.submitAttempted}
                   validations={{ equalsField: 'password' }}
-                  validationErrors={{ equalsField: 'Must match password' }}
+                  validationErrors={{ equalsField: t('errors:mustMatchPassword') }}
                   errorMessageStyles={{
                     fontSize: '12px',
                     bottom: '-19px'
@@ -148,6 +153,7 @@ export default class ResetPasswordForm extends React.PureComponent {
 
 ResetPasswordForm.propTypes = {
   user: PropTypes.user,
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   location: PropTypes.objectOf(PropTypes.any).isRequired
 }
@@ -156,3 +162,5 @@ ResetPasswordForm.defaultProps = {
   user: null,
   theme: null
 }
+
+export default translate(['errors', 'account'])(ResetPasswordForm)

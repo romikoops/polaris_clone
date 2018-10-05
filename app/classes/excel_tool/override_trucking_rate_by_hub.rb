@@ -278,7 +278,6 @@ module ExcelTool
         courier_id:  find_or_create_courier(meta[:courier]).id,
         truck_type:  !meta[:truck_type] || meta[:truck_type] == "" ? "default" : meta[:truck_type]
       )
-
       TruckingPricing.new(
         load_meterage:          {
           ratio:        meta[:load_meterage_ratio],
@@ -428,6 +427,7 @@ module ExcelTool
 
       if geometry.nil?
         geocoder_results = Geocoder.search(idents_and_country.values.join(" "))
+        raise "no geometry found for #{idents_and_country.values.join(', ')}" if geocoder_results.first.nil?
         coordinates = geocoder_results.first.geometry["location"]
         geometry = Geometry.find_by_coordinates(coordinates["lat"], coordinates["lng"])
       end

@@ -5,7 +5,7 @@ module CurrencyTools
 
   def get_rates(base, tenant_id)
     tenant = Tenant.find(tenant_id)
-    if tenant && tenant.scope["fixed_currency"]
+    if tenant && tenant.scope["fixed_exchange_rates"]
       tenant_rates = Currency.find_by(base: base, tenant_id: tenant_id)
       cached_rates = tenant_rates || Currency.find_by(base: base)
     else
@@ -60,7 +60,7 @@ module CurrencyTools
 
   def refresh_rates(base)
     currency_obj = Currency.find_by(base: base)
-    url = "http://data.fixer.io/latest?access_key=#{ENV['FIXER_API_KEY']}&base=#{base}"
+    url = "http://data.fixer.io/latest?access_key=#{Settings.fixer.api_key}&base=#{base}"
     response = JSON.parse(HTTP.get(url).to_s)
     rates = response["rates"]
 

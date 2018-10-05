@@ -88,7 +88,7 @@ class ShipperSeeder
   end
 
   def self.find_shipper_for_tenant(tenant)
-    tenant.users.find_by(email: "demo@#{tenant.subdomain}.#{tld(tenant)}")
+    tenant.users.find_by(uid: "#{tenant.id}***demo@#{tenant.subdomain}.#{tld(tenant)}")
   end
 
   def self.new_shipper(tenant)

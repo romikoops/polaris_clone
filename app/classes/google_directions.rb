@@ -12,7 +12,7 @@ class GoogleDirections
   BASE_URL  = "https://maps.googleapis.com"
   BASE_PATH = "/maps/api/directions/xml"
   DEFAULT_OPTIONS = {
-    key:           Rails.application.secrets.google_maps_server_api_key,
+    key:           Settings.google.api_key,
     language:      "en",
     alternative:   "false",
     mode:          "driving",

@@ -1,10 +1,11 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import fetch from 'isomorphic-fetch'
 import { Promise } from 'es6-promise-promise'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
-import { BASE_URL } from '../../../constants'
+import getApiHost from '../../../constants/api.constants'
 import { authHeader } from '../../../helpers'
 import { RoundButton } from '../../RoundButton/RoundButton'
 import styles from './index.scss'
@@ -40,13 +41,12 @@ class DocumentsSelector extends React.Component {
     }
   }
   onFormSubmit (e) {
-    e.preventDefault() // Stop form submit
+    e.preventDefault()
     if (this.state.file) {
       this.fileUpload(this.state.file)
     }
   }
   onChange (e) {
-    // this.setState({file: e.target.files[0]});
     this.fileUpload(e.target.files[0])
   }
   handleSelected (e) {
@@ -85,13 +85,15 @@ class DocumentsSelector extends React.Component {
         headers: { ...authHeader() },
         body: formData
       }
-      const uploadUrl = BASE_URL + url
+      const uploadUrl = getApiHost() + url
       fetch(uploadUrl, requestOptions).then(DocumentsSelector.handleResponse)
       if (this.uploaderInput.files.length) {
         this.uploaderInput.value = ''
       }
+
       return null
     }
+
     return this.showFileTypeError()
   }
   showFileTypeError () {
@@ -104,12 +106,12 @@ class DocumentsSelector extends React.Component {
   }
   render () {
     const {
-      theme, type, tooltip, options
+      theme, type, tooltip, options, t
     } = this.props
     const { selected } = this.state
     const tooltipId = v4()
     const errorStyle = this.state.error ? styles.error : ''
-    console.log(errorStyle)
+
     return (
       <div
         className={`flex-none layout-row ${styles.upload_btn_wrapper} `}
@@ -119,7 +121,7 @@ class DocumentsSelector extends React.Component {
         {selected || !options ? (
           <form>
             <RoundButton
-              text="Upload"
+              text={t('common:upload')}
               theme={theme}
               size="small"
               handleNext={e => this.clickUploaderInput(e)}
@@ -154,6 +156,7 @@ class DocumentsSelector extends React.Component {
 DocumentsSelector.propTypes = {
   url: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   dispatchFn: PropTypes.func,
   uploadFn: PropTypes.func,
@@ -169,4 +172,4 @@ DocumentsSelector.defaultProps = {
   options: []
 }
 
-export default DocumentsSelector
+export default translate('common')(DocumentsSelector)

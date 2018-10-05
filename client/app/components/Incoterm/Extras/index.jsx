@@ -1,10 +1,11 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import styles from './index.scss'
 import PropTypes from '../../../prop-types'
 import { gradientTextGenerator } from '../../../helpers'
 
-export function IncotermExtras ({
-  theme, shipment, feeHash, tenant
+function IncotermExtras ({
+  theme, shipment, feeHash, tenant, t
 }) {
   const selectedStyle =
     theme && theme.colors
@@ -35,7 +36,7 @@ export function IncotermExtras ({
       <p className="flex-none no_m letter_3 center">
         {feeHash.insurance && feeHash.insurance.val
           ? `${parseFloat(feeHash.insurance.val).toFixed(2)}`
-          : 'None'}
+          : t('common:none')}
       </p>
     </div>
   ) : (
@@ -48,7 +49,7 @@ export function IncotermExtras ({
         styles.fee_value
       } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
     >
-      <p className="flex-none no_m letter_3 center">Requested</p>
+      <p className="flex-none no_m letter_3 center">{t('shipment:requested')}</p>
     </div>
   )
   const none = (
@@ -57,7 +58,7 @@ export function IncotermExtras ({
         styles.fee_value
       } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
     >
-      <p className="flex-none no_m letter_3 center">None</p>
+      <p className="flex-none no_m letter_3 center">{t('common:none')}</p>
     </div>
   )
 
@@ -75,7 +76,7 @@ export function IncotermExtras ({
       <p className="flex-none no_m letter_3 center">
         {feeHash.customs && feeHash.customs.val
           ? `${parseFloat(feeHash.customs.val).toFixed(2)}`
-          : 'None'}
+          : t('common:none')}
       </p>
     </div>
   ) : (
@@ -95,7 +96,7 @@ export function IncotermExtras ({
       <p className="flex-none no_m letter_3 center">
         {feeHash.addons && feeHash.addons && feeHash.addons.customs_export_paper
           ? `${parseFloat(feeHash.addons.customs_export_paper.value).toFixed(2)}`
-          : 'None'}
+          : t('common:none')}
       </p>
     </div>
   ) : (
@@ -109,7 +110,7 @@ export function IncotermExtras ({
       </div>
       <div className="flex layout-row layout-align-center-space-around layout-wrap">
         <div className={`${styles.fee_text} flex-90 layout-row layout-align-center-center `}>
-          <h4 className="flex-none no_m">Customs</h4>
+          <h4 className="flex-none no_m">{t('shipment:customs')}</h4>
         </div>
         {scope.detailed_billing && feeHash.customs ? customsFeesValue : ''}
         {!scope.detailed_billing && feeHash.customs ? requested : ''}
@@ -124,7 +125,7 @@ export function IncotermExtras ({
       </div>
       <div className="flex layout-row layout-align-center-space-around layout-wrap">
         <div className={`${styles.fee_text} flex-90 layout-row layout-align-center-center `}>
-          <h4 className="flex-none no_m">Insurance</h4>
+          <h4 className="flex-none no_m">{t('shipment:insurance')}</h4>
         </div>
         {scope.detailed_billing && feeHash.insurance ? insuranceFeesValue : ''}
         {!scope.detailed_billing && feeHash.insurance ? requested : ''}
@@ -139,11 +140,12 @@ export function IncotermExtras ({
       </div>
       <div className="flex layout-row layout-align-center-space-around layout-wrap">
         <div className={`${styles.fee_text} flex-90 layout-row layout-align-center-center `}>
-          <h4 className="flex-none no_m">Customs Export Paper</h4>
+          <h4 className="flex-none no_m">{t('shipment:adb')}</h4>
         </div>
         {scope.detailed_billing && feeHash.addons && feeHash.addons.customs_export_paper ? exportPaperFeesValue : ''}
         {!scope.detailed_billing && feeHash.addons && feeHash.addons.customs_export_paper ? requested : ''}
         {!feeHash || (feeHash && feeHash.addons && !feeHash.addons.customs_export_paper) ? none : ''}
+        {shipment.eori || ''}
       </div>
     </div>
   )
@@ -161,6 +163,7 @@ export function IncotermExtras ({
 
 IncotermExtras.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   feeHash: PropTypes.objectOf(PropTypes.any),
   tenant: PropTypes.tenant,
   shipment: PropTypes.objectOf(PropTypes.any).isRequired
@@ -172,4 +175,4 @@ IncotermExtras.defaultProps = {
   tenant: {}
 }
 
-export default IncotermExtras
+export default translate(['common', 'shipment'])(IncotermExtras)

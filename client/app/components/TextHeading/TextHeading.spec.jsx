@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { TextHeading } from './TextHeading'
+import TextHeading from './TextHeading'
 
 const propsBase = {
   text: 'FOO_TEXT',

@@ -35,11 +35,9 @@ module OfferCalculatorService
     def update_cargo_units
       destroy_previous_cargo_units
       if aggregated_cargo_shipment?
-        @shipment.aggregated_cargo.try(:destroy)
         @shipment.aggregated_cargo = AggregatedCargo.new(aggregated_cargo_params)
         @shipment.aggregated_cargo.set_chargeable_weight!
       else
-
         @shipment.cargo_units = cargo_unit_const.extract(cargo_units_params)
       end
     end
@@ -51,7 +49,7 @@ module OfferCalculatorService
     def update_selected_day
       date = Chronic.parse(@params[:shipment][:selected_day], endian_precedence: :little)
       date_limit = Date.today + 5.days
-      @shipment.selected_day = [date, date_limit].max
+      @shipment.desired_start_date = [date, date_limit].max
     end
 
     private
@@ -97,6 +95,7 @@ module OfferCalculatorService
 
     def destroy_previous_cargo_units
       @shipment.aggregated_cargo.try(:destroy)
+      @shipment.aggregated_cargo = nil
       @shipment.cargo_items.destroy_all
       @shipment.containers.destroy_all
     end

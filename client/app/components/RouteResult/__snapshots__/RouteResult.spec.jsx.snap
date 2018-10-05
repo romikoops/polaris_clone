@@ -162,7 +162,7 @@ exports[`props.pickup is false 1`] = `
           <h4
             className="date_title"
           >
-             Estimated T/T 
+            Estimated Transit Time
             <sup>
               *
             </sup>
@@ -176,7 +176,7 @@ exports[`props.pickup is false 1`] = `
           >
              
             0
-             Days
+            days
           </p>
         </div>
       </div>
@@ -191,7 +191,7 @@ exports[`props.pickup is false 1`] = `
       <p
         className="flex-none"
       >
-        Total price: 
+        Total Price:
       </p>
       <Price
         currency="EUR"
@@ -317,7 +317,7 @@ exports[`shallow rendering 1`] = `
           <h4
             className="date_title"
           >
-            Pickup Date
+            Pick-up Date
           </h4>
         </div>
         <div
@@ -327,7 +327,7 @@ exports[`shallow rendering 1`] = `
             className="flex-none sched_elem"
           >
              
-            28-03-2018
+            27-03-2018
              
           </p>
         </div>
@@ -389,7 +389,7 @@ exports[`shallow rendering 1`] = `
           <h4
             className="date_title"
           >
-             Estimated T/T 
+            Estimated Transit Time
             <sup>
               *
             </sup>
@@ -403,7 +403,7 @@ exports[`shallow rendering 1`] = `
           >
              
             0
-             Days
+            days
           </p>
         </div>
       </div>
@@ -418,7 +418,7 @@ exports[`shallow rendering 1`] = `
       <p
         className="flex-none"
       >
-        Total price: 
+        Total Price:
       </p>
       <Price
         currency="EUR"

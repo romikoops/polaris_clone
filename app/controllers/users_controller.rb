@@ -7,48 +7,30 @@ class UsersController < ApplicationController
   skip_before_action :require_non_guest_authentication!, only: %i(update set_currency currencies)
 
   def home
-    @shipper = current_user
-    requested_shipments = @shipper.shipments.where(
-      status:    %w(requested requested_by_unconfirmed_account),
-      tenant_id: current_user.tenant_id
-    ).order(booking_placed_at: :desc)
-    open_shipments = @shipper.shipments.where(
-      status:    %w(in_progress confirmed),
-      tenant_id: current_user.tenant_id
-    ).order(booking_placed_at: :desc)
-    finished_shipments = @shipper.shipments
-      .where(status: "finished", tenant_id: current_user.tenant_id)
-      .order(booking_placed_at: :desc)
-    @requested_shipments = requested_shipments.map(&:with_address_options_json)
-    @open_shipments = open_shipments.map(&:with_address_options_json)
-    @finished_shipments = finished_shipments.map(&:with_address_options_json)
+    response = Rails.cache.fetch("#{current_user.shipments.cache_key}/dashboard_index", expires_in: 12.hours) do
+      
+      @contacts = current_user.contacts.where(alias: false).map do |contact|
+        contact.as_json(
+          include: { location: { include: { country: { only: :name } },
+                                except: %i(created_at updated_at country_id) } },
+          except: %i(created_at updated_at location_id)
+        )
+      end
+      @aliases = current_user.contacts.where(alias: true)
+      user_locs = current_user.user_locations
+      locations = user_locs.map do |ul|
+        { user: ul, location: ul.location.to_custom_hash }
+      end
 
-    @pricings = get_user_pricings(@shipper.id)
-    @contacts = @shipper.contacts.where(alias: false).map do |contact|
-      contact.as_json(
-        include: { location: { include: { country: { only: :name} },
-        except: %i(created_at updated_at country_id) } },
-        except: %i(created_at updated_at location_id))
+      resp = {
+        shipments:         shipments_hash,
+        contacts:          @contacts,
+        num_contact_pages: (current_user.contacts.count.to_f / 6).to_f.ceil,
+        aliases:           @aliases,
+        locations:         locations
+      }
     end
-    @aliases = @shipper.contacts.where(alias: true)
-    user_locs = @shipper.user_locations
-    locations = user_locs.map do |ul|
-      { user: ul, location: ul.location.to_custom_hash }
-    end
-
-    resp = {
-      shipments:         {
-        requested: @requested_shipments,
-        open:      @open_shipments,
-        finished:  @finished_shipments
-      },
-      pricings:          @pricings,
-      contacts:          @contacts,
-      num_contact_pages: (@shipper.contacts.count.to_f / 6).to_f.ceil,
-      aliases:           @aliases,
-      locations:         locations
-    }
-    response_handler(resp)
+    response_handler(response)
   end
 
   def account
@@ -77,7 +59,7 @@ class UsersController < ApplicationController
   end
 
   def currencies
-    currency = current_user.try(:currency) || "EUR"
+    currency = current_user.try(:currency) || 'EUR'
     tenant_id = current_user ? current_user.tenant_id : nil
     results = get_currency_array(currency, tenant_id)
     response_handler(results)
@@ -85,7 +67,7 @@ class UsersController < ApplicationController
 
   def download_gdpr
     url = DocumentService::GdprWriter.new(user_id: current_user.id).perform
-    response_handler(url: url, key: "gdpr")
+    response_handler(url: url, key: 'gdpr')
   end
 
   def set_currency
@@ -104,9 +86,9 @@ class UsersController < ApplicationController
   def opt_out
     new_status = current_user.optin_status.as_json
     new_status[params[:target]] = !new_status[params[:target]]
-    new_status.delete("id")
-    new_status.delete("updated_at")
-    new_status.delete("created_at")
+    new_status.delete('id')
+    new_status.delete('updated_at')
+    new_status.delete('created_at')
     optin_status = OptinStatus.find_by(new_status)
     current_user.optin_status = optin_status
     current_user.save!
@@ -133,6 +115,39 @@ class UsersController < ApplicationController
     end
 
     return_params
+  end
+
+  def shipments_hash
+    current_user.tenant.quotation_tool ?
+    {
+      quoted:   quoted_shipments.order(booking_placed_at: :desc).limit(3)&.map(&:with_address_index_json)
+    } : {
+      requested: requested_shipments.order(booking_placed_at: :desc).limit(3)&.map(&:with_address_index_json)
+    }
+  end
+
+  def requested_shipments
+    @requested_shipments ||= current_user.shipments.requested
+  end
+
+  def quoted_shipments
+    @quoted_shipments ||= current_user.shipments.quoted
+  end
+
+  def open_shipments
+    @open_shipments ||= current_user.shipments.open
+  end
+
+  def rejected_shipments
+    @rejected_shipments ||= current_user.shipments.rejected
+  end
+  
+  def archived_shipments
+    @archived_shipments ||= current_user.shipments.archived
+  end
+
+  def finished_shipments
+    @finished_shipments ||= current_user.shipments.finished
   end
 
   def location_params

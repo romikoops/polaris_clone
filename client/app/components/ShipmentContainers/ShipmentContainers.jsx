@@ -5,16 +5,16 @@ import PropTypes from '../../prop-types'
 import '../../styles/select-css-custom.css'
 import styles from './ShipmentContainers.scss'
 import { CONTAINER_DESCRIPTIONS, CONTAINER_TARE_WEIGHTS } from '../../constants'
-import { Checkbox } from '../Checkbox/Checkbox'
+import Checkbox from '../Checkbox/Checkbox'
 import defs from '../../styles/default_classes.scss'
-import { ValidatedInput } from '../ValidatedInput/ValidatedInput'
+import ValidatedInput from '../ValidatedInput/ValidatedInput'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import { Tooltip } from '../Tooltip/Tooltip'
 
 const containerDescriptions = CONTAINER_DESCRIPTIONS
 const containerTareWeights = CONTAINER_TARE_WEIGHTS
 
-export class ShipmentContainers extends Component {
+class ShipmentContainers extends Component {
   constructor (props) {
     super(props)
     this.state = {

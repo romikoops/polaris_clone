@@ -26,7 +26,7 @@ class Admin::CurrenciesController < ApplicationController
 
   def toggle_mode
     tenant = Tenant.find(current_user.tenant_id)
-    tenant.scope["fixed_currency"] = !tenant.scope["fixed_currency"]
+    tenant.scope["fixed_exchange_rate"] = !tenant.scope["fixed_exchange_rate"]
     tenant.save!
     currency = tenant ? tenant.currency : "USD"
     rates = get_currency_array(currency, tenant.id)

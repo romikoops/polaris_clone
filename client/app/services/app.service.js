@@ -1,5 +1,5 @@
 import { Promise } from 'es6-promise-promise'
-import { BASE_URL } from '../constants'
+import getApiHost from '../constants/api.constants'
 import { authHeader } from '../helpers'
 
 const { fetch } = window
@@ -20,7 +20,7 @@ function fetchCurrencies () {
     headers: authHeader()
   }
 
-  return fetch(`${BASE_URL}/currencies/get`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/currencies/get`, requestOptions).then(handleResponse)
 }
 
 function refreshRates (base) {
@@ -29,7 +29,7 @@ function refreshRates (base) {
     headers: authHeader()
   }
 
-  return fetch(`${BASE_URL}/currencies/refresh/${base}`, requestOptions)
+  return fetch(`${getApiHost()}/currencies/refresh/${base}`, requestOptions)
     .then(handleResponse)
 }
 
@@ -39,7 +39,7 @@ function fetchCurrenciesForBase (base) {
     headers: authHeader()
   }
 
-  return fetch(`${BASE_URL}/currencies/base/${base}`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/currencies/base/${base}`, requestOptions).then(handleResponse)
 }
 
 function setCurrency (currency) {
@@ -48,7 +48,7 @@ function setCurrency (currency) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ currency })
   }
-  const url = `${BASE_URL}/currencies/set`
+  const url = `${getApiHost()}/currencies/set`
   // FIXME: console.log(url)
 
   return fetch(url, requestOptions).then(handleResponse)
@@ -59,14 +59,14 @@ function fetchCountries () {
     headers: authHeader()
   }
 
-  return fetch(`${BASE_URL}/countries`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/countries`, requestOptions).then(handleResponse)
 }
 function toggleTenantCurrencyMode () {
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
-  const url = `${BASE_URL}/admin/currencies/toggle_mode`
+  const url = `${getApiHost()}/admin/currencies/toggle_mode`
   // FIXME: console.log(url)
 
   return fetch(url, requestOptions).then(handleResponse)
@@ -77,7 +77,7 @@ function setTenantCurrencyRates (base, rates) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ base, rates })
   }
-  const url = `${BASE_URL}/admin/currencies/set_rates`
+  const url = `${getApiHost()}/admin/currencies/set_rates`
   // FIXME: console.log(url)
 
   return fetch(url, requestOptions).then(handleResponse)

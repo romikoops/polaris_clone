@@ -1,13 +1,14 @@
 import React from 'react'
 import styles from '../AdminShipments.scss'
 import PropTypes from '../../../prop-types'
-import { moment } from '../../../constants'
-import { checkPreCarriage, gradientTextGenerator } from '../../../helpers'
+import { gradientTextGenerator } from '../../../helpers'
 
 export default function ShipmentOverviewShowCard ({
-  et,
+  estimatedTime,
+  carriage,
+  noCarriage,
   hub,
-  bg,
+  background,
   editTime,
   handleSaveTime,
   toggleEditTime,
@@ -28,13 +29,13 @@ export default function ShipmentOverviewShowCard ({
     <div className="flex-100 layout-row">
       <div className={`${styles.info_hub_box} flex-60 layout-column`}>
         <h3>{hub.name}</h3>
-        {et ? <div className="layout-row layout-align-start-center">
+        {estimatedTime ? <div className="layout-row layout-align-start-center">
           <div className="flex-60 layout-align-center-start">
             <span>
               {text}
             </span>
             <div className="layout-row layout-align-start-center">
-              {et}
+              {estimatedTime}
             </div>
           </div>
           {isAdmin
@@ -60,21 +61,36 @@ export default function ShipmentOverviewShowCard ({
             </div>) : '' }
         </div> : '' }
 
-        {text === 'ETD' ? (
-          <div className="flex-100 layout-row layout-align-center-stretch">
-            <div className="layout-row flex-100 layout-align-start-center">
-              <div className="flex-100 layout-row layout-align-start-center">
-                <i
-                  className={`flex-none fa fa-check-square clip ${styles.check_square}`}
-                  style={shipment.pickup_address ? selectedStyle : deselectedStyle}
-                />
+        {text === 'ETD'
+          ? (
+            <div className="flex-100 layout-row layout-align-start-center ">
+              <div className="layout-row flex-100 layout-align-start-center">
                 <div className={`flex layout-row layout-wrap layout-align-start-start ${styles.carriage_row}`}>
-                  <h4 className="flex-95 no_m layout-row">{checkPreCarriage(shipment, 'Pick-up').type}&nbsp;
-                    {shipment.pickup_address
-                      ? `on ${moment(checkPreCarriage(shipment, 'Pick-up').date)
-                        .format('DD/MM/YYYY')}`
-                      : ''}
-                  </h4>
+                  <div className="flex-100 layout-row">
+                    <div className="flex-md-100 flex-lg-40 layout-row">
+                      <i className={`flex-20 fa fa-check-square clip ${styles.check_square_sm}`} style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
+                      <h4 className="flex-70 layout-row">
+                        Pick-up
+                      </h4>
+                    </div>
+                    <div className="flex-60 layout-row">
+                      <i className={`flex-15 fa fa-check-square clip ${styles.check_square_sm}`} style={!shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
+                      <h4 className="flex-85 layout-row">
+                        Drop-off
+                      </h4>
+                    </div>
+                  </div>
+                  {shipment.has_pre_carriage ? (<div className="layout-row layout-align-start-center">
+                    <div className="flex-100 layout-align-center-start">
+                      <div className="layout-row layout-align-start-center">
+                        {carriage}
+                      </div>
+                    </div>
+                  </div>) : (<div className="flex-100 layout-align-center-start">
+                    <div className="layout-row layout-align-start-center">
+                      {noCarriage}
+                    </div>
+                  </div>) }
                   {shipment.pickup_address ? (
                     <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
                       <p>{shipment.pickup_address.street} &nbsp;
@@ -86,45 +102,65 @@ export default function ShipmentOverviewShowCard ({
                   ) : ''}
                 </div>
               </div>
-            </div>
-          </div>
-        ) : (
-          <div className="flex-100 layout-row layout-align-center-stretch">
-            <div className="layout-row flex-100 layout-align-start-center">
-              <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.delivery_address ? selectedStyle : deselectedStyle} />
-              <div className={`flex layout-row layout-wrap layout-align-start-start ${styles.carriage_row}`}>
-                <h4 className="flex-95 layout-row">{checkPreCarriage(shipment, 'Delivery').type}&nbsp;
-                  {shipment.delivery_address
-                    ? `on ${moment(checkPreCarriage(shipment, 'Delivery').date)
-                      .format('DD/MM/YYYY')}`
-                    : ''}
-                </h4>
-                {shipment.delivery_address ? (
-                  <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address} ${styles.margin_fixes}`}>
-                    <p>{shipment.delivery_address.street}&nbsp;
-                      {shipment.delivery_address.street_number},&nbsp;
-                      <strong>{shipment.delivery_address.city},&nbsp;
-                        {shipment.delivery_address.country.name} </strong>
 
-                    </p>
+            </div>
+          ) : (
+            <div className="flex-100 layout-row layout-align-center-stretch">
+              <div className="layout-row flex-100 layout-align-start-center">
+                <div className={`flex layout-row layout-wrap layout-align-start-start ${styles.carriage_row}`}>
+                  <div className="flex-100 layout-row">
+                    <div className="flex-40 layout-row">
+                      <i className={`flex-20 fa fa-check-square clip ${styles.check_square_sm}`} style={shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
+                      <h4 className="flex-80 layout-row">
+                      Delivery
+                      </h4>
+                    </div>
+                    <div className="flex-60 layout-row">
+                      <i className={`flex-15 fa fa-check-square clip ${styles.check_square_sm}`} style={!shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
+                      <h4 className="flex-85 layout-row">
+                      Collection
+                      </h4>
+                    </div>
                   </div>
-                ) : ''}
-              </div>
-            </div>
+                  {shipment.has_on_carriage ? (<div className="layout-row layout-align-start-center">
+                    <div className="flex-100 layout-align-center-start">
+                      <div className="layout-row layout-align-start-center">
+                        {carriage}
+                      </div>
+                    </div>
+                  </div>) : (<div className="flex-100 layout-align-center-start">
+                    <div className="layout-row layout-align-start-center">
+                      {noCarriage}
+                    </div>
+                  </div>) }
+                  {shipment.delivery_address ? (
+                    <div className={`layout-row flex-100 layout-align-start-center ${styles.carriage_address} ${styles.margin_fixes}`}>
+                      <p>{shipment.delivery_address.street}&nbsp;
+                        {shipment.delivery_address.street_number},&nbsp;
+                        <strong>{shipment.delivery_address.city},&nbsp;
+                          {shipment.delivery_address.country.name} </strong>
 
-          </div>
-        )}
+                      </p>
+                    </div>
+                  ) : ''}
+                </div>
+              </div>
+
+            </div>
+          )}
 
       </div>
-      <div className={`layout-column flex-40 ${styles.image}`} style={bg} />
+      <div className={`layout-column flex-40 ${styles.image}`} style={background} />
     </div>
   )
 }
 
 ShipmentOverviewShowCard.propTypes = {
-  et: PropTypes.node.isRequired,
+  estimatedTime: PropTypes.node.isRequired,
+  carriage: PropTypes.node.isRequired,
+  noCarriage: PropTypes.node.isRequired,
   hub: PropTypes.hub.isRequired,
-  bg: PropTypes.objectOf(PropTypes.string),
+  background: PropTypes.objectOf(PropTypes.string),
   shipment: PropTypes.objectOf(PropTypes.any),
   editTime: PropTypes.bool,
   theme: PropTypes.theme,
@@ -135,7 +171,7 @@ ShipmentOverviewShowCard.propTypes = {
 }
 
 ShipmentOverviewShowCard.defaultProps = {
-  bg: {},
+  background: {},
   shipment: {},
   text: '',
   editTime: false,

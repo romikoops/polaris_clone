@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, change } from '../../mocks'
+import { theme, identity } from '../../mocks'
 
 jest.mock('isomorphic-fetch', () =>
   () => Promise.resolve({ data: [] }))
@@ -32,9 +32,9 @@ jest.mock('../../constants', () => {
     invoice: 'Invoice',
     miscellaneous: 'Miscellaneous'
   }
-  const BASE_URL = 'BASE_URL'
+  const getApiHost = () => 'BASE_URL'
 
-  return { moment, documentTypes, BASE_URL }
+  return { moment, documentTypes, getApiHost }
 })
 // eslint-disable-next-line
 import FileTile from './FileTile'

@@ -12,7 +12,7 @@ export const documentConstants = {
   CLEAR_LOADING: 'CLEAR_LOADING',
   DOWNLOAD_REQUEST: 'DOWNLOAD_REQUEST',
   DOWNLOAD_SUCCESS: 'DOWNLOAD_SUCCESS',
-  DOWNLOAD_FAILURE: 'DOWNLOAD_PRICINGS_FAILURE'
+  DOWNLOAD_FAILURE: 'DOWNLOAD_FAILURE'
 }
 
 export const documentGlossary = {
@@ -34,4 +34,14 @@ export const documentGlossary = {
   localCharges: 'Local Charges',
   customs: 'Customs Fees'
 }
+
+export const docOptions = [
+  { label: 'Packing Sheet', value: 'packing_sheet' },
+  { label: 'Commercial Invoice', value: 'commercial_invoice' },
+  { label: 'Customs Declaration', value: 'customs_declaration' },
+  { label: 'Customs Value Declaration', value: 'customs_value_declaration' },
+  { label: 'EORI', value: 'eori' },
+  { label: 'Certificate Of Origin', value: 'certificate_of_origin' },
+  { label: 'Dangerous Goods', value: 'dangerous_goods' }
+]
 // export default documentConstants

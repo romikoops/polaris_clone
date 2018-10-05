@@ -61,7 +61,7 @@ Tabs.propTypes = {
 }
 
 Tabs.defaultProps = {
-  wrapperTabs: 'layout-row flex-40',
+  wrapperTabs: 'layout-row flex-60',
   paddingFixes: '',
   defaultActiveTabIndex: 0,
   children: null

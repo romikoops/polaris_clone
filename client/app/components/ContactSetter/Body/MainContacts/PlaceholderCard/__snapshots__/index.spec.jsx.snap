@@ -14,7 +14,7 @@ exports[`shallow render 1`] = `
     className="flex-100 layout-row layout-align-center-center"
   >
     <h3>
-      Choose a  
+      Choose a
       <br />
       <span
         className="contact_type"

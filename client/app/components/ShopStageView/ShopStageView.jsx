@@ -5,7 +5,7 @@ import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
 import { SHIPMENT_STAGES, QUOTE_STAGES } from '../../constants'
 import { gradientTextGenerator, gradientGenerator, history } from '../../helpers'
-import { HelpContact } from '../Help/Contact'
+import HelpContact from '../Help/Contact'
 
 export class ShopStageView extends Component {
   static goBack () {
@@ -14,8 +14,10 @@ export class ShopStageView extends Component {
   constructor (props) {
     super(props)
     this.state = {}
-    this.applicableStages = this.props.tenant.data.scope.quotation_tool
-      ? QUOTE_STAGES : SHIPMENT_STAGES
+    this.applicableStages =
+      this.props.tenant.data.scope.closed_quotation_tool ||
+        this.props.tenant.data.scope.open_quotation_tool
+        ? QUOTE_STAGES : SHIPMENT_STAGES
   }
   componentWillReceiveProps (nextProps) {
     this.setStageHeader(nextProps.currentStage)
@@ -104,6 +106,7 @@ export class ShopStageView extends Component {
       t
     } = this.props
     const { showHelp } = this.state
+    const isQuote = (tenant && tenant.data && tenant.data.scope) && (tenant.data.scope.closed_quotation_tool || tenant.data.scope.open_quotation_tool)
     const stageBoxes = this.applicableStages.map(stage => this.stageBox(stage))
     const gradientStyle =
       theme && theme.colors
@@ -189,7 +192,7 @@ export class ShopStageView extends Component {
             <div
               className={`${styles.line_box} layout-row layout-align-center flex-none`}
             >
-              <div className={`${styles.line} flex-none`} />
+              <div className={`${isQuote ? styles.quote_line : styles.line} flex-none`} />
               {stageBoxes}
             </div>
           </div>

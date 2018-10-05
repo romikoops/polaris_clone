@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from '../../prop-types'
 import { AdminShipmentsIndex } from './'
-import { AdminShipmentView } from './AdminShipmentView/AdminShipmentView'
+import AdminShipmentView from './AdminShipmentView/AdminShipmentView'
 import { adminActions } from '../../actions'
 import { AdminShipmentsGroup } from './Shipments/Group'
 
@@ -90,6 +90,7 @@ class AdminShipments extends Component {
                 adminDispatch={adminDispatch}
                 loading={loading}
                 hubs={hubs}
+                scope={tenant.data.scope}
                 handleShipmentAction={this.handleShipmentAction}
                 shipmentData={shipment}
                 clients={clients}
@@ -147,6 +148,46 @@ class AdminShipments extends Component {
                 theme={theme}
                 title="Finished"
                 target="finished"
+                adminDispatch={adminDispatch}
+                loading={loading}
+                hubs={hubs}
+                handleShipmentAction={this.handleShipmentAction}
+                shipments={shipments}
+                hubHash={hubHash}
+                clients={clients}
+                viewShipment={this.viewShipment}
+                {...props}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/admin/shipments/rejected"
+            render={props => (
+              <AdminShipmentsGroup
+                theme={theme}
+                title="Rejected"
+                target="rejected"
+                adminDispatch={adminDispatch}
+                loading={loading}
+                hubs={hubs}
+                handleShipmentAction={this.handleShipmentAction}
+                shipments={shipments}
+                hubHash={hubHash}
+                clients={clients}
+                viewShipment={this.viewShipment}
+                {...props}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/admin/shipments/archived"
+            render={props => (
+              <AdminShipmentsGroup
+                theme={theme}
+                title="Archived"
+                target="archived"
                 adminDispatch={adminDispatch}
                 loading={loading}
                 hubs={hubs}

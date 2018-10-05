@@ -11,13 +11,15 @@ exports[`compName !== AddressBook 1`] = `
     <i
       className="fa fa-arrow-left"
     />
-     Back to Address Book
+     
+    Back to Address Book
   </div>
   <div
     className="title_sec layout-row layout-align-center"
   >
     <ContactSetterNewContactWrapperTitle
       contactType="FOO"
+      t={[Function]}
     />
   </div>
   <div
@@ -46,13 +48,15 @@ exports[`contactType === notifyee && compName === ShipmentContactForm 1`] = `
     <i
       className="fa fa-arrow-left"
     />
-     Back to Address Book
+     
+    Back to Address Book
   </div>
   <div
     className="title_sec layout-row layout-align-center"
   >
     <ContactSetterNewContactWrapperTitle
       contactType="notifyee"
+      t={[Function]}
     />
   </div>
   <div
@@ -79,6 +83,7 @@ exports[`shallow render 1`] = `
   >
     <ContactSetterNewContactWrapperTitle
       contactType="FOO"
+      t={[Function]}
     />
   </div>
   <div

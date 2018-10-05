@@ -115,7 +115,7 @@ exports[`shallow rendering 1`] = `
       <h3
         className="flex-100 rhb_header"
       >
-         DESTINATION
+        DESTINATION
       </h3>
       <div
         className="flex-100 hub_card layout-row"

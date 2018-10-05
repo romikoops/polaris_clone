@@ -74,6 +74,9 @@
     overflow: hidden;
     transition: all 1250ms ease-in-out;
   }
+  .closed_notes {
+    height: 0;
+  }
 
 
 }

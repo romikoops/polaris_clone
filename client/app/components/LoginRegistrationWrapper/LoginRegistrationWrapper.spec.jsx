@@ -12,7 +12,7 @@ jest.mock('../../containers/RegistrationPage/RegistrationPage', () => ({
 }))
 
 // eslint-disable-next-line
-import { LoginRegistrationWrapper } from './LoginRegistrationWrapper'
+import LoginRegistrationWrapper from './LoginRegistrationWrapper'
 
 const propsBase = {
   initialCompName: 'LoginPage',
@@ -44,4 +44,18 @@ test('click changes state and calls props.updateDimensions', () => {
 
   clickableDiv.simulate('click')
   expect(dom.state().compName).toBe('LoginPage')
+})
+
+test('translation working on togglePrompt', () => {
+  const props = {
+    ...propsBase,
+    updateDimensions: jest.fn()
+  }
+
+  const dom = createWrapper(props)
+  const clickableDiv = dom.find('.emulate_link').first()
+  expect(clickableDiv.text()).toMatchSnapshot()
+
+  const clickableDivClick = dom.find('.emulate_link').first().simulate('click')
+  expect(clickableDivClick.text()).toMatchSnapshot()
 })

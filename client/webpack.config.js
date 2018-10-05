@@ -1,12 +1,12 @@
 const fs = require('fs')
 const path = require('path')
 const webpack = require('webpack')
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const DotenvWebpack = require('dotenv-webpack')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const NodeEnvPlugin = require('node-env-webpack-plugin')
-const DotenvWebpack = require('dotenv-webpack')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
+const SentryCliPlugin = require('@sentry/webpack-plugin')
 
 const babelrc = Object.assign({}, JSON.parse(fs.readFileSync('./.babelrc', 'utf-8')), {
   cacheDirectory: true,
@@ -16,8 +16,10 @@ const babelrc = Object.assign({}, JSON.parse(fs.readFileSync('./.babelrc', 'utf-
 babelrc.plugins.push('react-hot-loader/babel')
 module.exports = {
   entry: './app/index.jsx',
+  devtool: NodeEnvPlugin.isProduction ? 'source-map' : 'eval-cheap-module-source-map',
   devServer: {
-    historyApiFallback: true
+    historyApiFallback: true,
+    host: '0.0.0.0'
   },
   output: {
     publicPath: '/',
@@ -95,16 +97,19 @@ module.exports = {
     }),
     new CopyWebpackPlugin([
       { from: 'i18n/en/**/*', to: './en', flatten: true},
+      { from: 'app/config.js' },
     ]),
-    NodeEnvPlugin.isProduction
-      ? false
-      : new BrowserSyncPlugin({
-        host: 'localhost',
-        port: 3001,
-        proxy: 'http://localhost:8080/'
-      }),
     new DotenvWebpack({
       path: './.node-env'
-    })
+    }),
+    new webpack.EnvironmentPlugin(['RELEASE']),
+    NodeEnvPlugin.isProduction && process.env.SENTRY_AUTH_TOKEN
+      ? new SentryCliPlugin({
+        release: process.env.RELEASE,
+        include: 'dist/',
+        ignoreFile: '.sentrycliignore',
+        ignore: ['config.js']
+      })
+      : false
   ].filter(Boolean)
 }
