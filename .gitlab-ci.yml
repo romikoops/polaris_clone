@@ -116,8 +116,9 @@ docker:
   tags:
     - itsmycargo
   variables:
-    DOCKER_HOST: tcp://localhost:2375/
     DOCKER_DRIVER: overlay2
+    DOCKER_HOST: tcp://localhost:2375/
+    DOCKER_REGISTRY: eu.gcr.io/itsmycargo-main
     SENTRY_AUTH_TOKEN: 099b9abd2844497db3dace7307576c12fadc7d47bd68416584cdb4b90709de95
   services:
     - docker:dind
@@ -125,13 +126,31 @@ docker:
   script: |
     install_dependencies
     registry_login
-    /usr/bin/habitus -env REGISTRY=eu.gcr.io/itsmycargo-main -env TAG=${CI_COMMIT_SHA}
-    /usr/bin/habitus -env REGISTRY=eu.gcr.io/itsmycargo-main -env TAG=${CI_COMMIT_SHA} \
-      -build RELEASE=${CI_COMMIT_SHA} \
-      -build SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN} \
-      -d client/
-    docker push eu.gcr.io/itsmycargo-main/imc/api:${CI_COMMIT_SHA}
-    docker push eu.gcr.io/itsmycargo-main/imc/client:${CI_COMMIT_SHA}
+
+    # Build api
+    docker pull ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_REF_SLUG} || true
+    docker build \
+      --cache-from ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_REF_SLUG} \
+      --tag ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_SHA} \
+      --tag ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_REF_SLUG} \
+      .
+
+    # Build client
+    docker pull ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_REF_SLUG} || true
+    docker build \
+      --cache-from ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_REF_SLUG} \
+      --tag ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_SHA} \
+      --tag ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_REF_SLUG} \
+      --build-arg RELEASE=${CI_COMMIT_SHA} \
+      --build-arg SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN} \
+      client/
+
+    # Push images
+    docker push ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_SHA}
+    docker push ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_REF_SLUG}
+    docker push ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_SHA}
+    docker push ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_REF_SLUG}
+
   only:
     - branches
   except:
@@ -180,7 +199,7 @@ cucumber:
 
   before_script:
     - export CI_ENVIRONMENT_SLUG=$(cat ci_environment_slug.txt)
-    - export TARGET_URL=https://imcqa:shipmetimbers@demo.$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
+    - export TARGET_URL=https://demo.$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
 
   script: |
     cd qa/
