@@ -88,11 +88,7 @@
       <div>
         <h4 class="date-title">Closing Date</h4>
         <p class="sched-elem">
-          <% if shipment.has_pre_carriage %>
-            <%= (shipment.closing_date - shipment.trucking["pre_carriage"]["trucking_time_in_seconds"]).strftime("%d/%m/%Y") %>
-          <% else %>
-            <%= shipment.closing_date.strftime("%d/%m/%Y") %>
-          <% end %>
+          <%= shipment.closing_date.strftime("%d/%m/%Y") %>
         </p>
       </div>
     <% end %>
@@ -210,7 +206,7 @@
                 <div class="display-flex flex-grow margin-bottom">
                   <i
                     class="fa fa-file-o"
-                    style="color: <%= shipment.has_pre_carriage ? primary_color : '#E0E0E0' %>"
+                    style="color: <%= shipment.selected_offer["export"] ? primary_color : '#E0E0E0' %>"
                   ></i>
                   <p>
                 Origin<br />
@@ -220,7 +216,7 @@
                 <div class="display-flex flex-grow margin-bottom">
                   <i
                     class="fa fa-file"
-                    style="color: <%= shipment.has_on_carriage ? primary_color : '#E0E0E0' %>">
+                    style="color: <%= shipment.selected_offer["import"] ? primary_color : '#E0E0E0' %>">
                   </i>
                   <p>
                 Destination<br />
@@ -255,10 +251,15 @@
         </div>
       </div>
       <div class="total-section">      
-        <p><span>x<%= shipment.selected_offer["cargo"].count %>&nbsp;</span><%= load_type %></p>
+        <p><span>x<%= shipment.cargo_units.count || '1' %>&nbsp;</span><%= load_type %></p>
         <h2>
-          <%= (shipment.selected_offer["total"]["value"] * 100).floor / 100.0 %>
-          <%= shipment.selected_offer["total"]["currency"] %>
+          <% if shipment.selected_offer["edited_total"] %>
+            <%= (shipment.selected_offer["edited_total"]["value"] * 100).floor / 100.0 %>
+            <%= shipment.selected_offer["edited_total"]["currency"] %>
+          <% else %>
+            <%= (shipment.selected_offer["total"]["value"] * 100).floor / 100.0 %>
+            <%= shipment.selected_offer["total"]["currency"] %>
+          <% end %>
         </h2>
       </div>
     </div>
