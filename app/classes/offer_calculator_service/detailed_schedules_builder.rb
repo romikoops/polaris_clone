@@ -17,7 +17,7 @@ module OfferCalculatorService
         ).perform
 
         result = {
-          quote: grand_total_charge.deconstruct_tree_into_schedule_charge,
+          quote: grand_total_charge.deconstruct_tree_into_schedule_charge.deep_symbolize_keys,
           schedules: schedules.map(&:to_detailed_hash),
           meta: {
             mode_of_transport: charge_schedule.mode_of_transport,

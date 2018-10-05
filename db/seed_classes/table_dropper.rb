@@ -4,14 +4,16 @@ class TableDropper
     undelete_models  = []
 
     models_to_delete.each_with_index do |model, i|
-      if i > 1000
-        undelete_models = models_to_delete[1001..-1].uniq
-        log_not_deleted_models(undelete_models)
-        break
+      begin
+        if i > 1000
+          undelete_models = models_to_delete[1001..-1].uniq
+          log_not_deleted_models(undelete_models)
+          break
+        end
+        model.delete_all
+      rescue StandardError => e
+        models_to_delete << model
       end
-      model.delete_all
-    rescue StandardError
-      models_to_delete << model
     end
 
     deleted_models = (models_to_delete - undelete_models).map(&:to_s)
