@@ -602,8 +602,12 @@ module ShippingTools
   def get_shipment_pdf(params)
     shipment = Shipment.find_by_id(params[:shipment_id])
     pdf_string = render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_shipper.pdf', locals: { shipment: shipment })
-    shipper_pdf = BreezyPDFLite::RenderRequest.new(pdf_string).submit
-    send_data shipper_pdf.body, filename: 'Booking_' + shipment.imc_reference + '.pdf'
+    response = BreezyPDFLite::RenderRequest.new(pdf_string).submit
+    if response.code.to_i == 201
+      send_data response.body, filename: 'Booking_' + shipment.imc_reference + '.pdf'
+    else
+      Raise
+    end
   end
 
   def self.save_pdf_quotes(shipment, tenant, schedules)
