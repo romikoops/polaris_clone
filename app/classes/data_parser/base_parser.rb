@@ -4,7 +4,7 @@ module DataParser
   class BaseParser
     attr_reader :results, :stats, :hub, :tenant, :path, :hub_id
     include AwsConfig
-    
+
     def initialize(args = { _user: current_user })
       params = args[:params]
       @stats = _stats

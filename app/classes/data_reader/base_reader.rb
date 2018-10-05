@@ -35,7 +35,7 @@ module DataReader
           rows_data << build_row_obj(headers, parsed_row)
         end
 
-        @sheets_data.merge!(sheet_name => rows_data)
+        @sheets_data[sheet_name] = rows_data
       end
 
       @sheets_data
