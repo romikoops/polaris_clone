@@ -161,19 +161,10 @@ class QuoteCard extends PureComponent {
     const originHub = result.meta.origin_hub
     const destinationHub = result.meta.destination_hub
     const gradientStyle = gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-    let calcPayload
-    if (aggregatedCargo && aggregatedCargo.id) {
-      calcPayload = aggregatedCargo.weight
-    } else if (cargo.length === 1) {
-      calcPayload = cargo[0].payload_in_kg
-    } else {
-      calcPayload = cargo.reduce((a, b) => {
-        const aPayload = parseFloat(a.payload_in_kg) * parseInt(a.quantity, 10)
-        const bPayload = parseFloat(b.payload_in_kg) * parseInt(b.quantity, 10)
+    const calcPayload = aggregatedCargo && aggregatedCargo.id
+      ? aggregatedCargo.weight
+      : cargo.reduce((sum, cargoUnit) => (sum + +cargoUnit.payload_in_kg * +cargoUnit.quantity), 0)
 
-        return aPayload + bPayload
-      })
-    }
     const pricesArr = Object.keys(quote).splice(2).length !== 0 ? (
       Object.keys(quote).splice(2).map(key => (<CollapsingBar
         showArrow
