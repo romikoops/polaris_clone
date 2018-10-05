@@ -29,8 +29,8 @@ module DataReader
     def parse_headers(header_row)
       header_row.map! do |el|
         el.downcase!
+        el.gsub!(/[^a-z0-9\-\/\_]+/, '_') # underscore instead of unwanted characters
         el.gsub!(/\/+/, '__') # double underscore instead of slash
-        el.gsub!(/[^a-z0-9\-]+/, '_') # underscore instead of unwanted characters
         el.to_sym
       end
     end
