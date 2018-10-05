@@ -473,9 +473,9 @@ class UserProfile extends Component {
             <GreyBox
               title={t('user:yourData')}
               wrapperClassName="flex-gt-sm-35 flex-100 layout-row layout-align-stretch"
-              contentClassName="layout-column flex"
+              contentClassName="layout-row layout-wrap flex layout-align-start-start"
               content={(
-                <div className={`flex layout-row layout-wrap ${styles.conditions_box}`}>
+                <div className={`flex-100 layout-row layout-wrap ${styles.conditions_box}`}>
                   <div className="flex-100">
                     <p
                       className="emulate_link blue_link"
