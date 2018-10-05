@@ -32,7 +32,6 @@
         <p>From:&nbsp;<span><%= shipment.origin_hub.name %></span></p>
         <p>To:&nbsp;<span><%= shipment.destination_hub.name %></span></p>
       </div>
-      <div></div>
     </div>
   </div>
 
@@ -41,20 +40,19 @@
 
       <% if shipment.pickup_address && shipment.has_pre_carriage %>
         <div>
-          <div>
+          <div class="display-flex">
             <i class=" fa fa-check check-square" style="color: <%= precarriage_color %>"></i>
-            <h4 class="1">
+            <h4>
               Pick-up on <%= shipment.planned_pickup_date.try(:strftime, "%d/%m/%Y") %>
             </h4>
           </div>
 
           <div>
-            <div></div>
             <% if shipment.pickup_address %>
               <p>
                 <%= shipment.pickup_address.street %> 
-                <%= shipment.pickup_address.street_number %>
-                <%= shipment.pickup_address.city %>
+                <%= shipment.pickup_address.street_number %>,
+                <%= shipment.pickup_address.city %>,
                 <%= shipment.pickup_address.country.name %>
               </p>
             <% end %>
@@ -64,16 +62,15 @@
 
       <% if shipment.delivery_address && shipment.has_on_carriage %>
         <div>
-          <div>
+          <div class="display-flex">
             <i class=" fa fa-check check-square" style="color: <%= oncarriage_color %>"></i>
-            <h4 class="1">
+            <h4>
               Delivery on <%= shipment.planned_delivery_date.try(:strftime, "%d/%m/%Y") %>
             </h4>
           </div>
           <div>
-            <div></div>
               <% if shipment.delivery_address %>
-                <p class="1">
+                <p>
                   <%= shipment.delivery_address.street %> 
                   <%= shipment.delivery_address.street_number %>,
                   <%= shipment.delivery_address.city %>,
@@ -87,16 +84,18 @@
   <% end %>
           
   <div class="dates margin-bottom">
-    <div>
-      <h4 class="date-title"><%= shipment.has_pre_carriage ? 'Pick-up Date' : 'Closing Date' %></h4>
-      <p class="sched-elem">
-        <% if shipment.has_pre_carriage %>
-          <%= (shipment.closing_date - shipment.trucking["pre_carriage"]["trucking_time_in_seconds"]).strftime("%d/%m/%Y") %>
-        <% else %>
-          <%= shipment.closing_date.strftime("%d/%m/%Y") %>
-        <% end %>
-      </p>
-    </div>
+    <% if !shipment.has_pre_carriage %>
+      <div>
+        <h4 class="date-title">Closing Date</h4>
+        <p class="sched-elem">
+          <% if shipment.has_pre_carriage %>
+            <%= (shipment.closing_date - shipment.trucking["pre_carriage"]["trucking_time_in_seconds"]).strftime("%d/%m/%Y") %>
+          <% else %>
+            <%= shipment.closing_date.strftime("%d/%m/%Y") %>
+          <% end %>
+        </p>
+      </div>
+    <% end %>
     <div>
       <h4 class="date-title">ETD</h4>
       <p class="sched-elem">
