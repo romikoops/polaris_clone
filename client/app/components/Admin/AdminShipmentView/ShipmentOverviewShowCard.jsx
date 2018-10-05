@@ -67,15 +67,15 @@ export default function ShipmentOverviewShowCard ({
               <div className="layout-row flex-100 layout-align-start-center">
                 <div className={`flex layout-row layout-wrap layout-align-start-start ${styles.carriage_row}`}>
                   <div className="flex-100 layout-row">
-                    <div className="flex-md-100 flex-lg-50 layout-row">
+                    <div className="flex-md-100 flex-lg-40 layout-row">
                       <i className={`flex-20 fa fa-check-square clip ${styles.check_square_sm}`} style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
-                      <h4 className="flex-80 layout-row">
+                      <h4 className="flex-70 layout-row">
                         Pick-up
                       </h4>
                     </div>
-                    <div className="flex-50 layout-row">
-                      <i className={`flex-20 fa fa-check-square clip ${styles.check_square_sm}`} style={!shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
-                      <h4 className="flex-80 layout-row">
+                    <div className="flex-60 layout-row">
+                      <i className={`flex-15 fa fa-check-square clip ${styles.check_square_sm}`} style={!shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
+                      <h4 className="flex-85 layout-row">
                         Drop-off
                       </h4>
                     </div>
@@ -109,15 +109,15 @@ export default function ShipmentOverviewShowCard ({
               <div className="layout-row flex-100 layout-align-start-center">
                 <div className={`flex layout-row layout-wrap layout-align-start-start ${styles.carriage_row}`}>
                   <div className="flex-100 layout-row">
-                    <div className="flex-50 layout-row">
+                    <div className="flex-40 layout-row">
                       <i className={`flex-20 fa fa-check-square clip ${styles.check_square_sm}`} style={shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
                       <h4 className="flex-80 layout-row">
                       Delivery
                       </h4>
                     </div>
-                    <div className="flex-50 layout-row">
-                      <i className={`flex-20 fa fa-check-square clip ${styles.check_square_sm}`} style={!shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
-                      <h4 className="flex-80 layout-row">
+                    <div className="flex-60 layout-row">
+                      <i className={`flex-15 fa fa-check-square clip ${styles.check_square_sm}`} style={!shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
+                      <h4 className="flex-85 layout-row">
                       Collection
                       </h4>
                     </div>

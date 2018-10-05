@@ -694,7 +694,7 @@ class AdminShipmentView extends Component {
       </div>
     ) : (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {`${moment(shipment.planned_destination_collection_date).format('DD/MM/YYYY | HH:mm')}`}
+        from {`${moment(shipment.planned_destination_collection_date).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
 
