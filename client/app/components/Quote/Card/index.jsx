@@ -254,8 +254,8 @@ class QuoteCard extends PureComponent {
         />
       </div>
     </div>))
-
-    const showEarlierBtn = moment(schedules[0].closing_date).diff(moment(), 'days') > 5
+    const earlierDate = schedules[0] ? schedules[0].closing_date : false
+    const showEarlierBtn = earlierDate && moment(earlierDate).diff(moment(), 'days') > 5
 
     return (
       <div
