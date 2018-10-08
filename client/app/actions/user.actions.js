@@ -719,7 +719,7 @@ function getPricings (redirect) {
     )
   }
 }
-function getPricingsForItinerary (redirect) {
+function getPricingsForItinerary (id) {
   function request (pricingData) {
     return { type: userConstants.GET_ITINERARY_PRICINGS_REQUEST, payload: pricingData }
   }
@@ -733,7 +733,7 @@ function getPricingsForItinerary (redirect) {
   return (dispatch) => {
     dispatch(request())
 
-    userService.getPricingsForItinerary().then(
+    userService.getPricingsForItinerary(id).then(
       (data) => {
         dispatch(success(data))
       },

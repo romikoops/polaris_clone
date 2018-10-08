@@ -11,7 +11,9 @@ import { userActions, appActions } from '../../../actions'
 class PricingList extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {  }
+    this.state = { 
+      expanded: {}
+     }
   }
 
   componentDidMount() {
@@ -22,13 +24,16 @@ class PricingList extends PureComponent {
   }
 
   generateSubComponent (row) {
-    const { pricings } = this.props
-    if (!pricings.show || (pricings.show && !pricings.show[row.id])) {
-      userDispatch.getPricingsForItinerary(row.id)
+    const { pricings, userDispatch } = this.props
+    const rowId = row.original.id
+    if (!pricings.show || (pricings.show && !pricings.show[rowId])) {
+      userDispatch.getPricingsForItinerary(rowId)
       return ''
     }
     const { show } = pricings
-    const data = show[row.id]
+    
+    const data = show[rowId]
+    if (!data) return ''
     const columns = [
       {
         Header: t('common:routing'),
@@ -125,6 +130,7 @@ class PricingList extends PureComponent {
         ]
       }
     ]
+    console.log(this.state.expanded)
     return ( 
       <div className="flex-100 layout-row layout-align-start-start layout-wrap">
         <div className="flex-100 layout-row layout-align-start-center">
@@ -141,8 +147,10 @@ class PricingList extends PureComponent {
                  desc: true
                }
              ]}
+             expanded={this.state.expanded}
+             onExpandedChange={expanded => this.setState({ expanded })}
              defaultPageSize={20}
-             SubComponent={row => this.generateSubComponent(row)}
+             SubComponent={d => (<div className="flex"></div>)}
           />
         </div>
 
