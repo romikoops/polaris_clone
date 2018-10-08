@@ -7,6 +7,7 @@ stages:
   - build
   - review
   - review_cleanup
+  - QA
 
 code_quality:
   stage: test
@@ -56,7 +57,7 @@ api:
     - itsmycargo
   cache:
     paths:
-      - vendor/ruby
+      - vendor/bundle
   variables:
     POSTGRES_DB: imcr_test
     DATABASE_URL: postgis://postgres:@localhost/imcr_test
@@ -70,6 +71,7 @@ api:
   artifacts:
     paths:
       - coverage/
+    when: always
     expire_in: 1 week
     reports:
       junit:
@@ -101,6 +103,7 @@ client:
   artifacts:
     paths:
       - client/coverage/lcov-report
+    when: always
     expire_in: 1 week
     reports:
       junit:
@@ -113,8 +116,9 @@ docker:
   tags:
     - itsmycargo
   variables:
-    DOCKER_HOST: tcp://localhost:2375/
     DOCKER_DRIVER: overlay2
+    DOCKER_HOST: tcp://localhost:2375/
+    DOCKER_REGISTRY: eu.gcr.io/itsmycargo-main
     SENTRY_AUTH_TOKEN: 099b9abd2844497db3dace7307576c12fadc7d47bd68416584cdb4b90709de95
   services:
     - docker:dind
@@ -122,13 +126,31 @@ docker:
   script: |
     install_dependencies
     registry_login
-    /usr/bin/habitus -env REGISTRY=eu.gcr.io/itsmycargo-main -env TAG=${CI_COMMIT_SHA}
-    /usr/bin/habitus -env REGISTRY=eu.gcr.io/itsmycargo-main -env TAG=${CI_COMMIT_SHA} \
-      -build RELEASE=${CI_COMMIT_SHA} \
-      -build SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN} \
-      -d client/
-    docker push eu.gcr.io/itsmycargo-main/imc/api:${CI_COMMIT_SHA}
-    docker push eu.gcr.io/itsmycargo-main/imc/client:${CI_COMMIT_SHA}
+
+    # Build api
+    docker pull ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_REF_SLUG} || true
+    docker build \
+      --cache-from ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_REF_SLUG} \
+      --tag ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_SHA} \
+      --tag ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_REF_SLUG} \
+      .
+
+    # Build client
+    docker pull ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_REF_SLUG} || true
+    docker build \
+      --cache-from ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_REF_SLUG} \
+      --tag ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_SHA} \
+      --tag ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_REF_SLUG} \
+      --build-arg RELEASE=${CI_COMMIT_SHA} \
+      --build-arg SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN} \
+      client/
+
+    # Push images
+    docker push ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_SHA}
+    docker push ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_REF_SLUG}
+    docker push ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_SHA}
+    docker push ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_REF_SLUG}
+
   only:
     - branches
   except:
@@ -140,6 +162,7 @@ deploy:
   image: eu.gcr.io/itsmycargo-main/deploy:latest
   tags:
     - itsmycargo
+  retry: 1
 
   script:
     - deploy
@@ -158,6 +181,40 @@ deploy:
   except:
     - master
     - dev
+
+cucumber:
+  stage: QA
+  image: ruby:2.5
+  tags:
+    - itsmycargo
+  retry: 1
+  cache:
+    paths:
+      - qa/vendor/bundle
+  variables:
+    SELENIUM_URL: http://localhost:4444/wd/hub
+    DRIVER: remote_chrome
+  services:
+    - selenium/standalone-chrome:3
+
+  before_script:
+    - export CI_ENVIRONMENT_SLUG=$(cat ci_environment_slug.txt)
+    - export TARGET_URL=https://demo.$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
+
+  script: |
+    cd qa/
+    bundle check --path vendor/bundle || bundle install --path vendor/bundle --jobs $(nproc)
+    echo "Target URL: $TARGET_URL"
+    bin/cucumber --format progress --format junit --out report/
+
+  artifacts:
+    paths:
+      - qa/report/*.png
+    when: on_failure
+    expire_in: 1 week
+    reports:
+      junit:
+        - qa/report/*.xml
 
 reset_database:
   stage: review_cleanup

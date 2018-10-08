@@ -1,0 +1,11 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+gem 'capybara', '~> 3.8.2'
+gem 'capybara-screenshot', '~> 1.0.18'
+gem 'chronic'
+gem 'cucumber'
+gem 'pry'
+gem 'rspec-expectations'
+gem 'selenium-webdriver', '~> 3.14.0'
