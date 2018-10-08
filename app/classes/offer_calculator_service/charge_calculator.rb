@@ -27,6 +27,7 @@ module OfferCalculatorService
       create_trucking_charges
       cargo_result = calc_cargo_charges
       return nil if cargo_result.nil?
+
       @grand_total_charge.update_price!
       @grand_total_charge.save
       @grand_total_charge
@@ -133,6 +134,7 @@ module OfferCalculatorService
         create_charges_from_fees_data!(charge_result, children_charge_category, charge_category, parent_charge)
       end
       return nil if parent_charge.children.empty?
+      
       parent_charge.update_price!
     end
 

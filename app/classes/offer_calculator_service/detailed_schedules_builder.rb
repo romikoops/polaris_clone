@@ -16,6 +16,7 @@ module OfferCalculatorService
           user:          user
         ).perform
         next if grand_total_charge.nil?
+        
         result = {
           quote: grand_total_charge.deconstruct_tree_into_schedule_charge.deep_symbolize_keys,
           schedules: schedules.map(&:to_detailed_hash),
