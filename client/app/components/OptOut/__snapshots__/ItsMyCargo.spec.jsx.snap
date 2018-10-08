@@ -20,7 +20,7 @@ exports[`shallow rendering 1`] = `
       className="flex-100"
     >
       Use of any
-      ItsMyCargo webshop requires accepting the terms and conditions laid out on the Terms and Conditions page.
+       ItsMyCargo webshop requires accepting the terms and conditions laid out on the Terms and Conditions page.
     </p>
     <p
       className="flex-100"
@@ -31,8 +31,7 @@ exports[`shallow rendering 1`] = `
     <p
       className="flex-100"
     >
-      Should you wish to resume using one of the
-      ItsMyCargo Shops you will need to agree to the terms and conditions again
+      Should you wish to resume using one of the ItsMyCargo Shops you will need to agree to the terms and conditions again
     </p>
   </div>
   <div
@@ -47,8 +46,7 @@ exports[`shallow rendering 1`] = `
       className="flex-100"
     >
       <li>
-        Your user account will be marked as not agreeing to the
-        ItsMyCargo GMBH Terms and Conditions
+        Your user account will be marked as not agreeing to the {{tenantName}} Terms and Conditions
       </li>
       <li>
         You will be logged out and returned to the landing page

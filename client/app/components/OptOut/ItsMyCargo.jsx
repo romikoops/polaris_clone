@@ -33,7 +33,7 @@ class OptOutItsMyCargo extends Component {
             {t('optout:withdrawWarningHead')}{t('optout:withdrawWarningTail')}
           </p>
           <p className="flex-100">
-            {t('optout:agreeAgainHead')}{t('optout:agreeAgainGeneral')}
+            {t('optout:agreeAgainGeneral')}
           </p>
         </div>
         <div className="flex-100 layout-row layout-wrap layout-aling-center-center">
@@ -41,7 +41,7 @@ class OptOutItsMyCargo extends Component {
             {t('optout:optOutActionHead')}
           </p>
           <ul className="flex-100">
-            <li>{t('optout:accountMarked')}{t('imc:imcTerms')}</li>
+            <li>{t('optout:accountMarked', { tenantName: 'ItsMyCargo GMBH' })}</li>
             <li>{t('optout:optOutActionTail')}</li>
           </ul>
         </div>

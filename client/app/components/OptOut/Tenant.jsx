@@ -27,13 +27,13 @@ class OptOutTenant extends Component {
         </div>
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
           <p className="flex-100">
-            {`${t('optout:useRequiredHead')} ${tenant.data.name} ${t('optout:useRequiredTail')} ${tenant.data.name}.`}
+            {t('optout:useRequiredTenant', { tenantName: tenant.data.name })}
           </p>
           <p className="flex-100">
             {t('optout:withdrawWarningHead')} {t('optout:withdrawWarningTail')}
           </p>
           <p className="flex-100">
-            {`${t('optout:agreeAgainHead')} ${tenant.data.name} ${t('optout:agreeAgainTail')}`}
+            {t('optout:agreeAgainTenant', { tenantName: tenant.data.name })}
           </p>
         </div>
         <div className="flex-100 layout-row layout-wrap layout-aling-center-center">
@@ -41,7 +41,7 @@ class OptOutTenant extends Component {
             {t('optout:optOutActionHead')}
           </p>
           <ul className="flex-100">
-            <li>{`${t('optout:accountMarked')} ${tenant.data.name} ${t('footer:terms')}`}</li>
+            <li>{t('optout:accountMarked', { tenantName: tenant.data.name })}</li>
             <li>{t('optout:optOutActionTail')}</li>
           </ul>
         </div>
