@@ -41,7 +41,7 @@ module CurrencyTools
       end
     end
 
-    if Tenant.find(tenant_id).scope['atomic_rounding']
+    if Tenant.find(tenant_id).scope['continuous_rounding']
       return base_value.to_d.round(2)
     else
       return base_value
@@ -58,7 +58,7 @@ module CurrencyTools
         base_value += charge["value"]
       end
     end
-    if Tenant.find(tenant_id).scope['atomic_rounding']
+    if Tenant.find(tenant_id).scope['continuous_rounding']
       return base_value.to_d.round(2)
     else
       return base_value

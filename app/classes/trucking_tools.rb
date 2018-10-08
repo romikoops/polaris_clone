@@ -325,7 +325,7 @@ module TruckingTools
   end
 
   def should_round(result, scope)
-    if scope["atomic_rounding"]
+    if scope["continuous_rounding"]
       return result.to_d.round(2)
     else
       return result
