@@ -38,6 +38,20 @@ class PricingList extends PureComponent {
           }
         ]
       },
+      {
+        Header: t('common:pricing'),
+        columns: [
+          {
+            Header: t('common:numPricings'),
+            accessor: "pricing_count"
+          },
+          {
+            Header: t('common:dedicated'),
+            id: "has_user_pricing",
+            accessor: d => d.lastName
+          }
+        ]
+      },
     ]
     return ( 
       <div className="flex-100 layout-row layout-align-start-start">
