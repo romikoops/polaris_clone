@@ -2198,7 +2198,7 @@ class TenantSeeder
           legal: ''
         },
         dangerous_goods: false,
-        detailed_billing: false,
+        detailed_billing: true,
         continuous_rounding: false,
         closed_shop: true,
         closed_registration: true,

@@ -428,10 +428,12 @@ class Itinerary < ApplicationRecord
 
   def as_user_pricing_json(user, _options = {})
     new_options = {
-      user_has_pricing: user_has_pricing(user),
-      pricing_count:      pricing_count
-    }.merge(attributes)
-    # as_json(new_options)
+      methods: [
+        {user_has_pricing: user_has_pricing(user)},
+        {pricing_count:      pricing_count}
+      ]
+    }
+    as_json(new_options)
   end
 
   private

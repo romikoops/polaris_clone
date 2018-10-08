@@ -705,7 +705,7 @@ function getPricings (redirect) {
   return (dispatch) => {
     dispatch(request())
 
-    userService.getPricings(pages, perPage).then(
+    userService.getPricings().then(
       (data) => {
         dispatch(success(data))
         if (redirect) {
