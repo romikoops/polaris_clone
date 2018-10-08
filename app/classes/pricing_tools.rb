@@ -260,8 +260,8 @@ module PricingTools
     nil
   end
 
-  def round_fee(result, scope)
-    if scope['continuous_rounding']
+  def round_fee(result, should_round)
+    if should_round
       result.to_d.round(2)
     else
       result
@@ -291,7 +291,7 @@ module PricingTools
       fee_range.nil? ? 0 : fee_range['rate'] * quantity
     end
 
-    round_fee(result, scope)
+    round_fee(result, scope['continuous_rounding'])
   end
 
   def fee_value(fee, cargo_hash, scope)
@@ -332,7 +332,7 @@ module PricingTools
              when /RANGE/
                handle_range_fee(fee, cargo_hash)
     end
-    round_fee(result, scope)
+    round_fee(result, scope['continuous_rounding'])
   end
 
   def get_cargo_hash(cargo, mot)

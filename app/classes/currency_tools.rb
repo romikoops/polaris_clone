@@ -41,11 +41,7 @@ module CurrencyTools
       end
     end
 
-    if Tenant.find(tenant_id).scope['continuous_rounding']
-      return base_value.to_d.round(2)
-    else
-      return base_value
-    end
+    round_value(base_value, tenant_id)
   end
 
   def sum_and_convert_cargo(hash_obj, base, tenant_id)
@@ -58,11 +54,7 @@ module CurrencyTools
         base_value += charge['value']
       end
     end
-    if Tenant.find(tenant_id).scope['continuous_rounding']
-      return base_value.to_d.round(2)
-    else
-      return base_value
-    end
+    round_value(base_value, tenant_id)
   end
 
   def refresh_rates(base)
@@ -89,5 +81,13 @@ module CurrencyTools
     end
 
     results
+  end
+
+  def round_value(result, tenant_id)
+    if Tenant.find(tenant_id).scope['continuous_rounding']
+      result.to_d.round(2)
+    else
+      result
+    end
   end
 end

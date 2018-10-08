@@ -107,7 +107,7 @@ module TruckingTools
              handle_range_fare(fee, cargo)
     end
 
-    final_result = round_fare(fare, scope)
+    final_result = round_fare(fare, scope['continuous_rounding'])
     { currency: fee[:currency], value: final_result, key: key }
   end
 
@@ -326,8 +326,8 @@ module TruckingTools
     cargo_object['stackable']['number_of_items'] += quantity
   end
 
-  def round_fare(result, scope)
-    if scope['continuous_rounding']
+  def round_fare(result, rounding_scope)
+    if rounding_scope
       result.to_d.round(2)
     else
       result
