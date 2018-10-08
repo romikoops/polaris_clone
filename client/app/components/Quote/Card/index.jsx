@@ -299,7 +299,7 @@ class QuoteCard extends PureComponent {
               <p className="flex-100 layout-row layout-align-end-center">
                 {capitalize(t('acronym:kg'))}:&nbsp;
                 <span>
-                  {t('acronym:weight', { item: numberSpacing(calcPayload, 1) })}
+                  { numberSpacing(calcPayload, 1) } kg
                 </span>
               </p>
             </div>
