@@ -583,12 +583,26 @@ module ShippingTools
 
   def self.view_more_schedules(trip_id, delta)
     trip = Trip.find(trip_id)
-    trips = delta.to_i.positive? ? trip.later_trips : trip.ealier_trips.sort_by(&:start_date)
+    trips = delta.to_i.positive? ? trip.later_trips : trip.earlier_trips.sort_by(&:start_date)
+    final_results = false
+
+    if trips.empty? && delta.to_i.positive?
+      trips = trip.last_trips.sort_by(&:start_date)
+    end
+
+    if (trips.length < 5 || trips.empty?) && delta.to_i.positive?
+      final_results = true
+    end
+
+    if (trips.length < 5 || trips.empty?) && !delta.to_i.positive?
+      trips = trip.earliest_trips.sort_by(&:start_date)
+    end
 
     {
       schedules: Schedule.from_trips(trips),
       itinerary_id: trip.itinerary_id,
-      tenant_vehicle_id: trip.tenant_vehicle_id
+      tenant_vehicle_id: trip.tenant_vehicle_id,
+      finalResults: final_results
     }
   end
 

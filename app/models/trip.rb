@@ -44,11 +44,27 @@ class Trip < ApplicationRecord
              .limit(5)
   end
 
-  def ealier_trips(min_date: Date.today + 5.days)
+  def last_trips
+    itinerary.trips
+             .where(tenant_vehicle: tenant_vehicle)
+             .order(start_date: :desc)
+             .limit(5)
+  end
+
+  def earlier_trips(min_date: Date.today + 5.days)
     itinerary.trips
              .where(tenant_vehicle: tenant_vehicle)
              .where('start_date < ? AND start_date > ?', start_date, min_date)
              .order(start_date: :desc)
              .limit(5)
   end
+
+  def earliest_trips(min_date: Date.today + 5.days)
+    itinerary.trips
+             .where(tenant_vehicle: tenant_vehicle)
+             .where('start_date > ?', min_date)
+             .order(start_date: :desc)
+             .limit(5)
+  end
+
 end
