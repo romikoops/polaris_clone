@@ -143,7 +143,6 @@ class QuoteCard extends PureComponent {
       tenant,
       result,
       cargo,
-      handleInputChange,
       pickup,
       truckingTime,
       isQuotationTool,
@@ -151,7 +150,8 @@ class QuoteCard extends PureComponent {
     } = this.props
     const {
       quote,
-      schedules
+      schedules,
+      finalResults
     } = result
     const {
       showSchedules
@@ -254,7 +254,9 @@ class QuoteCard extends PureComponent {
         />
       </div>
     </div>))
-    const earlierDate = schedules[0] ? schedules[0].closing_date : false
+    const firstSchedule = schedules[0]
+    const lastSchedule = schedules[result.schedules.length - 1]
+    const earlierDate = schedules[0] ? firstSchedule.closing_date : false
     const showEarlierBtn = earlierDate && moment(earlierDate).diff(moment(), 'days') > 5
 
     return (
@@ -342,14 +344,15 @@ class QuoteCard extends PureComponent {
                 </div>
                 <div className="flex-40 layout-row layout-align-center">
                   <p className="flex-100 center">
-                    {`${moment(result.schedules[0].closing_date).format('ll')} - 
-                      ${moment(result.schedules[result.schedules.length - 1].closing_date).format('ll')}
+                    {`${moment(firstSchedule.closing_date).format('ll')} - 
+                      ${moment(lastSchedule.closing_date).format('ll')}
                     `}
                   </p>
                 </div>
                 <div
-                  className={`flex-30 layout-row layout-align-center-center ${styles.date_btn}`}
-                  onClick={() => this.handleSchedulesRequest(1)}
+                  className={`flex-30 layout-row layout-align-center-center 
+                  ${!finalResults ? '' : styles.disabled} ${styles.date_btn} ${styles.date_btn}`}
+                  onClick={!finalResults ? () => this.handleSchedulesRequest(1) : null}
                 >
                   <div className="flex-none layout-row layout-align-space-around-center">
                     <p className="flex-none">Later Departures</p>
@@ -396,7 +399,6 @@ QuoteCard.propTypes = {
   truckingTime: PropTypes.number,
   result: PropTypes.objectOf(PropTypes.any),
   cargo: PropTypes.arrayOf(PropTypes.any),
-  handleInputChange: PropTypes.func,
   handleClick: PropTypes.func,
   selectResult: PropTypes.func,
   handleScheduleRequest: PropTypes.func,
@@ -412,7 +414,6 @@ QuoteCard.defaultProps = {
   tenant: {},
   result: {},
   cargo: [],
-  handleInputChange: null,
   selectResult: null,
   handleScheduleRequest: null,
   handleClick: null,
