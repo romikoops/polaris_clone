@@ -114,7 +114,8 @@ Rails.application.routes.draw do
       get 'gdpr/download', to: 'users#download_gdpr'
       post 'opt_out/:target', to: 'users#opt_out'
     end
-    resource :pricings, only: [:index, :show]
+    get 'pricings', to: 'pricings#index'
+    get 'pricings/:id', to: 'pricings#show'
     post 'notes/fetch', to: 'notes#get_notes'
     get 'search/shipments/:target', to: 'shipments#search_shipments'
     get 'shipments/pages/delta_page_handler', to: 'shipments#delta_page_handler'

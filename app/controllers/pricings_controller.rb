@@ -7,17 +7,24 @@ class PricingsController < ApplicationController
     @pricings = current_user.pricings
     response = Rails.cache.fetch("#{@pricings.cache_key}/pricings_index", expires_in: 12.hours) do
       @transports = TransportCategory.all.uniq
-      detailed_itineraries = @itineraries
-                                .map {|itin| itin.as_user_pricing_json(current_user))
+      itineraries = @itineraries
+                                .map {|itin| itin.as_user_pricing_json(current_user) }
 
       last_updated = @itineraries.first ? @itineraries.first.updated_at : DateTime.now
       {
-        detailedItineraries: detailed_itineraries,
+        itineraries: itineraries,
         transportCategories: @transports,
         lastUpdate:          last_updated
       }
     end
     response_handler(response)
   end
+  private
 
+  def require_login
+    unless user_signed_in? && current_user && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
+      flash[:error] = "You are not authorized to access this section."
+      redirect_to root_path
+    end
+  end
 end

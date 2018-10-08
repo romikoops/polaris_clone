@@ -696,7 +696,7 @@ function getPricings (redirect) {
     return { type: userConstants.GET_PRICINGS_REQUEST, payload: pricingData }
   }
   function success (pricingData) {
-    return { type: userConstants.GET_PRICINGS_SUCCESS, payload: pricingData }
+    return { type: userConstants.GET_PRICINGS_SUCCESS, payload: pricingData.data }
   }
   function failure (error) {
     return { type: userConstants.GET_PRICINGS_FAILURE, error }
