@@ -151,7 +151,7 @@ module PricingTools
           fee_value(fee, get_cargo_hash(cargo, mot), user.tenant.scope)
         end
     end
-    binding.pry
+
     converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
     cargo.try(:unit_price=, value: converted, currency: user.currency)
     totals['total'] = { value: converted, currency: user.currency }
