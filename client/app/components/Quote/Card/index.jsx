@@ -31,17 +31,7 @@ class QuoteCard extends PureComponent {
 
     return hubType
   }
-  static determineSubKey (key) {
-    const { t } = this.props
-
-    switch (key) {
-      case 'trucking_lcl' || 'trucking_fcl':
-        return t('cargo:truckingRate')
-
-      default:
-        return key
-    }
-  }
+  
 
   constructor (props) {
     super(props)
@@ -82,6 +72,18 @@ class QuoteCard extends PureComponent {
       showSchedules: !prevState.showSchedules
     }
     ), () => this.toggleExpander(key))
+  }
+
+  determineSubKey (key) {
+    const { t } = this.props
+
+    switch (key) {
+      case 'trucking_lcl' || 'trucking_fcl':
+        return t('cargo:truckingRate')
+
+      default:
+        return key
+    }
   }
 
   selectSchedule (schedule) {
@@ -199,7 +201,7 @@ class QuoteCard extends PureComponent {
           .filter(value => value.length !== 1).map((price) => {
             const subPrices = (<div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
               <div className="flex-45 layout-row layout-align-start-center">
-                <span>{key === 'cargo' ? t('cargo:freightRate') : QuoteCard.determineSubKey(price[0])}</span>
+                <span>{key === 'cargo' ? t('cargo:freightRate') : this.determineSubKey(price[0])}</span>
               </div>
               <div className="flex-50 layout-row layout-align-end-center">
                 <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{(price[1].currency || price[1].total.currency)}</p>
