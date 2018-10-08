@@ -32,8 +32,8 @@ module OfferCalculatorService
           }
         }
         next if result[:quote].dig(:total, :value).blank? ||
-         result[:quote].dig(:total, :value).to_i.zero? ||
-         result[:quote].dig(:cargo, :total, :value).to_i.zero?
+                result[:quote].dig(:total, :value).to_i.zero? ||
+                result[:quote].dig(:cargo, :total, :value).to_i.zero?
 
         detailed_schedules << result
       end
