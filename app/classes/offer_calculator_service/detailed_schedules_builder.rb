@@ -15,7 +15,7 @@ module OfferCalculatorService
           shipment:      @shipment,
           user:          user
         ).perform
-
+        next if grand_total_charge.nil?
         result = {
           quote: grand_total_charge.deconstruct_tree_into_schedule_charge.deep_symbolize_keys,
           schedules: schedules.map(&:to_detailed_hash),
@@ -31,7 +31,9 @@ module OfferCalculatorService
             charge_trip_id: charge_schedule.trip_id
           }
         }
-        next if result[:quote].dig(:total, :value).blank? || result[:quote].dig(:total, :value).to_i.zero?
+        next if result[:quote].dig(:total, :value).blank? ||
+            result[:quote].dig(:total, :value).to_i.zero? ||
+            result[:quote].dig(:cargo, :total, :value).to_i.zero?
         
         detailed_schedules << result
       end
