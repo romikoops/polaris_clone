@@ -49,67 +49,64 @@ module TruckingTools
   def fare_calculator(key, fee, cargo, km, scope)
     fee.symbolize_keys!
 
-    case fee[:rate_basis]
-    when 'PER_KG'
+    fare = case fee[:rate_basis]
+           when 'PER_KG'
 
-      val = cargo['weight'] * fee[:value]
-      min = fee[:min_value] || 0
-      res = [val, min].max
+             val = cargo['weight'] * fee[:value]
+             min = fee[:min_value] || 0
+             [val, min].max
 
-      return_value = res
-    when 'PER_X_KG'
-      val = (cargo['weight'] / fee[:base]) * fee[:value]
-      min = fee[:min_value] || 0
-      res = [val, min].max
-      return_value = res
-    when 'PER_X_KM'
-      val = ((km / fee[:x_base]) * fee[:rate]) + fee[:base_value]
-      min = fee[:min_value] || 0
-      res = [val, min].max
-      return_value = res
-    when 'PER_X_TON'
-      val = ((cargo['weight'] / 1000) / fee[:base]) * fee[:value]
-      min = fee[:min_value] || 0
-      res = [val, min].max
-      return_value = res
-    when 'PER_SHIPMENT'
-      return_value = fee[:value]
-    when 'PER_BILL'
-      return_value = fee[:value]
-    when 'PER_ITEM'
-      return_value = fee[:value] * cargo['number_of_items']
-    when 'PER_CONTAINER'
-      return_value = fee[:value] * cargo['number_of_items']
-    when 'PER_CONTAINER_KM'
-      value = ((fee[:km] * km) + fee[:unit]) * cargo['number_of_items']
-      min = fee[:min_value] || 0
-      return_value = [min, value].max
+           when 'PER_X_KG'
+             val = (cargo['weight'] / fee[:base]) * fee[:value]
+             min = fee[:min_value] || 0
+             [val, min].max
 
-    when 'PER_CBM_TON'
-      cbm_value = cargo['volume'] * fee[:cbm]
-      ton_value = (cargo['weight'] / 1000) * fee[:ton]
-      min = fee[:min_value] || 0
-      return_value = [ton_value, cbm_value, min].max
-    when 'PER_CBM'
-      cbm_value = cargo['volume'] * (fee[:value] || fee[:cbm])
-      min = fee[:min_value] || 0
-      return_value = [cbm_value, min].max
+           when 'PER_X_KM'
+             val = ((km / fee[:x_base]) * fee[:rate]) + fee[:base_value]
+             min = fee[:min_value] || 0
+             [val, min].max
+           when 'PER_X_TON'
+             val = ((cargo['weight'] / 1000) / fee[:base]) * fee[:value]
+             min = fee[:min_value] || 0
+             [val, min].max
+           when 'PER_SHIPMENT'
+             fee[:value]
+           when 'PER_BILL'
+             fee[:value]
+           when 'PER_ITEM'
+             fee[:value] * cargo['number_of_items']
+           when 'PER_CONTAINER'
+             fee[:value] * cargo['number_of_items']
+           when 'PER_CONTAINER_KM'
+             value = ((fee[:km] * km) + fee[:unit]) * cargo['number_of_items']
+             min = fee[:min_value] || 0
+             [min, value].max
 
-    when 'PER_WM'
-      value = (cargo['weight'] / 1000) * fee[:value]
-      min = fee[:min_value] || 0
-      return_value = [value, min].max
+           when 'PER_CBM_TON'
+             cbm_value = cargo['volume'] * fee[:cbm]
+             ton_value = (cargo['weight'] / 1000) * fee[:ton]
+             min = fee[:min_value] || 0
+             [ton_value, cbm_value, min].max
+           when 'PER_CBM'
+             cbm_value = cargo['volume'] * (fee[:value] || fee[:cbm])
+             min = fee[:min_value] || 0
+             [cbm_value, min].max
 
-    when 'PER_CBM_KG'
-      cbm_value = cargo['volume'] * fee[:cbm]
-      kg_value = cargo['weight'] * fee[:kg]
-      min = fee[:min_value] || 0
-      return_value = [kg_value, cbm_value].max
+           when 'PER_WM'
+             value = (cargo['weight'] / 1000) * fee[:value]
+             min = fee[:min_value] || 0
+             [value, min].max
 
-    when /RANGE/
-      return_value = handle_range_fee(fee, cargo)
+           when 'PER_CBM_KG'
+             cbm_value = cargo['volume'] * fee[:cbm]
+             kg_value = cargo['weight'] * fee[:kg]
+             min = fee[:min_value] || 0
+             [kg_value, cbm_value].max
+
+           when /RANGE/
+             handle_range_fee(fee, cargo)
     end
-    final_result = should_round(return_value, scope)
+    final_result = handle_rounding(fare, scope)
     { currency: fee[:currency], value: final_result, key: key }
   end
 
@@ -320,7 +317,7 @@ module TruckingTools
     cargo_object['stackable']['number_of_items'] += quantity
   end
 
-  def should_round(result, scope)
+  def handle_rounding(result, scope)
     if scope['continuous_rounding']
       result.to_d.round(2)
     else
