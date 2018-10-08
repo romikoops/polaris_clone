@@ -112,7 +112,11 @@ gem 'signet'
 # New email gem
 gem 'mjml-rails', '~> 4.1'
 
+# Better console
 gem 'pry-rails'
+
+# Add comments to ActiveRecord queries
+gem 'marginalia', '~> 1.5'
 
 group :development, :test do
   # set environment variables - enforce loading environment right away
