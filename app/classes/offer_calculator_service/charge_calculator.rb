@@ -5,7 +5,7 @@ module OfferCalculatorService
     include CurrencyTools
     include PricingTools
 
-    def initialize(args={})
+    def initialize(args = {})
       @trucking_data = args[:trucking_data]
       @schedule      = args[:schedule]
       @user          = args[:user]
@@ -25,7 +25,9 @@ module OfferCalculatorService
 
       calc_local_charges
       create_trucking_charges
-      calc_cargo_charges
+      cargo_result = calc_cargo_charges
+      return nil if cargo_result.nil?
+
       @grand_total_charge.update_price!
       @grand_total_charge.save
       @grand_total_charge
@@ -46,15 +48,15 @@ module OfferCalculatorService
           @schedule.origin_hub,
           @shipment.load_type,
           cargo_units,
-          "export",
+          'export',
           @schedule.mode_of_transport,
           @schedule.trip.tenant_vehicle.id,
           @schedule.destination_hub_id,
           @user
         )
-        
+
         unless local_charges_data.empty?
-          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code("export"))
+          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('export'))
         end
       end
 
@@ -63,15 +65,15 @@ module OfferCalculatorService
           @schedule.destination_hub,
           @shipment.load_type,
           cargo_units,
-          "import",
+          'import',
           @schedule.mode_of_transport,
           @schedule.trip.tenant_vehicle.id,
           @schedule.origin_hub_id,
           @user
         )
-          
+
         unless local_charges_data.empty?
-          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code("import"))
+          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('import'))
         end
       end
     end
@@ -103,25 +105,25 @@ module OfferCalculatorService
         sum + cargo_unit.try(:quantity).to_i
       end
 
-      charge_category = ChargeCategory.from_code("cargo")
+      charge_category = ChargeCategory.from_code('cargo')
       parent_charge = create_parent_charge(charge_category)
       cargo_unit_array = @shipment.aggregated_cargo ? [@shipment.aggregated_cargo] : @shipment.cargo_units
 
-      if @user.tenant.scope["consolidate_cargo"] && cargo_unit_array.first.is_a?(CargoItem)
+      if @user.tenant.scope['consolidate_cargo'] && cargo_unit_array.first.is_a?(CargoItem)
         cargo_unit_array = consolidate_cargo(cargo_unit_array, @schedule.mode_of_transport)
       end
       cargo_unit_array.each do |cargo_unit|
         charge_result = send("determine_#{@shipment.load_type}_price",
-          cargo_unit,
-          @schedule,
-          @user,
-          total_units,
-          @shipment.planned_pickup_date,
-          @schedule.mode_of_transport)
+                             cargo_unit,
+                             @schedule,
+                             @user,
+                             total_units,
+                             @shipment.planned_pickup_date,
+                             @schedule.mode_of_transport)
 
         next if charge_result.nil?
 
-        cargo_unit_model = cargo_unit.class.to_s == "Hash" ? "CargoItem" : cargo_unit.class.to_s
+        cargo_unit_model = cargo_unit.class.to_s == 'Hash' ? 'CargoItem' : cargo_unit.class.to_s
 
         children_charge_category = ChargeCategory.find_or_create_by(
           name:          cargo_unit_model.humanize,
@@ -131,6 +133,7 @@ module OfferCalculatorService
 
         create_charges_from_fees_data!(charge_result, children_charge_category, charge_category, parent_charge)
       end
+      return nil if parent_charge.children.empty?
       
       parent_charge.update_price!
     end
@@ -148,19 +151,19 @@ module OfferCalculatorService
     def create_charges_from_fees_data!(
       fees_data,
       children_charge_category,
-      charge_category=ChargeCategory.grand_total,
-      parent=@grand_total_charge
+      charge_category = ChargeCategory.grand_total,
+      parent = @grand_total_charge
     )
       parent_charge = Charge.create(
         children_charge_category: children_charge_category,
         charge_category:          charge_category,
         charge_breakdown:         @charge_breakdown,
         parent:                   parent,
-        price:                    Price.create(fees_data["total"] || fees_data[:total])
+        price:                    Price.create(fees_data['total'] || fees_data[:total])
       )
 
       fees_data.each do |code, charge|
-        next if code.to_s == "total" || charge.empty?
+        next if code.to_s == 'total' || charge.empty?
 
         Charge.create(
           children_charge_category: ChargeCategory.from_code(code),
@@ -178,13 +181,13 @@ module OfferCalculatorService
 
     def consolidate_cargo(cargo_array, mot)
       cargo = {
-        id:                "ids",
+        id:                'ids',
         dimension_x:       0,
         dimension_y:       0,
         dimension_z:       0,
         volume:            0,
         payload_in_kg:     0,
-        cargo_class:       "",
+        cargo_class:       '',
         chargeable_weight: 0,
         num_of_items:      0
       }
