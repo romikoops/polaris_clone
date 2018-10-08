@@ -265,7 +265,7 @@ exports[`props.shipment.schedule_set.length < 1 1`] = `
           >
              
               
-            Days
+             Days
           </p>
         </div>
       </div>
@@ -539,7 +539,7 @@ exports[`shallow render 1`] = `
           >
              
               
-            Days
+             Days
           </p>
         </div>
       </div>

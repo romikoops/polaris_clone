@@ -28,9 +28,9 @@ gem 'sprockets-rails', require: 'sprockets/railtie'
 gem 'awesome_print'
 gem 'aws-sdk-sqs'
 gem 'bootstrap-sass', '~> 3.3.5.1'
+gem 'font-awesome-rails'
 gem 'rufo'
 gem 'shoryuken'
-gem 'font-awesome-rails'
 
 gem 'activerecord-postgis-adapter'
 gem 'rgeo-geojson'
@@ -112,7 +112,11 @@ gem 'signet'
 # New email gem
 gem 'mjml-rails', '~> 4.1'
 
+# Better console
 gem 'pry-rails'
+
+# Add comments to ActiveRecord queries
+gem 'marginalia', '~> 1.5'
 
 group :development, :test do
   # set environment variables - enforce loading environment right away

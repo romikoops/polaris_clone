@@ -38,7 +38,9 @@
         "selectCurrency": "Select Currency",
         "closestDeparture": "This is the closest departure to the specified date",
         "earlierDepartures": "Show earlier departures",
+        "earlierDeparturesBase": "Earlier Departures",
         "laterDepartures": "Show later departures",
+        "laterDeparturesBase": "Later Departures",
         "grossWeight": "Gross Weight",
         "containerClass": "Container Class",
         "viewHsCodes": "View Hs Codes",
@@ -96,7 +98,7 @@
         "requiresAction": "Requires Action",
         "inProcess": "In Process",
         "days": "days",
-        "capitalDays": "Days",
+        "capitalDays": " Days",
         "pickupDate": "Pick-up Date",
         "closingDate": "Closing Date",
         "etd": "ETD",
@@ -144,7 +146,8 @@
         "without": "without",
         "moreInfo": "More info",
         "voyageCode": "Voyage Code",
-        "vesselName": "Vessel Name"
+        "vesselName": "Vessel Name",
+        "select": "Select"
       },
       "admin": {
         "lowerLimit": "Lower Limit",
@@ -195,7 +198,7 @@
         "registrationPage": "RegistrationPage",
         "account": "Account",
         "searchAddress": "Search for address",
-        "noDetailsAvailable": "No details available for input:"
+        "noDetailsAvailable": "No details available for input: {{placeName}}"
       },
       "footer": {
         "about": "About Us",
@@ -216,7 +219,9 @@
         "areYouSure": "Are you sure you wish to delete this document? It cannot be undone.",
         "generated": "Your document is being generated.",
         "pleaseWait": "Please wait....",
-        "download": "Download"
+        "download": "Download",
+        "notUploaded": "Not uploaded",
+        "uploadNewDocument": "Upload New Document"
       },
       "account": {
         "signInFirst": "Sign In First",
@@ -244,7 +249,11 @@
         "thankYouService": "Thank you for using our service.",
         "sendViaEmail": "Send Via Email",
         "searchContacts": "Search Contacts",
-        "backToAddressBook": "Back to Address Book"
+        "backToAddressBook": "Back to Address Book",
+        "shipper": "Shipper",
+        "consignee": "Consignee",
+        "notifyees": "Notifyees",
+        "accountHolder": "Account Holder"
       },
       "cargo": {
         "cargoDetails": "Cargo Details",
@@ -302,7 +311,12 @@
         "widthDataTipTwo": "Width is automatically set by 'Collie Type'",
         "lengthDataTip": "Please note that the maximum length for items in Air Freight shipments is",
         "lengthDataTipTwo": "Length is automatically set by 'Collie Type'",
-        "cargoItem": "Cargo Item"
+        "cargoItem": "Cargo Item",
+        "freightRate": "Freight Rate",
+        "truckingRate": "Trucking Rate",
+        "container": "Container",
+        "containers": "Containers",
+        "cargoItems": "Cargo Items"
       },
       "bookconf": {
         "_component": "BookingConfirmation",
@@ -423,7 +437,11 @@
         "import": "import",
         "export": "export",
         "chooseDirection": "I am {{commercialAction}} ({{direction}})",
-        "serviceLevel": "Service Level"
+        "serviceLevel": "Service Level",
+        "originDocumentation": "Origin Documentation",
+        "destinationDocumentation": "Destination Documentation",
+        "freightRate": "Freight rate",
+        "truckingRate": "Trucking rate"
       },
       "user": {
         "newAlias": "New Alias",
@@ -525,28 +543,40 @@
         "dangerousGoodsFifteen": "cameras, cell phones, laptop computers, medical equipment and power tools."
       },
       "optout": {
-        "useRequiredHead": "Use of the",
+        "useRequiredTenant": "Use of the {{tenantName}} ItsMyCargo webshop requires accepting the terms and conditions laid out by {{tenantName}}.",
         "useOfAny": "Use of any",
-        "useRequiredTail": " ItsMyCargo webshop requires accepting the terms and conditions laid out by",
-        "useRequiredIMC": "ItsMyCargo webshop requires accepting the terms and conditions laid out on the Terms and Conditions page.",
+        "useRequiredIMC": " ItsMyCargo webshop requires accepting the terms and conditions laid out on the Terms and Conditions page.",
         "withdrawWarningHead": "As such if you decide to withdraw your agreement to the terms and conditions you will not",
         "withdrawWarningTail": "be able to continue using the shop and we will have to close the window",
-        "agreeAgainHead": "Should you wish to resume using one of the",
-        "agreeAgainTail": "ItsMyCargo Shop you will need to agree to the terms and conditions again",
-        "agreeAgainGeneral": "ItsMyCargo Shops you will need to agree to the terms and conditions again",
+        "agreeAgainTenant": "Should you wish to resume using the {{tenantName}} ItsMyCargo Shop you will need to agree to the terms and conditions again",
+        "agreeAgainGeneral": "Should you wish to resume using one of the ItsMyCargo Shops you will need to agree to the terms and conditions again",
         "optOutActionHead": "By clicking the Opt Out button below the following will happen:",
-        "accountMarked": "Your user account will be marked as not agreeing to the",
+        "accountMarked": "Your user account will be marked as not agreeing to the {{tenantName}} Terms and Conditions",
         "nonConsenting": "Your user account will be marked as not consenting to the use of cookies",
         "optOutActionTail": "You will be logged out and returned to the landing page"
       },
       "cookies": {
+        "cookies":"Cookies",
         "allWebshops": "All ItsMyCargo webshops use Cookies to help make our services better.",
-        "reasonsForCookiesHead": "Though we do not use cookies to track your movements   through out the web",
+        "reasonsForCookiesHead": "Though we do not use cookies to track your movements through out the web",
         "reasonsForCookiesTail": "we do need to save some information about your profile and the data you are accessing in the browser.",
         "infoIsVital": "This information is vital to the functioning of the site.",
         "useDiscontinuedHead": "As such if you decide to withdraw your consent to the use of cookies you will not be able",
         "useDiscontinuedTail": "to continue using the shop and we will have to close the window.",
         "useContinued": "Should you wish to resume using one of the ItsMyCargo Shops you will need to consent to the use of cookies again"
+      },
+      "acronym": {
+        "LCL": "LCL",
+        "FCL": "FCL",
+        "kg": "kg",
+        "weight": "{{item}} kg"
+      },
+      "quote": {
+        "viewPriceBreakdown": "View Price Breakdown",
+        "viewSchedules": "View Schedules",
+        "carrier": "Carrier: {{carrierName}}",
+        "service": "Service: {{serviceLevel}}",
+        "estimatedTT": "Estimated T/T"
       }
     }
 }

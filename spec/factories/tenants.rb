@@ -20,6 +20,7 @@ FactoryBot.define do
           }
         },
         closed_shop: false,
+        continuous_rounding: false,
         closed_registration: false,
         consolidate_cargo: false,
         customs_export_paper: false,
