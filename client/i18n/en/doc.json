@@ -2,14 +2,14 @@
   "reject": "Reject document",
   "type": "Type",
   "uploaded": "Uploaded",
-  "notUploaded": "Not uploaded",
   "uploadAnother": "Upload another file",
-  "uploadNewDocument": "Upload New Document",
   "restrictions":"Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed",
   "missingFile": "Missing File",
   "deleteThisDoc": "Delete this document?",
   "areYouSure": "Are you sure you wish to delete this document? It cannot be undone.",
   "generated": "Your document is being generated.",
   "pleaseWait": "Please wait....",
-  "download": "Download"
+  "download": "Download",
+  "notUploaded": "Not uploaded",
+  "uploadNewDocument": "Upload New Document"
 }
