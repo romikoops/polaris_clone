@@ -27,16 +27,8 @@ class PricingList extends PureComponent {
       userDispatch.getPricingsForItinerary(row.id)
       return ''
     }
-    
-  }
-
-
-  render() { 
-    const { t, pricings } = this.props
-    if (!pricings) return ''
-    const { index } = pricings
-    const { itineraries } = index
-    
+    const { show } = pricings
+    const data = show[row.id]
     const columns = [
       {
         Header: t('common:routing'),
@@ -73,6 +65,66 @@ class PricingList extends PureComponent {
         ]
       },
     ]
+    return (
+      <ReactTable
+             className="flex-100 height_100"
+             data={itineraries}
+             columns={columns}
+             defaultSorted={[
+               {
+                 id: 'origin_name',
+                 desc: true
+               }
+             ]}
+             defaultPageSize={20}
+             SubComponent={row => this.generateSubComponent(row)}
+          />
+    )
+    
+  }
+
+
+  render() { 
+    const { t, pricings } = this.props
+    if (!pricings) return ''
+    const { index } = pricings
+    const { itineraries } = index
+    const columns = [
+      {
+        Header: t('common:routing'),
+        columns: [
+          {
+            Header: t('common:origin'),
+            id: "origin_name",
+            accessor: d => d.stops[0].hub.nexus.name
+          },
+          {
+            Header: t('common:destination'),
+            id: "destination_name",
+            accessor: d => d.stops[1].hub.nexus.name
+          }
+        ]
+      },
+      {
+        Header: t('common:pricing'),
+        columns: [
+          {
+            Header: t('common:numPricings'),
+            accessor: "pricing_count"
+          },
+          {
+            Header: t('common:dedicated'),
+            id: "has_user_pricing",
+            accessor: d => d.has_user_pricing
+          },
+          {
+            Header: t('common:view'),
+            id: "view",
+            Cell: d => (<div className="flex">VIEW</div>)
+          }
+        ]
+      }
+    ]
     return ( 
       <div className="flex-100 layout-row layout-align-start-start layout-wrap">
         <div className="flex-100 layout-row layout-align-start-center">
@@ -85,11 +137,11 @@ class PricingList extends PureComponent {
              columns={columns}
              defaultSorted={[
                {
-                 id: 'closing_date',
+                 id: 'origin_name',
                  desc: true
                }
              ]}
-             defaultPageSize={20},
+             defaultPageSize={20}
              SubComponent={row => this.generateSubComponent(row)}
           />
         </div>

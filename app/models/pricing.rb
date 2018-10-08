@@ -20,7 +20,7 @@ class Pricing < ApplicationRecord
       methods: %i(data exceptions load_type cargo_class),
       only:    %i(
         effective_date expiration_date wm_rate itinerary_id
-        tenant_id transport_category_id id currency_name tenant_vehicle_id
+        tenant_id transport_category_id id currency_name tenant_vehicle_id user_id
       )
     )
     super(new_options)

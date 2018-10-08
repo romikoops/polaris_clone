@@ -19,7 +19,25 @@ class PricingsController < ApplicationController
     end
     response_handler(response)
   end
+
+  def show
+    @itinerary = Itinerary.find(params[:id])
+    @pricings = @itinerary.pricings.map(&:as_json)
+  end
+
   private
+
+  def filter_for_dedicated_pricings(pricings)
+    dedicated_pricings = pricings.select {|pricing| pricing.user_id == current_user.id}
+    pricings.each do |pricing|
+      if dedicated_pricings.select { |ded_pricing| 
+        ded_pricing.tenant_vehicle_id == pricing.tenant_vehicle_id &&
+        ded_pricing.transport_category == pricing.transport_category
+      }.empty?
+        dedicated_pricings << pricing
+      end
+    end
+  end
 
   def require_login
     unless user_signed_in? && current_user && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
