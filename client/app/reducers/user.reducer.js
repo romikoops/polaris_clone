@@ -531,6 +531,28 @@ export default function users (state = initialState, action) {
         loading: false,
         error: { pricings: action.error }
       }
+    case userConstants.GET_ITINERARY_PRICINGS_REQUEST:
+      return { ...state, loading: true }
+    case userConstants.GET_ITINERARY_PRICINGS_SUCCESS: {
+
+      return {
+        ...state,
+        pricings: {
+          ...state.pricings,
+          show: {
+            ...state.pricings.show,
+            [action.payload.itinerary_id]: action.payload
+          }
+        },
+        loading: false
+      }
+    }
+    case userConstants.GET_ITINERARY_PRICINGS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: { pricings: action.error }
+      }
 
     case userConstants.CLEAR_LOADING:
       return {

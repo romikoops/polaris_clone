@@ -21,6 +21,16 @@ class PricingList extends PureComponent {
     }
   }
 
+  generateSubComponent (row) {
+    const { pricings } = this.props
+    if (!pricings.show || (pricings.show && !pricings.show[row.id])) {
+      userDispatch.getPricingsForItinerary(row.id)
+      return ''
+    }
+    
+  }
+
+
   render() { 
     const { t, pricings } = this.props
     if (!pricings) return ''
@@ -79,7 +89,8 @@ class PricingList extends PureComponent {
                  desc: true
                }
              ]}
-             defaultPageSize={20}
+             defaultPageSize={20},
+             SubComponent={row => this.generateSubComponent(row)}
           />
         </div>
 

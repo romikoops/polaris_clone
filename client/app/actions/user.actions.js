@@ -719,6 +719,31 @@ function getPricings (redirect) {
     )
   }
 }
+function getPricingsForItinerary (redirect) {
+  function request (pricingData) {
+    return { type: userConstants.GET_ITINERARY_PRICINGS_REQUEST, payload: pricingData }
+  }
+  function success (pricingData) {
+    return { type: userConstants.GET_ITINERARY_PRICINGS_SUCCESS, payload: pricingData.data }
+  }
+  function failure (error) {
+    return { type: userConstants.GET_ITINERARY_PRICINGS_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    userService.getPricingsForItinerary().then(
+      (data) => {
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 
 function clearLoading () {
   return { type: userConstants.CLEAR_LOADING, payload: null }
@@ -769,7 +794,8 @@ export const userActions = {
   searchShipments,
   searchContacts,
   deltaShipmentsPage,
-  getPricings
+  getPricings,
+  getPricingsForItinerary
 
 }
 

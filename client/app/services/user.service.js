@@ -315,6 +315,14 @@ function getPricings () {
 
   return fetch(`${getApiHost()}/pricings`, requestOptions).then(handleResponse)
 }
+function getPricingsForItinerary (id) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch(`${getApiHost()}/pricings/${id}`, requestOptions).then(handleResponse)
+}
 
 export const userService = {
   getLocations,
@@ -345,6 +353,7 @@ export const userService = {
   searchShipments,
   deltaShipmentsPage,
   searchContacts,
-  getPricings
+  getPricings,
+  getPricingsForItinerary
 }
 export default userService
