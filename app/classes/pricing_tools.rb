@@ -231,7 +231,7 @@ module PricingTools
     Pricing.destroy(id)
   end
 
-  def handle_range_fare(fee, cargo_hash)
+  def handle_range_fee(fee, cargo_hash)
     weight_kg = cargo_hash[:weight]
     min = fee['min'] || 0
 
@@ -260,7 +260,7 @@ module PricingTools
     nil
   end
 
-  def handle_rounding(result, scope)
+  def round_fee(result, scope)
     if scope['continuous_rounding']
       result.to_d.round(2)
     else
@@ -274,24 +274,24 @@ module PricingTools
     cbm = cargo.volume
     ton = weight_kg / 1000
 
-    if fee['hw_threshold']
+    result = if fee['hw_threshold']
       ratio = weight_kg / cbm
 
       if ratio > fee['hw_threshold']
         rate_value = [cbm, ton].max * quantity * fee['rate'].to_i
-        result = [rate_value, fee['min']].max
+        return [rate_value, fee['min']].max
       end
 
-      result = 0
+      return 0
     elsif fee['range']
       fee_range = fee['range'].find do |range|
         weight_kg >= range['min'] && weight_kg <= range['max']
       end
 
-      result = fee_range.nil? ? 0 : fee_range['rate'] * quantity
+      return fee_range.nil? ? 0 : fee_range['rate'] * quantity
     end
 
-    handle_rounding(result, scope)
+    round_fee(result, scope)
   end
 
   def fee_value(fee, cargo_hash, scope)
@@ -330,9 +330,9 @@ module PricingTools
                min = fee['min'] || 0
                [cbm, ton, min].max
              when /RANGE/
-               handle_range_fare(fee, cargo_hash)
+               handle_range_fee(fee, cargo_hash)
     end
-    handle_rounding(result, scope)
+    round_fee(result, scope)
   end
 
   def get_cargo_hash(cargo, mot)

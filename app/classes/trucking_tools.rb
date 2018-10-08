@@ -104,29 +104,30 @@ module TruckingTools
              [kg_value, cbm_value].max
 
            when /RANGE/
-             handle_range_fee(fee, cargo)
+             handle_range_fare(fee, cargo)
     end
-    final_result = handle_rounding(fare, scope)
+
+    final_result = round_fare(fare, scope)
     { currency: fee[:currency], value: final_result, key: key }
   end
 
-  def handle_range_fee(fee, cargo)
+  def handle_range_fare(fee, cargo)
     weight_kg = cargo[:weight]
     min = fee['min'] || 0
-    case fee[:rate_basis]
+    result = case fee[:rate_basis]
     when 'PER_KG_RANGE'
       fee_range = fee[:range].find do |range|
         weight_kg >= range[:min] && weight_kg <= range[:max]
       end
       value = fee_range.nil? ? 0 : fee_range[:rate] * weight_kg
-      result = [value, min].max
+      [value, min].max
     when 'PER_CONTAINER_RANGE'
       fee_range = fee[:range].find do |range|
         weight_kg >= range[:min] && weight_kg <= range[:max]
       end
 
       value = fee_range.nil? ? 0 : fee_range[:rate]
-      result = [value, min].max
+      [value, min].max
     end
 
     result
@@ -210,7 +211,7 @@ module TruckingTools
         'number_of_items' => 0
       }
     }
-    # cargo_total_items = cargos.map {|c| c.quantity}.sum
+
     cargos.each do |cargo|
       determine_load_meterage(trucking_pricing, cargo_object, cargo)
     end
@@ -230,16 +231,23 @@ module TruckingTools
 
   def calc_trucking_price(trucking_pricing, cargos, km, carriage)
     direction = carriage == 'pre' ? 'export' : 'import'
-    cargo_object = trucking_pricing.load_type == 'container' ? get_container_object(cargos) : get_cargo_item_object(trucking_pricing, cargos)
+    cargo_object = if trucking_pricing.load_type == 'container' 
+      get_container_object(cargos)
+    else
+      get_cargo_item_object(trucking_pricing, cargos)
+    end
+
     trucking_pricings = {}
     scope = trucking_pricing.tenant.scope
     cargo_object.each do |stackable_type, cargo_values|
       trucking_pricings[stackable_type] = filter_trucking_pricings(trucking_pricing, cargo_values, direction)
     end
+
     fees = {}
     trucking_pricings.each do |key, tp|
       fees[key] = calculate_trucking_price(tp, cargo_object[key], direction, km, scope) if tp
     end
+
     total = { value: 0, currency: '' }
     fees.each do |_key, trucking_fee|
       next if trucking_fee.empty?
@@ -247,6 +255,7 @@ module TruckingTools
       total[:value] += trucking_fee[:value]
       total[:currency] = trucking_fee[:currency]
     end
+    
     total[:currency] = trucking_pricing.tenant.currency if total[:currency] == '' && total[:value] == 0
 
     fees[:total] = total
@@ -317,7 +326,7 @@ module TruckingTools
     cargo_object['stackable']['number_of_items'] += quantity
   end
 
-  def handle_rounding(result, scope)
+  def round_fare(result, scope)
     if scope['continuous_rounding']
       result.to_d.round(2)
     else
