@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module TruckingTools
-
   module_function
 
   def calculate_trucking_price(pricing, cargo, _direction, km, scope)
@@ -86,7 +85,6 @@ module TruckingTools
       min = fee[:min_value] || 0
       return_value = [min, value].max
 
-
     when 'PER_CBM_TON'
       cbm_value = cargo['volume'] * fee[:cbm]
       ton_value = (cargo['weight'] / 1000) * fee[:ton]
@@ -101,18 +99,18 @@ module TruckingTools
       value = (cargo['weight'] / 1000) * fee[:value]
       min = fee[:min_value] || 0
       return_value = [value, min].max
-      
+
     when 'PER_CBM_KG'
       cbm_value = cargo['volume'] * fee[:cbm]
       kg_value = cargo['weight'] * fee[:kg]
       min = fee[:min_value] || 0
       return_value = [kg_value, cbm_value].max
-      
+
     when /RANGE/
       return_value = handle_range_fee(fee, cargo)
     end
     final_result = should_round(return_value, scope)
-    return { currency: fee[:currency], value: final_result, key: key }
+    { currency: fee[:currency], value: final_result, key: key }
   end
 
   def handle_range_fee(fee, cargo)
@@ -134,7 +132,7 @@ module TruckingTools
       result = [value, min].max
     end
 
-    return result
+    result
   end
 
   def filter_trucking_pricings(trucking_pricing, cargo_values, _direction)
@@ -259,7 +257,6 @@ module TruckingTools
   end
 
   def determine_load_meterage(trucking_pricing, cargo_object, cargo)
-
     if trucking_pricing.load_meterage && trucking_pricing.load_meterage['ratio']
       if cargo.is_a? AggregatedCargo
         calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
@@ -297,7 +294,6 @@ module TruckingTools
   end
 
   def calc_cargo_load_meterage_height(trucking_pricing, cargo_object, cargo)
-
     load_meterage = (cargo.dimension_x * cargo.dimension_y) / 24_000
     load_meter_weight = load_meterage * trucking_pricing.load_meterage['ratio']
     trucking_chargeable_weight = load_meter_weight > cargo.payload_in_kg ? load_meter_weight : cargo.payload_in_kg
@@ -325,11 +321,10 @@ module TruckingTools
   end
 
   def should_round(result, scope)
-    if scope["continuous_rounding"]
-      return result.to_d.round(2)
+    if scope['continuous_rounding']
+      result.to_d.round(2)
     else
-      return result
+      result
     end
   end
-
 end

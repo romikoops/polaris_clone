@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module CurrencyTools
-  require "http"
+  require 'http'
 
   def get_rates(base, tenant_id)
     tenant = Tenant.find(tenant_id)
-    if tenant && tenant.scope["fixed_exchange_rates"]
+    if tenant && tenant.scope['fixed_exchange_rates']
       tenant_rates = Currency.find_by(base: base, tenant_id: tenant_id)
       cached_rates = tenant_rates || Currency.find_by(base: base)
     else
@@ -23,7 +23,7 @@ module CurrencyTools
   def get_currency_array(base, tenant_id)
     rates = get_rates(base, tenant_id)
     results = [{ key: base, rate: 1 }]
-    rates["today"].each do |k, v|
+    rates['today'].each do |k, v|
       results << { key: k, rate: v }
     end
 
@@ -52,10 +52,10 @@ module CurrencyTools
     rates = get_rates(base, tenant_id)
     base_value = 0
     hash_obj.each do |_key, charge|
-      if rates[:today][charge["currency"]]
-        base_value += charge["value"] * (1 / rates[:today][charge["currency"]])
-      elsif charge["currency"] == base
-        base_value += charge["value"]
+      if rates[:today][charge['currency']]
+        base_value += charge['value'] * (1 / rates[:today][charge['currency']])
+      elsif charge['currency'] == base
+        base_value += charge['value']
       end
     end
     if Tenant.find(tenant_id).scope['continuous_rounding']
@@ -69,7 +69,7 @@ module CurrencyTools
     currency_obj = Currency.find_by(base: base)
     url = "http://data.fixer.io/latest?access_key=#{Settings.fixer.api_key}&base=#{base}"
     response = JSON.parse(HTTP.get(url).to_s)
-    rates = response["rates"]
+    rates = response['rates']
 
     if !currency_obj
       currency_obj = Currency.create(today: rates, base: base)

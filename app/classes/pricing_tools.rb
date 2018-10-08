@@ -8,16 +8,16 @@ module PricingTools
       itinerary_id: schedule.trip.itinerary.id,
       user_id: user.id, transport_category_id: transport_category_id,
       tenant_vehicle_id: schedule.trip.tenant_vehicle_id
-      )
+    )
     pricing ||= Pricing.find_by(
       itinerary_id: schedule.trip.itinerary.id,
       transport_category_id: transport_category_id,
       tenant_vehicle_id: schedule.trip.tenant_vehicle_id
-      )
+    )
 
     return if pricing.nil?
 
-    pricing_exceptions = pricing.pricing_exceptions.where("effective_date <= ? AND expiration_date >= ?", shipment_date, shipment_date)
+    pricing_exceptions = pricing.pricing_exceptions.where('effective_date <= ? AND expiration_date >= ?', shipment_date, shipment_date)
     pricing_details =
       if pricing_exceptions.any?
         pricing_exceptions.first.pricing_details
@@ -31,13 +31,11 @@ module PricingTools
   end
 
   def transport_category(cargo_unit, schedule)
-
     schedule.trip.tenant_vehicle.vehicle.transport_categories.find_by(
-      name:              "any",
-      cargo_class:       cargo_unit.try(:size_class) || "lcl",
+      name:              'any',
+      cargo_class:       cargo_unit.try(:size_class) || 'lcl',
       mode_of_transport: schedule.mode_of_transport
     )
-    
   end
 
   def determine_local_charges(hub, load_type, cargos, direction, mot, tenant_vehicle_id, counterpart_hub_id, user)
@@ -52,25 +50,25 @@ module PricingTools
         end
 
       return_h[:quantity] += cargo_unit.quantity unless cargo_unit.try(:quantity).nil?
-      return_h[:volume]   += (cargo_unit.try(:volume) || 1) * (cargo_unit.try(:quantity)|| 1) || 0
+      return_h[:volume]   += (cargo_unit.try(:volume) || 1) * (cargo_unit.try(:quantity) || 1) || 0
 
       return_h[:weight]   += (cargo_unit.try(:weight) || weight)
     end
 
-    lt = load_type == "cargo_item" || load_type == "lcl" ? "lcl" : cargos[0].size_class
+    lt = load_type == 'cargo_item' || load_type == 'lcl' ? 'lcl' : cargos[0].size_class
     charge = hub.local_charges.find_by(direction: direction, load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id, counterpart_hub_id: counterpart_hub_id)
-    charge = charge || hub.local_charges.find_by(direction: direction, load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id, counterpart_hub_id: nil)
-    
+    charge ||= hub.local_charges.find_by(direction: direction, load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id, counterpart_hub_id: nil)
+
     return {} if charge.nil?
-    totals = { "total" => {} }
+    totals = { 'total' => {} }
 
     charge&.fees&.each do |k, fee|
-      totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
-      totals[k]["currency"] ||= fee["currency"]
-      totals[k]["value"] += fee_value(fee, cargo_hash, user.tenant.scope)
+      totals[k]             ||= { 'value' => 0, 'currency' => fee['currency'] }
+      totals[k]['currency'] ||= fee['currency']
+      totals[k]['value'] += fee_value(fee, cargo_hash, user.tenant.scope)
     end
     converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
-    totals["total"] = { value: converted, currency: user.currency }
+    totals['total'] = { value: converted, currency: user.currency }
 
     totals
   end
@@ -88,18 +86,19 @@ module PricingTools
     end
 
     return {} if charge.nil?
-    totals = { "total" => {} }
+    totals = { 'total' => {} }
     charge.each do |k, fee|
-      totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
-      totals[k]["currency"] ||= fee["currency"]
+      totals[k]             ||= { 'value' => 0, 'currency' => fee['currency'] }
+      totals[k]['currency'] ||= fee['currency']
 
-      totals[k]["value"] += fee_value(fee, cargo_hash, user.tenant.scope)
+      totals[k]['value'] += fee_value(fee, cargo_hash, user.tenant.scope)
     end
 
     converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
-    totals["total"] = { value: converted, currency: user.currency }
+    totals['total'] = { value: converted, currency: user.currency }
     totals
   end
+
   def calc_addon_charges(charge, cargos, user, mot)
     cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
       weight = if cargo_unit.is_a?(CargoItem) || cargo_unit.is_a?(AggregatedCargo)
@@ -113,20 +112,20 @@ module PricingTools
     end
 
     return {} if charge.nil?
-    totals = { "total" => {} }
+    totals = { 'total' => {} }
     charge.each do |k, fee|
-      totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
+      totals[k] ||= { 'value' => 0, 'currency' => fee['currency'] }
       if !fee['unknown']
-        totals[k]["currency"] ||= fee["currency"]
+        totals[k]['currency'] ||= fee['currency']
 
-        totals[k]["value"] += fee_value(fee, cargo_hash, user.tenant.scope)
+        totals[k]['value'] += fee_value(fee, cargo_hash, user.tenant.scope)
       else
-        totals[k]["value"]  += 0
+        totals[k]['value'] += 0
       end
     end
 
     converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
-    totals["total"] = { value: converted, currency: user.currency }
+    totals['total'] = { value: converted, currency: user.currency }
     totals
   end
 
@@ -135,28 +134,27 @@ module PricingTools
     return nil if transport_category.nil?
     transport_category_id = transport_category.id
     pricing = get_user_price(schedule, transport_category_id, user, shipment_date)
-    
+
     return nil if pricing.nil?
-    totals = { "total" => {} }
+    totals = { 'total' => {} }
 
     pricing.keys.each do |k|
       fee = pricing[k].clone
 
-      totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
-      totals[k]["currency"] ||= fee["currency"]
+      totals[k]             ||= { 'value' => 0, 'currency' => fee['currency'] }
+      totals[k]['currency'] ||= fee['currency']
 
-      totals[k]["value"] +=
-        if fee["hw_rate_basis"]
+      totals[k]['value'] +=
+        if fee['hw_rate_basis']
           heavy_weight_fee_value(fee, cargo, user.tenant.scope)
         else
           fee_value(fee, get_cargo_hash(cargo, mot), user.tenant.scope)
         end
     end
-    
 
     converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
     cargo.try(:unit_price=, value: converted, currency: user.currency)
-    totals["total"] = { value: converted, currency: user.currency }
+    totals['total'] = { value: converted, currency: user.currency }
 
     totals
   end
@@ -165,19 +163,19 @@ module PricingTools
     transport_category_id = transport_category(container, schedule).id
     pricing = get_user_price(schedule, transport_category_id, user, shipment_date)
     return if pricing.nil?
-    totals = { "total" => {} }
+    totals = { 'total' => {} }
 
     pricing.each do |k, fee|
-      totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
-      totals[k]["currency"] ||= fee["currency"]
+      totals[k]             ||= { 'value' => 0, 'currency' => fee['currency'] }
+      totals[k]['currency'] ||= fee['currency']
 
-      totals[k]["value"] += fee_value(fee, get_cargo_hash(container, mot), user.tenant.scope)
+      totals[k]['value'] += fee_value(fee, get_cargo_hash(container, mot), user.tenant.scope)
     end
 
     cargo_rate_value = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
     return if cargo_rate_value.nil? || cargo_rate_value == 0
     container.unit_price = { value: cargo_rate_value, currency: user.currency }
-    totals["total"] = { value: cargo_rate_value, currency: user.currency }
+    totals['total'] = { value: cargo_rate_value, currency: user.currency }
     totals
   end
 
@@ -192,7 +190,7 @@ module PricingTools
   def get_tenant_pricings_hash(tenant_id)
     pricings = get_tenant_pricings(tenant_id)
     pricings.each_with_object({}) do |pricing, return_h|
-      return_h[pricing["id"]] = pricing
+      return_h[pricing['id']] = pricing
     end
   end
 
@@ -235,27 +233,27 @@ module PricingTools
 
   def handle_range_fare(fee, cargo_hash)
     weight_kg = cargo_hash[:weight]
-    min = fee["min"] || 0
+    min = fee['min'] || 0
 
-    case fee["rate_basis"]
-    when "PER_KG_RANGE"
-      fee_range = fee["range"].find do |range|
-        weight_kg >= range["min"] && weight_kg <= range["max"]
-      end || fee["range"].max_by { |x| x["max"] }
-      value = fee_range.nil? ? 0 : fee_range["rate"] * weight_kg
+    case fee['rate_basis']
+    when 'PER_KG_RANGE'
+      fee_range = fee['range'].find do |range|
+        weight_kg >= range['min'] && weight_kg <= range['max']
+      end || fee['range'].max_by { |x| x['max'] }
+      value = fee_range.nil? ? 0 : fee_range['rate'] * weight_kg
 
       return [value, min].max
-    when "PER_CONTAINER_RANGE"
-      fee_range = fee["range"].find do |range|
-        weight_kg >= range["min"] && weight_kg <= range["max"]
+    when 'PER_CONTAINER_RANGE'
+      fee_range = fee['range'].find do |range|
+        weight_kg >= range['min'] && weight_kg <= range['max']
       end
-      value = fee_range.nil? ? 0 : fee_range["rate"]
+      value = fee_range.nil? ? 0 : fee_range['rate']
       return [value, min].max
-    when "PER_UNIT_RANGE"
-      fee_range = fee["range"].find do |range|
-        weight_kg >= range["min"] && weight_kg <= range["max"]
+    when 'PER_UNIT_RANGE'
+      fee_range = fee['range'].find do |range|
+        weight_kg >= range['min'] && weight_kg <= range['max']
       end
-      value = fee_range.nil? ? 0 : fee_range["rate"]
+      value = fee_range.nil? ? 0 : fee_range['rate']
       return [value, min].max
     end
 
@@ -263,10 +261,10 @@ module PricingTools
   end
 
   def should_round(result, scope)
-    if scope["continuous_rounding"]
-      return result.to_d.round(2)
+    if scope['continuous_rounding']
+      result.to_d.round(2)
     else
-      return result
+      result
     end
   end
 
@@ -276,65 +274,65 @@ module PricingTools
     cbm = cargo.volume
     ton = weight_kg / 1000
 
-    if fee["hw_threshold"]
+    if fee['hw_threshold']
       ratio = weight_kg / cbm
 
-      if ratio > fee["hw_threshold"]
-        rate_value = [cbm, ton].max * quantity * fee["rate"].to_i
-        result = [rate_value, fee["min"]].max
+      if ratio > fee['hw_threshold']
+        rate_value = [cbm, ton].max * quantity * fee['rate'].to_i
+        result = [rate_value, fee['min']].max
       end
 
       result = 0
-    elsif fee["range"]
-      fee_range = fee["range"].find do |range|
-        weight_kg >= range["min"] && weight_kg <= range["max"]
+    elsif fee['range']
+      fee_range = fee['range'].find do |range|
+        weight_kg >= range['min'] && weight_kg <= range['max']
       end
 
-      result = fee_range.nil? ? 0 : fee_range["rate"] * quantity
+      result = fee_range.nil? ? 0 : fee_range['rate'] * quantity
     end
 
-    return should_round(result, scope)
+    should_round(result, scope)
   end
 
   def fee_value(fee, cargo_hash, scope)
-    case fee["rate_basis"]
-    when "PER_SHIPMENT", "PER_BILL"
-      result = fee["value"].to_d
-    when "PER_ITEM", "PER_CONTAINER"
-      (fee["value"] || fee["rate"]).to_d * cargo_hash[:quantity]
-    when "PER_CBM"
-      min = fee["min"] || 0
+    case fee['rate_basis']
+    when 'PER_SHIPMENT', 'PER_BILL'
+      result = fee['value'].to_d
+    when 'PER_ITEM', 'PER_CONTAINER'
+      (fee['value'] || fee['rate']).to_d * cargo_hash[:quantity]
+    when 'PER_CBM'
+      min = fee['min'] || 0
       val = fee['value'] || fee['rate']
       cbm = val.to_d * cargo_hash[:volume]
       result = [cbm, min].max
-    when "PER_KG"
-      val = fee["value"].to_d * cargo_hash[:weight]
-      min = fee["min"] || 0
+    when 'PER_KG'
+      val = fee['value'].to_d * cargo_hash[:weight]
+      min = fee['min'] || 0
       result = [val, min].max
-    when "PER_X_KG_FLAT"
+    when 'PER_X_KG_FLAT'
       base = fee['base'].to_d
       val = fee['value'] * (cargo_hash[:weight] / base).ceil * base
-      min = fee["min"] || 0
+      min = fee['min'] || 0
       result = [val, min].max
-    when "PER_CBM_TON"
-      cbm = cargo_hash[:volume] * fee["cbm"]
-      ton = (cargo_hash[:weight] / 1000) * fee["ton"]
-      min = fee["min"] || 0
+    when 'PER_CBM_TON'
+      cbm = cargo_hash[:volume] * fee['cbm']
+      ton = (cargo_hash[:weight] / 1000) * fee['ton']
+      min = fee['min'] || 0
 
       result = [cbm, ton, min].max
-    when "PER_TON"
-      ton = (cargo_hash[:weight] / 1000) * fee["ton"]
-      min = fee["min"] || 0
+    when 'PER_TON'
+      ton = (cargo_hash[:weight] / 1000) * fee['ton']
+      min = fee['min'] || 0
       result = [ton, min].max
-    when "PER_WM"
-      cbm = cargo_hash[:volume] * (fee["value"] || fee["rate"])
-      ton = (cargo_hash[:weight] / 1000) * (fee["value"] || fee["rate"])
-      min = fee["min"] || 0
+    when 'PER_WM'
+      cbm = cargo_hash[:volume] * (fee['value'] || fee['rate'])
+      ton = (cargo_hash[:weight] / 1000) * (fee['value'] || fee['rate'])
+      min = fee['min'] || 0
       result = [cbm, ton, min].max
     when /RANGE/
       result = handle_range_fare(fee, cargo_hash)
     end
-    return should_round(result, scope)
+    should_round(result, scope)
   end
 
   def get_cargo_hash(cargo, mot)
