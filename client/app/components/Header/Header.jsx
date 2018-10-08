@@ -88,6 +88,7 @@ class Header extends Component {
       user
     } = this.props
     const { isTop } = this.state
+    const scope = tenant && tenant.data ? tenant.data.scope : {}
     const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
     const accountLinks = [
       user && user.role && user.role.name === 'shipper'
@@ -133,7 +134,7 @@ class Header extends Component {
         user={user}
         isLanding={isLanding}
         toggleShowLogin={this.toggleShowLogin}
-        loginText={tenant.data.scope.closed_registration ? t('common:logIn') : `${t('common:logIn')} / ${t('common:register')}`}
+        loginText={scope.closed_registration ? t('common:logIn') : `${t('common:logIn')} / ${t('common:register')}`}
       />
     )
     const hasErrors = error && error[currentStage] && error[currentStage].length > 0

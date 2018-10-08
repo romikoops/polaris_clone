@@ -33,7 +33,7 @@ credentialsName: services
 postgresql:
   enabled: true
   image: eu.gcr.io/itsmycargo-main/postgres-review
-  imageTag: latest
+  imageTag: stable
   imagePullPolicy: Always
 
   seed:

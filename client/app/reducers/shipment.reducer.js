@@ -117,7 +117,7 @@ export default function shipment (state = {}, action) {
         (r.meta.tenant_vehicle_id === action.payload.tenant_vehicle_id))[0]
       const targetIndex = results.indexOf(targetResult)
       results[targetIndex].schedules = action.payload.schedules
-
+      results[targetIndex].finalResults = action.payload.finalResults
       return {
         ...state,
         response: {
