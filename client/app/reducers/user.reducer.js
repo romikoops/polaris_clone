@@ -512,6 +512,24 @@ export default function users (state = initialState, action) {
       return errShips
     }
 
+    case userConstants.GET_PRICINGS_REQUEST:
+      return { ...state, loading: true }
+    case userConstants.GET_PRICINGS_SUCCESS: {
+      
+
+      return {
+        ...state,
+        pricings: action.payload,
+        loading: false
+      }
+    }
+    case userConstants.GET_PRICINGS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: { pricings: action.error }
+      }
+
     case userConstants.CLEAR_LOADING:
       return {
         ...state,

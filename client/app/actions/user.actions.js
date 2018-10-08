@@ -691,6 +691,35 @@ function saveAddressEdit (address) {
   }
 }
 
+function getPricings (redirect) {
+  function request (pricingData) {
+    return { type: userConstants.GET_PRICINGS_REQUEST, payload: pricingData }
+  }
+  function success (pricingData) {
+    return { type: userConstants.GET_PRICINGS_SUCCESS, payload: pricingData }
+  }
+  function failure (error) {
+    return { type: userConstants.GET_PRICINGS_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    userService.getPricings(pages, perPage).then(
+      (data) => {
+        dispatch(success(data))
+        if (redirect) {
+          dispatch(push('/account/pricings'))
+        }
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function clearLoading () {
   return { type: userConstants.CLEAR_LOADING, payload: null }
 }
@@ -739,7 +768,8 @@ export const userActions = {
   reuseShipment,
   searchShipments,
   searchContacts,
-  deltaShipmentsPage
+  deltaShipmentsPage,
+  getPricings
 
 }
 
