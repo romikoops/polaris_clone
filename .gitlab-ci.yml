@@ -215,6 +215,11 @@ cucumber:
     reports:
       junit:
         - qa/report/*.xml
+  only:
+    - branches
+  except:
+    - master
+    - dev
 
 reset_database:
   stage: review_cleanup
