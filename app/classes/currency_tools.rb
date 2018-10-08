@@ -41,7 +41,11 @@ module CurrencyTools
       end
     end
 
-    base_value
+    if Tenant.find(tenant_id).scope['atomic_rounding']
+      return base_value.to_d.round(2)
+    else
+      return base_value
+    end
   end
 
   def sum_and_convert_cargo(hash_obj, base, tenant_id)
@@ -54,8 +58,11 @@ module CurrencyTools
         base_value += charge["value"]
       end
     end
-
-    base_value
+    if Tenant.find(tenant_id).scope['atomic_rounding']
+      return base_value.to_d.round(2)
+    else
+      return base_value
+    end
   end
 
   def refresh_rates(base)
