@@ -103,7 +103,6 @@ class PlaceSearch extends Component {
   }
 
   initAutocomplete (map) {
-    // const targetId = target + '-gmac';
     const options = this.props.options ? this.props.options : {}
     const input = document.getElementById('location')
     const autocomplete = new this.props.gMaps.places.Autocomplete(input, options)
@@ -127,7 +126,7 @@ class PlaceSearch extends Component {
       const { t } = this.props
       const place = autocomplete.getPlace()
       if (!place.geometry) {
-        window.alert(`${t('common:noDetailsAvailable')} '${place.name}'`)
+        window.alert(t('nav:noDetailsAvailable', { placeName: place.name }))
 
         return
       }

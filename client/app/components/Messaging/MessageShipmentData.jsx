@@ -162,7 +162,7 @@ class MessageShipmentData extends Component {
                 </h4>
               </div>
               <div className="flex-100 layout-row layout-align-center">
-                <p className="flex-none"> {shipment.load_type === 'cargo_item' ? 'LCL' : 'FCL'} </p>
+                <p className="flex-none"> {shipment.load_type === 'cargo_item' ? t('acronym:LCL') : t('acronym:FCL')} </p>
               </div>
             </div>
           </div>
@@ -215,7 +215,7 @@ class MessageShipmentData extends Component {
                 </h4>
               </div>
               <div className="flex-100 layout-row layout-align-center">
-                <p className="flex-none"> {shipment.has_on_carriage ? 'Yes' : 'No'} </p>
+                <p className="flex-none"> {shipment.has_on_carriage ? t('common:yes') : t('common:no')} </p>
               </div>
             </div>
           </div>
@@ -265,4 +265,4 @@ MessageShipmentData.defaultProps = {
   onChange: null
 }
 
-export default translate(['common', 'shipment'])(MessageShipmentData)
+export default translate(['common', 'shipment', 'acronym'])(MessageShipmentData)

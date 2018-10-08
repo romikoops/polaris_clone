@@ -20,7 +20,7 @@ class OptOutCookies extends Component {
     return (
       <div className={`${styles.container} flex-none layout-row layout-align-center-center layout-wrap`}>
         <div className="flex-100 layout-row layout-align-start-center">
-          <h3 className="flex-none">Cookies</h3>
+          <h3 className="flex-none">{t('cookies:cookies')}</h3>
         </div>
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
           <p className="flex-100">

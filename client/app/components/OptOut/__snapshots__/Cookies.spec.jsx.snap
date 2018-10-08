@@ -24,7 +24,7 @@ exports[`shallow rendering 1`] = `
     <p
       className="flex-100"
     >
-      Though we do not use cookies to track your movements   through out the web
+      Though we do not use cookies to track your movements through out the web
       we do need to save some information about your profile and the data you are accessing in the browser.
       This information is vital to the functioning of the site.
     </p>

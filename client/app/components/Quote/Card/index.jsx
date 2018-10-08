@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import { translate } from 'react-i18next'
 import styles from './index.scss'
 import PropTypes from '../../../prop-types'
 import { moment } from '../../../constants'
@@ -31,9 +32,11 @@ class QuoteCard extends PureComponent {
     return hubType
   }
   static determineSubKey (key) {
+    const { t } = this.props
+
     switch (key) {
       case 'trucking_lcl' || 'trucking_fcl':
-        return 'Trucking Rate'
+        return t('cargo:truckingRate')
 
       default:
         return key
@@ -99,7 +102,7 @@ class QuoteCard extends PureComponent {
   }
 
   buttonToDisplay () {
-    const { tenant, result } = this.props
+    const { tenant, result, t } = this.props
     const { scope } = tenant.data
     const { showSchedules } = this.state
     const showPriceBreakdownBtn = (
@@ -107,7 +110,7 @@ class QuoteCard extends PureComponent {
         className={`flex layout-row layout-align-start-center pointy ${styles.view_switch}`}
         onClick={() => this.toggleShowSchedules('prices')}
       >
-        <p className="flex-none">View Price Breakdown</p>
+        <p className="flex-none">{t('quote:viewPriceBreakdown')}</p>
       </div>
     )
     const showSchedulesBtn = (
@@ -115,7 +118,7 @@ class QuoteCard extends PureComponent {
         className={`flex layout-row layout-align-start-center pointy ${styles.view_switch}`}
         onClick={() => this.toggleShowSchedules('schedules')}
       >
-        <p className="flex-none">View Schedules</p>
+        <p className="flex-none">{t('quote:viewSchedules')}</p>
       </div>
     )
     if (scope.detailed_billing && result.schedules.length > 1) {
@@ -146,7 +149,8 @@ class QuoteCard extends PureComponent {
       pickup,
       truckingTime,
       isQuotationTool,
-      aggregatedCargo
+      aggregatedCargo,
+      t
     } = this.props
     const {
       quote,
@@ -177,10 +181,10 @@ class QuoteCard extends PureComponent {
             <div className="flex-none layout-row layout-align-start-center" />
             <div className="flex-45 layout-row layout-align-start-center">
               {key === 'trucking_pre' ? (
-                <span>Pick-up</span>
+                <span>{t('shipment:pickUp')}</span>
               ) : ''}
               {key === 'trucking_on' ? (
-                <span>Delivery</span>
+                <span>{t('shipment:delivery')}</span>
               ) : ''}
               <span>{key === 'trucking_pre' || key === 'trucking_on' ? '' : capitalize(key)}</span>
             </div>
@@ -195,7 +199,7 @@ class QuoteCard extends PureComponent {
           .filter(value => value.length !== 1).map((price) => {
             const subPrices = (<div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
               <div className="flex-45 layout-row layout-align-start-center">
-                <span>{key === 'cargo' ? 'Freight rate' : QuoteCard.determineSubKey(price[0])}</span>
+                <span>{key === 'cargo' ? t('cargo:freightRate') : QuoteCard.determineSubKey(price[0])}</span>
               </div>
               <div className="flex-50 layout-row layout-align-end-center">
                 <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{(price[1].currency || price[1].total.currency)}</p>
@@ -239,8 +243,8 @@ class QuoteCard extends PureComponent {
           <div className="flex-100 layout-row">
             <p className={`flex-none ${styles.sched_elem}`}>
               {' '}
-              {moment(schedule.eta).diff(schedule.etd, 'days')}
-              {' Days'}
+              {moment(schedule.eta).diff(schedule.etd, t('common:days'))}
+              {t('common:capitalDays')}
             </p>
           </div>
         </div>
@@ -250,14 +254,14 @@ class QuoteCard extends PureComponent {
           size="small"
           handleNext={() => this.selectSchedule(schedule)}
           theme={theme}
-          text="Select"
+          text={t('common:select')}
         />
       </div>
     </div>))
     const firstSchedule = schedules[0]
     const lastSchedule = schedules[result.schedules.length - 1]
     const earlierDate = schedules[0] ? firstSchedule.closing_date : false
-    const showEarlierBtn = earlierDate && moment(earlierDate).diff(moment(), 'days') > 5
+    const showEarlierBtn = earlierDate && moment(earlierDate).diff(moment(), t('common:days')) > 5
 
     return (
       <div
@@ -274,8 +278,8 @@ class QuoteCard extends PureComponent {
           </div>
           <div className={`flex-60 layout-row layout-align-start-center ${styles.origin_destination}`}>
             <div className="layout-column layout-align-center-start">
-              <p>From: <span>{originHub.name}</span></p>
-              <p>To: <span>{destinationHub.name}</span></p>
+              <p>{t('common:from')}: <span>{originHub.name}</span></p>
+              <p>{t('common:to')}: <span>{destinationHub.name}</span></p>
             </div>
           </div>
           <div className="flex layout-row layout-wrap layout-align-end-center">
@@ -291,7 +295,10 @@ class QuoteCard extends PureComponent {
             </div>
             <div className={`flex-100 layout-row layout-wrap layout-align-end-center ${styles.unit_info}`}>
               <p className="flex-100 layout-row layout-align-end-center">
-                Kg:&nbsp; <span>{`${numberSpacing(calcPayload, 1)} kg`}</span>
+                {capitalize(t('acronym:kg'))}:&nbsp;
+                <span>
+                  {t('acronym:weight', { item: numberSpacing(calcPayload, 1) })}
+                </span>
               </p>
             </div>
           </div>
@@ -300,11 +307,11 @@ class QuoteCard extends PureComponent {
 
           { result.meta.carrier_name ? <div className="flex-50 layout-row layout-align-center-center">
             <i className="flex-none fa fa-ship" style={{ paddingRight: '7px' }} />
-            <p className="layout-row layout-align-end-center margin_5">{`Carrier: ${result.meta.carrier_name}`}</p>
+            <p className="layout-row layout-align-end-center margin_5">{t('quote:carrier', { carrierName: result.meta.carrier_name })}</p>
           </div> : '' }
           { result.meta.service_level ? <div className="flex-50 layout-row layout-align-center-center">
             <i className="flex-none fa fa-bell-o" style={{ paddingRight: '7px' }} />
-            <p className="layout-row layout-align-end-center margin_5">{`Service: ${capitalize(result.meta.service_level)}`}</p>
+            <p className="layout-row layout-align-end-center margin_5">{t('quote:service', { serviceLevel: capitalize(result.meta.service_level) })}</p>
           </div> : '' }
         </div>
 
@@ -315,16 +322,16 @@ class QuoteCard extends PureComponent {
               <div className={`flex-100 layout-row ${styles.dates_row} ${styles.dates_container} ${styles.dates_header}`}>
                 <div className="flex-75 layout-row">
                   <div className="flex-25 layout-row">
-                    <h4 className={styles.date_title}>{pickup ? 'Pickup Date' : 'Closing Date'}</h4>
+                    <h4 className={styles.date_title}>{pickup ? t('common:pickupDate') : t('common:closingDate')}</h4>
                   </div>
                   <div className="flex-25 layout-row">
-                    <h4 className={styles.date_title}>{`ETD ${QuoteCard.returnHubType(originHub)}`}</h4>
+                    <h4 className={styles.date_title}>{`${t('common:etd')} ${QuoteCard.returnHubType(originHub)}`}</h4>
                   </div>
                   <div className="flex-25 layout-row">
-                    <h4 className={styles.date_title}>{`ETA ${QuoteCard.returnHubType(destinationHub)} `}</h4>
+                    <h4 className={styles.date_title}>{`${t('common:eta')} ${QuoteCard.returnHubType(destinationHub)} `}</h4>
                   </div>
                   <div className="flex-25 layout-row">
-                    <h4 className={styles.date_title}> Estimated T/T </h4>
+                    <h4 className={styles.date_title}>{t('quote:estimatedTT')}</h4>
                   </div>
                 </div>
                 <div className="flex-25 layout-row" />
@@ -339,7 +346,7 @@ class QuoteCard extends PureComponent {
                 >
                   <div className="flex-none layout-row layout-align-space-around-center">
                     <i className="flex-none fa fa-chevron-left" />
-                    <p className="flex-none">Earlier Departures</p>
+                    <p className="flex-none">{t('common:earlierDeparturesBase')}</p>
                   </div>
                 </div>
                 <div className="flex-40 layout-row layout-align-center">
@@ -355,7 +362,7 @@ class QuoteCard extends PureComponent {
                   onClick={!finalResults ? () => this.handleSchedulesRequest(1) : null}
                 >
                   <div className="flex-none layout-row layout-align-space-around-center">
-                    <p className="flex-none">Later Departures</p>
+                    <p className="flex-none">{t('common:laterDeparturesBase')}</p>
                     <i className="flex-none fa fa-chevron-right" />
                   </div>
                 </div>
@@ -371,7 +378,7 @@ class QuoteCard extends PureComponent {
           <div className={`flex-100 layout-row layout-align-space-between-stretch ${styles.total_row}`}>
             {this.buttonToDisplay()}
             <div className={`${isQuotationTool ? 'flex' : 'flex-10'} layout-row layout-align-start-center`}>
-              <span style={{ textAlign: 'right' }}>Total</span>
+              <span style={{ textAlign: 'right' }}>{t('common:total')}</span>
             </div>
             <div className="flex-35 layout-row layout-align-end-center">
               <p style={!isQuotationTool ? { paddingRight: '18px' } : {}}>{numberSpacing(quote.total.value, 2)}&nbsp;{quote.total.currency}</p>
@@ -395,6 +402,7 @@ class QuoteCard extends PureComponent {
 
 QuoteCard.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   tenant: PropTypes.tenant,
   truckingTime: PropTypes.number,
   result: PropTypes.objectOf(PropTypes.any),
@@ -423,4 +431,4 @@ QuoteCard.defaultProps = {
   aggregatedCargo: {}
 }
 
-export default QuoteCard
+export default translate(['common', 'cargo', 'acronym', 'shipment', 'quote'])(QuoteCard)
