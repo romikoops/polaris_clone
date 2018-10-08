@@ -279,16 +279,16 @@ module PricingTools
 
       if ratio > fee['hw_threshold']
         rate_value = [cbm, ton].max * quantity * fee['rate'].to_i
-        return [rate_value, fee['min']].max
+        [rate_value, fee['min']].max
       end
 
-      return 0
+      0
     elsif fee['range']
       fee_range = fee['range'].find do |range|
         weight_kg >= range['min'] && weight_kg <= range['max']
       end
 
-      return fee_range.nil? ? 0 : fee_range['rate'] * quantity
+      fee_range.nil? ? 0 : fee_range['rate'] * quantity
     end
 
     round_fee(result, scope)
