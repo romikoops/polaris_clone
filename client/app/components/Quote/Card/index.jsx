@@ -31,7 +31,7 @@ class QuoteCard extends PureComponent {
 
     return hubType
   }
-  
+
 
   constructor (props) {
     super(props)
@@ -46,16 +46,12 @@ class QuoteCard extends PureComponent {
     this.handleClickChecked = this.handleClickChecked.bind(this)
   }
   componentDidMount () {
-    const { isQuotationTool, isFirst } = this.props
+    const { isQuotationTool } = this.props
     if (isQuotationTool) {
       this.setState({
         showSchedules: false
       })
     }
-    // if (isFirst && !this.state.isChecked) {
-    //   console.log('!!!!!!!!!!!!!!!!!!!!')
-    //   this.handleClickChecked()
-    // }
   }
   toggleExpander (key) {
     this.setState({
