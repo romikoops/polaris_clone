@@ -94,9 +94,9 @@ class Shipment < ApplicationRecord
   scope :requested_by_unconfirmed_account, -> { where(status: 'requested_by_unconfirmed_account') }
   scope :open, -> { where(status: %w(in_progress confirmed)) }
   scope :rejected, -> { where(status: %w(ignored declined)) }
-  scope :archived, -> { where(status: "archived") }
-  scope :finished, -> { where(status: "finished") }
-  scope :quoted, -> { where(status: "quoted") }
+  scope :archived, -> { where(status: 'archived') }
+  scope :finished, -> { where(status: 'finished') }
+  scope :quoted, -> { where(status: 'quoted') }
 
   scope :user_name, lambda { |query|
     user_ids = User.where('first_name ILIKE ? OR last_name ILIKE ?', "%#{query}%", "%#{query}%").ids
@@ -143,8 +143,8 @@ class Shipment < ApplicationRecord
     return nil if trip_id.nil?
 
     price = charge_breakdowns.where(trip_id: trip_id).first.charge('grand_total').price
-    
-    {value: price.value, currency: price.currency}
+
+    { value: price.value, currency: price.currency }
   end
 
   def origin_layover
@@ -346,7 +346,7 @@ class Shipment < ApplicationRecord
 
   def as_index_json(options = {})
     new_options = options.reverse_merge(
-      methods: %i(total_price mode_of_transport),
+      methods: %i(total_price mode_of_transport cargo_units selected_offer),
       include: [
         :destination_nexus,
         :origin_nexus,
