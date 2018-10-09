@@ -34,5 +34,11 @@
   "confirmPassword": "Confirm Password",
   "setPassword": "Set Password",
   "dataManager": "Data Manager",
-  "mostUsedContacts": "Most used Contacts"
+  "mostUsedContacts": "Most used Contacts",
+  "numPricings": "No. Pricings",
+  "dedicated": "Dedicated",
+  "effectiveDate": "Effective Date",
+  "expirationDate": "Expiration Date",
+  "carrier": "Carrier",
+  "loadType": "Load Type"
 }

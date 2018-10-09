@@ -26,6 +26,7 @@ class PricingsController < ApplicationController
     @itinerary = Itinerary.find(params[:id])
     @pricings = filter_for_dedicated_pricings(@itinerary.pricings).map(&:as_json)
     response_handler({
+      itinerary_id: params[:id],
       pricings: @pricings
     })
   end

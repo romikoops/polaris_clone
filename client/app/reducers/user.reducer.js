@@ -515,7 +515,6 @@ export default function users (state = initialState, action) {
     case userConstants.GET_PRICINGS_REQUEST:
       return { ...state, loading: true }
     case userConstants.GET_PRICINGS_SUCCESS: {
-
       return {
         ...state,
         pricings: {
@@ -534,7 +533,6 @@ export default function users (state = initialState, action) {
     case userConstants.GET_ITINERARY_PRICINGS_REQUEST:
       return { ...state, loading: true }
     case userConstants.GET_ITINERARY_PRICINGS_SUCCESS: {
-
       return {
         ...state,
         pricings: {

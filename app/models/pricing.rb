@@ -17,7 +17,7 @@ class Pricing < ApplicationRecord
 
   def as_json(options={})
     new_options = options.reverse_merge(
-      methods: %i(data exceptions load_type cargo_class),
+      methods: %i(data exceptions load_type cargo_class carrier service_level),
       only:    %i(
         effective_date expiration_date wm_rate itinerary_id
         tenant_id transport_category_id id currency_name tenant_vehicle_id user_id
@@ -33,4 +33,13 @@ class Pricing < ApplicationRecord
   def exceptions
     pricing_exceptions.map(&:as_json)
   end
+
+  def carrier
+    tenant_vehicle&.carrier&.name
+  end
+
+  def service_level
+    tenant_vehicle&.name
+  end
+
 end
