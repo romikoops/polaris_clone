@@ -16,8 +16,14 @@ class PricesTable extends PureComponent {
 
   componentDidMount() {
     const { pricings, userDispatch, row } = this.props
-    if (!pricings || (pricings && pricings.index && pricings.index.itineraries.length === 0)) {
-      userDispatch.getPricings(false)
+    debugger
+    if (!pricings || 
+        (pricings && !pricings.show) ||
+        (pricings && pricings.show && !pricings.show[row.original.id]) || 
+        (pricings && pricings.show && pricings.show[row.original.id].length === 0)
+      ) {
+      
+      userDispatch.getPricingsForItinerary(row.original.id)
     }
   }
 
@@ -27,7 +33,7 @@ class PricesTable extends PureComponent {
     const { t, pricings } = this.props
     if (!pricings) return ''
     const { show } = pricings
-    debugger
+    if (!show) return ''
     const data = show[row.id]
     if (!data) return ''
     const columns = [

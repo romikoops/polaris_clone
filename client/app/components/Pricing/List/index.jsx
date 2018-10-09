@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from '../../../prop-types'
 import { userActions, appActions } from '../../../actions'
+import PricesTable from './PricesTable'
 
 class PricingList extends PureComponent {
   constructor(props) {
@@ -23,72 +24,7 @@ class PricingList extends PureComponent {
     }
   }
 
-  expandRow (expanded) {
-    debugger
-    const { pricings, userDispatch } = this.props
-    const rowId = row.original.id
-    if (!pricings.show || (pricings.show && !pricings.show[rowId])) {
-      userDispatch.getPricingsForItinerary(rowId)
-      return ''
-    }
-    const { show } = pricings
-    
-    const data = show[rowId]
-    if (!data) return ''
-    const columns = [
-      {
-        Header: t('common:routing'),
-        columns: [
-          {
-            Header: t('common:origin'),
-            id: "origin_name",
-            accessor: d => d.stops[0].hub.nexus.name
-          },
-          {
-            Header: t('common:destination'),
-            id: "destination_name",
-            accessor: d => d.stops[1].hub.nexus.name
-          }
-        ]
-      },
-      {
-        Header: t('common:pricing'),
-        columns: [
-          {
-            Header: t('common:numPricings'),
-            accessor: "pricing_count"
-          },
-          {
-            Header: t('common:dedicated'),
-            id: "has_user_pricing",
-            accessor: d => d.has_user_pricing
-          },
-          {
-            Header: t('common:view'),
-            id: "view",
-            Cell: d => (<div className="flex">VIEW</div>)
-          }
-        ]
-      },
-    ]
-    return (
-      <ReactTable
-             className="flex-100 height_100"
-             data={itineraries}
-             columns={columns}
-             defaultSorted={[
-               {
-                 id: 'origin_name',
-                 desc: true
-               }
-             ]}
-             defaultPageSize={20}
-             SubComponent={row => this.generateSubComponent(row)}
-          />
-    )
-    
-  }
-
+ 
 
   render() { 
     const { t, pricings } = this.props
@@ -148,13 +84,8 @@ class PricingList extends PureComponent {
                  desc: true
                }
              ]}
-             expanded={this.state.expanded}
-             onExpandedChange={expanded => this.expandRow(expanded)}
              defaultPageSize={20}
-             SubComponent={d => {
-               console.log(d)
-               return (<div className="flex"></div>)
-              }}
+             SubComponent={d => (<PricesTable row={d} />)}
           />
         </div>
 
