@@ -23,7 +23,8 @@ class PricingList extends PureComponent {
     }
   }
 
-  generateSubComponent (row) {
+  expandRow (expanded) {
+    debugger
     const { pricings, userDispatch } = this.props
     const rowId = row.original.id
     if (!pricings.show || (pricings.show && !pricings.show[rowId])) {
@@ -148,9 +149,12 @@ class PricingList extends PureComponent {
                }
              ]}
              expanded={this.state.expanded}
-             onExpandedChange={expanded => this.setState({ expanded })}
+             onExpandedChange={expanded => this.expandRow(expanded)}
              defaultPageSize={20}
-             SubComponent={d => (<div className="flex"></div>)}
+             SubComponent={d => {
+               console.log(d)
+               return (<div className="flex"></div>)
+              }}
           />
         </div>
 
