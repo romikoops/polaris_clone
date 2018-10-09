@@ -144,5 +144,6 @@
   "without": "without",
   "moreInfo": "More info",
   "voyageCode": "Voyage Code",
-  "vesselName": "Vessel Name"
+  "vesselName": "Vessel Name",
+  "select": "Select"
 }
