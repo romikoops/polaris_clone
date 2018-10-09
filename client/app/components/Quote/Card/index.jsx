@@ -52,9 +52,10 @@ class QuoteCard extends PureComponent {
         showSchedules: false
       })
     }
-    if (isFirst && !this.state.isChecked) {
-      this.handleClickChecked()
-    }
+    // if (isFirst && !this.state.isChecked) {
+    //   console.log('!!!!!!!!!!!!!!!!!!!!')
+    //   this.handleClickChecked()
+    // }
   }
   toggleExpander (key) {
     this.setState({
