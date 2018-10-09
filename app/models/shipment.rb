@@ -145,6 +145,7 @@ class Shipment < ApplicationRecord
     price = charge_breakdowns.where(trip_id: trip_id).first.charge('grand_total').price
 
     { value: price.value, currency: price.currency }
+<<<<<<< HEAD
   end
 
   def edited_total
@@ -155,6 +156,8 @@ class Shipment < ApplicationRecord
     return nil if price.nil?
 
     { value: price.value, currency: price.currency }
+=======
+>>>>>>> 3027aeab8... IMC-538 edited pricings showing on cards
   end
 
   def origin_layover
