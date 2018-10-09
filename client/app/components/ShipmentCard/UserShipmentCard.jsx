@@ -45,7 +45,7 @@ class UserShipmentCard extends Component {
     const timeRow = !!plannedDate && !!shipment.planned_etd && !!shipment.planned_eta
       ? (<div className={`layout-row flex-100 layout-align-start-center
     ${styles.middle_bottom_box} ${styles.smallText}`}
-    >
+      >
         <div className="flex-20 layout-align-center-start">
           <span className="flex-100"><b>{t('common:pickupDate')}</b><br />
             <span className={`${styles.grey}`}>
@@ -212,9 +212,16 @@ class UserShipmentCard extends Component {
           </div>
           <div className="layout-row flex layout-align-end-end">
             <span className={`${styles.bigText} ${styles.price_style}`}>
-              <span> {shipment.total_price.currency} </span>
               <span>
-                {numberSpacing(shipment.total_price.value, 2)}
+                {shipment.total_price
+                  ? shipment.total_price.currency
+                  : shipment.selected_offer.total.currency}
+              </span>
+              <span>&nbsp;</span>
+              <span>
+                {shipment.total_price
+                  ? numberSpacing(shipment.total_price.value, 2)
+                  : numberSpacing(shipment.selected_offer.total.value, 2)}
               </span>
             </span>
           </div>
