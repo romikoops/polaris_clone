@@ -274,6 +274,7 @@ class ChooseOffer extends Component {
           pickup={shipment.has_pre_carriage}
           startDate={shipment.desired_start_date}
           result={s}
+          isFirst
           isChecked={isChecked[s.meta.charge_trip_id]}
           handleClick={e => this.handleClick(e, s)}
           selectResult={this.chooseResult}

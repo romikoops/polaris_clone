@@ -45,12 +45,15 @@ class QuoteCard extends PureComponent {
     }
     this.handleClickChecked = this.handleClickChecked.bind(this)
   }
-  componentWillMount () {
-    const { isQuotationTool } = this.props
+  componentDidMount () {
+    const { isQuotationTool, isFirst } = this.props
     if (isQuotationTool) {
       this.setState({
         showSchedules: false
       })
+    }
+    if (isFirst && !this.state.isChecked) {
+      this.handleClickChecked()
     }
   }
   toggleExpander (key) {
@@ -61,7 +64,7 @@ class QuoteCard extends PureComponent {
       }
     })
   }
-  handleClickChecked (e) {
+  handleClickChecked () {
     const { handleClick } = this.props
     this.setState(prevState => ({
       isChecked: !prevState.isChecked
@@ -389,7 +392,7 @@ class QuoteCard extends PureComponent {
                   className="pointy"
                   name="checked"
                   type="checkbox"
-                  onClick={e => this.handleClickChecked(e)}
+                  onClick={() => this.handleClickChecked()}
                   checked={this.props.isChecked}
                 />
               ) : ''}
