@@ -1,12 +1,16 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, tenant } from '../../../mocks'
+import { theme, tenant, identity } from '../../../mocks'
 
 import QuoteCard from './index'
+
+
 
 const propsBase = {
   theme,
   tenant,
+  identity,
+  loggedIn: true,
   truckingTime: 22,
   result: {
     meta: {
@@ -23,7 +27,7 @@ const propsBase = {
         currency: 'EUR'
       }
     },
-    schedules: ['scheduleOne', 'scheduleTwo']
+    schedules: [{ eta: '10-8-2018', closing_date: '10-8-2018', etd: '10-8-2018' }]
   },
   cargo: [],
   pickup: true,
