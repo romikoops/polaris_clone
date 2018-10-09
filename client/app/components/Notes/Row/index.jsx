@@ -17,7 +17,6 @@ const NotesRow = ({
       <div
         className={`flex-100 layout-row layout-start-center ${adminStyles.sec_header}`}
       >
-        {console.log(notes)}
         <p className={`${adminStyles.sec_header_text} flex-none`}>{t('common:notes')}</p>
         <div
           className="flex-10 layout-row alyout-align-center-center pointy"

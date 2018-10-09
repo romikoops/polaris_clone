@@ -34,7 +34,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   def delete_note
     itinerary = Itinerary.find(params[:itineraryId])
     note = Note.find(params[:noteId])
-    note.destroy!
+    note.destroy
     resp = itinerary.notes
     response_handler(resp)
   end
