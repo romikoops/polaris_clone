@@ -213,15 +213,11 @@ class UserShipmentCard extends Component {
           <div className="layout-row flex layout-align-end-end">
             <span className={`${styles.bigText} ${styles.price_style}`}>
               <span>
-                {shipment.total_price
-                  ? shipment.total_price.currency
-                  : shipment.selected_offer.total.currency}
+                {shipment.total_price.currency}
               </span>
               <span>&nbsp;</span>
               <span>
-                {shipment.total_price
-                  ? numberSpacing(shipment.total_price.value, 2)
-                  : numberSpacing(shipment.selected_offer.total.value, 2)}
+                {numberSpacing(shipment.total_price.value, 2)}
               </span>
             </span>
           </div>
