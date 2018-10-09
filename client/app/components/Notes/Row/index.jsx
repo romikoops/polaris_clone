@@ -6,16 +6,18 @@ import styles from './index.scss'
 import adminStyles from '../../Admin/Admin.scss'
 
 const NotesRow = ({
-  notes, theme, toggleNotesEdit, textStyle, t
+  notes, theme, toggleNotesEdit, textStyle, t, adminDispatch, itinerary
 }) => {
-  const noteCards = notes.map(n =>
-    <NotesCard note={n} theme={theme} />)
+  const noteCards = notes.length > 0 ? notes.map(n =>
+    <NotesCard note={n} itinerary={itinerary} adminDispatch={adminDispatch} theme={theme} />)
+    : ''
 
   return (
     <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.notes_wrapper}`}>
       <div
         className={`flex-100 layout-row layout-start-center ${adminStyles.sec_header}`}
       >
+        {console.log(notes)}
         <p className={`${adminStyles.sec_header_text} flex-none`}>{t('common:notes')}</p>
         <div
           className="flex-10 layout-row alyout-align-center-center pointy"
@@ -34,6 +36,8 @@ const NotesRow = ({
 
 NotesRow.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.any),
+  itinerary: PropTypes.itinerary,
+  adminDispatch: PropTypes.func,
   t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   toggleNotesEdit: PropTypes.func,
@@ -43,7 +47,9 @@ NotesRow.propTypes = {
 NotesRow.defaultProps = {
   notes: [],
   theme: {},
+  itinerary: {},
   toggleNotesEdit: null,
+  adminDispatch: null,
   textStyle: {}
 }
 

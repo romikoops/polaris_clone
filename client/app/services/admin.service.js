@@ -637,6 +637,16 @@ function saveItineraryNotes (id, notes) {
     .then(handleResponse)
 }
 
+function deleteItineraryNote (itineraryId, noteId) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' }
+  }
+
+  return fetch(`${getApiHost()}/admin/itineraries/${itineraryId}/delete_note/${noteId}`, requestOptions)
+    .then(handleResponse)
+}
+
 function editTruckingPrice (pricing) {
   const requestOptions = {
     method: 'POST',
@@ -685,6 +695,7 @@ export const adminService = {
   getShipments,
   getClients,
   saveItineraryNotes,
+  deleteItineraryNote,
   getItineraryPricings,
   wizardHubs,
   wizardSCharge,
