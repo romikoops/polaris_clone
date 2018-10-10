@@ -68,10 +68,11 @@ class DocumentsDownloader extends React.Component {
     if (downloadUrls[target]) {
       window.open(downloadUrls[target], '_blank')
     }
+    this.setState({ requested: false })
   }
   render () {
     const {
-      theme, loading, tooltip, square, size, t
+      theme, loading, tooltip, square, size, t, disabled
     } = this.props
     const { requested } = this.state
     const tooltipId = v4()
@@ -80,8 +81,9 @@ class DocumentsDownloader extends React.Component {
         text={t('common:request')}
         theme={theme}
         size={size}
+        disabled={disabled}
         handleNext={() => this.requestDocument()}
-        active
+        active={!disabled}
         border
       />
     ) : (
@@ -89,8 +91,9 @@ class DocumentsDownloader extends React.Component {
         text={t('common:request')}
         theme={theme}
         size={size}
+        disabled={disabled}
         handleNext={() => this.requestDocument()}
-        active
+        active={!disabled}
       />
     )
     const loadingBox = (
@@ -104,17 +107,19 @@ class DocumentsDownloader extends React.Component {
         text={t('doc:download')}
         theme={theme}
         size={size}
+        disabled={disabled}
         handleNext={() => this.downloadFile()}
-        active
+        active={!disabled}
         border
       />
     ) : (
       <RoundButton
         text={t('doc:download')}
         theme={theme}
+        disabled={disabled}
         size={size}
         handleNext={() => this.downloadFile()}
-        active
+        active={!disabled}
       />
     )
     let button
@@ -148,7 +153,8 @@ DocumentsDownloader.propTypes = {
   target: PropTypes.string,
   loading: PropTypes.bool,
   options: PropTypes.objectOf(PropTypes.any),
-  size: PropTypes.string
+  size: PropTypes.string,
+  disabled: PropTypes.bool
 }
 
 DocumentsDownloader.defaultProps = {
@@ -160,7 +166,8 @@ DocumentsDownloader.defaultProps = {
   target: '',
   loading: false,
   options: {},
-  size: 'small'
+  size: 'small',
+  disabled: false
 }
 
 function mapStateToProps (state) {

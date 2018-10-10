@@ -274,6 +274,7 @@ class ChooseOffer extends Component {
           pickup={shipment.has_pre_carriage}
           startDate={shipment.desired_start_date}
           result={s}
+          isFirst
           isChecked={isChecked[s.meta.charge_trip_id]}
           handleClick={e => this.handleClick(e, s)}
           selectResult={this.chooseResult}
@@ -398,6 +399,7 @@ class ChooseOffer extends Component {
                   <DocumentsDownloader
                     theme={theme}
                     target="quotations"
+                    disabled={this.state.selectedOffers.length < 1}
                     options={{ quotes: this.state.selectedOffers, shipment }}
                     size="full"
                     shipment={shipment}
@@ -414,7 +416,8 @@ class ChooseOffer extends Component {
                       <RoundButton
                         theme={theme}
                         size="full"
-                        active
+                        disabled={this.state.selectedOffers.length < 1}
+                        active={this.state.selectedOffers.length > 0}
                         text={t('account:sendViaEmail')}
                         handleNext={() => this.selectQuotes(shipment, this.state.selectedOffers, this.state.email)}
                       />

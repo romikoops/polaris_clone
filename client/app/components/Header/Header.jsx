@@ -88,7 +88,7 @@ class Header extends Component {
       user
     } = this.props
     const { isTop } = this.state
-    const scope = tenant && tenant.data ? tenant.data.scope : {}
+    const scope = tenant && tenant.data && tenant.data.id ? tenant.data.scope : {}
     const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
     const accountLinks = [
       user && user.role && user.role.name === 'shipper'
@@ -145,7 +145,7 @@ class Header extends Component {
       </div>
     )
 
-    const loginComponent = tenant.data.scope.closed_registration ? (
+    const loginComponent = (scope.closed_registration || !tenant.data.id) ? (
       <LoginPage
         theme={theme}
         req={req}

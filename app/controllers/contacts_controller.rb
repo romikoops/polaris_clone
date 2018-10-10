@@ -21,7 +21,7 @@ class ContactsController < ApplicationController
     scs.each do |s|
       tmp_shipment = s.shipment
       next unless tmp_shipment
-      shipments.push(tmp_shipment.with_address_options_json)
+      shipments.push(tmp_shipment.with_address_index_json)
     end
     location = contact.location
     response_handler(contact: contact, shipments: shipments, location: location)
