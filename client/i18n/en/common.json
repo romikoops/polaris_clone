@@ -72,7 +72,7 @@
   "insurance": "Insurance",
   "itinerary": "Itinerary",
   "miscellaneous": "Miscellaneous",
-  "newContact": "NEW CONTACT",
+  "newContact": "New Contact",
   "nonEmpty": "Must not be empty",
   "noBlank": "Must not be blank",
   "notes": "Notes",
@@ -145,5 +145,7 @@
   "moreInfo": "More info",
   "voyageCode": "Voyage Code",
   "vesselName": "Vessel Name",
-  "select": "Select"
+  "select": "Select",
+  "save": "Save",
+  "close": "Close"
 }

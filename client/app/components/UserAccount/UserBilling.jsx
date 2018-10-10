@@ -1,19 +1,22 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
-// import styles from './UserAccount.scss';
 
-export class UserBilling extends Component {
+class UserBilling extends Component {
   componentDidMount () {
     this.props.setNav('billing')
   }
 
   render () {
-    return <h1>UserBilling</h1>
+    const { t } = this.props
+
+    return <h1>{t('user:userBilling')}</h1>
   }
 }
 
 UserBilling.propTypes = {
-  setNav: PropTypes.func.isRequired
+  setNav: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 }
 
-export default UserBilling
+export default translate('user')(UserBilling)

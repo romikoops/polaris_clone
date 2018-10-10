@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
 import PropTypes from '../../prop-types'
@@ -9,7 +10,7 @@ import styles from './RouteFilterBox.scss'
 import TextHeading from '../TextHeading/TextHeading'
 import Checkbox from '../Checkbox/Checkbox'
 
-export class RouteFilterBox extends Component {
+class RouteFilterBox extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -45,7 +46,7 @@ export class RouteFilterBox extends Component {
   }
   render () {
     const {
-      theme, pickup, shipment, availableMotKeys, cargos, lastTripDate
+      theme, pickup, shipment, availableMotKeys, cargos, lastTripDate, t
     } = this.props
     const dayPickerProps = {
       disabledDays: {
@@ -91,22 +92,22 @@ export class RouteFilterBox extends Component {
       <div className={styles.filterbox}>
         <div className={styles.shipment_summary}>
           <div>
-            <TextHeading theme={theme} size={4} text="Shipment Summary" />
+            <TextHeading theme={theme} size={4} text={t('shipment:shipmentSummary')} />
           </div>
           <div className={`flex-100 layou-wrap ${styles.dpb}`}>
             <div className="layout-row flex-100">
               <i className={shipment.has_pre_carriage ? 'fa fa-check clip' : 'fa fa-times'} style={shipment.has_pre_carriage ? textStyle : { color: '#E0E0E0' }} />
-              <span>Pre-carriage</span>
+              <span>{t('shipment:preCarriage')}</span>
             </div>
             <div className="layout-row flex-100">
               <i className={shipment.has_on_carriage ? 'fa fa-check clip' : 'fa fa-times'} style={shipment.has_on_carriage ? textStyle : { color: '#E0E0E0' }} />
-              <span>On-carriage</span>
+              <span>{t('shipment:onCarriage')}</span>
             </div>
           </div>
         </div>
         <div className={styles.pickup_date}>
           <div>
-            <TextHeading theme={theme} size={4} text={pickup ? 'Pick-up Date' : 'Closing Date'} />
+            <TextHeading theme={theme} size={4} text={pickup ? t('shipment:pickUpDate') : t('common:closingDate')} />
           </div>
           <div className={`flex-none layout-row ${styles.dpb}`}>
             <div className={`flex-none layout-row layout-align-center-center ${styles.dpb_icon}`}>
@@ -126,7 +127,7 @@ export class RouteFilterBox extends Component {
         </div>
         <div className={styles.mode_of_transport}>
           <div>
-            <TextHeading theme={theme} size={4} text="Mode of transport" />
+            <TextHeading theme={theme} size={4} text={t('shipment:modeOfTransport')} />
           </div>
           {motCheckBoxes}
         </div>
@@ -139,8 +140,8 @@ export class RouteFilterBox extends Component {
           ))}
         </div>
         <div>
-          <p style={{ fontSize: '10px', marginTop: '0' }}>* Transit time (T/T) not guaranteed</p>
-          <p style={{ fontSize: '10px', marginTop: '0' }}>** You will be invoiced in local currency based on the exchange rate valid at the time</p>
+          <p style={{ fontSize: '10px', marginTop: '0' }}>{t('shipment:ttNoGuarantee')}</p>
+          <p style={{ fontSize: '10px', marginTop: '0' }}>{t('shipment:invoicedLocalCurrency')}</p>
 
         </div>
       </div>
@@ -149,6 +150,7 @@ export class RouteFilterBox extends Component {
 }
 RouteFilterBox.propTypes = {
   departureDate: PropTypes.number,
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   cargos: PropTypes.arrayOf(PropTypes.any),
   setDurationFilter: PropTypes.func.isRequired,
@@ -170,4 +172,4 @@ RouteFilterBox.defaultProps = {
   lastTripDate: ''
 }
 
-export default RouteFilterBox
+export default translate('shipment')(RouteFilterBox)

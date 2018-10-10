@@ -5,7 +5,7 @@ import { EmailSignInForm } from 'redux-auth/bootstrap-theme'
 import { browserHistory } from 'react-router'
 import PropTypes from '../../prop-types'
 
-export function SignIn ({ t }) {
+function SignIn ({ t }) {
   return (
     <div>
       <PageHeader>{t('account:signInFirst')}</PageHeader>

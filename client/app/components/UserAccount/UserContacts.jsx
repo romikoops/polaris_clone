@@ -62,12 +62,13 @@ class UserContacts extends Component {
     this.setState({ newContactBool: !this.state.newContactBool })
   }
 
-  handleValidSubmit (contact, reset, invalidate) {
+  handleValidSubmit (contact, reset, invalidate, t) {
     this.setState({ submitAttempted: true })
 
     function handleResponse (data) {
       if (data.email === true) {
-        invalidate({ email: 'Contact already exists.' })
+        invalidate({ email: t('errors:contactExists') })
+
         return
       }
 
@@ -105,7 +106,7 @@ class UserContacts extends Component {
             this.setState({ email: e.target.value })
           }}
           name="email"
-          placeholder="email"
+          placeholder={t('user:email')}
           validations={{
             minLength: 2,
             matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
@@ -119,7 +120,7 @@ class UserContacts extends Component {
         />
         {suggestion &&
             <div style={errorStyle}>
-              Did you mean&nbsp;
+              {t('errors:didYouMean')}&nbsp;
               <span
                 className="emulate_link blue_link"
                 onClick={(e) => {
@@ -172,7 +173,7 @@ class UserContacts extends Component {
                         className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}
                       >
                         <i className="fa fa-user flex-none" style={textStyle} />
-                        <p className="flex-none">New Contact</p>
+                        <p className="flex-none">{t('common:newContact')}</p>
                       </div>
                       <FormsyInput
                         wrapperClassName={styles.input_50}
@@ -320,7 +321,7 @@ class UserContacts extends Component {
                           theme={theme}
                           size="small"
                           active
-                          text="Save"
+                          text={t('common:save')}
                           iconClass="fa-floppy-o"
                         />
                       </div>

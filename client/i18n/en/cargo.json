@@ -57,5 +57,7 @@
   "cargoItem": "Cargo Item",
   "container": "Container",
   "containers": "Containers",
-  "cargoItems": "Cargo Items"
+  "cargoItems": "Cargo Items",
+  "freightRate": "Freight Rate",
+  "truckingRate": "Trucking Rate"
 }

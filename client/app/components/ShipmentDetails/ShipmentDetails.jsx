@@ -59,9 +59,9 @@ export class ShipmentDetails extends Component {
     } else {
       cargo.payload_in_kg = value / cargo.quantity
     }
+
     return cargo
   }
-  
   constructor (props) {
     super(props)
     this.state = {
@@ -524,8 +524,8 @@ export class ShipmentDetails extends Component {
     if (totalChargeableWeight > +maxAggregateDimensions.air.chargeableWeight) {
       excessChargeableWeightText = `
         ${t('cargo:excessChargeableWeight')}
-        (${totalChargeableWeight.toFixed(1)} kg) ${t('cargo:exceedsMaximum')}
-        (${maxAggregateDimensions.air.chargeableWeight} kg).
+        (${totalChargeableWeight.toFixed(1)} ${t('acronym:kg')}) ${t('cargo:exceedsMaximum')}
+        (${maxAggregateDimensions.air.chargeableWeight} ${t('acronym:kg')}).
       `
     } else {
       excessChargeableWeightText = ''

@@ -57,7 +57,7 @@ exports[`props.shipment is truthy 1`] = `
           },
         }
       }
-      title="FOO_TITLE Shipments"
+      title="{{title}} Shipments"
       tooltip="Shipments requested from the open or client shop. Investigate the shipment data and evaluate whether to accept, edit or decline the shipment"
       userView={true}
     />

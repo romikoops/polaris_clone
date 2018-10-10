@@ -22,5 +22,7 @@
   "addressDetails": "Address Details",
   "changeMyPassword": "Change my Password",
   "checkForPassword": "Please check your email for a link to change your password.",
-  "yourData": "Your Data"
+  "yourData": "Your Data",
+  "companyDetails": "Company Details",
+  "userBilling": "User Billing"
 }

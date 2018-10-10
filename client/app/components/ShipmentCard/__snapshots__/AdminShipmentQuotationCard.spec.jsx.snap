@@ -1,0 +1,246 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow rendering 1`] = `
+<div
+  className="flex-100 layout-align-start-stretch
+          container"
+  key="RANDOM_KEY_0"
+>
+  <hr
+    className="flex-100 layout-row hr_divider"
+  />
+  <div
+    className="card_link"
+    onClick={[Function]}
+  />
+  <div
+    className="layout-row flex-100 layout-align-space-between-stretch top_box"
+  >
+    <div
+      className="layout-row flex-10 layout-align-center-center routeIcon"
+    >
+      <i
+        className="fa fa-anchor clip "
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-60 layout-row layout-align-start-center hub_name"
+    >
+      <div
+        className="layout-column layout-align-center-start"
+      >
+        <p>
+          From
+          : 
+          <span />
+        </p>
+        <p>
+          To
+          : 
+          <span />
+        </p>
+      </div>
+    </div>
+    <div
+      className="layout-row flex-20 layout-align-start-center ett"
+    />
+  </div>
+  <div
+    className="layout-row flex-100 layout-align-space-between-stretch middle_top_box"
+  >
+    <div
+      className="layout-row flex-35 layout-align-center-center"
+    >
+      <div
+        className="flex-100"
+      >
+        <b
+          className="ref_row_card"
+        >
+          Ref
+          : 
+          FOO_IMC_REFERENCE
+        </b>
+        <p>
+          Placed at
+           
+          10/10/2018 - 12:00
+        </p>
+      </div>
+    </div>
+    <hr />
+    <div
+      className="layout-row flex-60 layout-align-center-center"
+    >
+      <div
+        className="flex-100"
+      >
+        <div
+          className="layout-row flex-100 layout-align-start-center"
+        >
+          <div
+            className="flex-10 layout-row layout-align-center-center"
+          >
+            <i
+              className="fa fa-user clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-80 layout-row layout-align-start-start"
+          >
+            <h4>
+              FOO_CLIENT_NAME
+            </h4>
+          </div>
+        </div>
+        <div
+          className="layout-row flex-100 layout-align-start-center"
+        >
+          <span
+            className="flex-10 layout-row layout-align-center-center"
+          >
+            <i
+              className="fa fa-building clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+            />
+          </span>
+          <span
+            className="flex-80 layout-row layout-align-start-center grey"
+          >
+            <p />
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-align-start-center
+      middle_bottom_box smallText"
+  >
+    <div
+      className="layout-row flex-50 layout-align-center-center"
+    >
+      <i
+        className="fa fa-times"
+        style={
+          Object {
+            "color": "#E0E0E0",
+          }
+        }
+      />
+      <p>
+        Pre-carriage
+      </p>
+    </div>
+    <div
+      className="layout-row flex-50 layout-align-center-center"
+    >
+      <i
+        className="fa fa-times"
+        style={
+          Object {
+            "color": "#E0E0E0",
+          }
+        }
+      />
+      <p>
+        On-carriage
+      </p>
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-align-space-between-center
+            bottom_box"
+  >
+    <div
+      className="layout-row flex-65 layout-align-start-center"
+    >
+      <div
+        className="layout-row flex-10"
+      >
+        <div
+          className="layout-row layout-align-center-center"
+        >
+          <span
+            className="smallText"
+          >
+            <b>
+              x
+            </b>
+            <span
+              className="bigText"
+            >
+              1
+            </span>
+          </span>
+        </div>
+      </div>
+      <span
+        className="flex-35"
+      >
+        Cargo Item
+      </span>
+      <span
+        className="flex-25 layout-row"
+      >
+        <i
+          className="fa fa-check-square clip"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
+            }
+          }
+        />
+        <p>
+          Pick-up
+        </p>
+      </span>
+      <span
+        className="flex-25 layout row"
+      >
+        <i
+          className="fa fa-check-square clip"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
+            }
+          }
+        />
+        <p>
+          Delivery
+        </p>
+      </span>
+    </div>
+    <div
+      className="layout-row flex layout-align-end-end"
+    >
+      <span
+        className="bigText price_style"
+      >
+        <span>
+           
+          USD
+           
+        </span>
+        <span>
+          200.99
+        </span>
+      </span>
+    </div>
+  </div>
+</div>
+`;

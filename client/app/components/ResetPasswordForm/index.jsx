@@ -90,7 +90,7 @@ class ResetPasswordForm extends React.PureComponent {
               onInvalidSubmit={model => this.handleInvalidSubmit(model)}
             >
               <div className="form-group">
-                <label htmlFor="password">Password</label>
+                <label htmlFor="password">{t('account:password')}</label>
                 <FormsyInput
                   type="password"
                   className={styles.form_control}
@@ -115,7 +115,7 @@ class ResetPasswordForm extends React.PureComponent {
               </div>
 
               <div className="form-group">
-                <label htmlFor="password_confirmation">Confirm Password</label>
+                <label htmlFor="password_confirmation">{t('account:confirmPassword')}</label>
                 <FormsyInput
                   type="password"
                   className={styles.form_control}
@@ -136,11 +136,10 @@ class ResetPasswordForm extends React.PureComponent {
               </div>
 
               <p style={{ fontSize: '13px', textAlign: 'justify', width: '271px' }}>
-                By clicking {'\'Set Password\''}, you will reset the password of your ItsMyCargo
-                account.
+                {t('account:resetPassword')}
               </p>
               <div className={`${styles.form_group_submit_btn} layout-row layout-align-center-center`}>
-                <RoundButton text="Set Password" theme={theme} size="small" active />
+                <RoundButton text={t('account:setPassword')} theme={theme} size="small" active />
                 <div className={styles.spinner}>{settingPassword && <LoadingSpinner />}</div>
               </div>
             </Formsy>

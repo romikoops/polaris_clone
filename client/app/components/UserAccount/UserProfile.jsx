@@ -230,7 +230,7 @@ class UserProfile extends Component {
               className="flex-100"
               options={currencyOptions}
               value={this.state.currentCurrency}
-              placeholder="Select Currency"
+              placeholder={t('common:selectCurrency')}
               onChange={e => this.handleCurrencyUpdate(e)}
             />
           </div>
@@ -408,7 +408,7 @@ class UserProfile extends Component {
               theme={theme}
               size="small"
               active
-              text="Save"
+              text={t('common:save')}
               handleNext={this.saveNewAlias}
               iconClass="fa-floppy-o"
             />
@@ -524,7 +524,7 @@ class UserProfile extends Component {
                   <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
                     <div className="flex-66 layout-row layout-align-start-center">
                       <p className="flex-none">
-                        ItsMyCargo
+                        {t('imc:imc')}
                         {' '}
                         <span
                           onClick={() => window.open('https://www.itsmycargo.com/en/terms', '_blank')}
