@@ -145,7 +145,7 @@ class Header extends Component {
       </div>
     )
 
-    const loginComponent = tenant.data.scope.closed_registration ? (
+    const loginComponent = (scope.closed_registration || !tenant.data.id) ? (
       <LoginPage
         theme={theme}
         req={req}
