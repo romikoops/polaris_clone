@@ -15,15 +15,12 @@ class PricingMailer < ApplicationMailer
     attachments.inline['logo.png'] = URI.open(@theme['logoLarge']).read
 
     mail(
-      # to: @tenant.emails['sales']['general'],
-      to: TEST_EMAIL,
+      to: @tenant.emails['sales']['general'],
       subject: "New Rate Request for #{@itinerary.name} from #{@user.full_name}"
     ) do |format|
       format.html
       format.mjml
     end
   end
-
-  private
 
 end
