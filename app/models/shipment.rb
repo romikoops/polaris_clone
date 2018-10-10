@@ -147,6 +147,14 @@ class Shipment < ApplicationRecord
     { value: price.value, currency: price.currency }
   end
 
+  def edited_total
+    return nil if trip_id.nil?
+
+    price = charge_breakdowns.where(trip_id: trip_id).first.charge('grand_total').edited_price
+    return nil if price.nil?
+    { value: price.value, currency: price.currency }
+  end
+
   def origin_layover
     return nil if trip.nil?
 
@@ -346,7 +354,7 @@ class Shipment < ApplicationRecord
 
   def as_index_json(options = {})
     new_options = options.reverse_merge(
-      methods: %i(total_price mode_of_transport cargo_units selected_offer),
+      methods: %i(total_price mode_of_transport cargo_units selected_offer edited_total),
       include: [
         :destination_nexus,
         :origin_nexus,

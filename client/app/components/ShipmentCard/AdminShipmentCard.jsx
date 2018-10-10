@@ -186,7 +186,6 @@ class AdminShipmentCard extends Component {
           </div>
         </div>
       )
-    debugger // eslint-disable-line no-debugger
 
     return (
       <div
@@ -301,8 +300,8 @@ class AdminShipmentCard extends Component {
           <div className="layout-row flex layout-align-end-end">
             <span className={`${styles.bigText} ${styles.price_style}`}>
               <span>
-                {shipment.selected_offer.edited_total
-                  ? numberSpacing(shipment.selected_offer.edited_total.value, 2)
+                {shipment.edited_total
+                  ? numberSpacing(shipment.edited_total.value, 2)
                   : numberSpacing(shipment.total_price.value, 2)}
               </span>
               <span> {shipment.total_price.currency} </span>
