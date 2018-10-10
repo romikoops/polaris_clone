@@ -133,6 +133,7 @@ function mapStateToProps (state) {
     pricings
   }
 }
+
 function mapDispatchToProps (dispatch) {
   return {
     userDispatch: bindActionCreators(userActions, dispatch),

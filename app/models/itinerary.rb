@@ -255,7 +255,7 @@ class Itinerary < ApplicationRecord
   end
 
   def user_has_pricing(user)
-    !pricings.where(user_id: user.id).empty?
+    pricings.exists?(user_id: user.id)
   end
 
   def pricing_count
@@ -431,7 +431,7 @@ class Itinerary < ApplicationRecord
         user_has_pricing: user_has_pricing(user),
         pricing_count:      pricing_count
     }
-    as_options_json().merge(new_options)
+    as_options_json(_options).merge(new_options)
   end
 
   private

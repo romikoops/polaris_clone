@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { translate } from 'react-i18next'
 import ReactTable from 'react-table'
+import { has } from 'lodash'
 import 'react-table/react-table.css'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -40,11 +41,7 @@ class PricesTable extends PureComponent {
 
   componentDidMount () {
     const { pricings, userDispatch, row } = this.props
-    if (!pricings ||
-        (pricings && !pricings.show) ||
-        (pricings && pricings.show && !pricings.show[row.original.id]) ||
-        (pricings && pricings.show && pricings.show[row.original.id].length === 0)
-    ) {
+    if (!has(pricings, `show.${row.original.id}`)) {
       userDispatch.getPricingsForItinerary(row.original.id)
     }
   }

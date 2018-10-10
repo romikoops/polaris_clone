@@ -44,7 +44,7 @@ class Pricing < ApplicationRecord
   end
 
   def has_requests(user_id)
-    !pricing_requests.find_by(user_id: user_id).nil?
+    pricing_requests.exists?(user_id: user_id)
   end
 
 end
