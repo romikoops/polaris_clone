@@ -216,7 +216,14 @@ export const shipments = {
 export const shipment = {
   origin_hub: { name: 'FOO_ORIGIN_HUB' },
   destination_hub: { name: 'FOO_DESTINATION_HUB' },
+  selected_offer: { cargo: {}, total: { value: 77 } },
   id: 654,
+  cargo_units: [{
+    dimension_x: 107.0,
+    dimension_y: 63.0,
+    dimension_z: 67.0,
+    quantity: 2
+  }],
   status: 'FOO_STATUS',
   clientName: 'FOO_CLIENT_NAME',
   planned_etd: 789,
