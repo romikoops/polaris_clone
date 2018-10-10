@@ -31,7 +31,7 @@ class QuoteCard extends PureComponent {
 
     return hubType
   }
-  
+
 
   constructor (props) {
     super(props)
@@ -45,7 +45,7 @@ class QuoteCard extends PureComponent {
     }
     this.handleClickChecked = this.handleClickChecked.bind(this)
   }
-  componentWillMount () {
+  componentDidMount () {
     const { isQuotationTool } = this.props
     if (isQuotationTool) {
       this.setState({
@@ -61,7 +61,7 @@ class QuoteCard extends PureComponent {
       }
     })
   }
-  handleClickChecked (e) {
+  handleClickChecked () {
     const { handleClick } = this.props
     this.setState(prevState => ({
       isChecked: !prevState.isChecked
@@ -389,7 +389,7 @@ class QuoteCard extends PureComponent {
                   className="pointy"
                   name="checked"
                   type="checkbox"
-                  onClick={e => this.handleClickChecked(e)}
+                  onClick={() => this.handleClickChecked()}
                   checked={this.props.isChecked}
                 />
               ) : ''}
