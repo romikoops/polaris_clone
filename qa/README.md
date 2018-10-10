@@ -1,6 +1,6 @@
 # ItsMyCargo QA
 
-This directory holds high level, "happy-path" testing of functioanlity of the app.
+This directory holds high level, "happy-path" testing of functionality of the app.
 It uses Cucumber tests and capybara with real, click-through browser (Chrome).
 
 ## Setup
@@ -19,7 +19,7 @@ Run bundle to install all required gems:
 
 ## Run tests
 
-To run full feature suite against `https://demo.itsmycargo.com`, simple run:
+To run full feature suite against `https://demo.itsmycargo.com`, simply run:
 
     $ bin/cucumber
 
