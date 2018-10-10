@@ -2,46 +2,40 @@
 
 class Tenant < ApplicationRecord
   include ImageTools
-  extend MongoTools
-  include MongoTools
   include DataValidator
-  has_many :shipments
-  has_many :routes
-  has_many :hubs
-  has_many :nexuses
-  has_many :routes
-  has_many :hub_routes, through: :routes
-  has_many :schedules
-  has_many :users
-  has_many :tenant_vehicles
-  has_many :vehicles, through: :tenant_vehicles
+  has_many :shipments, dependent: :destroy
+  has_many :hubs, dependent: :destroy
+  has_many :nexuses, dependent: :destroy
+  has_many :users, dependent: :destroy
+  has_many :tenant_vehicles, dependent: :destroy
+  has_many :vehicles, through: :tenant_vehicles, dependent: :destroy
   has_many :tenant_cargo_item_types, dependent: :destroy
-  has_many :cargo_item_types, through: :tenant_cargo_item_types
-  has_many :itineraries
-  has_many :stops, through: :itineraries
-  has_many :trips, through: :itineraries
-  has_many :layovers, through: :stops
-  has_many :trucking_pricings
-  has_many :hub_truckings, through: :hubs
-  has_many :trucking_destinations, through: :hub_truckings
-  has_many :documents
-  has_many :pricings
-  has_many :pricing_exceptions
-  has_many :pricing_details
-  has_many :local_charges
-  has_many :customs_fees
-  has_many :tenant_incoterms
-  has_many :incoterms, through: :tenant_incoterms
-  has_many :seller_incoterm_liabilities, through: :incoterms
-  has_many :buyer_incoterm_liabilities, through: :incoterms
-  has_many :seller_incoterm_scopes, through: :incoterms
-  has_many :buyer_incoterm_scopes, through: :incoterms
-  has_many :seller_incoterm_charges, through: :incoterms
-  has_many :buyer_incoterm_charges, through: :incoterms
-  has_many :conversations
-  has_many :max_dimensions_bundles
-  has_many :map_data
-  has_many :agencies
+  has_many :cargo_item_types, through: :tenant_cargo_item_types, dependent: :destroy
+  has_many :itineraries, dependent: :destroy
+  has_many :stops, through: :itineraries, dependent: :destroy
+  has_many :trips, through: :itineraries, dependent: :destroy
+  has_many :layovers, through: :stops, dependent: :destroy
+  has_many :trucking_pricings, dependent: :destroy
+  has_many :hub_truckings, through: :hubs, dependent: :destroy
+  has_many :trucking_destinations, through: :hub_truckings, dependent: :destroy
+  has_many :documents, dependent: :destroy
+  has_many :pricings, dependent: :destroy
+  has_many :pricing_exceptions, dependent: :destroy
+  has_many :pricing_details, dependent: :destroy
+  has_many :local_charges, dependent: :destroy
+  has_many :customs_fees, dependent: :destroy
+  has_many :tenant_incoterms, dependent: :destroy
+  has_many :incoterms, through: :tenant_incoterms, dependent: :destroy
+  has_many :seller_incoterm_liabilities, through: :incoterms, dependent: :destroy
+  has_many :buyer_incoterm_liabilities, through: :incoterms, dependent: :destroy
+  has_many :seller_incoterm_scopes, through: :incoterms, dependent: :destroy
+  has_many :buyer_incoterm_scopes, through: :incoterms, dependent: :destroy
+  has_many :seller_incoterm_charges, through: :incoterms, dependent: :destroy
+  has_many :buyer_incoterm_charges, through: :incoterms, dependent: :destroy
+  has_many :conversations, dependent: :destroy
+  has_many :max_dimensions_bundles, dependent: :destroy
+  has_many :map_data, dependent: :destroy
+  has_many :agencies, dependent: :destroy
 
   validates :scope, presence: true, scope: true
   validates :emails, presence: true, emails: true
