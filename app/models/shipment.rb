@@ -160,6 +160,14 @@ class Shipment < ApplicationRecord
 >>>>>>> 3027aeab8... IMC-538 edited pricings showing on cards
   end
 
+  def edited_total
+    return nil if trip_id.nil?
+
+    price = charge_breakdowns.where(trip_id: trip_id).first.charge('grand_total').edited_price
+    return nil if price.nil?
+    { value: price.value, currency: price.currency }
+  end
+
   def origin_layover
     return nil if trip.nil?
 

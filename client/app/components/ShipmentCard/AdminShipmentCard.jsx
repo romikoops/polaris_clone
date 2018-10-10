@@ -186,7 +186,6 @@ class AdminShipmentCard extends Component {
           </div>
         </div>
       )
-    debugger // eslint-disable-line no-debugger
 
     return (
       <div
