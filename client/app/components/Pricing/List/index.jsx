@@ -124,7 +124,7 @@ class PricingList extends PureComponent {
             onExpandedChange={newExpanded => this.setState({ expanded: newExpanded })}
             sorted={this.state.sorted}
             onSortedChange={newSorted => this.setState({ sorted: newSorted })}
-            defaultPageSize={10}
+            defaultPageSize={15}
             SubComponent={d => (
               <div className={styles.nested_table}>
                 <PricesTable row={d} />

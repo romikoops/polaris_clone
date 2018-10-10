@@ -37,6 +37,13 @@ class SideNav extends Component {
       },
       {
         key: v4(),
+        icon: 'fa-money',
+        text: t('account:pricings'),
+        url: '/account/pricings',
+        target: 'pricings'
+      },
+      {
+        key: v4(),
         icon: 'fa-user',
         text: t('account:profile'),
         url: '/account/profile',
@@ -216,8 +223,8 @@ class SideNav extends Component {
     const { userDispatch, user, tenant } = this.props
     const { scope } = tenant.data
     switch (target) {
-      case 'pricing':
-        userDispatch.getPricings(user.id, true)
+      case 'pricings':
+        userDispatch.goTo('/account/pricings')
         break
       case 'shipments': {
         const shipPages = scope.closed_quotation_tool || scope.open_quotation_tool

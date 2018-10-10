@@ -283,7 +283,8 @@
         "expirationDate": "Expiration Date",
         "carrier": "Carrier",
         "loadType": "Load Type",
-        "request": "Request"
+        "request": "Request",
+        "pricings": "Pricings"
       },
       "cargo": {
         "cargoDetails": "Cargo Details",

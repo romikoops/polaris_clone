@@ -9,7 +9,7 @@ import ShipmentOverviewCard from '../ShipmentCard/ShipmentOverviewCard'
 import { gradientTextGenerator } from '../../helpers'
 import SquareButton from '../SquareButton'
 import Loading from '../Loading/Loading'
-import PricingList from '../Pricing/List'
+
 
 class UserDashboard extends Component {
   static prepShipment (baseShipment, user) {
@@ -172,20 +172,6 @@ class UserDashboard extends Component {
               <u><b>{t('shipment:seeMoreShipments')}</b></u>
             </span>
             <div className={`flex-85 ${ustyles.separator}`} />
-          </div>
-        </div>
-        <div
-          className="layout-row flex-100 layout-wrap layout-align-center-center"
-        >
-          <div className="flex-100 layout-row layout-wrap layout-align-center-stretch">
-            <PricingList
-              theme={theme}
-              clients={contacts}
-              placeholder="Search Contacts"
-              title="Most used Contacts"
-              handleClick={this.viewClient}
-              seeAll={() => userDispatch.getContacts({ page: 1 }, true)}
-            />
           </div>
         </div>
         <div
