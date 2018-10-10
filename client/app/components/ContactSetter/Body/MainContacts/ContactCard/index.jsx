@@ -13,7 +13,7 @@ function locationForDisplay (location) {
   } = location
   const cityCountry = commaSeparatedWhenBothExist(city, country)
 
-  const streetWithNumber = street && street + (streetNumber && ` ${streetNumber}`)
+  const streetWithNumber = (street || '') + (streetNumber ? ` ${streetNumber}` : '')
   const addressDetails = commaSeparatedWhenBothExist(streetWithNumber, zipCode)
 
   return { cityCountry, addressDetails }
@@ -50,7 +50,7 @@ export default function ShipmentContactsBoxMainContactsContactCard ({
       <div className="flex-100 layout-row layout-align-start-start">
         <i className={`${styles.main_icon} fa fa-user`} style={iconStyle} />
         <h3 className={`${styles.contact_name}`}>
-        <Truncate lines={1}>{contact.firstName} {contact.lastName}</Truncate> <br />
+          <Truncate lines={1}>{contact.firstName} {contact.lastName}</Truncate> <br />
           <span className={styles.secondary_info}>
             <Truncate lines={1}>{contact.companyName} </Truncate>
           </span>
