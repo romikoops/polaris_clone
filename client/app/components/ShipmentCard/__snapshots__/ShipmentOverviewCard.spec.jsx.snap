@@ -51,6 +51,14 @@ exports[`admin is true 1`] = `
             }
             shipment={
               Object {
+                "cargo_units": Array [
+                  Object {
+                    "dimension_x": 107,
+                    "dimension_y": 63,
+                    "dimension_z": 67,
+                    "quantity": 2,
+                  },
+                ],
                 "clientName": "FOO_CLIENT_NAME",
                 "destination_hub": Object {
                   "name": "FOO_DESTINATION_HUB",
@@ -62,6 +70,12 @@ exports[`admin is true 1`] = `
                 },
                 "planned_etd": 789,
                 "schedule_set": Array [],
+                "selected_offer": Object {
+                  "cargo": Object {},
+                  "total": Object {
+                    "value": 77,
+                  },
+                },
                 "status": "FOO_STATUS",
                 "total_price": Object {
                   "currency": "USD",
@@ -127,6 +141,14 @@ exports[`shallow rendering 1`] = `
             }
             shipment={
               Object {
+                "cargo_units": Array [
+                  Object {
+                    "dimension_x": 107,
+                    "dimension_y": 63,
+                    "dimension_z": 67,
+                    "quantity": 2,
+                  },
+                ],
                 "clientName": "FOO_CLIENT_NAME",
                 "destination_hub": Object {
                   "name": "FOO_DESTINATION_HUB",
@@ -138,6 +160,12 @@ exports[`shallow rendering 1`] = `
                 },
                 "planned_etd": 789,
                 "schedule_set": Array [],
+                "selected_offer": Object {
+                  "cargo": Object {},
+                  "total": Object {
+                    "value": 77,
+                  },
+                },
                 "status": "FOO_STATUS",
                 "total_price": Object {
                   "currency": "USD",
