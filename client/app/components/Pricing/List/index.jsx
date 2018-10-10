@@ -10,6 +10,7 @@ import PricesTable from './PricesTable'
 import shouldBlur from './pricing_helpers'
 import styles from './index.scss'
 import { determineSortingCaret } from '../../../helpers/sortingCaret'
+import { capitalize } from '../../../helpers'
 
 class PricingList extends PureComponent {
   constructor (props) {
@@ -47,7 +48,7 @@ class PricingList extends PureComponent {
             </div>),
             id: 'origin_name',
             accessor: d => d.stops[0].hub.nexus.name,
-            Cell: row => (<div className={`flex layout-row layout-align-start-center ${shouldBlur(row, expandedIndexes)}`}>
+            Cell: row => (<div className={`flex layout-row layout-align-start-center ${styles.pricing_cell} ${shouldBlur(row, expandedIndexes)}`}>
               <p className="flex-none"> {row.row.origin_name}</p>
             </div>)
           },
@@ -58,7 +59,7 @@ class PricingList extends PureComponent {
             </div>),
             id: 'destination_name',
             accessor: d => d.stops[1].hub.nexus.name,
-            Cell: row => (<div className={`flex layout-row layout-align-start-center ${shouldBlur(row, expandedIndexes)}`}>
+            Cell: row => (<div className={`flex layout-row layout-align-start-center ${styles.pricing_cell} ${shouldBlur(row, expandedIndexes)}`}>
               <p className="flex-none"> {row.row.destination_name}</p>
             </div>)
           },
@@ -69,8 +70,8 @@ class PricingList extends PureComponent {
             </div>),
             id: 'mode_of_transport',
             accessor: d => d.mode_of_transport,
-            Cell: row => (<div className={`flex layout-row layout-align-start-center ${shouldBlur(row, expandedIndexes)}`}>
-              <p className="flex-none">{row.row.mode_of_transport} </p>
+            Cell: row => (<div className={`flex layout-row layout-align-start-center ${styles.pricing_cell} ${shouldBlur(row, expandedIndexes)}`}>
+              <p className="flex-none">{capitalize(row.row.mode_of_transport)} </p>
             </div>)
           }
         ]
@@ -84,7 +85,7 @@ class PricingList extends PureComponent {
               <p className="flex-none">{t('account:numPricings')}</p>
             </div>),
             accessor: 'pricing_count',
-            Cell: row => (<div className={`flex layout-row layout-align-start-center ${shouldBlur(row, expandedIndexes)}`}>
+            Cell: row => (<div className={`flex layout-row layout-align-start-center ${styles.pricing_cell} ${shouldBlur(row, expandedIndexes)}`}>
               <p className="flex-none">{row.row.pricing_count} </p>
             </div>)
           },
@@ -95,8 +96,8 @@ class PricingList extends PureComponent {
             </div>),
             id: 'has_user_pricing',
             accessor: d => d.has_user_pricing,
-            Cell: row => (<div className={`flex layout-row layout-align-start-center ${shouldBlur(row, expandedIndexes)}`}>
-              <p className="flex-none"> {row.row.has_user_pricing ? t('common: true') : t('common:false')}</p>
+            Cell: row => (<div className={`flex layout-row layout-align-start-center ${styles.pricing_cell} ${shouldBlur(row, expandedIndexes)}`}>
+              <p className="flex-none"> {row.row.has_user_pricing ? t('common: yes') : t('common:no')}</p>
             </div>)
           }
         ]

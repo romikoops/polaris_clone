@@ -11,6 +11,7 @@ import FeeTable from './FeeTable'
 import RangeFeeTable from './RangeFeeTable'
 import { moment } from '../../../constants'
 import { determineSortingCaret } from '../../../helpers/sortingCaret'
+import { RoundButton } from '../../RoundButton/RoundButton'
 
 class PricesTable extends PureComponent {
   static determineFeeTable (row) {
@@ -48,8 +49,20 @@ class PricesTable extends PureComponent {
     }
   }
 
+  requestPricing (data) {
+    const { userDispatch, user } = this.props
+    const req = {
+      pricing_id: data.id,
+      tenant_id: data.tenant_id,
+      user_id: user.id
+    }
+    userDispatch.requestPricing(req)
+  }
+
   render () {
-    const { t, pricings, row } = this.props
+    const {
+      t, pricings, row, theme
+    } = this.props
     const { sorted } = this.state
 
     if (!pricings) return ''
@@ -59,74 +72,79 @@ class PricesTable extends PureComponent {
     if (!data) return ''
     const columns = [
       {
-        columns: [
-          {
-            Header: (<div className="flex layout-row layout-center-center">
-              {determineSortingCaret('effectiveDate', sorted)}
-              <p className="flex-none">{t('account:effectiveDate')}</p>
-            </div>),
-            id: 'effectiveDate',
-            accessor: d => moment(d.effective_date).format('ll'),
-            Cell: rowData => (<div className="flex layout-row layout-align-start-center">
-              <p className="flex-none"> {rowData.row.effectiveDate}</p>
-            </div>)
-          },
-          {
-            Header: (<div className="flex layout-row layout-center-center">
-              {determineSortingCaret('expirationDate', sorted)}
-              <p className="flex-none">{t('account:expirationDate')}</p>
-            </div>),
-            id: 'expirationDate',
-            accessor: d => moment(d.expiration_date).format('ll'),
-            Cell: rowData => (<div className="flex layout-row layout-align-start-center">
-              <p className="flex-none"> {rowData.row.expirationDate}</p>
-            </div>)
-          },
-          {
-            Header: (<div className="flex layout-row layout-center-center">
-              {determineSortingCaret('carrier', sorted)}
-              <p className="flex-none">{t('account:carrier')}</p>
-            </div>),
-            id: 'carrier',
-            accessor: d => d.carrier,
-            Cell: rowData => (<div className="flex layout-row layout-align-start-center">
-              <p className="flex-none"> {rowData.row.carrier}</p>
-            </div>)
-          },
-          {
-            Header: (<div className="flex layout-row layout-center-center">
-              {determineSortingCaret('service_level', sorted)}
-              <p className="flex-none">{t('shipment:serviceLevel')}</p>
-            </div>),
-            id: 'service_level',
-            accessor: d => d.service_level,
-            Cell: rowData => (<div className="flex layout-row layout-align-start-center">
-              <p className="flex-none"> {rowData.row.service_level}</p>
-            </div>)
-          },
-          {
-            Header: (<div className="flex layout-row layout-center-center">
-              {determineSortingCaret('load_type', sorted)}
-              <p className="flex-none">{t('account:loadType')}</p>
-            </div>),
-            accessor: 'load_type',
-            Cell: rowData => (<div className="flex layout-row layout-align-start-center">
-              <p className="flex-none"> {t(`common:${rowData.row.load_type}`)}</p>
-            </div>)
-          },
-          {
-            Header: (<div className="flex layout-row layout-center-center">
-              {determineSortingCaret('dedicated', sorted)}
-              <p className="flex-none">{t('account:dedicated')}</p>
-            </div>),
-            id: 'dedicated',
-            accessor: d => (d.user_id ? t('common: true') : t('common: false')),
-            Cell: rowData => (<div className="flex layout-row layout-align-start-center">
-              <p className="flex-none"> {rowData.row.dedicated}</p>
-            </div>)
-          }
-
-        ]
+        Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret('effectiveDate', sorted)}
+          <p className="flex-none">{t('account:effectiveDate')}</p>
+        </div>),
+        id: 'effectiveDate',
+        accessor: d => moment(d.effective_date).format('ll'),
+        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+          <p className="flex-none"> {rowData.row.effectiveDate}</p>
+        </div>)
+      },
+      {
+        Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret('expirationDate', sorted)}
+          <p className="flex-none">{t('account:expirationDate')}</p>
+        </div>),
+        id: 'expirationDate',
+        accessor: d => moment(d.expiration_date).format('ll'),
+        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+          <p className="flex-none"> {rowData.row.expirationDate}</p>
+        </div>)
+      },
+      {
+        Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret('carrier', sorted)}
+          <p className="flex-none">{t('account:carrier')}</p>
+        </div>),
+        id: 'carrier',
+        accessor: d => d.carrier,
+        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+          <p className="flex-none"> {rowData.row.carrier}</p>
+        </div>)
+      },
+      {
+        Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret('service_level', sorted)}
+          <p className="flex-none">{t('shipment:serviceLevel')}</p>
+        </div>),
+        id: 'service_level',
+        accessor: d => d.service_level,
+        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+          <p className="flex-none"> {rowData.row.service_level}</p>
+        </div>)
+      },
+      {
+        Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret('load_type', sorted)}
+          <p className="flex-none">{t('account:loadType')}</p>
+        </div>),
+        accessor: 'load_type',
+        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+          <p className="flex-none"> {t(`common:${rowData.row.load_type}`)}</p>
+        </div>)
+      },
+      {
+        Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret('dedicated', sorted)}
+          <p className="flex-none">{t('account:dedicated')}</p>
+        </div>),
+        id: 'dedicated',
+        accessor: d => d.user_id,
+        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-center-center`}>
+          <p className="flex-none"> {rowData.row.dedicated}</p>
+          {!rowData.original.user_id && !rowData.original.requested
+            ? <RoundButton
+              theme={theme}
+              size="full"
+              active
+              handleNext={() => this.requestPricing(rowData.original)}
+              text={t('account:request')}
+            /> : ''}
+          {!rowData.original.user_id && rowData.original.requested ? t('common:requested') : ''}
+          {rowData.original.user_id ? t('common:yes') : '' }
+        </div>)
       }
     ]
 
@@ -157,7 +175,9 @@ PricesTable.propTypes = {
   t: PropTypes.func.isRequired,
   pricings: PropTypes.objectOf(PropTypes.any).isRequired,
   row: PropTypes.objectOf(PropTypes.any).isRequired,
-  userDispatch: PropTypes.objectOf(PropTypes.func).isRequired
+  userDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
+  user: PropTypes.objectOf(PropTypes.user).isRequired,
+  theme: PropTypes.objectOf(PropTypes.theme).isRequired
 }
 
 function mapStateToProps (state) {

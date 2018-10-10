@@ -159,5 +159,6 @@
   "false": "False",
   "rateBasis": "Rate Basis",
   "minimum": "Minimum",
-  "modeOfTransport": "Mode of Transport"
+  "modeOfTransport": "Mode of Transport",
+  "rate": "Rate"
 }

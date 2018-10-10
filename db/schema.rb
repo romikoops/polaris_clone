@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_21_102202) do
+ActiveRecord::Schema.define(version: 2018_10_10_103022) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -514,6 +514,15 @@ ActiveRecord::Schema.define(version: 2018_09_21_102202) do
     t.datetime "updated_at", null: false
     t.index ["pricing_id"], name: "index_pricing_exceptions_on_pricing_id"
     t.index ["tenant_id"], name: "index_pricing_exceptions_on_tenant_id"
+  end
+
+  create_table "pricing_requests", force: :cascade do |t|
+    t.integer "pricing_id"
+    t.integer "user_id"
+    t.integer "tenant_id"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "pricings", force: :cascade do |t|

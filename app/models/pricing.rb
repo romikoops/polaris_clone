@@ -8,6 +8,7 @@ class Pricing < ApplicationRecord
   belongs_to :user, optional: true
   has_many :pricing_details, as: :priceable, dependent: :destroy
   has_many :pricing_exceptions, dependent: :destroy
+  has_many :pricing_requests, dependent: :destroy
 
   delegate :load_type, to: :transport_category
   delegate :cargo_class, to: :transport_category
@@ -40,6 +41,10 @@ class Pricing < ApplicationRecord
 
   def service_level
     tenant_vehicle&.name
+  end
+
+  def has_requests(user_id)
+    !pricing_requests.find_by(user_id: user_id).nil?
   end
 
 end

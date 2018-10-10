@@ -282,7 +282,8 @@
         "effectiveDate": "Effective Date",
         "expirationDate": "Expiration Date",
         "carrier": "Carrier",
-        "loadType": "Load Type"
+        "loadType": "Load Type",
+        "request": "Request"
       },
       "cargo": {
         "cargoDetails": "Cargo Details",

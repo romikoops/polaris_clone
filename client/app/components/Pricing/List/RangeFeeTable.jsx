@@ -34,52 +34,48 @@ class RangeFeeTable extends PureComponent {
 
     const columns = [
       {
-        columns: [
-          {
-            Header: (<div className="flex layout-row layout-center-center">
-              {determineSortingCaret('fee_code', sorted)}
-              <p className="flex-none">{t('common:feeCode')}</p>
-            </div>),
-            id: 'fee_code',
-            accessor: d => d.feeCode,
-            Cell: rowData => (<div className="flex layout-row layout-align-start-center ">
-              <p className="flex-none"> {rowData.row.fee_code}</p>
-            </div>)
-          },
-          {
-            Header: (<div className="flex layout-row layout-center-center">
-              {determineSortingCaret('rate_basis', sorted)}
-              <p className="flex-none">{t('common:rateBasis')}</p>
-            </div>),
-            id: 'rate_basis',
-            accessor: d => d.rate_basis,
-            Cell: rowData => (<div className="flex layout-row layout-align-start-center ">
-              <p className="flex-none"> {rowData.row.rate_basis}</p>
-            </div>)
-          },
-          {
-            Header: (<div className="flex layout-row layout-center-center">
-              {determineSortingCaret('currency', sorted)}
-              <p className="flex-none">{t('common:currency')}</p>
-            </div>),
-            id: 'currency',
-            accessor: d => d.currency,
-            Cell: rowData => (<div className="flex layout-row layout-align-start-center ">
-              <p className="flex-none"> {rowData.row.currency}</p>
-            </div>)
-          },
-          {
-            Header: (<div className="flex layout-row layout-center-center">
-              {determineSortingCaret('min', sorted)}
-              <p className="flex-none">{t('common:minimum')}</p>
-            </div>),
-            id: 'min',
-            accessor: d => d.min,
-            Cell: rowData => (<div className="flex layout-row layout-align-start-center ">
-              <p className="flex-none"> {rowData.row.min}</p>
-            </div>)
-          }
-        ]
+        Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret('fee_code', sorted)}
+          <p className="flex-none">{t('common:feeCode')}</p>
+        </div>),
+        id: 'fee_code',
+        accessor: d => d.feeCode,
+        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+          <p className="flex-none"> {rowData.row.fee_code}</p>
+        </div>)
+      },
+      {
+        Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret('rate_basis', sorted)}
+          <p className="flex-none">{t('common:rateBasis')}</p>
+        </div>),
+        id: 'rate_basis',
+        accessor: d => d.rate_basis,
+        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+          <p className="flex-none"> {rowData.row.rate_basis}</p>
+        </div>)
+      },
+      {
+        Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret('currency', sorted)}
+          <p className="flex-none">{t('common:currency')}</p>
+        </div>),
+        id: 'currency',
+        accessor: d => d.currency,
+        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+          <p className="flex-none"> {rowData.row.currency}</p>
+        </div>)
+      },
+      {
+        Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret('min', sorted)}
+          <p className="flex-none">{t('common:minimum')}</p>
+        </div>),
+        id: 'min',
+        accessor: d => d.min,
+        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+          <p className="flex-none"> {rowData.row.min}</p>
+        </div>)
       }
     ]
     const rangeColumns = [
@@ -92,7 +88,7 @@ class RangeFeeTable extends PureComponent {
             </div>),
             id: 'min',
             accessor: d => d.min,
-            Cell: rowData => (<div className="flex layout-row layout-align-start-center">
+            Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
               <p className="flex-none"> {rowData.row.min}</p>
             </div>)
           },
@@ -103,7 +99,7 @@ class RangeFeeTable extends PureComponent {
             </div>),
             id: 'max',
             accessor: d => d.max,
-            Cell: rowData => (<div className="flex layout-row layout-align-start-center">
+            Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
               <p className="flex-none"> {rowData.row.max}</p>
             </div>)
           },
@@ -114,7 +110,7 @@ class RangeFeeTable extends PureComponent {
             </div>),
             id: 'rate',
             accessor: d => d.rate,
-            Cell: rowData => (<div className="flex layout-row layout-align-start-center">
+            Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
               <p className="flex-none"> {rowData.row.rate}</p>
             </div>)
           }
