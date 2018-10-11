@@ -1,9 +1,8 @@
 # frozen_string_literal: true
-require 'pry'
 
 @rate_row
 
-Given ('I am on the Pricings Page') do 
+Given ('I am on the Pricings Page') do
   visit '/account/pricings'
 end
 
@@ -17,7 +16,6 @@ When('I request the first public rate') do
     pricings_rows.each do |p_row|
       next if @rate_row
       is_requested = p_row.has_content?('Requested')
-      binding.pry
       next if is_requested
 
       button = p_row.find('p', text: 'REQUEST')
@@ -25,10 +23,9 @@ When('I request the first public rate') do
       button.click
       expect(p_row).to have_content('Requested')
     end
-    
   end
 end
 
-Then ('I expect to see the rate has been requested') do 
+Then ('I expect to see the rate has been requested') do
   expect(@rate_row).to have_content('Requested')
 end
