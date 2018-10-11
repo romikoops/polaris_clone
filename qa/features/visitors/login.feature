@@ -9,6 +9,7 @@ Feature: Login
       And I click the link to log in
      Then I expect to see the log in modal
 
+  @Smoke
   Scenario: Returning to the account page after login
     When I enter the correct credentials
      And I click the sign in button

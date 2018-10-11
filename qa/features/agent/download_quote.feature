@@ -30,6 +30,7 @@ Feature: Find Quotes
 
     Then I expect to see title "View Quotes"
      And I expect to see offers
+
     When I have not selected and offer, the button is disabled
      And I select the first quote
      And I download the PDF

@@ -2,25 +2,42 @@ variables:
   BUNDLE_GITLAB__COM: "gitlab-ci-token:${CI_JOB_TOKEN}"
   AUTO_DEVOPS_DOMAIN: itsmycargo.tech
 
+.dedicated-runner: &dedicated-runner
+  tags:
+    - itsmycargo
+
+.merge-request-only: &merge-request-only
+  only:
+    - branches
+  except:
+    - master
+    - dev
+
 stages:
   - test
   - build
   - review
-  - review_cleanup
   - QA
+  - acceptance
+  - cleanup
+
+before_script:
+  - date
+
+after_script:
+  - date
 
 code_quality:
+  <<: *dedicated-runner
   stage: test
   image: eu.gcr.io/itsmycargo-main/pronto:stable
   retry: 1
-  tags:
-    - itsmycargo
   cache:
     paths:
       - client/node_modules
 
   script:
-    - scripts/pronto
+    - timeout --preserve-status 5m scripts/pronto
 
   except:
     refs:
@@ -28,18 +45,17 @@ code_quality:
       - dev
 
 danger-review:
+  <<: *dedicated-runner
   stage: test
   image: eu.gcr.io/itsmycargo-main/danger:latest
   retry: 1
-  tags:
-    - itsmycargo
   allow_failure: true
   cache: {}
   dependencies: []
   before_script: []
 
   script:
-    - danger --fail-on-errors=true
+    - timeout -t 300 danger --fail-on-errors=true
 
   only:
     variables:
@@ -50,11 +66,10 @@ danger-review:
       - dev
 
 api:
+  <<: *dedicated-runner
   stage: test
   image: eu.gcr.io/itsmycargo-main/base:stable
   retry: 1
-  tags:
-    - itsmycargo
   cache:
     paths:
       - vendor/bundle
@@ -65,7 +80,7 @@ api:
     - mdillon/postgis
 
   script:
-    - scripts/test
+    - timeout --preserve-status 10m scripts/test
 
   coverage: '/\(\d+.\d+\%\) covered/'
   artifacts:
@@ -80,11 +95,9 @@ api:
         - rspec.xml
 
 client:
+  <<: *dedicated-runner
   stage: test
   image: node:10-alpine
-  retry: 1
-  tags:
-    - itsmycargo
   retry: 1
 
   cache:
@@ -96,8 +109,9 @@ client:
 
   script:
     - cd client
-    - npm install
-    - npm run test:ci
+    - date
+    - timeout -t 600 sh -c 'npm install && npm run test:ci'
+    - date
 
   coverage: '/^Statements\s*:\s*([^%]+)/'
   artifacts:
@@ -110,11 +124,11 @@ client:
         - client/junit.xml
 
 docker:
+  <<: *dedicated-runner
+  <<: *merge-request-only
   stage: build
   image: docker:stable
   retry: 1
-  tags:
-    - itsmycargo
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_HOST: tcp://localhost:2375/
@@ -128,14 +142,19 @@ docker:
     registry_login
 
     # Build api
+    echo 'Building API'
+    date
     docker pull ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_REF_SLUG} || true
     docker build \
       --cache-from ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_REF_SLUG} \
       --tag ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_SHA} \
       --tag ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_REF_SLUG} \
       .
+    date
 
     # Build client
+    echo 'Building Client'
+    date
     docker pull ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_REF_SLUG} || true
     docker build \
       --cache-from ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_REF_SLUG} \
@@ -144,29 +163,41 @@ docker:
       --build-arg RELEASE=${CI_COMMIT_SHA} \
       --build-arg SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN} \
       client/
+    date
+
+    # Build QA
+    echo 'Building QA'
+    date
+    docker pull ${DOCKER_REGISTRY}/imc/qa:${CI_COMMIT_REF_SLUG} || true
+    docker build \
+      --cache-from ${DOCKER_REGISTRY}/imc/qa:${CI_COMMIT_REF_SLUG} \
+      --tag ${DOCKER_REGISTRY}/imc/qa:${CI_COMMIT_SHA} \
+      --tag ${DOCKER_REGISTRY}/imc/qa:${CI_COMMIT_REF_SLUG} \
+      qa/
+    date
 
     # Push images
     docker push ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_SHA}
     docker push ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_REF_SLUG}
     docker push ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_SHA}
     docker push ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_REF_SLUG}
+    docker push ${DOCKER_REGISTRY}/imc/qa:${CI_COMMIT_SHA}
+    docker push ${DOCKER_REGISTRY}/imc/qa:${CI_COMMIT_REF_SLUG}
 
-  only:
-    - branches
-  except:
-    - master
-    - dev
+  dependencies: []
 
 deploy:
+  <<: *dedicated-runner
+  <<: *merge-request-only
   stage: review
   image: eu.gcr.io/itsmycargo-main/deploy:latest
-  tags:
-    - itsmycargo
   retry: 1
 
   script:
     - deploy
     - echo -e -n "$CI_ENVIRONMENT_SLUG" > ci_environment_slug.txt
+
+  dependencies: []
 
   artifacts:
     paths:
@@ -176,56 +207,99 @@ deploy:
     name: review/$CI_COMMIT_REF_NAME
     url: https://demo.$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
     on_stop: stop_review
-  only:
-    - branches
-  except:
-    - master
-    - dev
 
-cucumber:
+.cucumber-metadata: &cucumber-metadata
+  <<: *dedicated-runner
+  <<: *merge-request-only
   stage: QA
-  image: ruby:2.5
-  tags:
-    - itsmycargo
+  image: eu.gcr.io/itsmycargo-main/imc/qa:${CI_COMMIT_SHA}
   retry: 1
-  cache:
-    paths:
-      - qa/vendor/bundle
   variables:
+    GIT_STRATEGY: none
+    DRIVER: remote
     SELENIUM_URL: http://localhost:4444/wd/hub
-    DRIVER: remote_chrome
-  services:
-    - selenium/standalone-chrome:3
 
   before_script:
+    - export BROWSERNAME=$CI_JOB_NAME
     - export CI_ENVIRONMENT_SLUG=$(cat ci_environment_slug.txt)
     - export TARGET_URL=$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
+    - export REPORT_PATH=$CI_PROJECT_DIR
+    - 'echo "Target: $TARGET_URL"'
+    - dockerize -wait=tcp://localhost:4444 -timeout=5m
 
-  script: |
-    cd qa/
-    bundle check --path vendor/bundle || bundle install --path vendor/bundle --jobs $(nproc)
-    echo "Target URL: https://demo.$TARGET_URL"
-    bin/cucumber --tags 'not @wip' --format pretty --format junit --out report/
+  script:
+    - cd /app ; bin/cucumber --tags 'not @wip' --format progress --format junit --out $REPORT_PATH/
+
+  dependencies:
+    - deploy
 
   artifacts:
     paths:
-      - qa/report/*.png
-    when: on_failure
-    expire_in: 1 week
+      - '**/*.png'
+      - '**/*.html'
+    # when: on_failure
+    expire_in: 31 days
     reports:
       junit:
-        - qa/report/*.xml
-  only:
-    - branches
-  except:
-    - master
-    - dev
+        - '*.xml'
+
+.cucumber-crossbrowser: &cucumber-crossbrowser
+  <<: *cucumber-metadata
+  stage: acceptance
+
+  variables:
+    GIT_STRATEGY: none
+    DRIVER: crossbrowser
+    CROSSBROWSER_USERNAME: dev-services%40itsmycargo.com
+    CROSSBROWSER_AUTHKEY: uee1969b55dec975
+
+  before_script:
+    - date
+    - set -- $CI_JOB_NAME
+    - export CROSSBROWSER_BROWSERNAME=$1
+    - export CROSSBROWSER_VERSION=$2
+    - export CROSSBROWSER_PLATFORM=$3
+    - export CI_ENVIRONMENT_SLUG=$(cat ci_environment_slug.txt)
+    - export TARGET_URL=$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
+    - export REPORT_PATH=$CI_PROJECT_DIR
+    - 'echo "Target: $TARGET_URL"'
+
+  script:
+    - cd /app ; bin/cucumber --tags '@Smoke' --format progress --format junit --out $REPORT_PATH/
+
+  allow_failure: true
+
+chrome:
+  <<: *cucumber-metadata
+  services:
+    - selenium/standalone-chrome:3
+
+firefox:
+  <<: *cucumber-metadata
+  services:
+    - selenium/standalone-firefox:3
+
+# Cross Browser Testing
+# Disable most of browsers as we only have 1 parallel test (and 1 queued)
+# Ensure IE11@Win8 works always
+
+# Windows 10
+# chrome latest win10: *cucumber-crossbrowser
+# firefox latest win10: *cucumber-crossbrowser
+# internet_explorer 11 win10: *cucumber-crossbrowser
+# microsoft_edge 17 win10: *cucumber-crossbrowser
+# Windows 8.1
+internet_explorer 11 win8.1: *cucumber-crossbrowser
+# MacOS
+# chrome latest macos: *cucumber-crossbrowser
+# firefox latest macos: *cucumber-crossbrowser
+# safari 11 macos: *cucumber-crossbrowser
 
 reset_database:
-  stage: review_cleanup
+  <<: *dedicated-runner
+  <<: *merge-request-only
+  stage: cleanup
   image: eu.gcr.io/itsmycargo-main/deploy:latest
-  tags:
-    - itsmycargo
   variables:
     GIT_STRATEGY: none
     REVIEW_NAMESPACE: default
@@ -237,19 +311,14 @@ reset_database:
 
   when: manual
   allow_failure: true
-  only:
-    - branches
-  except:
-    - master
-    - dev
   dependencies:
     - deploy
 
 stop_review:
-  stage: review_cleanup
+  <<: *dedicated-runner
+  <<: *merge-request-only
+  stage: cleanup
   image: eu.gcr.io/itsmycargo-main/deploy:latest
-  tags:
-    - itsmycargo
   variables:
     GIT_STRATEGY: none
 
@@ -260,11 +329,6 @@ stop_review:
     action: stop
   when: manual
   allow_failure: true
-  only:
-    - branches
-  except:
-    - master
-    - dev
 
 .auto_devops: &auto_devops |
   # Auto DevOps variables and functions
