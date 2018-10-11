@@ -131,7 +131,7 @@ function updateUser (user, req, shipmentReq) {
   }
 
   return (dispatch) => {
-    dispatch(request(!req))
+    dispatch(request(!!shipmentReq))
 
     authenticationService.updateUser(user, req).then(
       (response) => {
