@@ -183,6 +183,11 @@ class User < ApplicationRecord
     send_devise_notification(:confirmation_instructions, @raw_confirmation_token, opts)
   end
 
+  # Override devise method to use deliver_later
+  def send_devise_notification(notification, *args)
+    devise_mailer.send(notification, self, *args).deliver_later
+  end
+
   def has_pricings
     self.pricings.length > 0
   end
