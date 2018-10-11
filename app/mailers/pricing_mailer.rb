@@ -13,9 +13,10 @@ class PricingMailer < ApplicationMailer
     @theme = @tenant.theme
 
     attachments.inline['logo.png'] = URI.open(@theme['logoLarge']).read
-    email = @tenant.emails.dig('sales','general')
+    email = @tenant.emails.dig('sales', 'general')
+
     return if email.nil?
-    
+
     mail(
       to: email,
       subject: "New Rate Request for #{@itinerary.name} from #{@user.full_name}"
@@ -24,5 +25,4 @@ class PricingMailer < ApplicationMailer
       format.mjml
     end
   end
-
 end
