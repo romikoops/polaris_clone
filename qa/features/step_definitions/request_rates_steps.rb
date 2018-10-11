@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require 'pry'
 @rate_row
 
 Given ('I am on the Pricings Page') do 
