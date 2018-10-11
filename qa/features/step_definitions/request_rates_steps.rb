@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require 'pry'
+
 @rate_row
 
 Given ('I am on the Pricings Page') do 
@@ -14,8 +16,11 @@ When('I request the first public rate') do
     pricings_rows = pricing_table.all('.rt-tr-group')
     pricings_rows.each do |p_row|
       next if @rate_row
+      is_requested = p_row.has_content?('Requested')
+      binding.pry
+      next if is_requested
+
       button = p_row.find('p', text: 'REQUEST')
-      next unless button
       @rate_row = p_row
       button.click
       expect(p_row).to have_content('Requested')
