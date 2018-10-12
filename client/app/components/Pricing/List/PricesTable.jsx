@@ -130,7 +130,6 @@ class PricesTable extends PureComponent {
         id: 'dedicated',
         accessor: d => d.user_id,
         Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-center-center`}>
-          <p className="flex-none"> {rowData.row.dedicated}</p>
           {!rowData.original.user_id && !rowData.original.requested
             ? <RoundButton
               theme={theme}

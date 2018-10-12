@@ -18,7 +18,7 @@ When('I request the first public rate') do
       is_requested = p_row.has_content?('Requested')
       next if is_requested
 
-      button = p_row.find('p', text: 'REQUEST')
+      button = p_row.find('button')
       @rate_row = p_row
       button.click
       expect(p_row).to have_content('Requested')
