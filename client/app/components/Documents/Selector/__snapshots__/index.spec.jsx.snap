@@ -37,6 +37,7 @@ exports[`shallow render 1`] = `
     <RoundButton
       active={true}
       back={false}
+      classNames=""
       disabled={false}
       handleDisabled={null}
       handleNext={[Function]}
@@ -81,6 +82,7 @@ exports[`state.error is true 1`] = `
     <RoundButton
       active={true}
       back={false}
+      classNames=""
       disabled={false}
       handleDisabled={null}
       handleNext={[Function]}
@@ -125,6 +127,7 @@ exports[`state.selected is true 1`] = `
     <RoundButton
       active={true}
       back={false}
+      classNames=""
       disabled={false}
       handleDisabled={null}
       handleNext={[Function]}

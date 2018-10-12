@@ -76,13 +76,5 @@ class Pricing < ApplicationRecord
         pricing_detail.update!(pricing_detail_params)
         pricing_detail.update!(range: range, currency_name: currency)
       end
-
-    # new_pricing = self.dup
-    # new_pricing.save!
-    # pricing_details.each do |detail|
-    #   new_detail = detail.dup
-    #   new_detail.priceable_id = new_pricing.id
-    #   new_detail.save!
-    # end
   end
 end

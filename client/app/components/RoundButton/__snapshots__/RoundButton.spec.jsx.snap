@@ -2,7 +2,7 @@
 
 exports[`size is full 1`] = `
 <div
-  className="flex-100"
+  className="flex-100 "
 >
   <button
     className="round_btn neutral full clickable"
@@ -33,7 +33,7 @@ exports[`size is full 1`] = `
 
 exports[`size is large 1`] = `
 <div
-  className="flex-100"
+  className="flex-100 "
 >
   <button
     className="round_btn neutral large clickable"
@@ -64,7 +64,7 @@ exports[`size is large 1`] = `
 
 exports[`size is small 1`] = `
 <div
-  className="flex-100"
+  className="flex-100 "
 >
   <button
     className="round_btn neutral small clickable"

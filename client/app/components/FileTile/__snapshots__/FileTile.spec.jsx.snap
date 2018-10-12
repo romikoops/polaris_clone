@@ -827,6 +827,7 @@ exports[`state.showDenialDetails is true 1`] = `
           <RoundButton
             active={false}
             back={false}
+            classNames=""
             disabled={false}
             handleDisabled={null}
             handleNext={[Function]}

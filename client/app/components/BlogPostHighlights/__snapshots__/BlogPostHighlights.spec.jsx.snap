@@ -89,6 +89,7 @@ exports[`shallow render 1`] = `
           <RoundButton
             active={true}
             back={false}
+            classNames=""
             disabled={false}
             handleDisabled={null}
             handleNext={null}
@@ -174,6 +175,7 @@ exports[`shallow render 1`] = `
           <RoundButton
             active={true}
             back={false}
+            classNames=""
             disabled={false}
             handleDisabled={null}
             handleNext={null}
@@ -260,6 +262,7 @@ exports[`shallow render 1`] = `
           <RoundButton
             active={true}
             back={false}
+            classNames=""
             disabled={false}
             handleDisabled={null}
             handleNext={null}
