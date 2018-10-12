@@ -163,6 +163,7 @@ exports[`shallow rendering 1`] = `
           <RoundButton
             active={true}
             back={false}
+            classNames=""
             disabled={false}
             handleDisabled={null}
             handleNext={null}
@@ -367,6 +368,7 @@ exports[`state.focus.password_confirmation is truthy 1`] = `
           <RoundButton
             active={true}
             back={false}
+            classNames=""
             disabled={false}
             handleDisabled={null}
             handleNext={null}
@@ -557,6 +559,7 @@ exports[`state.settingPassword is true 1`] = `
           <RoundButton
             active={true}
             back={false}
+            classNames=""
             disabled={false}
             handleDisabled={null}
             handleNext={null}
@@ -758,6 +761,7 @@ exports[`theme is falsy 1`] = `
           <RoundButton
             active={true}
             back={false}
+            classNames=""
             disabled={false}
             handleDisabled={null}
             handleNext={null}

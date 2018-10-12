@@ -71,6 +71,7 @@ exports[`shallow rendering 1`] = `
       <RoundButton
         active={true}
         back={false}
+        classNames=""
         disabled={false}
         handleDisabled={null}
         handleNext={[Function]}

@@ -2,13 +2,14 @@
 
 exports[`props.loading is false, state.requested is true 1`] = `
 <div
-  className="flex-none layout-row layout-align-center-center upload_btn_wrapper "
+  className="flex-none layout-row layout-align-center-center document_downloader upload_btn_wrapper "
   data-for="RANDOM_KEY_3"
   data-tip="FOO_TOOLTIP"
 >
   <RoundButton
     active={true}
     back={false}
+    classNames="ready"
     disabled={false}
     handleDisabled={null}
     handleNext={[Function]}
@@ -31,7 +32,7 @@ exports[`props.loading is false, state.requested is true 1`] = `
 
 exports[`props.loading is true, state.requested is true 1`] = `
 <div
-  className="flex-none layout-row layout-align-center-center upload_btn_wrapper "
+  className="flex-none layout-row layout-align-center-center document_downloader upload_btn_wrapper "
   data-for="RANDOM_KEY_5"
   data-tip="FOO_TOOLTIP"
 >
@@ -54,13 +55,14 @@ exports[`props.loading is true, state.requested is true 1`] = `
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-none layout-row layout-align-center-center upload_btn_wrapper "
+  className="flex-none layout-row layout-align-center-center document_downloader upload_btn_wrapper "
   data-for="RANDOM_KEY_0"
   data-tip="FOO_TOOLTIP"
 >
   <RoundButton
     active={true}
     back={false}
+    classNames="request"
     disabled={false}
     handleDisabled={null}
     handleNext={[Function]}
@@ -83,7 +85,7 @@ exports[`shallow render 1`] = `
 
 exports[`square is true 1`] = `
 <div
-  className="flex-none layout-row layout-align-center-center upload_btn_wrapper "
+  className="flex-none layout-row layout-align-center-center document_downloader upload_btn_wrapper "
   data-for="RANDOM_KEY_1"
   data-tip="FOO_TOOLTIP"
 >
@@ -91,6 +93,7 @@ exports[`square is true 1`] = `
     active={true}
     back={false}
     border={true}
+    classNames="request"
     disabled={false}
     handleDisabled={null}
     handleNext={[Function]}

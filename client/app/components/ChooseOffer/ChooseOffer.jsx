@@ -385,7 +385,7 @@ class ChooseOffer extends Component {
             </div>
           </div>
           {isQuotationTool ? (
-            <div className={`flex-20 offset-5  layout-wrap layout-align-center-start ${styles.download_section}`}>
+            <div className={`flex-20 offset-5 quote_options layout-wrap layout-align-center-start ${styles.download_section}`}>
               <p className={`flex-100 layout-row ${styles.offer_title}`} >{t('shipment:selectedOffers')}</p>
               {this.state.selectedOffers !== 0 ? (
                 this.state.selectedOffers.map(offer =>

@@ -1059,6 +1059,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             <RoundButton
               active={false}
               back={false}
+              classNames=""
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}
@@ -1092,6 +1093,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
         <RoundButton
           active={false}
           back={true}
+          classNames=""
           disabled={false}
           handleDisabled={null}
           handleNext={[Function]}
@@ -2238,6 +2240,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             <RoundButton
               active={false}
               back={false}
+              classNames=""
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}
@@ -2271,6 +2274,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
         <RoundButton
           active={false}
           back={true}
+          classNames=""
           disabled={false}
           handleDisabled={null}
           handleNext={[Function]}
@@ -3464,6 +3468,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             <RoundButton
               active={false}
               back={false}
+              classNames=""
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}
@@ -3497,6 +3502,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
         <RoundButton
           active={false}
           back={true}
+          classNames=""
           disabled={false}
           handleDisabled={null}
           handleNext={[Function]}
@@ -4582,6 +4588,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             <RoundButton
               active={false}
               back={false}
+              classNames=""
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}
@@ -4615,6 +4622,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
         <RoundButton
           active={false}
           back={true}
+          classNames=""
           disabled={false}
           handleDisabled={null}
           handleNext={[Function]}
@@ -5698,6 +5706,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             <RoundButton
               active={false}
               back={false}
+              classNames=""
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}
@@ -5731,6 +5740,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
         <RoundButton
           active={false}
           back={true}
+          classNames=""
           disabled={false}
           handleDisabled={null}
           handleNext={[Function]}
@@ -6798,6 +6808,7 @@ exports[`shallow render 1`] = `
             <RoundButton
               active={false}
               back={false}
+              classNames=""
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}
@@ -6831,6 +6842,7 @@ exports[`shallow render 1`] = `
         <RoundButton
           active={false}
           back={true}
+          classNames=""
           disabled={false}
           handleDisabled={null}
           handleNext={[Function]}
@@ -8219,6 +8231,7 @@ exports[`with cargo items 1`] = `
             <RoundButton
               active={false}
               back={false}
+              classNames=""
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}
@@ -8252,6 +8265,7 @@ exports[`with cargo items 1`] = `
         <RoundButton
           active={false}
           back={true}
+          classNames=""
           disabled={false}
           handleDisabled={null}
           handleNext={[Function]}
@@ -9598,6 +9612,7 @@ exports[`with containers 1`] = `
             <RoundButton
               active={false}
               back={false}
+              classNames=""
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}
@@ -9631,6 +9646,7 @@ exports[`with containers 1`] = `
         <RoundButton
           active={false}
           back={true}
+          classNames=""
           disabled={false}
           handleDisabled={null}
           handleNext={[Function]}
