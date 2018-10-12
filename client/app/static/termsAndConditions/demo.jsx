@@ -13,7 +13,7 @@ const demo = (
       <br />
       All assignments will be performed in accordance with the General Conditions
       of the Nordic Association of Freight Forwarders (NSAB 2015) with the exclusion
-      of § 25 A, first section. Greencarrier does not insure customers goods for the risks
+      of § 25 A, first section. Demo does not insure customers goods for the risks
       of fire, water and burglary during storage. To the extent that the forwarders liability
       is not subject to any compulsory legislation, the forwarder shall always be entitled
       to invoke the limitations or exonerations from liability laid down in NSAB 2015.
