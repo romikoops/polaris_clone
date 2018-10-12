@@ -236,7 +236,7 @@ class Autocomplete extends PureComponent {
     const inputErrorStyle = hasErrors ? styles.with_errors : ''
 
     return (
-      <div className={`flex-100 layout-row layout-align-center-center ${styles.autocomplete_container}`}>
+      <div className={`auto_origin flex-100 layout-row layout-align-center-center ${styles.autocomplete_container}`}>
         <div
           className={`flex-none ${!hideResults && hasResults ? styles.exit_click : styles.hidden}`}
           onClick={() => {
@@ -255,7 +255,7 @@ class Autocomplete extends PureComponent {
             onBlur={this.shouldTriggerInputChange}
           />
         </div>
-        <div className={`flex-100 layout-row layout-wrap
+        <div className={`flex-100 layout-row layout-wrap results
             ${hasResults && !hideResults ? styles.show_results : styles.hide_results}`}
         >
           <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.autocomplete_inner}`}>
