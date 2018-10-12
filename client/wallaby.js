@@ -9,6 +9,7 @@ module.exports = function (wallaby) {
       '!app/components/**/*.spec.jsx'
     ],
     tests: [
+      './translations/translationCheck.spec.jsx',
       'app/components/**/*.spec.jsx',
       '!app/components/ShipmentCardNew/AdminShipmentCardNew.spec.jsx',
       '!app/components/NavSidebar/NavSidebar.spec.jsx'
