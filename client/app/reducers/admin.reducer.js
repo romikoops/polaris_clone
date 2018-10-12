@@ -1369,6 +1369,24 @@ export default function admin (state = {}, action) {
         loading: false
       }
 
+    case adminConstants.DELETE_ITINERARY_NOTES_REQUEST:
+      return state
+    case adminConstants.DELETE_ITINERARY_NOTES_SUCCESS:
+      return {
+        ...state,
+        itinerary: {
+          ...state.itinerary,
+          notes: action.payload
+        },
+        loading: false
+      }
+    case adminConstants.DELETE_ITINERARY_NOTES_FAILURE:
+      return {
+        ...state,
+        error: { route: action.error },
+        loading: false
+      }
+
     case adminConstants.EDIT_SHIPMENT_TIME_REQUEST:
       return state
     case adminConstants.EDIT_SHIPMENT_TIME_SUCCESS:

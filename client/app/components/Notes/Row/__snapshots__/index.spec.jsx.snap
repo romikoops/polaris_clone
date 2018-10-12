@@ -26,6 +26,8 @@ exports[`shallow render 1`] = `
     className="flex-100 layout-row card_margin_right layout-wrap"
   >
     <NotesCard
+      adminDispatch={null}
+      itinerary={Object {}}
       note={
         Object {
           "header": "FOO_HEADER",
