@@ -193,14 +193,7 @@ class Header extends Component {
           {component}
           <div className="flex layout-row layout-align-end-center">
             {dropDowns}
-            {
-              (
-                this.props.showModal ||
-                this.props.loggingIn ||
-                this.props.registering
-              ) &&
-              loginModal
-            }
+            { this.props.showModal && loginModal }
           </div>
         </div>
         { hasErrors
