@@ -3,7 +3,7 @@ Feature: Find Quotes
   As an agent,
   I want to be able to find rates
   So that I know how much to charge my clients for their shipment.
-
+  @wip
   Scenario: Requesting LCL Quote
     Given I am logged in as an agent
       And I click "Find Rates" button
