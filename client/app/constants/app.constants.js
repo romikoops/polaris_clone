@@ -86,7 +86,16 @@ export const tooltips = {
   customs_pre_carriage:
     'Export Customs is not applicable for shipments without delivery to the port (pre-carriage).',
   customs_on_carriage:
-    'Import Customs is not applicable for shipments without delivery from the port (on-carriage).'
+    'Import Customs is not applicable for shipments without delivery from the port (on-carriage).',
+  charge_icons: {
+    pre_carriage: 'Pick-up',
+    on_carriage: 'Delivery',
+    documentation: {
+      origin: 'Origin Documentation',
+      destination: 'Destination Documentation'
+    },
+    freight: 'Freight'
+  }
 }
 
 // Tool tips menu admin

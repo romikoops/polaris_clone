@@ -129,33 +129,51 @@ class ShipmentCargoItems extends Component {
           className="layout-row flex-100 layout-wrap layout-align-stretch"
           style={{ position: 'relative', margin: '30px 0' }}
         >
-          <div className="flex-10 layout-row layout-align-center">
-            <QuantityInput
-              i={i}
-              cargoItem={cargoItem}
-              handleDelta={handleDelta}
-              nextStageAttempt={nextStageAttempt}
-            />
+          <div className={`flex-100 layout-align-start-center layout-row ${styles.cargo_unit_header}`}>
+            <h3>{t('cargo:yourCargo')}</h3>
+            <p>{t('cargo:fillFormCargoDetails')}</p>
+            {cargoItem ? (
+              <div className={styles.delete_icon} onClick={() => this.deleteCargo(i)}>
+                {t('common:delete')}
+                <i className="fa fa-trash" />
+              </div>
+            ) : (
+              ''
+            )}
           </div>
-          <div className={`${styles.cargo_item_box} ${styles.cargo_item_inputs} flex-90`}>
-            <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-              {inputs.colliType}
-              {inputs.nonStackable}
-              {inputs.dangerousGoods}
+          <div className={`flex-100 layout-row ${styles.cargo_unit_inputs}`}>
+            <div className="flex-15 layout-row layout-align-center">
+              <QuantityInput
+                i={i}
+                cargoItem={cargoItem}
+                handleDelta={handleDelta}
+                nextStageAttempt={nextStageAttempt}
+              />
             </div>
-            <div
-              className="layout-row flex-100 layout-wrap layout-align-start-center"
-              style={{ marginTop: '20px' }}
-            >
-              {inputs.length}
-              {inputs.width}
-              {inputs.height}
-              <div className="flex-10" />
-              {scope.consolidate_cargo ? inputs.collectiveWeight : inputs.grossWeight}
-            </div>
-            <div className={styles.expandIcon} onClick={() => this.toggleCargoItemInfoExpanded(i)}>
-              {t('common:additionalDetails')}
-              <i className={`${cargoItemInfoExpanded[i] && styles.rotated} fa fa-chevron-right`} />
+            <div className={`${styles.cargo_item_box} ${styles.cargo_item_inputs} flex-85`}>
+              <div
+                className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.padding_section}`}
+                style={{ marginBottom: '20px' }}
+              >
+                {inputs.length}
+                {inputs.width}
+                {inputs.height}
+                <div className="flex-5" />
+                {scope.consolidate_cargo ? inputs.collectiveWeight : inputs.grossWeight}
+              </div>
+              <div className="flex-100 layout-row" style={{ borderBottom: '1px solid rgb(236, 236, 236)' }} />
+              <div
+                className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.padding_section}`}
+                style={{ marginTop: '20px' }}
+              >
+                {inputs.colliType}
+                {inputs.nonStackable}
+                {inputs.dangerousGoods}
+              </div>
+              <div className={styles.expandIcon} onClick={() => this.toggleCargoItemInfoExpanded(i)}>
+                {t('common:additionalDetails')}
+                <i className={`${cargoItemInfoExpanded[i] && styles.rotated} fa fa-chevron-right`} />
+              </div>
             </div>
           </div>
           <div
@@ -177,15 +195,6 @@ class ShipmentCargoItems extends Component {
               </div>
             </div>
           </div>
-
-          {cargoItem ? (
-            <div className={styles.delete_icon} onClick={() => this.deleteCargo(i)}>
-              {t('common:delete')}
-              <i className="fa fa-trash" />
-            </div>
-          ) : (
-            ''
-          )}
         </div>
       )
     }
@@ -229,8 +238,24 @@ class ShipmentCargoItems extends Component {
           {`            
             .colli_type .Select-control {
               display: flex;
-              height: 32px;
               position: relative;
+              border: 1px solid #E0E0E0;
+              box-shadow: none;
+              background: transparent;
+            }
+            .colli_type .Select {
+              box-shadow: none;
+            }
+            .colli_type .Select-value {
+              background: transparent;
+              box-shadow: none;
+              border: 1px solid #E0E0E0;
+            }
+            .colli_type .Select-placeholder {
+              background: transparent;
+              box-shadow: none;
+              padding-bottom: 5px;
+              border: 1px solid #E0E0E0;
             }
             .colli_type .Select-clear-zone {
               position: absolute;
@@ -240,7 +265,7 @@ class ShipmentCargoItems extends Component {
             .colli_type .Select-arrow-zone {
               position: absolute;
               right: 0;
-              top: 5px;
+              top: 10px;
             }
           `}
         </style>

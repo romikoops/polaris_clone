@@ -33,7 +33,7 @@ class Checkbox extends PureComponent {
       : { color: 'black' }
     const sizeStyles = this.props.size ? { height: this.props.size, width: this.props.size } : {}
     const border = {
-      border: `1px solid ${theme && theme.colors ? theme.colors.secondary : 'black'}`
+      border: `1px solid #BDBDBD`
     }
     const size = this.props.size ? +this.props.size.replace('px', '') : 25
     const iconStyles = Object.assign({ fontSize: `${Math.max(Math.min(size * 0.8, 15), 12)}px` }, checkGradient)

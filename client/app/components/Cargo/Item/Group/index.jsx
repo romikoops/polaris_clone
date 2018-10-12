@@ -6,7 +6,10 @@ import '../../../../styles/react-toggle.scss'
 import styles from './CargoItemGroup.scss'
 import PropTypes from '../../../../prop-types'
 import CargoItemGroupAggregated from './Aggregated'
-import { LOAD_TYPES, LOAD_SIZES, cargoGlossary } from '../../../../constants'
+import length from '../../../../assets/images/cargo/length.png'
+import height from '../../../../assets/images/cargo/height.png'
+import width from '../../../../assets/images/cargo/width.png'
+import { LOAD_TYPES, cargoGlossary } from '../../../../constants'
 import { gradientTextGenerator, numberSpacing } from '../../../../helpers'
 
 class CargoItemGroup extends Component {
@@ -56,7 +59,7 @@ class CargoItemGroup extends Component {
         </div>
 
         <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
-          <img data-for={tooltipId} data-tip={t('common:length')} src={LOAD_SIZES.length} alt="Group_5_4" border="0" />
+          <img data-for={tooltipId} data-tip={t('common:length')} src={length} alt="length" border="0" />
           {
             showTooltip
               ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
@@ -66,7 +69,7 @@ class CargoItemGroup extends Component {
         </div>
 
         <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
-          <img data-for={tooltipId} data-tip={t('common:height')} src={LOAD_SIZES.height} alt="Group_5" border="0" />
+          <img data-for={tooltipId} data-tip={t('common:height')} src={height} alt="height" border="0" />
           {
             showTooltip
               ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
@@ -76,7 +79,7 @@ class CargoItemGroup extends Component {
         </div>
 
         <div className={`${styles.unit_data_cell} ${styles.side_border} flex-15 layout-row layout-align-center-center`}>
-          <img data-for={tooltipId} data-tip={t('common:width')} src={LOAD_SIZES.width} alt="Group_5_5" border="0" />
+          <img data-for={tooltipId} data-tip={t('common:width')} src={width} alt="width" border="0" />
           {
             showTooltip
               ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />

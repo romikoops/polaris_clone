@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate, Trans } from 'react-i18next'
+import { translate } from 'react-i18next'
 import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../prop-types'
 import styles from './CargoDetails.scss'

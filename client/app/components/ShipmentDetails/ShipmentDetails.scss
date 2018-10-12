@@ -14,20 +14,24 @@
     }
   }
   .cargo_sec {
-    margin-top: 30px;
+    margin-top: 50px;
     min-height: 187px;
     .toggle_aggregated_sec {
       height: 60px;
       border-top: 3px solid rgba(0, 0, 0, 0.2);
       border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+      margin-bottom: 15px;
       h3 {
         font-weight: normal;      
       }
     }
   }
   .date_sec {
-    min-height: 160px;
+    padding: 50px 0;
     border-bottom: 1px solid #EDEDED;
+    h3 {
+      margin-top: 0;
+    }
   }
   .dpb {
     position: relative;

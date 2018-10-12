@@ -289,6 +289,7 @@ class QuoteCard extends PureComponent {
               <ChargeIcons
                 theme={theme}
                 tenant={tenant}
+                mot={result.meta.mode_of_transport}
                 onCarriage={quote.trucking_on}
                 preCarriage={quote.trucking_pre}
                 originFees={quote.export}
