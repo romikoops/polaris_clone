@@ -20,6 +20,7 @@ And ('I select the first quote') do
 end
 
 And ('I download the PDF') do 
+  pending
   quote_bar = find('.quote_options')
   request_doc_box = quote_bar.find('div', class: 'document_downloader')
   request_doc_box.find('div', class: 'request').find('button').click
