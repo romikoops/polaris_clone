@@ -50,8 +50,8 @@ When('I confirm cargo does not contain dangerous good') do
 end
 
 Then('I expect to see offers') do
-  totals = all('span', text: 'Total')
-  expect(totals.count).to be >= 1
+  offers = all('.offer_result')
+  expect(offers.count).to be >= 1
 end
 
 When('I select first offer') do

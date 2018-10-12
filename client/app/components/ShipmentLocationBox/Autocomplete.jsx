@@ -259,7 +259,7 @@ class Autocomplete extends PureComponent {
             ${hasResults && !hideResults ? styles.show_results : styles.hide_results}`}
         >
           <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.autocomplete_inner}`}>
-            <div className={`flex-100 layout-row layout-wrap layout-align-start-start 
+            <div className={`flex-100 layout-row layout-wrap layout-align-start-start area
                 ${styles.results_section} ${!hasAreaResults ? styles.hide_results : ''}`}
             >
               <div className={`flex-100 layout-row layout-align-start-center 
@@ -269,7 +269,7 @@ class Autocomplete extends PureComponent {
               </div>
               {areaResultCards}
             </div>
-            <div className={`flex-100 layout-row layout-wrap layout-align-start-start 
+            <div className={`flex-100 layout-row layout-wrap layout-align-start-start address
                 ${styles.results_section} ${!hasAddressResults ? styles.hide_results : ''}`}
             >
               <div className={`flex-100 layout-row layout-align-start-center 

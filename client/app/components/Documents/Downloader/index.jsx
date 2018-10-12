@@ -78,6 +78,7 @@ class DocumentsDownloader extends React.Component {
     const tooltipId = v4()
     const start = square ? (
       <SquareButton
+        classNames="request"
         text={t('common:request')}
         theme={theme}
         size={size}
@@ -88,6 +89,7 @@ class DocumentsDownloader extends React.Component {
       />
     ) : (
       <RoundButton
+        classNames="request"
         text={t('common:request')}
         theme={theme}
         size={size}
@@ -104,6 +106,7 @@ class DocumentsDownloader extends React.Component {
     )
     const ready = square ? (
       <SquareButton
+        classNames="request"
         text={t('doc:download')}
         theme={theme}
         size={size}
@@ -114,6 +117,7 @@ class DocumentsDownloader extends React.Component {
       />
     ) : (
       <RoundButton
+        classNames="ready"
         text={t('doc:download')}
         theme={theme}
         disabled={disabled}
@@ -133,7 +137,7 @@ class DocumentsDownloader extends React.Component {
 
     return (
       <div
-        className={`flex-none layout-row layout-align-center-center ${styles.upload_btn_wrapper} `}
+        className={`flex-none layout-row layout-align-center-center document_downloader ${styles.upload_btn_wrapper} `}
         data-tip={tooltip}
         data-for={tooltipId}
       >
