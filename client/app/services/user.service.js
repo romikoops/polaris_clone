@@ -324,12 +324,10 @@ function getPricingsForItinerary (id) {
   return fetch(`${getApiHost()}/pricings/${id}`, requestOptions).then(handleResponse)
 }
 function requestPricing (req) {
-  const formData = new FormData()
-  formData.append('data', JSON.stringify(req))
   const requestOptions = {
     method: 'POST',
-    headers: authHeader(),
-    body: formData
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(req)
   }
 
   return fetch(`${getApiHost()}/pricings/${req.pricing_id}/request`, requestOptions).then(handleResponse)

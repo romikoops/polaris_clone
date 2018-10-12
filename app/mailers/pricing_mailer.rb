@@ -5,7 +5,7 @@ class PricingMailer < ApplicationMailer
   layout 'mailer'
   add_template_helper(ApplicationHelper)
 
-  def request_email(user_id:, pricing_id:, tenant_id:, status:)
+  def request_email(user_id:, pricing_id:, tenant_id:)
     @pricing = Pricing.find(pricing_id)
     @user = User.find(user_id)
     @itinerary = @pricing.itinerary

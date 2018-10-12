@@ -33,13 +33,14 @@ class PricingsController < ApplicationController
   end
 
   def request_dedicated_pricing
-    new_pricing_request = JSON.parse(params[:data])
-    new_pricing_request['status'] = 'requested'
+    new_pricing_request = pricing_request_params.to_h.symbolize_keys
+    PricingMailer.request_email(new_pricing_request).deliver_later
+    new_pricing_request[:status] = 'requested'
     @pricing_request = PricingRequest.create!(new_pricing_request)
-    PricingMailer.request_email(new_pricing_request.to_h).deliver_later
-    @itinerary = Pricing.find(new_pricing_request['pricing_id']).itinerary
+    
+    @itinerary = Pricing.find(new_pricing_request[:pricing_id]).itinerary
     @pricings = filter_for_dedicated_pricings(@itinerary.pricings).map(&:as_json)
-    set_requested_flag(@pricings, new_pricing_request['user_id'])
+    set_requested_flag(@pricings, new_pricing_request[:user_id])
 
     response_handler(
       itinerary_id: @itinerary.id,
@@ -65,6 +66,10 @@ class PricingsController < ApplicationController
       dedicated_pricings << pricing
     end
     dedicated_pricings
+  end
+
+  def pricing_request_params
+    params.permit(:tenant_id, :pricing_id, :user_id)
   end
 
   def require_login
