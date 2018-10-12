@@ -47,11 +47,30 @@
     // padding-top: 0px;
   }
   .incoterm_info {
-    color: white;
-    font-weight: bold;
-    font-size: 12px;
-    letter-spacing: 1px;
-    padding: 5px 10px;
+    text-decoration: underline;
+    font-size: 11px;
+    letter-spacing: 0.1px;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+  .incoterm_row {
+    padding-left: 20px;
+    border-left: 5px solid #F5F5F5;
+    h4 {
+      margin: 0;
+      margin-top: 20px !important;
+    }
+    p {
+      font-size: 12px;
+      color: rgb(119, 119, 119);
+      margin: 0;
+      margin-bottom: 8px !important;
+    }
+    p.incoterm_desc {
+      font-size: 14px;
+      color: #4F4F4F;
+    }
   }
   .no_customs_box {
     transition: all 1s ease;

@@ -385,3 +385,74 @@ export const colliTypes = [
   { key: 'Crates', label: 'Crates' },
   { key: 'Rolls', label: 'Rolls' }
 ]
+
+export const incotermInfo = {
+  description: 'Incoterms are internationally accepted commercial terms defining the respective roles of the buyer and seller in the arrangement of transportation and other responsibilities, and clarify when the ownership of the merchandise takes place. They are used in conjunction with a sales agreement or other method of transacting the sale. Below is an example of how INCO Terms work in action. The definitions provided here are the most common uses of each term, but are not the only way these terms are used. Pay close attention to the location listed for each term, as this indicates where payment details change from Shipper to Consignee.',
+  incoterms: {
+    exw: {
+      title: 'EXW (Ex Works)',
+      info: 'Factory, mill, warehouse: your door',
+      description: 'Title and risk pass to buyer including payment of all transportation and insurance cost from the seller\'s door. Used for any mode of transportation.'
+    },
+    fca: {
+      title: 'FCA (Free Carrier)',
+      info: 'Pick a place after your origin to start',
+      description: 'Title and risk pass to buyer including transportation and insurance cost when the seller delivers goods cleared for export to the carrier. Seller is obligated to load the goods on the Buyer\'s collecting vehicle; it is the Buyer\'s obligation to receive the Seller\'s arriving vehicle unloaded.'
+    },
+    fas: {
+      title: 'FAS (Free Alongside Ship)',
+      info: 'Port, after all origin port charges',
+      description: 'Title and risk pass to buyer including payment of all transportation and insurance cost once delivered alongside ship by the seller. Used for sea or inland waterway transportation. The export clearance obligation rests with the seller.'
+    },
+    fob: {
+      title: 'FOB (Free On Board)',
+      info: 'Port-same as FAS',
+      description: 'Risk pass to buyer including payment of all transportation and insurance cost once delivered on board the ship by the seller. Used for sea or inland waterway transportation.'
+    },
+    cfr: {
+      title: 'CFR (Cost and Freight)',
+      info: 'Destination port-paid to arrival at destination port',
+      description: 'Title, risk and insurance cost pass to buyer when delivered on board the ship by seller who pays the transportation cost to the destination port. Used for sea or inland waterway transportation.'
+    },
+    cif: {
+      title: 'CIF (Cost, Insurance and Freight) ',
+      info: 'Destination port-same as CFR, but includes insurance',
+      description: 'Title and risk pass to buyer when delivered on board the ship by seller who pays transportation and insurance cost to destination port. Used for sea or inland waterway transportation.'
+    },
+    cpt: {
+      title: 'CPT (Carriage Paid To)',
+      info: 'Place at destination-includes all destination port charges',
+      description: 'Title, risk and insurance cost pass to buyer when delivered to carrier or seller who pays transportation and insurance cost to destination. Used for any mode of transportation.'
+    },
+    cip: {
+      title: 'CIP (Carriage and Insurance Paid To)',
+      info: 'Place at destination-same as CPT, but includes insurance',
+      description: 'Title and risk pass to buyer when delivered to carrier by seller who pays transportation and insurance cost to destination. Used for any mode of transportation.'
+    },
+    daf: {
+      title: 'DAF (Delivered to Frontier)',
+      info: 'Border of country-same as paid by seller to border-all other charges to buyer',
+      description: 'Title, risk and responsibility for import clearance pass to buyer when delivered to named border point by seller. Used for any mode of transportation. (border of country-same as paid by seller to border-all other charges to buyer) Title, risk and responsibility for import clearance pass to buyer when delivered to named border point by seller. Used for any mode of transportation.'
+    },
+    des: {
+      title: 'DES (Delivered Ex Ship)',
+      info: 'On board ship to destination port',
+      description: 'Title, risk, responsibility for vessel discharge and import clearance pass to buyer when seller delivers goods on board the ship to destination port. Used for sea or inland waterway transportation.'
+    },
+    deq: {
+      title: 'DEQ (Delivered Ex Quay i.e. Duty Paid)',
+      info: 'Destination port-includes duties and taxes, but not destination charges or delivery',
+      description: 'Title and risk pass to buyer when delivered on board the ship at the destination point by the seller who delivers goods on dock at destination point cleared for import. Used for sea or inland waterway transportation.'
+    },
+    ddu: {
+      title: 'DDU (Delivered Duty Unpaid)',
+      info: 'Consignee door-excluding duties and taxes',
+      description: ' Title, risk, and responsibility for vessel discharge and import clearance pass to buyer when seller delivers goods on board the ship to destination port. Used for sea or inland waterway transportation.'
+    },
+    ddp: {
+      title: 'DDP (Delivered Duty Paid)',
+      info: 'Consignee door-includes all charges origin to destination',
+      description: 'Title and risk pass to buyer when seller delivers goods to named destination point cleared for import. Used for any mode of transportation.'
+    }
+  }
+}

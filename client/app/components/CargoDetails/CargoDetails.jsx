@@ -8,7 +8,7 @@ import DocumentsForm from '../Documents/Form'
 import DocumentsMultiForm from '../Documents/MultiForm'
 import defaults from '../../styles/default_classes.scss'
 import { converter, gradientGenerator } from '../../helpers'
-import { currencyOptions, tooltips } from '../../constants'
+import { currencyOptions, tooltips, incotermInfo } from '../../constants'
 import FormsyInput from '../FormsyInput/FormsyInput'
 import TextHeading from '../TextHeading/TextHeading'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
@@ -194,6 +194,21 @@ class CargoDetails extends Component {
       shipment
     } = shipmentData
 
+    const incotermBox = (
+      <div className="flex-100 layout-wrap layout-row">
+        <p>{incotermInfo.description}</p>
+        <div>
+          {Object.entries(incotermInfo.incoterms).map(array => (
+            <div className={`flex-70 ${styles.incoterm_row}`}>
+              <h4 style={{ color: theme.colors.primary }}>{array[1].title}</h4>
+              <p>{array[1].info}</p>
+              <p className={`${styles.incoterm_desc}`}>{array[1].description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+
     const insuranceBox = (
       <div
         className={`flex-100 layout-row  ${styles.box_content} ${
@@ -213,10 +228,6 @@ class CargoDetails extends Component {
         </div>
       </div>
     )
-    const gradientStyle =
-      theme && theme.colors
-        ? gradientGenerator(theme.colors.primary, theme.colors.secondary)
-        : { background: 'black' }
     const fadedPreCarriageText = shipment.has_pre_carriage ? '' : styles.faded_text
     const fadedOnCarriageText = shipment.has_on_carriage ? '' : styles.faded_text
     const textComp = (
@@ -228,11 +239,10 @@ class CargoDetails extends Component {
     const modal = (
       <Modal
         flexOptions="flex-80"
-        component={(
-          <div className="lol">lol</div>
-        )}
-        verticalPadding="30px"
-        horizontalPadding="40px"
+        component={incotermBox}
+        verticalPadding="65px"
+        maxWidth="70%"
+        horizontalPadding="55px"
         parentToggle={() => this.toggleIncotermModal()}
       />
     )
@@ -527,13 +537,12 @@ class CargoDetails extends Component {
                   <div className="flex-100">
                     <div className={`flex-none layout-row layout-wrap ${styles.f_header}`}>
                       {' '}
-                      <h4 className="no_m flex-90">Incoterms</h4>
+                      <h4 className="no_m flex-20">Incoterms</h4>
                       <div
                         className={`pointy ${styles.incoterm_info}`}
-                        style={gradientStyle}
                         onClick={() => this.toggleIncotermModal()}
                       >
-                        INFO
+                        What are Incoterms?
                       </div>
                       <p className="flex-90">
                         2010 by the International Chamber of Commerce (ICC) (Optional)

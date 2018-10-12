@@ -63,6 +63,7 @@ export class Modal extends Component {
     if (this.state.hidden) return ''
 
     const { windowHeight } = this.state
+    const { maxWidth } = this.props
 
     const propsMinHeight = dimentionToPx({
       value: this.props.minHeight,
@@ -73,7 +74,7 @@ export class Modal extends Component {
     const modalStyles = {
       minHeight,
       maxHeight: `calc(${windowHeight * 0.9}px - (${this.props.verticalPadding} * 2))`,
-      maxWidth: '90%',
+      maxWidth,
       padding: `${this.props.verticalPadding} ${this.props.horizontalPadding}`,
       overflowY: 'auto'
     }
@@ -103,6 +104,7 @@ Modal.propTypes = {
   parentToggle: PropTypes.func.isRequired,
   minHeight: PropTypes.string,
   flexOptions: PropTypes.string,
+  maxWidth: PropTypes.string,
   horizontalPadding: PropTypes.string,
   verticalPadding: PropTypes.string
 }
@@ -110,6 +112,7 @@ Modal.propTypes = {
 Modal.defaultProps = {
   minHeight: '',
   flexOptions: '',
+  maxWidth: '90%',
   horizontalPadding: '20px',
   verticalPadding: '20px'
 }
