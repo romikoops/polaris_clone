@@ -124,11 +124,10 @@ exports[`props.viewHSCodes is true 1`] = `
           className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
           <img
-            alt="Group_5_4"
+            alt="length"
             border="0"
             data-for="RANDOM_KEY_2"
             data-tip="Length"
-            src="https://image.ibb.co/cdRkSy/Group_5_4.png"
           />
           <ReactTooltip
             className="tooltip"
@@ -151,11 +150,10 @@ exports[`props.viewHSCodes is true 1`] = `
           className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
           <img
-            alt="Group_5"
+            alt="height"
             border="0"
             data-for="RANDOM_KEY_2"
             data-tip="Height"
-            src="https://image.ibb.co/f9QR0J/Group_5.png"
           />
           <ReactTooltip
             className="tooltip"
@@ -178,11 +176,10 @@ exports[`props.viewHSCodes is true 1`] = `
           className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
         >
           <img
-            alt="Group_5_5"
+            alt="width"
             border="0"
             data-for="RANDOM_KEY_2"
             data-tip="Width"
-            src="https://image.ibb.co/edttEd/Group_5_5.png"
           />
           <ReactTooltip
             className="tooltip"
@@ -376,11 +373,10 @@ exports[`shallow render 1`] = `
           className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
           <img
-            alt="Group_5_4"
+            alt="length"
             border="0"
             data-for="RANDOM_KEY_0"
             data-tip="Length"
-            src="https://image.ibb.co/cdRkSy/Group_5_4.png"
           />
           <ReactTooltip
             className="tooltip"
@@ -403,11 +399,10 @@ exports[`shallow render 1`] = `
           className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
           <img
-            alt="Group_5"
+            alt="height"
             border="0"
             data-for="RANDOM_KEY_0"
             data-tip="Height"
-            src="https://image.ibb.co/f9QR0J/Group_5.png"
           />
           <ReactTooltip
             className="tooltip"
@@ -430,11 +425,10 @@ exports[`shallow render 1`] = `
           className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
         >
           <img
-            alt="Group_5_5"
+            alt="width"
             border="0"
             data-for="RANDOM_KEY_0"
             data-tip="Width"
-            src="https://image.ibb.co/edttEd/Group_5_5.png"
           />
           <ReactTooltip
             className="tooltip"
@@ -628,11 +622,10 @@ exports[`state.unitView is true 1`] = `
           className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
           <img
-            alt="Group_5_4"
+            alt="length"
             border="0"
             data-for="RANDOM_KEY_6"
             data-tip="Length"
-            src="https://image.ibb.co/cdRkSy/Group_5_4.png"
           />
           <ReactTooltip
             className="tooltip"
@@ -655,11 +648,10 @@ exports[`state.unitView is true 1`] = `
           className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
           <img
-            alt="Group_5"
+            alt="height"
             border="0"
             data-for="RANDOM_KEY_6"
             data-tip="Height"
-            src="https://image.ibb.co/f9QR0J/Group_5.png"
           />
           <ReactTooltip
             className="tooltip"
@@ -682,11 +674,10 @@ exports[`state.unitView is true 1`] = `
           className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
         >
           <img
-            alt="Group_5_5"
+            alt="width"
             border="0"
             data-for="RANDOM_KEY_6"
             data-tip="Width"
-            src="https://image.ibb.co/edttEd/Group_5_5.png"
           />
           <ReactTooltip
             className="tooltip"
@@ -880,11 +871,10 @@ exports[`state.viewer is true 1`] = `
           className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
           <img
-            alt="Group_5_4"
+            alt="length"
             border="0"
             data-for="RANDOM_KEY_10"
             data-tip="Length"
-            src="https://image.ibb.co/cdRkSy/Group_5_4.png"
           />
           <ReactTooltip
             className="tooltip"
@@ -907,11 +897,10 @@ exports[`state.viewer is true 1`] = `
           className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
           <img
-            alt="Group_5"
+            alt="height"
             border="0"
             data-for="RANDOM_KEY_10"
             data-tip="Height"
-            src="https://image.ibb.co/f9QR0J/Group_5.png"
           />
           <ReactTooltip
             className="tooltip"
@@ -934,11 +923,10 @@ exports[`state.viewer is true 1`] = `
           className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
         >
           <img
-            alt="Group_5_5"
+            alt="width"
             border="0"
             data-for="RANDOM_KEY_10"
             data-tip="Width"
-            src="https://image.ibb.co/edttEd/Group_5_5.png"
           />
           <ReactTooltip
             className="tooltip"

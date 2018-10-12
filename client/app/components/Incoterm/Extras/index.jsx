@@ -29,11 +29,11 @@ function IncotermExtras ({
       } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
     >
       {feeHash.insurance && feeHash.insurance.val ? (
-        <p className="flex-none no_m letter_3 center">{feeHash.insurance.currency}</p>
+        <p className="flex-none no_m center">{feeHash.insurance.currency}</p>
       ) : (
         ''
       )}
-      <p className="flex-none no_m letter_3 center">
+      <p className="flex-none no_m center">
         {feeHash.insurance && feeHash.insurance.val
           ? `${parseFloat(feeHash.insurance.val).toFixed(2)}`
           : t('common:none')}
@@ -49,7 +49,7 @@ function IncotermExtras ({
         styles.fee_value
       } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
     >
-      <p className="flex-none no_m letter_3 center">{t('shipment:requested')}</p>
+      <p className="flex-none no_m center">{t('shipment:requested')}</p>
     </div>
   )
   const none = (
@@ -58,7 +58,7 @@ function IncotermExtras ({
         styles.fee_value
       } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
     >
-      <p className="flex-none no_m letter_3 center">{t('common:none')}</p>
+      <p className="flex-none no_m center">{t('common:none')}</p>
     </div>
   )
 
@@ -69,11 +69,11 @@ function IncotermExtras ({
       } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
     >
       {feeHash.customs && feeHash.customs.val ? (
-        <p className="flex-none no_m letter_3 center">{feeHash.customs.currency}</p>
+        <p className="flex-none no_m center">{feeHash.customs.currency}</p>
       ) : (
         ''
       )}
-      <p className="flex-none no_m letter_3 center">
+      <p className="flex-none no_m center">
         {feeHash.customs && feeHash.customs.val
           ? `${parseFloat(feeHash.customs.val).toFixed(2)}`
           : t('common:none')}
@@ -89,11 +89,11 @@ function IncotermExtras ({
       } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
     >
       {feeHash.addons && feeHash.addons && feeHash.addons.customs_export_paper ? (
-        <p className="flex-none no_m letter_3 center">{feeHash.addons.customs_export_paper.currency}</p>
+        <p className="flex-none no_m center">{feeHash.addons.customs_export_paper.currency}</p>
       ) : (
         ''
       )}
-      <p className="flex-none no_m letter_3 center">
+      <p className="flex-none no_m center">
         {feeHash.addons && feeHash.addons && feeHash.addons.customs_export_paper
           ? `${parseFloat(feeHash.addons.customs_export_paper.value).toFixed(2)}`
           : t('common:none')}
@@ -109,7 +109,7 @@ function IncotermExtras ({
         <i className="fa fa-id-card clip flex-none" style={customsStyle} />
       </div>
       <div className="flex layout-row layout-align-center-space-around layout-wrap">
-        <div className={`${styles.fee_text} flex-90 layout-row layout-align-center-center `}>
+        <div className={`${styles.fee_text} flex-100 layout-row layout-align-center-center `}>
           <h4 className="flex-none no_m">{t('shipment:customs')}</h4>
         </div>
         {scope.detailed_billing && feeHash.customs ? customsFeesValue : ''}
@@ -124,7 +124,7 @@ function IncotermExtras ({
         <i className="fa fa-umbrella clip flex-none" style={insuranceStyle} />
       </div>
       <div className="flex layout-row layout-align-center-space-around layout-wrap">
-        <div className={`${styles.fee_text} flex-90 layout-row layout-align-center-center `}>
+        <div className={`${styles.fee_text} flex-100 layout-row layout-align-center-center `}>
           <h4 className="flex-none no_m">{t('shipment:insurance')}</h4>
         </div>
         {scope.detailed_billing && feeHash.insurance ? insuranceFeesValue : ''}
@@ -139,7 +139,7 @@ function IncotermExtras ({
         <i className="fa fa-id-card clip flex-none" style={exportPaperStyle} />
       </div>
       <div className="flex layout-row layout-align-center-space-around layout-wrap">
-        <div className={`${styles.fee_text} flex-90 layout-row layout-align-center-center `}>
+        <div className={`${styles.fee_text} flex-100 layout-row layout-align-center-center `}>
           <h4 className="flex-none no_m">{t('shipment:adb')}</h4>
         </div>
         {scope.detailed_billing && feeHash.addons && feeHash.addons.customs_export_paper ? exportPaperFeesValue : ''}

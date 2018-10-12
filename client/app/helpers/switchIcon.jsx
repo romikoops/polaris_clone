@@ -1,18 +1,32 @@
 import React from 'react'
 
-export function switchIcon (mot, style, flex) {
+export function switchIcon (mot, style, flex, options) {
+  let className
   switch (mot) {
     case 'ocean':
-      return <i className={`fa fa-anchor ${style ? 'clip' : ''} ${flex || ''}`} style={style || {}} />
+      className = 'fa fa-anchor'
+      break
     case 'air':
-      return <i className={`fa fa-plane ${style ? 'clip' : ''} ${flex || ''}`} style={style || {}} />
+      className = 'fa fa-plane'
+      break
     case 'rail':
-      return <i className={`fa fa-train ${style ? 'clip' : ''} ${flex || ''}`} style={style || {}} />
+      className = 'fa fa-train'
+      break
     case 'truck':
-      return <i className={`fa fa-truck flip_icon_horizontal ${style ? 'clip' : ''} ${flex || ''}`} style={style || {}} />
+      className = 'fa fa-truck flip_icon_horizontal'
+      break
     default:
-      return <i className={`fa fa-anchor ${style ? 'clip' : ''} ${flex || ''}`} style={style || {}} />
+      className = 'fa fa-anchor'
   }
+
+  return (
+    <i
+      className={`${className} ${style ? 'clip' : ''} ${flex || ''}`}
+      style={style || {}}
+      data-for={options && options.dataFor}
+      data-tip={options && options.dataTip}
+    />
+  )
 }
 
 export default switchIcon

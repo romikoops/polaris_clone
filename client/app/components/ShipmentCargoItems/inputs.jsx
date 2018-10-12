@@ -1,15 +1,20 @@
 import React from 'react'
 import ReactTooltip from 'react-tooltip'
+import { v4 } from 'uuid'
 import ValidatedInput from '../ValidatedInput/ValidatedInput'
 import Checkbox from '../Checkbox/Checkbox'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import { Tooltip } from '../Tooltip/Tooltip'
+import kg from '../../assets/images/cargo/kg.png'
+import width from '../../assets/images/cargo/width.png'
+import length from '../../assets/images/cargo/length.png'
+import height from '../../assets/images/cargo/height.png'
 import {
- switchIcon,
+  switchIcon,
   chargeableWeight,
-  volume, 
+  volume,
   numberSpacing,
-   calcMaxDimensionsToApply 
+  calcMaxDimensionsToApply
 } from '../../helpers'
 import styles from './ShipmentCargoItems.scss'
 
@@ -56,6 +61,7 @@ export default function getInputs (
       type="number"
     />
   )
+  const tooltipId = v4()
   const inputs = {}
   const showColliTypeErrors =
     !firstRenderInputs && nextStageAttempt &&
@@ -70,6 +76,7 @@ export default function getInputs (
           placeholder={t('common:selectColliType')}
           className={styles.select_100}
           showErrors={showColliTypeErrors}
+          inputProps={{ name: `${i}-colliType` }}
           name={`${i}-colliType`}
           value={cargoItemTypes[i] && cargoItemTypes[i].label && cargoItemTypes[i]}
           options={availableCargoItemTypes}
@@ -80,15 +87,16 @@ export default function getInputs (
   )
 
   inputs.grossWeight = (
-    <div className="layout-row flex-40 layout-wrap layout-align-start-center" >
-      <div className={`flex-85 layout-row ${styles.input_box}`}>
-        <div className="flex-60 layout-row layout-align-center-center">
-          {t('common:grossWeight')}
-        </div>
+    <div className={`layout-row flex-30 layout-wrap layout-align-start-center ${styles.input_weight}`}>
+      <h4>{t('common:Gross Weight')}</h4>
+      <div className={`flex-60 layout-row ${styles.input_box}`}>
+
+        <img data-for={tooltipId} data-tip={t('common:grossWeight')} src={kg} alt="weight" border="0" />
+        <Tooltip color={theme.colors.primary} icon="fa-info-circle" text="payload_in_kg" />
         {
           cargoItem ? (
             <ValidatedInput
-              wrapperClassName="flex-60"
+              wrapperClassName="flex-90"
               name={`${i}-payload_in_kg`}
               value={cargoItem.payload_in_kg || ''}
               type="number"
@@ -117,7 +125,7 @@ export default function getInputs (
           kg
         </div>
       </div>
-      <Tooltip theme={theme} icon="fa-info-circle" text="payload_in_kg" />
+
     </div>
   )
   inputs.collectiveWeight = (
@@ -158,30 +166,25 @@ export default function getInputs (
           kg
         </div>
       </div>
-      <Tooltip theme={theme} icon="fa-info-circle" text="payload_in_kg" />
+      <Tooltip color={theme.colors.primary} icon="fa-info-circle" text="payload_in_kg" />
     </div>
   )
 
   inputs.volume = (
-    <div className="flex-30 layout-row layout-wrap layout-align-center-center">
+    <div className="flex-30 layout-row layout-wrap layout-align-end-center">
       <div className="layout-row flex-40 layout-align-center" >
-        <p className={`${styles.input_label} flex-none`}>{t('common:volume')}: </p>
-      </div>
-
-      <div className="flex">
-        <p className={styles.input_label}>
-          { numberSpacing(volume(cargoItem), 3) }
-          <span>m</span>
-          <sup style={{ marginLeft: '1px', fontSize: '10px', height: '17px' }}>3</sup>
+        <p className={`${styles.input_label} flex-none`}>{t('common:volume')}:&nbsp;&nbsp;
+          <span className={styles.input_value}>{ numberSpacing(volume(cargoItem), 3) }
+          &nbsp;m<sup style={{ marginLeft: '1px', fontSize: '10px', height: '17px' }}>3</sup></span>
         </p>
       </div>
     </div>
   )
 
   inputs.total = (
-    <div className={`${styles.total} flex-10 layout-row layout-wrap layout-align-center-stretch`}>
+    <div className={`${styles.total} flex-15 layout-row layout-wrap layout-align-center-stretch`}>
       <div className={`${styles.cargo_item_box} layout-row flex-100 layout-align-center-center`}>
-        <p className={`${styles.input_label} flex-none`}>{t('common:total')}:</p>
+        <p className={`${styles.input_label} flex-none`}>{t('common:total')}</p>
       </div>
     </div>
   )
@@ -203,9 +206,9 @@ export default function getInputs (
       )
     ) {
       return (
-        <div className="flex-33 layout-row">
+        <div className="flex-30 layout-align-center-center layout-row">
           { switchIcon(mot) }
-          <p className={`${styles.chargeable_weight_value}`}>
+          <p className={`${styles.chargeable_weight_value} ${styles.input_value}`}>
             {t('common:unavailable')}
           </p>
         </div>
@@ -213,9 +216,9 @@ export default function getInputs (
     }
 
     return (
-      <div className="flex-33 layout-row">
+      <div className="flex-30 layout-align-center-center layout-row">
         { switchIcon(mot) }
-        <p className={`${styles.chargeable_weight_value}`}>
+        <p className={`${styles.chargeable_weight_value} ${styles.input_value}`}>
           { numberSpacing(chargeableWeight(cargoItem, mot), 1) } kg
         </p>
       </div>
@@ -223,11 +226,11 @@ export default function getInputs (
   }
   inputs.chargeableWeight = (
     <div className={
-      `${styles.chargeable_weight} layout-row flex-60 ` +
+      `${styles.chargeable_weight} layout-row flex ` +
       'layout-wrap layout-align-end-center'
     }
     >
-      <div className="layout-row flex-35 layout-wrap layout-align-start-center" >
+      <div className="layout-row flex-30 layout-wrap layout-align-end-center" >
         <p className={`${styles.input_label} flex-none`}>{t('cargo:chargebleWeight')}: </p>
       </div>
       <div className={
@@ -258,7 +261,8 @@ export default function getInputs (
 
   let heightRef
   inputs.height = (
-    <div className="layout-row flex layout-wrap layout-align-start-center" >
+    <div className={`layout-row flex-20 layout-wrap layout-align-start-center ${styles.input_height}`}>
+      <h4>{t('common:height')}</h4>
       <div
         className={`flex-90 layout-row ${styles.input_box}`}
         data-tip={heightDataTip}
@@ -268,13 +272,12 @@ export default function getInputs (
         onFocus={() => ReactTooltip.show(heightRef)}
         onBlur={() => ReactTooltip.hide(heightRef)}
       >
-        <div className="flex-20 layout-row layout-align-center-center">
-          {t('common:height').charAt(0)}
-        </div>
+
+        <img data-for={tooltipId} data-tip={t('common:height')} src={height} alt="height" border="0" />
         {
           cargoItem ? (
             <ValidatedInput
-              wrapperClassName="flex-55"
+              wrapperClassName="flex-60"
               name={`${i}-dimension_z`}
               value={cargoItem.dimension_z || ''}
               type="number"
@@ -324,8 +327,8 @@ export default function getInputs (
   }
   let lengthRef
   inputs.length = (
-    <div className="layout-row flex layout-wrap layout-align-start-center" >
-      <ReactTooltip effect="solid" />
+    <div className={`layout-row flex-20 layout-wrap layout-align-start-center ${styles.input_length}`}>
+      <h4>{t('common:length')}</h4>
       <div
         className={`flex-90 layout-row ${styles.input_box}`}
         data-tip={lengthDataTip}
@@ -335,14 +338,13 @@ export default function getInputs (
         onFocus={() => ReactTooltip.show(lengthRef)}
         onBlur={() => ReactTooltip.hide(lengthRef)}
       >
-        <div className="flex-20 layout-row layout-align-center-center">
-          {t('common:length').charAt(0)}
-        </div>
+
+        <img data-for={tooltipId} data-tip={t('common:length')} src={length} alt="length" border="0" />
 
         {
           cargoItem ? (
             <ValidatedInput
-              wrapperClassName="flex-55"
+              wrapperClassName="flex-60"
               name={`${i}-dimension_x`}
               value={cargoItem.dimension_x || ''}
               type="number"
@@ -394,8 +396,8 @@ export default function getInputs (
 
   let widthRef
   inputs.width = (
-    <div className="layout-row flex layout-wrap layout-align-start-center" >
-      <ReactTooltip effect="solid" />
+    <div className={`layout-row flex-20 layout-wrap layout-align-start-center ${styles.input_width}`}>
+      <h4>{t('common:width')}</h4>
       <div
         className={`flex-90 layout-row ${styles.input_box}`}
         ref={(div) => { widthRef = div }}
@@ -405,13 +407,12 @@ export default function getInputs (
         onFocus={() => ReactTooltip.show(widthRef)}
         onBlur={() => ReactTooltip.hide(widthRef)}
       >
-        <div className="flex-20 layout-row layout-align-center-center">
-          {t('common:width').charAt(0)}
-        </div>
+
+        <img data-for={tooltipId} data-tip={t('common:width')} src={width} alt="width" border="0" />
         {
           cargoItem ? (
             <ValidatedInput
-              wrapperClassName="flex-55"
+              wrapperClassName="flex-60"
               name={`${i}-dimension_y`}
               value={cargoItem.dimension_y || ''}
               type="number"
@@ -447,39 +448,39 @@ export default function getInputs (
   )
   inputs.dangerousGoods = (
     <div
-      className="layout-row flex layout-wrap layout-align-start-center"
+      className={`layout-row flex layout-wrap layout-align-start-center ${styles.cargo_unit_check}`}
     >
-      <div className="layout-row flex-75 layout-wrap layout-align-start-center">
-        <p className={`${styles.input_label} flex-none`}>{t('common:dangerousGoods')}</p>
-        <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
-      </div>
       <Checkbox
         name={`${i}-dangerous_goods`}
         onChange={(checked, e) => this.toggleCheckbox(checked, e)}
         checked={cargoItem ? cargoItem.dangerous_goods : false}
         theme={theme}
-        size="20px"
+        size="15px"
         disabled={!scope.dangerous_goods}
         onClick={scope.dangerous_goods ? '' : () => toggleModal('noDangerousGoods')}
       />
+      <div className="layout-row flex-75 layout-wrap layout-align-start-center">
+        <p className={`${styles.input_label} flex-none`}>{t('common:dangerousGoods')}</p>
+        <Tooltip color={theme.colors.primary} icon="fa-info-circle" text="dangerous_goods" />
+      </div>
     </div>
   )
   inputs.nonStackable = (
     <div
-      className="layout-row flex layout-wrap layout-align-start-center"
+      className={`layout-row flex layout-wrap layout-align-end-center ${styles.cargo_unit_check}`}
     >
-      <div className="layout-row flex-65 layout-wrap layout-align-start-center">
-        <p className={`${styles.input_label} flex-none`}>{t('common:nonStackable')}</p>
-        <Tooltip theme={theme} icon="fa-info-circle" text="non_stackable" />
-      </div>
       <Checkbox
         name={`${i}-stackable`}
         onChange={(checked, e) => this.toggleCheckbox(!checked, e)}
         checked={cargoItem ? !cargoItem.stackable : false}
         theme={theme}
-        size="20px"
+        size="15px"
         disabled={false}
       />
+      <div className="layout-row flex-65 layout-wrap layout-align-start-center">
+        <p className={`${styles.input_label} flex-none`}>{t('common:nonStackable')}</p>
+        <Tooltip color={theme.colors.primary} icon="fa-info-circle" text="non_stackable" />
+      </div>
     </div>
   )
 

@@ -14,7 +14,7 @@ exports[`shallow rendering 1`] = `
         className="flex-100 layout-row layout-align-center-start"
         style={
           Object {
-            "margin": "0 0 4px 0",
+            "marginBottom": "25px",
           }
         }
       >
@@ -54,7 +54,7 @@ exports[`shallow rendering 1`] = `
         />
       </div>
       <hr
-        className="flex-70"
+        className="flex-35"
       />
     </div>
   </div>
@@ -75,7 +75,7 @@ exports[`with cargoItem.quantity 1`] = `
         className="flex-100 layout-row layout-align-center-start"
         style={
           Object {
-            "margin": "0 0 4px 0",
+            "marginBottom": "25px",
           }
         }
       >
@@ -116,7 +116,7 @@ exports[`with cargoItem.quantity 1`] = `
         />
       </div>
       <hr
-        className="flex-70"
+        className="flex-35"
       />
     </div>
   </div>

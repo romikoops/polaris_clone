@@ -987,18 +987,6 @@ export class ShipmentDetails extends Component {
         >
           {dayPickerSection}
         </div>
-        <div className="flex-100 layout-row layout-align-center-center">
-          <div className="flex-none content_width_booking layout-row layout-align-center-center">
-            <IncotermRow
-              theme={theme}
-              preCarriage={this.state.has_pre_carriage}
-              onCarriage={this.state.has_on_carriage}
-              originFees={this.state.has_pre_carriage}
-              destinationFees={this.state.has_on_carriage}
-              tenant={tenant}
-            />
-          </div>
-        </div>
         <div className={`layout-row flex-100 layout-wrap layout-align-center ${styles.cargo_sec}`}>
           {shipmentData.shipment.load_type === 'cargo_item' && (
             <div className="content_width_booking layout-row layout-wrap layout-align-center">

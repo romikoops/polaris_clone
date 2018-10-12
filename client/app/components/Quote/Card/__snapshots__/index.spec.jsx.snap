@@ -49,6 +49,7 @@ exports[`detailed billing working properly 1`] = `
       >
         <ChargeIcons
           destinationFees={false}
+          mot=""
           onCarriage={false}
           originFees={false}
           preCarriage={false}
@@ -414,6 +415,7 @@ exports[`shallow rendering 1`] = `
       >
         <ChargeIcons
           destinationFees={false}
+          mot=""
           onCarriage={false}
           originFees={false}
           preCarriage={false}
@@ -778,6 +780,7 @@ exports[`show schedule options working 1`] = `
       >
         <ChargeIcons
           destinationFees={false}
+          mot=""
           onCarriage={false}
           originFees={false}
           preCarriage={false}
@@ -1143,6 +1146,7 @@ exports[`show schedules set to true 1`] = `
       >
         <ChargeIcons
           destinationFees={false}
+          mot=""
           onCarriage={false}
           originFees={false}
           preCarriage={false}

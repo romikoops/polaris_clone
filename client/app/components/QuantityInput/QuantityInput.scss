@@ -2,44 +2,15 @@
   .quantity {
     width: 100%;
     position: relative;
-    background: darkgrey;
-    box-shadow: 0 0 2px rgba(darkgrey, 0.3);
-    border: 1px solid rgba(black, 0.08);
-    color: white;
-    // &:before {
-    //   content: "\25B2";
-    //   position: absolute;
-    //   right: 10px;
-    //   top: 35px;
-    //   color: rgba(black, 0.6);
-    //   z-index: 2;
-    //   opacity: 0;
-    //   font-size: 13px;
-    //   transition: transform 0.2s ease, color 0.4s ease;
-    // }
-    // &:after {
-    //   content: "\25BC";
-    //   position: absolute;
-    //   right: 10px;
-    //   top: 48px;
-    //   color: rgba(black, 0.6);
-    //   z-index: 2;
-    //   opacity: 0;
-    //   font-size: 13px;
-    //   transition: transform 0.2s ease, color 0.4s ease;
-    // }
-    // &:hover, &:focus-within {
-    //   &:before, &:after {
-    //     opacity: 1;
-    //   }
-    // }
+    border-right: 1px solid rgb(236, 236, 236);
     input {
       width: 100%;
+      padding-bottom: 14px;
       outline: none;
       border: none;
+      font-size: 24px;
       text-align: center;
       background: transparent;
-      color: white;
 
       // Chrome
       &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
