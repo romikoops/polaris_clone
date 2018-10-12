@@ -40,9 +40,10 @@ Rails.application.routes.draw do
       post 'hubs/process_csv', to: 'hubs#overwrite', as: :hubs_overwrite
       get  'hubs/sheet/download',  to: 'hubs#download_hubs'
       post 'user_managers/assign', to: 'user_managers#assign'
-      resources :itineraries, only: %i[index show create destroy]
+      resources :itineraries, only: %i[index show create destroy] do 
+        resources :notes, only: :delete
+      end
       post 'itineraries/:id/edit_notes', to: 'itineraries#edit_notes'
-      delete 'itineraries/:itineraryId/delete_note/:noteId', to: 'itineraries#delete_note'
 
       resources :pricings, only: %i[index destroy]
       get  'client_pricings/:id', to: 'pricings#client'

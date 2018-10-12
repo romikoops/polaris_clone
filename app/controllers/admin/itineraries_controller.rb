@@ -31,14 +31,6 @@ class Admin::ItinerariesController < Admin::AdminBaseController
     response_handler(itinerary_with_notes)
   end
 
-  def delete_note
-    itinerary = Itinerary.find(params[:itineraryId])
-    note = Note.find(params[:noteId])
-    note.destroy
-    resp = itinerary.notes
-    response_handler(resp)
-  end
-
   def show
     itinerary = Itinerary.find(params[:id])
     resp = { hubs:          itinerary.hubs,

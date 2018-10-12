@@ -643,7 +643,7 @@ function deleteItineraryNote (itineraryId, noteId) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
 
-  return fetch(`${getApiHost()}/admin/itineraries/${itineraryId}/delete_note/${noteId}`, requestOptions)
+  return fetch(`${getApiHost()}/admin/itineraries/${itineraryId}/notes/${noteId}`, requestOptions)
     .then(handleResponse)
 }
 
