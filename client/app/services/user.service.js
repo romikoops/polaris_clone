@@ -307,6 +307,32 @@ function reuseShipment (id) {
   return fetch(`${getApiHost()}/shipments/${id}/reuse_booking_data`, requestOptions).then(handleResponse)
 }
 
+function getPricings () {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch(`${getApiHost()}/pricings`, requestOptions).then(handleResponse)
+}
+function getPricingsForItinerary (id) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch(`${getApiHost()}/pricings/${id}`, requestOptions).then(handleResponse)
+}
+function requestPricing (req) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(req)
+  }
+
+  return fetch(`${getApiHost()}/pricings/${req.pricing_id}/request`, requestOptions).then(handleResponse)
+}
+
 export const userService = {
   getLocations,
   destroyLocation,
@@ -335,6 +361,9 @@ export const userService = {
   reuseShipment,
   searchShipments,
   deltaShipmentsPage,
-  searchContacts
+  searchContacts,
+  getPricings,
+  getPricingsForItinerary,
+  requestPricing
 }
 export default userService

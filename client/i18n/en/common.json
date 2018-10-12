@@ -117,6 +117,8 @@
   "hi": "Hi",
   "oceanFreight": "Ocean Freight",
   "airFreight": "Air Freight",
+  "railFreight": "Rail Freight",
+  "truckFreight": "Road Freight",
   "add": "Add",
   "set": "Set",
   "delete": "Delete",
@@ -147,5 +149,16 @@
   "vesselName": "Vessel Name",
   "select": "Select",
   "save": "Save",
-  "close": "Close"
+  "close": "Close",
+  "routing": "Routing",
+  "feeCode": "Fee Code",
+  "cargo_item": "Cargo Item",
+  "container": "Container",
+  "pricings": "Pricings",
+  "true": "True",
+  "false": "False",
+  "rateBasis": "Rate Basis",
+  "minimum": "Minimum",
+  "modeOfTransport": "Mode of Transport",
+  "rate": "Rate"
 }

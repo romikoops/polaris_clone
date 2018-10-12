@@ -10,6 +10,7 @@ import { gradientTextGenerator } from '../../helpers'
 import SquareButton from '../SquareButton'
 import Loading from '../Loading/Loading'
 
+
 class UserDashboard extends Component {
   static prepShipment (baseShipment, user) {
     const shipment = Object.assign({}, baseShipment)
