@@ -100,7 +100,7 @@ const UntranslatedEditProfileBox = ({
           theme={theme}
           handleNext={close}
           size="small"
-          text="close"
+          text={t('common:close')}
           iconClass="fa-times"
         />
       </div>
@@ -110,7 +110,7 @@ const UntranslatedEditProfileBox = ({
           handleNext={onSave}
           active
           size="small"
-          text="Save"
+          text={t('common:save')}
           iconClass="fa-floppy-o"
         />
       </div>
@@ -133,7 +133,7 @@ UntranslatedEditProfileBox.defaultProps = {
   style: {}
 }
 
-const EditProfileBox = translate('user')(UntranslatedEditProfileBox)
+const EditProfileBox = translate(['user', 'common'])(UntranslatedEditProfileBox)
 
 const UntranslatedProfileBox = ({
   user, style, edit, t
@@ -306,7 +306,7 @@ class UserContactsView extends Component {
                     close={this.closeEdit}
                   />
                 ) : (
-                  <ProfileBox user={contact} style={textStyle} theme={theme} edit={this.editProfile}/>
+                  <ProfileBox user={contact} style={textStyle} theme={theme} edit={this.editProfile} />
                 )}
               </div>
             )}

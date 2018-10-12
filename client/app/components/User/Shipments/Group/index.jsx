@@ -58,7 +58,7 @@ export class UserShipmentsGroup extends Component {
           hubs={hubHash}
           adminDispatch={userDispatch}
           shipments={mergedShipments}
-          title={`${title} Shipments`}
+          title={t('account:titleShipments', { title })}
           theme={theme}
           userView
           handleShipmentAction={handleShipmentAction}

@@ -5,7 +5,7 @@ import styles from './ShipmentThankYou.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import defaults from '../../styles/default_classes.scss'
 
-export class ShipmentThankYou extends Component {
+class ShipmentThankYou extends Component {
   componentDidMount () {
     const { setStage } = this.props
     setStage(6)
@@ -63,7 +63,7 @@ export class ShipmentThankYou extends Component {
                 <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
                   <RoundButton
                     theme={theme}
-                    text="Back to dashboard"
+                    text={t('common:back')}
                     back
                     iconClass="fa-angle0-left"
                     handleNext={() => shipmentDispatch.toDashboard(user.id)}
@@ -93,4 +93,4 @@ ShipmentThankYou.defaultProps = {
   user: {},
   tenant: null
 }
-export default translate('bookconf')(ShipmentThankYou)
+export default translate(['bookconf', 'common'])(ShipmentThankYou)

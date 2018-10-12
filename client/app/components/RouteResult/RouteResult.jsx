@@ -116,7 +116,7 @@ class RouteResult extends Component {
             </div>
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <h4 className={styles.date_title}>{`ETD ${RouteResult.returnHubType(originHub)}`}</h4>
+                <h4 className={styles.date_title}>{`${t('common:etd')} ${RouteResult.returnHubType(originHub)}`}</h4>
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -127,7 +127,7 @@ class RouteResult extends Component {
             </div>
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <h4 className={styles.date_title}>{`ETA ${RouteResult.returnHubType(destinationHub)} `}</h4>
+                <h4 className={styles.date_title}>{`${t('common:eta')} ${RouteResult.returnHubType(destinationHub)} `}</h4>
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>

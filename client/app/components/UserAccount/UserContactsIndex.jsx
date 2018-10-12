@@ -9,14 +9,15 @@ import ContactsIndex from '../Contacts/ContactsIndex'
 function UserContactsIndex ({
   theme,
   toggleNewContact,
-  newContactBox
+  newContactBox,
+  t
 }) {
   const newButton = (
     <div className="flex-none layout-row">
       <RoundButton
         theme={theme}
         size="small"
-        text="New Contact"
+        text={t('common:newContact')}
         active
         handleNext={toggleNewContact}
         iconClass="fa-plus"
@@ -30,7 +31,7 @@ function UserContactsIndex ({
         <div className="layout-row layout-wrap flex-100">
           <ContactsIndex
             theme={theme}
-            placeholder="Search Contacts"
+            placeholder={t('common:searchContacts')}
           />
         </div>
         {newContactBox}
@@ -38,7 +39,7 @@ function UserContactsIndex ({
       <div className="layout-column flex-20 hide-xs hide-sm layout-align-end-end relative" >
         <div className={`layout-column  width_100 hide-xs layout-align-end-end ${styles.side_box_style}`}>
           <SideOptionsBox
-            header="Data Manager"
+            header={t('account:dataManager')}
             content={
               <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <div className={`${styles.action_section} flex-100 layout-row layout-align-center-center layout-wrap`}>
@@ -56,7 +57,8 @@ function UserContactsIndex ({
 UserContactsIndex.propTypes = {
   theme: PropTypes.theme,
   toggleNewContact: PropTypes.func,
-  newContactBox: PropTypes.objectOf(PropTypes.any)
+  newContactBox: PropTypes.objectOf(PropTypes.any),
+  t: PropTypes.func.isRequired
 }
 
 UserContactsIndex.defaultProps = {
@@ -65,4 +67,4 @@ UserContactsIndex.defaultProps = {
   newContactBox: {}
 }
 
-export default translate('common')(UserContactsIndex)
+export default translate(['common', 'account'])(UserContactsIndex)

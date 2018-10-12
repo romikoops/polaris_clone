@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
+import { translate } from 'react-i18next'
 import Truncate from 'react-truncate'
 import { v4 } from 'uuid'
-import { sortBy } from 'lodash'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
 import defaults from '../../styles/default_classes.scss'
@@ -199,7 +199,7 @@ class UserLocationsBox extends PureComponent {
               type="text"
               name="search"
               value={searchText}
-              placeholder="Search Shipments"
+              placeholder={t('shipment:searchShipments')}
               onChange={this.handleSearchChange}
             />
           </div>
@@ -216,7 +216,7 @@ class UserLocationsBox extends PureComponent {
             onClick={parseInt(page, 10) > 1 ? this.prevPage : null}
           >
             <i className="fa fa-chevron-left" />
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;{t('common:basicBack')}</p>
           </div>
           {}
           <p>{page} / {pages} </p>
@@ -227,7 +227,7 @@ class UserLocationsBox extends PureComponent {
             `}
             onClick={parseInt(page, 10) < pages ? this.nextPage : null}
           >
-            <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
+            <p>{t('common:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
             <i className="fa fa-chevron-right" />
           </div>
         </div>
@@ -258,4 +258,4 @@ UserLocationsBox.defaultProps = {
   cols: 3
 }
 
-export default UserLocationsBox
+export default translate(['common', 'shipment'])(UserLocationsBox)

@@ -5,12 +5,12 @@ import FormsyInput from '../../FormsyInput/FormsyInput'
 import styles from '../ShipmentContactForm.scss'
 import IconLable from '../IconLable'
 
-export function CompanyDetailsSection ({
+function CompanyDetailsSection ({
   theme, contactData, setContactAttempted, checkValid, t
 }) {
   return (
     <div className="flex-100 layout-row layout-wrap">
-      <h3>Company Details</h3>
+      <h3>{t('user:companyDetails')}</h3>
       <div className={`${styles.grouped_inputs} flex-100 layout-row layout-wrap`}>
         <div className="flex-95 layout-row">
           <IconLable faClass="building-o" theme={theme} />

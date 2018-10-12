@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
-// import styles from './UserAccount.scss';
 
-export class UserPassword extends Component {
+class UserPassword extends Component {
   componentDidMount () {
     this.props.setNav('password')
   }

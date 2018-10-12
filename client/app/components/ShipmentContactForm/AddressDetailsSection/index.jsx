@@ -150,7 +150,7 @@ class AddressDetailsSection extends PureComponent {
                 type="text"
                 value={contactData.location.zipCode}
                 name="location-zipCode"
-                placeholder="Postal Code"
+                placeholder={t('user:postalCode')}
                 submitAttempted={setContactAttempted}
                 errorMessageStyles={{
                   fontSize: '12px',
@@ -169,7 +169,7 @@ class AddressDetailsSection extends PureComponent {
                 type="text"
                 value={contactData.location.country}
                 name="location-country"
-                placeholder="Country"
+                placeholder={t('user:country')}
                 submitAttempted={setContactAttempted}
                 errorMessageStyles={{
                   fontSize: '12px',

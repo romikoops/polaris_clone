@@ -11,5 +11,6 @@
   "pleaseWait": "Please wait....",
   "download": "Download",
   "notUploaded": "Not uploaded",
-  "uploadNewDocument": "Upload New Document"
+  "uploadNewDocument": "Upload New Document",
+  "shipmentPDF": "Download shipment pdf"
 }

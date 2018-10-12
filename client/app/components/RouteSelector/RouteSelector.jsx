@@ -84,13 +84,13 @@ export class RouteSelector extends Component {
           <div className="flex-100 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-align-space-between-center">
               <div className="flex-none layput-row layout-align-start-center">
-                <TextHeading theme={theme} size={2} text="Available Routes" />
+                <TextHeading theme={theme} size={2} text={t('shipment:availableRoutes')} />
               </div>
               <div className={`${styles.input_box} flex-none layput-row layout-align-start-center`}>
                 <input
                   type="text"
                   name="search"
-                  placeholder="Search route"
+                  placeholder={t('shipment:searchRoute')}
                   onChange={this.handleSearchChange}
                 />
               </div>
@@ -115,4 +115,4 @@ RouteSelector.defaultProps = {
   theme: null
 }
 
-export default translate()(RouteSelector)
+export default translate(['errors', 'shipment'])(RouteSelector)

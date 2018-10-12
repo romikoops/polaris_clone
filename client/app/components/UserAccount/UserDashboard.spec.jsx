@@ -25,7 +25,7 @@ jest.mock('../Admin/AdminSearchables', () => ({
 }))
 
 // eslint-disable-next-line import/first
-import { UserDashboard } from './UserDashboard'
+import UserDashboard from './UserDashboard'
 
 const propsBase = {
   theme,

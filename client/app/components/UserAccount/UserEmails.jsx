@@ -3,7 +3,7 @@ import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 // import styles from './UserAccount.scss';
 
-export class UserEmails extends Component {
+class UserEmails extends Component {
   componentDidMount () {
     this.props.setNav('emails')
   }

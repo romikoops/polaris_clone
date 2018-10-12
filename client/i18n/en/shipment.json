@@ -66,5 +66,13 @@
   "originDocumentation": "Origin Documentation",
   "destinationDocumentation": "Destination Documentation",
   "freightRate": "Freight rate",
-  "truckingRate": "Trucking rate"
+  "truckingRate": "Trucking rate",
+  "shipmentSummary": "Shipment Summary",
+  "modeOfTransport": "Mode of Transport",
+  "ttNoGuarantee": "* Transit time (T/T) not guaranteed",
+  "invoicedLocalCurrency": "** You will be invoiced in local currency based on the exchange rate valid at the time",
+  "availableRoutes": "Available Routes",
+  "searchRoute": "Search Route",
+  "quotedShipments": "Quoted Shipments",
+  "searchShipments": "Search Shipments"
 }

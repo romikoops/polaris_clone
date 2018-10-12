@@ -170,7 +170,7 @@ class ShipmentContainers extends Component {
                     maxValue: (values, _value) => _value <= maxValue
                   }}
                   validationErrors={{
-                    maxValue: `${t('errors:maxValue')} ${maxValue} kg`,
+                    maxValue: `${t('errors:maxValue')} ${maxValue} ${t('acronym:kg')}`,
                     nonNegative: t('errors:nonNegative'),
                     isDefaultRequiredValue: t('errors:notBlank')
                   }}
@@ -180,7 +180,7 @@ class ShipmentContainers extends Component {
               ) : (
                 <input className="flex-80" type="number" />
               )}
-              <div className="flex layout-row layout-align-center-center">kg</div>
+              <div className="flex layout-row layout-align-center-center">{t('acronym:kg')}</div>
             </div>
           </div>
           <div className="layout-row flex layout-wrap layout-align-start-center">
@@ -292,4 +292,4 @@ ShipmentContainers.defaultProps = {
   containers: []
 }
 
-export default translate(['common', 'cargo', 'shipment', 'errors'])(ShipmentContainers)
+export default translate(['common', 'cargo', 'shipment', 'errors', 'acronym'])(ShipmentContainers)
