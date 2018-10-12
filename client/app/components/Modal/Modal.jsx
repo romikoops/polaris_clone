@@ -63,7 +63,7 @@ export class Modal extends Component {
     if (this.state.hidden) return ''
 
     const { windowHeight } = this.state
-    const { maxWidth } = this.props
+    const { maxWidth, showExit } = this.props
 
     const propsMinHeight = dimentionToPx({
       value: this.props.minHeight,
@@ -92,6 +92,9 @@ export class Modal extends Component {
           style={modalStyles}
           className={`${styles.modal} ${this.props.flexOptions || 'flex-none'}`}
         >
+          {showExit ? (
+            <i className={` ${styles.exit_icon} fa fa-times pointy flex-none`} onClick={this.hide} />
+          ) : ''}
           { component }
         </div>
       </div>
@@ -103,6 +106,7 @@ Modal.propTypes = {
   component: PropTypes.node.isRequired,
   parentToggle: PropTypes.func.isRequired,
   minHeight: PropTypes.string,
+  showExit: PropTypes.bool,
   flexOptions: PropTypes.string,
   maxWidth: PropTypes.string,
   horizontalPadding: PropTypes.string,
@@ -112,6 +116,7 @@ Modal.propTypes = {
 Modal.defaultProps = {
   minHeight: '',
   flexOptions: '',
+  showExit: false,
   maxWidth: '90%',
   horizontalPadding: '20px',
   verticalPadding: '20px'

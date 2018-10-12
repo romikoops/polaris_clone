@@ -238,6 +238,7 @@ class CargoDetails extends Component {
 
     const modal = (
       <Modal
+        showExit
         flexOptions="flex-80"
         component={incotermBox}
         verticalPadding="65px"
