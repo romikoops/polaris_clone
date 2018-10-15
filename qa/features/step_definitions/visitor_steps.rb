@@ -79,7 +79,7 @@ Then('I expect to see offers') do
 end
 
 When('I select first offer') do
-  buttons = all(:xpath, "//button[.//*[contains(text(),'Select')]]")
+  buttons = all('.quote_card_select')
   buttons.first.click
 end
 

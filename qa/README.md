@@ -25,4 +25,7 @@ To run full feature suite against `https://demo.itsmycargo.com`, simply run:
 
 To run against different server, simply set `TARGET_URL=...` environment variable, e.g.
 
-    $ TARGET_URL=http://localhost:8080 bin/cucumber
+    $ TARGET_URL=localhost:8080 bin/cucumber
+
+`TARGET_URL` takes only the base domain name, without subdomain. This is cause subdomain is set dynamicaly per
+feature/scenario depending on required enabled feature set for each tenant.

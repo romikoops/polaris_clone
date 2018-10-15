@@ -5,9 +5,6 @@ Feature: Find Rates
   So that I know how much shipping my cargo would cost.
   I also would like to request a dedicated rate for a route
 
-  Background:
-
-
   Scenario: Requesting New Rate
     Given I am logged in successfully
       And I select "Pricings"
@@ -16,4 +13,3 @@ Feature: Find Rates
     Given I am on the Pricings Page
       And I request the first public rate
      Then I expect to see the rate has been requested
-    

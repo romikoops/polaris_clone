@@ -253,6 +253,7 @@ class QuoteCard extends PureComponent {
       </div>
       <div className="flex-25 layout-row layout-wrap" style={{ textAlign: 'right' }}>
         <RoundButton
+          classNames="quote_card_select"
           size="small"
           handleNext={() => this.selectSchedule(schedule)}
           theme={theme}
@@ -354,13 +355,13 @@ class QuoteCard extends PureComponent {
                 </div>
                 <div className="flex-40 layout-row layout-align-center">
                   <p className="flex-100 center">
-                    {`${moment(firstSchedule.closing_date).format('ll')} - 
+                    {`${moment(firstSchedule.closing_date).format('ll')} -
                       ${moment(lastSchedule.closing_date).format('ll')}
                     `}
                   </p>
                 </div>
                 <div
-                  className={`flex-30 layout-row layout-align-center-center 
+                  className={`flex-30 layout-row layout-align-center-center
                   ${!finalResults ? '' : styles.disabled} ${styles.date_btn} ${styles.date_btn}`}
                   onClick={!finalResults ? () => this.handleSchedulesRequest(1) : null}
                 >
