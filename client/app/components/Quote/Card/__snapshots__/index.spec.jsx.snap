@@ -2,7 +2,7 @@
 
 exports[`detailed billing working properly 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap wrapper "
+  className="flex-100 layout-row layout-wrap offer_result wrapper "
 >
   <div
     className="flex-100 layout-row layout-align-start-center container"
@@ -49,6 +49,7 @@ exports[`detailed billing working properly 1`] = `
       >
         <ChargeIcons
           destinationFees={false}
+          mot=""
           onCarriage={false}
           originFees={false}
           preCarriage={false}
@@ -242,6 +243,7 @@ exports[`detailed billing working properly 1`] = `
             <RoundButton
               active={false}
               back={false}
+              classNames=""
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}
@@ -367,7 +369,7 @@ exports[`detailed billing working properly 1`] = `
 
 exports[`shallow rendering 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap wrapper "
+  className="flex-100 layout-row layout-wrap offer_result wrapper "
 >
   <div
     className="flex-100 layout-row layout-align-start-center container"
@@ -414,6 +416,7 @@ exports[`shallow rendering 1`] = `
       >
         <ChargeIcons
           destinationFees={false}
+          mot=""
           onCarriage={false}
           originFees={false}
           preCarriage={false}
@@ -606,6 +609,7 @@ exports[`shallow rendering 1`] = `
             <RoundButton
               active={false}
               back={false}
+              classNames=""
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}
@@ -731,7 +735,7 @@ exports[`shallow rendering 1`] = `
 
 exports[`show schedule options working 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap wrapper "
+  className="flex-100 layout-row layout-wrap offer_result wrapper "
 >
   <div
     className="flex-100 layout-row layout-align-start-center container"
@@ -778,6 +782,7 @@ exports[`show schedule options working 1`] = `
       >
         <ChargeIcons
           destinationFees={false}
+          mot=""
           onCarriage={false}
           originFees={false}
           preCarriage={false}
@@ -971,6 +976,7 @@ exports[`show schedule options working 1`] = `
             <RoundButton
               active={false}
               back={false}
+              classNames=""
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}
@@ -1096,7 +1102,7 @@ exports[`show schedule options working 1`] = `
 
 exports[`show schedules set to true 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap wrapper "
+  className="flex-100 layout-row layout-wrap offer_result wrapper "
 >
   <div
     className="flex-100 layout-row layout-align-start-center container"
@@ -1143,6 +1149,7 @@ exports[`show schedules set to true 1`] = `
       >
         <ChargeIcons
           destinationFees={false}
+          mot=""
           onCarriage={false}
           originFees={false}
           preCarriage={false}
@@ -1335,6 +1342,7 @@ exports[`show schedules set to true 1`] = `
             <RoundButton
               active={false}
               back={false}
+              classNames=""
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}

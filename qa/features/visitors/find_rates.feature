@@ -26,3 +26,26 @@ Feature: Find Rates
 
     When I select first offer
     Then I expect to be requested for signing in.
+
+  Scenario: Requesting LCL Shipment
+    Given I am at the homepage
+      And I click "Find Rates" button
+     Then I expect to see title "Choose shipment"
+
+    When I select "I am Selling (Export)"
+     And I select "Air, Ocean LCL & Rail LCL"
+     And I click "Next Step" button
+    Then I expect to see title "Shipment Details"
+
+    When I select "Shanghai" as "Origin"
+     And I select "Gothenburg" as "Destination"
+     And I select "1 week from now" as Available Date
+     And I have shipment of 1 "Pallet" with length 78cm, width 78cm, height 78cm and weight 800kg
+     And I confirm cargo does not contain dangerous good
+     And I click "Get Offers" button
+
+    Then I expect to see title "Choose Offer"
+     And I expect to see offers
+
+    When I select first offer
+    Then I expect to be requested for signing in.

@@ -23,6 +23,14 @@ exports[`props.shipment is truthy 1`] = `
       shipments={
         Array [
           Object {
+            "cargo_units": Array [
+              Object {
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
+              },
+            ],
             "clientName": "undefined undefined",
             "companyName": "undefined",
             "destinationHub": "",
@@ -41,6 +49,12 @@ exports[`props.shipment is truthy 1`] = `
                 "hub_route_key": "foo-bar",
               },
             ],
+            "selected_offer": Object {
+              "cargo": Object {},
+              "total": Object {
+                "value": 77,
+              },
+            },
             "status": "FOO_STATUS",
             "total_price": Object {
               "currency": "USD",
@@ -57,7 +71,7 @@ exports[`props.shipment is truthy 1`] = `
           },
         }
       }
-      title="FOO_TITLE Shipments"
+      title="{{title}} Shipments"
       tooltip="Shipments requested from the open or client shop. Investigate the shipment data and evaluate whether to accept, edit or decline the shipment"
       userView={true}
     />

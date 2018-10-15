@@ -18,6 +18,17 @@ jest.mock('../QuantityInput/QuantityInput', () => {
     default: QuantityInput
   }
 })
+
+jest.mock('uuid', () => {
+  let counter = -1
+  const v4 = () => {
+    counter += 1
+
+    return `RANDOM_KEY_${counter}`
+  }
+
+  return { v4 }
+})
 // eslint-disable-next-line import/first
 import ShipmentCargoItems from './ShipmentCargoItems'
 

@@ -44,7 +44,7 @@ exports[`shallow rendering 1`] = `
           <input
             name="search"
             onChange={[Function]}
-            placeholder="Search route"
+            placeholder="Search Route"
             type="text"
           />
         </div>

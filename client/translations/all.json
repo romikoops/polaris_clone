@@ -74,7 +74,7 @@
         "insurance": "Insurance",
         "itinerary": "Itinerary",
         "miscellaneous": "Miscellaneous",
-        "newContact": "NEW CONTACT",
+        "newContact": "New Contact",
         "nonEmpty": "Must not be empty",
         "noBlank": "Must not be blank",
         "notes": "Notes",
@@ -119,6 +119,8 @@
         "hi": "Hi",
         "oceanFreight": "Ocean Freight",
         "airFreight": "Air Freight",
+        "railFreight": "Rail Freight",
+        "truckFreight": "Road Freight",
         "add": "Add",
         "set": "Set",
         "delete": "Delete",
@@ -147,7 +149,21 @@
         "moreInfo": "More info",
         "voyageCode": "Voyage Code",
         "vesselName": "Vessel Name",
-        "select": "Select"
+        "select": "Select",
+        "save": "Save",
+        "close": "Close",
+        "routing": "Routing",
+        "feeCode": "Fee Code",
+        "cargo_item": "Cargo Item",
+        "container": "Container",
+        "pricings": "Pricings",
+        "true": "True",
+        "false": "False",
+        "rateBasis": "Rate Basis",
+        "minimum": "Minimum",
+        "modeOfTransport": "Mode of Transport",
+        "rate": "Rate"
+
       },
       "admin": {
         "lowerLimit": "Lower Limit",
@@ -221,10 +237,12 @@
         "pleaseWait": "Please wait....",
         "download": "Download",
         "notUploaded": "Not uploaded",
-        "uploadNewDocument": "Upload New Document"
+        "uploadNewDocument": "Upload New Document",
+        "shipmentPDF": "Download shipment pdf"
       },
       "account": {
         "signInFirst": "Sign In First",
+        "dedicated": "Dedicated",
         "unauthenticated": "Unauthenticated users can't access the account page.",
         "dashboard": "Dashboard",
         "shipments": "Shipments",
@@ -253,7 +271,20 @@
         "shipper": "Shipper",
         "consignee": "Consignee",
         "notifyees": "Notifyees",
-        "accountHolder": "Account Holder"
+        "accountHolder": "Account Holder",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "setPassword": "Set Password",
+        "titleShipments": "{{title}} Shipments",
+        "dataManager": "Data Manager",
+        "mostUsedContacts": "Most used Contacts",
+        "numPricings": "No. Pricings",
+        "effectiveDate": "Effective Date",
+        "expirationDate": "Expiration Date",
+        "carrier": "Carrier",
+        "loadType": "Load Type",
+        "request": "Request",
+        "pricings": "Pricings"
       },
       "cargo": {
         "cargoDetails": "Cargo Details",
@@ -264,7 +295,7 @@
         "clearanceNoHead": "No, I do not want",
         "clearanceNoTail": "to handle my customs clearance",
         "clearanceTail": "to handle my customs clearance",
-        "conditionFirst": "When you ship goods from outside the European Union (EU), you may be charged customs duty and/or VAT. You can either handle the customs on your own, or have Greencarrier handle it for you.",
+        "conditionFirst": "When you ship goods from outside the European Union (EU), you may be charged customs duty and/or VAT. You can either handle the customs on your own, or have it handled for you.",
         "conditionSecond": "To cover our costs when we present your goods to the customs authorities – and pay any customs duty or VAT due on your behalf – we charge a clearance / handling fee. The fee depends on the value of the goods you are shipping, and can be found here to the right.",
         "costEffective": "A cost effective and simple way to cover for physical loss or damage to goods in transit.",
         "customsHandling": "Customs Handling",
@@ -316,7 +347,9 @@
         "truckingRate": "Trucking Rate",
         "container": "Container",
         "containers": "Containers",
-        "cargoItems": "Cargo Items"
+        "cargoItems": "Cargo Items",
+        "yourCargo": "Your Cargo",
+        "fillFormCargoDetails": "(Fill the form with your cargo details)"
       },
       "bookconf": {
         "_component": "BookingConfirmation",
@@ -350,7 +383,8 @@
         "followLink": "To confirm your email, please follow the link sent via email upon registration",
         "contactUs": "Do not hesitate to contact us either through the message center or your account manager",
         "showDetails": "Show Details",
-        "notUploaded": "Not Uploaded"
+        "notUploaded": "Not Uploaded",
+        "bookingPlacedAt": "Booking Placed at:"
       },
       "landing": {
         "adminDashboard": "Admin Dashboard",
@@ -441,7 +475,15 @@
         "originDocumentation": "Origin Documentation",
         "destinationDocumentation": "Destination Documentation",
         "freightRate": "Freight rate",
-        "truckingRate": "Trucking rate"
+        "truckingRate": "Trucking rate",
+        "shipmentSummary": "Shipment Summary",
+        "modeOfTransport": "Mode of Transport",
+        "ttNoGuarantee": "* Transit time (T/T) not guaranteed",
+        "invoicedLocalCurrency": "** You will be invoiced in local currency based on the exchange rate valid at the time",
+        "availableRoutes": "Available Routes",
+        "searchRoute": "Search Route",
+        "quotedShipments": "Quoted Shipments",
+        "searchShipments": "Search Shipments"
       },
       "user": {
         "newAlias": "New Alias",
@@ -467,7 +509,9 @@
         "addressDetails": "Address Details",
         "changeMyPassword": "Change my Password",
         "checkForPassword": "Please check your email for a link to change your password.",
-        "yourData": "Your Data"
+        "yourData": "Your Data",
+        "companyDetails": "Company Details",
+        "userBilling": "User Billing"
       },
       "imc": {
         "imcTerms": "ItsMyCargo GMBH Terms and Conditions",
@@ -485,14 +529,14 @@
         "fourChars": "Must be at least four characters long",
         "noRoutes": "No routes from this address",
         "noRoutesFound": "No Routes Found",
-        "noRoutesBetween": "No routes found between",
+        "noRoutesBetween": "No routes found between {{origin}} and {{destination}}",
         "maxValue": "Value must be less than",
         "nonNegative": "Must be greater than 0",
         "maxWeight": "Maximum weight is",
         "maxHeight": "Maximum height is",
         "maxLength": "Maximum length is",
-        "noRoutesFrom": "No routes found from",
-        "noRoutesTo": "No routes found to",
+        "noRoutesFrom": "No routes found from {{origin}}",
+        "noRoutesTo": "No routes found to {{destination}}",
         "maxWidth": "Maximum width is",
         "invalidResetPasswordOne": "You attempted to submit an invalid reset password. ",
         "invalidResetPasswordTwo": "If you wish to reset your password, ", 
@@ -501,7 +545,9 @@
         "errorOccured": "An Error Occured",
         "ohNo": "Oh no!",
         "somethingWrong": "Something has gone wrong! A message has been sent to the support team and will be addressed shortly!",
-        "pleaseRetry": "Please retry and if this error keeps happening please contact your store representative"
+        "pleaseRetry": "Please retry and if this error keeps happening please contact your store representative",
+        "contactExists": "Contact already exists.",
+        "didYouMean": "Did you mean"
       },
       "trucking": {
         "isNotAvailableLocal": " is not available in ",
@@ -569,7 +615,9 @@
         "LCL": "LCL",
         "FCL": "FCL",
         "kg": "kg",
-        "weight": "{{item}} kg"
+        "weight": "{{item}} kg",
+        "meterCubed": "m³"
+
       },
       "quote": {
         "viewPriceBreakdown": "View Price Breakdown",

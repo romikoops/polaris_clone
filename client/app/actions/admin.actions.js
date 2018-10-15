@@ -2,7 +2,6 @@ import { push } from 'react-router-redux'
 import { adminConstants } from '../constants/admin.constants'
 import { adminService } from '../services/admin.service'
 import { alertActions, documentActions } from './'
-// import { Promise } from 'es6-promise-promise';
 
 function getHubs (redirect, page, hubType, country, status) {
   function request (hubData) {
@@ -1014,6 +1013,31 @@ function saveItineraryNotes (itineraryId, notes) {
   }
 }
 
+function deleteItineraryNote (itineraryId, noteId) {
+  function request (itinerary) {
+    return { type: adminConstants.DELETE_ITINERARY_NOTES_REQUEST, payload: itinerary }
+  }
+  function success (itinerary) {
+    return { type: adminConstants.DELETE_ITINERARY_NOTES_SUCCESS, payload: itinerary }
+  }
+  function failure (error) {
+    return { type: adminConstants.DELETE_ITINERARY_NOTES_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+    adminService.deleteItineraryNote(itineraryId, noteId).then(
+      (data) => {
+        dispatch(success(data.data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function getItinerary (id, redirect) {
   function request (routeData) {
     return { type: adminConstants.GET_ROUTE_REQUEST, payload: routeData }
@@ -1739,6 +1763,7 @@ export const adminActions = {
   deleteTrip,
   deleteClient,
   saveItineraryNotes,
+  deleteItineraryNote,
   editTruckingPrice,
   editCustomsFees,
   updateHubMandatoryCharges,

@@ -28,7 +28,7 @@ function ShipmentAggregatedCargo ({
           {...sharedProps}
         />
         <div className="flex-10 layout-row layout-align-center-center">
-          m³
+          {t('acronym:meterCubed')}
         </div>
       </div>
       <div className={`${styles.input_box} flex-45 offset-10 layout-row`}>
@@ -42,7 +42,7 @@ function ShipmentAggregatedCargo ({
           {...sharedProps}
         />
         <div className="flex-10 layout-row layout-align-center-center">
-          Kg
+          {t('acronym:kg')}
         </div>
       </div>
     </div>
@@ -71,4 +71,4 @@ ShipmentAggregatedCargo.defaultProps = {
   nextStageAttempt: false
 }
 
-export default translate('cargo')(ShipmentAggregatedCargo)
+export default translate(['cargo', 'acronym'])(ShipmentAggregatedCargo)

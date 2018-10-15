@@ -8,11 +8,13 @@ function getAll (redirect) {
   function request () {
     return { type: userConstants.GETALL_REQUEST }
   }
+
   function success (response) {
     const payload = response.data
 
     return { type: userConstants.GETALL_SUCCESS, payload }
   }
+
   function failure (error) {
     return { type: userConstants.GETALL_FAILURE, error }
   }
@@ -38,9 +40,11 @@ function _delete (id) {
   function request (reqId) {
     return { type: userConstants.DELETE_REQUEST, reqId }
   }
+
   function success (respId) {
     return { type: userConstants.DELETE_SUCCESS, respId }
   }
+
   function failure (failId, error) {
     return { type: userConstants.DELETE_FAILURE, failId, error }
   }
@@ -62,9 +66,11 @@ function searchShipments (text, target, page, perPage) {
   function request (hubData) {
     return { type: userConstants.GET_SHIPMENTS_PAGE_REQUEST, payload: hubData }
   }
+
   function success (hubData) {
     return { type: userConstants.GET_SHIPMENTS_PAGE_SUCCESS, payload: hubData }
   }
+
   function failure (error) {
     return { type: userConstants.GET_SHIPMENTS_PAGE_FAILURE, error }
   }
@@ -87,9 +93,11 @@ function searchContacts (text, page, perPage) {
   function request (contactData) {
     return { type: userConstants.GET_CONTACTS_REQUEST, payload: contactData }
   }
+
   function success (contactData) {
     return { type: userConstants.GET_CONTACTS_SUCCESS, payload: contactData }
   }
+
   function failure (error) {
     return { type: userConstants.GET_CONTACTS_FAILURE, error }
   }
@@ -113,11 +121,13 @@ function getLocations (user, redirect) {
   function request () {
     return { type: userConstants.GETLOCATIONS_REQUEST }
   }
+
   function success (response) {
     const payload = response.data
 
     return { type: userConstants.GETLOCATIONS_SUCCESS, payload }
   }
+
   function failure (error) {
     return { type: userConstants.GETLOCATIONS_FAILURE, error }
   }
@@ -141,11 +151,13 @@ function optOut (userId, target) {
   function request () {
     return { type: userConstants.OPT_OUT_REQUEST }
   }
+
   function success (response) {
     const payload = response.data
 
     return { type: userConstants.OPT_OUT_SUCCESS, payload }
   }
+
   function failure (error) {
     return { type: userConstants.OPT_OUT_FAILURE, error }
   }
@@ -175,11 +187,13 @@ function destroyLocation (userId, locationId, redirect) {
   function request () {
     return { type: userConstants.DESTROYLOCATION_REQUEST }
   }
+
   function success (response) {
     const payload = response.data
 
     return { type: userConstants.DESTROYLOCATION_SUCCESS, payload }
   }
+
   function failure (error) {
     return { type: userConstants.DESTROYLOCATION_FAILURE, error }
   }
@@ -203,11 +217,13 @@ function makePrimary (userId, locationId, redirect) {
   function request () {
     return { type: userConstants.MAKEPRIMARY_REQUEST }
   }
+
   function success (response) {
     const payload = response.data
 
     return { type: userConstants.MAKEPRIMARY_SUCCESS, payload }
   }
+
   function failure (error) {
     return { type: userConstants.MAKEPRIMARY_FAILURE, error }
   }
@@ -231,9 +247,11 @@ function getShipments (pages, perPage, redirect) {
   function request (shipmentData) {
     return { type: userConstants.GET_SHIPMENTS_REQUEST, payload: shipmentData }
   }
+
   function success (shipmentData) {
     return { type: userConstants.GET_SHIPMENTS_SUCCESS, payload: shipmentData }
   }
+
   function failure (error) {
     return { type: userConstants.GET_SHIPMENTS_FAILURE, error }
   }
@@ -260,9 +278,11 @@ function deltaShipmentsPage (target, page, perPage) {
   function request (shipmentData) {
     return { type: userConstants.GET_SHIPMENTS_PAGE_REQUEST, payload: shipmentData }
   }
+
   function success (shipmentData) {
     return { type: userConstants.GET_SHIPMENTS_PAGE_SUCCESS, payload: shipmentData }
   }
+
   function failure (error) {
     return { type: userConstants.GET_SHIPMENTS_PAGE_FAILURE, error }
   }
@@ -286,9 +306,11 @@ function getHubs (id) {
   function request (hubData) {
     return { type: userConstants.GET_HUBS_REQUEST, payload: hubData }
   }
+
   function success (hubData) {
     return { type: userConstants.GET_HUBS_SUCCESS, payload: hubData }
   }
+
   function failure (error) {
     return { type: userConstants.GET_HUBS_FAILURE, error }
   }
@@ -312,9 +334,11 @@ function getShipment (id, redirect) {
   function request (shipmentData) {
     return { type: userConstants.USER_GET_SHIPMENT_REQUEST, payload: shipmentData }
   }
+
   function success (shipmentData) {
     return { type: userConstants.USER_GET_SHIPMENT_SUCCESS, payload: shipmentData }
   }
+
   function failure (error) {
     return { type: userConstants.USER_GET_SHIPMENT_FAILURE, error }
   }
@@ -346,9 +370,11 @@ function getDashboard (id, redirect) {
   function request (dashData) {
     return { type: userConstants.GET_DASHBOARD_REQUEST, payload: dashData }
   }
+
   function success (dashData) {
     return { type: userConstants.GET_DASHBOARD_SUCCESS, payload: dashData }
   }
+
   function failure (error) {
     return { type: userConstants.GET_DASHBOARD_FAILURE, error }
   }
@@ -375,9 +401,11 @@ function deleteDocument (id) {
   function request (deleteId) {
     return { type: userConstants.DELETE_DOCUMENT_REQUEST, payload: deleteId }
   }
+
   function success (deleteId) {
     return { type: userConstants.DELETE_DOCUMENT_SUCCESS, payload: deleteId }
   }
+
   function failure (error) {
     return { type: userConstants.DELETE_DOCUMENT_FAILURE, error }
   }
@@ -401,9 +429,11 @@ function uploadDocument (doc, type, url) {
   function request (file) {
     return { type: userConstants.UPLOAD_DOCUMENT_REQUEST, payload: file }
   }
+
   function success (file) {
     return { type: userConstants.UPLOAD_DOCUMENT_SUCCESS, payload: file.data }
   }
+
   function failure (error) {
     return { type: userConstants.UPLOAD_DOCUMENT_FAILURE, error }
   }
@@ -427,9 +457,11 @@ function getContact (id, redirect) {
   function request (contentData) {
     return { type: userConstants.GET_CONTACT_REQUEST, payload: contentData }
   }
+
   function success (contentData) {
     return { type: userConstants.GET_CONTACT_SUCCESS, payload: contentData }
   }
+
   function failure (error) {
     return { type: userConstants.GET_CONTACT_FAILURE, error }
   }
@@ -456,9 +488,11 @@ function getContacts (params, redirect) {
   function request () {
     return { type: userConstants.GET_CONTACTS_REQUEST }
   }
+
   function success (contactsData) {
     return { type: userConstants.GET_CONTACTS_SUCCESS, payload: contactsData }
   }
+
   function failure (error) {
     return { type: userConstants.GET_CONTACTS_FAILURE, error }
   }
@@ -485,9 +519,11 @@ function updateContact (data, redirect) {
   function request (contactData) {
     return { type: userConstants.UPDATE_CONTACT_REQUEST, payload: contactData }
   }
+
   function success (contactData) {
     return { type: userConstants.UPDATE_CONTACT_SUCCESS, payload: contactData }
   }
+
   function failure (error) {
     return { type: userConstants.UPDATE_CONTACT_FAILURE, error }
   }
@@ -514,9 +550,11 @@ function newUserLocation (userId, data) {
   function request (userlocData) {
     return { type: userConstants.NEW_USER_LOCATION_REQUEST, payload: userlocData }
   }
+
   function success (userlocData) {
     return { type: userConstants.NEW_USER_LOCATION_SUCCESS, payload: userlocData }
   }
+
   function failure (error) {
     return { type: userConstants.NEW_USER_LOCATION_FAILURE, error }
   }
@@ -539,9 +577,11 @@ function editUserLocation (userId, data) {
   function request (userlocData) {
     return { type: userConstants.EDIT_USER_LOCATION_REQUEST, payload: userlocData }
   }
+
   function success (userlocData) {
     return { type: userConstants.EDIT_USER_LOCATION_SUCCESS, payload: userlocData }
   }
+
   function failure (error) {
     return { type: userConstants.EDIT_USER_LOCATION_FAILURE, error }
   }
@@ -565,9 +605,11 @@ function newContact (data) {
   function request (newContactData) {
     return { type: userConstants.NEW_CONTACT_REQUEST, payload: newContactData }
   }
+
   function success (newContactData) {
     return { type: userConstants.NEW_CONTACT_SUCCESS, payload: newContactData }
   }
+
   function failure (error) {
     return { type: userConstants.NEW_CONTACT_FAILURE, error }
   }
@@ -591,9 +633,11 @@ function newAlias (data) {
   function request (newAliasData) {
     return { type: userConstants.NEW_ALIAS_REQUEST, payload: newAliasData }
   }
+
   function success (newAliasData) {
     return { type: userConstants.NEW_ALIAS_SUCCESS, payload: newAliasData }
   }
+
   function failure (error) {
     return { type: userConstants.NEW_ALIAS_FAILURE, error }
   }
@@ -617,9 +661,11 @@ function deleteAlias (aliasId) {
   function request (newAliasData) {
     return { type: userConstants.DELETE_ALIAS_REQUEST, payload: newAliasData }
   }
+
   function success (newAliasData) {
     return { type: userConstants.DELETE_ALIAS_SUCCESS, payload: newAliasData }
   }
+
   function failure (error) {
     return { type: userConstants.DELETE_ALIAS_FAILURE, error }
   }
@@ -643,9 +689,11 @@ function deleteContactAddress (addressId) {
   function request (delAddress) {
     return { type: userConstants.DELETE_CONTACT_ADDRESS_REQUEST, payload: delAddress }
   }
+
   function success (delAddress) {
     return { type: userConstants.DELETE_CONTACT_ADDRESS_SUCCESS, payload: delAddress }
   }
+
   function failure (error) {
     return { type: userConstants.DELETE_CONTACT_ADDRESS_FAILURE, error }
   }
@@ -669,9 +717,11 @@ function saveAddressEdit (address) {
   function request (addressData) {
     return { type: userConstants.UPDATE_CONTACT_ADDRESS_REQUEST, payload: addressData }
   }
+
   function success (addressData) {
     return { type: userConstants.UPDATE_CONTACT_ADDRESS_SUCCESS, payload: addressData }
   }
+
   function failure (error) {
     return { type: userConstants.UPDATE_CONTACT_ADDRESS_FAILURE, error }
   }
@@ -682,6 +732,91 @@ function saveAddressEdit (address) {
     userService.saveAddressEdit(address).then(
       (data) => {
         dispatch(success(data.data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
+function getPricings (redirect) {
+  function request (pricingData) {
+    return { type: userConstants.GET_PRICINGS_REQUEST, payload: pricingData }
+  }
+
+  function success (pricingData) {
+    return { type: userConstants.GET_PRICINGS_SUCCESS, payload: pricingData.data }
+  }
+
+  function failure (error) {
+    return { type: userConstants.GET_PRICINGS_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    userService.getPricings().then(
+      (data) => {
+        dispatch(success(data))
+        if (redirect) {
+          dispatch(push('/account/pricings'))
+        }
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function getPricingsForItinerary (id) {
+  function request (pricingData) {
+    return { type: userConstants.GET_ITINERARY_PRICINGS_REQUEST, payload: pricingData }
+  }
+
+  function success (pricingData) {
+    return { type: userConstants.GET_ITINERARY_PRICINGS_SUCCESS, payload: pricingData.data }
+  }
+
+  function failure (error) {
+    return { type: userConstants.GET_ITINERARY_PRICINGS_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    userService.getPricingsForItinerary(id).then(
+      (data) => {
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function requestPricing (req) {
+  function request (pricingData) {
+    return { type: userConstants.SEND_DEDICATED_PRICINGS_REQUEST, payload: pricingData }
+  }
+
+  function success (pricingData) {
+    return { type: userConstants.SEND_DEDICATED_PRICINGS_SUCCESS, payload: pricingData.data }
+  }
+
+  function failure (error) {
+    return { type: userConstants.SEND_DEDICATED_PRICINGS_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    userService.requestPricing(req).then(
+      (data) => {
+        dispatch(success(data))
       },
       (error) => {
         dispatch(failure(error))
@@ -739,7 +874,10 @@ export const userActions = {
   reuseShipment,
   searchShipments,
   searchContacts,
-  deltaShipmentsPage
+  deltaShipmentsPage,
+  getPricings,
+  getPricingsForItinerary,
+  requestPricing
 
 }
 

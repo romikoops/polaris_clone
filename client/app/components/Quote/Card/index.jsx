@@ -267,7 +267,7 @@ class QuoteCard extends PureComponent {
 
     return (
       <div
-        className={`flex-100 layout-row layout-wrap ${styles.wrapper} ${this.state.isChecked ? styles.wrapper_selected : ''}`}
+        className={`flex-100 layout-row layout-wrap offer_result ${styles.wrapper} ${this.state.isChecked ? styles.wrapper_selected : ''}`}
       >
         {this.state.isChecked ? (
           <div className={`${styles.wrapper_gradient}`}>
@@ -289,6 +289,7 @@ class QuoteCard extends PureComponent {
               <ChargeIcons
                 theme={theme}
                 tenant={tenant}
+                mot={result.meta.mode_of_transport}
                 onCarriage={quote.trucking_on}
                 preCarriage={quote.trucking_pre}
                 originFees={quote.export}

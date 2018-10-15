@@ -11,7 +11,7 @@ exports[`shallow render 1`] = `
         className="note_route flex-100 layout-row layout-align-start-center"
       >
         <div
-          className="flex-none layout-row layout-align-center-center"
+          className="flex-100 layout-row layout-align-center-center"
         >
           <div
             className="button important flex-none layout-row layout-align-center-center pointy"
@@ -25,13 +25,17 @@ exports[`shallow render 1`] = `
           >
             FOO_HEADER
           </span>
+          <i
+            className="fa fa-trash pointy flex-10"
+            onClick={[Function]}
+          />
         </div>
       </div>
       <div
         className="flex-100 layout-row layout-align-start-center"
       >
         <p
-          className="flex-90"
+          className="flex-95"
         />
       </div>
     </div>

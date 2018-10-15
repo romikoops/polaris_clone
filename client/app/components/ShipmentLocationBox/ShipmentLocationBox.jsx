@@ -359,22 +359,22 @@ class ShipmentLocationBox extends Component {
     if (isDefined(origin) && isDefined(destination)) {
       errors.push({
         type: 'error',
-        text: `${t('errors:noRoutesBetween')} ${origin} ${t('common:and')} ${destination}`
+        text: t('errors:noRoutesBetween', { origin, destination })
       })
     } else if (isDefined(origin) && !isDefined(destination)) {
       errors.push({
         type: 'error',
-        text: `${t('errors:noRoutesFrom')} ${origin}`
+        text: t('errors:noRoutesFrom', { origin })
       })
     } else if (!origin && destination) {
       errors.push({
         type: 'error',
-        text: `${t('errors:noRoutesTo')} ${destination}`
+        text: t('errors:noRoutesTo', { destination })
       })
     } else {
       errors.push({
         type: 'error',
-        text: `${t('errors:noRoutesFound')}`
+        text: t('errors:noRoutesFound')
       })
     }
     shipmentDispatch.setError({ stage: 'stage2', errors })

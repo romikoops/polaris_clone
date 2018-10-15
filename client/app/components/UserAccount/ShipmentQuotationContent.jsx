@@ -19,14 +19,13 @@ import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import ShipmentNotes from '../ShipmentNotes'
 
 class ShipmentQuotationContent extends Component {
-
   constructor (props) {
     super(props)
     this.state = {
       expander: {}
     }
   }
-  
+
   toggleExpander (key) {
     this.setState({
       expander: {
@@ -111,7 +110,7 @@ class ShipmentQuotationContent extends Component {
         wrapperTabs="layout-row flex-100 margin_bottom"
       >
         <Tab
-          tabTitle="Overview"
+          tabTitle={t('common:overview')}
           theme={theme}
         >
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">

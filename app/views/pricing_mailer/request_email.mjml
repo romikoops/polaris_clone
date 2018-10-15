@@ -1,0 +1,73 @@
+<% primary_color = @user.tenant.theme["colors"]["primary"] %>
+<mj-wrapper border="1px solid #f3f3f3" border-top="none" padding-top="60px">
+
+<mj-section padding="0px">
+    <mj-column padding="0 2.5%">
+      <mj-text line-height="24px" font-size="27px;" padding-left="34px">
+        <p>
+          Hello!
+        </p> 
+      </mj-text>
+    </mj-column>
+    <mj-column>
+        <mj-image width="200px" src="<%= @theme["logoLarge"] %>" />
+      </mj-column>
+  </mj-section>
+  <mj-spacer height="25px" />
+  <%# <mj-divider border-width="1px" border-style="solid" border-color="#e10f21" width="90%" /> %>
+  <mj-section full-width="full-width" padding="0px">
+    <mj-column width="100%" padding="0 2.5%">
+      <mj-text line-height="24px">
+        <p>
+          <%= @user.full_name %> from <strong><%= @user.company_name %></strong> <br>
+          has requested a dedicated rate for the following route:
+        </p> 
+      </mj-text>
+    </mj-column>
+  </mj-section>
+
+  <mj-section width="100%" background-color="#f3f3f3" margin="40px">
+    <mj-group>
+      <mj-column width="130px">
+        <% if @itinerary.mode_of_transport == "ocean" %>
+          <% mot_link = "https://assets.itsmycargo.com/assets/icons/anchor-solid-1.png" %>
+        <% end %>
+        <% if @itinerary.mode_of_transport == "air" %>
+          <% mot_link = "https://assets.itsmycargo.com/assets/icons/plane-solid-1.png" %>
+        <% end %>
+        <mj-image padding-top="20px" padding-bottom="20px" padding-left="0" padding-right="0" width="30px" src="<%= mot_link %>"></mj-image>
+      </mj-column>
+      <mj-column>
+        <mj-text line-height="16px" padding="0" margin-left="-40px" font-size="18px">
+          <p>Route: <strong><%= @itinerary.name %></strong></p>
+          <p>Mode of Transport: <strong><%= @itinerary.mode_of_transport.capitalize %></strong></p>
+          <p>Service Level: <strong><%= @pricing.tenant_vehicle.name.capitalize %></strong> </p>
+          <% carrier = @pricing.tenant_vehicle&.carrier %>
+          <% if carrier %>
+            <p>Carrier: <strong><%= @pricing.tenant_vehicle.carrier.name %></strong> </p>
+          <% end %>
+          <p>Load Type: <strong><%= @pricing.transport_category.load_type == 'cargo_item' ? 'Cargo Item' : 'Container' %></strong> </p>
+        </mj-text>
+      </mj-column>
+      <mj-column>
+        <mj-image width="30px" src=""></mj-image>        
+      </mj-column>
+      </mj-group>
+  </mj-section>
+  <mj-section full-width="full-width" padding="0px">
+    <mj-column width="100%" padding="0 2.5%">
+      <mj-text line-height="24px">
+        <p>
+          To assign <%= @user.full_name %> a new pricing proceed to the Pricings section of the Admin Dashboard and upload a Dedicated Pricing.
+        </p> 
+      </mj-text>
+    </mj-column>
+  </mj-section>
+  <mj-section full-width="full-width">
+    <mj-column>
+      <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
+    </mj-column>
+  </mj-section>
+  
+</mj-wrapper>
+<%= render "closing_lines", user: @user %>

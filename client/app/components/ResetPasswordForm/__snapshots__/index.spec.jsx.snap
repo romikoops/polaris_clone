@@ -155,9 +155,7 @@ exports[`shallow rendering 1`] = `
             }
           }
         >
-          By clicking 
-          'Set Password'
-          , you will reset the password of your ItsMyCargo account.
+          By clicking 'Set Password', you will reset the password of your ItsMyCargo account.
         </p>
         <div
           className="form_group_submit_btn layout-row layout-align-center-center"
@@ -165,6 +163,7 @@ exports[`shallow rendering 1`] = `
           <RoundButton
             active={true}
             back={false}
+            classNames=""
             disabled={false}
             handleDisabled={null}
             handleNext={null}
@@ -361,9 +360,7 @@ exports[`state.focus.password_confirmation is truthy 1`] = `
             }
           }
         >
-          By clicking 
-          'Set Password'
-          , you will reset the password of your ItsMyCargo account.
+          By clicking 'Set Password', you will reset the password of your ItsMyCargo account.
         </p>
         <div
           className="form_group_submit_btn layout-row layout-align-center-center"
@@ -371,6 +368,7 @@ exports[`state.focus.password_confirmation is truthy 1`] = `
           <RoundButton
             active={true}
             back={false}
+            classNames=""
             disabled={false}
             handleDisabled={null}
             handleNext={null}
@@ -553,9 +551,7 @@ exports[`state.settingPassword is true 1`] = `
             }
           }
         >
-          By clicking 
-          'Set Password'
-          , you will reset the password of your ItsMyCargo account.
+          By clicking 'Set Password', you will reset the password of your ItsMyCargo account.
         </p>
         <div
           className="form_group_submit_btn layout-row layout-align-center-center"
@@ -563,6 +559,7 @@ exports[`state.settingPassword is true 1`] = `
           <RoundButton
             active={true}
             back={false}
+            classNames=""
             disabled={false}
             handleDisabled={null}
             handleNext={null}
@@ -756,9 +753,7 @@ exports[`theme is falsy 1`] = `
             }
           }
         >
-          By clicking 
-          'Set Password'
-          , you will reset the password of your ItsMyCargo account.
+          By clicking 'Set Password', you will reset the password of your ItsMyCargo account.
         </p>
         <div
           className="form_group_submit_btn layout-row layout-align-center-center"
@@ -766,6 +761,7 @@ exports[`theme is falsy 1`] = `
           <RoundButton
             active={true}
             back={false}
+            classNames=""
             disabled={false}
             handleDisabled={null}
             handleNext={null}

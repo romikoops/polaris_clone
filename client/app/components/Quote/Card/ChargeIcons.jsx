@@ -1,7 +1,10 @@
 import React from 'react'
+import ReactTooltip from 'react-tooltip'
+import { v4 as uuidV4 } from 'uuid'
 import styles from './index.scss'
 import PropTypes from '../../../prop-types'
-import { gradientTextGenerator, determineSpecialism, switchIcon } from '../../../helpers'
+import { gradientTextGenerator, switchIcon } from '../../../helpers'
+import { tooltips } from '../../../constants'
 
 export function ChargeIcons ({
   theme,
@@ -9,9 +12,9 @@ export function ChargeIcons ({
   preCarriage,
   originFees,
   destinationFees,
-  tenant
+  mot
 }) {
-  const speciality = determineSpecialism(tenant.data.scope.modes_of_transport)
+  const tooltipId = uuidV4()
 
   const selectedStyle =
     theme && theme.colors
@@ -28,44 +31,68 @@ export function ChargeIcons ({
   const freightStyle = selectedStyle
 
   const preCarriageFeesTile = (
-    <div className={`${styles.fee_tile} flex layout-column layout-align-none-center`}>
+    <div className={`${styles.fee_tile} flex-none layout-column layout-align-none-center`}>
       <div className="flex layout-row layout-align-center-start width_100">
-        <i className="fa fa-truck clip flex-none" style={preCarriageStyle} />
+        <i
+          className="fa fa-truck clip flex-none"
+          style={preCarriageStyle}
+          data-tip={tooltips.charge_icons.pre_carriage}
+          data-for={tooltipId}
+        />
       </div>
+      <ReactTooltip id={tooltipId} className={styles.tooltip} effect="solid" />
     </div>
   )
   const onCarriageFeesTile = (
-    <div className={`${styles.fee_tile} flex layout-column layout-align-none-center`}>
+    <div className={`${styles.fee_tile} flex-none layout-column layout-align-none-center`}>
       <div className="flex layout-row layout-align-center-start width_100">
-        <i className={`fa fa-truck clip flex-none ${styles.dest_truck}`} style={onCarriageStyle} />
+        <i
+          className={`fa fa-truck clip flex-none flip_icon_horizontal ${styles.no_flip}`}
+          style={onCarriageStyle}
+          data-tip={tooltips.charge_icons.on_carriage}
+          data-for={tooltipId}
+        />
       </div>
+      <ReactTooltip id={tooltipId} className={styles.tooltip} effect="solid" />
     </div>
   )
   const originFeesTile = (
-    <div className={`${styles.fee_tile} flex layout-column layout-align-none-center`}>
+    <div className={`${styles.fee_tile} flex-none layout-column layout-align-none-center`}>
       <div className="flex layout-row layout-align-center-start width_100">
-        <i className="fa fa-file-text clip flex-none" style={originDocumentStyle} />
+        <i
+          className="fa fa-file-text clip flex-none"
+          style={originDocumentStyle}
+          data-tip={tooltips.charge_icons.documentation.origin}
+          data-for={tooltipId}
+        />
       </div>
+      <ReactTooltip id={tooltipId} className={styles.tooltip} effect="solid" />
     </div>
   )
   const destinationFeesTile = (
-    <div className={`${styles.fee_tile} flex layout-column layout-align-none-center`}>
+    <div className={`${styles.fee_tile} flex-none layout-column layout-align-none-center`}>
       <div className="flex layout-row layout-align-center-start width_100">
-        <i className="fa fa-file-text-o clip flex-none" style={destinationDocumentStyle} />
+        <i
+          className="fa fa-file-text-o clip flex-none"
+          style={destinationDocumentStyle}
+          data-tip={tooltips.charge_icons.documentation.destination}
+          data-for={tooltipId}
+        />
       </div>
+      <ReactTooltip id={tooltipId} className={styles.tooltip} effect="solid" />
     </div>
   )
   const freightFeesTile = (
-    <div className={`${styles.fee_tile} flex layout-column layout-align-none-center`}>
+    <div className={`${styles.fee_tile} flex-none layout-column layout-align-none-center`}>
       <div className="flex layout-row layout-align-center-start width_100">
-        {switchIcon(speciality, freightStyle)}
-        {/* <i className="fa fa-ship  flex-none" style={freightStyle} /> */}
+        {switchIcon(mot, freightStyle, '', { dataFor: tooltipId, dataTip: tooltips.charge_icons.freight })}
       </div>
+      <ReactTooltip id={tooltipId} className={styles.tooltip} effect="solid" />
     </div>
   )
 
   return (
-    <div className={`flex-100 layout-row layout-align-start-start  ${styles.incoterm_wrapper}`}>
+    <div className={`flex-100 layout-row layout-align-end-start ${styles.incoterm_wrapper}`}>
       {preCarriageFeesTile} {originFeesTile}
       {freightFeesTile} {destinationFeesTile}
       {onCarriageFeesTile}
@@ -75,6 +102,7 @@ export function ChargeIcons ({
 
 ChargeIcons.propTypes = {
   theme: PropTypes.theme,
+  mot: PropTypes.string,
   onCarriage: PropTypes.bool,
   preCarriage: PropTypes.bool,
   originFees: PropTypes.bool,
@@ -84,6 +112,7 @@ ChargeIcons.propTypes = {
 
 ChargeIcons.defaultProps = {
   theme: null,
+  mot: '',
   onCarriage: false,
   preCarriage: false,
   originFees: false,

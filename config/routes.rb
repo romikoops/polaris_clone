@@ -40,7 +40,9 @@ Rails.application.routes.draw do
       post 'hubs/process_csv', to: 'hubs#overwrite', as: :hubs_overwrite
       get  'hubs/sheet/download',  to: 'hubs#download_hubs'
       post 'user_managers/assign', to: 'user_managers#assign'
-      resources :itineraries, only: %i[index show create destroy]
+      resources :itineraries, only: %i[index show create destroy] do 
+        resources :notes, only: :delete
+      end
       post 'itineraries/:id/edit_notes', to: 'itineraries#edit_notes'
 
       resources :pricings, only: %i[index destroy]
@@ -114,6 +116,9 @@ Rails.application.routes.draw do
       get 'gdpr/download', to: 'users#download_gdpr'
       post 'opt_out/:target', to: 'users#opt_out'
     end
+    get 'pricings', to: 'pricings#index'
+    get 'pricings/:id', to: 'pricings#show'
+    post 'pricings/:id/request', to: 'pricings#request_dedicated_pricing'
     post 'notes/fetch', to: 'notes#get_notes'
     get 'search/shipments/:target', to: 'shipments#search_shipments'
     get 'shipments/pages/delta_page_handler', to: 'shipments#delta_page_handler'

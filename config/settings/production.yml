@@ -10,11 +10,11 @@ fixer:
 google:
   api_key: <%= Rails.application.credentials.production_google_api_key %>
 
+mailer:
+  queue: https://sqs.eu-central-1.amazonaws.com/003688427525/mailers
+
 smtp:
   host: smtp.sendgrid.net
   domain: itsmycargo.com
   username: apikey
   password: <%= Rails.application.credentials.production_smtp_password %>
-
-mailer:
-  queue: https://sqs.eu-central-1.amazonaws.com/003688427525/mailers

@@ -37,7 +37,7 @@ export const tooltips = {
   start_port_location: 'This is the start port of your shipment.',
   planned_pickup_date: 'Date states when cargo is ready for pickup',
   planned_dropoff_date:
-    'Date states when you chose to deliver cargo to Greencarrier appointed terminal',
+    'Date states when you chose to deliver cargo to appointed terminal',
   shipper_name: 'Example: John Smith, ItsMyCargo IVS.',
   shipper_street:
     'Example Tranehavegaard, 15. Note the address of the shipper is not always the same as the pick up location.',
@@ -86,7 +86,16 @@ export const tooltips = {
   customs_pre_carriage:
     'Export Customs is not applicable for shipments without delivery to the port (pre-carriage).',
   customs_on_carriage:
-    'Import Customs is not applicable for shipments without delivery from the port (on-carriage).'
+    'Import Customs is not applicable for shipments without delivery from the port (on-carriage).',
+  charge_icons: {
+    pre_carriage: 'Pick-up',
+    on_carriage: 'Delivery',
+    documentation: {
+      origin: 'Origin Documentation',
+      destination: 'Destination Documentation'
+    },
+    freight: 'Freight'
+  }
 }
 
 // Tool tips menu admin

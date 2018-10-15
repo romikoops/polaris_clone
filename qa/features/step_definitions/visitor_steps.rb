@@ -45,13 +45,37 @@ When('I have shipment of {int} {string} with weight of {int}kg') do |count, size
   control.sibling(class: 'Select-menu-outer').find('.Select-option', text: /\A#{count}\z/).click
 end
 
+When('I have shipment of {int} {string} with length {int}cm, width {int}cm, height {int}cm and weight {int}kg') do |count, colli, length, width, height, weight|
+  # Select colli type
+  elem = find("input[name='0-colliType']", visible: false)
+  control = elem.first(:xpath, './/..//..//..')
+  control.find(class: 'Select-arrow-zone').click
+
+  find('.Select-option', text: colli).click
+
+  # Length
+  fill_in '0-dimension_x', with: length
+
+  # Width
+  fill_in '0-dimension_y', with: width
+
+  # Height
+  fill_in '0-dimension_z', with: height
+
+  # Weight
+  fill_in '0-payload_in_kg', with: weight
+
+  # Quantity
+  fill_in '0-quantity', with: count
+end
+
 When('I confirm cargo does not contain dangerous good') do
   find("input[name='no_dangerous_goods_confirmation']", visible: false).sibling('span').click
 end
 
 Then('I expect to see offers') do
-  totals = all('span', text: 'Total')
-  expect(totals.count).to be >= 1
+  offers = all('.offer_result')
+  expect(offers.count).to be >= 1
 end
 
 When('I select first offer') do

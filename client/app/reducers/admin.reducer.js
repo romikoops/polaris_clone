@@ -557,7 +557,7 @@ export default function admin (state = {}, action) {
           ? state.dashboard.shipments.archived
           : []
       dashArchived.push(action.payload)
-      
+
       const shipment = state.shipment && state.shipment.shipment ? state.shipment.shipment : {}
       if (shipment) {
         shipment.status = 'archived'
@@ -1363,6 +1363,24 @@ export default function admin (state = {}, action) {
         loading: false
       }
     case adminConstants.SAVE_ITINERARY_NOTES_FAILURE:
+      return {
+        ...state,
+        error: { route: action.error },
+        loading: false
+      }
+
+    case adminConstants.DELETE_ITINERARY_NOTES_REQUEST:
+      return state
+    case adminConstants.DELETE_ITINERARY_NOTES_SUCCESS:
+      return {
+        ...state,
+        itinerary: {
+          ...state.itinerary,
+          notes: action.payload
+        },
+        loading: false
+      }
+    case adminConstants.DELETE_ITINERARY_NOTES_FAILURE:
       return {
         ...state,
         error: { route: action.error },

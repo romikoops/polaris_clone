@@ -254,6 +254,10 @@ class Itinerary < ApplicationRecord
     pricings.where.not(user_id: nil).count
   end
 
+  def user_has_pricing(user)
+    pricings.exists?(user_id: user.id)
+  end
+
   def pricing_count
     pricings.count
   end
@@ -419,7 +423,14 @@ class Itinerary < ApplicationRecord
       users_with_pricing: users_with_pricing,
       pricing_count:      pricing_count
     }.merge(attributes)
-    # as_json(new_options)
+  end
+
+  def as_user_pricing_json(user, options = {})
+    new_options = {
+      user_has_pricing: user_has_pricing(user),
+      pricing_count:      pricing_count
+    }
+    as_options_json(options).merge(new_options)
   end
 
   private

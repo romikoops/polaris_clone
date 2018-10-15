@@ -339,7 +339,7 @@ class UserShipmentView extends Component {
                   className="flex-100 layout-row layout-align-center-center"
                   style={{ paddingRight: '15px', paddingBottom: '14px', textAlign: 'center' }}
                 >
-                Download shipment pdf
+                  {t('doc:shipmentPDF')}
                 </p>
                 <DocumentsDownloader
                   theme={theme}
@@ -382,4 +382,4 @@ UserShipmentView.defaultProps = {
   tenant: {}
 }
 
-export default translate(['common', 'shipment', 'bookconf', 'cargo'])(UserShipmentView)
+export default translate(['common', 'shipment', 'bookconf', 'cargo', 'doc'])(UserShipmentView)

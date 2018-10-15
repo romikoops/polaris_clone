@@ -167,7 +167,6 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       f_shipments = finished_shipments.order(booking_placed_at: :desc).paginate(page: params[:finished_page], per_page: per_page)
       rj_shipments = rejected_shipments.order(booking_placed_at: :desc).paginate(page: params[:rejected_page], per_page: per_page)
       a_shipments = archived_shipments.order(booking_placed_at: :desc).paginate(page: params[:archived_page], per_page: per_page)
-
       num_pages = {
         finished:  f_shipments.total_pages,
         requested: r_shipments.total_pages,

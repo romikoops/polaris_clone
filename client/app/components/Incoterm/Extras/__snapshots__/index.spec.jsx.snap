@@ -24,7 +24,7 @@ exports[`props.feeHash is empty object 1`] = `
       className="flex layout-row layout-align-center-space-around layout-wrap"
     >
       <div
-        className="fee_text flex-90 layout-row layout-align-center-center "
+        className="fee_text flex-100 layout-row layout-align-center-center "
       >
         <h4
           className="flex-none no_m"
@@ -36,7 +36,7 @@ exports[`props.feeHash is empty object 1`] = `
         className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
       >
         <p
-          className="flex-none no_m letter_3 center"
+          className="flex-none no_m center"
         >
           None
         </p>
@@ -63,7 +63,7 @@ exports[`props.feeHash is empty object 1`] = `
       className="flex layout-row layout-align-center-space-around layout-wrap"
     >
       <div
-        className="fee_text flex-90 layout-row layout-align-center-center "
+        className="fee_text flex-100 layout-row layout-align-center-center "
       >
         <h4
           className="flex-none no_m"
@@ -75,7 +75,7 @@ exports[`props.feeHash is empty object 1`] = `
         className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
       >
         <p
-          className="flex-none no_m letter_3 center"
+          className="flex-none no_m center"
         >
           None
         </p>
@@ -102,7 +102,7 @@ exports[`props.feeHash is empty object 1`] = `
       className="flex layout-row layout-align-center-space-around layout-wrap"
     >
       <div
-        className="fee_text flex-90 layout-row layout-align-center-center "
+        className="fee_text flex-100 layout-row layout-align-center-center "
       >
         <h4
           className="flex-none no_m"
@@ -138,7 +138,7 @@ exports[`shallow render 1`] = `
       className="flex layout-row layout-align-center-space-around layout-wrap"
     >
       <div
-        className="fee_text flex-90 layout-row layout-align-center-center "
+        className="fee_text flex-100 layout-row layout-align-center-center "
       >
         <h4
           className="flex-none no_m"
@@ -150,12 +150,12 @@ exports[`shallow render 1`] = `
         className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
       >
         <p
-          className="flex-none no_m letter_3 center"
+          className="flex-none no_m center"
         >
           EUR
         </p>
         <p
-          className="flex-none no_m letter_3 center"
+          className="flex-none no_m center"
         >
           12.00
         </p>
@@ -181,7 +181,7 @@ exports[`shallow render 1`] = `
       className="flex layout-row layout-align-center-space-around layout-wrap"
     >
       <div
-        className="fee_text flex-90 layout-row layout-align-center-center "
+        className="fee_text flex-100 layout-row layout-align-center-center "
       >
         <h4
           className="flex-none no_m"
@@ -193,12 +193,12 @@ exports[`shallow render 1`] = `
         className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
       >
         <p
-          className="flex-none no_m letter_3 center"
+          className="flex-none no_m center"
         >
           EUR
         </p>
         <p
-          className="flex-none no_m letter_3 center"
+          className="flex-none no_m center"
         >
           20.00
         </p>
@@ -225,7 +225,7 @@ exports[`shallow render 1`] = `
       className="flex layout-row layout-align-center-space-around layout-wrap"
     >
       <div
-        className="fee_text flex-90 layout-row layout-align-center-center "
+        className="fee_text flex-100 layout-row layout-align-center-center "
       >
         <h4
           className="flex-none no_m"

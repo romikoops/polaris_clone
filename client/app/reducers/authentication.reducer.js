@@ -63,6 +63,8 @@ export default function (state = initialState, action) {
     case authenticationConstants.UPDATE_USER_SUCCESS:
       return {
         ...state,
+        showModal: false,
+        registering: false,
         loggedIn: true,
         registered: true,
         user: action.user
@@ -82,6 +84,8 @@ export default function (state = initialState, action) {
     case authenticationConstants.REGISTRATION_SUCCESS:
       return {
         ...state,
+        registering: false,
+        showModal: false,
         loggedIn: true,
         registered: true,
         user: action.user

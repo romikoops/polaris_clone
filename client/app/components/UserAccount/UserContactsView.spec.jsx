@@ -56,11 +56,11 @@ const propsBase = {
   }
 }
 
-test.skip('shallow render', () => {
+test('shallow render', () => {
   expect(shallow(<UserContactsView {...propsBase} />)).toMatchSnapshot()
 })
 
-test.skip('props.loading is true', () => {
+test('props.loading is true', () => {
   const props = {
     ...propsBase,
     loading: true
@@ -68,7 +68,7 @@ test.skip('props.loading is true', () => {
   expect(shallow(<UserContactsView {...props} />)).toMatchSnapshot()
 })
 
-test.skip('props.contactData is falsy', () => {
+test('props.contactData is falsy', () => {
   const props = {
     ...propsBase,
     contactData: undefined
@@ -76,7 +76,7 @@ test.skip('props.contactData is falsy', () => {
   expect(shallow(<UserContactsView {...props} />)).toMatchSnapshot()
 })
 
-test.skip('props.contactData.location is falsy', () => {
+test('props.contactData.location is falsy', () => {
   const props = {
     ...propsBase,
     contactData: {
@@ -87,7 +87,7 @@ test.skip('props.contactData.location is falsy', () => {
   expect(shallow(<UserContactsView {...props} />)).toMatchSnapshot()
 })
 
-test.skip('state.editBool is true', () => {
+test('state.editBool is true', () => {
   const wrapper = shallow(<UserContactsView {...propsBase} />)
   wrapper.setState({ editBool: true })
 

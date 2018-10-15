@@ -9,14 +9,14 @@
   "fourChars": "Must be at least four characters long",
   "noRoutes": "No routes from this address",
   "noRoutesFound": "No Routes Found",
-  "noRoutesBetween": "No routes found between",
+  "noRoutesBetween": "No routes found between {{origin}} and {{destination}}",
   "maxValue": "Value must be less than",
   "nonNegative": "Must be greater than 0",
   "maxWeight": "Maximum weight is",
   "maxHeight": "Maximum height is",
   "maxLength": "Maximum length is",
-  "noRoutesFrom": "No routes found from",
-  "noRoutesTo": "No routes found to",
+  "noRoutesFrom": "No routes found from {{origin}}",
+  "noRoutesTo": "No routes found to {{destination}}",
   "maxWidth": "Maximum width is",
   "invalidResetPasswordOne": "You attempted to submit an invalid reset password. ",
   "invalidResetPasswordTwo": "If you wish to reset your password, ", 
@@ -25,5 +25,7 @@
   "errorOccured": "An Error Occured",
   "ohNo": "Oh no!",
   "somethingWrong": "Something has gone wrong! A message has been sent to the support team and will be addressed shortly!",
-  "pleaseRetry": "Please retry and if this error keeps happening please contact your store representative"
+  "pleaseRetry": "Please retry and if this error keeps happening please contact your store representative",
+  "contactExists": "Contact already exists.",
+  "didYouMean": "Did you mean"
 }

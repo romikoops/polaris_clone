@@ -124,7 +124,7 @@ class EditLocation extends Component {
     this.setState({ autoListener: { ...this.state.autoListener, location: autocomplete } })
     this.autocompleteListener(map, autocomplete)
   }
-  autocompleteListener (aMap, autocomplete) {
+  autocompleteListener (aMap, autocomplete, t) {
     const infowindow = new this.props.gMaps.InfoWindow()
     const infowindowContent = document.getElementById('infowindow-content')
     infowindow.setContent(infowindowContent)
@@ -139,7 +139,7 @@ class EditLocation extends Component {
       marker.setVisible(false)
       const place = autocomplete.getPlace()
       if (!place.geometry) {
-        window.alert(`No details available for input: '${place.name}'`)
+        window.alert(t('nav:noDetailsAvailable', { placeName: place.name }))
 
         return
       }
@@ -329,7 +329,7 @@ class EditLocation extends Component {
           {originFields}
           <RoundButton
             active
-            text="Save"
+            text={t('common:save')}
             theme={this.props.theme}
             size="small"
             handleNext={this.saveLocation}

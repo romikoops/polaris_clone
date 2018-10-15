@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import { v4 } from 'uuid'
@@ -26,7 +27,8 @@ class ShipmentQuotationCard extends Component {
   render () {
     const {
       shipment,
-      theme
+      theme,
+      t
     } = this.props
 
     const gradientFontStyle =
@@ -58,15 +60,15 @@ class ShipmentQuotationCard extends Component {
           </div>
           <div className={`flex-60 layout-row layout-align-start-center ${styles.hub_name}`}>
             <div className="layout-column layout-align-center-start">
-              <p>From:&nbsp;<span>{originHubObj.name}</span></p>
-              <p>To:&nbsp;<span>{destinationHubObj.name}</span></p>
+              <p>{t('common:from')}:&nbsp;<span>{originHubObj.name}</span></p>
+              <p>{t('common:to')}:&nbsp;<span>{destinationHubObj.name}</span></p>
             </div>
           </div>
           <div className={`layout-row flex-20 layout-align-start-center ${styles.ett}`}>
             { shipment.planned_eta ? (<div>
-              <b>{moment(shipment.planned_eta).diff(shipment.planned_etd, 'days')} days</b><br />
+              <b>{moment(shipment.planned_eta).diff(shipment.planned_etd, 'days')} {t('common:days')}</b><br />
               <span className={`${styles.grey}`}>
-              Estimated Transit Time
+                {t('shipment:estimatedTransitTime')}
               </span>
             </div>) : '' }
           </div>
@@ -76,7 +78,7 @@ class ShipmentQuotationCard extends Component {
         >
           <div className="layout-row flex-35 layout-align-center-center">
             <div className=" flex-100">
-              <b className={styles.ref_row_card}>Ref:&nbsp;{shipment.imc_reference}</b>
+              <b className={styles.ref_row_card}>{t('common:ref')}:&nbsp;{shipment.imc_reference}</b>
             </div>
           </div>
           <span className="flex-25 layout-align-center-center layout-row">
@@ -84,14 +86,14 @@ class ShipmentQuotationCard extends Component {
               className="fa fa-check-square clip"
               style={shipment.trucking.has_pre_carriage ? gradientFontStyle : deselectedStyle}
             />
-            <p> Pre-carriage</p>
+            <p>{t('shipment:preCarriage')}</p>
           </span>
           <span className="flex-25 layout-align-center-center layout-row">
             <i
               className="fa fa-check-square clip"
               style={shipment.trucking.has_on_carriage ? gradientFontStyle : deselectedStyle}
             />
-            <p> On-carriage</p>
+            <p>{t('shipment:onCarriage')}</p>
           </span>
         </div>
 
@@ -106,7 +108,7 @@ class ShipmentQuotationCard extends Component {
                 </span>
               </div>
             </div>
-            <span className="flex-35">{shipment.load_type ? humanizeSnakeCase(shipment.load_type) : 'Cargo item'}</span>
+            <span className="flex-35">{shipment.load_type ? humanizeSnakeCase(shipment.load_type) : t('cargo:cargoItem') }</span>
           </div>
           <div className="layout-row flex layout-align-end-end">
             <span className={`${styles.bigText} ${styles.price_style}`}>
@@ -125,6 +127,7 @@ class ShipmentQuotationCard extends Component {
 ShipmentQuotationCard.propTypes = {
   shipment: PropTypes.objectOf(PropTypes.shipment),
   dispatches: PropTypes.objectOf(PropTypes.func),
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme
 }
 
@@ -134,4 +137,4 @@ ShipmentQuotationCard.defaultProps = {
   theme: {}
 }
 
-export default ShipmentQuotationCard
+export default translate()(ShipmentQuotationCard)

@@ -53,7 +53,7 @@ class QuantityInput extends PureComponent {
           >
             <p
               className="flex-100 layout-row layout-align-center-start"
-              style={{ margin: '0 0 4px 0' }}
+              style={{ marginBottom: '25px' }}
             >
               {t('common:quantity')}
             </p>
@@ -80,7 +80,7 @@ class QuantityInput extends PureComponent {
                 nextStageAttempt={nextStageAttempt}
               />
             </div>
-            <hr className="flex-70" />
+            <hr className="flex-35" />
           </div>
         </div>
       </div>

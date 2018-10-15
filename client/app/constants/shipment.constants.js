@@ -11,12 +11,6 @@ export const LOAD_TYPES = [
   }
 ]
 
-export const LOAD_SIZES = {
-  length: 'https://image.ibb.co/cdRkSy/Group_5_4.png',
-  width: 'https://image.ibb.co/edttEd/Group_5_5.png',
-  height: 'https://image.ibb.co/f9QR0J/Group_5.png'
-}
-
 export const SHIPMENT_STAGES = [
   {
     step: 1,

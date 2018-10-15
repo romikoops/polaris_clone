@@ -59,9 +59,9 @@ export class ShipmentDetails extends Component {
     } else {
       cargo.payload_in_kg = value / cargo.quantity
     }
+
     return cargo
   }
-  
   constructor (props) {
     super(props)
     this.state = {
@@ -524,8 +524,8 @@ export class ShipmentDetails extends Component {
     if (totalChargeableWeight > +maxAggregateDimensions.air.chargeableWeight) {
       excessChargeableWeightText = `
         ${t('cargo:excessChargeableWeight')}
-        (${totalChargeableWeight.toFixed(1)} kg) ${t('cargo:exceedsMaximum')}
-        (${maxAggregateDimensions.air.chargeableWeight} kg).
+        (${totalChargeableWeight.toFixed(1)} ${t('acronym:kg')}) ${t('cargo:exceedsMaximum')}
+        (${maxAggregateDimensions.air.chargeableWeight} ${t('acronym:kg')}).
       `
     } else {
       excessChargeableWeightText = ''
@@ -986,18 +986,6 @@ export class ShipmentDetails extends Component {
           } layout-row flex-100 layout-wrap layout-align-center-center`}
         >
           {dayPickerSection}
-        </div>
-        <div className="flex-100 layout-row layout-align-center-center">
-          <div className="flex-none content_width_booking layout-row layout-align-center-center">
-            <IncotermRow
-              theme={theme}
-              preCarriage={this.state.has_pre_carriage}
-              onCarriage={this.state.has_on_carriage}
-              originFees={this.state.has_pre_carriage}
-              destinationFees={this.state.has_on_carriage}
-              tenant={tenant}
-            />
-          </div>
         </div>
         <div className={`layout-row flex-100 layout-wrap layout-align-center ${styles.cargo_sec}`}>
           {shipmentData.shipment.load_type === 'cargo_item' && (

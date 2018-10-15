@@ -79,6 +79,15 @@ class NotesCard extends Component {
         return styles.alert_border_style
     }
   }
+  constructor (props) {
+    super(props)
+
+    this.deleteNote = this.deleteNote.bind(this)
+  }
+  deleteNote () {
+    const { adminDispatch, itinerary, note } = this.props
+    adminDispatch.deleteItineraryNote(itinerary.id, note.id)
+  }
   render () {
     const { note } = this.props
 
@@ -93,16 +102,14 @@ class NotesCard extends Component {
           } flex-none layout-wrap layout-align-center`}
         >
           <div className={`${styles.note_route} flex-100 layout-row layout-align-start-center`}>
-            <div className="flex-none layout-row layout-align-center-center">
+            <div className="flex-100 layout-row layout-align-center-center">
               {NotesCard.iconSwitcher(note.level)}
               <span className="flex-90">{note.header}</span>
+              <i className="fa fa-trash pointy flex-10" onClick={() => this.deleteNote()} />
             </div>
-            {/* <div className="flex-10 layout-row layout-align-center-center">
-              {NotesCard.motSwitcher(note.mode_of_transport, iconStyle)}
-            </div> */}
           </div>
           <div className="flex-100 layout-row layout-align-start-center">
-            <p className="flex-90">{note.body}</p>
+            <p className="flex-95">{note.body}</p>
           </div>
         </div>)}
       />
@@ -111,11 +118,13 @@ class NotesCard extends Component {
   }
 }
 NotesCard.propTypes = {
-  note: PropTypes.objectOf(PropTypes.any)
+  note: PropTypes.objectOf(PropTypes.any),
+  adminDispatch: PropTypes.func.isRequired,
+  itinerary: PropTypes.objectOf(PropTypes.any).isRequired
 }
 
 NotesCard.defaultProps = {
-  note: null
+  note: {}
 }
 
 export default NotesCard

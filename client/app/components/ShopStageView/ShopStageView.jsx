@@ -7,7 +7,7 @@ import { SHIPMENT_STAGES, QUOTE_STAGES } from '../../constants'
 import { gradientTextGenerator, gradientGenerator, history } from '../../helpers'
 import HelpContact from '../Help/Contact'
 
-export class ShopStageView extends Component {
+class ShopStageView extends Component {
   static goBack () {
     history.goBack()
   }

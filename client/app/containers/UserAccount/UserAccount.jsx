@@ -24,6 +24,7 @@ import defs from '../../styles/default_classes.scss'
 import styles from './UserAccount.scss'
 import NavBar from '../Nav'
 import GenericError from '../../components/ErrorHandling/Generic'
+import UserPricings from '../../components/UserAccount/UserPricings'
 
 class UserAccount extends Component {
   constructor (props) {
@@ -94,6 +95,9 @@ class UserAccount extends Component {
         break
       case 'profile':
         userDispatch.goTo('/account/profile')
+        break
+      case 'pricings':
+        userDispatch.goTo('/account/pricings')
         break
       default:
         break
@@ -246,6 +250,16 @@ class UserAccount extends Component {
                         locations={dashboard.locations}
                         userDispatch={userDispatch}
                         authDispatch={authDispatch}
+                      />
+                    )}
+                  />
+                  <Route
+                    path="/account/pricings"
+                    render={props => (
+                      <UserPricings
+                        {...props}
+                        setNav={this.setNavLink}
+                        setCurrentUrl={this.setCurrentUrl}
                       />
                     )}
                   />

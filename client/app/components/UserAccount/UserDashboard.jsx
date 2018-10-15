@@ -10,7 +10,8 @@ import { gradientTextGenerator } from '../../helpers'
 import SquareButton from '../SquareButton'
 import Loading from '../Loading/Loading'
 
-export class UserDashboard extends Component {
+
+class UserDashboard extends Component {
   static prepShipment (baseShipment, user) {
     const shipment = Object.assign({}, baseShipment)
     shipment.clientName = user ? `${user.first_name} ${user.last_name}` : ''
@@ -72,7 +73,7 @@ export class UserDashboard extends Component {
     const { userDispatch, user } = this.props
     userDispatch.makePrimary(user.id, locationId)
   }
-  
+
   seeAll () {
     const { userDispatch, seeAll } = this.props
     if (seeAll) {
@@ -97,7 +98,7 @@ export class UserDashboard extends Component {
       t
     } = this.props
     if (!user || !dashboard) {
-      return <Loading theme={theme} text="loading..." />
+      return <Loading theme={theme} text={t('bookconf:loading')} />
     }
     const { perPage } = this.state
     const {
@@ -150,7 +151,7 @@ export class UserDashboard extends Component {
                   active
                   border
                   size="large"
-                  text="Find Rates"
+                  text={t('landing:callToAction')}
                   iconClass="fa-archive"
                 />
               </div>
@@ -158,7 +159,7 @@ export class UserDashboard extends Component {
             </div>
           </div>
           <div className="layout-padding flex-100 layout-align-start-center greyBg">
-            <span><b>{isQuote ? 'Quoted Shipments' : 'Requested Shipments' }</b></span>
+            <span><b>{isQuote ? t('shipment:quotedShipments') : t('shipment:requestedShipments') }</b></span>
           </div>
           <ShipmentOverviewCard
             dispatches={userDispatch}
@@ -180,8 +181,8 @@ export class UserDashboard extends Component {
             <AdminSearchableClients
               theme={theme}
               clients={contacts}
-              placeholder="Search Contacts"
-              title="Most used Contacts"
+              placeholder={t('account:searchContacts')}
+              title={t('account:mostUsedContacts')}
               handleClick={this.viewClient}
               seeAll={() => userDispatch.getContacts({ page: 1 }, true)}
             />
@@ -248,4 +249,4 @@ UserDashboard.defaultProps = {
   theme: null
 }
 
-export default translate(['common', 'user', 'shipment'])(UserDashboard)
+export default translate(['common', 'user', 'shipment', 'account'])(UserDashboard)

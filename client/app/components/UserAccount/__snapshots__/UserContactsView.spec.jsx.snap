@@ -38,9 +38,10 @@ exports[`props.contactData.location is falsy 1`] = `
         <div
           className="layout-row flex-100"
         >
-          <ProfileBox
+          <UntranslatedProfileBox
             edit={[Function]}
             style="#333"
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -120,9 +121,6 @@ exports[`props.loading is true 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
 >
   <div
-    className="flex-100 layout-row layout-align-space-between-center sec_title"
-  />
-  <div
     className="flex-100 layout-row layout-align-start-stretch username_title"
   >
     <span
@@ -154,9 +152,10 @@ exports[`props.loading is true 1`] = `
         <div
           className="layout-row flex-100"
         >
-          <ProfileBox
+          <UntranslatedProfileBox
             edit={[Function]}
             style="#333"
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -190,6 +189,12 @@ exports[`props.loading is true 1`] = `
     className="layout-row flex-100 layout-wrap layout-align-start-center"
   >
     <AdminSearchableShipments
+      dispatches={
+        Object {
+          "getContact": [Function],
+          "goBack": [Function],
+        }
+      }
       hubs={
         Array [
           Object {},
@@ -219,10 +224,11 @@ exports[`props.loading is true 1`] = `
         }
       }
       title="Related Shipments"
+      userView={true}
     />
   </div>
   <div
-    className="layout-row flex-100 layout-wrap layout-align-start-center margin_bottom"
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
   >
     <div
       className="flex-100 layout-row layout-align-space-between-center"
@@ -245,7 +251,7 @@ exports[`props.loading is true 1`] = `
           "last_name": "Doe",
         }
       }
-      key="RANDOM_KEY_0"
+      key="RANDOM_KEY_1"
       showDelete={false}
       theme={
         Object {
@@ -255,16 +261,6 @@ exports[`props.loading is true 1`] = `
           },
         }
       }
-      contentClassName="layout-row flex"
-      flex={0}
-      flexGtLg={0}
-      flexMd={0}
-      fullWidth={false}
-      isBox={false}
-      padding={false}
-      title=""
-      titleAction={false}
-      wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
     />
   </div>
 </div>
@@ -306,9 +302,10 @@ exports[`shallow render 1`] = `
         <div
           className="layout-row flex-100"
         >
-          <ProfileBox
+          <UntranslatedProfileBox
             edit={[Function]}
             style="#333"
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -424,9 +421,6 @@ exports[`state.editBool is true 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
 >
   <div
-    className="flex-100 layout-row layout-align-space-between-center sec_title"
-  />
-  <div
     className="flex-100 layout-row layout-align-start-stretch username_title"
   >
     <span
@@ -458,11 +452,12 @@ exports[`state.editBool is true 1`] = `
         <div
           className="layout-row flex-100"
         >
-          <EditProfileBox
+          <UntranslatedEditProfileBox
             close={[Function]}
             handleChange={[Function]}
             onSave={[Function]}
             style="#333"
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -491,6 +486,12 @@ exports[`state.editBool is true 1`] = `
     className="layout-row flex-100 layout-wrap layout-align-start-center"
   >
     <AdminSearchableShipments
+      dispatches={
+        Object {
+          "getContact": [Function],
+          "goBack": [Function],
+        }
+      }
       hubs={
         Array [
           Object {},
@@ -520,6 +521,7 @@ exports[`state.editBool is true 1`] = `
         }
       }
       title="Related Shipments"
+      userView={true}
     />
   </div>
   <div
@@ -546,7 +548,7 @@ exports[`state.editBool is true 1`] = `
           "last_name": "Doe",
         }
       }
-      key="RANDOM_KEY_1"
+      key="RANDOM_KEY_3"
       showDelete={false}
       theme={
         Object {

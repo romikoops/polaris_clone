@@ -308,6 +308,7 @@ module ShippingTools
     if shipment.aggregated_cargo
       aggregated_cargo = shipment.aggregated_cargo
       aggregated_cargo.set_chargeable_weight!
+      aggregated_cargo.save!
     end
 
     documents = shipment.documents.map do |doc|

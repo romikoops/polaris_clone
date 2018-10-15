@@ -4,5 +4,5 @@
   "registrationPage": "RegistrationPage",
   "account": "Account",
   "searchAddress": "Search for address",
-  "noDetailsAvailable": "No details available for input:"
+  "noDetailsAvailable": "No details available for input: {{placeName}}"
 }

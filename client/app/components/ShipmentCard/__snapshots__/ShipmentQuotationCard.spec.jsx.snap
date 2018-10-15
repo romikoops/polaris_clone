@@ -1,0 +1,457 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`has oncarriage 1`] = `
+<div
+  className="flex-100 layout-align-start-stretch
+          container"
+  key="RANDOM_KEY_2"
+>
+  <hr
+    className="flex-100 layout-row hr_divider"
+  />
+  <div
+    className="card_link"
+    onClick={[Function]}
+  />
+  <div
+    className="layout-row flex-100 layout-align-space-between-stretch top_box"
+  >
+    <div
+      className="layout-row flex-10 layout-align-center-center routeIcon"
+    >
+      <i
+        className="fa fa-anchor clip "
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-60 layout-row layout-align-start-center hub_name"
+    >
+      <div
+        className="layout-column layout-align-center-start"
+      >
+        <p>
+          From
+          : 
+          <span />
+        </p>
+        <p>
+          To
+          : 
+          <span />
+        </p>
+      </div>
+    </div>
+    <div
+      className="layout-row flex-20 layout-align-start-center ett"
+    />
+  </div>
+  <div
+    className="layout-row flex-100 layout-align-space-between-stretch middle_top_box middle_top_box_quote"
+  >
+    <div
+      className="layout-row flex-35 layout-align-center-center"
+    >
+      <div
+        className=" flex-100"
+      >
+        <b
+          className="ref_row_card"
+        >
+          Ref
+          : 
+          FOO_IMC_REFERENCE
+        </b>
+      </div>
+    </div>
+    <span
+      className="flex-25 layout-align-center-center layout-row"
+    >
+      <i
+        className="fa fa-check-square clip"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
+          }
+        }
+      />
+      <p>
+        Pre-carriage :
+      </p>
+    </span>
+    <span
+      className="flex-25 layout-align-center-center layout-row"
+    >
+      <i
+        className="fa fa-check-square clip"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+      <p>
+        On-carriage :
+      </p>
+    </span>
+  </div>
+  <div
+    className="layout-row flex-100 layout-align-space-between-center
+            bottom_box"
+  >
+    <div
+      className="layout-row flex-65 layout-align-start-center"
+    >
+      <div
+        className="layout-row flex-10"
+      >
+        <div
+          className="layout-row layout-align-center-center"
+        >
+          <span
+            className="smallText"
+          >
+            <b>
+              x
+            </b>
+            <span
+              className="bigText"
+            >
+              1
+            </span>
+          </span>
+        </div>
+      </div>
+      <span
+        className="flex-35"
+      >
+        Cargo Item
+      </span>
+    </div>
+    <div
+      className="layout-row flex layout-align-end-end"
+    >
+      <span
+        className="bigText price_style"
+      >
+        <span>
+           
+          USD
+           
+        </span>
+        <span>
+          200.99
+        </span>
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`has precarriage 1`] = `
+<div
+  className="flex-100 layout-align-start-stretch
+          container"
+  key="RANDOM_KEY_1"
+>
+  <hr
+    className="flex-100 layout-row hr_divider"
+  />
+  <div
+    className="card_link"
+    onClick={[Function]}
+  />
+  <div
+    className="layout-row flex-100 layout-align-space-between-stretch top_box"
+  >
+    <div
+      className="layout-row flex-10 layout-align-center-center routeIcon"
+    >
+      <i
+        className="fa fa-anchor clip "
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-60 layout-row layout-align-start-center hub_name"
+    >
+      <div
+        className="layout-column layout-align-center-start"
+      >
+        <p>
+          From
+          : 
+          <span />
+        </p>
+        <p>
+          To
+          : 
+          <span />
+        </p>
+      </div>
+    </div>
+    <div
+      className="layout-row flex-20 layout-align-start-center ett"
+    />
+  </div>
+  <div
+    className="layout-row flex-100 layout-align-space-between-stretch middle_top_box middle_top_box_quote"
+  >
+    <div
+      className="layout-row flex-35 layout-align-center-center"
+    >
+      <div
+        className=" flex-100"
+      >
+        <b
+          className="ref_row_card"
+        >
+          Ref
+          : 
+          FOO_IMC_REFERENCE
+        </b>
+      </div>
+    </div>
+    <span
+      className="flex-25 layout-align-center-center layout-row"
+    >
+      <i
+        className="fa fa-check-square clip"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+      <p>
+        Pre-carriage :
+      </p>
+    </span>
+    <span
+      className="flex-25 layout-align-center-center layout-row"
+    >
+      <i
+        className="fa fa-check-square clip"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
+          }
+        }
+      />
+      <p>
+        On-carriage :
+      </p>
+    </span>
+  </div>
+  <div
+    className="layout-row flex-100 layout-align-space-between-center
+            bottom_box"
+  >
+    <div
+      className="layout-row flex-65 layout-align-start-center"
+    >
+      <div
+        className="layout-row flex-10"
+      >
+        <div
+          className="layout-row layout-align-center-center"
+        >
+          <span
+            className="smallText"
+          >
+            <b>
+              x
+            </b>
+            <span
+              className="bigText"
+            >
+              1
+            </span>
+          </span>
+        </div>
+      </div>
+      <span
+        className="flex-35"
+      >
+        Cargo Item
+      </span>
+    </div>
+    <div
+      className="layout-row flex layout-align-end-end"
+    >
+      <span
+        className="bigText price_style"
+      >
+        <span>
+           
+          USD
+           
+        </span>
+        <span>
+          200.99
+        </span>
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow rendering 1`] = `
+<div
+  className="flex-100 layout-align-start-stretch
+          container"
+  key="RANDOM_KEY_0"
+>
+  <hr
+    className="flex-100 layout-row hr_divider"
+  />
+  <div
+    className="card_link"
+    onClick={[Function]}
+  />
+  <div
+    className="layout-row flex-100 layout-align-space-between-stretch top_box"
+  >
+    <div
+      className="layout-row flex-10 layout-align-center-center routeIcon"
+    >
+      <i
+        className="fa fa-anchor clip "
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-60 layout-row layout-align-start-center hub_name"
+    >
+      <div
+        className="layout-column layout-align-center-start"
+      >
+        <p>
+          From
+          : 
+          <span />
+        </p>
+        <p>
+          To
+          : 
+          <span />
+        </p>
+      </div>
+    </div>
+    <div
+      className="layout-row flex-20 layout-align-start-center ett"
+    />
+  </div>
+  <div
+    className="layout-row flex-100 layout-align-space-between-stretch middle_top_box middle_top_box_quote"
+  >
+    <div
+      className="layout-row flex-35 layout-align-center-center"
+    >
+      <div
+        className=" flex-100"
+      >
+        <b
+          className="ref_row_card"
+        >
+          Ref
+          : 
+          FOO_IMC_REFERENCE
+        </b>
+      </div>
+    </div>
+    <span
+      className="flex-25 layout-align-center-center layout-row"
+    >
+      <i
+        className="fa fa-check-square clip"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
+          }
+        }
+      />
+      <p>
+        Pre-carriage :
+      </p>
+    </span>
+    <span
+      className="flex-25 layout-align-center-center layout-row"
+    >
+      <i
+        className="fa fa-check-square clip"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
+          }
+        }
+      />
+      <p>
+        On-carriage :
+      </p>
+    </span>
+  </div>
+  <div
+    className="layout-row flex-100 layout-align-space-between-center
+            bottom_box"
+  >
+    <div
+      className="layout-row flex-65 layout-align-start-center"
+    >
+      <div
+        className="layout-row flex-10"
+      >
+        <div
+          className="layout-row layout-align-center-center"
+        >
+          <span
+            className="smallText"
+          >
+            <b>
+              x
+            </b>
+            <span
+              className="bigText"
+            >
+              1
+            </span>
+          </span>
+        </div>
+      </div>
+      <span
+        className="flex-35"
+      >
+        Cargo Item
+      </span>
+    </div>
+    <div
+      className="layout-row flex layout-align-end-end"
+    >
+      <span
+        className="bigText price_style"
+      >
+        <span>
+           
+          USD
+           
+        </span>
+        <span>
+          200.99
+        </span>
+      </span>
+    </div>
+  </div>
+</div>
+`;

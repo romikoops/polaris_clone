@@ -19,6 +19,14 @@ class NotesController < ApplicationController
     response_handler(notes)
   end
 
+  def delete
+    itinerary = current_tenant.itineraries.find(params[:itinerary_id])
+    note = itinerary.notes.find(params[:id])
+    note.destroy
+    resp = itinerary.notes
+    response_handler(resp)
+  end
+
   private
 
   def transform_note(itinerary, note)

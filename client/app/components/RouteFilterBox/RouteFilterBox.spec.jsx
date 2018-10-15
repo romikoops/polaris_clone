@@ -18,7 +18,7 @@ jest.mock('../../constants', () => {
   return { moment }
 })
 // eslint-disable-next-line import/first
-import { RouteFilterBox } from './RouteFilterBox'
+import RouteFilterBox from './RouteFilterBox'
 
 const propsBase = {
   departureDate: 0,

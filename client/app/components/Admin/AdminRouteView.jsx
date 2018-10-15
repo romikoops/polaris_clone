@@ -217,7 +217,14 @@ export class AdminRouteView extends Component {
                 toggleView={() => this.toggleNotesEdit()}
               />
             ) : (
-              <NotesRow notes={notes} textStyle={textStyle} toggleNotesEdit={() => this.toggleNotesEdit()} theme={theme} />
+              <NotesRow
+                notes={notes}
+                textStyle={textStyle}
+                toggleNotesEdit={() => this.toggleNotesEdit()}
+                theme={theme}
+                adminDispatch={adminDispatch}
+                itinerary={itinerary}
+              />
             )}
           </div>
         </div>
@@ -230,7 +237,8 @@ AdminRouteView.propTypes = {
   hubHash: PropTypes.objectOf(PropTypes.hub),
   adminDispatch: PropTypes.shape({
     getHub: PropTypes.func,
-    getLayovers: PropTypes.func
+    getLayovers: PropTypes.func,
+    deleteItineraryNote: PropTypes.func
   }).isRequired,
   itineraryData: PropTypes.objectOf(PropTypes.any).isRequired,
   t: PropTypes.func.isRequired

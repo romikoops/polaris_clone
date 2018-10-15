@@ -105,7 +105,7 @@ export class UserShipmentRow extends Component {
           <div className="flex-100 layout-row layout-align-center-center">
             <h5 className="flex-none no_m">
               {' '}
-              {`Booking Placed at: ${moment(shipment.booking_placed_at).format('DD/MM/YYYY HH:mm')}`}
+              {`${t('bookconf:bookingPlacedAt')} ${moment(shipment.booking_placed_at).format('DD/MM/YYYY HH:mm')}`}
             </h5>
           </div>
           <div className={`${styles.hub_half} flex-100 layout-row layout-align-center-center`}>
@@ -245,4 +245,4 @@ UserShipmentRow.defaultProps = {
   hubs: []
 }
 
-export default translate(['common', 'shipment'])(UserShipmentRow)
+export default translate(['common', 'shipment', 'bookconf'])(UserShipmentRow)
