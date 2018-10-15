@@ -116,6 +116,7 @@
         "clear": "Clear",
         "and": "and",
         "getOffers": "Get Offers",
+        "getQuotes": "Get Quotes",
         "hi": "Hi",
         "oceanFreight": "Ocean Freight",
         "airFreight": "Air Freight",
@@ -162,8 +163,9 @@
         "rateBasis": "Rate Basis",
         "minimum": "Minimum",
         "modeOfTransport": "Mode of Transport",
-        "rate": "Rate"
-
+        "rate": "Rate",
+        "booking": "Booking",
+        "quotation": "Quotation"
       },
       "admin": {
         "lowerLimit": "Lower Limit",

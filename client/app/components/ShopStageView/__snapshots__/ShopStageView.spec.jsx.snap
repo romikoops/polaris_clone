@@ -16,9 +16,7 @@ exports[`shallow rendering 1`] = `
       <h3
         className="flex-none header"
       >
-         
-        FOO_SHOP_TYPE
-         
+        Quotation
       </h3>
       <i
         className="fa fa-chevron-right fade"
