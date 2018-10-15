@@ -411,7 +411,7 @@ class QuoteCard extends PureComponent {
             <div className={`${isQuotationTool ? 'flex' : 'flex-10'} layout-row layout-align-start-center`}>
               <span style={{ textAlign: 'right' }}>{t('common:total')}</span>
             </div>
-            <div className="flex-35 layout-row layout-align-end-center">
+            <div className="flex layout-row layout-align-end-center">
               <p style={!isQuotationTool ? { paddingRight: '18px' } : {}}>{numberSpacing(quote.total.value, 2)}&nbsp;{quote.total.currency}</p>
               {isQuotationTool ? (
                 <input
