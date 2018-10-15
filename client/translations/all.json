@@ -349,7 +349,7 @@
         "containers": "Containers",
         "cargoItems": "Cargo Items",
         "yourCargo": "Your Cargo",
-        "fillFormCargoDetails": "(Fill the form with your cargo details)",
+        "fillFormCargoDetails": "(Fill the form with your cargo details)"
       },
       "bookconf": {
         "_component": "BookingConfirmation",
