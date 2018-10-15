@@ -25,10 +25,10 @@ exports[`shallow rendering 1`] = `
           className="flex-100 layout-align-start-center layout-row cargo_unit_header"
         >
           <h3>
-            NO_TRANSLATION | key "cargo:yourCargo"
+            Your Cargo
           </h3>
           <p>
-            NO_TRANSLATION | key "cargo:fillFormCargoDetails"
+            (Fill the form with your cargo details)
           </p>
           <div
             className="delete_icon"
@@ -562,10 +562,10 @@ exports[`shallow rendering 1`] = `
             className="flex-100 layout-align-start-center layout-row cargo_unit_header"
           >
             <h3>
-              NO_TRANSLATION | key "cargo:yourCargo"
+              Your Cargo
             </h3>
             <p>
-              NO_TRANSLATION | key "cargo:fillFormCargoDetails"
+              (Fill the form with your cargo details)
             </p>
           </div>
           <div
