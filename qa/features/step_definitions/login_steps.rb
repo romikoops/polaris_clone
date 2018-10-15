@@ -16,11 +16,8 @@ Then('I expect to see the log in modal') do
   expect(page).to have_button('Sign In')
 end
 
-When('I enter the correct email address') do
+When('I enter the correct credentials') do
   fill_in('email', with: 'shipper@itsmycargo.com')
-end
-
-And('I enter the correct password') do
   fill_in('password', with: 'IMC123456789')
 end
 
@@ -32,11 +29,8 @@ Then('I expect to be redirected to the account page') do
   expect(page).to have_text('Welcome back')
 end
 
-When('I enter an incorrect email address') do
+When('I enter an incorrect credentials') do
   fill_in('email', with: 'shipper2@itsmycargo.com')
-end
-
-And('I enter an incorrect password') do
   fill_in('password', with: 'IMC1234567891000')
 end
 
