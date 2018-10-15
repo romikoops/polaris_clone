@@ -352,7 +352,9 @@
         "containers": "Containers",
         "cargoItems": "Cargo Items",
         "yourCargo": "Your Cargo",
-        "fillFormCargoDetails": "(Fill the form with your cargo details)"
+        "fillFormCargoDetails": "(Fill the form with your cargo details)",
+        "nonStackableFirst":"We currently do not offer freight rates for non-stackable cargo in our Web Shop.",
+        "nonStackableSecond": "Please contact our customer service department to place an order for your non-stackable cargo:"
       },
       "bookconf": {
         "_component": "BookingConfirmation",
