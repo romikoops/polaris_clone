@@ -536,18 +536,16 @@ class CargoDetails extends Component {
                 </div>
                 <div className="flex-100 layout-row layout-align-start-start layout-wrap">
                   <div className="flex-100">
-                    <div className={`flex-none layout-row layout-wrap ${styles.f_header}`}>
+                    <div className={`flex-none ${styles.f_header}`}>
                       {' '}
-                      <h4 className="no_m flex-20">Incoterms</h4>
-                      <div
-                        className={`pointy ${styles.incoterm_info}`}
+                      <h4 className="no_m flex-30">Incoterms <span>(Optional)</span></h4>
+                      <p
+                        className={`pointy flex-none ${styles.incoterm_info}`}
                         onClick={() => this.toggleIncotermModal()}
                       >
-                        What are Incoterms?
-                      </div>
-                      <p className="flex-90">
-                        2010 by the International Chamber of Commerce (ICC) (Optional)
+                        More info
                       </p>
+                      
                     </div>
                   </div>
                   <div className="flex-100 layout-row layout-align-start-start input_box_full">

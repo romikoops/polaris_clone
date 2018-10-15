@@ -349,18 +349,22 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
               className="flex-100"
             >
               <div
-                className="flex-none layout-row layout-wrap f_header"
+                className="flex-none f_header"
               >
                  
                 <h4
-                  className="no_m flex-100"
+                  className="no_m flex-30"
                 >
-                  Incoterms
+                  Incoterms 
+                  <span>
+                    (Optional)
+                  </span>
                 </h4>
                 <p
-                  className="flex-90"
+                  className="pointy flex-none incoterm_info"
+                  onClick={[Function]}
                 >
-                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                  More info
                 </p>
               </div>
             </div>
@@ -891,18 +895,22 @@ exports[`customsData[target].unknown 1`] = `
               className="flex-100"
             >
               <div
-                className="flex-none layout-row layout-wrap f_header"
+                className="flex-none f_header"
               >
                  
                 <h4
-                  className="no_m flex-100"
+                  className="no_m flex-30"
                 >
-                  Incoterms
+                  Incoterms 
+                  <span>
+                    (Optional)
+                  </span>
                 </h4>
                 <p
-                  className="flex-90"
+                  className="pointy flex-none incoterm_info"
+                  onClick={[Function]}
                 >
-                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                  More info
                 </p>
               </div>
             </div>
@@ -1433,18 +1441,22 @@ exports[`fee && !fee.unknown && fee.total.value 1`] = `
               className="flex-100"
             >
               <div
-                className="flex-none layout-row layout-wrap f_header"
+                className="flex-none f_header"
               >
                  
                 <h4
-                  className="no_m flex-100"
+                  className="no_m flex-30"
                 >
-                  Incoterms
+                  Incoterms 
+                  <span>
+                    (Optional)
+                  </span>
                 </h4>
                 <p
-                  className="flex-90"
+                  className="pointy flex-none incoterm_info"
+                  onClick={[Function]}
                 >
-                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                  More info
                 </p>
               </div>
             </div>
@@ -1975,18 +1987,22 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
               className="flex-100"
             >
               <div
-                className="flex-none layout-row layout-wrap f_header"
+                className="flex-none f_header"
               >
                  
                 <h4
-                  className="no_m flex-100"
+                  className="no_m flex-30"
                 >
-                  Incoterms
+                  Incoterms 
+                  <span>
+                    (Optional)
+                  </span>
                 </h4>
                 <p
-                  className="flex-90"
+                  className="pointy flex-none incoterm_info"
+                  onClick={[Function]}
                 >
-                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                  More info
                 </p>
               </div>
             </div>
@@ -3062,18 +3078,22 @@ exports[`shallow render 1`] = `
               className="flex-100"
             >
               <div
-                className="flex-none layout-row layout-wrap f_header"
+                className="flex-none f_header"
               >
                  
                 <h4
-                  className="no_m flex-100"
+                  className="no_m flex-30"
                 >
-                  Incoterms
+                  Incoterms 
+                  <span>
+                    (Optional)
+                  </span>
                 </h4>
                 <p
-                  className="flex-90"
+                  className="pointy flex-none incoterm_info"
+                  onClick={[Function]}
                 >
-                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                  More info
                 </p>
               </div>
             </div>
@@ -3604,18 +3624,22 @@ exports[`shipment.has_pre_carriage ? 1`] = `
               className="flex-100"
             >
               <div
-                className="flex-none layout-row layout-wrap f_header"
+                className="flex-none f_header"
               >
                  
                 <h4
-                  className="no_m flex-100"
+                  className="no_m flex-30"
                 >
-                  Incoterms
+                  Incoterms 
+                  <span>
+                    (Optional)
+                  </span>
                 </h4>
                 <p
-                  className="flex-90"
+                  className="pointy flex-none incoterm_info"
+                  onClick={[Function]}
                 >
-                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                  More info
                 </p>
               </div>
             </div>
@@ -4146,18 +4170,22 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
               className="flex-100"
             >
               <div
-                className="flex-none layout-row layout-wrap f_header"
+                className="flex-none f_header"
               >
                  
                 <h4
-                  className="no_m flex-100"
+                  className="no_m flex-30"
                 >
-                  Incoterms
+                  Incoterms 
+                  <span>
+                    (Optional)
+                  </span>
                 </h4>
                 <p
-                  className="flex-90"
+                  className="pointy flex-none incoterm_info"
+                  onClick={[Function]}
                 >
-                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                  More info
                 </p>
               </div>
             </div>
@@ -4718,18 +4746,22 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
               className="flex-100"
             >
               <div
-                className="flex-none layout-row layout-wrap f_header"
+                className="flex-none f_header"
               >
                  
                 <h4
-                  className="no_m flex-100"
+                  className="no_m flex-30"
                 >
-                  Incoterms
+                  Incoterms 
+                  <span>
+                    (Optional)
+                  </span>
                 </h4>
                 <p
-                  className="flex-90"
+                  className="pointy flex-none incoterm_info"
+                  onClick={[Function]}
                 >
-                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                  More info
                 </p>
               </div>
             </div>
@@ -5428,18 +5460,22 @@ exports[`this.props.insurance.bool ? 1`] = `
               className="flex-100"
             >
               <div
-                className="flex-none layout-row layout-wrap f_header"
+                className="flex-none f_header"
               >
                  
                 <h4
-                  className="no_m flex-100"
+                  className="no_m flex-30"
                 >
-                  Incoterms
+                  Incoterms 
+                  <span>
+                    (Optional)
+                  </span>
                 </h4>
                 <p
-                  className="flex-90"
+                  className="pointy flex-none incoterm_info"
+                  onClick={[Function]}
                 >
-                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                  More info
                 </p>
               </div>
             </div>
@@ -5970,18 +6006,22 @@ exports[`totalGoodsValue.value > 20000 1`] = `
               className="flex-100"
             >
               <div
-                className="flex-none layout-row layout-wrap f_header"
+                className="flex-none f_header"
               >
                  
                 <h4
-                  className="no_m flex-100"
+                  className="no_m flex-30"
                 >
-                  Incoterms
+                  Incoterms 
+                  <span>
+                    (Optional)
+                  </span>
                 </h4>
                 <p
-                  className="flex-90"
+                  className="pointy flex-none incoterm_info"
+                  onClick={[Function]}
                 >
-                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                  More info
                 </p>
               </div>
             </div>
