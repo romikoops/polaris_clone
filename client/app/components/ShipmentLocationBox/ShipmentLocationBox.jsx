@@ -94,8 +94,6 @@ class ShipmentLocationBox extends Component {
     this.handleTrucking = this.handleTrucking.bind(this)
     this.setOriginNexus = this.setOriginNexus.bind(this)
     this.setDestNexus = this.setDestNexus.bind(this)
-    this.postToggleAutocomplete = this.postToggleAutocomplete.bind(this)
-    this.initAutocomplete = this.initAutocomplete.bind(this)
     this.setNexusesFromRoute = this.setNexusesFromRoute.bind(this)
     this.resetAuto = this.resetAuto.bind(this)
     this.setMarker = this.setMarker.bind(this)
@@ -108,7 +106,6 @@ class ShipmentLocationBox extends Component {
     this.handleAddressFormFocus = this.handleAddressFormFocus.bind(this)
     this.handleSwap = this.handleSwap.bind(this)
     this.scopeNexusOptions = this.scopeNexusOptions.bind(this)
-    this.removeAutocompleteListener = this.removeAutocompleteListener.bind(this)
   }
 
   componentWillMount () {
@@ -125,16 +122,12 @@ class ShipmentLocationBox extends Component {
     this.prepForSelect('origin')
     this.prepForSelect('destination')
   }
+
   componentDidMount () {
     this.initMap()
   }
+  
   componentWillReceiveProps (nextProps) {
-    if (!this.props.has_on_carriage && nextProps.has_pre_carriage) {
-      this.postToggleAutocomplete('origin')
-    }
-    if (!this.props.has_pre_carriage && nextProps.has_on_carriage) {
-      this.postToggleAutocomplete('destination')
-    }
     if (this.props.has_on_carriage && !nextProps.has_on_carriage) {
       this.prepForSelect('destination')
     }
@@ -152,10 +145,6 @@ class ShipmentLocationBox extends Component {
     if (nextProps.prevRequest !== this.props.prevRequest && nextProps.prevRequest.shipment) {
       this.loadPrevReq(nextProps)
     }
-  }
-
-  componentWillUnmount () {
-    ['origin', 'destination'].forEach(target => this.removeAutocompleteListener(target))
   }
 
   setDestNexus (event) {
@@ -408,70 +397,13 @@ class ShipmentLocationBox extends Component {
       map,
       directionsService,
       directionsDisplay
-    }, () => {
-      if (this.props.has_pre_carriage) {
-        this.initAutocomplete(this.state.map, 'origin')
-        setTimeout(() => {
-          this.triggerPlaceChanged(this.state.autoText.origin, 'origin')
-        }, 1000)
-      }
-
-      if (this.props.has_on_carriage) {
-        this.initAutocomplete(this.state.map, 'destination')
-        setTimeout(() => {
-          this.triggerPlaceChanged(this.state.autoText.destination, 'destination')
-        }, 1000)
-      }
     })
-  }
-
-  initAutocomplete (map, target) {
-    const input = document.getElementById(target)
-    const autocomplete = new this.props.gMaps.places.Autocomplete(input)
-    autocomplete.bindTo('bounds', map)
-
-    this.removeAutocompleteListener(target)
-
-    const autoListener = this.addAutocompleteListener(map, autocomplete, target)
-
-    this.setState(prevState => (
-      { autoListener: { ...prevState.autoListener, [target]: autoListener } }
-    ))
-  }
-
-  postToggleAutocomplete (target) {
-    const { map } = this.state
-    if (target === 'destination') {
-      const timeout = map ? 1000 : 2000
-      setTimeout(() => this.initAutocomplete(map, target), timeout)
-    }
   }
 
   changeAddressFormVisibility (target, visibility) {
     const key = `show${capitalize(target)}Fields`
     const value = visibility != null ? visibility : !this.state[key]
     this.setState({ [key]: value })
-  }
-
-  removeAutocompleteListener (target) {
-    const autoListener = this.state.autoListener[target]
-    autoListener && autoListener.remove()
-  }
-
-  addAutocompleteListener (aMap, autocomplete, target) {
-    this.infowindow = new this.props.gMaps.InfoWindow()
-    this.infowindowContent = document.getElementById('infowindow-content')
-    this.infowindow.setContent(this.infowindowContent)
-
-    this.marker = new this.props.gMaps.Marker({
-      map: aMap,
-      anchorPoint: new this.props.gMaps.Point(0, -29)
-    })
-    if (autocomplete.getPlace()) this.handlePlaceChange(autocomplete, target)
-
-    return autocomplete.addListener('place_changed', () => {
-      this.handlePlaceChange(autocomplete.getPlace(), target)
-    })
   }
 
   triggerPlaceChanged (input, target) {
@@ -521,7 +453,6 @@ class ShipmentLocationBox extends Component {
     const { name, checked } = event.target
     if (name === 'has_pre_carriage') {
       if (checked) {
-        this.postToggleAutocomplete('origin')
         this.updateAddressFieldsErrors('origin')
       }
       this.props.handleCarriageChange('has_pre_carriage', checked)
@@ -529,7 +460,6 @@ class ShipmentLocationBox extends Component {
 
     if (name === 'has_on_carriage') {
       if (checked) {
-        this.postToggleAutocomplete('destination')
         this.updateAddressFieldsErrors('destination')
       }
       this.props.handleCarriageChange('has_on_carriage', checked)
