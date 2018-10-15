@@ -8,10 +8,10 @@ subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
   shipper = tenant.users.shipper.first
-  DataValidator::AllPricingsValidator.new(
+  DataValidator::PricingValidator.new(
     tenant: tenant.id,
     user: shipper,
-    key: 'data/speedtrans/pricing_expected_20180926_speedtrans.xlsx',
+    key: 'data/speedtrans/pricing_expected_20181015_speedtrans.xlsx',
     load_type: 'lcl'
     ).perform
 

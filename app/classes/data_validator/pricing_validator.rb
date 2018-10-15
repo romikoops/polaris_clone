@@ -78,7 +78,7 @@ module DataValidator
       all_units = false
       until all_units
         row = @sheet.row(current_index)
-        if row.first.include?('#')
+        if row&.first&.include?('#')
           str = row.first.sub('#', '')
           str_index, attribute = str.split('-')
           cargo_index = str_index.to_i
