@@ -199,13 +199,13 @@ cucumber:
 
   before_script:
     - export CI_ENVIRONMENT_SLUG=$(cat ci_environment_slug.txt)
-    - export TARGET_URL=https://demo.$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
+    - export TARGET_URL=$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
 
   script: |
     cd qa/
     bundle check --path vendor/bundle || bundle install --path vendor/bundle --jobs $(nproc)
-    echo "Target URL: $TARGET_URL"
-    bin/cucumber --format progress --format junit --out report/
+    echo "Target URL: https://demo.$TARGET_URL"
+    bin/cucumber --tags 'not @wip' --format pretty --format junit --out report/
 
   artifacts:
     paths:

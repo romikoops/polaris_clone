@@ -1,3 +1,4 @@
+@FeatureQuoteTool
 Feature: Find Quotes
 
   As an agent,

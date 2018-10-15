@@ -7,7 +7,7 @@ require 'cucumber'
 require 'selenium-webdriver'
 
 # Load all support
-Dir[File.expand_path('**/*.rb', __dir__)].each { |f| require f }
+# Dir[File.expand_path('**/*.rb', __dir__)].each { |f| require f }
 
 Capybara.register_driver :chrome do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome)
@@ -33,14 +33,18 @@ Capybara.register_driver :headless_chrome do |app|
 end
 
 Capybara.default_driver = ENV.fetch('DRIVER', 'chrome').to_sym
-Capybara.app_host = ENV.fetch('TARGET_URL', 'https://demo.itsmycargo.com')
-Capybara.default_max_wait_time = 30
+# Capybara.default_max_wait_time = 30
 
 Capybara::Screenshot.autosave_on_failure = false
 
 Before do |scenario|
   @scenario = scenario
   @step_index = 0
+
+  # Connect to correct subdomain
+  tags = scenario.tags.map(&:name)
+  subdomain = Helpers.subdomain_for_features(tags: tags)
+  Capybara.app_host = Helpers.app_host(subdomain: subdomain || 'demo')
 end
 
 AfterStep do
@@ -53,5 +57,3 @@ After do |scenario|
     print_console_log
   end
 end
-
-World(Helpers)
