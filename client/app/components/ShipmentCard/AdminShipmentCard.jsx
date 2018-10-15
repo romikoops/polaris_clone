@@ -81,7 +81,6 @@ class AdminShipmentCard extends Component {
       t,
       isDashboard
     } = this.props
-
     const gradientFontStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -129,7 +128,7 @@ class AdminShipmentCard extends Component {
     const timeRow = plannedDate && shipment.planned_etd && shipment.planned_eta
       ? (<div className={`layout-row flex-100 layout-align-start-center
     ${styles.middle_bottom_box} ${styles.smallText}`}
-    >
+      >
         <div className="flex-20 layout-align-center-start">
           <span className="flex-100"><b>{t('common:pickupDate')}</b><br />
             <span className={`${styles.grey}`}>
@@ -278,7 +277,7 @@ class AdminShipmentCard extends Component {
             <div className="layout-row flex-10">
               <div className="layout-row layout-align-center-center">
                 <span className={`${styles.smallText}`}>
-                  <b>x</b><span className={`${styles.bigText}`}>1</span>
+                  <b>x</b><span className={`${styles.bigText}`}>{shipment.cargo_units.length}</span>
                 </span>
               </div>
             </div>
@@ -300,10 +299,12 @@ class AdminShipmentCard extends Component {
           </div>
           <div className="layout-row flex layout-align-end-end">
             <span className={`${styles.bigText} ${styles.price_style}`}>
-              <span> {shipment.total_price.currency} </span>
               <span>
-                {numberSpacing(shipment.total_price.value, 2)}
-              </span> 
+                {shipment.edited_total
+                  ? numberSpacing(shipment.edited_total.value, 2)
+                  : numberSpacing(shipment.total_price.value, 2)}
+              </span>
+              <span> {shipment.total_price.currency} </span>
             </span>
           </div>
         </div>

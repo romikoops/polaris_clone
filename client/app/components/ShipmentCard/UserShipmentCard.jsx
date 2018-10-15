@@ -190,7 +190,7 @@ class UserShipmentCard extends Component {
             <div className="layout-row flex-10">
               <div className="layout-row layout-align-center-center">
                 <span className={`${styles.smallText}`}>
-                  <b>x</b><span className={`${styles.bigText}`}>1</span>
+                  <b>x</b><span className={`${styles.bigText}`}>{shipment.cargo_units.length}</span>
                 </span>
               </div>
             </div>
@@ -213,12 +213,12 @@ class UserShipmentCard extends Component {
           <div className="layout-row flex layout-align-end-end">
             <span className={`${styles.bigText} ${styles.price_style}`}>
               <span>
-                {shipment.total_price.currency}
+                {shipment.edited_total
+                  ? numberSpacing(shipment.edited_total.value, 2)
+                  : numberSpacing(shipment.total_price.value, 2)}
               </span>
               <span>&nbsp;</span>
-              <span>
-                {numberSpacing(shipment.total_price.value, 2)}
-              </span>
+              <span> {shipment.total_price.currency} </span>
             </span>
           </div>
         </div>

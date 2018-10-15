@@ -557,7 +557,7 @@ export default function admin (state = {}, action) {
           ? state.dashboard.shipments.archived
           : []
       dashArchived.push(action.payload)
-      
+
       const shipment = state.shipment && state.shipment.shipment ? state.shipment.shipment : {}
       if (shipment) {
         shipment.status = 'archived'
