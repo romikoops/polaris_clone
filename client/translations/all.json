@@ -347,7 +347,9 @@
         "truckingRate": "Trucking Rate",
         "container": "Container",
         "containers": "Containers",
-        "cargoItems": "Cargo Items"
+        "cargoItems": "Cargo Items",
+        "yourCargo": "Your Cargo",
+        "fillFormCargoDetails": "(Fill the form with your cargo details)",
       },
       "bookconf": {
         "_component": "BookingConfirmation",
