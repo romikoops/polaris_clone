@@ -15,16 +15,16 @@ class ChargeCategory < ApplicationRecord
   end
 
   def self.update_names
-    LocalCharge.all.each do |local|
+    LocalCharge.find_each do |local|
       local.fees.each do |key, fee|
         ChargeCategory.from_fee(fee)
       end
     end
-    PricingDetail.all.each do |pricing|
+    PricingDetail.find_each do |pricing|
       fee = { "code" => pricing.shipping_type }
       ChargeCategory.from_fee(fee)
     end
-    TruckingPricing.all.each do |trucking_pricing|
+    TruckingPricing.find_each do |trucking_pricing|
       trucking_pricing.fees.each do |key, fee|
         ChargeCategory.from_fee(fee)
       end

@@ -77,11 +77,11 @@ class QuoteCard extends PureComponent {
     const { tenant } = this.props
     const { scope } = tenant.data
     switch (scope.fee_detail) {
-      case '0':
+      case 'key':
         return this.displayKeyOnly(charge[0])
-      case '1':
+      case 'name':
         return charge[1].name
-      case '2':
+      case 'key_and_name':
         return this.displayKeyAndName(charge)
       default:
         return this.displayKeyOnly(charge[0])
