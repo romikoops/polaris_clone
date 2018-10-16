@@ -72,7 +72,7 @@ api:
   retry: 1
   cache:
     paths:
-      - vendor/bundle
+      - /usr/local/bundle/
   variables:
     POSTGRES_DB: imcr_test
     DATABASE_URL: postgis://postgres:@localhost/imcr_test
@@ -141,48 +141,7 @@ docker:
     install_dependencies
     registry_login
 
-    # Build api
-    echo 'Building API'
-    date
-    docker pull ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_REF_SLUG} || true
-    docker build \
-      --cache-from ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_REF_SLUG} \
-      --tag ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_SHA} \
-      --tag ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_REF_SLUG} \
-      .
-    date
-
-    # Build client
-    echo 'Building Client'
-    date
-    docker pull ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_REF_SLUG} || true
-    docker build \
-      --cache-from ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_REF_SLUG} \
-      --tag ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_SHA} \
-      --tag ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_REF_SLUG} \
-      --build-arg RELEASE=${CI_COMMIT_SHA} \
-      --build-arg SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN} \
-      client/
-    date
-
-    # Build QA
-    echo 'Building QA'
-    date
-    docker pull ${DOCKER_REGISTRY}/imc/qa:${CI_COMMIT_REF_SLUG} || true
-    docker build \
-      --cache-from ${DOCKER_REGISTRY}/imc/qa:${CI_COMMIT_REF_SLUG} \
-      --tag ${DOCKER_REGISTRY}/imc/qa:${CI_COMMIT_SHA} \
-      --tag ${DOCKER_REGISTRY}/imc/qa:${CI_COMMIT_REF_SLUG} \
-      qa/
-    date
-
-    # Push images
-    docker push ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_SHA}
-    docker push ${DOCKER_REGISTRY}/imc/api:${CI_COMMIT_REF_SLUG}
-    docker push ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_SHA}
-    docker push ${DOCKER_REGISTRY}/imc/client:${CI_COMMIT_REF_SLUG}
-    docker push ${DOCKER_REGISTRY}/imc/qa:${CI_COMMIT_SHA}
-    docker push ${DOCKER_REGISTRY}/imc/qa:${CI_COMMIT_REF_SLUG}
+    scripts/build.sh
 
   dependencies: []
 
@@ -212,7 +171,7 @@ deploy:
   <<: *dedicated-runner
   <<: *merge-request-only
   stage: QA
-  image: eu.gcr.io/itsmycargo-main/imc/qa:${CI_COMMIT_SHA}
+  image: eu.gcr.io/itsmycargo-main/ci/imc-qa:${CI_COMMIT_SHA}
   retry: 1
   variables:
     GIT_STRATEGY: none

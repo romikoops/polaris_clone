@@ -11,7 +11,12 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 WORKDIR /app
 
 COPY Gemfile Gemfile.lock ./
-RUN bundle check --path vendor/bundle || bundle install --path vendor/bundle -j $(nproc)
+RUN bundle config --global frozen 1 \
+    && bundle install -j4 --retry 3 \
+    # Remove unneeded files (cached *.gem, *.o, *.c)
+    && rm -rf /usr/local/bundle/cache/*.gem \
+    && find /usr/local/bundle/gems/ -name "*.c" -delete \
+    && find /usr/local/bundle/gems/ -name "*.o" -delete
 
 COPY . ./
 

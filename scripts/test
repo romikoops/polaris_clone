@@ -29,9 +29,7 @@ def yellow(msg)
 end
 
 def bundle!
-  path = ENV['CI'] ? '--path vendor/bundle' : ''
-
-  system("bundle check #{path}") || system!("bundle install -j $(nproc) #{path}")
+  system('bundle check') || system!('bundle install -j $(nproc)')
 end
 
 def runner(dir:, name:)
