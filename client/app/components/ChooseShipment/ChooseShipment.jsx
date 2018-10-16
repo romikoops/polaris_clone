@@ -30,44 +30,6 @@ class ChooseShipment extends Component {
     this.determineAvailableOptions()
   }
 
-  // componentWillReceiveProps (nextProps) {
-  //   if (nextProps !== this.props && nextProps.scope) {
-  //     const { scope } = nextProps
-  //     const allowedCargoTypeCount = { cargo_item: 0, container: 0 }
-  //     const allowedCargoTypes = { cargo_item: false, container: false }
-
-  //     Object.keys(scope.modes_of_transport).forEach((mot) => {
-  //       allowedCargoTypeCount.cargo_item += scope.modes_of_transport[mot].cargo_item
-  //       allowedCargoTypeCount.container += scope.modes_of_transport[mot].container
-  //     })
-  //     if (allowedCargoTypeCount.container > 0) {
-  //       allowedCargoTypes.container = true
-  //     }
-  //     if (allowedCargoTypeCount.cargo_item > 0) {
-  //       allowedCargoTypes.cargo_item = true
-  //     }
-  //     const showCargoTypes = allowedCargoTypes.cargo_item && allowedCargoTypes.container
-  //     const showDirections = !scope.default_direction
-  //     if (!showCargoTypes && showDirections) {
-  //       const loadType = allowedCargoTypes.cargo_item ? 'cargo_item' : 'container'
-  //       this.setState({
-  //         allowedCargoTypes, showCargoTypes, showDirections, loadType
-  //       })
-  //     } else if (showCargoTypes && !showDirections) {
-  //       const direction = scope.default_direction
-  //       this.setState({
-  //         allowedCargoTypes, showCargoTypes, showDirections, direction
-  //       })
-  //     } else if (!showCargoTypes && !showDirections) {
-  //       const direction = scope.default_direction
-  //       const loadType = allowedCargoTypes.cargo_item ? 'cargo_item' : 'container'
-  //       this.props.selectLoadType({ loadType, direction })
-  //     } else {
-  //       this.setState({ allowedCargoTypes, showCargoTypes, showDirections })
-  //     }
-  //   }
-  // }
-
   setLoadType (loadType) {
     this.setState({ loadType })
   }
