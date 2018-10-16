@@ -319,7 +319,7 @@ class TenantSeeder
         fixed_exchange_rates: false,
         dangerous_goods: false,
         fee_detail: "key_and_name",
-        detailed_billing: false,
+        detailed_billing: true,
         incoterm_info_level: 'text',
         cargo_info_level: 'hs_codes',
         has_insurance: true,

@@ -108,7 +108,6 @@ class QuoteCard extends PureComponent {
       default:
         return `${fee[0]} - ${fee[1].name}`
     }
-    
   }
 
   selectSchedule (schedule) {
@@ -223,10 +222,13 @@ class QuoteCard extends PureComponent {
         )}
         content={Object.entries(quote[`${key}`])
           .map(array => array.filter(value => !dnrKeys.includes(value)))
-          .filter(value => value.length !== 1).map((price) => {
+          .filter(value => value.length !== 1).map((price, i) => {
             const subPrices = (<div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
               <div className="flex-45 layout-row layout-align-start-center">
-                <span>{key === 'cargo' ? t('cargo:freightRate') : this.determineSubKey(price)}</span>
+                <span>
+                  {key === 'cargo' ? t('cargo:unitFreightRate', { unitNo: i + 1 })
+                    : this.determineSubKey(price)}
+                </span>
               </div>
               <div className="flex-50 layout-row layout-align-end-center">
                 <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{(price[1].currency || price[1].total.currency)}</p>

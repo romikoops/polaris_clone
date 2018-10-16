@@ -7,27 +7,23 @@ class ChargeCategory < ApplicationRecord
   validates :code, is_model: true, unless: ->(obj) { obj.cargo_unit_id.nil? }
 
   def self.grand_total
-    find_or_create_by(code: "grand_total", name: "Grand Total")
+    find_or_create_by(code: 'grand_total', name: 'Grand Total')
   end
 
   def self.base_node
-    find_or_create_by(code: "base_node", name: "Base Node")
+    find_or_create_by(code: 'base_node', name: 'Base Node')
   end
 
   def self.update_names
-    LocalCharge.find_each do |local|
-      local.fees.each do |key, fee|
-        ChargeCategory.from_fee(fee)
-      end
-    end
-    PricingDetail.find_each do |pricing|
-      fee = { "code" => pricing.shipping_type }
+    LocalCharge.pluck(:fees).reject(&:empty?).each do |fee|
       ChargeCategory.from_fee(fee)
     end
-    TruckingPricing.find_each do |trucking_pricing|
-      trucking_pricing.fees.each do |key, fee|
-        ChargeCategory.from_fee(fee)
-      end
+    PricingDetail.find_each do |pricing|
+      fee = { 'code' => pricing.shipping_type }
+      ChargeCategory.from_fee(fee)
+    end
+    TruckingPricing.pluck(:fees).reject(&:empty?).each do |fee|
+      ChargeCategory.from_fee(fee)
     end
   end
 
@@ -35,15 +31,15 @@ class ChargeCategory < ApplicationRecord
     find_by_code(code) ||
       find_or_create_by(
         code: code,
-        name: code.to_s.humanize.split(" ").map(&:capitalize).join(" ")
+        name: code.to_s.humanize.split(' ').map(&:capitalize).join(' ')
       )
   end
 
   def self.from_fee(charge)
-    charge_name = charge["name"] || charge["key"].to_s.humanize.split(" ").map(&:capitalize).join(" ")
-    existing_charge_category = find_by(code: charge["key"])
+    charge_name = charge['name'] || charge['key'].to_s.humanize.split(' ').map(&:capitalize).join(' ')
+    existing_charge_category = find_by(code: charge['key'])
     if existing_charge_category.nil?
-      find_or_create_by(code: charge["key"], name: charge_name)
+      find_or_create_by(code: charge['key'], name: charge_name)
     else
       existing_charge_category.update_attributes(name: charge_name)
     end

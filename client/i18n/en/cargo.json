@@ -55,6 +55,7 @@
   "lengthDataTip": "Please note that the maximum length for items in Air Freight shipments is",
   "lengthDataTipTwo": "Length is automatically set by 'Collie Type'",
   "yourCargo": "Your Cargo",
+  "unitFreightRate": "Freight Rate: Unit {{unitNo}}",
   "fillFormCargoDetails": "(Fill the form with your cargo details)",
   "cargoItem": "Cargo Item",
   "container": "Container",
