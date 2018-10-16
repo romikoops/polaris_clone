@@ -914,7 +914,7 @@ function confirmShipment (id, action, redirect) {
           dispatch(successAccept(shipmentData))
         } else if (action === 'finished') {
           dispatch(successFinished(shipmentData))
-        } else if (action === 'decline') {
+        } else if (['decline', 'ignore'].includes(action)) {
           dispatch(successDeny(shipmentData))
         } else if (action === 'archive') {
           dispatch(successArchive(shipmentData))
