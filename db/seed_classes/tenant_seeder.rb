@@ -2,7 +2,10 @@
 
 class TenantSeeder
 
-  TENANT_DATA  = JSON.parse(File.read("#{Rails.root}/db/dummydata/tenants.json"))
+
+  def self.tenant_data
+    JSON.parse(File.read("#{Rails.root}/db/dummydata/tenants.json"))
+  end
 
   def self.sandbox_exec(tenant_attr, other_data)
     tenant_attr[:subdomain] = "#{tenant_attr[:subdomain]}-sandbox"
@@ -31,8 +34,8 @@ class TenantSeeder
 
   def self.perform(filter = {})
     puts 'Seeding Tenants...'
-    TENANT_DATA.each do |tenant_attr|
-      tenant_attr.deep_symbolize_keys!
+    tenant_data.each do |raw_tenant|
+      tenant_attr = raw_tenant.deep_symbolize_keys
       next unless should_perform?(tenant_attr, filter)
 
       puts "  - #{tenant_attr[:subdomain]}..."
@@ -68,14 +71,14 @@ class TenantSeeder
   def self.update_cargo_item_types!(tenant, cargo_item_types_attr)
     return if cargo_item_types_attr.nil?
 
-    if cargo_item_types_attr == :all
+    if cargo_item_types_attr == 'all'
       CARGO_ITEM_TYPES.each do |cargo_item_type|
         TenantCargoItemType.find_or_create_by(tenant: tenant, cargo_item_type: cargo_item_type)
       end
       return
     end
 
-    if cargo_item_types_attr == :no_dimensions
+    if cargo_item_types_attr == 'no_dimensions'
       CARGO_ITEM_TYPES_NO_DIMENSIONS.each do |cargo_item_type|
         TenantCargoItemType.find_or_create_by(tenant: tenant, cargo_item_type: cargo_item_type)
       end
