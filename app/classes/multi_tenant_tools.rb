@@ -21,65 +21,65 @@ module MultiTenantTools
   )
   def update_indexes
     Tenant.all.each do |tenant|
-      title = tenant.name + " | ItsMyCargo"
-      favicon = "https://assets.itsmycargo.com/assets/favicon.ico"
+      title = tenant.name + ' | ItsMyCargo'
+      favicon = 'https://assets.itsmycargo.com/assets/favicon.ico'
       # indexHtml = Nokogiri::HTML(open("https://demo.itsmycargo.com/index.html"))
-      indexHtml = Nokogiri::HTML(open(Rails.root.to_s + "/client/dist/index.html"))
-      
-      titles = indexHtml.xpath("//title")
+      indexHtml = Nokogiri::HTML(open(Rails.root.to_s + '/client/dist/index.html'))
+
+      titles = indexHtml.xpath('//title')
       titles[0].content = title
-      links = indexHtml.xpath("//link")
+      links = indexHtml.xpath('//link')
 
       links.each do |lnk|
-        if lnk.attributes && lnk.attributes["href"] && lnk.attributes["href"].value == "https://assets.itsmycargo.com/assets/favicon.ico"
+        if lnk.attributes && lnk.attributes['href'] && lnk.attributes['href'].value == 'https://assets.itsmycargo.com/assets/favicon.ico'
           lnk.content = favicon
         end
       end
 
-      objKey = tenant["subdomain"] + ".html"
+      objKey = tenant['subdomain'] + '.html'
       newHtml = indexHtml.to_html
       # Replace API Host and tenantName
       newHtml.gsub!('__API_URL__', API_URL)
       newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
 
-      M3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: StringIO.new(newHtml), content_type: "text/html", acl: "public-read")
-      invalidate(tenant.web["cloudfront"], tenant.subdomain) if tenant.web && tenant.web["cloudfront"]
+      M3.put_object(bucket: 'multi.itsmycargo.com', key: objKey, body: StringIO.new(newHtml), content_type: 'text/html', acl: 'public-read')
+      invalidate(tenant.web['cloudfront'], tenant.subdomain) if tenant.web && tenant.web['cloudfront']
     end
   end
 
   def update_tenant(subdomain)
     # Tenant.all.each do |tenant|
     Tenant.where(subdomain: subdomain).each do |tenant|
-      title = tenant.name + " | ItsMyCargo"
-      favicon = "https://assets.itsmycargo.com/assets/favicon.ico"
+      title = tenant.name + ' | ItsMyCargo'
+      favicon = 'https://assets.itsmycargo.com/assets/favicon.ico'
       # indexHtml = Nokogiri::HTML(open("https://demo.itsmycargo.com/index.html"))
-      indexHtml = Nokogiri::HTML(open(Rails.root.to_s + "/client/dist/index.html"))
-      titles = indexHtml.xpath("//title")
+      indexHtml = Nokogiri::HTML(open(Rails.root.to_s + '/client/dist/index.html'))
+      titles = indexHtml.xpath('//title')
       titles[0].content = title
-      links = indexHtml.xpath("//link")
+      links = indexHtml.xpath('//link')
 
       links.each do |lnk|
-        if lnk.attributes && lnk.attributes["href"] && lnk.attributes["href"].value == "https://assets.itsmycargo.com/assets/favicon.ico"
+        if lnk.attributes && lnk.attributes['href'] && lnk.attributes['href'].value == 'https://assets.itsmycargo.com/assets/favicon.ico'
           lnk.content = favicon
         end
       end
 
-      objKey = tenant["subdomain"] + ".html"
+      objKey = tenant['subdomain'] + '.html'
       newHtml = indexHtml.to_html
       # Replace API Host and tenantName
       newHtml.gsub!('__API_URL__', DEV_API_URL)
       newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
-      File.open("blank.html", "w") { |file| file.write(newHtml) }
-      upFile = open("blank.html")
-      M3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
-      invalidate(tenant.web["cloudfront"], tenant.subdomain) if tenant.web && tenant.web["cloudfront"]
+      File.open('blank.html', 'w') { |file| file.write(newHtml) }
+      upFile = open('blank.html')
+      M3.put_object(bucket: 'multi.itsmycargo.com', key: objKey, body: upFile, content_type: 'text/html', acl: 'public-read')
+      invalidate(tenant.web['cloudfront'], tenant.subdomain) if tenant.web && tenant.web['cloudfront']
     end
   end
 
   def create_sandboxes
     sandbox_tenants = []
     Tenant.all.map do |t|
-      sandbox_tenants << t if t.subdomain.include? "sandbox"
+      sandbox_tenants << t if t.subdomain.include? 'sandbox'
     end
 
     sandbox_tenants.each do |st|
@@ -90,11 +90,11 @@ module MultiTenantTools
   def update_tenant_jsons
     @json_data = JSON.parse(File.read("#{Rails.root}/db/static_data/tenants.json"))
     @json_data.each do |tenant|
-      subdomain = tenant["subdomain"]
-      File.open("#{Rails.root}/db/dummydata/#{subdomain}/#{subdomain}.json", "w") { |file| file.write(tenant.to_json) }
+      subdomain = tenant['subdomain']
+      File.open("#{Rails.root}/db/dummydata/#{subdomain}/#{subdomain}.json", 'w') { |file| file.write(tenant.to_json) }
       objKey = "data/#{subdomain}/#{subdomain}.json"
       upFile = File.open("#{Rails.root}/db/dummydata/#{subdomain}/#{subdomain}.json")
-      S3.put_object(bucket: "assets.itsmycargo.com", key: objKey, body: upFile, content_type: "application/json", acl: "private")
+      S3.put_object(bucket: 'assets.itsmycargo.com', key: objKey, body: upFile, content_type: 'application/json', acl: 'private')
     end
   end
 
@@ -102,18 +102,18 @@ module MultiTenantTools
     @json_data = JSON.parse(File.read("#{Rails.root}/db/static_data/tenants.json"))
     @new_data = []
     @json_data.each do |tenant|
-      subdomain = tenant["subdomain"]
+      subdomain = tenant['subdomain']
       tenant_data = JSON.parse(
-        S3.get_object(bucket: "assets.itsmycargo.com", key: "data/#{subdomain}/#{subdomain}.json").body.read
+        S3.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
       )
       @new_data << tenant_data
     end
-    File.open("#{Rails.root}/db/dummydata/tenants.json", "w") { |file| file.write(@new_data.to_json) }
+    File.open("#{Rails.root}/db/dummydata/tenants.json", 'w') { |file| file.write(@new_data.to_json) }
   end
 
   def update_tenant_from_json(subdomain)
     json_data = JSON.parse(
-      S3.get_object(bucket: "assets.itsmycargo.com", key: "data/#{subdomain}/#{subdomain}.json").body.read
+      S3.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
     )
     json_data.delete('other_data')
     Tenant.find_by_subdomain(json_data['subdomain']).update_attributes(json_data)
@@ -122,7 +122,7 @@ module MultiTenantTools
   def create_new_tenant_site(subdomains)
     subdomains.each do |subdomain|
       json_data = JSON.parse(
-        S3.get_object(bucket: "assets.itsmycargo.com", key: "data/#{subdomain}/#{subdomain}.json").body.read
+        S3.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
       ).deep_symbolize_keys
       new_site(json_data, false)
     end
@@ -131,41 +131,41 @@ module MultiTenantTools
   def new_site(tenant, _is_demo)
     tenant.delete(:other_data)
     new_tenant = Tenant.create(tenant)
-    title = tenant[:name] + " | ItsMyCargo"
+    title = tenant[:name] + ' | ItsMyCargo'
     meta = tenant[:meta]
-    favicon = tenant[:favicon] ? tenant[:favicon] : "https://assets.itsmycargo.com/assets/favicon.ico"
-    indexHtml = Nokogiri::HTML(open(Rails.root.to_s + "/client/dist/index.html"))
-    titles = indexHtml.xpath("//title")
+    favicon = tenant[:favicon] || 'https://assets.itsmycargo.com/assets/favicon.ico'
+    indexHtml = Nokogiri::HTML(open(Rails.root.to_s + '/client/dist/index.html'))
+    titles = indexHtml.xpath('//title')
     titles[0].content = title
-    metas = indexHtml.xpath("//meta")
-    links = indexHtml.xpath("//link")
+    metas = indexHtml.xpath('//meta')
+    links = indexHtml.xpath('//link')
 
     links.each do |lnk|
-      if lnk.attributes && lnk.attributes["href"] && lnk.attributes["href"].value == "https://assets.itsmycargo.com/assets/favicon.ico"
+      if lnk.attributes && lnk.attributes['href'] && lnk.attributes['href'].value == 'https://assets.itsmycargo.com/assets/favicon.ico'
         lnk.content = favicon
       end
     end
 
-    objKey = tenant[:subdomain] + ".html"
+    objKey = tenant[:subdomain] + '.html'
     newHtml = indexHtml.to_html
-    M3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: StringIO.new(newHtml), content_type: "text/html", acl: "public-read")
+    M3.put_object(bucket: 'multi.itsmycargo.com', key: objKey, body: StringIO.new(newHtml), content_type: 'text/html', acl: 'public-read')
 
     create_distribution(tenant[:subdomain])
   end
 
   def new_site_from_tenant(subdomain)
     tenant = Tenant.find_by_subdomain(subdomain)
-    title = tenant.name + " | ItsMyCargo"
+    title = tenant.name + ' | ItsMyCargo'
 
-    favicon = "https://assets.itsmycargo.com/assets/favicon.ico"
-    indexHtml = Nokogiri::HTML(open(Rails.root.to_s + "/client/dist/index.html"))
-    titles = indexHtml.xpath("//title")
+    favicon = 'https://assets.itsmycargo.com/assets/favicon.ico'
+    indexHtml = Nokogiri::HTML(open(Rails.root.to_s + '/client/dist/index.html'))
+    titles = indexHtml.xpath('//title')
     titles[0].content = title
-    metas = indexHtml.xpath("//meta")
-    links = indexHtml.xpath("//link")
+    metas = indexHtml.xpath('//meta')
+    links = indexHtml.xpath('//link')
 
     links.each do |lnk|
-      if lnk.attributes && lnk.attributes["href"] && lnk.attributes["href"].value == "https://assets.itsmycargo.com/assets/favicon.ico"
+      if lnk.attributes && lnk.attributes['href'] && lnk.attributes['href'].value == 'https://assets.itsmycargo.com/assets/favicon.ico'
         lnk.content = favicon
       end
     end
@@ -173,15 +173,15 @@ module MultiTenantTools
     s3 = Aws::S3::Client.new(
       access_key_id:     Settings.aws.access_key_id,
       secret_access_key: Settings.aws.secret_access_key,
-      region:            "us-east-1"
+      region:            'us-east-1'
     )
-    objKey = tenant.subdomain + ".html"
+    objKey = tenant.subdomain + '.html'
     newHtml = indexHtml.to_html
     # Replace API Host and tenantName
     newHtml.gsub!('__API_URL__', API_URL)
     newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
 
-    M3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: StringIO.new(newHtml), content_type: "text/html", acl: "public-read")
+    M3.put_object(bucket: 'multi.itsmycargo.com', key: objKey, body: StringIO.new(newHtml), content_type: 'text/html', acl: 'public-read')
 
     create_distribution(tenant[:subdomain])
   end
@@ -196,32 +196,32 @@ module MultiTenantTools
     path = "#{subd}.html"
     domain = "#{subd}.itsmycargo.com"
     p path
-    origin_id = "S3-multi.itsmycargo.com"
-    origin_domain = "multi.itsmycargo.com.s3.amazonaws.com"
+    origin_id = 'S3-multi.itsmycargo.com'
+    origin_domain = 'multi.itsmycargo.com.s3.amazonaws.com'
     origins = {
       quantity: 1,
       items:    [
         { id:               origin_id,
           domain_name:      origin_domain,
-          origin_path:      "",
-          s3_origin_config: { origin_access_identity: "" } }
+          origin_path:      '',
+          s3_origin_config: { origin_access_identity: '' } }
       ]
     }
     default_cache_behavior = {
       target_origin_id:       origin_id,
-      forwarded_values:       { query_string: false, cookies: { forward: "none" } },
+      forwarded_values:       { query_string: false, cookies: { forward: 'none' } },
       trusted_signers:        { enabled: false, quantity: 0 },
-      viewer_protocol_policy: "redirect-to-https",
+      viewer_protocol_policy: 'redirect-to-https',
 
       compress:               true,
 
       min_ttl:                0
     }
-    price_class = "PriceClass_All"
+    price_class = 'PriceClass_All'
     viewer_certificate = { cloud_front_default_certificate: false,
-                           ssl_support_method:              "sni-only",
-                           acm_certificate_arn:             "arn:aws:acm:us-east-1:003688427525:certificate/fa0a9dca-a804-4fee-8a97-a273f827b1c5" }
-    comment = "-"
+                           ssl_support_method:              'sni-only',
+                           acm_certificate_arn:             'arn:aws:acm:us-east-1:003688427525:certificate/fa0a9dca-a804-4fee-8a97-a273f827b1c5' }
+    comment = '-'
     enabled = true
     resp = cloudfront.create_distribution \
       distribution_config: {
@@ -244,13 +244,13 @@ module MultiTenantTools
             {
               error_code:            403, # required
               response_page_path:    "/#{subd}.html",
-              response_code:         "200",
+              response_code:         '200',
               error_caching_min_ttl: 1
             },
             {
               error_code:            404, # required
               response_page_path:    "/#{subd}.html",
-              response_code:         "200",
+              response_code:         '200',
               error_caching_min_ttl: 1
             }
           ]
@@ -260,8 +260,8 @@ module MultiTenantTools
     @distribution_domain_name = resp[:distribution][:domain_name]
     tenant = Tenant.find_by_subdomain(subd)
     tenant.web = {} unless tenant.web
-    tenant.web["cloudfront"] = @distribution_id
-    tenant.web["cloudfront_name"] = @distribution_domain_name
+    tenant.web['cloudfront'] = @distribution_id
+    tenant.web['cloudfront_name'] = @distribution_domain_name
     tenant.save!
     new_record(domain, resp[:distribution][:domain_name])
   end
@@ -273,18 +273,18 @@ module MultiTenantTools
       region:            Settings.aws.region
     )
     resp = client.change_resource_record_sets(
-      hosted_zone_id: "Z3TZQVG8RI9CYN", # required
+      hosted_zone_id: 'Z3TZQVG8RI9CYN', # required
       change_batch:   { # required
-        comment: "Multi Tenant System",
+        comment: 'Multi Tenant System',
         changes: [ # required
           {
-            action:              "CREATE", # required, accepts CREATE, DELETE, UPSERT
+            action:              'CREATE', # required, accepts CREATE, DELETE, UPSERT
             resource_record_set: { # required
               name:         domain, # required
-              type:         "A", # required, accepts SOA, A, TXT, NS, CNAME, MX, NAPTR, PTR, SRV, SPF, AAAA
+              type:         'A', # required, accepts SOA, A, TXT, NS, CNAME, MX, NAPTR, PTR, SRV, SPF, AAAA
 
               alias_target: {
-                hosted_zone_id:         "Z2FDTNDATAQYW2", # required
+                hosted_zone_id:         'Z2FDTNDATAQYW2', # required
                 dns_name:               cf_name, # required
                 evaluate_target_health: false, # required
               }
@@ -295,18 +295,18 @@ module MultiTenantTools
       }
     )
     resp = client.change_resource_record_sets(
-      hosted_zone_id: "Z3TZQVG8RI9CYN", # required
+      hosted_zone_id: 'Z3TZQVG8RI9CYN', # required
       change_batch:   { # required
-        comment: "Hydra6",
+        comment: 'Hydra6',
         changes: [ # required
           {
-            action:              "CREATE", # required, accepts CREATE, DELETE, UPSERT
+            action:              'CREATE', # required, accepts CREATE, DELETE, UPSERT
             resource_record_set: { # required
               name:         domain, # required
-              type:         "AAAA", # required, accepts SOA, A, TXT, NS, CNAME, MX, NAPTR, PTR, SRV, SPF, AAAA
+              type:         'AAAA', # required, accepts SOA, A, TXT, NS, CNAME, MX, NAPTR, PTR, SRV, SPF, AAAA
 
               alias_target: {
-                hosted_zone_id:         "Z2FDTNDATAQYW2", # required
+                hosted_zone_id:         'Z2FDTNDATAQYW2', # required
                 dns_name:               cf_name, # required
                 evaluate_target_health: false, # required
               }
@@ -318,36 +318,35 @@ module MultiTenantTools
   end
 
   def seed_demo_site(subdomain, tld)
-
     tenant = Tenant.find_by_subdomain(subdomain)
     tenant.users.destroy_all
     admin = tenant.users.new(
-      role:                  Role.find_by_name("admin"),
+      role:                  Role.find_by_name('admin'),
 
       company_name:          tenant.name,
-      first_name:            "Admin",
-      last_name:             "Admin",
-      phone:                 "123456789",
+      first_name:            'Admin',
+      last_name:             'Admin',
+      phone:                 '123456789',
 
       email:                 "admin@#{subdomain}.#{tld}",
-      password:              "demo123456789",
-      password_confirmation: "demo123456789",
+      password:              'demo123456789',
+      password_confirmation: 'demo123456789',
 
       confirmed_at:          DateTime.new(2017, 1, 20)
     )
 
     admin.save!
     shipper = tenant.users.new(
-      role:                  Role.find_by_name("shipper"),
+      role:                  Role.find_by_name('shipper'),
 
-      company_name:          "Example Shipper Company",
-      first_name:            "John",
-      last_name:             "Smith",
-      phone:                 "123456789",
+      company_name:          'Example Shipper Company',
+      first_name:            'John',
+      last_name:             'Smith',
+      phone:                 '123456789',
 
       email:                 "demo@#{tenant.subdomain}.#{tld}",
-      password:              "demo123456789",
-      password_confirmation: "demo123456789",
+      password:              'demo123456789',
+      password_confirmation: 'demo123456789',
 
       confirmed_at:          DateTime.new(2017, 1, 20)
     )
@@ -356,32 +355,32 @@ module MultiTenantTools
     # Create dummy locations for shipper
     dummy_locations = [
       {
-        street:        "Kehrwieder",
-        street_number: "2",
-        zip_code:      "20457",
-        city:          "Hamburg",
-        country:       "Germany"
+        street:        'Kehrwieder',
+        street_number: '2',
+        zip_code:      '20457',
+        city:          'Hamburg',
+        country:       'Germany'
       },
       {
-        street:        "Carer del Cid",
-        street_number: "13",
-        zip_code:      "08001",
-        city:          "Barcelona",
-        country:       "Spain"
+        street:        'Carer del Cid',
+        street_number: '13',
+        zip_code:      '08001',
+        city:          'Barcelona',
+        country:       'Spain'
       },
       {
-        street:        "College Rd",
-        street_number: "1",
-        zip_code:      "PO1 3LX",
-        city:          "Portsmouth",
-        country:       "United Kingdom"
+        street:        'College Rd',
+        street_number: '1',
+        zip_code:      'PO1 3LX',
+        city:          'Portsmouth',
+        country:       'United Kingdom'
       },
       {
-        street:        "Tuna St",
-        street_number: "64",
-        zip_code:      "90731",
-        city:          "San Pedro",
-        country:       "USA"
+        street:        'Tuna St',
+        street_number: '64',
+        zip_code:      '90731',
+        city:          'San Pedro',
+        country:       'USA'
       }
     ]
 
@@ -393,39 +392,39 @@ module MultiTenantTools
     # Create dummy contacts for shipper address book
     dummy_contacts = [
       {
-        company_name: "Example Shipper Company",
-        first_name:   "John",
-        last_name:    "Smith",
-        phone:        "123456789",
+        company_name: 'Example Shipper Company',
+        first_name:   'John',
+        last_name:    'Smith',
+        phone:        '123456789',
         email:        "demo@#{tenant.subdomain}.com"
       },
       {
-        company_name: "Another Example Shipper Company",
-        first_name:   "Jane",
-        last_name:    "Doe",
-        phone:        "123456789",
-        email:        "jane@doe.com"
+        company_name: 'Another Example Shipper Company',
+        first_name:   'Jane',
+        last_name:    'Doe',
+        phone:        '123456789',
+        email:        'jane@doe.com'
       },
       {
-        company_name: "Yet Another Example Shipper Company",
-        first_name:   "Javier",
-        last_name:    "Garcia",
-        phone:        "0034123456789",
-        email:        "javi@shipping.com"
+        company_name: 'Yet Another Example Shipper Company',
+        first_name:   'Javier',
+        last_name:    'Garcia',
+        phone:        '0034123456789',
+        email:        'javi@shipping.com'
       },
       {
-        company_name: "Forwarder Company",
-        first_name:   "Gertrude",
-        last_name:    "Hummels",
-        phone:        "0049123456789",
-        email:        "gerti@fwd.com"
+        company_name: 'Forwarder Company',
+        first_name:   'Gertrude',
+        last_name:    'Hummels',
+        phone:        '0049123456789',
+        email:        'gerti@fwd.com'
       },
       {
-        company_name: "Another Forwarder Company",
-        first_name:   "Jerry",
-        last_name:    "Lin",
-        phone:        "001123456789",
-        email:        "jerry@fwder2.com"
+        company_name: 'Another Forwarder Company',
+        first_name:   'Jerry',
+        last_name:    'Lin',
+        phone:        '001123456789',
+        email:        'jerry@fwder2.com'
       }
     ]
 
@@ -435,24 +434,24 @@ module MultiTenantTools
       shipper.contacts.create(contact)
     end
 
-    puts "Seed vehicles"
+    puts 'Seed vehicles'
     VehicleSeeder.perform
 
-    puts "Seed prcings"
+    puts 'Seed prcings'
     PricingSeeder.perform
   end
 
   def quick_seed(subdomain)
-    puts "Seed prcings"
+    puts 'Seed prcings'
     PricingSeeder.perform(subdomain: subdomain)
   end
 
   def do_customs(subdomain)
     t = Tenant.find_by_subdomain(subdomain)
     shipper = t.users.shipper.first
-    puts "# Overwrite Local Charges From Sheet"
+    puts '# Overwrite Local Charges From Sheet'
     local_charges = File.open("#{Rails.root}/db/dummydata/fake_local_charges.xlsx")
-    req = { "xlsx" => local_charges }
+    req = { 'xlsx' => local_charges }
     ExcelTool::OverwriteLocalCharges.new(params: req, user: shipper).perform
   end
 
@@ -460,7 +459,7 @@ module MultiTenantTools
     t = Tenant.find_by_subdomain(subdomain)
     shipper = t.users.shipper.first
     public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
-    req = { "xlsx" => public_pricings }
+    req = { 'xlsx' => public_pricings }
     overwrite_mongo_lcl_pricings(req, dedicated = false, shipper)
     overwrite_mongo_lcl_pricings(req, dedicated = true, shipper)
   end
@@ -471,8 +470,8 @@ module MultiTenantTools
       secret_access_key: Settings.aws.secret_access_key,
       region:            Settings.aws.region
     )
-    invalArray = ["/#{subdomain}.html", "/config.js"]
-    invalStr = Time.now.to_i.to_s + "_subdomain"
+    invalArray = ["/#{subdomain}.html", '/config.js']
+    invalStr = Time.now.to_i.to_s + '_subdomain'
     resp = cloudfront.create_invalidation(
       distribution_id:    cfId, # required
       invalidation_batch: { # required
