@@ -5,7 +5,7 @@ import { formatDate, parseDate } from 'react-day-picker/moment'
 import PropTypes from '../../prop-types'
 import '../../styles/day-picker-custom.css'
 import { moment, LOAD_TYPES } from '../../constants'
-import { switchIcon, capitalize, gradientTextGenerator } from '../../helpers'
+import { switchIcon, capitalize } from '../../helpers'
 import styles from './RouteFilterBox.scss'
 import TextHeading from '../TextHeading/TextHeading'
 import Checkbox from '../Checkbox/Checkbox'
@@ -67,7 +67,7 @@ class RouteFilterBox extends Component {
     }
 
     const motCheckBoxKeys = Object.keys(availableMotKeys)
-    const motCheckBoxes = motCheckBoxKeys.map(mKey => (
+    const motCheckBoxes = motCheckBoxKeys.length > 1 ? motCheckBoxKeys.map(mKey => (
       <div className="radio layout-row layout-align-none-center" style={{ margin: '2px 0' }}>
         <Checkbox
           onChange={e => this.handleOptionChange(e, mKey)}
@@ -80,31 +80,12 @@ class RouteFilterBox extends Component {
           {capitalize(mKey)}
         </label>
       </div>
-    ))
+    )) : []
     const imgLCL = { backgroundImage: `url(${LOAD_TYPES[0].img})` }
     const imgFCL = { backgroundImage: `url(${LOAD_TYPES[1].img})` }
-    const textStyle =
-      theme && theme.colors
-        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-        : { color: 'black' }
 
     return (
       <div className={styles.filterbox}>
-        <div className={styles.shipment_summary}>
-          <div>
-            <TextHeading theme={theme} size={4} text={t('shipment:shipmentSummary')} />
-          </div>
-          <div className={`flex-100 layou-wrap ${styles.dpb}`}>
-            <div className="layout-row flex-100">
-              <i className={shipment.has_pre_carriage ? 'fa fa-check clip' : 'fa fa-times'} style={shipment.has_pre_carriage ? textStyle : { color: '#E0E0E0' }} />
-              <span>{t('shipment:preCarriage')}</span>
-            </div>
-            <div className="layout-row flex-100">
-              <i className={shipment.has_on_carriage ? 'fa fa-check clip' : 'fa fa-times'} style={shipment.has_on_carriage ? textStyle : { color: '#E0E0E0' }} />
-              <span>{t('shipment:onCarriage')}</span>
-            </div>
-          </div>
-        </div>
         <div className={styles.pickup_date}>
           <div>
             <TextHeading theme={theme} size={4} text={pickup ? t('shipment:pickUpDate') : t('common:closingDate')} />
@@ -125,12 +106,12 @@ class RouteFilterBox extends Component {
             />
           </div>
         </div>
-        <div className={styles.mode_of_transport}>
+        {motCheckBoxKeys.length > 1 ? <div className={styles.mode_of_transport}>
           <div>
             <TextHeading theme={theme} size={4} text={t('shipment:modeOfTransport')} />
           </div>
           {motCheckBoxes}
-        </div>
+        </div> : '' }
         <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.cargos_recap}`}>
           {cargos.map(cargo => (
             <div className="flex-100 layout-row layout-align-start-center">

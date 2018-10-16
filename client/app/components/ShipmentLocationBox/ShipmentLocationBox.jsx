@@ -1032,10 +1032,6 @@ class ShipmentLocationBox extends Component {
       fetchingtruckingAvailability
     } = this.state
 
-    console.log('!!!!!!!!!!!')
-    console.log(`Origin trucking: ${originTruckingAvailable}`)
-    console.log(`Dest trucking: ${destinationTruckingAvailable}`)
-    console.log('!!!!!!!!!!!')
     if (availableDestinationNexuses) destinationOptions = availableDestinationNexuses
     if (availableOriginNexuses) originOptions = availableOriginNexuses
     const requireFullAddress = scope.require_full_address
@@ -1380,7 +1376,6 @@ class ShipmentLocationBox extends Component {
     if (this.props.hideMap) {
       mapStyle.display = 'none'
     }
-    const isSwitchable = this.isSwitchable()
 
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-center-center">
@@ -1402,14 +1397,14 @@ class ShipmentLocationBox extends Component {
                       `${!truckingOptions.preCarriage ? styles.not_available : ''}`
                     }
                   >
-                    <TruckingTooltip
+                    { !originTruckingAvailable ? <TruckingTooltip
                       truckingBoolean={originTruckingAvailable}
                       truckingOptions={truckingOptions}
                       carriage="preCarriage"
                       hubName={this.state.oSelect.label}
                       direction={shipment.direction}
                       scope={scope}
-                    />
+                    /> : '' }
 
                     { !originTruckingAvailable ? <Toggle
                       className="flex-none"
@@ -1444,14 +1439,14 @@ class ShipmentLocationBox extends Component {
                       `${!truckingOptions.onCarriage ? styles.not_available : ''}`
                     }
                   >
-                    <TruckingTooltip
+                    { !destinationTruckingAvailable ? <TruckingTooltip
                       truckingBoolean={destinationTruckingAvailable}
                       truckingOptions={truckingOptions}
                       carriage="onCarriage"
                       hubName={this.state.dSelect.label}
                       direction={shipment.direction}
                       scope={scope}
-                    />
+                    /> : '' }
 
                     <label htmlFor="on-carriage" style={{ marginRight: '15px' }}>
                       {t('shipment:delivery')}
