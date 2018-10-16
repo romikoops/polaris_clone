@@ -344,6 +344,7 @@
         "lengthDataTipTwo": "Length is automatically set by 'Collie Type'",
         "cargoItem": "Cargo Item",
         "freightRate": "Freight Rate",
+        "unitFreightRate": "Freight Rate: Unit {{unitNo}}",
         "truckingRate": "Trucking Rate",
         "container": "Container",
         "containers": "Containers",

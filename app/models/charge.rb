@@ -16,7 +16,7 @@ class Charge < ApplicationRecord
   validates :detail_level, presence: true
 
   def deconstruct_tree_into_schedule_charge
-    return price.given_attributes if children.empty?
+    return price.given_attributes.merge(name: children_charge_category.name) if children.empty?
 
     children_charges = children.map do |charge|
       children_charge_category = charge.children_charge_category
@@ -24,7 +24,7 @@ class Charge < ApplicationRecord
       [key, charge.deconstruct_tree_into_schedule_charge]
     end.to_h
 
-    { total: price.given_attributes, edited_total: edited_price.try(:given_attributes) }.merge(children_charges)
+    { total: price.given_attributes, edited_total: edited_price.try(:given_attributes), name: children_charge_category.name }.merge(children_charges)
   end
 
   def self.create_from_schedule_charges(

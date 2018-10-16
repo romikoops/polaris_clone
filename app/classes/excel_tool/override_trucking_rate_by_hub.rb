@@ -245,6 +245,7 @@ module ExcelTool
         when "PER_CBM_KG"
           charges[fee_row_key] = { direction: row[:direction], truck_type: row[:truck_type], currency: row[:currency], cbm: row[:cbm], kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
         end
+        ChargeCategory.find_or_create_by!(code:row[:fee_code], name: row[:fee])
       end
     end
 

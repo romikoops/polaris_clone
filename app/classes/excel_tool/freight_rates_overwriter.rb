@@ -369,6 +369,7 @@ module ExcelTool
           pricing_exceptions = new_pricing_data.delete(:exceptions)
           pricing.update(new_pricing_data)
           pricing_details.each do |shipping_type, pricing_detail_data|
+            ChargeCategory.from_code(shipping_type)
             currency = pricing_detail_data.delete(:currency)
             pricing_detail_params = pricing_detail_data.merge(shipping_type: shipping_type, tenant: tenant)
             range = pricing_detail_params.delete(:range)

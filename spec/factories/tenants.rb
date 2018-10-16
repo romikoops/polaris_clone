@@ -27,6 +27,7 @@ FactoryBot.define do
         fixed_currency: true,
         dangerous_goods: false,
         detailed_billing: false,
+        fee_detail: 'key_and_name',
         require_full_address: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'text',
