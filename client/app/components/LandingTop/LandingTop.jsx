@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { translate } from 'react-i18next'
 import styled from 'styled-components'
 import PropTypes from '../../prop-types'
 import styles from './LandingTop.scss'
-import SquareButton from '../SquareButton'
 import Header from '../Header/Header'
+import ButtonSection from './ButtonSection'
 
 const StyledTop = styled.div`
   background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
@@ -18,156 +18,67 @@ const StyledTop = styled.div`
   position: relative;
 `
 
-class LandingTop extends Component {
-  constructor (props) {
-    super(props)
-    this.toAccount = this.toAccount.bind(this)
-    this.toAdmin = this.toAdmin.bind(this)
+function LandingTop ({
+  theme, user, tenant, bookNow, t
+}) {
+  const backgroundImage =
+    theme && theme.background
+      ? theme.background
+      : 'https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg'
+
+  const largeLogo = theme && theme.logoLarge ? theme.logoLarge : ''
+  const whiteLogo = theme && theme.logoWhite ? theme.logoWhite : largeLogo
+  const welcomeText = theme && theme.welcome_text ? theme.welcome_text : t('landing:welcomeTextTail')
+
+  const buttonSectionProps = {
+    theme, user, tenant, bookNow
   }
-  toAccount () {
-    this.props.goTo('/account')
-  }
-  toAdmin () {
-    this.props.toAdmin(true)
-  }
-  showLogin () {
-    const { authDispatch } = this.props
-    authDispatch.showLogin()
-  }
-  buttonsToDisplay (components) {
-    const { user, tenant } = this.props
-    const isClosed = tenant && tenant.data && tenant.data.scope && tenant.data.scope.closed_quotation_tool
-    if (!user) {
-      if (!isClosed) {
-        return [components.rates, components.login]
-      }
 
-      return [components.login]
-    }
-    if (['shipper', 'agent', 'agency_manager'].includes(user.role.name)) {
-      if (user.guest) {
-        return [components.rates]
-      } else if (!isClosed) {
-        return [components.rates, components.account]
-      }
-
-      return [components.account]
-    }
-    if (['admin', 'sub_admin', 'super_admin'].includes(user.role.name)) {
-      return [components.admin]
-    }
-
-    return []
-  }
-  render () {
-    const {
-      theme, user, tenant, bookNow, t
-    } = this.props
-    const myAccount = (
-      <div className="layout-row flex-50 flex-md-100 margin_bottom">
-        <SquareButton
-          text={t('common:accountTitle')}
-          theme={theme}
-          handleNext={() => this.toAccount()}
-          size="small"
-          active
-        />
-      </div>
-    )
-    const toAdmin = (
-      <div className="layout-row flex-50 flex-md-100 margin_bottom">
-        <SquareButton
-          text={t('landing:adminDashboard')}
-          theme={theme}
-          handleNext={() => this.toAdmin()}
-          size="small"
-          active
-        />
-      </div>
-    )
-    const findRates = (
-      <div className="layout-row flex-50 flex-md-100 margin_bottom">
-        <SquareButton text={t('landing:callToAction')} theme={theme} handleNext={bookNow} size="small" active />
-      </div>
-    )
-
-    const backgroundImage =
-      theme && theme.background
-        ? theme.background
-        : 'https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg'
-
-    const largeLogo = theme && theme.logoLarge ? theme.logoLarge : ''
-    const whiteLogo = theme && theme.logoWhite ? theme.logoWhite : largeLogo
-    const welcomeText = theme && theme.welcome_text ? theme.welcome_text : t('landing:welcomeTextTail')
-
-    return (
-      <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
-        <div className="layout-row flex-100 layout-wrap">
-          <div className="flex-100 layout-row">
-            <Header user={user} theme={theme} isLanding scrollable invert noMessages />
-          </div>
-          <div className="flex-50 layout-row layout-align-center layout-wrap">
-            <div className={`${styles.content_wrapper} flex-100 layout-row layout-wrap layout-align-center-center`}>
-              <div className={`flex-75 ${styles.banner_text}`}>
-                <img
-                  src={whiteLogo}
-                  alt=""
-                  className={`flex-none ${styles.tenant_logo_landing}`}
-                />
-                <h2 className="flex-none">
-                  <b>{t('landing:welcomeTextHead')}</b> <br />
-                  <i> {tenant.data.name} </i> <b> <br />
-                    {welcomeText}</b>
-                </h2>
-                <div className={styles.wrapper_hr}>
-                  <hr />
-                </div>
-                <div className={styles.wrapper_h3}>
-                  <h3 className="flex-none">
-                    {t('landing:descriptionHead')} <b>{t('landing:descriptionMiddle')}</b> {t('landing:descriptionTail')}
-                  </h3>
-                </div>
+  return (
+    <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
+      <div className="layout-row flex-100 layout-wrap">
+        <div className="flex-100 layout-row">
+          <Header user={user} theme={theme} isLanding scrollable invert noMessages />
+        </div>
+        <div className="flex-50 layout-row layout-align-center layout-wrap">
+          <div className={`${styles.content_wrapper} flex-100 layout-row layout-wrap layout-align-center-center`}>
+            <div className={`flex-75 ${styles.banner_text}`}>
+              <img
+                src={whiteLogo}
+                alt=""
+                className={`flex-none ${styles.tenant_logo_landing}`}
+              />
+              <h2 className="flex-none">
+                <b>{t('landing:welcomeTextHead')}</b> <br />
+                <i> {tenant.data.name} </i> <b> <br />
+                  {welcomeText}</b>
+              </h2>
+              <div className={styles.wrapper_hr}>
+                <hr />
               </div>
-              <div
-                className={
-                  `layout-row layout-align-start-center ${styles.wrapper_btns} flex-70 `
-                }
-              >
-                {this.buttonsToDisplay({ admin: toAdmin, account: myAccount, rates: findRates })}
-
-              </div>
-              <div className={`flex-70 ${styles.banner_text}`}>
-                <div className={`flex layout-row flex-100 ${styles.banner_text}`}>
-                  <div className="flex-none layout-row layout-align-start-center">
-                    <h4 className="flex-none">{t('landing:poweredBy')}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    <div className="flex-5" />
-                    <a className="layout-row layout-align-center-center" href="https://www.itsmycargo.com/" target="_blank">
-                      <img
-                        src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                        alt=""
-                        className={`flex-none pointy ${styles.powered_by_logo}`}
-                      />
-                    </a>
-                  </div>
-                </div>
+              <div className={styles.wrapper_h3}>
+                <h3 className="flex-none">
+                  {t('landing:descriptionHead')} <b>{t('landing:descriptionMiddle')}</b> {t('landing:descriptionTail')}
+                </h3>
               </div>
             </div>
+            <ButtonSection {...buttonSectionProps} hidden={window.innerHeight <= 750} />
           </div>
         </div>
-      </StyledTop>
-    )
-  }
+        <div className="flex-50 layout-row layout-align-center layout-wrap">
+          <ButtonSection {...buttonSectionProps} hidden={window.innerHeight > 750} />
+        </div>
+      </div>
+    </StyledTop>
+  )
 }
 
 LandingTop.propTypes = {
   theme: PropTypes.theme,
-  goTo: PropTypes.func.isRequired,
-  toAdmin: PropTypes.func.isRequired,
   user: PropTypes.user,
   tenant: PropTypes.tenant,
   t: PropTypes.func.isRequired,
-  bookNow: PropTypes.func,
-  authDispatch: PropTypes.objectOf(PropTypes.func).isRequired
+  bookNow: PropTypes.func
 }
 
 LandingTop.defaultProps = {

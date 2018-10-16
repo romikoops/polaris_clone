@@ -1,0 +1,421 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`is hidden 1`] = `""`;
+
+exports[`user.role_id is 1 1`] = `
+<div
+  className="content_wrapper flex-100 layout-row layout-wrap layout-align-center-center"
+>
+  <div
+    className="layout-row layout-align-start-center wrapper_btns flex-75"
+  >
+    <Connect(Component)
+      tenant={
+        Object {
+          "data": Object {
+            "data": Object {
+              "id": 123,
+              "scope": Object {
+                "closed_quotation_tool": true,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              },
+              "subdomain": "foosubdomain",
+              "theme": Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              },
+            },
+            "name": "FOO_NAME",
+            "scope": Object {
+              "closed_quotation_tool": true,
+            },
+          },
+        }
+      }
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 2,
+        }
+      }
+    />
+    <Connect(Component)
+      tenant={
+        Object {
+          "data": Object {
+            "data": Object {
+              "id": 123,
+              "scope": Object {
+                "closed_quotation_tool": true,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              },
+              "subdomain": "foosubdomain",
+              "theme": Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              },
+            },
+            "name": "FOO_NAME",
+            "scope": Object {
+              "closed_quotation_tool": true,
+            },
+          },
+        }
+      }
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 2,
+        }
+      }
+    />
+    <Component
+      bookNow={[Function]}
+      t={[Function]}
+      tenant={
+        Object {
+          "data": Object {
+            "data": Object {
+              "id": 123,
+              "scope": Object {
+                "closed_quotation_tool": true,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              },
+              "subdomain": "foosubdomain",
+              "theme": Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              },
+            },
+            "name": "FOO_NAME",
+            "scope": Object {
+              "closed_quotation_tool": true,
+            },
+          },
+        }
+      }
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 2,
+        }
+      }
+    />
+  </div>
+  <div
+    className="flex-75 banner_text"
+  >
+    <div
+      className="flex layout-row flex-100 banner_text"
+    >
+      <div
+        className="flex-none layout-row layout-align-start-center"
+      >
+        <h4
+          className="flex-none"
+        >
+          powered by
+        </h4>
+        <a
+          className="layout-row flex-offset-10 layout-align-center-center"
+          href="https://www.itsmycargo.com/"
+          target="_blank"
+        >
+          <img
+            alt=""
+            className="flex-none pointy powered_by_logo"
+            src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+          />
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`user.role_id is 2 1`] = `
+<div
+  className="content_wrapper flex-100 layout-row layout-wrap layout-align-center-center"
+>
+  <div
+    className="layout-row layout-align-start-center wrapper_btns flex-75"
+  >
+    <Connect(Component)
+      tenant={
+        Object {
+          "data": Object {
+            "data": Object {
+              "id": 123,
+              "scope": Object {
+                "closed_quotation_tool": true,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              },
+              "subdomain": "foosubdomain",
+              "theme": Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              },
+            },
+            "name": "FOO_NAME",
+            "scope": Object {
+              "closed_quotation_tool": true,
+            },
+          },
+        }
+      }
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 2,
+        }
+      }
+    />
+    <Connect(Component)
+      tenant={
+        Object {
+          "data": Object {
+            "data": Object {
+              "id": 123,
+              "scope": Object {
+                "closed_quotation_tool": true,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              },
+              "subdomain": "foosubdomain",
+              "theme": Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              },
+            },
+            "name": "FOO_NAME",
+            "scope": Object {
+              "closed_quotation_tool": true,
+            },
+          },
+        }
+      }
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 2,
+        }
+      }
+    />
+    <Component
+      bookNow={[Function]}
+      t={[Function]}
+      tenant={
+        Object {
+          "data": Object {
+            "data": Object {
+              "id": 123,
+              "scope": Object {
+                "closed_quotation_tool": true,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              },
+              "subdomain": "foosubdomain",
+              "theme": Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              },
+            },
+            "name": "FOO_NAME",
+            "scope": Object {
+              "closed_quotation_tool": true,
+            },
+          },
+        }
+      }
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 2,
+        }
+      }
+    />
+  </div>
+  <div
+    className="flex-75 banner_text"
+  >
+    <div
+      className="flex layout-row flex-100 banner_text"
+    >
+      <div
+        className="flex-none layout-row layout-align-start-center"
+      >
+        <h4
+          className="flex-none"
+        >
+          powered by
+        </h4>
+        <a
+          className="layout-row flex-offset-10 layout-align-center-center"
+          href="https://www.itsmycargo.com/"
+          target="_blank"
+        >
+          <img
+            alt=""
+            className="flex-none pointy powered_by_logo"
+            src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+          />
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;
