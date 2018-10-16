@@ -1031,6 +1031,7 @@ class ShipmentLocationBox extends Component {
       destinationTruckingAvailable,
       fetchingtruckingAvailability
     } = this.state
+
     if (availableDestinationNexuses) destinationOptions = availableDestinationNexuses
     if (availableOriginNexuses) originOptions = availableOriginNexuses
     const requireFullAddress = scope.require_full_address
@@ -1375,7 +1376,6 @@ class ShipmentLocationBox extends Component {
     if (this.props.hideMap) {
       mapStyle.display = 'none'
     }
-    const isSwitchable = this.isSwitchable()
 
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-center-center">
@@ -1397,22 +1397,22 @@ class ShipmentLocationBox extends Component {
                       `${!truckingOptions.preCarriage ? styles.not_available : ''}`
                     }
                   >
-                    <TruckingTooltip
+                    { !originTruckingAvailable ? <TruckingTooltip
                       truckingBoolean={originTruckingAvailable}
                       truckingOptions={truckingOptions}
                       carriage="preCarriage"
                       hubName={this.state.oSelect.label}
                       direction={shipment.direction}
                       scope={scope}
-                    />
+                    /> : '' }
 
-                    <Toggle
+                    { !originTruckingAvailable ? <Toggle
                       className="flex-none"
                       id="has_pre_carriage"
                       name="has_pre_carriage"
                       checked={this.props.has_pre_carriage}
                       onChange={this.handleTrucking}
-                    />
+                    /> : '' }
                     <label htmlFor="pre-carriage" style={{ marginLeft: '15px' }}>
                       {t('shipment:pickUp')}
                     </label>
@@ -1427,11 +1427,8 @@ class ShipmentLocationBox extends Component {
 
               <div
                 className="flex-5 layout-row layout-align-center-center"
-                onClick={isSwitchable ? this.handleSwap : null}
                 style={{ height: '60px' }}
-              >
-                <i className={`${styles.fa_exchange_style} fa fa-exchange `} />
-              </div>
+              />
 
               <div className="flex-45 layout-row layout-wrap layout-align-end-start">
                 {speciality !== 'truck'
@@ -1442,25 +1439,25 @@ class ShipmentLocationBox extends Component {
                       `${!truckingOptions.onCarriage ? styles.not_available : ''}`
                     }
                   >
-                    <TruckingTooltip
+                    { !destinationTruckingAvailable ? <TruckingTooltip
                       truckingBoolean={destinationTruckingAvailable}
                       truckingOptions={truckingOptions}
                       carriage="onCarriage"
                       hubName={this.state.dSelect.label}
                       direction={shipment.direction}
                       scope={scope}
-                    />
+                    /> : '' }
 
                     <label htmlFor="on-carriage" style={{ marginRight: '15px' }}>
                       {t('shipment:delivery')}
                     </label>
-                    <Toggle
+                    { !destinationTruckingAvailable ? <Toggle
                       className="flex-none"
                       id="has_on_carriage"
                       name="has_on_carriage"
                       checked={this.props.has_on_carriage}
                       onChange={this.handleTrucking}
-                    />
+                    /> : '' }
                     {loadType === 'container' && this.props.has_on_carriage ? onCarriageTruckTypes : ''}
                   </div> : <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">{t('shipment:delivery')}:</p></div>}
                 <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
