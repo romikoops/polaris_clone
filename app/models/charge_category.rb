@@ -15,15 +15,19 @@ class ChargeCategory < ApplicationRecord
   end
 
   def self.update_names
-    LocalCharge.pluck(:fees).reject(&:empty?).each do |fee|
-      ChargeCategory.from_fee(fee)
+    LocalCharge.pluck(:fees).reject(&:empty?).each do |fees|
+      fees.values.each do |fee|
+        ChargeCategory.from_fee(fee)
+      end
     end
     PricingDetail.find_each do |pricing|
       fee = { 'code' => pricing.shipping_type }
       ChargeCategory.from_fee(fee)
     end
-    TruckingPricing.pluck(:fees).reject(&:empty?).each do |fee|
-      ChargeCategory.from_fee(fee)
+    TruckingPricing.pluck(:fees).reject(&:empty?).each do |fees|
+      fees.values.each do |fee|
+        ChargeCategory.from_fee(fee)
+      end
     end
   end
 
