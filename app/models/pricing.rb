@@ -58,8 +58,12 @@ class Pricing < ApplicationRecord
     new_pricing_data.delete('updated_at')
     new_pricing_data.delete('load_type')
     new_pricing_data.delete('cargo_class')
+    new_pricing_data.delete('exceptions')
+    new_pricing_data.delete('carrier')
+    new_pricing_data.delete('service_level')
     new_pricing_data['user_id'] = user_id
     pricing_details = new_pricing_data.delete('data')
+    
     pricing_to_update.update(new_pricing_data)
     pricing_details.each do |shipping_type, pricing_detail_data|
       currency = pricing_detail_data.delete('currency')
