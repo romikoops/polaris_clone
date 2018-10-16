@@ -211,12 +211,29 @@ module TruckingTools
         'number_of_items' => 0
       }
     }
-
-    cargos.each do |cargo|
-      determine_load_meterage(trucking_pricing, cargo_object, cargo)
+    if trucking_pricing.tenant.scope['consolidate_cargo']
+      consolidated_load_meterage(trucking_pricing, cargo_object, cargos)
+    else
+      cargos.each do |cargo|
+        determine_load_meterage(trucking_pricing, cargo_object, cargo)
+      end
     end
 
     cargo_object
+  end
+
+  def consolidated_load_meterage(trucking_pricing, cargo_object, cargos)
+    total_area = cargos.sum {|cargo| cargo.dimension_x * cargo.dimension_y * cargo.quantity }
+    load_area_limit = trucking_pricing.load_meterage["area_limit"]
+    if total_area > load_area_limit
+      cargos.each do |cargo|
+        calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
+      end
+    else
+      cargos.each do |cargo|
+        calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
+      end
+    end
   end
 
   def get_container_object(containers)
