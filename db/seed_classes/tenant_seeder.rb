@@ -2101,6 +2101,7 @@ class TenantSeeder
         open_quotation_tool: false,
         require_full_address: true,
         consolidate_cargo: false,
+        default_direction: 'export',
         customs_export_paper: false,
         fixed_currency: false,
         fixed_exchange_rates: false,
