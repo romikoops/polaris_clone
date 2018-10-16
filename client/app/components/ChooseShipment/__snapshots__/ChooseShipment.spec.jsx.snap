@@ -2,10 +2,10 @@
 
 exports[`messages.length === 0 1`] = `
 <div
-  className="card_link_row layout-row flex-100 layout-align-center"
+  className="card_link_row layout-row flex-100 layout-align-center-center"
 >
   <div
-    className="flex-none content_width layout-row layout-align-start-center layout-wrap"
+    className="flex-none content_width layout-row layout-align-center-center layout-wrap"
   >
     <div
       className="flex-100 layout-row layout-align-space-around-center layout-wrap"
@@ -59,69 +59,8 @@ exports[`messages.length === 0 1`] = `
       </div>
     </div>
     <div
-      className="flex-100 layout-row layout-wrap section inactive"
-    >
-      <div
-        className="flex-100 layout-row layout-align-start-center"
-      >
-        <TextHeading
-          color=""
-          size={4}
-          text="Are you shipping cargo items or containers?"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-      </div>
-      <CardLinkRow
-        allowedCargoTypes={
-          Object {
-            "cargo_item": false,
-            "container": false,
-          }
-        }
-        cards={
-          Array [
-            Object {
-              "code": "cargo_item",
-              "handleClick": [Function],
-              "img": "https://assets.itsmycargo.com/assets/icons/cargo_item.svg",
-              "name": Object {
-                "modes_of_transport": Array [],
-              },
-              "options": Object {
-                "contained": true,
-              },
-            },
-            Object {
-              "code": "container",
-              "handleClick": [Function],
-              "img": "https://assets.itsmycargo.com/assets/icons/container.svg",
-              "name": Object {
-                "modes_of_transport": Array [],
-              },
-              "options": Object {
-                "contained": true,
-              },
-            },
-          ]
-        }
-        selectedType=""
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-      />
-    </div>
+      className="flex-100 layout-row layout-wrap empty_row "
+    />
     <div
       className="next_step_sec flex-100 layout-row layout-align-center section inactive"
     >
@@ -137,16 +76,16 @@ exports[`messages.length === 0 1`] = `
           className="next_step_btn_sec flex-100 layout-row layout-align-end"
         >
           <div
-            className="flex-none layout-column layout-align-center-center"
+            className="flex-gt-sm-70 flex-100 layout-row layout-align-end-start"
           >
-            <div
-              className="flex-none layout-row layout-align-center-start"
+            <p
+              className="mot_note flex-60"
             >
-              <p
-                className="mot_note"
-              >
-                Availabilities will be shown for all applicable modes of transport for your shipment
-              </p>
+              Availabilities will be shown for all applicable modes of transport for your shipment
+            </p>
+            <div
+              className="flex-40 layout-row layout-align-center-center"
+            >
               <RoundButton
                 active={false}
                 back={false}
@@ -157,7 +96,7 @@ exports[`messages.length === 0 1`] = `
                 icon=""
                 iconClass="fa-chevron-right"
                 inverse={false}
-                size="small"
+                size="full"
                 text="Next Step"
                 theme={
                   Object {
@@ -179,10 +118,10 @@ exports[`messages.length === 0 1`] = `
 
 exports[`shallow render 1`] = `
 <div
-  className="card_link_row layout-row flex-100 layout-align-center"
+  className="card_link_row layout-row flex-100 layout-align-center-center"
 >
   <div
-    className="flex-none content_width layout-row layout-align-start-center layout-wrap"
+    className="flex-none content_width layout-row layout-align-center-center layout-wrap"
   >
     <div
       className="flex-100 layout-row layout-align-space-around-center layout-wrap"
@@ -236,69 +175,8 @@ exports[`shallow render 1`] = `
       </div>
     </div>
     <div
-      className="flex-100 layout-row layout-wrap section inactive"
-    >
-      <div
-        className="flex-100 layout-row layout-align-start-center"
-      >
-        <TextHeading
-          color=""
-          size={4}
-          text="Are you shipping cargo items or containers?"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-      </div>
-      <CardLinkRow
-        allowedCargoTypes={
-          Object {
-            "cargo_item": false,
-            "container": false,
-          }
-        }
-        cards={
-          Array [
-            Object {
-              "code": "cargo_item",
-              "handleClick": [Function],
-              "img": "https://assets.itsmycargo.com/assets/icons/cargo_item.svg",
-              "name": Object {
-                "modes_of_transport": Array [],
-              },
-              "options": Object {
-                "contained": true,
-              },
-            },
-            Object {
-              "code": "container",
-              "handleClick": [Function],
-              "img": "https://assets.itsmycargo.com/assets/icons/container.svg",
-              "name": Object {
-                "modes_of_transport": Array [],
-              },
-              "options": Object {
-                "contained": true,
-              },
-            },
-          ]
-        }
-        selectedType=""
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-      />
-    </div>
+      className="flex-100 layout-row layout-wrap empty_row "
+    />
     <div
       className="next_step_sec flex-100 layout-row layout-align-center section inactive"
     >
@@ -314,16 +192,16 @@ exports[`shallow render 1`] = `
           className="next_step_btn_sec flex-100 layout-row layout-align-end"
         >
           <div
-            className="flex-none layout-column layout-align-center-center"
+            className="flex-gt-sm-70 flex-100 layout-row layout-align-end-start"
           >
-            <div
-              className="flex-none layout-row layout-align-center-start"
+            <p
+              className="mot_note flex-60"
             >
-              <p
-                className="mot_note"
-              >
-                Availabilities will be shown for all applicable modes of transport for your shipment
-              </p>
+              Availabilities will be shown for all applicable modes of transport for your shipment
+            </p>
+            <div
+              className="flex-40 layout-row layout-align-center-center"
+            >
               <RoundButton
                 active={false}
                 back={false}
@@ -334,7 +212,7 @@ exports[`shallow render 1`] = `
                 icon=""
                 iconClass="fa-chevron-right"
                 inverse={false}
-                size="small"
+                size="full"
                 text="Next Step"
                 theme={
                   Object {
@@ -356,10 +234,10 @@ exports[`shallow render 1`] = `
 
 exports[`state.direction && state.loadType 1`] = `
 <div
-  className="card_link_row layout-row flex-100 layout-align-center"
+  className="card_link_row layout-row flex-100 layout-align-center-center"
 >
   <div
-    className="flex-none content_width layout-row layout-align-start-center layout-wrap"
+    className="flex-none content_width layout-row layout-align-center-center layout-wrap"
   >
     <div
       className="flex-100 layout-row layout-align-space-around-center layout-wrap"
@@ -417,69 +295,8 @@ exports[`state.direction && state.loadType 1`] = `
       </div>
     </div>
     <div
-      className="flex-100 layout-row layout-wrap section "
-    >
-      <div
-        className="flex-100 layout-row layout-align-start-center"
-      >
-        <TextHeading
-          color=""
-          size={4}
-          text="Are you shipping cargo items or containers?"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-      </div>
-      <CardLinkRow
-        allowedCargoTypes={
-          Object {
-            "cargo_item": false,
-            "container": false,
-          }
-        }
-        cards={
-          Array [
-            Object {
-              "code": "cargo_item",
-              "handleClick": [Function],
-              "img": "https://assets.itsmycargo.com/assets/icons/cargo_item.svg",
-              "name": Object {
-                "modes_of_transport": Array [],
-              },
-              "options": Object {
-                "contained": true,
-              },
-            },
-            Object {
-              "code": "container",
-              "handleClick": [Function],
-              "img": "https://assets.itsmycargo.com/assets/icons/container.svg",
-              "name": Object {
-                "modes_of_transport": Array [],
-              },
-              "options": Object {
-                "contained": true,
-              },
-            },
-          ]
-        }
-        selectedType="FOO_LOAD_TYPE"
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-      />
-    </div>
+      className="flex-100 layout-row layout-wrap empty_row "
+    />
     <div
       className="next_step_sec flex-100 layout-row layout-align-center section "
     >
@@ -495,16 +312,16 @@ exports[`state.direction && state.loadType 1`] = `
           className="next_step_btn_sec flex-100 layout-row layout-align-end"
         >
           <div
-            className="flex-none layout-column layout-align-center-center"
+            className="flex-gt-sm-70 flex-100 layout-row layout-align-end-start"
           >
-            <div
-              className="flex-none layout-row layout-align-center-start"
+            <p
+              className="mot_note flex-60"
             >
-              <p
-                className="mot_note"
-              >
-                Availabilities will be shown for all applicable modes of transport for your shipment
-              </p>
+              Availabilities will be shown for all applicable modes of transport for your shipment
+            </p>
+            <div
+              className="flex-40 layout-row layout-align-center-center"
+            >
               <RoundButton
                 active={true}
                 back={false}
@@ -515,7 +332,7 @@ exports[`state.direction && state.loadType 1`] = `
                 icon=""
                 iconClass="fa-chevron-right"
                 inverse={false}
-                size="small"
+                size="full"
                 text="Next Step"
                 theme={
                   Object {
@@ -537,10 +354,10 @@ exports[`state.direction && state.loadType 1`] = `
 
 exports[`state.direction === export 1`] = `
 <div
-  className="card_link_row layout-row flex-100 layout-align-center"
+  className="card_link_row layout-row flex-100 layout-align-center-center"
 >
   <div
-    className="flex-none content_width layout-row layout-align-start-center layout-wrap"
+    className="flex-none content_width layout-row layout-align-center-center layout-wrap"
   >
     <div
       className="flex-100 layout-row layout-align-space-around-center layout-wrap"
@@ -598,71 +415,10 @@ exports[`state.direction === export 1`] = `
       </div>
     </div>
     <div
-      className="flex-100 layout-row layout-wrap section "
-    >
-      <div
-        className="flex-100 layout-row layout-align-start-center"
-      >
-        <TextHeading
-          color=""
-          size={4}
-          text="Are you shipping cargo items or containers?"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-      </div>
-      <CardLinkRow
-        allowedCargoTypes={
-          Object {
-            "cargo_item": false,
-            "container": false,
-          }
-        }
-        cards={
-          Array [
-            Object {
-              "code": "cargo_item",
-              "handleClick": [Function],
-              "img": "https://assets.itsmycargo.com/assets/icons/cargo_item.svg",
-              "name": Object {
-                "modes_of_transport": Array [],
-              },
-              "options": Object {
-                "contained": true,
-              },
-            },
-            Object {
-              "code": "container",
-              "handleClick": [Function],
-              "img": "https://assets.itsmycargo.com/assets/icons/container.svg",
-              "name": Object {
-                "modes_of_transport": Array [],
-              },
-              "options": Object {
-                "contained": true,
-              },
-            },
-          ]
-        }
-        selectedType=""
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-      />
-    </div>
+      className="flex-100 layout-row layout-wrap empty_row "
+    />
     <div
-      className="next_step_sec flex-100 layout-row layout-align-center section inactive"
+      className="next_step_sec flex-100 layout-row layout-align-center section "
     >
       <div
         className="mot_sec flex-80 layout-row layout-wrap layout-align-center"
@@ -676,27 +432,27 @@ exports[`state.direction === export 1`] = `
           className="next_step_btn_sec flex-100 layout-row layout-align-end"
         >
           <div
-            className="flex-none layout-column layout-align-center-center"
+            className="flex-gt-sm-70 flex-100 layout-row layout-align-end-start"
           >
-            <div
-              className="flex-none layout-row layout-align-center-start"
+            <p
+              className="mot_note flex-60"
             >
-              <p
-                className="mot_note"
-              >
-                Availabilities will be shown for all applicable modes of transport for your shipment
-              </p>
+              Availabilities will be shown for all applicable modes of transport for your shipment
+            </p>
+            <div
+              className="flex-40 layout-row layout-align-center-center"
+            >
               <RoundButton
-                active={false}
+                active={true}
                 back={false}
                 classNames=""
                 disabled={false}
                 handleDisabled={null}
-                handleNext={null}
+                handleNext={[Function]}
                 icon=""
                 iconClass="fa-chevron-right"
                 inverse={false}
-                size="small"
+                size="full"
                 text="Next Step"
                 theme={
                   Object {
@@ -718,10 +474,10 @@ exports[`state.direction === export 1`] = `
 
 exports[`theme is falsy 1`] = `
 <div
-  className="card_link_row layout-row flex-100 layout-align-center"
+  className="card_link_row layout-row flex-100 layout-align-center-center"
 >
   <div
-    className="flex-none content_width layout-row layout-align-start-center layout-wrap"
+    className="flex-none content_width layout-row layout-align-center-center layout-wrap"
   >
     <div
       className="flex-100 layout-row layout-align-space-around-center layout-wrap"
@@ -768,55 +524,8 @@ exports[`theme is falsy 1`] = `
       </div>
     </div>
     <div
-      className="flex-100 layout-row layout-wrap section inactive"
-    >
-      <div
-        className="flex-100 layout-row layout-align-start-center"
-      >
-        <TextHeading
-          color=""
-          size={4}
-          text="Are you shipping cargo items or containers?"
-          theme={null}
-        />
-      </div>
-      <CardLinkRow
-        allowedCargoTypes={
-          Object {
-            "cargo_item": false,
-            "container": false,
-          }
-        }
-        cards={
-          Array [
-            Object {
-              "code": "cargo_item",
-              "handleClick": [Function],
-              "img": "https://assets.itsmycargo.com/assets/icons/cargo_item.svg",
-              "name": Object {
-                "modes_of_transport": Array [],
-              },
-              "options": Object {
-                "contained": true,
-              },
-            },
-            Object {
-              "code": "container",
-              "handleClick": [Function],
-              "img": "https://assets.itsmycargo.com/assets/icons/container.svg",
-              "name": Object {
-                "modes_of_transport": Array [],
-              },
-              "options": Object {
-                "contained": true,
-              },
-            },
-          ]
-        }
-        selectedType=""
-        theme={null}
-      />
-    </div>
+      className="flex-100 layout-row layout-wrap empty_row "
+    />
     <div
       className="next_step_sec flex-100 layout-row layout-align-center section inactive"
     >
@@ -832,16 +541,16 @@ exports[`theme is falsy 1`] = `
           className="next_step_btn_sec flex-100 layout-row layout-align-end"
         >
           <div
-            className="flex-none layout-column layout-align-center-center"
+            className="flex-gt-sm-70 flex-100 layout-row layout-align-end-start"
           >
-            <div
-              className="flex-none layout-row layout-align-center-start"
+            <p
+              className="mot_note flex-60"
             >
-              <p
-                className="mot_note"
-              >
-                Availabilities will be shown for all applicable modes of transport for your shipment
-              </p>
+              Availabilities will be shown for all applicable modes of transport for your shipment
+            </p>
+            <div
+              className="flex-40 layout-row layout-align-center-center"
+            >
               <RoundButton
                 active={false}
                 back={false}
@@ -852,7 +561,7 @@ exports[`theme is falsy 1`] = `
                 icon=""
                 iconClass="fa-chevron-right"
                 inverse={false}
-                size="small"
+                size="full"
                 text="Next Step"
                 theme={null}
               />
