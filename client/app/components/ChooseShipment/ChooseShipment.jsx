@@ -27,32 +27,69 @@ class ChooseShipment extends Component {
   }
   componentDidMount () {
     window.scrollTo(0, 0)
+    this.determineAvailableOptions()
   }
+
   setLoadType (loadType) {
     this.setState({ loadType })
   }
+
   setDirection (direction) {
     this.setState({ direction })
   }
+
+  determineAvailableOptions () {
+    if (this.props && this.props.scope) {
+      const { scope } = this.props
+      const allowedCargoTypeCount = { cargo_item: 0, container: 0 }
+      const allowedCargoTypes = { cargo_item: false, container: false }
+
+      Object.keys(scope.modes_of_transport).forEach((mot) => {
+        allowedCargoTypeCount.cargo_item += scope.modes_of_transport[mot].cargo_item
+        allowedCargoTypeCount.container += scope.modes_of_transport[mot].container
+      })
+      if (allowedCargoTypeCount.container > 0) {
+        allowedCargoTypes.container = true
+      }
+      if (allowedCargoTypeCount.cargo_item > 0) {
+        allowedCargoTypes.cargo_item = true
+      }
+      const showCargoTypes = allowedCargoTypes.cargo_item && allowedCargoTypes.container
+      const showDirections = !scope.default_direction
+      if (!showCargoTypes && showDirections) {
+        const loadType = allowedCargoTypes.cargo_item ? 'cargo_item' : 'container'
+        this.setState({
+          allowedCargoTypes, showCargoTypes, showDirections, loadType
+        })
+      } else if (showCargoTypes && !showDirections) {
+        const direction = scope.default_direction
+        this.setState({
+          allowedCargoTypes, showCargoTypes, showDirections, direction
+        })
+      } else if (!showCargoTypes && !showDirections) {
+        const direction = scope.default_direction
+        const loadType = allowedCargoTypes.cargo_item ? 'cargo_item' : 'container'
+        this.props.selectLoadType({ loadType, direction })
+      } else {
+        this.setState({ allowedCargoTypes, showCargoTypes, showDirections })
+      }
+    }
+  }
+
   nextStep () {
     const { loadType, direction } = this.state
     this.props.selectLoadType({ loadType, direction })
   }
   render () {
-    const { theme, scope, t } = this.props
-    const allowedCargoTypeCount = { cargo_item: 0, container: 0 }
-    const allowedCargoTypes = { cargo_item: false, container: false }
-    Object.keys(scope.modes_of_transport).forEach((mot) => {
-      allowedCargoTypeCount.cargo_item += scope.modes_of_transport[mot].cargo_item
-      allowedCargoTypeCount.container += scope.modes_of_transport[mot].container
-    })
-    if (allowedCargoTypeCount.container > 0) {
-      allowedCargoTypes.container = true
-    }
-    if (allowedCargoTypeCount.cargo_item > 0) {
-      allowedCargoTypes.cargo_item = true
-    }
-    const { loadType, direction } = this.state
+    const { theme, t } = this.props
+
+    const {
+      loadType,
+      direction,
+      allowedCargoTypes,
+      showDirections,
+      showCargoTypes
+    } = this.state
     const gradientStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -86,7 +123,7 @@ class ChooseShipment extends Component {
     const activeBtn = (
       <RoundButton
         theme={theme}
-        size="small"
+        size="full"
         active
         handleNext={this.nextStep}
         text={t('common:nextStep')}
@@ -94,23 +131,28 @@ class ChooseShipment extends Component {
       />
     )
     const disabledBtn = (
-      <RoundButton theme={theme} size="small" text="Next Step" iconClass="fa-chevron-right" />
+      <RoundButton
+        theme={theme}
+        size="full"
+        text="Next Step"
+        iconClass="fa-chevron-right"
+      />
     )
 
     return (
-      <div className={`${styles.card_link_row} layout-row flex-100 layout-align-center`}>
+      <div className={`${styles.card_link_row} layout-row flex-100 layout-align-center-center`}>
         <div
           className={
-            `flex-none ${defs.content_width} layout-row layout-align-start-center layout-wrap`
+            `flex-none ${defs.content_width} layout-row layout-align-center-center layout-wrap`
           }
         >
-          <div className="flex-100 layout-row layout-align-space-around-center layout-wrap">
+          { showDirections ? <div className="flex-100 layout-row layout-align-space-around-center layout-wrap">
             <div className="flex-100 layout-row layout-align-start-center">
               <TextHeading theme={theme} size={4} text={t('common:importOrExport')} />
             </div>
             {directionButtons}
-          </div>
-          <div
+          </div> : <div className={`flex-100 layout-row layout-wrap ${styles.empty_row} `} /> }
+          { showCargoTypes ? <div
             className={
               `flex-100 layout-row layout-wrap ${styles.section} ` +
               `${direction ? '' : styles.inactive}`
@@ -130,6 +172,7 @@ class ChooseShipment extends Component {
               selectedType={loadType}
             />
           </div>
+            : <div className={`flex-100 layout-row layout-wrap ${styles.empty_row} `} /> }
           <div
             className={
               `${styles.next_step_sec} flex-100 layout-row layout-align-center ` +
@@ -143,11 +186,11 @@ class ChooseShipment extends Component {
               }}
             >
               <div className={`${styles.next_step_btn_sec} flex-100 layout-row layout-align-end`}>
-                <div className="flex-none layout-column layout-align-center-center">
-                  <div className="flex-none layout-row layout-align-center-start">
-                    <p className={styles.mot_note}>
-                      {t('common:availabilities')}
-                    </p>
+                <div className="flex-gt-sm-70 flex-100 layout-row layout-align-end-start">
+                  <p className={`${styles.mot_note} flex-60`}>
+                    {t('common:availabilities')}
+                  </p>
+                  <div className="flex-40 layout-row layout-align-center-center">
                     {loadType && direction ? activeBtn : disabledBtn}
                   </div>
                 </div>
