@@ -134,7 +134,7 @@ module OfferCalculatorService
         create_charges_from_fees_data!(charge_result, children_charge_category, charge_category, parent_charge)
       end
       return nil if parent_charge.children.empty?
-      
+
       parent_charge.update_price!
     end
 
