@@ -6,6 +6,19 @@ module MultiTenantTools
   require "#{Rails.root}/db/seed_classes/pricing_seeder.rb"
   API_URL = 'https://api2.itsmycargo.com'
   DEV_API_URL = 'https://gamma.itsmycargo.com'
+  S3 = Aws::S3::Client.new(
+    access_key_id:     Settings.aws.access_key_id,
+    secret_access_key: Settings.aws.secret_access_key
+  )
+  M3 = Aws::S3::Client.new(
+    access_key_id:     Settings.aws.access_key_id,
+    secret_access_key: Settings.aws.secret_access_key,
+    region: 'us-east-1'
+  )
+  S3SIGNER = Aws::S3::Presigner.new(
+    access_key_id:     Settings.aws.access_key_id,
+    secret_access_key: Settings.aws.secret_access_key
+  )
   def update_indexes
     Tenant.all.each do |tenant|
       title = tenant.name + " | ItsMyCargo"
@@ -23,11 +36,6 @@ module MultiTenantTools
         end
       end
 
-      s3 = Aws::S3::Client.new(
-        access_key_id:     Settings.aws.access_key_id,
-        secret_access_key: Settings.aws.secret_access_key,
-        region:            "us-east-1"
-      )
       objKey = tenant["subdomain"] + ".html"
       newHtml = indexHtml.to_html
       # Replace API Host and tenantName
@@ -35,7 +43,7 @@ module MultiTenantTools
       newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
       File.open("blank.html", "w") { |file| file.write(newHtml) }
       upFile = open("blank.html")
-      s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
+      M3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
       invalidate(tenant.web["cloudfront"], tenant.subdomain) if tenant.web && tenant.web["cloudfront"]
     end
   end
@@ -57,11 +65,6 @@ module MultiTenantTools
         end
       end
 
-      s3 = Aws::S3::Client.new(
-        access_key_id:     Settings.aws.access_key_id,
-        secret_access_key: Settings.aws.secret_access_key,
-        region:            "us-east-1"
-      )
       objKey = tenant["subdomain"] + ".html"
       newHtml = indexHtml.to_html
       # Replace API Host and tenantName
@@ -69,7 +72,7 @@ module MultiTenantTools
       newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
       File.open("blank.html", "w") { |file| file.write(newHtml) }
       upFile = open("blank.html")
-      s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
+      M3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
       invalidate(tenant.web["cloudfront"], tenant.subdomain) if tenant.web && tenant.web["cloudfront"]
     end
   end
@@ -85,143 +88,46 @@ module MultiTenantTools
     end
   end
 
-  def new_fn
-    tenant_data = [{
-      theme:     {
-        colors:     {
-          primary:         "#DB0025",
-          secondary:       "#008ACB",
-          brightPrimary:   "#e0708c",
-          brightSecondary: "#4368b7"
-        },
-        logoLarge:  "https://assets.itsmycargo.com/assets/images/logos/hartrodt_logo_wide.png",
-        logoWhite:  "https://assets.itsmycargo.com/assets/images/logos/hartrodt_logo_white.png",
-        logoSmall:  "https://assets.itsmycargo.com/assets/images/logos/hartrodt_logo_small.png",
-        background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
-      },
-      addresses: {
-        main: "Hoegerdamm 35, 20097 Hamburg"
-      },
-      phones:    {
-        main:    "+49 40 23 90-0",
-        support: "+49 172 4203 1020"
-      },
-      emails:    {
-        sales:   "sales@hartrodt.com",
-        support: "ah_ham@hartrodt.com"
-      },
-      subdomain: "hartrodt",
-      name:      "a.hartrodt",
-      currency:  "USD",
-      scope:     {
-        modes_of_transport:  {
-          ocean: {
-            container:  true,
-            cargo_item: true
-          },
-          rail:  {
-            container:  true,
-            cargo_item: true
-          },
-          air:   {
-            container:  false,
-            cargo_item: false
-          }
-        },
-        dangerous_goods:     false,
-        detailed_billing:    false,
-        incoterm_info_level: "text",
-        cargo_info_level:    "text",
-        has_insurance:       true,
-        has_customs:         true,
-        terms:               [
-          "You verify that all the information provided above is true",
-          "You agree to the presented terms and conditions.",
-          "a.hartrodt is to discuss the validity of the presented prices with the product owners."
-        ],
-        carriage_options:    {
-          on_carriage:  {
-            import: "optional",
-            export: "optional"
-          },
-          pre_carriage: {
-            import: "optional",
-            export: "optional"
-          }
-        }
-      }
-    },
-                   {
-                     theme:     {
-                       colors:     {
-                         primary:         "#D5006A",
-                         secondary:       "#1C2F5D",
-                         brightPrimary:   "#D5009F",
-                         brightSecondary: "#4984B4"
-                       },
-                       logoLarge:  "https://assets.itsmycargo.com/assets/images/logos/saco_logo.png",
-                       logoSmall:  "https://assets.itsmycargo.com/assets/images/logos/saco_logo.png",
-                       background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
-                     },
-                     addresses: {
-                       main: "Wollkämmereistraße 1, 21107 Hamburg"
-                     },
-                     phones:    {
-                       main:    "+49 40 311706-0",
-                       support: "+49 173 4203 1020"
-                     },
-                     emails:    {
-                       sales:   "sales@saco.de",
-                       support: "support@saco.de"
-                     },
-                     subdomain: "saco",
-                     name:      "SACO Shipping GmbH",
-                     currency:  "USD",
-                     scope:     {
-                       modes_of_transport:  {
-                         ocean: {
-                           container:  true,
-                           cargo_item: false
-                         },
-                         rail:  {
-                           container:  false,
-                           cargo_item: false
-                         },
-                         air:   {
-                           container:  false,
-                           cargo_item: false
-                         }
-                       },
-                       dangerous_goods:     false,
-                       detailed_billing:    false,
-                       incoterm_info_level: "text",
-                       cargo_info_level:    "text",
-                       has_insurance:       true,
-                       has_customs:         true,
-                       terms:               [
-                         "You verify that all the information provided above is true",
-                         "You agree to the presented terms and conditions.",
-                         "Saco Shipping is to discuss the validity of the presented prices with the product owners."
+  def update_tenant_jsons
+    @json_data = JSON.parse(File.read("#{Rails.root}/db/static_data/tenants.json"))
+    @json_data.each do |tenant|
+      subdomain = tenant["subdomain"]
+      File.open("#{Rails.root}/db/dummydata/#{subdomain}/#{subdomain}.json", "w") { |file| file.write(tenant.to_json) }
+      objKey = "data/#{subdomain}/#{subdomain}.json"
+      upFile = File.open("#{Rails.root}/db/dummydata/#{subdomain}/#{subdomain}.json")
+      S3.put_object(bucket: "assets.itsmycargo.com", key: objKey, body: upFile, content_type: "application/json", acl: "private")
+    end
+  end
 
-                       ],
-                       carriage_options:    {
-                         on_carriage:  {
-                           import: "optional",
-                           export: "optional"
-                         },
-                         pre_carriage: {
-                           import: "optional",
-                           export: "optional"
-                         }
-                       }
-                     }
-                   }]
-    tenant_data.each do |t|
-      new_site(t, false)
+  def sync_tenant_jsons
+    @json_data = JSON.parse(File.read("#{Rails.root}/db/static_data/tenants.json"))
+    @new_data = []
+    @json_data.each do |tenant|
+      subdomain = tenant["subdomain"]
+      signed_url = S3SIGNER.presigned_url(:get_object, bucket: "assets.itsmycargo.com", key: "data/#{subdomain}/#{subdomain}.json")
+      tenant_data = JSON.parse(open(signed_url).read)
+      @new_data << tenant_data
+    end
+    File.open("#{Rails.root}/db/dummydata/tenants.json", "w") { |file| file.write(@new_data.to_json) }
+  end
+
+  def update_tenant_from_json(subdomain)
+    signed_url = S3SIGNER.presigned_url(:get_object, bucket: "assets.itsmycargo.com", key: "data/#{subdomain}/#{subdomain}.json")
+    json_data = JSON.parse(open(signed_url).read)
+    json_data.delete('other_data')
+    Tenant.find_by_subdomain(json_data['subdomain']).update_attributes(json_data)
+  end
+
+  def new_fn(subdomains)
+    subdomains.each do |subdomain|
+      signed_url = S3SIGNER.presigned_url(:get_object, bucket: "assets.itsmycargo.com", key: "data/#{subdomain}/#{subdomain}.json")
+      json_data = JSON.parse(open(signed_url).read).deep_symbolize_keys
+      new_site(json_data, false)
     end
   end
 
   def new_site(tenant, _is_demo)
+    tenant.delete(:other_data)
     new_tenant = Tenant.create(tenant)
     title = tenant[:name] + " | ItsMyCargo"
     meta = tenant[:meta]
@@ -239,18 +145,13 @@ module MultiTenantTools
       end
     end
 
-    s3 = Aws::S3::Client.new(
-      access_key_id:     Settings.aws.access_key_id,
-      secret_access_key: Settings.aws.secret_access_key,
-      region:            "us-east-1"
-    )
     objKey = tenant[:subdomain] + ".html"
     newHtml = indexHtml.to_html
     File.open("blank.html", "w") do |file|
       file.write(newHtml)
     end
     upFile = open("blank.html")
-    s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
+    S3.put_object( bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
 
     create_distribution(tenant[:subdomain])
   end
@@ -286,7 +187,7 @@ module MultiTenantTools
       file.write(newHtml)
     end
     upFile = open("blank.html")
-    s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
+    M3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
 
     create_distribution(tenant[:subdomain])
   end
