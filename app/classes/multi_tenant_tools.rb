@@ -41,9 +41,8 @@ module MultiTenantTools
       # Replace API Host and tenantName
       newHtml.gsub!('__API_URL__', API_URL)
       newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
-      File.open("blank.html", "w") { |file| file.write(newHtml) }
-      upFile = open("blank.html")
-      M3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
+
+      M3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: StringIO.new(newHtml), content_type: "text/html", acl: "public-read")
       invalidate(tenant.web["cloudfront"], tenant.subdomain) if tenant.web && tenant.web["cloudfront"]
     end
   end
@@ -104,24 +103,27 @@ module MultiTenantTools
     @new_data = []
     @json_data.each do |tenant|
       subdomain = tenant["subdomain"]
-      signed_url = S3SIGNER.presigned_url(:get_object, bucket: "assets.itsmycargo.com", key: "data/#{subdomain}/#{subdomain}.json")
-      tenant_data = JSON.parse(open(signed_url).read)
+      tenant_data = JSON.parse(
+        S3.get_object(bucket: "assets.itsmycargo.com", key: "data/#{subdomain}/#{subdomain}.json").body.read
+      )
       @new_data << tenant_data
     end
     File.open("#{Rails.root}/db/dummydata/tenants.json", "w") { |file| file.write(@new_data.to_json) }
   end
 
   def update_tenant_from_json(subdomain)
-    signed_url = S3SIGNER.presigned_url(:get_object, bucket: "assets.itsmycargo.com", key: "data/#{subdomain}/#{subdomain}.json")
-    json_data = JSON.parse(open(signed_url).read)
+    json_data = JSON.parse(
+      S3.get_object(bucket: "assets.itsmycargo.com", key: "data/#{subdomain}/#{subdomain}.json").body.read
+    )
     json_data.delete('other_data')
     Tenant.find_by_subdomain(json_data['subdomain']).update_attributes(json_data)
   end
 
-  def new_fn(subdomains)
+  def create_new_tenant_site(subdomains)
     subdomains.each do |subdomain|
-      signed_url = S3SIGNER.presigned_url(:get_object, bucket: "assets.itsmycargo.com", key: "data/#{subdomain}/#{subdomain}.json")
-      json_data = JSON.parse(open(signed_url).read).deep_symbolize_keys
+      json_data = JSON.parse(
+        S3.get_object(bucket: "assets.itsmycargo.com", key: "data/#{subdomain}/#{subdomain}.json").body.read
+      ).deep_symbolize_keys
       new_site(json_data, false)
     end
   end
@@ -132,7 +134,6 @@ module MultiTenantTools
     title = tenant[:name] + " | ItsMyCargo"
     meta = tenant[:meta]
     favicon = tenant[:favicon] ? tenant[:favicon] : "https://assets.itsmycargo.com/assets/favicon.ico"
-    # indexHtml = Nokogiri::HTML(open("https://assets.itsmycargo.com/index.html"))
     indexHtml = Nokogiri::HTML(open(Rails.root.to_s + "/client/dist/index.html"))
     titles = indexHtml.xpath("//title")
     titles[0].content = title
@@ -147,11 +148,7 @@ module MultiTenantTools
 
     objKey = tenant[:subdomain] + ".html"
     newHtml = indexHtml.to_html
-    File.open("blank.html", "w") do |file|
-      file.write(newHtml)
-    end
-    upFile = open("blank.html")
-    S3.put_object( bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
+    M3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: StringIO.new(newHtml), content_type: "text/html", acl: "public-read")
 
     create_distribution(tenant[:subdomain])
   end
@@ -183,11 +180,8 @@ module MultiTenantTools
     # Replace API Host and tenantName
     newHtml.gsub!('__API_URL__', API_URL)
     newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
-    File.open("blank.html", "w") do |file|
-      file.write(newHtml)
-    end
-    upFile = open("blank.html")
-    M3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
+
+    M3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: StringIO.new(newHtml), content_type: "text/html", acl: "public-read")
 
     create_distribution(tenant[:subdomain])
   end
