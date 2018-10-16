@@ -1031,6 +1031,11 @@ class ShipmentLocationBox extends Component {
       destinationTruckingAvailable,
       fetchingtruckingAvailability
     } = this.state
+
+    console.log('!!!!!!!!!!!')
+    console.log(`Origin trucking: ${originTruckingAvailable}`)
+    console.log(`Dest trucking: ${destinationTruckingAvailable}`)
+    console.log('!!!!!!!!!!!')
     if (availableDestinationNexuses) destinationOptions = availableDestinationNexuses
     if (availableOriginNexuses) originOptions = availableOriginNexuses
     const requireFullAddress = scope.require_full_address
@@ -1406,13 +1411,13 @@ class ShipmentLocationBox extends Component {
                       scope={scope}
                     />
 
-                    <Toggle
+                    { !originTruckingAvailable ? <Toggle
                       className="flex-none"
                       id="has_pre_carriage"
                       name="has_pre_carriage"
                       checked={this.props.has_pre_carriage}
                       onChange={this.handleTrucking}
-                    />
+                    /> : '' }
                     <label htmlFor="pre-carriage" style={{ marginLeft: '15px' }}>
                       {t('shipment:pickUp')}
                     </label>
@@ -1454,13 +1459,13 @@ class ShipmentLocationBox extends Component {
                     <label htmlFor="on-carriage" style={{ marginRight: '15px' }}>
                       {t('shipment:delivery')}
                     </label>
-                    <Toggle
+                    { !destinationTruckingAvailable ? <Toggle
                       className="flex-none"
                       id="has_on_carriage"
                       name="has_on_carriage"
                       checked={this.props.has_on_carriage}
                       onChange={this.handleTrucking}
-                    />
+                    /> : '' }
                     {loadType === 'container' && this.props.has_on_carriage ? onCarriageTruckTypes : ''}
                   </div> : <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">{t('shipment:delivery')}:</p></div>}
                 <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
