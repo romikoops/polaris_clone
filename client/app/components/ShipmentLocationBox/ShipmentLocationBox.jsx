@@ -1432,11 +1432,8 @@ class ShipmentLocationBox extends Component {
 
               <div
                 className="flex-5 layout-row layout-align-center-center"
-                onClick={isSwitchable ? this.handleSwap : null}
                 style={{ height: '60px' }}
-              >
-                <i className={`${styles.fa_exchange_style} fa fa-exchange `} />
-              </div>
+              />
 
               <div className="flex-45 layout-row layout-wrap layout-align-end-start">
                 {speciality !== 'truck'
