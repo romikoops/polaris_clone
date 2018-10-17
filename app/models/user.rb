@@ -3,8 +3,8 @@
 class User < ApplicationRecord
   # Include default devise modules.
   devise :database_authenticatable, :registerable,
-    :recoverable, :rememberable, :trackable, :validatable,
-    :confirmable # , :omniauthable
+         :recoverable, :rememberable, :trackable, :validatable,
+         :confirmable # , :omniauthable
 
   include DeviseTokenAuth::Concerns::User
   before_validation :set_default_role, :sync_uid, :clear_tokens_if_empty
@@ -17,7 +17,7 @@ class User < ApplicationRecord
     message: ->(obj, _) { "'#{obj.email}' taken for Tenant '#{obj.tenant.subdomain}'" }
   }
   has_paper_trail
-  
+
   # Basic associations
   belongs_to :tenant
   belongs_to :role
@@ -27,7 +27,7 @@ class User < ApplicationRecord
   has_many :locations, through: :user_locations
   has_many :documents
   has_many :shipments
-  has_many :receivable_shipments, foreign_key: "consignee_id"
+  has_many :receivable_shipments, foreign_key: 'consignee_id'
 
   # belongs_to :notifying_shipment, class_name: "Shipment"
 
@@ -48,29 +48,29 @@ class User < ApplicationRecord
     scope role_name, -> { joins(:role).where("roles.name": role_name) }
   end
 
-  PERMITTED_PARAMS = %i[
+  PERMITTED_PARAMS = %i(
     email password
     guest tenant_id confirm_password password_confirmation
     company_name vat_number VAT_number first_name last_name phone
     optin_status_id cookies
-  ].freeze
+  ).freeze
 
   # Filterrific
-  filterrific default_filter_params: { sorted_by: "created_at_asc" },
-              available_filters:     %w[
+  filterrific default_filter_params: { sorted_by: 'created_at_asc' },
+              available_filters:     %w(
                 sorted_by
                 search_query
-              ]
+              )
   self.per_page = 10 # default for will_paginate
 
   scope :search_query, lambda { |query|
     return nil if query.blank?
     # condition query, parse into individual keywords
-    terms = query.to_s.delete(",").downcase.split(/\s+/)
+    terms = query.to_s.delete(',').downcase.split(/\s+/)
     # replace "*" with "%" for wildcard searches,
     # prepend and append '%', remove duplicate '%'s
     terms = terms.map do |e|
-      ("%" + e.tr("*", "%") + "%").gsub(/%+/, "%")
+      ('%' + e.tr('*', '%') + '%').gsub(/%+/, '%')
     end
 
     # configure number of OR conditions for provision
@@ -79,20 +79,20 @@ class User < ApplicationRecord
     num_or_conditions = 3
 
     or_clauses = [
-      "users.first_name ILIKE ?",
-      "users.last_name ILIKE ?",
-      "users.email ILIKE ?"
-    ].join(" OR ")
+      'users.first_name ILIKE ?',
+      'users.last_name ILIKE ?',
+      'users.email ILIKE ?'
+    ].join(' OR ')
 
     where(
-      terms.map { "(#{or_clauses})" }.join(" AND "),
+      terms.map { "(#{or_clauses})" }.join(' AND '),
       *terms.map { |e| [e] * num_or_conditions }.flatten
     )
   }
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
-    direction = /desc$/.match?(sort_option) ? "desc" : "asc"
+    direction = /desc$/.match?(sort_option) ? 'desc' : 'asc'
     case sort_option.to_s
     when /^created_at_/
       order("users.created_at #{direction}")
@@ -104,8 +104,8 @@ class User < ApplicationRecord
   # Class methods
   def self.options_for_sorted_by
     [
-      ["Registration date (newest first)", "created_at_desc"],
-      ["Registration date (oldest first)", "created_at_asc"]
+      ['Registration date (newest first)', 'created_at_desc'],
+      ['Registration date (oldest first)', 'created_at_asc']
     ]
   end
 
@@ -118,7 +118,7 @@ class User < ApplicationRecord
 
   def sanitized_user(options)
     to_include = {
-      optin_status: { except: %i(created_at updated_at) },
+      optin_status: { except: %i(created_at updated_at) }
     }.merge(options)
     render_options = {
       except: %i(tokens encrypted_password),
@@ -172,12 +172,12 @@ class User < ApplicationRecord
   end
 
   # Override devise method to include additional info as opts hash
-  def send_confirmation_instructions(opts={})
+  def send_confirmation_instructions(opts = {})
     return if guest
     generate_confirmation_token! unless @raw_confirmation_token
 
     # fall back to "default" config name
-    opts[:client_config] ||= "default"
+    opts[:client_config] ||= 'default'
     opts[:redirect_url]  ||= DeviseTokenAuth.default_confirm_success_url
     opts[:to]              = unconfirmed_email if pending_reconfirmation?
 
@@ -190,7 +190,7 @@ class User < ApplicationRecord
   end
 
   def has_pricings
-    self.pricings.length > 0
+    !pricings.empty?
   end
 
   def for_admin_json(options = {})
@@ -213,7 +213,7 @@ class User < ApplicationRecord
   private
 
   def set_default_role
-    self.role ||= Role.find_by_name("shipper")
+    self.role ||= Role.find_by_name('shipper')
   end
 
   def set_default_currency
@@ -221,7 +221,7 @@ class User < ApplicationRecord
   end
 
   def clear_tokens_if_empty
-    self.tokens = nil if tokens == "{}"
+    self.tokens = nil if tokens == '{}'
   end
 
   def sync_uid
@@ -230,7 +230,7 @@ class User < ApplicationRecord
 
   def update_shipments
     shipments.requested_by_unconfirmed_account.each do |shipment|
-      shipment.status = "requested"
+      shipment.status = 'requested'
       shipment.save
     end
   end

@@ -40,7 +40,7 @@ class Shipment < ApplicationRecord
   before_validation :update_carriage_properties!, :sync_nexuses, :set_default_destination_dates
 
   has_paper_trail
-  
+
   # ActiveRecord associations
   belongs_to :user
   belongs_to :quotation, optional: true
@@ -155,7 +155,7 @@ class Shipment < ApplicationRecord
     price = charge_breakdowns.where(trip_id: trip_id).first.charge('grand_total').edited_price
 
     return nil if price.nil?
-    
+
     { value: price.value, currency: price.currency }
   end
 
