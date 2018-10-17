@@ -10,7 +10,7 @@ class CargoItem < ApplicationRecord
   }.map_values { |v| BigDecimal(v) }
 
   DIMENSIONS = %i[dimension_x dimension_y dimension_z payload_in_kg chargeable_weight].freeze
-
+  has_paper_trail
   belongs_to :shipment
   delegate :tenant, to: :shipment
 

@@ -16,7 +16,8 @@ class User < ApplicationRecord
     scope:   :tenant_id,
     message: ->(obj, _) { "'#{obj.email}' taken for Tenant '#{obj.tenant.subdomain}'" }
   }
-
+  has_paper_trail
+  
   # Basic associations
   belongs_to :tenant
   belongs_to :role

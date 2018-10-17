@@ -8,6 +8,7 @@ class ApplicationController < ActionController::API
   before_action :set_raven_context
   before_action :require_authentication!
   before_action :require_non_guest_authentication!
+  before_action :set_paper_trail_whodunnit
 
   rescue_from ApplicationError do |error|
     response_handler(error)

@@ -39,6 +39,8 @@ class Shipment < ApplicationRecord
                     on: :create
   before_validation :update_carriage_properties!, :sync_nexuses, :set_default_destination_dates
 
+  has_paper_trail
+  
   # ActiveRecord associations
   belongs_to :user
   belongs_to :quotation, optional: true

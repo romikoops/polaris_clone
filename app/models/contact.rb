@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Contact < ApplicationRecord
+  has_paper_trail
+  
   belongs_to :user
   has_many :shipment_contacts
   belongs_to :location, optional: true

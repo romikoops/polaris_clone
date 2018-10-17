@@ -2,7 +2,7 @@
 
 class Charge < ApplicationRecord
   include CurrencyTools
-
+  has_paper_trail
   belongs_to :price
   belongs_to :edited_price, class_name: 'Price', optional: true
   belongs_to :charge_category
