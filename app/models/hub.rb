@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Hub < ApplicationRecord
+  has_paper_trail
   belongs_to :tenant
   belongs_to :nexus
   belongs_to :location

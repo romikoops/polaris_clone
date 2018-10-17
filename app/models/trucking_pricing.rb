@@ -3,6 +3,7 @@
 Dir["#{Rails.root}/app/queries/trucking_pricing/*.rb"].each { |file| require file }
 
 class TruckingPricing < ApplicationRecord
+  has_paper_trail
   has_many :shipments
   belongs_to :trucking_pricing_scope
   delegate :courier, to: :trucking_pricing_scope

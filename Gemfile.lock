@@ -829,6 +829,9 @@ GEM
       rack (>= 1.6.2, < 3)
     orm_adapter (0.5.0)
     os (1.0.0)
+    paper_trail (10.0.1)
+      activerecord (>= 4.2, < 5.3)
+      request_store (~> 1.1)
     parallel (1.12.1)
     parser (2.5.1.2)
       ast (~> 2.4.0)
@@ -892,6 +895,8 @@ GEM
       declarative (< 0.1.0)
       declarative-option (< 0.2.0)
       uber (< 0.2.0)
+    request_store (1.4.1)
+      rack (>= 1.4)
     responders (2.4.0)
       actionpack (>= 4.2.0, < 5.3)
       railties (>= 4.2.0, < 5.3)
@@ -1050,6 +1055,7 @@ DEPENDENCIES
   nokogiri
   omniauth
   os
+  paper_trail
   pg (~> 0.21)
   premailer-rails
   pry-rails

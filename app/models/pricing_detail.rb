@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class PricingDetail < ApplicationRecord
+  has_paper_trail
   belongs_to :tenant
   belongs_to :priceable, polymorphic: true
 

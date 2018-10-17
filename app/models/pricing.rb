@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Pricing < ApplicationRecord
+  has_paper_trail
   belongs_to :itinerary
   belongs_to :tenant
   belongs_to :transport_category
