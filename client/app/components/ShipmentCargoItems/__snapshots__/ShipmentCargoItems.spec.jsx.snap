@@ -365,10 +365,10 @@ exports[`shallow rendering 1`] = `
                 <Checkbox
                   checked={true}
                   className=""
-                  disabled={false}
+                  disabled={true}
                   name="0-stackable"
                   onChange={[Function]}
-                  onClick={null}
+                  onClick={[Function]}
                   size="15px"
                   theme={
                     Object {
@@ -778,10 +778,10 @@ exports[`shallow rendering 1`] = `
                   <Checkbox
                     checked={false}
                     className=""
-                    disabled={false}
+                    disabled={true}
                     name="-1-stackable"
                     onChange={[Function]}
-                    onClick={null}
+                    onClick={[Function]}
                     size="15px"
                     theme={
                       Object {

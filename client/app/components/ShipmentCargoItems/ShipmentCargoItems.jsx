@@ -297,7 +297,8 @@ ShipmentCargoItems.propTypes = {
   toggleModal: PropTypes.func,
   nextStageAttempt: PropTypes.bool,
   scope: PropTypes.shape({
-    dangerous_goods: PropTypes.bool
+    dangerous_goods: PropTypes.bool,
+    non_stackable_goods: PropTypes.bool
   }).isRequired,
   maxDimensions: PropTypes.objectOf(PropTypes.objectOf(PropTypes.number)).isRequired,
   availableMotsForRoute: PropTypes.arrayOf(PropTypes.string)

@@ -26,6 +26,7 @@ FactoryBot.define do
         customs_export_paper: false,
         fixed_currency: true,
         dangerous_goods: false,
+        non_stackable_goods: true,
         detailed_billing: false,
         fee_detail: 'key_and_name',
         require_full_address: false,

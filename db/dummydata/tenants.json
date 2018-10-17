@@ -83,6 +83,7 @@
     "fixed_currency": true,
     "fixed_exchange_rates": true,
     "dangerous_goods": false,
+    "non_stackable_goods": true,
     "detailed_billing": false,
     "incoterm_info_level": "text",
     "cargo_info_level": "text",
@@ -188,6 +189,7 @@
     "fixed_currency": false,
     "fixed_exchange_rates": false,
     "dangerous_goods": false,
+    "non_stackable_goods": true,
     "detailed_billing": false,
     "incoterm_info_level": "text",
     "cargo_info_level": "hs_codes",
@@ -271,6 +273,7 @@
     "fixed_currency": false,
     "fixed_exchange_rates": false,
     "dangerous_goods": false,
+    "non_stackable_goods": true,
     "detailed_billing": false,
     "incoterm_info_level": "text",
     "cargo_info_level": "hs_codes",
@@ -361,6 +364,7 @@
     "fixed_currency": false,
     "fixed_exchange_rates": false,
     "dangerous_goods": false,
+    "non_stackable_goods": true,
     "detailed_billing": false,
     "incoterm_info_level": "text",
     "cargo_info_level": "text",
@@ -464,6 +468,7 @@
     "fixed_currency": true,
     "fixed_exchange_rates": false,
     "dangerous_goods": false,
+    "non_stackable_goods": true,
     "detailed_billing": true,
     "incoterm_info_level": "text",
     "cargo_info_level": "text",
@@ -564,6 +569,7 @@
     "fixed_currency": false,
     "fixed_exchange_rates": false,
     "dangerous_goods": false,
+    "non_stackable_goods": true,
     "detailed_billing": false,
     "incoterm_info_level": "text",
     "cargo_info_level": "hs_codes",
@@ -635,6 +641,7 @@
       }
     },
     "dangerous_goods": true,
+    "non_stackable_goods": false,
     "links": {
       "about": "",
       "legal": ""
@@ -723,6 +730,7 @@
       "legal": ""
     },
     "dangerous_goods": false,
+    "non_stackable_goods": true,
     "detailed_billing": true,
     "continuous_rounding": false,
     "closed_shop": true,
@@ -806,6 +814,7 @@
       "legal": ""
     },
     "dangerous_goods": false,
+    "non_stackable_goods": true,
     "detailed_billing": false,
     "continuous_rounding": false,
     "closed_shop": false,
@@ -884,6 +893,7 @@
       }
     },
     "dangerous_goods": true,
+    "non_stackable_goods": true,
     "links": {
       "about": "",
       "legal": ""
@@ -986,6 +996,7 @@
       }
     },
     "dangerous_goods": true,
+    "non_stackable_goods": true,
     "links": {
       "about": "",
       "legal": ""

@@ -475,7 +475,8 @@ export default function getInputs (
         checked={cargoItem ? !cargoItem.stackable : false}
         theme={theme}
         size="15px"
-        disabled={false}
+        disabled={!scope.non_stackable_goods}
+        onClick={scope.non_stackable_goods ? '' : () => toggleModal('nonStackable')}
       />
       <div className="layout-row flex-65 layout-wrap layout-align-start-center">
         <p className={`${styles.input_label} flex-none`}>{t('common:nonStackable')}</p>
