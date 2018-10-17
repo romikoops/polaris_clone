@@ -6,19 +6,29 @@ module MultiTenantTools
   require "#{Rails.root}/db/seed_classes/pricing_seeder.rb"
   API_URL = 'https://api2.itsmycargo.com'
   DEV_API_URL = 'https://gamma.itsmycargo.com'
-  S3 = Aws::S3::Client.new(
-    access_key_id:     Settings.aws.access_key_id,
-    secret_access_key: Settings.aws.secret_access_key
-  )
-  M3 = Aws::S3::Client.new(
-    access_key_id:     Settings.aws.access_key_id,
-    secret_access_key: Settings.aws.secret_access_key,
-    region: 'us-east-1'
-  )
-  S3SIGNER = Aws::S3::Presigner.new(
-    access_key_id:     Settings.aws.access_key_id,
-    secret_access_key: Settings.aws.secret_access_key
-  )
+
+  def s3_signer
+    Aws::S3::Presigner.new(
+      access_key_id:     Settings.aws.access_key_id,
+      secret_access_key: Settings.aws.secret_access_key
+    )
+  end
+
+  def deploy_bucket
+    Aws::S3::Client.new(
+      access_key_id:     Settings.aws.access_key_id,
+      secret_access_key: Settings.aws.secret_access_key,
+      region: 'us-east-1'
+    )
+  end
+
+  def asset_bucket
+    Aws::S3::Client.new(
+      access_key_id:     Settings.aws.access_key_id,
+      secret_access_key: Settings.aws.secret_access_key
+    )
+  end
+
   def update_indexes
     Tenant.all.each do |tenant|
       title = tenant.name + ' | ItsMyCargo'
@@ -42,7 +52,7 @@ module MultiTenantTools
       newHtml.gsub!('__API_URL__', API_URL)
       newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
 
-      M3.put_object(bucket: 'multi.itsmycargo.com', key: objKey, body: StringIO.new(newHtml), content_type: 'text/html', acl: 'public-read')
+      deploy_bucket.put_object(bucket: 'multi.itsmycargo.com', key: objKey, body: StringIO.new(newHtml), content_type: 'text/html', acl: 'public-read')
       invalidate(tenant.web['cloudfront'], tenant.subdomain) if tenant.web && tenant.web['cloudfront']
     end
   end
@@ -70,7 +80,7 @@ module MultiTenantTools
       newHtml.gsub!('__API_URL__', DEV_API_URL)
       newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
 
-      M3.put_object(bucket: 'multi.itsmycargo.com', key: objKey, body: StringIO.new(newHtml), content_type: 'text/html', acl: 'public-read')
+      deploy_bucket.put_object(bucket: 'multi.itsmycargo.com', key: objKey, body: StringIO.new(newHtml), content_type: 'text/html', acl: 'public-read')
       invalidate(tenant.web['cloudfront'], tenant.subdomain) if tenant.web && tenant.web['cloudfront']
     end
   end
@@ -93,7 +103,7 @@ module MultiTenantTools
       File.open("#{Rails.root}/db/dummydata/#{subdomain}/#{subdomain}.json", 'w') { |file| file.write(tenant.to_json) }
       objKey = "data/#{subdomain}/#{subdomain}.json"
       upFile = File.open("#{Rails.root}/db/dummydata/#{subdomain}/#{subdomain}.json")
-      S3.put_object(bucket: 'assets.itsmycargo.com', key: objKey, body: upFile, content_type: 'application/json', acl: 'private')
+      asset_bucket.put_object(bucket: 'assets.itsmycargo.com', key: objKey, body: upFile, content_type: 'application/json', acl: 'private')
     end
   end
 
@@ -147,7 +157,7 @@ module MultiTenantTools
 
     objKey = tenant[:subdomain] + '.html'
     newHtml = indexHtml.to_html
-    M3.put_object(bucket: 'multi.itsmycargo.com', key: objKey, body: StringIO.new(newHtml), content_type: 'text/html', acl: 'public-read')
+    deploy_bucket.put_object(bucket: 'multi.itsmycargo.com', key: objKey, body: StringIO.new(newHtml), content_type: 'text/html', acl: 'public-read')
 
     create_distribution(tenant[:subdomain])
   end
@@ -180,7 +190,7 @@ module MultiTenantTools
     newHtml.gsub!('__API_URL__', API_URL)
     newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
 
-    M3.put_object(bucket: 'multi.itsmycargo.com', key: objKey, body: StringIO.new(newHtml), content_type: 'text/html', acl: 'public-read')
+    deploy_bucket.put_object(bucket: 'multi.itsmycargo.com', key: objKey, body: StringIO.new(newHtml), content_type: 'text/html', acl: 'public-read')
 
     create_distribution(tenant[:subdomain])
   end
