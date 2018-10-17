@@ -1,0 +1,1025 @@
+[{
+  "theme": {
+    "colors": {
+      "primary": "#0db14b",
+      "secondary": "#008ACB",
+      "brightPrimary": "#06CA52",
+      "brightSecondary": "#0CA7F7"
+    },
+    "logoLarge": "https://assets.itsmycargo.com/assets/images/logos/logo_black.png",
+    "logoWhite": "https://assets.itsmycargo.com/assets/images/logos/logo_white.png",
+    "logoSmall": "https://assets.itsmycargo.com/assets/images/logos/logo_black_small.png",
+    "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
+  },
+  "addresses": {
+    "main": "Torgny Segerstedtsgatan 80 426 77 Västra Frölunda",
+    "components": ["Torgny Segerstedtsgatan 80", "P.O Box 1037", "SE-405 22 Gothenburg", "Visiting adress: Redegatan 1B"]
+  },
+  "phones": {
+    "main": "+46 31-85 32 00",
+    "support": "+46 8 470 4970"
+  },
+  "emails": {
+    "sales": {
+      "air": "imc.air.se@greencarrier.se",
+      "ocean": "imc.sea.se@greencarrier.se",
+      "general": "imc.sea.se@greencarrier.se"
+    },
+    "support": {
+      "general": "support@greencarrier.com",
+      "air": "imc.air.se@greencarrier.se",
+      "ocean": "imc.sea.se@greencarrier.se"
+    }
+  },
+  "email_links": {
+    "confirmation_instructions": [{
+      "href": "https://freightservices.greencarrier.com/solution/tools/",
+      "link_text": "Nordic Association of Freight Forwarders",
+      "text": "All assignments will be performed in accordance with the General Conditions of the Nordic Association of Freight Forwarders (NSAB 2015)"
+    }, {
+      "href": "https://freightservices.greencarrier.com/added-services/claims/",
+      "link_text": "Claims Policy",
+      "text": "In the event you suffer a loss or damage to your goods, please refer to Greencarrier Freight Services' Claims Policy."
+    }, {
+      "href": "https://greencarrier.itsmycargo.com/terms_and_conditions",
+      "link_text": "Terms and Conditions",
+      "text": "For more information, please refer to the Terms and Conditions."
+    }]
+  },
+  "subdomain": "greencarrier",
+  "name": "Greencarrier",
+  "currency": "USD",
+  "scope": {
+    "modes_of_transport": {
+      "truck": {
+        "container": false,
+        "cargo_item": false
+      },
+      "ocean": {
+        "container": true,
+        "cargo_item": true
+      },
+      "rail": {
+        "container": false,
+        "cargo_item": false
+      },
+      "air": {
+        "container": false,
+        "cargo_item": true
+      }
+    },
+    "links": {
+      "about": "https://freightservices.greencarrier.com/about-us/",
+      "legal": "https://freightservices.greencarrier.com/contact/"
+    },
+    "continuous_rounding": false,
+    "closed_shop": false,
+    "closed_registration": false,
+    "closed_quotation_tool": false,
+    "open_quotation_tool": false,
+    "require_full_address": true,
+    "consolidate_cargo": false,
+    "customs_export_paper": false,
+    "fixed_currency": true,
+    "fixed_exchange_rates": true,
+    "dangerous_goods": false,
+    "detailed_billing": false,
+    "incoterm_info_level": "text",
+    "cargo_info_level": "text",
+    "has_insurance": true,
+    "has_customs": true,
+    "terms": ["You verify that all the information provided above is true", "You agree to the presented terms and conditions.", "Our rate and service proposals are made based on capacity conditions at the time of the inquiry. Market conditions are subject to change quickly. All offers must be re-confirmed with Greencarrier at the time of booking to be valid."],
+    "carriage_options": {
+      "on_carriage": {
+        "import": "mandatory",
+        "export": "optional"
+      },
+      "pre_carriage": {
+        "import": "optional",
+        "export": "mandatory"
+      }
+    }
+  },
+  "other_data": {
+    "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"],
+    "incoterms": ["EXW", "CFR", "DDP", "FAS"]
+  }
+}, {
+  "theme": {
+    "colors": {
+      "primary": "#0D5BA9",
+      "secondary": "#23802A",
+      "brightPrimary": "#2491FD",
+      "brightSecondary": "#25ED36"
+    },
+    "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+    "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+    "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+    "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+    "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
+  },
+  "addresses": {
+    "main": "Brooktorkai 7, 20457 Hamburg, Germany",
+    "components": []
+  },
+  "phones": {
+    "main": "+46 31-85 32 00",
+    "support": "0173042031020"
+  },
+  "emails": {
+    "sales": {
+      "general": "sales@demo.com",
+      "air": "sales@demo.com",
+      "ocean": "sales@demo.com",
+      "rail": "sales@demo.com"
+    },
+    "support": {
+      "general": "support@demo.com",
+      "air": "imc.air@demo.com",
+      "ocean": "imc.sea@demo.com",
+      "rail": "imc.rail@demo.com"
+    }
+  },
+  "email_links": {
+    "confirmation_instructions": [{
+      "href": "www.example.com",
+      "link_text": "Nordic Association of Freight Forwarders",
+      "text": "All assignments will be performed in accordance with the General Conditions of the Nordic Association of Freight Forwarders (NSAB 2015)"
+    }, {
+      "href": "www.example2.com",
+      "link_text": "example2",
+      "text": "This is just an example2."
+    }]
+  },
+  "subdomain": "demo",
+  "name": "Demo",
+  "scope": {
+    "modes_of_transport": {
+      "truck": {
+        "container": false,
+        "cargo_item": false
+      },
+      "ocean": {
+        "container": true,
+        "cargo_item": true
+      },
+      "rail": {
+        "container": true,
+        "cargo_item": true
+      },
+      "air": {
+        "container": true,
+        "cargo_item": true
+      }
+    },
+    "links": {
+      "about": "",
+      "legal": ""
+    },
+    "continuous_rounding": false,
+    "closed_shop": false,
+    "closed_registration": false,
+    "closed_quotation_tool": false,
+    "show_beta_features": true,
+    "open_quotation_tool": false,
+    "require_full_address": true,
+    "consolidate_cargo": false,
+    "customs_export_paper": false,
+    "fixed_currency": false,
+    "fixed_exchange_rates": false,
+    "dangerous_goods": false,
+    "detailed_billing": false,
+    "incoterm_info_level": "text",
+    "cargo_info_level": "hs_codes",
+    "has_insurance": true,
+    "has_customs": true,
+    "terms": ["You verify that all the information provided above is true", "You agree to the presented terms and conditions.", "Demo is to discuss the validity of the presented prices with the product owners."],
+    "carriage_options": {
+      "on_carriage": {
+        "import": "optional",
+        "export": "optional"
+      },
+      "pre_carriage": {
+        "import": "optional",
+        "export": "optional"
+      }
+    }
+  },
+  "other_data": {
+    "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"]
+  }
+}, {
+  "theme": {
+    "colors": {
+      "primary": "#FF9B0A",
+      "secondary": "#427FAF",
+      "brightPrimary": "#FFAC36",
+      "brightSecondary": "#539ED7"
+    },
+    "logoLarge": "https://assets.itsmycargo.com/assets/images/logos/logo_easy_shipping.png",
+    "logoSmall": "https://assets.itsmycargo.com/assets/images/logos/logo_easy_shipping.png",
+    "background": "https://assets.itsmycargo.com/assets/backgrounds/bg_easy_shipping.jpg"
+  },
+  "addresses": {
+    "components": [],
+    "main": "Industrivej 2 DK-7860 Spøttrup Denmark"
+  },
+  "phones": {
+    "main": "+45 5353 0300",
+    "support": "+45 5353 0300"
+  },
+  "emails": {
+    "sales": {
+      "general": "sales@easyshipping.dk"
+    },
+    "support": {
+      "general": "support@easyshipping.dk"
+    }
+  },
+  "web": {
+    "tld": "dk"
+  },
+  "subdomain": "easyshipping",
+  "name": "Easyshipping",
+  "scope": {
+    "modes_of_transport": {
+      "truck": {
+        "container": false,
+        "cargo_item": false
+      },
+      "ocean": {
+        "container": true,
+        "cargo_item": true
+      },
+      "rail": {
+        "container": true,
+        "cargo_item": true
+      },
+      "air": {
+        "container": false,
+        "cargo_item": false
+      }
+    },
+    "continuous_rounding": false,
+    "closed_shop": false,
+    "closed_registration": false,
+    "closed_quotation_tool": false,
+    "open_quotation_tool": false,
+    "require_full_address": true,
+    "consolidate_cargo": false,
+    "customs_export_paper": false,
+    "fixed_currency": false,
+    "fixed_exchange_rates": false,
+    "dangerous_goods": false,
+    "detailed_billing": false,
+    "incoterm_info_level": "text",
+    "cargo_info_level": "hs_codes",
+    "has_insurance": true,
+    "has_customs": false,
+    "terms": [],
+    "links": {
+      "about": "",
+      "legal": ""
+    },
+    "carriage_options": {
+      "on_carriage": {
+        "import": "optional",
+        "export": "disabled"
+      },
+      "pre_carriage": {
+        "import": "disabled",
+        "export": "optional"
+      }
+    }
+  },
+  "other_data": {
+    "cargo_item_types": "all"
+  }
+}, {
+  "theme": {
+    "colors": {
+      "primary": "#D5006A",
+      "secondary": "#1C2F5D",
+      "brightPrimary": "#D5009F",
+      "brightSecondary": "#4984B4"
+    },
+    "logoLarge": "https://assets.itsmycargo.com/assets/images/logos/saco_logo.png",
+    "logoSmall": "https://assets.itsmycargo.com/assets/images/logos/saco_logo.png",
+    "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+    "welcome_text": "online freight calculator"
+  },
+  "addresses": {
+    "components": [],
+    "main": "Wollkämmereistraße 1, 21107 Hamburg"
+  },
+  "phones": {
+    "main": "+49 40 311706-0",
+    "support": "+49 173 4203 1020"
+  },
+  "emails": {
+    "sales": {
+      "general": "sales@saco.de"
+    },
+    "support": {
+      "general": "support@saco.de"
+    }
+  },
+  "subdomain": "saco",
+  "name": "SACO Shipping GmbH",
+  "currency": "USD",
+  "scope": {
+    "modes_of_transport": {
+      "truck": {
+        "container": false,
+        "cargo_item": false
+      },
+      "ocean": {
+        "container": true,
+        "cargo_item": false
+      },
+      "rail": {
+        "container": false,
+        "cargo_item": false
+      },
+      "air": {
+        "container": false,
+        "cargo_item": false
+      }
+    },
+    "links": {
+      "about": "",
+      "legal": ""
+    },
+    "continuous_rounding": false,
+    "closed_shop": false,
+    "closed_registration": false,
+    "closed_quotation_tool": false,
+    "open_quotation_tool": true,
+    "require_full_address": true,
+    "consolidate_cargo": false,
+    "customs_export_paper": false,
+    "fixed_currency": false,
+    "fixed_exchange_rates": false,
+    "dangerous_goods": false,
+    "detailed_billing": false,
+    "incoterm_info_level": "text",
+    "cargo_info_level": "text",
+    "has_insurance": true,
+    "has_customs": true,
+    "terms": ["You verify that all the information provided above is true", "You agree to the presented terms and conditions.", "Saco Shipping is to discuss the validity of the presented prices with the product owners."],
+    "carriage_options": {
+      "on_carriage": {
+        "import": "optional",
+        "export": "optional"
+      },
+      "pre_carriage": {
+        "import": "optional",
+        "export": "optional"
+      }
+    }
+  },
+  "other_data": {
+    "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"]
+  }
+}, {
+  "theme": {
+    "colors": {
+      "primary": "#4FAACA",
+      "secondary": "#270C77",
+      "brightPrimary": "#4FAACA",
+      "brightSecondary": "#270C77"
+    },
+    "logoLarge": "https://assets.itsmycargo.com/assets/logos/speedtrans/speedtranslogo.png",
+    "logoSmall": "https://assets.itsmycargo.com/assets/logos/speedtrans/speedtranslogo.png",
+    "logoWhite": "https://assets.itsmycargo.com/assets/logos/speedtrans/speedtrans_logo_white.png",
+    "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
+  },
+  "addresses": {
+    "components": [],
+    "main": "Am Spitzwald 9 D-21509 Glinde"
+  },
+  "phones": {
+    "main": "+49 040 - 530 366 7 - 0",
+    "support": "49 040 - 530 366 7 - 0"
+  },
+  "emails": {
+    "sales": {
+      "ocean": "mkuester@speedtrans.com",
+      "general": "mkuester@speedtrans.com"
+    },
+    "support": {
+      "general": "mkuester@speedtrans.com",
+      "ocean": "mkuester@speedtrans.com"
+    }
+  },
+  "email_links": {
+    "confirmation_instructions": [{
+      "href": "",
+      "link_text": "",
+      "text": ""
+    }, {
+      "href": "",
+      "link_text": "",
+      "text": ""
+    }, {
+      "href": "",
+      "link_text": "",
+      "text": ""
+    }]
+  },
+  "subdomain": "speedtrans",
+  "name": "Küster Speedtrans Übersee Spedition GmbH",
+  "currency": "USD",
+  "scope": {
+    "modes_of_transport": {
+      "truck": {
+        "container": false,
+        "cargo_item": false
+      },
+      "ocean": {
+        "container": false,
+        "cargo_item": true
+      },
+      "rail": {
+        "container": false,
+        "cargo_item": false
+      },
+      "air": {
+        "container": false,
+        "cargo_item": false
+      }
+    },
+    "links": {
+      "about": "",
+      "legal": ""
+    },
+    "continuous_rounding": true,
+    "closed_shop": false,
+    "closed_registration": false,
+    "closed_quotation_tool": false,
+    "open_quotation_tool": false,
+    "require_full_address": false,
+    "consolidate_cargo": true,
+    "customs_export_paper": true,
+    "fixed_currency": true,
+    "fixed_exchange_rates": false,
+    "dangerous_goods": false,
+    "detailed_billing": true,
+    "incoterm_info_level": "text",
+    "cargo_info_level": "text",
+    "has_insurance": false,
+    "has_customs": false,
+    "terms": ["You verify that all the information provided above is true", "You agree to the presented terms and conditions.", "Our rate and service proposals are made based on capacity conditions at the time of the inquiry. Market conditions are subject to change quickly. All offers must be re-confirmed with Greencarrier at the time of booking to be valid."],
+    "carriage_options": {
+      "on_carriage": {
+        "import": "optional",
+        "export": "optional"
+      },
+      "pre_carriage": {
+        "import": "optional",
+        "export": "optional"
+      }
+    }
+  },
+  "other_data": {
+    "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"],
+    "incoterms": ["EXW", "CFR", "DDP", "FAS"]
+  }
+}, {
+  "theme": {
+    "colors": {
+      "primary": "#0D5BA9",
+      "secondary": "#23802A",
+      "brightPrimary": "#2491FD",
+      "brightSecondary": "#25ED36"
+    },
+    "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+    "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+    "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+    "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+    "background": "https://assets.itsmycargo.com/assets/logos/trucking/trucking_background.jpg"
+  },
+  "addresses": {
+    "components": [],
+    "main": "Brooktorkai 7, 20457 Hamburg, Germany"
+  },
+  "phones": {
+    "main": "+46 31-85 32 00",
+    "support": "0173042031020"
+  },
+  "emails": {
+    "sales": {
+      "general": "sales@trucking.com",
+      "air": "sales@trucking.com",
+      "ocean": "sales@trucking.com",
+      "rail": "sales@trucking.com"
+    },
+    "support": {
+      "general": "support@trucking.com",
+      "air": "imc.air@trucking.com",
+      "ocean": "imc.sea@trucking.com",
+      "rail": "imc.rail@trucking.com"
+    }
+  },
+  "email_links": {
+    "confirmation_instructions": [{
+      "href": "www.example.com",
+      "link_text": "Nordic Association of Freight Forwarders",
+      "text": "All assignments will be performed in accordance with the General Conditions of the Nordic Association of Freight Forwarders (NSAB 2015)"
+    }, {
+      "href": "www.example2.com",
+      "link_text": "example2",
+      "text": "This is just an example2."
+    }]
+  },
+  "subdomain": "trucking",
+  "name": "Trucking",
+  "scope": {
+    "modes_of_transport": {
+      "truck": {
+        "container": true,
+        "cargo_item": true
+      },
+      "ocean": {
+        "container": false,
+        "cargo_item": false
+      },
+      "rail": {
+        "container": false,
+        "cargo_item": false
+      },
+      "air": {
+        "container": false,
+        "cargo_item": false
+      }
+    },
+    "continuous_rounding": false,
+    "closed_shop": false,
+    "closed_registration": false,
+    "closed_quotation_tool": false,
+    "open_quotation_tool": false,
+    "require_full_address": false,
+    "consolidate_cargo": false,
+    "customs_export_paper": false,
+    "fixed_currency": false,
+    "fixed_exchange_rates": false,
+    "dangerous_goods": false,
+    "detailed_billing": false,
+    "incoterm_info_level": "text",
+    "cargo_info_level": "hs_codes",
+    "has_insurance": true,
+    "has_customs": true,
+    "links": {
+      "about": "",
+      "legal": ""
+    },
+    "terms": ["You verify that all the information provided above is true", "You agree to the presented terms and conditions.", "Trucking is to discuss the validity of the presented prices with the product owners."],
+    "carriage_options": {
+      "on_carriage": {
+        "import": "mandatory",
+        "export": "mandatory"
+      },
+      "pre_carriage": {
+        "import": "mandatory",
+        "export": "mandatory"
+      }
+    }
+  },
+  "other_data": {
+    "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"]
+  }
+}, {
+  "theme": {
+    "colors": {
+      "primary": "#e10f21",
+      "secondary": "#1d1d1b",
+      "brightPrimary": "#e10f21",
+      "brightSecondary": "#1d1d1b"
+    },
+    "logoLarge": "https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png",
+    "logoSmall": "https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png",
+    "background": "https://assets.itsmycargo.com/assets/logos/air_bg_1.jpg"
+  },
+  "addresses": {
+    "components": [],
+    "main": "Niendorfer Str. 170, 22848 Norderstedt, Germany"
+  },
+  "phones": {
+    "main": "+49 (0)40 85 40 68-0",
+    "support": "+49 (0)40 85 40 68-0"
+  },
+  "emails": {
+    "sales": {
+      "general": "cglitscher@gatewaycargo.de"
+    },
+    "support": {
+      "general": "cglitscher@gatewaycargo.de"
+    }
+  },
+  "subdomain": "gateway",
+  "name": "Gateway Cargo Systems GmbH",
+  "currency": "EUR",
+  "scope": {
+    "modes_of_transport": {
+      "ocean": {
+        "container": false,
+        "cargo_item": true
+      },
+      "rail": {
+        "container": false,
+        "cargo_item": false
+      },
+      "air": {
+        "container": false,
+        "cargo_item": false
+      }
+    },
+    "dangerous_goods": true,
+    "links": {
+      "about": "",
+      "legal": ""
+    },
+    "quote_notes": "1) Prices subject to change\n        2) All fees are converted at the time of quotation\n        using that day's European Central bank exchange rates and are an approximation\n        of the final amount ot be paid. The amount paid at the time of settlement\n        will reflect the exchange rates of the day.",
+    "detailed_billing": false,
+    "continuous_rounding": false,
+    "closed_shop": false,
+    "closed_registration": false,
+    "closed_quotation_tool": true,
+    "open_quotation_tool": false,
+    "require_full_address": true,
+    "consolidate_cargo": false,
+    "customs_export_paper": false,
+    "fixed_currency": false,
+    "fixed_exchange_rates": false,
+    "incoterm_info_level": "text",
+    "cargo_info_level": "text",
+    "has_insurance": false,
+    "has_customs": false,
+    "terms": ["You verify that all the information provided above is true", "You agree to the presented terms and conditions.", "Gateway Cargo Systems GmbH is to discuss the validity of the presented prices with the product owners."],
+    "carriage_options": {
+      "on_carriage": {
+        "import": "mandatory",
+        "export": "optional"
+      },
+      "pre_carriage": {
+        "import": "optional",
+        "export": "mandatory"
+      }
+    }
+  },
+  "other_data": {
+    "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"],
+    "incoterms": ["EXW", "FCA", "FOB", "FAS"]
+  }
+}, {
+  "theme": {
+    "colors": {
+      "primary": "#192673",
+      "secondary": "#FFA514",
+      "brightPrimary": "#1A31B1",
+      "brightSecondary": "#FCB645"
+    },
+    "logoLarge": "https://assets.itsmycargo.com/assets/tenants/schryver/schryver_logo_dark.png",
+    "logoSmall": "https://assets.itsmycargo.com/assets/tenants/schryver/schryver_logo_dark.png",
+    "logoWhite": "https://assets.itsmycargo.com/assets/tenants/schryver/schryver_white.png",
+    "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
+  },
+  "addresses": {
+    "components": [],
+    "main": "Sachsenstrasse 5, 20097, Hamburg, Germany "
+  },
+  "phones": {
+    "main": "+49-40-2 36 33- 272",
+    "support": "+49-40-2 36 33- 272"
+  },
+  "emails": {
+    "sales": {
+      "general": "support@schryver.com"
+    },
+    "support": {
+      "general": "support@schryver.com"
+    }
+  },
+  "subdomain": "schryver",
+  "name": "Schryver International Freight Forwarders GmbH",
+  "currency": "EUR",
+  "scope": {
+    "modes_of_transport": {
+      "ocean": {
+        "container": true,
+        "cargo_item": true
+      },
+      "rail": {
+        "container": false,
+        "cargo_item": false
+      },
+      "air": {
+        "container": false,
+        "cargo_item": false
+      }
+    },
+    "links": {
+      "about": "",
+      "legal": ""
+    },
+    "dangerous_goods": false,
+    "detailed_billing": true,
+    "continuous_rounding": false,
+    "closed_shop": true,
+    "closed_registration": true,
+    "closed_quotation_tool": false,
+    "open_quotation_tool": false,
+    "require_full_address": true,
+    "consolidate_cargo": false,
+    "customs_export_paper": false,
+    "fixed_currency": false,
+    "fixed_exchange_rates": false,
+    "incoterm_info_level": "text",
+    "cargo_info_level": "text",
+    "has_insurance": false,
+    "has_customs": false,
+    "terms": ["You verify that all the information provided above is true", "You agree to the presented terms and conditions.", "Schryver International Freight Forwarders GmbH is to discuss the validity of the presented prices with the product owners."],
+    "carriage_options": {
+      "on_carriage": {
+        "import": "optional",
+        "export": "optional"
+      },
+      "pre_carriage": {
+        "import": "optional",
+        "export": "optional"
+      }
+    }
+  },
+  "other_data": {
+    "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"],
+    "incoterms": ["EXW", "FCA", "FOB", "FAS"]
+  }
+}, {
+  "theme": {
+    "colors": {
+      "primary": "#30317C",
+      "secondary": "#7A8AC2",
+      "brightPrimary": "#30317C",
+      "brightSecondary": "#7A8AC2"
+    },
+    "logoLarge": "https://assets.itsmycargo.com/assets/tenants/normanglobal/normanglobal_logo.png",
+    "logoSmall": "https://assets.itsmycargo.com/assets/tenants/normanglobal/normanglobal_logo.png",
+    "logoWhite": "https://assets.itsmycargo.com/assets/tenants/normanglobal/normanglobal_logo_white.png",
+    "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
+  },
+  "addresses": {
+    "components": [],
+    "main": "Norman Global Logistics, Tower 1, 8/F, Unit 811, Cheung Sha Wan Plaza, 833 Cheung Sha Wan Rd, Kowloon, Hong Kong S.A.R"
+  },
+  "phones": {
+    "main": "+852 3582 3440",
+    "support": "+852 3582 3440"
+  },
+  "emails": {
+    "sales": {
+      "general": "test_hongkong@normanglobal.com"
+    },
+    "support": {
+      "general": "test_hongkong@normanglobal.com"
+    }
+  },
+  "subdomain": "normanglobal",
+  "name": "Norman Global Logistics",
+  "currency": "EUR",
+  "scope": {
+    "modes_of_transport": {
+      "ocean": {
+        "container": true,
+        "cargo_item": true
+      },
+      "rail": {
+        "container": false,
+        "cargo_item": false
+      },
+      "air": {
+        "container": false,
+        "cargo_item": false
+      }
+    },
+    "links": {
+      "about": "",
+      "legal": ""
+    },
+    "dangerous_goods": false,
+    "detailed_billing": false,
+    "continuous_rounding": false,
+    "closed_shop": false,
+    "closed_registration": false,
+    "closed_quotation_tool": false,
+    "open_quotation_tool": false,
+    "require_full_address": true,
+    "consolidate_cargo": false,
+    "customs_export_paper": false,
+    "fixed_currency": false,
+    "fixed_exchange_rates": false,
+    "incoterm_info_level": "text",
+    "cargo_info_level": "text",
+    "has_insurance": false,
+    "has_customs": false,
+    "terms": ["You verify that all the information provided above is true", "You agree to the presented terms and conditions.", "Norman Global Logistics is to discuss the validity of the presented prices with the product owners."],
+    "carriage_options": {
+      "on_carriage": {
+        "import": "optional",
+        "export": "optional"
+      },
+      "pre_carriage": {
+        "import": "optional",
+        "export": "optional"
+      }
+    }
+  },
+  "other_data": {
+    "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"],
+    "incoterms": ["EXW", "FCA", "FOB", "FAS"]
+  }
+}, {
+  "theme": {
+    "colors": {
+      "primary": "#e10f21",
+      "secondary": "#1d1d1b",
+      "brightPrimary": "#e10f21",
+      "brightSecondary": "#1d1d1b"
+    },
+    "logoLarge": "https://assets.itsmycargo.com/assets/tenants/fivestar/fivestar_logo.png",
+    "logoSmall": "https://assets.itsmycargo.com/assets/tenants/fivestar/fivestar_logo.png",
+    "background": "https://assets.itsmycargo.com/assets/logos/air_bg_1.jpg"
+  },
+  "addresses": {
+    "components": [],
+    "main": "Niendorfer Str. 170, 22848 Norderstedt, Germany"
+  },
+  "phones": {
+    "main": "+49 (0)40 56008073",
+    "support": "+49 (0)40 56008073"
+  },
+  "emails": {
+    "sales": {
+      "general": "infoham@fivestar-services.de"
+    },
+    "support": {
+      "general": "infoham@fivestar-services.de"
+    }
+  },
+  "subdomain": "fivestar",
+  "name": "Fivestar Services GmbH",
+  "currency": "EUR",
+  "scope": {
+    "modes_of_transport": {
+      "ocean": {
+        "container": false,
+        "cargo_item": true
+      },
+      "rail": {
+        "container": false,
+        "cargo_item": false
+      },
+      "air": {
+        "container": false,
+        "cargo_item": false
+      }
+    },
+    "dangerous_goods": true,
+    "links": {
+      "about": "",
+      "legal": ""
+    },
+    "quote_notes": "1) Prices subject to change\n        2) All fees are converted at the time of quotation\n        using that day's European Central bank exchange rates and are an approximation\n        of the final amount ot be paid. The amount paid at the time of settlement\n        will reflect the exchange rates of the day.",
+    "detailed_billing": false,
+    "continuous_rounding": false,
+    "closed_shop": false,
+    "closed_registration": false,
+    "closed_quotation_tool": true,
+    "open_quotation_tool": false,
+    "require_full_address": true,
+    "consolidate_cargo": false,
+    "customs_export_paper": false,
+    "fixed_currency": false,
+    "fixed_exchange_rates": false,
+    "incoterm_info_level": "text",
+    "cargo_info_level": "text",
+    "has_insurance": false,
+    "has_customs": false,
+    "terms": ["You verify that all the information provided above is true", "You agree to the presented terms and conditions.", "Fivestar Services GmbH is to discuss the validity of the presented prices with the product owners."],
+    "carriage_options": {
+      "on_carriage": {
+        "import": "mandatory",
+        "export": "optional"
+      },
+      "pre_carriage": {
+        "import": "optional",
+        "export": "mandatory"
+      }
+    }
+  },
+  "other_data": {
+    "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"],
+    "incoterms": ["EXW", "FCA", "FOB", "FAS"]
+  }
+}, {
+  "theme": {
+    "colors": {
+      "primary": "#0D5BA9",
+      "secondary": "#23802A",
+      "brightPrimary": "#2491FD",
+      "brightSecondary": "#25ED36"
+    },
+    "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+    "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+    "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+    "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+    "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
+  },
+  "addresses": {
+    "main": "Brooktorkai 7, 20457 Hamburg, Germany",
+    "components": []
+  },
+  "phones": {
+    "main": "+46 31-85 32 00",
+    "support": "0173042031020"
+  },
+  "emails": {
+    "sales": {
+      "general": "sales@demo.com",
+      "air": "sales@demo.com",
+      "ocean": "sales@demo.com",
+      "rail": "sales@demo.com"
+    },
+    "support": {
+      "general": "support@demo.com",
+      "air": "imc.air@demo.com",
+      "ocean": "imc.sea@demo.com",
+      "rail": "imc.rail@demo.com"
+    }
+  },
+  "email_links": {
+    "confirmation_instructions": [{
+      "href": "www.example.com",
+      "link_text": "Nordic Association of Freight Forwarders",
+      "text": "All assignments will be performed in accordance with the General Conditions of the Nordic Association of Freight Forwarders (NSAB 2015)"
+    }, {
+      "href": "www.example2.com",
+      "link_text": "example2",
+      "text": "This is just an example2."
+    }]
+  },
+  "subdomain": "quotations",
+  "name": "ItsMyCargo Quotes",
+  "currency": "EUR",
+  "scope": {
+    "modes_of_transport": {
+      "ocean": {
+        "container": false,
+        "cargo_item": true
+      },
+      "rail": {
+        "container": false,
+        "cargo_item": false
+      },
+      "air": {
+        "container": false,
+        "cargo_item": false
+      }
+    },
+    "dangerous_goods": true,
+    "links": {
+      "about": "",
+      "legal": ""
+    },
+    "quote_notes": "1) Prices subject to change\n        2) All fees are converted at the time of quotation\n        using that day's European Central bank exchange rates and are an approximation\n        of the final amount ot be paid. The amount paid at the time of settlement\n        will reflect the exchange rates of the day.",
+    "detailed_billing": false,
+    "continuous_rounding": false,
+    "closed_shop": false,
+    "closed_registration": false,
+    "closed_quotation_tool": true,
+    "open_quotation_tool": false,
+    "require_full_address": true,
+    "consolidate_cargo": false,
+    "customs_export_paper": false,
+    "fixed_currency": false,
+    "fixed_exchange_rates": false,
+    "incoterm_info_level": "text",
+    "cargo_info_level": "text",
+    "has_insurance": false,
+    "has_customs": false,
+    "terms": ["You verify that all the information provided above is true", "You agree to the presented terms and conditions.", "Quotation Services GmbH is to discuss the validity of the presented prices with the product owners."],
+    "carriage_options": {
+      "on_carriage": {
+        "import": "mandatory",
+        "export": "optional"
+      },
+      "pre_carriage": {
+        "import": "optional",
+        "export": "mandatory"
+      }
+    }
+  },
+  "other_data": {
+    "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"],
+    "incoterms": ["EXW", "FCA", "FOB", "FAS"]
+  }
+}]
