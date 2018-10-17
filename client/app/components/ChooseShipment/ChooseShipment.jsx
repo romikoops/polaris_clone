@@ -134,7 +134,7 @@ class ChooseShipment extends Component {
       <RoundButton
         theme={theme}
         size="full"
-        text="Next Step"
+        text={t('common:nextStep')}
         iconClass="fa-chevron-right"
       />
     )
