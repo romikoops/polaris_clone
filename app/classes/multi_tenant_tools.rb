@@ -69,9 +69,8 @@ module MultiTenantTools
       # Replace API Host and tenantName
       newHtml.gsub!('__API_URL__', DEV_API_URL)
       newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
-      File.open('blank.html', 'w') { |file| file.write(newHtml) }
-      upFile = open('blank.html')
-      M3.put_object(bucket: 'multi.itsmycargo.com', key: objKey, body: upFile, content_type: 'text/html', acl: 'public-read')
+
+      M3.put_object(bucket: 'multi.itsmycargo.com', key: objKey, body: StringIO.new(newHtml), content_type: 'text/html', acl: 'public-read')
       invalidate(tenant.web['cloudfront'], tenant.subdomain) if tenant.web && tenant.web['cloudfront']
     end
   end
