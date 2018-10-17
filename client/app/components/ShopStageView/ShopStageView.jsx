@@ -106,7 +106,8 @@ class ShopStageView extends Component {
       t
     } = this.props
     const { showHelp } = this.state
-    const isQuote = (tenant && tenant.data && tenant.data.scope) && (tenant.data.scope.closed_quotation_tool || tenant.data.scope.open_quotation_tool)
+    const isQuote = (tenant && tenant.data && tenant.data.scope) &&
+                    (tenant.data.scope.closed_quotation_tool || tenant.data.scope.open_quotation_tool)
     const stageBoxes = this.applicableStages.map(stage => this.stageBox(stage))
     const gradientStyle =
       theme && theme.colors
@@ -181,7 +182,9 @@ class ShopStageView extends Component {
               styles.banner_content
             }`}
           >
-            <h3 className="flex-none header"> {this.props.shopType} </h3>
+            <h3 className="flex-none header">
+              { isQuote ? t('common:quotation') : t('common:booking') }
+            </h3>
             <i className="fa fa-chevron-right fade" />
             <p className="flex-none fade"> {this.state.stageHeader} </p>
           </div>
@@ -211,7 +214,6 @@ ShopStageView.propTypes = {
   t: PropTypes.func.isRequired,
   setStage: PropTypes.func.isRequired,
   currentStage: PropTypes.number,
-  shopType: PropTypes.string.isRequired,
   disabledClick: PropTypes.bool,
   hasNextStage: PropTypes.bool,
   goForward: PropTypes.func
