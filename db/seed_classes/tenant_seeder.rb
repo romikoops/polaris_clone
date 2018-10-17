@@ -2,7 +2,6 @@
 
 class TenantSeeder
 
-
   def self.tenant_data
     JSON.parse(File.read("#{Rails.root}/db/dummydata/tenants.json"))
   end
