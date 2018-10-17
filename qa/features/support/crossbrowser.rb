@@ -9,7 +9,7 @@ module CrossBrowserTesting
 
   def cbt_request(method, url, params)
     return unless cbt_enabled?
-    
+
     username = ENV.fetch('CROSSBROWSER_USERNAME', '').sub('@', '%40')
     authkey = ENV.fetch('CROSSBROWSER_AUTHKEY', '')
     base_url = "https://#{username}:#{authkey}@crossbrowsertesting.com/api/v3"

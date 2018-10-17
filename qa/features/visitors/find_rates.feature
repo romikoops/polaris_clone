@@ -10,7 +10,6 @@ Feature: Find Rates
       And I am at the homepage
       And I click "Find Rates" button
      Then I expect to see title "Choose shipment"
-      And take a snapshot
 
   Scenario Outline: Requesting Shipment
     When I select "I am <Direction>"
