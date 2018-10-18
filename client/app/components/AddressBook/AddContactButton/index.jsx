@@ -11,7 +11,7 @@ export function AddressBookAddContactButton ({
   return (
     <div
       key={v4()}
-      className={`flex-100 layout-row layout-align-center-center ${styles.add_contact_btn}`}
+      className={`flex-100 layout-row layout-align-center-center ccb_new_contact ${styles.add_contact_btn}`}
       onClick={addContact}
     >
       <h3>{`+ ${t('common:newContact')}`}</h3>

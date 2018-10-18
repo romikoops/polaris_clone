@@ -20,6 +20,11 @@ When 'I set trucking from {string} to {string}' do |address, type|
   end
 end
 
+When 'I click the {string} tab' do |tab|
+  link = find('div', class: "ccb_#{tab.downcase}", wait: 10)
+  link.click
+end
+
 When 'I have LCL shipment of {int} units {int} x {int} x {int} with weight of {int}kg' do |count, dim_x, dim_y, dim_z, weight|
   # Select container size
   cargo_item_1 = find("div[name='0-cargoItem']")
@@ -38,4 +43,8 @@ When 'I have LCL shipment of {int} units {int} x {int} x {int} with weight of {i
 
   # Weight
   fill_in '0-payload_in_kg', with: weight
+end
+
+And ('I am on the User Dashboard') do
+  visit '/account'
 end

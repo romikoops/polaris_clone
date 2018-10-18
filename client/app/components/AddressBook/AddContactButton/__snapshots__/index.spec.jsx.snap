@@ -2,7 +2,7 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-100 layout-row layout-align-center-center add_contact_btn"
+  className="flex-100 layout-row layout-align-center-center ccb_new_contact add_contact_btn"
   key="RANDOM_KEY_0"
   onClick={[Function]}
 >
