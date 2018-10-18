@@ -1,6 +1,0 @@
-build:
-  version: 2016-03-14 # version of the build schema.
-  steps:
-    api:
-      name: _env(REGISTRY)/imc/api:_env(TAG)
-      dockerfile: Dockerfile

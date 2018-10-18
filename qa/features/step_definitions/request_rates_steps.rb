@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-@rate_row
-
-Given ('I am on the Pricings Page') do
+Given('I am on the Pricings Page') do
   visit '/account/pricings'
 end
 
@@ -25,7 +23,7 @@ When('I request the first public rate') do
   end
 end
 
-Then ('I expect to see the rate has been requested') do
+Then('I expect to see the rate has been requested') do
   pending
   expect(@rate_row).to have_content('Requested')
 end

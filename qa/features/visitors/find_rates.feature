@@ -1,3 +1,4 @@
+@Smoke
 Feature: Find Rates
 
   As a visitor,

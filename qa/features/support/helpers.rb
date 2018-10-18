@@ -24,19 +24,26 @@ module Helpers
   end
 
   def print_console_log
-    page.driver.browser.manage.logs.get(:browser).each do |log|
-      puts log.to_s
-    end
+    logs = page.driver.browser.manage.logs.get(:browser).map { |line| [line.level, line.message] }
+
+    puts logs.join("\n")
   end
 
-  def take_screenshot(name: nil)
-    name ||= [@scenario.name, @step_index].join('_')
+  def take_screenshot(name: @scenario.name)
+    prefix = format(
+      '%<feature>s/%<time>s-%<name>s',
+      feature: @scenario.feature.name.gsub(/[^\w\-]/, '_'),
+      name: name.gsub(/[^\w\-]/, '_'),
+      time: Time.now.strftime('%H%M%S')
+    )
 
-    name.gsub!(/[^\w\-]/, '_')
+    path = File.join(Capybara.save_path, prefix)
 
-    screenshot_path = format('./report/%<time>s-%<name>s.png', time: Time.now.strftime('%Y%m%d%H%M%S'), name: name)
-    save_screenshot(screenshot_path) # rubocop:disable Lint/Debugger
-    puts "Saved screenshot: #{screenshot_path}"
+    save_screenshot("#{path}.png") # rubocop:disable Lint/Debugger
+    save_page("#{path}.html")
+
+    puts "Saved #{path}.png"
+    puts "Saved #{path}.html"
   end
 end
 

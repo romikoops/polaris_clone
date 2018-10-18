@@ -1,40 +1,23 @@
-FROM ruby:2.5.1
+FROM ruby:2.5.1-alpine
 
-RUN set -ex \
-  \
-  && buildDeps=' \
-    apt-transport-https \
-    gnupg \
-    wget \
-  ' \
-  && apt-get update \
-  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends $buildDeps \
-  \
-  # Set up the Chrome PPA \
-  && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-  && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
-  \
-  && apt-get update \
-  && apt-get install -y \
-    google-chrome-stable \
-    libnss3 \
-    tzdata \
-    unzip \
-    xvfb \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-  && ln -s /usr/bin/google-chrome /usr/bin/chrome
+RUN apk add --no-cache --update \
+  build-base
 
-# Set up Chromedriver Environment variables
-ENV CHROMEDRIVER_VERSION 2.42
+ENV DOCKERIZE_VERSION v0.6.1
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
-# Download and install Chromedriver
-RUN set -ex \
-  && curl -s -L -O "http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" \
-  && unzip chromedriver_linux64.zip -d /usr/local/bin \
-  && rm -f chromedriver_linux64.zip.zip
-
-RUN mkdir -p /app
 WORKDIR /app
+
+COPY Gemfile Gemfile.lock ./
+RUN bundle config --global frozen 1 \
+    && bundle install -j4 --retry 3 \
+    # Remove unneeded files (cached *.gem, *.o, *.c)
+    && rm -rf /usr/local/bundle/cache/*.gem \
+    && find /usr/local/bundle/gems/ -name "*.c" -delete \
+    && find /usr/local/bundle/gems/ -name "*.o" -delete
+
+COPY . ./
 
 USER nobody
