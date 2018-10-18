@@ -59,22 +59,24 @@ class UserContacts extends Component {
     userDispatch.confirmShipment(id, action)
   }
   toggleNewContact () {
-    this.setState({ newContactBool: !this.state.newContactBool })
+    this.setState({ newContactBool: !this.state.newContactBool, submitAttempted: false })
   }
 
-  handleValidSubmit (contact, reset, invalidate, t) {
+  handleValidSubmit (contact, reset, invalidate) {
     this.setState({ submitAttempted: true })
 
     function handleResponse (data) {
       if (data.email === true) {
-        invalidate({ email: t('errors:contactExists') })
+        invalidate({ email: this.props.t('errors:contactExists') })
 
         return
       }
 
       const { userDispatch, contactsData } = this.props
-      userDispatch.newContact(contact)
-      userDispatch.getContacts({ page: 1, per_page: contactsData.per_page })
+      userDispatch.newContact(contact, () => {
+        userDispatch.getContacts({ page: 1, per_page: contactsData.per_page })
+        this.setState({ email: '' })
+      })
       this.toggleNewContact()
     }
 

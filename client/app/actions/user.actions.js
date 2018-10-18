@@ -601,7 +601,7 @@ function editUserLocation (userId, data) {
   }
 }
 
-function newContact (data) {
+function newContact (data, callback) {
   function request (newContactData) {
     return { type: userConstants.NEW_CONTACT_REQUEST, payload: newContactData }
   }
@@ -620,6 +620,8 @@ function newContact (data) {
     userService.newContact(data).then(
       (newData) => {
         dispatch(success(newData))
+
+        if (typeof callback === 'function') callback()
       },
       (error) => {
         dispatch(failure(error))
