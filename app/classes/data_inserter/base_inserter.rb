@@ -2,8 +2,6 @@
 
 module DataInserter
   class BaseInserter
-    attr_reader :xlsx, :sheets_data
-
     def initialize(tenant:, data:)
       @tenant = tenant
       @data = data
@@ -12,19 +10,21 @@ module DataInserter
       post_initialize
     end
 
-    def perform
+    def perform(should_generate_trips = true)
       raise StandardError, "The data doesn't contain the correct format!" unless valid?(@data)
 
-      @data.each do |row|
+      n_rows = @data.length
+      @data.each_with_index do |row, i|
         itinerary = find_or_initialize_itinerary(row)
         stops = find_or_initialize_stops(row, itinerary)
         itinerary.stops << stops
         itinerary.save!
 
-        # find_tenant_vehicle
+        tenant_vehicle = find_or_create_tenant_vehicle(row)
+        generate_trips(itinerary, row, tenant_vehicle) if should_generate_trips
+        create_pricings(row, tenant_vehicle)
 
-        ########
-        #
+        print_status(i, n_rows)
       end
     end
 
@@ -76,12 +76,58 @@ module DataInserter
       Carrier.find_or_create_by!(name: row[:carrier])
     end
 
-    def find_tenant_vehicle(row)
+    def find_or_create_tenant_vehicle(row)
       service_level = service_level(row)
       carrier = find_or_create_carrier(row)
-      vehicle = TenantVehicle.find_by(name: service_level, mode_of_transport: row[:mot], tenant_id: @tenant.id, carrier: carrier)
-      vehicle ||= Vehicle.create_from_name(service_level, @rate_hash[:data][:mot], @tenant.id, carrier.name)
-      @tenant_vehicle = vehicle
+      tenant_vehicle = TenantVehicle.find_by(name: service_level, mode_of_transport: row[:mot], tenant_id: @tenant.id, carrier: carrier)
+      # TODO: fix!! `Vehicle` shouldn't be creating a `TenantVehicle`!:
+      tenant_vehicle || Vehicle.create_from_name(service_level, row[:mot], @tenant.id, carrier.name)
+    end
+
+    def generate_trips(itinerary, row, tenant_vehicle)
+      transit_time = row[:transit_time] ? row[:transit_time].to_i : 30
+      itinerary.generate_weekly_schedules(
+        itinerary.stops.order(:index),
+        [transit_time],
+        DateTime.now,
+        DateTime.now + 1.week,
+        [2, 5],
+        tenant_vehicle.id,
+        4
+      )
+    end
+
+    def find_transport_category(cargo_class, tenant_vehicle)
+      @transport_category = tenant_vehicle.vehicle.transport_categories.find_by(name: 'any', cargo_class: cargo_class)
+    end
+
+    def create_pricings(row, tenant_vehicle)
+      row[:rate].each do |rate|
+        default_pricing_values = {
+          transport_category: find_transport_category(rate[:cargo_class], tenant_vehicle),
+          tenant: @tenant,
+          user: nil,
+          wm_rate: 1000,
+          effective_date: DateTime.now,
+          expiration_date: DateTime.now + 365
+        }
+        pricing_to_update = @itinerary.pricings.find_or_create_by!(default_pricing_values)
+        pricing_details = [rate]
+
+        pricing_details.each do |pricing_detail|
+          shipping_type = pricing_detail.delete(:code)
+          currency = pricing_detail.delete(:currency)
+          pricing_detail.delete(:cargo_class)
+          pricing_detail_params = pricing_detail.merge(shipping_type: shipping_type, tenant: @tenant)
+          pricing_detail = pricing_to_update.pricing_details.find_or_create_by(shipping_type: shipping_type, tenant: @tenant)
+          pricing_detail.update!(pricing_detail_params)
+          pricing_detail.update!(currency_name: currency)
+        end
+      end
+    end
+
+    def print_status(_current, total)
+      puts "#{i}/#{total}, #{i / total.to_f} %"
     end
 
     def local_stats
