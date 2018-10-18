@@ -11,7 +11,7 @@ export default function AddressBook ({
   const contactCards =
     contacts &&
     contacts.map(contact => (
-      <div key={v4()} className="flex-50 layout-row layout-align-start-stretch" style={{ padding: '15px' }}>
+      <div key={v4()} className="flex-50 layout-row layout-align-start-stretch ccb_contact" style={{ padding: '15px' }}>
         <ContactCard
           contactData={contact}
           theme={theme}
@@ -28,7 +28,7 @@ export default function AddressBook ({
   return (
     <div
       className={`
-        ${styles.contact_scroll} flex-100 layout-row layout-wrap layout-align-start
+        ${styles.contact_scroll} flex-100 layout-row layout-wrap layout-align-start ccb_contacts
       `}
     >
       {contactCards}

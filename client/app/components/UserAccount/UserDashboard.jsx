@@ -140,7 +140,7 @@ class UserDashboard extends Component {
                     style={gradientFontStyle}
                   />
                 </div>
-                <div className={`${ustyles.welcome} flex layout-row`}>
+                <div className={`${ustyles.welcome} flex layout-row ccb_dashboard`}>
                   {t('common:welcomeBack')}&nbsp; <b>{user.first_name}</b>
                 </div>
               </div>
@@ -150,6 +150,7 @@ class UserDashboard extends Component {
                   handleNext={this.startBooking}
                   active
                   border
+                  classNames="ccb_find_rates"
                   size="large"
                   text={t('landing:callToAction')}
                   iconClass="fa-archive"

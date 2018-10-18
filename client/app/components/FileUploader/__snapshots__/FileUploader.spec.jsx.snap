@@ -60,6 +60,7 @@ exports[`square is true 1`] = `
       active={true}
       back={false}
       border={true}
+      classNames=""
       disabled={false}
       handleDisabled={null}
       handleNext={[Function]}

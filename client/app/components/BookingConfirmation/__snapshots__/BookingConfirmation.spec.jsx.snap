@@ -980,7 +980,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
           >
             <Checkbox
               checked={false}
-              className=""
+              className="ccb_accept_terms"
               disabled={false}
               onChange={[Function]}
               onClick={null}
@@ -2161,7 +2161,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
           >
             <Checkbox
               checked={false}
-              className=""
+              className="ccb_accept_terms"
               disabled={false}
               onChange={[Function]}
               onClick={null}
@@ -3389,7 +3389,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
           >
             <Checkbox
               checked={false}
-              className=""
+              className="ccb_accept_terms"
               disabled={false}
               onChange={[Function]}
               onClick={null}
@@ -4509,7 +4509,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           >
             <Checkbox
               checked={false}
-              className=""
+              className="ccb_accept_terms"
               disabled={false}
               onChange={[Function]}
               onClick={null}
@@ -5627,7 +5627,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
           >
             <Checkbox
               checked={false}
-              className=""
+              className="ccb_accept_terms"
               disabled={false}
               onChange={[Function]}
               onClick={null}
@@ -6729,7 +6729,7 @@ exports[`shallow render 1`] = `
           >
             <Checkbox
               checked={false}
-              className=""
+              className="ccb_accept_terms"
               disabled={false}
               onChange={[Function]}
               onClick={null}
@@ -8152,7 +8152,7 @@ exports[`with cargo items 1`] = `
           >
             <Checkbox
               checked={false}
-              className=""
+              className="ccb_accept_terms"
               disabled={false}
               onChange={[Function]}
               onClick={null}
@@ -9533,7 +9533,7 @@ exports[`with containers 1`] = `
           >
             <Checkbox
               checked={false}
-              className=""
+              className="ccb_accept_terms"
               disabled={false}
               onChange={[Function]}
               onClick={null}

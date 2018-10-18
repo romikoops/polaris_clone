@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Given 'I am logged in successfully' do
+Given 'I am logged in as a shipper successfully' do
   step 'I am at the landing'
   step 'I am logged out'
   step 'I click the link to log in'

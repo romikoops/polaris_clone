@@ -7,7 +7,7 @@ Feature: Request Dedicated Pricing
   I also would like to request a dedicated rate for a route
 
   Scenario: Requesting New Rate
-    Given I am logged in successfully
+    Given I am logged in as a shipper successfully
       And I select "Pricings"
      Then I expect to see title "Pricings"
 

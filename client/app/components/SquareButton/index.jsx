@@ -14,7 +14,8 @@ export default function SquareButton ({
   disabled,
   handleNext,
   handleDisabled,
-  border
+  border,
+  classNames
 }) {
   const btnStyle = active ? { background: 'white' } : {}
 
@@ -80,13 +81,14 @@ export default function SquareButton ({
       break
   }
   const contentStyle = browserType() === 'IE' ? styles.ie_content : styles.content
+
   return (
     <div
       className={`flex-none layout-row layout-align-center-center layout-align-lg-start-center ${sizeClass} ${borderClass} ${wrapperSizeClass}`}
       style={borderGradient}
     >
       <button
-        className={`${styles.square_btn} ${bStyle} ${sizeClass} ${!disabled && styles.clickable}`}
+        className={`${styles.square_btn} ${bStyle} ${sizeClass} ${!disabled && styles.clickable} ${classNames}`}
         onClick={disabled ? handleDisabled : handleNext}
         style={btnStyle}
       >
@@ -112,7 +114,8 @@ SquareButton.propTypes = {
   iconClass: PropTypes.string,
   size: PropTypes.string,
   disabled: PropTypes.bool,
-  border: PropTypes.bool
+  border: PropTypes.bool,
+  classNames: PropTypes.string
 }
 
 SquareButton.defaultProps = {
@@ -125,5 +128,6 @@ SquareButton.defaultProps = {
   handleNext: null,
   handleDisabled: null,
   disabled: false,
-  border: false
+  border: false,
+  classNames: ''
 }
