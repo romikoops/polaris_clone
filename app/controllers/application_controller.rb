@@ -35,7 +35,7 @@ class ApplicationController < ActionController::API
   private
 
   def current_tenant
-    @current_tenant ||= Tenant.find_by(subdomain: params[:subdomain_id])
+    @current_tenant ||= current_user.tenant
   end
 
   def set_raven_context
