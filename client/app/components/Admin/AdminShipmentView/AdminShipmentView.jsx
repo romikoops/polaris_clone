@@ -173,16 +173,15 @@ class AdminShipmentView extends Component {
     handleShipmentAction(shipmentData.shipment.id, 'finished')
   }
   handlePriceChange (key, value) {
-    const { newPrices } = this.state
-    this.setState({
+    this.setState(prevState => ({
       newPrices: {
-        ...newPrices,
+        ...prevState.newPrices,
         [key]: {
-          ...newPrices[key],
+          ...prevState.newPrices[key],
           value
         }
       }
-    })
+    }))
   }
   toggleEditPrice () {
     this.setState({ showEditPrice: !this.state.showEditPrice })
