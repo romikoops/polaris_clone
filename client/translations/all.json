@@ -116,6 +116,7 @@
         "clear": "Clear",
         "and": "and",
         "getOffers": "Get Offers",
+        "getQuotes": "Get Quotes",
         "hi": "Hi",
         "oceanFreight": "Ocean Freight",
         "airFreight": "Air Freight",
@@ -162,8 +163,9 @@
         "rateBasis": "Rate Basis",
         "minimum": "Minimum",
         "modeOfTransport": "Mode of Transport",
-        "rate": "Rate"
-
+        "rate": "Rate",
+        "booking": "Booking",
+        "quotation": "Quotation"
       },
       "admin": {
         "lowerLimit": "Lower Limit",
@@ -344,12 +346,15 @@
         "lengthDataTipTwo": "Length is automatically set by 'Collie Type'",
         "cargoItem": "Cargo Item",
         "freightRate": "Freight Rate",
+        "unitFreightRate": "Freight Rate: Unit {{unitNo}}",
         "truckingRate": "Trucking Rate",
         "container": "Container",
         "containers": "Containers",
         "cargoItems": "Cargo Items",
         "yourCargo": "Your Cargo",
-        "fillFormCargoDetails": "(Fill the form with your cargo details)"
+        "fillFormCargoDetails": "(Fill the form with your cargo details)",
+        "nonStackableFirst":"We currently do not offer freight rates for non-stackable cargo in our Web Shop.",
+        "nonStackableSecond": "Please contact our customer service department to place an order for your non-stackable cargo:"
       },
       "bookconf": {
         "_component": "BookingConfirmation",

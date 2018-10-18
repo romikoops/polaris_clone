@@ -1,7 +1,0 @@
-api:
-  build: Dockerfile
-  image: eu.gcr.io/itsmycargo-main/imc/api
-
-client:
-  build: client/Dockerfile
-  image: eu.gcr.io/itsmycargo-main/imc/client

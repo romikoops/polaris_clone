@@ -115,19 +115,19 @@ module TruckingTools
     weight_kg = cargo[:weight]
     min = fee['min'] || 0
     result = case fee[:rate_basis]
-    when 'PER_KG_RANGE'
-      fee_range = fee[:range].find do |range|
-        weight_kg >= range[:min] && weight_kg <= range[:max]
-      end
-      value = fee_range.nil? ? 0 : fee_range[:rate] * weight_kg
-      [value, min].max
-    when 'PER_CONTAINER_RANGE'
-      fee_range = fee[:range].find do |range|
-        weight_kg >= range[:min] && weight_kg <= range[:max]
-      end
+             when 'PER_KG_RANGE'
+               fee_range = fee[:range].find do |range|
+                 weight_kg >= range[:min] && weight_kg <= range[:max]
+               end
+               value = fee_range.nil? ? 0 : fee_range[:rate] * weight_kg
+               [value, min].max
+             when 'PER_CONTAINER_RANGE'
+               fee_range = fee[:range].find do |range|
+                 weight_kg >= range[:min] && weight_kg <= range[:max]
+               end
 
-      value = fee_range.nil? ? 0 : fee_range[:rate]
-      [value, min].max
+               value = fee_range.nil? ? 0 : fee_range[:rate]
+               [value, min].max
     end
 
     result
@@ -211,12 +211,30 @@ module TruckingTools
         'number_of_items' => 0
       }
     }
-
-    cargos.each do |cargo|
-      determine_load_meterage(trucking_pricing, cargo_object, cargo)
+    if trucking_pricing.tenant.scope['consolidate_cargo']
+      consolidated_load_meterage(trucking_pricing, cargo_object, cargos)
+    else
+      cargos.each do |cargo|
+        determine_load_meterage(trucking_pricing, cargo_object, cargo)
+      end
     end
 
     cargo_object
+  end
+
+  def consolidated_load_meterage(trucking_pricing, cargo_object, cargos)
+    total_area = cargos.sum { |cargo| cargo.dimension_x * cargo.dimension_y * cargo.quantity }
+    non_stackable = cargos.select(&:stackable).empty?
+    load_area_limit = trucking_pricing.load_meterage['area_limit']
+    if total_area > load_area_limit || non_stackable
+      cargos.each do |cargo|
+        calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
+      end
+    else
+      cargos.each do |cargo|
+        calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
+      end
+    end
   end
 
   def get_container_object(containers)
@@ -231,10 +249,10 @@ module TruckingTools
 
   def calc_trucking_price(trucking_pricing, cargos, km, carriage)
     direction = carriage == 'pre' ? 'export' : 'import'
-    cargo_object = if trucking_pricing.load_type == 'container' 
-      get_container_object(cargos)
-    else
-      get_cargo_item_object(trucking_pricing, cargos)
+    cargo_object = if trucking_pricing.load_type == 'container'
+                     get_container_object(cargos)
+                   else
+                     get_cargo_item_object(trucking_pricing, cargos)
     end
 
     trucking_pricings = {}
@@ -255,7 +273,7 @@ module TruckingTools
       total[:value] += trucking_fee[:value]
       total[:currency] = trucking_fee[:currency]
     end
-    
+
     total[:currency] = trucking_pricing.tenant.currency if total[:currency] == '' && total[:value] == 0
 
     fees[:total] = total
@@ -310,7 +328,8 @@ module TruckingTools
 
   def calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
     load_meter_weight = ((cargo.dimension_x * cargo.dimension_y * cargo.quantity) / 24_000) * trucking_pricing.load_meterage['ratio']
-    trucking_chargeable_weight = load_meter_weight > cargo.payload_in_kg ? load_meter_weight : cargo.payload_in_kg
+    cbm_weight = (cargo.dimension_x * cargo.dimension_y * cargo.quantity) * (trucking_pricing.cbm_ratio || 1)
+    trucking_chargeable_weight = [load_meter_weight, cargo.payload_in_kg, cbm_weight].max
     cargo_object['non_stackable']['weight'] += trucking_chargeable_weight
     cargo_object['non_stackable']['volume'] += cargo.volume * cargo.quantity
     cargo_object['non_stackable']['number_of_items'] += cargo.quantity

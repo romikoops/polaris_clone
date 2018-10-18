@@ -100,71 +100,137 @@ exports[`theme has truthy properties 1`] = `
             </h3>
           </div>
         </div>
-        <div
-          className="layout-row layout-align-start-center wrapper_btns flex-70 "
-        >
-          <div
-            className="layout-row flex-50 flex-md-100 margin_bottom"
-          >
-            <SquareButton
-              active={true}
-              back={false}
-              border={false}
-              disabled={false}
-              handleDisabled={null}
-              handleNext={[Function]}
-              icon=""
-              iconClass=""
-              size="small"
-              text="My Account"
-              theme={
-                Object {
-                  "background": "green",
+        <ButtonSection
+          bookNow={[Function]}
+          hidden={false}
+          t={[Function]}
+          tenant={
+            Object {
+              "data": Object {
+                "data": Object {
+                  "id": 123,
+                  "scope": Object {
+                    "closed_quotation_tool": true,
+                    "modes_of_transport": Object {
+                      "air": Object {},
+                      "ocean": Object {
+                        "OCEAN_LOAD_TYPE": true,
+                      },
+                      "rail": Object {},
+                      "truck": Object {},
+                    },
+                  },
+                  "subdomain": "foosubdomain",
+                  "theme": Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  },
+                },
+                "name": "FOO_NAME",
+                "scope": Object {
+                  "closed_quotation_tool": true,
+                },
+              },
+            }
+          }
+          theme={
+            Object {
+              "background": "green",
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+              "logoLarge": "FOO_LOGO_LARGE",
+              "logoWhite": "FOO_LOGO_WHITE",
+              "welcome_text": "FOO_WELCOME_TEXT",
+            }
+          }
+          user={
+            Object {
+              "company_name": "FOO_COMPANY",
+              "currency": "EUR",
+              "email": "foo@bar.baz",
+              "first_name": "John",
+              "guest": false,
+              "last_name": "Doe",
+              "phone": "6345789",
+              "role": Object {
+                "name": "shipper",
+              },
+              "role_id": 2,
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-center layout-wrap"
+    >
+      <ButtonSection
+        bookNow={[Function]}
+        hidden={true}
+        t={[Function]}
+        tenant={
+          Object {
+            "data": Object {
+              "data": Object {
+                "id": 123,
+                "scope": Object {
+                  "closed_quotation_tool": true,
+                  "modes_of_transport": Object {
+                    "air": Object {},
+                    "ocean": Object {
+                      "OCEAN_LOAD_TYPE": true,
+                    },
+                    "rail": Object {},
+                    "truck": Object {},
+                  },
+                },
+                "subdomain": "foosubdomain",
+                "theme": Object {
                   "colors": Object {
                     "primary": "#333",
                     "secondary": "#fafafa",
                   },
-                  "logoLarge": "FOO_LOGO_LARGE",
-                  "logoWhite": "FOO_LOGO_WHITE",
-                  "welcome_text": "FOO_WELCOME_TEXT",
-                }
-              }
-            />
-          </div>
-        </div>
-        <div
-          className="flex-70 banner_text"
-        >
-          <div
-            className="flex layout-row flex-100 banner_text"
-          >
-            <div
-              className="flex-none layout-row layout-align-start-center"
-            >
-              <h4
-                className="flex-none"
-              >
-                powered by
-                      
-              </h4>
-              <div
-                className="flex-5"
-              />
-              <a
-                className="layout-row layout-align-center-center"
-                href="https://www.itsmycargo.com/"
-                target="_blank"
-              >
-                <img
-                  alt=""
-                  className="flex-none pointy powered_by_logo"
-                  src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+                },
+              },
+              "name": "FOO_NAME",
+              "scope": Object {
+                "closed_quotation_tool": true,
+              },
+            },
+          }
+        }
+        theme={
+          Object {
+            "background": "green",
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+            "logoLarge": "FOO_LOGO_LARGE",
+            "logoWhite": "FOO_LOGO_WHITE",
+            "welcome_text": "FOO_WELCOME_TEXT",
+          }
+        }
+        user={
+          Object {
+            "company_name": "FOO_COMPANY",
+            "currency": "EUR",
+            "email": "foo@bar.baz",
+            "first_name": "John",
+            "guest": false,
+            "last_name": "Doe",
+            "phone": "6345789",
+            "role": Object {
+              "name": "shipper",
+            },
+            "role_id": 2,
+          }
+        }
+      />
     </div>
   </div>
 </styled.div>
@@ -266,67 +332,129 @@ exports[`user.role_id is 1 1`] = `
             </h3>
           </div>
         </div>
-        <div
-          className="layout-row layout-align-start-center wrapper_btns flex-70 "
-        >
-          <div
-            className="layout-row flex-50 flex-md-100 margin_bottom"
-          >
-            <SquareButton
-              active={true}
-              back={false}
-              border={false}
-              disabled={false}
-              handleDisabled={null}
-              handleNext={[Function]}
-              icon=""
-              iconClass=""
-              size="small"
-              text="My Account"
-              theme={
-                Object {
+        <ButtonSection
+          bookNow={[Function]}
+          hidden={false}
+          t={[Function]}
+          tenant={
+            Object {
+              "data": Object {
+                "data": Object {
+                  "id": 123,
+                  "scope": Object {
+                    "closed_quotation_tool": true,
+                    "modes_of_transport": Object {
+                      "air": Object {},
+                      "ocean": Object {
+                        "OCEAN_LOAD_TYPE": true,
+                      },
+                      "rail": Object {},
+                      "truck": Object {},
+                    },
+                  },
+                  "subdomain": "foosubdomain",
+                  "theme": Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  },
+                },
+                "name": "FOO_NAME",
+                "scope": Object {
+                  "closed_quotation_tool": true,
+                },
+              },
+            }
+          }
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          user={
+            Object {
+              "company_name": "FOO_COMPANY",
+              "currency": "EUR",
+              "email": "foo@bar.baz",
+              "first_name": "John",
+              "guest": false,
+              "last_name": "Doe",
+              "phone": "6345789",
+              "role": Object {
+                "name": "shipper",
+              },
+              "role_id": 1,
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-center layout-wrap"
+    >
+      <ButtonSection
+        bookNow={[Function]}
+        hidden={true}
+        t={[Function]}
+        tenant={
+          Object {
+            "data": Object {
+              "data": Object {
+                "id": 123,
+                "scope": Object {
+                  "closed_quotation_tool": true,
+                  "modes_of_transport": Object {
+                    "air": Object {},
+                    "ocean": Object {
+                      "OCEAN_LOAD_TYPE": true,
+                    },
+                    "rail": Object {},
+                    "truck": Object {},
+                  },
+                },
+                "subdomain": "foosubdomain",
+                "theme": Object {
                   "colors": Object {
                     "primary": "#333",
                     "secondary": "#fafafa",
                   },
-                }
-              }
-            />
-          </div>
-        </div>
-        <div
-          className="flex-70 banner_text"
-        >
-          <div
-            className="flex layout-row flex-100 banner_text"
-          >
-            <div
-              className="flex-none layout-row layout-align-start-center"
-            >
-              <h4
-                className="flex-none"
-              >
-                powered by
-                      
-              </h4>
-              <div
-                className="flex-5"
-              />
-              <a
-                className="layout-row layout-align-center-center"
-                href="https://www.itsmycargo.com/"
-                target="_blank"
-              >
-                <img
-                  alt=""
-                  className="flex-none pointy powered_by_logo"
-                  src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+                },
+              },
+              "name": "FOO_NAME",
+              "scope": Object {
+                "closed_quotation_tool": true,
+              },
+            },
+          }
+        }
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        user={
+          Object {
+            "company_name": "FOO_COMPANY",
+            "currency": "EUR",
+            "email": "foo@bar.baz",
+            "first_name": "John",
+            "guest": false,
+            "last_name": "Doe",
+            "phone": "6345789",
+            "role": Object {
+              "name": "shipper",
+            },
+            "role_id": 1,
+          }
+        }
+      />
     </div>
   </div>
 </styled.div>
@@ -428,67 +556,129 @@ exports[`user.role_id is 2 1`] = `
             </h3>
           </div>
         </div>
-        <div
-          className="layout-row layout-align-start-center wrapper_btns flex-70 "
-        >
-          <div
-            className="layout-row flex-50 flex-md-100 margin_bottom"
-          >
-            <SquareButton
-              active={true}
-              back={false}
-              border={false}
-              disabled={false}
-              handleDisabled={null}
-              handleNext={[Function]}
-              icon=""
-              iconClass=""
-              size="small"
-              text="My Account"
-              theme={
-                Object {
+        <ButtonSection
+          bookNow={[Function]}
+          hidden={false}
+          t={[Function]}
+          tenant={
+            Object {
+              "data": Object {
+                "data": Object {
+                  "id": 123,
+                  "scope": Object {
+                    "closed_quotation_tool": true,
+                    "modes_of_transport": Object {
+                      "air": Object {},
+                      "ocean": Object {
+                        "OCEAN_LOAD_TYPE": true,
+                      },
+                      "rail": Object {},
+                      "truck": Object {},
+                    },
+                  },
+                  "subdomain": "foosubdomain",
+                  "theme": Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  },
+                },
+                "name": "FOO_NAME",
+                "scope": Object {
+                  "closed_quotation_tool": true,
+                },
+              },
+            }
+          }
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          user={
+            Object {
+              "company_name": "FOO_COMPANY",
+              "currency": "EUR",
+              "email": "foo@bar.baz",
+              "first_name": "John",
+              "guest": false,
+              "last_name": "Doe",
+              "phone": "6345789",
+              "role": Object {
+                "name": "shipper",
+              },
+              "role_id": 2,
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-center layout-wrap"
+    >
+      <ButtonSection
+        bookNow={[Function]}
+        hidden={true}
+        t={[Function]}
+        tenant={
+          Object {
+            "data": Object {
+              "data": Object {
+                "id": 123,
+                "scope": Object {
+                  "closed_quotation_tool": true,
+                  "modes_of_transport": Object {
+                    "air": Object {},
+                    "ocean": Object {
+                      "OCEAN_LOAD_TYPE": true,
+                    },
+                    "rail": Object {},
+                    "truck": Object {},
+                  },
+                },
+                "subdomain": "foosubdomain",
+                "theme": Object {
                   "colors": Object {
                     "primary": "#333",
                     "secondary": "#fafafa",
                   },
-                }
-              }
-            />
-          </div>
-        </div>
-        <div
-          className="flex-70 banner_text"
-        >
-          <div
-            className="flex layout-row flex-100 banner_text"
-          >
-            <div
-              className="flex-none layout-row layout-align-start-center"
-            >
-              <h4
-                className="flex-none"
-              >
-                powered by
-                      
-              </h4>
-              <div
-                className="flex-5"
-              />
-              <a
-                className="layout-row layout-align-center-center"
-                href="https://www.itsmycargo.com/"
-                target="_blank"
-              >
-                <img
-                  alt=""
-                  className="flex-none pointy powered_by_logo"
-                  src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+                },
+              },
+              "name": "FOO_NAME",
+              "scope": Object {
+                "closed_quotation_tool": true,
+              },
+            },
+          }
+        }
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        user={
+          Object {
+            "company_name": "FOO_COMPANY",
+            "currency": "EUR",
+            "email": "foo@bar.baz",
+            "first_name": "John",
+            "guest": false,
+            "last_name": "Doe",
+            "phone": "6345789",
+            "role": Object {
+              "name": "shipper",
+            },
+            "role_id": 2,
+          }
+        }
+      />
     </div>
   </div>
 </styled.div>

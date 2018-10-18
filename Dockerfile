@@ -1,7 +1,9 @@
-FROM ruby:2.5-alpine
+FROM ruby:2.5-alpine AS builder
 MAINTAINER mikko.kokkonen@itsmycargo.com
 
-ENV MALLOC_ARENA_MAX 2
+ARG BUNDLE_WITHOUT="development test"
+
+ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
 
 # Minimal requirements to run a Rails app
 RUN apk add --no-cache --update \
@@ -13,6 +15,31 @@ RUN apk add --no-cache --update \
   postgresql-dev \
   tzdata
 
+WORKDIR /app
+
+COPY Gemfile Gemfile.lock ./
+RUN bundle config --global frozen 1 \
+    && bundle install -j4 --retry 3 \
+    # Remove unneeded files (cached *.gem, *.o, *.c)
+    && rm -rf /usr/local/bundle/cache/*.gem \
+    && find /usr/local/bundle/gems/ -name "*.c" -delete \
+    && find /usr/local/bundle/gems/ -name "*.o" -delete
+
+COPY . ./
+
+RUN RAILS_ENV=production bin/rails assets:precompile
+
+FROM ruby:2.5-alpine AS app
+MAINTAINER mikko.kokkonen@itsmycargo.com
+
+ENV MALLOC_ARENA_MAX 2
+
+# Minimal requirements to run a Rails app
+RUN apk add --no-cache --update \
+  nodejs \
+  postgresql-client \
+  tzdata
+
 ENV DOCKERIZE_VERSION v0.6.1
 RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
@@ -20,21 +47,20 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 
 RUN npm install -g 'mjml@4.1.2'
 
-RUN mkdir -p /app
+# Add user
+RUN addgroup -g 1000 -S app \
+ && adduser -u 1000 -S app -G app
+USER app
+
+# Copy app with gems from former build stage
+COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
+COPY --from=builder --chown=app:app /app /app
+
+# Set Rails env
+ENV RAILS_LOG_TO_STDOUT true
+ENV RAILS_SERVE_STATIC_FILES true
+
 WORKDIR /app
-
-ENV RAILS_SERVE_STATIC_FILES=true
-ENV RAILS_LOG_TO_STDOUT=true
-
-ENV BUNDLE_PATH=/app/vendor/bundle
-ENV BUNDLE_WITHOUT="development test"
-
-COPY Gemfile Gemfile.lock ./
-RUN bundle install --deployment --retry 3
-
-COPY . ./
-
-RUN RAILS_ENV=production bin/rails assets:precompile
 
 EXPOSE 3000
 

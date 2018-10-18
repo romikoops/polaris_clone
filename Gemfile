@@ -102,6 +102,9 @@ gem 'premailer-rails'
 # Image resizing
 gem 'mini_magick'
 
+# Audit trail for changes
+gem 'paper_trail'
+
 # AWS SDK for hosting and S3
 gem 'aws-sdk', '~> 3'
 

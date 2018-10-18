@@ -1,11 +1,6 @@
 # Builder Image
-FROM node:8 AS build
-
-ARG SENTRY_AUTH_TOKEN=""
-ARG SENTRY_URL=https://sentry.itsmycargo.tech
-ARG SENTRY_ORG=itsmycargo
-ARG SENTRY_PROJECT=frontend
-ARG RELEASE=""
+FROM node:8 AS builder
+MAINTAINER mikko.kokkonen@itsmycargo.com
 
 RUN set -ex \
   \
@@ -21,6 +16,12 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 COPY . .
+
+ARG SENTRY_AUTH_TOKEN=""
+ARG SENTRY_URL=https://sentry.itsmycargo.tech
+ARG SENTRY_ORG=itsmycargo
+ARG SENTRY_PROJECT=frontend
+ARG RELEASE=""
 
 RUN \
     SENTRY_URL=$SENTRY_URL \
@@ -40,8 +41,7 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
     && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
-COPY --from=0 ./dist/ /usr/share/nginx/html/
+COPY --from=builder --chown=nginx:nginx ./dist/ /usr/share/nginx/html/
 COPY nginx/nginx.tmpl /etc/nginx/
-RUN chown -R nginx:nginx /usr/share/nginx/html/
 
 CMD ["dockerize", "-template", "/etc/nginx/nginx.tmpl:/etc/nginx/nginx.conf", "nginx", "-g", "daemon off;"]

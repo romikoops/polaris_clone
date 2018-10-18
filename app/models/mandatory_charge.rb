@@ -2,7 +2,7 @@
 
 class MandatoryCharge < ApplicationRecord
   has_many :hubs
-
+  has_paper_trail
   scope :falsified, -> { find_by(
         pre_carriage: false,
         on_carriage: false,

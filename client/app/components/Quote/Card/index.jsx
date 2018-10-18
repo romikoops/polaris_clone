@@ -32,7 +32,6 @@ class QuoteCard extends PureComponent {
     return hubType
   }
 
-
   constructor (props) {
     super(props)
     this.state = {
@@ -74,15 +73,40 @@ class QuoteCard extends PureComponent {
     ), () => this.toggleExpander(key))
   }
 
-  determineSubKey (key) {
-    const { t } = this.props
+  determineSubKey (charge) {
+    const { tenant } = this.props
+    const { scope } = tenant.data
+    switch (scope.fee_detail) {
+      case 'key':
+        return this.displayKeyOnly(charge[0])
+      case 'name':
+        return charge[1].name
+      case 'key_and_name':
+        return this.displayKeyAndName(charge)
+      default:
+        return this.displayKeyOnly(charge[0])
+    }
+  }
 
+  displayKeyOnly (key) {
+    const { t } = this.props
     switch (key) {
       case 'trucking_lcl' || 'trucking_fcl':
         return t('cargo:truckingRate')
 
       default:
         return key
+    }
+  }
+
+  displayKeyAndName (fee) {
+    const { t } = this.props
+    switch (fee[0]) {
+      case 'trucking_lcl' || 'trucking_fcl':
+        return t('cargo:truckingRate')
+
+      default:
+        return `${fee[0]} - ${fee[1].name}`
     }
   }
 
@@ -169,8 +193,9 @@ class QuoteCard extends PureComponent {
       ? aggregatedCargo.weight
       : cargo.reduce((sum, cargoUnit) => (sum + +cargoUnit.payload_in_kg * +cargoUnit.quantity), 0)
 
-    const pricesArr = Object.keys(quote).splice(2).length !== 0 ? (
-      Object.keys(quote).splice(2).map(key => (<CollapsingBar
+    const dnrKeys = ['total', 'edited_total', 'name']
+    const pricesArr = Object.keys(quote).filter(key => !dnrKeys.includes(key)).length !== 0 ? (
+      Object.keys(quote).filter(key => !dnrKeys.includes(key)).map(key => (<CollapsingBar
         showArrow
         collapsed={!this.state.expander[`${key}`]}
         theme={theme}
@@ -196,12 +221,14 @@ class QuoteCard extends PureComponent {
           </div>
         )}
         content={Object.entries(quote[`${key}`])
-          .map(array => array.filter(value =>
-            value !== 'total' && value !== 'edited_total'))
-          .filter(value => value.length !== 1).map((price) => {
+          .map(array => array.filter(value => !dnrKeys.includes(value)))
+          .filter(value => value.length !== 1).map((price, i) => {
             const subPrices = (<div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
               <div className="flex-45 layout-row layout-align-start-center">
-                <span>{key === 'cargo' ? t('cargo:freightRate') : this.determineSubKey(price[0])}</span>
+                <span>
+                  {key === 'cargo' ? t('cargo:unitFreightRate', { unitNo: i + 1 })
+                    : this.determineSubKey(price)}
+                </span>
               </div>
               <div className="flex-50 layout-row layout-align-end-center">
                 <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{(price[1].currency || price[1].total.currency)}</p>
@@ -253,6 +280,7 @@ class QuoteCard extends PureComponent {
       </div>
       <div className="flex-25 layout-row layout-wrap" style={{ textAlign: 'right' }}>
         <RoundButton
+          classNames="quote_card_select"
           size="small"
           handleNext={() => this.selectSchedule(schedule)}
           theme={theme}
@@ -354,13 +382,13 @@ class QuoteCard extends PureComponent {
                 </div>
                 <div className="flex-40 layout-row layout-align-center">
                   <p className="flex-100 center">
-                    {`${moment(firstSchedule.closing_date).format('ll')} - 
+                    {`${moment(firstSchedule.closing_date).format('ll')} -
                       ${moment(lastSchedule.closing_date).format('ll')}
                     `}
                   </p>
                 </div>
                 <div
-                  className={`flex-30 layout-row layout-align-center-center 
+                  className={`flex-30 layout-row layout-align-center-center
                   ${!finalResults ? '' : styles.disabled} ${styles.date_btn} ${styles.date_btn}`}
                   onClick={!finalResults ? () => this.handleSchedulesRequest(1) : null}
                 >
@@ -383,7 +411,7 @@ class QuoteCard extends PureComponent {
             <div className={`${isQuotationTool ? 'flex' : 'flex-10'} layout-row layout-align-start-center`}>
               <span style={{ textAlign: 'right' }}>{t('common:total')}</span>
             </div>
-            <div className="flex-35 layout-row layout-align-end-center">
+            <div className="flex layout-row layout-align-end-center">
               <p style={!isQuotationTool ? { paddingRight: '18px' } : {}}>{numberSpacing(quote.total.value, 2)}&nbsp;{quote.total.currency}</p>
               {isQuotationTool ? (
                 <input

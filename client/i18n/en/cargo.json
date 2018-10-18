@@ -55,11 +55,14 @@
   "lengthDataTip": "Please note that the maximum length for items in Air Freight shipments is",
   "lengthDataTipTwo": "Length is automatically set by 'Collie Type'",
   "yourCargo": "Your Cargo",
+  "unitFreightRate": "Freight Rate: Unit {{unitNo}}",
   "fillFormCargoDetails": "(Fill the form with your cargo details)",
   "cargoItem": "Cargo Item",
   "container": "Container",
   "containers": "Containers",
   "cargoItems": "Cargo Items",
   "freightRate": "Freight Rate",
-  "truckingRate": "Trucking Rate"
+  "truckingRate": "Trucking Rate",
+  "nonStackableFirst":"We currently do not offer freight rates for non-stackable cargo in our Web Shop.",
+  "nonStackableSecond": "Please contact our customer service department to place an order for your non-stackable cargo:"
 }

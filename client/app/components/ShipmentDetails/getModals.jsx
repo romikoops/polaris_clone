@@ -36,6 +36,39 @@ export default function getModals (props, toggleFunc, t) {
     t('dangerousGoods:partlyDangerous')
   ]
   const modals = {
+    nonStackable: {
+      message: (
+        <p style={{ textAlign: 'justify', lineHeight: '1.5' }}>
+          <span>
+            {t('common:hi')} {user.first_name} {user.last_name},<br />
+            {t('cargo:nonStackableFirst')} {t('cargo:nonStackableSecond')}<br />
+          </span>
+          <br />
+
+          <span style={{ marginRight: '10px' }}> {t('dangerousGoods:contactPhone')}:</span>
+          <span>{tenant.data.phones.support}</span>
+          <br />
+
+          <span style={{ marginRight: '20px' }}> {t('dangerousGoods:contactEmail')} </span>
+          <br />
+          <span style={{ marginRight: '20px', marginLeft: '10px', fontSize: '12px' }}> - {t('common:oceanFreight')}: </span>
+          <span>
+            <a href={`mailto:${tenant.data.emails.support.ocean}?subject=Nonstackable Goods Request`}>
+              {tenant.data.emails.support.ocean}
+            </a>
+          </span>
+          <br />
+          <span style={{ marginRight: '38px', marginLeft: '10px', fontSize: '12px' }}> - {t('common:airFreight')}: </span>
+          <span>
+            <a href={`mailto:${tenant.data.emails.support.air}?subject=Nonstackable Goods Request`}>
+              {tenant.data.emails.support.air}
+            </a>
+          </span>
+        </p>
+      ),
+      maxWidth: '600px',
+      show: false
+    },
     noDangerousGoods: {
       message: (
         <p style={{ textAlign: 'justify', lineHeight: '1.5' }}>

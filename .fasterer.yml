@@ -1,5 +1,6 @@
 speedups:
   each_with_index_vs_while: false
+  fetch_with_argument_vs_block: false
 exclude_paths:
-  - 'vendor/**/*.rb'
   - 'db/schema.rb'
+  - 'vendor/**/*.rb'

@@ -304,6 +304,7 @@ module ExcelTool
       end
       charge[:expiration_date] = row[:expiration_date]
       charge[:effective_date] = row[:effective_date]
+      ChargeCategory.find_or_create_by!(code:row[:fee_code], name: row[:fee])
       charge
     end
 

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Trip < ApplicationRecord
+  has_paper_trail
   has_many :layovers, dependent: :destroy
   belongs_to :tenant_vehicle
   belongs_to :itinerary

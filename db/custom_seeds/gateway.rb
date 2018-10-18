@@ -17,7 +17,7 @@ subdomains.each do |sub|
   tenant.trucking_pricings.delete_all
   tenant.hubs.destroy_all
   tenant.nexuses.destroy_all
-  tenant.users.shipper.where.not(id: shipper.id).destroy_all
+  tenant.users.shipper.destroy_all
   tenant.users.agent.destroy_all
   tenant.users.agency_manager.destroy_all
   tenant.agencies.destroy_all

@@ -243,7 +243,7 @@ exports[`detailed billing working properly 1`] = `
             <RoundButton
               active={false}
               back={false}
-              classNames=""
+              classNames="quote_card_select"
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}
@@ -290,13 +290,13 @@ exports[`detailed billing working properly 1`] = `
             <p
               className="flex-100 center"
             >
-              Oct 8, 2018 - 
+              Oct 8, 2018 -
                       Oct 8, 2018
                     
             </p>
           </div>
           <div
-            className="flex-30 layout-row layout-align-center-center 
+            className="flex-30 layout-row layout-align-center-center
                    date_btn date_btn"
             onClick={[Function]}
           >
@@ -345,7 +345,7 @@ exports[`detailed billing working properly 1`] = `
         </span>
       </div>
       <div
-        className="flex-35 layout-row layout-align-end-center"
+        className="flex layout-row layout-align-end-center"
       >
         <p
           style={Object {}}
@@ -609,7 +609,7 @@ exports[`shallow rendering 1`] = `
             <RoundButton
               active={false}
               back={false}
-              classNames=""
+              classNames="quote_card_select"
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}
@@ -656,13 +656,13 @@ exports[`shallow rendering 1`] = `
             <p
               className="flex-100 center"
             >
-              Oct 8, 2018 - 
+              Oct 8, 2018 -
                       Oct 8, 2018
                     
             </p>
           </div>
           <div
-            className="flex-30 layout-row layout-align-center-center 
+            className="flex-30 layout-row layout-align-center-center
                    date_btn date_btn"
             onClick={[Function]}
           >
@@ -711,7 +711,7 @@ exports[`shallow rendering 1`] = `
         </span>
       </div>
       <div
-        className="flex-35 layout-row layout-align-end-center"
+        className="flex layout-row layout-align-end-center"
       >
         <p
           style={Object {}}
@@ -976,7 +976,7 @@ exports[`show schedule options working 1`] = `
             <RoundButton
               active={false}
               back={false}
-              classNames=""
+              classNames="quote_card_select"
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}
@@ -1023,13 +1023,13 @@ exports[`show schedule options working 1`] = `
             <p
               className="flex-100 center"
             >
-              Oct 8, 2018 - 
+              Oct 8, 2018 -
                       Oct 8, 2018
                     
             </p>
           </div>
           <div
-            className="flex-30 layout-row layout-align-center-center 
+            className="flex-30 layout-row layout-align-center-center
                    date_btn date_btn"
             onClick={[Function]}
           >
@@ -1078,7 +1078,7 @@ exports[`show schedule options working 1`] = `
         </span>
       </div>
       <div
-        className="flex-35 layout-row layout-align-end-center"
+        className="flex layout-row layout-align-end-center"
       >
         <p
           style={Object {}}
@@ -1342,7 +1342,7 @@ exports[`show schedules set to true 1`] = `
             <RoundButton
               active={false}
               back={false}
-              classNames=""
+              classNames="quote_card_select"
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}
@@ -1389,13 +1389,13 @@ exports[`show schedules set to true 1`] = `
             <p
               className="flex-100 center"
             >
-              Oct 8, 2018 - 
+              Oct 8, 2018 -
                       Oct 8, 2018
                     
             </p>
           </div>
           <div
-            className="flex-30 layout-row layout-align-center-center 
+            className="flex-30 layout-row layout-align-center-center
                    date_btn date_btn"
             onClick={[Function]}
           >
@@ -1444,7 +1444,7 @@ exports[`show schedules set to true 1`] = `
         </span>
       </div>
       <div
-        className="flex-35 layout-row layout-align-end-center"
+        className="flex layout-row layout-align-end-center"
       >
         <p
           style={Object {}}

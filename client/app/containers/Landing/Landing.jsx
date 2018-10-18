@@ -8,7 +8,7 @@ import LandingTop from '../../components/LandingTop/LandingTop'
 import styles from './Landing.scss'
 import { RoundButton } from '../../components/RoundButton/RoundButton'
 import Loading from '../../components/Loading/Loading'
-import { userActions, adminActions, authenticationActions } from '../../actions'
+import { userActions, authenticationActions } from '../../actions'
 import { gradientTextGenerator } from '../../helpers'
 import Footer from '../../components/Footer/Footer'
 
@@ -50,7 +50,7 @@ class Landing extends Component {
 
   render () {
     const {
-      loggedIn, theme, user, tenant, userDispatch, authDispatch, adminDispatch
+      theme, user, tenant
     } = this.props
     const textStyle1 =
       theme && theme.colors
@@ -70,10 +70,7 @@ class Landing extends Component {
             className="flex-100"
             user={user}
             theme={theme}
-            goTo={userDispatch.goTo}
-            toAdmin={adminDispatch.getDashboard}
             tenant={tenant}
-            authDispatch={authDispatch}
             bookNow={() => this.bookNow()}
           />
           <div className={`${styles.service_box} layout-row flex-100 layout-wrap`}>
@@ -175,9 +172,6 @@ Landing.propTypes = {
   userDispatch: PropTypes.shape({
     goTo: PropTypes.func
   }).isRequired,
-  adminDispatch: PropTypes.shape({
-    getDashboard: PropTypes.func
-  }).isRequired,
   loggingIn: PropTypes.bool,
   // eslint-disable-next-line react/forbid-prop-types
   authDispatch: PropTypes.any.isRequired
@@ -195,7 +189,6 @@ Landing.defaultProps = {
 function mapDispatchToProps (dispatch) {
   return {
     userDispatch: bindActionCreators(userActions, dispatch),
-    adminDispatch: bindActionCreators(adminActions, dispatch),
     authDispatch: bindActionCreators(authenticationActions, dispatch)
   }
 }
