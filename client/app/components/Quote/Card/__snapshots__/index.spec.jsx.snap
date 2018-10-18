@@ -345,7 +345,7 @@ exports[`detailed billing working properly 1`] = `
         </span>
       </div>
       <div
-        className="flex-35 layout-row layout-align-end-center"
+        className="flex layout-row layout-align-end-center"
       >
         <p
           style={Object {}}
@@ -711,7 +711,7 @@ exports[`shallow rendering 1`] = `
         </span>
       </div>
       <div
-        className="flex-35 layout-row layout-align-end-center"
+        className="flex layout-row layout-align-end-center"
       >
         <p
           style={Object {}}
@@ -1078,7 +1078,7 @@ exports[`show schedule options working 1`] = `
         </span>
       </div>
       <div
-        className="flex-35 layout-row layout-align-end-center"
+        className="flex layout-row layout-align-end-center"
       >
         <p
           style={Object {}}
@@ -1444,7 +1444,7 @@ exports[`show schedules set to true 1`] = `
         </span>
       </div>
       <div
-        className="flex-35 layout-row layout-align-end-center"
+        className="flex layout-row layout-align-end-center"
       >
         <p
           style={Object {}}
