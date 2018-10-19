@@ -9,8 +9,9 @@ import AdminPromptConfirm from '../Admin/Prompt/Confirm'
 import {
   gradientTextGenerator,
   switchIcon,
-  numberSpacing,
-  splitName
+  splitName,
+  totalPrice,
+  formattedPriceValue
 } from '../../helpers'
 
 function loadIsComplete (confirmShipmentData, id, dispatches) {
@@ -81,6 +82,7 @@ class AdminShipmentCard extends Component {
       t,
       isDashboard
     } = this.props
+
     const gradientFontStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -277,7 +279,7 @@ class AdminShipmentCard extends Component {
             <div className="layout-row flex-10">
               <div className="layout-row layout-align-center-center">
                 <span className={`${styles.smallText}`}>
-                  <b>x</b><span className={`${styles.bigText}`}>{shipment.cargo_units.length}</span>
+                  <b>x</b><span className={`${styles.bigText}`}>{shipment.cargo_units ? shipment.cargo_units.length : ''}</span>
                 </span>
               </div>
             </div>
@@ -300,11 +302,9 @@ class AdminShipmentCard extends Component {
           <div className="layout-row flex layout-align-end-end">
             <span className={`${styles.bigText} ${styles.price_style}`}>
               <span>
-                {shipment.edited_total
-                  ? numberSpacing(shipment.edited_total.value, 2)
-                  : numberSpacing(shipment.total_price.value, 2)}
+                { formattedPriceValue(totalPrice(shipment).value) }
               </span>
-              <span> {shipment.total_price.currency} </span>
+              <span> { totalPrice(shipment).currency } </span>
             </span>
           </div>
         </div>

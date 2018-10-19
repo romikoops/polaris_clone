@@ -241,11 +241,11 @@ exports[`shallow rendering 1`] = `
         className="bigText price_style"
       >
         <span>
-          200.99
+          1034
         </span>
         <span>
            
-          USD
+          CNY
            
         </span>
       </span>
