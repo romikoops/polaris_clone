@@ -7,6 +7,8 @@ Feature: Booking Process
 
   Background:
     Given I am logged in as a shipper successfully
+      And I have at least 2 contacts
+      And I am on the User Dashboard
 
   Scenario Outline: Creating a booking
     When I click the find rates button

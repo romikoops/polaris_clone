@@ -45,6 +45,6 @@ When 'I have LCL shipment of {int} units {int} x {int} x {int} with weight of {i
   fill_in '0-payload_in_kg', with: weight
 end
 
-And ('I am on the User Dashboard') do
+And 'I am on the User Dashboard' do
   visit '/account'
 end

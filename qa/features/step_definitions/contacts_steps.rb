@@ -22,3 +22,14 @@ end
 Then 'I expect to see the New Contact modal' do
   expect(page).to have_css('.ccb_contact_form')
 end
+
+And('I have at least {int} contacts') do |contact|
+  step 'I click the "Contacts" tab'
+  step 'I expect to see title "Contacts"'
+  contact.times do
+    step 'I click "New Contact" button'
+    step 'I expect to see the New Contact modal'
+    step 'I enter information for my contact'
+    step 'I click "Save" button'
+  end
+end
