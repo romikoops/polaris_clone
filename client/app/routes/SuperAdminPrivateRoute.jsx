@@ -7,7 +7,6 @@ const isSuperAdmin = user => (user && user.role && user.role.name === 'super_adm
 export default function SuperAdminPrivateRoute ({
   component: Component, user, loggedIn, ...rest
 }) {
-  console.log(user)
   return (
     <Route
       {...rest}

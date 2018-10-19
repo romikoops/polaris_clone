@@ -31,53 +31,12 @@ class Admin extends Component {
   constructor (props) {
     super(props)
     this.state = { currentUrl: '/admin' }
-    this.setUrl = this.setUrl.bind(this)
     this.setCurrentUrl = this.setCurrentUrl.bind(this)
   }
   componentDidMount () {
     const { adminDispatch } = this.props
     adminDispatch.getClients(false)
     adminDispatch.getHubs(false)
-  }
-  setUrl (target) {
-    const { adminDispatch } = this.props
-    switch (target) {
-      case 'hubs':
-        adminDispatch.getHubs(true)
-        break
-      case 'serviceCharges':
-        adminDispatch.getServiceCharges(true)
-        break
-      case 'pricing':
-        adminDispatch.getPricings(true)
-        break
-      case 'schedules':
-        adminDispatch.getSchedules(true)
-        break
-      case 'trucking':
-        adminDispatch.getTrucking(true)
-        break
-      case 'shipments':
-        adminDispatch.getShipments(true)
-        break
-      case 'clients':
-        adminDispatch.getClients(true)
-        break
-      case 'dashboard':
-        adminDispatch.getDashboard(true)
-        break
-      case 'routes':
-        adminDispatch.getItineraries(true)
-        break
-      case 'wizard':
-        adminDispatch.goTo('/admin/wizard')
-        break
-      case 'super_admin':
-        adminDispatch.goTo('/admin/super_admin/upload')
-        break
-      default:
-        break
-    }
   }
   setCurrentUrl (url) {
     this.setState({ currentUrl: url })
@@ -122,10 +81,10 @@ class Admin extends Component {
         {loadingScreen}
         <GenericError theme={theme}>
           {menu}
-        </GenericError >
+        </GenericError>
         <GenericError theme={theme}>
           <Header theme={theme} scrollable />
-        </GenericError >
+        </GenericError>
         <div
           className="flex layout-row layout-align-center-start layout-wrap"
           style={footerStyle}
@@ -133,186 +92,184 @@ class Admin extends Component {
         >
           <GenericError theme={theme}>
             <NavBar className={`${styles.top_margin}`} />
-          </GenericError >
+          </GenericError>
           <div
             className=" flex-100 layout-row
              layout-wrap layout-align-start-start hundred"
           >
             <div className="flex-100 layout-row layout-wrap layout-align-center-center">
-              <GenericError theme={theme}>
-                <Switch className="flex ">
-
-                  <Route
-                    exact
-                    path="/admin/dashboard"
-                    render={props => (
-                      <AdminDashboard
-                        user={user}
-                        theme={theme}
-                        setCurrentUrl={this.setCurrentUrl}
-                        {...props}
-                        scope={tenant.data.scope}
-                        clients={clients}
-                        confirmShipmentData={confirmShipmentData}
-                        shipments={shipments}
-                        hubs={hubs}
-                        hubHash={hubHash}
-                        dashData={dashboard}
-                        adminDispatch={adminDispatch}
-                      />
-                    )}
-                  />
-
-                  <Route
-                    path="/admin/hubs"
-                    render={props => (
-                      <AdminHubs
-                        setCurrentUrl={this.setCurrentUrl}
-                        theme={theme}
-                        {...props}
-                        hubHash={hubHash}
-                        hubs={hubs}
-                        icon="fa-info-circle"
-                        tooltip={hubsTip.manage}
-                      />
-                    )}
-                  />
-
-                  <Route
-                    path="/admin/pricings"
-                    render={props => (
-                      <AdminPricings
-                        setCurrentUrl={this.setCurrentUrl}
-                        theme={theme}
-                        {...props}
-                        hubs={hubs}
-                        pricingData={pricingData}
-                      />
-                    )}
-                  />
-
-                  <Route
-                    path="/admin/currencies"
-                    render={props => (
-                      <AdminCurrencyCenter theme={theme} setCurrentUrl={this.setCurrentUrl} />
-                    )}
-                  />
-
-                  <SuperAdminPrivateRoute
-                    path="/admin/superadmin"
-                    component={SuperAdminTenantCreator}
-                    setCurrentUrl={this.setCurrentUrl}
-                    user={user}
-                    theme={theme}
-                  />
-
-                  <Route
-                    exact
-                    path="/admin/schedules"
-                    render={props => (
-                      <AdminSchedules
-                        theme={theme}
-                        setCurrentUrl={this.setCurrentUrl}
-                        {...props}
-                        hubs={hubHash}
-                        scope={tenant.data.scope}
-                        adminDispatch={adminDispatch}
-                        scheduleData={schedules}
-                      />
-                    )}
-                  />
-
-                  <Route
-                    exact
-                    path="/admin/schedules/:id"
-                    render={props => (
-                      <AdminSchedulesRoute
-                        theme={theme}
-                        {...props}
-                        hubs={hubHash}
-                        setCurrentUrl={this.setCurrentUrl}
-                        adminDispatch={adminDispatch}
-                        scheduleData={itinerarySchedules}
-                      />
-                    )}
-                  />
-
-                  <Route
-                    path="/admin/service_charges"
-                    render={props => (
-                      <AdminServiceCharges
-                        theme={theme}
-                        {...props}
-                        hubs={hubs}
-                        setCurrentUrl={this.setCurrentUrl}
-                        charges={serviceCharges}
-                        adminTools={adminDispatch}
-                      />
-                    )}
-                  />
-
-                  <Route
-                    path="/admin/shipments"
-                    render={props => (
-                      <AdminShipments
-                        theme={theme}
-                        {...props}
-                        hubs={hubs}
-                        setCurrentUrl={this.setCurrentUrl}
-                        hubHash={hubHash}
-                        shipments={shipments}
-                        clients={clients}
-                      />
-                    )}
-                  />
-
-                  <Route
-                    path="/admin/clients"
-                    render={props => (<AdminClients
+              <Switch className="flex">
+                <Route
+                  exact
+                  path="/admin/dashboard"
+                  render={props => (
+                    <AdminDashboard
+                      user={user}
                       theme={theme}
                       setCurrentUrl={this.setCurrentUrl}
-                      clients={clients}
                       {...props}
+                      scope={tenant.data.scope}
+                      clients={clients}
+                      confirmShipmentData={confirmShipmentData}
+                      shipments={shipments}
                       hubs={hubs}
                       hubHash={hubHash}
-                    />)}
-                  />
+                      dashData={dashboard}
+                      adminDispatch={adminDispatch}
+                    />
+                  )}
+                />
 
-                  <Route
-                    path="/admin/routes"
-                    render={props => (
-                      <AdminRoutes
-                        theme={theme}
-                        {...props}
-                        setCurrentUrl={this.setCurrentUrl}
-                        hubHash={hubHash}
-                        clients={clients}
-                        allHubs={allHubs}
-                        loading={loading}
-                      />
-                    )}
-                  />
+                <Route
+                  path="/admin/hubs"
+                  render={props => (
+                    <AdminHubs
+                      setCurrentUrl={this.setCurrentUrl}
+                      theme={theme}
+                      {...props}
+                      hubHash={hubHash}
+                      hubs={hubs}
+                      icon="fa-info-circle"
+                      tooltip={hubsTip.manage}
+                    />
+                  )}
+                />
 
-                  <Route
-                    path="/admin/wizard"
-                    render={props => (<AdminWizard
+                <Route
+                  path="/admin/pricings"
+                  render={props => (
+                    <AdminPricings
+                      setCurrentUrl={this.setCurrentUrl}
+                      theme={theme}
+                      {...props}
+                      hubs={hubs}
+                      pricingData={pricingData}
+                    />
+                  )}
+                />
+
+                <Route
+                  path="/admin/currencies"
+                  render={props => (
+                    <AdminCurrencyCenter theme={theme} setCurrentUrl={this.setCurrentUrl} />
+                  )}
+                />
+
+                <SuperAdminPrivateRoute
+                  path="/admin/superadmin"
+                  component={SuperAdminTenantCreator}
+                  setCurrentUrl={this.setCurrentUrl}
+                  user={user}
+                  theme={theme}
+                />
+
+                <Route
+                  exact
+                  path="/admin/schedules"
+                  render={props => (
+                    <AdminSchedules
                       theme={theme}
                       setCurrentUrl={this.setCurrentUrl}
                       {...props}
-                      hubHash={hubHash}
-                    />)}
-                  />
+                      hubs={hubHash}
+                      scope={tenant.data.scope}
+                      adminDispatch={adminDispatch}
+                      scheduleData={schedules}
+                    />
+                  )}
+                />
 
-                  <Route
-                    path="/admin/trucking"
-                    render={props => (<AdminTrucking
+                <Route
+                  exact
+                  path="/admin/schedules/:id"
+                  render={props => (
+                    <AdminSchedulesRoute
                       theme={theme}
-                      setCurrentUrl={this.setCurrentUrl}
                       {...props}
-                      hubHash={hubHash}
-                    />)}
-                  />
+                      hubs={hubHash}
+                      setCurrentUrl={this.setCurrentUrl}
+                      adminDispatch={adminDispatch}
+                      scheduleData={itinerarySchedules}
+                    />
+                  )}
+                />
 
+                <Route
+                  path="/admin/service_charges"
+                  render={props => (
+                    <AdminServiceCharges
+                      theme={theme}
+                      {...props}
+                      hubs={hubs}
+                      setCurrentUrl={this.setCurrentUrl}
+                      charges={serviceCharges}
+                      adminTools={adminDispatch}
+                    />
+                  )}
+                />
+
+                <Route
+                  path="/admin/shipments"
+                  render={props => (
+                    <AdminShipments
+                      theme={theme}
+                      {...props}
+                      hubs={hubs}
+                      setCurrentUrl={this.setCurrentUrl}
+                      hubHash={hubHash}
+                      shipments={shipments}
+                      clients={clients}
+                    />
+                  )}
+                />
+
+                <Route
+                  path="/admin/clients"
+                  render={props => (<AdminClients
+                    theme={theme}
+                    setCurrentUrl={this.setCurrentUrl}
+                    clients={clients}
+                    {...props}
+                    hubs={hubs}
+                    hubHash={hubHash}
+                  />)}
+                />
+
+                <Route
+                  path="/admin/routes"
+                  render={props => (
+                    <AdminRoutes
+                      theme={theme}
+                      {...props}
+                      setCurrentUrl={this.setCurrentUrl}
+                      hubHash={hubHash}
+                      clients={clients}
+                      allHubs={allHubs}
+                      loading={loading}
+                    />
+                  )}
+                />
+
+                <Route
+                  path="/admin/wizard"
+                  render={props => (<AdminWizard
+                    theme={theme}
+                    setCurrentUrl={this.setCurrentUrl}
+                    {...props}
+                    hubHash={hubHash}
+                  />)}
+                />
+
+                <Route
+                  path="/admin/trucking"
+                  render={props => (<AdminTrucking
+                    theme={theme}
+                    setCurrentUrl={this.setCurrentUrl}
+                    {...props}
+                    hubHash={hubHash}
+                  />)}
+                />
+                <GenericError theme={theme}>
                   <Route
                     path="/admin/super_admin/upload"
                     render={props => (<SuperAdmin
@@ -321,14 +278,13 @@ class Admin extends Component {
                       {...props}
                     />)}
                   />
-
-                </Switch>
-              </GenericError >
+                </GenericError>
+              </Switch>
             </div>
           </div>
           <GenericError theme={theme}>
             <Footer width={footerWidth} theme={theme} tenant={tenant.data} isShop />
-          </GenericError >
+          </GenericError>
         </div>
       </div>
     )

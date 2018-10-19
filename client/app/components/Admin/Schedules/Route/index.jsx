@@ -20,6 +20,7 @@ import { filters } from '../../../../helpers'
 import { moment } from '../../../../constants'
 import SideOptionsBox from '../../SideOptions/SideOptionsBox'
 import CollapsingBar from '../../../CollapsingBar/CollapsingBar'
+import GenericError from '../../../ErrorHandling/Generic'
 
 class AdminSchedulesRoute extends Component {
   static dynamicSort (property) {
@@ -287,114 +288,116 @@ class AdminSchedulesRoute extends Component {
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left padding_top">
-        {uploadStatus}
-        <div className="flex-80 layout-row layout-align-start-start layout-wrap">
-          <div
-            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
-          >
-            <TextHeading theme={theme} size={1} text={`Schedules: ${itinerary.name}`} />
+      <GenericError theme={theme}>
+        <div className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left padding_top">
+          {uploadStatus}
+          <div className="flex-80 layout-row layout-align-start-start layout-wrap">
+            <div
+              className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
+            >
+              <TextHeading theme={theme} size={1} text={`Schedules: ${itinerary.name}`} />
+            </div>
+            {showList ? listView : genView}
           </div>
-          {showList ? listView : genView}
-        </div>
-        <div className=" flex-20 layout-row layout-wrap layout-align-center-start">
-          <SideOptionsBox
-            header="Filters"
-            flexOptions="flex-100"
-            content={(
-              <div>
-                <div
-                  className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
-                >
-                  <input
-                    type="text"
-                    className="flex-100"
-                    value={searchFilters.query}
-                    placeholder="Search..."
-                    onChange={e => this.handleSearchQuery(e)}
-                  />
+          <div className=" flex-20 layout-row layout-wrap layout-align-center-start">
+            <SideOptionsBox
+              header="Filters"
+              flexOptions="flex-100"
+              content={(
+                <div>
+                  <div
+                    className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
+                  >
+                    <input
+                      type="text"
+                      className="flex-100"
+                      value={searchFilters.query}
+                      placeholder="Search..."
+                      onChange={e => this.handleSearchQuery(e)}
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
-          />
-          <SideOptionsBox
-            header="Data manager"
-            flexOptions="flex-100"
-            content={(
-              <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                <CollapsingBar
-                  collapsed={!expander.upload}
-                  theme={theme}
-                  handleCollapser={() => this.toggleExpander('upload')}
-                  showArrow
-                  text="Upload Data"
-                  faClass="fa fa-cloud-upload"
-                  content={(
-                    <div>
-                      <div
-                        className={`${
-                          styles.action_section
-                        } flex-100 layout-row layout-align-center-center layout-wrap`}
-                      >
-                        <p className="flex-80">{`Upload ${itinerary.name} Schedules Sheet`}</p>
-                        <FileUploader
-                          theme={theme}
-                          dispatchFn={file =>
-                            documentDispatch.uploadItinerarySchedules(file, itinerary.id)
-                          }
-                          type="xlsx"
-                          text="Train Schedules .xlsx"
-                        />
+              )}
+            />
+            <SideOptionsBox
+              header="Data manager"
+              flexOptions="flex-100"
+              content={(
+                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                  <CollapsingBar
+                    collapsed={!expander.upload}
+                    theme={theme}
+                    handleCollapser={() => this.toggleExpander('upload')}
+                    showArrow
+                    text="Upload Data"
+                    faClass="fa fa-cloud-upload"
+                    content={(
+                      <div>
+                        <div
+                          className={`${
+                            styles.action_section
+                          } flex-100 layout-row layout-align-center-center layout-wrap`}
+                        >
+                          <p className="flex-80">{`Upload ${itinerary.name} Schedules Sheet`}</p>
+                          <FileUploader
+                            theme={theme}
+                            dispatchFn={file =>
+                              documentDispatch.uploadItinerarySchedules(file, itinerary.id)
+                            }
+                            type="xlsx"
+                            text="Train Schedules .xlsx"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  )}
-                />
-                <CollapsingBar
-                  collapsed={!expander.download}
-                  theme={theme}
-                  handleCollapser={() => this.toggleExpander('download')}
-                  showArrow
-                  text="Download Data"
-                  faClass="fa fa-cloud-download"
-                  content={(
-                    <div>
+                    )}
+                  />
+                  <CollapsingBar
+                    collapsed={!expander.download}
+                    theme={theme}
+                    handleCollapser={() => this.toggleExpander('download')}
+                    showArrow
+                    text="Download Data"
+                    faClass="fa fa-cloud-download"
+                    content={(
+                      <div>
+                        <div
+                          className={`${
+                            styles.action_section
+                          } flex-100 layout-row layout-wrap layout-align-center-center`}
+                        >
+                          <p className="flex-80">Download Schedules Sheet</p>
+                          <DocumentsDownloader
+                            theme={theme}
+                            target="schedules"
+                            options={{ itinerary_id: itinerary.id }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  />
+                  <CollapsingBar
+                    collapsed={!expander.new}
+                    theme={theme}
+                    handleCollapser={() => this.toggleExpander('new')}
+                    showArrow
+                    text="Generate Schedules"
+                    faClass="fa fa-plus-circle"
+                    content={(
                       <div
                         className={`${
                           styles.action_section
                         } flex-100 layout-row layout-wrap layout-align-center-center`}
                       >
-                        <p className="flex-80">Download Schedules Sheet</p>
-                        <DocumentsDownloader
-                          theme={theme}
-                          target="schedules"
-                          options={{ itinerary_id: itinerary.id }}
-                        />
+                        {showList ? newButton : backButton}
                       </div>
-                    </div>
-                  )}
-                />
-                <CollapsingBar
-                  collapsed={!expander.new}
-                  theme={theme}
-                  handleCollapser={() => this.toggleExpander('new')}
-                  showArrow
-                  text="Generate Schedules"
-                  faClass="fa fa-plus-circle"
-                  content={(
-                    <div
-                      className={`${
-                        styles.action_section
-                      } flex-100 layout-row layout-wrap layout-align-center-center`}
-                    >
-                      {showList ? newButton : backButton}
-                    </div>
-                  )}
-                />
-              </div>
-            )}
-          />
+                    )}
+                  />
+                </div>
+              )}
+            />
+          </div>
         </div>
-      </div>
+      </GenericError>
     )
   }
 }

@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { AdminRoutesIndex, AdminRouteView, AdminRouteForm } from './'
 import { adminActions } from '../../actions'
 import { Modal } from '../Modal/Modal'
+import GenericError from '../../components/ErrorHandling/Generic'
 
 class AdminRoutes extends Component {
   constructor (props) {
@@ -54,61 +55,63 @@ class AdminRoutes extends Component {
     } = this.props
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        {this.state.newRoute ? (
-          <Modal
-            component={
-              <AdminRouteForm
-                theme={theme}
-                close={this.closeModal}
-                hubs={allHubs}
-                saveRoute={this.saveNewRoute}
-                adminDispatch={adminDispatch}
-              />
-            }
-            verticalPadding="30px"
-            horizontalPadding="40px"
-            parentToggle={this.closeModal}
-          />
+      <GenericError theme={theme}>
+        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+          {this.state.newRoute ? (
+            <Modal
+              component={
+                <AdminRouteForm
+                  theme={theme}
+                  close={this.closeModal}
+                  hubs={allHubs}
+                  saveRoute={this.saveNewRoute}
+                  adminDispatch={adminDispatch}
+                />
+              }
+              verticalPadding="30px"
+              horizontalPadding="40px"
+              parentToggle={this.closeModal}
+            />
 
-        ) : (
-          ''
-        )}
-        <Switch className="flex">
-          <Route
-            exact
-            path="/admin/routes"
-            render={props => (
-              <AdminRoutesIndex
-                theme={theme}
-                hubHash={hubHash}
-                itineraries={itineraries}
-                adminDispatch={adminDispatch}
-                {...props}
-                viewItinerary={this.viewItinerary}
-                loading={loading}
-                tenant={tenant}
-                mapData={mapData}
-                toggleNewRoute={this.toggleNewRoute}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin/routes/:id"
-            render={props => (
-              <AdminRouteView
-                theme={theme}
-                hubHash={hubHash}
-                itineraryData={itinerary}
-                adminDispatch={adminDispatch}
-                {...props}
-                loading={loading}
-              />
-            )}
-          />
-        </Switch>
-      </div>
+          ) : (
+            ''
+          )}
+          <Switch className="flex">
+            <Route
+              exact
+              path="/admin/routes"
+              render={props => (
+                <AdminRoutesIndex
+                  theme={theme}
+                  hubHash={hubHash}
+                  itineraries={itineraries}
+                  adminDispatch={adminDispatch}
+                  {...props}
+                  viewItinerary={this.viewItinerary}
+                  loading={loading}
+                  tenant={tenant}
+                  mapData={mapData}
+                  toggleNewRoute={this.toggleNewRoute}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/routes/:id"
+              render={props => (
+                <AdminRouteView
+                  theme={theme}
+                  hubHash={hubHash}
+                  itineraryData={itinerary}
+                  adminDispatch={adminDispatch}
+                  {...props}
+                  loading={loading}
+                />
+              )}
+            />
+          </Switch>
+        </div>
+      </GenericError>
     )
   }
 }
