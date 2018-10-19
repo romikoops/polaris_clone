@@ -245,7 +245,7 @@ class AdminShipmentContent extends Component {
                               <input
                                 type="number"
                                 onChange={e => handlePriceChange('trucking_pre', e.target.value)}
-                                value={Number(newPrices.trucking_pre.value).toFixed(2)}
+                                value={newPrices.trucking_pre.value}
                                 className="layout-padding flex-70 layout-row flex-initial"
                               />
                             </div>
@@ -289,7 +289,7 @@ class AdminShipmentContent extends Component {
                               <input
                                 type="number"
                                 onChange={e => handlePriceChange('trucking_on', e.target.value)}
-                                value={Number(newPrices.trucking_on.value).toFixed(2)}
+                                value={newPrices.trucking_on.value}
                                 className="layout-padding layout-row flex-70 flex-initial"
                               />
                             </div>
@@ -336,7 +336,7 @@ class AdminShipmentContent extends Component {
                               <input
                                 type="number"
                                 onChange={e => handlePriceChange('export', e.target.value)}
-                                value={Number(newPrices.export.value).toFixed(2)}
+                                value={newPrices.export.value}
                                 className="layout-padding layout-row flex-70 flex-initial"
                               />
                             </div>
@@ -383,7 +383,7 @@ class AdminShipmentContent extends Component {
                               <input
                                 type="number"
                                 onChange={e => handlePriceChange('import', e.target.value)}
-                                value={Number(newPrices.import.value).toFixed(2)}
+                                value={newPrices.import.value}
                                 className="layout-padding layout-row flex-70 flex-initial"
                               />
                             </div>
@@ -427,7 +427,7 @@ class AdminShipmentContent extends Component {
                               <input
                                 type="number"
                                 onChange={e => handlePriceChange('cargo', e.target.value)}
-                                value={Number(newPrices.cargo.value).toFixed(2)}
+                                value={newPrices.cargo.value}
                                 className="layout-padding layout-row flex-70 flex-initial"
                               />
                             </div>
@@ -507,7 +507,7 @@ class AdminShipmentContent extends Component {
                               <input
                                 type="number"
                                 onChange={e => handlePriceChange('insurance', e.target.value)}
-                                value={Number(newPrices.insurance.value).toFixed(2)}
+                                value={newPrices.insurance.value}
                                 className="layout-padding layout-row flex-70 flex-initial"
                               />
                             </div>
