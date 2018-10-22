@@ -21,6 +21,8 @@ stages:
   - acceptance
   - cleanup
 
+image: alpine:3.8
+
 before_script:
   - date
 
@@ -72,7 +74,7 @@ api:
   retry: 1
   cache:
     paths:
-      - /usr/local/bundle/
+      - vendor/ruby
   variables:
     POSTGRES_DB: imcr_test
     DATABASE_URL: postgis://postgres:@localhost/imcr_test
@@ -105,7 +107,7 @@ client:
     - client/node_modules/
 
   before_script:
-    - apk add --no-cache --update autoconf automake bash build-base lcms2-dev libjpeg-turbo-utils libpng-dev
+    - apk add --no-cache --update autoconf automake bash build-base gifsicle lcms2-dev libjpeg-turbo-utils libpng-dev libwebp-tools optipng pngquant
 
   script:
     - cd client
@@ -128,7 +130,6 @@ docker:
   <<: *merge-request-only
   stage: build
   image: docker:stable
-  retry: 1
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_HOST: tcp://localhost:2375/
@@ -137,11 +138,9 @@ docker:
   services:
     - docker:dind
 
-  script: |
-    install_dependencies
-    registry_login
-
-    scripts/build.sh
+  script:
+    - registry_login
+    - scripts/build.sh
 
   dependencies: []
 

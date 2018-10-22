@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e
+set -eu
 
 : ${DOCKER_REGISTRY}
 : ${CI_COMMIT_REF_SLUG}
@@ -69,3 +69,6 @@ docker push ${DOCKER_REGISTRY}/ci/imc-client:${CI_COMMIT_SHA}
 docker push ${DOCKER_REGISTRY}/ci/imc-client:${CI_COMMIT_REF_SLUG}
 docker push ${DOCKER_REGISTRY}/ci/imc-qa:${CI_COMMIT_SHA}
 docker push ${DOCKER_REGISTRY}/ci/imc-qa:${CI_COMMIT_REF_SLUG}
+
+echo 'All done.'
+exit 0

@@ -1,5 +1,7 @@
 FROM ruby:2.5.1-alpine
 
+LABEL maintainer="development@itsmycargo.com"
+
 RUN apk add --no-cache --update \
   build-base
 

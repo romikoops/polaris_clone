@@ -29,7 +29,8 @@ def yellow(msg)
 end
 
 def bundle!
-  system('bundle check') || system!('bundle install -j $(nproc)')
+  path = ENV['CI'] ? '--path vendor' : ''
+  system("bundle check #{path}") || system!("bundle install -j $(nproc) #{path}")
 end
 
 def runner(dir:, name:)
@@ -46,12 +47,12 @@ def runner(dir:, name:)
     @results[name] = code
   end
 
-  if File.exist?(APP_ROOT.join(dir, 'reports'))
-    report_dir = APP_ROOT.join('reports', name)
-    FileUtils.mkdir_p report_dir unless File.directory?(report_dir)
+  return unless File.exist?(APP_ROOT.join(dir, 'reports'))
 
-    FileUtils.cp_r Dir[APP_ROOT.join(dir, 'reports', '*')], report_dir, verbose: true
-  end
+  report_dir = APP_ROOT.join('reports', name)
+  FileUtils.mkdir_p report_dir unless File.directory?(report_dir)
+
+  FileUtils.cp_r Dir[APP_ROOT.join(dir, 'reports', '*')], report_dir, verbose: true
 end
 
 def system!(*args)
