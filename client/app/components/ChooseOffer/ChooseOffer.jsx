@@ -348,18 +348,6 @@ class ChooseOffer extends Component {
                   styles.route_header
                 }`}
               >
-                <div className="flex-none padd_10">
-                  {isQuote(tenant) ? (
-                    <TextHeading
-
-                      theme={theme}
-                      size={3}
-                      text={t('shipment:bestQuotations')}
-                    />
-                  ) : (
-                    ''
-                  )}
-                </div>
                 <div className="flex-30 layout-row layout-align-end-center">
                   {scope.fixed_currency ? (
                     ''
