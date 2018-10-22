@@ -21,6 +21,18 @@ spec:
         app: {{ include "app.name" . }}
         release: {{ .Release.Name }}
     spec:
+      {{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+      {{- end }}
       initContainers:
       - name: migrate
         image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
@@ -39,7 +51,7 @@ spec:
         - name: RAILS_MASTER_KEY
           valueFrom:
             secretKeyRef:
-              name: app-secrets
+              name: {{ template "app.fullname" . }}
               key: master.key
       containers:
       - name: backend
@@ -64,7 +76,7 @@ spec:
         - name: RAILS_MASTER_KEY
           valueFrom:
             secretKeyRef:
-              name: app-secrets
+              name: {{ template "app.fullname" . }}
               key: master.key
         ports:
         - name: http-backend
@@ -81,6 +93,8 @@ spec:
             port: http-backend
           initialDelaySeconds: 60
           periodSeconds: 30
+        resources:
+{{ toYaml .Values.backend.resources | indent 10 }}
       - name: frontend
         image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
         imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
@@ -102,10 +116,12 @@ spec:
             port: http-frontend
           initialDelaySeconds: 60
           periodSeconds: 30
+        resources:
+{{ toYaml .Values.frontend.resources | indent 10 }}
       volumes:
       - name: credentials
         secret:
-          secretName: {{ .Values.credentialsName }}
+          secretName: {{ include "app.fullname" . }}
           items:
           - key: credentials.json
             path: credentials.json

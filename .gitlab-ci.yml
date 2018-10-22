@@ -260,12 +260,11 @@ reset_database:
   image: eu.gcr.io/itsmycargo-main/deploy:latest
   variables:
     GIT_STRATEGY: none
-    REVIEW_NAMESPACE: default
 
   script:
     - export CI_ENVIRONMENT_SLUG=$(cat ci_environment_slug.txt)
-    - kubectl -n $REVIEW_NAMESPACE exec $(kubectl -n $REVIEW_NAMESPACE get pods -l app=postgresql,release=${CI_ENVIRONMENT_SLUG} -o jsonpath='{.items[].metadata.name}') /usr/local/bin/reset.sh full_anon
-    - kubectl -n $REVIEW_NAMESPACE delete pods -l app=imc-app,release=${CI_ENVIRONMENT_SLUG}
+    - kubectl -n $CI_ENVIRONMENT_SLUG exec $(kubectl -n $CI_ENVIRONMENT_SLUG get pods -l app=postgresql,release=${CI_ENVIRONMENT_SLUG} -o jsonpath='{.items[].metadata.name}') /usr/local/bin/reset.sh full_anon
+    - kubectl -n $CI_ENVIRONMENT_SLUG delete pods -l app=imc-app,release=${CI_ENVIRONMENT_SLUG}
 
   when: manual
   allow_failure: true
@@ -292,7 +291,6 @@ stop_review:
   # Auto DevOps variables and functions
   export GCP_REGISTRY=eu.gcr.io/itsmycargo-main
   export DEVOPS_CHART=chart/
-  export REVIEW_NAMESPACE=${REVIEW_NAMESPACE:=default}
   [[ "$TRACE" ]] && set -x
 
   function install_dependencies() {
@@ -310,7 +308,11 @@ stop_review:
   }
 
   function deploy() {
-    _helm_deploy || (delete && exit 1)
+    # Delete failed deployment
+    if [[ -n "$(helm ls -q "^$name$")" ]]; then
+      delete || true
+    fi
+    _helm_deploy
   }
 
   function delete() {
@@ -318,7 +320,7 @@ stop_review:
 
     if [[ -n "$(helm ls -q "^$name$")" ]]; then
       helm delete --purge "$name"
-      kubectl --namespace=${REVIEW_NAMESPACE} delete persistentvolumeclaims "${CI_ENVIRONMENT_SLUG}-postgresql" || true
+      kubectl delete namespace ${CI_ENVIRONMENT_SLUG}
     fi
   }
 
@@ -329,7 +331,10 @@ stop_review:
       --set backend.image.tag="$CI_COMMIT_SHA" \
       --set frontend.image.tag="$CI_COMMIT_SHA" \
       --set service.url="https://$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN" \
-      --namespace=${REVIEW_NAMESPACE} \
+      --set-file credentials=/etc/secrets/service-account/services.json \
+      --set-file postgresql.seed.credentials=/etc/secrets/service-account/services.json \
+      --set-file masterKey=/etc/secrets/service-account/review-master-key \
+      --namespace=${CI_ENVIRONMENT_SLUG} \
       --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
       "$CI_ENVIRONMENT_SLUG" \
       $DEVOPS_CHART
