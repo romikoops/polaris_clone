@@ -262,10 +262,18 @@ class QuoteCard extends PureComponent {
             <i className="flex-none fa fa-ship" style={{ paddingRight: '7px' }} />
             <p className="layout-row layout-align-end-center margin_5">{t('quote:carrier', { carrierName: result.meta.carrier_name })}</p>
           </div> : '' }
-          { result.meta.service_level ? <div className="flex-50 layout-row layout-align-center-center">
-            <i className="flex-none fa fa-bell-o" style={{ paddingRight: '7px' }} />
-            <p className="layout-row layout-align-end-center margin_5">{t('quote:service', { serviceLevel: capitalize(result.meta.service_level) })}</p>
-          </div> : '' }
+          {
+            result.meta.service_level_count > 1
+              ? (
+                <div className="flex-50 layout-row layout-align-center-center">
+                  <i className="flex-none fa fa-bell-o" style={{ paddingRight: '7px' }} />
+                  <p className="layout-row layout-align-end-center margin_5">
+                    {t('quote:service', { serviceLevel: capitalize(result.meta.service_level) })}
+                  </p>
+                </div>
+              )
+              : ''
+          }
         </div>
 
         <CollapsingContent
