@@ -47,10 +47,13 @@ Feature: Booking Process
     Then I expect to be redirected to the account page
 
     Examples:
-      | Direction        | Shipment Type             | Origin     | Destination | Shipment                                                              | Insurance | Clearance |
-      | Selling (Export) | Ocean FCL & Rail FCL      | Gothenburg | Shanghai    | 1 "20‘ Dry Container" with weight of 2500kg                           | yes       | no        |
-      | Selling (Export) | Ocean FCL & Rail FCL      | Gothenburg | Shanghai    | 1 "40‘ Dry Container" with weight of 1500kg                           | yes       | no        |
-      | Selling (Export) | Air, Ocean LCL & Rail LCL | Gothenburg | Shanghai    | 1 "Pallet" with length 78cm, width 78cm, height 78cm and weight 800kg | no        | no        |
-      | Buying (Import)  | Ocean FCL & Rail FCL      | Shanghai   | Gothenburg  | 1 "20‘ Dry Container" with weight of 2500kg                           | no        | yes       |
-      | Buying (Import)  | Ocean FCL & Rail FCL      | Shanghai   | Gothenburg  | 1 "40‘ Dry Container" with weight of 1500kg                           | yes       | yes       |
-      | Buying (Import)  | Air, Ocean LCL & Rail LCL | Shanghai   | Gothenburg  | 1 "Pallet" with length 78cm, width 78cm, height 78cm and weight 800kg | yes       | no        |
+      | Direction        | Shipment Type             | Origin                                          | Destination                                                               | Shipment                                                               | Insurance | Clearance |
+      | Selling (Export) | Ocean FCL & Rail FCL      | William Gibsons väg 13, 433 76 Jonsered, Sweden | Shanghai                                                                  | 1 "20‘ Dry Container" with weight of 2500kg                            | yes       | no        |
+      | Selling (Export) | Ocean FCL & Rail FCL      | Gothenburg                                      | 32 Hanzhongmen St, Gulou Qu, Nanjing Shi, Jiangsu Sheng, China, 210029    | 1 "20‘ Dry Container" with weight of 2500kg                            | yes       | no        |
+      | Selling (Export) | Ocean FCL & Rail FCL      | William Gibsons väg 13, 433 76 Jonsered, Sweden | 32 Hanzhongmen St, Gulou Qu, Nanjing Shi, Jiangsu Sheng, China, 210029    | 1 "20‘ Dry Container" with weight of 2500kg                            | yes       | no        |
+      | Selling (Export) | Ocean FCL & Rail FCL      | Gothenburg                                      | Shanghai                                                                  | 1 "20‘ Dry Container" with weight of 2500kg                            | yes       | no        |
+      | Selling (Export) | Ocean FCL & Rail FCL      | Gothenburg                                      | Shanghai                                                                  | 1 "40‘ Dry Container" with weight of 1500kg                            | yes       | no        |
+      | Selling (Export) | Air, Ocean LCL & Rail LCL | Gothenburg                                      | Shanghai                                                                  | 1 "Pallet" with length 78cm, width 78cm, height 78cm and weight 800kg  | no        | no        |
+      | Buying (Import)  | Ocean FCL & Rail FCL      | Shanghai                                        | Gothenburg                                                                | 1 "20‘ Dry Container" with weight of 2500kg                            | no        | yes       |
+      | Buying (Import)  | Ocean FCL & Rail FCL      | Shanghai                                        | Gothenburg                                                                | 1 "40‘ Dry Container" with weight of 1500kg                            | yes       | yes       |
+      | Buying (Import)  | Air, Ocean LCL & Rail LCL | Shanghai                                        | Gothenburg                                                                | 1 "Pallet" with length 78cm, width 78cm, height 78cm and weight 800kg  | yes       | no        |

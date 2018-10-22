@@ -1034,7 +1034,7 @@ class ShipmentLocationBox extends Component {
     )
 
     const originAuto = (
-      <div className="flex-100 layout-row layout-wrap">
+      <div className="flex-100 ccb_origin_carriage_input layout-row layout-wrap">
         <Autocomplete
           gMaps={this.props.gMaps}
           theme={this.props.theme}
@@ -1151,7 +1151,7 @@ class ShipmentLocationBox extends Component {
     )
 
     const destAuto = (
-      <div className="flex-100 layout-row layout-wrap">
+      <div className="flex-100 ccb_destination_carriage_input layout-row layout-wrap">
         <div className={styles.input_wrapper}>
           <Autocomplete
             gMaps={this.props.gMaps}
@@ -1257,7 +1257,7 @@ class ShipmentLocationBox extends Component {
                     /> : '' }
 
                     { !originTruckingAvailable ? <Toggle
-                      className="flex-none"
+                      className="flex-none ccb_pre_carriage"
                       id="has_pre_carriage"
                       name="has_pre_carriage"
                       checked={this.props.has_pre_carriage}
@@ -1302,7 +1302,7 @@ class ShipmentLocationBox extends Component {
                       {t('shipment:delivery')}
                     </label>
                     { !destinationTruckingAvailable ? <Toggle
-                      className="flex-none"
+                      className="flex-none ccb_on_carriage"
                       id="has_on_carriage"
                       name="has_on_carriage"
                       checked={this.props.has_on_carriage}

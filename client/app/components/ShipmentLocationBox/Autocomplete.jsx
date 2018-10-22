@@ -226,7 +226,7 @@ class Autocomplete extends PureComponent {
           return (
             <div
               className={`flex-100 layout-row layout-align-center-center
-          ${styles.autocomplete_card} pointy`}
+          ${styles.autocomplete_card} pointy ccb_result`}
               style={isHighlighted ? highlightStyle : {}}
               onClick={() => this.handleSelect(result)}
             >
@@ -236,7 +236,7 @@ class Autocomplete extends PureComponent {
     const inputErrorStyle = hasErrors ? styles.with_errors : ''
 
     return (
-      <div className={`auto_origin flex-100 layout-row layout-align-center-center ${styles.autocomplete_container}`}>
+      <div className={`auto_origin ccb_carriage flex-100 layout-row layout-align-center-center ${styles.autocomplete_container}`}>
         <div
           className={`flex-none ${!hideResults && hasResults ? styles.exit_click : styles.hidden}`}
           onClick={() => {
