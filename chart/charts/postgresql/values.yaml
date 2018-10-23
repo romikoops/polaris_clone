@@ -158,4 +158,4 @@ podAnnotations: {}
 seed:
   gcs_bucket:
   variant:
-  credentialsName:
+  credentials: ""

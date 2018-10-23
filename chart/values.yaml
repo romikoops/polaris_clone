@@ -9,12 +9,20 @@ backend:
     repository: eu.gcr.io/itsmycargo-main/ci/imc-api
     tag: latest
     pullPolicy: Always
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
 
 frontend:
   image:
     repository: eu.gcr.io/itsmycargo-main/ci/imc-client
     tag: latest
     pullPolicy: Always
+  resources:
+    requests:
+      memory: 10Mi
+      cpu: 10m
 
 service:
   enabled: true
@@ -22,13 +30,18 @@ service:
 
 ingress:
   enabled: true
-  # auth_url: "https://auth.flotilla.itsmycargo.tech"
-  auth:
-    username: imcqa
-    # APR1 crypted password (shipmetimbers)
-    password: $apr1$mqAfDcxF$hV5dmBnbRFzBstFn6/egO0
+credentials: ""
+masterKey: ""
 
-credentialsName: services
+nodeSelector: {}
+tolerations: []
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: cloud.google.com/gke-preemptible
+          operator: Exists
 
 postgresql:
   enabled: true
@@ -39,7 +52,7 @@ postgresql:
   seed:
     gcs_bucket: itsmycargo-main-engineering-resources
     variant: full_anon
-    credentialsName: services
+    credentials: ""
 
   ## Create a database user
   ## Default: postgres
@@ -63,3 +76,18 @@ postgresql:
 
   persistence:
     size: 10Gi
+
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+
+  nodeSelector: {}
+  tolerations: []
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: cloud.google.com/gke-preemptible
+            operator: Exists

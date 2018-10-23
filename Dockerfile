@@ -1,5 +1,5 @@
 FROM ruby:2.5-alpine AS builder
-MAINTAINER mikko.kokkonen@itsmycargo.com
+LABEL maintainer="development@itsmycargo.com"
 
 ARG BUNDLE_WITHOUT="development test"
 
@@ -12,8 +12,10 @@ RUN apk add --no-cache --update \
   git \
   linux-headers \
   nodejs \
+  npm \
   postgresql-dev \
   tzdata
+RUN npm install -g 'mjml@4.2.0'
 
 WORKDIR /app
 
@@ -30,13 +32,14 @@ COPY . ./
 RUN RAILS_ENV=production bin/rails assets:precompile
 
 FROM ruby:2.5-alpine AS app
-MAINTAINER mikko.kokkonen@itsmycargo.com
+LABEL maintainer="development@itsmycargo.com"
 
 ENV MALLOC_ARENA_MAX 2
 
 # Minimal requirements to run a Rails app
 RUN apk add --no-cache --update \
   nodejs \
+  npm \
   postgresql-client \
   tzdata
 
@@ -45,7 +48,7 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
     && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
-RUN npm install -g 'mjml@4.1.2'
+RUN npm install -g 'mjml@4.2.0'
 
 # Add user
 RUN addgroup -g 1000 -S app \

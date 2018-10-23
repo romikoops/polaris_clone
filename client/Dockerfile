@@ -1,16 +1,19 @@
 # Builder Image
-FROM node:8 AS builder
-MAINTAINER mikko.kokkonen@itsmycargo.com
+FROM node:10-alpine AS builder
+LABEL maintainer="development@itsmycargo.com"
 
-RUN set -ex \
-  \
-  && apt-get update \
-  \
-  && apt-get update \
-  && apt-get install -y \
-    libpng-dev \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apk add --update --no-cache \
+  autoconf \
+  automake \
+  bash \
+  build-base \
+  gifsicle \
+  lcms2-dev \
+  libjpeg-turbo-utils \
+  libpng-dev \
+  libwebp-tools \
+  optipng \
+  pngquant
 
 COPY package.json package-lock.json ./
 RUN npm install
