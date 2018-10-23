@@ -54,6 +54,9 @@ const StyledSelect = styled(Select)`
 class ShipmentLocationBox extends Component {
   constructor (props) {
     super(props)
+
+    this.defaultTruckType = 'chassis'
+
     this.state = {
       autoText: {
         origin: '',
@@ -917,18 +920,21 @@ class ShipmentLocationBox extends Component {
         })
       }
     })
-    if (!truckTypes.includes(selectedTrucking[truckingTarget])) {
-      const availableTruckType = truckTypes
-        .filter(tt => tt !== selectedTrucking[truckingTarget])[0]
-      const syntheticEvent = { target: { id: `${truckingTarget}-${availableTruckType}` } }
-      this.props.handleTruckingDetailsChange(syntheticEvent)
-    }
     this.setState({
       truckTypes: {
         ...this.state.truckTypes,
         [target]: truckTypes
       }
     })
+
+    if (!truckTypes.includes(selectedTrucking[truckingTarget])) {
+      const truckType = truckTypes.includes(this.defaultTruckType)
+        ? this.defaultTruckType
+        : truckTypes[0]
+
+      const syntheticEvent = { target: { id: `${truckingTarget}-${truckType}` } }
+      this.props.handleTruckingDetailsChange(syntheticEvent)
+    }
   }
 
   isSwitchable () {
