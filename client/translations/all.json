@@ -473,6 +473,7 @@
         "alternativeDepartures": "Alternative Departures",
         "moreDepartures": "More Departures",
         "selectedOffers": "Selected Offers",
+        "sendQuote": "Send Quote",
         "import": "import",
         "export": "export",
         "chooseDirection": "I am {{commercialAction}} ({{direction}})",
