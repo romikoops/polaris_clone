@@ -404,25 +404,6 @@ class ChooseOffer extends Component {
                     size="full"
                     shipment={shipment}
                   />
-                  <div className={styles.send_email}>
-                    <Formsy>
-                      <FormsyInput
-                        type="email"
-                        name="quotation_email"
-                        value={this.state.email}
-                        onChange={this.emailValue}
-                        placeholder="bob@gateway.com"
-                      />
-                      <RoundButton
-                        theme={theme}
-                        size="full"
-                        disabled={this.state.selectedOffers.length < 1}
-                        active={this.state.selectedOffers.length > 0}
-                        text={t('account:sendViaEmail')}
-                        handleNext={() => this.selectQuotes(shipment, this.state.selectedOffers, this.state.email)}
-                      />
-                    </Formsy>
-                  </div>
                 </div>
               </div>
             </div>
