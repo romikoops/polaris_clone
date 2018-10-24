@@ -17,5 +17,6 @@
   "transparencyIconText": "Full Transparency",
   "viewDocuments": "View or download documents when you need them",
   "welcomeTextHead": "Welcome to the",
-  "welcomeTextTail": "shop for online freight"
+  "welcomeTextShopTail": "shop for online freight",
+  "welcomeTextQuoteTail": "online quoting tool"
 }
