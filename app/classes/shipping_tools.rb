@@ -159,7 +159,7 @@ module ShippingTools
       cargo_notes:       shipment_data[:cargoNotes]
     )
     shipment.incoterm_text = shipment_data[:incotermText] if shipment_data[:incotermText]
-    
+
     # Shipper
     resource = shipment_data.require(:shipper)
     contact_location = Location.create_and_geocode(contact_location_params(resource))
@@ -621,7 +621,7 @@ module ShippingTools
     if response.code.to_i == 201
       send_data response.body, filename: 'Booking_' + shipment.imc_reference + '.pdf'
     else
-      Raise
+      raise
     end
   end
 
@@ -679,9 +679,10 @@ module ShippingTools
       locals:   { shipment: args[:shipment] }
     )
 
-    response =  BreezyPDFLite::RenderRequest.new(
+    response = BreezyPDFLite::RenderRequest.new(
       doc_erb.render
     ).submit
+    
     if response.code.to_i == 201
       doc_name = "#{args[:name]}_#{args[:shipment].imc_reference}.pdf"
 
@@ -693,7 +694,7 @@ module ShippingTools
 
       { name: doc_name, url: doc_url }
     else
-      Raise
+      raise
     end
   end
 
