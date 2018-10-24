@@ -70,9 +70,20 @@ function LandingTop ({
                 <hr />
               </div>
               <div className={styles.wrapper_h3}>
-                <h3 className="flex-none">
-                  {t('landing:descriptionHead')} <b>{t('landing:descriptionMiddle')}</b> {t('landing:descriptionTail')}
-                </h3>
+                {isQuote ? (
+                  <h3 className="flex-none">
+                    {t('landing:descriptionQuoteHead')}
+                    <b>{t('landing:descriptionQuoteMiddle')}</b>
+                    {t('landing:descriptionQuoteTail')}
+                  </h3>
+                ) : (
+                  <h3 className="flex-none">
+                    {t('landing:descriptionShopHead')}
+                    <b>{t('landing:descriptionShopMiddle')}</b>
+                    {t('landing:descriptionShopTail')}
+                  </h3>
+                )
+                }
               </div>
             </div>
             <ButtonSection {...buttonSectionProps} hidden={window.innerHeight <= 750} />
