@@ -2,14 +2,16 @@ import React, { Component } from 'react'
 import { translate } from 'react-i18next'
 import styles from './QuoteChargeBreakdown.scss'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
-import { numberSpacing, capitalize } from '../../helpers'
+import { numberSpacing, capitalize, formattedPriceValue } from '../../helpers'
 import PropTypes from '../../prop-types'
 
 class QuoteChargeBreakdown extends Component {
   constructor (props) {
     super(props)
+    this.unbreakableKeys = ['total', 'edited_total', 'name']
+    this.quoteKeys = this.quoteKeys.bind(this)
     this.state = {
-      expander: {}
+      expander: this.quoteKeys().reduce((acc, k) => ({ ...acc, [k]: props.scope.hide_sub_totals }), {})
     }
   }
 
@@ -57,75 +59,80 @@ class QuoteChargeBreakdown extends Component {
         return `${fee[0]} - ${fee[1].name}`
     }
   }
+  quoteKeys () {
+    return Object.keys(this.props.quote).filter(key => !this.unbreakableKeys.includes(key))
+  }
 
   render () {
     const {
       theme,
       t,
-      quote
+      quote,
+      scope
     } = this.props
     if (Object.keys(quote).length === 0) return ''
 
-    const unbreakableKeys = ['total', 'edited_total', 'name']
-    const quoteChargeBreakdown = Object.keys(quote)
-      .filter(key => !unbreakableKeys.includes(key))
-      .map(key => (
-        <CollapsingBar
-          showArrow
-          collapsed={!this.state.expander[`${key}`]}
-          theme={theme}
-          headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
-          handleCollapser={() => this.toggleExpander(`${key}`)}
-          mainWrapperStyle={{ borderTop: '1px solid #E0E0E0', minHeight: '50px' }}
-          contentHeader={(
-            <div className={`flex-100 layout-row layout-align-start-center ${styles.price_row}`}>
-              <div className="flex-none layout-row layout-align-start-center" />
+    return this.quoteKeys().map(key => (
+      <CollapsingBar
+        showArrow
+        collapsed={!this.state.expander[`${key}`]}
+        theme={theme}
+        contentStyle={styles.sub_price_row_wrapper}
+        headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
+        handleCollapser={() => this.toggleExpander(`${key}`)}
+        mainWrapperStyle={{ borderTop: '1px solid #E0E0E0', minHeight: '50px' }}
+        contentHeader={(
+          <div className={`flex-100 layout-row layout-align-start-center ${styles.price_row}`}>
+            <div className="flex-none layout-row layout-align-start-center" />
+            <div className="flex-45 layout-row layout-align-start-center">
+              {key === 'trucking_pre' ? (
+                <span>{t('shipment:pickUp')}</span>
+              ) : ''}
+              {key === 'trucking_on' ? (
+                <span>{t('shipment:delivery')}</span>
+              ) : ''}
+              <span>{key === 'trucking_pre' || key === 'trucking_on' ? '' : capitalize(key)}</span>
+            </div>
+            <div className="flex-50 layout-row layout-align-end-center">
+              <p>
+                {
+                  !scope.hide_sub_totals
+                    ? ''
+                    : `${formattedPriceValue(quote[key].total.value)} ${quote[key].total.currency}`
+                }
+              </p>
+            </div>
+          </div>
+        )}
+        content={Object.entries(quote[`${key}`])
+          .map(array => array.filter(value => !this.unbreakableKeys.includes(value)))
+          .filter(value => value.length !== 1).map((price, i) => {
+            const subPrices = (<div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
               <div className="flex-45 layout-row layout-align-start-center">
-                {key === 'trucking_pre' ? (
-                  <span>{t('shipment:pickUp')}</span>
-                ) : ''}
-                {key === 'trucking_on' ? (
-                  <span>{t('shipment:delivery')}</span>
-                ) : ''}
-                <span>{key === 'trucking_pre' || key === 'trucking_on' ? '' : capitalize(key)}</span>
+                <span>
+                  {key === 'cargo' ? t('cargo:unitFreightRate', { unitNo: i + 1 }) : this.determineSubKey(price)}
+                </span>
               </div>
               <div className="flex-50 layout-row layout-align-end-center">
-                <p>
-                  {numberSpacing(quote[`${key}`].total.value, 2)}&nbsp;{quote.total.currency}
-                </p>
+                <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{(price[1].currency || price[1].total.currency)}</p>
               </div>
-            </div>
-          )}
-          content={Object.entries(quote[`${key}`])
-            .map(array => array.filter(value => !unbreakableKeys.includes(value)))
-            .filter(value => value.length !== 1).map((price, i) => {
-              const subPrices = (<div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
-                <div className="flex-45 layout-row layout-align-start-center">
-                  <span>{key === 'cargo' ? `${t('cargo:unitFreightRate', { unitNo: i + 1 })}` : this.determineSubKey(price)}</span>
-                </div>
-                <div className="flex-50 layout-row layout-align-end-center">
-                  <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{(price[1].currency || price[1].total.currency)}</p>
-                </div>
-              </div>)
+            </div>)
 
-              return subPrices
-            })}
-        />
-      ))
-
-    return quoteChargeBreakdown
+            return subPrices
+          })}
+      />
+    ))
   }
 }
 
 QuoteChargeBreakdown.propTypes = {
   theme: PropTypes.theme,
-  scope: PropTypes.scope,
+  scope: PropTypes.scope.isRequired,
   t: PropTypes.func.isRequired,
   quote: PropTypes.node.isRequired
 }
 
 QuoteChargeBreakdown.defaultProps = {
-  theme: null,
-  scope: {}
+  theme: null
 }
 export default translate(['shipment', 'cargo'])(QuoteChargeBreakdown)

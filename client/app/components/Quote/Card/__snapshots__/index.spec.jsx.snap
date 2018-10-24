@@ -382,9 +382,7 @@ exports[`detailed billing working properly 1`] = `
         <p
           style={Object {}}
         >
-          100.00
-           
-          EUR
+          100.00 EUR
         </p>
         <RoundButton
           active={true}
@@ -793,9 +791,7 @@ exports[`shallow rendering 1`] = `
         <p
           style={Object {}}
         >
-          100.00
-           
-          EUR
+          100.00 EUR
         </p>
         <RoundButton
           active={true}
@@ -1206,9 +1202,7 @@ exports[`show schedule options working 1`] = `
         <p
           style={Object {}}
         >
-          100.00
-           
-          EUR
+          100.00 EUR
         </p>
         <RoundButton
           active={true}
@@ -1617,9 +1611,7 @@ exports[`show schedules set to true 1`] = `
         <p
           style={Object {}}
         >
-          100.00
-           
-          EUR
+          100.00 EUR
         </p>
         <RoundButton
           active={true}

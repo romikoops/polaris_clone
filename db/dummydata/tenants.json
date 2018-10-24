@@ -680,7 +680,9 @@
         "import": "optional",
         "export": "mandatory"
       }
-    }
+    },
+    "hide_grand_total": true,
+    "hide_sub_totals": true
   },
   "other_data": {
     "cargo_item_types": ["Pallet", "Carton", "Crate", "Stack", "Drum", "Skid"],
@@ -936,7 +938,9 @@
         "import": "optional",
         "export": "mandatory"
       }
-    }
+    },
+    "hide_grand_total": true,
+    "hide_sub_totals": true
   },
   "other_data": {
     "cargo_item_types": ["Pallet", "Carton", "Crate", "Stack", "Drum", "Skid"],
