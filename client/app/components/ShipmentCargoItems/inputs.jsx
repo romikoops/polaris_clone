@@ -86,48 +86,6 @@ export default function getInputs (
     </div>
   )
 
-  inputs.grossWeight = (
-    <div className={`layout-row flex-30 layout-wrap layout-align-start-center ${styles.input_weight}`}>
-      <h4>{t('common:Gross Weight')}</h4>
-      <div className={`flex-60 layout-row ${styles.input_box}`}>
-
-        <img data-for={tooltipId} data-tip={t('common:grossWeight')} src={kg} alt="weight" border="0" />
-        <Tooltip color={theme.colors.primary} icon="fa-info-circle" text="payload_in_kg" />
-        {
-          cargoItem ? (
-            <ValidatedInput
-              wrapperClassName="flex-90"
-              name={`${i}-payload_in_kg`}
-              value={cargoItem.payload_in_kg || ''}
-              type="number"
-              onChange={handleDelta}
-              firstRenderInputs={firstRenderInputs}
-              setFirstRenderInputs={this.setFirstRenderInputs}
-              nextStageAttempt={nextStageAttempt}
-              errorStyles={{
-                fontSize: '10px',
-                bottom: '-14px'
-              }}
-              validations={{
-                nonNegative: (values, value) => value > 0,
-                maxDimension: (values, value) => value <= +maxDimensionsToApply.payloadInKg
-              }}
-              validationErrors={{
-                isDefaultRequiredValue: t('common:greaterZero'),
-                nonNegative: t('common:greaterZero'),
-                maxDimension: `${t('errors:maxWeight')} ${maxDimensionsToApply.payloadInKg}`
-              }}
-              required
-            />
-          ) : placeholderInput
-        }
-        <div className="flex-20 layout-row layout-align-center-center">
-          kg
-        </div>
-      </div>
-
-    </div>
-  )
   inputs.collectiveWeight = (
     <div className="layout-row flex-30 layout-wrap layout-align-start-center" >
       <div className={`flex-85 layout-row ${styles.input_box}`}>
@@ -141,6 +99,7 @@ export default function getInputs (
               name={`${i}-collectiveWeight`}
               value={cargoItem.payload_in_kg * cargoItem.quantity || ''}
               type="number"
+              placeholder="0"
               onChange={handleDelta}
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
@@ -170,22 +129,56 @@ export default function getInputs (
     </div>
   )
 
-  inputs.volume = (
-    <div className="flex-30 layout-row layout-wrap layout-align-end-center">
-      <div className="layout-row flex-40 layout-align-center" >
-        <p className={`${styles.input_label} flex-none`}>{t('common:volume')}:&nbsp;&nbsp;
-          <span className={styles.input_value}>{ numberSpacing(volume(cargoItem), 3) }
-          &nbsp;m<sup style={{ marginLeft: '1px', fontSize: '10px', height: '17px' }}>3</sup></span>
-        </p>
+  inputs.grossWeight = (
+    <div className={`layout-row flex-30 layout-wrap layout-align-start-center ${styles.input_weight}`}>
+      <h4>{t('common:Gross Weight')}</h4>
+      <div className={`flex-60 layout-row ${styles.input_box}`}>
+
+        <img data-for={tooltipId} data-tip={t('common:grossWeight')} src={kg} alt="weight" border="0" />
+        <Tooltip color={theme.colors.primary} icon="fa-info-circle" text="payload_in_kg" />
+        {
+          cargoItem ? (
+            <ValidatedInput
+              wrapperClassName="flex-90"
+              name={`${i}-payload_in_kg`}
+              value={cargoItem.payload_in_kg || ''}
+              type="number"
+              placeholder="0"
+              onChange={handleDelta}
+              firstRenderInputs={firstRenderInputs}
+              setFirstRenderInputs={this.setFirstRenderInputs}
+              nextStageAttempt={nextStageAttempt}
+              errorStyles={{
+                fontSize: '10px',
+                bottom: '-14px'
+              }}
+              validations={{
+                nonNegative: (values, value) => value > 0,
+                maxDimension: (values, value) => value <= +maxDimensionsToApply.payloadInKg
+              }}
+              validationErrors={{
+                isDefaultRequiredValue: t('common:greaterZero'),
+                nonNegative: t('common:greaterZero'),
+                maxDimension: `${t('errors:maxWeight')} ${maxDimensionsToApply.payloadInKg}`
+              }}
+              required
+            />
+          ) : placeholderInput
+        }
+        <div className="flex-20 layout-row layout-align-center-center">
+          kg
+        </div>
       </div>
+
     </div>
   )
 
-  inputs.total = (
-    <div className={`${styles.total} flex-15 layout-row layout-wrap layout-align-center-stretch`}>
-      <div className={`${styles.cargo_item_box} layout-row flex-100 layout-align-center-center`}>
-        <p className={`${styles.input_label} flex-none`}>{t('common:total')}</p>
-      </div>
+  inputs.volume = (
+    <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.charge_volume}`}>
+      <p className={`${styles.input_label} flex-none`}>{t('common:total')}&nbsp;{t('common:volume')}:&nbsp;&nbsp;
+        <span className={styles.input_value}>{ numberSpacing(volume(cargoItem), 3) }
+          &nbsp;m<sup style={{ marginLeft: '1px', fontSize: '10px', height: '17px' }}>3</sup></span>
+      </p>
     </div>
   )
 
@@ -206,7 +199,7 @@ export default function getInputs (
       )
     ) {
       return (
-        <div className="flex-30 layout-align-center-center layout-row">
+        <div className={`flex-none layout-align-center-center layout-row ${styles.single_charge}`}>
           { switchIcon(mot) }
           <p className={`${styles.chargeable_weight_value} ${styles.input_value}`}>
             {t('common:unavailable')}
@@ -216,7 +209,7 @@ export default function getInputs (
     }
 
     return (
-      <div className="flex-30 layout-align-center-center layout-row">
+      <div className={`flex-none layout-align-center-center layout-row ${styles.single_charge}`}>
         { switchIcon(mot) }
         <p className={`${styles.chargeable_weight_value} ${styles.input_value}`}>
           { numberSpacing(chargeableWeight(cargoItem, mot), 1) } kg
@@ -226,12 +219,12 @@ export default function getInputs (
   }
   inputs.chargeableWeight = (
     <div className={
-      `${styles.chargeable_weight} layout-row flex ` +
-      'layout-wrap layout-align-end-center'
+      `${styles.chargeable_weight} layout-row flex-100 ` +
+      'layout-wrap layout-align-start-center'
     }
     >
-      <div className="layout-row flex-30 layout-wrap layout-align-end-center" >
-        <p className={`${styles.input_label} flex-none`}>{t('cargo:chargebleWeight')}: </p>
+      <div className="layout-row flex-none layout-wrap layout-align-end-center" >
+        <p className={`${styles.subchargeable} flex-none`}>{t('cargo:chargeble')}: </p>
       </div>
       <div className={
         `${styles.chargeable_weight_values} flex ` +
@@ -282,6 +275,7 @@ export default function getInputs (
               value={cargoItem.dimension_z || ''}
               type="number"
               min="0"
+              placeholder="0"
               step="any"
               onChange={(event, hasError) => handleDelta(event, hasError, heightRef)}
               firstRenderInputs={firstRenderInputs}
@@ -349,6 +343,7 @@ export default function getInputs (
               value={cargoItem.dimension_x || ''}
               type="number"
               min="0"
+              placeholder="0"
               step="any"
               onChange={(event, hasError) => handleDelta(event, hasError, lengthRef)}
               firstRenderInputs={firstRenderInputs}
@@ -418,6 +413,7 @@ export default function getInputs (
               type="number"
               min="0"
               step="any"
+              placeholder="0"
               onChange={(event, hasError) => handleDelta(event, hasError, widthRef)}
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
@@ -460,7 +456,7 @@ export default function getInputs (
         onClick={scope.dangerous_goods ? '' : () => toggleModal('noDangerousGoods')}
       />
       <div className="layout-row flex-75 layout-wrap layout-align-start-center">
-        <p className={`${styles.input_label} flex-none`}>{t('common:dangerousGoods')}</p>
+        <p className={`${styles.input_check} flex-none`}>{t('common:dangerousGoods')}</p>
         <Tooltip color={theme.colors.primary} icon="fa-info-circle" text="dangerous_goods" />
       </div>
     </div>
@@ -479,7 +475,7 @@ export default function getInputs (
         onClick={scope.non_stackable_goods ? '' : () => toggleModal('nonStackable')}
       />
       <div className="layout-row flex-65 layout-wrap layout-align-start-center">
-        <p className={`${styles.input_label} flex-none`}>{t('common:nonStackable')}</p>
+        <p className={`${styles.input_check} flex-none`}>{t('common:nonStackable')}</p>
         <Tooltip color={theme.colors.primary} icon="fa-info-circle" text="non_stackable" />
       </div>
     </div>

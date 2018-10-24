@@ -141,7 +141,7 @@ class ShipmentCargoItems extends Component {
               ''
             )}
           </div>
-          <div className={`flex-100 layout-row ${styles.cargo_unit_inputs}`}>
+          <div className={`flex-100 layout-row layout-wrap ${styles.cargo_unit_inputs}`}>
             <div className="flex-15 layout-row layout-align-center">
               <QuantityInput
                 i={i}
@@ -151,50 +151,50 @@ class ShipmentCargoItems extends Component {
               />
             </div>
             <div className={`${styles.cargo_item_box} ${styles.cargo_item_inputs} flex-85`}>
+              <div style={{ position: 'relative' }}>
+                <div
+                  className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.padding_section}`}
+                  style={{ marginBottom: '20px' }}
+                >
+                  {inputs.length}
+                  {inputs.width}
+                  {inputs.height}
+                  <div className="flex-5" />
+                  {scope.consolidate_cargo ? inputs.collectiveWeight : inputs.grossWeight}
+                </div>
+                <div className="flex-100 layout-row" style={{ borderBottom: '1px solid rgb(236, 236, 236)' }} />
+                <div
+                  className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.padding_section}`}
+                  style={{ margin: '20px 0' }}
+                >
+                  {inputs.colliType}
+                  {inputs.nonStackable}
+                  {inputs.dangerousGoods}
+                </div>
+              </div>
               <div
-                className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.padding_section}`}
-                style={{ marginBottom: '20px' }}
-              >
-                {inputs.length}
-                {inputs.width}
-                {inputs.height}
-                <div className="flex-5" />
-                {scope.consolidate_cargo ? inputs.collectiveWeight : inputs.grossWeight}
-              </div>
-              <div className="flex-100 layout-row" style={{ borderBottom: '1px solid rgb(236, 236, 236)' }} />
-              <div
-                className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.padding_section}`}
-                style={{ marginTop: '20px' }}
-              >
-                {inputs.colliType}
-                {inputs.nonStackable}
-                {inputs.dangerousGoods}
-              </div>
-              <div className={styles.expandIcon} onClick={() => this.toggleCargoItemInfoExpanded(i)}>
-                {t('common:additionalDetails')}
-                <i className={`${cargoItemInfoExpanded[i] && styles.rotated} fa fa-chevron-right`} />
-              </div>
-            </div>
-          </div>
-          <div
-            className={
-              `${styles.cargo_item_info} ` +
+                className={
+                  `${styles.cargo_item_info} ` +
               `${cargoItemInfoExpanded[i] && styles.expanded} ` +
               'flex-100'
-            }
-          >
-            <div
-              className={
-                `${styles.inner_cargo_item_info} layout-row layout-wrap layout-align-start`
-              }
-            >
-              {inputs.total}
-              <div className={`${styles.cargo_item_box} flex layout-row`}>
-                {inputs.volume}
-                {inputs.chargeableWeight}
+                }
+              >
+                <div
+                  className={
+                    `${styles.inner_cargo_item_info} layout-row flex-100 layout-wrap layout-align-start`
+                  }
+                >
+                  <div className={`${styles.cargo_item_box} flex-25 layout-wrap layout-row`}>
+                    {inputs.volume}
+                    {inputs.chargeableWeight}
+                  </div>
+                </div>
               </div>
+
             </div>
+
           </div>
+
         </div>
       )
     }
