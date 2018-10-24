@@ -61,8 +61,9 @@ class ShipmentQuotationContent extends Component {
       cargoView
     } = this.props
 
+    const dnrKeys = ['total', 'edited_total', 'name']
     const pricesArr = Object.keys(shipment.selected_offer).splice(2).length !== 0 ? (
-      Object.keys(shipment.selected_offer).splice(2).map(key => (<CollapsingBar
+      Object.keys(shipment.selected_offer).splice(2).filter(key => !dnrKeys.includes(key)).map(key => (<CollapsingBar
         showArrow
         collapsed={!this.state.expander[`${key}`]}
         theme={theme}
@@ -83,20 +84,24 @@ class ShipmentQuotationContent extends Component {
               <span>{key === 'trucking_pre' || key === 'trucking_on' ? '' : capitalize(key)}</span>
             </div>
             <div className="flex-50 layout-row layout-align-end-center">
-              <p>{numberSpacing(shipment.selected_offer[`${key}`].total.value, 2)}&nbsp;{shipment.selected_offer.total.currency}</p>
+              {shipment.selected_offer[`${key}`].total
+                ? <p>
+                  {numberSpacing(shipment.selected_offer[`${key}`].total.value, 2)}&nbsp;{shipment.selected_offer.total.currency}
+                </p>
+                : ''
+              }
             </div>
           </div>
         )}
         content={Object.entries(shipment.selected_offer[`${key}`])
-          .map(array => array.filter(value =>
-            value !== 'total' && value !== 'edited_total'))
-          .filter(value => value.length !== 1).map((price) => {
+          .map(array => array.filter(value => !dnrKeys.includes(value)))
+          .filter(value => value.length !== 1).map((price, i) => {
             const subPrices = (<div className={`flex-100 layout-row layout-align-start-center ${quoteStyles.sub_price_row}`}>
               <div className="flex-45 layout-row layout-align-start-center">
-                <span>{key === 'cargo' ? `${t('shipment:freightRate')}` : this.determineSubKey(price[0])}</span>
+                <span>{key === 'cargo' ? `${t('cargo:unitFreightRate', { unitNo: i + 1 })}` : this.determineSubKey(price[0])}</span>
               </div>
               <div className="flex-50 layout-row layout-align-end-center">
-                <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{shipment.selected_offer.total.currency}</p>
+                <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{(price[1].currency || price[1].total.currency)}</p>
               </div>
             </div>)
 
