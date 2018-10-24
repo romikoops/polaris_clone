@@ -354,12 +354,26 @@ exports[`detailed billing working properly 1`] = `
            
           EUR
         </p>
-        <input
-          checked={false}
-          className="pointy"
-          name="checked"
-          onClick={[Function]}
-          type="checkbox"
+        <RoundButton
+          active={true}
+          back={false}
+          classNames="pointy layout-row layout-align-center-center add_button shorter"
+          disabled={false}
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass=""
+          inverse={false}
+          size="small"
+          text="Add"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
         />
       </div>
     </div>
@@ -720,12 +734,26 @@ exports[`shallow rendering 1`] = `
            
           EUR
         </p>
-        <input
-          checked={false}
-          className="pointy"
-          name="checked"
-          onClick={[Function]}
-          type="checkbox"
+        <RoundButton
+          active={true}
+          back={false}
+          classNames="pointy layout-row layout-align-center-center add_button shorter"
+          disabled={false}
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass=""
+          inverse={false}
+          size="small"
+          text="Add"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
         />
       </div>
     </div>
@@ -1087,12 +1115,26 @@ exports[`show schedule options working 1`] = `
            
           EUR
         </p>
-        <input
-          checked={false}
-          className="pointy"
-          name="checked"
-          onClick={[Function]}
-          type="checkbox"
+        <RoundButton
+          active={true}
+          back={false}
+          classNames="pointy layout-row layout-align-center-center add_button shorter"
+          disabled={false}
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass=""
+          inverse={false}
+          size="small"
+          text="Add"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
         />
       </div>
     </div>
@@ -1453,12 +1495,26 @@ exports[`show schedules set to true 1`] = `
            
           EUR
         </p>
-        <input
-          checked={false}
-          className="pointy"
-          name="checked"
-          onClick={[Function]}
-          type="checkbox"
+        <RoundButton
+          active={true}
+          back={false}
+          classNames="pointy layout-row layout-align-center-center add_button shorter"
+          disabled={false}
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass=""
+          inverse={false}
+          size="small"
+          text="Add"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
         />
       </div>
     </div>

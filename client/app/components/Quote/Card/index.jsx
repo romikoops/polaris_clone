@@ -414,12 +414,13 @@ class QuoteCard extends PureComponent {
             <div className="flex layout-row layout-align-end-center">
               <p style={!isQuotationTool ? { paddingRight: '18px' } : {}}>{numberSpacing(quote.total.value, 2)}&nbsp;{quote.total.currency}</p>
               {isQuotationTool ? (
-                <input
-                  className="pointy"
-                  name="checked"
-                  type="checkbox"
-                  onClick={() => this.handleClickChecked()}
-                  checked={this.props.isChecked}
+                <RoundButton
+                  active={!this.state.isChecked}
+                  classNames={`pointy layout-row layout-align-center-center ${styles.add_button} ${!this.state.isChecked ? styles.shorter : styles.longer}`}
+                  size="small"
+                  handleNext={() => this.handleClickChecked()}
+                  theme={theme}
+                  text={!this.state.isChecked ? t('common:add') : t('common:remove')}
                 />
               ) : ''}
 
