@@ -75,6 +75,7 @@ postgresql:
       periodSeconds: 5
 
   persistence:
+    storageClass: "regional-standard"
     size: 10Gi
 
   resources:

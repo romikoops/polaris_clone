@@ -162,7 +162,7 @@ deploy:
     - ci_environment_slug.txt
 
   environment:
-    name: review/$CI_COMMIT_REF_NAME
+    name: $CI_COMMIT_REF_NAME
     url: https://demo.$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
     on_stop: stop_review
 
@@ -282,10 +282,9 @@ stop_review:
   script:
     - delete
   environment:
-    name: review/$CI_COMMIT_REF_NAME
+    name: $CI_COMMIT_REF_NAME
     action: stop
   when: manual
-  allow_failure: true
 
 .auto_devops: &auto_devops |
   # Auto DevOps variables and functions
@@ -309,19 +308,18 @@ stop_review:
 
   function deploy() {
     # Delete failed deployment
-    if [[ -n "$(helm ls -q "^$name$")" ]]; then
+    if [[ -n "$(helm ls --failed -q "^$CI_ENVIRONMENT_SLUG$")" ]]; then
       delete || true
     fi
     _helm_deploy
   }
 
   function delete() {
-    name="$CI_ENVIRONMENT_SLUG"
-
-    if [[ -n "$(helm ls -q "^$name$")" ]]; then
+    if [[ -n "$(helm ls --failed --deleted -q "^$CI_ENVIRONMENT_SLUG$")" ]]; then
       helm delete --purge "$name"
-      kubectl delete namespace ${CI_ENVIRONMENT_SLUG}
     fi
+
+    kubectl delete namespace ${CI_ENVIRONMENT_SLUG} || true
   }
 
   function _helm_deploy() {
