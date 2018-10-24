@@ -100,14 +100,12 @@ class ShipmentLocationBox extends Component {
     this.setNexusesFromRoute = this.setNexusesFromRoute.bind(this)
     this.resetAuto = this.resetAuto.bind(this)
     this.setMarker = this.setMarker.bind(this)
-    this.swapMarkers = this.swapMarkers.bind(this)
     this.handleAuto = this.handleAuto.bind(this)
     this.changeAddressFormVisibility = this.changeAddressFormVisibility.bind(this)
     this.toggleModal = this.toggleModal.bind(this)
     this.selectedRoute = this.selectedRoute.bind(this)
     this.loadPrevReq = this.loadPrevReq.bind(this)
     this.handleAddressFormFocus = this.handleAddressFormFocus.bind(this)
-    this.handleSwap = this.handleSwap.bind(this)
     this.scopeNexusOptions = this.scopeNexusOptions.bind(this)
   }
 
@@ -129,7 +127,7 @@ class ShipmentLocationBox extends Component {
   componentDidMount () {
     this.initMap()
   }
-  
+
   componentWillReceiveProps (nextProps) {
     if (this.props.has_on_carriage && !nextProps.has_on_carriage) {
       this.prepForSelect('destination')
@@ -668,18 +666,6 @@ class ShipmentLocationBox extends Component {
         }, 500)
     }
 
-    if (
-      (!newState.oSelect || (newState.oSelect && !newState.oSelect.label)) ||
-      (!newState.dSelect || (newState.dSelect && !newState.dSelect.label))
-    ) {
-      if (this.state.swapStarted) {
-        this.setState({
-          swapStarted: false
-        }, () => this.props.handleSwap())
-        this.setRouteError(shipment.origin.nexus_name, shipment.destination.nexus_name)
-      }
-    }
-
     this.setState(newState, () => {
       this.prepForSelect('destination')
       this.prepForSelect('origin')
@@ -747,61 +733,6 @@ class ShipmentLocationBox extends Component {
 
     this.setState(newState)
   }
-  handleSwap () {
-    /* eslint-disable camelcase */
-    const { has_on_carriage, has_pre_carriage } = this.props
-
-    // Handle the cases for when trucking exists
-    if (has_pre_carriage || has_on_carriage) {
-      this.handleTrucking({
-        target: {
-          name: 'has_on_carriage',
-          checked: has_pre_carriage
-        }
-      })
-      this.handleTrucking({
-        target: {
-          name: 'has_pre_carriage',
-          checked: has_on_carriage
-        }
-      })
-
-      const {
-        truckingHubs,
-        truckTypes,
-        originTruckingAvailable,
-        destinationTruckingAvailable
-      } = this.state
-
-      const newTruckTypes = {
-        destination: truckTypes.origin,
-        origin: truckTypes.destination
-      }
-      const newTruckingHubs = {
-        destination: truckingHubs.origin,
-        origin: truckingHubs.destination
-      }
-      this.swapMarkers()
-      this.setState({
-        truckingHubs: newTruckingHubs,
-        truckTypes: newTruckTypes,
-        originTruckingAvailable: destinationTruckingAvailable,
-        destinationTruckingAvailable: originTruckingAvailable,
-        swapStarted: true
-      }, () => this.props.handleSwap())
-
-      // Address Fields Errors
-      const originFieldsHaveErrors = this.state.destinationFieldsHaveErrors
-      const destinationFieldsHaveErrors = this.state.originFieldsHaveErrors
-      this.setState({ originFieldsHaveErrors, destinationFieldsHaveErrors })
-    } else {
-      this.setState({
-        swapStarted: true
-      }, () => this.props.handleSwap())
-    }
-
-    /* eslint-enable camelcase */
-  }
   clearAddressFields (target) {
     const targets = target ? [target] : ['origin', 'destination']
     targets.forEach((t) => {
@@ -817,23 +748,6 @@ class ShipmentLocationBox extends Component {
         },
         [selectKey]: {}
       }), () => this.props.setTargetAddress(t, {}))
-    })
-  }
-  swapMarkers () {
-    const { markers } = this.state
-    const newMarkers = {
-      origin: markers.destination,
-      destination: markers.origin
-    }
-    this.setState({ markers: { origin: {}, destination: {} } }, () => {
-      if (newMarkers.origin.title !== undefined) {
-        markers.destination.setMap(null)
-        this.setMarker(newMarkers.origin.position, newMarkers.origin.title, 'origin')
-      }
-      if (newMarkers.destination.title !== undefined) {
-        markers.origin.setMap(null)
-        this.setMarker(newMarkers.destination.position, newMarkers.destination.title, 'destination')
-      }
     })
   }
 
@@ -1425,7 +1339,6 @@ ShipmentLocationBox.propTypes = {
   shipmentDispatch: PropTypes.objectOf(PropTypes.func),
   setTargetAddress: PropTypes.func.isRequired,
   handleAddressChange: PropTypes.func.isRequired,
-  handleSwap: PropTypes.func.isRequired,
   handleCarriageChange: PropTypes.func.isRequired,
   allNexuses: PropTypes.shape({
     origins: PropTypes.array,
