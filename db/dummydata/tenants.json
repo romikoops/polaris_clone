@@ -675,7 +675,7 @@
     }
   },
   "other_data": {
-    "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"],
+    "cargo_item_types": ["Pallet", "Carton", "Crate", "Stack", "Drum", "Skid"],
     "incoterms": ["EXW", "FCA", "FOB", "FAS"]
   }
 }, {
@@ -927,7 +927,7 @@
     }
   },
   "other_data": {
-    "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"],
+    "cargo_item_types": ["Pallet", "Carton", "Crate", "Stack", "Drum", "Skid"],
     "incoterms": ["EXW", "FCA", "FOB", "FAS"]
   }
 }, {
