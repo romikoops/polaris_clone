@@ -97,7 +97,7 @@ module MultiTenantTools
   end
 
   def update_tenant_jsons
-    @json_data = JSON.parse(File.read("#{Rails.root}/db/static_data/tenants.json"))
+    @json_data = JSON.parse(File.read("#{Rails.root}/db/dummydata/tenants.json"))
     @json_data.each do |tenant|
       subdomain = tenant['subdomain']
       File.open("#{Rails.root}/db/dummydata/#{subdomain}/#{subdomain}.json", 'w') { |file| file.write(tenant.to_json) }
@@ -108,7 +108,7 @@ module MultiTenantTools
   end
 
   def sync_tenant_jsons
-    @json_data = JSON.parse(File.read("#{Rails.root}/db/static_data/tenants.json"))
+    @json_data = JSON.parse(File.read("#{Rails.root}/db/dummydata/tenants.json"))
     @new_data = []
     @json_data.each do |tenant|
       subdomain = tenant['subdomain']
