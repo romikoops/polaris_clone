@@ -46,45 +46,30 @@
           </div>
         </div>
 
-      <% s.selected_offer.each do |k, v| %>
-          <div class="sub-prices">
-            <% if k != "total" && k != "edited_total" %>
-              <div class="total-price-single">
-                <% if k == "trucking_pre" %>
-                  <h4>Pick-up</h4>
-                <% end %>
-                <% if k == "trucking_on" %>
-                  <h4>Delivery</h4>
-                <% end %>
-                <% if k != "trucking_on" && k != "trucking_pre" %>
-                  <h4><%= k %></h4>
-                <% end %>
-                <h3><%= v["total"]["value"].to_f.truncate(2) %>&nbsp;<%= v["total"]["currency"] %></h3>
-              </div>
-              <div class="subtotal-price-group">
-                <% v.each do |a, b| %>
-                  <% if a != "total" && a != "edited_total" %>
-                    <div class="subtotal-price-single">
-                    <% if a == "trucking_lcl" %>
-                      <h4>Lcl</h4>
-                    <% end %>
-                    <% if a == "trucking_fcl" %>
-                      <h4>Fcl</h4>
-                    <% end %>
-                    <% if k == "cargo" %>
-                      <h4>Cargo</h4>
-                    <% end %>
-                    <% if k != "cargo" && a != "trucking_lcl" && a != "trucking_fcl" %>
-                      <h4><%= a %></h4>
-                    <% end %>
-                      <h3> <%= b["value"] || b["total"]["value"].to_f.truncate(2).to_s %>&nbsp;<%= b["currency"] || b["total"]["currency"] %></h3>
-                    </div>
-                  <% end %>
-                <% end %>
-              </div>
+      <% s.selected_offer.except("total", "edited_total", "name").each do |charge_key, charge| %>
+        <div class="sub-prices">
+          <div class="total-price-single">
+            <h4><%= charge["name"] %></h4>
+            <% if charge != "Grand Total" %>
+              <h3><%= charge["total"]["value"].to_f.truncate(2) %>&nbsp;<%= charge["total"]["currency"] %></h3>
             <% end %>
           </div>
-        <% end %>
+          <div class="subtotal-price-group">
+            <% if charge != "Grand Total" %>
+              <% charge.except("total", "edited_total", "name").each do |sub_charge_key, sub_charge| %>
+                <div class="subtotal-price-single">
+                  <h4><%= sub_charge["name"] %></h4>
+                  <% if sub_charge["value"] %>
+                    <h3> <%= sub_charge["value"].to_f.truncate(2).to_s %>&nbsp;<%= sub_charge["currency"] %></h3>
+                  <% else %>
+                    <h3> <%= sub_charge["total"]["value"] %>&nbsp;<%= sub_charge["total"]["currency"] %></h3>
+                  <% end %>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
 
         <div class="total-row">
           <h4>Total</h4>
