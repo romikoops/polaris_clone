@@ -70,7 +70,7 @@ exports[`shallow render 1`] = `
     iconClass=""
     inverse={false}
     size="small"
-    text="Request"
+    text="Download"
     theme={
       Object {
         "colors": Object {
@@ -100,7 +100,7 @@ exports[`square is true 1`] = `
     icon=""
     iconClass=""
     size="small"
-    text="Request"
+    text="Download"
     theme={
       Object {
         "colors": Object {

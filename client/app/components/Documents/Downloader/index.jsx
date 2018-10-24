@@ -79,7 +79,7 @@ class DocumentsDownloader extends React.Component {
     const start = square ? (
       <SquareButton
         classNames="request"
-        text={t('common:request')}
+        text={t('doc:download')}
         theme={theme}
         size={size}
         disabled={disabled}
@@ -90,7 +90,7 @@ class DocumentsDownloader extends React.Component {
     ) : (
       <RoundButton
         classNames="request"
-        text={t('common:request')}
+        text={t('doc:download')}
         theme={theme}
         size={size}
         disabled={disabled}
@@ -133,6 +133,7 @@ class DocumentsDownloader extends React.Component {
       button = loadingBox
     } else if (!loading && requested) {
       button = ready
+      this.downloadFile()
     }
 
     return (
