@@ -6,10 +6,17 @@
   <% precarriage_color = shipment.has_pre_carriage ? primary_color : neutral_color %>
   <% oncarriage_color = shipment.has_on_carriage ? primary_color : neutral_color %>
 
-  <div class="title text-center">
-    <h1>QUOTATIONS</h1>
-    <hr style="border-color: <%= primary_color %>">
-    <p><%= tenant.name %></p>
+  <div class="title display-flex">
+    <div>
+      <h1>QUOTATIONS</h1>
+      <hr style="border-color: <%= primary_color %>">
+      <p><%= tenant.name %></p>
+    </div>
+    <div class="agent-info">
+        <p><strong><%= shipment.user.first_name %> <%= shipment.user.last_name %></strong></p>
+        <p><%= shipment.user.email %></p>
+        <p><%= shipment.user.phone %></p>
+    </div>
   </div>
 
     <% shipments.map do |s| %>
