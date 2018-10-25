@@ -35,13 +35,7 @@ masterKey: ""
 
 nodeSelector: {}
 tolerations: []
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: cloud.google.com/gke-preemptible
-          operator: Exists
+affinity: {}
 
 postgresql:
   enabled: true
@@ -75,7 +69,8 @@ postgresql:
       periodSeconds: 5
 
   persistence:
-    storageClass: "regional-standard"
+    enabled: false
+    # storageClass: "regional-standard"
     size: 10Gi
 
   resources:
@@ -85,10 +80,10 @@ postgresql:
 
   nodeSelector: {}
   tolerations: []
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: cloud.google.com/gke-preemptible
-            operator: Exists
+  affinity: {}
+    # nodeAffinity:
+    #   requiredDuringSchedulingIgnoredDuringExecution:
+    #     nodeSelectorTerms:
+    #     - matchExpressions:
+    #       - key: cloud.google.com/gke-preemptible
+    #         operator: Exists
