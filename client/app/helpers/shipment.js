@@ -3,7 +3,9 @@ import { shipmentConstants, moment } from "../constants";
 export function totalPrice (shipment) {
   const selectedOffer = shipment.selected_offer
 
-  if (!selectedOffer) return {}
+  if (!selectedOffer) {
+    return shipment.edited_total || shipment.total_price || {}
+  }
 
   return selectedOffer.edited_total || selectedOffer.total || {}
 }
