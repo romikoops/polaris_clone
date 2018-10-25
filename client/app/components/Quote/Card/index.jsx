@@ -31,7 +31,6 @@ class QuoteCard extends PureComponent {
 
     return hubType
   }
-
   constructor (props) {
     super(props)
     this.state = {
@@ -39,7 +38,8 @@ class QuoteCard extends PureComponent {
       showSchedules: (props.result &&
         props.result.schedules &&
         props.result.schedules.length > 0 &&
-        props.result.schedules[0].etd !== null)
+        props.result.schedules[0].etd !== null),
+      expander: {}
     }
     this.handleClickChecked = this.handleClickChecked.bind(this)
   }
@@ -56,6 +56,14 @@ class QuoteCard extends PureComponent {
     this.setState(prevState => ({
       isChecked: !prevState.isChecked
     }), () => handleClick(this.state.isChecked))
+  }
+  toggleExpander (key) {
+    this.setState({
+      expander: {
+        ...this.state.expander,
+        [key]: !this.state.expander[key]
+      }
+    })
   }
   toggleShowSchedules (key) {
     this.setState(prevState => ({
@@ -308,14 +316,13 @@ class QuoteCard extends PureComponent {
             </div>
           )}
         />
-        <CollapsingContent
-          collapsed={showSchedules}
-          content={<QuoteChargeBreakdown
+        <CollapsingContent collapsed={showSchedules}>
+          <QuoteChargeBreakdown
             theme={theme}
             scope={tenant.data.scope}
             quote={quote}
-          />}
-        />
+          />
+        </CollapsingContent>
         <div className="flex-100 layout-wrap layout-align-start-stretch">
           <div className={`flex-100 layout-row layout-align-space-between-stretch ${styles.total_row}`}>
             {this.buttonToDisplay()}

@@ -74,7 +74,6 @@ class QuoteChargeBreakdown extends Component {
           showArrow
           collapsed={!this.state.expander[`${key}`]}
           theme={theme}
-          contentStyle={styles.sub_price_row_wrapper}
           headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
           handleCollapser={() => this.toggleExpander(`${key}`)}
           mainWrapperStyle={{ borderTop: '1px solid #E0E0E0', minHeight: '50px' }}
