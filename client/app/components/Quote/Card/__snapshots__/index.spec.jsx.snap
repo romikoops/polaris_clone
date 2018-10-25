@@ -316,49 +316,47 @@ exports[`detailed billing working properly 1`] = `
         </div>
       </div>
     }
-    contentStyle={Object {}}
     minHeight=""
   />
   <CollapsingContent
     collapsed={false}
-    content={
-      <QuoteChargeBreakdown
-        quote={
-          Object {
-            "total": Object {
-              "currency": "EUR",
-              "value": 100,
-            },
-          }
-        }
-        scope={
-          Object {
-            "closed_quotation_tool": true,
-            "detailed_billing": true,
-            "modes_of_transport": Object {
-              "air": Object {},
-              "ocean": Object {
-                "OCEAN_LOAD_TYPE": true,
-              },
-              "rail": Object {},
-              "truck": Object {},
-            },
-          }
-        }
-        t={[Function]}
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-      />
-    }
-    contentStyle={Object {}}
+    content=""
     minHeight=""
-  />
+  >
+    <QuoteChargeBreakdown
+      quote={
+        Object {
+          "total": Object {
+            "currency": "EUR",
+            "value": 100,
+          },
+        }
+      }
+      scope={
+        Object {
+          "closed_quotation_tool": true,
+          "detailed_billing": true,
+          "modes_of_transport": Object {
+            "air": Object {},
+            "ocean": Object {
+              "OCEAN_LOAD_TYPE": true,
+            },
+            "rail": Object {},
+            "truck": Object {},
+          },
+        }
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </CollapsingContent>
   <div
     className="flex-100 layout-wrap layout-align-start-stretch"
   >
@@ -730,48 +728,46 @@ exports[`shallow rendering 1`] = `
         </div>
       </div>
     }
-    contentStyle={Object {}}
     minHeight=""
   />
   <CollapsingContent
     collapsed={false}
-    content={
-      <QuoteChargeBreakdown
-        quote={
-          Object {
-            "total": Object {
-              "currency": "EUR",
-              "value": 100,
-            },
-          }
-        }
-        scope={
-          Object {
-            "closed_quotation_tool": true,
-            "modes_of_transport": Object {
-              "air": Object {},
-              "ocean": Object {
-                "OCEAN_LOAD_TYPE": true,
-              },
-              "rail": Object {},
-              "truck": Object {},
-            },
-          }
-        }
-        t={[Function]}
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-      />
-    }
-    contentStyle={Object {}}
+    content=""
     minHeight=""
-  />
+  >
+    <QuoteChargeBreakdown
+      quote={
+        Object {
+          "total": Object {
+            "currency": "EUR",
+            "value": 100,
+          },
+        }
+      }
+      scope={
+        Object {
+          "closed_quotation_tool": true,
+          "modes_of_transport": Object {
+            "air": Object {},
+            "ocean": Object {
+              "OCEAN_LOAD_TYPE": true,
+            },
+            "rail": Object {},
+            "truck": Object {},
+          },
+        }
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </CollapsingContent>
   <div
     className="flex-100 layout-wrap layout-align-start-stretch"
   >
@@ -1144,49 +1140,47 @@ exports[`show schedule options working 1`] = `
         </div>
       </div>
     }
-    contentStyle={Object {}}
     minHeight=""
   />
   <CollapsingContent
     collapsed={true}
-    content={
-      <QuoteChargeBreakdown
-        quote={
-          Object {
-            "total": Object {
-              "currency": "EUR",
-              "value": 100,
-            },
-          }
-        }
-        scope={
-          Object {
-            "closed_quotation_tool": true,
-            "detailed_billing": true,
-            "modes_of_transport": Object {
-              "air": Object {},
-              "ocean": Object {
-                "OCEAN_LOAD_TYPE": true,
-              },
-              "rail": Object {},
-              "truck": Object {},
-            },
-          }
-        }
-        t={[Function]}
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-      />
-    }
-    contentStyle={Object {}}
+    content=""
     minHeight=""
-  />
+  >
+    <QuoteChargeBreakdown
+      quote={
+        Object {
+          "total": Object {
+            "currency": "EUR",
+            "value": 100,
+          },
+        }
+      }
+      scope={
+        Object {
+          "closed_quotation_tool": true,
+          "detailed_billing": true,
+          "modes_of_transport": Object {
+            "air": Object {},
+            "ocean": Object {
+              "OCEAN_LOAD_TYPE": true,
+            },
+            "rail": Object {},
+            "truck": Object {},
+          },
+        }
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </CollapsingContent>
   <div
     className="flex-100 layout-wrap layout-align-start-stretch"
   >
@@ -1558,48 +1552,46 @@ exports[`show schedules set to true 1`] = `
         </div>
       </div>
     }
-    contentStyle={Object {}}
     minHeight=""
   />
   <CollapsingContent
     collapsed={true}
-    content={
-      <QuoteChargeBreakdown
-        quote={
-          Object {
-            "total": Object {
-              "currency": "EUR",
-              "value": 100,
-            },
-          }
-        }
-        scope={
-          Object {
-            "closed_quotation_tool": true,
-            "modes_of_transport": Object {
-              "air": Object {},
-              "ocean": Object {
-                "OCEAN_LOAD_TYPE": true,
-              },
-              "rail": Object {},
-              "truck": Object {},
-            },
-          }
-        }
-        t={[Function]}
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-      />
-    }
-    contentStyle={Object {}}
+    content=""
     minHeight=""
-  />
+  >
+    <QuoteChargeBreakdown
+      quote={
+        Object {
+          "total": Object {
+            "currency": "EUR",
+            "value": 100,
+          },
+        }
+      }
+      scope={
+        Object {
+          "closed_quotation_tool": true,
+          "modes_of_transport": Object {
+            "air": Object {},
+            "ocean": Object {
+              "OCEAN_LOAD_TYPE": true,
+            },
+            "rail": Object {},
+            "truck": Object {},
+          },
+        }
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </CollapsingContent>
   <div
     className="flex-100 layout-wrap layout-align-start-stretch"
   >
