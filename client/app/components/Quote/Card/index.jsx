@@ -3,7 +3,13 @@ import { translate } from 'react-i18next'
 import styles from './index.scss'
 import PropTypes from '../../../prop-types'
 import { moment } from '../../../constants'
-import { switchIcon, gradientTextGenerator, numberSpacing, capitalize } from '../../../helpers'
+import {
+  switchIcon,
+  gradientTextGenerator,
+  numberSpacing,
+  capitalize,
+  formattedPriceValue
+} from '../../../helpers'
 import { ChargeIcons } from './ChargeIcons'
 import QuoteChargeBreakdown from '../../QuoteChargeBreakdown/QuoteChargeBreakdown'
 import { RoundButton } from '../../RoundButton/RoundButton'
@@ -140,6 +146,7 @@ class QuoteCard extends PureComponent {
       aggregatedCargo,
       t
     } = this.props
+    const { scope } = tenant.data
     const {
       quote,
       schedules,
@@ -327,10 +334,16 @@ class QuoteCard extends PureComponent {
           <div className={`flex-100 layout-row layout-align-space-between-stretch ${styles.total_row}`}>
             {this.buttonToDisplay()}
             <div className={`${isQuotationTool ? 'flex' : 'flex-10'} layout-row layout-align-start-center`}>
-              <span style={{ textAlign: 'right' }}>{t('common:total')}</span>
+              <span style={{ textAlign: 'right' }}>{scope.hide_grand_total ? '' : t('common:total')}</span>
             </div>
             <div className="flex layout-row layout-align-end-center">
-              <p style={!isQuotationTool ? { paddingRight: '18px' } : {}}>{numberSpacing(quote.total.value, 2)}&nbsp;{quote.total.currency}</p>
+              <p style={!isQuotationTool ? { paddingRight: '18px' } : {}}>
+                {
+                  scope.hide_grand_total
+                    ? ''
+                    : `${formattedPriceValue(quote.total.value)} ${quote.total.currency}`
+                }
+              </p>
               {isQuotationTool ? (
                 <RoundButton
                   active={!this.state.isChecked}
