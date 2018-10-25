@@ -3,6 +3,8 @@
 module TruckingTools
   module_function
 
+  LOAD_METERAGE_AREA_DIVISOR = 24_000
+  CBM_VOLUME_DIVISOR = 1_000_000
   def calculate_trucking_price(pricing, cargo, _direction, km, scope)
     fees = {}
     result = {}
@@ -318,7 +320,7 @@ module TruckingTools
   end
 
   def calc_cargo_load_meterage_height(trucking_pricing, cargo_object, cargo)
-    load_meterage = (cargo.dimension_x * cargo.dimension_y) / 24_000
+    load_meterage = (cargo.dimension_x * cargo.dimension_y) / LOAD_METERAGE_AREA_DIVISOR
     load_meter_weight = load_meterage * trucking_pricing.load_meterage['ratio']
     trucking_chargeable_weight = load_meter_weight > cargo.payload_in_kg ? load_meter_weight : cargo.payload_in_kg
     cargo_object['non_stackable']['weight'] += trucking_chargeable_weight * cargo.quantity
@@ -327,8 +329,10 @@ module TruckingTools
   end
 
   def calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
-    load_meter_weight = ((cargo.dimension_x * cargo.dimension_y * cargo.quantity) / 24_000) * trucking_pricing.load_meterage['ratio']
-    cbm_weight = ((cargo.dimension_x * cargo.dimension_y * cargo.dimension_z * cargo.quantity)/1000000) * (trucking_pricing.cbm_ratio || 1)
+    load_meter_var = (cargo.dimension_x * cargo.dimension_y * cargo.quantity) / LOAD_METERAGE_AREA_DIVISOR
+    load_meter_weight = load_meter_var * trucking_pricing.load_meterage['ratio']
+    cbm_var = (cargo.dimension_x * cargo.dimension_y * cargo.dimension_z * cargo.quantity) / CBM_VOLUME_DIVISOR
+    cbm_weight = cbm_var * (trucking_pricing.cbm_ratio || 0)
     trucking_chargeable_weight = [load_meter_weight, cargo.payload_in_kg, cbm_weight].max
     cargo_object['non_stackable']['weight'] += trucking_chargeable_weight
     cargo_object['non_stackable']['volume'] += cargo.volume * cargo.quantity
@@ -336,7 +340,7 @@ module TruckingTools
   end
 
   def calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
-    cbm_ratio = trucking_pricing['cbm_ratio'] || 333
+    cbm_ratio = trucking_pricing['cbm_ratio'] || 0
     cbm_weight = cargo.volume * cbm_ratio
     quantity = cargo.try(:quantity) || 1
     trucking_chargeable_weight = [cbm_weight, cargo.try(:payload_in_kg) || cargo.weight].max
