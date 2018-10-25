@@ -226,7 +226,7 @@ module TruckingTools
     total_area = cargos.sum { |cargo| cargo.dimension_x * cargo.dimension_y * cargo.quantity }
     non_stackable = cargos.select(&:stackable).empty?
     load_area_limit = trucking_pricing.load_meterage['area_limit']
-    if total_area > load_area_limit || non_stackable
+    if total_area >= load_area_limit || non_stackable
       cargos.each do |cargo|
         calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
       end
@@ -328,7 +328,7 @@ module TruckingTools
 
   def calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
     load_meter_weight = ((cargo.dimension_x * cargo.dimension_y * cargo.quantity) / 24_000) * trucking_pricing.load_meterage['ratio']
-    cbm_weight = (cargo.dimension_x * cargo.dimension_y * cargo.quantity) * (trucking_pricing.cbm_ratio || 1)
+    cbm_weight = ((cargo.dimension_x * cargo.dimension_y * cargo.dimension_z * cargo.quantity)/1000000) * (trucking_pricing.cbm_ratio || 1)
     trucking_chargeable_weight = [load_meter_weight, cargo.payload_in_kg, cbm_weight].max
     cargo_object['non_stackable']['weight'] += trucking_chargeable_weight
     cargo_object['non_stackable']['volume'] += cargo.volume * cargo.quantity
