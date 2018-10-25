@@ -5,7 +5,7 @@ exports[`shallow render 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-stretch"
 >
   <div
-    className="flex"
+    className="flex ccb_shipper"
     key="RANDOM_KEY_0"
   >
      
@@ -47,7 +47,7 @@ exports[`shallow render 1`] = `
     />
   </div>
   <div
-    className="flex"
+    className="flex ccb_consignee"
     key="RANDOM_KEY_1"
   >
      

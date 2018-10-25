@@ -28,7 +28,7 @@ export default function ShipmentContactsBoxMainContacts ({
   const chevronDirection = direction === 'import' ? 'left' : 'right'
 
   const contentElems = [shipperCard, consigneeCard].map(elem => (
-    <div className="flex" key={v4()}> { elem } </div>
+    <div className={`flex ${`ccb_${elem.props.contactType}`}`} key={v4()}> { elem } </div>
   ))
   if (direction === 'import') contentElems.reverse()
   const chevron = (
@@ -40,6 +40,7 @@ export default function ShipmentContactsBoxMainContacts ({
     </div>
   )
   contentElems.splice(1, 0, chevron)
+
   return (
     <div className="flex-100 layout-row layout-wrap layout-align-start-stretch">
       { contentElems }

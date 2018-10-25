@@ -17,9 +17,29 @@ When('I select {string}') do |string|
 end
 
 When('I select {string} as {string}') do |place, type|
-  elem = find('div', class: 'Select-placeholder', text: type, wait: 10)
-  elem.sibling('.Select-input').find('input').send_keys(place)
-  find('.Select-option', text: place).click
+  if place[/\d+/]
+    if type == 'Origin'
+      find('.ccb_pre_carriage').click
+    elsif type == 'Destination'
+      find('.ccb_on_carriage').click
+    end
+    elem = find('div', class: "ccb_#{type.downcase}_carriage_input", wait: 10)
+    within(elem) do
+      box = find('.ccb_carriage')
+      within(box) do
+        place.split('').each do |c|
+          find('input').send_keys(c)
+          sleep(1.0 / 24.0)
+        end
+        all(:css, '.ccb_result').first.click
+      end
+    end
+    sleep(8)
+  else
+    elem = find('div', class: 'Select-placeholder', text: type, wait: 10)
+    elem.sibling('.Select-input').find('input').send_keys(place)
+    find('.Select-option', text: place).click
+  end
 end
 
 When('I select {string} as Available Date') do |string|

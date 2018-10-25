@@ -438,7 +438,7 @@ class CargoDetails extends Component {
                   <div className="flex-100 layout-row">
                     <div className="flex-66 layout-row">
                       <FormsyInput
-                        className={`flex-100 ${styles.cargo_input} `}
+                        className={`flex-100 ccb_total_goods_value ${styles.cargo_input} `}
                         wrapperClassName={`flex-100 ${styles.wrapper_cargo_input}`}
                         errorMessageStyles={{
                           fontSize: '13px',
@@ -459,7 +459,7 @@ class CargoDetails extends Component {
                     </div>
                     <div className="flex-33 layout-row">
                       <NamedSelect
-                        className="flex-100"
+                        className="flex-100 ccb_currency"
                         options={currencyOptions}
                         onChange={this.handleTotalGoodsCurrency}
                         value={totalGoodsCurrency}
@@ -481,7 +481,7 @@ class CargoDetails extends Component {
                   </div>
                   <div className="flex-100">
                     <FormsyTextarea
-                      className={`flex-100 ${styles.cargo_text_area} `}
+                      className={`flex-100 ccb_description_goods ${styles.cargo_text_area} `}
                       wrapperClassName={`flex-100 ${styles.wrapper_cargo_input}`}
                       errorMessageStyles={{
                         fontSize: '13px',
@@ -655,6 +655,7 @@ class CargoDetails extends Component {
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
                           <Checkbox
+                            className="ccb_yes_insurance"
                             onChange={() => this.toggleInsurance(true)}
                             checked={this.props.insurance.bool}
                             theme={theme}
@@ -669,6 +670,7 @@ class CargoDetails extends Component {
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
                           <Checkbox
+                            className="ccb_no_insurance"
                             onChange={() => this.toggleInsurance(false)}
                             checked={
                               this.props.insurance.bool === null ? null : !this.props.insurance.bool
@@ -739,6 +741,7 @@ class CargoDetails extends Component {
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
                           <Checkbox
+                            className="ccb_yes_clearance"
                             onChange={() => this.toggleCustoms(true)}
                             checked={this.state.customsView}
                             theme={theme}
@@ -754,6 +757,7 @@ class CargoDetails extends Component {
                         <div className="flex-10 layout-row layout-align-end-center">
                           <Checkbox
                             onChange={() => this.toggleCustoms(false)}
+                            className="ccb_no_clearance"
                             checked={
                               this.state.customsView === null ? null : !this.state.customsView
                             }

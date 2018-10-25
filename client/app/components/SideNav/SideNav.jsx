@@ -293,7 +293,7 @@ class SideNav extends Component {
 
       return (
         <div
-          className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`}
+          className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center ccb_${li.text.toLowerCase()}`}
           onClick={() => this.handleClickAction(li, i, isAdmin)}
           key={li.key}
           style={this.state.activeIndex === i ? { background: '#E0E0E0' } : {}}

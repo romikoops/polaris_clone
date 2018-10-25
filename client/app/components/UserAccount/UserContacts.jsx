@@ -164,7 +164,7 @@ class UserContacts extends Component {
                       onClick={this.toggleNewContact}
                     />
                     <Formsy
-                      className={`flex-none layout-row layout-wrap layout-align-start-start ${
+                      className={`flex-none layout-row layout-wrap layout-align-start-start ccb_contact_form ${
                         styles.new_contact_content
                       }`}
                       onValidSubmit={this.handleValidSubmit}

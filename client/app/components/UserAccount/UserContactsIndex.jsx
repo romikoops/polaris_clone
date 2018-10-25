@@ -31,7 +31,7 @@ function UserContactsIndex ({
         <div className="layout-row layout-wrap flex-100">
           <ContactsIndex
             theme={theme}
-            placeholder={t('common:searchContacts')}
+            placeholder={t('account:searchContacts')}
           />
         </div>
         {newContactBox}

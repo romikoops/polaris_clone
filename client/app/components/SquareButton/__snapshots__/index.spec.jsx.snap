@@ -10,7 +10,7 @@ exports[`shallow rendering when props.size is full 1`] = `
   }
 >
   <button
-    className="square_btn neutral full clickable"
+    className="square_btn neutral full clickable "
     onClick={[Function]}
     style={Object {}}
   >
@@ -46,7 +46,7 @@ exports[`shallow rendering when props.size is large 1`] = `
   }
 >
   <button
-    className="square_btn neutral large clickable"
+    className="square_btn neutral large clickable "
     onClick={[Function]}
     style={Object {}}
   >
@@ -82,7 +82,7 @@ exports[`shallow rendering when props.size is small 1`] = `
   }
 >
   <button
-    className="square_btn neutral small clickable"
+    className="square_btn neutral small clickable "
     onClick={[Function]}
     style={Object {}}
   >

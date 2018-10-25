@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Given 'I am logged in successfully' do
+Given 'I am logged in as a shipper successfully' do
   step 'I am at the landing'
   step 'I am logged out'
   step 'I click the link to log in'
@@ -18,6 +18,11 @@ When 'I set trucking from {string} to {string}' do |address, type|
     desired_result = elem.find('.results').has_content?(address)
     elem.find('.results').find('.address').find('div', text: address).click if desired_result
   end
+end
+
+When 'I click the {string} tab' do |tab|
+  link = find('div', class: "ccb_#{tab.downcase}", wait: 10)
+  link.click
 end
 
 When 'I have LCL shipment of {int} units {int} x {int} x {int} with weight of {int}kg' do |count, dim_x, dim_y, dim_z, weight|
@@ -38,4 +43,8 @@ When 'I have LCL shipment of {int} units {int} x {int} x {int} with weight of {i
 
   # Weight
   fill_in '0-payload_in_kg', with: weight
+end
+
+And 'I am on the User Dashboard' do
+  visit '/account'
 end
