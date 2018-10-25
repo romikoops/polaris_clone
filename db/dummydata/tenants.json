@@ -632,6 +632,7 @@
   "name": "Gateway Cargo Systems GmbH",
   "currency": "EUR",
   "scope": {
+    "default_direction": "export",
     "modes_of_transport": {
       "ocean": {
         "container": false,
@@ -887,6 +888,7 @@
   "name": "Fivestar Services GmbH",
   "currency": "EUR",
   "scope": {
+    "default_direction": "export",
     "modes_of_transport": {
       "ocean": {
         "container": false,
