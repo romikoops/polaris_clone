@@ -357,7 +357,7 @@ exports[`cont.dangerousGoods is true 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Payload​​
+              Payload
             </p>
             <p
               className="flex-100"
@@ -567,7 +567,7 @@ exports[`containers is falsy 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Payload​​
+              Payload
             </p>
             <p
               className="flex-100"
@@ -890,7 +890,7 @@ exports[`shallow render 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Payload​​
+              Payload
             </p>
             <p
               className="flex-100"
@@ -1226,7 +1226,7 @@ exports[`state.showPaste is true 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Payload​​
+              Payload
             </p>
             <p
               className="flex-100"
@@ -1535,7 +1535,7 @@ exports[`theme is falsy 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Payload​​
+              Payload
             </p>
             <p
               className="flex-100"
@@ -1857,7 +1857,7 @@ exports[`variable textInputBool is true 1`] = `
             <p
               className="flex-100 cell_header"
             >
-              Payload​​
+              Payload
             </p>
             <p
               className="flex-100"
