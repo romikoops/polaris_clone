@@ -20,7 +20,7 @@ module AwsConfig
     end
 
     def awsurl
-      "https://s3-eu-west-1.amazonaws.com/imcdev/"
+      "https://s3-eu-west-1.amazonaws.com/assets.itsmycargo.com/"
     end
 
     def path(shipment)
@@ -40,7 +40,7 @@ module AwsConfig
 
     def delete_documents(docs)
       docs.each do |doc|
-        self.aws_client.delete_object(bucket: "imcdev", key: doc.url)
+        self.aws_client.delete_object(bucket: Settings.aws.bucket, key: doc.url)
         doc.delete
       end
     end
@@ -86,7 +86,7 @@ module AwsConfig
     end
 
     def awsurl
-      "https://s3-eu-west-1.amazonaws.com/imcdev/"
+      "https://s3-eu-west-1.amazonaws.com/assets.itsmycargo.com/"
     end
 
     def path(shipment)
