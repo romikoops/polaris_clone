@@ -122,16 +122,18 @@ module MultiTenantTools
 
   def update_tenant_from_json(subdomain)
     json_data = JSON.parse(
-      S3.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
+      asset_bucket.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
     )
+    # Handle "other_data" part of the hash (hacky)
     json_data.delete('other_data')
+
     Tenant.find_by_subdomain(json_data['subdomain']).update_attributes(json_data)
   end
 
   def create_new_tenant_site(subdomains)
     subdomains.each do |subdomain|
       json_data = JSON.parse(
-        S3.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
+        asset_bucket.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
       ).deep_symbolize_keys
       new_site(json_data, false)
     end
