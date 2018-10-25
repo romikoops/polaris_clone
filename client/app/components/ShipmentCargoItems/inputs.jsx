@@ -12,9 +12,11 @@ import height from '../../assets/images/cargo/height.png'
 import {
   switchIcon,
   chargeableWeight,
+  chargeableVolume,
   volume,
   numberSpacing,
-  calcMaxDimensionsToApply
+  calcMaxDimensionsToApply,
+  weight
 } from '../../helpers'
 import styles from './ShipmentCargoItems.scss'
 
@@ -173,11 +175,19 @@ export default function getInputs (
     </div>
   )
 
-  inputs.volume = (
+  inputs.totalVolume = (
     <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.charge_volume}`}>
       <p className={`${styles.input_label} flex-none`}>{t('common:total')}&nbsp;{t('common:volume')}:&nbsp;&nbsp;
-        <span className={styles.input_value}>{ numberSpacing(volume(cargoItem), 3) }
+        <span className={styles.input_value}>{numberSpacing(volume(cargoItem), 3)}
           &nbsp;m<sup style={{ marginLeft: '1px', fontSize: '10px', height: '17px' }}>3</sup></span>
+      </p>
+    </div>
+  )
+  inputs.totalWeight = (
+    <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.charge_volume}`}>
+      <p className={`${styles.input_label} flex-none`}>{t('common:total')}&nbsp;{t('common:weight')}:&nbsp;&nbsp;
+        <span className={styles.input_value}>{numberSpacing(weight(cargoItem), 1)}
+          &nbsp;kg</span>
       </p>
     </div>
   )
@@ -212,11 +222,34 @@ export default function getInputs (
       <div className={`flex-none layout-align-center-center layout-row ${styles.single_charge}`}>
         { switchIcon(mot) }
         <p className={`${styles.chargeable_weight_value} ${styles.input_value}`}>
-          { numberSpacing(chargeableWeight(cargoItem, mot), 1) } kg
+          {mot === 'ocean' ? numberSpacing(chargeableVolume(cargoItem, mot), 3) : numberSpacing(chargeableWeight(cargoItem, mot), 1)}
+          {mot === 'ocean' ? (
+            <span>
+              &nbsp;m<sup style={{ marginLeft: '1px', fontSize: '10px', height: '17px' }}>3</sup>
+            </span>
+          ) : (<span>&nbsp;kg</span>)}
         </p>
       </div>
     )
   }
+  inputs.chargeableVolume = (
+    <div className={
+      `${styles.chargeable_weight} layout-row flex-100 ` +
+      'layout-wrap layout-align-start-center'
+    }
+    >
+      <div className="layout-row flex-none layout-wrap layout-align-end-center" >
+        <p className={`${styles.subchargeable} flex-none`}>{t('cargo:chargeble')}: </p>
+      </div>
+      <div className={
+        `${styles.chargeable_weight_values} flex ` +
+        'layout-row layout-align-start-center'
+      }
+      >
+        {scope.modes_of_transport["ocean"] ? chargeableWeightElemJSX('ocean') : ''}
+      </div>
+    </div>
+  )
   inputs.chargeableWeight = (
     <div className={
       `${styles.chargeable_weight} layout-row flex-100 ` +
@@ -231,11 +264,9 @@ export default function getInputs (
         'layout-row layout-align-start-center'
       }
       >
-        {
-          Object.keys(scope.modes_of_transport).map(mot => (
-            scope.modes_of_transport[mot].cargo_item ? chargeableWeightElemJSX(mot) : ''
-          ))
-        }
+        {Object.keys(scope.modes_of_transport).map(mot => (
+          (scope.modes_of_transport[mot].cargo_item && mot !== 'ocean') ? chargeableWeightElemJSX(mot) : ''
+        ))}
       </div>
     </div>
   )

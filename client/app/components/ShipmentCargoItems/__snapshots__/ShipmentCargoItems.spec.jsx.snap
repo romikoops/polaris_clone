@@ -453,7 +453,7 @@ exports[`shallow rendering 1`] = `
                 className="inner_cargo_item_info layout-row flex-100 layout-wrap layout-align-start"
               >
                 <div
-                  className="cargo_item_box flex-25 layout-wrap layout-row"
+                  className="flex-25 layout-wrap layout-row"
                 >
                   <div
                     className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
@@ -481,6 +481,45 @@ exports[`shallow rendering 1`] = `
                         >
                           3
                         </sup>
+                      </span>
+                    </p>
+                  </div>
+                  <div
+                    className="chargeable_weight layout-row flex-100 layout-wrap layout-align-start-center"
+                  >
+                    <div
+                      className="layout-row flex-none layout-wrap layout-align-end-center"
+                    >
+                      <p
+                        className="subchargeable flex-none"
+                      >
+                        Chargeable
+                        : 
+                      </p>
+                    </div>
+                    <div
+                      className="chargeable_weight_values flex layout-row layout-align-start-center"
+                    />
+                  </div>
+                </div>
+                <div
+                  className="padding_left flex-25 layout-wrap layout-row"
+                >
+                  <div
+                    className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
+                  >
+                    <p
+                      className="input_label flex-none"
+                    >
+                      Total
+                       
+                      NO_TRANSLATION | key "common:weight"
+                      :  
+                      <span
+                        className="input_value"
+                      >
+                        NaN
+                         kg
                       </span>
                     </p>
                   </div>
@@ -850,7 +889,7 @@ exports[`shallow rendering 1`] = `
                   className="inner_cargo_item_info layout-row flex-100 layout-wrap layout-align-start"
                 >
                   <div
-                    className="cargo_item_box flex-25 layout-wrap layout-row"
+                    className="flex-25 layout-wrap layout-row"
                   >
                     <div
                       className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
@@ -877,6 +916,44 @@ exports[`shallow rendering 1`] = `
                           >
                             3
                           </sup>
+                        </span>
+                      </p>
+                    </div>
+                    <div
+                      className="chargeable_weight layout-row flex-100 layout-wrap layout-align-start-center"
+                    >
+                      <div
+                        className="layout-row flex-none layout-wrap layout-align-end-center"
+                      >
+                        <p
+                          className="subchargeable flex-none"
+                        >
+                          Chargeable
+                          : 
+                        </p>
+                      </div>
+                      <div
+                        className="chargeable_weight_values flex layout-row layout-align-start-center"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    className="padding_left flex-25 layout-wrap layout-row"
+                  >
+                    <div
+                      className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
+                    >
+                      <p
+                        className="input_label flex-none"
+                      >
+                        Total
+                         
+                        NO_TRANSLATION | key "common:weight"
+                        :  
+                        <span
+                          className="input_value"
+                        >
+                           kg
                         </span>
                       </p>
                     </div>

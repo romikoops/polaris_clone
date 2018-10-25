@@ -147,6 +147,9 @@
     }
     .inner_cargo_item_info {
       height: 70px;
+      .padding_left {
+        margin-left: 25px;
+      }
     }
   }
   h3.unit_header {
