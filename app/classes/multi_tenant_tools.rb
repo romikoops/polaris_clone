@@ -4,6 +4,7 @@ module MultiTenantTools
   include ExcelTools
   require "#{Rails.root}/db/seed_classes/vehicle_seeder.rb"
   require "#{Rails.root}/db/seed_classes/pricing_seeder.rb"
+  require "#{Rails.root}/db/seed_classes/tenant_seeder.rb"
   API_URL = 'https://api2.itsmycargo.com'
   DEV_API_URL = 'https://gamma.itsmycargo.com'
 
@@ -124,10 +125,15 @@ module MultiTenantTools
     json_data = JSON.parse(
       asset_bucket.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
     )
-    # Handle "other_data" part of the hash (hacky)
-    json_data.delete('other_data')
 
-    Tenant.find_by_subdomain(json_data['subdomain']).update_attributes(json_data)
+    tenant = Tenant.find_by_subdomain(json_data['subdomain'])
+    
+    # Handle "other_data" part of the hash (hacky)
+    other_data = json_data.delete('other_data') || {}
+    TenantSeeder.update_cargo_item_types!(tenant, other_data[:cargo_item_types])
+    TenantSeeder.update_tenant_incoterms!(tenant, other_data[:incoterms])
+
+    tenant.update_attributes(json_data)
   end
 
   def create_new_tenant_site(subdomains)
