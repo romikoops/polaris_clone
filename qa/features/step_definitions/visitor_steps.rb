@@ -29,7 +29,7 @@ When('I select {string} as {string}') do |place, type|
       within(box) do
         place.split('').each do |c|
           find('input').send_keys(c)
-          sleep(1.0 / 24.0)
+          sleep(1.0 / 10.0)
         end
         all(:css, '.ccb_result').first.click
       end
