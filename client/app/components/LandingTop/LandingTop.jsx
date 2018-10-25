@@ -28,7 +28,20 @@ function LandingTop ({
 
   const largeLogo = theme && theme.logoLarge ? theme.logoLarge : ''
   const whiteLogo = theme && theme.logoWhite ? theme.logoWhite : largeLogo
-  const welcomeText = theme && theme.welcome_text ? theme.welcome_text : t('landing:welcomeTextTail')
+  const isQuote = (tenant && tenant.data && tenant.data.scope) &&
+    (tenant.data.scope.closed_quotation_tool || tenant.data.scope.open_quotation_tool)
+
+  function determineWelcomeTail () {
+    if (theme && theme.welcome_text) {
+      return theme.welcome_text
+    } else if (isQuote) {
+      return t('landing:welcomeTextQuoteTail')
+    }
+
+    return t('landing:welcomeTextShopTail')
+  }
+
+  const welcomeTextTail = determineWelcomeTail()
 
   const buttonSectionProps = {
     theme, user, tenant, bookNow
@@ -51,15 +64,26 @@ function LandingTop ({
               <h2 className="flex-none">
                 <b>{t('landing:welcomeTextHead')}</b> <br />
                 <i> {tenant.data.name} </i> <b> <br />
-                  {welcomeText}</b>
+                  {welcomeTextTail}</b>
               </h2>
               <div className={styles.wrapper_hr}>
                 <hr />
               </div>
               <div className={styles.wrapper_h3}>
-                <h3 className="flex-none">
-                  {t('landing:descriptionHead')} <b>{t('landing:descriptionMiddle')}</b> {t('landing:descriptionTail')}
-                </h3>
+                {isQuote ? (
+                  <h3 className="flex-none">
+                    {t('landing:descriptionQuoteHead')}
+                    <b>{t('landing:descriptionQuoteMiddle')}</b>
+                    {t('landing:descriptionQuoteTail')}
+                  </h3>
+                ) : (
+                  <h3 className="flex-none">
+                    {t('landing:descriptionShopHead')}
+                    <b>{t('landing:descriptionShopMiddle')}</b>
+                    {t('landing:descriptionShopTail')}
+                  </h3>
+                )
+                }
               </div>
             </div>
             <ButtonSection {...buttonSectionProps} hidden={window.innerHeight <= 750} />

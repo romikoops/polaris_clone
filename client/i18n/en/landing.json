@@ -2,9 +2,12 @@
   "adminDashboard": "Admin Dashboard",
   "benefits": "There are tons of benefits of managing your logistics online:",
   "callToAction": "Find Rates",
-  "descriptionHead": "Enjoy the most advanced and easy to use ",
-  "descriptionMiddle": "booking system",
-  "descriptionTail": " in the market. Finally, shipping is as simple as it should be.",
+  "descriptionShopHead": "Enjoy the most advanced and easy to use ",
+  "descriptionShopMiddle": "booking system",
+  "descriptionShopTail": " in the market. Finally, shipping is as simple as it should be.",
+  "descriptionQuoteHead": "Enjoy our modern and easy to use ",
+  "descriptionQuoteMiddle": "quoting tool",
+  "descriptionQuoteTail": " right away. Finally, shipping is as simple as it should be.",
   "instantIconText": "Instant Booking",
   "offersOverview": "Get an instant overview of available offers",
   "placeBooking": "Place bookings from wherever, whenever",
@@ -17,5 +20,6 @@
   "transparencyIconText": "Full Transparency",
   "viewDocuments": "View or download documents when you need them",
   "welcomeTextHead": "Welcome to the",
-  "welcomeTextTail": "shop for online freight"
+  "welcomeTextShopTail": "shop for online freight",
+  "welcomeTextQuoteTail": "online quoting tool"
 }
