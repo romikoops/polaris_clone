@@ -40,6 +40,7 @@ class NavBar extends Component {
           admin.client && admin.client.client
             ? `${capitalize(admin.client.client.first_name)}  ${capitalize(admin.client.client.last_name)}`
             : categories[categories.length - 1]
+
         return (
           <div
             className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
@@ -54,6 +55,7 @@ class NavBar extends Component {
           admin.shipment && admin.shipment.shipment && admin.shipment.shipment.imc_reference
             ? admin.shipment.shipment.imc_reference
             : categories[categories.length - 1]
+
         return (
           <div
             className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
@@ -69,6 +71,7 @@ class NavBar extends Component {
           admin.itinerarySchedules.itinerary.name
             ? admin.itinerarySchedules.itinerary.name
             : categories[categories.length - 1]
+
         return (
           <div
             className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
@@ -112,6 +115,7 @@ class NavBar extends Component {
             admin.itineraryPricings && admin.itineraryPricings.itinerary
               ? admin.itineraryPricings.itinerary.name
               : categories[categories.length - 1]
+
           return (
             <div
               className={`${
@@ -136,6 +140,7 @@ class NavBar extends Component {
           admin.clientPricings && admin.clientPricings.client
             ? `${capitalize(admin.clientPricings.client.first_name)}  ${capitalize(admin.clientPricings.client.last_name)}`
             : categories[categories.length - 1]
+
         return (
           <div
             className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
@@ -166,6 +171,7 @@ class NavBar extends Component {
           users.shipment && users.shipment.shipment
             ? users.shipment.shipment.imc_reference
             : categories[categories.length - 1]
+
         return (
           <div
             className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
@@ -205,6 +211,7 @@ class NavBar extends Component {
             </div>
           )
         }
+
         return (
           <div
             className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}

@@ -211,7 +211,15 @@ function getServiceCharges () {
 
   return fetch(`${getApiHost()}/admin/local_charges`, requestOptions).then(handleResponse)
 }
-function getShipments (pages, perPage) {
+function getShipments (_pages, perPage) {
+  const pages = _pages || {
+    open: 1,
+    requested: 1,
+    archived: 1,
+    rejected: 1,
+    finished: 1
+  }
+
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
