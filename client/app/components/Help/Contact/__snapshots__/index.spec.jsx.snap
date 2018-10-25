@@ -139,7 +139,9 @@ exports[`shallow render 1`] = `
   }
   flexOptions=""
   horizontalPadding="20px"
+  maxWidth="90%"
   minHeight=""
+  showExit={false}
   theme={
     Object {
       "colors": Object {
