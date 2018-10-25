@@ -69,6 +69,7 @@ postgresql:
       periodSeconds: 5
 
   persistence:
+    enabled: false
     # storageClass: "regional-standard"
     size: 10Gi
 
