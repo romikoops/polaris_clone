@@ -1,0 +1,41 @@
+:local {
+  .price_row {
+    div:first-child {
+      width: 17px;
+      height: 17px;
+      background: #F2F2F2;
+      border-radius: 50%;
+      margin-left: 15px;
+    }
+    span {
+      padding-left: 15px;
+    }
+    p {
+      padding-right: 10px;
+      font-size: 21px;
+      text-align: right;
+      letter-spacing: 0.02em;
+      font-weight: 600;
+    }
+  }
+  .sub_price_row {
+    background: #F8F8F8;
+    border-bottom: 1px solid #E0E0E0;
+    height: 40px;
+    span {
+      padding-left: 24px;
+      font-weight: bold;
+      line-height: normal;
+      font-size: 11px;
+      letter-spacing: 0.02em;
+    }
+    p {
+      font-weight: 900;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+    }
+  }
+  .sub_price_row_wrapper {
+    border-bottom: 1px solid #E0E0E0; 
+  }
+}
