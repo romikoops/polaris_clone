@@ -115,7 +115,7 @@ module MultiTenantTools
     @json_data.each do |tenant|
       subdomain = tenant['subdomain']
       tenant_data = JSON.parse(
-        S3.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
+        asset_bucket.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
       )
       @new_data << tenant_data
     end
