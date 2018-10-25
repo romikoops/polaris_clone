@@ -127,7 +127,6 @@ client:
 
 docker:
   <<: *dedicated-runner
-  <<: *merge-request-only
   stage: build
   image: docker:stable
   variables:
