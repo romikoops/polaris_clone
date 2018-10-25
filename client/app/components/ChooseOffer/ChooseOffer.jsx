@@ -374,6 +374,7 @@ class ChooseOffer extends Component {
                       value={currentCurrency}
                       placeholder={t('common:selectCurrency')}
                       onChange={e => this.handleCurrencyUpdate(e)}
+                      clearable={false}
                     />
                   )}
                 </div>
