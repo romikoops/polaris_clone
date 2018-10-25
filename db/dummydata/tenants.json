@@ -284,8 +284,8 @@
     "has_customs": false,
     "terms": [],
     "links": {
-      "about": "",
-      "legal": ""
+      "about": "http://easyshipping.dk/",
+      "legal": "http://easyshipping.dk/kontakt.html"
     },
     "carriage_options": {
       "on_carriage": {
@@ -458,8 +458,8 @@
       }
     },
     "links": {
-      "about": "",
-      "legal": ""
+      "about": "http://www.speedtrans.com/ueberuns.php",
+      "legal": "http://www.speedtrans.com/impressum.php"
     },
     "continuous_rounding": true,
     "closed_shop": false,
@@ -622,10 +622,10 @@
   },
   "emails": {
     "sales": {
-      "general": "cglitscher@gatewaycargo.de"
+      "general": "nschoenlau@gatewaycargo.de"
     },
     "support": {
-      "general": "cglitscher@gatewaycargo.de"
+      "general": "nschoenlau@gatewaycargo.de"
     }
   },
   "subdomain": "gateway",
@@ -650,8 +650,8 @@
     "dangerous_goods": true,
     "non_stackable_goods": false,
     "links": {
-      "about": "",
-      "legal": ""
+      "about": "https://www.gatewaycargo.de/offices_us.html",
+      "legal": "https://www.gatewaycargo.de/contact_us.html#imprint"
     },
     "quote_notes": "1) Prices subject to change\n        2) All fees are converted at the time of quotation\n        using that day's European Central bank exchange rates and are an approximation\n        of the final amount ot be paid. The amount paid at the time of settlement\n        will reflect the exchange rates of the day.",
     "fee_detail": "key_and_name",
@@ -734,8 +734,8 @@
       }
     },
     "links": {
-      "about": "",
-      "legal": ""
+      "about": "https://www.schryver.com/about-us/",
+      "legal": "https://www.schryver.com/imprint-2/"
     },
     "dangerous_goods": false,
     "non_stackable_goods": true,
@@ -819,8 +819,8 @@
       }
     },
     "links": {
-      "about": "",
-      "legal": ""
+      "about": "http://www.normanglobal.com/services/",
+      "legal": "http://www.normanglobal.com/about-us/privacy-policy/"
     },
     "dangerous_goods": false,
     "non_stackable_goods": true,
@@ -906,8 +906,8 @@
     "dangerous_goods": true,
     "non_stackable_goods": true,
     "links": {
-      "about": "",
-      "legal": ""
+      "about": "https://www.fivestar-services.de/company_us.html",
+      "legal": "https://www.fivestar-services.de/contact_us.html#impressum"
     },
     "quote_notes": "1) Prices subject to change\n        2) All fees are converted at the time of quotation\n        using that day's European Central bank exchange rates and are an approximation\n        of the final amount ot be paid. The amount paid at the time of settlement\n        will reflect the exchange rates of the day.",
     "fee_detail": "key_and_name",
