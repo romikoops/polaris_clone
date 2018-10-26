@@ -79,8 +79,7 @@ class AdminShipmentCard extends Component {
       shipment,
       theme,
       confirmShipmentData,
-      t,
-      isDashboard
+      t
     } = this.props
 
     const gradientFontStyle =
@@ -231,7 +230,7 @@ class AdminShipmentCard extends Component {
           <div className="layout-row flex-35 layout-align-center-center">
             <div className="flex-100">
               <b className={styles.ref_row_card}>{t('common:ref')}:&nbsp;{shipment.imc_reference}</b>
-              <p>{t('shipment:placedAt')}&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY - HH:mm')}</p>
+              <p>{t('shipment:placedAt')}&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY | HH:mm')}</p>
             </div>
           </div>
 

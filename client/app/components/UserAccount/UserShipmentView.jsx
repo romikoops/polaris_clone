@@ -185,8 +185,8 @@ class UserShipmentView extends Component {
     } = shipmentData
 
     const createdDate = shipment
-      ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
-      : moment().format('DD-MM-YYYY | HH:mm A')
+      ? moment(shipment.updated_at).format('DD/MM/YYYY | HH:mm')
+      : moment().format('DD/MM/YYYY | HH:mm')
     const bg1 =
       shipment.origin_hub && shipment.origin_hub.photo
         ? { backgroundImage: `url(${shipment.origin_hub.photo})` }

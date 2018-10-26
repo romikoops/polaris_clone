@@ -31,7 +31,7 @@ module ShippingTools
         destination_hub_id: schedule['destination_hub']['id'],
         quotation_id: schedule['id'],
         trip_id: trip.id,
-        booking_placed_at: shipment.booking_placed_at,
+        booking_placed_at: DateTime.now,
         closing_date: shipment.closing_date,
         planned_eta: shipment.planned_eta,
         planned_etd: shipment.planned_etd,
