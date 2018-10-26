@@ -41,7 +41,7 @@ exports[`shallow rendering 1`] = `
           </div>
         </div>
         <div
-          className="flex-100 layout-row cargo_unit_inputs"
+          className="flex-100 layout-row layout-wrap cargo_unit_inputs"
         >
           <div
             className="flex-15 layout-row layout-align-center"
@@ -66,454 +66,481 @@ exports[`shallow rendering 1`] = `
             className="cargo_item_box cargo_item_inputs flex-85"
           >
             <div
-              className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
               style={
                 Object {
-                  "marginBottom": "20px",
+                  "position": "relative",
                 }
               }
             >
               <div
-                className="layout-row flex-20 layout-wrap layout-align-start-center input_length"
-              >
-                <h4>
-                  Length
-                </h4>
-                <div
-                  className="flex-90 layout-row input_box"
-                  data-event="disable"
-                  data-tip=""
-                  onBlur={[Function]}
-                  onFocus={[Function]}
-                  onMouseEnter={[Function]}
-                >
-                  <img
-                    alt="length"
-                    border="0"
-                    data-for="RANDOM_KEY_0"
-                    data-tip="Length"
-                  />
-                  <ValidatedInput
-                    errorStyles={
-                      Object {
-                        "bottom": "-14px",
-                        "fontSize": "10px",
-                      }
-                    }
-                    min="0"
-                    name="0-dimension_x"
-                    nextStageAttempt={false}
-                    onChange={[Function]}
-                    required={true}
-                    setFirstRenderInputs={[Function]}
-                    step="any"
-                    type="number"
-                    validationErrors={
-                      Object {
-                        "isDefaultRequiredValue": "Must be greater than 0",
-                        "maxDimension": "Maximum length is undefined",
-                        "nonNegative": "Must be greater than 0",
-                      }
-                    }
-                    validations={
-                      Object {
-                        "maxDimension": [Function],
-                        "nonNegative": [Function],
-                      }
-                    }
-                    value={13}
-                    wrapperClassName="flex-60"
-                  />
-                  <div
-                    className="flex-25 layout-row layout-align-center-center"
-                  >
-                    cm
-                  </div>
-                </div>
-              </div>
-              <div
-                className="layout-row flex-20 layout-wrap layout-align-start-center input_width"
-              >
-                <h4>
-                  Width
-                </h4>
-                <div
-                  className="flex-90 layout-row input_box"
-                  data-event="disable"
-                  data-tip=""
-                  onBlur={[Function]}
-                  onFocus={[Function]}
-                  onMouseEnter={[Function]}
-                >
-                  <img
-                    alt="width"
-                    border="0"
-                    data-for="RANDOM_KEY_0"
-                    data-tip="Width"
-                  />
-                  <ValidatedInput
-                    errorStyles={
-                      Object {
-                        "bottom": "-14px",
-                        "fontSize": "10px",
-                      }
-                    }
-                    min="0"
-                    name="0-dimension_y"
-                    nextStageAttempt={false}
-                    onChange={[Function]}
-                    required={true}
-                    setFirstRenderInputs={[Function]}
-                    step="any"
-                    type="number"
-                    validationErrors={
-                      Object {
-                        "isDefaultRequiredValue": "Must be greater than 0",
-                        "maxDimension": "Maximum width is undefined",
-                        "nonNegative": "Must be greater than 0",
-                      }
-                    }
-                    validations={
-                      Object {
-                        "maxDimension": [Function],
-                        "nonNegative": [Function],
-                      }
-                    }
-                    value={24}
-                    wrapperClassName="flex-60"
-                  />
-                  <div
-                    className="flex-25 layout-row layout-align-center-center"
-                  >
-                    cm
-                  </div>
-                </div>
-              </div>
-              <div
-                className="layout-row flex-20 layout-wrap layout-align-start-center input_height"
-              >
-                <h4>
-                  Height
-                </h4>
-                <div
-                  className="flex-90 layout-row input_box"
-                  data-event="disable"
-                  data-tip=""
-                  onBlur={[Function]}
-                  onFocus={[Function]}
-                  onMouseEnter={[Function]}
-                >
-                  <img
-                    alt="height"
-                    border="0"
-                    data-for="RANDOM_KEY_0"
-                    data-tip="Height"
-                  />
-                  <ValidatedInput
-                    errorStyles={
-                      Object {
-                        "bottom": "-14px",
-                        "fontSize": "10px",
-                      }
-                    }
-                    min="0"
-                    name="0-dimension_z"
-                    nextStageAttempt={false}
-                    onChange={[Function]}
-                    required={true}
-                    setFirstRenderInputs={[Function]}
-                    step="any"
-                    type="number"
-                    validationErrors={
-                      Object {
-                        "isDefaultRequiredValue": "Must be greater than 0",
-                        "maxDimension": "Maximum height is undefined",
-                        "nonNegative": "Must be greater than 0",
-                      }
-                    }
-                    validations={
-                      Object {
-                        "maxDimension": [Function],
-                        "nonNegative": [Function],
-                      }
-                    }
-                    value=""
-                    wrapperClassName="flex-60"
-                  />
-                  <div
-                    className="flex-25 layout-row layout-align-center-center"
-                  >
-                    cm
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-5"
-              />
-              <div
-                className="layout-row flex-30 layout-wrap layout-align-start-center input_weight"
-              >
-                <h4>
-                  NO_TRANSLATION | key "common:Gross Weight"
-                </h4>
-                <div
-                  className="flex-60 layout-row input_box"
-                >
-                  <img
-                    alt="weight"
-                    border="0"
-                    data-for="RANDOM_KEY_0"
-                    data-tip="Gross Weight"
-                  />
-                  <Tooltip
-                    color="#333"
-                    icon="fa-info-circle"
-                    text="payload_in_kg"
-                    theme={Object {}}
-                    toolText=""
-                  />
-                  <ValidatedInput
-                    errorStyles={
-                      Object {
-                        "bottom": "-14px",
-                        "fontSize": "10px",
-                      }
-                    }
-                    name="0-payload_in_kg"
-                    nextStageAttempt={false}
-                    onChange={[Function]}
-                    required={true}
-                    setFirstRenderInputs={[Function]}
-                    type="number"
-                    validationErrors={
-                      Object {
-                        "isDefaultRequiredValue": "Must be greater than 0",
-                        "maxDimension": "Maximum weight is undefined",
-                        "nonNegative": "Must be greater than 0",
-                      }
-                    }
-                    validations={
-                      Object {
-                        "maxDimension": [Function],
-                        "nonNegative": [Function],
-                      }
-                    }
-                    value=""
-                    wrapperClassName="flex-90"
-                  />
-                  <div
-                    className="flex-20 layout-row layout-align-center-center"
-                  >
-                    kg
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              className="flex-100 layout-row"
-              style={
-                Object {
-                  "borderBottom": "1px solid rgb(236, 236, 236)",
-                }
-              }
-            />
-            <div
-              className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
-              style={
-                Object {
-                  "marginTop": "20px",
-                }
-              }
-            >
-              <div
-                className="layout-row flex-40 layout-wrap layout-align-start-center colli_type"
-              >
-                <div
-                  style={
-                    Object {
-                      "width": "95%",
-                    }
+                className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
+                style={
+                  Object {
+                    "marginBottom": "20px",
                   }
+                }
+              >
+                <div
+                  className="layout-row flex-20 layout-wrap layout-align-start-center input_length"
                 >
-                  <NamedSelect
-                    className="select_100"
-                    inputProps={
-                      Object {
-                        "name": "0-colliType",
-                      }
-                    }
-                    name="0-colliType"
-                    onChange={[Function]}
-                    options={
-                      Array [
+                  <h4>
+                    Length
+                  </h4>
+                  <div
+                    className="flex-90 layout-row input_box"
+                    data-event="disable"
+                    data-tip=""
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <img
+                      alt="length"
+                      border="0"
+                      data-for="RANDOM_KEY_0"
+                      data-tip="Length"
+                    />
+                    <ValidatedInput
+                      errorStyles={
                         Object {
-                          "description": "BAR",
-                          "dimension_x": 5,
-                          "dimension_y": 6,
-                          "key": 7,
-                        },
-                      ]
-                    }
-                    placeholder="Select your colli type"
-                    showErrors={false}
-                  />
-                </div>
-              </div>
-              <div
-                className="layout-row flex layout-wrap layout-align-end-center cargo_unit_check"
-              >
-                <Checkbox
-                  checked={true}
-                  className=""
-                  disabled={true}
-                  name="0-stackable"
-                  onChange={[Function]}
-                  onClick={[Function]}
-                  size="15px"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                />
-                <div
-                  className="layout-row flex-65 layout-wrap layout-align-start-center"
-                >
-                  <p
-                    className="input_label flex-none"
-                  >
-                    Non Stackable
-                  </p>
-                  <Tooltip
-                    color="#333"
-                    icon="fa-info-circle"
-                    text="non_stackable"
-                    theme={Object {}}
-                    toolText=""
-                  />
-                </div>
-              </div>
-              <div
-                className="layout-row flex layout-wrap layout-align-start-center cargo_unit_check"
-              >
-                <Checkbox
-                  checked={false}
-                  className=""
-                  disabled={true}
-                  name="0-dangerous_goods"
-                  onChange={[Function]}
-                  onClick={[Function]}
-                  size="15px"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                />
-                <div
-                  className="layout-row flex-75 layout-wrap layout-align-start-center"
-                >
-                  <p
-                    className="input_label flex-none"
-                  >
-                    Dangerous Goods
-                  </p>
-                  <Tooltip
-                    color="#333"
-                    icon="fa-info-circle"
-                    text="dangerous_goods"
-                    theme={Object {}}
-                    toolText=""
-                  />
-                </div>
-              </div>
-            </div>
-            <div
-              className="expandIcon"
-              onClick={[Function]}
-            >
-              Additional Details
-              <i
-                className="rotated fa fa-chevron-right"
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          className="cargo_item_info expanded flex-100"
-        >
-          <div
-            className="inner_cargo_item_info layout-row layout-wrap layout-align-start"
-          >
-            <div
-              className="total flex-15 layout-row layout-wrap layout-align-center-stretch"
-            >
-              <div
-                className="cargo_item_box layout-row flex-100 layout-align-center-center"
-              >
-                <p
-                  className="input_label flex-none"
-                >
-                  Total
-                </p>
-              </div>
-            </div>
-            <div
-              className="cargo_item_box flex layout-row"
-            >
-              <div
-                className="flex-30 layout-row layout-wrap layout-align-end-center"
-              >
-                <div
-                  className="layout-row flex-40 layout-align-center"
-                >
-                  <p
-                    className="input_label flex-none"
-                  >
-                    Volume
-                    :  
-                    <span
-                      className="input_value"
-                    >
-                      NaN
-                       m
-                      <sup
-                        style={
-                          Object {
-                            "fontSize": "10px",
-                            "height": "17px",
-                            "marginLeft": "1px",
-                          }
+                          "bottom": "-14px",
+                          "fontSize": "10px",
                         }
-                      >
-                        3
-                      </sup>
-                    </span>
-                  </p>
+                      }
+                      min="0"
+                      name="0-dimension_x"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      step="any"
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": "Maximum length is undefined",
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={13}
+                      wrapperClassName="flex-60"
+                    />
+                    <div
+                      className="flex-25 layout-row layout-align-center-center"
+                    >
+                      cm
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex-20 layout-wrap layout-align-start-center input_width"
+                >
+                  <h4>
+                    Width
+                  </h4>
+                  <div
+                    className="flex-90 layout-row input_box"
+                    data-event="disable"
+                    data-tip=""
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <img
+                      alt="width"
+                      border="0"
+                      data-for="RANDOM_KEY_0"
+                      data-tip="Width"
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "bottom": "-14px",
+                          "fontSize": "10px",
+                        }
+                      }
+                      min="0"
+                      name="0-dimension_y"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      step="any"
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": "Maximum width is undefined",
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={24}
+                      wrapperClassName="flex-60"
+                    />
+                    <div
+                      className="flex-25 layout-row layout-align-center-center"
+                    >
+                      cm
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex-20 layout-wrap layout-align-start-center input_height"
+                >
+                  <h4>
+                    Height
+                  </h4>
+                  <div
+                    className="flex-90 layout-row input_box"
+                    data-event="disable"
+                    data-tip=""
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <img
+                      alt="height"
+                      border="0"
+                      data-for="RANDOM_KEY_0"
+                      data-tip="Height"
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "bottom": "-14px",
+                          "fontSize": "10px",
+                        }
+                      }
+                      min="0"
+                      name="0-dimension_z"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      step="any"
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": "Maximum height is undefined",
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value=""
+                      wrapperClassName="flex-60"
+                    />
+                    <div
+                      className="flex-25 layout-row layout-align-center-center"
+                    >
+                      cm
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-5"
+                />
+                <div
+                  className="layout-row flex-30 layout-wrap layout-align-start-center input_weight"
+                >
+                  <h4>
+                    NO_TRANSLATION | key "common:Gross Weight"
+                  </h4>
+                  <div
+                    className="flex-60 layout-row input_box"
+                  >
+                    <img
+                      alt="weight"
+                      border="0"
+                      data-for="RANDOM_KEY_0"
+                      data-tip="Gross Weight"
+                    />
+                    <Tooltip
+                      color="#333"
+                      icon="fa-info-circle"
+                      text="payload_in_kg"
+                      theme={Object {}}
+                      toolText=""
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "bottom": "-14px",
+                          "fontSize": "10px",
+                        }
+                      }
+                      name="0-payload_in_kg"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": "Maximum weight is undefined",
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value=""
+                      wrapperClassName="flex-90"
+                    />
+                    <div
+                      className="flex-20 layout-row layout-align-center-center"
+                    >
+                      kg
+                    </div>
+                  </div>
                 </div>
               </div>
               <div
-                className="chargeable_weight layout-row flex layout-wrap layout-align-end-center"
+                className="flex-100 layout-row"
+                style={
+                  Object {
+                    "borderBottom": "1px solid rgb(236, 236, 236)",
+                  }
+                }
+              />
+              <div
+                className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
+                style={
+                  Object {
+                    "margin": "20px 0",
+                  }
+                }
               >
                 <div
-                  className="layout-row flex-30 layout-wrap layout-align-end-center"
+                  className="layout-row flex-40 layout-wrap layout-align-start-center colli_type"
                 >
-                  <p
-                    className="input_label flex-none"
+                  <div
+                    style={
+                      Object {
+                        "width": "95%",
+                      }
+                    }
                   >
-                    Chargeable Weight
-                    : 
-                  </p>
+                    <NamedSelect
+                      className="select_100"
+                      inputProps={
+                        Object {
+                          "name": "0-colliType",
+                        }
+                      }
+                      name="0-colliType"
+                      onChange={[Function]}
+                      options={
+                        Array [
+                          Object {
+                            "description": "BAR",
+                            "dimension_x": 5,
+                            "dimension_y": 6,
+                            "key": 7,
+                          },
+                        ]
+                      }
+                      placeholder="Select your colli type"
+                      showErrors={false}
+                    />
+                  </div>
                 </div>
                 <div
-                  className="chargeable_weight_values flex layout-row layout-align-start-center"
-                />
+                  className="layout-row flex layout-wrap layout-align-end-center cargo_unit_check"
+                >
+                  <Checkbox
+                    checked={true}
+                    className=""
+                    disabled={true}
+                    name="0-stackable"
+                    onChange={[Function]}
+                    onClick={[Function]}
+                    size="15px"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <div
+                    className="layout-row flex-65 layout-wrap layout-align-start-center"
+                  >
+                    <p
+                      className="input_check flex-none"
+                    >
+                      Non Stackable
+                    </p>
+                    <Tooltip
+                      color="#333"
+                      icon="fa-info-circle"
+                      text="non_stackable"
+                      theme={Object {}}
+                      toolText=""
+                    />
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex layout-wrap layout-align-start-center cargo_unit_check"
+                >
+                  <Checkbox
+                    checked={false}
+                    className=""
+                    disabled={true}
+                    name="0-dangerous_goods"
+                    onChange={[Function]}
+                    onClick={[Function]}
+                    size="15px"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <div
+                    className="layout-row flex-75 layout-wrap layout-align-start-center"
+                  >
+                    <p
+                      className="input_check flex-none"
+                    >
+                      Dangerous Goods
+                    </p>
+                    <Tooltip
+                      color="#333"
+                      icon="fa-info-circle"
+                      text="dangerous_goods"
+                      theme={Object {}}
+                      toolText=""
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="cargo_item_info expanded flex-100"
+            >
+              <div
+                className="inner_cargo_item_info layout-row flex-100 layout-wrap layout-align-start"
+              >
+                <div
+                  className="flex-25 layout-wrap layout-row"
+                >
+                  <div
+                    className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
+                  >
+                    <p
+                      className="input_label flex-none"
+                    >
+                      Total
+                       
+                      Volume
+                      :  
+                      <span
+                        className="input_value"
+                      >
+                        NaN
+                         m
+                        <sup
+                          style={
+                            Object {
+                              "fontSize": "10px",
+                              "height": "17px",
+                              "marginLeft": "1px",
+                            }
+                          }
+                        >
+                          3
+                        </sup>
+                      </span>
+                    </p>
+                  </div>
+                  <div
+                    className="chargeable_weight layout-row flex-100 layout-wrap layout-align-start-center"
+                  >
+                    <div
+                      className="layout-row flex-none layout-wrap layout-align-end-center"
+                    >
+                      <p
+                        className="subchargeable flex-none"
+                      >
+                        Chargeable
+                        : 
+                      </p>
+                    </div>
+                    <div
+                      className="chargeable_weight_values flex layout-row layout-align-start-center"
+                    />
+                  </div>
+                </div>
+                <div
+                  className="padding_left flex-25 layout-wrap layout-row"
+                >
+                  <div
+                    className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
+                  >
+                    <p
+                      className="input_label flex-none"
+                    >
+                      Total
+                       
+                      NO_TRANSLATION | key "common:weight"
+                      :  
+                      <span
+                        className="input_value"
+                      >
+                        NaN
+                         kg
+                      </span>
+                    </p>
+                  </div>
+                  <div
+                    className="chargeable_weight layout-row flex-100 layout-wrap layout-align-start-center"
+                  >
+                    <div
+                      className="layout-row flex-none layout-wrap layout-align-end-center"
+                    >
+                      <p
+                        className="subchargeable flex-none"
+                      >
+                        Chargeable
+                        : 
+                      </p>
+                    </div>
+                    <div
+                      className="chargeable_weight_values flex layout-row layout-align-start-center"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -569,7 +596,7 @@ exports[`shallow rendering 1`] = `
             </p>
           </div>
           <div
-            className="flex-100 layout-row cargo_unit_inputs"
+            className="flex-100 layout-row layout-wrap cargo_unit_inputs"
           >
             <div
               className="flex-15 layout-row layout-align-center"
@@ -585,347 +612,369 @@ exports[`shallow rendering 1`] = `
               className="cargo_item_box cargo_item_inputs flex-85"
             >
               <div
-                className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
                 style={
                   Object {
-                    "marginBottom": "20px",
+                    "position": "relative",
                   }
                 }
               >
                 <div
-                  className="layout-row flex-20 layout-wrap layout-align-start-center input_length"
+                  className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
+                  style={
+                    Object {
+                      "marginBottom": "20px",
+                    }
+                  }
                 >
-                  <h4>
-                    Length
-                  </h4>
                   <div
-                    className="flex-90 layout-row input_box"
-                    data-event="disable"
-                    data-tip=""
-                    onBlur={[Function]}
-                    onFocus={[Function]}
-                    onMouseEnter={[Function]}
+                    className="layout-row flex-20 layout-wrap layout-align-start-center input_length"
                   >
-                    <img
-                      alt="length"
-                      border="0"
-                      data-for="RANDOM_KEY_1"
-                      data-tip="Length"
-                    />
-                    <input
-                      className="flex-80"
-                      type="number"
-                    />
+                    <h4>
+                      Length
+                    </h4>
                     <div
-                      className="flex-25 layout-row layout-align-center-center"
+                      className="flex-90 layout-row input_box"
+                      data-event="disable"
+                      data-tip=""
+                      onBlur={[Function]}
+                      onFocus={[Function]}
+                      onMouseEnter={[Function]}
                     >
-                      cm
+                      <img
+                        alt="length"
+                        border="0"
+                        data-for="RANDOM_KEY_1"
+                        data-tip="Length"
+                      />
+                      <input
+                        className="flex-80"
+                        type="number"
+                      />
+                      <div
+                        className="flex-25 layout-row layout-align-center-center"
+                      >
+                        cm
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    className="layout-row flex-20 layout-wrap layout-align-start-center input_width"
+                  >
+                    <h4>
+                      Width
+                    </h4>
+                    <div
+                      className="flex-90 layout-row input_box"
+                      data-event="disable"
+                      data-tip=""
+                      onBlur={[Function]}
+                      onFocus={[Function]}
+                      onMouseEnter={[Function]}
+                    >
+                      <img
+                        alt="width"
+                        border="0"
+                        data-for="RANDOM_KEY_1"
+                        data-tip="Width"
+                      />
+                      <input
+                        className="flex-80"
+                        type="number"
+                      />
+                      <div
+                        className="flex-25 layout-row layout-align-center-center"
+                      >
+                        cm
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    className="layout-row flex-20 layout-wrap layout-align-start-center input_height"
+                  >
+                    <h4>
+                      Height
+                    </h4>
+                    <div
+                      className="flex-90 layout-row input_box"
+                      data-event="disable"
+                      data-tip=""
+                      onBlur={[Function]}
+                      onFocus={[Function]}
+                      onMouseEnter={[Function]}
+                    >
+                      <img
+                        alt="height"
+                        border="0"
+                        data-for="RANDOM_KEY_1"
+                        data-tip="Height"
+                      />
+                      <input
+                        className="flex-80"
+                        type="number"
+                      />
+                      <div
+                        className="flex-25 layout-row layout-align-center-center"
+                      >
+                        cm
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    className="flex-5"
+                  />
+                  <div
+                    className="layout-row flex-30 layout-wrap layout-align-start-center input_weight"
+                  >
+                    <h4>
+                      NO_TRANSLATION | key "common:Gross Weight"
+                    </h4>
+                    <div
+                      className="flex-60 layout-row input_box"
+                    >
+                      <img
+                        alt="weight"
+                        border="0"
+                        data-for="RANDOM_KEY_1"
+                        data-tip="Gross Weight"
+                      />
+                      <Tooltip
+                        color="#333"
+                        icon="fa-info-circle"
+                        text="payload_in_kg"
+                        theme={Object {}}
+                        toolText=""
+                      />
+                      <input
+                        className="flex-80"
+                        type="number"
+                      />
+                      <div
+                        className="flex-20 layout-row layout-align-center-center"
+                      >
+                        kg
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div
-                  className="layout-row flex-20 layout-wrap layout-align-start-center input_width"
-                >
-                  <h4>
-                    Width
-                  </h4>
-                  <div
-                    className="flex-90 layout-row input_box"
-                    data-event="disable"
-                    data-tip=""
-                    onBlur={[Function]}
-                    onFocus={[Function]}
-                    onMouseEnter={[Function]}
-                  >
-                    <img
-                      alt="width"
-                      border="0"
-                      data-for="RANDOM_KEY_1"
-                      data-tip="Width"
-                    />
-                    <input
-                      className="flex-80"
-                      type="number"
-                    />
-                    <div
-                      className="flex-25 layout-row layout-align-center-center"
-                    >
-                      cm
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className="layout-row flex-20 layout-wrap layout-align-start-center input_height"
-                >
-                  <h4>
-                    Height
-                  </h4>
-                  <div
-                    className="flex-90 layout-row input_box"
-                    data-event="disable"
-                    data-tip=""
-                    onBlur={[Function]}
-                    onFocus={[Function]}
-                    onMouseEnter={[Function]}
-                  >
-                    <img
-                      alt="height"
-                      border="0"
-                      data-for="RANDOM_KEY_1"
-                      data-tip="Height"
-                    />
-                    <input
-                      className="flex-80"
-                      type="number"
-                    />
-                    <div
-                      className="flex-25 layout-row layout-align-center-center"
-                    >
-                      cm
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className="flex-5"
+                  className="flex-100 layout-row"
+                  style={
+                    Object {
+                      "borderBottom": "1px solid rgb(236, 236, 236)",
+                    }
+                  }
                 />
                 <div
-                  className="layout-row flex-30 layout-wrap layout-align-start-center input_weight"
-                >
-                  <h4>
-                    NO_TRANSLATION | key "common:Gross Weight"
-                  </h4>
-                  <div
-                    className="flex-60 layout-row input_box"
-                  >
-                    <img
-                      alt="weight"
-                      border="0"
-                      data-for="RANDOM_KEY_1"
-                      data-tip="Gross Weight"
-                    />
-                    <Tooltip
-                      color="#333"
-                      icon="fa-info-circle"
-                      text="payload_in_kg"
-                      theme={Object {}}
-                      toolText=""
-                    />
-                    <input
-                      className="flex-80"
-                      type="number"
-                    />
-                    <div
-                      className="flex-20 layout-row layout-align-center-center"
-                    >
-                      kg
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className="flex-100 layout-row"
-                style={
-                  Object {
-                    "borderBottom": "1px solid rgb(236, 236, 236)",
-                  }
-                }
-              />
-              <div
-                className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
-                style={
-                  Object {
-                    "marginTop": "20px",
-                  }
-                }
-              >
-                <div
-                  className="layout-row flex-40 layout-wrap layout-align-start-center colli_type"
-                >
-                  <div
-                    style={
-                      Object {
-                        "width": "95%",
-                      }
+                  className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
+                  style={
+                    Object {
+                      "margin": "20px 0",
                     }
+                  }
+                >
+                  <div
+                    className="layout-row flex-40 layout-wrap layout-align-start-center colli_type"
                   >
-                    <NamedSelect
-                      className="select_100"
-                      inputProps={
+                    <div
+                      style={
                         Object {
-                          "name": "-1-colliType",
+                          "width": "95%",
                         }
                       }
-                      name="-1-colliType"
-                      onChange={[Function]}
-                      options={
-                        Array [
+                    >
+                      <NamedSelect
+                        className="select_100"
+                        inputProps={
                           Object {
-                            "description": "BAR",
-                            "dimension_x": 5,
-                            "dimension_y": 6,
-                            "key": 7,
-                          },
-                        ]
-                      }
-                      placeholder="Select your colli type"
-                      showErrors={false}
-                    />
-                  </div>
-                </div>
-                <div
-                  className="layout-row flex layout-wrap layout-align-end-center cargo_unit_check"
-                >
-                  <Checkbox
-                    checked={false}
-                    className=""
-                    disabled={true}
-                    name="-1-stackable"
-                    onChange={[Function]}
-                    onClick={[Function]}
-                    size="15px"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                  />
-                  <div
-                    className="layout-row flex-65 layout-wrap layout-align-start-center"
-                  >
-                    <p
-                      className="input_label flex-none"
-                    >
-                      Non Stackable
-                    </p>
-                    <Tooltip
-                      color="#333"
-                      icon="fa-info-circle"
-                      text="non_stackable"
-                      theme={Object {}}
-                      toolText=""
-                    />
-                  </div>
-                </div>
-                <div
-                  className="layout-row flex layout-wrap layout-align-start-center cargo_unit_check"
-                >
-                  <Checkbox
-                    checked={false}
-                    className=""
-                    disabled={true}
-                    name="-1-dangerous_goods"
-                    onChange={[Function]}
-                    onClick={[Function]}
-                    size="15px"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                  />
-                  <div
-                    className="layout-row flex-75 layout-wrap layout-align-start-center"
-                  >
-                    <p
-                      className="input_label flex-none"
-                    >
-                      Dangerous Goods
-                    </p>
-                    <Tooltip
-                      color="#333"
-                      icon="fa-info-circle"
-                      text="dangerous_goods"
-                      theme={Object {}}
-                      toolText=""
-                    />
-                  </div>
-                </div>
-              </div>
-              <div
-                className="expandIcon"
-                onClick={[Function]}
-              >
-                Additional Details
-                <i
-                  className="undefined fa fa-chevron-right"
-                />
-              </div>
-            </div>
-          </div>
-          <div
-            className="cargo_item_info undefined flex-100"
-          >
-            <div
-              className="inner_cargo_item_info layout-row layout-wrap layout-align-start"
-            >
-              <div
-                className="total flex-15 layout-row layout-wrap layout-align-center-stretch"
-              >
-                <div
-                  className="cargo_item_box layout-row flex-100 layout-align-center-center"
-                >
-                  <p
-                    className="input_label flex-none"
-                  >
-                    Total
-                  </p>
-                </div>
-              </div>
-              <div
-                className="cargo_item_box flex layout-row"
-              >
-                <div
-                  className="flex-30 layout-row layout-wrap layout-align-end-center"
-                >
-                  <div
-                    className="layout-row flex-40 layout-align-center"
-                  >
-                    <p
-                      className="input_label flex-none"
-                    >
-                      Volume
-                      :  
-                      <span
-                        className="input_value"
-                      >
-                         m
-                        <sup
-                          style={
-                            Object {
-                              "fontSize": "10px",
-                              "height": "17px",
-                              "marginLeft": "1px",
-                            }
+                            "name": "-1-colliType",
                           }
-                        >
-                          3
-                        </sup>
-                      </span>
-                    </p>
+                        }
+                        name="-1-colliType"
+                        onChange={[Function]}
+                        options={
+                          Array [
+                            Object {
+                              "description": "BAR",
+                              "dimension_x": 5,
+                              "dimension_y": 6,
+                              "key": 7,
+                            },
+                          ]
+                        }
+                        placeholder="Select your colli type"
+                        showErrors={false}
+                      />
+                    </div>
+                  </div>
+                  <div
+                    className="layout-row flex layout-wrap layout-align-end-center cargo_unit_check"
+                  >
+                    <Checkbox
+                      checked={false}
+                      className=""
+                      disabled={true}
+                      name="-1-stackable"
+                      onChange={[Function]}
+                      onClick={[Function]}
+                      size="15px"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                    <div
+                      className="layout-row flex-65 layout-wrap layout-align-start-center"
+                    >
+                      <p
+                        className="input_check flex-none"
+                      >
+                        Non Stackable
+                      </p>
+                      <Tooltip
+                        color="#333"
+                        icon="fa-info-circle"
+                        text="non_stackable"
+                        theme={Object {}}
+                        toolText=""
+                      />
+                    </div>
+                  </div>
+                  <div
+                    className="layout-row flex layout-wrap layout-align-start-center cargo_unit_check"
+                  >
+                    <Checkbox
+                      checked={false}
+                      className=""
+                      disabled={true}
+                      name="-1-dangerous_goods"
+                      onChange={[Function]}
+                      onClick={[Function]}
+                      size="15px"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                    <div
+                      className="layout-row flex-75 layout-wrap layout-align-start-center"
+                    >
+                      <p
+                        className="input_check flex-none"
+                      >
+                        Dangerous Goods
+                      </p>
+                      <Tooltip
+                        color="#333"
+                        icon="fa-info-circle"
+                        text="dangerous_goods"
+                        theme={Object {}}
+                        toolText=""
+                      />
+                    </div>
                   </div>
                 </div>
+              </div>
+              <div
+                className="cargo_item_info undefined flex-100"
+              >
                 <div
-                  className="chargeable_weight layout-row flex layout-wrap layout-align-end-center"
+                  className="inner_cargo_item_info layout-row flex-100 layout-wrap layout-align-start"
                 >
                   <div
-                    className="layout-row flex-30 layout-wrap layout-align-end-center"
+                    className="flex-25 layout-wrap layout-row"
                   >
-                    <p
-                      className="input_label flex-none"
+                    <div
+                      className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
                     >
-                      Chargeable Weight
-                      : 
-                    </p>
+                      <p
+                        className="input_label flex-none"
+                      >
+                        Total
+                         
+                        Volume
+                        :  
+                        <span
+                          className="input_value"
+                        >
+                           m
+                          <sup
+                            style={
+                              Object {
+                                "fontSize": "10px",
+                                "height": "17px",
+                                "marginLeft": "1px",
+                              }
+                            }
+                          >
+                            3
+                          </sup>
+                        </span>
+                      </p>
+                    </div>
+                    <div
+                      className="chargeable_weight layout-row flex-100 layout-wrap layout-align-start-center"
+                    >
+                      <div
+                        className="layout-row flex-none layout-wrap layout-align-end-center"
+                      >
+                        <p
+                          className="subchargeable flex-none"
+                        >
+                          Chargeable
+                          : 
+                        </p>
+                      </div>
+                      <div
+                        className="chargeable_weight_values flex layout-row layout-align-start-center"
+                      />
+                    </div>
                   </div>
                   <div
-                    className="chargeable_weight_values flex layout-row layout-align-start-center"
-                  />
+                    className="padding_left flex-25 layout-wrap layout-row"
+                  >
+                    <div
+                      className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
+                    >
+                      <p
+                        className="input_label flex-none"
+                      >
+                        Total
+                         
+                        NO_TRANSLATION | key "common:weight"
+                        :  
+                        <span
+                          className="input_value"
+                        >
+                           kg
+                        </span>
+                      </p>
+                    </div>
+                    <div
+                      className="chargeable_weight layout-row flex-100 layout-wrap layout-align-start-center"
+                    >
+                      <div
+                        className="layout-row flex-none layout-wrap layout-align-end-center"
+                      >
+                        <p
+                          className="subchargeable flex-none"
+                        >
+                          Chargeable
+                          : 
+                        </p>
+                      </div>
+                      <div
+                        className="chargeable_weight_values flex layout-row layout-align-start-center"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
