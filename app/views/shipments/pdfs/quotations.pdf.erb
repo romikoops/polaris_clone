@@ -80,11 +80,12 @@
                 <div class="subtotal-currency-single">
                   <h4>Fees charged in <%= currency_key %>:</h4>
                   <h3> 
-                    <%= if ['export', 'import'].include?(charge_key) 
-                     sub_charges.sum{|c| c['value']} 
-                     else
-                     sub_charges.sum{|c| c['total']['value']} 
-                     end
+                    <%= 
+                      if ['export', 'import'].include?(charge_key) 
+                        sub_charges.sum{|c| c['value']} 
+                      else
+                        sub_charges.sum{|c| c['total']['value']} 
+                      end
                      %>&nbsp;<%= currency_key %>
                   </h3>
                 </div>
@@ -114,7 +115,7 @@
             <%= tenant.scope["quote_notes"] || "" %>
           </p>
         </div>
-      <%end%>
+      <% end %>
       
     <% end %>
   
