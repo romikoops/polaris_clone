@@ -35,4 +35,22 @@
       letter-spacing: 0.02em;
     }
   }
+  .currency_header {
+    background: #F6F6F6;
+    border-bottom: 1px solid #E0E0E0;
+    height: 40px;
+    span {
+      padding-left: 20px;
+      padding-right: 20px;
+      font-weight: bold;
+      line-height: normal;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+    }
+    p {
+      font-weight: 900;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+    }
+  }
 }
