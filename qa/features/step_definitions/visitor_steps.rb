@@ -19,9 +19,9 @@ end
 When('I select {string} as {string}') do |place, type|
   if place[/\d+/]
     if type == 'Origin'
-      find('.ccb_pre_carriage').click
+      find('.ccb_pre_carriage', wait: 10).click
     elsif type == 'Destination'
-      find('.ccb_on_carriage').click
+      find('.ccb_on_carriage', wait: 10).click
     end
     elem = find('div', class: "ccb_#{type.downcase}_carriage_input", wait: 10)
     within(elem) do
