@@ -7,6 +7,7 @@ import { AdminShipmentsIndex } from './'
 import AdminShipmentView from './AdminShipmentView/AdminShipmentView'
 import { adminActions } from '../../actions'
 import { AdminShipmentsGroup } from './Shipments/Group'
+import GenericError from '../../components/ErrorHandling/Generic'
 
 class AdminShipments extends Component {
   constructor (props) {
@@ -61,147 +62,149 @@ class AdminShipments extends Component {
     }
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding">
-        <Switch className="flex">
-          <Route
-            exact
-            path="/admin/shipments"
-            render={props => (
-              <AdminShipmentsIndex
-                theme={theme}
-                handleShipmentAction={this.handleShipmentAction}
-                clients={clients}
-                hubs={hubs}
-                adminDispatch={adminDispatch}
-                hubHash={hubHash}
-                shipments={shipments}
-                user={user}
-                viewShipment={this.viewShipment}
-                {...props}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin/shipments/view/:id"
-            render={props => (
-              <AdminShipmentView
-                theme={theme}
-                adminDispatch={adminDispatch}
-                loading={loading}
-                hubs={hubs}
-                scope={tenant.data.scope}
-                handleShipmentAction={this.handleShipmentAction}
-                shipmentData={shipment}
-                clients={clients}
-                user={user}
-                tenant={tenant}
-                {...props}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin/shipments/requested"
-            render={props => (
-              <AdminShipmentsGroup
-                theme={theme}
-                title="Requested"
-                target="requested"
-                adminDispatch={adminDispatch}
-                loading={loading}
-                hubs={hubs}
-                handleShipmentAction={this.handleShipmentAction}
-                shipments={shipments}
-                hubHash={hubHash}
-                clients={clients}
-                viewShipment={this.viewShipment}
-                {...props}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin/shipments/open"
-            render={props => (
-              <AdminShipmentsGroup
-                theme={theme}
-                title="Open"
-                target="open"
-                adminDispatch={adminDispatch}
-                loading={loading}
-                hubs={hubs}
-                handleShipmentAction={this.handleShipmentAction}
-                shipments={shipments}
-                hubHash={hubHash}
-                clients={clients}
-                viewShipment={this.viewShipment}
-                {...props}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin/shipments/finished"
-            render={props => (
-              <AdminShipmentsGroup
-                theme={theme}
-                title="Finished"
-                target="finished"
-                adminDispatch={adminDispatch}
-                loading={loading}
-                hubs={hubs}
-                handleShipmentAction={this.handleShipmentAction}
-                shipments={shipments}
-                hubHash={hubHash}
-                clients={clients}
-                viewShipment={this.viewShipment}
-                {...props}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin/shipments/rejected"
-            render={props => (
-              <AdminShipmentsGroup
-                theme={theme}
-                title="Rejected"
-                target="rejected"
-                adminDispatch={adminDispatch}
-                loading={loading}
-                hubs={hubs}
-                handleShipmentAction={this.handleShipmentAction}
-                shipments={shipments}
-                hubHash={hubHash}
-                clients={clients}
-                viewShipment={this.viewShipment}
-                {...props}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin/shipments/archived"
-            render={props => (
-              <AdminShipmentsGroup
-                theme={theme}
-                title="Archived"
-                target="archived"
-                adminDispatch={adminDispatch}
-                loading={loading}
-                hubs={hubs}
-                handleShipmentAction={this.handleShipmentAction}
-                shipments={shipments}
-                hubHash={hubHash}
-                clients={clients}
-                viewShipment={this.viewShipment}
-                {...props}
-              />
-            )}
-          />
-        </Switch>
-      </div>
+      <GenericError theme={theme}>
+        <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding">
+          <Switch className="flex">
+            <Route
+              exact
+              path="/admin/shipments"
+              render={props => (
+                <AdminShipmentsIndex
+                  theme={theme}
+                  handleShipmentAction={this.handleShipmentAction}
+                  clients={clients}
+                  hubs={hubs}
+                  adminDispatch={adminDispatch}
+                  hubHash={hubHash}
+                  shipments={shipments}
+                  user={user}
+                  viewShipment={this.viewShipment}
+                  {...props}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/shipments/view/:id"
+              render={props => (
+                <AdminShipmentView
+                  theme={theme}
+                  adminDispatch={adminDispatch}
+                  loading={loading}
+                  hubs={hubs}
+                  scope={tenant.data.scope}
+                  handleShipmentAction={this.handleShipmentAction}
+                  shipmentData={shipment}
+                  clients={clients}
+                  user={user}
+                  tenant={tenant}
+                  {...props}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/shipments/requested"
+              render={props => (
+                <AdminShipmentsGroup
+                  theme={theme}
+                  title="Requested"
+                  target="requested"
+                  adminDispatch={adminDispatch}
+                  loading={loading}
+                  hubs={hubs}
+                  handleShipmentAction={this.handleShipmentAction}
+                  shipments={shipments}
+                  hubHash={hubHash}
+                  clients={clients}
+                  viewShipment={this.viewShipment}
+                  {...props}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/shipments/open"
+              render={props => (
+                <AdminShipmentsGroup
+                  theme={theme}
+                  title="Open"
+                  target="open"
+                  adminDispatch={adminDispatch}
+                  loading={loading}
+                  hubs={hubs}
+                  handleShipmentAction={this.handleShipmentAction}
+                  shipments={shipments}
+                  hubHash={hubHash}
+                  clients={clients}
+                  viewShipment={this.viewShipment}
+                  {...props}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/shipments/finished"
+              render={props => (
+                <AdminShipmentsGroup
+                  theme={theme}
+                  title="Finished"
+                  target="finished"
+                  adminDispatch={adminDispatch}
+                  loading={loading}
+                  hubs={hubs}
+                  handleShipmentAction={this.handleShipmentAction}
+                  shipments={shipments}
+                  hubHash={hubHash}
+                  clients={clients}
+                  viewShipment={this.viewShipment}
+                  {...props}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/shipments/rejected"
+              render={props => (
+                <AdminShipmentsGroup
+                  theme={theme}
+                  title="Rejected"
+                  target="rejected"
+                  adminDispatch={adminDispatch}
+                  loading={loading}
+                  hubs={hubs}
+                  handleShipmentAction={this.handleShipmentAction}
+                  shipments={shipments}
+                  hubHash={hubHash}
+                  clients={clients}
+                  viewShipment={this.viewShipment}
+                  {...props}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/shipments/archived"
+              render={props => (
+                <AdminShipmentsGroup
+                  theme={theme}
+                  title="Archived"
+                  target="archived"
+                  adminDispatch={adminDispatch}
+                  loading={loading}
+                  hubs={hubs}
+                  handleShipmentAction={this.handleShipmentAction}
+                  shipments={shipments}
+                  hubHash={hubHash}
+                  clients={clients}
+                  viewShipment={this.viewShipment}
+                  {...props}
+                />
+              )}
+            />
+          </Switch>
+        </div>
+      </GenericError>
     )
   }
 }

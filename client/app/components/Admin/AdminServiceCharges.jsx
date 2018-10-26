@@ -5,6 +5,7 @@ import styles from './Admin.scss'
 import { AdminHubTile } from './Hubs/AdminHubTile'
 import { AdminChargePanel } from './AdminChargePanel'
 import FileUploader from '../../components/FileUploader/FileUploader'
+import GenericError from '../../components/ErrorHandling/Generic'
 
 export class AdminServiceCharges extends Component {
   constructor (props) {
@@ -59,23 +60,26 @@ export class AdminServiceCharges extends Component {
           ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
           : 'black'
     }
+
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div className={`flex-100 layout-row layout-align-start-center ${styles.sec_title}`}>
-          <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
-            service charges
-          </p>
+      <GenericError theme={theme}>
+        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+          <div className={`flex-100 layout-row layout-align-start-center ${styles.sec_title}`}>
+            <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
+              service charges
+            </p>
+          </div>
+          <div
+            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}
+          >
+            <p className="flex-none">Upload Service Charges Sheet</p>
+            <FileUploader theme={theme} url={scUrl} type="xlsx" text="Service Charges .xlsx" />
+          </div>
+          <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+            {selectedHub ? chargeList : hubList}
+          </div>
         </div>
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}
-        >
-          <p className="flex-none">Upload Service Charges Sheet</p>
-          <FileUploader theme={theme} url={scUrl} type="xlsx" text="Service Charges .xlsx" />
-        </div>
-        <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-          {selectedHub ? chargeList : hubList}
-        </div>
-      </div>
+      </GenericError>
     )
   }
 }

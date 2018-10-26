@@ -11,6 +11,7 @@ import { authHeader } from '../../../../helpers'
 import { appActions } from '../../../../actions'
 import FileUploader from '../../../../components/FileUploader/FileUploader'
 import { NamedSelect } from '../../../../components/NamedSelect/NamedSelect'
+import GenericError from '../../../../components/ErrorHandling/Generic'
 
 const SA_BASE_URL =
   process.env.NODE_ENV === 'production'
@@ -242,459 +243,461 @@ class SuperAdminTenantCreator extends React.Component {
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-center-start ">
-        <div className="flex-100 layout-row layout-align-start-center">
-          <h2 className="flex-100">Set Theme</h2>
-          <div className="flex-50 layout-row layout-align-start-center layout-wrap">
-            <p className="flex-100">Choose Theme</p>
-            <NamedSelect
-              className="flex-100"
-              theme={theme}
-              value={selectedTenant}
-              options={tenantsArr}
-              onChange={e => this.setTheme(e)}
-              name="incoterm_info_level"
-            />
-          </div>
-        </div>
-        <div className="flex-80 layout-row layout-align-start-start layout-wrap">
+      <GenericError theme={theme}>
+        <div className="flex-100 layout-row layout-wrap layout-align-center-start ">
           <div className="flex-100 layout-row layout-align-start-center">
-            <h1 className="flex-none">Tenant Creator</h1>
-          </div>
-          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-            <h4 className="flex-100">Basic Info</h4>
-            <div className="flex-40 layout-row layout-align-start-center input_box">
-              <input
-                type="text"
-                value={newTenant.subdomain}
-                onChange={e => this.handleChange(e)}
-                name="subdomain"
-                placeholder="Subdomain"
-                className="flex-none"
-              />
-            </div>
-            <div className="flex-40 layout-row layout-align-start-center input_box">
-              <input
-                type="text"
-                value={newTenant.name}
-                onChange={e => this.handleChange(e)}
-                name="name"
-                placeholder="Name"
-                className="flex-none"
-              />
-            </div>
-          </div>
-          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-            <h4 className="flex-100">Theme</h4>
-            <div className="flex-40 layout-row layout-align-start-center input_box">
-              <input
-                type="text"
-                value={newTenant.theme.colors.primary}
-                onChange={e => this.handleChange(e)}
-                name="theme-colors-primary"
-                placeholder="Primary Color"
-                className="flex-none"
-              />
-              <div
-                className={`${styles.demo_color} flex-20`}
-                style={{ background: newTenant.theme.colors.primary }}
-              />
-            </div>
-            <div className="flex-40 layout-row layout-align-start-center input_box">
-              <input
-                type="text"
-                value={newTenant.theme.colors.secondary}
-                onChange={e => this.handleChange(e)}
-                name="theme-colors-secondary"
-                placeholder="Secondary Color"
-                className="flex-none"
-              />
-              <div
-                className={`${styles.demo_color} flex-20`}
-                style={{ background: newTenant.theme.colors.secondary }}
-              />
-            </div>
-            <div className="flex-40 layout-row layout-align-start-center input_box">
-              <input
-                type="text"
-                value={newTenant.theme.colors.brightPrimary}
-                onChange={e => this.handleChange(e)}
-                name="theme-colors-brightPrimary"
-                placeholder="Bright Primary Color"
-                className="flex-none"
-              />
-              <div
-                className={`${styles.demo_color} flex-20`}
-                style={{ background: newTenant.theme.colors.brightPrimary }}
-              />
-            </div>
-            <div className="flex-40 layout-row layout-align-start-center input_box">
-              <input
-                type="text"
-                value={newTenant.theme.colors.brightSecondary}
-                onChange={e => this.handleChange(e)}
-                name="theme-colors-brightSecondary"
-                placeholder="Bright Secondary Color"
-                className="flex-none"
-              />
-              <div
-                className={`${styles.demo_color} flex-20`}
-                style={{ background: newTenant.theme.colors.brightSecondary }}
-              />
-            </div>
-            <div
-              className="flex-50 layout-row
-              layout-align-start-center layout-wrap "
-            >
-              <div className="flex-50 layout-row layout-wrap">
-                <p className="flex-100">Logo - Large</p>
-                <FileUploader
-                  dispatchFn={file => this.uploadImages(file, 'logoLarge')}
-                  theme={theme}
-                />
-              </div>
-              <div className="flex-50 layout-row layout-wrap">
-                <div
-                  className={`${styles.demo_img} flex-none`}
-                  style={{ background: newTenant.theme.logoLarge }}
-                />
-              </div>
-            </div>
-            <div
-              className="flex-50 layout-row
-              layout-align-start-center layout-wrap "
-            >
-              <div className="flex-50 layout-row layout-wrap">
-                <p className="flex-100">Logo - Small</p>
-                <FileUploader
-                  dispatchFn={file => this.uploadImages(file, 'logoSmall')}
-                  theme={theme}
-                />
-              </div>
-              <div className="flex-50 layout-row layout-wrap">
-                <div
-                  className={`${styles.demo_img} flex-none`}
-                  style={{ background: newTenant.theme.logoSmall }}
-                />
-              </div>
-            </div>
-            <div
-              className="flex-50 layout-row
-              layout-align-start-center layout-wrap "
-            >
-              <div className="flex-50 layout-row layout-wrap">
-                <p className="flex-100">Logo - White</p>
-                <FileUploader
-                  dispatchFn={file => this.uploadImages(file, 'logoWhite')}
-                  theme={theme}
-                />
-              </div>
-              <div className="flex-50 layout-row layout-wrap">
-                <div
-                  className={`${styles.demo_img} flex-none`}
-                  style={{ background: newTenant.theme.logoWhite }}
-                />
-              </div>
-            </div>
-            <div className="flex-50 layout-row layout-align-start-center layout-wrap ">
-              <div className="flex-50 layout-row layout-wrap">
-                <p className="flex-100">Logo - Wide</p>
-                <FileUploader
-                  dispatchFn={file => this.uploadImages(file, 'logoWide')}
-                  theme={theme}
-                />
-              </div>
-              <div className="flex-50 layout-row layout-wrap">
-                <div
-                  className={`${styles.demo_img} flex-none`}
-                  style={{ background: newTenant.theme.logoWide }}
-                />
-              </div>
-            </div>
-            <div
-              className="flex-50 layout-row
-              layout-align-start-center layout-wrap "
-            >
-              <div className="flex-50 layout-row layout-wrap">
-                <p className="flex-100">Background</p>
-                <FileUploader
-                  dispatchFn={file => this.uploadImages(file, 'background')}
-                  theme={theme}
-                />
-              </div>
-              <div className="flex-50 layout-row layout-wrap">
-                <div
-                  className={`${styles.demo_img} flex-none`}
-                  style={{ background: newTenant.theme.background }}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-            <h4 className="flex-100">Addresses</h4>
-            <div className="flex-40 layout-row layout-align-start-center input_box_full">
-              <input
-                type="text"
-                value={newTenant.addresses.main}
-                onChange={e => this.handleChange(e)}
-                name="addresses-main"
-                placeholder="Main Address"
-                className="flex-none"
-              />
-            </div>
-          </div>
-          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-            <h4 className="flex-100">Phone Numbers</h4>
-            <div className="flex-40 layout-row layout-align-start-center input_box_full">
-              <input
-                type="text"
-                value={newTenant.phones.main}
-                onChange={e => this.handleChange(e)}
-                name="phones-main"
-                placeholder="Main Phone Number"
-                className="flex-none"
-              />
-            </div>
-            <div className="flex-40 layout-row layout-align-start-center input_box_full">
-              <input
-                type="text"
-                value={newTenant.phones.support}
-                onChange={e => this.handleChange(e)}
-                name="phones-support"
-                placeholder="Support Phone Number"
-                className="flex-none"
-              />
-            </div>
-          </div>
-          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-            <h4 className="flex-100">Emails</h4>
-            <div className="flex-40 layout-row layout-align-start-center input_box_full">
-              <input
-                type="text"
-                value={newTenant.emails.sales}
-                onChange={e => this.handleChange(e)}
-                name="emails-sales"
-                placeholder="Sales Email Address"
-                className="flex-none"
-              />
-            </div>
-            <div className="flex-40 layout-row layout-align-start-center input_box_full">
-              <input
-                type="text"
-                value={newTenant.emails.support.general}
-                onChange={e => this.handleChange(e)}
-                name="emails-support-general"
-                placeholder="General Support Email"
-                className="flex-none"
-              />
-            </div>
-            <div className="flex-40 layout-row layout-align-start-center input_box_full">
-              <input
-                type="text"
-                value={newTenant.emails.support.sea}
-                onChange={e => this.handleChange(e)}
-                name="emails-support-sea"
-                placeholder="Ocean Freight Support Email"
-                className="flex-none"
-              />
-            </div>
-            <div className="flex-40 layout-row layout-align-start-center input_box_full">
-              <input
-                type="text"
-                value={newTenant.emails.support.air}
-                onChange={e => this.handleChange(e)}
-                name="emails-support-air"
-                placeholder="Air Freight Support Email"
-                className="flex-none"
-              />
-            </div>
-          </div>
-          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-            <h4 className="flex-100">Scope</h4>
-            <div className="flex-100 layout-row layout-wrap">
-              <h5 className="flex-none">Cargo Modes of Transport</h5>
-              <div className="flex-50 layout-row layout-align-start-center layout-wrap">
-                <p className="flex-100">Ocean - Container</p>
-                <Toggle
-                  checked={newTenant.scope.modes_of_transport.ocean.container}
-                  onChange={e => this.handleToggle(e, 'modes_of_transport-ocean-container')}
-                />
-              </div>
-              <div className="flex-50 layout-row layout-align-start-center layout-wrap">
-                <p className="flex-100">Ocean - Cargo item</p>
-                <Toggle
-                  checked={newTenant.scope.modes_of_transport.ocean.cargo_item}
-                  onChange={e => this.handleToggle(e, 'modes_of_transport-ocean-cargo_item')}
-                />
-              </div>
-              <div className="flex-50 layout-row layout-align-start-center layout-wrap">
-                <p className="flex-100">Air - Container</p>
-                <Toggle
-                  checked={newTenant.scope.modes_of_transport.air.container}
-                  onChange={e => this.handleToggle(e, 'modes_of_transport-air-container')}
-                />
-              </div>
-              <div className="flex-50 layout-row layout-align-start-center layout-wrap">
-                <p className="flex-100">Air - Cargo item</p>
-                <Toggle
-                  checked={newTenant.scope.modes_of_transport.air.cargo_item}
-                  onChange={e => this.handleToggle(e, 'modes_of_transport-air-cargo_item')}
-                />
-              </div>
-              <div className="flex-50 layout-row layout-align-start-center layout-wrap">
-                <p className="flex-100">Rail - Container</p>
-                <Toggle
-                  checked={newTenant.scope.modes_of_transport.rail.container}
-                  onChange={e => this.handleToggle(e, 'modes_of_transport-rail-container')}
-                />
-              </div>
-              <div className="flex-50 layout-row layout-align-start-center layout-wrap">
-                <p className="flex-100">Rail - Cargo item</p>
-                <Toggle
-                  checked={newTenant.scope.modes_of_transport.rail.cargo_item}
-                  onChange={e => this.handleToggle(e, 'modes_of_transport-rail-cargo_item')}
-                />
-              </div>
-            </div>
+            <h2 className="flex-100">Set Theme</h2>
             <div className="flex-50 layout-row layout-align-start-center layout-wrap">
-              <p className="flex-100">Dangerous Goods</p>
-              <Toggle
-                checked={newTenant.scope.dangerous_goods}
-                onChange={e => this.handleToggle(e, 'dangerous_goods')}
-              />
-            </div>
-            <div className="flex-50 layout-row layout-align-start-center layout-wrap">
-              <p className="flex-100">Detailed Billing</p>
-              <Toggle
-                checked={newTenant.scope.detailed_billing}
-                onChange={e => this.handleToggle(e, 'detailed_billing')}
-              />
-            </div>
-            <div className="flex-50 layout-row layout-align-start-center layout-wrap">
-              <p className="flex-100">Has Insurance</p>
-              <Toggle
-                checked={newTenant.scope.has_insurance}
-                onChange={e => this.handleToggle(e, 'has_insurance')}
-              />
-            </div>
-            <div className="flex-50 layout-row layout-align-start-center layout-wrap">
-              <p className="flex-100">Has Customs</p>
-              <Toggle
-                checked={newTenant.scope.has_customs}
-                onChange={e => this.handleToggle(e, 'has_customs')}
-              />
-            </div>
-            <div className="flex-50 layout-row layout-align-start-center layout-wrap">
-              <p className="flex-100">Incoterm Detail</p>
+              <p className="flex-100">Choose Theme</p>
               <NamedSelect
+                className="flex-100"
                 theme={theme}
-                value={newTenant.scope.incoterm_info_level}
-                options={incoOptions}
-                onChange={e => this.handleSelect(e)}
+                value={selectedTenant}
+                options={tenantsArr}
+                onChange={e => this.setTheme(e)}
                 name="incoterm_info_level"
               />
             </div>
-            <div className="flex-50 layout-row layout-align-start-center layout-wrap">
-              <p className="flex-100">Cargo Detail</p>
-              <NamedSelect
-                theme={theme}
-                value={newTenant.scope.cargo_info_level}
-                options={incoOptions}
-                onChange={e => this.handleSelect(e)}
-                name="cargo_info_level"
-              />
+          </div>
+          <div className="flex-80 layout-row layout-align-start-start layout-wrap">
+            <div className="flex-100 layout-row layout-align-start-center">
+              <h1 className="flex-none">Tenant Creator</h1>
             </div>
-            <div className="flex-100 layout-row layout-wrap">
-              <h5 className="flex-100">Carriage options</h5>
-              <div className="flex-100 layout-row layout-wrap">
-                <p className="flex-100">On Carriage</p>
-                <div className="flex-50 layout-row layout-align-start-center layout-wrap">
-                  <p className="flex-100">Import</p>
-                  <NamedSelect
-                    theme={theme}
-                    value={newTenant.scope.carriage_options.on_carriage.import}
-                    options={carriageOptions}
-                    onChange={e => this.handleSelect(e)}
-                    name="carriage_options-on_carriage-import"
-                  />
-                </div>
-                <div className="flex-50 layout-row layout-align-start-center layout-wrap">
-                  <p className="flex-100">Export</p>
-                  <NamedSelect
-                    theme={theme}
-                    value={newTenant.scope.carriage_options.on_carriage.import}
-                    options={carriageOptions}
-                    onChange={e => this.handleSelect(e)}
-                    name="carriage_options-on_carriage-export"
-                  />
-                </div>
+            <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+              <h4 className="flex-100">Basic Info</h4>
+              <div className="flex-40 layout-row layout-align-start-center input_box">
+                <input
+                  type="text"
+                  value={newTenant.subdomain}
+                  onChange={e => this.handleChange(e)}
+                  name="subdomain"
+                  placeholder="Subdomain"
+                  className="flex-none"
+                />
               </div>
-              <div className="flex-100 layout-row layout-wrap">
-                <p className="flex-100">Pre Carriage</p>
-                <div className="flex-50 layout-row layout-align-start-center layout-wrap">
-                  <p className="flex-100">Import</p>
-                  <NamedSelect
-                    theme={theme}
-                    value={newTenant.scope.carriage_options.pre_carriage.import}
-                    options={carriageOptions}
-                    onChange={e => this.handleSelect(e)}
-                    name="carriage_options-pre_carriage-import"
-                  />
-                </div>
-                <div className="flex-50 layout-row layout-align-start-center layout-wrap">
-                  <p className="flex-100">Export</p>
-                  <NamedSelect
-                    theme={theme}
-                    value={newTenant.scope.carriage_options.pre_carriage.import}
-                    options={carriageOptions}
-                    onChange={e => this.handleSelect(e)}
-                    name="carriage_options-pre_carriage-export"
-                  />
-                </div>
+              <div className="flex-40 layout-row layout-align-start-center input_box">
+                <input
+                  type="text"
+                  value={newTenant.name}
+                  onChange={e => this.handleChange(e)}
+                  name="name"
+                  placeholder="Name"
+                  className="flex-none"
+                />
               </div>
             </div>
-            <div className="flex-100 layout-row layout-wrap">
-              <h5 className="flex-100">Terms</h5>
-              <div className="flex-100 layout-row layout-wrap">
-                <div className="flex-100 layout-row layout-align-start-center input_box_full">
-                  <input
-                    type="text"
-                    value={newTenant.scope.terms[0]}
-                    onChange={e => this.handleTermsChange(e)}
-                    name="0"
-                    placeholder="Support Phone Number"
-                    className="flex-none"
+            <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+              <h4 className="flex-100">Theme</h4>
+              <div className="flex-40 layout-row layout-align-start-center input_box">
+                <input
+                  type="text"
+                  value={newTenant.theme.colors.primary}
+                  onChange={e => this.handleChange(e)}
+                  name="theme-colors-primary"
+                  placeholder="Primary Color"
+                  className="flex-none"
+                />
+                <div
+                  className={`${styles.demo_color} flex-20`}
+                  style={{ background: newTenant.theme.colors.primary }}
+                />
+              </div>
+              <div className="flex-40 layout-row layout-align-start-center input_box">
+                <input
+                  type="text"
+                  value={newTenant.theme.colors.secondary}
+                  onChange={e => this.handleChange(e)}
+                  name="theme-colors-secondary"
+                  placeholder="Secondary Color"
+                  className="flex-none"
+                />
+                <div
+                  className={`${styles.demo_color} flex-20`}
+                  style={{ background: newTenant.theme.colors.secondary }}
+                />
+              </div>
+              <div className="flex-40 layout-row layout-align-start-center input_box">
+                <input
+                  type="text"
+                  value={newTenant.theme.colors.brightPrimary}
+                  onChange={e => this.handleChange(e)}
+                  name="theme-colors-brightPrimary"
+                  placeholder="Bright Primary Color"
+                  className="flex-none"
+                />
+                <div
+                  className={`${styles.demo_color} flex-20`}
+                  style={{ background: newTenant.theme.colors.brightPrimary }}
+                />
+              </div>
+              <div className="flex-40 layout-row layout-align-start-center input_box">
+                <input
+                  type="text"
+                  value={newTenant.theme.colors.brightSecondary}
+                  onChange={e => this.handleChange(e)}
+                  name="theme-colors-brightSecondary"
+                  placeholder="Bright Secondary Color"
+                  className="flex-none"
+                />
+                <div
+                  className={`${styles.demo_color} flex-20`}
+                  style={{ background: newTenant.theme.colors.brightSecondary }}
+                />
+              </div>
+              <div
+                className="flex-50 layout-row
+                layout-align-start-center layout-wrap "
+              >
+                <div className="flex-50 layout-row layout-wrap">
+                  <p className="flex-100">Logo - Large</p>
+                  <FileUploader
+                    dispatchFn={file => this.uploadImages(file, 'logoLarge')}
+                    theme={theme}
                   />
                 </div>
-                <div className="flex-100 layout-row layout-align-start-center input_box_full">
-                  <input
-                    type="text"
-                    value={newTenant.scope.terms[1]}
-                    onChange={e => this.handleTermsChange(e)}
-                    name="1"
-                    placeholder="Support Phone Number"
-                    className="flex-none"
-                  />
-                </div>
-                <div className="flex-100 layout-row layout-align-start-center input_box_full">
-                  <input
-                    type="text"
-                    value={newTenant.scope.terms[2]}
-                    onChange={e => this.handleTermsChange(e)}
-                    name="2"
-                    placeholder="Support Phone Number"
-                    className="flex-none"
+                <div className="flex-50 layout-row layout-wrap">
+                  <div
+                    className={`${styles.demo_img} flex-none`}
+                    style={{ background: newTenant.theme.logoLarge }}
                   />
                 </div>
               </div>
+              <div
+                className="flex-50 layout-row
+                layout-align-start-center layout-wrap "
+              >
+                <div className="flex-50 layout-row layout-wrap">
+                  <p className="flex-100">Logo - Small</p>
+                  <FileUploader
+                    dispatchFn={file => this.uploadImages(file, 'logoSmall')}
+                    theme={theme}
+                  />
+                </div>
+                <div className="flex-50 layout-row layout-wrap">
+                  <div
+                    className={`${styles.demo_img} flex-none`}
+                    style={{ background: newTenant.theme.logoSmall }}
+                  />
+                </div>
+              </div>
+              <div
+                className="flex-50 layout-row
+                layout-align-start-center layout-wrap "
+              >
+                <div className="flex-50 layout-row layout-wrap">
+                  <p className="flex-100">Logo - White</p>
+                  <FileUploader
+                    dispatchFn={file => this.uploadImages(file, 'logoWhite')}
+                    theme={theme}
+                  />
+                </div>
+                <div className="flex-50 layout-row layout-wrap">
+                  <div
+                    className={`${styles.demo_img} flex-none`}
+                    style={{ background: newTenant.theme.logoWhite }}
+                  />
+                </div>
+              </div>
+              <div className="flex-50 layout-row layout-align-start-center layout-wrap ">
+                <div className="flex-50 layout-row layout-wrap">
+                  <p className="flex-100">Logo - Wide</p>
+                  <FileUploader
+                    dispatchFn={file => this.uploadImages(file, 'logoWide')}
+                    theme={theme}
+                  />
+                </div>
+                <div className="flex-50 layout-row layout-wrap">
+                  <div
+                    className={`${styles.demo_img} flex-none`}
+                    style={{ background: newTenant.theme.logoWide }}
+                  />
+                </div>
+              </div>
+              <div
+                className="flex-50 layout-row
+                layout-align-start-center layout-wrap "
+              >
+                <div className="flex-50 layout-row layout-wrap">
+                  <p className="flex-100">Background</p>
+                  <FileUploader
+                    dispatchFn={file => this.uploadImages(file, 'background')}
+                    theme={theme}
+                  />
+                </div>
+                <div className="flex-50 layout-row layout-wrap">
+                  <div
+                    className={`${styles.demo_img} flex-none`}
+                    style={{ background: newTenant.theme.background }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+              <h4 className="flex-100">Addresses</h4>
+              <div className="flex-40 layout-row layout-align-start-center input_box_full">
+                <input
+                  type="text"
+                  value={newTenant.addresses.main}
+                  onChange={e => this.handleChange(e)}
+                  name="addresses-main"
+                  placeholder="Main Address"
+                  className="flex-none"
+                />
+              </div>
+            </div>
+            <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+              <h4 className="flex-100">Phone Numbers</h4>
+              <div className="flex-40 layout-row layout-align-start-center input_box_full">
+                <input
+                  type="text"
+                  value={newTenant.phones.main}
+                  onChange={e => this.handleChange(e)}
+                  name="phones-main"
+                  placeholder="Main Phone Number"
+                  className="flex-none"
+                />
+              </div>
+              <div className="flex-40 layout-row layout-align-start-center input_box_full">
+                <input
+                  type="text"
+                  value={newTenant.phones.support}
+                  onChange={e => this.handleChange(e)}
+                  name="phones-support"
+                  placeholder="Support Phone Number"
+                  className="flex-none"
+                />
+              </div>
+            </div>
+            <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+              <h4 className="flex-100">Emails</h4>
+              <div className="flex-40 layout-row layout-align-start-center input_box_full">
+                <input
+                  type="text"
+                  value={newTenant.emails.sales}
+                  onChange={e => this.handleChange(e)}
+                  name="emails-sales"
+                  placeholder="Sales Email Address"
+                  className="flex-none"
+                />
+              </div>
+              <div className="flex-40 layout-row layout-align-start-center input_box_full">
+                <input
+                  type="text"
+                  value={newTenant.emails.support.general}
+                  onChange={e => this.handleChange(e)}
+                  name="emails-support-general"
+                  placeholder="General Support Email"
+                  className="flex-none"
+                />
+              </div>
+              <div className="flex-40 layout-row layout-align-start-center input_box_full">
+                <input
+                  type="text"
+                  value={newTenant.emails.support.sea}
+                  onChange={e => this.handleChange(e)}
+                  name="emails-support-sea"
+                  placeholder="Ocean Freight Support Email"
+                  className="flex-none"
+                />
+              </div>
+              <div className="flex-40 layout-row layout-align-start-center input_box_full">
+                <input
+                  type="text"
+                  value={newTenant.emails.support.air}
+                  onChange={e => this.handleChange(e)}
+                  name="emails-support-air"
+                  placeholder="Air Freight Support Email"
+                  className="flex-none"
+                />
+              </div>
+            </div>
+            <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+              <h4 className="flex-100">Scope</h4>
+              <div className="flex-100 layout-row layout-wrap">
+                <h5 className="flex-none">Cargo Modes of Transport</h5>
+                <div className="flex-50 layout-row layout-align-start-center layout-wrap">
+                  <p className="flex-100">Ocean - Container</p>
+                  <Toggle
+                    checked={newTenant.scope.modes_of_transport.ocean.container}
+                    onChange={e => this.handleToggle(e, 'modes_of_transport-ocean-container')}
+                  />
+                </div>
+                <div className="flex-50 layout-row layout-align-start-center layout-wrap">
+                  <p className="flex-100">Ocean - Cargo item</p>
+                  <Toggle
+                    checked={newTenant.scope.modes_of_transport.ocean.cargo_item}
+                    onChange={e => this.handleToggle(e, 'modes_of_transport-ocean-cargo_item')}
+                  />
+                </div>
+                <div className="flex-50 layout-row layout-align-start-center layout-wrap">
+                  <p className="flex-100">Air - Container</p>
+                  <Toggle
+                    checked={newTenant.scope.modes_of_transport.air.container}
+                    onChange={e => this.handleToggle(e, 'modes_of_transport-air-container')}
+                  />
+                </div>
+                <div className="flex-50 layout-row layout-align-start-center layout-wrap">
+                  <p className="flex-100">Air - Cargo item</p>
+                  <Toggle
+                    checked={newTenant.scope.modes_of_transport.air.cargo_item}
+                    onChange={e => this.handleToggle(e, 'modes_of_transport-air-cargo_item')}
+                  />
+                </div>
+                <div className="flex-50 layout-row layout-align-start-center layout-wrap">
+                  <p className="flex-100">Rail - Container</p>
+                  <Toggle
+                    checked={newTenant.scope.modes_of_transport.rail.container}
+                    onChange={e => this.handleToggle(e, 'modes_of_transport-rail-container')}
+                  />
+                </div>
+                <div className="flex-50 layout-row layout-align-start-center layout-wrap">
+                  <p className="flex-100">Rail - Cargo item</p>
+                  <Toggle
+                    checked={newTenant.scope.modes_of_transport.rail.cargo_item}
+                    onChange={e => this.handleToggle(e, 'modes_of_transport-rail-cargo_item')}
+                  />
+                </div>
+              </div>
+              <div className="flex-50 layout-row layout-align-start-center layout-wrap">
+                <p className="flex-100">Dangerous Goods</p>
+                <Toggle
+                  checked={newTenant.scope.dangerous_goods}
+                  onChange={e => this.handleToggle(e, 'dangerous_goods')}
+                />
+              </div>
+              <div className="flex-50 layout-row layout-align-start-center layout-wrap">
+                <p className="flex-100">Detailed Billing</p>
+                <Toggle
+                  checked={newTenant.scope.detailed_billing}
+                  onChange={e => this.handleToggle(e, 'detailed_billing')}
+                />
+              </div>
+              <div className="flex-50 layout-row layout-align-start-center layout-wrap">
+                <p className="flex-100">Has Insurance</p>
+                <Toggle
+                  checked={newTenant.scope.has_insurance}
+                  onChange={e => this.handleToggle(e, 'has_insurance')}
+                />
+              </div>
+              <div className="flex-50 layout-row layout-align-start-center layout-wrap">
+                <p className="flex-100">Has Customs</p>
+                <Toggle
+                  checked={newTenant.scope.has_customs}
+                  onChange={e => this.handleToggle(e, 'has_customs')}
+                />
+              </div>
+              <div className="flex-50 layout-row layout-align-start-center layout-wrap">
+                <p className="flex-100">Incoterm Detail</p>
+                <NamedSelect
+                  theme={theme}
+                  value={newTenant.scope.incoterm_info_level}
+                  options={incoOptions}
+                  onChange={e => this.handleSelect(e)}
+                  name="incoterm_info_level"
+                />
+              </div>
+              <div className="flex-50 layout-row layout-align-start-center layout-wrap">
+                <p className="flex-100">Cargo Detail</p>
+                <NamedSelect
+                  theme={theme}
+                  value={newTenant.scope.cargo_info_level}
+                  options={incoOptions}
+                  onChange={e => this.handleSelect(e)}
+                  name="cargo_info_level"
+                />
+              </div>
+              <div className="flex-100 layout-row layout-wrap">
+                <h5 className="flex-100">Carriage options</h5>
+                <div className="flex-100 layout-row layout-wrap">
+                  <p className="flex-100">On Carriage</p>
+                  <div className="flex-50 layout-row layout-align-start-center layout-wrap">
+                    <p className="flex-100">Import</p>
+                    <NamedSelect
+                      theme={theme}
+                      value={newTenant.scope.carriage_options.on_carriage.import}
+                      options={carriageOptions}
+                      onChange={e => this.handleSelect(e)}
+                      name="carriage_options-on_carriage-import"
+                    />
+                  </div>
+                  <div className="flex-50 layout-row layout-align-start-center layout-wrap">
+                    <p className="flex-100">Export</p>
+                    <NamedSelect
+                      theme={theme}
+                      value={newTenant.scope.carriage_options.on_carriage.import}
+                      options={carriageOptions}
+                      onChange={e => this.handleSelect(e)}
+                      name="carriage_options-on_carriage-export"
+                    />
+                  </div>
+                </div>
+                <div className="flex-100 layout-row layout-wrap">
+                  <p className="flex-100">Pre Carriage</p>
+                  <div className="flex-50 layout-row layout-align-start-center layout-wrap">
+                    <p className="flex-100">Import</p>
+                    <NamedSelect
+                      theme={theme}
+                      value={newTenant.scope.carriage_options.pre_carriage.import}
+                      options={carriageOptions}
+                      onChange={e => this.handleSelect(e)}
+                      name="carriage_options-pre_carriage-import"
+                    />
+                  </div>
+                  <div className="flex-50 layout-row layout-align-start-center layout-wrap">
+                    <p className="flex-100">Export</p>
+                    <NamedSelect
+                      theme={theme}
+                      value={newTenant.scope.carriage_options.pre_carriage.import}
+                      options={carriageOptions}
+                      onChange={e => this.handleSelect(e)}
+                      name="carriage_options-pre_carriage-export"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex-100 layout-row layout-wrap">
+                <h5 className="flex-100">Terms</h5>
+                <div className="flex-100 layout-row layout-wrap">
+                  <div className="flex-100 layout-row layout-align-start-center input_box_full">
+                    <input
+                      type="text"
+                      value={newTenant.scope.terms[0]}
+                      onChange={e => this.handleTermsChange(e)}
+                      name="0"
+                      placeholder="Support Phone Number"
+                      className="flex-none"
+                    />
+                  </div>
+                  <div className="flex-100 layout-row layout-align-start-center input_box_full">
+                    <input
+                      type="text"
+                      value={newTenant.scope.terms[1]}
+                      onChange={e => this.handleTermsChange(e)}
+                      name="1"
+                      placeholder="Support Phone Number"
+                      className="flex-none"
+                    />
+                  </div>
+                  <div className="flex-100 layout-row layout-align-start-center input_box_full">
+                    <input
+                      type="text"
+                      value={newTenant.scope.terms[2]}
+                      onChange={e => this.handleTermsChange(e)}
+                      name="2"
+                      placeholder="Support Phone Number"
+                      className="flex-none"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex-100 layout-row layout-align-end-center">
+              <SquareButton theme={theme} handleNext={() => this.saveTenant()} text="Save" />
             </div>
           </div>
-          <div className="flex-100 layout-row layout-align-end-center">
-            <SquareButton theme={theme} handleNext={() => this.saveTenant()} text="Save" />
-          </div>
+          {styleTagJSX}
         </div>
-        {styleTagJSX}
-      </div>
+      </GenericError>
     )
   }
 }

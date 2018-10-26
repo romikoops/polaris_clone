@@ -8,6 +8,7 @@ import { AdminRouteList } from './AdminRouteList'
 import { WorldMap } from './DashboardMap/WorldMap'
 import { gradientTextGenerator } from '../../helpers'
 import styles from './AdminDashboard.scss'
+import GenericError from '../../components/ErrorHandling/Generic'
 
 export class AdminDashboard extends Component {
   static prepShipment (baseShipment, clients, hubsObj) {
@@ -136,72 +137,74 @@ export class AdminDashboard extends Component {
     )
 
     return (
-      <div
-        className={
-          `layout-row flex-100 layout-wrap layout-align-start-center extra_padding ${styles.container}`
-        }
-      >
+      <GenericError theme={theme}>
         <div
           className={
-            `layout-row flex-100 layout-align-space-between-start ${styles.header}`
+            `layout-row flex-100 layout-wrap layout-align-start-center extra_padding ${styles.container}`
           }
         >
-          <div className={`layout-row flex-100 layout-align-start-center ${styles.headerElement}`}>
-            <span className="layout-row flex-10 layout-align-center-center">
-              <i className={`fa fa-user clip ${styles.bigProfile}`} style={gradientFontStyle} />
-            </span>
-            <span className={`${styles.welcome} flex-90 layout-row`}>Welcome back,&nbsp; <b>{user.first_name}</b></span>
+          <div
+            className={
+              `layout-row flex-100 layout-align-space-between-start ${styles.header}`
+            }
+          >
+            <div className={`layout-row flex-100 layout-align-start-center ${styles.headerElement}`}>
+              <span className="layout-row flex-10 layout-align-center-center">
+                <i className={`fa fa-user clip ${styles.bigProfile}`} style={gradientFontStyle} />
+              </span>
+              <span className={`${styles.welcome} flex-90 layout-row`}>Welcome back,&nbsp; <b>{user.first_name}</b></span>
+            </div>
           </div>
-        </div>
-        <div className="layout-padding flex-100 layout-align-start-center greyBg">
-          <span><b>{isQuote ? 'Quoted Shipments' : 'Requested Shipments' }</b></span>
-        </div>
-        <ShipmentOverviewCard
-          admin
-          noTitle
-          confirmShipmentData={confirmShipmentData}
-          handleSelect={this.handleClick}
-          dispatches={adminDispatch}
-          shipments={preppedShipments}
-          theme={theme}
-          hubs={hubHash}
-          handleAction={this.handleShipmentAction}
-        />
-        <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>
-          <span className="flex-15" onClick={() => this.handleViewShipments()}><u><b>See more shipments</b></u></span>
-          <div className={`flex-85 ${styles.separator}`} />
-        </div>
-        <div className="margin_bottom flex-100">
-          <GreyBox
-            flex={100}
-            content={mapComponent}
+          <div className="layout-padding flex-100 layout-align-start-center greyBg">
+            <span><b>{isQuote ? 'Quoted Shipments' : 'Requested Shipments' }</b></span>
+          </div>
+          <ShipmentOverviewCard
+            admin
+            noTitle
+            confirmShipmentData={confirmShipmentData}
+            handleSelect={this.handleClick}
+            dispatches={adminDispatch}
+            shipments={preppedShipments}
+            theme={theme}
+            hubs={hubHash}
+            handleAction={this.handleShipmentAction}
           />
-        </div>
-        <div className="layout-row layout-wrap flex-100 layout-align-space-between-stretch">
-          <div className="flex-gt-md-60 flex-100">
-            <AdminHubCard
-              hubs={hubHash}
-              adminDispatch={adminDispatch}
-              theme={theme}
+          <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>
+            <span className="flex-15" onClick={() => this.handleViewShipments()}><u><b>See more shipments</b></u></span>
+            <div className={`flex-85 ${styles.separator}`} />
+          </div>
+          <div className="margin_bottom flex-100">
+            <GreyBox
+              flex={100}
+              content={mapComponent}
             />
-            <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>
-              <span className="flex-15" onClick={() => this.handleViewHubs()}><u><b>See more</b></u></span>
-              <div className={`flex-85 ${styles.separator}`} />
+          </div>
+          <div className="layout-row layout-wrap flex-100 layout-align-space-between-stretch">
+            <div className="flex-gt-md-60 flex-100">
+              <AdminHubCard
+                hubs={hubHash}
+                adminDispatch={adminDispatch}
+                theme={theme}
+              />
+              <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>
+                <span className="flex-15" onClick={() => this.handleViewHubs()}><u><b>See more</b></u></span>
+                <div className={`flex-85 ${styles.separator}`} />
+              </div>
+            </div>
+            <div className="flex-gt-md-35 flex-100">
+              <AdminClientCardIndex
+                clients={clients}
+                viewClient={id => adminDispatch.getClient(id, true)}
+                theme={theme}
+              />
+              <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>
+                <span className="flex-20" onClick={() => this.handleViewClients()}><u><b>See more</b></u></span>
+                <div className={`flex-80 ${styles.separator}`} />
+              </div>
             </div>
           </div>
-          <div className="flex-gt-md-35 flex-100">
-            <AdminClientCardIndex
-              clients={clients}
-              viewClient={id => adminDispatch.getClient(id, true)}
-              theme={theme}
-            />
-            <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>
-              <span className="flex-20" onClick={() => this.handleViewClients()}><u><b>See more</b></u></span>
-              <div className={`flex-80 ${styles.separator}`} />
-            </div>
-          </div>
         </div>
-      </div>
+      </GenericError>
     )
   }
 }

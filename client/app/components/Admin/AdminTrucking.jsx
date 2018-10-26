@@ -6,6 +6,7 @@ import PropTypes from '../../prop-types'
 import { AdminTruckingIndex, AdminTruckingView, AdminTruckingCreator } from './'
 import { adminActions, appActions } from '../../actions'
 import { history } from '../../helpers'
+import GenericError from '../../components/ErrorHandling/Generic'
 
 class AdminTrucking extends Component {
   static backToIndex () {
@@ -46,53 +47,55 @@ class AdminTrucking extends Component {
     const { truckingNexuses, nexuses } = trucking
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <Switch className="flex">
-          <Route
-            exact
-            path="/admin/pricings"
-            render={props => (
-              <AdminTruckingIndex
-                theme={theme}
-                truckingNexuses={truckingNexuses}
-                {...props}
-                hubs={hubs}
-                adminDispatch={adminDispatch}
-                appDispatch={appDispatch}
-                loading={loading}
-                viewTrucking={this.viewTrucking}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin/pricings/trucking/:id"
-            render={props => (
-              <AdminTruckingView
-                theme={theme}
-                nexuses={nexuses}
-                truckingDetail={truckingDetail}
-                loading={loading}
-                adminDispatch={adminDispatch}
-                {...props}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin/trucking/new/creator"
-            render={props => (
-              <AdminTruckingCreator
-                theme={theme}
-                nexuses={nexuses}
-                hub={truckingDetail.hub}
-                adminDispatch={adminDispatch}
-                closeForm={this.toggleCreator}
-              />
-            )}
-          />
-        </Switch>
-      </div>
+      <GenericError theme={theme}>
+        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+          <Switch className="flex">
+            <Route
+              exact
+              path="/admin/pricings"
+              render={props => (
+                <AdminTruckingIndex
+                  theme={theme}
+                  truckingNexuses={truckingNexuses}
+                  {...props}
+                  hubs={hubs}
+                  adminDispatch={adminDispatch}
+                  appDispatch={appDispatch}
+                  loading={loading}
+                  viewTrucking={this.viewTrucking}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/pricings/trucking/:id"
+              render={props => (
+                <AdminTruckingView
+                  theme={theme}
+                  nexuses={nexuses}
+                  truckingDetail={truckingDetail}
+                  loading={loading}
+                  adminDispatch={adminDispatch}
+                  {...props}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/trucking/new/creator"
+              render={props => (
+                <AdminTruckingCreator
+                  theme={theme}
+                  nexuses={nexuses}
+                  hub={truckingDetail.hub}
+                  adminDispatch={adminDispatch}
+                  closeForm={this.toggleCreator}
+                />
+              )}
+            />
+          </Switch>
+        </div>
+      </GenericError>
     )
   }
 }

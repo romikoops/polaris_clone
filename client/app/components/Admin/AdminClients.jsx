@@ -11,6 +11,7 @@ import styles from './Admin.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions } from '../../actions'
 import FormsyInput from '../FormsyInput/FormsyInput'
+import GenericError from '../../components/ErrorHandling/Generic'
 
 class AdminClients extends Component {
   static errorsExist (errorsObjects) {
@@ -435,41 +436,43 @@ class AdminClients extends Component {
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        {newClientBool ? newClientBox : ''}
-        <Switch className="flex">
-          <Route
-            exact
-            path="/admin/clients"
-            render={props => (
-              <AdminClientsIndex
-                theme={theme}
-                handleClientAction={this.handleClientAction}
-                clients={clients}
-                hubs={hubs}
-                adminDispatch={adminDispatch}
-                viewClient={this.viewClient}
-                toggleNewClient={() => this.toggleNewClient()}
-                {...props}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin/clients/:id"
-            render={props => (
-              <AdminClientView
-                theme={theme}
-                hubHash={hubHash}
-                handleClientAction={this.handleClientAction}
-                clientData={client}
-                adminDispatch={adminDispatch}
-                {...props}
-              />
-            )}
-          />
-        </Switch>
-      </div>
+      <GenericError theme={theme}>
+        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+          {newClientBool ? newClientBox : ''}
+          <Switch className="flex">
+            <Route
+              exact
+              path="/admin/clients"
+              render={props => (
+                <AdminClientsIndex
+                  theme={theme}
+                  handleClientAction={this.handleClientAction}
+                  clients={clients}
+                  hubs={hubs}
+                  adminDispatch={adminDispatch}
+                  viewClient={this.viewClient}
+                  toggleNewClient={() => this.toggleNewClient()}
+                  {...props}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/clients/:id"
+              render={props => (
+                <AdminClientView
+                  theme={theme}
+                  hubHash={hubHash}
+                  handleClientAction={this.handleClientAction}
+                  clientData={client}
+                  adminDispatch={adminDispatch}
+                  {...props}
+                />
+              )}
+            />
+          </Switch>
+        </div>
+      </GenericError>
     )
   }
 }
