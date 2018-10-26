@@ -1,3 +1,4 @@
+
 <div class="wrapper-quotations">
   <% primary_color = tenant.theme["colors"]["primary"] %>
   <% neutral_color = '#C4C4C4' %>
@@ -47,7 +48,12 @@
               </div>
               <p>
                 <strong>Kg:</strong>
-                <%= shipment.cargo_items.inject(0) {|sum, hash| sum + hash[:payload_in_kg].to_f} %>&nbsp;kg
+                <%= if s.aggregated_cargo
+                      s.aggregated_cargo.weight.to_f
+                    else
+                      s.cargo_units.inject(0) {|sum, hash| sum + hash[:payload_in_kg].to_f}
+                    end
+                %>&nbsp;kg
               </p>
             </div>
           </div>
