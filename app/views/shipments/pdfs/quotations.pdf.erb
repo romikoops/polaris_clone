@@ -1,9 +1,9 @@
-
 <div class="wrapper-quotations">
   <% primary_color = tenant.theme["colors"]["primary"] %>
   <% neutral_color = '#C4C4C4' %>
   <% tenant_logo_asset = "logoLarge_" + tenant["subdomain"] + ".png" %>
   <% tenant_logo_url = tenant.theme["logoLarge"] %>
+  <% scope = tenant.scope %>
   <% precarriage_color = shipment.has_pre_carriage ? primary_color : neutral_color %>
   <% oncarriage_color = shipment.has_on_carriage ? primary_color : neutral_color %>
 
@@ -63,7 +63,7 @@
         <div class="sub-prices">
           <div class="total-price-single">
             <h4><%= charge["name"] %></h4>
-            <% if charge != "Grand Total" %>
+            <% if charge != "Grand Total" && !scope['hide_grand_total'] %>
               <h3><%= charge["total"]["value"].to_f.truncate(2) %>&nbsp;<%= charge["total"]["currency"] %></h3>
             <% end %>
           </div>
@@ -74,7 +74,7 @@
                   <h4><%= sub_charge["name"] %></h4>
                   <% if sub_charge["value"] %>
                     <h3> <%= sub_charge["value"].to_f.truncate(2).to_s %>&nbsp;<%= sub_charge["currency"] %></h3>
-                  <% else %>
+                  <% elsif !scope['hide_sub_total']%>
                     <h3> <%= sub_charge["total"]["value"] %>&nbsp;<%= sub_charge["total"]["currency"] %></h3>
                   <% end %>
                 </div>
@@ -83,17 +83,18 @@
           </div>
         </div>
       <% end %>
-
+      <% if !scope['hide_grand_total']%>
         <div class="total-row">
-          <h4>Total</h4>
-          <p class="quote"><%= s.selected_offer["total"]["value"].to_f.truncate(2) %>
-            &nbsp;<%= s.selected_offer["total"]["currency"] %>
+            <h4>Total</h4>
+            <p class="quote"><%= s.selected_offer["total"]["value"].to_f.truncate(2) %>
+              &nbsp;<%= s.selected_offer["total"]["currency"] %>
+            </p>
+          </div>
+          <p class="notes">
+            <%= tenant.scope["quote_notes"] || "" %>
           </p>
         </div>
-        <p class="notes">
-          <%= tenant.scope["quote_notes"] || "" %>
-        </p>
-      </div>
+      <%end%>
       
     <% end %>
   
