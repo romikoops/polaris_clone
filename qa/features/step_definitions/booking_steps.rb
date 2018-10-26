@@ -14,6 +14,7 @@ And('I describe my goods') do
 end
 
 When('I click the find rates button') do
+  sleep(2)
   find('.ccb_find_rates').click
 end
 

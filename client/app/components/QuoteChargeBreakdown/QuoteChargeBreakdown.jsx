@@ -64,7 +64,7 @@ class QuoteChargeBreakdown extends Component {
   }
 
   generateContent (key) {
-    const { quote, t } = this.props
+    const { quote, t, scope } = this.props
     const contentSections = Object.entries(quote[`${key}`])
       .map(array => array.filter(value => !this.unbreakableKeys.includes(value)))
       .filter(value => value.length !== 1)
@@ -101,7 +101,11 @@ class QuoteChargeBreakdown extends Component {
               </span>
             </div>
             <div className="flex-50 layout-row layout-align-end-center">
-              <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{(price[1].currency || price[1].total.currency)}</p>
+              {scope.cargo_price_notes && scope.cargo_price_notes[key] ? (
+                <span style={{ textAlign: 'right', width: '12vw' }}>{scope.cargo_price_notes[key]}</span>
+              ) : (
+                <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{(price[1].currency || price[1].total.currency)}</p>
+              )}
             </div>
           </div>)
 
@@ -144,7 +148,7 @@ class QuoteChargeBreakdown extends Component {
             <div className="flex-50 layout-row layout-align-end-center">
               <p>
                 {
-                  !scope.hide_sub_totals
+                  scope.hide_sub_totals || (scope.cargo_price_notes && scope.cargo_price_notes[key])
                     ? ''
                     : `${formattedPriceValue(quote[key].total.value)} ${quote[key].total.currency}`
                 }

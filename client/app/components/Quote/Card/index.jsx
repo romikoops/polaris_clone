@@ -347,6 +347,7 @@ class QuoteCard extends PureComponent {
               {isQuotationTool ? (
                 <RoundButton
                   active={!this.state.isChecked}
+                  flexContainer={scope.hide_grand_total ? '40' : '100'}
                   classNames={`pointy layout-row layout-align-center-center ${styles.add_button} ${!this.state.isChecked ? styles.shorter : styles.longer}`}
                   size="small"
                   handleNext={() => this.handleClickChecked()}

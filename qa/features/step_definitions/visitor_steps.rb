@@ -18,25 +18,26 @@ end
 
 When('I select {string} as {string}') do |place, type|
   if place[/\d+/]
+    sleep(3)
     if type == 'Origin'
-      find('.ccb_pre_carriage', wait: 10).click
+      find('.ccb_pre_carriage', wait: 60).click
     elsif type == 'Destination'
-      find('.ccb_on_carriage', wait: 10).click
+      find('.ccb_on_carriage', wait: 60).click
     end
-    elem = find('div', class: "ccb_#{type.downcase}_carriage_input", wait: 10)
+    elem = find('div', class: "ccb_#{type.downcase}_carriage_input", wait: 60)
     within(elem) do
       box = find('.ccb_carriage')
       within(box) do
-        place.split('').each do |c|
-          find('input').send_keys(c)
-          sleep(1.0 / 10.0)
-        end
-        all(:css, '.ccb_result').first.click
+        find('input').fill_in(with: place[0...-1])
+        sleep(0.5)
+        find('input').send_keys(place[-1])
+
+        find('.ccb_result', text: place[0..30], wait: 20).click
       end
     end
     sleep(8)
   else
-    elem = find('div', class: 'Select-placeholder', text: type, wait: 10)
+    elem = find('div', class: 'Select-placeholder', text: type, wait: 60)
     elem.sibling('.Select-input').find('input').send_keys(place)
     find('.Select-option', text: place).click
   end
