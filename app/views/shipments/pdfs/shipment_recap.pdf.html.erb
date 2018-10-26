@@ -250,7 +250,7 @@
         </div>
       </div>
       <div class="total-section">      
-        <p><span>x<%= shipment.aggregated_cargo ? '1' : shipment.cargo_units.count %>&nbsp;</span><%= load_type %></p>
+        <p><span>x<%= shipment.aggregated_cargo ? '1' : shipment.cargo_units.pluck(:quantity).sum %>&nbsp;</span><%= load_type %></p>
         <h2>
           <% if shipment.selected_offer["edited_total"] %>
             <%= (shipment.selected_offer["edited_total"]["value"] * 100).floor / 100.0 %>
