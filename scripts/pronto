@@ -1,8 +1,10 @@
 #!/bin/bash -e
 
-: ${FORMATTER:=gitlab}
 TARGET_BRANCH=$(curl -s --header "PRIVATE-TOKEN:${PRONTO_GITLAB_API_PRIVATE_TOKEN}" "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/merge_requests?source_branch=${CI_COMMIT_REF_NAME}" |jq -r '.[].target_branch')
 
+DEFAULT_FORMATTER=$(test -n "${TARGET_BRANCH}" && echo gitlab || echo text)
+
+: ${FORMATTER:=$DEFAULT_FORMATTER}
 
 echo "Pronto"
 echo ""
