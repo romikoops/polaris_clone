@@ -172,7 +172,7 @@ export class ShipmentsCompUser extends Component {
     const listView = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <Tabs>
-          {keysToRender.map(status => (<Tab
+          {keysToRender.map(status => (keysToRender.length > 1 ? (<Tab
             tabTitle={capitalize(status)}
             theme={theme}
           >
@@ -190,7 +190,22 @@ export class ShipmentsCompUser extends Component {
               nextPage={() => this.nextPage(status)}
               handleSearchChange={e => this.handleSearchQuery(e, status)}
             />
-          </Tab>))}
+          </Tab>) : (<Tab isUniq>
+            <AdminShipmentsBox
+              handleClick={this.viewShipment}
+              dispatches={userDispatch}
+              shipments={mergedShipments[status]}
+              theme={theme}
+              userView
+              searchText={search[status]}
+              tooltip={adminTip[status]}
+              page={pages[status]}
+              numPages={numShipmentsPages[status]}
+              prevPage={() => this.prevPage(status)}
+              nextPage={() => this.nextPage(status)}
+              handleSearchChange={e => this.handleSearchQuery(e, status)}
+            />
+          </Tab>)))}
 
         </Tabs>
       </div>

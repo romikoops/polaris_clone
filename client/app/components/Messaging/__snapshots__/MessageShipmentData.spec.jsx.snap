@@ -304,7 +304,7 @@ exports[`shallow render 1`] = `
               }
             }
           >
-            Pre-carriage :
+            Pre-carriage
           </h4>
         </div>
         <div
@@ -333,7 +333,7 @@ exports[`shallow render 1`] = `
               }
             }
           >
-            On-carriage :
+            On-carriage
           </h4>
         </div>
         <div

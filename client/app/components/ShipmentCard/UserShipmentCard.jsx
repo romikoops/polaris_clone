@@ -112,6 +112,9 @@ class UserShipmentCard extends Component {
           ${styles.container}`
         }
       >
+        <div className={`layout-row flex-15 layout-align-center-center ${styles.topRight}`}>
+          <p className={`${styles.check} pointy`}>{t('common:viewDetails')}</p>
+        </div>
         <hr className={`flex-100 layout-row ${styles.hr_divider}`} />
         <div className={adminStyles.card_link} onClick={() => this.handleView()} />
 
@@ -142,7 +145,7 @@ class UserShipmentCard extends Component {
           <div className="layout-row flex-40 layout-align-center-center">
             <div className=" flex-100">
               <b className={styles.ref_row_card}>{t('common:ref')}:&nbsp;{shipment.imc_reference}</b>
-              <p>{t('shipment:placedAt')}&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY - HH:mm')}</p>
+              <p>{t('shipment:placedAt')}&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY | HH:mm')}</p>
             </div>
           </div>
 

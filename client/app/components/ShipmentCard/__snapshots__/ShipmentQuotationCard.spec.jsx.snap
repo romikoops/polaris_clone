@@ -6,6 +6,15 @@ exports[`has oncarriage 1`] = `
           container"
   key="RANDOM_KEY_2"
 >
+  <div
+    className="layout-row flex-15 layout-align-center-center topRight"
+  >
+    <p
+      className="check pointy"
+    >
+      View Details
+    </p>
+  </div>
   <hr
     className="flex-100 layout-row hr_divider"
   />
@@ -66,6 +75,11 @@ exports[`has oncarriage 1`] = `
           : 
           FOO_IMC_REFERENCE
         </b>
+        <p>
+          Placed at
+           
+          10/10/2018 | 00:00
+        </p>
       </div>
     </div>
     <span
@@ -80,7 +94,7 @@ exports[`has oncarriage 1`] = `
         }
       />
       <p>
-        Pre-carriage :
+        Pre-carriage
       </p>
     </span>
     <span
@@ -95,7 +109,7 @@ exports[`has oncarriage 1`] = `
         }
       />
       <p>
-        On-carriage :
+        On-carriage
       </p>
     </span>
   </div>
@@ -130,22 +144,6 @@ exports[`has oncarriage 1`] = `
         className="flex-35"
       >
         Cargo Item
-      </span>
-    </div>
-    <div
-      className="layout-row flex layout-align-end-end"
-    >
-      <span
-        className="bigText price_style"
-      >
-        <span>
-           
-          USD
-           
-        </span>
-        <span>
-          200.99
-        </span>
       </span>
     </div>
   </div>
@@ -158,6 +156,15 @@ exports[`has precarriage 1`] = `
           container"
   key="RANDOM_KEY_1"
 >
+  <div
+    className="layout-row flex-15 layout-align-center-center topRight"
+  >
+    <p
+      className="check pointy"
+    >
+      View Details
+    </p>
+  </div>
   <hr
     className="flex-100 layout-row hr_divider"
   />
@@ -218,6 +225,11 @@ exports[`has precarriage 1`] = `
           : 
           FOO_IMC_REFERENCE
         </b>
+        <p>
+          Placed at
+           
+          10/10/2018 | 00:00
+        </p>
       </div>
     </div>
     <span
@@ -232,7 +244,7 @@ exports[`has precarriage 1`] = `
         }
       />
       <p>
-        Pre-carriage :
+        Pre-carriage
       </p>
     </span>
     <span
@@ -247,7 +259,7 @@ exports[`has precarriage 1`] = `
         }
       />
       <p>
-        On-carriage :
+        On-carriage
       </p>
     </span>
   </div>
@@ -282,22 +294,6 @@ exports[`has precarriage 1`] = `
         className="flex-35"
       >
         Cargo Item
-      </span>
-    </div>
-    <div
-      className="layout-row flex layout-align-end-end"
-    >
-      <span
-        className="bigText price_style"
-      >
-        <span>
-           
-          USD
-           
-        </span>
-        <span>
-          200.99
-        </span>
       </span>
     </div>
   </div>
@@ -310,6 +306,15 @@ exports[`shallow rendering 1`] = `
           container"
   key="RANDOM_KEY_0"
 >
+  <div
+    className="layout-row flex-15 layout-align-center-center topRight"
+  >
+    <p
+      className="check pointy"
+    >
+      View Details
+    </p>
+  </div>
   <hr
     className="flex-100 layout-row hr_divider"
   />
@@ -370,6 +375,11 @@ exports[`shallow rendering 1`] = `
           : 
           FOO_IMC_REFERENCE
         </b>
+        <p>
+          Placed at
+           
+          10/10/2018 | 00:00
+        </p>
       </div>
     </div>
     <span
@@ -384,7 +394,7 @@ exports[`shallow rendering 1`] = `
         }
       />
       <p>
-        Pre-carriage :
+        Pre-carriage
       </p>
     </span>
     <span
@@ -399,7 +409,7 @@ exports[`shallow rendering 1`] = `
         }
       />
       <p>
-        On-carriage :
+        On-carriage
       </p>
     </span>
   </div>
@@ -434,22 +444,6 @@ exports[`shallow rendering 1`] = `
         className="flex-35"
       >
         Cargo Item
-      </span>
-    </div>
-    <div
-      className="layout-row flex layout-align-end-end"
-    >
-      <span
-        className="bigText price_style"
-      >
-        <span>
-           
-          USD
-           
-        </span>
-        <span>
-          200.99
-        </span>
       </span>
     </div>
   </div>

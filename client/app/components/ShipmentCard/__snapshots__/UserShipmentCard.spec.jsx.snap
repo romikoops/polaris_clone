@@ -6,6 +6,15 @@ exports[`shallow rendering 1`] = `
           container"
   key="RANDOM_KEY_0"
 >
+  <div
+    className="layout-row flex-15 layout-align-center-center topRight"
+  >
+    <p
+      className="check pointy"
+    >
+      View Details
+    </p>
+  </div>
   <hr
     className="flex-100 layout-row hr_divider"
   />

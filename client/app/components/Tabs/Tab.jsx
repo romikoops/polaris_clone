@@ -5,7 +5,7 @@ import { gradientBorderGenerator, gradientTextGenerator, switchIcon } from '../.
 
 export default function Tab (props) {
   const {
-    linkClassName, isActive, onClick, tabIndex, tabTitle, theme, icon, mot, extraClick
+    linkClassName, isActive, onClick, tabIndex, tabTitle, theme, icon, mot, extraClick, isUniq
   } = props
 
   const borderGradient =
@@ -19,11 +19,12 @@ export default function Tab (props) {
   const deselectedStyle = {
     ...gradientBorderGenerator('#DCDBDC', '#DCDBDC')
   }
+  const gradientStyle = isActive ? borderGradient : deselectedStyle
   const showIcon = isActive ? switchIcon(mot, gradientFontStyle) : switchIcon(mot)
 
   return (
-    <div className={`layout-row flex-100 layout-align-center-center ${styles.tab}`}>
-      <div className={styles.gradient} style={isActive ? borderGradient : deselectedStyle} />
+    <div className={`layout-row flex-100 layout-align-center-center ${!isUniq ? 'pointy' : ''} ${styles.tab}`}>
+      <div className={styles.gradient} style={!isUniq ? gradientStyle : {}} />
       <div className={`${styles.content}`}>
         <a
           className={`layout-row layout-align-${icon || mot ? 'center' : 'space-around'}-end ${linkClassName} ${isActive ? 'active' && styles.active : styles.disabled}`}
@@ -50,6 +51,7 @@ Tab.propTypes = {
   onClick: PropTypes.func,
   extraClick: PropTypes.func,
   tabIndex: PropTypes.number,
+  isUniq: PropTypes.bool,
   isActive: PropTypes.bool,
   linkClassName: PropTypes.string,
   mot: PropTypes.string,
@@ -64,6 +66,7 @@ Tab.defaultProps = {
   tabIndex: 0,
   linkClassName: '',
   mot: '',
+  isUniq: false,
   isActive: false,
   theme: null,
   icon: ''
