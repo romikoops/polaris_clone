@@ -69,15 +69,35 @@
           </div>
           <div class="subtotal-price-group">
             <% if charge != "Grand Total" %>
-              <% charge.except("total", "edited_total", "name").each do |sub_charge_key, sub_charge| %>
-                <div class="subtotal-price-single">
-                  <h4><%= sub_charge["name"] %></h4>
-                  <% if sub_charge["value"] %>
-                    <h3> <%= sub_charge["value"].to_f.truncate(2).to_s %>&nbsp;<%= sub_charge["currency"] %></h3>
-                  <% elsif !scope['hide_sub_total']%>
-                    <h3> <%= sub_charge["total"]["value"] %>&nbsp;<%= sub_charge["total"]["currency"] %></h3>
-                  <% end %>
+              <% 
+                sorted_charges = if ['export', 'import'].include?(charge_key) 
+                  charge.except("total", "edited_total", "name").values.group_by{|c| c['currency']}
+                  else
+                  charge.except("total", "edited_total", "name").values.group_by{|c| c['total']['currency']}
+                  end
+                %>
+              <% sorted_charges.each do |currency_key, sub_charges| %>
+                <div class="subtotal-currency-single">
+                  <h4>Fees charged in <%= currency_key %>:</h4>
+                  <h3> 
+                    <%= if ['export', 'import'].include?(charge_key) 
+                     sub_charges.sum{|c| c['value']} 
+                     else
+                     sub_charges.sum{|c| c['total']['value']} 
+                     end
+                     %>&nbsp;<%= currency_key %>
+                  </h3>
                 </div>
+                <% sub_charges.each do |sub_charge| %>
+                  <div class="subtotal-price-single">
+                    <h4><%= sub_charge["name"] %></h4>
+                    <% if sub_charge["value"] %>
+                      <h3> <%= sub_charge["value"].to_f.truncate(2).to_s %>&nbsp;<%= sub_charge["currency"] %></h3>
+                    <% elsif !scope['hide_sub_total']%>
+                      <h3> <%= sub_charge["total"]["value"] %>&nbsp;<%= sub_charge["total"]["currency"] %></h3>
+                    <% end %>
+                  </div>
+                <% end %>
               <% end %>
             <% end %>
           </div>
