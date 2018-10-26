@@ -808,7 +808,9 @@ class ShipmentLocationBox extends Component {
 
       const truckingBoolean = !newFilteredRouteIndexes.some(i => routes[i][counterpart].truckTypes.length > 0)
 
-      if (targetTrucking) this.prepTruckTypes(newFilteredRoutes, target)
+      const carriage = target === 'destination' ? this.props.has_pre_carriage : this.props.has_on_carriage
+
+      if (targetTrucking && carriage) this.prepTruckTypes(newFilteredRoutes, target)
       if (newFilteredRouteIndexes.length === 0) {
         this.setRouteError(counterpartLocation.label, targetLocation.label)
       }
@@ -1175,10 +1177,14 @@ class ShipmentLocationBox extends Component {
 
       return ''
     }
-    const { theme } = this.props
     const { shipment } = shipmentData
+    /* eslint-disable camelcase */
+    const { theme, has_pre_carriage, has_on_carriage } = this.props
     const errorClass =
-      originFieldsHaveErrors || destinationFieldsHaveErrors ? styles.with_errors : ''
+      (has_pre_carriage && originFieldsHaveErrors) || (has_on_carriage && destinationFieldsHaveErrors)
+        ? styles.with_errors
+        : ''
+    /* eslint-enable camelcase */
 
     const toggleCSS = `
       .react-toggle--checked .react-toggle-track {
