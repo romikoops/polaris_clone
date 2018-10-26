@@ -163,5 +163,6 @@
   "modeOfTransport": "Mode of Transport",
   "rate": "Rate",
   "booking": "Booking",
-  "quotation": "Quotation"
+  "quotation": "Quotation",
+  "chargeble": "Chargeable"
 }
