@@ -10,7 +10,8 @@ import Root from './containers/Root'
 import './index.scss'
 
 Sentry.init({
-  dsn: window.keel.sentryUrl,
+  debug: (process.env.NODE_ENV === 'development'),
+  dsn: (process.env.NODE_ENV === 'development') ? '' : window.keel.sentryUrl,
   environment: window.keel.environment,
   release: process.env.RELEASE
  })

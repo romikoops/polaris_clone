@@ -1,4 +1,5 @@
 import { push } from 'react-router-redux'
+import * as Sentry from '@sentry/browser'
 import { authenticationConstants } from '../constants'
 import { authenticationService } from '../services'
 import { alertActions, shipmentActions, adminActions, userActions, tenantActions } from './'
@@ -115,6 +116,9 @@ function register (user, target) {
 }
 function setUser (user) {
   window.localStorage.setItem(cookieKey, JSON.stringify(user.data))
+  Sentry.configureScope((scope) => {
+    scope.setUser({ id: user.data.id, email: user.data.email })
+  })
 
   return { type: authenticationConstants.SET_USER, user: user.data }
 }

@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch'
 import { Promise } from 'es6-promise-promise'
+import * as Sentry from '@sentry/browser'
 import {
   tenantConstants
 } from '../constants'
@@ -19,6 +20,10 @@ function logOut () {
 }
 
 function receiveTenant (subdomain, json) {
+  Sentry.configureScope((scope) => {
+    scope.setTag('tenant', subdomain)
+  })
+
   return {
     type: tenantConstants.RECEIVE_TENANT,
     subdomain,
