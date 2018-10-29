@@ -184,7 +184,7 @@ class UserShipmentContent extends Component {
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
-                      estimatedTime={estimatedTimes.etdJSX}
+                      estimatedTime={formattedDate(estimatedTimes.etdJSX)}
                       text={t('common:etd')}
                       theme={theme}
                       carriage={pickupDate}
@@ -213,7 +213,7 @@ class UserShipmentContent extends Component {
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
-                      estimatedTime={estimatedTimes.etaJSX}
+                      estimatedTime={formattedDate(estimatedTimes.etaJSX)}
                       carriage={deliveryDate}
                       shipment={shipment}
                       text={t('common:eta')}
