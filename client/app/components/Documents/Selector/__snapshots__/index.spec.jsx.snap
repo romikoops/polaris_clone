@@ -11,6 +11,7 @@ exports[`selected || !options is false 1`] = `
   >
     <NamedSelect
       className="flex-100"
+      clearable={false}
       onChange={[Function]}
       options={Array []}
       theme={

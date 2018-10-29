@@ -603,6 +603,7 @@ class AdminShipmentContent extends Component {
                           className={`${styles.select} flex-50`}
                           value={fileType}
                           options={docOptions}
+                          clearable={false}
                           onChange={this.setFileType}
                         />
                         <div className="flex-50 layout-align-center-center layout-row padd_10">
