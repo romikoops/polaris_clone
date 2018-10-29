@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-import Truncate from 'react-truncate'
 import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './ShipmentLocationBox.scss'
@@ -213,7 +212,7 @@ class Autocomplete extends PureComponent {
               style={isHighlighted ? highlightStyle : {}}
               onClick={() => this.handleSelect(result)}
             >
-              <p className="flex"><Truncate lines={1} >{result.description}</Truncate></p>
+              <p className="flex">{result.description}</p>
             </div>)
         }) : []
     const addressResultCards = hasAddressResults
@@ -230,7 +229,7 @@ class Autocomplete extends PureComponent {
               style={isHighlighted ? highlightStyle : {}}
               onClick={() => this.handleSelect(result)}
             >
-              <p className="flex"><Truncate lines={1} >{result.description}</Truncate> </p>
+              <p className="flex">{result.description}</p>
             </div>)
         }) : []
     const inputErrorStyle = hasErrors ? styles.with_errors : ''
