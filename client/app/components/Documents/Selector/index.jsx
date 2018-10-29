@@ -144,6 +144,7 @@ class DocumentsSelector extends React.Component {
               options={options}
               value={selected}
               className="flex-100"
+              clearable={false}
               onChange={e => this.handleSelected(e)}
             />
           </div>
