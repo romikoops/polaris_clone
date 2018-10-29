@@ -17,9 +17,9 @@ stages:
   - test
   - build
   - review
+  - cleanup
   - QA
   - acceptance
-  - cleanup
 
 image: alpine:3.8
 
