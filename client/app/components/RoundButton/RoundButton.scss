@@ -78,8 +78,14 @@
   }
 
   .back {
-    background-color: #787878;
-    color: #FFFFFF !important;
+    border: 2px solid #9e9e9e;
+    color: #9e9e9e !important;
+    transition: all 0.5 ease;
+    &:hover {
+      border: 0;
+      background: #787878;
+      color: white !important;
+    }
   }
   .content {
     position: relative;

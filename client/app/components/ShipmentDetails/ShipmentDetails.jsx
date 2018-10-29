@@ -845,10 +845,10 @@ export class ShipmentDetails extends Component {
 
     const dayPickerSection = (
       <div className={`${defaults.content_width} layout-row flex-none layout-align-start-center`}>
-        <div className="layout-row flex-50 layout-align-start-center layout-wrap">
-          <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
-            <div className="flex-none letter_2 layout-align-space-between-end">
-              <TextHeading theme={theme} text={dayPickerText} size={3} />
+        <div className="layout-row flex-70 layout-align-start-center layout-wrap">
+          <div className="flex-none layout-row layout-align-start-center" style={{ paddingRight: '15px' }}>
+            <div className="flex-none layout-align-space-between-end">
+              <TextHeading theme={theme} text={`${dayPickerText}:`} size={3} />
             </div>
             <Tooltip theme={theme} text={dayPickerToolip} icon="fa-info-circle" />
           </div>
@@ -875,7 +875,6 @@ export class ShipmentDetails extends Component {
             </span>
           </div>
         </div>
-
         <div className="flex-50 layout-row layout-wrap layout-align-end-center">
           <IncotermBox
             theme={theme}
@@ -901,7 +900,7 @@ export class ShipmentDetails extends Component {
     return (
       <div
         className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start"
-        style={{ minHeight: '1800px' }}
+        style={{ minHeight: '1485px' }}
       >
         {modals &&
           Object.keys(modals)
@@ -1043,6 +1042,7 @@ export class ShipmentDetails extends Component {
                     `${this.state.shakeClass.noDangerousGoodsConfirmed} flex-100 ` +
                     'layout-row layout-align-start-center'
                   }
+                  style={{ marginBottom: '28px' }}
                 >
                   <div className="flex-10 layout-row layout-align-start-start">
                     <Checkbox
@@ -1072,13 +1072,26 @@ export class ShipmentDetails extends Component {
                 </div>
               )}
             </div>
-            <div className="flex layout-row layout-wrap layout-align-end">
-              <div className="flex-100 layout-row layout-align-end">
+            <div className="flex-100 layout-row layout-wrap layout-align-end">
+              {user && !user.guest && (
+                <div className="flex-35 layout-row layout-align-end">
+                  <RoundButton
+                    text={t('common:back')}
+                    handleNext={this.returnToDashboard}
+                    iconClass="fa-angle-left"
+                    theme={theme}
+                    classNames="layout-row layout-align-end"
+                    back
+                  />
+                </div>
+              )}
+              <div className="flex-35 layout-row layout-align-end">
                 <RoundButton
                   text={isQuote ? t('common:getQuotes') : t('common:getOffers')}
                   handleNext={this.handleNextStage}
                   handleDisabled={() => this.handleNextStageDisabled()}
                   theme={theme}
+                  classNames="layout-row layout-align-end"
                   active={getOffersBtnIsActive(this.state)}
                   disabled={!getOffersBtnIsActive(this.state)}
                 />
@@ -1091,37 +1104,6 @@ export class ShipmentDetails extends Component {
             </div>
           </div>
         </div>
-        {user &&
-          !user.guest && (
-          <div
-            className={
-              `${defaults.border_divider} layout-row flex-100 ` +
-                'layout-wrap layout-align-center-center'
-            }
-          >
-            <div
-              className={
-                `${styles.btn_sec} ${defaults.content_width} ` +
-                  'layout-row flex-none layout-wrap layout-align-start-start'
-              }
-            >
-              <div
-                className={
-                  `${styles.btn_sec} ${defaults.content_width} ` +
-                    'layout-row flex-none layout-wrap layout-align-start-start'
-                }
-              >
-                <RoundButton
-                  text={t('common:back')}
-                  handleNext={this.returnToDashboard}
-                  iconClass="fa-angle-left"
-                  theme={theme}
-                  back
-                />
-              </div>
-            </div>
-          </div>
-        )}
         {styleTagJSX}
       </div>
     )
