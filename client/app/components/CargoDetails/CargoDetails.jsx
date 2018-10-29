@@ -570,7 +570,7 @@ class CargoDetails extends Component {
                   layout-row layout-wrap layout-align-start-start"
               >
                 <div className="flex-100 layout-row layout-wrap" name="packing_sheet">
-                  <div className="flex-100 layout-row">
+                  <div className="flex-100 layout-row margin_5">
                     <DocumentsForm
                       theme={theme}
                       type="packing_sheet"
@@ -584,7 +584,7 @@ class CargoDetails extends Component {
                 </div>
 
                 <div className="flex-100 layout-row layout-wrap" name="commercial_invoice">
-                  <div className="flex-100 layout-row">
+                  <div className="flex-100 layout-row margin_5">
                     <DocumentsForm
                       theme={theme}
                       type="commercial_invoice"
