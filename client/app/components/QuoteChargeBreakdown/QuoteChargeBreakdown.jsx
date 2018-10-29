@@ -63,6 +63,54 @@ class QuoteChargeBreakdown extends Component {
     return Object.keys(this.props.quote).filter(key => !this.unbreakableKeys.includes(key))
   }
 
+  generateContent (key) {
+    const { quote, t } = this.props
+    const contentSections = Object.entries(quote[`${key}`])
+      .map(array => array.filter(value => !this.unbreakableKeys.includes(value)))
+      .filter(value => value.length !== 1)
+    const currencySections = {}
+    const currencyTotals = {}
+    contentSections.forEach((price) => {
+      const currency = ['export', 'import'].includes(key) ? price[1].currency : price[1].total.currency
+      const value = ['export', 'import'].includes(key) ? price[1].value : price[1].total.value
+      if (!currencySections[currency]) {
+        currencySections[currency] = []
+      }
+      if (!currencyTotals[currency]) {
+        currencyTotals[currency] = 0.0
+      }
+      currencyTotals[currency] += parseFloat(value)
+      currencySections[currency].push(price)
+    })
+
+    return Object.entries(currencySections).map(currencyFees => (
+      <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
+        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.currency_header}`}>
+          <div className="flex-45 layout-row layout-align-start-center">
+            <span className="flex-none"> {t('cargo:feesIn', { currency: currencyFees[0] })}</span>
+          </div>
+          <div className="flex-45 layout-row layout-align-end-center">
+            <span className="flex-none">{`${numberSpacing(currencyTotals[currencyFees[0]], 2)} ${currencyFees[0]}`}</span>
+          </div>
+        </div>
+        {currencyFees[1].map((price, i) => {
+          const subPrices = (<div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
+            <div className="flex-45 layout-row layout-align-start-center">
+              <span>
+                {key === 'cargo' ? t('cargo:unitFreightRate', { unitNo: i + 1 }) : this.determineSubKey(price)}
+              </span>
+            </div>
+            <div className="flex-50 layout-row layout-align-end-center">
+              <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{(price[1].currency || price[1].total.currency)}</p>
+            </div>
+          </div>)
+
+          return subPrices
+        })}
+      </div>
+    ))
+  }
+
   render () {
     const {
       theme,
@@ -104,22 +152,7 @@ class QuoteChargeBreakdown extends Component {
             </div>
           </div>
         )}
-        content={Object.entries(quote[`${key}`])
-          .map(array => array.filter(value => !this.unbreakableKeys.includes(value)))
-          .filter(value => value.length !== 1).map((price, i) => {
-            const subPrices = (<div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
-              <div className="flex-45 layout-row layout-align-start-center">
-                <span>
-                  {key === 'cargo' ? t('cargo:unitFreightRate', { unitNo: i + 1 }) : this.determineSubKey(price)}
-                </span>
-              </div>
-              <div className="flex-50 layout-row layout-align-end-center">
-                <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{(price[1].currency || price[1].total.currency)}</p>
-              </div>
-            </div>)
-
-            return subPrices
-          })}
+        content={this.generateContent(key)}
       />
     ))
   }
