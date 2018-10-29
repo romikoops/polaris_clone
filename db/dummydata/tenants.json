@@ -647,7 +647,7 @@
         "cargo_item": false
       }
     },
-    "dangerous_goods": true,
+    "dangerous_goods": false,
     "non_stackable_goods": false,
     "links": {
       "about": "https://www.gatewaycargo.de/offices_us.html",
@@ -661,7 +661,7 @@
     "closed_registration": false,
     "closed_quotation_tool": true,
     "open_quotation_tool": false,
-    "require_full_address": true,
+    "require_full_address": false,
     "consolidate_cargo": false,
     "customs_export_paper": false,
     "fixed_currency": false,
@@ -685,7 +685,7 @@
     "hide_sub_totals": true
   },
   "other_data": {
-    "cargo_item_types": ["Pallet", "Carton", "Crate", "Stack", "Drum", "Skid"],
+    "cargo_item_types": ["Pallet", "Carton (only palletized)", "Crate", "Stack", "Drum (only palletized)", "Skid"],
     "incoterms": ["EXW", "FCA", "FOB", "FAS"]
   }
 }, {
@@ -905,8 +905,8 @@
         "cargo_item": false
       }
     },
-    "dangerous_goods": true,
-    "non_stackable_goods": true,
+    "dangerous_goods": false,
+    "non_stackable_goods": false,
     "links": {
       "about": "https://www.fivestar-services.de/company_us.html",
       "legal": "https://www.fivestar-services.de/contact_us.html#impressum"
@@ -919,7 +919,7 @@
     "closed_registration": false,
     "closed_quotation_tool": true,
     "open_quotation_tool": false,
-    "require_full_address": true,
+    "require_full_address": false,
     "consolidate_cargo": false,
     "customs_export_paper": false,
     "fixed_currency": false,
@@ -943,7 +943,7 @@
     "hide_sub_totals": true
   },
   "other_data": {
-    "cargo_item_types": ["Pallet", "Carton", "Crate", "Stack", "Drum", "Skid"],
+    "cargo_item_types": ["Pallet", "Carton (only palletized)", "Crate", "Stack", "Drum (only palletized)", "Skid"],
     "incoterms": ["EXW", "FCA", "FOB", "FAS"]
   }
 }, {
