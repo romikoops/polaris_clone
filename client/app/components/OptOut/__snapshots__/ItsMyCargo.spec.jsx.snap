@@ -73,6 +73,7 @@ exports[`shallow rendering 1`] = `
         back={false}
         classNames=""
         disabled={false}
+        flexContainer="100"
         handleDisabled={null}
         handleNext={[Function]}
         icon=""

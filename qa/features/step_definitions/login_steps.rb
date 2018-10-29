@@ -26,7 +26,7 @@ And('I click the sign in button') do
 end
 
 Then('I expect to be redirected to the account page') do
-  expect(page).to have_css('.ccb_dashboard')
+  expect(page).to have_css('.ccb_dashboard', wait: 20)
 end
 
 When('I enter an incorrect credentials') do

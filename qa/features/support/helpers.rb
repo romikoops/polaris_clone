@@ -44,6 +44,33 @@ module Helpers
     puts "Saved #{path}.png"
     puts "Saved #{path}.html"
   end
+
+  def find_with_retry(*args)
+    i = 0
+    element = nil
+    until element || i > 5
+      begin
+        element = find(*args)
+      rescue Capybara::ElementNotFound
+        yield(i)
+        i += 1
+      end
+    end
+
+    element
+  end
+
+  def find_with_fallback(*args)
+    element = nil
+
+    begin
+      element = find(*args)
+    rescue Capybara::ElementNotFound
+      element = yield
+    end
+
+    element
+  end
 end
 
 World(Helpers)
