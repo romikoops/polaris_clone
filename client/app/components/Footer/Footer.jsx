@@ -44,7 +44,7 @@ function Footer ({
             <div className="flex-50 layout-row layout-align-start-center">
               <img src={logo} />
             </div>
-            <div className="flex-50 layout-row layout-align-end-end">
+            <div className="flex-50 layout-row layout-align-end-center">
               <a
                 className={`flex-none layout-row layout-align-center-center pointy ${
                   styles.contact_elem

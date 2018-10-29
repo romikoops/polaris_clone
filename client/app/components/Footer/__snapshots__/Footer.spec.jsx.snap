@@ -21,7 +21,7 @@ exports[`shallow render 1`] = `
         />
       </div>
       <div
-        className="flex-50 layout-row layout-align-end-end"
+        className="flex-50 layout-row layout-align-end-center"
       >
         <a
           className="flex-none layout-row layout-align-center-center pointy contact_elem"
@@ -157,7 +157,7 @@ exports[`theme is falsy 1`] = `
         />
       </div>
       <div
-        className="flex-50 layout-row layout-align-end-end"
+        className="flex-50 layout-row layout-align-end-center"
       >
         <a
           className="flex-none layout-row layout-align-center-center pointy contact_elem"
