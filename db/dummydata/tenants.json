@@ -837,9 +837,6 @@
     "consolidate_cargo": false,
     "customs_export_paper": false,
     "fixed_currency": false,
-    "cargo_price_notes": {
-      "cargo": "As per separate agreement with Saco Shipping"
-    },
     "fixed_exchange_rates": false,
     "incoterm_info_level": "text",
     "cargo_info_level": "text",
