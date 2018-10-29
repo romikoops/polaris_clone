@@ -5,6 +5,7 @@ import PropTypes from '../../prop-types'
 import styles from './LandingTop.scss'
 import Header from '../Header/Header'
 import ButtonSection from './ButtonSection'
+import isQuote from '../../helpers/tenant'
 
 const StyledTop = styled.div`
   background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
@@ -28,13 +29,11 @@ function LandingTop ({
 
   const largeLogo = theme && theme.logoLarge ? theme.logoLarge : ''
   const whiteLogo = theme && theme.logoWhite ? theme.logoWhite : largeLogo
-  const isQuote = (tenant && tenant.data && tenant.data.scope) &&
-    (tenant.data.scope.closed_quotation_tool || tenant.data.scope.open_quotation_tool)
 
   function determineWelcomeTail () {
     if (theme && theme.welcome_text) {
       return theme.welcome_text
-    } else if (isQuote) {
+    } else if (isQuote(tenant)) {
       return t('landing:welcomeTextQuoteTail')
     }
 
@@ -70,7 +69,7 @@ function LandingTop ({
                 <hr />
               </div>
               <div className={styles.wrapper_h3}>
-                {isQuote ? (
+                {isQuote(tenant) ? (
                   <h3 className="flex-none">
                     {t('landing:descriptionQuoteHead')}
                     <b>{t('landing:descriptionQuoteMiddle')}</b>

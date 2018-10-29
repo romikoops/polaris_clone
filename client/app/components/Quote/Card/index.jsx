@@ -8,7 +8,8 @@ import {
   gradientTextGenerator,
   numberSpacing,
   capitalize,
-  formattedPriceValue
+  formattedPriceValue,
+  isQuote
 } from '../../../helpers'
 import { ChargeIcons } from './ChargeIcons'
 import QuoteChargeBreakdown from '../../QuoteChargeBreakdown/QuoteChargeBreakdown'
@@ -50,8 +51,8 @@ class QuoteCard extends PureComponent {
     this.handleClickChecked = this.handleClickChecked.bind(this)
   }
   componentDidMount () {
-    const { isQuotationTool } = this.props
-    if (isQuotationTool) {
+    const { tenant } = this.props
+    if (isQuote(tenant)) {
       this.setState({
         showSchedules: false
       })
@@ -142,7 +143,6 @@ class QuoteCard extends PureComponent {
       cargo,
       pickup,
       truckingTime,
-      isQuotationTool,
       aggregatedCargo,
       t
     } = this.props
@@ -333,18 +333,18 @@ class QuoteCard extends PureComponent {
         <div className="flex-100 layout-wrap layout-align-start-stretch">
           <div className={`flex-100 layout-row layout-align-space-between-stretch ${styles.total_row}`}>
             {this.buttonToDisplay()}
-            <div className={`${isQuotationTool ? 'flex' : 'flex-10'} layout-row layout-align-start-center`}>
+            <div className={`${isQuote(tenant) ? 'flex' : 'flex-10'} layout-row layout-align-start-center`}>
               <span style={{ textAlign: 'right' }}>{scope.hide_grand_total ? '' : t('common:total')}</span>
             </div>
             <div className="flex layout-row layout-align-end-center">
-              <p style={!isQuotationTool ? { paddingRight: '18px' } : {}}>
+              <p style={!isQuote(tenant) ? { paddingRight: '18px' } : {}}>
                 {
                   scope.hide_grand_total
                     ? ''
                     : `${formattedPriceValue(quote.total.value)} ${quote.total.currency}`
                 }
               </p>
-              {isQuotationTool ? (
+              {isQuote(tenant) ? (
                 <RoundButton
                   active={!this.state.isChecked}
                   flexContainer={scope.hide_grand_total ? '40' : '100'}
@@ -376,7 +376,6 @@ QuoteCard.propTypes = {
   handleScheduleRequest: PropTypes.func,
   pickup: PropTypes.bool,
   isChecked: PropTypes.bool,
-  isQuotationTool: PropTypes.bool,
   aggregatedCargo: PropTypes.objectOf(PropTypes.string)
 }
 
@@ -390,7 +389,6 @@ QuoteCard.defaultProps = {
   handleScheduleRequest: null,
   handleClick: null,
   pickup: false,
-  isQuotationTool: false,
   isChecked: false,
   aggregatedCargo: {}
 }

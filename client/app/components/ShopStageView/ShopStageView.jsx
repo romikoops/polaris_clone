@@ -4,7 +4,7 @@ import styles from './ShopStageView.scss'
 import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
 import { SHIPMENT_STAGES, QUOTE_STAGES } from '../../constants'
-import { gradientTextGenerator, gradientGenerator, history } from '../../helpers'
+import { gradientTextGenerator, gradientGenerator, history, isQuote } from '../../helpers'
 import HelpContact from '../Help/Contact'
 
 class ShopStageView extends Component {
@@ -106,8 +106,6 @@ class ShopStageView extends Component {
       t
     } = this.props
     const { showHelp } = this.state
-    const isQuote = (tenant && tenant.data && tenant.data.scope) &&
-                    (tenant.data.scope.closed_quotation_tool || tenant.data.scope.open_quotation_tool)
     const stageBoxes = this.applicableStages.map(stage => this.stageBox(stage))
     const gradientStyle =
       theme && theme.colors
@@ -183,7 +181,7 @@ class ShopStageView extends Component {
             }`}
           >
             <h3 className="flex-none header">
-              { isQuote ? t('common:quotation') : t('common:booking') }
+              { isQuote(tenant) ? t('common:quotation') : t('common:booking') }
             </h3>
             <i className="fa fa-chevron-right fade" />
             <p className="flex-none fade"> {this.state.stageHeader} </p>
@@ -195,7 +193,7 @@ class ShopStageView extends Component {
             <div
               className={`${styles.line_box} layout-row layout-align-center flex-none`}
             >
-              <div className={`${isQuote ? styles.quote_line : styles.line} flex-none`} />
+              <div className={`${isQuote(tenant) ? styles.quote_line : styles.line} flex-none`} />
               {stageBoxes}
             </div>
           </div>

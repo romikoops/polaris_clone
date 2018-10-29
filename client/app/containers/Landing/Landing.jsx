@@ -9,7 +9,7 @@ import styles from './Landing.scss'
 import { RoundButton } from '../../components/RoundButton/RoundButton'
 import Loading from '../../components/Loading/Loading'
 import { userActions, authenticationActions } from '../../actions'
-import { gradientTextGenerator } from '../../helpers'
+import { gradientTextGenerator, isQuote } from '../../helpers'
 import Footer from '../../components/Footer/Footer'
 
 class Landing extends Component {
@@ -60,9 +60,6 @@ class Landing extends Component {
 
     const loadingScreen = this.props.loading ? <Loading theme={theme} /> : ''
 
-    const isQuote = (tenant && tenant.data && tenant.data.scope) &&
-      (tenant.data.scope.closed_quotation_tool || tenant.data.scope.open_quotation_tool)
-
     const minHeightForFooter = window.innerHeight - 350
     const footerStyle = { minHeight: `${minHeightForFooter}px`, position: 'relative', paddingBottom: '125px' }
 
@@ -77,7 +74,7 @@ class Landing extends Component {
             tenant={tenant}
             bookNow={() => this.bookNow()}
           />
-          {!isQuote ? (
+          {!isQuote(tenant) ? (
             <div className="layout-row flex-100 layout-wrap">
               <div className={`${styles.service_box} layout-row flex-100 layout-wrap`}>
                 <div className={`${styles.service_label} layout-row layout-align-center-center flex-100`}>

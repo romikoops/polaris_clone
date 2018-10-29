@@ -19,7 +19,7 @@ import ShipmentCargoItems from '../ShipmentCargoItems/ShipmentCargoItems'
 import ShipmentAggregatedCargo from '../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
 import TextHeading from '../TextHeading/TextHeading'
 import IncotermBox from '../Incoterm/Box'
-import { camelize, isEmpty, chargeableWeight } from '../../helpers'
+import { camelize, isEmpty, chargeableWeight, isQuote } from '../../helpers'
 import Checkbox from '../Checkbox/Checkbox'
 import NotesRow from '../Notes/Row'
 import '../../styles/select-css-custom.scss'
@@ -754,9 +754,6 @@ export class ShipmentDetails extends Component {
       t
     } = this.props
 
-    const isQuote = (tenant && tenant.data && tenant.data.scope) &&
-                    (tenant.data.scope.closed_quotation_tool || tenant.data.scope.open_quotation_tool)
-
     const { modals, filteredRouteIndexes } = this.state
 
     if (!filteredRouteIndexes.length) return ''
@@ -1075,7 +1072,7 @@ export class ShipmentDetails extends Component {
             <div className="flex layout-row layout-wrap layout-align-end">
               <div className="flex-100 layout-row layout-align-end">
                 <RoundButton
-                  text={isQuote ? t('common:getQuotes') : t('common:getOffers')}
+                  text={isQuote(tenant) ? t('common:getQuotes') : t('common:getOffers')}
                   handleNext={this.handleNextStage}
                   handleDisabled={() => this.handleNextStageDisabled()}
                   theme={theme}

@@ -4,8 +4,6 @@ import { theme, tenant, identity } from '../../../mocks'
 
 import QuoteCard from './index'
 
-
-
 const propsBase = {
   theme,
   tenant,
@@ -31,7 +29,6 @@ const propsBase = {
   },
   cargo: [],
   pickup: true,
-  isQuotationTool: true,
   aggregatedCargo: {}
 }
 

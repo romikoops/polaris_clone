@@ -7,6 +7,7 @@ import { AdminClientCardIndex } from './AdminClientCardIndex'
 import { AdminRouteList } from './AdminRouteList'
 import { WorldMap } from './DashboardMap/WorldMap'
 import { gradientTextGenerator } from '../../helpers'
+import isQuote from '../../helpers/tenant'
 import styles from './AdminDashboard.scss'
 import GenericError from '../../components/ErrorHandling/Generic'
 
@@ -92,7 +93,7 @@ export class AdminDashboard extends Component {
       confirmShipmentData,
       adminDispatch,
       theme,
-      scope
+      tenant
     } = this.props
     const { hoverId, perPage } = this.state
 
@@ -110,8 +111,7 @@ export class AdminDashboard extends Component {
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
-    const isQuote = scope && (scope.closed_quotation_tool || scope.open_quotation_tool)
-    const shipmentsToDisplay = isQuote ? shipments.quoted : shipments.requested
+    const shipmentsToDisplay = isQuote(tenant) ? shipments.quoted : shipments.requested
     const preppedShipments = shipmentsToDisplay ? shipmentsToDisplay.slice(0, perPage)
       .map(s => AdminDashboard.prepShipment(s, clientHash, hubHash)) : []
 
@@ -156,7 +156,7 @@ export class AdminDashboard extends Component {
             </div>
           </div>
           <div className="layout-padding flex-100 layout-align-start-center greyBg">
-            <span><b>{isQuote ? 'Quoted Shipments' : 'Requested Shipments' }</b></span>
+            <span><b>{isQuote(tenant) ? 'Quoted Shipments' : 'Requested Shipments' }</b></span>
           </div>
           <ShipmentOverviewCard
             admin
@@ -213,7 +213,7 @@ AdminDashboard.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.any,
   theme: PropTypes.theme,
-  scope: PropTypes.scope,
+  tenant: PropTypes.tenant.isRequired,
   dashData: PropTypes.shape({
     schedules: PropTypes.array
   }),

@@ -67,7 +67,7 @@ exports[`shallow render 1`] = `
     >
       <span>
         <b>
-          Quoted Shipments
+          Requested Shipments
         </b>
       </span>
     </div>

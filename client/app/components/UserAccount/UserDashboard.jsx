@@ -7,9 +7,9 @@ import UserLocations from './UserLocations'
 import { AdminSearchableClients } from '../Admin/AdminSearchables'
 import ShipmentOverviewCard from '../ShipmentCard/ShipmentOverviewCard'
 import { gradientTextGenerator } from '../../helpers'
+import isQuote from '../../helpers/tenant'
 import SquareButton from '../SquareButton'
 import Loading from '../Loading/Loading'
-
 
 class UserDashboard extends Component {
   static prepShipment (baseShipment, user) {
@@ -94,7 +94,7 @@ class UserDashboard extends Component {
       dashboard,
       user,
       userDispatch,
-      scope,
+      tenant,
       t
     } = this.props
     if (!user || !dashboard) {
@@ -107,8 +107,7 @@ class UserDashboard extends Component {
       locations
     } = dashboard
 
-    const isQuote = scope.closed_quotation_tool || scope.open_quotation_tool
-    const shipmentsToDisplay = isQuote ? shipments.quoted : shipments.requested
+    const shipmentsToDisplay = isQuote(tenant) ? shipments.quoted : shipments.requested
     const preppedShipments = shipmentsToDisplay ? shipmentsToDisplay.slice(0, perPage)
       .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
       .map(s => UserDashboard.prepShipment(s, user)) : []
@@ -160,7 +159,7 @@ class UserDashboard extends Component {
             </div>
           </div>
           <div className="layout-padding flex-100 layout-align-start-center greyBg">
-            <span><b>{isQuote ? t('shipment:quotedShipments') : t('shipment:requestedShipments') }</b></span>
+            <span><b>{isQuote(tenant) ? t('shipment:quotedShipments') : t('shipment:requestedShipments') }</b></span>
           </div>
           <ShipmentOverviewCard
             dispatches={userDispatch}
@@ -234,6 +233,7 @@ UserDashboard.propTypes = {
   }).isRequired,
   seeAll: PropTypes.func,
   theme: PropTypes.theme,
+  tenant: PropTypes.tenant.isRequired,
   user: PropTypes.user.isRequired,
   dashboard: PropTypes.shape({
     shipments: PropTypes.shipments,

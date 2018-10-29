@@ -105,6 +105,7 @@ class Admin extends Component {
                   render={props => (
                     <AdminDashboard
                       user={user}
+                      tenant={tenant}
                       theme={theme}
                       setCurrentUrl={this.setCurrentUrl}
                       {...props}
@@ -283,7 +284,7 @@ class Admin extends Component {
             </div>
           </div>
           <GenericError theme={theme}>
-            <Footer width={footerWidth} theme={theme} tenant={tenant.data} isShop />
+            <Footer width={footerWidth} theme={theme} tenant={tenant} />
           </GenericError>
         </div>
       </div>

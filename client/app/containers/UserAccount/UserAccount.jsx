@@ -178,6 +178,7 @@ class UserAccount extends Component {
                         theme={theme}
                         {...props}
                         user={user}
+                        tenant={tenant}
                         scope={tenant.data.scope}
                         setCurrentUrl={this.setCurrentUrl}
                         dashboard={dashboard}
@@ -392,7 +393,7 @@ class UserAccount extends Component {
               </GenericError >
             </div>
           </div>
-          <Footer isShop tenant={tenant.data} />
+          <Footer tenant={tenant} />
         </div>
       </div>
     )
