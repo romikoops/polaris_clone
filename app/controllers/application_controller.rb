@@ -35,16 +35,29 @@ class ApplicationController < ActionController::API
   private
 
   def current_tenant
-    @current_tenant ||= current_user.tenant
+    @current_tenant ||= current_user&.tenant
   end
 
   def set_raven_context
-    Raven.user_context(id: session[:current_user_id]) # or anything else in session
-    Raven.extra_context(params: params.to_unsafe_h, url: request.url)
+    tenant_scope = current_tenant&.scope
+    Raven.user_context(
+      email: current_user&.email,
+      id: current_user&.id,
+      ip: request.remote_ip
+    )
+    Raven.extra_context(
+      params: params.to_unsafe_h,
+      tenant: current_tenant&.subdomain,
+      url: request.url,
+      scope: {
+        quotation_tool: tenant_scope&.slice('open_quotation_tool', 'closed_quotation_tool')&.values&.reduce(:|),
+        beta_features: tenant_scope&.fetch('show_beta_features', false)
+      }
+    )
   end
 
   def clear_shoryuken
-    file_path = Rails.root + "/log/shoryuken.log"
+    file_path = Rails.root + '/log/shoryuken.log'
     File.delete(file_path)
   end
 end
