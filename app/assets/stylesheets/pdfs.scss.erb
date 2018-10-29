@@ -174,18 +174,40 @@ br{
   justify-content: space-between;
   align-items: center;
 }
-.subtotal-price-single h3 {
-  padding-right: 50px;
+.subtotal-currency-single {
+  background: white !important;
+  -webkit-print-color-adjust: exact !important;
+  border-bottom: 1.5px solid #E0E0E0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.subtotal-currency-single h3 {
+  padding-right: 45px;
   margin: 8px 0;
   font-size: 15px;
   text-align: right;
   font-weight: bold;
 }
-.subtotal-price-single h4 {
-  padding-left: 50px;
+.subtotal-currency-single h4 {
+  padding-left: 45px;
   font-weight: bold;
   margin: 8px 0;
   font-size: 12px;
+}
+.subtotal-price-single h3 {
+  padding-right: 60px;
+  margin: 8px 0;
+  font-size: 12px;
+  text-align: right;
+  font-weight: normal;
+
+}
+.subtotal-price-single h4 {
+  padding-left: 60px;
+  margin: 8px 0;
+  font-size: 12px;
+  font-weight: normal;
 }
 .subtotal-price-group {
   .subtotal-price-single {
@@ -205,7 +227,7 @@ br{
 }
 .total-price-single h4 {
   font-size: 16px;
-  font-weight: 400;
+  font-weight: bold;
   margin: 10px 0;
   padding-left: 35px;
   text-transform: capitalize;
