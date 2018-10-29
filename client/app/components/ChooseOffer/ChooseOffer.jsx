@@ -326,9 +326,10 @@ class ChooseOffer extends Component {
           />
         ) : ''}
         <div className={`flex-none ${defs.content_width} layout-row`}>
-          <div className="flex-20 layout-row layout-wrap">
+          {!isQuote(tenant) ? <div className="flex-20 layout-row layout-wrap">
             <RouteFilterBox
               theme={theme}
+              tenant={tenant}
               cargos={shipmentData.cargoUnits}
               pickup={shipment.has_pre_carriage}
               setDurationFilter={this.setDuration}
@@ -341,7 +342,7 @@ class ChooseOffer extends Component {
               lastTripDate={lastTripDate}
               setDepartureDate={this.setDepartureDate}
             />
-          </div>
+          </div> : ''}
           <div className="flex  offset-5 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-wrap">
               <div
