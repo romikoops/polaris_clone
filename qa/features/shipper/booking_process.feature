@@ -13,7 +13,6 @@ Feature: Booking Process
   Scenario Outline: Creating a booking
     When I click the find rates button
     Then I expect to see title "Choose shipment"
-     And take a snapshot
 
     When I select "I am <Direction>"
      And I select "<Shipment Type>"

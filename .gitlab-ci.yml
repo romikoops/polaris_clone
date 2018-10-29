@@ -185,7 +185,7 @@ deploy:
     - dockerize -wait=tcp://localhost:4444 -timeout=5m
 
   script:
-    - cd /app ; bin/cucumber --tags 'not @wip' --format progress --format junit --out $REPORT_PATH/
+    - cd /app ; bin/cucumber --tags 'not @wip' --format pretty --format junit --out $REPORT_PATH/
 
   dependencies:
     - deploy
@@ -223,7 +223,7 @@ deploy:
     - 'echo "Target: $TARGET_URL"'
 
   script:
-    - cd /app ; bin/cucumber --tags '@Smoke' --format progress --format junit --out $REPORT_PATH/
+    - cd /app ; bin/cucumber --tags '@Smoke' --format pretty --format junit --out $REPORT_PATH/
 
   allow_failure: true
 

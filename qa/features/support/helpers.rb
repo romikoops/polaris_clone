@@ -31,10 +31,11 @@ module Helpers
 
   def take_screenshot(name: @scenario.name)
     path = format(
-      '%<feature>s/%<time>s-%<name>s',
+      '%<feature>s/%<time>s-%<name>s%<status>s',
       feature: @scenario.feature.name.gsub(/[^\w\-]/, '_'),
       name: name.gsub(/[^\w\-]/, '_'),
-      time: Time.now.strftime('%H%M%S')
+      status: @scenario.failed? ? '_FAILED' : '',
+      time: Time.now.strftime('%H%M%S'),
     )
 
     save_screenshot("#{path}.png") # rubocop:disable Lint/Debugger
