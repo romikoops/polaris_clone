@@ -402,9 +402,13 @@ class ShipmentLocationBox extends Component {
   }
 
   changeAddressFormVisibility (target, visibility) {
-    const key = `show${capitalize(target)}Fields`
-    const value = visibility != null ? visibility : !this.state[key]
-    this.setState({ [key]: value })
+    this.setState((prevState) => {
+      const key = `show${capitalize(target)}Fields`
+      const value = visibility != null ? visibility : !prevState[key]
+
+      return { [key]: value }
+    })
+
   }
 
   triggerPlaceChanged (input, target) {
@@ -474,13 +478,13 @@ class ShipmentLocationBox extends Component {
     const key2 = eventKeys[1]
     const val = event.target.value
 
-    this.setState({
-      ...this.state,
+    this.setState(prevState => ({
+      ...prevState,
       [key1]: {
-        ...this.state[key1],
+        ...prevState[key1],
         [key2]: val
       }
-    })
+    }))
   }
 
   scopeNexusOptions (nexusIds, hubIds, target) {
@@ -495,7 +499,7 @@ class ShipmentLocationBox extends Component {
 
   handleAuto (event) {
     const { name, value } = event.target
-    this.setState({ autoText: { ...this.state.autoText, [name]: value } })
+    this.setState(prevState => ({ autoText: { ...prevState.autoText, [name]: value } }))
   }
 
   selectLocation (place, target) {
@@ -542,12 +546,12 @@ class ShipmentLocationBox extends Component {
                     checked: false
                   }
                 })
-                this.setState({
+                this.setState(prevState => ({
                   autoText: {
-                    ...this.state.autoText,
+                    ...prevState.autoText,
                     [target]: ''
                   }
-                })
+                }))
               }
               target === 'origin' ? this.setOriginNexus(nexusOption) : this.setDestNexus(nexusOption)
 
@@ -583,9 +587,9 @@ class ShipmentLocationBox extends Component {
         }
       )
 
-      this.setState({
-        autoText: { ...this.state.autoText, [target]: place.formatted_address }
-      })
+      this.setState(prevState => ({
+        autoText: { ...prevState.autoText, [target]: place.formatted_address }
+      }))
     })
   }
 
@@ -598,10 +602,10 @@ class ShipmentLocationBox extends Component {
       country: '',
       fullAddress: ''
     }
-    this.setState({
-      autoText: { ...this.state.autoText, [target]: '' },
+    this.setState(prevState => ({
+      autoText: { ...prevState.autoText, [target]: '' },
       [target]: tmpAddress
-    }, () => this.props.setTargetAddress(target, tmpAddress))
+    }), () => this.props.setTargetAddress(target, tmpAddress))
   }
   handleAddressFormFocus (event) {
     const target = event.target.name.split('-')[0]
