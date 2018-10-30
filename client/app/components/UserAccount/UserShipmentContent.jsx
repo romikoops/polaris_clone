@@ -13,9 +13,9 @@ import DocumentsForm from '../Documents/Form'
 import { moment, documentTypes, docOptions } from '../../constants'
 import {
   switchIcon,
-  formattedPriceValue,
   totalPrice,
-  formattedDate
+  formattedDate,
+  numberSpacing
 } from '../../helpers'
 import ContactDetailsRow from '../Admin/AdminShipmentView/ContactDetailsRow'
 import GreyBox from '../GreyBox/GreyBox'
@@ -413,7 +413,7 @@ class UserShipmentContent extends Component {
                     </div>
                   </div>
                   <h2 className="layout-align-start-center layout-row flex">
-                    {formattedPriceValue(totalPrice(shipment).value)} {totalPrice(shipment).currency}
+                    {numberSpacing(totalPrice(shipment).value, 2)} {totalPrice(shipment).currency}
                   </h2>
                 </div>
               </div>
@@ -440,7 +440,7 @@ class UserShipmentContent extends Component {
         >
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
             <GreyBox
-              wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right}`}
+              wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_bottom}`}
               contentClassName="layout-column flex"
               content={cargoView}
             />

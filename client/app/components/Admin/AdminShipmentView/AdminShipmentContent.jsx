@@ -7,7 +7,7 @@ import styles from '../AdminShipments.scss'
 import adminStyles from '../Admin.scss'
 import GradientBorder from '../../GradientBorder'
 import { moment, docOptions, documentTypes } from '../../../constants'
-import { formattedPriceValue, totalPrice } from '../../../helpers'
+import { numberSpacing, totalPrice } from '../../../helpers'
 import ShipmentOverviewShowCard from './ShipmentOverviewShowCard'
 import DocumentsForm from '../../Documents/Form'
 import ContactDetailsRow from './ContactDetailsRow'
@@ -545,7 +545,7 @@ class AdminShipmentContent extends Component {
                     </div>
                   </div>
                   <h2 className="layout-align-start-center layout-row flex">
-                    {formattedPriceValue(totalPrice(shipment).value)} {totalPrice(shipment).currency}
+                    {numberSpacing(totalPrice(shipment).value, 2)} {totalPrice(shipment).currency}
                   </h2>
                 </div>
               </div>
@@ -573,7 +573,7 @@ class AdminShipmentContent extends Component {
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
             <GreyBox
 
-              wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right}`}
+              wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_bottom}`}
               contentClassName="layout-column flex"
               content={cargoView}
             />
