@@ -100,7 +100,6 @@ class ShipmentLocationBox extends Component {
     this.setNexusesFromRoute = this.setNexusesFromRoute.bind(this)
     this.resetAuto = this.resetAuto.bind(this)
     this.setMarker = this.setMarker.bind(this)
-    this.handleAuto = this.handleAuto.bind(this)
     this.changeAddressFormVisibility = this.changeAddressFormVisibility.bind(this)
     this.toggleModal = this.toggleModal.bind(this)
     this.selectedRoute = this.selectedRoute.bind(this)
@@ -497,11 +496,6 @@ class ShipmentLocationBox extends Component {
     })
   }
 
-  handleAuto (event) {
-    const { name, value } = event.target
-    this.setState(prevState => ({ autoText: { ...prevState.autoText, [name]: value } }))
-  }
-
   selectLocation (place, target) {
     this.setState({ fetchingtruckingAvailability: true }, () => {
       const counterpart = target === 'origin' ? 'destination' : 'origin'
@@ -546,6 +540,7 @@ class ShipmentLocationBox extends Component {
                     checked: false
                   }
                 })
+
                 this.setState(prevState => ({
                   autoText: {
                     ...prevState.autoText,
@@ -602,6 +597,7 @@ class ShipmentLocationBox extends Component {
       country: '',
       fullAddress: ''
     }
+
     this.setState(prevState => ({
       autoText: { ...prevState.autoText, [target]: '' },
       [target]: tmpAddress
@@ -1044,7 +1040,6 @@ class ShipmentLocationBox extends Component {
         <Autocomplete
           gMaps={this.props.gMaps}
           theme={this.props.theme}
-          t={t}
           map={this.state.map}
           input={this.state.autoText.origin}
           hasErrors={originFieldsHaveErrors}

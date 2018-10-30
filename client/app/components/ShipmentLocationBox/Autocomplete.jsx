@@ -33,16 +33,17 @@ class Autocomplete extends PureComponent {
     this.deltaHighlightIndex = this.deltaHighlightIndex.bind(this)
     this.handleKeyEvent = this.handleKeyEvent.bind(this)
     this.showResultsTimer = this.showResultsTimer.bind(this)
-  }
 
-  componentDidMount () {
-    this.intializeAutocomplete()
+    const { gMaps } = props
+
+    this.areaService = new gMaps.places.AutocompleteService({ types: ['regions'] })
+    this.addressService = new gMaps.places.AutocompleteService({ types: ['address'] })
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.input !== this.state.input) {
-      this.setState({ input: nextProps.input })
-    }
+    if (this.props.input === nextProps.input) return
+
+    this.setState(prevState => (nextProps.input === prevState.input ? {} : { input: nextProps.input }))
   }
 
   componentWillUnmount () {
@@ -52,14 +53,6 @@ class Autocomplete extends PureComponent {
   getPlace (placeId, callback) {
     const service = new this.props.gMaps.places.PlacesService(this.props.map)
     service.getDetails({ placeId }, place => callback(place))
-  }
-
-  intializeAutocomplete () {
-    const areaOptions = { types: ['regions'] }
-    const addressOptions = { types: ['address'] }
-    const areaService = new this.props.gMaps.places.AutocompleteService(areaOptions)
-    const addressService = new this.props.gMaps.places.AutocompleteService(addressOptions)
-    this.setState({ areaService, addressService })
   }
 
   initKeyboardListener () {
@@ -139,23 +132,25 @@ class Autocomplete extends PureComponent {
   }
 
   shouldTriggerInputChange (event) {
-    const { value } = event.target
-    const { searchTimeout, input } = this.state
-    if (value === input) return null
-    if (searchTimeout) {
-      clearTimeout(searchTimeout)
-    }
-    const newTimeout = setTimeout(this.handleInputChange(event.target.value), 750)
-    this.setState({
-      input: event.target.value,
-      searchTimeout: newTimeout
+    const { target } = event
+
+    this.setState((prevState) => {
+      const { value } = target
+      const { searchTimeout, input } = prevState
+      if (value === input) return {}
+
+      if (searchTimeout) clearTimeout(searchTimeout)
+      const newTimeout = setTimeout(this.handleInputChange(value), 750)
+
+      return {
+        input: value,
+        searchTimeout: newTimeout
+      }
     })
   }
 
   handleInputChange (input) {
-    const { areaService, addressService } = this.state
-    if (!input || input === '') return this.setState({ input: '' })
-    areaService.getPlacePredictions({ input }, (results) => {
+    this.areaService.getPlacePredictions({ input }, (results) => {
       if (results && results.length > 0) {
         const filteredResults = Autocomplete.filterResults(results, { types: ['postal_code', 'locality'] })
         this.setState({ areaResults: filteredResults, hideResults: false }, () => {
@@ -164,7 +159,7 @@ class Autocomplete extends PureComponent {
         })
       }
     })
-    addressService.getPlacePredictions({ input }, (results) => {
+    this.addressService.getPlacePredictions({ input }, (results) => {
       if (results && results.length > 0) {
         const filteredResults = Autocomplete.filterResults(results, {})
         this.setState({ addressResults: filteredResults, hideResults: false }, () => {
@@ -173,8 +168,6 @@ class Autocomplete extends PureComponent {
         })
       }
     })
-
-    return ''
   }
   handleSelect (result) {
     listenerTools.removeHandler(document, 'keydown', this.handleKeyEvent)
@@ -207,14 +200,15 @@ class Autocomplete extends PureComponent {
 
           return (
             <div
-              className={`flex-100 layout-row layout-align-center-center pointy
-                ${styles.autocomplete_card}`}
+              className={`flex-100 layout-row layout-align-center-center pointy ${styles.autocomplete_card}`}
               style={isHighlighted ? highlightStyle : {}}
               onClick={() => this.handleSelect(result)}
             >
               <p className="flex">{result.description}</p>
-            </div>)
-        }) : []
+            </div>
+          )
+        })
+      : []
     const addressResultCards = hasAddressResults
       ? addressResults
         .filter(result => !areaResults.some(element => element.description === result.description))
@@ -231,7 +225,8 @@ class Autocomplete extends PureComponent {
             >
               <p className="flex">{result.description}</p>
             </div>)
-        }) : []
+        })
+      : []
     const inputErrorStyle = hasErrors ? styles.with_errors : ''
 
     return (
@@ -254,16 +249,18 @@ class Autocomplete extends PureComponent {
             onBlur={this.shouldTriggerInputChange}
           />
         </div>
-        <div className={`flex-100 layout-row layout-wrap results
-            ${hasResults && !hideResults ? styles.show_results : styles.hide_results}`}
+        <div className={`
+          flex-100 layout-row layout-wrap results 
+          ${hasResults && !hideResults ? styles.show_results : styles.hide_results}
+        `}
         >
           <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.autocomplete_inner}`}>
-            <div className={`flex-100 layout-row layout-wrap layout-align-start-start area
-                ${styles.results_section} ${!hasAreaResults ? styles.hide_results : ''}`}
+            <div className={`
+              flex-100 layout-row layout-wrap layout-align-start-start area
+              ${styles.results_section} ${!hasAreaResults ? styles.hide_results : ''}
+            `}
             >
-              <div className={`flex-100 layout-row layout-align-start-center 
-                  ${styles.results_section_header}`}
-              >
+              <div className={`flex-100 layout-row layout-align-start-center ${styles.results_section_header}`}>
                 <p className="flex-none">{t('common:areaPostalCodes')}</p>
               </div>
               {areaResultCards}
@@ -271,9 +268,7 @@ class Autocomplete extends PureComponent {
             <div className={`flex-100 layout-row layout-wrap layout-align-start-start address
                 ${styles.results_section} ${!hasAddressResults ? styles.hide_results : ''}`}
             >
-              <div className={`flex-100 layout-row layout-align-start-center 
-                  ${styles.results_section_header}`}
-              >
+              <div className={`flex-100 layout-row layout-align-start-center ${styles.results_section_header}`}>
                 <p className="flex-none"> {t('common:addresses')}</p>
               </div>
               {addressResultCards}
