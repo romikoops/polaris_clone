@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
-import '../../styles/select-css-custom.css'
+import '../../styles/select-css-custom.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { moTOptions } from '../../constants'
 

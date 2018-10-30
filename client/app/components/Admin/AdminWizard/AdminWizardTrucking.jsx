@@ -6,7 +6,7 @@ import styles from '../Admin.scss'
 // import { AdminHubTile } from '../';
 import { RoundButton } from '../../RoundButton/RoundButton'
 // import {v4} from 'uuid';
-import '../../../styles/select-css-custom.css'
+import '../../../styles/select-css-custom.scss'
 import FileUploader from '../../../components/FileUploader/FileUploader'
 import history from '../../../helpers'
 

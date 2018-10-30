@@ -7,7 +7,7 @@ import TextHeading from '../../TextHeading/TextHeading'
 import PropTypes from '../../../prop-types'
 import { gradientTextGenerator } from '../../../helpers'
 import { incoterms } from '../../../constants'
-import '../../../styles/select-css-custom.css'
+import '../../../styles/select-css-custom.scss'
 
 function IncotermBox ({
   theme,

@@ -5,7 +5,7 @@ import styles from '../Admin.scss'
 // import { RoundButton } from '../../RoundButton/RoundButton';
 // import {v4} from 'uuid';
 // import Select from 'react-select';
-// import '../../../styles/select-css-custom.css';
+// import '../../../styles/select-css-custom.scss';
 // import styled from 'styled-components';
 // import FileUploader from '../../../components/FileUploader/FileUploader';
 export class AdminWizardFinished extends Component {

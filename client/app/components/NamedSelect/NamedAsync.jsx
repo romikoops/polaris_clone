@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Async } from 'react-select'
 import styled from 'styled-components'
-import '../../styles/select-css-custom.css'
+import '../../styles/select-css-custom.scss'
 import PropTypes from '../../prop-types'
 
 export class NamedAsync extends Component {

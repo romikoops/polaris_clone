@@ -4,7 +4,7 @@ import PropTypes from '../../prop-types'
 import styles from './ShipmentCargoItems.scss'
 import defs from '../../styles/default_classes.scss'
 import QuantityInput from '../QuantityInput/QuantityInput'
-import '../../styles/select-css-custom.css'
+import '../../styles/select-css-custom.scss'
 import getInputs from './inputs'
 
 class ShipmentCargoItems extends Component {

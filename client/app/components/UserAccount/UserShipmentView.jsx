@@ -14,7 +14,7 @@ import {
   gradientGenerator,
   gradientBorderGenerator
 } from '../../helpers'
-import '../../styles/select-css-custom.css'
+import '../../styles/select-css-custom.scss'
 import DocumentsDownloader from '../Documents/Downloader'
 import GradientBorder from '../GradientBorder'
 import UserShipmentContent from './UserShipmentContent'
