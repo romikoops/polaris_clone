@@ -19,7 +19,7 @@ import ShipmentCargoItems from '../ShipmentCargoItems/ShipmentCargoItems'
 import ShipmentAggregatedCargo from '../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
 import TextHeading from '../TextHeading/TextHeading'
 import IncotermBox from '../Incoterm/Box'
-import { camelize, isEmpty, chargeableWeight } from '../../helpers'
+import { camelize, isEmpty, chargeableWeight, isQuote } from '../../helpers'
 import Checkbox from '../Checkbox/Checkbox'
 import NotesRow from '../Notes/Row'
 import '../../styles/select-css-custom.scss'
@@ -596,6 +596,7 @@ export class ShipmentDetails extends Component {
     const {
       origin, destination, selectedDay, incoterm
     } = this.state
+    const { tenant } = this.props
     const { scope } = this.props.tenant.data
     const requiresFullAddress = scope.require_full_address
     if (
@@ -611,7 +612,7 @@ export class ShipmentDetails extends Component {
 
       return
     }
-    if (!selectedDay) {
+    if (!selectedDay && !isQuote(tenant)) {
       this.incrementNextStageAttemps()
       ShipmentDetails.scrollTo('dayPicker')
 
@@ -649,7 +650,7 @@ export class ShipmentDetails extends Component {
       origin,
       destination,
       incoterm,
-      selected_day: selectedDay,
+      selected_day: selectedDay || moment().format('DD/MM/YYYY'),
       trucking: this.state.shipment.trucking,
       cargo_items_attributes: this.state.cargoItems,
       containers_attributes: this.state.containers,
@@ -753,9 +754,6 @@ export class ShipmentDetails extends Component {
       showRegistration,
       t
     } = this.props
-
-    const isQuote = (tenant && tenant.data && tenant.data.scope) &&
-                    (tenant.data.scope.closed_quotation_tool || tenant.data.scope.open_quotation_tool)
 
     const { modals, filteredRouteIndexes } = this.state
 
@@ -944,13 +942,13 @@ export class ShipmentDetails extends Component {
             <NotesRow notes={notes} theme={theme} />
           </div>
         </div>
-        <div
+        {isQuote(tenant) ? '' : <div
           className={`${
             styles.date_sec
           } layout-row flex-100 layout-wrap layout-align-center-center`}
         >
           {dayPickerSection}
-        </div>
+        </div> }
         <div className={`layout-row flex-100 layout-wrap layout-align-center ${styles.cargo_sec}`}>
           {shipmentData.shipment.load_type === 'cargo_item' && (
             <div className="content_width_booking layout-row layout-wrap layout-align-center">
@@ -1075,7 +1073,7 @@ export class ShipmentDetails extends Component {
             <div className="flex layout-row layout-wrap layout-align-end">
               <div className="flex-100 layout-row layout-align-end">
                 <RoundButton
-                  text={isQuote ? t('common:getQuotes') : t('common:getOffers')}
+                  text={isQuote(tenant) ? t('common:getQuotes') : t('common:getOffers')}
                   handleNext={this.handleNextStage}
                   handleDisabled={() => this.handleNextStageDisabled()}
                   theme={theme}

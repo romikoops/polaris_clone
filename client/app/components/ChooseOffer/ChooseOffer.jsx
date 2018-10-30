@@ -6,7 +6,7 @@ import PropTypes from '../../prop-types'
 import RouteFilterBox from '../RouteFilterBox/RouteFilterBox'
 import { currencyOptions, moment } from '../../constants'
 import styles from './ChooseOffer.scss'
-import { numberSpacing } from '../../helpers'
+import { numberSpacing, isQuote } from '../../helpers'
 import DocumentsDownloader from '../Documents/Downloader'
 import defs from '../../styles/default_classes.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
@@ -203,7 +203,6 @@ class ChooseOffer extends Component {
     const { scope } = tenant.data
 
     const { currentCurrency, isChecked } = this.state
-    const isQuotationTool = scope.closed_quotation_tool || scope.open_quotation_tool || scope.quotation_tool
     const {
       shipment, results, lastTripDate, aggregatedCargo
     } = shipmentData
@@ -249,7 +248,6 @@ class ChooseOffer extends Component {
           <QuoteCard
             theme={theme}
             tenant={tenant}
-            isQuotationTool={isQuotationTool}
             pickup={shipment.has_pre_carriage}
             startDate={shipment.desired_start_date}
             result={s}
@@ -270,7 +268,6 @@ class ChooseOffer extends Component {
         <QuoteCard
           theme={theme}
           tenant={tenant}
-          isQuotationTool={isQuotationTool}
           pickup={shipment.has_pre_carriage}
           startDate={shipment.desired_start_date}
           result={s}
@@ -329,9 +326,10 @@ class ChooseOffer extends Component {
           />
         ) : ''}
         <div className={`flex-none ${defs.content_width} layout-row`}>
-          <div className="flex-20 layout-row layout-wrap">
+          {!isQuote(tenant) ? <div className="flex-20 layout-row layout-wrap">
             <RouteFilterBox
               theme={theme}
+              tenant={tenant}
               cargos={shipmentData.cargoUnits}
               pickup={shipment.has_pre_carriage}
               setDurationFilter={this.setDuration}
@@ -344,7 +342,7 @@ class ChooseOffer extends Component {
               lastTripDate={lastTripDate}
               setDepartureDate={this.setDepartureDate}
             />
-          </div>
+          </div> : ''}
           <div className="flex  offset-5 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-wrap">
               <div
@@ -353,7 +351,7 @@ class ChooseOffer extends Component {
                 }`}
               >
                 <div className="flex-none padd_10">
-                  {isQuotationTool ? (
+                  {isQuote(tenant) ? (
                     <TextHeading
 
                       theme={theme}
@@ -385,9 +383,9 @@ class ChooseOffer extends Component {
               {focusRoutestoRender}
             </div>
           </div>
-          {isQuotationTool ? (
+          {isQuote(tenant) ? (
             <div className={`flex-20 offset-5 quote_options layout-wrap layout-align-center-start ${styles.download_section}`}>
-              <p className={`flex-100 layout-row ${styles.offer_title}`} >{isQuotationTool ? t('shipment:sendQuote') : t('shipment:selectedOffers') }</p>
+              <p className={`flex-100 layout-row ${styles.offer_title}`} >{isQuote(tenant) ? t('shipment:sendQuote') : t('shipment:selectedOffers') }</p>
               {this.state.selectedOffers !== 0 ? (
                 this.state.selectedOffers.map(offer =>
                   (<div className={`flex-100 layout-row layout-align-start-center ${styles.selected_offer}`}>

@@ -7,8 +7,7 @@ exports[`shallow render 1`] = `
   style={Object {}}
 >
   <div
-    className="contact_bar
-         flex-100 layout-row layout-align-center-center"
+    className="contact_bar flex-100 layout-row layout-align-center-center"
   >
     <div
       className="flex-none content_width layout-row"
@@ -38,8 +37,7 @@ exports[`shallow render 1`] = `
           />
         </a>
         <div
-          className="flex-none layout-row layout-align-center-end
-               contact_elem"
+          className="flex-none layout-row layout-align-center-end contact_elem"
         >
           <i
             aria-hidden="true"
@@ -143,8 +141,7 @@ exports[`theme is falsy 1`] = `
   style={Object {}}
 >
   <div
-    className="contact_bar
-         flex-100 layout-row layout-align-center-center"
+    className="contact_bar flex-100 layout-row layout-align-center-center"
   >
     <div
       className="flex-none content_width layout-row"
@@ -174,8 +171,7 @@ exports[`theme is falsy 1`] = `
           />
         </a>
         <div
-          className="flex-none layout-row layout-align-center-end
-               contact_elem"
+          className="flex-none layout-row layout-align-center-end contact_elem"
         >
           <i
             aria-hidden="true"

@@ -3,9 +3,10 @@ import { translate } from 'react-i18next'
 import styles from './Footer.scss'
 import defs from '../../styles/default_classes.scss'
 import PropTypes from '../../prop-types'
+import isQuote from '../../helpers/tenant'
 
 function Footer ({
-  theme, tenant, isShop, width, t
+  theme, tenant, width, t
 }) {
   if (!tenant) {
     return ''
@@ -17,7 +18,6 @@ function Footer ({
   if (!logo && theme && theme.logoSmall) logo = theme.logoSmall
   const supportNumber = tenant && tenant.phones ? tenant.phones.support : ''
   const supportEmail = tenant && tenant.emails ? tenant.emails.support.general : ''
-  const tenantName = tenant ? tenant.name : ''
   const links = tenant && tenant.scope ? tenant.scope.links : {}
   const defaultLinks = {
     privacy: 'https://itsmycargo.com/en/privacy',
@@ -35,34 +35,33 @@ function Footer ({
       layout-wrap ${styles.footer_wrapper} layout-align-start`}
       style={widthStyle}
     >
-      {isShop
-        ? <div />
-        : <div className={`${styles.contact_bar}
-         flex-100 layout-row layout-align-center-center`}
-        >
-          <div className={`flex-none ${defs.content_width} layout-row`}>
-            <div className="flex-50 layout-row layout-align-start-center">
-              <img src={logo} />
-            </div>
-            <div className="flex-50 layout-row layout-align-end-center">
-              <a
-                className={`flex-none layout-row layout-align-center-center pointy ${
-                  styles.contact_elem
-                }`}
-                href={`mailto:${supportEmail}`}
-              >
-                <i className="fa fa-envelope" aria-hidden="true" style={primaryColor} />
-                {supportEmail}
-              </a>
-              <div className={`flex-none layout-row layout-align-center-end
-               ${styles.contact_elem}`}
-              >
-                <i className="fa fa-phone" aria-hidden="true" style={primaryColor} />
-                {supportNumber}
+      {
+        isQuote(tenant)
+          ? (
+            <div className={`${styles.contact_bar} flex-100 layout-row layout-align-center-center`}>
+              <div className={`flex-none ${defs.content_width} layout-row`}>
+                <div className="flex-50 layout-row layout-align-start-center">
+                  <img src={logo} />
+                </div>
+                <div className="flex-50 layout-row layout-align-end-center">
+                  <a
+                    className={`flex-none layout-row layout-align-center-center pointy ${
+                      styles.contact_elem
+                    }`}
+                    href={`mailto:${supportEmail}`}
+                  >
+                    <i className="fa fa-envelope" aria-hidden="true" style={primaryColor} />
+                    {supportEmail}
+                  </a>
+                  <div className={`flex-none layout-row layout-align-center-end ${styles.contact_elem}`}>
+                    <i className="fa fa-phone" aria-hidden="true" style={primaryColor} />
+                    {supportNumber}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          )
+          : <div />
       }
       <div className={`${styles.footer_shop} layout-row flex-100 layout-wrap`}>
         <div className="flex-100 layout-align-center">
@@ -124,14 +123,12 @@ Footer.propTypes = {
   theme: PropTypes.theme,
   t: PropTypes.func.isRequired,
   tenant: PropTypes.tenant,
-  isShop: PropTypes.bool,
   width: PropTypes.number
 }
 
 Footer.defaultProps = {
   theme: {},
   tenant: {},
-  isShop: false,
   width: null
 }
 
