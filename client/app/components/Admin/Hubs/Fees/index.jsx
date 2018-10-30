@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import '../../../../styles/day-picker-custom.css'
+import '../../../../styles/day-picker-custom.scss'
 import styles from '../../Admin.scss'
 import styles2 from './index.scss'
 import {

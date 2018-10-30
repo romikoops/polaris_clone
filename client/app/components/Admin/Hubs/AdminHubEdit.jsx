@@ -5,7 +5,7 @@ import PropTypes from '../../../prop-types'
 import styles from './index.scss'
 import GmapsWrapper from '../../../hocs/GmapsWrapper'
 import PlaceSearch from '../../Maps/PlaceSearch'
-import '../../../styles/select-css-custom.css'
+import '../../../styles/select-css-custom.scss'
 import SquareButton from '../../SquareButton'
 import { gradientTextGenerator } from '../../../helpers'
 

@@ -7,7 +7,7 @@ import {
 } from 'react-day-picker/moment'
 import styles from './Admin.scss'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
-import '../../styles/day-picker-custom.css'
+import '../../styles/day-picker-custom.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { currencyOptions } from '../../constants/admin.constants'
 import AdminPromptConfirm from './Prompt/Confirm'
