@@ -30,7 +30,7 @@ gem 'sass-rails'
 gem 'sprockets-rails', require: 'sprockets/railtie'
 
 gem 'awesome_print'
-gem 'aws-sdk-sqs'
+gem 'aws-sdk-sqs', '~> 1.9.0'
 gem 'bootstrap-sass', '~> 3.3.5.1'
 gem 'font-awesome-rails'
 gem 'rufo'

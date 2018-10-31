@@ -55,7 +55,7 @@ GEM
       execjs
     awesome_print (1.8.0)
     aws-eventstream (1.0.1)
-    aws-partitions (1.96.0)
+    aws-partitions (1.107.0)
     aws-sdk (3.0.1)
       aws-sdk-resources (~> 3)
     aws-sdk-acm (1.9.0)
@@ -166,7 +166,7 @@ GEM
     aws-sdk-connect (1.1.0)
       aws-sdk-core (~> 3)
       aws-sigv4 (~> 1.0)
-    aws-sdk-core (3.22.1)
+    aws-sdk-core (3.36.0)
       aws-eventstream (~> 1.0)
       aws-partitions (~> 1.0)
       aws-sigv4 (~> 1.0)
@@ -599,8 +599,8 @@ GEM
     aws-sdk-sns (1.3.0)
       aws-sdk-core (~> 3)
       aws-sigv4 (~> 1.0)
-    aws-sdk-sqs (1.4.0)
-      aws-sdk-core (~> 3)
+    aws-sdk-sqs (1.9.0)
+      aws-sdk-core (~> 3, >= 3.26.0)
       aws-sigv4 (~> 1.0)
     aws-sdk-ssm (1.18.0)
       aws-sdk-core (~> 3)
@@ -1033,7 +1033,7 @@ DEPENDENCIES
   activerecord-postgis-adapter
   awesome_print
   aws-sdk (~> 3)
-  aws-sdk-sqs
+  aws-sdk-sqs (~> 1.9.0)
   bootsnap (>= 1.1.0)
   bootstrap-sass (~> 3.3.5.1)
   breezy_pdf_lite
