@@ -414,7 +414,7 @@ module ShippingTools
     end
     @origin_hub      = Hub.find(@schedule['origin_hub']['id'])
     @destination_hub = Hub.find(@schedule['destination_hub']['id'])
-    if shipment.has_pre_carriage 
+    if shipment.has_pre_carriage
       shipment.planned_pickup_date = shipment.trip.closing_date - 1.day - shipment.trucking["pre_carriage"]["trucking_time_in_seconds"].seconds
     else
       shipment.planned_origin_drop_off_date = shipment.trip.closing_date - 1.day
@@ -648,24 +648,22 @@ module ShippingTools
 
   def self.save_and_send_quotes(shipment, schedules, email)
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
-    QuoteMailer.quotation_email(shipment, main_quote.shipments.to_a, email, main_quote).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
+    QuoteMailer.quotation_email(shipment, main_quote.shipments.to_a, email, main_quote).deliver_later
   end
 
   def self.tenant_notification_email(user, shipment)
-    ShipmentMailer.tenant_notification(user, shipment).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
+    ShipmentMailer.tenant_notification(user, shipment).deliver_later
   end
 
   def self.shipper_notification_email(user, shipment)
-    ShipmentMailer.shipper_notification(user, shipment).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
+    ShipmentMailer.shipper_notification(user, shipment).deliver_later
   end
 
   def self.shipper_confirmation_email(user, shipment)
-    if Rails.env.production? && ENV['BETA'] != 'true'
-      ShipmentMailer.shipper_confirmation(
-        user,
-        shipment
-      ).deliver_later
-    end
+    ShipmentMailer.shipper_confirmation(
+      user,
+      shipment
+    ).deliver_later
   end
 
   def self.last_trip(user)
@@ -682,7 +680,7 @@ module ShippingTools
     response = BreezyPDFLite::RenderRequest.new(
       doc_erb.render
     ).submit
-    
+
     if response.code.to_i == 201
       doc_name = "#{args[:name]}_#{args[:shipment].imc_reference}.pdf"
 
