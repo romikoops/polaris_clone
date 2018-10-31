@@ -38,6 +38,11 @@ class ApplicationController < ActionController::API
     @current_tenant ||= current_user&.tenant
   end
 
+  def append_info_to_payload(payload)
+    super
+    payload[:tenant] = current_tenant&.subdomain
+  end
+
   def set_raven_context
     tenant_scope = current_tenant&.scope
     Raven.user_context(

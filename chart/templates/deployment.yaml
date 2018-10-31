@@ -83,13 +83,13 @@ spec:
           containerPort: 3000
         livenessProbe:
           httpGet:
-            path: /
+            path: /up
             port: http-backend
           initialDelaySeconds: 60
           periodSeconds: 30
         readinessProbe:
           httpGet:
-            path: /
+            path: /up
             port: http-backend
           initialDelaySeconds: 60
           periodSeconds: 30
