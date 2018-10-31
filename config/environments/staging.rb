@@ -3,7 +3,7 @@
 require_relative './production'
 
 Rails.application.configure do
-  config.active_job.queue_adapter = :inline
+  config.active_job.queue_adapter = :async
 
   Mail.register_interceptor(
     RecipientInterceptor.new(
