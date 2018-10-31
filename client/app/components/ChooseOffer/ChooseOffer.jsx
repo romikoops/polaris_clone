@@ -405,6 +405,18 @@ class ChooseOffer extends Component {
                   />
                 </div>
               </div>
+              <div className={`flex-100 layout-row layout-align-center-center ${styles.send_email}`}>
+                <div className="flex-90 layout-row layout-align-center-center layout-wrap">
+                  <RoundButton
+                    theme={theme}
+                    size="full"
+                    disabled={this.state.selectedOffers.length < 1}
+                    active={this.state.selectedOffers.length > 0}
+                    text={t('account:sendViaEmail')}
+                    handleNext={() => this.selectQuotes(shipment, this.state.selectedOffers, this.props.user.email)}
+                  />
+                </div>
+              </div>
             </div>
           ) : ''}
 
