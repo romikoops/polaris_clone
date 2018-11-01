@@ -131,7 +131,6 @@ class ShipmentCargoItems extends Component {
         >
           <div className={`flex-100 layout-align-start-center layout-row ${styles.cargo_unit_header}`}>
             <h3>{t('cargo:yourCargo')}</h3>
-            <p>{t('cargo:fillFormCargoDetails')}</p>
             {cargoItem ? (
               <div className={styles.delete_icon} onClick={() => this.deleteCargo(i)}>
                 {t('common:delete')}
@@ -232,9 +231,6 @@ class ShipmentCargoItems extends Component {
                 <i className="fa fa-plus-square-o clip" style={textStyle} />
                 <p> {t('shipment:addUnit')}</p>
               </div>
-            </div>
-            <div className={`flex-100 ${styles.new_container_placeholder}`}>
-              {generateCargoItem(null, -1)}
             </div>
           </div>
         </div>

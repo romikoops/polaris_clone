@@ -38,6 +38,7 @@
   }
   .add_unit_wrapper {
     position: relative;
+    padding-bottom: 50px;
     &:hover + .new_container_placeholder {
       opacity: 0.2;
       visibility: visible;

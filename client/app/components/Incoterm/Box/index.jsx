@@ -124,14 +124,12 @@ function IncotermBox ({
   `
   const textDisplay = (
     <div className="flex-100 layout-row layout-align-end-center layout-wrap">
-      <div className="flex-100 layout-row layout-align-end-center">
-        <div className="flex-none letter_2">
-          <TextHeading theme={theme} text={t('shipment:serviceLevel')} size={3} />
+      <div className="flex-40 layout-row layout-align-end-center">
+        <div className="flex-none" style={{ paddingRight: '15px' }}>
+          <TextHeading theme={theme} text={`${t('shipment:serviceLevel')}:`} size={3} />
         </div>
-      </div>
-      <div className="flex-100 layout-row layout-align-end-center">
         <div className="flex-none layout-row layout-align-center-center">
-          <i className="fa fa-chain clip flex-none" style={selectedStyle} />
+          <i className="fa fa-chain flex-none" style={{ color: '#E0E0E0', paddingRight: '8px' }} />
         </div>
         <div className="flex-5" />
         <div className="flex-none layout-row layout-align-center-center">
@@ -144,7 +142,7 @@ function IncotermBox ({
   const dropdownFull = (
     <div className="flex-100 layout-row layout-align-end-center layout-wrap">
       <div className="flex-100 layout-row layout-align-end-center">
-        <div className="flex-none letter_2">
+        <div className="flex-none">
           <TextHeading theme={theme} text={t('common:selectIncoterm')} size={3} />
         </div>
       </div>
@@ -166,7 +164,7 @@ function IncotermBox ({
   const dropdownSimple = (
     <div className="flex-100 layout-row layout-align-end-center layout-wrap">
       <div className="flex-100 layout-row layout-align-end-center">
-        <div className="flex-none letter_2">
+        <div className="flex-none">
           <TextHeading theme={theme} text={t('common:selectIncoterm')} size={3} />
         </div>
       </div>
