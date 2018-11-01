@@ -11,7 +11,6 @@ class IncotermsController < ApplicationController
     mot = params[:mode_of_transport]
     incoterm_charge = IncotermCharge.find_by(pre_carriage: pre_carriage, on_carriage: on_carriage)
     incoterms = current_user.tenant.incoterms.where("#{buyer_seller}_incoterm_charge" => incoterm_charge)
-    awesome_print incoterms
     response_handler(format_for_select_box(incoterms))
   end
 
