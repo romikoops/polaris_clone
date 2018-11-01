@@ -134,7 +134,7 @@ export default function ShipmentOverviewShowCard ({
                     </div>
                   </div>) }
                   {shipment.delivery_address ? (
-                    <div className={`layout-row flex-100 layout-align-start-center ${styles.carriage_address} ${styles.margin_fixes}`}>
+                    <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
                       <p>{shipment.delivery_address.street}&nbsp;
                         {shipment.delivery_address.street_number},&nbsp;
                         <strong>{shipment.delivery_address.city},&nbsp;
