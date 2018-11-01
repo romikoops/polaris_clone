@@ -14,6 +14,12 @@ gem 'activerecord-import'
 # Strong Migrations - Prevent Non Zero-Down time Migrations
 gem 'strong_migrations'
 
+# Easy Monitoring
+gem 'easymon'
+
+# Nicer logs
+gem 'lograge'
+
 # Setup RailsConfig for easier secret management
 gem 'config'
 
