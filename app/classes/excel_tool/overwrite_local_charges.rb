@@ -116,7 +116,7 @@ module ExcelTool
     end
 
     def find_hub(row)
-      hub_name = row[:destination].include?(hub_type_name[row[:mot].downcase]) ? row[:destination] : "#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"
+      hub_name = row[:destination].ends_with?(" #{hub_type_name[row[:mot].downcase]}") ? row[:destination] : "#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"
       Hub.find_by(name: hub_name, tenant_id: user.tenant_id)
     end
 
