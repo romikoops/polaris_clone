@@ -90,27 +90,33 @@ class Header extends Component {
     const { isTop } = this.state
     const scope = tenant && tenant.data && tenant.data.id ? tenant.data.scope : {}
     const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
-    const accountLinks = [
-      user && user.role && user.role.name === 'shipper'
-        ? {
-          url: '/account',
-          text: t('nav:account'),
-          fontAwesomeIcon: 'fa-cog',
-          key: 'settings'
-        }
-        : {
+    const accountLinks = user && user.role && user.role.name.includes('admin')
+      ? [
+        {
           url: '/admin/dashboard',
           text: t('nav:account'),
           fontAwesomeIcon: 'fa-cog',
           key: 'settings'
         },
+        {
+          url: '/signout',
+          text: t('nav:signOut'),
+          fontAwesomeIcon: 'fa-sign-out',
+          key: 'signOut'
+        }]
+      : [{
+        url: '/account',
+        text: t('nav:account'),
+        fontAwesomeIcon: 'fa-cog',
+        key: 'settings'
+      },
       {
         url: '/signout',
         text: t('nav:signOut'),
         fontAwesomeIcon: 'fa-sign-out',
         key: 'signOut'
       }
-    ]
+      ]
 
     let logoUrl = ''
     const logoDisplay = {
