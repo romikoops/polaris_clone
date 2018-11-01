@@ -82,9 +82,6 @@ class QuoteChargeBreakdown extends Component {
       currencyTotals[currency] += parseFloat(value)
       currencySections[currency].push(price)
     })
-    if (key === 'cargo') {
-      debugger
-    }
 
     return Object.entries(currencySections).map(currencyFees => (
       <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
