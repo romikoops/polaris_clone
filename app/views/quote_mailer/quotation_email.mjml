@@ -28,10 +28,10 @@
   <mj-section width="100%" background-color="#f3f3f3" margin="40px">
     <mj-group>
       <mj-column width="130px">
-        <% if @shipments.first.itinerary.mode_of_transport == "ocean" %>
+        <% if @shipments.first.mode_of_transport == "ocean" %>
           <% mot_link = "https://assets.itsmycargo.com/assets/icons/anchor-solid-1.png" %>
         <% end %>
-        <% if @shipments.first.itinerary.mode_of_transport == "air" %>
+        <% if @shipments.first.mode_of_transport == "air" %>
           <% mot_link = "https://assets.itsmycargo.com/assets/icons/plane-solid-1.png" %>
         <% end %>
         <mj-image padding-top="20px" padding-bottom="20px" padding-left="0" padding-right="0" width="30px" src="<%= mot_link %>"></mj-image>

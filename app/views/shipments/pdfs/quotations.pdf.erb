@@ -26,9 +26,9 @@
       <div class="all-row">
         <div class="main-container">
           <div class="info">
-            <% if s.itinerary.mode_of_transport == "ocean" %>
+            <% if s.mode_of_transport == "ocean" %>
               <% mot = "anchor" %>
-            <% elsif s.itinerary.mode_of_transport == "air" %>
+            <% elsif s.mode_of_transport == "air" %>
               <% mot = "plane" %>
             <% else %>
               <% mot = "truck" %>
@@ -92,9 +92,11 @@
                 <% sub_charges.each do |sub_charge| %>
                   <div class="subtotal-price-single">
                     <h4><%= sub_charge["name"] %></h4>
-                    <% if sub_charge["value"] %>
+                    <% if sub_charge["value"] && !scope['hide_sub_totals'] %>
                       <h3> <%= sub_charge["value"].to_f.truncate(2).to_s %>&nbsp;<%= sub_charge["currency"] %></h3>
-                    <% elsif !scope['hide_sub_total']%>
+                    <% elsif scope['hide_sub_totals'] && scope['cargo_price_notes'] && scope['cargo_price_notes'][charge_key] %>
+                      <h3> <%= scope['cargo_price_notes'][charge_key.to_s] %></h3>
+                    <% elsif !scope['hide_sub_totals'] && (!scope['cargo_price_notes'] || scope['cargo_price_notes'] && !scope['cargo_price_notes'][charge_key]) %>
                       <h3> <%= sub_charge["total"]["value"] %>&nbsp;<%= sub_charge["total"]["currency"] %></h3>
                     <% end %>
                   </div>
