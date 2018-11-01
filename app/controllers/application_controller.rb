@@ -44,20 +44,20 @@ class ApplicationController < ActionController::API
   end
 
   def set_raven_context
-    tenant_scope = current_tenant&.scope
     Raven.user_context(
       email: current_user&.email,
       id: current_user&.id,
       ip: request.remote_ip
     )
+    Raven.tags_context(
+      agency: current_user&.agency_id&.present?,
+      tenant: current_tenant&.subdomain
+    )
     Raven.extra_context(
+      agency: current_user&.agency&.slice(%i{id name}),
       params: params.to_unsafe_h,
-      tenant: current_tenant&.subdomain,
       url: request.url,
-      scope: {
-        quotation_tool: tenant_scope&.slice('open_quotation_tool', 'closed_quotation_tool')&.values&.reduce(:|),
-        beta_features: tenant_scope&.fetch('show_beta_features', false)
-      }
+      scope: current_tenant&.scope
     )
   end
 
