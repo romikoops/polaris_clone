@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './index.scss'
 import { capitalize } from '../../../helpers'
@@ -70,4 +70,4 @@ HelpContact.defaultProps = {
   tenant: {}
 }
 
-export default translate('help')(HelpContact)
+export default withNamespaces('help')(HelpContact)

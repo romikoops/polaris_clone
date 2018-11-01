@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import FormsyInput from '../../FormsyInput/FormsyInput'
 import styles from '../ShipmentContactForm.scss'
@@ -146,4 +146,4 @@ CompanyDetailsSection.defaultProps = {
   setContactAttempted: false
 }
 
-export default translate(['errors', 'user'])(CompanyDetailsSection)
+export default withNamespaces(['errors', 'user'])(CompanyDetailsSection)

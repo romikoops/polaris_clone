@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
 import { pick, uniqWith } from 'lodash'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import adminStyles from '../Admin/Admin.scss'
 import styles from '../Admin/AdminShipments.scss'
@@ -382,4 +382,4 @@ UserShipmentView.defaultProps = {
   tenant: {}
 }
 
-export default translate(['common', 'shipment', 'bookconf', 'cargo', 'doc'])(UserShipmentView)
+export default withNamespaces(['common', 'shipment', 'bookconf', 'cargo', 'doc'])(UserShipmentView)

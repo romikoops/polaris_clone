@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from '../CargoDetails/CargoDetails.scss'
 import TextHeading from '../TextHeading/TextHeading'
@@ -134,4 +134,4 @@ CustomsExportPaper.defaultProps = {
   toggleCustomAddon: false
 }
 
-export default translate(['cargo', 'shipment'])(CustomsExportPaper)
+export default withNamespaces(['cargo', 'shipment'])(CustomsExportPaper)

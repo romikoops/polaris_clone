@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styled from 'styled-components'
 import styles from './Messaging.scss'
 import PropTypes from '../../prop-types'
@@ -119,4 +119,4 @@ ConvoTile.defaultProps = {
   theme: null
 }
 
-export default translate(['bookconf', 'shipment', 'common'])(ConvoTile)
+export default withNamespaces(['bookconf', 'shipment', 'common'])(ConvoTile)

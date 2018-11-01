@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styled from 'styled-components'
 import PropTypes from '../../prop-types'
 import styles from './LandingTop.scss'
@@ -111,4 +111,4 @@ LandingTop.defaultProps = {
   bookNow: null
 }
 
-export default translate(['common', 'landing'])(LandingTop)
+export default withNamespaces(['common', 'landing'])(LandingTop)

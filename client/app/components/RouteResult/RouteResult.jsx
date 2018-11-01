@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './RouteResult.scss'
 import { moment } from '../../constants'
@@ -186,4 +186,4 @@ RouteResult.defaultProps = {
   truckingTime: 0
 }
 
-export default translate(['common', 'shipment'])(RouteResult)
+export default withNamespaces(['common', 'shipment'])(RouteResult)

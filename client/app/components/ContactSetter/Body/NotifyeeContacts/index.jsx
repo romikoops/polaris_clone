@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styles from '../Body.scss'
 import ContactSetterBodyNotifyeeContactsContactCard from './ContactCard'
 import ContactSetterBodyNotifyeeContactsAddContactButton from './AddContactButton'
@@ -62,4 +62,4 @@ ContactSetterBodyNotifyeeContacts.defaultProps = {
   showEditContact: null
 }
 
-export default translate('common')(ContactSetterBodyNotifyeeContacts)
+export default withNamespaces('common')(ContactSetterBodyNotifyeeContacts)

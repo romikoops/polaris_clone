@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styles from './Footer.scss'
 import defs from '../../styles/default_classes.scss'
 import PropTypes from '../../prop-types'
@@ -132,4 +132,4 @@ Footer.defaultProps = {
   width: null
 }
 
-export default translate('footer')(Footer)
+export default withNamespaces('footer')(Footer)

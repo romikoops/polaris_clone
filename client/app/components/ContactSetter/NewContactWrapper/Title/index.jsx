@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { nameToDisplay } from '../../../../helpers'
 import styles from './Title.scss'
 import PropTypes from '../../../../prop-types'
@@ -22,4 +22,4 @@ ContactSetterNewContactWrapperTitle.defaultProps = {
   contactType: ''
 }
 
-export default translate('account')(ContactSetterNewContactWrapperTitle)
+export default withNamespaces('account')(ContactSetterNewContactWrapperTitle)

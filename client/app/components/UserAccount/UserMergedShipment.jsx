@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './UserAccount.scss'
 import { capitalize } from '../../helpers'
@@ -45,4 +45,4 @@ UserMergedShipment.propTypes = {
   }).isRequired
 }
 
-export default translate('common')(UserMergedShipment)
+export default withNamespaces('common')(UserMergedShipment)

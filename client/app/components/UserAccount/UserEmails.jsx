@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 // import styles from './UserAccount.scss';
 
@@ -23,4 +23,4 @@ UserEmails.propTypes = {
   setNav: PropTypes.func.isRequired
 }
 
-export default translate('user')(UserEmails)
+export default withNamespaces('user')(UserEmails)

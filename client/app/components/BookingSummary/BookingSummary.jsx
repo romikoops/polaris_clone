@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import Truncate from 'react-truncate'
@@ -144,4 +144,4 @@ function mapStateToProps (state) {
   return { ...bookingSummary, theme }
 }
 
-export default translate(['cargo', 'common', 'shipment'])(withRouter(connect(mapStateToProps)(BookingSummary)))
+export default withNamespaces(['cargo', 'common', 'shipment'])(withRouter(connect(mapStateToProps)(BookingSummary)))

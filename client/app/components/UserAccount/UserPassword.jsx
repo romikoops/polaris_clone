@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 
 class UserPassword extends Component {
@@ -21,4 +21,4 @@ UserPassword.propTypes = {
   setNav: PropTypes.func.isRequired
 }
 
-export default translate('user')(UserPassword)
+export default withNamespaces('user')(UserPassword)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import fetch from 'isomorphic-fetch'
 import Truncate from 'react-truncate'
 import { Promise } from 'es6-promise-promise'
@@ -208,4 +208,4 @@ DocumentsMultiForm.defaultProps = {
   deleteFn: null
 }
 
-export default translate('doc')(DocumentsMultiForm)
+export default withNamespaces('doc')(DocumentsMultiForm)

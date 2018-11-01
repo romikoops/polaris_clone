@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import { RoundButton } from '../RoundButton/RoundButton'
 import styles from './index.scss'
@@ -74,4 +74,4 @@ OptOutCookies.defaultProps = {
   theme: null
 }
 
-export default translate(['cookies', 'optOut'])(OptOutCookies)
+export default withNamespaces(['cookies', 'optOut'])(OptOutCookies)

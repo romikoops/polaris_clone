@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styles from '../../Body.scss'
 import errors from '../../../../../styles/errors.scss'
 import PropTypes from '../../../../../prop-types'
@@ -55,4 +55,4 @@ ShipmentContactsBoxMainContactsPlaceholderCard.defaultProps = {
   showAddressBook: null
 }
 
-export default translate(['common', 'account'])(ShipmentContactsBoxMainContactsPlaceholderCard)
+export default withNamespaces(['common', 'account'])(ShipmentContactsBoxMainContactsPlaceholderCard)

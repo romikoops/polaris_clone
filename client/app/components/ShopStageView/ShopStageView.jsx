@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styles from './ShopStageView.scss'
 import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
@@ -226,4 +226,4 @@ ShopStageView.defaultProps = {
   goForward: null
 }
 
-export default translate(['common', 'help'])(ShopStageView)
+export default withNamespaces(['common', 'help'])(ShopStageView)

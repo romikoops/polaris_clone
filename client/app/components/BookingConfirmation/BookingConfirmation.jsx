@@ -1,6 +1,6 @@
 /* eslint react/prop-types: "off" */
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import { pick, uniqWith } from 'lodash'
 import { moment, documentTypes, shipmentStatii } from '../../constants'
@@ -966,4 +966,4 @@ function HeadingFactoryFn (theme) {
   )
 }
 
-export default translate(['bookconf', 'common'])(BookingConfirmation)
+export default withNamespaces(['bookconf', 'common'])(BookingConfirmation)

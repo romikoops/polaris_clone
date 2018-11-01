@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import { NamedAsync } from '../NamedSelect/NamedAsync'
 import { authHeader } from '../../helpers'
@@ -308,4 +308,4 @@ HSCodeRow.defaultProps = {
   hsTexts: {},
   handleHsTextChange: null
 }
-export default translate('common')(HSCodeRow)
+export default withNamespaces('common')(HSCodeRow)

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
 import PropTypes from '../../prop-types'
@@ -153,4 +153,4 @@ RouteFilterBox.defaultProps = {
   lastTripDate: ''
 }
 
-export default translate('shipment')(RouteFilterBox)
+export default withNamespaces('shipment')(RouteFilterBox)

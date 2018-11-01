@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import { moment } from '../../constants'
 import { Price } from '../Price/Price'
@@ -152,4 +152,4 @@ BestRoutesBox.defaultProps = {
   shipmentData: null
 }
 
-export default translate('common')(BestRoutesBox)
+export default withNamespaces('common')(BestRoutesBox)

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import * as Scroll from 'react-scroll'
 import Toggle from 'react-toggle'
 import ReactTooltip from 'react-tooltip'
@@ -1141,4 +1141,4 @@ ShipmentDetails.defaultProps = {
   hideMap: false
 }
 
-export default translate(['errors', 'cargo', 'common', 'dangerousGoods'])(ShipmentDetails)
+export default withNamespaces(['errors', 'cargo', 'common', 'dangerousGoods'])(ShipmentDetails)

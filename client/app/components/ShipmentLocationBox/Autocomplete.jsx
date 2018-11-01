@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './ShipmentLocationBox.scss'
 import listenerTools from '../../helpers/listeners'
@@ -299,4 +299,4 @@ Autocomplete.defaultProps = {
   hasErrors: false
 }
 
-export default translate(['common', 'errors'])(Autocomplete)
+export default withNamespaces(['common', 'errors'])(Autocomplete)

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import Formsy from 'formsy-react'
 import MailCheck from 'react-mailcheck'
 import { bindActionCreators } from 'redux'
@@ -408,4 +408,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default translate(['user', 'errors'])(connect(mapStateToProps, mapDispatchToProps)(UserContacts))
+export default withNamespaces(['user', 'errors'])(connect(mapStateToProps, mapDispatchToProps)(UserContacts))

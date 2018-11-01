@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
 import '../../../../styles/react-toggle.scss'
@@ -183,4 +183,4 @@ CargoItemGroup.defaultProps = {
   theme: null
 }
 
-export default translate(['cargo', 'common'])(CargoItemGroup)
+export default withNamespaces(['cargo', 'common'])(CargoItemGroup)

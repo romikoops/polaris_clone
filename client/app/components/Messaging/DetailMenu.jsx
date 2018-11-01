@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import styles from './DetailMenu.scss'
@@ -49,4 +49,4 @@ DetailMenu.propTypes = {
   t: PropTypes.func.isRequired
 }
 
-export default translate('common')(DetailMenu)
+export default withNamespaces('common')(DetailMenu)

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import ustyles from './UserAccount.scss'
 import defaults from '../../styles/default_classes.scss'
@@ -250,4 +250,4 @@ UserDashboard.defaultProps = {
   theme: null
 }
 
-export default translate(['common', 'user', 'shipment', 'account'])(UserDashboard)
+export default withNamespaces(['common', 'user', 'shipment', 'account'])(UserDashboard)

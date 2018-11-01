@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
@@ -263,4 +263,4 @@ ShipmentQuotationContent.defaultProps = {
   cargoView: null
 }
 
-export default translate(['common', 'shipment', 'cargo'])(ShipmentQuotationContent)
+export default withNamespaces(['common', 'shipment', 'cargo'])(ShipmentQuotationContent)

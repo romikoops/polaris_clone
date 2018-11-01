@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
 import UserLocations from './UserLocations'
@@ -657,4 +657,4 @@ UserProfile.defaultProps = {
   tenant: {}
 }
 
-export default translate(['common', 'footer', 'user', 'imc'])(UserProfile)
+export default withNamespaces(['common', 'footer', 'user', 'imc'])(UserProfile)

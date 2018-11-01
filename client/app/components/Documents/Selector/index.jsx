@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import fetch from 'isomorphic-fetch'
 import { Promise } from 'es6-promise-promise'
 import ReactTooltip from 'react-tooltip'
@@ -173,4 +173,4 @@ DocumentsSelector.defaultProps = {
   options: []
 }
 
-export default translate('common')(DocumentsSelector)
+export default withNamespaces('common')(DocumentsSelector)

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import styles from './UserShipmentRow.scss'
@@ -245,4 +245,4 @@ UserShipmentRow.defaultProps = {
   hubs: []
 }
 
-export default translate(['common', 'shipment', 'bookconf'])(UserShipmentRow)
+export default withNamespaces(['common', 'shipment', 'bookconf'])(UserShipmentRow)

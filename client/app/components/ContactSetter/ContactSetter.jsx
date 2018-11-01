@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './ContactSetter.scss'
 import defs from '../../styles/default_classes.scss'
@@ -198,4 +198,4 @@ ContactSetter.defaultProps = {
   finishBookingAttempted: false
 }
 
-export default translate()(ContactSetter)
+export default withNamespaces()(ContactSetter)

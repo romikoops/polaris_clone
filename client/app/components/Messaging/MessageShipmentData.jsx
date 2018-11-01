@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styles from './Messaging.scss'
 import { moment } from '../../constants'
 import { Price } from '../Price/Price'
@@ -265,4 +265,4 @@ MessageShipmentData.defaultProps = {
   onChange: null
 }
 
-export default translate(['common', 'shipment', 'acronym'])(MessageShipmentData)
+export default withNamespaces(['common', 'shipment', 'acronym'])(MessageShipmentData)

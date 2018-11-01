@@ -1,6 +1,6 @@
 import React from 'react'
 import { v4 } from 'uuid'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styles from '../AdminShipments.scss'
 import adminStyles from '../Admin.scss'
 import PropTypes from '../../../prop-types'
@@ -208,4 +208,4 @@ ContactDetailsRow.defaultProps = {
   user: {}
 }
 
-export default translate('account')(ContactDetailsRow)
+export default withNamespaces('account')(ContactDetailsRow)

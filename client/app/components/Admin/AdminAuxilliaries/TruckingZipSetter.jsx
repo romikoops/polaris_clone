@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import Formsy from 'formsy-react'
 // import styles from '../Admin.scss'
@@ -67,4 +67,4 @@ TruckingZipSetter.propTypes = {
 TruckingZipSetter.defaultProps = {
   theme: {}
 }
-export default translate('admin')(TruckingZipSetter)
+export default withNamespaces('admin')(TruckingZipSetter)

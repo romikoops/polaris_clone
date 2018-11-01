@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import Scroll from 'react-scroll'
 import styles from './Messaging.scss'
@@ -218,4 +218,4 @@ Conversation.defaultProps = {
   shipmentRef: ''
 }
 
-export default translate(['account', 'bookconf'])(Conversation)
+export default withNamespaces(['account', 'bookconf'])(Conversation)

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './LoginRegistrationWrapper.scss'
 import { LoginPage } from '../../containers/LoginPage/LoginPage'
@@ -72,4 +72,4 @@ LoginRegistrationWrapper.defaultProps = {
   updateDimensions: null
 }
 
-export default translate(['common', 'account'])(LoginRegistrationWrapper)
+export default withNamespaces(['common', 'account'])(LoginRegistrationWrapper)

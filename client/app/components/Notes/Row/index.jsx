@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import NotesCard from '../Card'
 import styles from './index.scss'
@@ -52,4 +52,4 @@ NotesRow.defaultProps = {
   textStyle: {}
 }
 
-export default translate('common')(NotesRow)
+export default withNamespaces('common')(NotesRow)

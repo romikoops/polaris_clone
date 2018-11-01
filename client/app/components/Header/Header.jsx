@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from '../../prop-types'
@@ -295,4 +295,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default translate(['nav', 'common'])(connect(mapStateToProps, mapDispatchToProps)(Header))
+export default withNamespaces(['nav', 'common'])(connect(mapStateToProps, mapDispatchToProps)(Header))

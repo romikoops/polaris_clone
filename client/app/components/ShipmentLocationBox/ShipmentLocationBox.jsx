@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import Select from 'react-select'
 import Toggle from 'react-toggle'
 import styled from 'styled-components'
@@ -1384,4 +1384,4 @@ ShipmentLocationBox.defaultProps = {
   hideMap: false
 }
 
-export default translate(['errors', 'shipment', 'user', 'nav', 'common'])(ShipmentLocationBox)
+export default withNamespaces(['errors', 'shipment', 'user', 'nav', 'common'])(ShipmentLocationBox)

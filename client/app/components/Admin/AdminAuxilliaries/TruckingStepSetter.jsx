@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import Formsy from 'formsy-react'
 import styles from '../Admin.scss'
@@ -204,4 +204,4 @@ TruckingStepSetter.propTypes = {
 TruckingStepSetter.defaultProps = {
   theme: {}
 }
-export default translate(['common', 'admin'])(TruckingStepSetter)
+export default withNamespaces(['common', 'admin'])(TruckingStepSetter)

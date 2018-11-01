@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import ValidatedInput from '../../ValidatedInput/ValidatedInput'
 
@@ -50,4 +50,4 @@ ShipmentAggregatedCargoInput.defaultProps = {
   nextStageAttempt: false
 }
 
-export default translate(['common', 'errors'])(ShipmentAggregatedCargoInput)
+export default withNamespaces(['common', 'errors'])(ShipmentAggregatedCargoInput)

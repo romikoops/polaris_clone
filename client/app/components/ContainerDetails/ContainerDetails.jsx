@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { CONTAINER_DESCRIPTIONS } from '../../constants'
 import styles from './ContainerDetails.scss'
 import PropTypes from '../../prop-types'
@@ -88,4 +88,4 @@ ContainerDetails.defaultProps = {
   viewHSCodes: false
 }
 
-export default translate('common')(ContainerDetails)
+export default withNamespaces('common')(ContainerDetails)

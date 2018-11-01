@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './ShipmentThankYou.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
@@ -93,4 +93,4 @@ ShipmentThankYou.defaultProps = {
   user: {},
   tenant: null
 }
-export default translate(['bookconf', 'common'])(ShipmentThankYou)
+export default withNamespaces(['bookconf', 'common'])(ShipmentThankYou)

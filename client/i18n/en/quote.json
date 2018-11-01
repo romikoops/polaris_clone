@@ -1,7 +1,0 @@
-{
-  "viewPriceBreakdown": "View Price Breakdown",
-  "viewSchedules": "View Schedules",
-  "carrier": "Carrier: {{carrierName}}",
-  "service": "Service: {{serviceLevel}}",
-  "estimatedTT": "Estimated T/T"
-}

@@ -2,7 +2,7 @@
 import * as Scroll from 'react-scroll'
 import Formsy from 'formsy-react'
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import defaults from '../../styles/default_classes.scss'
 import styles from './BookingDetails.scss'
 // eslint-disable-next-line no-named-as-default
@@ -457,4 +457,4 @@ function scrollTo (target, offset) {
   })
 }
 
-export default translate('common')(BookingDetails)
+export default withNamespaces('common')(BookingDetails)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styles from './index.scss'
 import PropTypes from '../../../prop-types'
 import { gradientTextGenerator } from '../../../helpers'
@@ -175,4 +175,4 @@ IncotermExtras.defaultProps = {
   tenant: {}
 }
 
-export default translate(['common', 'shipment'])(IncotermExtras)
+export default withNamespaces(['common', 'shipment'])(IncotermExtras)

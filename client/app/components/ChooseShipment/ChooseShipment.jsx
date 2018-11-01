@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './ChooseShipment.scss'
 import defs from '../../styles/default_classes.scss'
@@ -214,4 +214,4 @@ ChooseShipment.defaultProps = {
   theme: null
 }
 
-export default translate('shipment')(ChooseShipment)
+export default withNamespaces('shipment')(ChooseShipment)

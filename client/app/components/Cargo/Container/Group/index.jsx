@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import '../../../../styles/react-toggle.scss'
 import styles from './CargoContainerGroup.scss'
@@ -152,4 +152,4 @@ CargoContainerGroup.defaultProps = {
   theme: null
 }
 
-export default translate(['cargo', 'common'])(CargoContainerGroup)
+export default withNamespaces(['cargo', 'common'])(CargoContainerGroup)

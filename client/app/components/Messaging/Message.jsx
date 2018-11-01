@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styled from 'styled-components'
 import styles from './Messaging.scss'
 import { moment } from '../../constants'
@@ -139,4 +139,4 @@ Message.defaultProps = {
   client: null
 }
 
-export default translate(['common', 'account'])(Message)
+export default withNamespaces(['common', 'account'])(Message)
