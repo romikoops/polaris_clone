@@ -436,7 +436,6 @@ module ExcelTool
         tmp_fee.delete(:truck_type)
         trucking_pricing[:fees][tmp_fee[:key]] = tmp_fee
       end
-
     end
 
     def identity_country(single_ident_values_and_country)
@@ -508,6 +507,8 @@ module ExcelTool
     def determine_identifier_type_and_modifier(identifier_type)
       if identifier_type == 'CITY'
         'geometry_id'
+      elsif identifier_type == 'POSTAL_CODE'
+        %w(geometry_id postal_code)
       elsif identifier_type.include?('_')
         identifier_type.split('_').map(&:downcase)
       elsif identifier_type.include?(' ')
@@ -527,10 +528,16 @@ module ExcelTool
     end
 
     def find_geometry(idents_and_country)
-      geometry = Geometry.cascading_find_by_names(
-        idents_and_country[:sub_ident],
-        idents_and_country[:ident]
-      )
+      geometry = if @identifier_modifier == 'postal_code'
+                   Geometry.cascading_find_by_name(
+                     idents_and_country[:ident].capitalize
+                   )
+                 else
+                   Geometry.cascading_find_by_names(
+                     idents_and_country[:sub_ident],
+                     idents_and_country[:ident]
+                   )
+                 end
 
       if geometry.nil?
         geocoder_results = Geocoder.search(idents_and_country.values.join(' '))

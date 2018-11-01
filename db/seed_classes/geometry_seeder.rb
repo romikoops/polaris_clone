@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 class GeometrySeeder
+  TMP_PATH = 'tmp/tmp_kml.kml'
   def self.perform
     puts 'Reading from kml...'
-    geometry_hash = Hash.from_xml(File.open('db/dummydata/china.kml'))
+    GeometrySeeder.get_s3_file('data/china.kml')
+    geometry_hash = Hash.from_xml(File.open(TMP_PATH))
     geometries = geometry_hash['kml']['Document']['Folder']['Placemark']
 
     puts
@@ -50,11 +52,24 @@ class GeometrySeeder
     puts 'Writing Geometries to DB...'
 
     Geometry.import geometries_data,
-      on_duplicate_key_update: {
-        conflict_target: %i[name_1 name_2 name_3 name_4],
-        columns:         [:data]
-      }
+                    on_duplicate_key_update: {
+                      conflict_target: %i(name_1 name_2 name_3 name_4),
+                      columns:         [:data]
+                    }
+
+    File.delete(TMP_PATH) if File.exist?(TMP_PATH)
 
     puts 'Geometries seeded...'
+  end
+
+  def self.get_s3_file(key)
+    s3 = Aws::S3::Client.new
+
+    file = s3.get_object(
+      bucket: 'assets.itsmycargo.com',
+      key: key
+    ).body.read
+
+    File.open(TMP_PATH, 'wb') { |f| f.write(file) }
   end
 end
