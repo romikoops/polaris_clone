@@ -465,7 +465,7 @@ exports[`user is falsy 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/admin/dashboard",
+                "url": "/account",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
