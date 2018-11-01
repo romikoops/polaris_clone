@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
 import { translate } from 'react-i18next'
-import Formsy from 'formsy-react'
 import PropTypes from '../../prop-types'
 import RouteFilterBox from '../RouteFilterBox/RouteFilterBox'
 import { currencyOptions, moment } from '../../constants'
@@ -13,7 +12,6 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import TextHeading from '../TextHeading/TextHeading'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import QuoteCard from '../Quote/Card'
-import FormsyInput from '../FormsyInput/FormsyInput'
 import { Modal } from '../Modal/Modal'
 
 class ChooseOffer extends Component {
@@ -387,9 +385,12 @@ class ChooseOffer extends Component {
             <div className={`flex-20 offset-5 quote_options layout-wrap layout-align-center-start ${styles.download_section}`}>
               <p className={`flex-100 layout-row ${styles.offer_title}`} >{isQuote(tenant) ? t('shipment:sendQuote') : t('shipment:selectedOffers') }</p>
               {this.state.selectedOffers !== 0 ? (
-                this.state.selectedOffers.map(offer =>
+                this.state.selectedOffers.map((offer, i) =>
                   (<div className={`flex-100 layout-row layout-align-start-center ${styles.selected_offer}`}>
-                    <span>{numberSpacing(offer.quote.total.value, 2)}&nbsp;{shipmentData.results[0].quote.total.currency}</span>
+                    { scope.hide_grand_total
+                      ? <span> {t('shipment:quoteNo', { number: i + 1 })}</span>
+                      : <span>{numberSpacing(offer.quote.total.value, 2)}&nbsp;{shipmentData.results[0].quote.total.currency}</span>
+                    }
                     <i className="fa fa-times pointy layout-row layout-align-end-center" onClick={() => this.handleClick(false, offer)} />
                   </div>))
               ) : ''}

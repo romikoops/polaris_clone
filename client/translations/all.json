@@ -496,7 +496,8 @@
       "availableRoutes": "Available Routes",
       "searchRoute": "Search Route",
       "quotedShipments": "Quoted Shipments",
-      "searchShipments": "Search Shipments"
+      "searchShipments": "Search Shipments",
+      "quoteNo": "Quote No: {{number}}"
     },
     "user": {
       "newAlias": "New Alias",
