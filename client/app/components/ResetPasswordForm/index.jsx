@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import Formsy from 'formsy-react'
 import PropTypes from '../../prop-types'
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
@@ -162,4 +162,4 @@ ResetPasswordForm.defaultProps = {
   theme: null
 }
 
-export default translate(['errors', 'account'])(ResetPasswordForm)
+export default withNamespaces(['errors', 'account'])(ResetPasswordForm)

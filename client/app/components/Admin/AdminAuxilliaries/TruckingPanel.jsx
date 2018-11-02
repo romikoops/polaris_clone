@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import { PanelBox } from './'
 // import styles from '../Admin.scss'
@@ -155,4 +155,4 @@ TruckingPanel.propTypes = {
 TruckingPanel.defaultProps = {
   theme: {}
 }
-export default translate('admin')(TruckingPanel)
+export default withNamespaces('admin')(TruckingPanel)

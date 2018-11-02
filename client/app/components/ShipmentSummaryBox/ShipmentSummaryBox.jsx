@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './ShipmentSummaryBox.scss'
 import { moment } from '../../constants'
@@ -268,4 +268,4 @@ ShipmentSummaryBox.defaultProps = {
   total: 0
 }
 
-export default translate(['shipment', 'common'])(ShipmentSummaryBox)
+export default withNamespaces(['shipment', 'common'])(ShipmentSummaryBox)

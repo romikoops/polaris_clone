@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { PageHeader } from 'react-bootstrap'
 import { EmailSignInForm } from 'redux-auth/bootstrap-theme'
 import { browserHistory } from 'react-router'
@@ -18,4 +18,4 @@ function SignIn ({ t }) {
 SignIn.propTypes = {
   t: PropTypes.func.isRequired
 }
-export default translate('account')(SignIn)
+export default withNamespaces('account')(SignIn)

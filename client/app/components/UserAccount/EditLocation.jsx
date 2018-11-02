@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
 // import defaults from '../../styles/default_classes.scss';
@@ -357,4 +357,4 @@ EditLocation.defaultProps = {
   location: {}
 }
 
-export default translate(['user', 'common', 'nav'])(EditLocation)
+export default withNamespaces(['user', 'common', 'nav'])(EditLocation)

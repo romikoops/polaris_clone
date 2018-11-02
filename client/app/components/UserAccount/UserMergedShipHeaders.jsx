@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 
 export function UserMergedShipHeaders (props) {
   const { title, total, t } = props
@@ -41,4 +41,4 @@ UserMergedShipHeaders.propTypes = {
   total: PropTypes.number.isRequired
 }
 
-export default translate('common')(UserMergedShipHeaders)
+export default withNamespaces('common')(UserMergedShipHeaders)

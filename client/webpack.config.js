@@ -21,9 +21,12 @@ module.exports = {
     historyApiFallback: true,
     host: '0.0.0.0'
   },
+  optimization: {
+    sideEffects: true
+  },
   output: {
     publicPath: '/',
-    filename: NodeEnvPlugin.isProduction ? '[name]-[hash].min.js' : '[name].js'
+    filename: NodeEnvPlugin.isProduction ? '[name]-[chunkhash].min.js' : '[name].js'
   },
   module: {
     rules: [
@@ -72,6 +75,10 @@ module.exports = {
         ]
       },
       {
+        test: /locales/,
+        loader: '@alienfast/i18next-loader'
+      },
+      {
         test: /\.woff(2)?(\?[a-z0-9#=&.]+)?$/,
         use: 'url-loader?limit=10000&mimetype=application/font-woff'
       },
@@ -96,8 +103,7 @@ module.exports = {
       chunkFilename: '[id].css'
     }),
     new CopyWebpackPlugin([
-      { from: 'i18n/en/**/*', to: './en', flatten: true},
-      { from: 'app/config.js' },
+      { from: 'app/config.js' }
     ]),
     new DotenvWebpack({
       path: './.node-env'

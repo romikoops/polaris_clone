@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 
 function Infobox (convoKey, eta, etd, origin, totalprice, status, t) {
@@ -14,4 +14,4 @@ Infobox.PropTypes = {
   t: PropTypes.func.isRequired
 }
 
-export default translate('bookconf')(Infobox)
+export default withNamespaces('bookconf')(Infobox)

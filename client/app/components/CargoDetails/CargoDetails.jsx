@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../prop-types'
 import styles from './CargoDetails.scss'
@@ -883,4 +883,4 @@ CargoDetails.defaultProps = {
   incotermText: ''
 }
 
-export default translate(['common', 'cargo'])(CargoDetails)
+export default withNamespaces(['common', 'cargo'])(CargoDetails)

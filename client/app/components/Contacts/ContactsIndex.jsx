@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -207,4 +207,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default translate(['common', 'account'])(connect(mapStateToProps, mapDispatchToProps)(ContactsIndex))
+export default withNamespaces(['common', 'account'])(connect(mapStateToProps, mapDispatchToProps)(ContactsIndex))

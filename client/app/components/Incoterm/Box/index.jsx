@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import Select from 'react-select'
 import styled from 'styled-components'
 import styles from './index.scss'
@@ -235,4 +235,4 @@ IncotermBox.defaultProps = {
   direction: ''
 }
 
-export default translate(['common', 'itbox', 'shipment'])(IncotermBox)
+export default withNamespaces(['common', 'itbox', 'shipment'])(IncotermBox)

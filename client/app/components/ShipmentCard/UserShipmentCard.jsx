@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import { v4 } from 'uuid'
@@ -243,4 +243,4 @@ UserShipmentCard.defaultProps = {
   theme: {}
 }
 
-export default translate(['shipment', 'user', 'cargo'])(UserShipmentCard)
+export default withNamespaces(['shipment', 'user', 'cargo'])(UserShipmentCard)

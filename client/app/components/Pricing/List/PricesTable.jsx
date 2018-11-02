@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import ReactTable from 'react-table'
 import { has } from 'lodash'
 import 'react-table/react-table.css'
@@ -201,4 +201,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default translate(['common', 'shipment', 'account'])(connect(mapStateToProps, mapDispatchToProps)(PricesTable))
+export default withNamespaces(['common', 'shipment', 'account'])(connect(mapStateToProps, mapDispatchToProps)(PricesTable))

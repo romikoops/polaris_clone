@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from '../../../Admin/Admin.scss'
 import { AdminSearchableShipments } from '../../../Admin/AdminSearchables'
@@ -112,4 +112,4 @@ UserShipmentsGroup.defaultProps = {
   target: ''
 }
 
-export default translate('shipment')(UserShipmentsGroup)
+export default withNamespaces('shipment')(UserShipmentsGroup)

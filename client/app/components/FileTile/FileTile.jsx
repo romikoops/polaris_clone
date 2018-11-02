@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import fetch from 'isomorphic-fetch'
 import { Link } from 'react-router-dom'
 import Truncate from 'react-truncate'
@@ -327,4 +327,4 @@ FileTile.defaultProps = {
   isAdmin: false
 }
 
-export default translate(['common', 'doc'])(FileTile)
+export default withNamespaces(['common', 'doc'])(FileTile)

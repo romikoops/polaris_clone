@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styles from '../CargoItemGroup.scss'
 import PropTypes from '../../../../../prop-types'
 import { numberSpacing } from '../../../../../helpers'
@@ -58,4 +58,4 @@ CargoItemGroupAggregated.defaultProps = {
   group: {}
 }
 
-export default translate('common')(CargoItemGroupAggregated)
+export default withNamespaces('common')(CargoItemGroupAggregated)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import styles from './AddressBookAddContactButton.scss'
 import PropTypes from '../../../prop-types'
@@ -24,4 +24,4 @@ AddressBookAddContactButton.propTypes = {
   t: PropTypes.func.isRequired
 }
 
-export default translate('common')(AddressBookAddContactButton)
+export default withNamespaces('common')(AddressBookAddContactButton)

@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import { bindActionCreators } from 'redux'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styles from './LandingTop.scss'
 import PropTypes from '../../prop-types'
 import SquareButton from '../SquareButton'
@@ -10,7 +10,7 @@ import { adminActions } from '../../actions'
 
 const MyAccount = connect(null, dispatch => (
   { toAccount: () => dispatch(push('/account')) }
-))(translate(['common'])(({
+))(withNamespaces(['common'])(({
   user, tenant, theme, toAccount, t
 }) => (
   user && user.role && ['shipper', 'agent', 'agency_manager'].includes(user.role.name) &&
@@ -30,7 +30,7 @@ const MyAccount = connect(null, dispatch => (
 
 const ToAdmin = connect(null, dispatch => (
   { adminDispatch: bindActionCreators(adminActions, dispatch) }
-))(translate(['landing'])(({
+))(withNamespaces(['landing'])(({
   user, theme, adminDispatch, t
 }) => (
   user && user.role && ['admin', 'sub_admin', 'super_admin'].includes(user.role.name) && (
@@ -46,7 +46,7 @@ const ToAdmin = connect(null, dispatch => (
   )
 )))
 
-const FindRates = translate(['landing'])(({
+const FindRates = withNamespaces(['landing'])(({
   user, theme, bookNow, t
 }) => (
   (!user || ['shipper', 'agent', 'agency_manager'].includes(user.role.name)) && (
@@ -112,4 +112,4 @@ ButtonSection.defaultProps = {
   className: ''
 }
 
-export default translate(['landing'])(ButtonSection)
+export default withNamespaces(['landing'])(ButtonSection)

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import Tabs from '../../Tabs/Tabs'
 import Tab from '../../Tabs/Tab'
@@ -700,4 +700,4 @@ AdminShipmentContent.defaultProps = {
   newPrices: {}
 }
 
-export default translate(['common', 'shipment', 'doc', 'cargo', 'account'])(AdminShipmentContent)
+export default withNamespaces(['common', 'shipment', 'doc', 'cargo', 'account'])(AdminShipmentContent)

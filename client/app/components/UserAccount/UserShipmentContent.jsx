@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import styled from 'styled-components'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
@@ -544,4 +544,4 @@ UserShipmentContent.defaultProps = {
   cargoView: null
 }
 
-export default translate(['common', 'shipment', 'doc', 'cargo', 'account'])(UserShipmentContent)
+export default withNamespaces(['common', 'shipment', 'doc', 'cargo', 'account'])(UserShipmentContent)

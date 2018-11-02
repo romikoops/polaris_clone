@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import RouteFilterBox from '../RouteFilterBox/RouteFilterBox'
 import { currencyOptions, moment } from '../../constants'
@@ -473,4 +473,4 @@ ChooseOffer.defaultProps = {
   originalSelectedDay: false
 }
 
-export default translate(['account', 'landing', 'common'])(ChooseOffer)
+export default withNamespaces(['account', 'landing', 'common'])(ChooseOffer)

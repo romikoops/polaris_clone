@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import ValidatedInput from '../ValidatedInput/ValidatedInput'
 import styles from './QuantityInput.scss'
@@ -102,4 +102,4 @@ QuantityInput.defaultProps = {
   nextStageAttempt: false
 }
 
-export default translate(['common', 'errors'])(QuantityInput)
+export default withNamespaces(['common', 'errors'])(QuantityInput)

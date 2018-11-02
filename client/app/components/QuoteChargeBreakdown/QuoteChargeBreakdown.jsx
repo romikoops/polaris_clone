@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styles from './QuoteChargeBreakdown.scss'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import { numberSpacing, capitalize, formattedPriceValue } from '../../helpers'
@@ -172,4 +172,4 @@ QuoteChargeBreakdown.propTypes = {
 QuoteChargeBreakdown.defaultProps = {
   theme: null
 }
-export default translate(['shipment', 'cargo'])(QuoteChargeBreakdown)
+export default withNamespaces(['shipment', 'cargo'])(QuoteChargeBreakdown)

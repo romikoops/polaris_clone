@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styles from './index.scss'
 import PropTypes from '../../prop-types'
 import GreyBox from '../GreyBox/GreyBox'
@@ -97,4 +97,4 @@ ShipmentNotes.defaultProps = {
   shipment: {}
 }
 
-export default translate(['common', 'cargo', 'bookconf'])(ShipmentNotes)
+export default withNamespaces(['common', 'cargo', 'bookconf'])(ShipmentNotes)

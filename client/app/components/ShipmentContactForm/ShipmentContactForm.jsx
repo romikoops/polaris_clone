@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import Formsy from 'formsy-react'
 import styles from './ShipmentContactForm.scss'
@@ -247,4 +247,4 @@ ShipmentContactForm.defaultProps = {
   showEdit: false
 }
 
-export default translate(['common', 'errors'])(ShipmentContactForm)
+export default withNamespaces(['common', 'errors'])(ShipmentContactForm)

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styles from './index.scss'
 import PropTypes from '../../../prop-types'
 import { moment } from '../../../constants'
@@ -393,4 +393,4 @@ QuoteCard.defaultProps = {
   aggregatedCargo: {}
 }
 
-export default translate(['common', 'cargo', 'acronym', 'shipment', 'quote'])(QuoteCard)
+export default withNamespaces(['common', 'cargo', 'acronym', 'shipment', 'quote'])(QuoteCard)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import { RoundButton } from '../RoundButton/RoundButton'
 import SideOptionsBox from '../Admin/SideOptions/SideOptionsBox'
@@ -67,4 +67,4 @@ UserContactsIndex.defaultProps = {
   newContactBox: {}
 }
 
-export default translate(['common', 'account'])(UserContactsIndex)
+export default withNamespaces(['common', 'account'])(UserContactsIndex)

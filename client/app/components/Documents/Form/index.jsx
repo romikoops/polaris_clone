@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import fetch from 'isomorphic-fetch'
 import Truncate from 'react-truncate'
 import { Promise } from 'es6-promise-promise'
@@ -285,4 +285,4 @@ DocumentsForm.defaultProps = {
   viewer: false
 }
 
-export default translate(['common', 'doc'])(DocumentsForm)
+export default withNamespaces(['common', 'doc'])(DocumentsForm)

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './Maps.scss'
 import { colorSVG } from '../../helpers'
@@ -206,4 +206,4 @@ PlaceSearch.defaultProps = {
   location: {}
 }
 
-export default translate('nav')(PlaceSearch)
+export default withNamespaces('nav')(PlaceSearch)

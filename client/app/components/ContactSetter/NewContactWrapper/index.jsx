@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import styles from './NewContactWrapper.scss'
 import ContactSetterNewContactWrapperTitle from './Title'
@@ -69,4 +69,4 @@ ContactSetterNewContactWrapper.defaultProps = {
   updateDimensions: null
 }
 
-export default translate('account')(ContactSetterNewContactWrapper)
+export default withNamespaces('account')(ContactSetterNewContactWrapper)

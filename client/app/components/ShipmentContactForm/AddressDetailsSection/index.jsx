@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import GmapsWrapper from '../../../hocs/GmapsWrapper'
 import FormsyInput from '../../FormsyInput/FormsyInput'
@@ -217,4 +217,4 @@ AddressDetailsSection.defaultProps = {
   setContactBtn: null
 }
 
-export default translate(['errors', 'user'])(AddressDetailsSection)
+export default withNamespaces(['errors', 'user'])(AddressDetailsSection)

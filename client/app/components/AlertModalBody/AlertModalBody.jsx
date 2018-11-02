@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './AlertModalBody.scss'
 import { trim, ROW } from '../../classNames'
@@ -88,4 +88,4 @@ AlertModalBody.defaultProps = {
   maxWidth: null
 }
 
-export default translate(['footer', 'imc'])(AlertModalBody)
+export default withNamespaces(['footer', 'imc'])(AlertModalBody)
