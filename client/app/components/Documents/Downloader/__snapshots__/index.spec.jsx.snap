@@ -37,20 +37,9 @@ exports[`props.loading is true, state.requested is true 1`] = `
   data-for="RANDOM_KEY_5"
   data-tip="FOO_TOOLTIP"
 >
-  <div
-    className="flex-100 layout-column layout-align-space-around-center"
-  >
-    <p
-      className="flex-none"
-    >
-      Your document is being generated.
-    </p>
-    <p
-      className="flex-none"
-    >
-      Please wait....
-    </p>
-  </div>
+  <LoadingSpinner
+    size="small"
+  />
 </div>
 `;
 
