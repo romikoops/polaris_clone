@@ -343,38 +343,6 @@ class ChooseOffer extends Component {
           </div> : ''}
           <div className="flex  offset-5 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-wrap">
-              <div
-                className={`flex-100 layout-row layout-align-space-between-center margin_bottom ${
-                  styles.route_header
-                }`}
-              >
-                <div className="flex-none padd_10">
-                  {isQuote(tenant) ? (
-                    <TextHeading
-
-                      theme={theme}
-                      size={3}
-                      text={t('shipment:bestQuotations')}
-                    />
-                  ) : (
-                    ''
-                  )}
-                </div>
-                <div className="flex-30 layout-row layout-align-end-center">
-                  {scope.fixed_currency ? (
-                    ''
-                  ) : (
-                    <NamedSelect
-                      className="flex-100"
-                      options={currencyOptions}
-                      value={currentCurrency}
-                      placeholder={t('common:selectCurrency')}
-                      onChange={e => this.handleCurrencyUpdate(e)}
-                      clearable={false}
-                    />
-                  )}
-                </div>
-              </div>
               {closestRoutestoRender}
             </div>
             <div className="flex-100 layout-row layout-wrap">

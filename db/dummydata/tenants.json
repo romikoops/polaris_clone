@@ -943,7 +943,14 @@
       }
     },
     "hide_grand_total": true,
-    "hide_sub_totals": true
+    "hide_sub_totals": true,
+    "translation_overrides": {
+      "shipment:export": "overrides:fivestarExport"
+    },
+    "offer_disclaimers": [
+      "fivestarExwFob",
+      "fivestarAsPerCarrier"
+    ]
   },
   "other_data": {
     "cargo_item_types": ["Pallet", "Carton (only palletized)", "Crate", "Stack", "Drum (only palletized)", "Skid"],

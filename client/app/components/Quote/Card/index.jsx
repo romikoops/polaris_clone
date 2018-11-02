@@ -116,19 +116,20 @@ class QuoteCard extends PureComponent {
         <p className="flex-none">{t('quote:viewSchedules')}</p>
       </div>
     )
+
     if (scope.detailed_billing && result.schedules.length > 1) {
       return (
-        <div className="flex-50 layout-row layout-align-start-center" style={{ textAlign: 'left' }}>
+        <div className="flex-40 layout-row layout-align-start-center" style={{ textAlign: 'left' }}>
           {showSchedules ? showPriceBreakdownBtn : showSchedulesBtn}
         </div>
       )
     } else if (!scope.detailed_billing && result.schedules.length > 1) {
       return (
-        <div className="flex-50 layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
+        <div className="flex-40 layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
       )
     } else if (!scope.detailed_billing && (!result.schedules || result.schedules.length < 1)) {
       return (
-        <div className="flex-50 layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
+        <div className="flex-40 layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
       )
     }
 
@@ -331,12 +332,12 @@ class QuoteCard extends PureComponent {
           />
         </CollapsingContent>
         <div className="flex-100 layout-wrap layout-align-start-stretch">
-          <div className={`flex-100 layout-row layout-align-space-between-stretch ${styles.total_row}`}>
-            {this.buttonToDisplay()}
-            <div className={`${isQuote(tenant) ? 'flex' : 'flex-10'} layout-row layout-align-start-center`}>
+          <div className={`flex-100 layout-row layout-align-space-between-stretch layout-wrap ${styles.total_row}`}>
+            
+            <div className={`${isQuote(tenant) ? 'flex' : 'flex-40'} layout-row layout-align-start-center`}>
               <span style={{ textAlign: 'right' }}>{scope.hide_grand_total ? '' : t('common:total')}</span>
             </div>
-            <div className="flex layout-row layout-align-end-center">
+            <div className={`${isQuote(tenant) ? 'flex-75' : 'flex'}  layout-row layout-align-end-center`}>
               <p style={!isQuote(tenant) ? { paddingRight: '18px' } : {}}>
                 {
                   scope.hide_grand_total
@@ -345,19 +346,33 @@ class QuoteCard extends PureComponent {
                 }
               </p>
               {isQuote(tenant) ? (
-                <RoundButton
-                  active={!this.state.isChecked}
-                  flexContainer={scope.hide_grand_total ? '40' : '100'}
-                  classNames={`pointy layout-row layout-align-center-center ${styles.add_button} ${!this.state.isChecked ? styles.shorter : styles.longer}`}
-                  size="small"
-                  handleNext={() => this.handleClickChecked()}
-                  theme={theme}
-                  text={!this.state.isChecked ? t('common:add') : t('common:remove')}
-                />
+                <div className="flex-gt-md-25 flex-33 layout-row layout-align-end-center">
+                  <RoundButton
+                    active={!this.state.isChecked}
+                    flexContainer={scope.hide_grand_total ? '40' : '100'}
+                    classNames={`pointy layout-row layout-align-center-center ${styles.add_button} ${!this.state.isChecked ? styles.shorter : styles.longer}`}
+                    size="small"
+                    handleNext={() => this.handleClickChecked()}
+                    theme={theme}
+                    text={!this.state.isChecked ? t('common:add') : t('common:remove')}
+                  />
+                </div>
               ) : ''}
 
             </div>
+            <div className="flex-100 layout-row layout-align-end-center">
+              {this.buttonToDisplay()}
+              <div className="flex-60 layout-row layout-align-end-center layout-wrap">
+              { scope.offer_disclaimers && scope.offer_disclaimers.length
+                ? 
+                  scope.offer_disclaimers.map(disclaimer =>
+                    <p className={`flex-100 ${styles.disclaimers}`}>{t(`disclaimers:${disclaimer}`, { carrier: result.meta.carrier_name })}</p>)
+                : ''
+              }
+               </div>
+            </div>
           </div>
+
         </div>
       </div>
     )
@@ -393,4 +408,4 @@ QuoteCard.defaultProps = {
   aggregatedCargo: {}
 }
 
-export default withNamespaces(['common', 'cargo', 'acronym', 'shipment', 'quote'])(QuoteCard)
+export default withNamespaces(['common', 'cargo', 'acronym', 'shipment', 'quote', 'disclaimers'])(QuoteCard)

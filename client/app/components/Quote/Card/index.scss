@@ -141,10 +141,9 @@
     padding-top: 12px;
     padding-bottom: 12px;
     span {
-      padding-left: 10px;
-      font-style: italic;
+      padding-left: 40px;
       font-weight: 900;
-      font-size: 19px;
+      font-size: 30px;
       letter-spacing: 0.03em;
     }
     p {
@@ -207,6 +206,7 @@
     top: 0;
     z-index: 100;
     text-shadow: 0 0 0;
+    padding-top: 5px;
     p {
       padding-left: 20px;
       font-size: 12px;
@@ -214,5 +214,10 @@
         color: #828282
       }
     }
+  }
+  .disclaimers {
+    font-size: 12px !important;
+    padding-right: 5px;
+    padding-top: 3px;
   }
 }
