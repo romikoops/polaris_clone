@@ -1,8 +1,5 @@
 :local {
   .trucking_details {
-    // needs a fixed height for the animation
-    // 2 or 3 px smaller than the height of the section,
-    // in order to have to box-shadow visible
     height: 40px;
 
     background: transparent;
@@ -45,7 +42,6 @@
     }
     .carriage_sec {
       position: relative;
-      
     }
   }
 }

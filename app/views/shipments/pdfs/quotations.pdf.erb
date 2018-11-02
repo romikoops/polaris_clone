@@ -3,13 +3,21 @@
   <% neutral_color = '#C4C4C4' %>
   <% tenant_logo_asset = "logoLarge_" + tenant["subdomain"] + ".png" %>
   <% tenant_logo_url = tenant.theme["logoLarge"] %>
+  <% scope = tenant.scope %>
   <% precarriage_color = shipment.has_pre_carriage ? primary_color : neutral_color %>
   <% oncarriage_color = shipment.has_on_carriage ? primary_color : neutral_color %>
 
-  <div class="title text-center">
-    <h1>QUOTATIONS</h1>
-    <hr style="border-color: <%= primary_color %>">
-    <p><%= tenant.name %></p>
+  <div class="title display-flex">
+    <div>
+      <h1>QUOTATIONS</h1>
+      <hr style="border-color: <%= primary_color %>">
+      <p><%= tenant.name %></p>
+    </div>
+    <div class="agent-info">
+        <p><strong><%= shipment.user.first_name %> <%= shipment.user.last_name %></strong></p>
+        <p><%= shipment.user.email %></p>
+        <p><%= shipment.user.phone %></p>
+    </div>
   </div>
 
     <% shipments.map do |s| %>
@@ -18,9 +26,9 @@
       <div class="all-row">
         <div class="main-container">
           <div class="info">
-            <% if s.itinerary.mode_of_transport == "ocean" %>
+            <% if s.mode_of_transport == "ocean" %>
               <% mot = "anchor" %>
-            <% elsif s.itinerary.mode_of_transport == "air" %>
+            <% elsif s.mode_of_transport == "air" %>
               <% mot = "plane" %>
             <% else %>
               <% mot = "truck" %>
@@ -40,62 +48,76 @@
               </div>
               <p>
                 <strong>Kg:</strong>
-                <%= shipment.cargo_items.inject(0) {|sum, hash| sum + hash[:payload_in_kg].to_f} %>&nbsp;kg
+                <%= if s.aggregated_cargo
+                      s.aggregated_cargo.weight.to_f
+                    else
+                      s.cargo_units.inject(0) {|sum, hash| sum + hash[:payload_in_kg].to_f}
+                    end
+                %>&nbsp;kg
               </p>
             </div>
           </div>
         </div>
 
-      <% s.selected_offer.each do |k, v| %>
-          <div class="sub-prices">
-            <% if k != "total" && k != "edited_total" %>
-              <div class="total-price-single">
-                <% if k == "trucking_pre" %>
-                  <h4>Pick-up</h4>
-                <% end %>
-                <% if k == "trucking_on" %>
-                  <h4>Delivery</h4>
-                <% end %>
-                <% if k != "trucking_on" && k != "trucking_pre" %>
-                  <h4><%= k %></h4>
-                <% end %>
-                <h3><%= v["total"]["value"].to_f.truncate(2) %>&nbsp;<%= v["total"]["currency"] %></h3>
-              </div>
-              <div class="subtotal-price-group">
-                <% v.each do |a, b| %>
-                  <% if a != "total" && a != "edited_total" %>
-                    <div class="subtotal-price-single">
-                    <% if a == "trucking_lcl" %>
-                      <h4>Lcl</h4>
-                    <% end %>
-                    <% if a == "trucking_fcl" %>
-                      <h4>Fcl</h4>
-                    <% end %>
-                    <% if k == "cargo" %>
-                      <h4>Cargo</h4>
-                    <% end %>
-                    <% if k != "cargo" && a != "trucking_lcl" && a != "trucking_fcl" %>
-                      <h4><%= a %></h4>
-                    <% end %>
-                      <h3> <%= b["value"] || b["total"]["value"].to_f.truncate(2).to_s %>&nbsp;<%= b["currency"] || b["total"]["currency"] %></h3>
-                    </div>
-                  <% end %>
-                <% end %>
-              </div>
+      <% s.selected_offer.except("total", "edited_total", "name").each do |charge_key, charge| %>
+        <div class="sub-prices">
+          <div class="total-price-single">
+            <h4><%= charge["name"] %></h4>
+            <% if charge != "Grand Total" && !scope['hide_grand_total'] %>
+              <h3><%= charge["total"]["value"].to_f.truncate(2) %>&nbsp;<%= charge["total"]["currency"] %></h3>
             <% end %>
           </div>
-        <% end %>
-
+          <div class="subtotal-price-group">
+            <% if charge != "Grand Total" %>
+              <% 
+                sorted_charges = if ['export', 'import'].include?(charge_key) 
+                  charge.except("total", "edited_total", "name").values.group_by{|c| c['currency']}
+                  else
+                  charge.except("total", "edited_total", "name").values.group_by{|c| c['total']['currency']}
+                  end
+                %>
+              <% sorted_charges.each do |currency_key, sub_charges| %>
+                <div class="subtotal-currency-single">
+                  <h4>Fees charged in <%= currency_key %>:</h4>
+                  <h3> 
+                    <%= 
+                      if ['export', 'import'].include?(charge_key) 
+                        sub_charges.sum{|c| c['value']} 
+                      else
+                        sub_charges.sum{|c| c['total']['value']} 
+                      end
+                     %>&nbsp;<%= currency_key %>
+                  </h3>
+                </div>
+                <% sub_charges.each do |sub_charge| %>
+                  <div class="subtotal-price-single">
+                    <h4><%= sub_charge["name"] %></h4>
+                    <% if sub_charge["value"] && !scope['hide_sub_totals'] %>
+                      <h3> <%= sub_charge["value"].to_f.truncate(2).to_s %>&nbsp;<%= sub_charge["currency"] %></h3>
+                    <% elsif scope['hide_sub_totals'] && scope['cargo_price_notes'] && scope['cargo_price_notes'][charge_key] %>
+                      <h3> <%= scope['cargo_price_notes'][charge_key.to_s] %></h3>
+                    <% elsif !scope['hide_sub_totals'] && (!scope['cargo_price_notes'] || scope['cargo_price_notes'] && !scope['cargo_price_notes'][charge_key]) %>
+                      <h3> <%= sub_charge["total"]["value"] %>&nbsp;<%= sub_charge["total"]["currency"] %></h3>
+                    <% end %>
+                  </div>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+      <% if !scope['hide_grand_total']%>
         <div class="total-row">
-          <h4>Total</h4>
-          <p class="quote"><%= s.selected_offer["total"]["value"].to_f.truncate(2) %>
-            &nbsp;<%= s.selected_offer["total"]["currency"] %>
+            <h4>Total</h4>
+            <p class="quote"><%= s.selected_offer["total"]["value"].to_f.truncate(2) %>
+              &nbsp;<%= s.selected_offer["total"]["currency"] %>
+            </p>
+          </div>
+          <p class="notes">
+            <%= tenant.scope["quote_notes"] || "" %>
           </p>
         </div>
-        <p class="notes">
-          <%= tenant.scope["quote_notes"] || "" %>
-        </p>
-      </div>
+      <% end %>
       
     <% end %>
   

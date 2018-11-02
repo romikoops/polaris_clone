@@ -69,7 +69,7 @@ exports[`shallow rendering 1`] = `
         <p>
           Placed at
            
-          10/10/2018 - 12:00
+          10/10/2018 | 00:00
         </p>
       </div>
     </div>

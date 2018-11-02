@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 // import { UserShipmentRow } from './';
@@ -133,7 +133,7 @@ UntranslatedEditProfileBox.defaultProps = {
   style: {}
 }
 
-const EditProfileBox = translate(['user', 'common'])(UntranslatedEditProfileBox)
+const EditProfileBox = withNamespaces(['user', 'common'])(UntranslatedEditProfileBox)
 
 const UntranslatedProfileBox = ({
   user, style, edit, t
@@ -188,7 +188,7 @@ UntranslatedProfileBox.defaultProps = {
   style: {}
 }
 
-const ProfileBox = translate('user')(UntranslatedProfileBox)
+const ProfileBox = withNamespaces('user')(UntranslatedProfileBox)
 
 class UserContactsView extends Component {
   static prepShipment (baseShipment, user, hubsObj) {
@@ -375,4 +375,4 @@ UserContactsView.defaultProps = {
   hubs: []
 }
 
-export default translate(['common', 'user', 'shipment'])(UserContactsView)
+export default withNamespaces(['common', 'user', 'shipment'])(UserContactsView)

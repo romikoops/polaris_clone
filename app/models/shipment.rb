@@ -332,8 +332,8 @@ class Shipment < ApplicationRecord
   end
 
   def view_offers(index)
-    awesome_print charge_breakdowns[index].to_nested_hash
   end
+  deprecate :view_offers, deprecator: APP_DEPRECATION
 
   def as_options_json(options = {})
     new_options = options.reverse_merge(

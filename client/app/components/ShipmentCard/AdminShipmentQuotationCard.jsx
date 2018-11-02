@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import { v4 } from 'uuid'
@@ -229,7 +229,7 @@ class AdminShipmentQuotationCard extends Component {
           <div className="layout-row flex-35 layout-align-center-center">
             <div className="flex-100">
               <b className={styles.ref_row_card}>{t('common:ref')}:&nbsp;{shipment.imc_reference}</b>
-              <p>{t('shipment:placedAt')}&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY - hh:mm')}</p>
+              <p>{t('shipment:placedAt')}&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY | HH:mm')}</p>
             </div>
           </div>
 
@@ -325,4 +325,4 @@ AdminShipmentQuotationCard.defaultProps = {
   theme: {}
 }
 
-export default translate(['cargo', 'common', 'shipment'])(AdminShipmentQuotationCard)
+export default withNamespaces(['cargo', 'common', 'shipment'])(AdminShipmentQuotationCard)

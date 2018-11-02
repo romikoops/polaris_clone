@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import Truncate from 'react-truncate'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
@@ -258,4 +258,4 @@ UserLocationsBox.defaultProps = {
   cols: 3
 }
 
-export default translate(['common', 'shipment'])(UserLocationsBox)
+export default withNamespaces(['common', 'shipment'])(UserLocationsBox)

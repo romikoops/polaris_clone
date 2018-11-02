@@ -1,5 +1,5 @@
 export function numberSpacing (number, decimals) {
-  if (!number) {
+  if (!number && number !== 0) {
     return ''
   }
   let num

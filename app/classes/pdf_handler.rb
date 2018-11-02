@@ -37,14 +37,14 @@ class PdfHandler
     response = BreezyPDFLite::RenderRequest.new(
       doc_erb.render
     ).submit
-    
+
     if response.code.to_i == 201
       File.open('tmp/' + @full_name, 'wb') { |file| file.write(response.body) }
       @path = 'tmp/' + @full_name
       @pdf  = File.open(@path)
       self
     else
-      Raise
+      raise
     end
   end
 

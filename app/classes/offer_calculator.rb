@@ -7,11 +7,11 @@ class OfferCalculator
   include OfferCalculatorService
 
   def initialize(shipment, params, user)
-    @user     = user
-    @shipment = shipment
-    @delay    = params['delay']
-    @isQuote = params['shipment'].delete('isQuote')
-    
+    @user           = user
+    @shipment       = shipment
+    @delay          = params['delay']
+    @quotation_tool = params['shipment'].delete('isQuote') || @user.tenant.quotation_tool?
+
     instantiate_service_classes(params)
     update_shipment
   end
@@ -21,13 +21,7 @@ class OfferCalculator
     @trucking_data      = @trucking_data_builder.perform(@hubs)
     @routes             = @route_finder.perform(@hubs)
     @routes             = @route_filter.perform(@routes)
-    if @user.tenant.scope["open_quotation_tool"] || @user.tenant.scope["closed_quotation_tool"] || @user.tenant.scope["quotation_tool"] || @isQuote
-      @route_objs         = @quote_route_builder.perform(@routes)
-      @detailed_schedules = @detailed_quote_builder.perform(@route_objs, @trucking_data, @user)
-    else
-      @schedules          = @schedule_finder.perform(@routes, @delay, @hubs)
-      @detailed_schedules = @detailed_schedules_builder.perform(@schedules, @trucking_data, @user)
-    end
+    @detailed_schedules = @detailed_schedules_builder.perform(schedules, @trucking_data, @user)
   end
 
   private
@@ -41,7 +35,6 @@ class OfferCalculator
     @schedule_finder            = ScheduleFinder.new(@shipment)
     @quote_route_builder        = QuoteRouteBuilder.new(@shipment)
     @detailed_schedules_builder = DetailedSchedulesBuilder.new(@shipment)
-    @detailed_quote_builder     = DetailedQuoteBuilder.new(@shipment)
   end
 
   def update_shipment
@@ -50,5 +43,17 @@ class OfferCalculator
     @shipment_update_handler.update_incoterm
     @shipment_update_handler.update_cargo_units
     @shipment_update_handler.update_selected_day
+  end
+
+  def schedules
+    if quotation_tool?
+      @quote_route_builder.perform(@routes)
+    else
+      @schedule_finder.perform(@routes, @delay, @hubs)
+    end
+  end
+
+  def quotation_tool?
+    @quotation_tool
   end
 end

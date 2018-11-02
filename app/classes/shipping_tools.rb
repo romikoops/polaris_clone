@@ -31,7 +31,7 @@ module ShippingTools
         destination_hub_id: schedule['destination_hub']['id'],
         quotation_id: schedule['id'],
         trip_id: trip.id,
-        booking_placed_at: shipment.booking_placed_at,
+        booking_placed_at: DateTime.now,
         closing_date: shipment.closing_date,
         planned_eta: shipment.planned_eta,
         planned_etd: shipment.planned_etd,
@@ -159,7 +159,7 @@ module ShippingTools
       cargo_notes:       shipment_data[:cargoNotes]
     )
     shipment.incoterm_text = shipment_data[:incotermText] if shipment_data[:incotermText]
-    
+
     # Shipper
     resource = shipment_data.require(:shipper)
     contact_location = Location.create_and_geocode(contact_location_params(resource))
@@ -414,7 +414,7 @@ module ShippingTools
     end
     @origin_hub      = Hub.find(@schedule['origin_hub']['id'])
     @destination_hub = Hub.find(@schedule['destination_hub']['id'])
-    if shipment.has_pre_carriage 
+    if shipment.has_pre_carriage
       shipment.planned_pickup_date = shipment.trip.closing_date - 1.day - shipment.trucking["pre_carriage"]["trucking_time_in_seconds"].seconds
     else
       shipment.planned_origin_drop_off_date = shipment.trip.closing_date - 1.day
@@ -621,7 +621,7 @@ module ShippingTools
     if response.code.to_i == 201
       send_data response.body, filename: 'Booking_' + shipment.imc_reference + '.pdf'
     else
-      Raise
+      raise
     end
   end
 
@@ -648,24 +648,22 @@ module ShippingTools
 
   def self.save_and_send_quotes(shipment, schedules, email)
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
-    QuoteMailer.quotation_email(shipment, main_quote.shipments.to_a, email, main_quote).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
+    QuoteMailer.quotation_email(shipment, main_quote.shipments.to_a, email, main_quote).deliver_later
   end
 
   def self.tenant_notification_email(user, shipment)
-    ShipmentMailer.tenant_notification(user, shipment).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
+    ShipmentMailer.tenant_notification(user, shipment).deliver_later
   end
 
   def self.shipper_notification_email(user, shipment)
-    ShipmentMailer.shipper_notification(user, shipment).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
+    ShipmentMailer.shipper_notification(user, shipment).deliver_later
   end
 
   def self.shipper_confirmation_email(user, shipment)
-    if Rails.env.production? && ENV['BETA'] != 'true'
-      ShipmentMailer.shipper_confirmation(
-        user,
-        shipment
-      ).deliver_later
-    end
+    ShipmentMailer.shipper_confirmation(
+      user,
+      shipment
+    ).deliver_later
   end
 
   def self.last_trip(user)
@@ -679,9 +677,10 @@ module ShippingTools
       locals:   { shipment: args[:shipment] }
     )
 
-    response =  BreezyPDFLite::RenderRequest.new(
+    response = BreezyPDFLite::RenderRequest.new(
       doc_erb.render
     ).submit
+
     if response.code.to_i == 201
       doc_name = "#{args[:name]}_#{args[:shipment].imc_reference}.pdf"
 
@@ -693,7 +692,7 @@ module ShippingTools
 
       { name: doc_name, url: doc_url }
     else
-      Raise
+      raise
     end
   end
 

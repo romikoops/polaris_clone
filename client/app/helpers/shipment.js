@@ -3,7 +3,9 @@ import { shipmentConstants, moment } from "../constants";
 export function totalPrice (shipment) {
   const selectedOffer = shipment.selected_offer
 
-  if (!selectedOffer) return {}
+  if (!selectedOffer) {
+    return shipment.edited_total || shipment.total_price || {}
+  }
 
   return selectedOffer.edited_total || selectedOffer.total || {}
 }
@@ -16,8 +18,8 @@ export function totalPriceString (shipment) {
 
 export function formattedDate (date) {
   const e = moment(date)
-  
-  return e.format('DD/MM/YYYY | HH:mm')
+
+  return e.format('DD/MM/YYYY')
 }
 
 export function formattedPriceValue (num) {

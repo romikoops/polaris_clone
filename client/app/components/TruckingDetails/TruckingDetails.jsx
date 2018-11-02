@@ -1,4 +1,6 @@
 import React from 'react'
+import ReactTooltip from 'react-tooltip'
+import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import styles from './TruckingDetails.scss'
 import { Tooltip } from '../Tooltip/Tooltip'
@@ -8,6 +10,8 @@ export default function TruckingDetails (props) {
   const {
     theme, trucking, truckTypes, handleTruckingDetailsChange, target
   } = props
+
+  if (truckTypes.length === 0) return ''
 
   function tooltip (truckType) {
     return (
@@ -24,9 +28,17 @@ export default function TruckingDetails (props) {
   function formGroup (carriage, truckType) {
     const disabled = !truckTypes.includes(truckType)
     const disabledClass = disabled ? styles.disabled : ''
+    const id = v4()
+    const humanizedTruckType = humanizeSnakeCase(truckType)
 
     return (
-      <div className={`${styles.form_group} ${disabledClass} flex-50 layout-row layout-align-start-end`}>
+      <div
+        className={`${styles.form_group} ${disabledClass} flex-50 layout-row layout-align-start-end`}
+        data-tip={`${humanizedTruckType} is not available for the given address.`}
+        data-for={id}
+      >
+        { disabled ? <ReactTooltip effect="solid" id={id} place="bottom" /> : '' }
+
         <div className={disabled ? styles.overlay : ''} />
         <input
           type="radio"
@@ -35,8 +47,9 @@ export default function TruckingDetails (props) {
           value={`${carriage}_truck`}
           checked={trucking[carriage].truck_type === truckType}
           onChange={handleTruckingDetailsChange}
+          disabled={disabled}
         />
-        <label htmlFor={`${carriage}-${truckType}`}>{ humanizeSnakeCase(truckType) }</label>
+        <label htmlFor={`${carriage}-${truckType}`}>{ humanizedTruckType }</label>
         {tooltip(truckType)}
       </div>
     )

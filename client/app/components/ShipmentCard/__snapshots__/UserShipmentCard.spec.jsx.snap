@@ -6,6 +6,15 @@ exports[`shallow rendering 1`] = `
           container"
   key="RANDOM_KEY_0"
 >
+  <div
+    className="layout-row flex-15 layout-align-center-center topRight"
+  >
+    <p
+      className="check pointy"
+    >
+      View Details
+    </p>
+  </div>
   <hr
     className="flex-100 layout-row hr_divider"
   />
@@ -45,10 +54,10 @@ exports[`shallow rendering 1`] = `
     className="layout-row flex-100 layout-align-space-between-stretch middle_top_box"
   >
     <div
-      className="layout-row flex-40 layout-align-center-center"
+      className="layout-row flex-35 layout-align-center-center"
     >
       <div
-        className=" flex-100"
+        className="flex-100"
       >
         <b
           className="ref_row_card"
@@ -66,7 +75,7 @@ exports[`shallow rendering 1`] = `
     </div>
     <hr />
     <div
-      className="layout-row flex-60"
+      className="layout-row flex-60 layout-align-center-center"
     >
       <div
         className=" flex-100"
@@ -123,7 +132,7 @@ exports[`shallow rendering 1`] = `
       middle_bottom_box smallText"
   >
     <div
-      className="layout-row flex-50 layout-align-center-center"
+      className="layout-row flex-100 layout-align-center-center"
     >
       <i
         className="fa fa-times"
@@ -138,7 +147,7 @@ exports[`shallow rendering 1`] = `
       </p>
     </div>
     <div
-      className="layout-row flex-50 layout-align-center-center"
+      className="layout-row flex-100 layout-align-center-center"
     >
       <i
         className="fa fa-times"

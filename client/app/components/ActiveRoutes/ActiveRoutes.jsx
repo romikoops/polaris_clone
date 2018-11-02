@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styles from './ActiveRoutes.scss'
 import PropTypes from '../../prop-types'
 import { Carousel } from '../Carousel/Carousel'
@@ -27,4 +27,4 @@ ActiveRoutes.defaultProps = {
   theme: null
 }
 
-export default translate('common')(ActiveRoutes)
+export default withNamespaces('common')(ActiveRoutes)

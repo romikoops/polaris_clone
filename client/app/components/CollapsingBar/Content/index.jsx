@@ -20,12 +20,15 @@ export default class CollapsingContent extends React.PureComponent {
   }
   updateHeight () {
     const panelHeight = this.panel.clientHeight
-    if (panelHeight > this.state.panelHeight || !this.state.panelHeight) {
-      this.setState({ panelHeight: this.panel.clientHeight })
-    }
+
+    this.setState(prevState => (
+      panelHeight > prevState.panelHeight || !prevState.panelHeight ? { panelHeight } : {}
+    ))
   }
   render () {
-    const { collapsed, content, minHeight, contentStyle } = this.props
+    const {
+      collapsed, content, children, minHeight
+    } = this.props
     const { firstRender } = this.state
 
     return (
@@ -37,14 +40,9 @@ export default class CollapsingContent extends React.PureComponent {
           transition: `max-height ${Math.log(1 + this.state.panelHeight) / 10}s linear`
         }}
       >
-        <div
-          className={
-            `${contentStyle || styles.inner_wrapper} flex-100 ` +
-          'layout-row layout-wrap layout-align-start-start'
-          }
-          ref={(div) => { this.panel = div }}
-        >
+        <div className="flex-none" ref={(div) => { this.panel = div }}>
           { content }
+          { children }
         </div>
       </div>
     )
@@ -55,12 +53,12 @@ CollapsingContent.propTypes = {
   collapsed: Proptypes.bool,
   content: Proptypes.node,
   minHeight: Proptypes.string,
-  contentStyle: Proptypes.objectOf(Proptypes.any)
+  children: Proptypes.arrayOf(Proptypes.node)
 }
 
 CollapsingContent.defaultProps = {
   collapsed: false,
   content: '',
-  contentStyle: {},
-  minHeight: ''
+  minHeight: '',
+  children: null
 }

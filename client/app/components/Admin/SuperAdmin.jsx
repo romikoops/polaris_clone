@@ -4,6 +4,7 @@ import FileUploader from '../../components/FileUploader/FileUploader'
 
 export function SuperAdmin ({ theme }) {
   const upUrl = '/super_admins/new_demo'
+
   return (
     <div className="flex-100 layout-row layout-align-space-between-center">
       <p className="flex-none">Upload Demo Tenant Object</p>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import ustyles from './UserAccount.scss'
 import defaults from '../../styles/default_classes.scss'
@@ -7,9 +7,9 @@ import UserLocations from './UserLocations'
 import { AdminSearchableClients } from '../Admin/AdminSearchables'
 import ShipmentOverviewCard from '../ShipmentCard/ShipmentOverviewCard'
 import { gradientTextGenerator } from '../../helpers'
+import isQuote from '../../helpers/tenant'
 import SquareButton from '../SquareButton'
 import Loading from '../Loading/Loading'
-
 
 class UserDashboard extends Component {
   static prepShipment (baseShipment, user) {
@@ -94,7 +94,7 @@ class UserDashboard extends Component {
       dashboard,
       user,
       userDispatch,
-      scope,
+      tenant,
       t
     } = this.props
     if (!user || !dashboard) {
@@ -107,8 +107,7 @@ class UserDashboard extends Component {
       locations
     } = dashboard
 
-    const isQuote = scope.closed_quotation_tool || scope.open_quotation_tool
-    const shipmentsToDisplay = isQuote ? shipments.quoted : shipments.requested
+    const shipmentsToDisplay = isQuote(tenant) ? shipments.quoted : shipments.requested
     const preppedShipments = shipmentsToDisplay ? shipmentsToDisplay.slice(0, perPage)
       .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
       .map(s => UserDashboard.prepShipment(s, user)) : []
@@ -140,7 +139,7 @@ class UserDashboard extends Component {
                     style={gradientFontStyle}
                   />
                 </div>
-                <div className={`${ustyles.welcome} flex layout-row`}>
+                <div className={`${ustyles.welcome} flex layout-row ccb_dashboard`}>
                   {t('common:welcomeBack')}&nbsp; <b>{user.first_name}</b>
                 </div>
               </div>
@@ -150,6 +149,7 @@ class UserDashboard extends Component {
                   handleNext={this.startBooking}
                   active
                   border
+                  classNames="ccb_find_rates"
                   size="large"
                   text={t('landing:callToAction')}
                   iconClass="fa-archive"
@@ -159,7 +159,7 @@ class UserDashboard extends Component {
             </div>
           </div>
           <div className="layout-padding flex-100 layout-align-start-center greyBg">
-            <span><b>{isQuote ? t('shipment:quotedShipments') : t('shipment:requestedShipments') }</b></span>
+            <span><b>{isQuote(tenant) ? t('shipment:quotedShipments') : t('shipment:requestedShipments') }</b></span>
           </div>
           <ShipmentOverviewCard
             dispatches={userDispatch}
@@ -233,6 +233,7 @@ UserDashboard.propTypes = {
   }).isRequired,
   seeAll: PropTypes.func,
   theme: PropTypes.theme,
+  tenant: PropTypes.tenant.isRequired,
   user: PropTypes.user.isRequired,
   dashboard: PropTypes.shape({
     shipments: PropTypes.shipments,
@@ -249,4 +250,4 @@ UserDashboard.defaultProps = {
   theme: null
 }
 
-export default translate(['common', 'user', 'shipment', 'account'])(UserDashboard)
+export default withNamespaces(['common', 'user', 'shipment', 'account'])(UserDashboard)

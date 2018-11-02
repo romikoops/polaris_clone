@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './ShipmentAggregatedCargo.scss'
 import ShipmentAggregatedCargoInput from './Input'
@@ -71,4 +71,4 @@ ShipmentAggregatedCargo.defaultProps = {
   nextStageAttempt: false
 }
 
-export default translate(['cargo', 'acronym'])(ShipmentAggregatedCargo)
+export default withNamespaces(['cargo', 'acronym'])(ShipmentAggregatedCargo)

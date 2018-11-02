@@ -98,6 +98,7 @@ exports[`detailed billing working properly 1`] = `
           Kg
           : 
           <span>
+            0.0
              kg
           </span>
         </p>
@@ -245,6 +246,7 @@ exports[`detailed billing working properly 1`] = `
               back={false}
               classNames="quote_card_select"
               disabled={false}
+              flexContainer="100"
               handleDisabled={null}
               handleNext={[Function]}
               icon=""
@@ -316,20 +318,52 @@ exports[`detailed billing working properly 1`] = `
         </div>
       </div>
     }
-    contentStyle={Object {}}
     minHeight=""
   />
   <CollapsingContent
     collapsed={false}
     content=""
-    contentStyle={Object {}}
     minHeight=""
-  />
+  >
+    <QuoteChargeBreakdown
+      quote={
+        Object {
+          "total": Object {
+            "currency": "EUR",
+            "value": 100,
+          },
+        }
+      }
+      scope={
+        Object {
+          "closed_quotation_tool": true,
+          "detailed_billing": true,
+          "modes_of_transport": Object {
+            "air": Object {},
+            "ocean": Object {
+              "OCEAN_LOAD_TYPE": true,
+            },
+            "rail": Object {},
+            "truck": Object {},
+          },
+        }
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </CollapsingContent>
   <div
     className="flex-100 layout-wrap layout-align-start-stretch"
   >
     <div
-      className="flex-100 layout-row layout-align-space-between-stretch total_row"
+      className="flex-100 layout-row layout-align-space-between-stretch layout-wrap total_row"
     >
       <div
         className="flex layout-row layout-align-start-center"
@@ -345,21 +379,45 @@ exports[`detailed billing working properly 1`] = `
         </span>
       </div>
       <div
-        className="flex layout-row layout-align-end-center"
+        className="flex-75  layout-row layout-align-end-center"
       >
         <p
           style={Object {}}
         >
-          100.00
-           
-          EUR
+          100.00 EUR
         </p>
-        <input
-          checked={false}
-          className="pointy"
-          name="checked"
-          onClick={[Function]}
-          type="checkbox"
+        <div
+          className="flex-gt-md-25 flex-33 layout-row layout-align-end-center"
+        >
+          <RoundButton
+            active={true}
+            back={false}
+            classNames="pointy layout-row layout-align-center-center add_button shorter"
+            disabled={false}
+            flexContainer="100"
+            handleDisabled={null}
+            handleNext={[Function]}
+            icon=""
+            iconClass=""
+            inverse={false}
+            size="small"
+            text="Add"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-end-center"
+      >
+        <div
+          className="flex-60 layout-row layout-align-end-center layout-wrap"
         />
       </div>
     </div>
@@ -464,6 +522,7 @@ exports[`shallow rendering 1`] = `
           Kg
           : 
           <span>
+            0.0
              kg
           </span>
         </p>
@@ -611,6 +670,7 @@ exports[`shallow rendering 1`] = `
               back={false}
               classNames="quote_card_select"
               disabled={false}
+              flexContainer="100"
               handleDisabled={null}
               handleNext={[Function]}
               icon=""
@@ -682,20 +742,51 @@ exports[`shallow rendering 1`] = `
         </div>
       </div>
     }
-    contentStyle={Object {}}
     minHeight=""
   />
   <CollapsingContent
     collapsed={false}
     content=""
-    contentStyle={Object {}}
     minHeight=""
-  />
+  >
+    <QuoteChargeBreakdown
+      quote={
+        Object {
+          "total": Object {
+            "currency": "EUR",
+            "value": 100,
+          },
+        }
+      }
+      scope={
+        Object {
+          "closed_quotation_tool": true,
+          "modes_of_transport": Object {
+            "air": Object {},
+            "ocean": Object {
+              "OCEAN_LOAD_TYPE": true,
+            },
+            "rail": Object {},
+            "truck": Object {},
+          },
+        }
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </CollapsingContent>
   <div
     className="flex-100 layout-wrap layout-align-start-stretch"
   >
     <div
-      className="flex-100 layout-row layout-align-space-between-stretch total_row"
+      className="flex-100 layout-row layout-align-space-between-stretch layout-wrap total_row"
     >
       <div
         className="flex layout-row layout-align-start-center"
@@ -711,21 +802,45 @@ exports[`shallow rendering 1`] = `
         </span>
       </div>
       <div
-        className="flex layout-row layout-align-end-center"
+        className="flex-75  layout-row layout-align-end-center"
       >
         <p
           style={Object {}}
         >
-          100.00
-           
-          EUR
+          100.00 EUR
         </p>
-        <input
-          checked={false}
-          className="pointy"
-          name="checked"
-          onClick={[Function]}
-          type="checkbox"
+        <div
+          className="flex-gt-md-25 flex-33 layout-row layout-align-end-center"
+        >
+          <RoundButton
+            active={true}
+            back={false}
+            classNames="pointy layout-row layout-align-center-center add_button shorter"
+            disabled={false}
+            flexContainer="100"
+            handleDisabled={null}
+            handleNext={[Function]}
+            icon=""
+            iconClass=""
+            inverse={false}
+            size="small"
+            text="Add"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-end-center"
+      >
+        <div
+          className="flex-60 layout-row layout-align-end-center layout-wrap"
         />
       </div>
     </div>
@@ -831,6 +946,7 @@ exports[`show schedule options working 1`] = `
           Kg
           : 
           <span>
+            0.0
              kg
           </span>
         </p>
@@ -978,6 +1094,7 @@ exports[`show schedule options working 1`] = `
               back={false}
               classNames="quote_card_select"
               disabled={false}
+              flexContainer="100"
               handleDisabled={null}
               handleNext={[Function]}
               icon=""
@@ -1049,20 +1166,52 @@ exports[`show schedule options working 1`] = `
         </div>
       </div>
     }
-    contentStyle={Object {}}
     minHeight=""
   />
   <CollapsingContent
     collapsed={true}
     content=""
-    contentStyle={Object {}}
     minHeight=""
-  />
+  >
+    <QuoteChargeBreakdown
+      quote={
+        Object {
+          "total": Object {
+            "currency": "EUR",
+            "value": 100,
+          },
+        }
+      }
+      scope={
+        Object {
+          "closed_quotation_tool": true,
+          "detailed_billing": true,
+          "modes_of_transport": Object {
+            "air": Object {},
+            "ocean": Object {
+              "OCEAN_LOAD_TYPE": true,
+            },
+            "rail": Object {},
+            "truck": Object {},
+          },
+        }
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </CollapsingContent>
   <div
     className="flex-100 layout-wrap layout-align-start-stretch"
   >
     <div
-      className="flex-100 layout-row layout-align-space-between-stretch total_row"
+      className="flex-100 layout-row layout-align-space-between-stretch layout-wrap total_row"
     >
       <div
         className="flex layout-row layout-align-start-center"
@@ -1078,21 +1227,45 @@ exports[`show schedule options working 1`] = `
         </span>
       </div>
       <div
-        className="flex layout-row layout-align-end-center"
+        className="flex-75  layout-row layout-align-end-center"
       >
         <p
           style={Object {}}
         >
-          100.00
-           
-          EUR
+          100.00 EUR
         </p>
-        <input
-          checked={false}
-          className="pointy"
-          name="checked"
-          onClick={[Function]}
-          type="checkbox"
+        <div
+          className="flex-gt-md-25 flex-33 layout-row layout-align-end-center"
+        >
+          <RoundButton
+            active={true}
+            back={false}
+            classNames="pointy layout-row layout-align-center-center add_button shorter"
+            disabled={false}
+            flexContainer="100"
+            handleDisabled={null}
+            handleNext={[Function]}
+            icon=""
+            iconClass=""
+            inverse={false}
+            size="small"
+            text="Add"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-end-center"
+      >
+        <div
+          className="flex-60 layout-row layout-align-end-center layout-wrap"
         />
       </div>
     </div>
@@ -1197,6 +1370,7 @@ exports[`show schedules set to true 1`] = `
           Kg
           : 
           <span>
+            0.0
              kg
           </span>
         </p>
@@ -1344,6 +1518,7 @@ exports[`show schedules set to true 1`] = `
               back={false}
               classNames="quote_card_select"
               disabled={false}
+              flexContainer="100"
               handleDisabled={null}
               handleNext={[Function]}
               icon=""
@@ -1415,20 +1590,51 @@ exports[`show schedules set to true 1`] = `
         </div>
       </div>
     }
-    contentStyle={Object {}}
     minHeight=""
   />
   <CollapsingContent
     collapsed={true}
     content=""
-    contentStyle={Object {}}
     minHeight=""
-  />
+  >
+    <QuoteChargeBreakdown
+      quote={
+        Object {
+          "total": Object {
+            "currency": "EUR",
+            "value": 100,
+          },
+        }
+      }
+      scope={
+        Object {
+          "closed_quotation_tool": true,
+          "modes_of_transport": Object {
+            "air": Object {},
+            "ocean": Object {
+              "OCEAN_LOAD_TYPE": true,
+            },
+            "rail": Object {},
+            "truck": Object {},
+          },
+        }
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </CollapsingContent>
   <div
     className="flex-100 layout-wrap layout-align-start-stretch"
   >
     <div
-      className="flex-100 layout-row layout-align-space-between-stretch total_row"
+      className="flex-100 layout-row layout-align-space-between-stretch layout-wrap total_row"
     >
       <div
         className="flex layout-row layout-align-start-center"
@@ -1444,21 +1650,45 @@ exports[`show schedules set to true 1`] = `
         </span>
       </div>
       <div
-        className="flex layout-row layout-align-end-center"
+        className="flex-75  layout-row layout-align-end-center"
       >
         <p
           style={Object {}}
         >
-          100.00
-           
-          EUR
+          100.00 EUR
         </p>
-        <input
-          checked={false}
-          className="pointy"
-          name="checked"
-          onClick={[Function]}
-          type="checkbox"
+        <div
+          className="flex-gt-md-25 flex-33 layout-row layout-align-end-center"
+        >
+          <RoundButton
+            active={true}
+            back={false}
+            classNames="pointy layout-row layout-align-center-center add_button shorter"
+            disabled={false}
+            flexContainer="100"
+            handleDisabled={null}
+            handleNext={[Function]}
+            icon=""
+            iconClass=""
+            inverse={false}
+            size="small"
+            text="Add"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-end-center"
+      >
+        <div
+          className="flex-60 layout-row layout-align-end-center layout-wrap"
         />
       </div>
     </div>

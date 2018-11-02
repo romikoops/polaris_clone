@@ -90,19 +90,17 @@ exports[`theme has truthy properties 1`] = `
             <h3
               className="flex-none"
             >
-              Enjoy the most advanced and easy to use 
-               
+              Enjoy our modern and easy to use 
               <b>
-                booking system
+                quoting tool
               </b>
-               
-               in the market. Finally, shipping is as simple as it should be.
+               right away. Finally, shipping is as simple as it should be.
             </h3>
           </div>
         </div>
         <ButtonSection
           bookNow={[Function]}
-          hidden={false}
+          className="hide_h_xs"
           t={[Function]}
           tenant={
             Object {
@@ -170,7 +168,7 @@ exports[`theme has truthy properties 1`] = `
     >
       <ButtonSection
         bookNow={[Function]}
-        hidden={true}
+        className="show_h_xs"
         t={[Function]}
         tenant={
           Object {
@@ -308,7 +306,7 @@ exports[`user.role_id is 1 1`] = `
             <b>
                
               <br />
-              shop for online freight
+              online quoting tool
             </b>
           </h2>
           <div
@@ -322,19 +320,17 @@ exports[`user.role_id is 1 1`] = `
             <h3
               className="flex-none"
             >
-              Enjoy the most advanced and easy to use 
-               
+              Enjoy our modern and easy to use 
               <b>
-                booking system
+                quoting tool
               </b>
-               
-               in the market. Finally, shipping is as simple as it should be.
+               right away. Finally, shipping is as simple as it should be.
             </h3>
           </div>
         </div>
         <ButtonSection
           bookNow={[Function]}
-          hidden={false}
+          className="hide_h_xs"
           t={[Function]}
           tenant={
             Object {
@@ -398,7 +394,7 @@ exports[`user.role_id is 1 1`] = `
     >
       <ButtonSection
         bookNow={[Function]}
-        hidden={true}
+        className="show_h_xs"
         t={[Function]}
         tenant={
           Object {
@@ -532,7 +528,7 @@ exports[`user.role_id is 2 1`] = `
             <b>
                
               <br />
-              shop for online freight
+              online quoting tool
             </b>
           </h2>
           <div
@@ -546,19 +542,17 @@ exports[`user.role_id is 2 1`] = `
             <h3
               className="flex-none"
             >
-              Enjoy the most advanced and easy to use 
-               
+              Enjoy our modern and easy to use 
               <b>
-                booking system
+                quoting tool
               </b>
-               
-               in the market. Finally, shipping is as simple as it should be.
+               right away. Finally, shipping is as simple as it should be.
             </h3>
           </div>
         </div>
         <ButtonSection
           bookNow={[Function]}
-          hidden={false}
+          className="hide_h_xs"
           t={[Function]}
           tenant={
             Object {
@@ -622,7 +616,7 @@ exports[`user.role_id is 2 1`] = `
     >
       <ButtonSection
         bookNow={[Function]}
-        hidden={true}
+        className="show_h_xs"
         t={[Function]}
         tenant={
           Object {

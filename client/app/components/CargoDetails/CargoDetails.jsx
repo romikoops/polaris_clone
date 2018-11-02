@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../prop-types'
 import styles from './CargoDetails.scss'
@@ -7,13 +7,14 @@ import Checkbox from '../Checkbox/Checkbox'
 import DocumentsForm from '../Documents/Form'
 import DocumentsMultiForm from '../Documents/MultiForm'
 import defaults from '../../styles/default_classes.scss'
-import { converter } from '../../helpers'
-import { currencyOptions, tooltips } from '../../constants'
+import { converter, gradientGenerator } from '../../helpers'
+import { currencyOptions, tooltips, incotermInfo } from '../../constants'
 import FormsyInput from '../FormsyInput/FormsyInput'
 import TextHeading from '../TextHeading/TextHeading'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import FormsyTextarea from '../FormsyTextarea/FormsyTextarea'
 import CustomsExportPaper from '../Addons/CustomsExportPaper'
+import { Modal } from '../Modal/Modal'
 
 class CargoDetails extends Component {
   static displayCustomsFee (customsData, target, customs, t) {
@@ -56,7 +57,8 @@ class CargoDetails extends Component {
       totalGoodsCurrency: {
         label: 'EUR',
         value: 'EUR'
-      }
+      },
+      showModal: false
     }
 
     this.calcCustomsFee = this.calcCustomsFee.bind(this)
@@ -156,6 +158,11 @@ class CargoDetails extends Component {
   handleChange (event) {
     this.props.handleChange(event)
   }
+  toggleIncotermModal () {
+    this.setState(prevState => ({
+      showModal: !prevState.showModal
+    }))
+  }
   handleTotalGoodsCurrency (selection) {
     this.setState({ totalGoodsCurrency: selection })
     this.props.handleTotalGoodsCurrency(selection.value)
@@ -187,6 +194,21 @@ class CargoDetails extends Component {
       shipment
     } = shipmentData
 
+    const incotermBox = (
+      <div className="flex-100 layout-wrap layout-row">
+        <p>{incotermInfo.description}</p>
+        <div>
+          {Object.entries(incotermInfo.incoterms).map(array => (
+            <div className={`flex-70 ${styles.incoterm_row}`}>
+              <h4 style={{ color: theme.colors.primary }}>{array[1].title}</h4>
+              <p>{array[1].info}</p>
+              <p className={`${styles.incoterm_desc}`}>{array[1].description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+
     const insuranceBox = (
       <div
         className={`flex-100 layout-row  ${styles.box_content} ${
@@ -212,6 +234,18 @@ class CargoDetails extends Component {
       <b style={{ fontWeight: 'normal', fontSize: '.83em' }}>
         ({t('cargo:ifApplicable')})
       </b>
+    )
+
+    const modal = (
+      <Modal
+        showExit
+        flexOptions="flex-80"
+        component={incotermBox}
+        verticalPadding="65px"
+        maxWidth="70%"
+        horizontalPadding="55px"
+        parentToggle={() => this.toggleIncotermModal()}
+      />
     )
 
     const handleText = `${t('cargo:handleHead')} ${tenant.data.name} ${t('cargo:handleTail')}:`
@@ -291,7 +325,7 @@ class CargoDetails extends Component {
               <div className="flex-33 layout-row layout-wrap">
                 <div className="flex-100">
                   <TextHeading theme={theme} size={3} text="EORI" Comp={textComp} />
-                  
+
                 </div>
                 <div className="flex-100 input_box">
                   <input
@@ -394,6 +428,7 @@ class CargoDetails extends Component {
 
     return (
       <div name="cargoDetailsBox" className="flex-100 layout-row layout-wrap padd_top">
+        {this.state.showModal ? modal : ''}
         <div className="flex-100 layout-row layout-align-center">
           <div className={`flex-none ${defaults.content_width} layout-row layout-wrap`}>
             <div className="flex-100 layout-row layout-align-space-between-center">
@@ -438,7 +473,7 @@ class CargoDetails extends Component {
                   <div className="flex-100 layout-row">
                     <div className="flex-66 layout-row">
                       <FormsyInput
-                        className={`flex-100 ${styles.cargo_input} `}
+                        className={`flex-100 ccb_total_goods_value ${styles.cargo_input} `}
                         wrapperClassName={`flex-100 ${styles.wrapper_cargo_input}`}
                         errorMessageStyles={{
                           fontSize: '13px',
@@ -459,7 +494,7 @@ class CargoDetails extends Component {
                     </div>
                     <div className="flex-33 layout-row">
                       <NamedSelect
-                        className="flex-100"
+                        className="flex-100 ccb_currency"
                         options={currencyOptions}
                         onChange={this.handleTotalGoodsCurrency}
                         value={totalGoodsCurrency}
@@ -481,7 +516,7 @@ class CargoDetails extends Component {
                   </div>
                   <div className="flex-100">
                     <FormsyTextarea
-                      className={`flex-100 ${styles.cargo_text_area} `}
+                      className={`flex-100 ccb_description_goods ${styles.cargo_text_area} `}
                       wrapperClassName={`flex-100 ${styles.wrapper_cargo_input}`}
                       errorMessageStyles={{
                         fontSize: '13px',
@@ -501,12 +536,16 @@ class CargoDetails extends Component {
                 </div>
                 <div className="flex-100 layout-row layout-align-start-start layout-wrap">
                   <div className="flex-100">
-                    <div className={`flex-none layout-row layout-wrap ${styles.f_header}`}>
+                    <div className={`flex-none ${styles.f_header}`}>
                       {' '}
-                      <h4 className="no_m flex-100">Incoterms</h4>
-                      <p className="flex-90">
-                        2010 by the International Chamber of Commerce (ICC) (Optional)
+                      <h4 className="no_m flex-30">Incoterms <span>(Optional)</span></h4>
+                      <p
+                        className={`pointy flex-none ${styles.incoterm_info}`}
+                        onClick={() => this.toggleIncotermModal()}
+                      >
+                        More info
                       </p>
+                      
                     </div>
                   </div>
                   <div className="flex-100 layout-row layout-align-start-start input_box_full">
@@ -531,7 +570,7 @@ class CargoDetails extends Component {
                   layout-row layout-wrap layout-align-start-start"
               >
                 <div className="flex-100 layout-row layout-wrap" name="packing_sheet">
-                  <div className="flex-100 layout-row">
+                  <div className="flex-100 layout-row margin_5">
                     <DocumentsForm
                       theme={theme}
                       type="packing_sheet"
@@ -545,7 +584,7 @@ class CargoDetails extends Component {
                 </div>
 
                 <div className="flex-100 layout-row layout-wrap" name="commercial_invoice">
-                  <div className="flex-100 layout-row">
+                  <div className="flex-100 layout-row margin_5">
                     <DocumentsForm
                       theme={theme}
                       type="commercial_invoice"
@@ -655,6 +694,7 @@ class CargoDetails extends Component {
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
                           <Checkbox
+                            className="ccb_yes_insurance"
                             onChange={() => this.toggleInsurance(true)}
                             checked={this.props.insurance.bool}
                             theme={theme}
@@ -669,6 +709,7 @@ class CargoDetails extends Component {
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
                           <Checkbox
+                            className="ccb_no_insurance"
                             onChange={() => this.toggleInsurance(false)}
                             checked={
                               this.props.insurance.bool === null ? null : !this.props.insurance.bool
@@ -739,6 +780,7 @@ class CargoDetails extends Component {
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
                           <Checkbox
+                            className="ccb_yes_clearance"
                             onChange={() => this.toggleCustoms(true)}
                             checked={this.state.customsView}
                             theme={theme}
@@ -754,6 +796,7 @@ class CargoDetails extends Component {
                         <div className="flex-10 layout-row layout-align-end-center">
                           <Checkbox
                             onChange={() => this.toggleCustoms(false)}
+                            className="ccb_no_clearance"
                             checked={
                               this.state.customsView === null ? null : !this.state.customsView
                             }
@@ -840,4 +883,4 @@ CargoDetails.defaultProps = {
   incotermText: ''
 }
 
-export default translate(['common', 'cargo'])(CargoDetails)
+export default withNamespaces(['common', 'cargo'])(CargoDetails)

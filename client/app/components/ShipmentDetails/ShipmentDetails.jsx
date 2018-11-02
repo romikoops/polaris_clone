@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import * as Scroll from 'react-scroll'
 import Toggle from 'react-toggle'
 import ReactTooltip from 'react-tooltip'
@@ -10,7 +10,7 @@ import styles from './ShipmentDetails.scss'
 import errorStyles from '../../styles/errors.scss'
 import defaults from '../../styles/default_classes.scss'
 import { moment } from '../../constants'
-import '../../styles/day-picker-custom.css'
+import '../../styles/day-picker-custom.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { Tooltip } from '../Tooltip/Tooltip'
 import ShipmentLocationBox from '../ShipmentLocationBox/ShipmentLocationBox'
@@ -18,12 +18,11 @@ import ShipmentContainers from '../ShipmentContainers/ShipmentContainers'
 import ShipmentCargoItems from '../ShipmentCargoItems/ShipmentCargoItems'
 import ShipmentAggregatedCargo from '../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
 import TextHeading from '../TextHeading/TextHeading'
-import IncotermRow from '../Incoterm/Row'
 import IncotermBox from '../Incoterm/Box'
-import { camelize, isEmpty, chargeableWeight } from '../../helpers'
+import { camelize, isEmpty, chargeableWeight, isQuote } from '../../helpers'
 import Checkbox from '../Checkbox/Checkbox'
 import NotesRow from '../Notes/Row'
-import '../../styles/select-css-custom.css'
+import '../../styles/select-css-custom.scss'
 import getModals from './getModals'
 import toggleCSS from './toggleCSS'
 import getOffersBtnIsActive, {
@@ -313,43 +312,6 @@ export class ShipmentDetails extends Component {
     })
   }
 
-  handleSwap () {
-    this.setState((prevState) => {
-      let prevRequest = {}
-      const { routes } = this.props.shipmentData
-      if (prevState.prevRequest && prevRequest.shipment) {
-        prevRequest = {
-          ...prevState.prevRequest,
-          shipment: {
-            ...prevState.prevRequest.shipment,
-            origin: prevState.prevRequest.shipment.destination,
-            destination: prevState.prevRequest.shipment.origin,
-            has_on_carriage: !!prevState.prevRequest.shipment.trucking.pre_carriage.truck_type,
-            has_pre_carriage: !!prevState.prevRequest.shipment.trucking.on_carriage.truck_type,
-            trucking: {
-              pre_carriage: prevState.prevRequest.shipment.trucking.on_carriage,
-              on_carriage: prevState.prevRequest.shipment.trucking.pre_carriage
-            }
-          }
-        }
-      } else {
-        prevRequest = {
-          shipment: {
-            origin: prevState.destination,
-            destination: prevState.origin
-          }
-        }
-      }
-
-      return {
-        prevRequest,
-        filteredRouteIndexes: routes.map((_, i) => i),
-        origin: prevState.destination,
-        destination: prevState.origin
-      }
-    })
-  }
-
   presetMandatoryCarriage () {
     const { scope } = this.props.tenant.data
     Object.keys(scope.carriage_options).forEach((carriage) => {
@@ -634,6 +596,7 @@ export class ShipmentDetails extends Component {
     const {
       origin, destination, selectedDay, incoterm
     } = this.state
+    const { tenant } = this.props
     const { scope } = this.props.tenant.data
     const requiresFullAddress = scope.require_full_address
     if (
@@ -649,7 +612,7 @@ export class ShipmentDetails extends Component {
 
       return
     }
-    if (!selectedDay) {
+    if (!selectedDay && !isQuote(tenant)) {
       this.incrementNextStageAttemps()
       ShipmentDetails.scrollTo('dayPicker')
 
@@ -687,7 +650,7 @@ export class ShipmentDetails extends Component {
       origin,
       destination,
       incoterm,
-      selected_day: selectedDay,
+      selected_day: selectedDay || moment().format('DD/MM/YYYY'),
       trucking: this.state.shipment.trucking,
       cargo_items_attributes: this.state.cargoItems,
       containers_attributes: this.state.containers,
@@ -792,9 +755,6 @@ export class ShipmentDetails extends Component {
       t
     } = this.props
 
-    const isQuote = (tenant && tenant.data && tenant.data.scope) &&
-                    (tenant.data.scope.closed_quotation_tool || tenant.data.scope.open_quotation_tool)
-
     const { modals, filteredRouteIndexes } = this.state
 
     if (!filteredRouteIndexes.length) return ''
@@ -883,10 +843,10 @@ export class ShipmentDetails extends Component {
 
     const dayPickerSection = (
       <div className={`${defaults.content_width} layout-row flex-none layout-align-start-center`}>
-        <div className="layout-row flex-50 layout-align-start-center layout-wrap">
-          <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
-            <div className="flex-none letter_2 layout-align-space-between-end">
-              <TextHeading theme={theme} text={dayPickerText} size={3} />
+        <div className="layout-row flex-70 layout-align-start-center layout-wrap">
+          <div className="flex-none layout-row layout-align-start-center" style={{ paddingRight: '15px' }}>
+            <div className="flex-none layout-align-space-between-end">
+              <TextHeading theme={theme} text={`${dayPickerText}:`} size={3} />
             </div>
             <Tooltip theme={theme} text={dayPickerToolip} icon="fa-info-circle" />
           </div>
@@ -913,7 +873,6 @@ export class ShipmentDetails extends Component {
             </span>
           </div>
         </div>
-
         <div className="flex-50 layout-row layout-wrap layout-align-end-center">
           <IncotermBox
             theme={theme}
@@ -939,7 +898,7 @@ export class ShipmentDetails extends Component {
     return (
       <div
         className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start"
-        style={{ minHeight: '1800px' }}
+        style={{ minHeight: '1485px' }}
       >
         {modals &&
           Object.keys(modals)
@@ -955,7 +914,6 @@ export class ShipmentDetails extends Component {
             has_on_carriage={this.state.has_on_carriage}
             has_pre_carriage={this.state.has_pre_carriage}
             origin={this.state.origin}
-            handleSwap={() => this.handleSwap()}
             destination={this.state.destination}
             nextStageAttempts={this.state.nextStageAttempts}
             handleAddressChange={this.handleAddressChange}
@@ -983,13 +941,13 @@ export class ShipmentDetails extends Component {
             <NotesRow notes={notes} theme={theme} />
           </div>
         </div>
-        <div
+        {isQuote(tenant) ? '' : <div
           className={`${
             styles.date_sec
           } layout-row flex-100 layout-wrap layout-align-center-center`}
         >
           {dayPickerSection}
-        </div>
+        </div> }
         <div className={`layout-row flex-100 layout-wrap layout-align-center ${styles.cargo_sec}`}>
           {shipmentData.shipment.load_type === 'cargo_item' && (
             <div className="content_width_booking layout-row layout-wrap layout-align-center">
@@ -1082,6 +1040,7 @@ export class ShipmentDetails extends Component {
                     `${this.state.shakeClass.noDangerousGoodsConfirmed} flex-100 ` +
                     'layout-row layout-align-start-center'
                   }
+                  style={{ marginBottom: '28px' }}
                 >
                   <div className="flex-10 layout-row layout-align-start-start">
                     <Checkbox
@@ -1111,13 +1070,26 @@ export class ShipmentDetails extends Component {
                 </div>
               )}
             </div>
-            <div className="flex layout-row layout-wrap layout-align-end">
-              <div className="flex-100 layout-row layout-align-end">
+            <div className="flex-100 layout-row layout-wrap layout-align-end">
+              {user && !user.guest && (
+                <div className="flex-35 layout-row layout-align-end">
+                  <RoundButton
+                    text={t('common:back')}
+                    handleNext={this.returnToDashboard}
+                    iconClass="fa-angle-left"
+                    theme={theme}
+                    classNames="layout-row layout-align-end"
+                    back
+                  />
+                </div>
+              )}
+              <div className="flex-35 layout-row layout-align-end">
                 <RoundButton
-                  text={isQuote ? t('common:getQuotes') : t('common:getOffers')}
+                  text={isQuote(tenant) ? t('common:getQuotes') : t('common:getOffers')}
                   handleNext={this.handleNextStage}
                   handleDisabled={() => this.handleNextStageDisabled()}
                   theme={theme}
+                  classNames="layout-row layout-align-end"
                   active={getOffersBtnIsActive(this.state)}
                   disabled={!getOffersBtnIsActive(this.state)}
                 />
@@ -1130,37 +1102,6 @@ export class ShipmentDetails extends Component {
             </div>
           </div>
         </div>
-        {user &&
-          !user.guest && (
-          <div
-            className={
-              `${defaults.border_divider} layout-row flex-100 ` +
-                'layout-wrap layout-align-center-center'
-            }
-          >
-            <div
-              className={
-                `${styles.btn_sec} ${defaults.content_width} ` +
-                  'layout-row flex-none layout-wrap layout-align-start-start'
-              }
-            >
-              <div
-                className={
-                  `${styles.btn_sec} ${defaults.content_width} ` +
-                    'layout-row flex-none layout-wrap layout-align-start-start'
-                }
-              >
-                <RoundButton
-                  text={t('common:back')}
-                  handleNext={this.returnToDashboard}
-                  iconClass="fa-angle-left"
-                  theme={theme}
-                  back
-                />
-              </div>
-            </div>
-          </div>
-        )}
         {styleTagJSX}
       </div>
     )
@@ -1200,4 +1141,4 @@ ShipmentDetails.defaultProps = {
   hideMap: false
 }
 
-export default translate(['errors', 'cargo', 'common', 'dangerousGoods'])(ShipmentDetails)
+export default withNamespaces(['errors', 'cargo', 'common', 'dangerousGoods'])(ShipmentDetails)

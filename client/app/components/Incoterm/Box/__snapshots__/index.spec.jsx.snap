@@ -11,7 +11,7 @@ exports[`incoterm_info_level is simple 1`] = `
       className="flex-100 layout-row layout-align-end-center"
     >
       <div
-        className="flex-none letter_2"
+        className="flex-none"
       >
         <TextHeading
           color=""
@@ -61,7 +61,7 @@ exports[`incoterm_info_level render is full 1`] = `
       className="flex-100 layout-row layout-align-end-center"
     >
       <div
-        className="flex-none letter_2"
+        className="flex-none"
       >
         <TextHeading
           color=""
@@ -162,15 +162,20 @@ exports[`incoterm_info_level render is text 1`] = `
     className="flex-100 layout-row layout-align-end-center layout-wrap"
   >
     <div
-      className="flex-100 layout-row layout-align-end-center"
+      className="flex-40 layout-row layout-align-end-center"
     >
       <div
-        className="flex-none letter_2"
+        className="flex-none"
+        style={
+          Object {
+            "paddingRight": "15px",
+          }
+        }
       >
         <TextHeading
           color=""
           size={3}
-          text="Service Level"
+          text="Service Level:"
           theme={
             Object {
               "colors": Object {
@@ -181,16 +186,17 @@ exports[`incoterm_info_level render is text 1`] = `
           }
         />
       </div>
-    </div>
-    <div
-      className="flex-100 layout-row layout-align-end-center"
-    >
       <div
         className="flex-none layout-row layout-align-center-center"
       >
         <i
-          className="fa fa-chain clip flex-none"
-          style="#333"
+          className="fa fa-chain flex-none"
+          style={
+            Object {
+              "color": "#E0E0E0",
+              "paddingRight": "8px",
+            }
+          }
         />
       </div>
       <div
@@ -221,7 +227,7 @@ exports[`theme is falsy 1`] = `
       className="flex-100 layout-row layout-align-end-center"
     >
       <div
-        className="flex-none letter_2"
+        className="flex-none"
       >
         <TextHeading
           color=""

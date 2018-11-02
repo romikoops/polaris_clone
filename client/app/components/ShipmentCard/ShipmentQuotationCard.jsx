@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import { v4 } from 'uuid'
@@ -8,7 +8,6 @@ import adminStyles from '../Admin/Admin.scss'
 import {
   gradientTextGenerator,
   switchIcon,
-  numberSpacing,
   splitName,
   humanizeSnakeCase
 } from '../../helpers'
@@ -49,6 +48,9 @@ class ShipmentQuotationCard extends Component {
           ${styles.container}`
         }
       >
+        <div className={`layout-row flex-15 layout-align-center-center ${styles.topRight}`}>
+          <p className={`${styles.check} pointy`}>{t('common:viewDetails')}</p>
+        </div>
         <hr className={`flex-100 layout-row ${styles.hr_divider}`} />
         <div className={adminStyles.card_link} onClick={() => this.handleView()} />
 
@@ -79,6 +81,10 @@ class ShipmentQuotationCard extends Component {
           <div className="layout-row flex-35 layout-align-center-center">
             <div className=" flex-100">
               <b className={styles.ref_row_card}>{t('common:ref')}:&nbsp;{shipment.imc_reference}</b>
+              <p>{t('shipment:placedAt')}&nbsp;
+                {shipment.booking_placed_at
+                  ? moment(shipment.booking_placed_at).format('DD/MM/YYYY | HH:mm') : '-'}
+              </p>
             </div>
           </div>
           <span className="flex-25 layout-align-center-center layout-row">
@@ -104,19 +110,11 @@ class ShipmentQuotationCard extends Component {
             <div className="layout-row flex-10">
               <div className="layout-row layout-align-center-center">
                 <span className={`${styles.smallText}`}>
-                  <b>x</b><span className={`${styles.bigText}`}>{shipment.cargo_items ? shipment.cargo_items.count : '1'}</span>
+                  <b>x</b><span className={`${styles.bigText}`}>{shipment.cargo_units ? shipment.cargo_units.length : '0'}</span>
                 </span>
               </div>
             </div>
             <span className="flex-35">{shipment.load_type ? humanizeSnakeCase(shipment.load_type) : t('cargo:cargoItem') }</span>
-          </div>
-          <div className="layout-row flex layout-align-end-end">
-            <span className={`${styles.bigText} ${styles.price_style}`}>
-              <span> {shipment.total_price.currency} </span>
-              <span>
-                {numberSpacing(shipment.total_price.value, 2)}
-              </span>
-            </span>
           </div>
         </div>
       </div>
@@ -137,4 +135,4 @@ ShipmentQuotationCard.defaultProps = {
   theme: {}
 }
 
-export default translate()(ShipmentQuotationCard)
+export default withNamespaces(['cargo', 'common'])(ShipmentQuotationCard)

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { Redirect } from 'react-router'
 import PropTypes from '../../prop-types'
 import styles from './CardLink.scss'
@@ -85,4 +85,4 @@ CardLink.defaultProps = {
   allowedCargoTypes: {}
 }
 
-export default translate('common')(CardLink)
+export default withNamespaces('common')(CardLink)

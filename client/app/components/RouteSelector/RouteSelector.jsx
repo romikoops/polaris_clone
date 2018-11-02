@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import Fuse from 'fuse.js'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
@@ -115,4 +115,4 @@ RouteSelector.defaultProps = {
   theme: null
 }
 
-export default translate(['errors', 'shipment'])(RouteSelector)
+export default withNamespaces(['errors', 'shipment'])(RouteSelector)

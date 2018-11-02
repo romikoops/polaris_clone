@@ -25,8 +25,8 @@ class Charge < ApplicationRecord
     end.to_h
 
     {
-      total: price.given_attributes,
-      edited_total: edited_price.try(:given_attributes),
+      total: price.rounded_attributes,
+      edited_total: edited_price.try(:rounded_attributes),
       name: children_charge_category.name
     }.merge(children_charges)
   end

@@ -14,7 +14,7 @@ import {
 import { RoundButton } from '../../RoundButton/RoundButton'
 import { adminActions } from '../../../actions'
 import TextHeading from '../../TextHeading/TextHeading'
-// import {v4} from 'uuid';
+import GenericError from '../../ErrorHandling/Generic'
 
 class AdminWizard extends Component {
   constructor (props) {
@@ -54,89 +54,92 @@ class AdminWizard extends Component {
         />
       </div>
     )
+
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-          <div className={`flex-100 layout-row layout-align-start-center ${styles.sec_title}`}>
-            <TextHeading theme={theme} size={1} text="Set Up Wizard" />
+      <GenericError>
+        <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+          <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+            <div className={`flex-100 layout-row layout-align-start-center ${styles.sec_title}`}>
+              <TextHeading theme={theme} size={1} text="Set Up Wizard" />
+            </div>
+            <div className={`flex-100 layout-row layout-align-start-center ${styles.sec_title}`}>
+              <TextHeading
+                theme={theme}
+                size={3}
+                text="WARNING: Your existing data might be overwritten!"
+                warning
+              />
+            </div>
+            <Switch className="flex">
+              <Route
+                exact
+                path="/admin/wizard"
+                render={props => <StartView theme={theme} {...props} />}
+              />
+              <Route
+                exact
+                path="/admin/wizard/hubs"
+                render={props => (
+                  <AdminWizardHubs
+                    theme={theme}
+                    {...props}
+                    adminTools={adminDispatch}
+                    newHubs={newHubs}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/admin/wizard/service_charges"
+                render={props => (
+                  <AdminWizardServiceCharges
+                    theme={theme}
+                    {...props}
+                    adminTools={adminDispatch}
+                    newScs={newScs}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/admin/wizard/pricings"
+                render={props => (
+                  <AdminWizardPricings
+                    theme={theme}
+                    {...props}
+                    adminTools={adminDispatch}
+                    newScs={newScs}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/admin/wizard/trucking"
+                render={props => (
+                  <AdminWizardTrucking
+                    theme={theme}
+                    {...props}
+                    adminTools={adminDispatch}
+                    newScs={newScs}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/admin/wizard/finished"
+                render={props => (
+                  <AdminWizardFinished
+                    theme={theme}
+                    {...props}
+                    adminTools={adminDispatch}
+                    newScs={newScs}
+                  />
+                )}
+              />
+            </Switch>
           </div>
-          <div className={`flex-100 layout-row layout-align-start-center ${styles.sec_title}`}>
-            <TextHeading
-              theme={theme}
-              size={3}
-              text="WARNING: Your existing data might be overwritten!"
-              warning
-            />
-          </div>
-          <Switch className="flex">
-            <Route
-              exact
-              path="/admin/wizard"
-              render={props => <StartView theme={theme} {...props} />}
-            />
-            <Route
-              exact
-              path="/admin/wizard/hubs"
-              render={props => (
-                <AdminWizardHubs
-                  theme={theme}
-                  {...props}
-                  adminTools={adminDispatch}
-                  newHubs={newHubs}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/admin/wizard/service_charges"
-              render={props => (
-                <AdminWizardServiceCharges
-                  theme={theme}
-                  {...props}
-                  adminTools={adminDispatch}
-                  newScs={newScs}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/admin/wizard/pricings"
-              render={props => (
-                <AdminWizardPricings
-                  theme={theme}
-                  {...props}
-                  adminTools={adminDispatch}
-                  newScs={newScs}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/admin/wizard/trucking"
-              render={props => (
-                <AdminWizardTrucking
-                  theme={theme}
-                  {...props}
-                  adminTools={adminDispatch}
-                  newScs={newScs}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/admin/wizard/finished"
-              render={props => (
-                <AdminWizardFinished
-                  theme={theme}
-                  {...props}
-                  adminTools={adminDispatch}
-                  newScs={newScs}
-                />
-              )}
-            />
-          </Switch>
         </div>
-      </div>
+      </GenericError>
     )
   }
 }

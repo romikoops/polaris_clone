@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { pick, uniqWith } from 'lodash'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
@@ -173,16 +173,15 @@ class AdminShipmentView extends Component {
     handleShipmentAction(shipmentData.shipment.id, 'finished')
   }
   handlePriceChange (key, value) {
-    const { newPrices } = this.state
-    this.setState({
+    this.setState(prevState => ({
       newPrices: {
-        ...newPrices,
+        ...prevState.newPrices,
         [key]: {
-          ...newPrices[key],
+          ...prevState.newPrices[key],
           value
         }
       }
-    })
+    }))
   }
   toggleEditPrice () {
     this.setState({ showEditPrice: !this.state.showEditPrice })
@@ -471,7 +470,7 @@ class AdminShipmentView extends Component {
     ) : (
       ''
     )
-    
+
     const statusArchived = (shipment.status === 'archived') ? (
       <div className={`${adminStyles.border_box} layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box}`}>
         <p className="layout-align-center-center layout-row"> {t('common:archived')} </p>
@@ -694,7 +693,7 @@ class AdminShipmentView extends Component {
       </div>
     ) : (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        from {`${moment(shipment.planned_destination_collection_date).format('DD/MM/YYYY | HH:mm')}`}
+        from {`${formattedDate(moment(shipment.planned_destination_collection_date))}`}
       </p>
     )
 
@@ -868,4 +867,4 @@ AdminShipmentView.defaultProps = {
   scope: {}
 }
 
-export default translate('common')(AdminShipmentView)
+export default withNamespaces('common')(AdminShipmentView)

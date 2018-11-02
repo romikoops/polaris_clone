@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
-import '../../styles/select-css-custom.css'
+import '../../styles/select-css-custom.scss'
 import styles from './ShipmentContainers.scss'
 import { CONTAINER_DESCRIPTIONS, CONTAINER_TARE_WEIGHTS } from '../../constants'
 import Checkbox from '../Checkbox/Checkbox'
@@ -292,4 +292,4 @@ ShipmentContainers.defaultProps = {
   containers: []
 }
 
-export default translate(['common', 'cargo', 'shipment', 'errors', 'acronym'])(ShipmentContainers)
+export default withNamespaces(['common', 'cargo', 'shipment', 'errors', 'acronym'])(ShipmentContainers)

@@ -30,20 +30,46 @@ module Helpers
   end
 
   def take_screenshot(name: @scenario.name)
-    prefix = format(
-      '%<feature>s/%<time>s-%<name>s',
+    path = format(
+      '%<feature>s/%<time>s-%<name>s%<status>s',
       feature: @scenario.feature.name.gsub(/[^\w\-]/, '_'),
       name: name.gsub(/[^\w\-]/, '_'),
-      time: Time.now.strftime('%H%M%S')
+      status: @scenario.failed? ? '_FAILED' : '',
+      time: Time.now.strftime('%H%M%S'),
     )
-
-    path = File.join(Capybara.save_path, prefix)
 
     save_screenshot("#{path}.png") # rubocop:disable Lint/Debugger
     save_page("#{path}.html")
 
     puts "Saved #{path}.png"
     puts "Saved #{path}.html"
+  end
+
+  def find_with_retry(*args)
+    i = 0
+    element = nil
+    until element || i > 5
+      begin
+        element = find(*args)
+      rescue Capybara::ElementNotFound
+        yield(i)
+        i += 1
+      end
+    end
+
+    element
+  end
+
+  def find_with_fallback(*args)
+    element = nil
+
+    begin
+      element = find(*args)
+    rescue Capybara::ElementNotFound
+      element = yield
+    end
+
+    element
   end
 end
 

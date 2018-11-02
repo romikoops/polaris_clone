@@ -17,6 +17,16 @@ const propsBase = {
   truckTypes: ['FOO', 'BAR'],
   handleTruckingDetailsChange: identity
 }
+jest.mock('uuid', () => {
+  let counter = -1
+  const v4 = () => {
+    counter += 1
+
+    return `RANDOM_KEY_${counter}`
+  }
+
+  return { v4 }
+})
 
 const createWrapper = propsInput => mount(<TruckingDetails {...propsInput} />)
 

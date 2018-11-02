@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import styled from 'styled-components'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
@@ -13,9 +13,9 @@ import DocumentsForm from '../Documents/Form'
 import { moment, documentTypes, docOptions } from '../../constants'
 import {
   switchIcon,
-  formattedPriceValue,
   totalPrice,
-  formattedDate
+  formattedDate,
+  numberSpacing
 } from '../../helpers'
 import ContactDetailsRow from '../Admin/AdminShipmentView/ContactDetailsRow'
 import GreyBox from '../GreyBox/GreyBox'
@@ -184,7 +184,7 @@ class UserShipmentContent extends Component {
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
-                      estimatedTime={estimatedTimes.etdJSX}
+                      estimatedTime={formattedDate(estimatedTimes.etdJSX)}
                       text={t('common:etd')}
                       theme={theme}
                       carriage={pickupDate}
@@ -213,7 +213,7 @@ class UserShipmentContent extends Component {
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
-                      estimatedTime={estimatedTimes.etaJSX}
+                      estimatedTime={formattedDate(estimatedTimes.etaJSX)}
                       carriage={deliveryDate}
                       shipment={shipment}
                       text={t('common:eta')}
@@ -405,7 +405,7 @@ class UserShipmentContent extends Component {
                 </div>
               </div>
               <div className={`flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding ${styles.services_box}`}>
-                <div className="layout-column flex-100">
+                <div className="flex-100 layout-row">
                   <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
                     <div className="layout-align-start-center layout-row flex">
                       <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>x&nbsp;{cargoCount}</span>
@@ -413,7 +413,7 @@ class UserShipmentContent extends Component {
                     </div>
                   </div>
                   <h2 className="layout-align-start-center layout-row flex">
-                    {formattedPriceValue(totalPrice(shipment).value)} {totalPrice(shipment).currency}
+                    {numberSpacing(totalPrice(shipment).value, 2)} {totalPrice(shipment).currency}
                   </h2>
                 </div>
               </div>
@@ -440,7 +440,7 @@ class UserShipmentContent extends Component {
         >
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
             <GreyBox
-              wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right}`}
+              wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_bottom}`}
               contentClassName="layout-column flex"
               content={cargoView}
             />
@@ -469,6 +469,7 @@ class UserShipmentContent extends Component {
                           className={`${styles.select} flex-50`}
                           value={fileType}
                           options={docOptions}
+                          clearable={false}
                           onChange={this.setFileType}
                         />
                         <div className="flex-50 layout-align-center-center layout-row padd_10">
@@ -543,4 +544,4 @@ UserShipmentContent.defaultProps = {
   cargoView: null
 }
 
-export default translate(['common', 'shipment', 'doc', 'cargo', 'account'])(UserShipmentContent)
+export default withNamespaces(['common', 'shipment', 'doc', 'cargo', 'account'])(UserShipmentContent)

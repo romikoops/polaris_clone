@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { StickyContainer, Sticky } from 'react-sticky'
 import PropTypes from '../../prop-types'
 import styles from './Alert.scss'
@@ -73,4 +73,4 @@ Alert.defaultProps = {
   timeout: 5000
 }
 
-export default translate('errors')(Alert)
+export default withNamespaces('errors')(Alert)

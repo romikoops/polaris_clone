@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import { bindActionCreators } from 'redux'
@@ -187,4 +187,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default translate(['common'])(connect(mapStateToProps, mapDispatchToProps)(RangeFeeTable))
+export default withNamespaces(['common'])(connect(mapStateToProps, mapDispatchToProps)(RangeFeeTable))

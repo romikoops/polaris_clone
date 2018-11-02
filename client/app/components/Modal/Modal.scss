@@ -12,8 +12,19 @@
   }
   .modal {
     z-index: 1500;
+    position: relative;
     box-shadow: 0 0 50px rgba(black, 0.6);
     background: white;
     padding: 200px;
+    .exit_icon {
+      color: rgb(202, 202, 202);
+      text-align: right;
+      position: absolute;
+      right: 17%;
+      top: 130px;
+      &:hover {
+        color: rgb(124, 124, 124);
+      }
+    }
   }
 }

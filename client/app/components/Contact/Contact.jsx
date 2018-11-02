@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './Contact.scss'
 import { nameToDisplay } from '../../helpers'
@@ -57,4 +57,4 @@ Contact.defaultProps = {
   textStyle: {}
 }
 
-export default translate('common')(Contact)
+export default withNamespaces('common')(Contact)

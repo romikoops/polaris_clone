@@ -14,6 +14,7 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions, documentActions } from '../../actions'
 import { AdminUploadsSuccess } from './Uploads/Success'
 import { AdminTruckingView } from './AdminTruckingView'
+import GenericError from '../../components/ErrorHandling/Generic'
 
 class AdminPricings extends Component {
   constructor (props) {
@@ -93,103 +94,105 @@ class AdminPricings extends Component {
     const { nexuses } = trucking
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        {uploadStatus}
-        {selectedPricing ? backButton : ''}
+      <GenericError theme={theme}>
+        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+          {uploadStatus}
+          {selectedPricing ? backButton : ''}
 
-        <Switch className="flex">
-          <Route
-            exact
-            path="/admin/pricings"
-            render={props => (
-              <AdminPricingsIndex
-                theme={theme}
-                scope={tenant.data.scope}
-                hubs={hubs}
-                hubHash={hubHash}
-                clients={filteredClients}
-                pricingData={pricingData}
-                itineraries={itineraries}
-                {...props}
-                adminDispatch={adminDispatch}
-                documentDispatch={documentDispatch}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin/pricings/clients"
-            render={props => (
-              <AdminPricingsClientIndex
-                theme={theme}
-                clients={filteredClients}
-                adminTools={adminDispatch}
-                {...props}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin/pricings/routes"
-            render={props => (
-              <AdminPricingsRouteIndex
-                theme={theme}
-                hubs={hubs}
-                itineraries={itineraries || pricingData.itineraries}
-                adminTools={adminDispatch}
-                {...props}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin/pricings/clients/:id"
-            render={props => (
-              <AdminPricingClientView
-                theme={theme}
-                hubs={hubs}
-                hubHash={hubHash}
-                pricingData={pricingData}
-                clientPricings={clientPricings}
-                adminActions={adminDispatch}
-                {...props}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin/pricings/trucking/:id"
-            render={props => (
-              <AdminTruckingView
-                theme={theme}
-                nexuses={nexuses}
-                truckingDetail={truckingDetail}
-                loading={loading}
-                adminDispatch={adminDispatch}
-                {...props}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin/pricings/routes/:id"
-            render={props => (
-              <AdminPricingRouteView
-                clientPricings={clientPricings}
-                theme={theme}
-                hubs={hubs}
-                scope={tenant.data.scope}
-                hubHash={hubHash}
-                pricingData={pricingData}
-                clients={filteredClients}
-                itineraryPricings={itineraryPricings}
-                adminActions={adminDispatch}
-                {...props}
-              />
-            )}
-          />
-        </Switch>
-      </div>
+          <Switch className="flex">
+            <Route
+              exact
+              path="/admin/pricings"
+              render={props => (
+                <AdminPricingsIndex
+                  theme={theme}
+                  scope={tenant.data.scope}
+                  hubs={hubs}
+                  hubHash={hubHash}
+                  clients={filteredClients}
+                  pricingData={pricingData}
+                  itineraries={itineraries}
+                  {...props}
+                  adminDispatch={adminDispatch}
+                  documentDispatch={documentDispatch}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/pricings/clients"
+              render={props => (
+                <AdminPricingsClientIndex
+                  theme={theme}
+                  clients={filteredClients}
+                  adminTools={adminDispatch}
+                  {...props}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/pricings/routes"
+              render={props => (
+                <AdminPricingsRouteIndex
+                  theme={theme}
+                  hubs={hubs}
+                  itineraries={itineraries || pricingData.itineraries}
+                  adminTools={adminDispatch}
+                  {...props}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/pricings/clients/:id"
+              render={props => (
+                <AdminPricingClientView
+                  theme={theme}
+                  hubs={hubs}
+                  hubHash={hubHash}
+                  pricingData={pricingData}
+                  clientPricings={clientPricings}
+                  adminActions={adminDispatch}
+                  {...props}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/pricings/trucking/:id"
+              render={props => (
+                <AdminTruckingView
+                  theme={theme}
+                  nexuses={nexuses}
+                  truckingDetail={truckingDetail}
+                  loading={loading}
+                  adminDispatch={adminDispatch}
+                  {...props}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/pricings/routes/:id"
+              render={props => (
+                <AdminPricingRouteView
+                  clientPricings={clientPricings}
+                  theme={theme}
+                  hubs={hubs}
+                  scope={tenant.data.scope}
+                  hubHash={hubHash}
+                  pricingData={pricingData}
+                  clients={filteredClients}
+                  itineraryPricings={itineraryPricings}
+                  adminActions={adminDispatch}
+                  {...props}
+                />
+              )}
+            />
+          </Switch>
+        </div>
+      </GenericError>
     )
   }
 }

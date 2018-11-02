@@ -7,12 +7,13 @@ import Header from '../Header/Header'
 export default function TermsAndConditions ({ tenant, user, theme }) {
   const subdomain = (tenant && tenant.data && tenant.data.subdomain) || 'def'
   const content = termsAndConditions[subdomain] || termsAndConditions.def
+
   return (
     <div className="flex-100 layout-row layout-wrap">
       <Header user={user} theme={theme} noMessages />
       <div className="flex-100 layout-row layout-align-center">
         <div className={`${styles.terms_and_conditions} content_width_booking`}>
-          { content }
+          {content}
         </div>
       </div>
     </div>

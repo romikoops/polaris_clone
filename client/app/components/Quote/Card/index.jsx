@@ -1,11 +1,18 @@
 import React, { PureComponent } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styles from './index.scss'
 import PropTypes from '../../../prop-types'
 import { moment } from '../../../constants'
-import { switchIcon, gradientTextGenerator, numberSpacing, capitalize } from '../../../helpers'
+import {
+  switchIcon,
+  gradientTextGenerator,
+  numberSpacing,
+  capitalize,
+  formattedPriceValue,
+  isQuote
+} from '../../../helpers'
 import { ChargeIcons } from './ChargeIcons'
-import CollapsingBar from '../../CollapsingBar/CollapsingBar'
+import QuoteChargeBreakdown from '../../QuoteChargeBreakdown/QuoteChargeBreakdown'
 import { RoundButton } from '../../RoundButton/RoundButton'
 import CollapsingContent from '../../CollapsingBar/Content'
 
@@ -31,26 +38,31 @@ class QuoteCard extends PureComponent {
 
     return hubType
   }
-
   constructor (props) {
     super(props)
     this.state = {
-      expander: {},
       isChecked: props.isChecked,
       showSchedules: (props.result &&
         props.result.schedules &&
         props.result.schedules.length > 0 &&
-        props.result.schedules[0].etd !== null)
+        props.result.schedules[0].etd !== null),
+      expander: {}
     }
     this.handleClickChecked = this.handleClickChecked.bind(this)
   }
   componentDidMount () {
-    const { isQuotationTool } = this.props
-    if (isQuotationTool) {
+    const { tenant } = this.props
+    if (isQuote(tenant)) {
       this.setState({
         showSchedules: false
       })
     }
+  }
+  handleClickChecked () {
+    const { handleClick } = this.props
+    this.setState(prevState => ({
+      isChecked: !prevState.isChecked
+    }), () => handleClick(this.state.isChecked))
   }
   toggleExpander (key) {
     this.setState({
@@ -60,54 +72,11 @@ class QuoteCard extends PureComponent {
       }
     })
   }
-  handleClickChecked () {
-    const { handleClick } = this.props
-    this.setState(prevState => ({
-      isChecked: !prevState.isChecked
-    }), () => handleClick(this.state.isChecked))
-  }
   toggleShowSchedules (key) {
     this.setState(prevState => ({
       showSchedules: !prevState.showSchedules
     }
     ), () => this.toggleExpander(key))
-  }
-
-  determineSubKey (charge) {
-    const { tenant } = this.props
-    const { scope } = tenant.data
-    switch (scope.fee_detail) {
-      case 'key':
-        return this.displayKeyOnly(charge[0])
-      case 'name':
-        return charge[1].name
-      case 'key_and_name':
-        return this.displayKeyAndName(charge)
-      default:
-        return this.displayKeyOnly(charge[0])
-    }
-  }
-
-  displayKeyOnly (key) {
-    const { t } = this.props
-    switch (key) {
-      case 'trucking_lcl' || 'trucking_fcl':
-        return t('cargo:truckingRate')
-
-      default:
-        return key
-    }
-  }
-
-  displayKeyAndName (fee) {
-    const { t } = this.props
-    switch (fee[0]) {
-      case 'trucking_lcl' || 'trucking_fcl':
-        return t('cargo:truckingRate')
-
-      default:
-        return `${fee[0]} - ${fee[1].name}`
-    }
   }
 
   selectSchedule (schedule) {
@@ -147,19 +116,20 @@ class QuoteCard extends PureComponent {
         <p className="flex-none">{t('quote:viewSchedules')}</p>
       </div>
     )
+
     if (scope.detailed_billing && result.schedules.length > 1) {
       return (
-        <div className="flex-50 layout-row layout-align-start-center" style={{ textAlign: 'left' }}>
+        <div className="flex-40 layout-row layout-align-start-center" style={{ textAlign: 'left' }}>
           {showSchedules ? showPriceBreakdownBtn : showSchedulesBtn}
         </div>
       )
     } else if (!scope.detailed_billing && result.schedules.length > 1) {
       return (
-        <div className="flex-50 layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
+        <div className="flex-40 layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
       )
     } else if (!scope.detailed_billing && (!result.schedules || result.schedules.length < 1)) {
       return (
-        <div className="flex-50 layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
+        <div className="flex-40 layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
       )
     }
 
@@ -174,10 +144,10 @@ class QuoteCard extends PureComponent {
       cargo,
       pickup,
       truckingTime,
-      isQuotationTool,
       aggregatedCargo,
       t
     } = this.props
+    const { scope } = tenant.data
     const {
       quote,
       schedules,
@@ -192,53 +162,6 @@ class QuoteCard extends PureComponent {
     const calcPayload = aggregatedCargo && aggregatedCargo.id
       ? aggregatedCargo.weight
       : cargo.reduce((sum, cargoUnit) => (sum + +cargoUnit.payload_in_kg * +cargoUnit.quantity), 0)
-
-    const dnrKeys = ['total', 'edited_total', 'name']
-    const pricesArr = Object.keys(quote).filter(key => !dnrKeys.includes(key)).length !== 0 ? (
-      Object.keys(quote).filter(key => !dnrKeys.includes(key)).map(key => (<CollapsingBar
-        showArrow
-        collapsed={!this.state.expander[`${key}`]}
-        theme={theme}
-        contentStyle={styles.sub_price_row_wrapper}
-        headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
-        handleCollapser={() => this.toggleExpander(`${key}`)}
-        mainWrapperStyle={{ borderTop: '1px solid #E0E0E0', minHeight: '50px' }}
-        contentHeader={(
-          <div className={`flex-100 layout-row layout-align-start-center ${styles.price_row}`}>
-            <div className="flex-none layout-row layout-align-start-center" />
-            <div className="flex-45 layout-row layout-align-start-center">
-              {key === 'trucking_pre' ? (
-                <span>{t('shipment:pickUp')}</span>
-              ) : ''}
-              {key === 'trucking_on' ? (
-                <span>{t('shipment:delivery')}</span>
-              ) : ''}
-              <span>{key === 'trucking_pre' || key === 'trucking_on' ? '' : capitalize(key)}</span>
-            </div>
-            <div className="flex-50 layout-row layout-align-end-center">
-              <p>{numberSpacing(quote[`${key}`].total.value, 2)}&nbsp;{quote.total.currency}</p>
-            </div>
-          </div>
-        )}
-        content={Object.entries(quote[`${key}`])
-          .map(array => array.filter(value => !dnrKeys.includes(value)))
-          .filter(value => value.length !== 1).map((price, i) => {
-            const subPrices = (<div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
-              <div className="flex-45 layout-row layout-align-start-center">
-                <span>
-                  {key === 'cargo' ? t('cargo:unitFreightRate', { unitNo: i + 1 })
-                    : this.determineSubKey(price)}
-                </span>
-              </div>
-              <div className="flex-50 layout-row layout-align-end-center">
-                <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{(price[1].currency || price[1].total.currency)}</p>
-              </div>
-            </div>)
-
-            return subPrices
-          })}
-      />))
-    ) : ''
 
     const schedulesArr = schedules.map(schedule => (<div className={`flex-100 layout-row layout-align-start-center ${styles.dates_container}`}>
       <div className={`flex-75 layout-row ${styles.dates_row}`}>
@@ -340,10 +263,18 @@ class QuoteCard extends PureComponent {
             <i className="flex-none fa fa-ship" style={{ paddingRight: '7px' }} />
             <p className="layout-row layout-align-end-center margin_5">{t('quote:carrier', { carrierName: result.meta.carrier_name })}</p>
           </div> : '' }
-          { result.meta.service_level ? <div className="flex-50 layout-row layout-align-center-center">
-            <i className="flex-none fa fa-bell-o" style={{ paddingRight: '7px' }} />
-            <p className="layout-row layout-align-end-center margin_5">{t('quote:service', { serviceLevel: capitalize(result.meta.service_level) })}</p>
-          </div> : '' }
+          {
+            result.meta.service_level_count > 1
+              ? (
+                <div className="flex-50 layout-row layout-align-center-center">
+                  <i className="flex-none fa fa-bell-o" style={{ paddingRight: '7px' }} />
+                  <p className="layout-row layout-align-end-center margin_5">
+                    {t('quote:service', { serviceLevel: capitalize(result.meta.service_level) })}
+                  </p>
+                </div>
+              )
+              : ''
+          }
         </div>
 
         <CollapsingContent
@@ -401,30 +332,55 @@ class QuoteCard extends PureComponent {
             </div>
           )}
         />
-        <CollapsingContent
-          collapsed={showSchedules}
-          content={pricesArr}
-        />
+        <CollapsingContent collapsed={showSchedules}>
+          <QuoteChargeBreakdown
+            theme={theme}
+            scope={tenant.data.scope}
+            quote={quote}
+          />
+        </CollapsingContent>
         <div className="flex-100 layout-wrap layout-align-start-stretch">
-          <div className={`flex-100 layout-row layout-align-space-between-stretch ${styles.total_row}`}>
-            {this.buttonToDisplay()}
-            <div className={`${isQuotationTool ? 'flex' : 'flex-10'} layout-row layout-align-start-center`}>
-              <span style={{ textAlign: 'right' }}>{t('common:total')}</span>
+          <div className={`flex-100 layout-row layout-align-space-between-stretch layout-wrap ${styles.total_row}`}>
+            
+            <div className={`${isQuote(tenant) ? 'flex' : 'flex-40'} layout-row layout-align-start-center`}>
+              <span style={{ textAlign: 'right' }}>{scope.hide_grand_total ? '' : t('common:total')}</span>
             </div>
-            <div className="flex layout-row layout-align-end-center">
-              <p style={!isQuotationTool ? { paddingRight: '18px' } : {}}>{numberSpacing(quote.total.value, 2)}&nbsp;{quote.total.currency}</p>
-              {isQuotationTool ? (
-                <input
-                  className="pointy"
-                  name="checked"
-                  type="checkbox"
-                  onClick={() => this.handleClickChecked()}
-                  checked={this.props.isChecked}
-                />
+            <div className={`${isQuote(tenant) ? 'flex-75' : 'flex'}  layout-row layout-align-end-center`}>
+              <p style={!isQuote(tenant) ? { paddingRight: '18px' } : {}}>
+                {
+                  scope.hide_grand_total
+                    ? ''
+                    : `${formattedPriceValue(quote.total.value)} ${quote.total.currency}`
+                }
+              </p>
+              {isQuote(tenant) ? (
+                <div className="flex-gt-md-25 flex-33 layout-row layout-align-end-center">
+                  <RoundButton
+                    active={!this.state.isChecked}
+                    flexContainer={scope.hide_grand_total ? '40' : '100'}
+                    classNames={`pointy layout-row layout-align-center-center ${styles.add_button} ${!this.state.isChecked ? styles.shorter : styles.longer}`}
+                    size="small"
+                    handleNext={() => this.handleClickChecked()}
+                    theme={theme}
+                    text={!this.state.isChecked ? t('common:add') : t('common:remove')}
+                  />
+                </div>
               ) : ''}
 
             </div>
+            <div className="flex-100 layout-row layout-align-end-center">
+              {this.buttonToDisplay()}
+              <div className="flex-60 layout-row layout-align-end-center layout-wrap">
+              { scope.offer_disclaimers && scope.offer_disclaimers.length
+                ? 
+                  scope.offer_disclaimers.map(disclaimer =>
+                    <p className={`flex-100 ${styles.disclaimers}`}>{t(`disclaimers:${disclaimer}`, { carrier: result.meta.carrier_name })}</p>)
+                : ''
+              }
+               </div>
+            </div>
           </div>
+
         </div>
       </div>
     )
@@ -443,7 +399,6 @@ QuoteCard.propTypes = {
   handleScheduleRequest: PropTypes.func,
   pickup: PropTypes.bool,
   isChecked: PropTypes.bool,
-  isQuotationTool: PropTypes.bool,
   aggregatedCargo: PropTypes.objectOf(PropTypes.string)
 }
 
@@ -457,9 +412,8 @@ QuoteCard.defaultProps = {
   handleScheduleRequest: null,
   handleClick: null,
   pickup: false,
-  isQuotationTool: false,
   isChecked: false,
   aggregatedCargo: {}
 }
 
-export default translate(['common', 'cargo', 'acronym', 'shipment', 'quote'])(QuoteCard)
+export default withNamespaces(['common', 'cargo', 'acronym', 'shipment', 'quote', 'disclaimers'])(QuoteCard)

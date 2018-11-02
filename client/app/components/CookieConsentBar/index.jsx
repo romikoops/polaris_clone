@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { authenticationActions } from '../../actions'
@@ -137,4 +137,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default translate('common')(connect(null, mapDispatchToProps)(CookieConsentBar))
+export default withNamespaces('common')(connect(null, mapDispatchToProps)(CookieConsentBar))

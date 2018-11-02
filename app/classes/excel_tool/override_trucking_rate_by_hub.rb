@@ -110,6 +110,7 @@ module ExcelTool
 
           modify_charges(trucking_pricing, row_truck_type, direction)
           tp = trucking_pricing
+
           td_query = build_td_query(single_ident_values, single_ident_values_and_country)
           td_ids = ActiveRecord::Base.connection.execute(td_query).values.flatten
           delete_previous_trucking_pricings(hub, td_ids)
@@ -347,6 +348,7 @@ module ExcelTool
             name: row[:fee]
           }
         end
+
         ChargeCategory.find_or_create_by!(code: row[:fee_code], name: row[:fee])
       end
     end
@@ -425,14 +427,16 @@ module ExcelTool
     end
 
     def modify_charges(trucking_pricing, row_truck_type, direction)
+      direction_str = direction == 'pre' ? 'export' : 'import'
       charges.each do |_k, fee|
         tmp_fee = fee.clone
-        next unless tmp_fee[:direction] == direction && tmp_fee[:truck_type] == row_truck_type
+        next unless tmp_fee[:direction] == direction_str && tmp_fee[:truck_type] == row_truck_type
 
         tmp_fee.delete(:direction)
         tmp_fee.delete(:truck_type)
         trucking_pricing[:fees][tmp_fee[:key]] = tmp_fee
       end
+
     end
 
     def identity_country(single_ident_values_and_country)

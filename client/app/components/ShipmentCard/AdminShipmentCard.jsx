@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import { v4 } from 'uuid'
@@ -9,8 +9,9 @@ import AdminPromptConfirm from '../Admin/Prompt/Confirm'
 import {
   gradientTextGenerator,
   switchIcon,
-  numberSpacing,
-  splitName
+  splitName,
+  totalPrice,
+  formattedPriceValue
 } from '../../helpers'
 
 function loadIsComplete (confirmShipmentData, id, dispatches) {
@@ -78,9 +79,9 @@ class AdminShipmentCard extends Component {
       shipment,
       theme,
       confirmShipmentData,
-      t,
-      isDashboard
+      t
     } = this.props
+
     const gradientFontStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -229,7 +230,7 @@ class AdminShipmentCard extends Component {
           <div className="layout-row flex-35 layout-align-center-center">
             <div className="flex-100">
               <b className={styles.ref_row_card}>{t('common:ref')}:&nbsp;{shipment.imc_reference}</b>
-              <p>{t('shipment:placedAt')}&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY - HH:mm')}</p>
+              <p>{t('shipment:placedAt')}&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY | HH:mm')}</p>
             </div>
           </div>
 
@@ -277,7 +278,7 @@ class AdminShipmentCard extends Component {
             <div className="layout-row flex-10">
               <div className="layout-row layout-align-center-center">
                 <span className={`${styles.smallText}`}>
-                  <b>x</b><span className={`${styles.bigText}`}>{shipment.cargo_units.length}</span>
+                  <b>x</b><span className={`${styles.bigText}`}>{shipment.cargo_units ? shipment.cargo_units.length : ''}</span>
                 </span>
               </div>
             </div>
@@ -300,11 +301,9 @@ class AdminShipmentCard extends Component {
           <div className="layout-row flex layout-align-end-end">
             <span className={`${styles.bigText} ${styles.price_style}`}>
               <span>
-                {shipment.edited_total
-                  ? numberSpacing(shipment.edited_total.value, 2)
-                  : numberSpacing(shipment.total_price.value, 2)}
+                { formattedPriceValue(totalPrice(shipment).value) }
               </span>
-              <span> {shipment.total_price.currency} </span>
+              <span> { totalPrice(shipment).currency } </span>
             </span>
           </div>
         </div>
@@ -327,4 +326,4 @@ AdminShipmentCard.defaultProps = {
   theme: {}
 }
 
-export default translate(['common', 'shipment', 'cargo'])(AdminShipmentCard)
+export default withNamespaces(['common', 'shipment', 'cargo'])(AdminShipmentCard)

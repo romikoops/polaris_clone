@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import Formsy from 'formsy-react'
 import FormsyInput from '../../FormsyInput/FormsyInput'
@@ -69,4 +69,4 @@ TruckingCitySetter.defaultProps = {
   theme: {},
   tmpCity: {}
 }
-export default translate(['user', 'admin'])(TruckingCitySetter)
+export default withNamespaces(['user', 'admin'])(TruckingCitySetter)

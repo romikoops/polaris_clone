@@ -11,6 +11,7 @@ exports[`props.loading is false, state.requested is true 1`] = `
     back={false}
     classNames="ready"
     disabled={false}
+    flexContainer="100"
     handleDisabled={null}
     handleNext={[Function]}
     icon=""
@@ -36,20 +37,9 @@ exports[`props.loading is true, state.requested is true 1`] = `
   data-for="RANDOM_KEY_5"
   data-tip="FOO_TOOLTIP"
 >
-  <div
-    className="flex-100 layout-column layout-align-space-around-center"
-  >
-    <p
-      className="flex-none"
-    >
-      Your document is being generated.
-    </p>
-    <p
-      className="flex-none"
-    >
-      Please wait....
-    </p>
-  </div>
+  <LoadingSpinner
+    size="small"
+  />
 </div>
 `;
 
@@ -64,13 +54,14 @@ exports[`shallow render 1`] = `
     back={false}
     classNames="request"
     disabled={false}
+    flexContainer="100"
     handleDisabled={null}
     handleNext={[Function]}
     icon=""
     iconClass=""
     inverse={false}
     size="small"
-    text="Request"
+    text="Download"
     theme={
       Object {
         "colors": Object {
@@ -100,7 +91,7 @@ exports[`square is true 1`] = `
     icon=""
     iconClass=""
     size="small"
-    text="Request"
+    text="Download"
     theme={
       Object {
         "colors": Object {

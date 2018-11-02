@@ -3,7 +3,7 @@
 exports[`shallow render 1`] = `
 <div
   className="
-        contact_scroll flex-100 layout-row layout-wrap layout-align-start
+        contact_scroll flex-100 layout-row layout-wrap layout-align-start ccb_contacts
       "
 >
   <div
@@ -19,7 +19,7 @@ exports[`shallow render 1`] = `
     />
   </div>
   <div
-    className="flex-50 layout-row layout-align-start-stretch"
+    className="flex-50 layout-row layout-align-start-stretch ccb_contact"
     key="RANDOM_KEY_0"
     style={
       Object {

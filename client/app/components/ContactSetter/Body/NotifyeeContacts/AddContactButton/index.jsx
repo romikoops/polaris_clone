@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import styles from './AddContactButton.scss'
 import PropTypes from '../../../../../prop-types'
@@ -32,4 +32,4 @@ ContactSetterBodyNotifyeeContactsAddContactButton.defaultProps = {
   onClick: null
 }
 
-export default translate('common')(ContactSetterBodyNotifyeeContactsAddContactButton)
+export default withNamespaces('common')(ContactSetterBodyNotifyeeContactsAddContactButton)

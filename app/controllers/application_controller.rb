@@ -35,16 +35,34 @@ class ApplicationController < ActionController::API
   private
 
   def current_tenant
-    @current_tenant ||= Tenant.find_by(subdomain: params[:subdomain_id])
+    @current_tenant ||= current_user&.tenant
+  end
+
+  def append_info_to_payload(payload)
+    super
+    payload[:tenant] = current_tenant&.subdomain
   end
 
   def set_raven_context
-    Raven.user_context(id: session[:current_user_id]) # or anything else in session
-    Raven.extra_context(params: params.to_unsafe_h, url: request.url)
+    Raven.user_context(
+      email: current_user&.email,
+      id: current_user&.id,
+      ip: request.remote_ip
+    )
+    Raven.tags_context(
+      agency: current_user&.agency_id&.present?,
+      tenant: current_tenant&.subdomain
+    )
+    Raven.extra_context(
+      agency: current_user&.agency&.slice(%i{id name}),
+      params: params.to_unsafe_h,
+      url: request.url,
+      scope: current_tenant&.scope
+    )
   end
 
   def clear_shoryuken
-    file_path = Rails.root + "/log/shoryuken.log"
+    file_path = Rails.root + '/log/shoryuken.log'
     File.delete(file_path)
   end
 end

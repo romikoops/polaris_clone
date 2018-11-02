@@ -24,7 +24,8 @@ Capybara.register_driver :remote do |app|
     browser_name: ENV.fetch('BROWSERNAME'),
     javascript_enabled: true,
     takes_screenshot: true,
-    css_selectors_enabled: true
+    css_selectors_enabled: true,
+    accept_untrusted_certs: true
   )
 
   Capybara::Selenium::Driver.new(app,

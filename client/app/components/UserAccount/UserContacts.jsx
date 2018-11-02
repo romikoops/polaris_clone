@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import Formsy from 'formsy-react'
 import MailCheck from 'react-mailcheck'
 import { bindActionCreators } from 'redux'
@@ -59,22 +59,24 @@ class UserContacts extends Component {
     userDispatch.confirmShipment(id, action)
   }
   toggleNewContact () {
-    this.setState({ newContactBool: !this.state.newContactBool })
+    this.setState({ newContactBool: !this.state.newContactBool, submitAttempted: false })
   }
 
-  handleValidSubmit (contact, reset, invalidate, t) {
+  handleValidSubmit (contact, reset, invalidate) {
     this.setState({ submitAttempted: true })
 
     function handleResponse (data) {
       if (data.email === true) {
-        invalidate({ email: t('errors:contactExists') })
+        invalidate({ email: this.props.t('errors:contactExists') })
 
         return
       }
 
       const { userDispatch, contactsData } = this.props
-      userDispatch.newContact(contact)
-      userDispatch.getContacts({ page: 1, per_page: contactsData.per_page })
+      userDispatch.newContact(contact, () => {
+        userDispatch.getContacts({ page: 1, per_page: contactsData.per_page })
+        this.setState({ email: '' })
+      })
       this.toggleNewContact()
     }
 
@@ -162,7 +164,7 @@ class UserContacts extends Component {
                       onClick={this.toggleNewContact}
                     />
                     <Formsy
-                      className={`flex-none layout-row layout-wrap layout-align-start-start ${
+                      className={`flex-none layout-row layout-wrap layout-align-start-start ccb_contact_form ${
                         styles.new_contact_content
                       }`}
                       onValidSubmit={this.handleValidSubmit}
@@ -406,4 +408,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default translate(['user', 'errors'])(connect(mapStateToProps, mapDispatchToProps)(UserContacts))
+export default withNamespaces(['user', 'errors'])(connect(mapStateToProps, mapDispatchToProps)(UserContacts))

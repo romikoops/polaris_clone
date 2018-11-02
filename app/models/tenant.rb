@@ -83,9 +83,12 @@ class Tenant < ApplicationRecord
     end
   end
 
-  def quotation_tool
+  def quotation_tool?
     scope['open_quotation_tool'] || scope['closed_quotation_tool']
   end
+
+  alias quotation_tool quotation_tool?
+  deprecate :quotation_tool, deprecator: APP_DEPRECATION
 
   def mode_of_transport_in_scope?(mode_of_transport, load_type=nil)
     return scope.dig("modes_of_transport", mode_of_transport.to_s).values.any? if load_type.nil?

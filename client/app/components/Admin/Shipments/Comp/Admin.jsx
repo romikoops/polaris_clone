@@ -157,7 +157,7 @@ export class ShipmentsCompAdmin extends Component {
     } = this.props
     const { search } = this.state
 
-    if (!shipments || !hubs || !clients) {
+    if (!shipments || !shipments.pages || !hubs || !clients) {
       return ''
     }
     const { pages } = shipments

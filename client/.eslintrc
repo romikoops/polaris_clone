@@ -1,5 +1,5 @@
 {
-  "plugins": ["json", "jest"],
+  "plugins": ["jest"],
   "extends": ["airbnb", "standard", "plugin:jest/recommended"],
   "rules": {
     "padding-line-between-statements": [

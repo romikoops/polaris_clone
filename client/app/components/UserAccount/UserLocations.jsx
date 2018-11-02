@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 // eslint-disable-next-line no-named-as-default
 import EditLocation from './EditLocation'
@@ -152,4 +152,4 @@ UserLocations.defaultProps = {
   cols: 3
 }
 
-export default translate(['common', 'user'])(UserLocations)
+export default withNamespaces(['common', 'user'])(UserLocations)

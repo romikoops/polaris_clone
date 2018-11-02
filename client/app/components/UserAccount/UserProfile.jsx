@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
 import UserLocations from './UserLocations'
@@ -7,7 +7,7 @@ import ProfileBox from './ProfileBox'
 import EditProfileBox from './EditProfileBox'
 import { AdminClientTile } from '../Admin'
 import { RoundButton } from '../RoundButton/RoundButton'
-import '../../styles/select-css-custom.css'
+import '../../styles/select-css-custom.scss'
 import {
   gradientTextGenerator,
   authHeader
@@ -657,4 +657,4 @@ UserProfile.defaultProps = {
   tenant: {}
 }
 
-export default translate(['common', 'footer', 'user', 'imc'])(UserProfile)
+export default withNamespaces(['common', 'footer', 'user', 'imc'])(UserProfile)

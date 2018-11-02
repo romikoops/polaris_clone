@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../prop-types'
 import styles from './ShipmentLocationBox.scss'
@@ -57,4 +57,4 @@ TruckingTooltip.defaultProps = {
   direction: ''
 }
 
-export default translate('trucking')(TruckingTooltip)
+export default withNamespaces('trucking')(TruckingTooltip)

@@ -3,8 +3,6 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.5.1'
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.1'
 # Use sqlite3 as the database for Active Record
@@ -16,6 +14,12 @@ gem 'activerecord-import'
 # Strong Migrations - Prevent Non Zero-Down time Migrations
 gem 'strong_migrations'
 
+# Easy Monitoring
+gem 'easymon'
+
+# Nicer logs
+gem 'lograge'
+
 # Setup RailsConfig for easier secret management
 gem 'config'
 
@@ -26,7 +30,7 @@ gem 'sass-rails'
 gem 'sprockets-rails', require: 'sprockets/railtie'
 
 gem 'awesome_print'
-gem 'aws-sdk-sqs'
+gem 'aws-sdk-sqs', '~> 1.9.0'
 gem 'bootstrap-sass', '~> 3.3.5.1'
 gem 'font-awesome-rails'
 gem 'rufo'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import styles from './AddressBookAddContactButton.scss'
 import PropTypes from '../../../prop-types'
@@ -11,7 +11,7 @@ export function AddressBookAddContactButton ({
   return (
     <div
       key={v4()}
-      className={`flex-100 layout-row layout-align-center-center ${styles.add_contact_btn}`}
+      className={`flex-100 layout-row layout-align-center-center ccb_new_contact ${styles.add_contact_btn}`}
       onClick={addContact}
     >
       <h3>{`+ ${t('common:newContact')}`}</h3>
@@ -24,4 +24,4 @@ AddressBookAddContactButton.propTypes = {
   t: PropTypes.func.isRequired
 }
 
-export default translate('common')(AddressBookAddContactButton)
+export default withNamespaces('common')(AddressBookAddContactButton)

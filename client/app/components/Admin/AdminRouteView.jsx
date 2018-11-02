@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import PropTypes from '../../prop-types'
@@ -249,4 +249,4 @@ AdminRouteView.defaultProps = {
   hubHash: {}
 }
 
-export default translate(['common', 'admin'])(AdminRouteView)
+export default withNamespaces(['common', 'admin'])(AdminRouteView)

@@ -2,8 +2,10 @@
 
 module MultiTenantTools
   include ExcelTools
-  require "#{Rails.root}/db/seed_classes/vehicle_seeder.rb"
-  require "#{Rails.root}/db/seed_classes/pricing_seeder.rb"
+  require_relative '../../db/seed_classes/vehicle_seeder.rb'
+  require_relative '../../db/seed_classes/pricing_seeder.rb'
+  require_relative '../../db/seed_classes/tenant_seeder.rb'
+
   API_URL = 'https://api2.itsmycargo.com'
   DEV_API_URL = 'https://gamma.itsmycargo.com'
 
@@ -97,7 +99,7 @@ module MultiTenantTools
   end
 
   def update_tenant_jsons
-    @json_data = JSON.parse(File.read("#{Rails.root}/db/static_data/tenants.json"))
+    @json_data = JSON.parse(File.read("#{Rails.root}/db/dummydata/tenants.json"))
     @json_data.each do |tenant|
       subdomain = tenant['subdomain']
       File.open("#{Rails.root}/db/dummydata/#{subdomain}/#{subdomain}.json", 'w') { |file| file.write(tenant.to_json) }
@@ -108,12 +110,12 @@ module MultiTenantTools
   end
 
   def sync_tenant_jsons
-    @json_data = JSON.parse(File.read("#{Rails.root}/db/static_data/tenants.json"))
+    @json_data = JSON.parse(File.read("#{Rails.root}/db/dummydata/tenants.json"))
     @new_data = []
     @json_data.each do |tenant|
       subdomain = tenant['subdomain']
       tenant_data = JSON.parse(
-        S3.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
+        asset_bucket.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
       )
       @new_data << tenant_data
     end
@@ -122,16 +124,23 @@ module MultiTenantTools
 
   def update_tenant_from_json(subdomain)
     json_data = JSON.parse(
-      S3.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
+      asset_bucket.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
     )
-    json_data.delete('other_data')
-    Tenant.find_by_subdomain(json_data['subdomain']).update_attributes(json_data)
+
+    tenant = Tenant.find_by_subdomain(json_data['subdomain'])
+
+    # Handle "other_data" part of the hash (hacky)
+    other_data = json_data.delete('other_data') || {}
+    TenantSeeder.update_cargo_item_types!(tenant, other_data['cargo_item_types'])
+    TenantSeeder.update_tenant_incoterms!(tenant, other_data['incoterms'])
+
+    tenant.update_attributes(json_data)
   end
 
   def create_new_tenant_site(subdomains)
     subdomains.each do |subdomain|
       json_data = JSON.parse(
-        S3.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
+        asset_bucket.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
       ).deep_symbolize_keys
       new_site(json_data, false)
     end

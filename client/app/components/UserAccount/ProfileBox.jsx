@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
 
@@ -58,4 +58,4 @@ ProfileBox.defaultProps = {
   style: {}
 }
 
-export default translate(['user', 'common'])(ProfileBox)
+export default withNamespaces(['user', 'common'])(ProfileBox)

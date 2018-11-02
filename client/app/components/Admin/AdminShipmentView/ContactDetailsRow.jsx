@@ -1,6 +1,6 @@
 import React from 'react'
 import { v4 } from 'uuid'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styles from '../AdminShipments.scss'
 import adminStyles from '../Admin.scss'
 import PropTypes from '../../../prop-types'
@@ -149,15 +149,7 @@ function ContactDetailsRow ({
 
   return (
     <div className={`layout-row flex-100 layout-wrap margin_bottom ${adminStyles.margin_box_right}`}>
-      {isAccountHolder === '' ? <div className={`flex-100 ${flexSize} layout-row layout-align-center card_padding_right margin_bottom`}>
-        <GreyBox
-          title={t('account:accountHolder')}
-          wrapperClassName="layout-row flex-100 layout-align-start-start"
-          contentClassName="layout-row layout-wrap flex-100"
-          content={accountContact}
-          showTitle
-        />
-      </div> : '' }
+
       <div className={`flex-100 ${flexSize} layout-row layout-align-center card_padding_right margin_bottom`}>
         <GreyBox
           title={t('account:shipper')}
@@ -178,15 +170,26 @@ function ContactDetailsRow ({
           showTitle
         />
       </div>
-      <div className="flex-100 flex-gt-sm-20 layout-row layout-align-center margin_bottom">
+      {isAccountHolder === '' ? <div className={`flex-100 ${flexSize} layout-row layout-align-center card_padding_right margin_bottom`}>
         <GreyBox
-          title={t('account:notifyees')}
-          wrapperClassName="layout-row flex-100 height_100 layout-align-start-start"
+          title={t('account:accountHolder')}
+          wrapperClassName="layout-row flex-100 layout-align-start-start"
           contentClassName="layout-row layout-wrap flex-100"
-          content={nArray}
+          content={accountContact}
           showTitle
         />
-      </div>
+      </div> : '' }
+      {nArray.length > 0 ? (
+        <div className="flex-100 flex-gt-sm-20 layout-row layout-align-center margin_bottom">
+          <GreyBox
+            title={t('account:notifyees')}
+            wrapperClassName="layout-row flex-100 height_100 layout-align-start-start"
+            contentClassName="layout-row layout-wrap flex-100"
+            content={nArray}
+            showTitle
+          />
+        </div>
+      ) : ''}
     </div>
   )
 }
@@ -205,4 +208,4 @@ ContactDetailsRow.defaultProps = {
   user: {}
 }
 
-export default translate('account')(ContactDetailsRow)
+export default withNamespaces('account')(ContactDetailsRow)

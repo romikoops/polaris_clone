@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
 import { pick, uniqWith } from 'lodash'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import adminStyles from '../Admin/Admin.scss'
 import styles from '../Admin/AdminShipments.scss'
@@ -14,7 +14,7 @@ import {
   gradientGenerator,
   gradientBorderGenerator
 } from '../../helpers'
-import '../../styles/select-css-custom.css'
+import '../../styles/select-css-custom.scss'
 import DocumentsDownloader from '../Documents/Downloader'
 import GradientBorder from '../GradientBorder'
 import UserShipmentContent from './UserShipmentContent'
@@ -185,8 +185,8 @@ class UserShipmentView extends Component {
     } = shipmentData
 
     const createdDate = shipment
-      ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
-      : moment().format('DD-MM-YYYY | HH:mm A')
+      ? moment(shipment.updated_at).format('DD/MM/YYYY | HH:mm')
+      : moment().format('DD/MM/YYYY | HH:mm')
     const bg1 =
       shipment.origin_hub && shipment.origin_hub.photo
         ? { backgroundImage: `url(${shipment.origin_hub.photo})` }
@@ -382,4 +382,4 @@ UserShipmentView.defaultProps = {
   tenant: {}
 }
 
-export default translate(['common', 'shipment', 'bookconf', 'cargo', 'doc'])(UserShipmentView)
+export default withNamespaces(['common', 'shipment', 'bookconf', 'cargo', 'doc'])(UserShipmentView)

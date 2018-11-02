@@ -8,6 +8,7 @@ import { AdminUploadsSuccess } from '../Uploads/Success'
 import { adminActions, documentActions, appActions } from '../../../actions'
 import { Modal } from '../../Modal/Modal'
 // import styles from '../Admin.scss'
+import GenericError from '../../../components/ErrorHandling/Generic'
 
 class AdminHubs extends Component {
   constructor (props) {
@@ -97,59 +98,61 @@ class AdminHubs extends Component {
     const scope = tenant && tenant.data ? tenant.data.scope : {}
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        {uploadStatus}
-        {this.state.newHub ? (
-          <Modal
-            component={
-              <AdminHubForm theme={theme} close={this.toggleNewHub} saveHub={this.saveNewHub} />
-            }
-            verticalPadding="30px"
-            horizontalPadding="40px"
-            parentToggle={this.toggleNewHub}
-          />
+      <GenericError theme={theme}>
+        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+          {uploadStatus}
+          {this.state.newHub ? (
+            <Modal
+              component={
+                <AdminHubForm theme={theme} close={this.toggleNewHub} saveHub={this.saveNewHub} />
+              }
+              verticalPadding="30px"
+              horizontalPadding="40px"
+              parentToggle={this.toggleNewHub}
+            />
 
-        ) : (
-          ''
-        )}
-        <Switch className="flex">
-          <Route
-            exact
-            path="/admin/hubs"
-            render={props => (
-              <AdminHubsIndex
-                theme={theme}
-                hubs={hubs}
-                countries={countries}
-                adminDispatch={adminDispatch}
-                {...props}
-                toggleNewHub={this.toggleNewHub}
-                viewHub={this.viewHub}
-                scope={scope}
-                numHubPages={numHubPages}
-                documentDispatch={documentDispatch}
-                getHubsFromPage={this.getHubsFromPage}
-                searchHubsFromPage={this.searchHubsFromPage}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin/hubs/:id"
-            render={props => (
-              <AdminHubView
-                setView={this.setView}
-                theme={theme}
-                hubs={hubs}
-                hubHash={hubHash}
-                hubData={hub}
-                adminActions={adminDispatch}
-                {...props}
-              />
-            )}
-          />
-        </Switch>
-      </div>
+          ) : (
+            ''
+          )}
+          <Switch className="flex">
+            <Route
+              exact
+              path="/admin/hubs"
+              render={props => (
+                <AdminHubsIndex
+                  theme={theme}
+                  hubs={hubs}
+                  countries={countries}
+                  adminDispatch={adminDispatch}
+                  {...props}
+                  toggleNewHub={this.toggleNewHub}
+                  viewHub={this.viewHub}
+                  scope={scope}
+                  numHubPages={numHubPages}
+                  documentDispatch={documentDispatch}
+                  getHubsFromPage={this.getHubsFromPage}
+                  searchHubsFromPage={this.searchHubsFromPage}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/admin/hubs/:id"
+              render={props => (
+                <AdminHubView
+                  setView={this.setView}
+                  theme={theme}
+                  hubs={hubs}
+                  hubHash={hubHash}
+                  hubData={hub}
+                  adminActions={adminDispatch}
+                  {...props}
+                />
+              )}
+            />
+          </Switch>
+        </div>
+      </GenericError>
     )
   }
 }

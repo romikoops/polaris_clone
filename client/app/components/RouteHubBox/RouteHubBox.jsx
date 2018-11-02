@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
 import styles from './RouteHubBox.scss'
@@ -190,4 +190,4 @@ RouteHubBox.defaultProps = {
   theme: null
 }
 
-export default translate(['common', 'shipment'])(RouteHubBox)
+export default withNamespaces(['common', 'shipment'])(RouteHubBox)

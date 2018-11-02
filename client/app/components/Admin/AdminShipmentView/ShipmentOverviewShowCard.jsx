@@ -67,7 +67,7 @@ export default function ShipmentOverviewShowCard ({
               <div className="layout-row flex-100 layout-align-start-center">
                 <div className={`flex layout-row layout-wrap layout-align-start-start ${styles.carriage_row}`}>
                   <div className="flex-100 layout-row">
-                    <div className="flex-md-100 flex-lg-40 layout-row">
+                    <div className="flex-40 layout-row">
                       <i className={`flex-20 fa fa-check-square clip ${styles.check_square_sm}`} style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
                       <h4 className="flex-70 layout-row">
                         Pick-up
@@ -134,7 +134,7 @@ export default function ShipmentOverviewShowCard ({
                     </div>
                   </div>) }
                   {shipment.delivery_address ? (
-                    <div className={`layout-row flex-100 layout-align-start-center ${styles.carriage_address} ${styles.margin_fixes}`}>
+                    <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
                       <p>{shipment.delivery_address.street}&nbsp;
                         {shipment.delivery_address.street_number},&nbsp;
                         <strong>{shipment.delivery_address.city},&nbsp;

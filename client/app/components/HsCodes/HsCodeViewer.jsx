@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import styles from './HsCodeViewer.scss'
 import PropTypes from '../../prop-types'
 
@@ -97,4 +97,4 @@ HsCodeViewer.defaultProps = {
   theme: null
 }
 
-export default translate('common')(HsCodeViewer)
+export default withNamespaces('common')(HsCodeViewer)

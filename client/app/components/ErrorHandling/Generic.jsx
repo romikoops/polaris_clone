@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import * as Sentry from '@sentry/browser'
 import PropTypes from '../../prop-types'
 import styles from './errors.scss'
@@ -54,4 +54,4 @@ GenericError.defaultProps = {
   theme: {}
 }
 
-export default translate('errors')(GenericError)
+export default withNamespaces('errors')(GenericError)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Promise } from 'es6-promise-promise'
@@ -8,6 +8,7 @@ import PropTypes from '../../../prop-types'
 import { documentActions } from '../../../actions'
 import { RoundButton } from '../../RoundButton/RoundButton'
 import SquareButton from '../../SquareButton'
+import { LoadingSpinner } from '../../LoadingSpinner/LoadingSpinner'
 import styles from './index.scss'
 
 class DocumentsDownloader extends React.Component {
@@ -66,7 +67,7 @@ class DocumentsDownloader extends React.Component {
     const { downloadUrls, target } = this.props
 
     if (downloadUrls[target]) {
-      window.open(downloadUrls[target], '_blank')
+      window.location = downloadUrls[target]
     }
     this.setState({ requested: false })
   }
@@ -79,7 +80,7 @@ class DocumentsDownloader extends React.Component {
     const start = square ? (
       <SquareButton
         classNames="request"
-        text={t('common:request')}
+        text={t('doc:download')}
         theme={theme}
         size={size}
         disabled={disabled}
@@ -90,7 +91,7 @@ class DocumentsDownloader extends React.Component {
     ) : (
       <RoundButton
         classNames="request"
-        text={t('common:request')}
+        text={t('doc:download')}
         theme={theme}
         size={size}
         disabled={disabled}
@@ -99,10 +100,7 @@ class DocumentsDownloader extends React.Component {
       />
     )
     const loadingBox = (
-      <div className="flex-100 layout-column layout-align-space-around-center">
-        <p className="flex-none">{t('doc:generated')}</p>
-        <p className="flex-none">{t('doc:pleaseWait')}</p>
-      </div>
+      <LoadingSpinner size="small" />
     )
     const ready = square ? (
       <SquareButton
@@ -133,6 +131,7 @@ class DocumentsDownloader extends React.Component {
       button = loadingBox
     } else if (!loading && requested) {
       button = ready
+      this.downloadFile()
     }
 
     return (
@@ -194,4 +193,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default translate(['common', 'doc'])(connect(mapStateToProps, mapDispatchToProps)(DocumentsDownloader))
+export default withNamespaces(['common', 'doc'])(connect(mapStateToProps, mapDispatchToProps)(DocumentsDownloader))

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import GreyBox from '../GreyBox/GreyBox'
 import UserShipmentCard from './UserShipmentCard'
@@ -114,4 +114,4 @@ ShipmentOverviewCard.defaultProps = {
   noTitle: false
 }
 
-export default translate('shipment')(ShipmentOverviewCard)
+export default withNamespaces('shipment')(ShipmentOverviewCard)

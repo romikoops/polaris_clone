@@ -9,6 +9,7 @@ import { appActions } from '../../../../actions'
 import { NamedSelect } from '../../../NamedSelect/NamedSelect'
 import SquareButton from '../../../SquareButton'
 import { currencyOptions } from '../../../../constants'
+import GenericError from '../../../ErrorHandling/Generic'
 
 const CurrencyViewTile = ({
   currency, convertValue, results, baseCurrency, calculator
@@ -293,67 +294,69 @@ class AdminCurrencyCenter extends Component {
     </div>)
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div className="flex-100 layout-row layout-align-start-center">
-          <TextHeading size={3} text="Currency Center" />
-        </div>
-        <div className="flex-100 layout-row layout-align-center-start layout-wrap">
-          <div className="flex-80 layout-row layout-align-center-center layout-wrap">
-
-            <div className="flex-90 layout-row layout-align-center-start layout-wrap">
-              {currencyRates}
-            </div>
+      <GenericError theme={theme}>
+        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+          <div className="flex-100 layout-row layout-align-start-center">
+            <TextHeading size={3} text="Currency Center" />
           </div>
-          <div className="flex-20 layout-row layout-wrap layout-align-center-start">
+          <div className="flex-100 layout-row layout-align-center-start layout-wrap">
+            <div className="flex-80 layout-row layout-align-center-center layout-wrap">
 
-            <div
-              className="flex-100 layout-row layout-align-space-around-center
-                    layout-wrap input_box"
-            >
-              <input
-                className="flex-90"
-                type="text"
-                placeholder="Search Currencies"
-                value={searchString}
-                onChange={e => this.handleSearch(e)}
-              />
-            </div>
-            <div className="flex-90 layout-row layout-align-space-between-start">
-              <div className="flex-90 layout-row layout-align-space-between-center">
-                <p className="flex-none">Live Rates</p>
-                <div className="flex-5" />
-                <Toggle
-                  className="flex-none"
-                  id="rateToggle"
-                  name="rateToggle"
-                  checked={rateBool}
-                  onChange={e => this.handleRateToggle(e)}
-                />
-                <div className="flex-5" />
-                <p className="flex-none">Set Rates</p>
+              <div className="flex-90 layout-row layout-align-center-start layout-wrap">
+                {currencyRates}
               </div>
             </div>
-            <div className="flex-90 layout-row layout-align-space-between-start">
-              <p className="flex-none">Base Currency</p>
-              <p className="flex-none">{baseCurrency.key}</p>
+            <div className="flex-20 layout-row layout-wrap layout-align-center-start">
+
+              <div
+                className="flex-100 layout-row layout-align-space-around-center
+                      layout-wrap input_box"
+              >
+                <input
+                  className="flex-90"
+                  type="text"
+                  placeholder="Search Currencies"
+                  value={searchString}
+                  onChange={e => this.handleSearch(e)}
+                />
+              </div>
+              <div className="flex-90 layout-row layout-align-space-between-start">
+                <div className="flex-90 layout-row layout-align-space-between-center">
+                  <p className="flex-none">Live Rates</p>
+                  <div className="flex-5" />
+                  <Toggle
+                    className="flex-none"
+                    id="rateToggle"
+                    name="rateToggle"
+                    checked={rateBool}
+                    onChange={e => this.handleRateToggle(e)}
+                  />
+                  <div className="flex-5" />
+                  <p className="flex-none">Set Rates</p>
+                </div>
+              </div>
+              <div className="flex-90 layout-row layout-align-space-between-start">
+                <p className="flex-none">Base Currency</p>
+                <p className="flex-none">{baseCurrency.key}</p>
+              </div>
+              <div className="flex-100 layout-row layout-align-center-center">
+                <NamedSelect
+                  className="flex-100"
+                  options={currencyOptions}
+                  value={currentBase}
+                  onChange={e => this.handleBaseChange(e)}
+                />
+              </div>
+              { rateBool
+                ? editorButtons
+                : refreshButton
+              }
+              <div className="flex-100 layout-row layout-align-center-center" />
             </div>
-            <div className="flex-100 layout-row layout-align-center-center">
-              <NamedSelect
-                className="flex-100"
-                options={currencyOptions}
-                value={currentBase}
-                onChange={e => this.handleBaseChange(e)}
-              />
-            </div>
-            { rateBool
-              ? editorButtons
-              : refreshButton
-            }
-            <div className="flex-100 layout-row layout-align-center-center" />
           </div>
+          {styleTagJSX}
         </div>
-        {styleTagJSX}
-      </div>
+      </GenericError>
     )
   }
 }

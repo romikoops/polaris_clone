@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import { v4 } from 'uuid'
@@ -87,14 +87,14 @@ class UserShipmentCard extends Component {
         <div className={`layout-row flex-100 layout-align-start-center
       ${styles.middle_bottom_box} ${styles.smallText}`}
         >
-          <div className="layout-row flex-50 layout-align-center-center">
+          <div className="layout-row flex-100 layout-align-center-center">
             <i
               className={shipment.has_pre_carriage ? 'fa fa-check clip' : 'fa fa-times'}
               style={shipment.has_pre_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
             />
             <p>{t('shipment:preCarriageBase')}</p>
           </div>
-          <div className="layout-row flex-50 layout-align-center-center">
+          <div className="layout-row flex-100 layout-align-center-center">
             <i
               className={shipment.has_on_carriage ? 'fa fa-check clip' : 'fa fa-times'}
               style={shipment.has_on_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
@@ -112,6 +112,9 @@ class UserShipmentCard extends Component {
           ${styles.container}`
         }
       >
+        <div className={`layout-row flex-15 layout-align-center-center ${styles.topRight}`}>
+          <p className={`${styles.check} pointy`}>{t('common:viewDetails')}</p>
+        </div>
         <hr className={`flex-100 layout-row ${styles.hr_divider}`} />
         <div className={adminStyles.card_link} onClick={() => this.handleView()} />
 
@@ -139,16 +142,16 @@ class UserShipmentCard extends Component {
         <div
           className={`layout-row flex-100 layout-align-space-between-stretch ${styles.middle_top_box}`}
         >
-          <div className="layout-row flex-40 layout-align-center-center">
-            <div className=" flex-100">
+          <div className="layout-row flex-35 layout-align-center-center">
+            <div className="flex-100">
               <b className={styles.ref_row_card}>{t('common:ref')}:&nbsp;{shipment.imc_reference}</b>
-              <p>{t('shipment:placedAt')}&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY - HH:mm')}</p>
+              <p>{t('shipment:placedAt')}&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY | HH:mm')}</p>
             </div>
           </div>
 
           <hr />
 
-          <div className="layout-row flex-60">
+          <div className="layout-row flex-60 layout-align-center-center">
             <div className=" flex-100">
               <div className="layout-row flex-50 layout-align-start-center">
                 <div className="flex-10 layout-row layout-align-center-center">
@@ -240,4 +243,4 @@ UserShipmentCard.defaultProps = {
   theme: {}
 }
 
-export default translate(['shipment', 'user', 'cargo'])(UserShipmentCard)
+export default withNamespaces(['shipment', 'user', 'cargo'])(UserShipmentCard)

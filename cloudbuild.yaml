@@ -1,0 +1,21 @@
+steps:
+  - name: gcr.io/kaniko-project/executor:latest
+    args: ["--cache",
+           "--dockerfile=Dockerfile",
+           "--context=/workspace/",
+           "--destination=eu.gcr.io/$PROJECT_ID/ci/imc-api:$COMMIT_SHA"]
+  - name: gcr.io/kaniko-project/executor:latest
+    args: ["--cache",
+           "--dockerfile=client/Dockerfile",
+           "--context=/workspace/client/",
+           "--build-arg=RELEASE=$COMMIT_SHA",
+           "--build-arg=SENTRY_AUTH_TOKEN=$_SENTRY_AUTH_TOKEN",
+           "--destination=eu.gcr.io/$PROJECT_ID/ci/imc-client:$COMMIT_SHA"]
+  - name: gcr.io/kaniko-project/executor:latest
+    args: ["--cache",
+           "--dockerfile=qa/Dockerfile",
+           "--context=/workspace/qa/",
+           "--destination=eu.gcr.io/$PROJECT_ID/ci/imc-qa:$COMMIT_SHA"]
+images: ["eu.gcr.io/${PROJECT_ID}/ci/imc-api:${COMMIT_SHA}",
+  "eu.gcr.io/${PROJECT_ID}/ci/imc-client:${COMMIT_SHA}",
+  "eu.gcr.io/${PROJECT_ID}/ci/imc-qa:${COMMIT_SHA}"]

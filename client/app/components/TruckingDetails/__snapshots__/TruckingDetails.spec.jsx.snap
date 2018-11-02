@@ -18,12 +18,23 @@ exports[`shallow render 1`] = `
         >
           <div
             className="form_group disabled flex-50 layout-row layout-align-start-end"
+            data-for="RANDOM_KEY_0"
+            data-tip="Side Lifter is not available for the given address."
           >
+            <ReactTooltip
+              effect="solid"
+              id="RANDOM_KEY_0"
+              insecure={true}
+              place="bottom"
+              resizeHide={true}
+              wrapper="div"
+            />
             <div
               className="overlay"
             />
             <input
               checked={false}
+              disabled={true}
               id="on_carriage-side_lifter"
               name="on_carriage_truck"
               onChange={[Function]}
@@ -53,12 +64,23 @@ exports[`shallow render 1`] = `
           </div>
           <div
             className="form_group disabled flex-50 layout-row layout-align-start-end"
+            data-for="RANDOM_KEY_1"
+            data-tip="Chassis is not available for the given address."
           >
+            <ReactTooltip
+              effect="solid"
+              id="RANDOM_KEY_1"
+              insecure={true}
+              place="bottom"
+              resizeHide={true}
+              wrapper="div"
+            />
             <div
               className="overlay"
             />
             <input
               checked={false}
+              disabled={true}
               id="on_carriage-chassis"
               name="on_carriage_truck"
               onChange={[Function]}

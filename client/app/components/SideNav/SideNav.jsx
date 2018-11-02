@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
@@ -293,7 +293,7 @@ class SideNav extends Component {
 
       return (
         <div
-          className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`}
+          className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center ccb_${li.text.toLowerCase()}`}
           onClick={() => this.handleClickAction(li, i, isAdmin)}
           key={li.key}
           style={this.state.activeIndex === i ? { background: '#E0E0E0' } : {}}
@@ -399,4 +399,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default translate('account')(withRouter(connect(mapStateToProps, mapDispatchToProps)(SideNav)))
+export default withNamespaces('account')(withRouter(connect(mapStateToProps, mapDispatchToProps)(SideNav)))

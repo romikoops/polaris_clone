@@ -84,6 +84,7 @@
     "fixed_exchange_rates": true,
     "dangerous_goods": false,
     "non_stackable_goods": true,
+    "fee_detail": "key_and_name",
     "detailed_billing": false,
     "incoterm_info_level": "text",
     "cargo_info_level": "text",
@@ -190,6 +191,7 @@
     "fixed_exchange_rates": false,
     "dangerous_goods": false,
     "non_stackable_goods": true,
+    "fee_detail": "key_and_name",
     "detailed_billing": false,
     "incoterm_info_level": "text",
     "cargo_info_level": "hs_codes",
@@ -220,7 +222,7 @@
     },
     "logoLarge": "https://assets.itsmycargo.com/assets/images/logos/logo_easy_shipping.png",
     "logoSmall": "https://assets.itsmycargo.com/assets/images/logos/logo_easy_shipping.png",
-    "background": "https://assets.itsmycargo.com/assets/backgrounds/bg_easy_shipping.jpg"
+    "background": "https://assets.itsmycargo.com/assets/backgrounds/bg_easyshipping.jpg"
   },
   "addresses": {
     "components": [],
@@ -274,6 +276,7 @@
     "fixed_exchange_rates": false,
     "dangerous_goods": false,
     "non_stackable_goods": true,
+    "fee_detail": "key_and_name",
     "detailed_billing": false,
     "incoterm_info_level": "text",
     "cargo_info_level": "hs_codes",
@@ -281,8 +284,8 @@
     "has_customs": false,
     "terms": [],
     "links": {
-      "about": "",
-      "legal": ""
+      "about": "http://easyshipping.dk/",
+      "legal": "http://easyshipping.dk/kontakt.html"
     },
     "carriage_options": {
       "on_carriage": {
@@ -365,6 +368,7 @@
     "fixed_exchange_rates": false,
     "dangerous_goods": false,
     "non_stackable_goods": true,
+    "fee_detail": "key_and_name",
     "detailed_billing": false,
     "incoterm_info_level": "text",
     "cargo_info_level": "text",
@@ -396,7 +400,7 @@
     "logoLarge": "https://assets.itsmycargo.com/assets/logos/speedtrans/speedtranslogo.png",
     "logoSmall": "https://assets.itsmycargo.com/assets/logos/speedtrans/speedtranslogo.png",
     "logoWhite": "https://assets.itsmycargo.com/assets/logos/speedtrans/speedtrans_logo_white.png",
-    "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
+    "background": "https://assets.itsmycargo.com/assets/backgrounds/bg_speedtrans.jpg"
   },
   "addresses": {
     "components": [],
@@ -454,8 +458,8 @@
       }
     },
     "links": {
-      "about": "",
-      "legal": ""
+      "about": "http://www.speedtrans.com/ueberuns.php",
+      "legal": "http://www.speedtrans.com/impressum.php"
     },
     "continuous_rounding": true,
     "closed_shop": false,
@@ -469,6 +473,7 @@
     "fixed_exchange_rates": false,
     "dangerous_goods": false,
     "non_stackable_goods": true,
+    "fee_detail": "key_and_name",
     "detailed_billing": true,
     "incoterm_info_level": "text",
     "cargo_info_level": "text",
@@ -570,6 +575,7 @@
     "fixed_exchange_rates": false,
     "dangerous_goods": false,
     "non_stackable_goods": true,
+    "fee_detail": "key_and_name",
     "detailed_billing": false,
     "incoterm_info_level": "text",
     "cargo_info_level": "hs_codes",
@@ -604,7 +610,7 @@
     },
     "logoLarge": "https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png",
     "logoSmall": "https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png",
-    "background": "https://assets.itsmycargo.com/assets/logos/air_bg_1.jpg"
+    "background": "https://assets.itsmycargo.com/assets/backgrounds/bg_gateway.jpg"
   },
   "addresses": {
     "components": [],
@@ -616,16 +622,17 @@
   },
   "emails": {
     "sales": {
-      "general": "cglitscher@gatewaycargo.de"
+      "general": "nschoenlau@gatewaycargo.de"
     },
     "support": {
-      "general": "cglitscher@gatewaycargo.de"
+      "general": "nschoenlau@gatewaycargo.de"
     }
   },
   "subdomain": "gateway",
   "name": "Gateway Cargo Systems GmbH",
   "currency": "EUR",
   "scope": {
+    "default_direction": "export",
     "modes_of_transport": {
       "ocean": {
         "container": false,
@@ -640,20 +647,21 @@
         "cargo_item": false
       }
     },
-    "dangerous_goods": true,
+    "dangerous_goods": false,
     "non_stackable_goods": false,
     "links": {
-      "about": "",
-      "legal": ""
+      "about": "https://www.gatewaycargo.de/offices_us.html",
+      "legal": "https://www.gatewaycargo.de/contact_us.html#imprint"
     },
     "quote_notes": "1) Prices subject to change\n        2) All fees are converted at the time of quotation\n        using that day's European Central bank exchange rates and are an approximation\n        of the final amount ot be paid. The amount paid at the time of settlement\n        will reflect the exchange rates of the day.",
+    "fee_detail": "key_and_name",
     "detailed_billing": false,
     "continuous_rounding": false,
-    "closed_shop": false,
+    "closed_shop": true,
     "closed_registration": false,
     "closed_quotation_tool": true,
     "open_quotation_tool": false,
-    "require_full_address": true,
+    "require_full_address": false,
     "consolidate_cargo": false,
     "customs_export_paper": false,
     "fixed_currency": false,
@@ -672,10 +680,12 @@
         "import": "optional",
         "export": "mandatory"
       }
-    }
+    },
+    "hide_grand_total": true,
+    "hide_sub_totals": true
   },
   "other_data": {
-    "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"],
+    "cargo_item_types": ["Pallet", "Carton (only palletized)", "Crate", "Stack", "Drum (only palletized)", "Skid"],
     "incoterms": ["EXW", "FCA", "FOB", "FAS"]
   }
 }, {
@@ -689,7 +699,7 @@
     "logoLarge": "https://assets.itsmycargo.com/assets/tenants/schryver/schryver_logo_dark.png",
     "logoSmall": "https://assets.itsmycargo.com/assets/tenants/schryver/schryver_logo_dark.png",
     "logoWhite": "https://assets.itsmycargo.com/assets/tenants/schryver/schryver_white.png",
-    "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
+    "background": "https://assets.itsmycargo.com/assets/backgrounds/bg_schryver.jpg"
   },
   "addresses": {
     "components": [],
@@ -726,11 +736,12 @@
       }
     },
     "links": {
-      "about": "",
-      "legal": ""
+      "about": "https://www.schryver.com/about-us/",
+      "legal": "https://www.schryver.com/imprint-2/"
     },
     "dangerous_goods": false,
     "non_stackable_goods": true,
+    "fee_detail": "key_and_name",
     "detailed_billing": true,
     "continuous_rounding": false,
     "closed_shop": true,
@@ -773,7 +784,7 @@
     "logoLarge": "https://assets.itsmycargo.com/assets/tenants/normanglobal/normanglobal_logo.png",
     "logoSmall": "https://assets.itsmycargo.com/assets/tenants/normanglobal/normanglobal_logo.png",
     "logoWhite": "https://assets.itsmycargo.com/assets/tenants/normanglobal/normanglobal_logo_white.png",
-    "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
+    "background": "https://assets.itsmycargo.com/assets/backgrounds/bg_normanglobal.jpg"
   },
   "addresses": {
     "components": [],
@@ -810,11 +821,12 @@
       }
     },
     "links": {
-      "about": "",
-      "legal": ""
+      "about": "http://www.normanglobal.com/services/",
+      "legal": "http://www.normanglobal.com/about-us/privacy-policy/"
     },
     "dangerous_goods": false,
     "non_stackable_goods": true,
+    "fee_detail": "key_and_name",
     "detailed_billing": false,
     "continuous_rounding": false,
     "closed_shop": false,
@@ -856,7 +868,7 @@
     },
     "logoLarge": "https://assets.itsmycargo.com/assets/tenants/fivestar/fivestar_logo.png",
     "logoSmall": "https://assets.itsmycargo.com/assets/tenants/fivestar/fivestar_logo.png",
-    "background": "https://assets.itsmycargo.com/assets/logos/air_bg_1.jpg"
+    "background": "https://assets.itsmycargo.com/assets/backgrounds/bg_fivestar.jpg"
   },
   "addresses": {
     "components": [],
@@ -878,6 +890,7 @@
   "name": "Fivestar Services GmbH",
   "currency": "EUR",
   "scope": {
+    "default_direction": "export",
     "modes_of_transport": {
       "ocean": {
         "container": false,
@@ -892,23 +905,27 @@
         "cargo_item": false
       }
     },
-    "dangerous_goods": true,
-    "non_stackable_goods": true,
+    "dangerous_goods": false,
+    "non_stackable_goods": false,
     "links": {
-      "about": "",
-      "legal": ""
+      "about": "https://www.fivestar-services.de/company_us.html",
+      "legal": "https://www.fivestar-services.de/contact_us.html#impressum"
     },
     "quote_notes": "1) Prices subject to change\n        2) All fees are converted at the time of quotation\n        using that day's European Central bank exchange rates and are an approximation\n        of the final amount ot be paid. The amount paid at the time of settlement\n        will reflect the exchange rates of the day.",
+    "fee_detail": "key_and_name",
     "detailed_billing": false,
     "continuous_rounding": false,
-    "closed_shop": false,
+    "closed_shop": true,
     "closed_registration": false,
     "closed_quotation_tool": true,
     "open_quotation_tool": false,
-    "require_full_address": true,
+    "require_full_address": false,
     "consolidate_cargo": false,
     "customs_export_paper": false,
     "fixed_currency": false,
+    "cargo_price_notes": {
+      "cargo": "As per separate agreement with Saco Shipping"
+    },
     "fixed_exchange_rates": false,
     "incoterm_info_level": "text",
     "cargo_info_level": "text",
@@ -924,10 +941,19 @@
         "import": "optional",
         "export": "mandatory"
       }
-    }
+    },
+    "hide_grand_total": true,
+    "hide_sub_totals": true,
+    "translation_overrides": {
+      "shipment:export": "overrides:fivestarExport"
+    },
+    "offer_disclaimers": [
+      "fivestarExwFob",
+      "fivestarAsPerCarrier"
+    ]
   },
   "other_data": {
-    "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"],
+    "cargo_item_types": ["Pallet", "Carton (only palletized)", "Crate", "Stack", "Drum (only palletized)", "Skid"],
     "incoterms": ["EXW", "FCA", "FOB", "FAS"]
   }
 }, {
@@ -1002,6 +1028,7 @@
       "legal": ""
     },
     "quote_notes": "1) Prices subject to change\n        2) All fees are converted at the time of quotation\n        using that day's European Central bank exchange rates and are an approximation\n        of the final amount ot be paid. The amount paid at the time of settlement\n        will reflect the exchange rates of the day.",
+    "fee_detail": "key_and_name",
     "detailed_billing": false,
     "continuous_rounding": false,
     "closed_shop": false,

@@ -17,16 +17,23 @@ class ChargeCategory < ApplicationRecord
   def self.update_names
     LocalCharge.pluck(:fees).reject(&:empty?).each do |fees|
       fees.values.each do |fee|
-        ChargeCategory.from_fee(fee)
+        from_fee(fee) unless fee['key'].blank?
       end
     end
-    PricingDetail.find_each do |pricing|
-      fee = { 'code' => pricing.shipping_type }
-      ChargeCategory.from_fee(fee)
+
+    [
+      { code: 'HAS', name: 'Heavy Weight Surcharge' },
+      { code: 'EBS', name: 'Emergency Bunker Surcharge' },
+      { code: 'XAS', name: 'XAS' },
+      { code: 'LSS', name: 'Low Sulphur Surcharge' },
+      { code: 'BAS', name: 'Basic Ocean Freight' }
+    ].each do |attributes|
+      (find_by(attributes.slice(:code)) || new).update(attributes)
     end
+
     TruckingPricing.pluck(:fees).reject(&:empty?).each do |fees|
       fees.values.each do |fee|
-        ChargeCategory.from_fee(fee)
+        from_fee(fee)
       end
     end
   end
@@ -39,14 +46,13 @@ class ChargeCategory < ApplicationRecord
       )
   end
 
-  def self.from_fee(charge)
-    charge_name = charge['name'] || charge['key'].to_s.humanize.split(' ').map(&:capitalize).join(' ')
-    existing_charge_category = find_by(code: charge['key'])
-    if existing_charge_category.nil?
-      find_or_create_by(code: charge['key'], name: charge_name)
-    else
-      existing_charge_category.update_attributes(name: charge_name)
+  def self.from_fee(fee)
+    code = fee['key']
+    name = fee.fetch('name') do
+      fee['key'].to_s.humanize.split(' ').map(&:capitalize).join(' ')
     end
+
+    (find_by(code: code) || new).update!(name: name, code: code)
   end
 
   def cargo_unit

@@ -1,19 +1,17 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
-import { translate } from 'react-i18next'
-import Formsy from 'formsy-react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import RouteFilterBox from '../RouteFilterBox/RouteFilterBox'
 import { currencyOptions, moment } from '../../constants'
 import styles from './ChooseOffer.scss'
-import { numberSpacing } from '../../helpers'
+import { numberSpacing, isQuote } from '../../helpers'
 import DocumentsDownloader from '../Documents/Downloader'
 import defs from '../../styles/default_classes.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import TextHeading from '../TextHeading/TextHeading'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import QuoteCard from '../Quote/Card'
-import FormsyInput from '../FormsyInput/FormsyInput'
 import { Modal } from '../Modal/Modal'
 
 class ChooseOffer extends Component {
@@ -203,7 +201,6 @@ class ChooseOffer extends Component {
     const { scope } = tenant.data
 
     const { currentCurrency, isChecked } = this.state
-    const isQuotationTool = scope.closed_quotation_tool || scope.open_quotation_tool || scope.quotation_tool
     const {
       shipment, results, lastTripDate, aggregatedCargo
     } = shipmentData
@@ -249,7 +246,6 @@ class ChooseOffer extends Component {
           <QuoteCard
             theme={theme}
             tenant={tenant}
-            isQuotationTool={isQuotationTool}
             pickup={shipment.has_pre_carriage}
             startDate={shipment.desired_start_date}
             result={s}
@@ -270,7 +266,6 @@ class ChooseOffer extends Component {
         <QuoteCard
           theme={theme}
           tenant={tenant}
-          isQuotationTool={isQuotationTool}
           pickup={shipment.has_pre_carriage}
           startDate={shipment.desired_start_date}
           result={s}
@@ -329,9 +324,10 @@ class ChooseOffer extends Component {
           />
         ) : ''}
         <div className={`flex-none ${defs.content_width} layout-row`}>
-          <div className="flex-20 layout-row layout-wrap">
+          {!isQuote(tenant) ? <div className="flex-20 layout-row layout-wrap">
             <RouteFilterBox
               theme={theme}
+              tenant={tenant}
               cargos={shipmentData.cargoUnits}
               pickup={shipment.has_pre_carriage}
               setDurationFilter={this.setDuration}
@@ -344,53 +340,25 @@ class ChooseOffer extends Component {
               lastTripDate={lastTripDate}
               setDepartureDate={this.setDepartureDate}
             />
-          </div>
+          </div> : ''}
           <div className="flex  offset-5 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-wrap">
-              <div
-                className={`flex-100 layout-row layout-align-space-between-center margin_bottom ${
-                  styles.route_header
-                }`}
-              >
-                <div className="flex-none padd_10">
-                  {isQuotationTool ? (
-                    <TextHeading
-
-                      theme={theme}
-                      size={3}
-                      text={t('shipment:bestQuotations')}
-                    />
-                  ) : (
-                    ''
-                  )}
-                </div>
-                <div className="flex-30 layout-row layout-align-end-center">
-                  {scope.fixed_currency ? (
-                    ''
-                  ) : (
-                    <NamedSelect
-                      className="flex-100"
-                      options={currencyOptions}
-                      value={currentCurrency}
-                      placeholder={t('common:selectCurrency')}
-                      onChange={e => this.handleCurrencyUpdate(e)}
-                    />
-                  )}
-                </div>
-              </div>
               {closestRoutestoRender}
             </div>
             <div className="flex-100 layout-row layout-wrap">
               {focusRoutestoRender}
             </div>
           </div>
-          {isQuotationTool ? (
+          {isQuote(tenant) ? (
             <div className={`flex-20 offset-5 quote_options layout-wrap layout-align-center-start ${styles.download_section}`}>
-              <p className={`flex-100 layout-row ${styles.offer_title}`} >{t('shipment:selectedOffers')}</p>
+              <p className={`flex-100 layout-row ${styles.offer_title}`} >{isQuote(tenant) ? t('shipment:sendQuote') : t('shipment:selectedOffers') }</p>
               {this.state.selectedOffers !== 0 ? (
-                this.state.selectedOffers.map(offer =>
+                this.state.selectedOffers.map((offer, i) =>
                   (<div className={`flex-100 layout-row layout-align-start-center ${styles.selected_offer}`}>
-                    <span>{numberSpacing(offer.quote.total.value, 2)}&nbsp;{shipmentData.results[0].quote.total.currency}</span>
+                    { scope.hide_grand_total
+                      ? <span> {t('shipment:quoteNo', { number: i + 1 })}</span>
+                      : <span>{numberSpacing(offer.quote.total.value, 2)}&nbsp;{shipmentData.results[0].quote.total.currency}</span>
+                    }
                     <i className="fa fa-times pointy layout-row layout-align-end-center" onClick={() => this.handleClick(false, offer)} />
                   </div>))
               ) : ''}
@@ -404,25 +372,18 @@ class ChooseOffer extends Component {
                     size="full"
                     shipment={shipment}
                   />
-                  <div className={styles.send_email}>
-                    <Formsy>
-                      <FormsyInput
-                        type="email"
-                        name="quotation_email"
-                        value={this.state.email}
-                        onChange={this.emailValue}
-                        placeholder="bob@gateway.com"
-                      />
-                      <RoundButton
-                        theme={theme}
-                        size="full"
-                        disabled={this.state.selectedOffers.length < 1}
-                        active={this.state.selectedOffers.length > 0}
-                        text={t('account:sendViaEmail')}
-                        handleNext={() => this.selectQuotes(shipment, this.state.selectedOffers, this.state.email)}
-                      />
-                    </Formsy>
-                  </div>
+                </div>
+              </div>
+              <div className={`flex-100 layout-row layout-align-center-center ${styles.send_email}`}>
+                <div className="flex-90 layout-row layout-align-center-center layout-wrap">
+                  <RoundButton
+                    theme={theme}
+                    size="full"
+                    disabled={this.state.selectedOffers.length < 1}
+                    active={this.state.selectedOffers.length > 0}
+                    text={t('account:sendViaEmail')}
+                    handleNext={() => this.selectQuotes(shipment, this.state.selectedOffers, this.props.user.email)}
+                  />
                 </div>
               </div>
             </div>
@@ -480,4 +441,4 @@ ChooseOffer.defaultProps = {
   originalSelectedDay: false
 }
 
-export default translate(['account', 'landing', 'common'])(ChooseOffer)
+export default withNamespaces(['account', 'landing', 'common'])(ChooseOffer)

@@ -26,7 +26,7 @@ exports[`shallow render 1`] = `
             />
           </div>
           <div
-            className="welcome flex layout-row"
+            className="welcome flex layout-row ccb_dashboard"
           >
             Welcome back,
               
@@ -42,6 +42,7 @@ exports[`shallow render 1`] = `
             active={true}
             back={false}
             border={true}
+            classNames="ccb_find_rates"
             disabled={false}
             handleDisabled={null}
             handleNext={[Function]}
@@ -66,7 +67,7 @@ exports[`shallow render 1`] = `
     >
       <span>
         <b>
-          Quoted Shipments
+          Requested Shipments
         </b>
       </span>
     </div>

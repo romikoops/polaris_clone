@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import styles from './UserShipmentRow.scss'
@@ -105,7 +105,7 @@ export class UserShipmentRow extends Component {
           <div className="flex-100 layout-row layout-align-center-center">
             <h5 className="flex-none no_m">
               {' '}
-              {`${t('bookconf:bookingPlacedAt')} ${moment(shipment.booking_placed_at).format('DD/MM/YYYY HH:mm')}`}
+              {`${t('bookconf:bookingPlacedAt')} ${moment(shipment.booking_placed_at).format('DD/MM/YYYY | HH:mm')}`}
             </h5>
           </div>
           <div className={`${styles.hub_half} flex-100 layout-row layout-align-center-center`}>
@@ -245,4 +245,4 @@ UserShipmentRow.defaultProps = {
   hubs: []
 }
 
-export default translate(['common', 'shipment', 'bookconf'])(UserShipmentRow)
+export default withNamespaces(['common', 'shipment', 'bookconf'])(UserShipmentRow)

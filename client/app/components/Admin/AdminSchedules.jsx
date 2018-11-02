@@ -9,13 +9,14 @@ import { AdminUploadsSuccess } from './Uploads/Success'
 import AdminScheduleGenerator from './AdminScheduleGenerator'
 import DocumentsDownloader from '../Documents/Downloader'
 import { filters, capitalize } from '../../helpers'
-import '../../styles/select-css-custom.css'
+import '../../styles/select-css-custom.scss'
 import SideOptionsBox from './SideOptions/SideOptionsBox'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import CardRoutesIndex from './CardRouteIndex'
 import Tab from '../Tabs/Tab'
 import Tabs from '../Tabs/Tabs'
 import { RoundButton } from '../RoundButton/RoundButton'
+import GenericError from '../../components/ErrorHandling/Generic'
 
 class AdminSchedules extends Component {
   static dynamicSort (property) {
@@ -328,12 +329,14 @@ class AdminSchedules extends Component {
     const currView = showList ? listView : genView
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left">
-        {uploadStatus}
-        <div className={`${styles.component_view} flex layout-row layout-align-start-start`}>
-          {currView}
+      <GenericError theme={theme}>
+        <div className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left">
+          {uploadStatus}
+          <div className={`${styles.component_view} flex layout-row layout-align-start-start`}>
+            {currView}
+          </div>
         </div>
-      </div>
+      </GenericError>
     )
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import fetch from 'isomorphic-fetch'
 import { Promise } from 'es6-promise-promise'
 import ReactTooltip from 'react-tooltip'
@@ -155,4 +155,4 @@ FileUploader.defaultProps = {
   size: 'small'
 }
 
-export default translate('common')(FileUploader)
+export default withNamespaces('common')(FileUploader)

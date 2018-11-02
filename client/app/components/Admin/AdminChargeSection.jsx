@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import PropTypes from '../../prop-types'
 import { serviceChargeNames, currencyOptions } from '../../constants/admin.constants'
 import styles from './Admin.scss'
-import '../../styles/select-css-custom.css'
+import '../../styles/select-css-custom.scss'
 
 export class AdminChargeSection extends Component {
   constructor (props) {

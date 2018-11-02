@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import Tabs from '../../Tabs/Tabs'
 import Tab from '../../Tabs/Tab'
@@ -7,7 +7,7 @@ import styles from '../AdminShipments.scss'
 import adminStyles from '../Admin.scss'
 import GradientBorder from '../../GradientBorder'
 import { moment, docOptions, documentTypes } from '../../../constants'
-import { formattedPriceValue, totalPrice } from '../../../helpers'
+import { numberSpacing, totalPrice } from '../../../helpers'
 import ShipmentOverviewShowCard from './ShipmentOverviewShowCard'
 import DocumentsForm from '../../Documents/Form'
 import ContactDetailsRow from './ContactDetailsRow'
@@ -245,7 +245,7 @@ class AdminShipmentContent extends Component {
                               <input
                                 type="number"
                                 onChange={e => handlePriceChange('trucking_pre', e.target.value)}
-                                value={Number(newPrices.trucking_pre.value).toFixed(2)}
+                                value={newPrices.trucking_pre.value}
                                 className="layout-padding flex-70 layout-row flex-initial"
                               />
                             </div>
@@ -289,7 +289,7 @@ class AdminShipmentContent extends Component {
                               <input
                                 type="number"
                                 onChange={e => handlePriceChange('trucking_on', e.target.value)}
-                                value={Number(newPrices.trucking_on.value).toFixed(2)}
+                                value={newPrices.trucking_on.value}
                                 className="layout-padding layout-row flex-70 flex-initial"
                               />
                             </div>
@@ -336,7 +336,7 @@ class AdminShipmentContent extends Component {
                               <input
                                 type="number"
                                 onChange={e => handlePriceChange('export', e.target.value)}
-                                value={Number(newPrices.export.value).toFixed(2)}
+                                value={newPrices.export.value}
                                 className="layout-padding layout-row flex-70 flex-initial"
                               />
                             </div>
@@ -383,7 +383,7 @@ class AdminShipmentContent extends Component {
                               <input
                                 type="number"
                                 onChange={e => handlePriceChange('import', e.target.value)}
-                                value={Number(newPrices.import.value).toFixed(2)}
+                                value={newPrices.import.value}
                                 className="layout-padding layout-row flex-70 flex-initial"
                               />
                             </div>
@@ -427,7 +427,7 @@ class AdminShipmentContent extends Component {
                               <input
                                 type="number"
                                 onChange={e => handlePriceChange('cargo', e.target.value)}
-                                value={Number(newPrices.cargo.value).toFixed(2)}
+                                value={newPrices.cargo.value}
                                 className="layout-padding layout-row flex-70 flex-initial"
                               />
                             </div>
@@ -507,7 +507,7 @@ class AdminShipmentContent extends Component {
                               <input
                                 type="number"
                                 onChange={e => handlePriceChange('insurance', e.target.value)}
-                                value={Number(newPrices.insurance.value).toFixed(2)}
+                                value={newPrices.insurance.value}
                                 className="layout-padding layout-row flex-70 flex-initial"
                               />
                             </div>
@@ -545,7 +545,7 @@ class AdminShipmentContent extends Component {
                     </div>
                   </div>
                   <h2 className="layout-align-start-center layout-row flex">
-                    {formattedPriceValue(totalPrice(shipment).value)} {totalPrice(shipment).currency}
+                    {numberSpacing(totalPrice(shipment).value, 2)} {totalPrice(shipment).currency}
                   </h2>
                 </div>
               </div>
@@ -573,7 +573,7 @@ class AdminShipmentContent extends Component {
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
             <GreyBox
 
-              wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right}`}
+              wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_bottom}`}
               contentClassName="layout-column flex"
               content={cargoView}
             />
@@ -603,6 +603,7 @@ class AdminShipmentContent extends Component {
                           className={`${styles.select} flex-50`}
                           value={fileType}
                           options={docOptions}
+                          clearable={false}
                           onChange={this.setFileType}
                         />
                         <div className="flex-50 layout-align-center-center layout-row padd_10">
@@ -699,4 +700,4 @@ AdminShipmentContent.defaultProps = {
   newPrices: {}
 }
 
-export default translate(['common', 'shipment', 'doc', 'cargo', 'account'])(AdminShipmentContent)
+export default withNamespaces(['common', 'shipment', 'doc', 'cargo', 'account'])(AdminShipmentContent)
