@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Geocoder.configure(
+  lookup: :google,
+  
   # Use API key (server key from Google)
   api_key: Settings.google.api_key,
   use_https:  false,
