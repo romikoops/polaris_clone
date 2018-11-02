@@ -36,16 +36,20 @@ exports[`shallow render 1`] = `
           <div
             className="flex-90 layout-row layout-align-start-center"
           >
-            <p
-              className="flex-none"
-              style={
-                Object {
-                  "marginRight": "5px",
-                }
-              }
+            <label
+              htmlFor="addon_toggle_true"
             >
-              Yes, I want undefined to secure my Customs Export Paper (ADB)
-            </p>
+              <p
+                className="flex-none"
+                style={
+                  Object {
+                    "marginRight": "5px",
+                  }
+                }
+              >
+                Yes, I want undefined to secure my Customs Export Paper (ADB)
+              </p>
+            </label>
           </div>
           <div
             className="flex-10 layout-row layout-align-end-center"
@@ -54,6 +58,7 @@ exports[`shallow render 1`] = `
               checked={false}
               className=""
               disabled={false}
+              id="addon_toggle_true"
               onChange={[Function]}
               onClick={null}
               size={null}
@@ -74,16 +79,20 @@ exports[`shallow render 1`] = `
           <div
             className="flex-90 layout-row layout-align-start-center"
           >
-            <p
-              className="flex-none"
-              style={
-                Object {
-                  "marginRight": "5px",
-                }
-              }
+            <label
+              htmlFor="addon_toggle_false"
             >
-              No, I do not want undefined to secure my Customs Export Paper (ADB)
-            </p>
+              <p
+                className="flex-none"
+                style={
+                  Object {
+                    "marginRight": "5px",
+                  }
+                }
+              >
+                No, I do not want undefined to secure my Customs Export Paper (ADB)
+              </p>
+            </label>
           </div>
           <div
             className="flex-10 layout-row layout-align-end-center"
@@ -92,6 +101,7 @@ exports[`shallow render 1`] = `
               checked={true}
               className=""
               disabled={false}
+              id="addon_toggle_false"
               onChange={[Function]}
               onClick={null}
               size={null}

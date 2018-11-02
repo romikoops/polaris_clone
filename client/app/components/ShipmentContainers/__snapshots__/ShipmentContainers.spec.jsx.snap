@@ -207,15 +207,19 @@ exports[`containers.dangerous_goods is true 1`] = `
         </div>
         <div
           className="layout-row flex layout-wrap layout-align-start-center"
+          onClick={[Function]}
         >
           <div
             className="layout-row flex-100 layout-wrap layout-align-start-center"
           >
-            <p
-              className="input_label flex-none"
+            <label
+              className="input_label flex-none pointy"
+              htmlFor="0-dangerous_goods"
             >
-              Dangerous Goods
-            </p>
+              <p>
+                Dangerous Goods
+              </p>
+            </label>
             <Tooltip
               icon="fa-info-circle"
               text="dangerous_goods"
@@ -232,8 +236,8 @@ exports[`containers.dangerous_goods is true 1`] = `
           <[object Object]
             checked={true}
             disabled={true}
+            id="0-dangerous_goods"
             onChange={[Function]}
-            onClick={[Function]}
             size="34px"
             theme={
               Object {
@@ -451,15 +455,19 @@ exports[`containers.dangerous_goods is true 1`] = `
           </div>
           <div
             className="layout-row flex layout-wrap layout-align-start-center"
+            onClick={[Function]}
           >
             <div
               className="layout-row flex-100 layout-wrap layout-align-start-center"
             >
-              <p
-                className="input_label flex-none"
+              <label
+                className="input_label flex-none pointy"
+                htmlFor="-1-dangerous_goods"
               >
-                Dangerous Goods
-              </p>
+                <p>
+                  Dangerous Goods
+                </p>
+              </label>
               <Tooltip
                 icon="fa-info-circle"
                 text="dangerous_goods"
@@ -476,8 +484,8 @@ exports[`containers.dangerous_goods is true 1`] = `
             <[object Object]
               checked={false}
               disabled={true}
+              id="-1-dangerous_goods"
               onChange={[Function]}
-              onClick={[Function]}
               size="34px"
               theme={
                 Object {
@@ -703,15 +711,19 @@ exports[`nextStageAttempt is true 1`] = `
         </div>
         <div
           className="layout-row flex layout-wrap layout-align-start-center"
+          onClick={[Function]}
         >
           <div
             className="layout-row flex-100 layout-wrap layout-align-start-center"
           >
-            <p
-              className="input_label flex-none"
+            <label
+              className="input_label flex-none pointy"
+              htmlFor="0-dangerous_goods"
             >
-              Dangerous Goods
-            </p>
+              <p>
+                Dangerous Goods
+              </p>
+            </label>
             <Tooltip
               icon="fa-info-circle"
               text="dangerous_goods"
@@ -728,8 +740,8 @@ exports[`nextStageAttempt is true 1`] = `
           <[object Object]
             checked={false}
             disabled={true}
+            id="0-dangerous_goods"
             onChange={[Function]}
-            onClick={[Function]}
             size="34px"
             theme={
               Object {
@@ -947,15 +959,19 @@ exports[`nextStageAttempt is true 1`] = `
           </div>
           <div
             className="layout-row flex layout-wrap layout-align-start-center"
+            onClick={[Function]}
           >
             <div
               className="layout-row flex-100 layout-wrap layout-align-start-center"
             >
-              <p
-                className="input_label flex-none"
+              <label
+                className="input_label flex-none pointy"
+                htmlFor="-1-dangerous_goods"
               >
-                Dangerous Goods
-              </p>
+                <p>
+                  Dangerous Goods
+                </p>
+              </label>
               <Tooltip
                 icon="fa-info-circle"
                 text="dangerous_goods"
@@ -972,8 +988,8 @@ exports[`nextStageAttempt is true 1`] = `
             <[object Object]
               checked={false}
               disabled={true}
+              id="-1-dangerous_goods"
               onChange={[Function]}
-              onClick={[Function]}
               size="34px"
               theme={
                 Object {
@@ -1199,15 +1215,19 @@ exports[`scope.dangerous_goods is true 1`] = `
         </div>
         <div
           className="layout-row flex layout-wrap layout-align-start-center"
+          onClick=""
         >
           <div
             className="layout-row flex-100 layout-wrap layout-align-start-center"
           >
-            <p
-              className="input_label flex-none"
+            <label
+              className="input_label flex-none pointy"
+              htmlFor="0-dangerous_goods"
             >
-              Dangerous Goods
-            </p>
+              <p>
+                Dangerous Goods
+              </p>
+            </label>
             <Tooltip
               icon="fa-info-circle"
               text="dangerous_goods"
@@ -1224,8 +1244,8 @@ exports[`scope.dangerous_goods is true 1`] = `
           <[object Object]
             checked={false}
             disabled={false}
+            id="0-dangerous_goods"
             onChange={[Function]}
-            onClick=""
             size="34px"
             theme={
               Object {
@@ -1443,15 +1463,19 @@ exports[`scope.dangerous_goods is true 1`] = `
           </div>
           <div
             className="layout-row flex layout-wrap layout-align-start-center"
+            onClick=""
           >
             <div
               className="layout-row flex-100 layout-wrap layout-align-start-center"
             >
-              <p
-                className="input_label flex-none"
+              <label
+                className="input_label flex-none pointy"
+                htmlFor="-1-dangerous_goods"
               >
-                Dangerous Goods
-              </p>
+                <p>
+                  Dangerous Goods
+                </p>
+              </label>
               <Tooltip
                 icon="fa-info-circle"
                 text="dangerous_goods"
@@ -1468,8 +1492,8 @@ exports[`scope.dangerous_goods is true 1`] = `
             <[object Object]
               checked={false}
               disabled={false}
+              id="-1-dangerous_goods"
               onChange={[Function]}
-              onClick=""
               size="34px"
               theme={
                 Object {
@@ -1695,15 +1719,19 @@ exports[`shallow rendering 1`] = `
         </div>
         <div
           className="layout-row flex layout-wrap layout-align-start-center"
+          onClick={[Function]}
         >
           <div
             className="layout-row flex-100 layout-wrap layout-align-start-center"
           >
-            <p
-              className="input_label flex-none"
+            <label
+              className="input_label flex-none pointy"
+              htmlFor="0-dangerous_goods"
             >
-              Dangerous Goods
-            </p>
+              <p>
+                Dangerous Goods
+              </p>
+            </label>
             <Tooltip
               icon="fa-info-circle"
               text="dangerous_goods"
@@ -1720,8 +1748,8 @@ exports[`shallow rendering 1`] = `
           <[object Object]
             checked={false}
             disabled={true}
+            id="0-dangerous_goods"
             onChange={[Function]}
-            onClick={[Function]}
             size="34px"
             theme={
               Object {
@@ -1939,15 +1967,19 @@ exports[`shallow rendering 1`] = `
           </div>
           <div
             className="layout-row flex layout-wrap layout-align-start-center"
+            onClick={[Function]}
           >
             <div
               className="layout-row flex-100 layout-wrap layout-align-start-center"
             >
-              <p
-                className="input_label flex-none"
+              <label
+                className="input_label flex-none pointy"
+                htmlFor="-1-dangerous_goods"
               >
-                Dangerous Goods
-              </p>
+                <p>
+                  Dangerous Goods
+                </p>
+              </label>
               <Tooltip
                 icon="fa-info-circle"
                 text="dangerous_goods"
@@ -1964,8 +1996,8 @@ exports[`shallow rendering 1`] = `
             <[object Object]
               checked={false}
               disabled={true}
+              id="-1-dangerous_goods"
               onChange={[Function]}
-              onClick={[Function]}
               size="34px"
               theme={
                 Object {

@@ -25,7 +25,7 @@ class Checkbox extends PureComponent {
   }
   render () {
     const {
-      disabled, theme, name
+      disabled, theme, name, id
     } = this.props
     const { checked } = this.state
     const checkGradient = theme
@@ -46,6 +46,7 @@ class Checkbox extends PureComponent {
       >
         <label>
           <input
+            id={id}
             type="checkbox"
             checked={checked}
             disabled={disabled}
@@ -68,7 +69,8 @@ Checkbox.propTypes = {
   size: PropTypes.string,
   onChange: PropTypes.func,
   onClick: PropTypes.func,
-  className: PropTypes.string
+  className: PropTypes.string,
+  id: PropTypes.string
 }
 Checkbox.defaultProps = {
   theme: null,
@@ -77,7 +79,8 @@ Checkbox.defaultProps = {
   size: null,
   onChange: null,
   onClick: null,
-  className: ''
+  className: '',
+  id: null
 }
 
 export default Checkbox

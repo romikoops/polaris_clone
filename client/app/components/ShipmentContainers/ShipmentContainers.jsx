@@ -194,18 +194,23 @@ class ShipmentContainers extends Component {
               onChange={this.handleContainerQ}
             />
           </div>
-          <div className="layout-row flex layout-wrap layout-align-start-center">
+          <div
+            className="layout-row flex layout-wrap layout-align-start-center"
+            onClick={scope.dangerous_goods ? '' : () => toggleModal('noDangerousGoods')}
+          >
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-              <p className={`${styles.input_label} flex-none`}>{t('common:dangerousGoods')}</p>
+              <label htmlFor={`${i}-dangerous_goods`} className={`${styles.input_label} flex-none pointy`}>
+                <p>{t('common:dangerousGoods')}</p>
+              </label>
               <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
             </div>
             <Checkbox
+              id={`${i}-dangerous_goods`}
               onChange={() => this.toggleDangerousGoods(i)}
               checked={container ? container.dangerous_goods : false}
               theme={theme}
               size="34px"
               disabled={!scope.dangerous_goods}
-              onClick={scope.dangerous_goods ? '' : () => toggleModal('noDangerousGoods')}
             />
           </div>
 

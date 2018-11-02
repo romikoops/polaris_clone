@@ -575,13 +575,16 @@ class BookingConfirmation extends Component {
           <div className={CHECKBOX}>
             <div className={CHECKBOX_CELL}>
               <Checkbox
+                id="accept_terms"
                 className="ccb_accept_terms"
                 onChange={this.toggleAcceptTerms}
                 checked={this.state.acceptTerms}
                 theme={theme}
               />
             </div>
-            {Terms}
+            <label htmlFor="accept_terms" className="pointy">
+              {Terms}
+            </label>
           </div>
 
           <div className={ACCEPT} style={acceptStyle}>

@@ -144,6 +144,7 @@ class RegistrationPage extends React.Component {
       submitAttempted: this.state.submitAttempted,
       theme
     }
+
     return (
       <Formsy
         className={styles.registration_form}

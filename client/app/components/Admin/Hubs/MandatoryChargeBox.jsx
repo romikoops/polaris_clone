@@ -73,8 +73,11 @@ class MandatoryChargeBox extends PureComponent {
         { confimPrompt }
         <div className={`flex-100 layout-row layout-align-start-center layout-wrap ${styles.mandatory_charges_box}`}>
           <div className={`flex-75 layout-row layout-align-space-around-center ${styles.charges_row_padding}`}>
-            <p className="flex-none">Import Fees</p>
+            <label htmlFor="import" className="pointy">
+              <p>Import Fees</p>
+            </label>
             <Checkbox
+              id="import"
               theme={theme}
               name="import"
               checked={mandatoryCharge.import_charges}
@@ -82,8 +85,11 @@ class MandatoryChargeBox extends PureComponent {
             />
           </div>
           <div className={`flex-75 layout-row layout-align-space-around-center ${styles.charges_row_padding}`}>
-            <p className="flex-none">Export Fees</p>
+            <label htmlFor="export" className="pointy">
+              <p>Export Fees</p>
+            </label>
             <Checkbox
+              id="export"
               theme={theme}
               name="export"
               checked={mandatoryCharge.export_charges}
