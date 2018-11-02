@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Select from 'react-select'
 import { bindActionCreators } from 'redux'
@@ -7,13 +6,14 @@ import DayPickerInput from 'react-day-picker/DayPickerInput'
 import styled from 'styled-components'
 import 'react-day-picker/lib/style.css'
 import ReactTooltip from 'react-tooltip'
-import '../../styles/select-css-custom.scss'
-import { moment, getApiHost, adminSchedules as schedTip } from '../../constants'
-import { adminActions } from '../../actions'
-import Checkbox from '../Checkbox/Checkbox'
-import { RoundButton } from '../RoundButton/RoundButton'
-import { authHeader, capitalize } from '../../helpers'
-import styles from './Admin.scss'
+import PropTypes from '../../../prop-types'
+import '../../../styles/select-css-custom.scss'
+import { moment, getApiHost, adminSchedules as schedTip } from '../../../constants'
+import { adminActions } from '../../../actions'
+import { RoundButton } from '../../RoundButton/RoundButton'
+import { authHeader, capitalize } from '../../../helpers'
+import styles from '../Admin.scss'
+import WeekdayCheckboxes from './WeekdayCheckboxes'
 
 class AdminScheduleGenerator extends Component {
   static camelToCaps (string) {
@@ -49,6 +49,7 @@ class AdminScheduleGenerator extends Component {
     this.handleDuration = this.handleDuration.bind(this)
     this.genSchedules = this.genSchedules.bind(this)
     this.getStopsForItinerary = this.getStopsForItinerary.bind(this)
+    this.toggleWeekdays = this.toggleWeekdays.bind(this)
   }
   componentWillMount () {
     if (this.props.itinerary.id) {
@@ -95,7 +96,9 @@ class AdminScheduleGenerator extends Component {
       })
   }
   toggleWeekdays (ord) {
-    this.setState({ weekdays: { ...this.state.weekdays, [ord]: !this.state.weekdays[ord] } })
+    this.setState(prevState => ({
+      weekdays: { ...prevState.weekdays, [ord]: !prevState.weekdays[ord] }
+    }))
   }
   handleIntervalChange (ev) {
     const { name, value } = ev.target
@@ -417,69 +420,7 @@ class AdminScheduleGenerator extends Component {
 
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
               <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                <div className="flex layout-row layout-align-start-center">
-                  <Checkbox
-                    theme={theme}
-                    onChange={() => this.toggleWeekdays('1')}
-                    name="1"
-                    checked={weekdays['1']}
-                  />
-                  <p className="flex-none">Mon</p>
-                </div>
-                <div className="flex layout-row layout-align-start-center">
-                  <Checkbox
-                    theme={theme}
-                    onChange={() => this.toggleWeekdays('2')}
-                    name="2"
-                    checked={weekdays['2']}
-                  />
-                  <p className="flex-none">Tue</p>
-                </div>
-                <div className="flex layout-row layout-align-start-center">
-                  <Checkbox
-                    theme={theme}
-                    onChange={() => this.toggleWeekdays('3')}
-                    name="3"
-                    checked={weekdays['3']}
-                  />
-                  <p className="flex-none">Wed</p>
-                </div>
-                <div className="flex layout-row layout-align-start-center">
-                  <Checkbox
-                    theme={theme}
-                    onChange={() => this.toggleWeekdays('4')}
-                    name="4"
-                    checked={weekdays['4']}
-                  />
-                  <p className="flex-none">Thu</p>
-                </div>
-                <div className="flex layout-row layout-align-start-center">
-                  <Checkbox
-                    theme={theme}
-                    onChange={() => this.toggleWeekdays('5')}
-                    name="5"
-                    checked={weekdays['5']}
-                  />
-                  <p className="flex-none">Fri</p>
-                </div>
-                <div className="flex layout-row layout-align-start-center">
-                  <Checkbox
-                    theme={theme}
-                    onChange={() => this.toggleWeekdays('6')}
-                    name="6"
-                    checked={weekdays['6']}
-                  />
-                  <p className="flex-none">Sat</p>
-                </div>
-                <div className="flex layout-row layout-align-start-center">
-                  <Checkbox
-                    theme={theme}
-                    onChange={() => this.toggleWeekdays('7')}
-                    name="7"
-                    checked={weekdays['7']}
-                  />
-                  <p className="flex-none">Sun</p>
-                </div>
+                <WeekdayCheckboxes theme={theme} toggleWeekdays={this.toggleWeekdays} weekdays={weekdays} />
               </div>
             </div>
           </div>
