@@ -29,6 +29,8 @@ module ShippingTools
         imc_reference: shipment.imc_reference,
         origin_hub_id: schedule['origin_hub']['id'],
         destination_hub_id: schedule['destination_hub']['id'],
+        origin_nexus_id: shipment.origin_nexus_id,
+        destination_nexus_id: shipment.destination_nexus_id,
         quotation_id: schedule['id'],
         trip_id: trip.id,
         booking_placed_at: DateTime.now,
@@ -42,7 +44,7 @@ module ShippingTools
         load_type: shipment.load_type,
         itinerary: trip.itinerary
       )
-      new_shipment.cargo_items = shipment.cargo_items
+      new_shipment.cargo_units = shipment.cargo_units
       shipment.charge_breakdowns.each do |charge_breakdown|
         new_charge_breakdown = charge_breakdown.dup
         new_charge_breakdown.update(shipment: new_shipment)
@@ -415,7 +417,7 @@ module ShippingTools
     @origin_hub      = Hub.find(@schedule['origin_hub']['id'])
     @destination_hub = Hub.find(@schedule['destination_hub']['id'])
     if shipment.has_pre_carriage
-      shipment.planned_pickup_date = shipment.trip.closing_date - 1.day - shipment.trucking["pre_carriage"]["trucking_time_in_seconds"].seconds
+      shipment.planned_pickup_date = shipment.trip.closing_date - 1.day - shipment.trucking['pre_carriage']['trucking_time_in_seconds'].seconds
     else
       shipment.planned_origin_drop_off_date = shipment.trip.closing_date - 1.day
     end
@@ -587,17 +589,11 @@ module ShippingTools
     trips = delta.to_i.positive? ? trip.later_trips : trip.earlier_trips.sort_by(&:start_date)
     final_results = false
 
-    if trips.empty? && delta.to_i.positive?
-      trips = trip.last_trips.sort_by(&:start_date)
-    end
+    trips = trip.last_trips.sort_by(&:start_date) if trips.empty? && delta.to_i.positive?
 
-    if (trips.length < 5 || trips.empty?) && delta.to_i.positive?
-      final_results = true
-    end
+    final_results = true if (trips.length < 5 || trips.empty?) && delta.to_i.positive?
 
-    if (trips.length < 5 || trips.empty?) && !delta.to_i.positive?
-      trips = trip.earliest_trips.sort_by(&:start_date)
-    end
+    trips = trip.earliest_trips.sort_by(&:start_date) if (trips.length < 5 || trips.empty?) && !delta.to_i.positive?
 
     {
       schedules: Schedule.from_trips(trips),
