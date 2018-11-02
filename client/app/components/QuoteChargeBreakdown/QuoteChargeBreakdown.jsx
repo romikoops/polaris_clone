@@ -85,15 +85,8 @@ class QuoteChargeBreakdown extends Component {
 
     return Object.entries(currencySections).map(currencyFees => (
       <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
-        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.currency_header}`}>
-          <div className="flex-45 layout-row layout-align-start-center">
-            <span className="flex-none"> {t('cargo:feesIn', { currency: currencyFees[0] })}</span>
-          </div>
-          <div className="flex-45 layout-row layout-align-end-center">
-            <span className="flex-none">{`${numberSpacing(currencyTotals[currencyFees[0]], 2)} ${currencyFees[0]}`}</span>
-          </div>
-        </div>
-        {currencyFees[1].map((price, i) => {
+
+        {scope.detailed_billing ? currencyFees[1].map((price, i) => {
           const subPrices = (<div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
             <div className="flex-45 layout-row layout-align-start-center">
               <span>
@@ -102,7 +95,7 @@ class QuoteChargeBreakdown extends Component {
             </div>
             <div className="flex-50 layout-row layout-align-end-center">
               {scope.cargo_price_notes && scope.cargo_price_notes[key] ? (
-                <span style={{ textAlign: 'right', width: '12vw' }}>{scope.cargo_price_notes[key]}</span>
+                <span style={{ textAlign: 'right', width: '100%' }}>{scope.cargo_price_notes[key]}</span>
               ) : (
                 <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{(price[1].currency || price[1].total.currency)}</p>
               )}
@@ -110,9 +103,27 @@ class QuoteChargeBreakdown extends Component {
           </div>)
 
           return subPrices
-        })}
+        }) : ''}
+        {scope.cargo_price_notes && scope.cargo_price_notes[key] ? ''
+          : <div className={`flex-100 layout-row layout-align-space-between-center ${styles.currency_header}`}>
+            <div className="flex-45 layout-row layout-align-start-center">
+              <span className="flex-none"> {t('cargo:feesIn', { currency: currencyFees[0] })}</span>
+            </div>
+            <div className="flex-45 layout-row layout-align-end-center">
+              <span className="flex-none">{`${numberSpacing(currencyTotals[currencyFees[0]] || 0, 2)} ${currencyFees[0]}`}</span>
+            </div>
+          </div> }
       </div>
     ))
+  }
+
+  overrideTranslations (key) {
+    const { t, scope } = this.props
+    if (scope.translation_overrides && scope.translation_overrides[key]) {
+      return capitalize(t(scope.translation_overrides[key]))
+    }
+
+    return capitalize(t(key))
   }
 
   render () {
@@ -124,41 +135,46 @@ class QuoteChargeBreakdown extends Component {
     } = this.props
     if (Object.keys(quote).length === 0) return ''
 
-    return this.quoteKeys().map(key => (
-      <CollapsingBar
-        showArrow
-        collapsed={!this.state.expander[`${key}`]}
-        theme={theme}
-        contentStyle={styles.sub_price_row_wrapper}
-        headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
-        handleCollapser={() => this.toggleExpander(`${key}`)}
-        mainWrapperStyle={{ borderTop: '1px solid #E0E0E0', minHeight: '50px' }}
-        contentHeader={(
-          <div className={`flex-100 layout-row layout-align-start-center ${styles.price_row}`}>
-            <div className="flex-none layout-row layout-align-start-center" />
-            <div className="flex-45 layout-row layout-align-start-center">
-              {key === 'trucking_pre' ? (
-                <span>{t('shipment:pickUp')}</span>
-              ) : ''}
-              {key === 'trucking_on' ? (
-                <span>{t('shipment:delivery')}</span>
-              ) : ''}
-              <span>{key === 'trucking_pre' || key === 'trucking_on' ? '' : capitalize(key)}</span>
+    return this.quoteKeys()
+      .filter(key => ((!scope.cargo_price_notes || (scope.cargo_price_notes && !scope.cargo_price_notes[key]))))
+      .map(key => (
+        <CollapsingBar
+          showArrow
+          collapsed={!this.state.expander[`${key}`]}
+          theme={theme}
+          contentStyle={styles.sub_price_row_wrapper}
+          headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
+          handleCollapser={() => this.toggleExpander(`${key}`)}
+          mainWrapperStyle={{ borderTop: '1px solid #E0E0E0', minHeight: '50px' }}
+          contentHeader={(
+            <div className={`flex-100 layout-row layout-align-start-center ${styles.price_row}`}>
+              <div
+                className="flex-none layout-row layout-align-start-center"
+                style={{ background: theme.colors.primary }}
+              />
+              <div className="flex-45 layout-row layout-align-start-center">
+                {key === 'trucking_pre' ? (
+                  <span>{t('shipment:pickUp')}</span>
+                ) : ''}
+                {key === 'trucking_on' ? (
+                  <span>{t('shipment:delivery')}</span>
+                ) : ''}
+                <span>{key === 'trucking_pre' || key === 'trucking_on' ? '' : this.overrideTranslations(`shipment:${key}`) }</span>
+              </div>
+              <div className="flex-50 layout-row layout-align-end-center">
+                <p>
+                  {
+                    scope.hide_sub_totals || (scope.cargo_price_notes && scope.cargo_price_notes[key])
+                      ? ''
+                      : `${formattedPriceValue(quote[key].total.value)} ${quote[key].total.currency}`
+                  }
+                </p>
+              </div>
             </div>
-            <div className="flex-50 layout-row layout-align-end-center">
-              <p>
-                {
-                  scope.hide_sub_totals || (scope.cargo_price_notes && scope.cargo_price_notes[key])
-                    ? ''
-                    : `${formattedPriceValue(quote[key].total.value)} ${quote[key].total.currency}`
-                }
-              </p>
-            </div>
-          </div>
-        )}
-        content={this.generateContent(key)}
-      />
-    ))
+          )}
+          content={this.generateContent(key)}
+        />
+      ))
   }
 }
 
@@ -172,4 +188,4 @@ QuoteChargeBreakdown.propTypes = {
 QuoteChargeBreakdown.defaultProps = {
   theme: null
 }
-export default withNamespaces(['shipment', 'cargo'])(QuoteChargeBreakdown)
+export default withNamespaces(['shipment', 'cargo', 'overrides'])(QuoteChargeBreakdown)

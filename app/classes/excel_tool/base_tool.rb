@@ -54,7 +54,7 @@ module ExcelTool
     end
 
     def debug_message(message)
-      puts message if DEBUG
+      puts message
     end
 
     def set_general_local_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)

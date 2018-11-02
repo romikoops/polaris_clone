@@ -357,7 +357,7 @@
     "fillFormCargoDetails": "(Fill the form with your cargo details)",
     "nonStackableFirst": "We currently do not offer freight rates for non-stackable cargo in our Web Shop.",
     "nonStackableSecond": "Please contact our customer service department to place an order for your non-stackable cargo:",
-    "feesIn": "Fees in {{currency}}"
+    "feesIn": "Sub Total in {{currency}}"
   },
   "bookconf": {
     "_component": "BookingConfirmation",
@@ -496,7 +496,9 @@
     "availableRoutes": "Available Routes",
     "searchRoute": "Search Route",
     "quotedShipments": "Quoted Shipments",
-    "searchShipments": "Search Shipments"
+    "searchShipments": "Search Shipments",
+    "quoteNo": "Quote No: {{number}}",
+    "cargo" : "cargo"
   },
   "user": {
     "newAlias": "New Alias",
@@ -637,5 +639,13 @@
     "carrier": "Carrier: {{carrierName}}",
     "service": "Service: {{serviceLevel}}",
     "estimatedTT": "Estimated T/T"
+  },
+  "overrides": {
+    "fivestarExport": "Total Local Charges"
+  },
+  "disclaimers": {
+    "fivestarExwFob": "Ex-Works to FOB at port of choice",
+    "fivestarAsPerFreight": "Freight charge as per your agreement with your freight provider",
+    "fivestarAsPerCarrier": "Freight charge as per your agreement with {{carrier}}"
   }
 }

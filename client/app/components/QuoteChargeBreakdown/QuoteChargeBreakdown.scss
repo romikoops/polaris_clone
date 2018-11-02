@@ -1,29 +1,29 @@
 :local {
   .price_row {
     div:first-child {
-      width: 17px;
-      height: 17px;
-      background: #F2F2F2;
+      width: 5px;
+      height: 5px;
+      // background: #F8F8F8;
       border-radius: 50%;
-      margin-left: 15px;
+      margin-left: 10px;
     }
     span {
-      padding-left: 15px;
+      padding-left: 10px;
     }
     p {
       padding-right: 10px;
       font-size: 21px;
       text-align: right;
       letter-spacing: 0.02em;
-      font-weight: 600;
+      font-weight: 800;
     }
   }
   .sub_price_row {
-    background: #F8F8F8;
+    background: #F2F2F2;
     border-bottom: 1px solid #E0E0E0;
     height: 40px;
     span {
-      padding-left: 24px;
+      padding-left: 75px;
       font-weight: bold;
       line-height: normal;
       font-size: 11px;
@@ -36,11 +36,11 @@
     }
   }
   .currency_header {
-    background: #F6F6F6;
+    background: rgb(228, 222, 222);
     border-bottom: 1px solid #E0E0E0;
     height: 40px;
     span {
-      padding-left: 20px;
+      padding-left: 50px;
       padding-right: 20px;
       font-weight: bold;
       line-height: normal;
