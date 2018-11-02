@@ -14,7 +14,7 @@ function ShipmentNotes ({
               ${styles.no_border_top} margin_bottom`}
       contentClassName="layout-row flex-100"
       content={(
-        <div className="layout-column flex-100">
+        <div className="layout-row layout-wrap flex-100">
           <div className={`layout-row flex-100 flex-sm-100 flex-xs-100 ${styles.column_info}`}>
             <div className={`flex-30 layout-row offset-5 layout-align-start-center layout-wrap ${styles.border_right}`}>
               {shipment.total_goods_value ? (
@@ -44,7 +44,7 @@ function ShipmentNotes ({
             </div>
           </div>
           {shipment.eori || shipment.incoterm_text || shipment.notes ? (
-            <div className={`layout-column flex-100 flex-sm-100 flex-xs-100 ${styles.column_info}`}>
+            <div className={`layout-row flex-100 layout-wrap ${styles.column_info}`}>
 
               {shipment.eori ? (
                 <div className={`${shipment.incoterm_text || shipment.notes ? styles.border_bottom : ''}
