@@ -100,7 +100,7 @@ exports[`theme has truthy properties 1`] = `
         </div>
         <ButtonSection
           bookNow={[Function]}
-          hidden={false}
+          className="hide_h_xs"
           t={[Function]}
           tenant={
             Object {
@@ -168,7 +168,7 @@ exports[`theme has truthy properties 1`] = `
     >
       <ButtonSection
         bookNow={[Function]}
-        hidden={true}
+        className="show_h_xs"
         t={[Function]}
         tenant={
           Object {
@@ -330,7 +330,7 @@ exports[`user.role_id is 1 1`] = `
         </div>
         <ButtonSection
           bookNow={[Function]}
-          hidden={false}
+          className="hide_h_xs"
           t={[Function]}
           tenant={
             Object {
@@ -394,7 +394,7 @@ exports[`user.role_id is 1 1`] = `
     >
       <ButtonSection
         bookNow={[Function]}
-        hidden={true}
+        className="show_h_xs"
         t={[Function]}
         tenant={
           Object {
@@ -552,7 +552,7 @@ exports[`user.role_id is 2 1`] = `
         </div>
         <ButtonSection
           bookNow={[Function]}
-          hidden={false}
+          className="hide_h_xs"
           t={[Function]}
           tenant={
             Object {
@@ -616,7 +616,7 @@ exports[`user.role_id is 2 1`] = `
     >
       <ButtonSection
         bookNow={[Function]}
-        hidden={true}
+        className="show_h_xs"
         t={[Function]}
         tenant={
           Object {

@@ -57,14 +57,15 @@ const FindRates = translate(['landing'])(({
 ))
 
 const ButtonSection = ({
-  user, tenant, theme, bookNow, hidden, t
+  user, tenant, theme, bookNow, className, t
 }) => {
-  if (hidden) return ''
-
   const buttonProps = { user, tenant, theme }
 
   return (
-    <div className={`${styles.content_wrapper} flex-100 layout-row layout-wrap layout-align-center-center`}>
+    <div className={`
+      ${styles.content_wrapper} ${className} flex-100 layout-row layout-wrap layout-align-center-center
+    `}
+    >
       <div className={`layout-row layout-align-start-center ${styles.wrapper_btns} flex-75`}>
         <MyAccount {...buttonProps} />
         <ToAdmin {...buttonProps} />
@@ -100,7 +101,7 @@ ButtonSection.propTypes = {
   tenant: PropTypes.tenant,
   t: PropTypes.func.isRequired,
   bookNow: PropTypes.func,
-  hidden: PropTypes.bool
+  className: PropTypes.string
 }
 
 ButtonSection.defaultProps = {
@@ -108,7 +109,7 @@ ButtonSection.defaultProps = {
   user: null,
   tenant: null,
   bookNow: null,
-  hidden: false
+  className: ''
 }
 
 export default translate(['landing'])(ButtonSection)

@@ -85,11 +85,11 @@ function LandingTop ({
                 }
               </div>
             </div>
-            <ButtonSection {...buttonSectionProps} hidden={window.innerHeight <= 750} />
+            <ButtonSection {...buttonSectionProps} className="hide_h_xs" />
           </div>
         </div>
         <div className="flex-50 layout-row layout-align-center layout-wrap">
-          <ButtonSection {...buttonSectionProps} hidden={window.innerHeight > 750} />
+          <ButtonSection {...buttonSectionProps} className="show_h_xs" />
         </div>
       </div>
     </StyledTop>

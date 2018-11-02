@@ -41,12 +41,3 @@ test('user.role_id is 1', () => {
 
   expect(shallow(<ButtonSection {...props} />)).toMatchSnapshot()
 })
-
-test('is hidden', () => {
-  const props = {
-    ...propsBase,
-    hidden: true
-  }
-
-  expect(shallow(<ButtonSection {...props} />)).toMatchSnapshot()
-})
