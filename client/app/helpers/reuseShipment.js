@@ -35,7 +35,7 @@ function reuseLocation (shipment, target) {
   let address = {}
   if (shipment.has_pre_carriage && target === 'origin') {
     address = {
-      number: shipment.pickup_address.number,
+      number: shipment.pickup_address.street_number,
       street: shipment.pickup_address.street,
       city: shipment.pickup_address.city,
       country: shipment.pickup_address.country.name,
@@ -46,7 +46,7 @@ function reuseLocation (shipment, target) {
     }
   } else if (shipment.has_on_carriage && target === 'destination') {
     address = {
-      number: shipment.delivery_address.number,
+      number: shipment.delivery_address.street_number,
       street: shipment.delivery_address.street,
       city: shipment.delivery_address.city,
       country: shipment.delivery_address.country.name,
