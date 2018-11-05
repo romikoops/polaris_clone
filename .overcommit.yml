@@ -1,6 +1,10 @@
 # Disable annoying signature complain when this file changes
 verify_signatures: false
 
+PostCheckout:
+  EnsureBranchName:
+    enabled: true
+
 CommitMsg:
   MessageFormat:
     enabled: true
