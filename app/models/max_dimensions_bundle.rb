@@ -11,7 +11,7 @@ class MaxDimensionsBundle < ApplicationRecord
       "#{max_dimensions_name} from tenant '#{obj.tenant.subdomain}'"
     end
   }
-  CustomValidations.inclusion(self, :mode_of_transport, %w(ocean rail air general))
+  CustomValidations.inclusion(self, :mode_of_transport, %w(ocean rail air truck truck_carriage general))
   validates :dimension_x, :dimension_y, :dimension_z, :payload_in_kg, :chargeable_weight,
             numericality: true, allow_nil: true
 
