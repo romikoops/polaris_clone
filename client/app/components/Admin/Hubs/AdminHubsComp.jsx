@@ -180,36 +180,35 @@ export class AdminHubsComp extends Component {
     if (!this.props.hubs) {
       return ''
     }
-    const typeFilters = Object.keys(searchFilters.hubType).map((htk) => {
+    const typeFilters = Object.keys(searchFilters.hubType).map((hubType) => {
       const typeNames = {
         ocean: 'Port', air: 'Airport', rail: 'Railyard', truck: 'Depot'
       }
 
       return (
-        <div
-          className={`${
-            styles.action_section
-          } flex-100 layout-row layout-align-center-center layout-wrap`}
-        >
-          <p className="flex-70">{typeNames[htk]}</p>
+        <div className={`${styles.action_section} flex-100 layout-row layout-align-center-center layout-wrap`}>
+          <label htmlFor={hubType} className="pointy">
+            <p>{typeNames[hubType]}</p>
+          </label>
           <Checkbox
-            onChange={() => this.toggleFilterValue('hubType', htk)}
-            checked={searchFilters.hubType[htk]}
+            id={hubType}
+            onChange={() => this.toggleFilterValue('hubType', hubType)}
+            checked={searchFilters.hubType[hubType]}
             theme={theme}
           />
         </div>
       )
     })
-    const statusFilters = Object.keys(searchFilters.status).map(sk => (
-      <div
-        className={`${
-          styles.action_section
-        } flex-100 layout-row layout-align-center-center layout-wrap`}
-      >
-        <p className="flex-70">{capitalize(sk)}</p>
+    const statusFilters = Object.keys(searchFilters.status).map(status => (
+      <div className={`${styles.action_section} flex-100 layout-row layout-align-center-center layout-wrap`}>
+        <label htmlFor={status} className="pointy">
+          <p>{capitalize(status)}</p>
+        </label>
+
         <Checkbox
-          onChange={() => this.toggleFilterValue('status', sk)}
-          checked={searchFilters.status[sk]}
+          id={status}
+          onChange={() => this.toggleFilterValue('status', status)}
+          checked={searchFilters.status[status]}
           theme={theme}
         />
       </div>

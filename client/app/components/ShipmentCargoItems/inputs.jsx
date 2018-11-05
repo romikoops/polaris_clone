@@ -476,18 +476,21 @@ export default function getInputs (
   inputs.dangerousGoods = (
     <div
       className={`layout-row flex layout-wrap layout-align-start-center ${styles.cargo_unit_check}`}
+      onClick={scope.dangerous_goods ? '' : () => toggleModal('noDangerousGoods')}
     >
       <Checkbox
+        id={`${i}-dangerous_goods`}
         name={`${i}-dangerous_goods`}
         onChange={(checked, e) => this.toggleCheckbox(checked, e)}
         checked={cargoItem ? cargoItem.dangerous_goods : false}
         theme={theme}
         size="15px"
         disabled={!scope.dangerous_goods}
-        onClick={scope.dangerous_goods ? '' : () => toggleModal('noDangerousGoods')}
       />
       <div className="layout-row flex-75 layout-wrap layout-align-start-center">
-        <p className={`${styles.input_check} flex-none`}>{t('common:dangerousGoods')}</p>
+        <label className={`${styles.input_check} flex-none pointy`} htmlFor={`${i}-dangerous_goods`}>
+          <p>{t('common:dangerousGoods')}</p>
+        </label>
         <Tooltip color={theme.colors.primary} icon="fa-info-circle" text="dangerous_goods" />
       </div>
     </div>
@@ -495,18 +498,21 @@ export default function getInputs (
   inputs.nonStackable = (
     <div
       className={`layout-row flex layout-wrap layout-align-end-center ${styles.cargo_unit_check}`}
+      onClick={scope.non_stackable_goods ? '' : () => toggleModal('nonStackable')}
     >
       <Checkbox
+        id={`${i}-stackable`}
         name={`${i}-stackable`}
         onChange={(checked, e) => this.toggleCheckbox(!checked, e)}
         checked={cargoItem ? !cargoItem.stackable : false}
         theme={theme}
         size="15px"
         disabled={!scope.non_stackable_goods}
-        onClick={scope.non_stackable_goods ? '' : () => toggleModal('nonStackable')}
       />
       <div className="layout-row flex-65 layout-wrap layout-align-start-center">
-        <p className={`${styles.input_check} flex-none`}>{t('common:nonStackable')}</p>
+        <label className={`${styles.input_check} flex-none pointy`} htmlFor={`${i}-stackable`}>
+          <p>{t('common:nonStackable')}</p>
+        </label>
         <Tooltip color={theme.colors.primary} icon="fa-info-circle" text="non_stackable" />
       </div>
     </div>

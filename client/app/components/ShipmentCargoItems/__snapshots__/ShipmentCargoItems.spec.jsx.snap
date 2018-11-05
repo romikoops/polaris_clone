@@ -369,14 +369,16 @@ exports[`shallow rendering 1`] = `
                 </div>
                 <div
                   className="layout-row flex layout-wrap layout-align-end-center cargo_unit_check"
+                  onClick={[Function]}
                 >
                   <Checkbox
                     checked={true}
                     className=""
                     disabled={true}
+                    id="0-stackable"
                     name="0-stackable"
                     onChange={[Function]}
-                    onClick={[Function]}
+                    onClick={null}
                     size="15px"
                     theme={
                       Object {
@@ -390,11 +392,14 @@ exports[`shallow rendering 1`] = `
                   <div
                     className="layout-row flex-65 layout-wrap layout-align-start-center"
                   >
-                    <p
-                      className="input_check flex-none"
+                    <label
+                      className="input_check flex-none pointy"
+                      htmlFor="0-stackable"
                     >
-                      Non Stackable
-                    </p>
+                      <p>
+                        Non Stackable
+                      </p>
+                    </label>
                     <Tooltip
                       color="#333"
                       icon="fa-info-circle"
@@ -406,14 +411,16 @@ exports[`shallow rendering 1`] = `
                 </div>
                 <div
                   className="layout-row flex layout-wrap layout-align-start-center cargo_unit_check"
+                  onClick={[Function]}
                 >
                   <Checkbox
                     checked={false}
                     className=""
                     disabled={true}
+                    id="0-dangerous_goods"
                     name="0-dangerous_goods"
                     onChange={[Function]}
-                    onClick={[Function]}
+                    onClick={null}
                     size="15px"
                     theme={
                       Object {
@@ -427,11 +434,14 @@ exports[`shallow rendering 1`] = `
                   <div
                     className="layout-row flex-75 layout-wrap layout-align-start-center"
                   >
-                    <p
-                      className="input_check flex-none"
+                    <label
+                      className="input_check flex-none pointy"
+                      htmlFor="0-dangerous_goods"
                     >
-                      Dangerous Goods
-                    </p>
+                      <p>
+                        Dangerous Goods
+                      </p>
+                    </label>
                     <Tooltip
                       color="#333"
                       icon="fa-info-circle"

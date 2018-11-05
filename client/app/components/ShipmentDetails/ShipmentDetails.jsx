@@ -1009,6 +1009,7 @@ export class ShipmentDetails extends Component {
                 >
                   <div className="flex-10 layout-row layout-align-start-start">
                     <Checkbox
+                      id="stackable_goods_confirmation"
                       theme={theme}
                       onChange={() =>
                         this.setState({
@@ -1021,14 +1022,16 @@ export class ShipmentDetails extends Component {
                     />
                   </div>
                   <div className="flex">
-                    <p style={{ margin: 0, fontSize: '14px', width: '100%' }}>
-                      {t('cargo:confirmStackable')}
-                      <br />
-                      <span style={{ fontSize: '11px', width: '100%' }}>
-                        ({t('cargo:nonStackable')}{' '}
-                        {t('cargo:cargoUnits')})
-                      </span>
-                    </p>
+                    <label htmlFor="stackable_goods_confirmation" className="pointy">
+                      <p style={{ margin: 0, fontSize: '14px', width: '100%' }}>
+                        {t('cargo:confirmStackable')}
+                        <br />
+                        <span style={{ fontSize: '11px', width: '100%' }}>
+                          ({t('cargo:nonStackable')}{' '}
+                          {t('cargo:cargoUnits')})
+                        </span>
+                      </p>
+                    </label>
                   </div>
                 </div>
               )}
@@ -1045,6 +1048,7 @@ export class ShipmentDetails extends Component {
                 >
                   <div className="flex-10 layout-row layout-align-start-start">
                     <Checkbox
+                      id="no_dangerous_goods_confirmation"
                       theme={theme}
                       onChange={() =>
                         this.setState({
@@ -1057,16 +1061,18 @@ export class ShipmentDetails extends Component {
                     />
                   </div>
                   <div className="flex">
-                    <p style={{ margin: 0, fontSize: '14px' }}>
-                      {t('cargo:confirmSafe')}{' '}
-                      <span
-                        className="emulate_link blue_link"
-                        onClick={() => this.toggleModal('dangerousGoodsInfo')}
-                      >
-                        {t('common:dangerousGoods')}
-                      </span>
-                        .
-                    </p>
+                    <label htmlFor="no_dangerous_goods_confirmation" className="pointy">
+                      <p style={{ margin: 0, fontSize: '14px' }}>
+                        {t('cargo:confirmSafe')}{' '}
+                        <span
+                          className="emulate_link blue_link"
+                          onClick={() => this.toggleModal('dangerousGoodsInfo')}
+                        >
+                          {t('common:dangerousGoods')}
+                        </span>
+                          .
+                      </p>
+                    </label>
                   </div>
                 </div>
               )}

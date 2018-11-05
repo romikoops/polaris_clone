@@ -84,12 +84,15 @@ class CustomsExportPaper extends PureComponent {
             >
               <div className="flex-100 layout-row layout-align-end-center">
                 <div className="flex-90 layout-row layout-align-start-center">
-                  <p className="flex-none" style={{ marginRight: '5px' }}>
-                    {`${t('cargo:clearanceHead')} ${tenant.data.name} ${t('shipment:customsExportPaperFive')}`}
-                  </p>
+                  <label htmlFor="addon_toggle_true">
+                    <p className="flex-none" style={{ marginRight: '5px' }}>
+                      {`${t('cargo:clearanceHead')} ${tenant.data.name} ${t('shipment:customsExportPaperFive')}`}
+                    </p>
+                  </label>
                 </div>
                 <div className="flex-10 layout-row layout-align-end-center">
                   <Checkbox
+                    id="addon_toggle_true"
                     onChange={() => this.toggleAddon(true)}
                     checked={this.state.addonView}
                     theme={theme}
@@ -98,12 +101,15 @@ class CustomsExportPaper extends PureComponent {
               </div>
               <div className="flex-100 layout-row layout-align-end-center">
                 <div className="flex-90 layout-row layout-align-start-center">
-                  <p className="flex-none" style={{ marginRight: '5px' }}>
-                    {`${t('cargo:clearanceNoHead')} ${tenant.data.name} ${t('shipment:customsExportPaperFive')}`}
-                  </p>
+                  <label htmlFor="addon_toggle_false">
+                    <p className="flex-none" style={{ marginRight: '5px' }}>
+                      {`${t('cargo:clearanceNoHead')} ${tenant.data.name} ${t('shipment:customsExportPaperFive')}`}
+                    </p>
+                  </label>
                 </div>
                 <div className="flex-10 layout-row layout-align-end-center">
                   <Checkbox
+                    id="addon_toggle_false"
                     onChange={() => this.toggleAddon(false)}
                     checked={
                       this.state.addonView === null ? null : !this.state.addonView

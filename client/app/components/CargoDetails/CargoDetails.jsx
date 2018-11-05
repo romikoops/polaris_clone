@@ -688,12 +688,13 @@ class CargoDetails extends Component {
                     >
                       <div className="flex-100 layout-row layout-wrap layout-align-end-center">
                         <div className="flex-90 layout-row layout-align-start-center">
-                          <p className="flex-none layout-align-start-center">
+                          <label htmlFor="yes_insurance" className="pointy">
                             {quoteInsurance}
-                          </p>
+                          </label>
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
                           <Checkbox
+                            id="yes_insurance"
                             className="ccb_yes_insurance"
                             onChange={() => this.toggleInsurance(true)}
                             checked={this.props.insurance.bool}
@@ -703,17 +704,16 @@ class CargoDetails extends Component {
                       </div>
                       <div className="flex-100 layout-row layout-align-end-center">
                         <div className="flex-90 layout-row layout-align-start-center">
-                          <p className="flex-none" style={{ marginRight: '5px' }}>
+                          <label htmlFor="no_insurance" className="pointy">
                             {quoteInsuranceNegative}
-                          </p>
+                          </label>
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
                           <Checkbox
+                            id="no_insurance"
                             className="ccb_no_insurance"
                             onChange={() => this.toggleInsurance(false)}
-                            checked={
-                              this.props.insurance.bool === null ? null : !this.props.insurance.bool
-                            }
+                            checked={this.props.insurance.bool === null ? null : !this.props.insurance.bool}
                             theme={theme}
                           />
                         </div>
@@ -774,12 +774,13 @@ class CargoDetails extends Component {
                     >
                       <div className="flex-100 layout-row layout-align-end-center">
                         <div className="flex-90 layout-row layout-align-start-center">
-                          <p className="flex-none" style={{ marginRight: '5px' }}>
+                          <label htmlFor="yes_clearance" className="pointy">
                             {clearance}
-                          </p>
+                          </label>
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
                           <Checkbox
+                            id="yes_clearance"
                             className="ccb_yes_clearance"
                             onChange={() => this.toggleCustoms(true)}
                             checked={this.state.customsView}
@@ -789,17 +790,16 @@ class CargoDetails extends Component {
                       </div>
                       <div className="flex-100 layout-row layout-align-end-center">
                         <div className="flex-90 layout-row layout-align-start-center">
-                          <p className="flex-none" style={{ marginRight: '5px' }}>
+                          <label htmlFor="no_clearance" className="pointy">
                             {clearanceNegative}
-                          </p>
+                          </label>
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
                           <Checkbox
+                            id="no_clearance"
                             onChange={() => this.toggleCustoms(false)}
                             className="ccb_no_clearance"
-                            checked={
-                              this.state.customsView === null ? null : !this.state.customsView
-                            }
+                            checked={this.state.customsView === null ? null : !this.state.customsView}
                             theme={theme}
                           />
                         </div>
