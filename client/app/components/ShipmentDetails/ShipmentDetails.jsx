@@ -355,6 +355,7 @@ export class ShipmentDetails extends Component {
     })
   }
   loadReusedShipment (obj) {
+
     const newCargoItemsErrors = obj.cargoItems.map(cia => ({
       payload_in_kg: false,
       dimension_x: false,
@@ -375,8 +376,8 @@ export class ShipmentDetails extends Component {
         ? obj.shipment.planned_pickup_date : obj.shipment.planned_origin_drop_off_date,
       origin: reuseShipments.reuseLocation(obj.shipment, 'origin'),
       destination: reuseShipments.reuseLocation(obj.shipment, 'destination'),
-      has_on_carriage: !!obj.shipment.trucking.on_carriage.truck_type,
-      has_pre_carriage: !!obj.shipment.trucking.pre_carriage.truck_type,
+      has_on_carriage: obj.shipment.trucking.on_carriage ? !!obj.shipment.trucking.on_carriage.truck_type : false,
+      has_pre_carriage: obj.shipment.trucking.pre_carriage ? !!obj.shipment.trucking.pre_carriage.truck_type : false,
       trucking: obj.shipment.trucking,
       incoterm: obj.shipment.incoterm,
       routeSet: true,
