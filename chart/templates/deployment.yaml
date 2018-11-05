@@ -115,6 +115,10 @@ spec:
           value: "api.{{ include "hostname" .Values.service.url }}"
         - name: API_URL
           value: "https://api.{{ include "hostname" .Values.service.url }}"
+        - name: K8S_NAMESPACE
+          value: {{ .Release.Namespace | quote }}
+        - name: REVIEW_URL
+          value: {{ include "hostname" .Values.service.url }}
         ports:
         - name: http-frontend
           containerPort: 80

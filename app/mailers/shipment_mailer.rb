@@ -13,7 +13,8 @@ class ShipmentMailer < ApplicationMailer
     @shipment = shipment
     base_url =
       case Rails.env
-      when 'production'  then "http://#{@shipment.tenant.subdomain}.itsmycargo.com/"
+      when 'production'  then "https://#{@shipment.tenant.subdomain}.itsmycargo.com/"
+      when 'review'      then "https://#{@shipment.tenant.subdomain}.#{ENV['REVIEW_URL']}"
       when 'development' then 'http://localhost:8080/'
       when 'test'        then 'http://localhost:8080/'
       end

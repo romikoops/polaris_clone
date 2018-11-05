@@ -11,7 +11,7 @@ google:
   api_key: <%= Rails.application.credentials.dig(:review, :google, :api_key) %>
 
 smtp:
-  host: smtp.sendgrid.net
-  domain: itsmycargo.com
-  username: apikey
+  host: smtp.mailgun.org
+  domain: itsmycargo.tech
+  username: review@mg.itsmycargo.tech
   password: <%= Rails.application.credentials.dig(:review, :smtp, :password) %>
