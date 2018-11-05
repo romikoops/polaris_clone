@@ -17,6 +17,9 @@
         <p><strong><%= shipment.user.first_name %> <%= shipment.user.last_name %></strong></p>
         <p><%= shipment.user.email %></p>
         <p><%= shipment.user.phone %></p>
+        <% if shipment.user.external_id%>
+          <p>Customer ID: <%= shipment.user.external_id.to_i %></p>
+        <% end %>
     </div>
   </div>
 
@@ -37,6 +40,7 @@
             <div class="shipment-info">
               <p>From:&nbsp;<span><%= s.origin_hub.name %></span></p>
               <p>To:&nbsp;<span><%= s.destination_hub.name %></span></p>
+              <p>Ref:&nbsp;<span><%= s.imc_reference %></span></p>
             </div>
             <div class="text-right cargo-info">
               <div class="charge-icons">
@@ -55,6 +59,19 @@
                     end
                 %>&nbsp;kg
               </p>
+              <% if s.load_type != 'container'%>
+                <p>
+                  <strong>Vol:</strong>
+                  <%= if s.aggregated_cargo
+                        s.aggregated_cargo.volume.to_f
+                      else
+                        s.cargo_units.inject(0) do |sum, hash| 
+                          sum + (hash[:quantity].to_f * hash[:dimension_x].to_f * hash[:dimension_y].to_f * hash[:dimension_z].to_f / 1000000)
+                        end
+                      end
+                  %>&nbsp;kg
+                </p>
+              <% end %>
             </div>
           </div>
         </div>
