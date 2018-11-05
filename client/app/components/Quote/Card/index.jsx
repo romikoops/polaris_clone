@@ -260,7 +260,7 @@ class QuoteCard extends PureComponent {
         <div className="flex-100 layout-row layout-align-start-center" style={{ paddingBottom: '18px' }}>
 
           { result.meta.carrier_name ? <div className="flex-50 layout-row layout-align-center-center">
-            <i className="flex-none fa fa-ship" style={{ paddingRight: '7px' }} />
+            {switchIcon(result.meta.mode_of_transport)}
             <p className="layout-row layout-align-end-center margin_5">{t('quote:carrier', { carrierName: result.meta.carrier_name })}</p>
           </div> : '' }
           {
