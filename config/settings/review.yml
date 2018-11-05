@@ -1,17 +1,17 @@
 aws:
-  access_key_id: <%= Rails.application.credentials.review_aws_access_key_id %>
-  secret_access_key: <%= Rails.application.credentials.review_aws_secret_access_key %>
+  access_key_id: <%= Rails.application.credentials.dig(:review, :aws, :access_key_id) %>
+  secret_access_key: <%= Rails.application.credentials.dig(:review, :aws, :secret_access_key) %>
   region: eu-central-1
-  bucket: assets.itsmycargo.com
+  bucket: imcdev
 
 fixer:
-  api_key: <%= Rails.application.credentials.review_fixer_api_key %>
+  api_key: <%= Rails.application.credentials.dig(:review, :fixer, :api_key) %>
 
 google:
-  api_key: <%= Rails.application.credentials.review_google_api_key %>
+  api_key: <%= Rails.application.credentials.dig(:review, :google, :api_key) %>
 
 smtp:
   host: smtp.sendgrid.net
   domain: itsmycargo.com
   username: apikey
-  password: <%= Rails.application.credentials.review_smtp_password %>
+  password: <%= Rails.application.credentials.dig(:review, :smtp, :password) %>

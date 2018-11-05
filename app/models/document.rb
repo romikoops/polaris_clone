@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Document < ApplicationRecord
-  include AwsConfig
-  belongs_to :shipment
-  belongs_to :user
+  has_one_attached :file
+  belongs_to :shipment, optional: true
+  belongs_to :user, optional: true
   belongs_to :tenant
   belongs_to :quotation, optional: true
 

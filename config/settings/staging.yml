@@ -1,17 +1,17 @@
 aws:
-  access_key_id: <%= Rails.application.credentials.staging_aws_access_key_id %>
-  secret_access_key: <%= Rails.application.credentials.staging_aws_secret_access_key %>
+  access_key_id: <%= Rails.application.credentials.dig(:staging, :aws, :access_key_id %>
+  secret_access_key: <%= Rails.application.credentials.dig(:staging, :aws, :secret_access_key %>
   region: eu-central-1
   bucket: assets.itsmycargo.com
 
 fixer:
-  api_key: <%= Rails.application.credentials.staging_fixer_api_key %>
+  api_key: <%= Rails.application.credentials.dig(:staging, :fixer, :api_key) %>
 
 google:
-  api_key: <%= Rails.application.credentials.staging_google_api_key %>
+  api_key: <%= Rails.application.credentials.dig(:staging, :google, :api_key) %>
 
 smtp:
   host: sendgrid.net
   domain: itsmycargo.com
   username: itsmycargo
-  password: <%= Rails.application.credentials.staging_smtp_password %>
+  password: <%= Rails.application.credentials.dig(:staging, :smtp, :password) %>

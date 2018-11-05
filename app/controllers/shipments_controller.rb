@@ -41,10 +41,10 @@ class ShipmentsController < ApplicationController
     shipments = shipment_association.map(&:with_address_index_json)
 
     response_handler(
-      shipments:          shipments,
+      shipments: shipments,
       num_shipment_pages: shipment_association.total_pages,
-      target:             params[:target],
-      page:               params[:page]
+      target: params[:target],
+      page: params[:page]
     )
   end
 
@@ -82,29 +82,37 @@ class ShipmentsController < ApplicationController
       shipment_association,
       filterific_params,
       available_filters: filters,
-      sanitize_params:   true
+      sanitize_params: true
     )) || return
     shipments = filterrific.find.paginate(page: params[:page], per_page: per_page)
 
     response_handler(
-      shipments:          shipments.map(&:with_address_index_json),
+      shipments: shipments.map(&:with_address_index_json),
       num_shipment_pages: shipment.total_pages,
-      target:             params[:target],
-      page:               params[:page]
+      target: params[:target],
+      page: params[:page]
     )
   end
 
   # Uploads document and returns Document item
   def upload_document
     @shipment = Shipment.find(params[:shipment_id])
-    @doc
     if params[:file]
-      @doc = create_document(params[:file], @shipment, params[:type], current_user)
-      tmp = @doc.as_json
-      tmp['signed_url'] = @doc.get_signed_url
+      @doc = Document.create!(
+        shipment: @shipment,
+        text: params[:file].original_filename.gsub(/[^0-9A-Za-z.\-]/, '_'),
+        doc_type: params[:type],
+        user: current_user,
+        tenant: current_user.tenant,
+        file: params[:file]
+      )
+
+      @doc.as_json.merge(
+        signed_url: rails_blob_url(@doc.file, disposition: 'attachment')
+      )
     end
 
-    response_handler(tmp)
+    response_handler(@doc)
   end
 
   def show
@@ -119,26 +127,22 @@ class ShipmentsController < ApplicationController
     end
 
     documents = shipment.documents.map do |doc|
-      tmp_doc = doc.as_json
-      tmp_doc['signed_url'] = doc.get_signed_url
-      tmp_doc
+      doc.as_json.merge(
+        signed_url: rails_blob_url(doc.file, disposition: 'attachment')
+      )
     end
 
     shipment_as_json = shipment.with_address_options_json
 
     response_handler(
-      shipment:        shipment_as_json,
-      cargoItems:      shipment.cargo_items,
-      containers:      shipment.containers,
+      shipment: shipment_as_json,
+      cargoItems: shipment.cargo_items,
+      containers: shipment.containers,
       aggregatedCargo: shipment.aggregated_cargo,
-      contacts:        contacts,
-      documents:       documents,
-      cargoItemTypes:  cargo_item_types
+      contacts: contacts,
+      documents: documents,
+      cargoItemTypes: cargo_item_types
     )
-  end
-
-  def get_shipper_pdf
-    get_shipment_pdf(params)
   end
 
   def get_booking_index
@@ -151,21 +155,21 @@ class ShipmentsController < ApplicationController
       a_shipments = archived_shipments.order(booking_placed_at: :desc).paginate(page: params[:archived_page], per_page: per_page)
 
       num_pages = {
-        finished:  f_shipments.total_pages,
+        finished: f_shipments.total_pages,
         requested: r_shipments.total_pages,
-        open:      o_shipments.total_pages,
-        rejected:  rj_shipments.total_pages,
-        archived:  a_shipments.total_pages
+        open: o_shipments.total_pages,
+        rejected: rj_shipments.total_pages,
+        archived: a_shipments.total_pages
       }
       {
-        requested:          r_shipments.map(&:with_address_index_json),
-        open:               o_shipments.map(&:with_address_index_json),
-        finished:           f_shipments.map(&:with_address_index_json),
-        rejected:           rj_shipments.map(&:with_address_index_json),
-        archived:           a_shipments.map(&:with_address_index_json),
-        pages:              {
-          open:      params[:open_page],
-          finished:  params[:finished_page],
+        requested: r_shipments.map(&:with_address_index_json),
+        open: o_shipments.map(&:with_address_index_json),
+        finished: f_shipments.map(&:with_address_index_json),
+        rejected: rj_shipments.map(&:with_address_index_json),
+        archived: a_shipments.map(&:with_address_index_json),
+        pages: {
+          open: params[:open_page],
+          finished: params[:finished_page],
           requested: params[:requested_page],
           rejected: params[:rejected_page],
           archived: params[:archived_page]
@@ -183,12 +187,12 @@ class ShipmentsController < ApplicationController
       quoted = quoted_shipments.order(updated_at: :desc)
                                .paginate(page: params[:quoted_page], per_page: per_page)
       num_pages = {
-        quoted:  quoted.total_pages
+        quoted: quoted.total_pages
       }
       {
-        quoted:         quoted.map(&:with_address_index_json),
-        pages:              {
-          quoted:      params[:quoted_page]
+        quoted: quoted.map(&:with_address_index_json),
+        pages: {
+          quoted: params[:quoted_page]
         },
         num_shipment_pages: num_pages
       }
