@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module ExcelTool
-  class OverwriteSchedulesByItinerary  < ExcelTool::BaseTool
+  class OverwriteSchedulesByItinerary < ExcelTool::BaseTool
     attr_reader :first_sheet, :schedules, :itinerary, :_user
-    
+
     def perform
       overwrite_schedules_by_itinerary
     end
@@ -17,16 +19,16 @@ module ExcelTool
     end
 
     def post_initialize(args)
-       params = args[:params]
-       @first_sheet = xlsx.sheet(xlsx.sheets.first)
-       @schedules = _schedules
-       @itinerary = params["itinerary"]
-       @_user = args[:user]
+      params = args[:params]
+      @first_sheet = xlsx.sheet(xlsx.sheets.first)
+      @schedules = _schedules
+      @itinerary = params['itinerary']
+      @_user = args[:_user]
     end
-    
+
     def _stats
       {
-        type:     "schedules",
+        type:     'schedules',
         layovers: {
           number_updated: 0,
           number_created: 0
@@ -47,19 +49,20 @@ module ExcelTool
 
     def _schedules
       first_sheet.parse(
-        vessel:        "VESSEL",
-        voyage_code:   "VOYAGE_CODE",
-        from:          "FROM",
-        to:            "TO",
-        closing_date:  "CLOSING_DATE",
-        eta:           "ETA",
-        etd:           "ETD",
-        service_level: "SERVICE_LEVEL"
+        vessel:        'VESSEL',
+        voyage_code:   'VOYAGE_CODE',
+        from:          'FROM',
+        to:            'TO',
+        closing_date:  'CLOSING_DATE',
+        eta:           'ETA',
+        etd:           'ETD',
+        service_level: 'SERVICE_LEVEL',
+        carrier:       'CARRIER'
       )
     end
 
     def update_stats_result_hashes(row)
-      tenant_vehicle = find_or_creat_tenant_vehicle(row) 
+      tenant_vehicle = find_or_creat_tenant_vehicle(row)
       startDate = row[:etd]
       endDate = row[:eta]
       stops = itinerary.stops.order(:index)
@@ -67,11 +70,12 @@ module ExcelTool
       if itinerary
         generator_results = itinerary.generate_schedules_from_sheet(
           stops, startDate, endDate, tenant_vehicle.vehicle_id,
-          row[:closing_date], row[:vessel], row[:voyage_code])
+          row[:closing_date], row[:vessel], row[:voyage_code]
+        )
         push_results(generator_results)
         push_stats(generator_results)
       else
-        raise "Route cannot be found!"
+        raise 'Route cannot be found!'
       end
     end
 
@@ -86,13 +90,19 @@ module ExcelTool
     end
 
     def find_or_creat_tenant_vehicle(row)
-      service_level = row[:service_level] ? row[:service_level] : "default"
+      service_level = row[:service_level] || 'standard'
       tv = TenantVehicle.find_by(
-          tenant_id: _user.tenant_id,
-          mode_of_transport: itinerary.mode_of_transport,
-          name: row[:service_level]
-        )
-      tv ||= Vehicle.create_from_name(service_level, itinerary.mode_of_transport, _user.tenant_id)
+        tenant_id: _user.tenant_id,
+        mode_of_transport: itinerary.mode_of_transport,
+        name: row[:service_level],
+        carrier: Carrier.find_by(name: row[:carrier])
+      )
+      tv ||= TenantVehicle.find_by(
+        tenant_id: _user.tenant_id,
+        mode_of_transport: itinerary.mode_of_transport,
+        name: row[:service_level]
+      )
+      tv ||= Vehicle.create_from_name(service_level, itinerary.mode_of_transport, _user.tenant_id, row[:carrier])
       tv
     end
   end
