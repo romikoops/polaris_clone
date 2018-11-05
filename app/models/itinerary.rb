@@ -255,7 +255,8 @@ class Itinerary < ApplicationRecord
   end
 
   def user_has_pricing(user)
-    pricings.exists?(user_id: user.id)
+    ids = [user.id, user&.agency&.agency_manager_id].compact
+    pricings.exists?(user_id: ids)
   end
 
   def pricing_count
