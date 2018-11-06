@@ -55,7 +55,7 @@ class CargoContainerGroup extends Component {
         <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center">
-              <span>{group.items[0].weight_class}</span>&nbsp;kg</p>
+              <span>{group.items[0].weight_class}</span></p>
             <p className="flex-none layout-row layout-align-center-center">{t('cargo:weightClass')}</p>
           </div>
         </div>

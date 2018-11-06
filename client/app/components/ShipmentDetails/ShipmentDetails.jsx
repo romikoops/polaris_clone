@@ -337,7 +337,7 @@ export class ShipmentDetails extends Component {
       payload_in_kg: false
     }))
     this.getInitalFilteredRouteIndexes()
-    this.setState({
+    this.setState(prevState => ({
       cargoItems: obj.cargo_items_attributes,
       containers: obj.containers_attributes,
       cargoItemsErrors: newCargoItemsErrors,
@@ -347,14 +347,15 @@ export class ShipmentDetails extends Component {
       destination: obj.destination,
       has_on_carriage: !!obj.trucking.on_carriage.truck_type,
       has_pre_carriage: !!obj.trucking.pre_carriage.truck_type,
-      trucking: obj.trucking,
+      shipment: { ...prevState.shipment, trucking: obj.trucking },
       incoterm: obj.incoterm,
       routeSet: true,
       prevRequest: req,
       prevRequestLoaded: true
-    })
+    }))
   }
   loadReusedShipment (obj) {
+
     const newCargoItemsErrors = obj.cargoItems.map(cia => ({
       payload_in_kg: false,
       dimension_x: false,
@@ -366,7 +367,7 @@ export class ShipmentDetails extends Component {
     const newContainerErrors = obj.containers.map(cia => ({
       payload_in_kg: false
     }))
-    this.setState({
+    this.setState(prevState => ({
       cargoItems: reuseShipments.reuseCargoItems(obj.cargoItems),
       containers: reuseShipments.reuseContainers(obj.containers),
       cargoItemsErrors: newCargoItemsErrors,
@@ -375,13 +376,13 @@ export class ShipmentDetails extends Component {
         ? obj.shipment.planned_pickup_date : obj.shipment.planned_origin_drop_off_date,
       origin: reuseShipments.reuseLocation(obj.shipment, 'origin'),
       destination: reuseShipments.reuseLocation(obj.shipment, 'destination'),
-      has_on_carriage: !!obj.shipment.trucking.on_carriage.truck_type,
-      has_pre_carriage: !!obj.shipment.trucking.pre_carriage.truck_type,
+      has_on_carriage: obj.shipment.trucking.on_carriage ? !!obj.shipment.trucking.on_carriage.truck_type : false,
+      has_pre_carriage: obj.shipment.trucking.pre_carriage ? !!obj.shipment.trucking.pre_carriage.truck_type : false,
       trucking: obj.shipment.trucking,
       incoterm: obj.shipment.incoterm,
       routeSet: true,
       prevRequestLoaded: true
-    })
+    }))
   }
 
   updateAvailableMotsForRoute () {
@@ -599,6 +600,7 @@ export class ShipmentDetails extends Component {
     const { tenant } = this.props
     const { scope } = this.props.tenant.data
     const requiresFullAddress = scope.require_full_address
+
     if (
       (!origin.nexus_id && !this.state.has_pre_carriage) ||
       (!destination.nexus_id && !this.state.has_on_carriage) ||
@@ -1008,6 +1010,7 @@ export class ShipmentDetails extends Component {
                 >
                   <div className="flex-10 layout-row layout-align-start-start">
                     <Checkbox
+                      id="stackable_goods_confirmation"
                       theme={theme}
                       onChange={() =>
                         this.setState({
@@ -1020,14 +1023,16 @@ export class ShipmentDetails extends Component {
                     />
                   </div>
                   <div className="flex">
-                    <p style={{ margin: 0, fontSize: '14px', width: '100%' }}>
-                      {t('cargo:confirmStackable')}
-                      <br />
-                      <span style={{ fontSize: '11px', width: '100%' }}>
-                        ({t('cargo:nonStackable')}{' '}
-                        {t('cargo:cargoUnits')})
-                      </span>
-                    </p>
+                    <label htmlFor="stackable_goods_confirmation" className="pointy">
+                      <p style={{ margin: 0, fontSize: '14px', width: '100%' }}>
+                        {t('cargo:confirmStackable')}
+                        <br />
+                        <span style={{ fontSize: '11px', width: '100%' }}>
+                          ({t('cargo:nonStackable')}{' '}
+                          {t('cargo:cargoUnits')})
+                        </span>
+                      </p>
+                    </label>
                   </div>
                 </div>
               )}
@@ -1044,6 +1049,7 @@ export class ShipmentDetails extends Component {
                 >
                   <div className="flex-10 layout-row layout-align-start-start">
                     <Checkbox
+                      id="no_dangerous_goods_confirmation"
                       theme={theme}
                       onChange={() =>
                         this.setState({
@@ -1056,16 +1062,18 @@ export class ShipmentDetails extends Component {
                     />
                   </div>
                   <div className="flex">
-                    <p style={{ margin: 0, fontSize: '14px' }}>
-                      {t('cargo:confirmSafe')}{' '}
-                      <span
-                        className="emulate_link blue_link"
-                        onClick={() => this.toggleModal('dangerousGoodsInfo')}
-                      >
-                        {t('common:dangerousGoods')}
-                      </span>
-                        .
-                    </p>
+                    <label htmlFor="no_dangerous_goods_confirmation" className="pointy">
+                      <p style={{ margin: 0, fontSize: '14px' }}>
+                        {t('cargo:confirmSafe')}{' '}
+                        <span
+                          className="emulate_link blue_link"
+                          onClick={() => this.toggleModal('dangerousGoodsInfo')}
+                        >
+                          {t('common:dangerousGoods')}
+                        </span>
+                          .
+                      </p>
+                    </label>
                   </div>
                 </div>
               )}

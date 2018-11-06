@@ -2219,11 +2219,12 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
               <div
                 className="flex-90 layout-row layout-align-start-center"
               >
-                <p
-                  className="flex-none layout-align-start-center"
+                <label
+                  className="pointy"
+                  htmlFor="yes_insurance"
                 >
                   Yes, I want undefined to quote insurance for my cargo
-                </p>
+                </label>
               </div>
               <div
                 className="flex-10 layout-row layout-align-end-center"
@@ -2232,6 +2233,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                   checked={null}
                   className="ccb_yes_insurance"
                   disabled={false}
+                  id="yes_insurance"
                   onChange={[Function]}
                   onClick={null}
                   size={null}
@@ -2252,16 +2254,12 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
               <div
                 className="flex-90 layout-row layout-align-start-center"
               >
-                <p
-                  className="flex-none"
-                  style={
-                    Object {
-                      "marginRight": "5px",
-                    }
-                  }
+                <label
+                  className="pointy"
+                  htmlFor="no_insurance"
                 >
                   No, I do not want undefined to quote insurance for my cargo
-                </p>
+                </label>
               </div>
               <div
                 className="flex-10 layout-row layout-align-end-center"
@@ -2270,6 +2268,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                   checked={null}
                   className="ccb_no_insurance"
                   disabled={false}
+                  id="no_insurance"
                   onChange={[Function]}
                   onClick={null}
                   size={null}
@@ -2383,16 +2382,12 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
               <div
                 className="flex-90 layout-row layout-align-start-center"
               >
-                <p
-                  className="flex-none"
-                  style={
-                    Object {
-                      "marginRight": "5px",
-                    }
-                  }
+                <label
+                  className="pointy"
+                  htmlFor="yes_clearance"
                 >
                   Yes, I want undefined to handle my customs clearance
-                </p>
+                </label>
               </div>
               <div
                 className="flex-10 layout-row layout-align-end-center"
@@ -2401,6 +2396,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                   checked={null}
                   className="ccb_yes_clearance"
                   disabled={false}
+                  id="yes_clearance"
                   onChange={[Function]}
                   onClick={null}
                   size={null}
@@ -2421,16 +2417,12 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
               <div
                 className="flex-90 layout-row layout-align-start-center"
               >
-                <p
-                  className="flex-none"
-                  style={
-                    Object {
-                      "marginRight": "5px",
-                    }
-                  }
+                <label
+                  className="pointy"
+                  htmlFor="no_clearance"
                 >
                   No, I do not want undefined to handle my customs clearance
-                </p>
+                </label>
               </div>
               <div
                 className="flex-10 layout-row layout-align-end-center"
@@ -2439,6 +2431,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                   checked={null}
                   className="ccb_no_clearance"
                   disabled={false}
+                  id="no_clearance"
                   onChange={[Function]}
                   onClick={null}
                   size={null}
@@ -2514,6 +2507,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                     checked={true}
                     className=""
                     disabled={true}
+                    id={null}
                     onChange={[Function]}
                     onClick={null}
                     size={null}
@@ -2549,6 +2543,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                     checked={true}
                     className=""
                     disabled={true}
+                    id={null}
                     onChange={[Function]}
                     onClick={null}
                     size={null}
@@ -4978,11 +4973,12 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
               <div
                 className="flex-90 layout-row layout-align-start-center"
               >
-                <p
-                  className="flex-none layout-align-start-center"
+                <label
+                  className="pointy"
+                  htmlFor="yes_insurance"
                 >
                   Yes, I want undefined to quote insurance for my cargo
-                </p>
+                </label>
               </div>
               <div
                 className="flex-10 layout-row layout-align-end-center"
@@ -4991,6 +4987,7 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
                   checked={true}
                   className="ccb_yes_insurance"
                   disabled={false}
+                  id="yes_insurance"
                   onChange={[Function]}
                   onClick={null}
                   size={null}
@@ -5011,16 +5008,12 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
               <div
                 className="flex-90 layout-row layout-align-start-center"
               >
-                <p
-                  className="flex-none"
-                  style={
-                    Object {
-                      "marginRight": "5px",
-                    }
-                  }
+                <label
+                  className="pointy"
+                  htmlFor="no_insurance"
                 >
                   No, I do not want undefined to quote insurance for my cargo
-                </p>
+                </label>
               </div>
               <div
                 className="flex-10 layout-row layout-align-end-center"
@@ -5029,6 +5022,7 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
                   checked={false}
                   className="ccb_no_insurance"
                   disabled={false}
+                  id="no_insurance"
                   onChange={[Function]}
                   onClick={null}
                   size={null}

@@ -5,8 +5,14 @@ class PricingsController < ApplicationController
 
   def index
     tenant = current_user.tenant
-    @itineraries = tenant.itineraries
-    @pricings = current_user.pricings
+    if tenant.scope['closed_quotation_tool']
+      user_pricing_id = current_user.agency.agency_manager_id
+      @pricings = tenant.pricings.where(user_id: user_pricing_id)
+      @itineraries = @pricings.map(&:itinerary)
+    else
+      @pricings = tenant.pricings
+      @itineraries = tenant.itineraries
+    end
     response = Rails.cache.fetch("#{@pricings.cache_key}/pricings_index", expires_in: 12.hours) do
       @transports = TransportCategory.all.uniq
       itineraries = @itineraries
@@ -37,7 +43,7 @@ class PricingsController < ApplicationController
     PricingMailer.request_email(new_pricing_request).deliver_later
     new_pricing_request[:status] = 'requested'
     @pricing_request = PricingRequest.create!(new_pricing_request)
-    
+
     @itinerary = Pricing.find(new_pricing_request[:pricing_id]).itinerary
     @pricings = filter_for_dedicated_pricings(@itinerary.pricings).map(&:as_json)
     set_requested_flag(@pricings, new_pricing_request[:user_id])

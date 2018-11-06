@@ -130,13 +130,12 @@ class AdminClientsIndex extends Component {
     )
     const results = this.applyFilters(searchResults)
     const typeFilters = Object.keys(searchFilters.companies).map(htk => (
-      <div
-        className={`${
-          styles.action_section
-        } flex-100 layout-row layout-align-center-center layout-wrap`}
-      >
-        <p className="flex-70">{capitalize(htk)}</p>
+      <div className={`${styles.action_section} flex-100 layout-row layout-align-center-center layout-wrap`}>
+        <label htmlFor="companies_filter" className="flex-70">
+          <p>{capitalize(htk)}</p>
+        </label>
         <Checkbox
+          id="companies_filter"
           onChange={() => this.toggleFilterValue('companies', htk)}
           checked={searchFilters.companies[htk]}
           theme={theme}
@@ -169,9 +168,9 @@ class AdminClientsIndex extends Component {
       <div className="flex-95 layout-row layout-align-center-center margin_bottom">
         <div
           className={`
-                flex-15 layout-row layout-align-center-center pointy
-                ${styles.navigation_button} ${page === 1 ? styles.disabled : ''}
-              `}
+            flex-15 layout-row layout-align-center-center pointy
+            ${styles.navigation_button} ${page === 1 ? styles.disabled : ''}
+          `}
           onClick={page > 1 ? () => this.deltaPage(-1) : null}
         >
           <i className="fa fa-chevron-left" />
@@ -181,9 +180,9 @@ class AdminClientsIndex extends Component {
         <p>{page}</p>
         <div
           className={`
-                flex-15 layout-row layout-align-center-center pointy
-                ${styles.navigation_button} ${page < numPages ? '' : styles.disabled}
-              `}
+            flex-15 layout-row layout-align-center-center pointy
+            ${styles.navigation_button} ${page < numPages ? '' : styles.disabled}
+          `}
           onClick={page < numPages ? () => this.deltaPage(1) : null}
         >
           <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>

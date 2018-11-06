@@ -41,6 +41,9 @@ Naming/FileName:
   Exclude:
     - config/initializers/*.rb
 
+Naming/VariableNumber:
+  EnforcedStyle: snake_case
+
 Style/Documentation:
   Enabled: false
 

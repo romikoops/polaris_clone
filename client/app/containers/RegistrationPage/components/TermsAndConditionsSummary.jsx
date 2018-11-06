@@ -35,6 +35,7 @@ export default function TermsAndConditionsSummary (props) {
       >
         <div className="flex-5 layout-row layout-align-start-start">
           <Checkbox
+            id="tenant-accept_terms_and_conditions"
             theme={theme}
             onChange={handleChange}
             checked={accepted.tenant}
@@ -43,22 +44,25 @@ export default function TermsAndConditionsSummary (props) {
           />
         </div>
         <div className="flex">
-          <p style={{ margin: 0, fontSize: '13px' }}>
-            I hereby confirm that I have read and agree to the {capitalize(subdomain)} {' '}
-            <span
-              className="emulate_link blue_link"
-              onClick={goToTermsAndConditions}
-            >
-              terms and conditions
-            </span>
-            .
-          </p>
+          <label className="pointy" htmlFor="tenant-accept_terms_and_conditions">
+            <p style={{ margin: 0, fontSize: '13px' }}>
+              I hereby confirm that I have read and agree to the {capitalize(subdomain)} {' '}
+              <span
+                className="emulate_link blue_link"
+                onClick={goToTermsAndConditions}
+              >
+                terms and conditions
+              </span>
+              .
+            </p>
+          </label>
         </div>
       </div>
 
       <div className={`${shakeClass.imc} flex-90 layout-row layout-align-center-center`}>
         <div className="flex-5 layout-row layout-align-start-start">
           <Checkbox
+            id="imc-accept_terms_and_conditions"
             theme={theme}
             onChange={handleChange}
             checked={accepted.imc}
@@ -67,16 +71,18 @@ export default function TermsAndConditionsSummary (props) {
           />
         </div>
         <div className="flex">
-          <p style={{ margin: 0, fontSize: '13px' }}>
-            I hereby confirm that I have read and agree to the ItsMyCargo  {' '}
-            <span
-              className="emulate_link blue_link"
-              onClick={goToImcTermsAndConditions}
-            >
-              terms and conditions
-            </span>
-            .
-          </p>
+          <label className="pointy" htmlFor="imc-accept_terms_and_conditions">
+            <p style={{ margin: 0, fontSize: '13px' }}>
+              I hereby confirm that I have read and agree to the ItsMyCargo  {' '}
+              <span
+                className="emulate_link blue_link"
+                onClick={goToImcTermsAndConditions}
+              >
+                terms and conditions
+              </span>
+              .
+            </p>
+          </label>
         </div>
       </div>
 
