@@ -52,20 +52,12 @@
               </div>
               <p>
                 <strong>Kg:</strong>
-                <%= cargo_data[s.id]
-                %>&nbsp;kg
+                <%= cargo_data[:kg][s.id] %>&nbsp;kg
               </p>
               <% if s.load_type != 'container'%>
                 <p>
                   <strong>Vol:</strong>
-                  <%= if s.aggregated_cargo
-                        s.aggregated_cargo.volume.to_f
-                      else
-                        s.cargo_units.inject(0) do |sum, hash| 
-                          sum + (hash[:quantity].to_f * hash[:dimension_x].to_f * hash[:dimension_y].to_f * hash[:dimension_z].to_f / 1000000)
-                        end
-                      end
-                  %>&nbsp;kg
+                  <%= cargo_data[:vol][s.id] %>&nbsp;kg
                 </p>
               <% end %>
             </div>
