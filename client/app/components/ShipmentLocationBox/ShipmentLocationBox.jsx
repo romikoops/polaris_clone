@@ -407,7 +407,6 @@ class ShipmentLocationBox extends Component {
 
       return { [key]: value }
     })
-
   }
 
   triggerPlaceChanged (input, target) {
@@ -513,8 +512,10 @@ class ShipmentLocationBox extends Component {
       const loadType = shipment.load_type
 
       const prefix = target === 'origin' ? 'pre' : 'on'
+      const indexesToUse = this.state.lastTarget === target ? routes.map((_, i) => i) : filteredRouteIndexes
 
-      const availableHubIds = routeFilters.getHubIds(filteredRouteIndexes, lookupTablesForRoutes, routes, target)
+      const availableHubIds = routeFilters.getHubIds(indexesToUse, lookupTablesForRoutes, routes, target)
+
       getRequests.findAvailability(
         lat,
         lng,
@@ -551,7 +552,7 @@ class ShipmentLocationBox extends Component {
               target === 'origin' ? this.setOriginNexus(nexusOption) : this.setDestNexus(nexusOption)
 
               const fieldsHaveErrors = !nexusOption
-              this.setState({ [`${target}FieldsHaveErrors`]: fieldsHaveErrors })
+              this.setState({ [`${target}FieldsHaveErrors`]: fieldsHaveErrors, lastTarget: target })
               const addressFormsHaveErrors =
                 fieldsHaveErrors || this.state[`${counterpart}FieldsHaveErrors`]
               this.props.handleSelectLocation(target, addressFormsHaveErrors)
@@ -562,7 +563,8 @@ class ShipmentLocationBox extends Component {
               truckingHubs: {
                 ...this.state.truckingHubs,
                 [target]: hubIds
-              }
+              },
+              lastTarget: target
             }, () => this.prepForSelect(target))
             this.props.handleSelectLocation(counterpart, this.state[`${counterpart}FieldsHaveErrors`])
             this.props.setNotesIds(nexusIds, target)
@@ -577,7 +579,8 @@ class ShipmentLocationBox extends Component {
             truckingOptions: {
               ...this.state.truckingOptions,
               [`${prefix}Carriage`]: truckingAvailable
-            }
+            },
+            lastTarget: target
           })
         }
       )
@@ -764,6 +767,7 @@ class ShipmentLocationBox extends Component {
       const counterpartLocation = target === 'origin' ? dSelect : oSelect
       const counterpartTrucking = truckingHubs[counterpart]
       let indexes = filteredRouteIndexes.slice()
+      const unfilteredRouteIndexes = routes.map((_, i) => i)
       if (targetLocation.label) {
         indexes = routeFilters.selectFromLookupTable(
           lookupTablesForRoutes,
@@ -775,11 +779,12 @@ class ShipmentLocationBox extends Component {
           targetTrucking, `${target}Hub`
         )
       } else if (!targetLocation.label && !targetTrucking) {
-        indexes = routes.map((_, i) => i)
+        indexes = unfilteredRouteIndexes
       }
-      const unfilteredRouteIndexes = routes.map((_, i) => i)
+
       const indexesToUse = (counterpartLocation.label || counterpartTrucking)
-        ? unfilteredRouteIndexes : filteredRouteIndexes
+        ? filteredRouteIndexes : unfilteredRouteIndexes
+
       let newFilteredRouteIndexes = routeFilters.scopeIndexes(
         indexesToUse,
         indexes
@@ -814,6 +819,7 @@ class ShipmentLocationBox extends Component {
       if (newFilteredRouteIndexes.length === 0) {
         this.setRouteError(counterpartLocation.label, targetLocation.label)
       }
+
       this.props.updateFilteredRouteIndexes(newFilteredRouteIndexes)
 
       return {
