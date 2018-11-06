@@ -119,30 +119,43 @@ class UserShipmentContent extends Component {
     const missingDocs = []
 
     if (documents) {
-      documents.forEach((doc) => {
-        docChecker[doc.doc_type] = true
-        docView.push(<div className="flex-xs-100 flex-sm-45 flex-33 flex-gt-lg-25 layout-align-start-center layout-row" style={{ padding: '10px' }}>
-          <DocumentsForm
-            theme={theme}
-            type={doc.doc_type}
-            dispatchFn={file => this.fileFn(file)}
-            text={documentTypes[doc.doc_type]}
-            doc={doc}
-            viewer
-            deleteFn={file => this.deleteDoc(file)}
-          />
+      const uploadedDocs = documents.reduce((docObj, item) => {
+        docObj[item.doc_type] = docObj[item.doc_type] || []
+        docObj[item.doc_type].push(item.text)
+
+        return docObj
+      }, {})
+
+      Object.keys(uploadedDocs).forEach((key) => {
+        docChecker[key] = true
+
+        docView.push(<div className={`flex-35 layout-row layout-align-start-start layout-padding ${adminStyles.uploaded_doc}`}>
+          <i className="fa fa-check flex-none" style={{ color: 'rgb(13, 177, 75)' }} />
+          <div className="layout-row flex layout-wrap" style={{ marginBottom: '12px' }}>
+            <h4 className="flex-100 layout-row">{documentTypes[key]}</h4>
+            {uploadedDocs[key].map(text => (
+              <div className="flex-100 layout-row">
+                <i
+                  className="fa fa-trash pointy flex-none"
+                  onClick={() => this.deleteDoc(documents.filter(doc => doc.text === text)[0])}
+                />
+                <p className="flex layout-row">
+                  {text}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>)
       })
     }
 
     Object.keys(docChecker).forEach((key) => {
       if (!docChecker[key]) {
-        missingDocs.push(<div className={`flex-25 layout-row layout-align-start-center layout-padding ${adminStyles.no_doc}`}>
-          <div className="flex-none layout-row layout-align-center-center">
-            <i className="flex-none fa fa-ban" />
-          </div>
-          <div className="flex layout-align-start-center layout-row">
-            <p className="flex-none">{`${documentTypes[key]}: ${t('doc:notUploaded')}`}</p>
+        missingDocs.push(<div className={`flex-35 layout-row layout-align-start-start layout-padding ${adminStyles.no_doc}`}>
+          <i className="flex-none fa fa-ban" />
+          <div className="flex layout-wrap layout-row">
+            <h4 className="flex-100">{documentTypes[key]}</h4>
+            <p>{t('bookconf:notUploaded')}</p>
           </div>
         </div>)
       }
@@ -487,7 +500,7 @@ class UserShipmentContent extends Component {
 
                   </div>
                   <div
-                    className="flex-100 layout-row layout-wrap layout-align-start-center"
+                    className="flex-100 layout-row layout-wrap layout-align-start-start"
                     style={{ marginTop: '5px' }}
                   >
                     {docView}
