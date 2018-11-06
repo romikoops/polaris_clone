@@ -244,6 +244,7 @@ class Autocomplete extends PureComponent {
         >
           <input
             type="text"
+            tabIndex={this.props.tabIndex}
             value={input}
             onChange={this.shouldTriggerInputChange}
             onBlur={this.shouldTriggerInputChange}
@@ -291,12 +292,14 @@ Autocomplete.propTypes = {
   map: PropTypes.func.isRequired,
   input: PropTypes.string,
   hasErrors: PropTypes.bool,
-  handlePlaceSelect: PropTypes.func.isRequired
+  handlePlaceSelect: PropTypes.func.isRequired,
+  tabIndex: PropTypes.string
 }
 Autocomplete.defaultProps = {
   theme: {},
   input: '',
-  hasErrors: false
+  hasErrors: false,
+  tabIndex: null
 }
 
 export default withNamespaces(['common', 'errors'])(Autocomplete)
