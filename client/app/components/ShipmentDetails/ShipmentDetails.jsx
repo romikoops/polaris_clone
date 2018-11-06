@@ -337,7 +337,7 @@ export class ShipmentDetails extends Component {
       payload_in_kg: false
     }))
     this.getInitalFilteredRouteIndexes()
-    this.setState({
+    this.setState(prevState => ({
       cargoItems: obj.cargo_items_attributes,
       containers: obj.containers_attributes,
       cargoItemsErrors: newCargoItemsErrors,
@@ -347,12 +347,12 @@ export class ShipmentDetails extends Component {
       destination: obj.destination,
       has_on_carriage: !!obj.trucking.on_carriage.truck_type,
       has_pre_carriage: !!obj.trucking.pre_carriage.truck_type,
-      trucking: obj.trucking,
+      shipment: { ...prevState.shipment, trucking: obj.trucking },
       incoterm: obj.incoterm,
       routeSet: true,
       prevRequest: req,
       prevRequestLoaded: true
-    })
+    }))
   }
   loadReusedShipment (obj) {
 
@@ -367,7 +367,7 @@ export class ShipmentDetails extends Component {
     const newContainerErrors = obj.containers.map(cia => ({
       payload_in_kg: false
     }))
-    this.setState({
+    this.setState(prevState => ({
       cargoItems: reuseShipments.reuseCargoItems(obj.cargoItems),
       containers: reuseShipments.reuseContainers(obj.containers),
       cargoItemsErrors: newCargoItemsErrors,
@@ -382,7 +382,7 @@ export class ShipmentDetails extends Component {
       incoterm: obj.shipment.incoterm,
       routeSet: true,
       prevRequestLoaded: true
-    })
+    }))
   }
 
   updateAvailableMotsForRoute () {
@@ -600,6 +600,7 @@ export class ShipmentDetails extends Component {
     const { tenant } = this.props
     const { scope } = this.props.tenant.data
     const requiresFullAddress = scope.require_full_address
+
     if (
       (!origin.nexus_id && !this.state.has_pre_carriage) ||
       (!destination.nexus_id && !this.state.has_on_carriage) ||
