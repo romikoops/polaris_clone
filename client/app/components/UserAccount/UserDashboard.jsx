@@ -174,7 +174,7 @@ class UserDashboard extends Component {
             <div className={`flex-85 ${ustyles.separator}`} />
           </div>
         </div>
-        <div
+        { isQuote(tenant) ? '' : <div
           className="layout-row flex-100 layout-wrap layout-align-center-center"
         >
           <div className="flex-100 layout-row layout-wrap layout-align-center-stretch">
@@ -187,8 +187,8 @@ class UserDashboard extends Component {
               seeAll={() => userDispatch.getContacts({ page: 1 }, true)}
             />
           </div>
-        </div>
-        <div
+        </div> }
+        { isQuote(tenant) ? '' : <div
           className={`layout-row flex-100 layout-wrap layout-align-center-center ${
             defaults.border_divider
           }`}
@@ -214,7 +214,7 @@ class UserDashboard extends Component {
               />
             )}
           </div>
-        </div>
+        </div> }
       </div>
     )
   }
