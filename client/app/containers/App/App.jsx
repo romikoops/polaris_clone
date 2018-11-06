@@ -84,6 +84,7 @@ class App extends Component {
           theme={theme}
           tenant={tenant}
           loggedIn={loggedIn}
+          cookieRef={this.cookieRef}
         />
         <div className="flex-100 mc layout-row  layout-align-start">
           {showMessages || sending ? <MessageCenter /> : ''}

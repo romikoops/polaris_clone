@@ -1,12 +1,15 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { withNamespaces } from 'react-i18next'
+import { bindActionCreators } from 'redux'
+import { cookieActions } from '../../actions'
 import styles from './Footer.scss'
 import defs from '../../styles/default_classes.scss'
 import PropTypes from '../../prop-types'
 import isQuote from '../../helpers/tenant'
 
 function Footer ({
-  theme, tenant, width, t
+  theme, tenant, width, t, cookieDispatch
 }) {
   if (!tenant) {
     return ''
@@ -34,6 +37,10 @@ function Footer ({
       className={`flex-100 layout-row 
       layout-wrap ${styles.footer_wrapper} layout-align-start`}
       style={widthStyle}
+      ref={(div) => {
+        if (!div) return
+        cookieDispatch.updateCookieHeight(div.offsetHeight)
+      }}
     >
       {
         isQuote(tenant)
@@ -123,7 +130,10 @@ Footer.propTypes = {
   theme: PropTypes.theme,
   t: PropTypes.func.isRequired,
   tenant: PropTypes.tenant,
-  width: PropTypes.number
+  width: PropTypes.number,
+  cookieDispatch: PropTypes.shape({
+    updateCookieHeight: PropTypes.func
+  }).isRequired
 }
 
 Footer.defaultProps = {
@@ -132,4 +142,10 @@ Footer.defaultProps = {
   width: null
 }
 
-export default withNamespaces('footer')(Footer)
+function mapDispatchToProps (dispatch) {
+  return {
+    cookieDispatch: bindActionCreators(cookieActions, dispatch)
+  }
+}
+
+export default connect(null, mapDispatchToProps)(withNamespaces('footer')(Footer))
