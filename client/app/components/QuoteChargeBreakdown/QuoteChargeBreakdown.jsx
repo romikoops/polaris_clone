@@ -125,11 +125,27 @@ class QuoteChargeBreakdown extends Component {
 
     return capitalize(t(key))
   }
+  renderSubTitle (key) {
+    const { t, mot, scope } = this.props
+    if (scope.translation_overrides && scope.translation_overrides[key]) {
+      return this.overrideTranslations(`shipment:${key}`)
+    }
+
+    switch (key) {
+      case 'trucking_pre':
+        return t('shipment:pickUp')
+      case 'trucking_on':
+        return t('shipment:delivery')
+      case 'cargo':
+        return t('shipment:motCargo', { mot: t(`shipment:${mot}`) })
+      default:
+        return ''
+    }
+  }
 
   render () {
     const {
       theme,
-      t,
       quote,
       scope
     } = this.props
@@ -152,13 +168,7 @@ class QuoteChargeBreakdown extends Component {
                 className="flex-none layout-row layout-align-start-center"
               />
               <div className="flex-45 layout-row layout-align-start-center">
-                {key === 'trucking_pre' ? (
-                  <span>{t('shipment:pickUp')}</span>
-                ) : ''}
-                {key === 'trucking_on' ? (
-                  <span>{t('shipment:delivery')}</span>
-                ) : ''}
-                <span>{key === 'trucking_pre' || key === 'trucking_on' ? '' : this.overrideTranslations(`shipment:${key}`) }</span>
+                <span>{this.renderSubTitle(key)}</span>
               </div>
               <div className="flex-50 layout-row layout-align-end-center">
                 <p>
@@ -181,7 +191,8 @@ QuoteChargeBreakdown.propTypes = {
   theme: PropTypes.theme,
   scope: PropTypes.scope.isRequired,
   t: PropTypes.func.isRequired,
-  quote: PropTypes.node.isRequired
+  quote: PropTypes.node.isRequired,
+  mot: PropTypes.string.isRequired
 }
 
 QuoteChargeBreakdown.defaultProps = {
