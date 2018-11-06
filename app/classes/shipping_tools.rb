@@ -13,16 +13,8 @@ module ShippingTools
     results.each do |result|
       schedule = result['schedules'].first
       trip = Trip.find(schedule['trip_id'])
-      on_carriage_hash = !!result['quote']['trucking_on'] ?
-      {
-        truck_type: '',
-        location_id: Location.geocoded_location(shipment.delivery_address).id
-      } : nil
-      pre_carriage_hash = !!result['quote']['trucking_pre'] ?
-      {
-        truck_type: '',
-        location_id: Location.geocoded_location(shipment.pickup_address).id
-      } : nil
+      on_carriage_hash = !!result['quote']['trucking_on'] ? shipment.trucking['on_carriage'] : nil
+      pre_carriage_hash = !!result['quote']['trucking_pre'] ? shipment.trucking['pre_carriage'] : nil
       new_shipment = main_quote.shipments.create!(
         status: 'quoted',
         user_id: shipment.user_id,
@@ -38,8 +30,8 @@ module ShippingTools
         planned_eta: shipment.planned_eta,
         planned_etd: shipment.planned_etd,
         trucking: {
-          has_pre_carriage: pre_carriage_hash,
-          has_on_carriage: on_carriage_hash
+          pre_carriage: pre_carriage_hash,
+          on_carriage: on_carriage_hash
         },
         load_type: shipment.load_type,
         itinerary: trip.itinerary
@@ -51,6 +43,8 @@ module ShippingTools
 
         new_charge_breakdown.dup_charges(charge_breakdown: charge_breakdown)
       end
+      new_shipment.save!
+
     end
     main_quote
   end

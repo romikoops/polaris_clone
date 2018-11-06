@@ -106,7 +106,7 @@ function ShipmentQuotationContent ({
                   <div className="flex-45 margin_bottom">
                     <div className="layout-row flex-100">
                       <div className="flex-none layout-row">
-                        <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.trucking.has_pre_carriage ? selectedStyle : deselectedStyle} />
+                        <i className="fa fa-truck clip flex-none layout-align-center-center" style={feeHash.trucking_pre ? selectedStyle : deselectedStyle} />
                         <p>{t('shipment:pickUp')}</p>
                       </div>
                     </div>
@@ -116,7 +116,7 @@ function ShipmentQuotationContent ({
                       <div className="flex-none layout-row">
                         <i
                           className="fa fa-truck clip flex-none layout-align-center-center"
-                          style={shipment.trucking.has_on_carriage ? selectedStyle : deselectedStyle}
+                          style={feeHash.trucking_on ? selectedStyle : deselectedStyle}
                         />
                         <p>{t('shipment:delivery')}</p>
                       </div>
@@ -127,7 +127,7 @@ function ShipmentQuotationContent ({
                       <div className="layout-row flex-none">
                         <i
                           className="fa fa-file-text clip flex-none layout-align-center-center"
-                          style={shipment.trucking.has_pre_carriage ? selectedStyle : deselectedStyle}
+                          style={feeHash.export ? selectedStyle : deselectedStyle}
                         />
                         <p>
                           {t('shipment:originDocumentation')}
@@ -142,7 +142,7 @@ function ShipmentQuotationContent ({
                       <div className="layout-row flex-none">
                         <i
                           className="fa fa-file-text-o clip flex-none layout-align-center-center"
-                          style={shipment.trucking.has_on_carriage ? selectedStyle : deselectedStyle}
+                          style={feeHash.import ? selectedStyle : deselectedStyle}
                         />
                         <p>
                           {t('shipment:destinationDocumentation')}
@@ -180,7 +180,7 @@ function ShipmentQuotationContent ({
                   <div className="layout-column flex-100 margin_bottom">
                     <div className="layout-row flex-100">
                       <div className="layout-row flex-none">
-                        <i className="fa fa-umbrella clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
+                        <i className="fa fa-umbrella clip flex-none" style={feeHash.insurance ? selectedStyle : deselectedStyle} />
                         <p>{t('shipment:insurance')}</p>
                       </div>
                       {scope.detailed_billing && feeHash.insurance && !feeHash.insurance.value && !feeHash.insurance.edited_total
@@ -204,10 +204,10 @@ function ShipmentQuotationContent ({
               />
               <div className="flex-100 layout-wrap layout-align-start-stretch">
                 <div className={`flex-100 layout-row layout-align-start-stretch ${quoteStyles.total_row}`}>
-                  <div className="flex-20 layout-row layout-align-start-center">
+                  <div className="flex-30 layout-row layout-align-start-center">
                     <span>{t('common:total')}</span>
                   </div>
-                  <div className="flex-80 layout-row layout-align-end-center">
+                  <div className="flex-70 layout-row layout-align-end-center">
                     <p className="card_padding_right">{numberSpacing(shipment.selected_offer.total.value, 2)}&nbsp;{shipment.selected_offer.total.currency}</p>
                   </div>
                 </div>
