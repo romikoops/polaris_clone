@@ -17,6 +17,14 @@ class PdfHandler
     @quotation  = args[:quotation]
     @logo       = args[:logo]
     @load_type  = args[:load_type]
+    @cargo_data = {}
+    @shipments.each do |s|
+      @cargo_data[s.id] = if s.aggregated_cargo
+                            s.aggregated_cargo.weight.to_f
+                          else
+                            s.cargo_units.inject(0) { |sum, hash| sum + hash[:payload_in_kg].to_f }
+      end
+    end
 
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
   end
@@ -31,7 +39,8 @@ class PdfHandler
         quotes:    @quotes,
         logo:      @logo,
         load_type: @load_type,
-        tenant:    @shipment.tenant
+        tenant:    @shipment.tenant,
+        cargo_data: @cargo_data
       }
     )
     response = BreezyPDFLite::RenderRequest.new(
