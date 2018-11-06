@@ -347,7 +347,7 @@ export class ShipmentDetails extends Component {
       destination: obj.destination,
       has_on_carriage: !!obj.trucking.on_carriage.truck_type,
       has_pre_carriage: !!obj.trucking.pre_carriage.truck_type,
-      shipment: { ...prevState.shipment, trucking: obj.trucking },
+      shipment: { ...prevState.shipment, trucking: obj.trucking, ...obj },
       incoterm: obj.incoterm,
       routeSet: true,
       prevRequest: req,
@@ -635,8 +635,8 @@ export class ShipmentDetails extends Component {
         return
       }
     } else {
-      const { shipment } = this.state
-      const loadType = camelize(shipment.load_type)
+      const rawLoadType = this.props.shipmentData.shipment.load_type
+      const loadType = camelize(rawLoadType)
       const errorIdx = ShipmentDetails.errorsAt(this.state[`${loadType}sErrors`])
 
       if (errorIdx > -1) {
