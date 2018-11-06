@@ -96,15 +96,26 @@
     margin: 0;
     font-size: 30px;
   }
-    .no_doc {
-      font-size: 12px;
-      i {
-        color: red;
-      }
-      p {
-        margin-left: 10px;
-      }
+  .no_doc, .uploaded_doc {
+    h4 {
+      margin: 0;
     }
+    h4, i {
+      font-size: 14px;
+    }
+    p, h4 {
+      margin-left: 10px;
+    }
+    p {
+      font-size: 12px;
+    }
+  }
+  .no_doc i {
+    color: red;
+  }
+  .uploaded_doc i {
+    color: rgb(13, 177, 75);
+  }
   .main_panel {
     .inner_wrapper {
       padding: 15px;

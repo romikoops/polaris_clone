@@ -7,7 +7,7 @@ import Checkbox from '../Checkbox/Checkbox'
 import DocumentsForm from '../Documents/Form'
 import DocumentsMultiForm from '../Documents/MultiForm'
 import defaults from '../../styles/default_classes.scss'
-import { converter, gradientGenerator } from '../../helpers'
+import { converter } from '../../helpers'
 import { currencyOptions, tooltips, incotermInfo } from '../../constants'
 import FormsyInput from '../FormsyInput/FormsyInput'
 import TextHeading from '../TextHeading/TextHeading'
@@ -545,7 +545,7 @@ class CargoDetails extends Component {
                       >
                         More info
                       </p>
-                      
+
                     </div>
                   </div>
                   <div className="flex-100 layout-row layout-align-start-start input_box_full">
@@ -571,26 +571,26 @@ class CargoDetails extends Component {
               >
                 <div className="flex-100 layout-row layout-wrap" name="packing_sheet">
                   <div className="flex-100 layout-row margin_5">
-                    <DocumentsForm
+                    <DocumentsMultiForm
                       theme={theme}
                       type="packing_sheet"
                       dispatchFn={this.fileFn}
                       text={t('common:packingSheet')}
-                      doc={documents.packing_sheet}
+                      documents={documents.packing_sheet}
                       isRequired
                       deleteFn={this.deleteDoc}
                     />
                   </div>
                 </div>
-
+                
                 <div className="flex-100 layout-row layout-wrap" name="commercial_invoice">
                   <div className="flex-100 layout-row margin_5">
-                    <DocumentsForm
+                    <DocumentsMultiForm
                       theme={theme}
                       type="commercial_invoice"
                       dispatchFn={this.fileFn}
-                      text="Commercial Invoice"
-                      doc={documents.commercial_invoice}
+                      text={t('common:commercialInvoice')}
+                      documents={documents.commercial_invoice}
                       isRequired
                       deleteFn={this.deleteDoc}
                     />
