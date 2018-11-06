@@ -50,7 +50,7 @@ export { default as AdminShipments } from './AdminShipments'
 export * from './AdminShipmentsIndex'
 export * from './AdminShipmentView/AdminShipmentView'
 
-export { default as AdminScheduleGenerator } from './AdminScheduleGenerator'
+export { default as AdminScheduleGenerator } from './AdminScheduleGenerator/index'
 export * from './AdminScheduleLine'
 export * from './AdminChargeSection'
 export * from './AdminServiceCharges'
