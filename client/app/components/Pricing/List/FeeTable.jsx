@@ -17,10 +17,22 @@ class FeeTable extends PureComponent {
     }
   }
 
-  render () {
-    const { t, row } = this.props
-    if (!row || (row && !row.original)) return ''
+  determineStringToRender (value, target) {
+    const { scope } = this.props.tenant.data
+    if (!scope) return value
+    if (scope.cargo_price_notes && scope.cargo_price_notes.cargo && target === 'rate') {
+      return scope.cargo_price_notes.cargo
+    } else if (scope.cargo_price_notes && scope.cargo_price_notes.cargo && target === 'min') {
+      return ''
+    }
 
+    return value
+  }
+
+  render () {
+    const { t, row, tenant } = this.props
+    if (!row || (row && !row.original)) return ''
+    const { scope } = tenant.data
     const fees = row.original.data
     if (!fees) return ''
     const { sorted } = this.state
@@ -72,12 +84,17 @@ class FeeTable extends PureComponent {
           <p className="flex-none">{t('common:rate')}</p>
         </div>),
         id: 'rate',
+        style: { 'white-space': 'unset' },
         accessor: d => d.rate,
-        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
-          <p className="flex-none"> {rowData.row.rate}</p>
+        Cell: rowData => (<div className={`${styles.pricing_cell} flex-100 layout-row layout-align-start-center`}>
+          <p className="flex-100">
+            {this.determineStringToRender(rowData.row.rate, 'rate')}
+          </p>
         </div>)
-      },
-      {
+      }
+    ]
+    if ((scope && !scope.cargo_price_notes) || (scope && scope.cargo_price_notes && !scope.cargo_price_notes.cargo)) {
+      columns.push({
         Header: (<div className="flex layout-row layout-center-center">
           {determineSortingCaret('min', sorted)}
           <p className="flex-none">{t('common:minimum')}</p>
@@ -85,10 +102,10 @@ class FeeTable extends PureComponent {
         id: 'min',
         accessor: d => d.min,
         Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
-          <p className="flex-none"> {rowData.row.min}</p>
+          <p className="flex-none"> {this.determineStringToRender(rowData.row.min, 'min')}</p>
         </div>)
-      }
-    ]
+      })
+    }
 
     return (
       <ReactTable
@@ -112,7 +129,8 @@ class FeeTable extends PureComponent {
 
 FeeTable.propTypes = {
   t: PropTypes.func.isRequired,
-  row: PropTypes.objectOf(PropTypes.any).isRequired
+  row: PropTypes.objectOf(PropTypes.any).isRequired,
+  tenant: PropTypes.tenant.isRequired
 }
 
 function mapStateToProps (state) {
