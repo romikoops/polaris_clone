@@ -557,9 +557,7 @@ class ShipmentLocationBox extends Component {
 
               const fieldsHaveErrors = !nexusOption
               this.setState({ [`${target}FieldsHaveErrors`]: fieldsHaveErrors, lastTarget: target })
-              const addressFormsHaveErrors =
-                fieldsHaveErrors || this.state[`${counterpart}FieldsHaveErrors`]
-              this.props.handleSelectLocation(target, addressFormsHaveErrors)
+              this.props.handleSelectLocation(target, fieldsHaveErrors)
             })
           } else {
             this.setState({
@@ -570,7 +568,7 @@ class ShipmentLocationBox extends Component {
               },
               lastTarget: target
             }, () => this.prepForSelect(target))
-            this.props.handleSelectLocation(counterpart, this.state[`${counterpart}FieldsHaveErrors`])
+            this.props.handleSelectLocation(target, this.state[`${target}FieldsHaveErrors`])
             this.props.setNotesIds(nexusIds, target)
 
             addressFromPlace(place, this.props.gMaps, this.state.map, (address) => {
