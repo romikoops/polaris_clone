@@ -39,7 +39,7 @@ export class SimpleMap extends Component {
     const { theme, zoom } = this.props
     const newMarkers = []
     const icon = {
-      url: colourSVG('location', theme),
+      url: colourSVG('address', theme),
       anchor: new this.props.gMaps.Point(25, 50),
       scaledSize: new this.props.gMaps.Size(36, 36)
     }
