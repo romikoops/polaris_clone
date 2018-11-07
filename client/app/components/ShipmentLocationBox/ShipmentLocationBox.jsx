@@ -817,7 +817,7 @@ class ShipmentLocationBox extends Component {
 
       const truckingBoolean = !newFilteredRouteIndexes.some(i => routes[i][counterpart].truckTypes.length > 0)
 
-      const carriage = target === 'destination' ? this.props.has_pre_carriage : this.props.has_on_carriage
+      const carriage = target === 'destination' ? this.props.has_on_carriage : this.props.has_pre_carriage
 
       if (targetTrucking && carriage) this.prepTruckTypes(newFilteredRoutes, target)
       if (newFilteredRouteIndexes.length === 0) {
