@@ -43,18 +43,26 @@ class GeometrySeeder
       end
       multi_polygon = RGeo::Cartesian.factory.multi_polygon(polygons)
 
-      attributes = { data: multi_polygon }
-      names.each_with_index { |name, i| attributes["name_#{i + 1}"] = name }
+      attributes = { 
+        bounds: multi_polygon,
+        postal_code: '',
+        neighbourhood: names[3],
+        city: names[2],
+        province: names[1],
+        country: names[0]
+      }
+      # names.each_with_index { |name, i| attributes["name_#{i + 1}"] = name }
+
       attributes
     end
 
     puts
     puts 'Writing Geometries to DB...'
 
-    Geometry.import geometries_data,
+    Location.import geometries_data,
                     on_duplicate_key_update: {
-                      conflict_target: %i(name_1 name_2 name_3 name_4),
-                      columns:         [:data]
+                      conflict_target: %i(postal_code suburb neighbourhood city province country),
+                      columns:         [:bounds]
                     }
 
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)

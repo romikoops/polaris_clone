@@ -400,6 +400,18 @@ ActiveRecord::Schema.define(version: 2018_11_13_124857) do
     t.boolean "dangerous", default: false
   end
 
+  create_table "locations", force: :cascade do |t|
+    t.string "postal_code"
+    t.string "suburb"
+    t.string "neighbourhood"
+    t.string "city"
+    t.string "province"
+    t.string "country"
+    t.string "admin_level"
+    t.geometry "bounds", limit: {:srid=>0, :type=>"geometry"}
+    t.index ["postal_code", "suburb", "neighbourhood", "city", "province", "country"], name: "uniq_index", unique: true
+  end
+
   create_table "mandatory_charges", force: :cascade do |t|
     t.boolean "pre_carriage"
     t.boolean "on_carriage"
@@ -745,7 +757,7 @@ ActiveRecord::Schema.define(version: 2018_11_13_124857) do
     t.integer "distance"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "geometry_id"
+    t.integer "location_id"
     t.index ["city_name"], name: "index_trucking_destinations_on_city_name"
     t.index ["country_code"], name: "index_trucking_destinations_on_country_code"
     t.index ["distance"], name: "index_trucking_destinations_on_distance"
