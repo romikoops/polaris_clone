@@ -23,8 +23,8 @@ class User < ApplicationRecord
   belongs_to :role
   belongs_to :optin_status
   has_many :conversations
-  has_many :user_locations, dependent: :destroy
-  has_many :locations, through: :user_locations
+  has_many :user_addresses, dependent: :destroy
+  has_many :addresses, through: :user_addresses
   has_many :documents
   has_many :shipments
   has_many :receivable_shipments, foreign_key: 'consignee_id'
@@ -137,19 +137,19 @@ class User < ApplicationRecord
   end
 
   def full_name_and_company_and_address
-    "#{first_name} #{last_name}\n#{company_name}\n#{location.geocoded_address}"
+    "#{first_name} #{last_name}\n#{company_name}\n#{address.geocoded_address}"
   end
 
   def decorated_created_at
     created_at.to_date.to_s(:long)
   end
 
-  def primary_location
-    locations.where('user_locations.primary': true).first
+  def primary_address
+    addresses.where('user_addresses.primary': true).first
   end
 
-  def secondary_locations
-    locations.where('user_locations.primary': false)
+  def secondary_addresses
+    addresses.where('user_addresses.primary': false)
   end
 
   def expanded

@@ -51,8 +51,8 @@ GmapsLoader.propTypes = {
   }).isRequired,
   has_on_carriage: PropTypes.bool,
   has_pre_carriage: PropTypes.bool,
-  origin: PropTypes.location.isRequired,
-  destination: PropTypes.location.isRequired,
+  origin: PropTypes.address.isRequired,
+  destination: PropTypes.address.isRequired,
   prevRequest: PropTypes.shape({
     shipment: PropTypes.object
   }),

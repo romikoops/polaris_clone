@@ -30,9 +30,9 @@ class AdminShipmentAction extends Component {
     }
   }
   handleAction () {
-    const { match, location, adminDispatch } = this.props
+    const { match, address, adminDispatch } = this.props
     const { uuid } = match.params
-    const query = new window.URLSearchParams(location.search)
+    const query = new window.URLSearchParams(address.search)
     const action = query.get('action')
     if (action === 'edit') {
       adminDispatch.getShipment(uuid, true)
@@ -74,7 +74,7 @@ AdminShipmentAction.propTypes = {
   }).isRequired,
   authenticationDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   match: PropTypes.match.isRequired,
-  location: PropTypes.location.isRequired
+  address: PropTypes.address.isRequired
 }
 
 AdminShipmentAction.defaultProps = {

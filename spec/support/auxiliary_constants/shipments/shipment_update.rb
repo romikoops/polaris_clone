@@ -1,5 +1,5 @@
 CONSIGNEE = {
-  location: {
+  address: {
     country: "Sweden",
     id: 672,
     city: "San Pedro",
@@ -9,7 +9,7 @@ CONSIGNEE = {
     geocodedAddress: "Tuna St 64, 90731 San Pedro, Sweden",
     latitude: 33.73875,
     longitude: -118.2688393,
-    locationType: nil,
+    addressType: nil,
     name: nil
   },
   contact: {
@@ -21,7 +21,7 @@ CONSIGNEE = {
   }
 }
 SHIPPER = {
-  location: {
+  address: {
     country: "UK",
     id: 668,
     city: "Portsmouth",
@@ -31,7 +31,7 @@ SHIPPER = {
     geocodedAddress: "College Rd 1, PO13LX Portsmouth",
     latitude: 50.8000106,
     longitude: -1.1066824,
-    locationType: nil,
+    addressType: nil,
     name: nil
   },
   contact: {

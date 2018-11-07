@@ -46,7 +46,7 @@ class ShipmentSummaryBox extends Component {
   }
   render () {
     const {
-      theme, shipment, hubs, route, user, total, locations, t
+      theme, shipment, hubs, route, user, total, addresses, t
     } = this.props
     const { startHub, endHub } = hubs
     const gradientFontStyle =
@@ -75,10 +75,10 @@ class ShipmentSummaryBox extends Component {
           <TextHeading theme={theme} size={4} text={t('shipment:pickUpAddress')} />
         </div>
         <address className="flex-100 layout-row layout-wrap">
-          {locations.origin.street_number} {locations.origin.street} <br />
-          {locations.origin.city} <br />
-          {locations.origin.zip_code} <br />
-          {locations.origin.country} <br />
+          {addresses.origin.street_number} {addresses.origin.street} <br />
+          {addresses.origin.city} <br />
+          {addresses.origin.zip_code} <br />
+          {addresses.origin.country} <br />
         </address>
       </div>
     )
@@ -90,10 +90,10 @@ class ShipmentSummaryBox extends Component {
           <TextHeading theme={theme} size={4} text={t('shipment:deliveryAddress')} />
         </div>
         <address className="flex-100 layout-row layout-wrap">
-          {locations.destination.street_number} {locations.destination.street} <br />
-          {locations.destination.city} <br />
-          {locations.destination.zip_code} <br />
-          {locations.destination.country} <br />
+          {addresses.destination.street_number} {addresses.destination.street} <br />
+          {addresses.destination.city} <br />
+          {addresses.destination.zip_code} <br />
+          {addresses.destination.country} <br />
         </address>
       </div>
     )
@@ -255,7 +255,7 @@ ShipmentSummaryBox.propTypes = {
   route: PropTypes.route,
   user: PropTypes.user,
   total: PropTypes.number,
-  locations: PropTypes.locations
+  addresses: PropTypes.addresses
 }
 
 ShipmentSummaryBox.defaultProps = {
@@ -264,7 +264,7 @@ ShipmentSummaryBox.defaultProps = {
   hubs: [],
   route: null,
   user: null,
-  locations: null,
+  addresses: null,
   total: 0
 }
 

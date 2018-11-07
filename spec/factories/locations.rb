@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :location do
+  factory :address do
     name 'Gothenburg'
     latitude '57.694253'
     longitude '11.854048'

@@ -7,10 +7,10 @@ import { gradientTextGenerator } from '../../../../../helpers'
 function commaSeparatedWhenBothExist (str1, str2) {
   return str1 && str2 ? `${str1}, ${str2}` : (str1 || str2)
 }
-function locationForDisplay (location) {
+function addressForDisplay (address) {
   const {
     street, streetNumber, city, country, zipCode
-  } = location
+  } = address
   const cityCountry = commaSeparatedWhenBothExist(city, country)
 
   const streetWithNumber = (street || '') + (streetNumber ? ` ${streetNumber}` : '')
@@ -22,7 +22,7 @@ function locationForDisplay (location) {
 export default function ShipmentContactsBoxMainContactsContactCard ({
   contactData, theme, contactType, showAddressBook, showEditContact, handleClick
 }) {
-  const { contact, location } = contactData
+  const { contact, address } = contactData
   const iconStyle = {
     ...gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
   }
@@ -42,7 +42,7 @@ export default function ShipmentContactsBoxMainContactsContactCard ({
     </div>
   )
 
-  const { addressDetails } = locationForDisplay(location)
+  const { addressDetails } = addressForDisplay(address)
 
   return (
     <div className={`flex-100 layout-row layout-wrap ${styles.contact_card}`} style={borderStyles}>
@@ -65,12 +65,12 @@ export default function ShipmentContactsBoxMainContactsContactCard ({
         </div>
         <div className="flex-100 layout-row layout-align-end-center">
           <p className={`${styles.secondary_info_city} flex-90 offset-10`}>
-            <b> { location.city } </b>
+            <b> { address.city } </b>
           </p>
         </div>
         <div className="flex-100 layout-row layout-align-end-center">
           <p className={`${styles.secondary_info_country} flex-90 offset-10`}>
-            <Truncate lines={1}> { location.country }</Truncate>
+            <Truncate lines={1}> { address.country }</Truncate>
           </p>
         </div>
       </div>
@@ -95,7 +95,7 @@ export default function ShipmentContactsBoxMainContactsContactCard ({
 ShipmentContactsBoxMainContactsContactCard.propTypes = {
   contactData: PropTypes.shape({
     contact: PropTypes.object,
-    location: PropTypes.object
+    address: PropTypes.object
   }).isRequired,
   theme: PropTypes.theme,
   contactType: PropTypes.string,

@@ -82,8 +82,8 @@ export default function users (state = initialState, action) {
         ...state,
         dashboard: {
           ...state.dashboard,
-          locations: state.dashboard.locations
-            .filter(item => item.location.id !== parseInt(action.payload.id, 10))
+          addresses: state.dashboard.addresses
+            .filter(item => item.address.id !== parseInt(action.payload.id, 10))
         },
         loading: false
       }
@@ -104,7 +104,7 @@ export default function users (state = initialState, action) {
         loading: false,
         dashboard: {
           ...state.dashboard,
-          locations: action.payload
+          addresses: action.payload
         }
       }
     case userConstants.MAKEPRIMARY_FAILURE:
@@ -124,7 +124,7 @@ export default function users (state = initialState, action) {
         loading: false,
         dashboard: {
           ...state.dashboard,
-          locations: action.payload
+          addresses: action.payload
         }
       }
     case userConstants.NEW_USER_LOCATION_FAILURE:
@@ -144,7 +144,7 @@ export default function users (state = initialState, action) {
         loading: false,
         dashboard: {
           ...state.dashboard,
-          locations: action.payload
+          addresses: action.payload
         }
       }
     case userConstants.EDIT_USER_LOCATION_FAILURE:
@@ -423,7 +423,7 @@ export default function users (state = initialState, action) {
       return { ...state, loading: true }
     case userConstants.UPDATE_CONTACT_ADDRESS_SUCCESS: {
       const cLData = state.contactData
-      cLData.location = action.payload
+      cLData.address = action.payload
 
       return {
         ...state,
@@ -442,7 +442,7 @@ export default function users (state = initialState, action) {
       return { ...state, loading: true }
     case userConstants.DELETE_CONTACT_ADDRESS_SUCCESS: {
       const caData = state.contactData
-      caData.location = false
+      caData.address = false
 
       return {
         ...state,

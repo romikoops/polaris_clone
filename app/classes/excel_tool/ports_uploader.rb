@@ -1,6 +1,6 @@
 module ExcelTool
   class PortsUploader < ExcelTool::BaseTool
-    attr_reader :first_sheet, :country, :nexus, :user, :port_row, :location, :mandatory_charge
+    attr_reader :first_sheet, :country, :nexus, :user, :port_row, :address, :mandatory_charge
 
     def post_initialize(args)
       @first_sheet = xlsx.sheet(xlsx.sheets.first)
@@ -45,18 +45,18 @@ module ExcelTool
       end
 
       def _nexus
-        Location.find_by(
+       Address.find_by(
           name: port_row[:name],
-          location_type: "nexus",
+          address_type: "nexus",
           country: country
         )
       end
 
       def _nexus_create
         lat, lng = port_row[:lat_lng].split(', ')
-        Location.create!(
+       Address.create!(
           name:             port_row[:name],
-          location_type:    "nexus",
+          address_type:    "nexus",
           latitude:         lat,
           longitude:        lng,
           photo:            port_row[:photo],
@@ -66,16 +66,16 @@ module ExcelTool
         )
       end
 
-      def find_or_create_location
+      def find_or_create_address
         lat, lng = port_row[:lat_lng].split(', ')
-        Location.find_or_create_by(
+       Address.find_or_create_by(
           name:             port_row[:name],
           latitude:         lat,
           longitude:        lng,
           country:          country,
           city:             port_row[:name],
           geocoded_address: port_row[:geocoded_address],
-          location_type: nil
+          address_type: nil
         )
       end
 
@@ -90,7 +90,7 @@ module ExcelTool
         lat, lng = port_row[:lat_lng].split(', ')
         @port.update_attributes(
           nexus_id:         nexus.id,
-          location_id:      location.id,
+          address_id:      address.id,
           latitude:         lat,
           longitude:        lng,
           name:             port_row[:name],
@@ -105,7 +105,7 @@ module ExcelTool
         lat, lng = port_row[:lat_lng].split(', ')
         nexus.ports.create!(
           nexus_id:         nexus.id,
-          location_id:      location.id,
+          address_id:      address.id,
           latitude:         lat,
           longitude:        lng,
           name:             port_row[:name],
@@ -128,10 +128,10 @@ module ExcelTool
         end
       end
 
-      def update_location_geocode
-        if !location.street_number
-          location.reverse_geocode
-          location.save!
+      def update_address_geocode
+        if !address.street_number
+          address.reverse_geocode
+          address.save!
         end
       end
 
@@ -154,8 +154,8 @@ module ExcelTool
           @nexus = _nexus
           @nexus ||= _nexus_create
 
-          @location = find_or_create_location
-          update_location_geocode
+          @address = find_or_create_address
+          update_address_geocode
           update_or_create_hub
           results[:nexuses] << nexus
           stats[:nexuses][:number_updated] += 1

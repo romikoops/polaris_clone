@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, location } from '../../../mocks'
+import { theme, address } from '../../../mocks'
 
 import CompanyDetailsSection from './'
 
 const propsBase = {
   theme,
   contactData: {
-    location,
+    address,
     contact: {
       companyName: 'FOO_COMPANY_NAME',
       firstName: 'FOO_FIRST_NAME',

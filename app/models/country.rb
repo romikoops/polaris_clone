@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Country < ApplicationRecord
-  has_many :locations
+  has_many :addresses
   has_many :nexuses
   Geoplace = Struct.new(:name, :code)
   # Class Methods

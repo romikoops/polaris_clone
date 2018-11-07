@@ -22,19 +22,19 @@ class EditLocation extends Component {
 
     this.state = {
       geocodedAddress: this.props.geocodedAddress,
-      location: {
-        street: this.props.location ? this.props.location.street : '',
-        number: this.props.location ? this.props.location.street_number : '',
-        zipCode: this.props.location ? this.props.location.zip_code : '',
-        city: this.props.location ? this.props.location.city : '',
-        country: this.props.location ? this.props.location.country : '',
-        fullAddress: this.props.location ? this.props.location.geocoded_address : ''
+      address: {
+        street: this.props.address ? this.props.address.street : '',
+        number: this.props.address ? this.props.address.street_number : '',
+        zipCode: this.props.address ? this.props.address.zip_code : '',
+        city: this.props.address ? this.props.address.city : '',
+        country: this.props.address ? this.props.address.country : '',
+        fullAddress: this.props.address ? this.props.address.geocoded_address : ''
       },
       autoText: {
-        location: ''
+        address: ''
       },
       autocomplete: {
-        location: ''
+        address: ''
       },
       markers: {}
     }
@@ -50,36 +50,36 @@ class EditLocation extends Component {
     this.initMap()
   }
   componentWillReceiveProps () {
-    if (!this.state.location.street && this.props.location) {
+    if (!this.state.address.street && this.props.address) {
       this.setState({
-        location: {
-          street: this.props.location.street,
-          number: this.props.location.street_number,
-          zipCode: this.props.location.zip_code,
-          city: this.props.location.city,
-          country: this.props.location.country,
-          fullAddress: this.props.location.geocoded_address
+        address: {
+          street: this.props.address.street,
+          number: this.props.address.street_number,
+          zipCode: this.props.address.zip_code,
+          city: this.props.address.city,
+          country: this.props.address.country,
+          fullAddress: this.props.address.geocoded_address
         }
       })
     }
   }
-  setMarker (location, name) {
+  setMarker (address, name) {
     const { markers, map } = this.state
     const { theme } = this.props
     const newMarkers = []
     const icon = {
-      url: colourSVG('location', theme),
+      url: colourSVG('address', theme),
       anchor: new this.props.gMaps.Point(25, 50),
       scaledSize: new this.props.gMaps.Size(36, 36)
     }
     const marker = new this.props.gMaps.Marker({
-      position: location,
+      position: address,
       map,
       title: name,
       icon
     })
-    markers.location = marker
-    newMarkers.push(markers.location)
+    markers.address = marker
+    newMarkers.push(markers.address)
     this.setState({ markers })
     const bounds = new this.props.gMaps.LatLngBounds()
     for (let i = 0; i < newMarkers.length; i++) {
@@ -118,10 +118,10 @@ class EditLocation extends Component {
 
   initAutocomplete (map) {
     // const targetId = target + '-gmac';
-    const input = document.getElementById('location')
+    const input = document.getElementById('address')
     const autocomplete = new this.props.gMaps.places.Autocomplete(input)
     autocomplete.bindTo('bounds', map)
-    this.setState({ autoListener: { ...this.state.autoListener, location: autocomplete } })
+    this.setState({ autoListener: { ...this.state.autoListener, address: autocomplete } })
     this.autocompleteListener(map, autocomplete)
   }
   autocompleteListener (aMap, autocomplete, t) {
@@ -202,26 +202,26 @@ class EditLocation extends Component {
     })
     tmpAddress.fullAddress = place.formatted_address
 
-    this.setState({ location: tmpAddress })
+    this.setState({ address: tmpAddress })
     this.setState({
-      autocomplete: { ...this.state.autocomplete, location: true }
+      autocomplete: { ...this.state.autocomplete, address: true }
     })
   }
   resetAuto () {
     // this.state.autoListener[target].clearListeners();
     this.setState({
-      autocomplete: { ...this.state.autocomplete, location: false }
+      autocomplete: { ...this.state.autocomplete, address: false }
     })
   }
   saveLocation () {
-    const { location } = this.state
+    const { address } = this.state
     const preppedLocation = {}
-    preppedLocation.id = this.props.location.id
-    preppedLocation.street_number = location.number
-    preppedLocation.street = location.street
-    preppedLocation.zip_code = location.zipCode
-    preppedLocation.city = location.city
-    preppedLocation.country = location.country
+    preppedLocation.id = this.props.address.id
+    preppedLocation.street_number = address.number
+    preppedLocation.street = address.street
+    preppedLocation.zip_code = address.zipCode
+    preppedLocation.city = address.city
+    preppedLocation.country = address.country
     this.props.saveLocation(preppedLocation)
   }
 
@@ -231,49 +231,49 @@ class EditLocation extends Component {
       <div className="flex-80 layout-row layout-wrap layout-align-end-space-around">
         <input
           id="not-auto"
-          name="location-number"
+          name="address-number"
           className={`flex-none ${styles.input}`}
           type="string"
           onChange={this.handleAddressChange}
-          value={this.state.location.number}
+          value={this.state.address.number}
           placeholder={t('user:streetNumber')}
         />
         <input
-          name="location-street"
+          name="address-street"
           className={`flex-none ${styles.input}`}
           type="string"
           onChange={this.handleAddressChange}
-          value={this.state.location.street}
+          value={this.state.address.street}
           placeholder={t('user:street')}
         />
         <input
-          name="location-zipCode"
+          name="address-zipCode"
           className={`flex-none ${styles.input}`}
           type="string"
           onChange={this.handleAddressChange}
-          value={this.state.location.zipCode}
+          value={this.state.address.zipCode}
           placeholder={t('user:postalCode')}
         />
         <input
-          name="location-city"
+          name="address-city"
           className={`flex-none ${styles.input}`}
           type="string"
           onChange={this.handleAddressChange}
-          value={this.state.location.city}
+          value={this.state.address.city}
           placeholder={t('user:city')}
         />
         <input
-          name="location-country"
+          name="address-country"
           className={`flex-none ${styles.input}`}
           type="string"
           onChange={this.handleAddressChange}
-          value={this.state.location.country}
+          value={this.state.address.country}
           placeholder={t('user:country')}
         />
         <div className="flex-100 layout-row layout-align-start-center">
           <div
             className="flex-none layout-row layout-align-end-center"
-            onClick={() => this.resetAuto('location')}
+            onClick={() => this.resetAuto('address')}
           >
             <i className="fa fa-times flex-none" />
             <p className="offset-5 flex-none" style={{ paddingRight: '10px' }}>
@@ -290,15 +290,15 @@ class EditLocation extends Component {
     const autoInput = (
       <div
         className={`flex-100 layout-row layout-wrap ${styles.overlay_auto}`}
-        style={this.state.autocomplete.location ? autoHide : {}}
+        style={this.state.autocomplete.address ? autoHide : {}}
       >
         <input
-          id="location"
-          name="location"
+          id="address"
+          name="address"
           className={`flex-none ${styles.input}`}
           type="string"
           onChange={this.handleAuto}
-          value={this.state.autoText.location}
+          value={this.state.autoText.address}
           placeholder={t('nav:searchAddress')}
         />
       </div>
@@ -348,13 +348,13 @@ EditLocation.propTypes = {
   saveLocation: PropTypes.func.isRequired,
   gMaps: PropTypes.gMaps.isRequired,
   geocodedAddress: PropTypes.string,
-  location: PropTypes.objectOf(PropTypes.string)
+  address: PropTypes.objectOf(PropTypes.string)
 }
 
 EditLocation.defaultProps = {
   theme: null,
   geocodedAddress: '',
-  location: {}
+  address: {}
 }
 
 export default withNamespaces(['user', 'common', 'nav'])(EditLocation)

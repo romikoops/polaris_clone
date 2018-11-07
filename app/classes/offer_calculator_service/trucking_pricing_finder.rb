@@ -11,7 +11,7 @@ module OfferCalculatorService
 
     def perform(hub_id, distance)
       TruckingPricing.find_by_filter(
-        location:   @address,
+        address:   @address,
         load_type:  @shipment.load_type,
         tenant_id:  @shipment.tenant_id,
         truck_type: @trucking_details["truck_type"],

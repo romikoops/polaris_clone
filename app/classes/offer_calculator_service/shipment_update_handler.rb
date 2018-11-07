@@ -26,9 +26,9 @@ module OfferCalculatorService
 
       { origin: "pre", destination: "on" }.each do |target, carriage|
         next unless @shipment.has_carriage?(carriage)
-        location = Location.create_from_raw_params!(location_params(target))
-        raise_trucking_address_error(target) if trucking_address_invalid?(location)
-        @shipment.trucking["#{carriage}_carriage"]["location_id"] = location.id
+        address = Address.create_from_raw_params!(address_params(target))
+        raise_trucking_address_error(target) if trucking_address_invalid?(address)
+        @shipment.trucking["#{carriage}_carriage"]["address_id"] = address.id
       end
     end
 
@@ -100,17 +100,17 @@ module OfferCalculatorService
       @shipment.containers.destroy_all
     end
 
-    def trucking_address_invalid?(location)
-      location.nil? || location.zip_code.blank?
+    def trucking_address_invalid?(address)
+      address.nil? || address.zip_code.blank?
     end
 
-    def location_params(target)
-      unsafe_location_hash = @params.require(:shipment).require(target).to_unsafe_hash
-      snakefied_location_hash = unsafe_location_hash.deep_transform_keys { |k| k.to_s.underscore }
-      snakefied_location_hash.deep_symbolize_keys!
-      snakefied_location_hash[:geocoded_address] = snakefied_location_hash.delete(:full_address)
-      snakefied_location_hash[:street_number] = snakefied_location_hash.delete(:number)
-      ActionController::Parameters.new(snakefied_location_hash)
+    def address_params(target)
+      unsafe_address_hash = @params.require(:shipment).require(target).to_unsafe_hash
+      snakefied_address_hash = unsafe_address_hash.deep_transform_keys { |k| k.to_s.underscore }
+      snakefied_address_hash.deep_symbolize_keys!
+      snakefied_address_hash[:geocoded_address] = snakefied_address_hash.delete(:full_address)
+      snakefied_address_hash[:street_number] = snakefied_address_hash.delete(:number)
+      ActionController::Parameters.new(snakefied_address_hash)
     end
 
     def raise_trucking_address_error(target)

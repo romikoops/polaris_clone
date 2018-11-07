@@ -1,6 +1,6 @@
 module ExcelTool
   class HubsOverwriter < ExcelTool::BaseTool
-    attr_reader :first_sheet, :country, :nexus, :user, :hub_row, :location, :mandatory_charge
+    attr_reader :first_sheet, :country, :nexus, :user, :hub_row, :address, :mandatory_charge
 
     def post_initialize(args)
       @first_sheet = xlsx.sheet(xlsx.sheets.first)
@@ -95,15 +95,15 @@ module ExcelTool
         )
       end
 
-      def find_or_create_location
-        Location.find_or_create_by(
+      def find_or_create_address
+       Address.find_or_create_by(
           name:             hub_row[:hub_name],
           latitude:         hub_row[:latitude],
           longitude:        hub_row[:longitude],
           country:          country,
           city:             hub_row[:hub_name],
           geocoded_address: hub_row[:geocoded_address],
-          location_type: nil
+          address_type: nil
         )
       end
 
@@ -127,7 +127,7 @@ module ExcelTool
       def update_hub
         @hub.update_attributes(
           nexus_id:         nexus.id,
-          location_id:      location.id,
+          address_id:      address.id,
           tenant_id:        user.tenant_id,
           hub_type:         hub_row[:hub_type],
           trucking_type:    hub_row[:trucking_type],
@@ -154,7 +154,7 @@ module ExcelTool
       def create_nexus_hub
         nexus.hubs.create!(
           nexus_id:         nexus.id,
-          location_id:      location.id,
+          address_id:      address.id,
           tenant_id:        user.tenant_id,
           hub_type:         hub_row[:hub_type],
           trucking_type:    hub_row[:trucking_type],
@@ -178,10 +178,10 @@ module ExcelTool
         end
       end
 
-      def update_location_geocode
-        if !location.street_number
-          location.reverse_geocode
-          location.save!
+      def update_address_geocode
+        if !address.street_number
+          address.reverse_geocode
+          address.save!
         end
       end
 
@@ -220,8 +220,8 @@ module ExcelTool
           @nexus = _nexus
           @nexus ||= _nexus_create
 
-          @location = find_or_create_location
-          update_location_geocode
+          @address = find_or_create_address
+          update_address_geocode
           update_or_create_hub
           results[:nexuses] << nexus
           stats[:nexuses][:number_updated] += 1

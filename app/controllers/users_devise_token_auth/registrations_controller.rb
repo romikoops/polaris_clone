@@ -14,9 +14,9 @@ module UsersDeviseTokenAuth
 
         # Create Address for non-guest Users
         unless resource.guest
-          location = Location.create_from_raw_params!(location_params)
-          location.geocode_from_address_fields!
-          resource.locations << location unless location.nil?
+          address = Address.create_from_raw_params!(address_params)
+          address.geocode_from_address_fields!
+          resource.addresses << address unless address.nil?
         end
 
         @headers = resource.create_new_auth_token
@@ -62,8 +62,8 @@ module UsersDeviseTokenAuth
       "tenant_email"
     end
 
-    def location_params
-      params.require(:location).permit(
+    def address_params
+      params.require(:address).permit(
         :street, :street_number, :zip_code, :city, :country
       )
     end

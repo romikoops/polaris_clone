@@ -4,7 +4,7 @@ class Hub < ApplicationRecord
   has_paper_trail
   belongs_to :tenant
   belongs_to :nexus
-  belongs_to :location
+  belongs_to :address
 
   has_many :addons
   has_many :stops,    dependent: :destroy
@@ -31,7 +31,7 @@ class Hub < ApplicationRecord
 
     hubs = Hub.all
     hubs.each do |h|
-      h.nexus_id = h.location_id
+      h.nexus_id = h.address_id
       h.save!
     end
   end
@@ -70,7 +70,7 @@ class Hub < ApplicationRecord
 
   def self.prepped(user)
     where(tenant_id: user.tenant_id).map do |hub|
-      { data: hub, location: hub.location.to_custom_hash }
+      { data: hub, address: hub.address.to_custom_hash }
     end
   end
 
@@ -105,19 +105,19 @@ class Hub < ApplicationRecord
   end
 
   def lat_lng_string
-    "#{location.latitude},#{location.longitude}"
+    "#{address.latitude},#{address.longitude}"
   end
 
   def lat_lng_array
-    [location.latitude, location.longitude]
+    [address.latitude, address.longitude]
   end
   def lng_lat_array
-    # loc = location
-    [location.longitude, location.latitude]
+    # loc = address
+    [address.longitude, address.latitude]
   end
 
   def distance_to(loc)
-    Geocoder::Calculations.distance_between([loc.latitude, loc.longitude], [location.latitude, location.longitude])
+    Geocoder::Calculations.distance_between([loc.latitude, loc.longitude], [address.latitude, address.longitude])
   end
 
   def toggle_hub_status!
@@ -170,7 +170,7 @@ class Hub < ApplicationRecord
     new_options = options.reverse_merge(
       include: {
         nexus:    { only: %i[id name] },
-        location: {
+        address: {
           include: {
             country: { only: %i[name]}
           }

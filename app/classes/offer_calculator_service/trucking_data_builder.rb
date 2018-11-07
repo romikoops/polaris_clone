@@ -14,7 +14,7 @@ module OfferCalculatorService
 
     def data_for_hubs(hub_ids, carriage)
       trucking_details = @shipment.trucking["#{carriage}_carriage"]
-      address          = Location.find(trucking_details["location_id"])
+      address          = Address.find(trucking_details["address_id"])
 
       trucking_pricing_finder = TruckingPricingFinder.new(
         trucking_details: trucking_details,

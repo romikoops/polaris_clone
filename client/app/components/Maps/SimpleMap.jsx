@@ -25,32 +25,32 @@ export class SimpleMap extends Component {
     this.setInitialMarker()
   }
   setInitialMarker () {
-    const { location } = this.props
-    if (location && location.latitude && location.longitude) {
+    const { address } = this.props
+    if (address && address.latitude && address.longitude) {
       this.setMarker({
-        lat: location.latitude,
-        lng: location.longitude
-      }, location.name)
+        lat: address.latitude,
+        lng: address.longitude
+      }, address.name)
     }
   }
 
-  setMarker (location, name) {
+  setMarker (address, name) {
     const { markers, map } = this.state
     const { theme, zoom } = this.props
     const newMarkers = []
     const icon = {
-      url: colourSVG('location', theme),
+      url: colourSVG('address', theme),
       anchor: new this.props.gMaps.Point(25, 50),
       scaledSize: new this.props.gMaps.Size(36, 36)
     }
     const marker = new this.props.gMaps.Marker({
-      position: location,
+      position: address,
       map,
       title: name,
       icon
     })
-    markers.location = marker
-    newMarkers.push(markers.location)
+    markers.address = marker
+    newMarkers.push(markers.address)
     this.setState({ markers })
     const bounds = new this.props.gMaps.LatLngBounds()
     for (let i = 0; i < newMarkers.length; i++) {
@@ -105,14 +105,14 @@ export class SimpleMap extends Component {
 SimpleMap.propTypes = {
   theme: PropTypes.theme,
   gMaps: PropTypes.gMaps.isRequired,
-  location: PropTypes.objectOf(PropTypes.any),
+  address: PropTypes.objectOf(PropTypes.any),
   height: PropTypes.string,
   zoom: PropTypes.number
 }
 
 SimpleMap.defaultProps = {
   theme: null,
-  location: {},
+  address: {},
   height: '167px',
   zoom: 12
 }

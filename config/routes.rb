@@ -113,8 +113,8 @@ Rails.application.routes.draw do
       get 'hubs',    as: :hubs
       put 'update',  as: :update
 
-      resources :locations, controller: :user_locations, only: %i(index create update destroy)
-      post 'locations/:location_id/edit', to: 'user_locations#edit'
+      resources :addresses, controller: :user_addresses, only: %i(index create update destroy)
+      post 'addresses/:address_id/edit', to: 'user_addresses#edit'
       get 'gdpr/download', to: 'users#download_gdpr'
       post 'opt_out/:target', to: 'users#opt_out'
     end

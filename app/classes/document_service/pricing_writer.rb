@@ -24,10 +24,10 @@ module DocumentService
         pricing.deep_symbolize_keys!
         next if pricing[:expiration_date] < DateTime.now
         current_itinerary     = current_itinerary(pricing)
-        origin_aux_data       = location_and_aux_data(pricing, 0, "id")
-        current_origin        = origin_aux_data[:location]
-        destination_aux_data  = location_and_aux_data(pricing, 1, "id")
-        current_destination   = destination_aux_data[:location]
+        origin_aux_data       = address_and_aux_data(pricing, 0, "id")
+        current_origin        = origin_aux_data[:address]
+        destination_aux_data  = address_and_aux_data(pricing, 1, "id")
+        current_destination   = destination_aux_data[:address]
         carrier               = carrier(pricing)
         key_origin = aux_data[:itineraries][pricing[:itinerary_id]].dig("stops", 0, "id")
         key_destination = aux_data[:itineraries][pricing[:itinerary_id]].dig("stops", 1, "id")
@@ -127,10 +127,10 @@ module DocumentService
       tenant_vehicle.carrier ? tenant_vehicle.carrier.name : nil
     end
 
-    def location_and_aux_data(pricing, key1, key2)
+    def address_and_aux_data(pricing, key1, key2)
       stop_id = aux_data[:itineraries][pricing[:itinerary_id]].dig("stops", key1, key2)
       aux_data[:nexuses][stop_id] = stop(stop_id).hub.nexus unless aux_data[:nexuses][stop_id]
-      { location: aux_data[:nexuses][stop_id], aux_data: aux_data }
+      { address: aux_data[:nexuses][stop_id], aux_data: aux_data }
     end
 
     def pricing_sheet_header_text

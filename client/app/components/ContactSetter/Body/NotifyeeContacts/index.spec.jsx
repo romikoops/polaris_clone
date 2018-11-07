@@ -24,11 +24,11 @@ const propsBase = {
   notifyees: [
     {
       contact,
-      location: {}
+      address: {}
     },
     {
       contactSecond,
-      location: {}
+      address: {}
     }
   ],
   showAddressBook: identity,

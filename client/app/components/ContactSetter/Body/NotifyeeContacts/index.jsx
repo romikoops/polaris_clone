@@ -50,7 +50,7 @@ ContactSetterBodyNotifyeeContacts.propTypes = {
   t: PropTypes.func.isRequired,
   notifyees: PropTypes.arrayOf(PropTypes.shape({
     contact: PropTypes.object,
-    location: PropTypes.object
+    address: PropTypes.object
   })).isRequired,
   showAddressBook: PropTypes.func.isRequired,
   removeFunc: PropTypes.func.isRequired,

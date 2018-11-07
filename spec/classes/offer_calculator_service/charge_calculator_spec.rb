@@ -19,8 +19,8 @@ RSpec.describe OfferCalculatorService::ChargeCalculator do
         final_destination = setup[:_final_destination]
         origin_trcking = setup[:_origin_trucking]
 
-        shipment.trucking["on_carriage"]["location_id"] = final_destination.id if carriage == 'on'
-        shipment.trucking["pre_carriage"]["location_id"] = origin_trcking.id if carriage == 'pre'
+        shipment.trucking["on_carriage"]["address_id"] = final_destination.id if carriage == 'on'
+        shipment.trucking["pre_carriage"]["address_id"] = origin_trcking.id if carriage == 'pre'
         shipment.save!
         @trucking_data_builder      = OfferCalculatorService::TruckingDataBuilder.new(shipment)
         c_hub = { origin: [origin_hub.id], destination: [destination_hub.id] }

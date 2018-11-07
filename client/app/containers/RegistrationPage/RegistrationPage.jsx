@@ -13,13 +13,13 @@ import styles from './RegistrationPage.scss'
 
 class RegistrationPage extends React.Component {
   static mapInputs (inputs) {
-    const locationInputs = ['street', 'number', 'zip_code', 'city', 'country']
-    const model = { location: {} }
+    const addressInputs = ['street', 'number', 'zip_code', 'city', 'country']
+    const model = { address: {} }
     Object.keys(inputs).forEach((inputName) => {
       if (inputName === 'number') {
-        model.location.street_number = inputs.number
-      } else if (locationInputs.includes(inputName)) {
-        model.location[inputName] = inputs[inputName]
+        model.address.street_number = inputs.number
+      } else if (addressInputs.includes(inputName)) {
+        model.address[inputName] = inputs[inputName]
       } else {
         model[inputName] = inputs[inputName]
       }

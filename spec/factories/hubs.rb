@@ -12,7 +12,7 @@ FactoryBot.define do
     hub_status 'active'
     hub_code 'GOO1'
     association :tenant
-    association :location
+    association :address
     association :nexus
     association :mandatory_charge
   end

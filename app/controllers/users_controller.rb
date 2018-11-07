@@ -11,15 +11,15 @@ class UsersController < ApplicationController
       
       @contacts = current_user.contacts.where(alias: false).map do |contact|
         contact.as_json(
-          include: { location: { include: { country: { only: :name } },
+          include: { address: { include: { country: { only: :name } },
                                 except: %i(created_at updated_at country_id) } },
-          except: %i(created_at updated_at location_id)
+          except: %i(created_at updated_at address_id)
         )
       end
       @aliases = current_user.contacts.where(alias: true)
-      user_locs = current_user.user_locations
-      locations = user_locs.map do |ul|
-        { user: ul, location: ul.location.to_custom_hash }
+      user_locs = current_user.user_addresses
+      addresses = user_locs.map do |ul|
+        { user: ul, address: ul.address.to_custom_hash }
       end
 
       resp = {
@@ -27,7 +27,7 @@ class UsersController < ApplicationController
         contacts:          @contacts,
         num_contact_pages: (current_user.contacts.count.to_f / 6).to_f.ceil,
         aliases:           @aliases,
-        locations:         locations
+        addresses:         addresses
       }
     end
     response_handler(response)
@@ -35,9 +35,9 @@ class UsersController < ApplicationController
 
   def account
     @user = current_user
-    @locations = @user.locations
+    @addresses = @user.addresses
 
-    { locations: @locations }
+    { addresses: @addresses }
   end
 
   def update
@@ -45,10 +45,10 @@ class UsersController < ApplicationController
     updating_guest_to_regular_user = current_user.guest
     @user.update_attributes(user_params)
 
-    if @user.valid? && !@user.guest && params[:update][:location]
-      location = Location.create_from_raw_params!(location_params)
-      location.geocode_from_address_fields!
-      @user.locations << location unless location.nil?
+    if @user.valid? && !@user.guest && params[:update][:address]
+      address = Address.create_from_raw_params!(address_params)
+      address.geocode_from_address_fields!
+      @user.addresses << address unless address.nil?
       @user.optin_status = OptinStatus.find_by(tenant: true, itsmycargo: true, cookies: @user.optin_status.cookies)
       @user.send_confirmation_instructions if updating_guest_to_regular_user
       @user.save
@@ -150,8 +150,8 @@ class UsersController < ApplicationController
     @finished_shipments ||= current_user.shipments.finished
   end
 
-  def location_params
-    params.require(:update).require(:location).permit(
+  def address_params
+    params.require(:update).require(:address).permit(
       :street, :street_number, :zip_code, :city, :country
     )
   end

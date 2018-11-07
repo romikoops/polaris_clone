@@ -194,11 +194,11 @@ class Shipment < ApplicationRecord
   end
 
   def pickup_address
-    Location.where(id: trucking.dig('pre_carriage', 'location_id')).first
+   Address.where(id: trucking.dig('pre_carriage', 'address_id')).first
   end
 
   def delivery_address
-    Location.where(id: trucking.dig('on_carriage', 'location_id')).first
+   Address.where(id: trucking.dig('on_carriage', 'address_id')).first
   end
 
   def pickup_address_with_country
@@ -343,12 +343,12 @@ class Shipment < ApplicationRecord
         :origin_nexus,
         {
           destination_hub: {
-            include: { location: { only: %i(geocoded_address latitude longitude) } }
+            include: { address: { only: %i(geocoded_address latitude longitude) } }
           }
         },
         {
           origin_hub: {
-            include: { location: { only: %i(geocoded_address latitude longitude) } }
+            include: { address: { only: %i(geocoded_address latitude longitude) } }
           }
         }
       ]
@@ -408,8 +408,8 @@ class Shipment < ApplicationRecord
       itinerary = s.itinerary
       s.destination_nexus = itinerary.last_stop.hub.nexus
       s.origin_nexus = itinerary.first_stop.hub.nexus
-      s.trucking['on_carriage']['location_id'] ||= itinerary.last_stop.hub.id if s.has_on_carriage
-      s.trucking['pre_carriage']['location_id'] ||= itinerary.first_stop.hub.id if s.has_pre_carriage
+      s.trucking['on_carriage']['address_id'] ||= itinerary.last_stop.hub.id if s.has_on_carriage
+      s.trucking['pre_carriage']['address_id'] ||= itinerary.first_stop.hub.id if s.has_pre_carriage
       s.save!
     end
   end

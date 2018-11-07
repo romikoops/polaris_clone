@@ -19,7 +19,7 @@ class PlaceSearch extends Component {
 
     this.state = {
       autoText: {
-        location: ''
+        address: ''
       },
       markers: {}
     }
@@ -33,39 +33,39 @@ class PlaceSearch extends Component {
     this.initMap(this.setInitialMarker)
   }
   componentWillReceiveProps (nextProps) {
-    const { location } = nextProps
-    if (location && this.state.autoText.location === '') {
-      this.setState({ autoText: { location: location.geocoded_address } })
+    const { address } = nextProps
+    if (address && this.state.autoText.address === '') {
+      this.setState({ autoText: { address: address.geocoded_address } })
     }
     this.setInitialMarker()
   }
   setInitialMarker () {
-    const { location } = this.props
-    if (location && location.latitude && location.longitude) {
+    const { address } = this.props
+    if (address && address.latitude && address.longitude) {
       this.setMarker({
-        lat: location.latitude,
-        lng: location.longitude
-      }, location.name)
+        lat: address.latitude,
+        lng: address.longitude
+      }, address.name)
     }
   }
 
-  setMarker (location, name) {
+  setMarker (address, name) {
     const { markers, map } = this.state
     const { theme } = this.props
     const newMarkers = []
     const icon = {
-      url: colourSVG('location', theme),
+      url: colourSVG('address', theme),
       anchor: new this.props.gMaps.Point(25, 50),
       scaledSize: new this.props.gMaps.Size(36, 36)
     }
     const marker = new this.props.gMaps.Marker({
-      position: location,
+      position: address,
       map,
       title: name,
       icon
     })
-    markers.location = marker
-    newMarkers.push(markers.location)
+    markers.address = marker
+    newMarkers.push(markers.address)
     this.setState({ markers })
     const bounds = new this.props.gMaps.LatLngBounds()
     for (let i = 0; i < newMarkers.length; i++) {
@@ -104,10 +104,10 @@ class PlaceSearch extends Component {
 
   initAutocomplete (map) {
     const options = this.props.options ? this.props.options : {}
-    const input = document.getElementById('location')
+    const input = document.getElementById('address')
     const autocomplete = new this.props.gMaps.places.Autocomplete(input, options)
     autocomplete.bindTo('bounds', map)
-    this.setState({ autoListener: { ...this.state.autoListener, location: autocomplete } })
+    this.setState({ autoListener: { ...this.state.autoListener, address: autocomplete } })
     this.autocompleteListener(map, autocomplete)
   }
   autocompleteListener (aMap, autocomplete) {
@@ -166,12 +166,12 @@ class PlaceSearch extends Component {
     const autoInput = (
       <div className="flex-100 layout-row layout-wrap" style={autoInputStyles}>
         <input
-          id="location"
-          name="location"
+          id="address"
+          name="address"
           className={`flex-none ${styles.input}`}
           type="string"
           onChange={this.handleAuto}
-          value={this.state.autoText.location}
+          value={this.state.autoText.address}
           placeholder={t('nav:searchAddress')}
           style={this.props.inputStyles}
         />
@@ -195,7 +195,7 @@ PlaceSearch.propTypes = {
   hideMap: PropTypes.bool,
   inputStyles: PropTypes.objectOf(PropTypes.string),
   options: PropTypes.objectOf(PropTypes.any),
-  location: PropTypes.objectOf(PropTypes.any)
+  address: PropTypes.objectOf(PropTypes.any)
 }
 
 PlaceSearch.defaultProps = {
@@ -203,7 +203,7 @@ PlaceSearch.defaultProps = {
   hideMap: false,
   inputStyles: {},
   options: {},
-  location: {}
+  address: {}
 }
 
 export default withNamespaces('nav')(PlaceSearch)

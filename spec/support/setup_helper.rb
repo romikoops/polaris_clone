@@ -26,29 +26,29 @@ module SetupHelper
 
       destination_country = create(:country)
       origin_country = create(:country)
-      pre_carriage_trucking_location = { country: origin_country }.merge((JSON.parse(is_json ? args[:pre_carriage_location].to_json : args[:pre_carriage_location])).deep_symbolize_keys)
-      origin_location =  JSON.parse(is_json ? args[:origin_location].to_json : args[:origin_location])
-      origin_location[:country] = origin_country
-      origin = location(origin_location.deep_symbolize_keys)
-      destination = location(country: destination_country)
-      trucking_location = (JSON.parse(is_json ? args[:trucking_location].to_json : args[:trucking_location])).deep_symbolize_keys
-      trucking_location[:country] = destination_country
-      final_destination = location(trucking_location)
+      pre_carriage_trucking_address = { country: origin_country }.merge((JSON.parse(is_json ? args[:pre_carriage_address].to_json : args[:pre_carriage_address])).deep_symbolize_keys)
+      origin_address =  JSON.parse(is_json ? args[:origin_address].to_json : args[:origin_address])
+      origin_address[:country] = origin_country
+      origin = address(origin_address.deep_symbolize_keys)
+      destination = address(country: destination_country)
+      trucking_address = (JSON.parse(is_json ? args[:trucking_address].to_json : args[:trucking_address])).deep_symbolize_keys
+      trucking_address[:country] = destination_country
+      final_destination = address(trucking_address)
 
       # findout how to implement origin trucking for pre_carriage
-      origin_trucking = location(pre_carriage_trucking_location)
+      origin_trucking = address(pre_carriage_trucking_address)
 
      _mandatory_charge_type = mandatory_charge(origin_charges: charge_type(args), import_charges: charge_type(args))
       _origin_nexus = origin_nexus(name: args[:origin_nexus_name], latitude: args[:origin_latitude], longitude: args[:origin_longitude])
       _origin_hub  = origin_hub(port: args[:origin_port], origin_nexus: _origin_nexus, tenant: _user.tenant,
-        atitude: args[:origin_latitude], longitude: args[:origin_longitude], mandatory_charge: _mandatory_charge_type, location: origin)
+        atitude: args[:origin_latitude], longitude: args[:origin_longitude], mandatory_charge: _mandatory_charge_type, address: origin)
       
       _destination_nexus = destination_nexus(name: args[:destination_nexus_name], latitude: args[:destination_latitude],
         longitude: args[:destination_longitude])
 
       _destination_hub = destination_hub(port: args[:destination_port], destination_nexus: _destination_nexus,
         latitude: args[:destination_latitude], longitude: args[:destination_longitude],
-        mandatory_charge: _mandatory_charge_type, location: destination, tenant: _user.tenant)
+        mandatory_charge: _mandatory_charge_type, address: destination, tenant: _user.tenant)
 
       _shipment = shipment(cargo_items: [_cargo_item], user: _user, shipment_status: args[:shipment_status],
         trip: _trip, load_type: args[:load_type], direction: args[:direction], origin_hub: _origin_hub,
@@ -67,8 +67,8 @@ module SetupHelper
         cargo_class: args[:cargo_class], carriage: args[:extras][:carriage], truck_type: args[:trucking][:on_carriage][:truck_type])
      
       _trucking_pricing = trucking_pricing(tenant: _user.tenant, trucking_pricing_scope: _trucking_pricing_scope, modifier: args[:extras][:modifier],
-        truck_type: args[:trucking][:on_carriage][:truck_type], carriage: args[:extras][:carriage], load_type: args[:load_type], location: final_destination)
-      _trucking_destination = trucking_destination(zipcode: trucking_location[:zip_code])
+        truck_type: args[:trucking][:on_carriage][:truck_type], carriage: args[:extras][:carriage], load_type: args[:load_type], address: final_destination)
+      _trucking_destination = trucking_destination(zipcode: trucking_address[:zip_code])
       _hub_trucking = hub_trucking(trucking_pricing: _trucking_pricing, hub: _destination_hub, trucking_destination: _trucking_destination)
 
       _schedule = schedule(_shipment)
@@ -125,8 +125,8 @@ module SetupHelper
         tenant_vehicle_id: arg[:tenant_vehicle].id, direction: arg[:direction], fees: arg[:fees])
     end
 
-    def location(arg = {})
-      create(:location, name: arg[:name] || 'Gothenburg', latitude: arg[:latitude] || '57.694253',
+    def address(arg = {})
+      create(:address, name: arg[:name] || 'Gothenburg', latitude: arg[:latitude] || '57.694253',
         longitude: arg[:longitude] || '11.854048', zip_code: arg[:zip_code] || '43813',
         geocoded_address: arg[:geocoded_address] || '438 80 Landvetter, Sweden',
         city: arg[:city] || 'Gothenburg', country: arg[:country]
@@ -203,7 +203,7 @@ module SetupHelper
 
     def origin_hub(arg)
       create(:hub, name: arg[:port] || "Shanghai Port", nexus: arg[:origin_nexus], latitude: arg[:latitude],
-        longitude: arg[:longitude], mandatory_charge: arg[:mandatory_charge], tenant: arg[:tenant], location: arg[:location])
+        longitude: arg[:longitude], mandatory_charge: arg[:mandatory_charge], tenant: arg[:tenant], address: arg[:address])
     end
 
     def destination_nexus(arg)
@@ -213,7 +213,7 @@ module SetupHelper
     def destination_hub(arg)
       create(:hub, name: arg[:port] || "Gothenburg port", nexus: arg[:destination_nexus],
         latitude: arg[:latitude], longitude: arg[:longitude], mandatory_charge: arg[:mandatory_charge], tenant: arg[:tenant],
-        location: arg[:location])
+        address: arg[:address])
 
     end
 
@@ -405,10 +405,10 @@ module SetupHelper
         cargo_class: 'cargo_class',
         rate: 'rate',
         fees: 'fees',
-        trucking_location: 'trucking_location',
-        origin_location: 'origin_location',
+        trucking_address: 'trucking_address',
+        origin_address: 'origin_address',
         extras: 'extras',
-        pre_carriage_location: 'pre_carriage_location'
+        pre_carriage_address: 'pre_carriage_address'
       ) 
 
       test_sheet.each do |sheet|

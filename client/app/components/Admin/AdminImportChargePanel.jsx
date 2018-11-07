@@ -23,7 +23,6 @@ export class AdminImportChargePanel extends Component {
     if (!hub || !charge) {
       return ''
     }
-    // const bg1 = { backgroundImage: 'url(' + hub.location.photo + ')' };
     const gradientStyle = {
       background:
         theme && theme.colors

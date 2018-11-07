@@ -43,16 +43,16 @@ module DataParser
       end
 
       def geocode_port_data(country_key, port_object)
-        port_location = Location.geocoded_location("#{port_object[:name]}, #{country_key}")
-        port_nexus = Location.from_short_name("#{port_object[:name]} ,#{country_key}", 'nexus')
+        port_address = Address.geocoded_address("#{port_object[:name]}, #{country_key}")
+        port_nexus = Address.from_short_name("#{port_object[:name]} ,#{country_key}", 'nexus')
         return {
           hub_code: port_object[:code],
-          name: port_location.city,
-          latitude: port_location.latitude,
-          longitude: port_location.longitude,
-          location: port_location,
+          name: port_address.city,
+          latitude: port_address.latitude,
+          longitude: port_address.longitude,
+          address: port_address,
           nexus: port_nexus,
-          country_id: port_location.country_id
+          country_id: port_address.country_id
         }
       end
       

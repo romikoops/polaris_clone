@@ -12,14 +12,14 @@ class Admin::ClientsController < Admin::AdminBaseController
     response_handler(clients: clients, managers: managers)
   end
 
-  # Return selected User, assigned managers, shipments made and user locations
+  # Return selected User, assigned managers, shipments made and user addresses
 
   def show
     client = User.find(params[:id])
-    locations = client.locations
+    addresses = client.addresses
     shipments = client.shipments.where(status: %w[requested open in_progress finished]).map(&:with_address_options_json)
     manager_assignments = UserManager.where(user_id: client)
-    resp = { client: client, locations: locations, shipments: shipments, managerAssignments: manager_assignments }
+    resp = { client: client, addresses: addresses, shipments: shipments, managerAssignments: manager_assignments }
     response_handler(resp)
   end
 

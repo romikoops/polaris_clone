@@ -123,7 +123,7 @@ class ShipmentsController < ApplicationController
     end
 
     contacts = shipment.shipment_contacts.map do |sc|
-      { contact: sc.contact, type: sc.contact_type, location: sc.contact.location } if sc.contact
+      { contact: sc.contact, type: sc.contact_type, address: sc.contact.address } if sc.contact
     end
 
     documents = shipment.documents.map do |doc|

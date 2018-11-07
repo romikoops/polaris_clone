@@ -73,7 +73,7 @@ class ShipmentLocationBox extends Component {
         destination: {}
       },
       showModal: false,
-      locationFromModal: false,
+      addressFromModal: false,
       truckingOptions: {
         onCarriage: true,
         preCarriage: true
@@ -275,7 +275,7 @@ class ShipmentLocationBox extends Component {
     }
   }
 
-  setMarker (location, name, target) {
+  setMarker (address, name, target) {
     const {
       markers, map, directionsDisplay, directionsService
     } = this.state
@@ -287,7 +287,7 @@ class ShipmentLocationBox extends Component {
     let icon
     if (target === 'origin') {
       icon = {
-        url: colourSVG('location', theme),
+        url: colourSVG('address', theme),
         anchor: new this.props.gMaps.Point(18, 18),
         scaledSize: new this.props.gMaps.Size(36, 36)
       }
@@ -299,7 +299,7 @@ class ShipmentLocationBox extends Component {
       }
     }
     const marker = new this.props.gMaps.Marker({
-      position: location,
+      position: address,
       map,
       title: name,
       icon,
@@ -694,7 +694,7 @@ class ShipmentLocationBox extends Component {
     }
     this.setState({ origin, destination })
     this.setState({ showModal: !this.state.showModal })
-    this.setState({ locationFromModal: !this.state.locationFromModal })
+    this.setState({ addressFromModal: !this.state.addressFromModal })
     this.setNexusesFromRoute(route)
   }
   loadReusedShipment () {

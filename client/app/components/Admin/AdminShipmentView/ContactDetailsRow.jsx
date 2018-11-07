@@ -65,11 +65,11 @@ function ContactDetailsRow ({
             </div>
             <div
               className={`${styles.info_row} ${styles.last_margin} flex-100 layout-row layout-align-sm-center-center flex-sm-30`}
-              style={{ display: n.location.street && n.location.street_number && n.location.zip_code && n.location.city ? 'block' : 'none' }}
+              style={{ display: n.address.street && n.address.street_number && n.address.zip_code && n.address.city ? 'block' : 'none' }}
             >
               <i className={`${adminStyles.icon} fa fa-map flex-none`} style={style} />
-              <p>{n.location.street ? `${n.location.street}` : '' }{ n.location.street_number ? `${n.location.street_number}` : ''} <br />
-                <strong>{n.location.zip_code ? `${n.location.zip_code}` : ''} {n.location.city ? `${n.location.city}` : ''}</strong> <br />
+              <p>{n.address.street ? `${n.address.street}` : '' }{ n.address.street_number ? `${n.address.street_number}` : ''} <br />
+                <strong>{n.address.zip_code ? `${n.address.zip_code}` : ''} {n.address.city ? `${n.address.city}` : ''}</strong> <br />
               </p>
             </div>
 
@@ -104,11 +104,11 @@ function ContactDetailsRow ({
             </div>
             <div
               className={`${styles.info_row} ${styles.last_margin} flex-100 layout-row layout-align-sm-center-center flex-sm-30`}
-              style={{ display: n.location.street && n.location.street_number && n.location.zip_code && n.location.city ? 'block' : 'none' }}
+              style={{ display: n.address.street && n.address.street_number && n.address.zip_code && n.address.city ? 'block' : 'none' }}
             >
               <i className={`${adminStyles.icon} fa fa-map flex-none`} style={style} />
-              <p>{n.location.street ? `${n.location.street}` : '' }{ n.location.street_number ? `${n.location.street_number}` : ''}<br />
-                <strong>{n.location.zip_code ? `${n.location.zip_code}` : ''} {n.location.city ? `${n.location.city}` : ''}</strong> <br />
+              <p>{n.address.street ? `${n.address.street}` : '' }{ n.address.street_number ? `${n.address.street_number}` : ''}<br />
+                <strong>{n.address.zip_code ? `${n.address.zip_code}` : ''} {n.address.city ? `${n.address.city}` : ''}</strong> <br />
               </p>
             </div>
           </div>

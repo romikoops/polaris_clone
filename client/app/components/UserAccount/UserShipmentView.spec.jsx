@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, shipmentData, tenant, user, match, location } from '../../mocks'
+import { theme, identity, shipmentData, tenant, user, match, address } from '../../mocks'
 
 /**
  * ISSUE
@@ -127,7 +127,7 @@ test('shipmentData.contacts is present', () => {
     },
     {
       type: 'shipper',
-      location,
+      address,
       contact: {
         first_name: 'BAR_FIRST_NAME',
         last_name: 'BAR_LAST_NAME'
@@ -135,7 +135,7 @@ test('shipmentData.contacts is present', () => {
     },
     {
       type: 'consignee',
-      location,
+      address,
       contact: {
         first_name: 'BAZ_FIRST_NAME',
         last_name: 'BAZ_LAST_NAME'

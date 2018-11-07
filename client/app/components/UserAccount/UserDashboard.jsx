@@ -69,9 +69,9 @@ class UserDashboard extends Component {
     this.props.userDispatch.goTo('/booking')
   }
 
-  makePrimary (locationId) {
+  makePrimary (addressId) {
     const { userDispatch, user } = this.props
-    userDispatch.makePrimary(user.id, locationId)
+    userDispatch.makePrimary(user.id, addressId)
   }
 
   seeAll () {
@@ -104,7 +104,7 @@ class UserDashboard extends Component {
     const {
       shipments,
       contacts,
-      locations
+      addresses
     } = dashboard
 
     const shipmentsToDisplay = isQuote(tenant) ? shipments.quoted : shipments.requested
@@ -201,13 +201,13 @@ class UserDashboard extends Component {
                 <span><b>{t('shipment:myShipmentAddresses')}</b></span>
               </div>
             </div>
-            {locations.length === 0 ? (
+            {addresses.length === 0 ? (
               t('shipment:noAddresses')
             ) : (
               <UserLocations
                 setNav={() => {}}
                 userDispatch={userDispatch}
-                locations={locations}
+                addresses={addresses}
                 makePrimary={this.makePrimary}
                 theme={theme}
                 user={user}
@@ -239,7 +239,7 @@ UserDashboard.propTypes = {
     shipments: PropTypes.shipments,
     pricings: PropTypes.objectOf(PropTypes.string),
     contacts: PropTypes.arrayOf(PropTypes.object),
-    locations: PropTypes.arrayOf(PropTypes.location)
+    addresses: PropTypes.arrayOf(PropTypes.address)
   })
 }
 

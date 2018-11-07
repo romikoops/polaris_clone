@@ -2,7 +2,7 @@
 
 exports[`props.contactData is falsy 1`] = `""`;
 
-exports[`props.contactData.location is falsy 1`] = `
+exports[`props.contactData.address is falsy 1`] = `
 <div
   className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
 >

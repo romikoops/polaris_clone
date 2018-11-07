@@ -22,7 +22,7 @@ class ContactSetter extends Component {
       showModal: false,
       contactData: {
         contact: {},
-        location: {}
+        address: {}
       }
     }
     this.showAddressBook = this.showAddressBook.bind(this)
@@ -34,7 +34,7 @@ class ContactSetter extends Component {
       contactData: {
         ...this.state.contactData,
         contact: contactData.contact,
-        location: contactData.location
+        address: contactData.address
       }
     })
   }
@@ -74,7 +74,7 @@ class ContactSetter extends Component {
             ShipmentContactFormProps={{
               contactType,
               theme: this.props.theme,
-              selectedContact: { contact: {}, location: {} },
+              selectedContact: { contact: {}, address: {} },
               setContact: (contactData) => {
                 this.props.setContact(contactData, contactType, index)
                 this.setState({ modal: null, showModal: false })

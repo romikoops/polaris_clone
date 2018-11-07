@@ -444,15 +444,15 @@ export default function shipment (state = {}, action) {
           email: contactData.email,
           alias: contactData.alias,
           phone: contactData.phone,
-          locationId: contactData.location_id
+          addressId: contactData.address_id
         },
-        location: {
-          country: contactData.location.country.name,
-          city: contactData.location.city,
-          zipCode: contactData.location.zip_code,
-          street: contactData.location.street,
-          streetNumber: contactData.location.street_number,
-          geocodedAddress: contactData.location.geocoded_address
+        address: {
+          country: contactData.address.country.name,
+          city: contactData.address.city,
+          zipCode: contactData.address.zip_code,
+          street: contactData.address.street,
+          streetNumber: contactData.address.street_number,
+          geocodedAddress: contactData.address.geocoded_address
         }
       }
 

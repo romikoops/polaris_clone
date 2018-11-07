@@ -11,8 +11,8 @@ describe 'Shipment requests', type: :request do
   let(:trip) { create(:trip) }
   let(:user) { create(:user, tenant: tenant) }
   let(:shipment) { create(:shipment, load_type: load_type, direction: direction, user: user, tenant: tenant, origin_nexus: origin_nexus, destination_nexus: destination_nexus, trip: itinerary.trips.first, itinerary: itinerary) }
-  let(:origin_nexus) { create(:location, hub: origin_hub) }
-  let(:destination_nexus) { create(:location, hub: destination_hub) }
+  let(:origin_nexus) { create(:address, hub: origin_hub) }
+  let(:destination_nexus) { create(:address, hub: destination_hub) }
   let!(:itinerary) { create(:itinerary, tenant: tenant, stops: [origin_stop, destination_stop], layovers: [origin_layover, destination_layover], trips: [trip]) }
   let(:origin_hub) { create(:hub, tenant: tenant) }
   let(:destination_hub) { create(:hub, tenant: tenant) }
@@ -74,12 +74,12 @@ describe 'Shipment requests', type: :request do
           },
           originHubs: [
             {
-              id: origin_hub.id, tenant_id: tenant.id, location_id: origin_hub.location_id, name: 'Gothenburg Port', hub_type: 'ocean', latitude: nil, longitude: nil, hub_status: 'active', hub_code: 'GOO1', trucking_type: nil, photo: nil, nexus_id: origin_hub.nexus_id
+              id: origin_hub.id, tenant_id: tenant.id, address_id: origin_hub.address_id, name: 'Gothenburg Port', hub_type: 'ocean', latitude: nil, longitude: nil, hub_status: 'active', hub_code: 'GOO1', trucking_type: nil, photo: nil, nexus_id: origin_hub.nexus_id
             }
           ],
           destinationHubs: [
             {
-              id: destination_hub.id, tenant_id: tenant.id, location_id: destination_hub.location_id, name: 'Gothenburg Port', hub_type: 'ocean', latitude: nil, longitude: nil, hub_status: 'active', hub_code: 'GOO1', trucking_type: nil, photo: nil, nexus_id: destination_hub.nexus_id
+              id: destination_hub.id, tenant_id: tenant.id, address_id: destination_hub.address_id, name: 'Gothenburg Port', hub_type: 'ocean', latitude: nil, longitude: nil, hub_status: 'active', hub_code: 'GOO1', trucking_type: nil, photo: nil, nexus_id: destination_hub.nexus_id
             }
           ],
           cargoUnits: [
@@ -99,7 +99,7 @@ describe 'Shipment requests', type: :request do
           })
           .to_return(
             status: 200,
-            body: {"data"=>{"address_components"=>[{"long_name"=>"Sweden", "short_name"=>"SE", "types"=>["country", "political"]}], "formatted_address"=>"Sweden", "geometry"=>{"bounds"=>{"northeast"=>{"lat"=>69.0599709, "lng"=>24.1773101}, "southwest"=>{"lat"=>55.0059799, "lng"=>10.5798}}, "location"=>{"lat"=>60.12816100000001, "lng"=>18.643501}, "location_type"=>"APPROXIMATE", "viewport"=>{"northeast"=>{"lat"=>69.0599709, "lng"=>24.1773101}, "southwest"=>{"lat"=>55.0059799, "lng"=>10.5798}}}, "partial_match"=>true, "place_id"=>"ChIJ8fA1bTmyXEYRYm-tjaLruCI", "types"=>["country", "political"]}}.to_json,
+            body: {"data"=>{"address_components"=>[{"long_name"=>"Sweden", "short_name"=>"SE", "types"=>["country", "political"]}], "formatted_address"=>"Sweden", "geometry"=>{"bounds"=>{"northeast"=>{"lat"=>69.0599709, "lng"=>24.1773101}, "southwest"=>{"lat"=>55.0059799, "lng"=>10.5798}}, "address"=>{"lat"=>60.12816100000001, "lng"=>18.643501}, "address_type"=>"APPROXIMATE", "viewport"=>{"northeast"=>{"lat"=>69.0599709, "lng"=>24.1773101}, "southwest"=>{"lat"=>55.0059799, "lng"=>10.5798}}}, "partial_match"=>true, "place_id"=>"ChIJ8fA1bTmyXEYRYm-tjaLruCI", "types"=>["country", "political"]}}.to_json,
             headers: {}
           )
 
@@ -129,12 +129,12 @@ describe 'Shipment requests', type: :request do
           },
           hubs: {
             startHub: {
-              data: { id: origin_hub.id, tenant_id: tenant.id, location_id: origin_hub.location_id, name: origin_hub.name, hub_type: origin_hub.hub_type, latitude: nil, longitude: nil, hub_status: origin_hub.hub_status, hub_code: origin_hub.hub_code, trucking_type: nil, photo: nil, nexus_id: origin_hub.nexus_id },
-              location: origin_hub.nexus.given_attributes
+              data: { id: origin_hub.id, tenant_id: tenant.id, address_id: origin_hub.address_id, name: origin_hub.name, hub_type: origin_hub.hub_type, latitude: nil, longitude: nil, hub_status: origin_hub.hub_status, hub_code: origin_hub.hub_code, trucking_type: nil, photo: nil, nexus_id: origin_hub.nexus_id },
+              address: origin_hub.nexus.given_attributes
             },
             endHub: {
-              data: { id: destination_hub.id, tenant_id: tenant.id, location_id: destination_hub.location_id, name: destination_hub.name, hub_type: destination_hub.hub_type, latitude: destination_hub.latitude, longitude: destination_hub.longitude, hub_status: destination_hub.hub_status, hub_code: destination_hub.hub_code, nexus_id: destination_hub.nexus_id },
-              location: destination_hub.nexus.given_attributes
+              data: { id: destination_hub.id, tenant_id: tenant.id, address_id: destination_hub.address_id, name: destination_hub.name, hub_type: destination_hub.hub_type, latitude: destination_hub.latitude, longitude: destination_hub.longitude, hub_status: destination_hub.hub_status, hub_code: destination_hub.hub_code, nexus_id: destination_hub.nexus_id },
+              address: destination_hub.nexus.given_attributes
             }
           },
           contacts: [], userLocations: [],
@@ -148,12 +148,12 @@ describe 'Shipment requests', type: :request do
             }
           ],
           cargoItems: [], customs: { import: { unknown: true }, export: { unknown: true }, total: { total: { value: 0, currency: 'EUR' } } },
-          locations: {
+          addresses: {
             origin: {
-              id: origin_nexus.id, name: origin_nexus.name, location_type: nil, latitude: origin_nexus.latitude, longitude: origin_nexus.longitude, geocoded_address: origin_nexus.geocoded_address, zip_code: origin_nexus.zip_code, city: origin_nexus.city
+              id: origin_nexus.id, name: origin_nexus.name, address_type: nil, latitude: origin_nexus.latitude, longitude: origin_nexus.longitude, geocoded_address: origin_nexus.geocoded_address, zip_code: origin_nexus.zip_code, city: origin_nexus.city
             },
             destination: {
-              id: destination_nexus.id, name: destination_nexus.name, location_type: nil, latitude: destination_nexus.latitude, longitude: destination_nexus.longitude, geocoded_address: destination_nexus.geocoded_address, zip_code: destination_nexus.zip_code, city: destination_nexus.city
+              id: destination_nexus.id, name: destination_nexus.name, address_type: nil, latitude: destination_nexus.latitude, longitude: destination_nexus.longitude, geocoded_address: destination_nexus.geocoded_address, zip_code: destination_nexus.zip_code, city: destination_nexus.city
             }
           }
         }
@@ -196,12 +196,12 @@ describe 'Shipment requests', type: :request do
             }
           ],
           aggregatedCargo: nil,
-          locations: {
+          addresses: {
             origin: {
-              id: origin_nexus.id, name: origin_nexus.name, location_type: nil, latitude: origin_nexus.latitude, longitude: origin_nexus.longitude, geocoded_address: origin_nexus.geocoded_address, zip_code: origin_nexus.zip_code, city: origin_nexus.city
+              id: origin_nexus.id, name: origin_nexus.name, address_type: nil, latitude: origin_nexus.latitude, longitude: origin_nexus.longitude, geocoded_address: origin_nexus.geocoded_address, zip_code: origin_nexus.zip_code, city: origin_nexus.city
             },
             destination: {
-              id: destination_nexus.id, name: destination_nexus.name, location_type: nil, latitude: destination_nexus.latitude, longitude: destination_nexus.longitude, geocoded_address: destination_nexus.geocoded_address, zip_code: destination_nexus.zip_code, city: destination_nexus.city
+              id: destination_nexus.id, name: destination_nexus.name, address_type: nil, latitude: destination_nexus.latitude, longitude: destination_nexus.longitude, geocoded_address: destination_nexus.geocoded_address, zip_code: destination_nexus.zip_code, city: destination_nexus.city
             }
           },
           consignee:      {}, # TBD
@@ -229,7 +229,7 @@ describe 'Shipment requests', type: :request do
           })
           .to_return(
             status: 200,
-            body: {"results"=>[{"address_components"=>[{"long_name"=>"United Kingdom", "short_name"=>"GB", "types"=>["country", "political"]}], "formatted_address"=>"United Kingdom", "geometry"=>{"bounds"=>{"northeast"=>{"lat"=>60.91569999999999, "lng"=>33.9165549}, "southwest"=>{"lat"=>34.5614, "lng"=>-8.8988999}}, "location"=>{"lat"=>55.378051, "lng"=>-3.435973}, "location_type"=>"APPROXIMATE", "viewport"=>{"northeast"=>{"lat"=>60.91569999999999, "lng"=>33.9165549}, "southwest"=>{"lat"=>34.5614, "lng"=>-8.8988999}}}, "partial_match"=>true, "place_id"=>"ChIJqZHHQhE7WgIReiWIMkOg-MQ", "types"=>["country", "political"]}], "status"=>"OK"}.to_json,
+            body: {"results"=>[{"address_components"=>[{"long_name"=>"United Kingdom", "short_name"=>"GB", "types"=>["country", "political"]}], "formatted_address"=>"United Kingdom", "geometry"=>{"bounds"=>{"northeast"=>{"lat"=>60.91569999999999, "lng"=>33.9165549}, "southwest"=>{"lat"=>34.5614, "lng"=>-8.8988999}}, "address"=>{"lat"=>55.378051, "lng"=>-3.435973}, "address_type"=>"APPROXIMATE", "viewport"=>{"northeast"=>{"lat"=>60.91569999999999, "lng"=>33.9165549}, "southwest"=>{"lat"=>34.5614, "lng"=>-8.8988999}}}, "partial_match"=>true, "place_id"=>"ChIJqZHHQhE7WgIReiWIMkOg-MQ", "types"=>["country", "political"]}], "status"=>"OK"}.to_json,
             headers: {}
           )
 
@@ -242,7 +242,7 @@ describe 'Shipment requests', type: :request do
           })
           .to_return(
             status: 200,
-            body: {"results"=>[{"address_components"=>[{"long_name"=>"Sweden", "short_name"=>"SE", "types"=>["country", "political"]}], "formatted_address"=>"Sweden", "geometry"=>{"bounds"=>{"northeast"=>{"lat"=>69.0599709, "lng"=>24.1773101}, "southwest"=>{"lat"=>55.0059799, "lng"=>10.5798}}, "location"=>{"lat"=>60.12816100000001, "lng"=>18.643501}, "location_type"=>"APPROXIMATE", "viewport"=>{"northeast"=>{"lat"=>69.0599709, "lng"=>24.1773101}, "southwest"=>{"lat"=>55.0059799, "lng"=>10.5798}}}, "partial_match"=>true, "place_id"=>"ChIJ8fA1bTmyXEYRYm-tjaLruCI", "types"=>["country", "political"]}], "status"=>"OK"}.to_json,
+            body: {"results"=>[{"address_components"=>[{"long_name"=>"Sweden", "short_name"=>"SE", "types"=>["country", "political"]}], "formatted_address"=>"Sweden", "geometry"=>{"bounds"=>{"northeast"=>{"lat"=>69.0599709, "lng"=>24.1773101}, "southwest"=>{"lat"=>55.0059799, "lng"=>10.5798}}, "address"=>{"lat"=>60.12816100000001, "lng"=>18.643501}, "address_type"=>"APPROXIMATE", "viewport"=>{"northeast"=>{"lat"=>69.0599709, "lng"=>24.1773101}, "southwest"=>{"lat"=>55.0059799, "lng"=>10.5798}}}, "partial_match"=>true, "place_id"=>"ChIJ8fA1bTmyXEYRYm-tjaLruCI", "types"=>["country", "political"]}], "status"=>"OK"}.to_json,
             headers: {}
           )
 
@@ -257,7 +257,7 @@ describe 'Shipment requests', type: :request do
           })
           .to_return(
             status: 200,
-            body: {"results"=>[{"address_components"=>[{"long_name"=>"Sweden", "short_name"=>"SE", "types"=>["country", "political"]}], "formatted_address"=>"Sweden", "geometry"=>{"bounds"=>{"northeast"=>{"lat"=>69.0599709, "lng"=>24.1773101}, "southwest"=>{"lat"=>55.0059799, "lng"=>10.5798}}, "location"=>{"lat"=>60.12816100000001, "lng"=>18.643501}, "location_type"=>"APPROXIMATE", "viewport"=>{"northeast"=>{"lat"=>69.0599709, "lng"=>24.1773101}, "southwest"=>{"lat"=>55.0059799, "lng"=>10.5798}}}, "partial_match"=>true, "place_id"=>"ChIJ8fA1bTmyXEYRYm-tjaLruCI", "types"=>["country", "political"]}], "status"=>"OK"}.to_json,
+            body: {"results"=>[{"address_components"=>[{"long_name"=>"Sweden", "short_name"=>"SE", "types"=>["country", "political"]}], "formatted_address"=>"Sweden", "geometry"=>{"bounds"=>{"northeast"=>{"lat"=>69.0599709, "lng"=>24.1773101}, "southwest"=>{"lat"=>55.0059799, "lng"=>10.5798}}, "address"=>{"lat"=>60.12816100000001, "lng"=>18.643501}, "address_type"=>"APPROXIMATE", "viewport"=>{"northeast"=>{"lat"=>69.0599709, "lng"=>24.1773101}, "southwest"=>{"lat"=>55.0059799, "lng"=>10.5798}}}, "partial_match"=>true, "place_id"=>"ChIJ8fA1bTmyXEYRYm-tjaLruCI", "types"=>["country", "political"]}], "status"=>"OK"}.to_json,
             headers: {}
           )
 
@@ -270,7 +270,7 @@ describe 'Shipment requests', type: :request do
           })
           .to_return(
             status: 200,
-            body: {"results"=>[{"address_components"=>[{"long_name"=>"1", "short_name"=>"1", "types"=>["street_number"]}, {"long_name"=>"College Road", "short_name"=>"College Rd", "types"=>["route"]}, {"long_name"=>"Portsmouth", "short_name"=>"Portsmouth", "types"=>["postal_town"]}, {"long_name"=>"Portsmouth", "short_name"=>"Portsmouth", "types"=>["administrative_area_level_2", "political"]}, {"long_name"=>"England", "short_name"=>"England", "types"=>["administrative_area_level_1", "political"]}, {"long_name"=>"United Kingdom", "short_name"=>"GB", "types"=>["country", "political"]}, {"long_name"=>"PO1 3LX", "short_name"=>"PO1 3LX", "types"=>["postal_code"]}], "formatted_address"=>"1 College Rd, Portsmouth PO1 3LX, UK", "geometry"=>{"location"=>{"lat"=>50.8000106, "lng"=>-1.1066824}, "location_type"=>"ROOFTOP", "viewport"=>{"northeast"=>{"lat"=>50.8013595802915, "lng"=>-1.105333419708498}, "southwest"=>{"lat"=>50.7986616197085, "lng"=>-1.108031380291502}}}, "place_id"=>"ChIJsY5dan9ddEgR8NM3lL61DpM", "types"=>["premise"]}], "status"=>"OK"}.to_json,
+            body: {"results"=>[{"address_components"=>[{"long_name"=>"1", "short_name"=>"1", "types"=>["street_number"]}, {"long_name"=>"College Road", "short_name"=>"College Rd", "types"=>["route"]}, {"long_name"=>"Portsmouth", "short_name"=>"Portsmouth", "types"=>["postal_town"]}, {"long_name"=>"Portsmouth", "short_name"=>"Portsmouth", "types"=>["administrative_area_level_2", "political"]}, {"long_name"=>"England", "short_name"=>"England", "types"=>["administrative_area_level_1", "political"]}, {"long_name"=>"United Kingdom", "short_name"=>"GB", "types"=>["country", "political"]}, {"long_name"=>"PO1 3LX", "short_name"=>"PO1 3LX", "types"=>["postal_code"]}], "formatted_address"=>"1 College Rd, Portsmouth PO1 3LX, UK", "geometry"=>{"address"=>{"lat"=>50.8000106, "lng"=>-1.1066824}, "address_type"=>"ROOFTOP", "viewport"=>{"northeast"=>{"lat"=>50.8013595802915, "lng"=>-1.105333419708498}, "southwest"=>{"lat"=>50.7986616197085, "lng"=>-1.108031380291502}}}, "place_id"=>"ChIJsY5dan9ddEgR8NM3lL61DpM", "types"=>["premise"]}], "status"=>"OK"}.to_json,
             headers: {}
           )
 

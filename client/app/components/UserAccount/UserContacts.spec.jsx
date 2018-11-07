@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, history, contact, shipments, location } from '../../mocks'
+import { theme, identity, history, contact, shipments, address } from '../../mocks'
 
 jest.mock('react-redux', () => ({
   connect: (mapStateToProps, mapDispatchToProps) => Component => Component
@@ -24,7 +24,7 @@ const propsBase = {
   contactData: {
     contact,
     shipments,
-    location
+    address
   }
 }
 

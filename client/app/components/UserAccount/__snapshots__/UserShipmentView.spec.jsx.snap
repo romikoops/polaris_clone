@@ -114,11 +114,7 @@ exports[`loading is true 1`] = `
       selectedStyle="#333"
       shipmentData={
         Object {
-          "cargoItems": Array [],
-          "contacts": Array [],
-          "containers": Array [],
-          "documents": Array [],
-          "locations": Object {
+          "addresses": Object {
             "destination": Object {
               "city": "BAR_CITY",
               "country": "China",
@@ -136,6 +132,10 @@ exports[`loading is true 1`] = `
             },
             "startHub": "FOO_START_HUB",
           },
+          "cargoItems": Array [],
+          "contacts": Array [],
+          "containers": Array [],
+          "documents": Array [],
           "schedules": Array [
             Object {
               "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
@@ -480,11 +480,7 @@ exports[`shallow render 1`] = `
       selectedStyle="#333"
       shipmentData={
         Object {
-          "cargoItems": Array [],
-          "contacts": Array [],
-          "containers": Array [],
-          "documents": Array [],
-          "locations": Object {
+          "addresses": Object {
             "destination": Object {
               "city": "BAR_CITY",
               "country": "China",
@@ -502,6 +498,10 @@ exports[`shallow render 1`] = `
             },
             "startHub": "FOO_START_HUB",
           },
+          "cargoItems": Array [],
+          "contacts": Array [],
+          "containers": Array [],
+          "documents": Array [],
           "schedules": Array [
             Object {
               "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
@@ -907,24 +907,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
       selectedStyle="#333"
       shipmentData={
         Object {
-          "cargoItemTypes": Object {
-            "bar": "BAR_CARGO_TYPE",
-            "foo": "FOO_CARGO_TYPE",
-          },
-          "cargoItems": Array [
-            Object {
-              "cargo_item_type_id": "foo",
-              "id": 0,
-            },
-            Object {
-              "cargo_item_type_id": "bar",
-              "id": 1,
-            },
-          ],
-          "contacts": Array [],
-          "containers": Array [],
-          "documents": Array [],
-          "locations": Object {
+          "addresses": Object {
             "destination": Object {
               "city": "BAR_CITY",
               "country": "China",
@@ -942,6 +925,23 @@ exports[`shipmentData.cargoItems is present 1`] = `
             },
             "startHub": "FOO_START_HUB",
           },
+          "cargoItemTypes": Object {
+            "bar": "BAR_CARGO_TYPE",
+            "foo": "FOO_CARGO_TYPE",
+          },
+          "cargoItems": Array [
+            Object {
+              "cargo_item_type_id": "foo",
+              "id": 0,
+            },
+            Object {
+              "cargo_item_type_id": "bar",
+              "id": 1,
+            },
+          ],
+          "contacts": Array [],
+          "containers": Array [],
+          "documents": Array [],
           "schedules": Array [
             Object {
               "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
@@ -1286,57 +1286,7 @@ exports[`shipmentData.contacts is present 1`] = `
       selectedStyle="#333"
       shipmentData={
         Object {
-          "cargoItems": Array [],
-          "contacts": Array [
-            Object {
-              "contact": Object {
-                "first_name": "FOO_FIRST_NAME",
-                "last_name": "FOO_LAST_NAME",
-              },
-              "type": "notifyee",
-            },
-            Object {
-              "contact": Object {
-                "first_name": "BAR_FIRST_NAME",
-                "last_name": "BAR_LAST_NAME",
-              },
-              "location": Object {
-                "city": "FOO_CITY",
-                "country": "Germany",
-                "geocodedAddress": "FOO_GEOCODED_ADDRESS",
-                "id": 246,
-                "primary": true,
-                "street": "FOO_STREET",
-                "streetNumber": 579,
-                "street_number": 579,
-                "zipCode": "22456",
-                "zip_code": "22456",
-              },
-              "type": "shipper",
-            },
-            Object {
-              "contact": Object {
-                "first_name": "BAZ_FIRST_NAME",
-                "last_name": "BAZ_LAST_NAME",
-              },
-              "location": Object {
-                "city": "FOO_CITY",
-                "country": "Germany",
-                "geocodedAddress": "FOO_GEOCODED_ADDRESS",
-                "id": 246,
-                "primary": true,
-                "street": "FOO_STREET",
-                "streetNumber": 579,
-                "street_number": 579,
-                "zipCode": "22456",
-                "zip_code": "22456",
-              },
-              "type": "consignee",
-            },
-          ],
-          "containers": Array [],
-          "documents": Array [],
-          "locations": Object {
+          "addresses": Object {
             "destination": Object {
               "city": "BAR_CITY",
               "country": "China",
@@ -1354,6 +1304,56 @@ exports[`shipmentData.contacts is present 1`] = `
             },
             "startHub": "FOO_START_HUB",
           },
+          "cargoItems": Array [],
+          "contacts": Array [
+            Object {
+              "contact": Object {
+                "first_name": "FOO_FIRST_NAME",
+                "last_name": "FOO_LAST_NAME",
+              },
+              "type": "notifyee",
+            },
+            Object {
+              "address": Object {
+                "city": "FOO_CITY",
+                "country": "Germany",
+                "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                "id": 246,
+                "primary": true,
+                "street": "FOO_STREET",
+                "streetNumber": 579,
+                "street_number": 579,
+                "zipCode": "22456",
+                "zip_code": "22456",
+              },
+              "contact": Object {
+                "first_name": "BAR_FIRST_NAME",
+                "last_name": "BAR_LAST_NAME",
+              },
+              "type": "shipper",
+            },
+            Object {
+              "address": Object {
+                "city": "FOO_CITY",
+                "country": "Germany",
+                "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                "id": 246,
+                "primary": true,
+                "street": "FOO_STREET",
+                "streetNumber": 579,
+                "street_number": 579,
+                "zipCode": "22456",
+                "zip_code": "22456",
+              },
+              "contact": Object {
+                "first_name": "BAZ_FIRST_NAME",
+                "last_name": "BAZ_LAST_NAME",
+              },
+              "type": "consignee",
+            },
+          ],
+          "containers": Array [],
+          "documents": Array [],
           "schedules": Array [
             Object {
               "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
@@ -1698,20 +1698,7 @@ exports[`shipmentData.documents is present 1`] = `
       selectedStyle="#333"
       shipmentData={
         Object {
-          "cargoItems": Array [],
-          "contacts": Array [],
-          "containers": Array [],
-          "documents": Array [
-            Object {
-              "doc_type": "foo",
-              "id": 0,
-            },
-            Object {
-              "doc_type": "bar",
-              "id": 1,
-            },
-          ],
-          "locations": Object {
+          "addresses": Object {
             "destination": Object {
               "city": "BAR_CITY",
               "country": "China",
@@ -1729,6 +1716,19 @@ exports[`shipmentData.documents is present 1`] = `
             },
             "startHub": "FOO_START_HUB",
           },
+          "cargoItems": Array [],
+          "contacts": Array [],
+          "containers": Array [],
+          "documents": Array [
+            Object {
+              "doc_type": "foo",
+              "id": 0,
+            },
+            Object {
+              "doc_type": "bar",
+              "id": 1,
+            },
+          ],
           "schedules": Array [
             Object {
               "hub_route_key": "OCEAN_HUB_ROUTE_KEY",

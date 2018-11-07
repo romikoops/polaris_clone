@@ -75,7 +75,7 @@ module DataInserter
             name: "#{@existing_hub_data[:name].strip} #{hub_type_name[@hub_type]}",
             latitude: @existing_hub_data[:latitude],
             longitude: @existing_hub_data[:longitude],
-            location: @existing_hub_data[:location],
+            address: @existing_hub_data[:address],
             nexus: @existing_hub_data[:nexus],
             hub_type: @hub_type,
             hub_code: @existing_hub_data[:code],
@@ -104,8 +104,8 @@ module DataInserter
           
           
           return if @checked_hubs.include?(name)
-          port_location = Location.geocoded_location("#{name}, #{country_name}")
-          puts port_location.city
+          port_address = Address.geocoded_address("#{name}, #{country_name}")
+          puts port_address.city
           port_nexus = Nexus.from_short_name("#{name} ,#{country_name}", @user.tenant_id)
           country = Country.find_by_name(country_name)
           if country.nil?
@@ -123,9 +123,9 @@ module DataInserter
           return {
             hub_code: @hub_data[:code],
             name: name,
-            latitude: port_location.latitude,
-            longitude: port_location.longitude,
-            location: port_location,
+            latitude: port_address.latitude,
+            longitude: port_address.longitude,
+            address: port_address,
             nexus: port_nexus,
             country_id: country.try(:id)
           }

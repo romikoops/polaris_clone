@@ -11,8 +11,8 @@ class NexusesController < ApplicationController
   end
 
   def find_nexus
-    geocoded_location = Location.new(latitude: params[:lat], longitude: params[:lng])
-    nexus_data = geocoded_location.closest_location_with_distance
+    geocoded_address = Address.new(latitude: params[:lat], longitude: params[:lng])
+    nexus_data = geocoded_address.closest_address_with_distance
     nexus = nexus_data.first if nexus_data.last <= 200
     response_handler(nexus: nexus)
   end
@@ -41,7 +41,7 @@ class NexusesController < ApplicationController
   end
 
   def format_for_select_box(available_hub_ids_grouped_by_nexus)
-    Location.where(id: available_hub_ids_grouped_by_nexus.keys).map do |nexus|
+   Address.where(id: available_hub_ids_grouped_by_nexus.keys).map do |nexus|
       {
         label: nexus[:name],
         value: nexus.as_json.merge(hub_ids: available_hub_ids_grouped_by_nexus[nexus.id])

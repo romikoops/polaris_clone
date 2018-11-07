@@ -15,7 +15,7 @@ module ExcelTools
 
     hub_rows.each do |hub_row|
       imgstr = reduce_and_upload(hub_row[:hub_name], hub_row[:url])
-      nexus = Location.find_by_name(hub_row[:hub_name])
+      nexus = Address.find_by_name(hub_row[:hub_name])
       nexus.update_attributes(photo: imgstr[:sm])
       nexus.save!
     end

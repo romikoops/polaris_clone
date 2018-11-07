@@ -41,7 +41,7 @@ const contactData = {
     last_name: 'Doe'
   },
   shipments: [shipment],
-  location: identity
+  address: identity
 }
 
 const propsBase = {
@@ -76,12 +76,12 @@ test('props.contactData is falsy', () => {
   expect(shallow(<UserContactsView {...props} />)).toMatchSnapshot()
 })
 
-test('props.contactData.location is falsy', () => {
+test('props.contactData.address is falsy', () => {
   const props = {
     ...propsBase,
     contactData: {
       ...contactData,
-      location: undefined
+      address: undefined
     }
   }
   expect(shallow(<UserContactsView {...props} />)).toMatchSnapshot()

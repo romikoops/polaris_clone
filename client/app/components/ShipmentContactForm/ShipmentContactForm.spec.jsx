@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, location } from '../../mocks'
+import { theme, identity, address } from '../../mocks'
 
 jest.mock('formsy-react', () => {
   // eslint-disable-next-line
@@ -44,7 +44,7 @@ const propsBase = {
   setContact: identity,
   handleChange: identity,
   contactData: {
-    location,
+    address,
     contact: { companyName: 'FOO_COMPANY' },
     type: 'FOO_TYPE'
   }

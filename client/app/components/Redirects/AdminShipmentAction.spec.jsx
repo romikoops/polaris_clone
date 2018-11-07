@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { user, location, identity, match, theme } from '../../mocks'
+import { user, address, identity, match, theme } from '../../mocks'
 import AdminShipmentAction from './AdminShipmentAction'
 
 jest.mock('react-redux', () => ({
@@ -25,7 +25,7 @@ const propsBase = {
     closeLogin: identity
   },
   match,
-  location
+  address
 }
 
 test('shallow rendering', () => {

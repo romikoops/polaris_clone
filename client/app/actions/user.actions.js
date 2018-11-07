@@ -117,7 +117,7 @@ function searchContacts (text, page, perPage) {
   }
 }
 
-function getLocations (user, redirect) {
+function getAddresss (user, redirect) {
   function request () {
     return { type: userConstants.GETLOCATIONS_REQUEST }
   }
@@ -135,10 +135,10 @@ function getLocations (user, redirect) {
   return (dispatch) => {
     dispatch(request())
 
-    userService.getLocations(user).then(
+    userService.getAddresss(user).then(
       (response) => {
         if (redirect) {
-          dispatch(push('/account/locations'))
+          dispatch(push('/account/addresses'))
         }
         dispatch(success(response))
       },
@@ -183,7 +183,7 @@ function optOutCookies () {
   }
 }
 
-function destroyLocation (userId, locationId, redirect) {
+function destroyAddress (userId, addressId, redirect) {
   function request () {
     return { type: userConstants.DESTROYLOCATION_REQUEST }
   }
@@ -201,10 +201,10 @@ function destroyLocation (userId, locationId, redirect) {
   return (dispatch) => {
     dispatch(request())
 
-    userService.destroyLocation(userId, locationId).then(
+    userService.destroyAddress(userId, addressId).then(
       (response) => {
         if (redirect) {
-          dispatch(push('/account/locations'))
+          dispatch(push('/account/addresses'))
         }
         dispatch(success(response))
       },
@@ -213,7 +213,7 @@ function destroyLocation (userId, locationId, redirect) {
   }
 }
 
-function makePrimary (userId, locationId, redirect) {
+function makePrimary (userId, addressId, redirect) {
   function request () {
     return { type: userConstants.MAKEPRIMARY_REQUEST }
   }
@@ -231,7 +231,7 @@ function makePrimary (userId, locationId, redirect) {
   return (dispatch) => {
     dispatch(request())
 
-    userService.makePrimary(userId, locationId).then(
+    userService.makePrimary(userId, addressId).then(
       (response) => {
         if (redirect) {
           dispatch(push('/account/dashboard'))
@@ -546,7 +546,7 @@ function updateContact (data, redirect) {
   }
 }
 
-function newUserLocation (userId, data) {
+function newUserAddress (userId, data) {
   function request (userlocData) {
     return { type: userConstants.NEW_USER_LOCATION_REQUEST, payload: userlocData }
   }
@@ -562,7 +562,7 @@ function newUserLocation (userId, data) {
   return (dispatch) => {
     dispatch(request())
 
-    userService.newUserLocation(userId, data).then(
+    userService.newUserAddress(userId, data).then(
       (newData) => {
         dispatch(success(newData.data))
       },
@@ -573,7 +573,7 @@ function newUserLocation (userId, data) {
     )
   }
 }
-function editUserLocation (userId, data) {
+function editUserAddress (userId, data) {
   function request (userlocData) {
     return { type: userConstants.EDIT_USER_LOCATION_REQUEST, payload: userlocData }
   }
@@ -589,7 +589,7 @@ function editUserLocation (userId, data) {
   return (dispatch) => {
     dispatch(request())
 
-    userService.editUserLocation(userId, data).then(
+    userService.editUserAddress(userId, data).then(
       (newData) => {
         dispatch(success(newData.data))
       },
@@ -847,8 +847,8 @@ function logOut () {
 }
 
 export const userActions = {
-  getLocations,
-  destroyLocation,
+  getAddresss,
+  destroyAddress,
   makePrimary,
   getDashboard,
   deleteDocument,
@@ -862,7 +862,7 @@ export const userActions = {
   getContacts,
   goBack,
   updateContact,
-  newUserLocation,
+  newUserAddress,
   newContact,
   newAlias,
   deleteAlias,
@@ -871,7 +871,7 @@ export const userActions = {
   deleteContactAddress,
   delete: _delete,
   logOut,
-  editUserLocation,
+  editUserAddress,
   optOut,
   reuseShipment,
   searchShipments,

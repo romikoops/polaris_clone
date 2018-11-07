@@ -57,7 +57,7 @@
     </div>
     <div class="col-xs-5">
       <div class="wrap-overflow">
-        <strong>Start Port CFS:</strong> <%= shipment.start_port_location.geocoded_address %><br>
+        <strong>Start Port CFS:</strong> <%= shipment.start_port_address.geocoded_address %><br>
       </div>
     </div>
     <div class="col-xs-2 no-padding">
@@ -67,7 +67,7 @@
     </div>
     <div class="col-xs-5">
       <div class="wrap-overflow">
-        <strong>End Port CFS:</strong> <%= line_wrap(shipment.end_port_location.city_country) %><br>
+        <strong>End Port CFS:</strong> <%= line_wrap(shipment.end_port_address.city_country) %><br>
       </div>
     </div>
     <div class="col-xs-12">
@@ -84,7 +84,7 @@
       <div class="wrap-overflow">
         <u><strong>Consignor:</strong></u><br>
         <%= line_wrap(shipment.user.full_name) %><br>
-        <strong>Address:</strong> <%= line_wrap(shipment.shipper_legal_location.full_address) %><br>
+        <strong>Address:</strong> <%= line_wrap(shipment.shipper_legal_address.full_address) %><br>
         <strong>Phone:</strong> <%= line_wrap(shipment.user.phone) %><br>
         <strong>Email:</strong> <%= line_wrap(shipment.user.email) %><br>
       </div>
@@ -106,7 +106,7 @@
     <div class="col-xs-6">
       <div class="wrap-overflow">
         <u><strong>Trucking:</strong></u><br>
-        <strong>Route: </strong><%= shipment.pickup_location.geocoded_address %> (Pickup Location) &nbsp;&nbsp;<strong>&rarr;</strong>&nbsp;&nbsp; <%= line_wrap(shipment.start_port_location.geocoded_address) %> (Start Port CFS)<br>
+        <strong>Route: </strong><%= shipment.pickup_address.geocoded_address %> (Pickup Location) &nbsp;&nbsp;<strong>&rarr;</strong>&nbsp;&nbsp; <%= line_wrap(shipment.start_port_address.geocoded_address) %> (Start Port CFS)<br>
         <strong>Pickup Date: </strong><%= formatted_datetime(shipment.planned_pickup_date) %><br>
         <strong>Trucking Distance:</strong> <%= shipment.trucking_distance_in_km %> km<br>
         <strong>Trucking Transit Time:</strong> <%= GoogleDirections.formatted_driving_time(shipment.trucking_transit_time) %><br>
@@ -118,7 +118,7 @@
     <div class="col-xs-6">
       <div class="wrap-overflow">
         <u><strong>Sea Ocean:</strong></u><br>
-        <strong>Route: </strong><%= line_wrap(shipment.start_port_location.geocoded_address) %> (Start Port CFS) &nbsp;&nbsp;<strong>&rarr;</strong>&nbsp;&nbsp; <%= line_wrap(shipment.end_port_location.geocoded_address) %> (End Port CFS)<br>
+        <strong>Route: </strong><%= line_wrap(shipment.start_port_address.geocoded_address) %> (Start Port CFS) &nbsp;&nbsp;<strong>&rarr;</strong>&nbsp;&nbsp; <%= line_wrap(shipment.end_port_address.geocoded_address) %> (End Port CFS)<br>
         <strong>Company:</strong> <%= line_wrap(shipment.consolidator.company_name) %><br>
         <strong>Phone:</strong> <%= line_wrap(shipment.consolidator.phone) %><br>
         <strong>Email:</strong> <%= line_wrap(shipment.consolidator.email) %><br>

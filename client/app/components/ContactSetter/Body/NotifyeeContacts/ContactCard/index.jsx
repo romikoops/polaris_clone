@@ -48,7 +48,7 @@ export default function ContactSetterBodyNotifyeeContactsContactCard ({
 ContactSetterBodyNotifyeeContactsContactCard.propTypes = {
   contactData: PropTypes.shape({
     contact: PropTypes.object,
-    location: PropTypes.object
+    address: PropTypes.object
   }).isRequired,
   theme: PropTypes.theme,
   removeFunc: PropTypes.func,

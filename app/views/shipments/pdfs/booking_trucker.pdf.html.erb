@@ -52,7 +52,7 @@
     </div>
     <div class="col-xs-5">
       <div class="wrap-overflow">
-        <strong>Pickup Location:</strong> <%= shipment.pickup_location.geocoded_address %><br>
+        <strong>Pickup Location:</strong> <%= shipment.pickup_address.geocoded_address %><br>
       </div>
     </div>
     <div class="col-xs-2 no-padding">
@@ -62,7 +62,7 @@
     </div>
     <div class="col-xs-5">
       <div class="wrap-overflow">
-        <strong>Start Port CFS:</strong> <%= line_wrap(shipment.start_port_location.geocoded_address) %><br>
+        <strong>Start Port CFS:</strong> <%= line_wrap(shipment.start_port_address.geocoded_address) %><br>
       </div>
     </div>
     <div class="col-xs-12">
@@ -80,7 +80,7 @@
       <div class="wrap-overflow">
         <u><strong>Consignor Personal Information:</strong></u><br>
         <%= line_wrap(shipment.user.full_name) %><br>
-        <strong>Address:</strong> <%= line_wrap(shipment.shipper_legal_location.full_address) %><br>
+        <strong>Address:</strong> <%= line_wrap(shipment.shipper_legal_address.full_address) %><br>
         <strong>Phone:</strong> <%= line_wrap(shipment.user.phone) %><br>
         <strong>Email:</strong> <%= line_wrap(shipment.user.email) %><br>
       </div>
@@ -100,7 +100,7 @@
   <div class="row">
     <div class="col-xs-12">
       <u><strong>Sea Ocean:</strong></u><br>
-        <strong>Route: </strong><%= line_wrap(shipment.start_port_location.geocoded_address) %> (Start Port CFS) &nbsp;&nbsp;<strong>&rarr;</strong>&nbsp;&nbsp; <%= line_wrap(shipment.end_port_location.city_country) %> (End Port CFS)<br>
+        <strong>Route: </strong><%= line_wrap(shipment.start_port_address.geocoded_address) %> (Start Port CFS) &nbsp;&nbsp;<strong>&rarr;</strong>&nbsp;&nbsp; <%= line_wrap(shipment.end_port_address.city_country) %> (End Port CFS)<br>
         <strong>Company:</strong> <%= line_wrap(shipment.consolidator.company_name) %><br>
         <strong>Phone:</strong> <%= line_wrap(shipment.consolidator.phone) %><br>
         <strong>Email:</strong> <%= line_wrap(shipment.consolidator.email) %><br>
