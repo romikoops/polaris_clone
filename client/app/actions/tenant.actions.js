@@ -1,9 +1,8 @@
 import fetch from 'isomorphic-fetch'
 import { Promise } from 'es6-promise-promise'
 import * as Sentry from '@sentry/browser'
-import {
-  tenantConstants
-} from '../constants'
+import { tenantConstants } from '../constants'
+import { tenantService } from '../services/tenant.service'
 import getApiHost from '../constants/api.constants'
 
 function requestTenant (subdomain) {
@@ -87,6 +86,39 @@ function fetchTenantIfNeeded (subdomain) {
     return Promise.resolve()
   }
 }
+
+function updateEmails (newEmails, tenant) {
+  function request (tenantData) {
+    return {
+      type: tenantConstants.UPDATE_EMAILS_REQUEST,
+      tenantData
+    }
+  }
+  function success (tenantData) {
+    return {
+      type: tenantConstants.UPDATE_EMAILS_SUCCESS,
+      tenantData
+    }
+  }
+  function failure (error) {
+    return { type: tenantConstants.UPDATE_EMAILS_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request(newEmails, tenant))
+
+    tenantService.updateEmails(newEmails, tenant).then(
+      (resp) => {
+        const tenantData = resp.data
+        dispatch(success(tenantData))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 const tenantActions = {
   requestTenant,
   logOut,
@@ -94,7 +126,8 @@ const tenantActions = {
   invalidateSubdomain,
   fetchTenant,
   fetchTenantIfNeeded,
-  shouldFetchTenant
+  shouldFetchTenant,
+  updateEmails
 }
 
 export default tenantActions

@@ -27,7 +27,7 @@ class AdminSettings extends Component {
       t,
       theme,
       tenant,
-      adminDispatch
+      tenantDispatch
     } = this.props
     // const { showEmailSettings } = this.state
 
@@ -38,7 +38,7 @@ class AdminSettings extends Component {
           <AdminEmailForm
             theme={theme}
             tenant={tenant}
-            adminDispatch={adminDispatch}
+            tenantDispatch={tenantDispatch}
           />
         </div>
       </GenericError>
@@ -48,7 +48,7 @@ class AdminSettings extends Component {
 
 AdminSettings.propTypes = {
   tenant: PropTypes.tenant.isRequired,
-  adminDispatch: PropTypes.shape({
+  tenantDispatch: PropTypes.shape({
     updateEmails: PropTypes.func
   }).isRequired,
   theme: PropTypes.theme,

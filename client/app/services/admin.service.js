@@ -675,14 +675,14 @@ function updateHubMandatoryCharges (id, charges) {
   return fetch(`${getApiHost()}/admin/hubs/${id}/update_mandatory_charges`, requestOptions)
     .then(handleResponse)
 }
-function updateEmails (emails) {
+function updateEmails (emails, tenant) {
   const requestOptions = {
     method: 'PATCH',
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
-    body: JSON.stringify({ emails })
+    body: JSON.stringify({ tenant: { emails } })
   }
 
-  return fetch(`${getApiHost()}/admin/tenants/`, requestOptions)
+  return fetch(`${getApiHost()}/admin/tenants/${tenant.data.id}`, requestOptions)
     .then(handleResponse)
 }
 

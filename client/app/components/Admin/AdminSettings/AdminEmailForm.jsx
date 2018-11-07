@@ -3,20 +3,28 @@ import PropTypes from 'prop-types'
 import Formsy from 'formsy-react'
 import FormsyInput from '../../FormsyInput/FormsyInput'
 import { RoundButton } from '../../RoundButton/RoundButton'
+import styles from './AdminSettings.scss'
 import { withNamespaces } from 'react-i18next'
 import { capitalize } from '../../../helpers'
 
-
 class AdminEmailForm extends Component {
+  static mapInputs (inputs) {
+    return Object.keys(inputs).reduce((emails, inputName) => {
+      const [key, subKey] = inputName.split('-')
+      const email = inputs[inputName]
+
+      return { ...emails, [key]: { ...emails[key], [subKey]: email } }
+    }, {})
+  }
+
   constructor (props) {
     super(props)
-    // this.saveEmail = this.saveEmail.bind(this)
     this.saveEmails = this.saveEmails.bind(this)
   }
 
-  saveEmails () {
-    const { adminDispatch, tenant } = this.props
-    adminDispatch.updateEmails(tenant)
+  saveEmails (newEmails) {
+    const { tenantDispatch, tenant } = this.props
+    tenantDispatch.updateEmails(newEmails, tenant)
   }
 
   render () {
@@ -24,20 +32,30 @@ class AdminEmailForm extends Component {
     const emails = tenant.data.emails
 
     const emailKeys = Object.keys(tenant.data.emails)
+    
+    const typeStyle = {
+      textAlign: 'center',
+      fontWeight: 'bold'
+    }
 
     const emailInputs = emailKeys.map(key => (
       <div>
-        <p>{capitalize(key)}</p>
+        <h3>{capitalize(key)} {t('user:emails')}:</h3>
 
-        <div className="flex-100 layout-row layout-row layout-align-center-start">
-          <div className="flex-100 layout-row layout-align-start-center input_box">
-            {Object.entries(emails[key]).map(subKey => (
-              <FormsyInput
-                type="text"
-                name={capitalize(subKey[0])}
-                placeholder={capitalize(subKey[0])}
-                value={subKey[1]}
-              />
+        <div className={`${styles.email_settings} flex-100 layout-row layout-row layout-align-center-start`}>
+          <div className="flex-100 layout-row layout-align-center-center input_box">
+            {Object.entries(emails[key]).map(([subKey, email]) => (
+              <div>
+                <div style={typeStyle}>
+                  <p>{capitalize(subKey)}</p>
+                </div>
+                <FormsyInput
+                  type="text"
+                  name={`${key}-${subKey}`}
+                  placeholder={capitalize(subKey)}
+                  value={email}
+                />
+              </div>
             ))
             }
           </div>
@@ -48,18 +66,11 @@ class AdminEmailForm extends Component {
 
     return (
       <div className="flex-100 layout-row layout-align-start-center">
-
         <Formsy
           onValidSubmit={this.saveEmails}
+          mapping={AdminEmailForm.mapInputs}
           className="flex-100 layout-row layout-align-start-center"
         >
-          <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start">
-            <div className="flex-100 layout-row layout-align-start-center">
-              <h2 className="flex-none sup_l">
-                {t('admin:updateShopEmails')}
-              </h2>
-            </div>
-          </div>
           <div className="flex-100 layout-row layout-row layout-wrap layout-align-center-start">
             {emailInputs}
           </div>
@@ -80,7 +91,7 @@ class AdminEmailForm extends Component {
 AdminEmailForm.propTypes = {
   theme: PropTypes.theme,
   tenant: PropTypes.tenant.isRequired,
-  adminDispatch: PropTypes.shape({
+  tenantDispatch: PropTypes.shape({
     updateEmails: PropTypes.func
   }).isRequired,
   t: PropTypes.func.isRequired
@@ -89,4 +100,4 @@ AdminEmailForm.propTypes = {
 AdminEmailForm.defaultProps = {
   theme: {}
 }
-export default withNamespaces(['admin', 'common'])(AdminEmailForm)
+export default withNamespaces(['admin', 'common', 'user'])(AdminEmailForm)

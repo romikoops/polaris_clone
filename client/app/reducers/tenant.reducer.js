@@ -45,6 +45,34 @@ export const tenant = (
         }
       }
     }
+    case tenantActions.UPDATE_EMAILS_REQUEST: {
+      return {
+        ...state,
+        isFetching: true,
+        loading: true,
+        didInvalidate: false
+      }
+    }
+    case tenantActions.UPDATE_EMAILS_SUCCESS: {
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          theme: action.payload
+        },
+        isFetching: false,
+        loading: false,
+        didInvalidate: false
+      }
+    }
+    case tenantActions.UPDATE_EMAILS_FAILURE: {
+      return {
+        ...state,
+        isFetching: false,
+        loading: false,
+        didInvalidate: true
+      }
+    }
     case tenantActions.CLEAR_LOADING: {
       return {
         ...state,

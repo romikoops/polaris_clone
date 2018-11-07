@@ -1710,39 +1710,6 @@ function goTo (path) {
   }
 }
 
-function updateEmails (tenant) {
-  function request (tenantData) {
-    return {
-      type: adminConstants.UPDATE_EMAILS_REQUEST,
-      tenantData
-    }
-  }
-  function success (tenantData) {
-    return {
-      type: adminConstants.UPDATE_EMAILS_SUCCESS,
-      tenantData
-    }
-  }
-  function failure (error) {
-    return { type: adminConstants.UPDATE_EMAILS_FAILURE, error }
-  }
-
-  return (dispatch) => {
-    dispatch(request(tenant))
-
-    adminService.updateEmails(tenant).then(
-      (resp) => {
-        const tenantData = resp.data
-        dispatch(success(tenantData))
-      },
-      (error) => {
-        dispatch(failure(error))
-        dispatch(alertActions.error(error))
-      }
-    )
-  }
-}
-
 export const adminActions = {
   getHubs,
   newHubImage,
@@ -1808,8 +1775,7 @@ export const adminActions = {
   searchShipments,
   deltaShipmentsPage,
   deleteDocument,
-  searchPricings,
-  updateEmails
+  searchPricings
 }
 
 export default adminActions
