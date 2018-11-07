@@ -65,6 +65,7 @@ class QuoteChargeBreakdown extends Component {
 
   generateContent (key) {
     const { quote, t, scope } = this.props
+
     const contentSections = Object.entries(quote[`${key}`])
       .map(array => array.filter(value => !this.unbreakableKeys.includes(value)))
       .filter(value => value.length !== 1)
@@ -119,14 +120,17 @@ class QuoteChargeBreakdown extends Component {
 
   overrideTranslations (key) {
     const { t, scope } = this.props
+
     if (scope.translation_overrides && scope.translation_overrides[key]) {
       return capitalize(t(scope.translation_overrides[key]))
     }
 
     return capitalize(t(key))
   }
+
   renderSubTitle (key) {
     const { t, mot, scope } = this.props
+
     if (scope.translation_overrides && scope.translation_overrides[key]) {
       return this.overrideTranslations(`shipment:${key}`)
     }
