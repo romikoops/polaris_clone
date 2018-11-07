@@ -2,15 +2,39 @@
 
 module DataInserter
   class BaseInserter
-    def initialize(tenant:, data:)
+    def initialize(tenant:, data:, args: {})
+      # Expected data structure:
+      # {
+      #   "Sheet1": [
+      #     {
+      #       "header1": "...",
+      #       "header2": 0.0,
+      #       "Fees": {
+      #         "fee1":0.0
+      #       }
+      #     },
+      #     {
+      #       ...
+      #     }
+      #   ],
+      #   "Sheet2": [
+      #     {
+      #       ...
+      #     },
+      #     {
+      #       ...
+      #     }
+      #   ]
+      # }
+
       @tenant = tenant
       @data = data
 
       @stats = {}
-      post_initialize
+      post_initialize(args)
     end
 
-    def perform(_should_generate_trips = true)
+    def perform
       raise StandardError, "The data doesn't contain the correct format!" unless valid?(@data)
     end
 
@@ -21,6 +45,10 @@ module DataInserter
     private
 
     def post_initialize
+      raise NotImplementedError, "This method must be implemented in #{self.class.name}."
+    end
+
+    def valid?(_data)
       raise NotImplementedError, "This method must be implemented in #{self.class.name}."
     end
 

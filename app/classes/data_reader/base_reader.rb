@@ -4,14 +4,8 @@ module DataReader
   class BaseReader
     attr_reader :xlsx, :sheets_data
 
-    def initialize(args = { user: current_user })
-      # FOR DEBUGGING------------------------------------------
-      # In console run e.g. `x = DataReader::OceanFclReader.new({})`
-      path = Rails.root.join('app', 'classes', 'data_reader', 'test_AIR.xlsx').to_s
-      args = args.merge(path: path)
-      # /FOR DEBUGGING-----------------------------------------
-
-      @xlsx = open_spreadsheet_file(args[:path])
+    def initialize(path:)
+      @xlsx = open_spreadsheet_file(path)
       @sheets_data = {}
       @stats = {}
       post_initialize
@@ -22,7 +16,7 @@ module DataReader
         # Parse headers (first row) and validate them
         headers = parse_headers(sheet_data.first)
         begin
-          validate_headers(headers, sheet_name)
+          validate_headers(sheet_name, headers)
         rescue StandardError => e
           puts e
           break
@@ -56,6 +50,7 @@ module DataReader
     end
 
     def open_spreadsheet_file(path)
+      path = path.to_s
       Roo::Spreadsheet.open(path)
     end
 
@@ -63,12 +58,11 @@ module DataReader
       header_row.map! do |el|
         el.downcase!
         el.gsub!(%r{[^a-z0-9\-\/\_]+}, '_') # underscore instead of unwanted characters
-        el.gsub!(%r{\/+}, '__') # double underscore instead of slash
-        el.to_sym
+        el
       end
     end
 
-    def validate_headers(_headers)
+    def validate_headers(_sheet_name, _headers)
       raise NotImplementedError, "This method must be implemented in #{self.class.name}."
     end
 

@@ -7,8 +7,8 @@ module DataReader
     def post_initialize
     end
 
-    def validate_headers(headers, sheet_name)
-      valid_headers = %i(
+    def validate_headers(sheet_name, headers)
+      valid_headers = %w(
         effective_date
         expiration_date
         customer_email

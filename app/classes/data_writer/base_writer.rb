@@ -5,9 +5,29 @@ module DataWriter
     attr_reader :xlsx, :sheets_data
 
     def initialize(file_name:, sheets_data:)
-      # DEBUG
-      sheets_data = JSON.parse('{"Tabelle1":[{"effective_date":"2018-07-01","expiration_date":"2019-03-20","customer_email":null,"origin":"Hamburg","destination":"Guayaquil","mot":"ocean","carrier":"CMA CGM","service_level":"standard","load_type":"fcl_20","transit_time":20,"currency":"USD","fees":{"bas":"USD 550","lss":50,"efs__ebs":45}},{"effective_date":"2018-07-01","expiration_date":"2019-03-20","customer_email":null,"origin":"Hamburg","destination":"Guayaquil","mot":"ocean","carrier":"CMA CGM","service_level":"standard","load_type":"fcl_40","transit_time":20,"currency":"USD","fees":{"bas":"USD 850","lss":100,"efs__ebs":90}},{"effective_date":"2018-07-01","expiration_date":"2019-03-20","customer_email":null,"origin":"Hamburg","destination":"Guayaquil","mot":"ocean","carrier":"CMA CGM","service_level":"standard","load_type":"fcl_40_hq","transit_time":20,"currency":"USD","fees":{"bas":"USD 850","lss":100,"efs__ebs":90}},{"effective_date":"2018-07-01","expiration_date":"2019-03-20","customer_email":null,"origin":"Hamburg","destination":"Guayaquil","mot":"ocean","carrier":"MSC","service_level":"standard","load_type":"fcl_20","transit_time":20,"currency":"USD","fees":{"bas":"USD 550","lss":30,"efs__ebs":35}},{"effective_date":"2018-07-01","expiration_date":"2019-03-20","customer_email":null,"origin":"Hamburg","destination":"Guayaquil","mot":"ocean","carrier":"MSC","service_level":"standard","load_type":"fcl_40","transit_time":20,"currency":"USD","fees":{"bas":"USD 875","lss":60,"efs__ebs":70}},{"effective_date":"2018-07-01","expiration_date":"2019-03-20","customer_email":null,"origin":"Hamburg","destination":"Guayaquil","mot":"ocean","carrier":"MSC","service_level":"standard","load_type":"fcl_40_hq","transit_time":20,"currency":"USD","fees":{"bas":"USD 875","lss":60,"efs__ebs":70}},{"effective_date":"2018-07-01","expiration_date":"2019-03-20","customer_email":null,"origin":"Hamburg","destination":"Guayaquil","mot":"ocean","carrier":"COSCO","service_level":"standard","load_type":"fcl_20","transit_time":20,"currency":"USD","fees":{"bas":"USD 550","lss":null,"efs__ebs":50}},{"effective_date":"2018-07-01","expiration_date":"2019-03-20","customer_email":null,"origin":"Hamburg","destination":"Guayaquil","mot":"ocean","carrier":"COSCO","service_level":"standard","load_type":"fcl_40","transit_time":20,"currency":"USD","fees":{"bas":"USD 875","lss":null,"efs__ebs":100}},{"effective_date":"2018-07-01","expiration_date":"2019-03-20","customer_email":null,"origin":"Hamburg","destination":"Guayaquil","mot":"ocean","carrier":"COSCO","service_level":"standard","load_type":"fcl_40_hq","transit_time":20,"currency":"USD","fees":{"bas":"USD 875","lss":null,"efs__ebs":100}},{"effective_date":"2018-07-01","expiration_date":"2019-03-20","customer_email":null,"origin":"Hamburg","destination":"Guayaquil","mot":"ocean","carrier":"CMA CGM","service_level":"standard","load_type":"fcl_20","transit_time":20,"currency":"USD","fees":{"bas":"USD 550","lss":null,"efs__ebs":null}},{"effective_date":"2018-07-01","expiration_date":"2019-03-20","customer_email":null,"origin":"Hamburg","destination":"Guayaquil","mot":"ocean","carrier":"CMA CGM","service_level":"standard","load_type":"fcl_40","transit_time":20,"currency":"USD","fees":{"bas":"USD 850","lss":null,"efs__ebs":null}},{"effective_date":"2018-07-01","expiration_date":"2019-03-20","customer_email":null,"origin":"Hamburg","destination":"Guayaquil","mot":"ocean","carrier":"CMA CGM","service_level":"standard","load_type":"fcl_40_hq","transit_time":20,"currency":"USD","fees":{"bas":"USD 850","lss":null,"efs__ebs":null}}]}')
-      # /DEBUG
+      # Expected data structure:
+      # {
+      #   "Sheet1": [
+      #     {
+      #       "header1": "...",
+      #       "header2": 0.0,
+      #       "Fees": {
+      #         "fee1":0.0
+      #       }
+      #     },
+      #     {
+      #       ...
+      #     }
+      #   ],
+      #   "Sheet2": [
+      #     {
+      #       ...
+      #     },
+      #     {
+      #       ...
+      #     }
+      #   ]
+      # }
 
       @file_name = file_name
       @sheets_data = sheets_data

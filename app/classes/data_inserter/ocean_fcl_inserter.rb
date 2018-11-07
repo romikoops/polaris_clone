@@ -2,53 +2,67 @@
 
 module DataInserter
   class OceanFclInserter < DataInserter::BaseInserter
-    def perform(should_generate_trips = false)
+    def perform
       super
 
-      n_rows = @data.length
-      @data.each_with_index do |row, i|
-        itinerary = find_or_initialize_itinerary(row)
-        stops = find_or_initialize_stops(row, itinerary)
-        itinerary.stops << stops
-        itinerary.save!
+      @data.each_with_index do |(sheet_name, rows), sheet_i|
+        rows.each_with_index do |row, row_i|
+          itinerary = find_or_initialize_itinerary(row)
+          stops = find_or_initialize_stops(row, itinerary)
+          itinerary.stops << stops
+          itinerary.save!
 
-        tenant_vehicle = find_or_create_tenant_vehicle(row)
-        generate_trips(itinerary, row, tenant_vehicle) if should_generate_trips
-        create_pricings(row, tenant_vehicle)
+          tenant_vehicle = find_or_create_tenant_vehicle(row)
+          generate_trips(itinerary, row, tenant_vehicle) if @should_generate_trips
+          create_pricings(row, tenant_vehicle)
 
-        print_status(i, n_rows)
+          puts "Status: Sheet \"#{sheet_name}\" (##{sheet_i + 1}) | Row ##{row_i + 1}"
+        end
       end
     end
 
     private
 
-    def post_initialize
+    def post_initialize(args)
+      @should_generate_trips = args[:should_generate_trips] || false
     end
 
     def valid?(_data)
-      raise NotImplementedError, "This method must be implemented in #{self.class.name}."
+      true
     end
 
     def itinerary_name(row)
-      [row[:origin], row[:destination]].join(' - ')
+      [row['origin'], row['destination']].join(' - ')
     end
 
     def find_or_initialize_itinerary(row)
       Itinerary.find_or_initialize_by(
         name: itinerary_name(row),
-        mode_of_transport: row[:mot],
+        mode_of_transport: row['mot'],
         tenant: @tenant
       )
     end
 
     def stop_names(row)
-      [row[:origin], row[:destination]]
+      [row['origin'], row['destination']]
+    end
+
+    def append_hub_suffix(name, mot)
+      name + ' ' + {
+        'ocean' => 'Port',
+        'air'   => 'Airport',
+        'rail'  => 'Railyard',
+        'truck' => 'Depot'
+      }[mot]
     end
 
     def find_or_initialize_stops(row, itinerary)
-      stop_names(row).map.with_index do |stop_name, i|
-        hub = @tenant.hubs.find_by(name: stop_name)
-        raise StandardError, "Stop (Hub) with name \"#{stop_name}\" not found!" unless hub
+      stop_names = stop_names(row)
+      mot = itinerary.mode_of_transport
+      stops_as_hubs_names = stop_names.map { |stop_name| append_hub_suffix(stop_name, mot) }
+      stops_as_hubs_names.map.with_index do |hub_name, i|
+        hub = @tenant.hubs.find_by(name: hub_name)
+        raise StandardError, "Stop (Hub) with name \"#{hub_name}\" not found!" unless hub
 
         stop = itinerary.stops.find_by(hub_id: hub.id, index: i)
         stop || Stop.new(hub_id: hub.id, index: i)
@@ -68,7 +82,7 @@ module DataInserter
       carrier = find_or_create_carrier(row)
       tenant_vehicle = TenantVehicle.find_by(name: service_level, mode_of_transport: row[:mot], tenant_id: @tenant.id, carrier: carrier)
       # TODO: fix!! `Vehicle` shouldn't be creating a `TenantVehicle`!:
-      tenant_vehicle || Vehicle.create_from_name(service_level, row[:mot], @tenant.id, carrier.name)
+      tenant_vehicle || Vehicle.create_from_name(service_level, row[:mot], @tenant.id, carrier.name) # returns a `TenantVehicle`!
     end
 
     def generate_trips(itinerary, row, tenant_vehicle)
@@ -111,10 +125,6 @@ module DataInserter
           pricing_detail.update!(currency_name: currency)
         end
       end
-    end
-
-    def print_status(_current, total)
-      puts "#{i}/#{total}, #{i / total.to_f} %"
     end
 
     def local_stats
