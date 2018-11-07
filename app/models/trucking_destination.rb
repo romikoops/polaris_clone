@@ -8,7 +8,7 @@ class TruckingDestination < ApplicationRecord
       message: "is a duplicate (all attributes match an existing record in the DB)"
     }
 
-  belongs_to :geometry, optional: true
+  belongs_to :location, optional: true
   has_many :hub_truckings
   has_many :trucking_pricings, through: :hub_truckings
   has_many :hubs, through: :hub_truckings

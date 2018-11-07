@@ -39,6 +39,61 @@ class Location < ApplicationRecord
 	  ", lat: lat, lng: lng).first
   end
 
+  def self.cascading_find_by_names(*args)
+    case args.length
+    when 1
+      cascading_find_by_name(*args)
+    when 2
+      cascading_find_by_two_names(*args)
+    else
+      raise ArgumentError, "wrong number of arguments (given #{args.length}, expected 2)"
+    end
+  end
+
+  def self.cascading_find_by_two_names(raw_name_1, raw_name_2)
+    # binding.pry
+    name_2 = raw_name_2.split.map(&:capitalize).join(' ')
+    name_1_test = raw_name_1.try(:split)
+    name_1 = name_1_test.nil? ? name_2 : name_1_test.map(&:capitalize).join(' ')
+    keys = %w[postal_code suburb neighbourhood city province country]
+    final_result = nil
+    keys.to_a.reverse_each.with_index do |name_i, i|
+      results_1 = where(name_i => name_1)
+
+      next if results_1.empty?
+      results_1.each do |result|
+        sub_keys = keys.slice!(0, keys.length - (i+1))
+        sub_keys.to_a.reverse_each.with_index do |name_j, j|
+          sub_results = results_1.where(name_j => name_2)
+          specific_result = sub_results.where(sub_keys.reverse[j + 1] => name_2).first
+          result = specific_result || sub_results.first
+
+          final_result = result unless result.nil?
+        end
+      end
+    end
+    return final_result unless final_result.nil?
+    keys.to_a.reverse_each.with_index do |name_i, i|
+      final_result = where(name_i => name_2).first
+
+      next if final_result
+    end
+
+    return final_result
+
+  end
+
+  def self.cascading_find_by_name(raw_name)
+    name = raw_name.split.map(&:capitalize).join(' ')
+
+    (1..4).to_a.reverse_each do |i|
+      result = where("name_#{i} ILIKE ?", name).first
+      return result unless result.nil?
+    end
+
+    nil
+  end
+
   # def self.within(lat:, lng:, distance: 0.25)
   #   # TODO: implement using ST_DWithin, and benchmark against this implementation
 

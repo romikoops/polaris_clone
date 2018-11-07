@@ -183,7 +183,7 @@ module ExcelTool
               end
               { ident: ident_value, country: idents_and_country[:country] }
             end
-          elsif identifier_type == 'geometry_id'
+          elsif identifier_type == 'location_id'
             geometry = find_geometry(idents_and_country)
             stats[:trucking_destinations][:number_created] += 1
 
@@ -440,7 +440,7 @@ module ExcelTool
 
     def identity_country(single_ident_values_and_country)
       case identifier_type
-      when 'distance', 'geometry_id'
+      when 'distance', 'location_id'
         single_ident_values_and_country.map do |h|
           "(#{h[:ident]}, '#{h[:country]}', current_timestamp, current_timestamp)"
         end
@@ -506,9 +506,9 @@ module ExcelTool
 
     def determine_identifier_type_and_modifier(identifier_type)
       if identifier_type == 'CITY'
-        'geometry_id'
+        'location_id'
       elsif identifier_type == 'POSTAL_CODE'
-        %w(geometry_id postal_code)
+        %w(location_id postal_code)
       elsif identifier_type.include?('_')
         identifier_type.split('_').map(&:downcase)
       elsif identifier_type.include?(' ')
@@ -529,11 +529,12 @@ module ExcelTool
 
     def find_geometry(idents_and_country)
       geometry = if @identifier_modifier == 'postal_code'
-                   Geometry.cascading_find_by_name(
-                     idents_and_country[:ident].capitalize
-                   )
+                    Location.find_by_postal_code(idents_and_country[:ident].capitalize)
+                  #  Geometry.cascading_find_by_name(
+                  #    idents_and_country[:ident].capitalize
+                  #  )
                  else
-                   Geometry.cascading_find_by_names(
+                   Location.cascading_find_by_names(
                      idents_and_country[:sub_ident],
                      idents_and_country[:ident]
                    )

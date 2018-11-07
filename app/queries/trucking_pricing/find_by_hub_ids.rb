@@ -34,7 +34,7 @@ module Queries
               ident_type,
               CASE
                 WHEN ident_type = 'city'
-                  THEN MIN(geometries.name_4) || '*' || MIN(geometries.name_2)
+                  THEN MIN(locations.city) || '*' || MIN(locations.country)
                 ELSE
                   MIN(ident_value)::text      || '*' || MAX(ident_value)::text
               END AS ident_values
@@ -56,7 +56,7 @@ module Queries
                   CASE
                     WHEN trucking_destinations.zipcode  IS NOT NULL THEN trucking_destinations.zipcode::integer
                     WHEN trucking_destinations.distance IS NOT NULL THEN trucking_destinations.distance::integer
-                    ELSE trucking_destinations.geometry_id
+                    ELSE trucking_destinations.location_id
                   END AS ident_value
                 FROM trucking_pricings
                 JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
@@ -64,7 +64,7 @@ module Queries
                 WHERE hub_truckings.hub_id IN (:hub_ids)
               ) AS sub_query_lvl_3
             ) AS sub_query_lvl_2
-            LEFT OUTER JOIN geometries ON sub_query_lvl_2.ident_value = geometries.id
+            LEFT OUTER JOIN locations ON sub_query_lvl_2.ident_value = locations.id
             GROUP BY tp_id, ident_type, range
             ORDER BY MAX(ident_value)
           ) AS sub_query_lvl_1

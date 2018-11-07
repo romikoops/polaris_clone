@@ -51,6 +51,7 @@ class GeometrySeeder
         province: names[1],
         country: names[0]
       }
+      # binding.pry
       # names.each_with_index { |name, i| attributes["name_#{i + 1}"] = name }
 
       attributes

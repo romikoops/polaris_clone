@@ -51,12 +51,12 @@ module Queries
             (trucking_destinations.zipcode IS NOT NULL)
             AND (trucking_destinations.zipcode = :zipcode)
           ) OR (
-            (trucking_destinations.geometry_id IS NOT NULL)
+            (trucking_destinations.location_id IS NOT NULL)
             AND (
               SELECT ST_Contains(
                 (
-                  SELECT data::geometry FROM geometries
-                  WHERE id = trucking_destinations.geometry_id
+                  SELECT bounds::geometry FROM locations
+                  WHERE id = trucking_destinations.location_id
                 ),
                 (SELECT ST_Point(:longitude, :latitude)::geometry)
               ) AS contains
