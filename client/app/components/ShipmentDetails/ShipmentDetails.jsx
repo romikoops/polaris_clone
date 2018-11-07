@@ -1003,6 +1003,7 @@ export class ShipmentDetails extends Component {
                   id="aggregated_cargo"
                   name="aggregated_cargo"
                   checked={this.state.aggregated}
+                  tabIndex="-1"
                   onChange={() => this.toggleAggregatedCargo()}
                 />
                 <h3
