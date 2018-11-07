@@ -20,6 +20,11 @@ class DocumentsMultiForm extends React.Component {
 
     return response.json()
   }
+
+  static downloadFile (url) {
+    window.location = url
+  }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -90,6 +95,8 @@ class DocumentsMultiForm extends React.Component {
     e.preventDefault()
     this.uploaderInput.click()
   }
+  
+
   render () {
     const {
       theme,
@@ -110,15 +117,9 @@ class DocumentsMultiForm extends React.Component {
     const existingDocuments = documents
       ? documents.map((d) => {
         const link = d.signed_url ? (
-          <Link
-            to={d.signed_url}
-            className={`${styles.icon_btn} flex layout-row layout-align-center-center`}
-            target="_blank"
-          >
-            <p className="flex">
-              <Truncate lines={1}>{d.text} </Truncate>
-            </p>
-          </Link>
+          <p className="flex pointy" key={d.id} onClick={() => DocumentsMultiForm.downloadFile(d.signed_url)}>
+            <Truncate lines={1}>{d.text} </Truncate>
+          </p>
         ) : (
           <p className="flex">
             <Truncate lines={1}>{d.text} </Truncate>
