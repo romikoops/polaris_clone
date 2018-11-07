@@ -218,7 +218,7 @@ class QuoteCard extends PureComponent {
 
     return (
       <div
-        className={`flex-100 layout-row layout-wrap offer_result ${styles.wrapper} ${this.state.isChecked ? styles.wrapper_selected : ''}`}
+        className={`flex-100 flex-lg-80 offset-lg-20 layout-row layout-wrap offer_result ${styles.wrapper} ${this.state.isChecked ? styles.wrapper_selected : ''}`}
       >
         {this.state.isChecked ? (
           <div className={`${styles.wrapper_gradient}`}>
