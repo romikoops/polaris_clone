@@ -95,7 +95,7 @@ class QuoteChargeBreakdown extends Component {
             </div>
             <div className="flex-50 layout-row layout-align-end-center">
               {scope.cargo_price_notes && scope.cargo_price_notes[key] ? (
-                <span style={{ textAlign: 'right', width: '100%' }}>{scope.cargo_price_notes[key]}</span>
+                <p style={{ textAlign: 'right', width: '100%' }}>{scope.cargo_price_notes[key]}</p>
               ) : (
                 <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{(price[1].currency || price[1].total.currency)}</p>
               )}
@@ -110,7 +110,7 @@ class QuoteChargeBreakdown extends Component {
               <span className="flex-none"> {t('cargo:feesIn', { currency: currencyFees[0] })}</span>
             </div>
             <div className="flex-45 layout-row layout-align-end-center">
-              <span className="flex-none">{`${numberSpacing(currencyTotals[currencyFees[0]] || 0, 2)} ${currencyFees[0]}`}</span>
+              <p className="flex-none">{`${numberSpacing(currencyTotals[currencyFees[0]] || 0, 2)} ${currencyFees[0]}`}</p>
             </div>
           </div> }
       </div>
@@ -150,7 +150,6 @@ class QuoteChargeBreakdown extends Component {
             <div className={`flex-100 layout-row layout-align-start-center ${styles.price_row}`}>
               <div
                 className="flex-none layout-row layout-align-start-center"
-                style={{ background: theme.colors.primary }}
               />
               <div className="flex-45 layout-row layout-align-start-center">
                 {key === 'trucking_pre' ? (

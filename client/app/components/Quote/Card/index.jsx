@@ -341,23 +341,21 @@ class QuoteCard extends PureComponent {
         </CollapsingContent>
         <div className="flex-100 layout-wrap layout-align-start-stretch">
           <div className={`flex-100 layout-row layout-align-space-between-stretch layout-wrap ${styles.total_row}`}>
-            
+
             <div className={`${isQuote(tenant) ? 'flex' : 'flex-40'} layout-row layout-align-start-center`}>
               <span style={{ textAlign: 'right' }}>{scope.hide_grand_total ? '' : t('common:total')}</span>
             </div>
             <div className={`${isQuote(tenant) ? 'flex-75' : 'flex'}  layout-row layout-align-end-center`}>
               <p style={!isQuote(tenant) ? { paddingRight: '18px' } : {}}>
-                {
-                  scope.hide_grand_total
-                    ? ''
-                    : `${formattedPriceValue(quote.total.value)} ${quote.total.currency}`
-                }
+                {scope.hide_grand_total
+                  ? ''
+                  : `${formattedPriceValue(quote.total.value)} ${quote.total.currency}`}
               </p>
               {isQuote(tenant) ? (
                 <div className="flex-gt-md-25 flex-33 layout-row layout-align-end-center">
                   <RoundButton
                     active={!this.state.isChecked}
-                    flexContainer={scope.hide_grand_total ? '40' : '100'}
+                    flexContainer="100"
                     classNames={`pointy layout-row layout-align-center-center ${styles.add_button} ${!this.state.isChecked ? styles.shorter : styles.longer}`}
                     size="small"
                     handleNext={() => this.handleClickChecked()}
@@ -371,13 +369,12 @@ class QuoteCard extends PureComponent {
             <div className="flex-100 layout-row layout-align-end-center">
               {this.buttonToDisplay()}
               <div className="flex-60 layout-row layout-align-end-center layout-wrap">
-              { scope.offer_disclaimers && scope.offer_disclaimers.length
-                ? 
-                  scope.offer_disclaimers.map(disclaimer =>
+                { scope.offer_disclaimers && scope.offer_disclaimers.length
+                  ? scope.offer_disclaimers.map(disclaimer =>
                     <p className={`flex-100 ${styles.disclaimers}`}>{t(`disclaimers:${disclaimer}`, { carrier: result.meta.carrier_name })}</p>)
-                : ''
-              }
-               </div>
+                  : ''
+                }
+              </div>
             </div>
           </div>
 
