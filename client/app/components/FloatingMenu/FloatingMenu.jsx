@@ -61,7 +61,7 @@ class FloatingMenu extends Component {
           className={
             `${styles.floating_menu} ` +
             `${this.state.expand ? '' : styles.collapsed} ` +
-            'flex-none layout-column layout-align-space-between'
+            'flex-none layout-align-space-between'
           }
           style={this.state.overflowOverwrite}
         >

@@ -11,7 +11,6 @@
     padding-top: 10px;
     width: $menu-width-expanded;
     box-shadow: 1px 0 1px rgba(black, 0.25);
-    overflow: hidden;
     transition: all 0.8s ease;
     &.collapsed {
       width: $menu-width-collapsed;
