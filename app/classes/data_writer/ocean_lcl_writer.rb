@@ -1,15 +1,8 @@
 # frozen_string_literal: true
 
 module DataWriter
-  class OceanLclWriter < DataWriter::BaseWriter
+  class OceanLclWriter < BaseWriter
     private
-
-    def post_initialize
-    end
-
-    def local_stats
-      {}
-    end
 
     def extract_raw_headers(first_row)
       first_row.keys

@@ -2,13 +2,12 @@
 
 module DataReader
   class BaseReader
-    attr_reader :xlsx, :sheets_data
+    attr_reader :tenant, :xlsx, :sheets_data
 
-    def initialize(path:)
+    def initialize(tenant:, path:)
+      @tenant = tenant
       @xlsx = open_spreadsheet_file(path)
       @sheets_data = {}
-      @stats = {}
-      post_initialize
     end
 
     def perform
@@ -35,19 +34,7 @@ module DataReader
       @sheets_data
     end
 
-    def stats
-      @stats.merge!(local_stats)
-    end
-
     private
-
-    def post_initialize
-      raise NotImplementedError, "This method must be implemented in #{self.class.name}."
-    end
-
-    def local_stats
-      raise NotImplementedError, "This method must be implemented in #{self.class.name}."
-    end
 
     def open_spreadsheet_file(path)
       path = path.to_s
@@ -58,7 +45,7 @@ module DataReader
       header_row.map! do |el|
         el.downcase!
         el.gsub!(%r{[^a-z0-9\-\/\_]+}, '_') # underscore instead of unwanted characters
-        el
+        el.to_sym
       end
     end
 

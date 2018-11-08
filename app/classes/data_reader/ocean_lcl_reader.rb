@@ -1,14 +1,11 @@
 # frozen_string_literal: true
 
 module DataReader
-  class OceanLclReader < DataReader::BaseReader
+  class OceanLclReader < BaseReader
     private
 
-    def post_initialize
-    end
-
     def validate_headers(sheet_name, headers)
-      valid_headers = %w(
+      valid_headers = %i(
         effective_date
         expiration_date
         customer_email
@@ -35,10 +32,6 @@ module DataReader
 
     def build_row_obj(headers, parsed_row)
       headers.zip(parsed_row).to_h
-    end
-
-    def local_stats
-      {}
     end
   end
 end

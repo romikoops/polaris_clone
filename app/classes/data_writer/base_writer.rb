@@ -9,10 +9,10 @@ module DataWriter
       # {
       #   "Sheet1": [
       #     {
-      #       "header1": "...",
-      #       "header2": 0.0,
-      #       "Fees": {
-      #         "fee1":0.0
+      #       header1: "...",
+      #       header2: 0.0,
+      #       fees: {
+      #         "fee1": 0.0
       #       }
       #     },
       #     {
@@ -32,8 +32,6 @@ module DataWriter
       @file_name = file_name
       @sheets_data = sheets_data
       @xlsx = nil
-      @stats = {}
-      post_initialize
     end
 
     def perform
@@ -42,17 +40,12 @@ module DataWriter
       @sheets_data.each do |sheet_name, rows|
         worksheet = @xlsx.add_worksheet(sheet_name)
         headers = extract_headers(rows.first)
-        write_headers(worksheet, headers)
         setup_worksheet(worksheet, headers.length)
+        write_headers(worksheet, headers)
         write_rows_data(worksheet, rows)
       end
 
       @xlsx.close
-      stats
-    end
-
-    def stats
-      @stats.merge!(local_stats)
     end
 
     private
@@ -75,9 +68,10 @@ module DataWriter
     end
 
     def header_format
-      format = @xlsx.add_format
-      format.set_bold
-      format
+      return @format if @format
+      @format = @xlsx.add_format
+      @format.set_bold
+      @format
     end
 
     def write_headers(worksheet, headers)
@@ -102,14 +96,6 @@ module DataWriter
       rows.each_with_index do |row_data, i|
         write_row(worksheet, i + 1, 0, row_data)
       end
-    end
-
-    def post_initialize
-      raise NotImplementedError, "This method must be implemented in #{self.class.name}."
-    end
-
-    def local_stats
-      raise NotImplementedError, "This method must be implemented in #{self.class.name}."
     end
   end
 end

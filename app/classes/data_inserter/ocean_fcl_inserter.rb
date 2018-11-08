@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module DataInserter
-  class OceanFclInserter < DataInserter::BaseInserter
+  class OceanFclInserter < BaseInserter
     def perform
       super
 
-      @data.each_with_index do |(sheet_name, rows), sheet_i|
+      data.each_with_index do |(sheet_name, rows), sheet_i|
         rows.each_with_index do |row, row_i|
           itinerary = find_or_initialize_itinerary(row)
           stops = find_or_initialize_stops(row, itinerary)
@@ -13,8 +13,8 @@ module DataInserter
           itinerary.save!
 
           tenant_vehicle = find_or_create_tenant_vehicle(row)
-          generate_trips(itinerary, row, tenant_vehicle) if @should_generate_trips
-          create_pricings(row, tenant_vehicle)
+          generate_trips(itinerary, row, tenant_vehicle) if should_generate_trips?
+          create_pricing_with_pricing_details(row, tenant_vehicle, itinerary)
 
           puts "Status: Sheet \"#{sheet_name}\" (##{sheet_i + 1}) | Row ##{row_i + 1}"
         end
@@ -23,28 +23,29 @@ module DataInserter
 
     private
 
-    def post_initialize(args)
-      @should_generate_trips = args[:should_generate_trips] || false
+    def should_generate_trips?
+      @should_generate_trips ||= options[:should_generate_trips] || false
     end
 
     def valid?(_data)
+      # TODO: Implement validation
       true
     end
 
     def itinerary_name(row)
-      [row['origin'], row['destination']].join(' - ')
+      [row[:origin], row[:destination]].join(' - ')
     end
 
     def find_or_initialize_itinerary(row)
       Itinerary.find_or_initialize_by(
         name: itinerary_name(row),
-        mode_of_transport: row['mot'],
+        mode_of_transport: row[:mot],
         tenant: @tenant
       )
     end
 
     def stop_names(row)
-      [row['origin'], row['destination']]
+      [row[:origin], row[:destination]]
     end
 
     def append_hub_suffix(name, mot)
@@ -74,7 +75,7 @@ module DataInserter
     end
 
     def find_or_create_carrier(row)
-      Carrier.find_or_create_by!(name: row[:carrier])
+      Carrier.find_or_create_by(name: row[:carrier])
     end
 
     def find_or_create_tenant_vehicle(row)
@@ -98,37 +99,37 @@ module DataInserter
       )
     end
 
-    def find_transport_category(cargo_class, tenant_vehicle)
-      @transport_category = tenant_vehicle.vehicle.transport_categories.find_by(name: 'any', cargo_class: cargo_class)
-    end
-
-    def create_pricings(row, tenant_vehicle)
-      row[:rate].each do |rate|
-        default_pricing_values = {
-          transport_category: find_transport_category(rate[:cargo_class], tenant_vehicle),
-          tenant: @tenant,
-          user: nil,
-          wm_rate: 1000,
-          effective_date: DateTime.now,
-          expiration_date: DateTime.now + 365
-        }
-        pricing_to_update = @itinerary.pricings.find_or_create_by!(default_pricing_values)
-        pricing_details = [rate]
-
-        pricing_details.each do |pricing_detail|
-          shipping_type = pricing_detail.delete(:code)
-          currency = pricing_detail.delete(:currency)
-          pricing_detail.delete(:cargo_class)
-          pricing_detail_params = pricing_detail.merge(shipping_type: shipping_type, tenant: @tenant)
-          pricing_detail = pricing_to_update.pricing_details.find_or_create_by(shipping_type: shipping_type, tenant: @tenant)
-          pricing_detail.update!(pricing_detail_params)
-          pricing_detail.update!(currency_name: currency)
-        end
+    def find_or_create_pricing_details_for_pricing(pricing, row)
+      row[:fees].each do |fee_name, fee_value|
+        pricing_detail_params = { rate: fee_value,
+                                  rate_basis: row[:type],
+                                  min: 1 * fee_value,
+                                  shipping_type: fee_name,
+                                  currency_name: row[:currency],
+                                  tenant: @tenant }
+        pricing.pricing_details.find_or_create_by(pricing_detail_params)
       end
     end
 
-    def local_stats
-      {}
+    def find_transport_category(tenant_vehicle, cargo_class)
+      # TODO: what is called 'load_type' in the excel file is actually a cargo_class!
+      @transport_category = tenant_vehicle.vehicle.transport_categories.find_by(name: 'any', cargo_class: cargo_class)
+    end
+
+    def create_pricing_with_pricing_details(row, tenant_vehicle, itinerary)
+      pricing_params = {
+        # TODO: what is called 'load_type' in the excel file is actually a cargo_class!
+        transport_category: find_transport_category(tenant_vehicle, row[:load_type]),
+        tenant_vehicle: tenant_vehicle,
+        tenant: @tenant,
+        user: nil,
+        wm_rate: 1000,
+        effective_date: Date.parse(row[:effective_date].to_s),
+        expiration_date: Date.parse(row[:expiration_date].to_s)
+      }
+      pricing_to_update = itinerary.pricings.find_or_create_by(pricing_params)
+
+      find_or_create_pricing_details_for_pricing(pricing_to_update, row)
     end
   end
 end

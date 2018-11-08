@@ -1,14 +1,11 @@
 # frozen_string_literal: true
 
 module DataReader
-  class OceanFclReader < DataReader::BaseReader
+  class OceanFclReader < BaseReader
     private
 
-    def post_initialize
-    end
-
     def validate_headers(sheet_name, headers)
-      valid_headers = %w(
+      valid_headers = %i(
         effective_date
         expiration_date
         customer_email
@@ -37,12 +34,8 @@ module DataReader
 
       ## Build hash objects, and merge them
       standard_part = standard_headers.zip(row_until_fees).to_h
-      fee_part = { "Fees" => fee_headers.zip(row_just_fees).to_h }
+      fee_part = { fees: fee_headers.zip(row_just_fees).to_h }
       standard_part.merge(fee_part)
-    end
-
-    def local_stats
-      {}
     end
   end
 end
