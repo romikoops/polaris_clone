@@ -2,7 +2,7 @@
 
 module PricingTools
   include CurrencyTools
-  DEFAULT_MAX = 1_000_000
+  DEFAULT_MAX = Float::INFINITY
   def get_user_price(schedule, transport_category_id, user, shipment_date)
     pricing = Pricing.find_by(
       itinerary_id: schedule.trip.itinerary.id,
