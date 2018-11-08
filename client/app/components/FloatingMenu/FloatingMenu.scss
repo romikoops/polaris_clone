@@ -7,11 +7,10 @@
     top: 70px;
     bottom: 0;
     z-index: 50;
-    background: rgb(240, 240, 240);
-    padding-top: 10px;
     width: $menu-width-expanded;
     box-shadow: 1px 0 1px rgba(black, 0.25);
-    transition: all 0.8s ease;
+    transition: all 0.8s ease;  
+
     &.collapsed {
       width: $menu-width-collapsed;
       .collapse_prompt {
@@ -19,6 +18,14 @@
           transform: rotate(180deg)
         }
       }
+    }
+    .inner_wrapper {
+      height: 100%;
+      width: 100%;
+      position: static;
+      overflow: hidden;
+      background: rgb(240, 240, 240);
+      padding-top: 10px;
     }
     .menu_content {
       // padding: 0 10px;
