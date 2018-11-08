@@ -16,10 +16,15 @@ exports[`shallow render 1`] = `
         </h3>
       </div>
       <div
-        className="flex-100 layout-row.layout-align-start-center layout-wrap"
+        className="help_content flex-100 layout-row.layout-align-start-center layout-wrap"
       >
         <p
-          className="flex-none offset-5"
+          className="flex-none"
+          style={
+            Object {
+              "marginTop": "18px",
+            }
+          }
         >
            Send an email detailing your issues to:
         </p>
@@ -31,29 +36,28 @@ exports[`shallow render 1`] = `
           className="email_row flex-100 layout-row layout-align-space-between-center"
         >
           <div
-            className="flex-55 layout-row layout-align-start-center"
+            className="flex-30 layout-row layout-align-start-center"
           >
             <p
               className="flex-none no_m"
             >
-              General Enquiries: 
+              <strong>
+                General Enquiries: 
+              </strong>
             </p>
           </div>
           <div
-            className="email_box flex-45 layout-row layout-align-end-center"
+            className="email_box flex-70 layout-row layout-align-start-center"
           >
-            <div
-              className="flex-20 layout-row layoutalign-center-center"
-            >
-              <i
-                className="fa fa-envelope flex-none"
-                style={
-                  Object {
-                    "color": "#333",
-                  }
+            <i
+              className="fa fa-envelope flex-none"
+              style={
+                Object {
+                  "color": "#333",
+                  "marginRight": "10px",
                 }
-              />
-            </div>
+              }
+            />
             <a
               className="flex-80 pointy"
               href="mailto:general@general.com"
@@ -66,30 +70,29 @@ exports[`shallow render 1`] = `
           className="email_row flex-100 layout-row layout-align-space-between-center"
         >
           <div
-            className="flex-55 layout-row layout-align-start-center"
+            className="flex-30 layout-row layout-align-start-center"
           >
             <p
               className="flex-none no_m"
             >
-              Foo
-              :
+              <strong>
+                Foo
+                :
+              </strong>
             </p>
           </div>
           <div
-            className="email_box flex-45 layout-row layout-align-space-around-center"
+            className="email_box flex-70 layout-row layout-align-start-center"
           >
-            <div
-              className="flex-20 layout-row layoutalign-center-center"
-            >
-              <i
-                className="fa fa-envelope flex-none"
-                style={
-                  Object {
-                    "color": "#333",
-                  }
+            <i
+              className="fa fa-envelope flex-none"
+              style={
+                Object {
+                  "color": "#333",
+                  "marginRight": "10px",
                 }
-              />
-            </div>
+              }
+            />
             <a
               className="flex-80 pointy"
               href="mailto:foo@foo.com"
@@ -102,30 +105,29 @@ exports[`shallow render 1`] = `
           className="email_row flex-100 layout-row layout-align-space-between-center"
         >
           <div
-            className="flex-55 layout-row layout-align-start-center"
+            className="flex-30 layout-row layout-align-start-center"
           >
             <p
               className="flex-none no_m"
             >
-              Bar
-              :
+              <strong>
+                Bar
+                :
+              </strong>
             </p>
           </div>
           <div
-            className="email_box flex-45 layout-row layout-align-space-around-center"
+            className="email_box flex-70 layout-row layout-align-start-center"
           >
-            <div
-              className="flex-20 layout-row layoutalign-center-center"
-            >
-              <i
-                className="fa fa-envelope flex-none"
-                style={
-                  Object {
-                    "color": "#333",
-                  }
+            <i
+              className="fa fa-envelope flex-none"
+              style={
+                Object {
+                  "color": "#333",
+                  "marginRight": "10px",
                 }
-              />
-            </div>
+              }
+            />
             <a
               className="flex-80 pointy"
               href="mailto:bar@bar.com"
