@@ -26,6 +26,7 @@ class QuoteChargeBreakdown extends Component {
 
   determineSubKey (charge) {
     const { scope } = this.props
+
     switch (scope.fee_detail) {
       case 'key':
         return this.displayKeyOnly(charge[0])
@@ -40,6 +41,7 @@ class QuoteChargeBreakdown extends Component {
 
   displayKeyOnly (key) {
     const { t } = this.props
+
     switch (key) {
       case 'trucking_lcl' || 'trucking_fcl':
         return t('cargo:truckingRate')
@@ -51,6 +53,7 @@ class QuoteChargeBreakdown extends Component {
 
   displayKeyAndName (fee) {
     const { t } = this.props
+    
     switch (fee[0]) {
       case 'trucking_lcl' || 'trucking_fcl':
         return t('cargo:truckingRate')
