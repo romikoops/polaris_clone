@@ -6,7 +6,7 @@ exports[`shallow render 1`] = `
     className="pusher collapsed"
   />
   <div
-    className="floating_menu collapsed flex-none layout-align-space-between"
+    className="floating_menu collapsed flex-none layout-column layout-align-space-between"
     style={Object {}}
   >
     <div
@@ -76,7 +76,7 @@ exports[`theme is falsy 1`] = `
     className="pusher collapsed"
   />
   <div
-    className="floating_menu collapsed flex-none layout-align-space-between"
+    className="floating_menu collapsed flex-none layout-column layout-align-space-between"
     style={Object {}}
   >
     <div
