@@ -3,6 +3,7 @@ import { Promise } from 'es6-promise-promise'
 import * as Sentry from '@sentry/browser'
 import { tenantConstants } from '../constants'
 import { tenantService } from '../services/tenant.service'
+import { alertActions } from './'
 import getApiHost from '../constants/api.constants'
 
 function requestTenant (subdomain) {
@@ -66,6 +67,7 @@ function shouldFetchTenant (state, subdomain) {
   if (tenant.isFetching) {
     return false
   }
+
   return tenant.didInvalidate
 }
 
@@ -94,10 +96,10 @@ function updateEmails (newEmails, tenant) {
       tenantData
     }
   }
-  function success (tenantData) {
+  function success (emails) {
     return {
       type: tenantConstants.UPDATE_EMAILS_SUCCESS,
-      tenantData
+      payload: emails
     }
   }
   function failure (error) {
@@ -109,8 +111,8 @@ function updateEmails (newEmails, tenant) {
 
     tenantService.updateEmails(newEmails, tenant).then(
       (resp) => {
-        const tenantData = resp.data
-        dispatch(success(tenantData))
+        const { emails } = resp.data
+        dispatch(success(emails))
       },
       (error) => {
         dispatch(failure(error))
@@ -119,6 +121,10 @@ function updateEmails (newEmails, tenant) {
     )
   }
 }
+function updateReduxStore (payload) {
+  return dispatch => dispatch({ type: 'GENERAL_UPDATE', payload })
+}
+
 const tenantActions = {
   requestTenant,
   logOut,
@@ -127,7 +133,8 @@ const tenantActions = {
   fetchTenant,
   fetchTenantIfNeeded,
   shouldFetchTenant,
-  updateEmails
+  updateEmails,
+  updateReduxStore
 }
 
 export default tenantActions

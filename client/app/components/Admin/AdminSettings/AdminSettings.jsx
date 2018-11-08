@@ -1,27 +1,11 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import GenericError from '../../../components/ErrorHandling/Generic'
 import styles from './AdminSettings.scss'
 import AdminEmailForm from './AdminEmailForm'
 
-class AdminSettings extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      // showEmailSettings: false
-    }
-  }
-
-  toggleExpander (key) {
-    this.setState({
-      expander: {
-        ...this.state.expander,
-        [key]: !this.state.expander[key]
-      }
-    })
-  }
-
+class AdminSettings extends PureComponent {
   render () {
     const {
       t,
@@ -29,7 +13,6 @@ class AdminSettings extends Component {
       tenant,
       tenantDispatch
     } = this.props
-    // const { showEmailSettings } = this.state
 
     return (
       <GenericError theme={theme}>

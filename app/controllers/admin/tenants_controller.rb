@@ -6,12 +6,12 @@ module Admin
       tenant = current_user.tenant
       tenant.assign_attributes(tenant_params)
 
-      if tenant.save
-        response_handler(tenant)
-      else
-        raise # custom application error
-      end
+      raise ApplicationError::InvalidTenant unless tenant.save
+
+      response_handler(tenant)
     end
+
+    private
 
     def tenant_params
       params.require(:tenant).permit(

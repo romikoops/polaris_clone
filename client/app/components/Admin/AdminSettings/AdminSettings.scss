@@ -2,4 +2,37 @@
   .container {
     height: 100%;
   }
+  .email_settings {
+    box-shadow: 0 2px 5px rgba(black, .2);
+    margin: 10px;
+    padding: 20px;
+  }
+  .input {
+    margin: 0 15px 30px 15px;
+    height: 36.91px;
+    border: 1px solid #F2F2F2;
+    border-radius: 3px;
+    width: 80%;
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+  }
+
+  .input_box input {
+    height: 38px;
+    border: 1px solid #c9c9c9;
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    padding: 0 10px;
+    min-width: 80%;
+    max-width: 100%;
+    &:focus {
+      outline: 1px solid #E0E0E0;
+    }
+  }
+  .email_header {
+    text-align: center;
+    font-weight: bold;
+    padding-bottom: 5px;
+  }
+
 }
