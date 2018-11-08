@@ -143,7 +143,7 @@ Rails.application.routes.draw do
 
     resources :trucking_availability, only: [:index]
     resources :incoterms, only: [:index]
-
+    resources :locations, only: [:index]
     resources :nexuses, only: [:index]
     get 'find_nexus', to: 'nexuses#find_nexus'
     get 'currencies/base/:currency', to: 'currencies#get_currencies_for_base'

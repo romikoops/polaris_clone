@@ -4,6 +4,7 @@ import PropTypes from '../../prop-types'
 import styles from './ShipmentLocationBox.scss'
 import listenerTools from '../../helpers/listeners'
 import errorStyles from '../../styles/errors.scss'
+import getRequests from './getRequests'
 
 class Autocomplete extends PureComponent {
   static filterResults (results, options) {
@@ -36,7 +37,7 @@ class Autocomplete extends PureComponent {
 
     const { gMaps } = props
 
-    this.areaService = new gMaps.places.AutocompleteService({ types: ['regions'] })
+    // this.areaService = new gMaps.places.AutocompleteService({ types: ['regions'] })
     this.addressService = new gMaps.places.AutocompleteService({ types: ['address'] })
   }
 
@@ -150,15 +151,22 @@ class Autocomplete extends PureComponent {
   }
 
   handleInputChange (input) {
-    this.areaService.getPlacePredictions({ input }, (results) => {
-      if (results && results.length > 0) {
-        const filteredResults = Autocomplete.filterResults(results, { types: ['postal_code', 'locality'] })
-        this.setState({ areaResults: filteredResults, hideResults: false }, () => {
-          this.initKeyboardListener()
-          this.showResultsTimer()
-        })
-      }
+    getRequests.searchLocations(input, (results) => {
+      this.setState({ areaResults: results, hideResults: false }, () => {
+        this.initKeyboardListener()
+        this.showResultsTimer()
+      })
     })
+
+    // this.areaService.getPlacePredictions({ input }, (results) => {
+    //   if (results && results.length > 0) {
+    //     const filteredResults = Autocomplete.filterResults(results, { types: ['postal_code', 'locality'] })
+    //     this.setState({ areaResults: filteredResults, hideResults: false }, () => {
+    //       this.initKeyboardListener()
+    //       this.showResultsTimer()
+    //     })
+    //   }
+    // })
     this.addressService.getPlacePredictions({ input }, (results) => {
       if (results && results.length > 0) {
         const filteredResults = Autocomplete.filterResults(results, {})
@@ -172,8 +180,13 @@ class Autocomplete extends PureComponent {
   handleSelect (result) {
     listenerTools.removeHandler(document, 'keydown', this.handleKeyEvent)
 
-    const { handlePlaceSelect } = this.props
-    this.getPlace(result.place_id, place => handlePlaceSelect(place))
+    const { handlePlaceSelect, handleLocationSelect } = this.props
+    if (result.id) {
+      handleLocationSelect(result)
+    } else {
+      this.getPlace(result.place_id, place => handlePlaceSelect(place))
+    }
+
     this.setState({ hideResults: true, listenerSet: false })
   }
   shouldExpandResults () {

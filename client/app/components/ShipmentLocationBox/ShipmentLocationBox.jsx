@@ -287,7 +287,7 @@ class ShipmentLocationBox extends Component {
     let icon
     if (target === 'origin') {
       icon = {
-        url: colourSVG('address', theme),
+        url: colourSVG('location', theme),
         anchor: new this.props.gMaps.Point(18, 18),
         scaledSize: new this.props.gMaps.Size(36, 36)
       }
@@ -429,6 +429,20 @@ class ShipmentLocationBox extends Component {
     if (!place.geometry) {
       return
     }
+
+    this.setMarker(
+      {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng()
+      },
+      place.name,
+      target
+    )
+
+    this.selectLocation(place, target)
+  }
+  handleLocationChange (location, target) {
+    this.changeAddressFormVisibility(target, true)
 
     this.setMarker(
       {

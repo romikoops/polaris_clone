@@ -6,6 +6,18 @@ class Location < ApplicationRecord
     scope:   %i(neighbourhood city province country),
     message: ->(obj, _) { "is a duplicate for the names: #{obj.names.log_format}" }
   }
+  filterrific(
+    default_filter_params: { search_locations: '' },
+    available_filters: %i(
+      search_locations
+    )
+  )
+
+  scope :search_locations, lambda { |query|
+    where(
+      'postal_code ILIKE ? OR neighbourhood ILIKE ? OR suburb ILIKE ? OR city ILIKE ?',
+       "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%")
+  }
 
   def self.find_by_coordinates(lat:, lng:)
     where('ST_Contains(bounds, ST_Point(:lng, :lat))', lat: lat, lng: lng).first
@@ -28,6 +40,10 @@ class Location < ApplicationRecord
 
   def names
     [postal_code, neighbourhood, city, province, country]
+  end
+
+  def description
+    names.compact.join(', ')
   end
 
   def self.find_by_coordinates(lat, lng)
