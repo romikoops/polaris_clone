@@ -132,7 +132,7 @@ class DocumentsMultiForm extends React.Component {
               className={`${styles.icon_btn} flex-none layout-row layout-align-center-center`}
               onClick={() => deleteFn(d)}
             >
-              <i className="fa fa-trash" />
+              <i className="fa fa-trash pointy" />
             </div>
           </div>)
       })

@@ -118,6 +118,7 @@ export default function shipment (state = {}, action) {
       const targetIndex = results.indexOf(targetResult)
       results[targetIndex].schedules = action.payload.schedules
       results[targetIndex].finalResults = action.payload.finalResults
+
       return {
         ...state,
         response: {
@@ -311,18 +312,13 @@ export default function shipment (state = {}, action) {
     case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_REQUEST:
       return state
     case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_SUCCESS: {
-      const docs = state.response.stage3.documents
-      if (action.payload.doc_type === 'miscellaneous') {
-        let miscArr
-        if (!docs.miscellaneous) {
-          miscArr = [action.payload]
-        } else {
-          miscArr = docs.miscellaneous
-          miscArr.push(action.payload)
-        }
-        docs.miscellaneous = miscArr
+      const { documents } = state.response.stage3
+      const docType = action.payload.doc_type
+
+      if (documents[docType]) {
+        documents[docType].push(action.payload)
       } else {
-        docs[action.payload.doc_type] = action.payload
+        documents[docType] = [action.payload]
       }
 
       return {
@@ -331,7 +327,7 @@ export default function shipment (state = {}, action) {
           ...state.response,
           stage3: {
             ...state.response.stage3,
-            documents: docs
+            documents
           }
         },
         loading: false
@@ -351,11 +347,7 @@ export default function shipment (state = {}, action) {
     case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_SUCCESS: {
       const docObj = {}
       Object.keys(state.response.stage3.documents).forEach((key) => {
-        if (key === 'miscellaneous') {
-          docObj[key] = state.response.stage3.documents[key].filter(d => d.id !== action.payload)
-        } else if (state.response.stage3.documents[key].id !== action.payload) {
-          docObj[key] = state.response.stage3.documents[key]
-        }
+        docObj[key] = state.response.stage3.documents[key].filter(d => d.id !== action.payload)
       })
       const stage4 = state.response.stage4
         ? state.response.stage4.documents.filter(d => d.id !== action.payload) : []

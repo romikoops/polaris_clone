@@ -404,13 +404,11 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Packing Sheet"
                 theme={
@@ -424,7 +422,6 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
                 tooltip=""
                 type="packing_sheet"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -435,13 +432,11 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Commercial Invoice"
                 theme={
@@ -455,7 +450,6 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
                 tooltip=""
                 type="commercial_invoice"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -950,13 +944,11 @@ exports[`customsData[target].unknown 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Packing Sheet"
                 theme={
@@ -970,7 +962,6 @@ exports[`customsData[target].unknown 1`] = `
                 tooltip=""
                 type="packing_sheet"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -981,13 +972,11 @@ exports[`customsData[target].unknown 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Commercial Invoice"
                 theme={
@@ -1001,7 +990,6 @@ exports[`customsData[target].unknown 1`] = `
                 tooltip=""
                 type="commercial_invoice"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -1496,13 +1484,11 @@ exports[`fee && !fee.unknown && fee.total.value 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Packing Sheet"
                 theme={
@@ -1516,7 +1502,6 @@ exports[`fee && !fee.unknown && fee.total.value 1`] = `
                 tooltip=""
                 type="packing_sheet"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -1527,13 +1512,11 @@ exports[`fee && !fee.unknown && fee.total.value 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Commercial Invoice"
                 theme={
@@ -1547,7 +1530,6 @@ exports[`fee && !fee.unknown && fee.total.value 1`] = `
                 tooltip=""
                 type="commercial_invoice"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -2042,13 +2024,11 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Packing Sheet"
                 theme={
@@ -2062,7 +2042,6 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                 tooltip=""
                 type="packing_sheet"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -2073,13 +2052,11 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Commercial Invoice"
                 theme={
@@ -2093,7 +2070,6 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                 tooltip=""
                 type="commercial_invoice"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -3128,13 +3104,11 @@ exports[`shallow render 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Packing Sheet"
                 theme={
@@ -3148,7 +3122,6 @@ exports[`shallow render 1`] = `
                 tooltip=""
                 type="packing_sheet"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -3159,13 +3132,11 @@ exports[`shallow render 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Commercial Invoice"
                 theme={
@@ -3179,7 +3150,6 @@ exports[`shallow render 1`] = `
                 tooltip=""
                 type="commercial_invoice"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -3674,13 +3644,11 @@ exports[`shipment.has_pre_carriage ? 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Packing Sheet"
                 theme={
@@ -3694,7 +3662,6 @@ exports[`shipment.has_pre_carriage ? 1`] = `
                 tooltip=""
                 type="packing_sheet"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -3705,13 +3672,11 @@ exports[`shipment.has_pre_carriage ? 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Commercial Invoice"
                 theme={
@@ -3725,7 +3690,6 @@ exports[`shipment.has_pre_carriage ? 1`] = `
                 tooltip=""
                 type="commercial_invoice"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -4220,13 +4184,11 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Packing Sheet"
                 theme={
@@ -4240,7 +4202,6 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
                 tooltip=""
                 type="packing_sheet"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -4251,13 +4212,11 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Commercial Invoice"
                 theme={
@@ -4271,7 +4230,6 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
                 tooltip=""
                 type="commercial_invoice"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -4796,13 +4754,11 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Packing Sheet"
                 theme={
@@ -4816,7 +4772,6 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
                 tooltip=""
                 type="packing_sheet"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -4827,13 +4782,11 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Commercial Invoice"
                 theme={
@@ -4847,7 +4800,6 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
                 tooltip=""
                 type="commercial_invoice"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -5509,13 +5461,11 @@ exports[`this.props.insurance.bool ? 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Packing Sheet"
                 theme={
@@ -5529,7 +5479,6 @@ exports[`this.props.insurance.bool ? 1`] = `
                 tooltip=""
                 type="packing_sheet"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -5540,13 +5489,11 @@ exports[`this.props.insurance.bool ? 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Commercial Invoice"
                 theme={
@@ -5560,7 +5507,6 @@ exports[`this.props.insurance.bool ? 1`] = `
                 tooltip=""
                 type="commercial_invoice"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -6055,13 +6001,11 @@ exports[`totalGoodsValue.value > 20000 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Packing Sheet"
                 theme={
@@ -6075,7 +6019,6 @@ exports[`totalGoodsValue.value > 20000 1`] = `
                 tooltip=""
                 type="packing_sheet"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
@@ -6086,13 +6029,11 @@ exports[`totalGoodsValue.value > 20000 1`] = `
             <div
               className="flex-100 layout-row margin_5"
             >
-              <DocumentsForm
+              <DocumentsMultiForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
-                displayOnly={false}
-                doc={Object {}}
+                documents={Array []}
                 isRequired={true}
-                multiple={false}
                 t={[Function]}
                 text="Commercial Invoice"
                 theme={
@@ -6106,7 +6047,6 @@ exports[`totalGoodsValue.value > 20000 1`] = `
                 tooltip=""
                 type="commercial_invoice"
                 uploadFn={null}
-                viewer={false}
               />
             </div>
           </div>
