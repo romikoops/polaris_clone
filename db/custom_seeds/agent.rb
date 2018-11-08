@@ -1,4 +1,6 @@
-agency_tenants = Tenant.all.select{ |t| t.quotation_tool? && t.subdomain != 'quotations'}
+# frozen_string_literal: true
+
+agency_tenants = Tenant.all.select { |t| t.quotation_tool? && t.subdomain != 'quotations' }
 @manager_role = Role.find_by_name('agency_manager')
 @agent_role = Role.find_by_name('agent')
 agency_tenants.each do |tenant|
@@ -42,9 +44,8 @@ agency_tenants.each do |tenant|
   )
   @agency.update_attributes(agency_manager_id: @agency_manager.id)
   agency_to_copy = tenant.agencies.where.not(name: 'ItsMyCargo').first
-  if agency_to_copy && agency_to_copy.agency_manager
-    agency_to_copy.agency_manager.pricings.each do |pricing|
-      pricing.duplicate_for_user(@agency_manager.id)
-    end 
+  next unless agency_to_copy&.agency_manager
+  agency_to_copy.agency_manager.pricings.each do |pricing|
+    pricing.duplicate_for_user(@agency_manager.id)
   end
 end
