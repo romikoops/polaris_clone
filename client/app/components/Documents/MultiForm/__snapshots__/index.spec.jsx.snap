@@ -97,24 +97,18 @@ exports[`shallow render 1`] = `
     <div
       className="flex-100 layout-row layout-align-start-center"
     >
-      <Link
-        className="icon_btn flex layout-row layout-align-center-center"
-        replace={false}
-        target="_blank"
-        to="FOO_SIGNED_URL"
+      <p
+        className="flex pointy"
+        onClick={[Function]}
       >
-        <p
-          className="flex"
+        <Truncate
+          ellipsis="…"
+          lines={1}
+          trimWhitespace={false}
         >
-          <Truncate
-            ellipsis="…"
-            lines={1}
-            trimWhitespace={false}
-          >
-             
-          </Truncate>
-        </p>
-      </Link>
+           
+        </Truncate>
+      </p>
       <div
         className="icon_btn flex-none layout-row layout-align-center-center"
         onClick={[Function]}
@@ -127,24 +121,18 @@ exports[`shallow render 1`] = `
     <div
       className="flex-100 layout-row layout-align-start-center"
     >
-      <Link
-        className="icon_btn flex layout-row layout-align-center-center"
-        replace={false}
-        target="_blank"
-        to="BAR_SIGNED_URL"
+      <p
+        className="flex pointy"
+        onClick={[Function]}
       >
-        <p
-          className="flex"
+        <Truncate
+          ellipsis="…"
+          lines={1}
+          trimWhitespace={false}
         >
-          <Truncate
-            ellipsis="…"
-            lines={1}
-            trimWhitespace={false}
-          >
-             
-          </Truncate>
-        </p>
-      </Link>
+           
+        </Truncate>
+      </p>
       <div
         className="icon_btn flex-none layout-row layout-align-center-center"
         onClick={[Function]}
@@ -253,24 +241,18 @@ exports[`theme is falsy 1`] = `
     <div
       className="flex-100 layout-row layout-align-start-center"
     >
-      <Link
-        className="icon_btn flex layout-row layout-align-center-center"
-        replace={false}
-        target="_blank"
-        to="FOO_SIGNED_URL"
+      <p
+        className="flex pointy"
+        onClick={[Function]}
       >
-        <p
-          className="flex"
+        <Truncate
+          ellipsis="…"
+          lines={1}
+          trimWhitespace={false}
         >
-          <Truncate
-            ellipsis="…"
-            lines={1}
-            trimWhitespace={false}
-          >
-             
-          </Truncate>
-        </p>
-      </Link>
+           
+        </Truncate>
+      </p>
       <div
         className="icon_btn flex-none layout-row layout-align-center-center"
         onClick={[Function]}
@@ -283,24 +265,18 @@ exports[`theme is falsy 1`] = `
     <div
       className="flex-100 layout-row layout-align-start-center"
     >
-      <Link
-        className="icon_btn flex layout-row layout-align-center-center"
-        replace={false}
-        target="_blank"
-        to="BAR_SIGNED_URL"
+      <p
+        className="flex pointy"
+        onClick={[Function]}
       >
-        <p
-          className="flex"
+        <Truncate
+          ellipsis="…"
+          lines={1}
+          trimWhitespace={false}
         >
-          <Truncate
-            ellipsis="…"
-            lines={1}
-            trimWhitespace={false}
-          >
-             
-          </Truncate>
-        </p>
-      </Link>
+           
+        </Truncate>
+      </p>
       <div
         className="icon_btn flex-none layout-row layout-align-center-center"
         onClick={[Function]}
