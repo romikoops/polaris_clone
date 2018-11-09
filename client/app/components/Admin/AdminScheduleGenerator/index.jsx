@@ -8,12 +8,13 @@ import 'react-day-picker/lib/style.css'
 import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../../prop-types'
 import '../../../styles/select-css-custom.scss'
-import { moment, getApiHost, adminSchedules as schedTip } from '../../../constants'
+import { moment, adminSchedules as schedTip } from '../../../constants'
 import { adminActions } from '../../../actions'
 import { RoundButton } from '../../RoundButton/RoundButton'
 import { authHeader, capitalize } from '../../../helpers'
 import styles from '../Admin.scss'
 import WeekdayCheckboxes from './WeekdayCheckboxes'
+import getApiHost from '../../../constants/api.constants'
 
 class AdminScheduleGenerator extends Component {
   static camelToCaps (string) {
