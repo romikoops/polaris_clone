@@ -21,6 +21,9 @@
           <p>Customer ID: <%= shipment.user.external_id.to_i %></p>
         <% end %>
     </div>
+    <div>
+      <p><%= tenant.scope.pdf_remarks %></p>
+    </div>
   </div>
 
     <% shipments.map do |s| %>
