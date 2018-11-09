@@ -410,7 +410,14 @@ ActiveRecord::Schema.define(version: 2018_11_23_145726) do
     t.string "country"
     t.string "admin_level"
     t.geometry "bounds", limit: {:srid=>0, :type=>"geometry"}
+    t.index ["admin_level"], name: "index_locations_on_admin_level"
+    t.index ["city"], name: "index_locations_on_city"
+    t.index ["country"], name: "index_locations_on_country"
+    t.index ["neighbourhood"], name: "index_locations_on_neighbourhood"
     t.index ["postal_code", "suburb", "neighbourhood", "city", "province", "country"], name: "uniq_index", unique: true
+    t.index ["postal_code"], name: "index_locations_on_postal_code"
+    t.index ["province"], name: "index_locations_on_province"
+    t.index ["suburb"], name: "index_locations_on_suburb"
   end
 
   create_table "mandatory_charges", force: :cascade do |t|

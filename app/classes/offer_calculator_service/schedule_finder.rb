@@ -19,7 +19,7 @@ module OfferCalculatorService
 
     def longest_trucking_time(hubs)
       return 0 unless @shipment.has_pre_carriage?
-
+      binding.pry
       google_directions = GoogleDirections.new(
         @shipment.pickup_address.lat_lng_string,
         @shipment.pickup_address.furthest_hub(hubs[:origin]).lat_lng_string,

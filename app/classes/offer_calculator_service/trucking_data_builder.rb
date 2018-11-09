@@ -37,7 +37,7 @@ module OfferCalculatorService
         address.lat_lng_string,
         hub.lat_lng_string,
         @shipment.desired_start_date.to_i
-      ).distance_in_km
+      ).distance_in_km || 0
     end
 
     def data_for_trucking_charges(trucking_pricings, distance)

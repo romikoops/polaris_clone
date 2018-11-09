@@ -26,6 +26,7 @@ module OfferCalculatorService
 
       { origin: 'pre', destination: 'on' }.each do |target, carriage|
         next unless @shipment.has_carriage?(carriage)
+        binding.pry
         address = Address.create_from_raw_params!(address_params(target))
         raise_trucking_address_error(target) if trucking_address_invalid?(address)
         @shipment.trucking["#{carriage}_carriage"]['address_id'] = address.id

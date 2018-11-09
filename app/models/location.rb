@@ -1,23 +1,18 @@
 # frozen_string_literal: true
 
 class Location < ApplicationRecord
+  include PgSearch
   # validates :postal_code, :city, :province, :country, presence: true
   validates :postal_code, uniqueness: {
     scope:   %i(neighbourhood city province country),
     message: ->(obj, _) { "is a duplicate for the names: #{obj.names.log_format}" }
   }
-  filterrific(
-    default_filter_params: { search_locations: '' },
-    available_filters: %i(
-      search_locations
-    )
-  )
 
-  scope :search_locations, lambda { |query|
-    where(
-      'postal_code ILIKE ? OR neighbourhood ILIKE ? OR suburb ILIKE ? OR city ILIKE ?',
-       "%#{query}%", "%#{query}%", "%#{query}%", "%#{query}%")
-  }
+  pg_search_scope :autocomplete,
+                  :against => [:postal_code, :neighbourhood, :city, :province, :country],
+                  :using => {
+                    :tsearch => {:prefix => true}
+                  }
 
   def self.find_by_coordinates(lat:, lng:)
     where('ST_Contains(bounds, ST_Point(:lng, :lat))', lat: lat, lng: lng).first
@@ -44,6 +39,10 @@ class Location < ApplicationRecord
 
   def description
     names.compact.join(', ')
+  end
+
+  def geojson
+    RGeo::GeoJSON.encode(RGeo::GeoJSON::Feature.new(bounds))
   end
 
   def self.find_by_coordinates(lat, lng)

@@ -72,6 +72,10 @@ class ShipmentLocationBox extends Component {
         origin: {},
         destination: {}
       },
+      locationData: {
+        origin: {},
+        destination: {}
+      },
       showModal: false,
       addressFromModal: false,
       truckingOptions: {
@@ -124,6 +128,7 @@ class ShipmentLocationBox extends Component {
   }
 
   componentDidMount () {
+    
     this.initMap()
   }
 
@@ -274,7 +279,49 @@ class ShipmentLocationBox extends Component {
       }
     }
   }
+  setLocationMap (location, target) {
+    const {
+      map, locationData, directionsDisplay, directionsService, markers
+    } = this.state
 
+    const counterpart = target === 'origin' ? 'destination' : 'origin'
+    if (locationData[target].title !== undefined) {
+      map.data.remove(locationData[target][0])
+    }
+    
+    const targetKml = map.data.addGeoJson(location.geojson)
+    locationData[target] = targetKml
+    const bounds = new this.props.gMaps.LatLngBounds()
+    const lats = []
+    const lngs = []
+    targetKml.forEach((feature) => {
+      feature.getGeometry().forEachLatLng((latlng) => {
+        bounds.extend(latlng)
+        lats.push(latlng.lat())
+        lngs.push(latlng.lng())
+      })
+    })
+    const latLng = routeHelpers.centerFromGeoJson(lats, lngs)
+    this.setMarker(latLng, location.city, target)
+    
+    this.setState({ locationData })
+    map.fitBounds(bounds)
+
+    if (this.state.speciality === 'truck' && markers[counterpart].title && latLng) {
+      directionsDisplay.setMap(map)
+      const request = {
+        [target]: latLng,
+        [counterpart]: markers[counterpart].getPosition(),
+        travelMode: 'DRIVING'
+      }
+      directionsService.route(request, (result, status) => {
+        if (status === 'OK') {
+          directionsDisplay.setDirections(result)
+        }
+      })
+    }
+    return latLng
+  }
   setMarker (address, name, target) {
     const {
       markers, map, directionsDisplay, directionsService
@@ -288,13 +335,13 @@ class ShipmentLocationBox extends Component {
     if (target === 'origin') {
       icon = {
         url: colourSVG('location', theme),
-        anchor: new this.props.gMaps.Point(18, 18),
+        anchor: new this.props.gMaps.Point(18, 36),
         scaledSize: new this.props.gMaps.Size(36, 36)
       }
     } else {
       icon = {
         url: colourSVG('flag', theme),
-        anchor: new this.props.gMaps.Point(18, 18),
+        anchor: new this.props.gMaps.Point(10, 25),
         scaledSize: new this.props.gMaps.Size(36, 36)
       }
     }
@@ -444,16 +491,20 @@ class ShipmentLocationBox extends Component {
   handleLocationChange (location, target) {
     this.changeAddressFormVisibility(target, true)
 
-    this.setMarker(
-      {
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng()
-      },
-      place.name,
+    const latLng = this.setLocationMap(
+      location,
       target
     )
+    const address = {
+      zipCode: location.postal_code,
+      city: location.city,
+      country: location.country,
+      latitude: latLng.lat,
+      longitude: latLng.lng,
+      fullAddress: location.description
+    }
 
-    this.selectLocation(place, target)
+    this.selectLocation(address, target)
   }
   filterTruckTypesByHub (truckTypeObject) {
     this.setState({ truckTypeObject })
@@ -516,6 +567,7 @@ class ShipmentLocationBox extends Component {
   selectLocation (place, target) {
     this.setState({ fetchingtruckingAvailability: true }, () => {
       const counterpart = target === 'origin' ? 'destination' : 'origin'
+      const isLocationObj = (place.latitude && place.longitude)
 
       setTimeout(() => {
         if (!this.isOnFocus[target]) this.changeAddressFormVisibility(target, false)
@@ -523,8 +575,9 @@ class ShipmentLocationBox extends Component {
 
       const { shipmentData, filteredRouteIndexes } = this.props
       const { lookupTablesForRoutes, routes, shipment } = shipmentData
-      const lat = place.geometry.location.lat()
-      const lng = place.geometry.location.lng()
+
+      const lat = isLocationObj ? place.latitude : place.geometry.location.lat()
+      const lng = isLocationObj ? place.longitude : place.geometry.location.lng()
 
       const tenantId = shipment.tenant_id
       const loadType = shipment.load_type
@@ -584,10 +637,14 @@ class ShipmentLocationBox extends Component {
             }, () => this.prepForSelect(target))
             this.props.handleSelectLocation(target, this.state[`${target}FieldsHaveErrors`])
             this.props.setNotesIds(nexusIds, target)
-
-            addressFromPlace(place, this.props.gMaps, this.state.map, (address) => {
-              this.props.setTargetAddress(target, { ...address, nexusIds })
-            })
+            if (isLocationObj) {
+              this.props.setTargetAddress(target, { ...place, nexusIds })
+            } else {
+              addressFromPlace(place, this.props.gMaps, this.state.map, (address) => {
+                this.props.setTargetAddress(target, { ...address, nexusIds })
+              })
+            }
+            
           }
 
           this.setState({
@@ -671,6 +728,7 @@ class ShipmentLocationBox extends Component {
       destination: shipment.destination.fullAddress || ''
     }
     if (newState.oSelect && newState.oSelect.label && shipment.origin.nexus_id) {
+      debugger
       this.state.map
         ? this.setOriginNexus(newState.oSelect)
         : setTimeout(() => {
@@ -805,7 +863,7 @@ class ShipmentLocationBox extends Component {
         indexesToUse,
         indexes
       )
-
+      // debugger
       let fieldsHaveErrors = false
       if (targetTrucking && newFilteredRouteIndexes.length === 0) {
         newFilteredRouteIndexes = filteredRouteIndexes
@@ -1071,6 +1129,7 @@ class ShipmentLocationBox extends Component {
           input={this.state.autoText.origin}
           hasErrors={originFieldsHaveErrors}
           handlePlaceSelect={place => this.handlePlaceChange(place, 'origin')}
+          handleLocationSelect={place => this.handleLocationChange(place, 'origin')}
         />
       </div>
     )
@@ -1194,6 +1253,7 @@ class ShipmentLocationBox extends Component {
             map={this.state.map}
             input={this.state.autoText.destination}
             handlePlaceSelect={place => this.handlePlaceChange(place, 'destination')}
+            handleLocationSelect={place => this.handleLocationChange(place, 'destination')}
           />
         </div>
       </div>
