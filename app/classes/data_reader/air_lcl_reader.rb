@@ -4,29 +4,26 @@ module DataReader
   class AirLclReader < BaseReader
     private
 
-    def headers_valid?(sheet_name, headers)
-      valid_headers = %i(
-        effective_date
-        expiration_date
-        customer_email
-        origin
-        destination
-        carrier
-        service_level
-        transit_time
-        range_min
-        range_max
-        wm_ratio
-        currency
-        rate_basis
-        rate_min
-        rate
-        hw_rate_basis
-        hw_threshold
-      )
+    def headers_valid?(_sheet_name, headers)
+      valid_static_headers = %i(effective_date
+                                expiration_date
+                                customer_email
+                                origin
+                                destination
+                                carrier
+                                service_level
+                                transit_time
+                                range_min
+                                range_max
+                                wm_ratio
+                                currency
+                                rate_basis
+                                rate_min
+                                rate
+                                hw_rate_basis
+                                hw_threshold)
 
-      # Order needs to be maintained in order to be valid
-      valid_static_headers.each_with_index.map { |el, i| el == headers[i] }.all?
+      valid_static_headers == headers
     end
 
     def build_row_obj(headers, parsed_row)
