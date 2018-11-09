@@ -27,7 +27,7 @@ module DataInserter
       @should_generate_trips ||= options[:should_generate_trips] || false
     end
 
-    def valid?(_data)
+    def data_valid?(_data)
       # TODO: Implement validation
       true
     end

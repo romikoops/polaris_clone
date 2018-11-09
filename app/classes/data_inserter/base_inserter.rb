@@ -33,7 +33,7 @@ module DataInserter
     end
 
     def perform
-      raise StandardError, "The data doesn't contain the correct format!" unless valid?(data)
+      raise StandardError, "The data doesn't contain the correct format!" unless data_valid?(data)
     end
 
     private
@@ -44,7 +44,7 @@ module DataInserter
       raise NotImplementedError, "This method must be implemented in #{self.class.name}."
     end
 
-    def valid?(_data)
+    def data_valid?(_data)
       raise NotImplementedError, "This method must be implemented in #{self.class.name}."
     end
   end

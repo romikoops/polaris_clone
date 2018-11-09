@@ -2,24 +2,26 @@
 
 module DataReader
   class BaseReader
-    attr_reader :tenant, :xlsx, :sheets_data
+    attr_reader :xlsx, :sheets_data
 
-    def initialize(tenant:, path:)
-      @tenant = tenant
+    private
+
+    attr_reader :data_extraction_method
+
+    public
+
+    def initialize(path:)
       @xlsx = open_spreadsheet_file(path)
       @sheets_data = {}
+      @data_extraction_method = nil
     end
 
     def perform
       @xlsx.each_with_pagename do |sheet_name, sheet_data|
-        # Parse headers (first row) and validate them
         headers = parse_headers(sheet_data.first)
-        begin
-          validate_headers(sheet_name, headers)
-        rescue StandardError => e
-          puts e
-          break
-        end
+        determine_data_extraction_method(headers)
+
+        raise StandardError, "The headers of sheet \"#{sheet_name}\" are not valid." unless headers_valid?(headers)
 
         # Parse all but first row
         rows_data = []
@@ -28,7 +30,7 @@ module DataReader
           rows_data << build_row_obj(headers, parsed_row)
         end
 
-        @sheets_data[sheet_name] = rows_data
+        @sheets_data[sheet_name] = restructure_rows_data(rows_data)
       end
 
       @sheets_data
@@ -41,6 +43,10 @@ module DataReader
       Roo::Spreadsheet.open(path)
     end
 
+    def determine_data_extraction_method(_headers)
+      raise NotImplementedError, "This method must be implemented in #{self.class.name}."
+    end
+
     def parse_headers(header_row)
       header_row.map! do |el|
         el.downcase!
@@ -49,7 +55,7 @@ module DataReader
       end
     end
 
-    def validate_headers(_sheet_name, _headers)
+    def headers_valid?(_headers)
       raise NotImplementedError, "This method must be implemented in #{self.class.name}."
     end
 
@@ -58,7 +64,11 @@ module DataReader
       row_data.map! { |el| el.is_a?(String) ? el.strip : el }
     end
 
-    def build_row_obj(_headers, _parsed_row)
+    def build_row_obj(headers, parsed_row)
+      headers.zip(parsed_row).to_h
+    end
+
+    def restructure_rows_data(_rows_data)
       raise NotImplementedError, "This method must be implemented in #{self.class.name}."
     end
   end

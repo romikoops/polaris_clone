@@ -4,7 +4,7 @@ module DataReader
   class OceanLclReader < BaseReader
     private
 
-    def validate_headers(sheet_name, headers)
+    def headers_valid?(sheet_name, headers)
       valid_headers = %i(
         effective_date
         expiration_date
@@ -26,8 +26,7 @@ module DataReader
       )
 
       # Order needs to be maintained in order to be valid
-      headers_are_valid = headers == valid_headers
-      raise StandardError, "The headers of sheet \"#{sheet_name}\" are not valid." unless headers_are_valid
+      valid_static_headers.each_with_index.map { |el, i| el == headers[i] }.all?
     end
 
     def build_row_obj(headers, parsed_row)

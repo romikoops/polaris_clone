@@ -5,46 +5,92 @@ module DataReader
     class OceanFclReader < DataReader::BaseReader
       private
 
-      def validate_headers(sheet_name, headers)
-        valid_static_headers = case sheet_name
-                               when 'Rate Sheet'
-                                 %i(effective_date
-                                    expiration_date
-                                    customer_email
-                                    origin
-                                    country_origin
-                                    destination
-                                    country_destination
-                                    mot
-                                    carrier
-                                    service_level
-                                    load_type
-                                    type
-                                    transit_time
-                                    currency)
-                               when 'Other Charges'
-                                 [] # for now, assign something ([]) that makes headers valid.
+      DYNAMIC_FEE_COLS_NO_RANGES_HEADERS = %i(effective_date
+                                              expiration_date
+                                              customer_email
+                                              origin
+                                              country_origin
+                                              destination
+                                              country_destination
+                                              mot
+                                              carrier
+                                              service_level
+                                              load_type
+                                              type
+                                              transit_time
+                                              currency).freeze
+
+      ONE_COL_FEE_AND_RANGES_HEADERS = %i(effective_date
+                                          expiration_date
+                                          customer_email
+                                          origin
+                                          country_origin
+                                          destination
+                                          country_destination
+                                          mot
+                                          carrier
+                                          service_level
+                                          load_type
+                                          type
+                                          range_min
+                                          range_max
+                                          currency
+                                          fee_code
+                                          fee_name
+                                          fee).freeze
+
+      def determine_data_extraction_method(headers)
+        @data_extraction_method = if headers.include?(:fee_code)
+                                    'one_col_fee_and_ranges'
+                                  else
+                                    'dynamic_fee_cols_no_ranges'
+                                  end
+      end
+
+      def headers_valid?(headers)
+        valid_static_headers = case data_extraction_method
+                               when 'dynamic_fee_cols_no_ranges'
+                                 DYNAMIC_FEE_COLS_NO_RANGES_HEADERS
+                               when 'one_col_fee_and_ranges'
+                                 ONE_COL_FEE_AND_RANGES_HEADERS
                                else
                                  [nil]
                                end
 
         # Order needs to be maintained in order to be valid
-        headers_are_valid = valid_static_headers.each_with_index.map { |el, i| el == headers[i] }.all?
-        raise StandardError, "The headers of sheet \"#{sheet_name}\" are not valid." unless headers_are_valid
+        valid_static_headers.each_with_index.map { |el, i| el == headers[i] }.all?
       end
 
-      def build_row_obj(headers, parsed_row)
-        # Seperate the fees into their own hash and nest them into result
-        ## Split headers and rows
-        standard_headers, fee_headers = headers.slice_after(:currency).to_a
-        split_index = standard_headers.length
-        row_until_fees = parsed_row[0...split_index]
-        row_just_fees = parsed_row[split_index..-1]
+      def restructure_with_dynamic_fee_cols_no_ranges(rows_data)
+        rows_data.map do |row_data|
+          # Put fees one level deeper under :fees key
+          standard_keys, fee_keys = row_data.keys.slice_after(:currency).to_a
+          standard_part = row_data.slice(*standard_keys)
+          fee_part = row_data.slice(*fee_keys)
 
-        ## Build hash objects, and merge them
-        standard_part = standard_headers.zip(row_until_fees).to_h
-        fee_part = { fees: fee_headers.zip(row_just_fees).to_h }
-        standard_part.merge(fee_part)
+          standard_part.merge(fees: fee_part)
+        end
+      end
+
+      def restructure_with_one_col_fee_and_ranges(rows_data)
+        rows_data.map do |row_data|
+          if row_data[:range_min] && row_data[:range_max]
+            # TODO!!!!!!!
+          else
+            row_data
+          end
+        end
+      end
+
+      def restructure_rows_data(rows_data)
+        case data_extraction_method
+        when 'dynamic_fee_cols_no_ranges'
+          restructure_with_dynamic_fee_cols_no_ranges(rows_data)
+        when 'one_col_fee_and_ranges'
+          restructure_with_one_col_fee_and_ranges(rows_data)
+        else
+          []
+        end
       end
     end
   end
