@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+      "module": "commonjs",
+      "target": "es6",
+      "jsx": "react",
+      "checkJs": true,
+      "lib": [
+          "es2016",
+          "es2017",
+          "es2018",
+          "dom"
+      ]
+  },
+  "include":["app/components/**/*"]
+}
