@@ -65,7 +65,6 @@ class DocumentsDownloader extends React.Component {
 
   downloadFile () {
     const { downloadUrls, target } = this.props
-
     if (downloadUrls[target]) {
       window.location = downloadUrls[target]
     }
