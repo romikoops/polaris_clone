@@ -29,7 +29,7 @@ module Queries
       end
 
       def raw_query_with_truck_types
-        "
+        <<-SQL
           SELECT
             MAX(itineraries.id)                AS itinerary_id,
             MAX(itineraries.name)              AS itinerary_name,
@@ -48,10 +48,22 @@ module Queries
             MAX(origin_nexuses.longitude)      AS origin_longitude,
             MAX(destination_nexuses.latitude)  AS destination_latitude,
             MAX(destination_nexuses.longitude) AS destination_longitude,
-            STRING_AGG(DISTINCT origin_truck_type_availabilities.truck_type, ',')
-              AS origin_truck_types,
-            STRING_AGG(DISTINCT destination_truck_type_availabilities.truck_type, ',')
-              AS destination_truck_types
+            STRING_AGG(
+              DISTINCT CASE
+                WHEN origin_truck_type_availabilities.load_type = :load_type
+                  AND  origin_truck_type_availabilities.carriage = 'pre'
+                  THEN origin_truck_type_availabilities.truck_type
+              END,
+              ','
+            ) AS origin_truck_types,
+            STRING_AGG(
+              DISTINCT CASE
+                WHEN destination_truck_type_availabilities.load_type = :load_type
+                  AND  destination_truck_type_availabilities.carriage = 'on'
+                  THEN destination_truck_type_availabilities.truck_type
+              END,
+              ','
+            ) AS destination_truck_types
           FROM itineraries
           JOIN stops AS origin_stops
             ON itineraries.id = origin_stops.itinerary_id
@@ -77,26 +89,12 @@ module Queries
                destination_truck_type_availabilities.id
           WHERE itineraries.id IN (:itinerary_ids)
           AND   origin_stops.index < destination_stops.index
-          AND (
-            origin_truck_type_availabilities.id IS NULL
-            OR (
-              origin_truck_type_availabilities.load_type      = :load_type
-              AND   origin_truck_type_availabilities.carriage = 'pre'
-            )
-          )
-          AND (
-            destination_truck_type_availabilities.id IS NULL
-            OR (
-              destination_truck_type_availabilities.load_type      = :load_type
-              AND   destination_truck_type_availabilities.carriage = 'on'
-            )
-          )
           GROUP BY origin_stops.id, destination_stops.id
-        "
+        SQL
       end
 
       def raw_query_without_truck_types
-        "
+        <<-SQL
           SELECT
             itineraries.id                AS itinerary_id,
             itineraries.name              AS itinerary_name,
@@ -130,7 +128,7 @@ module Queries
             ON destination_nexuses.id = destination_hubs.nexus_id
           WHERE itineraries.id IN (:itinerary_ids)
           AND   origin_stops.index < destination_stops.index
-        "
+        SQL
       end
     end
   end
