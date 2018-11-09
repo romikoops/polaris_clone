@@ -100,7 +100,8 @@
         "import": "optional",
         "export": "mandatory"
       }
-    }
+    },
+    "pdf_remarks": ""
   },
   "other_data": {
     "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"],
@@ -207,7 +208,8 @@
         "import": "optional",
         "export": "optional"
       }
-    }
+    },
+    "pdf_remarks": ""
   },
   "other_data": {
     "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"]
@@ -296,7 +298,8 @@
         "import": "disabled",
         "export": "optional"
       }
-    }
+    },
+    "pdf_remarks": ""
   },
   "other_data": {
     "cargo_item_types": "all"
@@ -384,7 +387,8 @@
         "import": "optional",
         "export": "optional"
       }
-    }
+    },
+    "pdf_remarks": ""
   },
   "other_data": {
     "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"]
@@ -489,7 +493,8 @@
         "import": "optional",
         "export": "optional"
       }
-    }
+    },
+    "pdf_remarks": ""
   },
   "other_data": {
     "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"],
@@ -595,7 +600,8 @@
         "import": "mandatory",
         "export": "mandatory"
       }
-    }
+    },
+    "pdf_remarks": ""
   },
   "other_data": {
     "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"]
@@ -681,6 +687,7 @@
         "export": "mandatory"
       }
     },
+    "pdf_remarks": "",
     "hide_grand_total": true,
     "hide_sub_totals": true
   },
@@ -776,7 +783,8 @@
         "import": "optional",
         "export": "optional"
       }
-    }
+    },
+    "pdf_remarks": ""
   },
   "other_data": {
     "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"],
@@ -951,6 +959,7 @@
         "export": "mandatory"
       }
     },
+    "pdf_remarks": "",
     "hide_grand_total": true,
     "hide_sub_totals": true,
     "translation_overrides": {
@@ -1072,7 +1081,8 @@
         "import": "optional",
         "export": "mandatory"
       }
-    }
+    },
+    "pdf_remarks": ""
   },
   "other_data": {
     "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"],
