@@ -22,7 +22,8 @@ exports[`displayOnly is true 1`] = `
       className="flex-60 layout-row layout-align-center-center"
     >
       <p
-        className="flex-none"
+        className="flex-none pointy"
+        onClick={[Function]}
       >
         <Truncate
           ellipsis="…"
@@ -90,7 +91,8 @@ exports[`multiple is true 1`] = `
       className="flex-60 layout-row layout-align-center-center"
     >
       <p
-        className="flex-none"
+        className="flex-none pointy"
+        onClick={[Function]}
       >
         <Truncate
           ellipsis="…"
@@ -180,7 +182,8 @@ exports[`shallow render 1`] = `
       className="flex-60 layout-row layout-align-center-center"
     >
       <p
-        className="flex-none"
+        className="flex-none pointy"
+        onClick={[Function]}
       >
         <Truncate
           ellipsis="…"
@@ -275,7 +278,8 @@ exports[`theme is falsy 1`] = `
       className="flex-60 layout-row layout-align-center-center"
     >
       <p
-        className="flex-none"
+        className="flex-none pointy"
+        onClick={[Function]}
       >
         <Truncate
           ellipsis="…"
@@ -374,7 +378,8 @@ exports[`viewer is true 1`] = `
       className="flex-60 layout-row layout-align-center-center"
     >
       <p
-        className="flex-none"
+        className="flex-none pointy"
+        onClick={[Function]}
       >
         <Truncate
           ellipsis="…"
