@@ -3,7 +3,7 @@
 namespace :db do
   APP_ROOT = Pathname.new(File.expand_path('../../../', __dir__))
   SEED_FILE = APP_ROOT.join('tmp/full_anon.sqlc')
-  KEYFILE = File.join(ENV['HOME'], '.gcloud_developer.json')
+  KEYFILE = File.join(ENV.fetch('HOME', ''), '.gcloud_developer.json')
 
   desc 'Import latest Development Seed database'
   task import: %w(db:import:fetch db:import:restore) do
