@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_17_080328) do
+ActiveRecord::Schema.define(version: 2018_11_09_123344) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -131,10 +131,10 @@ ActiveRecord::Schema.define(version: 2018_10_17_080328) do
     t.integer "user_id"
     t.integer "location_id"
     t.string "company_name"
-    t.string "first_name"
-    t.string "last_name"
-    t.string "phone"
-    t.string "email"
+    t.string "first_name", comment: "MASKED WITH FUNCTION anon.random_first_name()"
+    t.string "last_name", comment: "MASKED WITH FUNCTION anon.random_last_name()"
+    t.string "phone", comment: "MASKED WITH FUNCTION anon.random_phone()"
+    t.string "email", comment: "MASKED WITH FUNCTION anon.random_email()"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "alias", default: false
@@ -449,8 +449,8 @@ ActiveRecord::Schema.define(version: 2018_10_17_080328) do
     t.integer "itinerary_id"
     t.integer "hub_id"
     t.integer "trucking_pricing_id"
-    t.string "body"
-    t.string "header"
+    t.string "body", comment: "MASKED WITH CONSTANT \"\""
+    t.string "header", comment: "MASKED WITH CONSTANT \"\""
     t.string "level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -782,12 +782,12 @@ ActiveRecord::Schema.define(version: 2018_10_17_080328) do
     t.string "unconfirmed_email"
     t.string "nickname"
     t.string "image"
-    t.string "email"
+    t.string "email", comment: "MASKED WITH FUNCTION anon.random_email()"
     t.integer "tenant_id"
     t.string "company_name"
-    t.string "first_name"
-    t.string "last_name"
-    t.string "phone"
+    t.string "first_name", comment: "MASKED WITH FUNCTION anon.random_first_name()"
+    t.string "last_name", comment: "MASKED WITH FUNCTION anon.random_last_name()"
+    t.string "phone", comment: "MASKED WITH FUNCTION anon.random_phone()"
     t.json "tokens"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
