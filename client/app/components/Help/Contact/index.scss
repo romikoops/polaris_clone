@@ -1,11 +1,10 @@
 :local {
   .body_wrapper {
     border-radius: 5px;
-
     width: 600px;
   }
   .help_content {
-    padding: 15px;
+    padding: 0px 15px 15px 15px;
   }
   .help_header {
     background: darkslategray;
@@ -13,5 +12,8 @@
   }
   .email_row {
     margin: 5px 0;
+  }
+  .email_box a {
+    color: #4F4F4F;
   }
 }
