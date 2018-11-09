@@ -11,5 +11,5 @@ export function stackableGoodsCondition (state) {
 }
 
 export default function getOffersBtnIsActive (state) {
-  return noDangerousGoodsCondition(state) && stackableGoodsCondition(state)
+  return noDangerousGoodsCondition(state) && stackableGoodsCondition(state) && !state.excessWeightText
 }

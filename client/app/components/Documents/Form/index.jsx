@@ -19,6 +19,11 @@ class DocumentsForm extends React.Component {
 
     return response.json()
   }
+
+  static downloadFile (url) {
+    window.location = url
+  }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -129,7 +134,7 @@ class DocumentsForm extends React.Component {
     const tooltipId = v4()
     const errorStyle = this.state.error ? styles.error : ''
     const fileName = doc ? (
-      <p className="flex-none">
+      <p className="flex-none pointy" onClick={() => DocumentsForm.downloadFile(doc.signed_url)}>
         <Truncate lines={1}>{doc.text} </Truncate>
       </p>
     ) : (

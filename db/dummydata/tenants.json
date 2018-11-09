@@ -686,7 +686,16 @@
   },
   "other_data": {
     "cargo_item_types": ["Pallet", "Carton (only palletized)", "Crate", "Stack", "Drum (only palletized)", "Skid"],
-    "incoterms": ["EXW", "FCA", "FOB", "FAS"]
+    "incoterms": ["EXW", "FCA", "FOB", "FAS"],
+    "max_aggregate_dimensions": {
+      "truck_carriage": {
+        "dimension_x": 0,
+        "dimension_y": 0,
+        "dimension_z": 0,
+        "payload_in_kg": 3500,
+        "chargeable_weight": 3500
+      }
+    }
   }
 }, {
   "theme": {
@@ -954,7 +963,16 @@
   },
   "other_data": {
     "cargo_item_types": ["Pallet", "Carton (only palletized)", "Crate", "Stack", "Drum (only palletized)", "Skid"],
-    "incoterms": ["EXW", "FCA", "FOB", "FAS"]
+    "incoterms": ["EXW", "FCA", "FOB", "FAS"],
+    "max_aggregate_dimensions": {
+      "truck_carriage": {
+        "dimension_x": 0,
+        "dimension_y": 0,
+        "dimension_z": 0,
+        "payload_in_kg": 3500,
+        "chargeable_weight": 3500
+      }
+    }
   }
 }, {
   "theme": {

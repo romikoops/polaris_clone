@@ -347,7 +347,7 @@ export class ShipmentDetails extends Component {
       destination: obj.destination,
       has_on_carriage: !!obj.trucking.on_carriage.truck_type,
       has_pre_carriage: !!obj.trucking.pre_carriage.truck_type,
-      shipment: { ...prevState.shipment, trucking: obj.trucking },
+      shipment: { ...prevState.shipment, trucking: obj.trucking, ...obj },
       incoterm: obj.incoterm,
       routeSet: true,
       prevRequest: req,
@@ -468,10 +468,10 @@ export class ShipmentDetails extends Component {
     }
   }
 
-  updatedExcessChargeableWeightText (cargoItems) {
+  updatedExcessChargeableWeightText (cargoItems, state) {
     const { t } = this.props
     const { maxAggregateDimensions } = this.props.shipmentData
-    const { availableMotsForRoute } = this.state
+    const { availableMotsForRoute } = state
     if (
       !maxAggregateDimensions.air ||
       (availableMotsForRoute.length && availableMotsForRoute.every(mot => mot === 'air'))
@@ -497,31 +497,63 @@ export class ShipmentDetails extends Component {
     return excessChargeableWeightText
   }
 
+  updatedExcessWeightText (cargoItems, state) {
+    const { t, shipmentData } = this.props
+    const { maxAggregateDimensions } = shipmentData
+
+    if (!maxAggregateDimensions.truckCarriage) return ''
+    if (!(state.has_on_carriage || state.has_pre_carriage)) return ''
+
+    const totalWeight = cargoItems.reduce((sum, cargoItem) => (
+      sum + +cargoItem.payload_in_kg * cargoItem.quantity
+    ), 0)
+
+    let excessWeightText = ''
+    if (totalWeight > +maxAggregateDimensions.truckCarriage.payloadInKg) {
+      excessWeightText = `
+        ${t('cargo:excessWeight')}
+        (${totalWeight.toFixed(1)} ${t('acronym:kg')}) ${t('cargo:exceedsMaximum')}
+        (${maxAggregateDimensions.truckCarriage.payloadInKg} ${t('acronym:kg')}).
+      `
+    } else {
+      excessWeightText = ''
+    }
+
+    return excessWeightText
+  }
+
   handleCargoItemChange (event, hasError, divRef) {
     const { name, value } = event.target
     const [index, suffixName] = name.split('-')
-    const { cargoItems, cargoItemsErrors } = this.state
-    const { scope } = this.props.tenant.data
+    this.setState((prevState) => {
+      const { cargoItems, cargoItemsErrors } = prevState
+      const { scope } = this.props.tenant.data
 
-    if (!cargoItems[index] || !cargoItemsErrors[index]) return
-    if (typeof value === 'boolean') {
-      cargoItems[index][suffixName] = value
-    } else if (scope.consolidate_cargo && ['collectiveWeight', 'quantity'].includes(suffixName)) {
-      cargoItems[index] = ShipmentDetails.handleCollectiveWeightChange(cargoItems[index], suffixName, value)
-    } else {
-      cargoItems[index][suffixName] = value ? +value : 0
-    }
-    const adjustedSuffix = suffixName === 'collectiveWeight' ? 'payload_in_kg' : suffixName
+      if (!cargoItems[index] || !cargoItemsErrors[index]) return {}
+      if (typeof value === 'boolean') {
+        cargoItems[index][suffixName] = value
+      } else if (scope.consolidate_cargo && ['collectiveWeight', 'quantity'].includes(suffixName)) {
+        cargoItems[index] = ShipmentDetails.handleCollectiveWeightChange(cargoItems[index], suffixName, value)
+      } else {
+        cargoItems[index][suffixName] = value ? +value : 0
+      }
+      const adjustedSuffix = suffixName === 'collectiveWeight' ? 'payload_in_kg' : suffixName
 
-    this.updateAirMaxDimensionsTooltips(value, divRef, adjustedSuffix)
+      this.updateAirMaxDimensionsTooltips(value, divRef, adjustedSuffix)
 
-    const excessChargeableWeightText =
-      this.updatedExcessChargeableWeightText(cargoItems)
+      const excessChargeableWeightText =
+        this.updatedExcessChargeableWeightText(cargoItems, prevState)
 
-    if (hasError !== undefined) {
-      cargoItemsErrors[index][adjustedSuffix] = hasError
-    }
-    this.setState({ cargoItems, cargoItemsErrors, excessChargeableWeightText })
+      const excessWeightText = this.updatedExcessWeightText(cargoItems, prevState)
+
+      if (hasError !== undefined) {
+        cargoItemsErrors[index][adjustedSuffix] = hasError
+      }
+
+      return {
+        cargoItems, cargoItemsErrors, excessChargeableWeightText, excessWeightText
+      }
+    })
   }
 
   handleContainerChange (event, hasError) {
@@ -635,8 +667,8 @@ export class ShipmentDetails extends Component {
         return
       }
     } else {
-      const { shipment } = this.state
-      const loadType = camelize(shipment.load_type)
+      const rawLoadType = this.props.shipmentData.shipment.load_type
+      const loadType = camelize(rawLoadType)
       const errorIdx = ShipmentDetails.errorsAt(this.state[`${loadType}sErrors`])
 
       if (errorIdx > -1) {
@@ -971,6 +1003,7 @@ export class ShipmentDetails extends Component {
                   id="aggregated_cargo"
                   name="aggregated_cargo"
                   checked={this.state.aggregated}
+                  tabIndex="-1"
                   onChange={() => this.toggleAggregatedCargo()}
                 />
                 <h3
@@ -1103,9 +1136,20 @@ export class ShipmentDetails extends Component {
                 />
               </div>
               <div className="flex-100 layout-row layout-align-end">
-                <p style={{ fontSize: '14px', width: '317px' }}>
-                  { this.state.excessChargeableWeightText }
-                </p>
+                {
+                  this.state.excessChargeableWeightText && (
+                    <p style={{ fontSize: '14px', width: '317px' }}>
+                      { this.state.excessChargeableWeightText }
+                    </p>
+                  )
+                }
+                {
+                  this.state.excessWeightText && (
+                    <p style={{ fontSize: '14px', width: '317px', color: 'rgb(211, 104, 80)' }}>
+                      { this.state.excessWeightText }
+                    </p>
+                  )
+                }
               </div>
             </div>
           </div>

@@ -1,6 +1,6 @@
 variables:
   BUNDLE_GITLAB__COM: "gitlab-ci-token:${CI_JOB_TOKEN}"
-  AUTO_DEVOPS_DOMAIN: itsmycargo.tech
+  AUTO_DEVOPS_DOMAIN: itsmycargo.shop
 
 .dedicated-runner: &dedicated-runner
   tags:
@@ -315,7 +315,7 @@ stop_review:
   }
 
   function delete() {
-    if [[ -n "$(helm ls --failed --deleted -q "^$CI_ENVIRONMENT_SLUG$")" ]]; then
+    if [[ -n "$(helm ls --all --short "^$CI_ENVIRONMENT_SLUG$")" ]]; then
       helm delete --purge "$name"
     fi
 

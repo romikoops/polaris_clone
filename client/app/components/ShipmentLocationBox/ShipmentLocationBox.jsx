@@ -18,6 +18,7 @@ import routeHelpers from './routeHelpers'
 import TruckingTooltip from './TruckingTooltip'
 import TruckingDetails from '../TruckingDetails/TruckingDetails'
 import Autocomplete from './Autocomplete'
+import removeTabIndex from './removeTabIndex'
 
 const colourSVG = colorSVG
 const mapStyles = mapStyling
@@ -43,7 +44,6 @@ const StyledSelect = styled(Select)`
     border: 1px solid #f2f2f2;
   }
   .Select-placeholder {
-    background-color: ${props => backgroundColor(props)};
     ${props => placeholderColorOverwrite(props)};
   }
   .Select-option {
@@ -303,7 +303,8 @@ class ShipmentLocationBox extends Component {
       map,
       title: name,
       icon,
-      optimized: false
+      optimized: false,
+      keyboard: false
     })
     markers[target] = marker
     if (markers.origin.title !== undefined) {
@@ -383,10 +384,13 @@ class ShipmentLocationBox extends Component {
       zoom: 5,
       mapTypeId: this.props.gMaps.MapTypeId.ROADMAP,
       disableDefaultUI: true,
-      styles: mapStyles
+      styles: mapStyles,
+      keyboard: false
     }
 
     const map = new this.props.gMaps.Map(document.getElementById('map'), mapsOptions)
+    removeTabIndex(map, this.props.gMaps)
+
     let directionsDisplay = false
     let directionsService = false
     if (this.state.speciality === 'truck') {
@@ -813,7 +817,7 @@ class ShipmentLocationBox extends Component {
 
       const truckingBoolean = !newFilteredRouteIndexes.some(i => routes[i][counterpart].truckTypes.length > 0)
 
-      const carriage = target === 'destination' ? this.props.has_pre_carriage : this.props.has_on_carriage
+      const carriage = target === 'destination' ? this.props.has_on_carriage : this.props.has_pre_carriage
 
       if (targetTrucking && carriage) this.prepTruckTypes(newFilteredRoutes, target)
       if (newFilteredRouteIndexes.length === 0) {
@@ -968,6 +972,7 @@ class ShipmentLocationBox extends Component {
             value={origin.street || ''}
             autoComplete="off"
             placeholder={t('user:street')}
+            disabled={!this.state.showOriginFields}
           />
           <input
             id="not-auto"
@@ -983,6 +988,7 @@ class ShipmentLocationBox extends Component {
             value={origin.number || ''}
             autoComplete="off"
             placeholder={t('user:number')}
+            disabled={!this.state.showOriginFields}
           />
           <input
             name="origin-zipCode"
@@ -997,6 +1003,7 @@ class ShipmentLocationBox extends Component {
             value={origin.zipCode || ''}
             autoComplete="off"
             placeholder={t('user:postalCode')}
+            disabled={!this.state.showOriginFields}
           />
           <input
             name="origin-city"
@@ -1011,6 +1018,7 @@ class ShipmentLocationBox extends Component {
             value={origin.city || ''}
             autoComplete="off"
             placeholder={t('user:city')}
+            disabled={!this.state.showOriginFields}
           />
           <input
             name="origin-country"
@@ -1025,6 +1033,7 @@ class ShipmentLocationBox extends Component {
             value={origin.country || ''}
             autoComplete="off"
             placeholder={t('user:country')}
+            disabled={!this.state.showOriginFields}
           />
           <div className="flex-100 layout-row layout-align-start-center">
             <div
@@ -1088,6 +1097,7 @@ class ShipmentLocationBox extends Component {
             value={destination.street || ''}
             autoComplete="off"
             placeholder={t('user:street')}
+            disabled={!this.state.showDestinationFields}
           />
           <input
             name="destination-number"
@@ -1102,6 +1112,7 @@ class ShipmentLocationBox extends Component {
             value={destination.number || ''}
             autoComplete="off"
             placeholder={t('user:number')}
+            disabled={!this.state.showDestinationFields}
           />
           <input
             name="destination-zipCode"
@@ -1115,6 +1126,7 @@ class ShipmentLocationBox extends Component {
             value={destination.zipCode || ''}
             autoComplete="off"
             placeholder={t('user:postalCode')}
+            disabled={!this.state.showDestinationFields}
           />
           <input
             name="destination-city"
@@ -1128,6 +1140,7 @@ class ShipmentLocationBox extends Component {
             value={destination.city || ''}
             autoComplete="off"
             placeholder={t('user:city')}
+            disabled={!this.state.showDestinationFields}
           />
           <input
             name="destination-country"
@@ -1141,6 +1154,7 @@ class ShipmentLocationBox extends Component {
             value={destination.country || ''}
             autoComplete="off"
             placeholder={t('user:country')}
+            disabled={!this.state.showDestinationFields}
           />
           <div className="flex-100 layout-row layout-align-start-center">
             <div
@@ -1271,6 +1285,7 @@ class ShipmentLocationBox extends Component {
                       className="flex-none ccb_pre_carriage"
                       id="has_pre_carriage"
                       name="has_pre_carriage"
+                      tabIndex="-1"
                       checked={this.props.has_pre_carriage}
                       onChange={this.handleTrucking}
                     /> : '' }
@@ -1316,6 +1331,7 @@ class ShipmentLocationBox extends Component {
                       className="flex-none ccb_on_carriage"
                       id="has_on_carriage"
                       name="has_on_carriage"
+                      tabIndex="-1"
                       checked={this.props.has_on_carriage}
                       onChange={this.handleTrucking}
                     /> : '' }

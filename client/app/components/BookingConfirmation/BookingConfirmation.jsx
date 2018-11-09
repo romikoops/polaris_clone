@@ -63,7 +63,8 @@ const INNER_WRAPPER_CELL = `${WRAP_ROW(100)} ${ALIGN_BETWEEN_START}`
 const ITINERARY =
   `${styles.shipment_card_itinerary} ${WRAP_ROW(100)} ${ALIGN_BETWEEN_CENTER}`
 const LAYOUT_WRAP = `${WRAP_ROW(100)} ${ALIGN_START_CENTER}`
-const MISSING_DOCS = `${ROW(25)} ${ALIGN_START_CENTER} ${styles.no_doc}`
+const UPLOADED_DOCS = `${ROW(35)} layout-wrap ${ALIGN_START} ${styles.uploaded_doc}`
+const MISSING_DOCS = `${ROW(35)} layout-wrap ${ALIGN_START} ${styles.no_doc}`
 
 const SHIPMENT_CARD = `${styles.shipment_card} ${WRAP_ROW(100)} ${ALIGN_BETWEEN_CENTER}`
 
@@ -552,10 +553,10 @@ class BookingConfirmation extends Component {
 
         <div className={getPanelStyle(collapser.documents)}>
           <div className={INNER_WRAPPER}>
-            <div className={LAYOUT_WRAP}>
+            <div className="flex-100 layout-row layout-wrap layout-align-start-start">
               {docView}
             </div>
-            <div className={LAYOUT_WRAP}>
+            <div className="flex-100 layout-row layout-wrap layout-align-start-start">
               {missingDocs}
             </div>
           </div>
@@ -741,20 +742,26 @@ function getDocs ({
   const docView = []
   const missingDocs = []
 
-  if (documents) {
-    documents.forEach((doc) => {
-      docChecker[doc.doc_type] = true
+  const uploadedDocs = documents.reduce((docObj, item) => {
+    docObj[item.doc_type] = docObj[item.doc_type] || []
+    docObj[item.doc_type].push(item.text)
 
-      docView.push(<div className={ROW(45)} style={{ padding: '10px' }}>
-        <DocumentsForm
-          theme={theme}
-          type={doc.doc_type}
-          dispatchFn={dispatchFn}
-          text={documentTypes[doc.doc_type]}
-          doc={doc}
-          viewer
-          deleteFn={deleteFn}
-        />
+    return docObj
+  }, {})
+  if (documents) {
+    Object.keys(uploadedDocs).forEach((key) => {
+      docChecker[key] = true
+
+      docView.push(<div className={UPLOADED_DOCS}>
+        <i className="fa fa-check flex-none" />
+        <div className="layout-row flex layout-wrap" style={{ marginBottom: '12px' }}>
+          <h4 className="flex-100 layout-row">{documentTypes[key]}</h4>
+          {uploadedDocs[key].map(text => (
+            <p className="flex-100 layout-row">
+              {text}
+            </p>
+          ))}
+        </div>
       </div>)
     })
   }
@@ -762,11 +769,10 @@ function getDocs ({
   Object.keys(docChecker).forEach((key) => {
     if (!docChecker[key]) {
       missingDocs.push(<div key={v4()} className={MISSING_DOCS}>
-        <div className={`flex-none layout-row ${ALIGN_CENTER}`}>
-          <i className="flex-none fa fa-ban" />
-        </div>
-        <div className="flex layout-align-start-center layout-row">
-          <p className="flex-none">{`${documentTypes[key]}: ${t('bookconf:notUploaded')}`}</p>
+        <i className="flex-none fa fa-ban" />
+        <div className="flex layout-wrap layout-row">
+          <h4 className="flex-100">{documentTypes[key]}</h4>
+          <p>{t('bookconf:notUploaded')}</p>
         </div>
       </div>)
     }

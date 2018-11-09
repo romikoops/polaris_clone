@@ -892,50 +892,48 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
           />
           <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
           >
             <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
+              className="flex-35 layout-row layout-wrap layout-align-start-start no_doc"
               key="RANDOM_KEY_24"
             >
+              <i
+                className="flex-none fa fa-ban"
+              />
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex layout-wrap layout-row"
               >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
+                <h4
+                  className="flex-100"
                 >
-                  Packing Sheet: Not Uploaded
+                  Packing Sheet
+                </h4>
+                <p>
+                  Not Uploaded
                 </p>
               </div>
             </div>
             <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
+              className="flex-35 layout-row layout-wrap layout-align-start-start no_doc"
               key="RANDOM_KEY_25"
             >
+              <i
+                className="flex-none fa fa-ban"
+              />
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex layout-wrap layout-row"
               >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
+                <h4
+                  className="flex-100"
                 >
-                  Commercial Invoice: Not Uploaded
+                  Commercial Invoice
+                </h4>
+                <p>
+                  Not Uploaded
                 </p>
               </div>
             </div>
@@ -2008,123 +2006,93 @@ exports[`props.shipmentData.documents is truthy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
           >
             <div
-              className="flex-45 layout-row"
-              style={
-                Object {
-                  "padding": "10px",
-                }
-              }
+              className="flex-35 layout-row layout-wrap layout-align-start-start uploaded_doc"
             >
-              <DocumentsForm
-                deleteFn={[Function]}
-                dispatchFn={[Function]}
-                displayOnly={false}
-                doc={
-                  Object {
-                    "doc_type": "FOO_DOC_TYPE",
-                    "id": 0,
-                  }
-                }
-                isRequired={false}
-                multiple={false}
-                t={[Function]}
-                text=""
-                theme={
-                  Object {
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                  }
-                }
-                tooltip=""
-                type="FOO_DOC_TYPE"
-                uploadFn={null}
-                viewer={true}
+              <i
+                className="fa fa-check flex-none"
               />
+              <div
+                className="layout-row flex layout-wrap"
+                style={
+                  Object {
+                    "marginBottom": "12px",
+                  }
+                }
+              >
+                <h4
+                  className="flex-100 layout-row"
+                />
+                <p
+                  className="flex-100 layout-row"
+                />
+              </div>
             </div>
             <div
-              className="flex-45 layout-row"
-              style={
-                Object {
-                  "padding": "10px",
-                }
-              }
+              className="flex-35 layout-row layout-wrap layout-align-start-start uploaded_doc"
             >
-              <DocumentsForm
-                deleteFn={[Function]}
-                dispatchFn={[Function]}
-                displayOnly={false}
-                doc={
-                  Object {
-                    "doc_type": "BAR_DOC_TYPE",
-                    "id": 1,
-                  }
-                }
-                isRequired={false}
-                multiple={false}
-                t={[Function]}
-                text=""
-                theme={
-                  Object {
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                  }
-                }
-                tooltip=""
-                type="BAR_DOC_TYPE"
-                uploadFn={null}
-                viewer={true}
+              <i
+                className="fa fa-check flex-none"
               />
+              <div
+                className="layout-row flex layout-wrap"
+                style={
+                  Object {
+                    "marginBottom": "12px",
+                  }
+                }
+              >
+                <h4
+                  className="flex-100 layout-row"
+                />
+                <p
+                  className="flex-100 layout-row"
+                />
+              </div>
             </div>
           </div>
           <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
           >
             <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
+              className="flex-35 layout-row layout-wrap layout-align-start-start no_doc"
               key="RANDOM_KEY_30"
             >
+              <i
+                className="flex-none fa fa-ban"
+              />
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex layout-wrap layout-row"
               >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
+                <h4
+                  className="flex-100"
                 >
-                  Packing Sheet: Not Uploaded
+                  Packing Sheet
+                </h4>
+                <p>
+                  Not Uploaded
                 </p>
               </div>
             </div>
             <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
+              className="flex-35 layout-row layout-wrap layout-align-start-start no_doc"
               key="RANDOM_KEY_31"
             >
+              <i
+                className="flex-none fa fa-ban"
+              />
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex layout-wrap layout-row"
               >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
+                <h4
+                  className="flex-100"
                 >
-                  Commercial Invoice: Not Uploaded
+                  Commercial Invoice
+                </h4>
+                <p>
+                  Not Uploaded
                 </p>
               </div>
             </div>
@@ -3317,50 +3285,48 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
           />
           <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
           >
             <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
+              className="flex-35 layout-row layout-wrap layout-align-start-start no_doc"
               key="RANDOM_KEY_39"
             >
+              <i
+                className="flex-none fa fa-ban"
+              />
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex layout-wrap layout-row"
               >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
+                <h4
+                  className="flex-100"
                 >
-                  Packing Sheet: Not Uploaded
+                  Packing Sheet
+                </h4>
+                <p>
+                  Not Uploaded
                 </p>
               </div>
             </div>
             <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
+              className="flex-35 layout-row layout-wrap layout-align-start-start no_doc"
               key="RANDOM_KEY_40"
             >
+              <i
+                className="flex-none fa fa-ban"
+              />
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex layout-wrap layout-row"
               >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
+                <h4
+                  className="flex-100"
                 >
-                  Commercial Invoice: Not Uploaded
+                  Commercial Invoice
+                </h4>
+                <p>
+                  Not Uploaded
                 </p>
               </div>
             </div>
@@ -4445,50 +4411,48 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
           />
           <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
           >
             <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
+              className="flex-35 layout-row layout-wrap layout-align-start-start no_doc"
               key="RANDOM_KEY_51"
             >
+              <i
+                className="flex-none fa fa-ban"
+              />
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex layout-wrap layout-row"
               >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
+                <h4
+                  className="flex-100"
                 >
-                  Packing Sheet: Not Uploaded
+                  Packing Sheet
+                </h4>
+                <p>
+                  Not Uploaded
                 </p>
               </div>
             </div>
             <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
+              className="flex-35 layout-row layout-wrap layout-align-start-start no_doc"
               key="RANDOM_KEY_52"
             >
+              <i
+                className="flex-none fa fa-ban"
+              />
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex layout-wrap layout-row"
               >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
+                <h4
+                  className="flex-100"
                 >
-                  Commercial Invoice: Not Uploaded
+                  Commercial Invoice
+                </h4>
+                <p>
+                  Not Uploaded
                 </p>
               </div>
             </div>
@@ -5571,50 +5535,48 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
           />
           <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
           >
             <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
+              className="flex-35 layout-row layout-wrap layout-align-start-start no_doc"
               key="RANDOM_KEY_45"
             >
+              <i
+                className="flex-none fa fa-ban"
+              />
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex layout-wrap layout-row"
               >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
+                <h4
+                  className="flex-100"
                 >
-                  Packing Sheet: Not Uploaded
+                  Packing Sheet
+                </h4>
+                <p>
+                  Not Uploaded
                 </p>
               </div>
             </div>
             <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
+              className="flex-35 layout-row layout-wrap layout-align-start-start no_doc"
               key="RANDOM_KEY_46"
             >
+              <i
+                className="flex-none fa fa-ban"
+              />
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex layout-wrap layout-row"
               >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
+                <h4
+                  className="flex-100"
                 >
-                  Commercial Invoice: Not Uploaded
+                  Commercial Invoice
+                </h4>
+                <p>
+                  Not Uploaded
                 </p>
               </div>
             </div>
@@ -6681,50 +6643,48 @@ exports[`shallow render 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
           />
           <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
           >
             <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
+              className="flex-35 layout-row layout-wrap layout-align-start-start no_doc"
               key="RANDOM_KEY_2"
             >
+              <i
+                className="flex-none fa fa-ban"
+              />
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex layout-wrap layout-row"
               >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
+                <h4
+                  className="flex-100"
                 >
-                  Packing Sheet: Not Uploaded
+                  Packing Sheet
+                </h4>
+                <p>
+                  Not Uploaded
                 </p>
               </div>
             </div>
             <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
+              className="flex-35 layout-row layout-wrap layout-align-start-start no_doc"
               key="RANDOM_KEY_3"
             >
+              <i
+                className="flex-none fa fa-ban"
+              />
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex layout-wrap layout-row"
               >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
+                <h4
+                  className="flex-100"
                 >
-                  Commercial Invoice: Not Uploaded
+                  Commercial Invoice
+                </h4>
+                <p>
+                  Not Uploaded
                 </p>
               </div>
             </div>
@@ -8112,50 +8072,48 @@ exports[`with cargo items 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
           />
           <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
           >
             <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
+              className="flex-35 layout-row layout-wrap layout-align-start-start no_doc"
               key="RANDOM_KEY_18"
             >
+              <i
+                className="flex-none fa fa-ban"
+              />
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex layout-wrap layout-row"
               >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
+                <h4
+                  className="flex-100"
                 >
-                  Packing Sheet: Not Uploaded
+                  Packing Sheet
+                </h4>
+                <p>
+                  Not Uploaded
                 </p>
               </div>
             </div>
             <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
+              className="flex-35 layout-row layout-wrap layout-align-start-start no_doc"
               key="RANDOM_KEY_19"
             >
+              <i
+                className="flex-none fa fa-ban"
+              />
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex layout-wrap layout-row"
               >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
+                <h4
+                  className="flex-100"
                 >
-                  Commercial Invoice: Not Uploaded
+                  Commercial Invoice
+                </h4>
+                <p>
+                  Not Uploaded
                 </p>
               </div>
             </div>
@@ -9501,50 +9459,48 @@ exports[`with containers 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
           />
           <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
           >
             <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
+              className="flex-35 layout-row layout-wrap layout-align-start-start no_doc"
               key="RANDOM_KEY_10"
             >
+              <i
+                className="flex-none fa fa-ban"
+              />
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex layout-wrap layout-row"
               >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
+                <h4
+                  className="flex-100"
                 >
-                  Packing Sheet: Not Uploaded
+                  Packing Sheet
+                </h4>
+                <p>
+                  Not Uploaded
                 </p>
               </div>
             </div>
             <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
+              className="flex-35 layout-row layout-wrap layout-align-start-start no_doc"
               key="RANDOM_KEY_11"
             >
+              <i
+                className="flex-none fa fa-ban"
+              />
               <div
-                className="flex-none layout-row layout-align-center-center"
+                className="flex layout-wrap layout-row"
               >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
+                <h4
+                  className="flex-100"
                 >
-                  Commercial Invoice: Not Uploaded
+                  Commercial Invoice
+                </h4>
+                <p>
+                  Not Uploaded
                 </p>
               </div>
             </div>

@@ -29,9 +29,9 @@ module ExcelTool
     end
 
     def create_tenant_vehicle(row, itinerary)
-      service_level = row[:service_level] ? row[:service_level] : "default"
+      service_level = row[:service_level] ? row[:service_level] : "standard"
       Vehicle.create_from_name(
-        service_level, itinerary.mode_of_transport, user.tenant_id)
+        service_level, itinerary.mode_of_transport, user.tenant_id, row[:carrier])
     end
     
     def _stats
@@ -64,7 +64,8 @@ module ExcelTool
         closing_date:  "CLOSING_DATE",
         eta:           "ETA",
         etd:           "ETD",
-        service_level: "SERVICE_LEVEL"
+        service_level: "SERVICE_LEVEL",
+        carrier:       'CARRIER'
       )
     end
 
@@ -79,11 +80,18 @@ module ExcelTool
     end
 
     def find_tenant_vehicle(row, itinerary)
-      TenantVehicle.find_by(
+      tv = TenantVehicle.find_by(
+        tenant_id:         user.tenant_id,
+        mode_of_transport: itinerary.mode_of_transport,
+        name:              row[:service_level],
+        carrier:          Carrier.find_by(name: row[:carrier])
+      )
+      tv ||= TenantVehicle.find_by(
         tenant_id:         user.tenant_id,
         mode_of_transport: itinerary.mode_of_transport,
         name:              row[:service_level]
       )
+      tv
     end
 
     def update_results_and_stats_hashes(row, itinerary)
