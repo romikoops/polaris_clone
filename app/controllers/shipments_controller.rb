@@ -126,9 +126,9 @@ class ShipmentsController < ApplicationController
       { contact: sc.contact, type: sc.contact_type, address: sc.contact.address } if sc.contact
     end
 
-    documents = shipment.documents.map do |doc|
+    documents = shipment.documents.select { |doc| doc.file.attached? }.map do |doc|
       doc.as_json.merge(
-        signed_url: rails_blob_url(doc.file, disposition: 'attachment')
+        signed_url: Rails.application.routes.url_helpers.rails_blob_url(doc.file, disposition: 'attachment')
       )
     end
 
