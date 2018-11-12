@@ -44,7 +44,7 @@ class QuoteChargeBreakdown extends Component {
 
     switch (key) {
       case 'trucking_lcl' || 'trucking_fcl':
-        return t('cargo.truckingRate')
+        return t('cargo:truckingRate')
 
       default:
         return key
@@ -56,7 +56,7 @@ class QuoteChargeBreakdown extends Component {
     
     switch (fee[0]) {
       case 'trucking_lcl' || 'trucking_fcl':
-        return t('cargo.truckingRate')
+        return t('cargo:truckingRate')
 
       default:
         return `${fee[0]} - ${fee[1].name}`
@@ -140,11 +140,11 @@ class QuoteChargeBreakdown extends Component {
 
     switch (key) {
       case 'trucking_pre':
-        return t('shipment.pickUp')
+        return t('shipment:pickUp')
       case 'trucking_on':
-        return t('shipment.delivery')
+        return t('shipment:delivery')
       case 'cargo':
-        return t('shipment.motCargo', { mot: t(`shipment.${mot}`) })
+        return t('shipment:motCargo', { mot: t(`shipment:${mot}`) })
       default:
         return ''
     }
