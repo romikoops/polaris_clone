@@ -27,7 +27,9 @@ class Itinerary < ApplicationRecord
       trips:    []
     }
 
-    trip = trips.create!(start_date: start_date, end_date: end_date, tenant_vehicle_id: tenant_vehicle_id, vessel: vessel, voyage_code: voyage_code)
+    trip = trips.new(start_date: start_date, end_date: end_date, tenant_vehicle_id: tenant_vehicle_id, vessel: vessel, voyage_code: voyage_code)
+    return results unless trip.save
+    
     results[:trips] << trip
     stops.each do |stop|
       data =
