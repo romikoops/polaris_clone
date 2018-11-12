@@ -1,10 +1,37 @@
 import React, { Component } from 'react'
 // import { v4 } from 'uuid'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../../../prop-types'
 import styles from '../../Admin.scss'
 import ShipmentOverviewCard from '../../../ShipmentCard/ShipmentOverviewCard'
 
 export class AdminShipmentsBox extends Component {
+  static switchShipment (status, t) {
+    let shipmentStatus
+    switch (status) {
+      case 'requested':
+        shipmentStatus = <p className="flex-none">{t('shipment:asShipmentsRequested')}</p>
+        break
+      case 'open':
+        shipmentStatus = <p className="flex-none">{t('shipment:asShipmentsOpened')}</p>
+        break
+      case 'finished':
+        shipmentStatus = <p className="flex-none">{t('shipment:asShipmentsFinished')}</p>
+        break
+      case 'rejected':
+        shipmentStatus = <p className="flex-none">{t('shipment:asShipmentsRejected')}</p>
+        break
+      case 'archived':
+        shipmentStatus = <p className="flex-none">{t('shipment:asShipmentsArchived')}</p>
+        break
+      default:
+        shipmentStatus = <p className="flex-none">{t('shipment:asShipmentsRequested')}</p>
+        break
+    }
+
+    return shipmentStatus
+  }
+
   constructor (props) {
     super(props)
 
@@ -34,12 +61,14 @@ export class AdminShipmentsBox extends Component {
       theme,
       userView,
       page,
+      status,
       dispatches,
       nextPage,
       prevPage,
       handleSearchChange,
       numPages,
       shipments,
+      t,
       confirmShipmentData,
       searchText
     } = this.props
@@ -68,15 +97,15 @@ export class AdminShipmentsBox extends Component {
         </div>
 
         {shipments.length === 0 ? (
-          <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
+          <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center margin_bottom">
             <div
               className={`flex-100 layout-row layout-align-space-between-center ${
                 styles.sec_subheader
               }`}
             >
-              <p className={` ${styles.sec_subheader_text} flex-none`}> No Shipments yet</p>
+              <p className={` ${styles.sec_subheader_text} flex-none`}>{t('shipment:noShipments')}</p>
             </div>
-            <p className="flex-none"> As shipments are requested, they will appear here</p>
+            {AdminShipmentsBox.switchShipment(status, t)}
           </div>
         ) : (
           <ShipmentOverviewCard
@@ -126,6 +155,7 @@ AdminShipmentsBox.propTypes = {
     goTo: PropTypes.func
   }).isRequired,
   seeAll: PropTypes.func,
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   userView: PropTypes.bool,
   confirmShipmentData: PropTypes.objectOf(PropTypes.any),
@@ -151,4 +181,4 @@ AdminShipmentsBox.defaultProps = {
   searchText: ''
 }
 
-export default AdminShipmentsBox
+export default withNamespaces('shipment')(AdminShipmentsBox)

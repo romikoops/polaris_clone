@@ -180,6 +180,7 @@ export class ShipmentsCompUser extends Component {
               handleClick={this.viewShipment}
               dispatches={userDispatch}
               shipments={mergedShipments[status]}
+              status={status}
               theme={theme}
               userView
               searchText={search[status]}
@@ -197,6 +198,7 @@ export class ShipmentsCompUser extends Component {
               shipments={mergedShipments[status]}
               theme={theme}
               userView
+              status={status}
               searchText={search[status]}
               tooltip={adminTip[status]}
               page={pages[status]}
