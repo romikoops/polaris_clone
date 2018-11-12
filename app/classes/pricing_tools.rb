@@ -301,7 +301,7 @@ module PricingTools
   def fee_value(fee, cargo_hash, scope)
     result = case fee['rate_basis']
              when 'PER_SHIPMENT', 'PER_BILL'
-               fee['value'].to_d
+              (fee['value'] || fee['rate']).to_d
              when 'PER_ITEM', 'PER_CONTAINER'
                (fee['value'] || fee['rate']).to_d * cargo_hash[:quantity]
              when 'PER_CBM'
