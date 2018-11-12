@@ -27,10 +27,10 @@ module DocumentService
         results.each do |result|
           result.deep_symbolize_keys!
           counterpart_hub_name = hub_name(result)
-          tenant_vehicle_name = vehicle_name(result)
+          tenant_vehicle_name, carrier_name = service_level_and_carrier(result)
           next unless result[:fees]
           result[:fees].each do |key, fee|
-            write_data = local_write_data(fee, key, result, counterpart_hub_name, tenant_vehicle_name)
+            write_data = local_write_data(fee, key, result, counterpart_hub_name, tenant_vehicle_name, carrier_name)
             if fee[:range] && !fee[:range].empty?
               fee[:range].each do |range_fee|
                 worksheet = worksheet_builder({worksheet: worksheet, row: row, start: 0,
@@ -59,16 +59,17 @@ module DocumentService
       end
     end
 
-    def vehicle_name(result)
+    def service_level_and_carrier(result)
       if result[:tenant_vehicle_id]
-        TenantVehicle.find(result[:tenant_vehicle_id]).name
+        tenant_vehicle = TenantVehicle.find(result[:tenant_vehicle_id])
+          [tenant_vehicle.name, tenant_vehicle&.carrier&.name]
       else
         ""
       end
     end
 
-    def local_write_data(fee, key, result, counterpart_hub_name, tenant_vehicle_name)
-      data = [fee[:effective_date], fee[:expiration_date], counterpart_hub_name, tenant_vehicle_name, fee[:name]]
+    def local_write_data(fee, key, result, counterpart_hub_name, tenant_vehicle_name, carrier_name)
+      data = [fee[:effective_date], fee[:expiration_date], counterpart_hub_name, tenant_vehicle_name, carrier_name, fee[:name]]
       data << result[:mode_of_transport] << key << result[:load_type]
       data << result[:direction] << fee[:currency] << fee[:rate_basis]
       data
@@ -94,10 +95,10 @@ module DocumentService
 
     def local_charges_header_test
       %w(EFFECTIVE_DATE EXPIRATION_DATE
-      DESTINATION SERVICE_LEVEL FEE MOT
+      DESTINATION SERVICE_LEVEL CARRIER FEE MOT
       FEE_CODE LOAD_TYPE DIRECTION CURRENCY
       RATE_BASIS TON CBM KG ITEM SHIPMENT
-      BILL CONTAINER MINIMUM WM RANGE_MIN RANGE_MAX BASE DANGEROUS)
+      BILL CONTAINER MINIMUM MAXIMUM WM RANGE_MIN RANGE_MAX BASE DANGEROUS)
     end
 
     def worksheet_builder(options, range_fee=nil)
@@ -112,46 +113,69 @@ module DocumentService
     def worksheet_conditional_builder(worksheet,  row, fee, range_fee=nil)
       case fee[:rate_basis]
       when "PER_CONTAINER"
-        worksheet.write(row, 17, fee[:value])
+        worksheet.write(row, 18, fee[:value])
       when "PER_ITEM"
-        worksheet.write(row, 14, fee[:value])
-      when "PER_BILL"
-        worksheet.write(row, 16, fee[:value])
-      when "PER_SHIPMENT"
         worksheet.write(row, 15, fee[:value])
+      when "PER_BILL"
+        worksheet.write(row, 17, fee[:value])
+      when "PER_SHIPMENT"
+        worksheet.write(row, 16, fee[:value])
       when "PER_CBM_TON"
-        worksheet.write(row, 11, fee[:ton])
-        worksheet.write(row, 12, fee[:cbm])
-        worksheet.write(row, 18, fee[:min])
+        worksheet.write(row, 12, fee[:ton])
+        worksheet.write(row, 13, fee[:cbm])
+        worksheet.write(row, 19, fee[:min])
+        worksheet.write(row, 20, fee[:max])
+      when "PER_TON"
+        worksheet.write(row, 12, fee[:ton])
+        worksheet.write(row, 19, fee[:min])
+        worksheet.write(row, 20, fee[:max])
+      when "PER_CBM"
+        worksheet.write(row, 13, fee[:value])
+        worksheet.write(row, 19, fee[:min])
+        worksheet.write(row, 20, fee[:max])
       when "PER_CBM_KG"
-        worksheet.write(row, 13, fee[:kg])
-        worksheet.write(row, 12, fee[:cbm])
-        worksheet.write(row, 18, fee[:min])
+        worksheet.write(row, 14, fee[:kg])
+        worksheet.write(row, 13, fee[:cbm])
+        worksheet.write(row, 19, fee[:min])
+        worksheet.write(row, 20, fee[:max])
+      when "PER_X_KG"
+        worksheet.write(row, 14, fee[:kg])
+        worksheet.write(row, 24, fee[:base])
+        worksheet.write(row, 19, fee[:min])
+        worksheet.write(row, 20, fee[:max])
+      when "PER_X_KG_FLAT"
+        worksheet.write(row, 14, fee[:value])
+        worksheet.write(row, 24, fee[:base])
+        worksheet.write(row, 19, fee[:min])
+        worksheet.write(row, 20, fee[:max])
       when "PER_WM"
         if range_fee
-          worksheet.write(row, 19, range_fee[:rate])
-          worksheet.write(row, 18, fee[:min])
+          worksheet.write(row, 21, range_fee[:rate])
+          worksheet.write(row, 19, fee[:min])
+          worksheet.write(row, 20, fee[:max])
         else
-          worksheet.write(row, 19, fee[:value])
+          worksheet.write(row, 21, fee[:value])
         end
       when "PER_KG"
         if range_fee
-          worksheet.write(row, 13, range_fee[:rate])
+          worksheet.write(row, 14, range_fee[:rate])
         else
-          worksheet.write(row, 13, fee[:kg])
+          worksheet.write(row, 14, fee[:kg])
         end
-        worksheet.write(row, 18, fee[:min])
+        worksheet.write(row, 19, fee[:min])
+        worksheet.write(row, 20, fee[:max])
       when "PER_KG_RANGE"
         if range_fee
-          worksheet.write(row, 13, range_fee[:rate])
+          worksheet.write(row, 14, range_fee[:rate])
         else
-          worksheet.write(row, 13, fee[:kg])
+          worksheet.write(row, 14, fee[:kg])
         end
-        worksheet.write(row, 18, fee[:min])
+        worksheet.write(row, 19, fee[:min])
+        worksheet.write(row, 20, fee[:max])
       end
       if range_fee
-        worksheet.write(row, 20, range_fee[:min])
-        worksheet.write(row, 21, range_fee[:max])
+        worksheet.write(row, 22, range_fee[:min])
+        worksheet.write(row, 23, range_fee[:max])
       end
       worksheet
     end

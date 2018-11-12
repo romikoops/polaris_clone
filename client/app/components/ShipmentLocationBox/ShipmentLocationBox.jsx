@@ -557,9 +557,7 @@ class ShipmentLocationBox extends Component {
 
               const fieldsHaveErrors = !nexusOption
               this.setState({ [`${target}FieldsHaveErrors`]: fieldsHaveErrors, lastTarget: target })
-              const addressFormsHaveErrors =
-                fieldsHaveErrors || this.state[`${counterpart}FieldsHaveErrors`]
-              this.props.handleSelectLocation(target, addressFormsHaveErrors)
+              this.props.handleSelectLocation(target, fieldsHaveErrors)
             })
           } else {
             this.setState({
@@ -570,7 +568,7 @@ class ShipmentLocationBox extends Component {
               },
               lastTarget: target
             }, () => this.prepForSelect(target))
-            this.props.handleSelectLocation(counterpart, this.state[`${counterpart}FieldsHaveErrors`])
+            this.props.handleSelectLocation(target, this.state[`${target}FieldsHaveErrors`])
             this.props.setNotesIds(nexusIds, target)
 
             addressFromPlace(place, this.props.gMaps, this.state.map, (address) => {
@@ -815,7 +813,7 @@ class ShipmentLocationBox extends Component {
         selectOptions.push(routeHelpers.routeOption(route[counterpart]))
       })
 
-      const truckingBoolean = !newFilteredRouteIndexes.some(i => routes[i][counterpart].truckTypes.length > 0)
+      const truckingBoolean = newFilteredRouteIndexes.some(i => routes[i][counterpart].truckTypes.length > 0)
 
       const carriage = target === 'destination' ? this.props.has_on_carriage : this.props.has_pre_carriage
 
@@ -1272,8 +1270,8 @@ class ShipmentLocationBox extends Component {
                       `${!truckingOptions.preCarriage ? styles.not_available : ''}`
                     }
                   >
-                    { !originTruckingAvailable ? <TruckingTooltip
-                      truckingBoolean={originTruckingAvailable}
+                    { originTruckingAvailable ? <TruckingTooltip
+                      truckingBoolean={!originTruckingAvailable}
                       truckingOptions={truckingOptions}
                       carriage="preCarriage"
                       hubName={this.state.oSelect.label}
@@ -1281,7 +1279,7 @@ class ShipmentLocationBox extends Component {
                       scope={scope}
                     /> : '' }
 
-                    { !originTruckingAvailable ? <Toggle
+                    { originTruckingAvailable ? <Toggle
                       className="flex-none ccb_pre_carriage"
                       id="has_pre_carriage"
                       name="has_pre_carriage"
@@ -1315,8 +1313,8 @@ class ShipmentLocationBox extends Component {
                       `${!truckingOptions.onCarriage ? styles.not_available : ''}`
                     }
                   >
-                    { !destinationTruckingAvailable ? <TruckingTooltip
-                      truckingBoolean={destinationTruckingAvailable}
+                    { destinationTruckingAvailable ? <TruckingTooltip
+                      truckingBoolean={!destinationTruckingAvailable}
                       truckingOptions={truckingOptions}
                       carriage="onCarriage"
                       hubName={this.state.dSelect.label}
@@ -1327,7 +1325,7 @@ class ShipmentLocationBox extends Component {
                     <label htmlFor="on-carriage" style={{ marginRight: '15px' }}>
                       {t('shipment:delivery')}
                     </label>
-                    { !destinationTruckingAvailable ? <Toggle
+                    { destinationTruckingAvailable ? <Toggle
                       className="flex-none ccb_on_carriage"
                       id="has_on_carriage"
                       name="has_on_carriage"

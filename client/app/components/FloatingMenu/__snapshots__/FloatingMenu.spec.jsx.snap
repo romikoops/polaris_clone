@@ -6,63 +6,67 @@ exports[`shallow render 1`] = `
     className="pusher collapsed"
   />
   <div
-    className="floating_menu collapsed flex-none layout-column layout-align-space-between"
-    style={Object {}}
+    className="floating_menu collapsed"
   >
     <div
-      className="flex-none layout-row menu_content closed"
+      className="inner_wrapper flex-none layout-column layout-align-space-between"
+      style={Object {}}
     >
-      <Comp
-        currentUrl=""
-        expand={false}
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-        user={
-          Object {
-            "company_name": "FOO_COMPANY",
-            "currency": "EUR",
-            "email": "foo@bar.baz",
-            "first_name": "John",
-            "guest": false,
-            "last_name": "Doe",
-            "phone": "6345789",
-            "role": Object {
-              "name": "shipper",
-            },
-          }
-        }
-      />
-    </div>
-    <div>
-      <hr
-        style={Object {}}
-      />
       <div
-        className="collapse_prompt pointy"
-        onClick={[Function]}
+        className="flex-none layout-row menu_content closed"
       >
-        <div
-          className="flex-none layout-row layout-align-start-center"
-        >
-          <i
-            className="fa fa-angle-double-left clip"
-            style={
-              Object {
-                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-              }
+        <Comp
+          currentUrl=""
+          expand={false}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
             }
-          />
-          <p
-            style={Object {}}
+          }
+          user={
+            Object {
+              "company_name": "FOO_COMPANY",
+              "currency": "EUR",
+              "email": "foo@bar.baz",
+              "first_name": "John",
+              "guest": false,
+              "last_name": "Doe",
+              "phone": "6345789",
+              "role": Object {
+                "name": "shipper",
+              },
+            }
+          }
+        />
+      </div>
+      <div>
+        <hr
+          style={Object {}}
+        />
+        <div
+          className="collapse_prompt pointy"
+          onClick={[Function]}
+        >
+          <div
+            className="flex-none layout-row layout-align-start-center"
           >
-            Collapse sidebar
-          </p>
+            <i
+              className="fa fa-angle-double-left clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+            />
+            <p
+              style={Object {}}
+            >
+              Collapse sidebar
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -76,56 +80,60 @@ exports[`theme is falsy 1`] = `
     className="pusher collapsed"
   />
   <div
-    className="floating_menu collapsed flex-none layout-column layout-align-space-between"
-    style={Object {}}
+    className="floating_menu collapsed"
   >
     <div
-      className="flex-none layout-row menu_content closed"
+      className="inner_wrapper flex-none layout-column layout-align-space-between"
+      style={Object {}}
     >
-      <Comp
-        currentUrl=""
-        expand={false}
-        theme={null}
-        user={
-          Object {
-            "company_name": "FOO_COMPANY",
-            "currency": "EUR",
-            "email": "foo@bar.baz",
-            "first_name": "John",
-            "guest": false,
-            "last_name": "Doe",
-            "phone": "6345789",
-            "role": Object {
-              "name": "shipper",
-            },
-          }
-        }
-      />
-    </div>
-    <div>
-      <hr
-        style={Object {}}
-      />
       <div
-        className="collapse_prompt pointy"
-        onClick={[Function]}
+        className="flex-none layout-row menu_content closed"
       >
-        <div
-          className="flex-none layout-row layout-align-start-center"
-        >
-          <i
-            className="fa fa-angle-double-left clip"
-            style={
-              Object {
-                "color": "black",
-              }
+        <Comp
+          currentUrl=""
+          expand={false}
+          theme={null}
+          user={
+            Object {
+              "company_name": "FOO_COMPANY",
+              "currency": "EUR",
+              "email": "foo@bar.baz",
+              "first_name": "John",
+              "guest": false,
+              "last_name": "Doe",
+              "phone": "6345789",
+              "role": Object {
+                "name": "shipper",
+              },
             }
-          />
-          <p
-            style={Object {}}
+          }
+        />
+      </div>
+      <div>
+        <hr
+          style={Object {}}
+        />
+        <div
+          className="collapse_prompt pointy"
+          onClick={[Function]}
+        >
+          <div
+            className="flex-none layout-row layout-align-start-center"
           >
-            Collapse sidebar
-          </p>
+            <i
+              className="fa fa-angle-double-left clip"
+              style={
+                Object {
+                  "color": "black",
+                }
+              }
+            />
+            <p
+              style={Object {}}
+            >
+              Collapse sidebar
+            </p>
+          </div>
         </div>
       </div>
     </div>

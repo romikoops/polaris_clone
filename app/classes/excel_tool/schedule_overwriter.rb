@@ -31,9 +31,9 @@ module ExcelTool
     def create_tenant_vehicle(row, itinerary)
       service_level = row[:service_level] ? row[:service_level] : "standard"
       Vehicle.create_from_name(
-        service_level, itinerary.mode_of_transport, user.tenant_id, row[:carrier])
+        service_level, itinerary.mode_of_transport, @user.tenant_id, row[:carrier])
     end
-    
+
     def _stats
       {
         type:     "schedules",
@@ -80,17 +80,20 @@ module ExcelTool
     end
 
     def find_tenant_vehicle(row, itinerary)
+      service_level = row[:service_level] || 'standard'
       tv = TenantVehicle.find_by(
-        tenant_id:         user.tenant_id,
+        tenant_id:         @user.tenant_id,
         mode_of_transport: itinerary.mode_of_transport,
         name:              row[:service_level],
         carrier:          Carrier.find_by(name: row[:carrier])
       )
       tv ||= TenantVehicle.find_by(
-        tenant_id:         user.tenant_id,
+        tenant_id:         @user.tenant_id,
         mode_of_transport: itinerary.mode_of_transport,
         name:              row[:service_level]
       )
+      tv ||= Vehicle.create_from_name(service_level, itinerary.mode_of_transport, @user.tenant_id, row[:carrier])
+      
       tv
     end
 
