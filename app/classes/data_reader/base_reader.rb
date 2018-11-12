@@ -20,6 +20,7 @@ module DataReader
       @xlsx.each_with_pagename do |sheet_name, sheet_data|
         headers = parse_headers(sheet_data.first)
         determine_data_extraction_method(headers)
+        @sheets_data[sheet_name] = { data_extraction_method: data_extraction_method }
 
         raise StandardError, "The headers of sheet \"#{sheet_name}\" are not valid." unless headers_valid?(headers)
 
@@ -30,7 +31,7 @@ module DataReader
           rows_data << build_row_obj(headers, parsed_row)
         end
 
-        @sheets_data[sheet_name] = restructure_rows_data(rows_data)
+        @sheets_data[sheet_name][:rows_data] = restructure_rows_data(rows_data)
       end
 
       @sheets_data

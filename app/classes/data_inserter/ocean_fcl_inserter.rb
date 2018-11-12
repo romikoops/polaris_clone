@@ -5,8 +5,10 @@ module DataInserter
     def perform
       super
 
-      data.each_with_index do |(sheet_name, rows), sheet_i|
-        rows.each_with_index do |row, row_i|
+      data.each_with_index do |(k_sheet_name, values), sheet_i|
+        data_extraction_method = values[:data_extraction_method]
+
+        values[:rows_data].each_with_index do |row, row_i|
           itinerary = find_or_initialize_itinerary(row)
           stops = find_or_initialize_stops(row, itinerary)
           itinerary.stops << stops
@@ -14,9 +16,9 @@ module DataInserter
 
           tenant_vehicle = find_or_create_tenant_vehicle(row)
           generate_trips(itinerary, row, tenant_vehicle) if should_generate_trips?
-          create_pricing_with_pricing_details(row, tenant_vehicle, itinerary)
+          create_pricing_with_pricing_details(data_extraction_method, row, tenant_vehicle, itinerary)
 
-          puts "Status: Sheet \"#{sheet_name}\" (##{sheet_i + 1}) | Row ##{row_i + 1}"
+          puts "Status: Sheet \"#{k_sheet_name}\" (##{sheet_i + 1}) | Row ##{row_i + 1}"
         end
       end
     end
@@ -99,14 +101,45 @@ module DataInserter
       )
     end
 
-    def find_or_create_pricing_details_for_pricing(pricing, row)
-      row[:fees].each do |fee_name, fee_value|
-        pricing_detail_params = { rate: fee_value,
-                                  rate_basis: row[:type],
-                                  min: 1 * fee_value,
-                                  shipping_type: fee_name,
-                                  currency_name: row[:currency],
-                                  tenant: @tenant }
+    def pricing_details_with_dynamic_fee_cols_no_ranges(row)
+      row[:fees].map do |fee_name, fee_value|
+        { rate_basis: row[:type],
+          rate: fee_value,
+          min: 1 * fee_value,
+          shipping_type: fee_name.upcase,
+          currency_name: row[:currency].upcase,
+          tenant_id: @tenant.id }
+      end
+    end
+
+    def pricing_details_with_one_col_fee_and_ranges(row)
+      pricing_detail_params = { rate_basis: row[:type],
+                                shipping_type: row[:fee_code].upcase,
+                                currency_name: row[:currency].upcase,
+                                tenant_id: @tenant.id }
+      if row.has_key?(:range)
+        min_rate_in_range = row[:range].map { |r| r['rate'] }.min
+        pricing_detail_params.merge!(rate: min_rate_in_range,
+                                    min: 1 * min_rate_in_range,
+                                    range: row[:range])
+      else
+        pricing_detail_params.merge!(rate: row[:fee],
+                                    min: 1 * row[:fee])
+      end
+      [pricing_detail_params]
+    end
+
+    def find_or_create_pricing_details_for_pricing(data_extraction_method, pricing, row)
+      case data_extraction_method
+      when 'dynamic_fee_cols_no_ranges'
+        pricing_detail_params_arr = pricing_details_with_dynamic_fee_cols_no_ranges(row)
+      when 'one_col_fee_and_ranges'
+        pricing_detail_params_arr = pricing_details_with_one_col_fee_and_ranges(row)
+      else
+        raise StandardError, 'Data extraction method not correctly set.'
+      end
+
+      pricing_detail_params_arr.each do |pricing_detail_params|
         pricing.pricing_details.find_or_create_by(pricing_detail_params)
       end
     end
@@ -116,7 +149,7 @@ module DataInserter
       @transport_category = tenant_vehicle.vehicle.transport_categories.find_by(name: 'any', cargo_class: cargo_class)
     end
 
-    def create_pricing_with_pricing_details(row, tenant_vehicle, itinerary)
+    def create_pricing_with_pricing_details(data_extraction_method, row, tenant_vehicle, itinerary)
       pricing_params = {
         # TODO: what is called 'load_type' in the excel file is actually a cargo_class!
         transport_category: find_transport_category(tenant_vehicle, row[:load_type]),
@@ -129,7 +162,7 @@ module DataInserter
       }
       pricing_to_update = itinerary.pricings.find_or_create_by(pricing_params)
 
-      find_or_create_pricing_details_for_pricing(pricing_to_update, row)
+      find_or_create_pricing_details_for_pricing(data_extraction_method, pricing_to_update, row)
     end
   end
 end

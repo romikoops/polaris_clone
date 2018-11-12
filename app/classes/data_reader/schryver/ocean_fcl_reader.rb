@@ -94,7 +94,7 @@ module DataReader
       def row_connected_by_range?(next_row_data, current_row_identifier_values)
         next_row_data_identifier_values = row_identifier_values(next_row_data)
 
-        # Next row should have range values, and contain the same values
+        # Next row should have range values, and contain the same identifier values
         (next_row_data[:range_min] && next_row_data[:range_max]) &&
           next_row_data_identifier_values == current_row_identifier_values
       end
@@ -122,6 +122,8 @@ module DataReader
             row_data.delete(:fee) # already inside range hash, called 'rate'. Yes, it's ridiculous.
             row_data.merge(range: ranges_values)
           else # no ranges
+            row_data.delete(:range_min)
+            row_data.delete(:range_max)
             row_data
           end
         end

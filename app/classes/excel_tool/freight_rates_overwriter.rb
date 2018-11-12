@@ -3,7 +3,7 @@
 module ExcelTool
   class FreightRatesOverwriter < ExcelTool::BaseTool
     attr_reader :first_sheet, :tenant, :aux_data, :new_pricings, :nested_pricings, :user, :effective_date,
-      :expiration_date, :pricing_key, :cargo_type, :itinerary, :generate
+                :expiration_date, :pricing_key, :cargo_type, :itinerary, :generate
 
     def post_initialize(args)
       @first_sheet = xlsx.sheet(xlsx.sheets.first)
@@ -61,8 +61,8 @@ module ExcelTool
 
     def _stats
       {
-        type:              "pricings",
-        pricings:          {
+        type: 'pricings',
+        pricings: {
           number_updated: 0,
           number_created: 0
         },
@@ -70,65 +70,65 @@ module ExcelTool
           number_updated: 0,
           number_created: 0
         },
-        itineraries:       {
+        itineraries: {
           number_updated: 0,
           number_created: 0
         },
-        stops:             {
+        stops: {
           number_updated: 0,
           number_created: 0
         },
-        layovers:          {
+        layovers: {
           number_updated: 0,
           number_created: 0
         },
-        trips:             {
+        trips: {
           number_updated: 0,
           number_created: 0
         },
-        userPricings:      {
+        userPricings: {
           number_updated: 0,
           number_created: 0
         },
-        userAffected:      []
+        userAffected: []
       }
     end
 
     def _results
       {
-        pricings:          [],
+        pricings: [],
         itineraryPricings: [],
-        userPricings:      [],
-        itineraries:       [],
-        stops:             [],
-        layovers:          [],
-        trips:             []
+        userPricings: [],
+        itineraries: [],
+        stops: [],
+        layovers: [],
+        trips: []
       }
     end
 
     def pricing_rows
       rows = first_sheet.parse(
-        customer_id:     "CUSTOMER_ID",
-        mot:             "MOT",
-        cargo_type:      "CARGO_TYPE",
-        effective_date:  "EFFECTIVE_DATE",
-        expiration_date: "EXPIRATION_DATE",
-        origin:          "ORIGIN",
-        destination:     "DESTINATION",
-        vehicle:         "VEHICLE",
-        fee:             "FEE",
-        currency:        "CURRENCY",
-        rate_basis:      "RATE_BASIS",
-        rate_min:        "RATE_MIN",
-        rate:            "RATE",
-        hw_threshold:    "HW_THRESHOLD",
-        hw_rate_basis:   "HW_RATE_BASIS",
-        min_range:       "MIN_RANGE",
-        max_range:       "MAX_RANGE",
-        transit_time:    "TRANSIT_TIME",
-        carrier:         "CARRIER",
-        nested:          "NESTED",
-        wm_rate:         "WM_RATE"
+        customer_id: 'CUSTOMER_ID',
+        mot: 'MOT',
+        cargo_type: 'CARGO_TYPE',
+        effective_date: 'EFFECTIVE_DATE',
+        expiration_date: 'EXPIRATION_DATE',
+        origin: 'ORIGIN',
+        destination: 'DESTINATION',
+        vehicle: 'VEHICLE',
+        fee: 'FEE',
+        currency: 'CURRENCY',
+        rate_basis: 'RATE_BASIS',
+        rate_min: 'RATE_MIN',
+        rate: 'RATE',
+        hw_threshold: 'HW_THRESHOLD',
+        hw_rate_basis: 'HW_RATE_BASIS',
+        min_range: 'MIN_RANGE',
+        max_range: 'MAX_RANGE',
+        transit_time: 'TRANSIT_TIME',
+        carrier: 'CARRIER',
+        nested: 'NESTED',
+        wm_rate: 'WM_RATE'
       )
       rows.each do |row|
         row[:cargo_type].strip!
@@ -149,37 +149,37 @@ module ExcelTool
     end
 
     def set_cargo_type(row)
-      @cargo_type = row[:cargo_type] == "cargo_item" ? "lcl" : row[:cargo_type]
+      @cargo_type = row[:cargo_type] == 'cargo_item' ? 'lcl' : row[:cargo_type]
     end
 
     def populate_new_pricings
       new_pricings[pricing_key][cargo_type] ||= {
-        data:            {},
-        exceptions:      [],
-        effective_date:  effective_date,
+        data: {},
+        exceptions: [],
+        effective_date: effective_date,
         expiration_date: expiration_date,
-        updated_at:      DateTime.now
+        updated_at: DateTime.now
       }
     end
 
     def find_nexus(string, tenant_id)
       nexus = Nexus.find_by(name: string, tenant_id: tenant_id)
-      nexus || Nexus.where("name ILIKE ? AND tenant_id = ?", "%#{string}%", tenant_id).first
+      nexus || Nexus.where('name ILIKE ? AND tenant_id = ?', "%#{string}%", tenant_id).first
     end
 
     def tenant_vehicle(row)
       if row[:carrier]
         carrier = Carrier.find_or_create_by!(name: row[:carrier])
         carrier.tenant_vehicles.find_by(
-          tenant_id:         user.tenant_id,
+          tenant_id: user.tenant_id,
           mode_of_transport: row[:mot].downcase,
-          name:              row[:vehicle]
+          name: row[:vehicle]
         )
       else
         TenantVehicle.find_by(
-          tenant_id:         user.tenant_id,
+          tenant_id: user.tenant_id,
           mode_of_transport: row[:mot].downcase,
-          name:              row[:service_level]
+          name: row[:service_level]
         )
       end
     end
@@ -189,7 +189,7 @@ module ExcelTool
         vehicle = tenant_vehicle(row)
 
         aux_data[pricing_key][:tenant_vehicle] = vehicle.presence ||
-        Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id, row[:carrier])
+                                                 Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id, row[:carrier])
       end
       aux_data[pricing_key][:load_type] = row[:cargo_type] == 'lcl' ? 'cargo_item' : 'container'
       aux_data[pricing_key][:customer] = User.find_by(email: row[:customer_id], tenant_id: user.tenant_id) if row[:customer_id]
@@ -241,7 +241,7 @@ module ExcelTool
     def populate_stats_and_results
       start_date = DateTime.now
       end_date = generate ? start_date + 60.days : start_date + 5.days
-      if !@unsaved_itins.include?(@itinerary)
+      unless @unsaved_itins.include?(@itinerary)
         generator_results = aux_data[pricing_key][:itinerary].generate_weekly_schedules(
           aux_data[pricing_key][:stops_in_order],
           steps_in_order,
@@ -264,28 +264,28 @@ module ExcelTool
 
     def add_nested_key_values
       nested_pricings[pricing_key][cargo_type][nested_key] ||= {
-        data:            {},
-        effective_date:  effective_date,
+        data: {},
+        effective_date: effective_date,
         expiration_date: expiration_date
       }
     end
 
     def add_nested_key_values_with_rows(row)
       nested_pricings[pricing_key][cargo_type][nested_key][:data][row[:fee]] ||= {
-        rate:       row[:rate],
+        rate: row[:rate],
         rate_basis: row[:rate_basis],
-        currency:   row[:currency],
-        min:        row[:rate_min]
+        currency: row[:currency],
+        min: row[:rate_min]
       }
     end
 
     def nested_min_range(row)
       if row[:min_range]
-        nested_pricings[pricing_key][cargo_type][nested_key][:data][row[:fee]].delete("rate")
+        nested_pricings[pricing_key][cargo_type][nested_key][:data][row[:fee]].delete('rate')
         nested_pricings[pricing_key][cargo_type][nested_key][:data][row[:fee]][:range] ||= []
         nested_pricings[pricing_key][cargo_type][nested_key][:data][row[:fee]][:range] << {
-          min:  row[:min_range],
-          max:  row[:max_range],
+          min: row[:min_range],
+          max: row[:max_range],
           rate: row[:rate]
         }
       end
@@ -293,20 +293,20 @@ module ExcelTool
 
     def add_fee_to_new_princings(row)
       new_pricings[pricing_key][cargo_type][:data][row[:fee]] = {
-        rate:       row[:rate],
+        rate: row[:rate],
         rate_basis: row[:rate_basis],
-        currency:   row[:currency],
-        min:        row[:rate_min]
+        currency: row[:currency],
+        min: row[:rate_min]
       }
     end
 
     def new_princings_min_range(row)
       if row[:min_range]
-        new_pricings[pricing_key][cargo_type][:data][row[:fee]].delete("rate")
+        new_pricings[pricing_key][cargo_type][:data][row[:fee]].delete('rate')
         new_pricings[pricing_key][cargo_type][:data][row[:fee]][:range] ||= []
         new_pricings[pricing_key][cargo_type][:data][row[:fee]][:range] << {
-          min:  row[:min_range],
-          max:  row[:max_range],
+          min: row[:min_range],
+          max: row[:max_range],
           rate: row[:rate]
         }
       end
@@ -356,7 +356,7 @@ module ExcelTool
       new_pricings.each do |it_key, cargo_pricings|
         cargo_pricings.each do |cargo_key, pricing_data|
           new_pricing_data = pricing_data.clone
-          transport_category = aux_data[it_key][:tenant_vehicle].vehicle.transport_categories.find_by(name: "any", cargo_class: cargo_key)
+          transport_category = aux_data[it_key][:tenant_vehicle].vehicle.transport_categories.find_by(name: 'any', cargo_class: cargo_key)
           itinerary = aux_data[it_key][:itinerary]
           user = aux_data[it_key][:customer]
 
