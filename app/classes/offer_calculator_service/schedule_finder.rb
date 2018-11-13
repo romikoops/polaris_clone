@@ -11,9 +11,7 @@ module OfferCalculatorService
 
     def current_etd_in_search(hubs)
       trucking_time = longest_trucking_time(hubs).seconds
-      if trucking_time != 0
-        @shipment.trucking["pre_carriage"]["trucking_time_in_seconds"] = [trucking_time, 129600].max
-      end
+      @shipment.trucking['pre_carriage']['trucking_time_in_seconds'] = [trucking_time, 129_600].max if trucking_time != 0
       @shipment.desired_start_date + trucking_time
     end
 

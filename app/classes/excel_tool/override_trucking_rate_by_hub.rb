@@ -171,12 +171,12 @@ module ExcelTool
     end
 
     def load_ident_values_and_countries
-      current_country = {name: nil, code: nil}
+      current_country = { name: nil, code: nil }
       zones.each do |zone_name, idents_and_countries|
-        current_country = {name: Country.find_by_code(idents_and_countries.first[:country]).name, code: idents_and_countries.first[:country]}
+        current_country = { name: Country.find_by_code(idents_and_countries.first[:country]).name, code: idents_and_countries.first[:country] }
         all_ident_values_and_countries[zone_name] = idents_and_countries.flat_map do |idents_and_country|
           if current_country[:code] != idents_and_country[:country]
-            current_country = {name: Country.find_by_code(idents_and_country[:country]).name, code: idents_and_country[:country]}
+            current_country = { name: Country.find_by_code(idents_and_country[:country]).name, code: idents_and_country[:country] }
           end
           if idents_and_country[:min] && idents_and_country[:max]
             (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
@@ -188,7 +188,7 @@ module ExcelTool
               else
                 ident_value = ident
               end
-              @locations << {postal_code: ident_value, country: current_country[:name]}
+              @locations << { postal_code: ident_value, country: current_country[:name] }
               { ident: ident_value, country: idents_and_country[:country] }
             end
           elsif identifier_type == 'location_id'
@@ -200,16 +200,15 @@ module ExcelTool
             idents_and_country
           end
         end
-
       end
     end
 
     def import_locations
       Location.import(@locations,
-      on_duplicate_key_update: {
-        conflict_target: %i(postal_code suburb neighbourhood city province country),
-        columns:         %i(bounds)
-      })
+                      on_duplicate_key_update: {
+                        conflict_target: %i(postal_code suburb neighbourhood city province country),
+                        columns:         %i(bounds)
+                      })
     end
 
     def parse_fees_sheet

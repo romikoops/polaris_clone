@@ -48,7 +48,6 @@ module DataInserter
 
       def default_mandatory_charge
         if @hub_data[:routing]&.include?('RTM') && @direction == 'import'
-
           @mandatory_charge = MandatoryCharge.find_by(export_charges: true, import_charges: false, pre_carriage: false, on_carriage: false)
         elsif @hub_data[:country] && ['Japan', 'United States of America', 'USA', 'Usa'].include?(@hub_data[:country]) && @direction == 'export'
           @mandatory_charge = MandatoryCharge.find_by(export_charges: false, import_charges: true, pre_carriage: false, on_carriage: false)
@@ -59,7 +58,7 @@ module DataInserter
       end
 
       def find_or_create_hub
-        return if !@existing_hub_data
+        return unless @existing_hub_data
         mandatory_charge = default_mandatory_charge
         temp_hub = @user.tenant.hubs.where(
           name: "#{@existing_hub_data[:name]} #{hub_type_name[@hub_type]}",
@@ -81,14 +80,13 @@ module DataInserter
           @hub.save!
         end
         awesome_print @hub.mandatory_charge
-        @hubs << {hub: @hub, data: @hub_data}
+        @hubs << { hub: @hub, data: @hub_data }
       end
 
       def geocode_port_data
         name = @hub_data[:port]
         country_name = @hub_data[:country]
-        
-        
+
         return if @checked_hubs.include?(name)
         port_address = Address.geocoded_address("#{name}, #{country_name}")
         puts port_address.city
@@ -97,16 +95,14 @@ module DataInserter
         if country.nil?
           string = ''
           if country_name == 'Uk'
-            string = "United Kingdom of Great Britain and Northern Ireland"
+            string = 'United Kingdom of Great Britain and Northern Ireland'
           elsif country_name == 'Usa'
             string == 'United States of America'
           end
           country = Country.find_by_name(string)
-          if country.nil?
-            country = Country.where("name LIKE ?", "%#{country_name}%").first
-          end
+          country = Country.where('name LIKE ?', "%#{country_name}%").first if country.nil?
         end
-        return {
+        {
           hub_code: @hub_data[:code],
           name: name,
           latitude: port_address.latitude,
@@ -114,15 +110,6 @@ module DataInserter
           address: port_address,
           nexus: port_nexus,
           country_id: country.try(:id)
-        }
-      end
-
-      def hub_type_name
-        @hub_type_name ||= {
-          'ocean' => 'Port',
-          'air'   => 'Airport',
-          'rail'  => 'Railyard',
-          'truck' => 'Depot'
         }
       end
 
