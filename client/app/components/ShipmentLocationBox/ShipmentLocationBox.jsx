@@ -8,7 +8,7 @@ import '../../styles/react-toggle.scss'
 import '../../styles/select-css-custom.scss'
 import styles from './ShipmentLocationBox.scss'
 import errorStyles from '../../styles/errors.scss'
-import { colorSVG, determineSpecialism, isDefined } from '../../helpers'
+import { colorSVG, determineSpecialism, isDefined, onlyUnique } from '../../helpers'
 import { mapStyling } from '../../constants/map.constants'
 import { capitalize } from '../../helpers/stringTools'
 import addressFromPlace from './addressFromPlace'
@@ -19,6 +19,7 @@ import TruckingTooltip from './TruckingTooltip'
 import TruckingDetails from '../TruckingDetails/TruckingDetails'
 import Autocomplete from './Autocomplete'
 import removeTabIndex from './removeTabIndex'
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 
 const colourSVG = colorSVG
 const mapStyles = mapStyling
@@ -88,7 +89,11 @@ class ShipmentLocationBox extends Component {
         origin: [],
         destination: []
       },
-      truckingHubs: {}
+      truckingHubs: {},
+      countries: {
+        origin: [],
+        destination: []
+      }
     }
 
     this.isOnFocus = {
@@ -150,6 +155,12 @@ class ShipmentLocationBox extends Component {
     if (nextProps.prevRequest !== this.props.prevRequest && nextProps.prevRequest.shipment) {
       this.loadPrevReq(nextProps)
     }
+
+    if (nextProps.shipmentData && 
+        (this.state.countries.origin.length === 0 || this.state.countries.destination.length === 0)
+      ) {
+      this.extractCountries(nextProps)
+    }
   }
 
   setDestNexus (event) {
@@ -186,6 +197,8 @@ class ShipmentLocationBox extends Component {
       }
     }
   }
+
+
 
   setNexusesFromRoute (route) {
     const selectedOrigin = this.props.allNexuses.origins.find(nx => (
@@ -422,6 +435,24 @@ class ShipmentLocationBox extends Component {
     service.getDetails({ placeId }, place => callback(place))
   }
 
+  extractCountries (props) {
+    const { routes } = props.shipmentData
+    const countries_origin = []
+    const countries_destination = []
+    routes.forEach(route => {
+      countries_origin.push(route.origin.country.toLowerCase())
+      countries_destination.push(route.destination.country.toLowerCase())
+    })
+
+    const countries = {
+      origin: countries_origin.filter(onlyUnique),
+      destination:  countries_destination.filter(onlyUnique)
+    }
+
+    this.setState({ countries });
+
+  }
+
   initMap () {
     const mapsOptions = {
       center: {
@@ -578,7 +609,7 @@ class ShipmentLocationBox extends Component {
 
       const lat = isLocationObj ? place.latitude : place.geometry.location.lat()
       const lng = isLocationObj ? place.longitude : place.geometry.location.lng()
-
+      const fullAddress = isLocationObj ? place.fullAddress : place.formatted_address
       const tenantId = shipment.tenant_id
       const loadType = shipment.load_type
 
@@ -659,7 +690,7 @@ class ShipmentLocationBox extends Component {
       )
 
       this.setState(prevState => ({
-        autoText: { ...prevState.autoText, [target]: place.formatted_address }
+        autoText: { ...prevState.autoText, [target]: fullAddress }
       }))
     })
   }
@@ -961,7 +992,8 @@ class ShipmentLocationBox extends Component {
       truckTypes,
       originTruckingAvailable,
       destinationTruckingAvailable,
-      fetchingtruckingAvailability
+      fetchingtruckingAvailability,
+      countries
     } = this.state
 
     if (availableDestinationNexuses) destinationOptions = availableDestinationNexuses
@@ -1023,6 +1055,7 @@ class ShipmentLocationBox extends Component {
         <div
           className={`${styles.address_form} flex-100 layout-row layout-wrap layout-align-center`}
         >
+<<<<<<< HEAD
           <div
             className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}
           >
@@ -1106,16 +1139,103 @@ class ShipmentLocationBox extends Component {
             disabled={!this.state.showOriginFields}
           />
           <div className="flex-100 layout-row layout-align-start-center">
+=======
+         { fetchingtruckingAvailability ? <LoadingSpinner size="small" /> :
+           <div
+           className={`flex-100 layout-row layout-wrap layout-align-center`}
+         >
+>>>>>>> 281e00f48... IMC-592 - prerebase
             <div
-              className={`${styles.clear_sec} flex-none layout-row layout-align-end-center`}
-              onClick={() => this.resetAuto('origin')}
+              className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}
             >
-              <i className="fa fa-times flex-none" />
-              <p className="offset-5 flex-none" style={{ paddingRight: '10px' }}>
-                Clear
-              </p>
+              <p className="flex-none">{t('shipment:enterPickUp')}</p>
+            </div>
+         
+          
+            <input
+              name="origin-street"
+              className={
+                `flex-90 ${styles.input} ` +
+                `${nextStageAttempts > 0 && !origin.street && requireFullAddress ? styles.with_errors : ''}`
+              }
+              type="string"
+              onChange={this.handleAddressChange}
+              onFocus={this.handleAddressFormFocus}
+              onBlur={this.handleAddressFormFocus}
+              value={origin.street || ''}
+              autoComplete="off"
+              placeholder={t('user:street')}
+            />
+            <input
+              id="not-auto"
+              name="origin-number"
+              className={
+                `flex-90 ${styles.input} ` +
+                `${nextStageAttempts > 0 && !origin.number && requireFullAddress ? styles.with_errors : ''}`
+              }
+              type="string"
+              onChange={this.handleAddressChange}
+              onFocus={this.handleAddressFormFocus}
+              onBlur={this.handleAddressFormFocus}
+              value={origin.number || ''}
+              autoComplete="off"
+              placeholder={t('user:number')}
+            />
+            <input
+              name="origin-zipCode"
+              className={
+                `flex-90 ${styles.input} ` +
+                `${nextStageAttempts > 0 && !origin.zipCode ? styles.with_errors : ''}`
+              }
+              type="string"
+              onChange={this.handleAddressChange}
+              onFocus={this.handleAddressFormFocus}
+              onBlur={this.handleAddressFormFocus}
+              value={origin.zipCode || ''}
+              autoComplete="off"
+              placeholder={t('user:postalCode')}
+            />
+            <input
+              name="origin-city"
+              className={
+                `flex-90 ${styles.input} ` +
+                `${nextStageAttempts > 0 && !origin.city ? styles.with_errors : ''}`
+              }
+              type="string"
+              onChange={this.handleAddressChange}
+              onFocus={this.handleAddressFormFocus}
+              onBlur={this.handleAddressFormFocus}
+              value={origin.city || ''}
+              autoComplete="off"
+              placeholder={t('user:city')}
+            />
+            <input
+              name="origin-country"
+              className={
+                `flex-90 ${styles.input} ` +
+                `${nextStageAttempts > 0 && !origin.country ? styles.with_errors : ''}`
+              }
+              type="string"
+              onChange={this.handleAddressChange}
+              onFocus={this.handleAddressFormFocus}
+              onBlur={this.handleAddressFormFocus}
+              value={origin.country || ''}
+              autoComplete="off"
+              placeholder={t('user:country')}
+            />
+            <div className="flex-100 layout-row layout-align-start-center">
+              <div
+                className={`${styles.clear_sec} flex-none layout-row layout-align-end-center`}
+                onClick={() => this.resetAuto('origin')}
+              >
+                <i className="fa fa-times flex-none" />
+                <p className="offset-5 flex-none" style={{ paddingRight: '10px' }}>
+                  Clear
+                </p>
+              </div>
             </div>
           </div>
+          }
         </div>
       </div>
     )
@@ -1130,6 +1250,7 @@ class ShipmentLocationBox extends Component {
           hasErrors={originFieldsHaveErrors}
           handlePlaceSelect={place => this.handlePlaceChange(place, 'origin')}
           handleLocationSelect={place => this.handleLocationChange(place, 'origin')}
+          countries={countries.origin}
         />
       </div>
     )
@@ -1254,6 +1375,7 @@ class ShipmentLocationBox extends Component {
             input={this.state.autoText.destination}
             handlePlaceSelect={place => this.handlePlaceChange(place, 'destination')}
             handleLocationSelect={place => this.handleLocationChange(place, 'destination')}
+            countries={countries.destination}
           />
         </div>
       </div>

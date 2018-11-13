@@ -48,6 +48,8 @@ module Queries
             MAX(origin_nexuses.longitude)      AS origin_longitude,
             MAX(destination_nexuses.latitude)  AS destination_latitude,
             MAX(destination_nexuses.longitude) AS destination_longitude,
+            MAX(origin_countries.code)         AS origin_country,
+            MAX(destination_countries.code)    AS destination_country,
             STRING_AGG(
               DISTINCT CASE
                 WHEN origin_truck_type_availabilities.load_type = :load_type
@@ -64,6 +66,10 @@ module Queries
               END,
               ','
             ) AS destination_truck_types
+            STRING_AGG(DISTINCT origin_truck_type_availabilities.truck_type, ',')
+              AS origin_truck_types,
+            STRING_AGG(DISTINCT destination_truck_type_availabilities.truck_type, ',')
+              AS destination_truck_types
           FROM itineraries
           JOIN stops AS origin_stops
             ON itineraries.id = origin_stops.itinerary_id
@@ -73,6 +79,14 @@ module Queries
             ON origin_hubs.id = origin_stops.hub_id
           JOIN hubs AS destination_hubs
             ON destination_hubs.id = destination_stops.hub_id
+          JOIN addresses AS origin_hubs_addresses
+            ON origin_hubs.address_id = origin_hubs_addresses.id
+          JOIN addresses AS destination_hubs_addresses
+            ON destination_hubs.address_id = destination_hubs_addresses.id
+          JOIN countries AS origin_countries
+            ON origin_hubs_addresses.country_id = origin_countries.id
+          JOIN countries AS destination_countries
+            ON destination_hubs_addresses.country_id = destination_countries.id
           JOIN nexuses AS origin_nexuses
             ON origin_nexuses.id = origin_hubs.nexus_id
           JOIN nexuses AS destination_nexuses

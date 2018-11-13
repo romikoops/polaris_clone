@@ -40,9 +40,9 @@ function findAvailability (lat, lng, tenantId, loadType, carriage, availableHubI
   })
 }
 
-function searchLocations (input, callback) {
+function searchLocations (input, countries, callback) {
   fetch(
-    `${getApiHost()}/locations?query=${input}`,
+    `${getApiHost()}/locations?query=${input}&countries=${countries}`,
     {
       method: 'GET',
       headers: authHeader()
