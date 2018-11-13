@@ -139,7 +139,10 @@ class QuoteChargeBreakdown extends Component {
     const unitSections = Object.entries(quote[`${key}`])
       .map(array => array.filter(value => !this.unbreakableKeys.includes(value)))
       .filter(value => value.length !== 1)
+<<<<<<< HEAD
 
+=======
+>>>>>>> db8a9b6d4... IMC-592 - ready
 
     return unitSections.map((unitArray) => {
       const cargo = this.fetchCargoData(unitArray[0])
@@ -256,11 +259,11 @@ class QuoteChargeBreakdown extends Component {
                   }
                 </p>
               </div>
-            </div>
-          )}
-          content={this.determineContentToGenerate(key)}
-        />
-      ))
+            )}
+            content={this.determineContentToGenerate(key)}
+          />
+        ) : ''
+      })
   }
 }
 

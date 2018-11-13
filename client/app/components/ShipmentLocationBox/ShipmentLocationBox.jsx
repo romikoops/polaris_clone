@@ -53,6 +53,14 @@ const StyledSelect = styled(Select)`
 `
 
 class ShipmentLocationBox extends Component {
+  static sortOptions (array) {
+    return array.sort((a, b) => {
+      const textA = a.label.toUpperCase()
+      const textB = b.label.toUpperCase()
+
+      return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
+    })
+  }
   constructor (props) {
     super(props)
 
@@ -133,7 +141,6 @@ class ShipmentLocationBox extends Component {
   }
 
   componentDidMount () {
-    
     this.initMap()
   }
 
@@ -155,10 +162,13 @@ class ShipmentLocationBox extends Component {
     if (nextProps.prevRequest !== this.props.prevRequest && nextProps.prevRequest.shipment) {
       this.loadPrevReq(nextProps)
     }
+    if (typeof this.state.map === 'undefined') {
+      this.initMap()
+    }
 
-    if (nextProps.shipmentData && 
+    if (nextProps.shipmentData &&
         (this.state.countries.origin.length === 0 || this.state.countries.destination.length === 0)
-      ) {
+    ) {
       this.extractCountries(nextProps)
     }
   }
@@ -197,8 +207,6 @@ class ShipmentLocationBox extends Component {
       }
     }
   }
-
-
 
   setNexusesFromRoute (route) {
     const selectedOrigin = this.props.allNexuses.origins.find(nx => (
@@ -301,7 +309,7 @@ class ShipmentLocationBox extends Component {
     if (locationData[target].title !== undefined) {
       map.data.remove(locationData[target][0])
     }
-    
+
     const targetKml = map.data.addGeoJson(location.geojson)
     locationData[target] = targetKml
     const bounds = new this.props.gMaps.LatLngBounds()
@@ -316,7 +324,7 @@ class ShipmentLocationBox extends Component {
     })
     const latLng = routeHelpers.centerFromGeoJson(lats, lngs)
     this.setMarker(latLng, location.city, target)
-    
+
     this.setState({ locationData })
     map.fitBounds(bounds)
 
@@ -333,6 +341,7 @@ class ShipmentLocationBox extends Component {
         }
       })
     }
+
     return latLng
   }
   setMarker (address, name, target) {
@@ -439,18 +448,17 @@ class ShipmentLocationBox extends Component {
     const { routes } = props.shipmentData
     const countries_origin = []
     const countries_destination = []
-    routes.forEach(route => {
+    routes.forEach((route) => {
       countries_origin.push(route.origin.country.toLowerCase())
       countries_destination.push(route.destination.country.toLowerCase())
     })
 
     const countries = {
       origin: countries_origin.filter(onlyUnique),
-      destination:  countries_destination.filter(onlyUnique)
+      destination: countries_destination.filter(onlyUnique)
     }
 
-    this.setState({ countries });
-
+    this.setState({ countries })
   }
 
   initMap () {
@@ -675,7 +683,6 @@ class ShipmentLocationBox extends Component {
                 this.props.setTargetAddress(target, { ...address, nexusIds })
               })
             }
-            
           }
 
           this.setState({
@@ -759,7 +766,6 @@ class ShipmentLocationBox extends Component {
       destination: shipment.destination.fullAddress || ''
     }
     if (newState.oSelect && newState.oSelect.label && shipment.origin.nexus_id) {
-      debugger
       this.state.map
         ? this.setOriginNexus(newState.oSelect)
         : setTimeout(() => {
@@ -771,7 +777,7 @@ class ShipmentLocationBox extends Component {
         ? this.setDestNexus(newState.dSelect)
         : setTimeout(() => {
           this.setDestNexus(newState.dSelect)
-        }, 500)
+        }, 1000)
     }
 
     this.setState(newState, () => {
@@ -974,6 +980,7 @@ class ShipmentLocationBox extends Component {
       (autoText.origin !== '' && autoText.destination !== '')
     )
   }
+
   render () {
     const {
       scope, shipmentData, nextStageAttempts, origin, destination, selectedTrucking, t
@@ -996,8 +1003,8 @@ class ShipmentLocationBox extends Component {
       countries
     } = this.state
 
-    if (availableDestinationNexuses) destinationOptions = availableDestinationNexuses
-    if (availableOriginNexuses) originOptions = availableOriginNexuses
+    if (availableDestinationNexuses) destinationOptions = ShipmentLocationBox.sortOptions(availableDestinationNexuses)
+    if (availableOriginNexuses) originOptions = ShipmentLocationBox.sortOptions(availableOriginNexuses)
     const requireFullAddress = scope.require_full_address
     const showOriginError = !this.state.oSelect && nextStageAttempts > 0
     const originNexus = (
@@ -1007,7 +1014,7 @@ class ShipmentLocationBox extends Component {
           className={styles.select}
           value={this.state.oSelect}
           placeholder={t('shipment:origin')}
-          options={originOptions}
+          options={originOptions.sort((a, b) => a.label - b.label)}
           disabled={fetchingtruckingAvailability}
           onChange={this.setOriginNexus}
           nextStageAttempt={nextStageAttempts > 0}
@@ -1027,7 +1034,7 @@ class ShipmentLocationBox extends Component {
           value={this.state.dSelect}
           disabled={fetchingtruckingAvailability}
           placeholder={t('shipment:destination')}
-          options={destinationOptions}
+          options={destinationOptions.sort((a, b) => a.label - b.label)}
           onChange={this.setDestNexus}
           backgroundColor={backgroundColor}
           nextStageAttempt={nextStageAttempts > 0}
@@ -1055,186 +1062,99 @@ class ShipmentLocationBox extends Component {
         <div
           className={`${styles.address_form} flex-100 layout-row layout-wrap layout-align-center`}
         >
-<<<<<<< HEAD
-          <div
-            className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}
-          >
-            <p className="flex-none">{t('shipment:enterPickUp')}</p>
-          </div>
-
-          <input
-            name="origin-street"
-            className={
-              `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !origin.street && requireFullAddress ? styles.with_errors : ''}`
-            }
-            type="string"
-            onChange={this.handleAddressChange}
-            onFocus={this.handleAddressFormFocus}
-            onBlur={this.handleAddressFormFocus}
-            value={origin.street || ''}
-            autoComplete="off"
-            placeholder={t('user:street')}
-            disabled={!this.state.showOriginFields}
-          />
-          <input
-            id="not-auto"
-            name="origin-number"
-            className={
-              `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !origin.number && requireFullAddress ? styles.with_errors : ''}`
-            }
-            type="string"
-            onChange={this.handleAddressChange}
-            onFocus={this.handleAddressFormFocus}
-            onBlur={this.handleAddressFormFocus}
-            value={origin.number || ''}
-            autoComplete="off"
-            placeholder={t('user:number')}
-            disabled={!this.state.showOriginFields}
-          />
-          <input
-            name="origin-zipCode"
-            className={
-              `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !origin.zipCode ? styles.with_errors : ''}`
-            }
-            type="string"
-            onChange={this.handleAddressChange}
-            onFocus={this.handleAddressFormFocus}
-            onBlur={this.handleAddressFormFocus}
-            value={origin.zipCode || ''}
-            autoComplete="off"
-            placeholder={t('user:postalCode')}
-            disabled={!this.state.showOriginFields}
-          />
-          <input
-            name="origin-city"
-            className={
-              `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !origin.city ? styles.with_errors : ''}`
-            }
-            type="string"
-            onChange={this.handleAddressChange}
-            onFocus={this.handleAddressFormFocus}
-            onBlur={this.handleAddressFormFocus}
-            value={origin.city || ''}
-            autoComplete="off"
-            placeholder={t('user:city')}
-            disabled={!this.state.showOriginFields}
-          />
-          <input
-            name="origin-country"
-            className={
-              `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !origin.country ? styles.with_errors : ''}`
-            }
-            type="string"
-            onChange={this.handleAddressChange}
-            onFocus={this.handleAddressFormFocus}
-            onBlur={this.handleAddressFormFocus}
-            value={origin.country || ''}
-            autoComplete="off"
-            placeholder={t('user:country')}
-            disabled={!this.state.showOriginFields}
-          />
-          <div className="flex-100 layout-row layout-align-start-center">
-=======
-         { fetchingtruckingAvailability ? <LoadingSpinner size="small" /> :
-           <div
-           className={`flex-100 layout-row layout-wrap layout-align-center`}
-         >
->>>>>>> 281e00f48... IMC-592 - prerebase
-            <div
-              className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}
+          { fetchingtruckingAvailability ? <LoadingSpinner size="small" />
+            : <div
+              className="flex-100 layout-row layout-wrap layout-align-center"
             >
-              <p className="flex-none">{t('shipment:enterPickUp')}</p>
-            </div>
-         
-          
-            <input
-              name="origin-street"
-              className={
-                `flex-90 ${styles.input} ` +
-                `${nextStageAttempts > 0 && !origin.street && requireFullAddress ? styles.with_errors : ''}`
-              }
-              type="string"
-              onChange={this.handleAddressChange}
-              onFocus={this.handleAddressFormFocus}
-              onBlur={this.handleAddressFormFocus}
-              value={origin.street || ''}
-              autoComplete="off"
-              placeholder={t('user:street')}
-            />
-            <input
-              id="not-auto"
-              name="origin-number"
-              className={
-                `flex-90 ${styles.input} ` +
-                `${nextStageAttempts > 0 && !origin.number && requireFullAddress ? styles.with_errors : ''}`
-              }
-              type="string"
-              onChange={this.handleAddressChange}
-              onFocus={this.handleAddressFormFocus}
-              onBlur={this.handleAddressFormFocus}
-              value={origin.number || ''}
-              autoComplete="off"
-              placeholder={t('user:number')}
-            />
-            <input
-              name="origin-zipCode"
-              className={
-                `flex-90 ${styles.input} ` +
-                `${nextStageAttempts > 0 && !origin.zipCode ? styles.with_errors : ''}`
-              }
-              type="string"
-              onChange={this.handleAddressChange}
-              onFocus={this.handleAddressFormFocus}
-              onBlur={this.handleAddressFormFocus}
-              value={origin.zipCode || ''}
-              autoComplete="off"
-              placeholder={t('user:postalCode')}
-            />
-            <input
-              name="origin-city"
-              className={
-                `flex-90 ${styles.input} ` +
-                `${nextStageAttempts > 0 && !origin.city ? styles.with_errors : ''}`
-              }
-              type="string"
-              onChange={this.handleAddressChange}
-              onFocus={this.handleAddressFormFocus}
-              onBlur={this.handleAddressFormFocus}
-              value={origin.city || ''}
-              autoComplete="off"
-              placeholder={t('user:city')}
-            />
-            <input
-              name="origin-country"
-              className={
-                `flex-90 ${styles.input} ` +
-                `${nextStageAttempts > 0 && !origin.country ? styles.with_errors : ''}`
-              }
-              type="string"
-              onChange={this.handleAddressChange}
-              onFocus={this.handleAddressFormFocus}
-              onBlur={this.handleAddressFormFocus}
-              value={origin.country || ''}
-              autoComplete="off"
-              placeholder={t('user:country')}
-            />
-            <div className="flex-100 layout-row layout-align-start-center">
               <div
-                className={`${styles.clear_sec} flex-none layout-row layout-align-end-center`}
-                onClick={() => this.resetAuto('origin')}
+                className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}
               >
-                <i className="fa fa-times flex-none" />
-                <p className="offset-5 flex-none" style={{ paddingRight: '10px' }}>
+                <p className="flex-none">{t('shipment:enterPickUp')}</p>
+              </div>
+
+              <input
+                name="origin-street"
+                className={
+                  `flex-90 ${styles.input} ` +
+                `${nextStageAttempts > 0 && !origin.street && requireFullAddress ? styles.with_errors : ''}`
+                }
+                type="string"
+                onChange={this.handleAddressChange}
+                onFocus={this.handleAddressFormFocus}
+                onBlur={this.handleAddressFormFocus}
+                value={origin.street || ''}
+                autoComplete="off"
+                placeholder={t('user:street')}
+              />
+              <input
+                id="not-auto"
+                name="origin-number"
+                className={
+                  `flex-90 ${styles.input} ` +
+                `${nextStageAttempts > 0 && !origin.number && requireFullAddress ? styles.with_errors : ''}`
+                }
+                type="string"
+                onChange={this.handleAddressChange}
+                onFocus={this.handleAddressFormFocus}
+                onBlur={this.handleAddressFormFocus}
+                value={origin.number || ''}
+                autoComplete="off"
+                placeholder={t('user:number')}
+              />
+              <input
+                name="origin-zipCode"
+                className={
+                  `flex-90 ${styles.input} ` +
+                `${nextStageAttempts > 0 && !origin.zipCode ? styles.with_errors : ''}`
+                }
+                type="string"
+                onChange={this.handleAddressChange}
+                onFocus={this.handleAddressFormFocus}
+                onBlur={this.handleAddressFormFocus}
+                value={origin.zipCode || ''}
+                autoComplete="off"
+                placeholder={t('user:postalCode')}
+              />
+              <input
+                name="origin-city"
+                className={
+                  `flex-90 ${styles.input} ` +
+                `${nextStageAttempts > 0 && !origin.city ? styles.with_errors : ''}`
+                }
+                type="string"
+                onChange={this.handleAddressChange}
+                onFocus={this.handleAddressFormFocus}
+                onBlur={this.handleAddressFormFocus}
+                value={origin.city || ''}
+                autoComplete="off"
+                placeholder={t('user:city')}
+              />
+              <input
+                name="origin-country"
+                className={
+                  `flex-90 ${styles.input} ` +
+                `${nextStageAttempts > 0 && !origin.country ? styles.with_errors : ''}`
+                }
+                type="string"
+                onChange={this.handleAddressChange}
+                onFocus={this.handleAddressFormFocus}
+                onBlur={this.handleAddressFormFocus}
+                value={origin.country || ''}
+                autoComplete="off"
+                placeholder={t('user:country')}
+              />
+              <div className="flex-100 layout-row layout-align-start-center">
+                <div
+                  className={`${styles.clear_sec} flex-none layout-row layout-align-end-center`}
+                  onClick={() => this.resetAuto('origin')}
+                >
+                  <i className="fa fa-times flex-none" />
+                  <p className="offset-5 flex-none" style={{ paddingRight: '10px' }}>
                   Clear
-                </p>
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
           }
         </div>
       </div>
@@ -1271,94 +1191,100 @@ class ShipmentLocationBox extends Component {
           <i className={`${styles.up} flex-none fa fa-angle-double-up`} />
         </div>
         <div className={`${styles.address_form} ${toggleLogic} flex-100 layout-row layout-wrap layout-align-center`}>
-          <div
-            className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}
-          >
-            <p className="flex-none">{t('shipment:enterDelivery')}</p>
-          </div>
-
-          <input
-            name="destination-street"
-            className={
-              `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !destination.street && requireFullAddress ? styles.with_errors : ''}`
-            }
-            onChange={this.handleAddressChange}
-            onFocus={this.handleAddressFormFocus}
-            onBlur={this.handleAddressFormFocus}
-            value={destination.street || ''}
-            autoComplete="off"
-            placeholder={t('user:street')}
-            disabled={!this.state.showDestinationFields}
-          />
-          <input
-            name="destination-number"
-            className={
-              `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !destination.number && requireFullAddress ? styles.with_errors : ''}`
-            }
-            type="string"
-            onChange={this.handleAddressChange}
-            onFocus={this.handleAddressFormFocus}
-            onBlur={this.handleAddressFormFocus}
-            value={destination.number || ''}
-            autoComplete="off"
-            placeholder={t('user:number')}
-            disabled={!this.state.showDestinationFields}
-          />
-          <input
-            name="destination-zipCode"
-            className={
-              `flex-90 ${styles.zipCode} ${styles.input}` +
-              `${nextStageAttempts > 0 && !destination.number ? styles.with_errors : ''}`
-            }
-            onChange={this.handleAddressChange}
-            onFocus={this.handleAddressFormFocus}
-            onBlur={this.handleAddressFormFocus}
-            value={destination.zipCode || ''}
-            autoComplete="off"
-            placeholder={t('user:postalCode')}
-            disabled={!this.state.showDestinationFields}
-          />
-          <input
-            name="destination-city"
-            className={
-              `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !destination.city ? styles.with_errors : ''}`
-            }
-            onChange={this.handleAddressChange}
-            onFocus={this.handleAddressFormFocus}
-            onBlur={this.handleAddressFormFocus}
-            value={destination.city || ''}
-            autoComplete="off"
-            placeholder={t('user:city')}
-            disabled={!this.state.showDestinationFields}
-          />
-          <input
-            name="destination-country"
-            className={
-              `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !destination.country ? styles.with_errors : ''}`
-            }
-            onChange={this.handleAddressChange}
-            onFocus={this.handleAddressFormFocus}
-            onBlur={this.handleAddressFormFocus}
-            value={destination.country || ''}
-            autoComplete="off"
-            placeholder={t('user:country')}
-            disabled={!this.state.showDestinationFields}
-          />
-          <div className="flex-100 layout-row layout-align-start-center">
-            <div
-              className={`${styles.clear_sec} flex-none layout-row layout-align-end-center`}
-              onClick={() => this.resetAuto('destination')}
+          { fetchingtruckingAvailability ? <LoadingSpinner size="small" />
+            : <div
+              className="flex-100 layout-row layout-wrap layout-align-center"
             >
-              <i className="fa fa-times flex-none" />
-              <p className="offset-5 flex-none" style={{ paddingRight: '10px' }}>
-                {t('common:clear')}
-              </p>
+              <div
+                className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}
+              >
+                <p className="flex-none">{t('shipment:enterDelivery')}</p>
+              </div>
+
+              <input
+                name="destination-street"
+                className={
+                  `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !destination.street && requireFullAddress ? styles.with_errors : ''}`
+                }
+                onChange={this.handleAddressChange}
+                onFocus={this.handleAddressFormFocus}
+                onBlur={this.handleAddressFormFocus}
+                value={destination.street || ''}
+                autoComplete="off"
+                placeholder={t('user:street')}
+                disabled={!this.state.showDestinationFields}
+              />
+              <input
+                name="destination-number"
+                className={
+                  `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !destination.number && requireFullAddress ? styles.with_errors : ''}`
+                }
+                type="string"
+                onChange={this.handleAddressChange}
+                onFocus={this.handleAddressFormFocus}
+                onBlur={this.handleAddressFormFocus}
+                value={destination.number || ''}
+                autoComplete="off"
+                placeholder={t('user:number')}
+                disabled={!this.state.showDestinationFields}
+              />
+              <input
+                name="destination-zipCode"
+                className={
+                  `flex-90 ${styles.zipCode} ${styles.input}` +
+              `${nextStageAttempts > 0 && !destination.number ? styles.with_errors : ''}`
+                }
+                onChange={this.handleAddressChange}
+                onFocus={this.handleAddressFormFocus}
+                onBlur={this.handleAddressFormFocus}
+                value={destination.zipCode || ''}
+                autoComplete="off"
+                placeholder={t('user:postalCode')}
+                disabled={!this.state.showDestinationFields}
+              />
+              <input
+                name="destination-city"
+                className={
+                  `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !destination.city ? styles.with_errors : ''}`
+                }
+                onChange={this.handleAddressChange}
+                onFocus={this.handleAddressFormFocus}
+                onBlur={this.handleAddressFormFocus}
+                value={destination.city || ''}
+                autoComplete="off"
+                placeholder={t('user:city')}
+                disabled={!this.state.showDestinationFields}
+              />
+              <input
+                name="destination-country"
+                className={
+                  `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !destination.country ? styles.with_errors : ''}`
+                }
+                onChange={this.handleAddressChange}
+                onFocus={this.handleAddressFormFocus}
+                onBlur={this.handleAddressFormFocus}
+                value={destination.country || ''}
+                autoComplete="off"
+                placeholder={t('user:country')}
+                disabled={!this.state.showDestinationFields}
+              />
+              <div className="flex-100 layout-row layout-align-start-center">
+                <div
+                  className={`${styles.clear_sec} flex-none layout-row layout-align-end-center`}
+                  onClick={() => this.resetAuto('destination')}
+                >
+                  <i className="fa fa-times flex-none" />
+                  <p className="offset-5 flex-none" style={{ paddingRight: '10px' }}>
+                    {t('common:clear')}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
+          }
         </div>
       </div>
     )

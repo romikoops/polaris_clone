@@ -12,7 +12,7 @@ class LocationsController < ApplicationController
                 raw_results
               else
                 raw_results.select { |result| countries.include?(result.country) }
-    end
+              end
     response_handler(
       results: results.map(&:as_result_json)
     )

@@ -66,10 +66,6 @@ module Queries
               END,
               ','
             ) AS destination_truck_types
-            STRING_AGG(DISTINCT origin_truck_type_availabilities.truck_type, ',')
-              AS origin_truck_types,
-            STRING_AGG(DISTINCT destination_truck_type_availabilities.truck_type, ',')
-              AS destination_truck_types
           FROM itineraries
           JOIN stops AS origin_stops
             ON itineraries.id = origin_stops.itinerary_id

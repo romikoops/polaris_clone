@@ -44,6 +44,9 @@ class Autocomplete extends PureComponent {
   }
 
   componentWillReceiveProps (nextProps) {
+    if (typeof this.addressService === undefined) {
+      this.addressService = new nextProps.gMaps.places.AutocompleteService({ types: ['address'] })
+    }
     if (this.props.input === nextProps.input) return
     this.setState(prevState => (nextProps.input === prevState.input ? {} : { input: nextProps.input }))
   }
