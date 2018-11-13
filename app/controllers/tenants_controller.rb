@@ -18,4 +18,11 @@ class TenantsController < ApplicationController
       json_response({}, 400)
     end
   end
+
+  def show
+    tenant_id = params[:id]
+    ref = "#{request.referrer}/#{tenant_id}"
+    tenant = Tenant.find(tenant_id)
+    response_handler(url: ref, tenant: tenant)
+  end
 end

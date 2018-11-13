@@ -6,14 +6,16 @@ Rails.application.routes.draw do
   get '/health_check', to: 'server_checks#health_check'
   get '/', to: 'server_checks#health_check'
 
-  mount_devise_token_auth_for 'User', at: 'subdomain/:subdomain_id/auth', controllers: {
+  mount_devise_token_auth_for 'User', at: 'tenant/:tenant_id/auth', controllers: {
     sessions: 'users_devise_token_auth/sessions',
     registrations: 'users_devise_token_auth/registrations',
     confirmations: 'users_devise_token_auth/confirmations',
     passwords: 'users_devise_token_auth/passwords'
   }, skip: [:omniauth_callbacks]
 
-  resources :subdomain, only: [:show] do
+  resource :tenant, only: [:show]
+
+  resources :tenants, only: [:show] do
     namespace :admin do
       resources :shipments do
         collection do

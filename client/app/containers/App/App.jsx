@@ -22,27 +22,30 @@ import CookieConsentBar from '../../components/CookieConsentBar'
 import GenericError from '../../components/ErrorHandling/Generic'
 
 class App extends Component {
-  componentWillMount () {
-    const { tenant, isFetching, appDispatch } = this.props
-    if (!tenant && !isFetching) {
-      const subdomain = getSubdomain()
-      appDispatch.fetchTenantIfNeeded(subdomain)
-    }
-    this.isUserExpired()
+  constructor (props) {
+    super(props)
+
+    const { tenant, isFetching, appDispatch } = props
+    const tenantId = '45'
+    appDispatch.setTenant(tenantId)
+    // if (!tenant && !isFetching) {
+    //   const subdomain = getSubdomain()
+    //   appDispatch.fetchTenantIfNeeded(subdomain)
+    // }
   }
   componentDidMount () {
     const { appDispatch } = this.props
-    const subdomain = getSubdomain()
-    appDispatch.fetchTenantIfNeeded(subdomain)
-    appDispatch.fetchCurrencies()
+    // const subdomain = getSubdomain()
+    // appDispatch.fetchTenantIfNeeded(subdomain)
+    // appDispatch.fetchCurrencies()
     this.isUserExpired()
   }
   componentDidUpdate (prevProps) {
     if ((this.props.selectedSubdomain !== prevProps.selectedSubdomain ||
       (!this.props.tenant && !this.props.isFetching) ||
     (this.props.tenant && !this.props.tenant.data && !this.props.isFetching))) {
-      const { appDispatch, selectedSubdomain } = this.props
-      appDispatch.fetchTenantIfNeeded(selectedSubdomain)
+      // const { appDispatch, selectedSubdomain } = this.props
+      // appDispatch.fetchTenantIfNeeded(selectedSubdomain)
     }
   }
   isUserExpired () {
@@ -65,8 +68,12 @@ class App extends Component {
       showMessages,
       sending,
       loading,
-      loggingIn
+      loggingIn,
+      app
     } = this.props
+
+    if (!app || !app.test) return ''
+
     if (!tenant || (tenant && !tenant.data)) {
       return <Loading theme={defaultTheme} text="loading..." />
     }
@@ -170,7 +177,8 @@ App.propTypes = {
   user: PropTypes.user,
   loggedIn: PropTypes.bool,
   appDispatch: PropTypes.shape({
-    fetchTenantIfNeeded: PropTypes.func
+    fetchTenantIfNeeded: PropTypes.func,
+    setTenant: PropTypes.func
   }).isRequired,
   sending: PropTypes.bool,
   showMessages: PropTypes.bool,
@@ -188,8 +196,10 @@ App.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    selectedSubdomain, tenant, authentication, messaging, admin, users
+    selectedSubdomain, authentication, messaging, admin, users, app
   } = state
+  if (!app || !app.test) return {}
+  const tenant = app.test
   const { showMessages, sending } = messaging
   const { user, loggedIn, loggingIn } = authentication
   const { isFetching } = tenant || {
@@ -206,7 +216,8 @@ function mapStateToProps (state) {
     isFetching,
     showMessages,
     sending,
-    loading
+    loading,
+    app
   }
 }
 function mapDispatchToProps (dispatch) {

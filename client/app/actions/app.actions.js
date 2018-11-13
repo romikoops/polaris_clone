@@ -4,7 +4,6 @@ import { appConstants } from '../constants'
 import getApiHost from '../constants/api.constants'
 import { appService } from '../services'
 import {
-  alertActions,
   shipmentActions,
   userActions,
   adminActions,
@@ -15,6 +14,27 @@ import {
 import getSubdomain from '../helpers/subdomain'
 
 const { fetch } = window
+
+function setTenant (tenantId) {
+  function request () {
+  }
+  function success (payload) {
+    return { type: 'TEST', payload }
+  }
+  function failure (error) {
+  }
+
+  return (dispatch) => {
+    appService.setTenant(tenantId).then(
+      (resp) => {
+        dispatch(success(resp))
+      },
+      () => {
+        // TODO
+      }
+    )
+  }
+}
 
 function fetchCurrencies (type) {
   function request (currencyReq) {
@@ -321,6 +341,7 @@ export const appActions = {
   invalidateSubdomain,
   setCurrency,
   clearLoading,
+  setTenant,
   goTo,
   fetchTenants,
   setTheme,

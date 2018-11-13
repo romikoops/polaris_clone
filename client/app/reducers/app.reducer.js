@@ -3,6 +3,24 @@ import { appConstants } from '../constants'
 
 export default function app (state = {}, action) {
   switch (action.type) {
+    // case appConstants.SET_TENANT_REQUEST: {
+    //   return state
+    // }
+    // case appConstants.SET_TENANT_SUCCESS: {
+    //   return action.payload
+    // }
+    // case appConstants.SET_TENANT_ERROR: {
+    //   const currErr = merge({}, state, {
+    //     error: action.payload,
+    //     loading: false
+    //   })
+    //   return currErr
+    // }
+    case 'TEST':
+      return {
+        ...state,
+        test: action.payload
+      }
     case appConstants.FETCH_CURRENCIES_REQUEST: {
       return state
     }
