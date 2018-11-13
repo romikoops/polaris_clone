@@ -13,18 +13,18 @@ class PricingsController < ApplicationController
       @pricings = tenant.pricings
       @itineraries = tenant.itineraries
     end
-    response = Rails.cache.fetch("#{@pricings.cache_key}/pricings_index", expires_in: 12.hours) do
+    # response = Rails.cache.fetch("#{@pricings.cache_key}/pricings_index", expires_in: 12.hours) do
       @transports = TransportCategory.all.uniq
       itineraries = @itineraries
                     .map { |itin| itin.as_user_pricing_json(current_user) }
 
       last_updated = @itineraries.first ? @itineraries.first.updated_at : DateTime.now
-      {
+     response = {
         itineraries: itineraries,
         transportCategories: @transports,
         lastUpdate:          last_updated
       }
-    end
+    # end
     response_handler(response)
   end
 

@@ -29,7 +29,7 @@ class Itinerary < ApplicationRecord
 
     trip = trips.new(start_date: start_date, end_date: end_date, tenant_vehicle_id: tenant_vehicle_id, vessel: vessel, voyage_code: voyage_code)
     return results unless trip.save
-    
+
     results[:trips] << trip
     stops.each do |stop|
       data =
@@ -265,6 +265,15 @@ class Itinerary < ApplicationRecord
     pricings.count
   end
 
+  def dedicated_pricing_count(user)
+    dedicated_pricings_count = pricings.where(user_id: user.id).count
+    open_pricings_count = pricings.where(user_id: nil).count
+    {
+      dedicated_pricings_count: dedicated_pricings_count,
+      open_pricings_count:    (dedicated_pricings_count - open_pricings_count).abs
+    }
+  end
+
   def routes
     stops.order(:index).to_a.combination(2).map do |stop_array|
       if !stop_array[0].hub || !stop_array[1].hub
@@ -430,9 +439,8 @@ class Itinerary < ApplicationRecord
 
   def as_user_pricing_json(user, options = {})
     new_options = {
-      user_has_pricing: user_has_pricing(user),
-      pricing_count:      pricing_count
-    }
+      user_has_pricing: user_has_pricing(user)
+    }.merge(dedicated_pricing_count(user))
     as_options_json(options).merge(new_options)
   end
 

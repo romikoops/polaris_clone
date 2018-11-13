@@ -82,22 +82,22 @@ class PricingList extends PureComponent {
           {
             Header: (<div className="flex layout-row layout-center-center">
               {determineSortingCaret('pricing_count', sorted)}
-              <p className="flex-none">{t('account:numPricings')}</p>
+              <p className="flex-none">{t('account:openPricingCount')}</p>
             </div>),
-            accessor: 'pricing_count',
+            accessor: 'open_pricings_count',
             Cell: row => (<div className={`flex layout-row layout-align-start-center ${styles.pricing_cell} ${shouldBlur(row, expandedIndexes)}`}>
-              <p className="flex-none">{row.row.pricing_count} </p>
+              <p className="flex-none">{row.row.open_pricings_count} </p>
             </div>)
           },
           {
             Header: (<div className="flex layout-row layout-center-center">
               {determineSortingCaret('has_user_pricing', sorted)}
-              <p className="flex-none">{t('account:dedicated')}</p>
+              <p className="flex-none">{t('account:dedicatedPricingCount')}</p>
             </div>),
-            id: 'has_user_pricing',
-            accessor: d => d.has_user_pricing,
+            id: 'dedicated_pricings_count',
+            accessor: d => d.dedicated_pricings_count,
             Cell: row => (<div className={`flex layout-row layout-align-start-center ${styles.pricing_cell} ${shouldBlur(row, expandedIndexes)}`}>
-              <p className="flex-none"> {row.row.has_user_pricing ? t('common: yes') : t('common:no')}</p>
+              <p className="flex-none"> {row.row.dedicated_pricings_count}</p>
             </div>)
           }
         ]
