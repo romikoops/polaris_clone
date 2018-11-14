@@ -75,7 +75,6 @@ module ExcelTool
 
     def find_or_create_tenant_vehicle(row, itinerary)
       tenant_vehicle = find_tenant_vehicle(row, itinerary)
-      # tenant_vehicle ||= create_tenant_vehicle(row, itinerary)
       tenant_vehicle
     end
 
