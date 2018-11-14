@@ -194,11 +194,11 @@ class Shipment < ApplicationRecord
   end
 
   def pickup_address
-   Address.where(id: trucking.dig('pre_carriage', 'address_id')).first
+    Address.where(id: trucking.dig('pre_carriage', 'address_id')).first
   end
 
   def delivery_address
-   Address.where(id: trucking.dig('on_carriage', 'address_id')).first
+    Address.where(id: trucking.dig('on_carriage', 'address_id')).first
   end
 
   def pickup_address_with_country

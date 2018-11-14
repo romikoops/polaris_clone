@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe OfferCalculatorService::ChargeCalculator do
-  describe "#perform", :vcr do
+  describe '#perform', :vcr do
     include SetupHelper
     # json_test = test_cases_from_excel("#{Rails.root}/spec/test_sheets/spec_sheet.xlsx", "Sheet1")
     json_test = test_cases_from_json("#{Rails.root}/spec/test_sheets/spec_sheet.json")
@@ -19,12 +21,12 @@ RSpec.describe OfferCalculatorService::ChargeCalculator do
         final_destination = setup[:_final_destination]
         origin_trcking = setup[:_origin_trucking]
 
-        shipment.trucking["on_carriage"]["address_id"] = final_destination.id if carriage == 'on'
-        shipment.trucking["pre_carriage"]["address_id"] = origin_trcking.id if carriage == 'pre'
+        shipment.trucking['on_carriage']['address_id'] = final_destination.id if carriage == 'on'
+        shipment.trucking['pre_carriage']['address_id'] = origin_trcking.id if carriage == 'pre'
         shipment.save!
-        @trucking_data_builder      = OfferCalculatorService::TruckingDataBuilder.new(shipment)
+        @trucking_data_builder = OfferCalculatorService::TruckingDataBuilder.new(shipment)
         c_hub = { origin: [origin_hub.id], destination: [destination_hub.id] }
-        @trucking_data      = @trucking_data_builder.perform(c_hub)
+        @trucking_data = @trucking_data_builder.perform(c_hub)
         offer_charge = OfferCalculatorService::ChargeCalculator.new(
           shipment:      shipment,
           trucking_data: @trucking_data,

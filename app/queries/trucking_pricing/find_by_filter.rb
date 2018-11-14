@@ -5,7 +5,7 @@ module Queries
     class FindByFilter
       MANDATORY_ARGS = %i(load_type tenant_id carriage).freeze
 
-      def initialize(args={})
+      def initialize(args = {})
         argument_errors(args)
 
         @klass = args[:klass]
@@ -40,7 +40,7 @@ module Queries
           .where(nexuses_condition)
           .where(hubs_condition)
           .where(trucking_destination_where_statement, trucking_destination_conditions_binds)
-          .select("hubs.id AS preloaded_hub_id, trucking_pricings.*")
+          .select('hubs.id AS preloaded_hub_id, trucking_pricings.*')
       end
 
       private
@@ -120,7 +120,7 @@ module Queries
       def raise_if_country_code_error(args)
         return unless args[:address].try(:country).try(:code).nil? && args[:country_code].nil?
 
-        raise ArgumentError, "Must provide country_code"
+        raise ArgumentError, 'Must provide country_code'
       end
 
       def raise_if_no_valid_filter_error(args)

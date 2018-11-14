@@ -43,7 +43,7 @@ class GeometrySeeder
       end
       multi_polygon = RGeo::Cartesian.factory.multi_polygon(polygons)
 
-      attributes = { 
+      attributes = {
         bounds: multi_polygon,
         postal_code: '',
         neighbourhood: names[3],

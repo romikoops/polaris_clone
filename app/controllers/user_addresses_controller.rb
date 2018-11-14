@@ -43,8 +43,8 @@ class UserAddresssController < ApplicationController
   def edit
     user = User.find(params[:user_id])
     address_data = JSON.parse(params[:edit_address])
-    address_data.delete("id")
-    address_data["country"] = Country.geo_find_by_name(address_data["country"])
+    address_data.delete('id')
+    address_data['country'] = Country.geo_find_by_name(address_data['country'])
     user_loc = Address.find(params[:address_id])
     user_loc.update_attributes(address_data)
     user_loc.save!

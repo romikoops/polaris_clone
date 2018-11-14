@@ -252,11 +252,11 @@ class Itinerary < ApplicationRecord
   end
 
   def origin_nexuses
-   Address.where(id: origin_nexus_ids)
+    Address.where(id: origin_nexus_ids)
   end
 
   def destination_nexuses
-   Address.where(id: destination_nexus_ids)
+    Address.where(id: destination_nexus_ids)
   end
 
   def users_with_pricing

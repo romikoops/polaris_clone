@@ -529,7 +529,7 @@ module ExcelTool
 
     def find_geometry(idents_and_country)
       geometry = if @identifier_modifier == 'postal_code'
-                    Location.find_by_postal_code(idents_and_country[:ident].capitalize)
+                   Location.find_by_postal_code(idents_and_country[:ident].capitalize)
                  else
                    Location.cascading_find_by_names(
                      idents_and_country[:sub_ident],

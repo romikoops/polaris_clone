@@ -9,7 +9,7 @@ class Country < ApplicationRecord
     geocoder_results = Geocoder.search(country: name)
     return nil if geocoder_results.empty?
 
-    code = geocoder_results.first.data["address_components"].first["short_name"]
+    code = geocoder_results.first.data['address_components'].first['short_name']
     find_by(code: code)
   end
 
@@ -18,8 +18,8 @@ class Country < ApplicationRecord
 
     geocoder_results.map do |geo|
       Geoplace.new(
-        geo.data["address_components"].first["long_name"],
-        geo.data["address_components"].first["short_name"]
+        geo.data['address_components'].first['long_name'],
+        geo.data['address_components'].first['short_name']
       )
     end
   end

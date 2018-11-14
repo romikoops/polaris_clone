@@ -59,7 +59,7 @@ module UsersDeviseTokenAuth
     end
 
     def provider
-      "tenant_email"
+      'tenant_email'
     end
 
     def address_params

@@ -99,7 +99,7 @@ module DocumentService
     end
 
     def find_address(id)
-     Address.find(id)
+      Address.find(id)
     end
 
     def shipment_headers
@@ -133,8 +133,8 @@ module DocumentService
         shipment_sheet.write(row, 2, shipment.imc_reference)
         shipment_sheet.write(row, 3, shipment.status)
         shipment_sheet.write(row, 4, shipment.load_type.humanize)
-        shipment_sheet.write(row, 5, shipment.has_pre_carriage ? "Yes" : "No")
-        shipment_sheet.write(row, 6, shipment.has_on_carriage ? "Yes" : "No")
+        shipment_sheet.write(row, 5, shipment.has_pre_carriage ? 'Yes' : 'No')
+        shipment_sheet.write(row, 6, shipment.has_on_carriage ? 'Yes' : 'No')
         shipment_sheet.write(row, 7, shipment.planned_etd)
         shipment_sheet.write(row, 8, shipment.planned_eta)
         shipment_sheet.write(row, 9, "#{shipment.total_price[:currency]} #{shipment.total_price[:value].to_d.round(2)}")

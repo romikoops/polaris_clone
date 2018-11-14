@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Queries
   module TruckingPricing
     class FindByHubIds
       attr_reader :result
 
-      def initialize(args={})
+      def initialize(args = {})
         argument_errors(args)
 
         @klass = args[:klass]
@@ -75,17 +77,17 @@ module Queries
 
       def deserialized_result
         @result.map do |row|
-          next if row["ident_values"].nil?
+          next if row['ident_values'].nil?
           {
-            "truckingPricing" => @klass.find(row["trucking_pricing_id"]).as_options_json,
-            row["ident_type"] => row["ident_values"].split(",").map { |range| range.split("*") },
-            "countryCode"     => row["country_code"]
+            'truckingPricing' => @klass.find(row['trucking_pricing_id']).as_options_json,
+            row['ident_type'] => row['ident_values'].split(',').map { |range| range.split('*') },
+            'countryCode'     => row['country_code']
           }
         end.compact
       end
 
       def argument_errors(args)
-        raise ArgumentError, "Must provide hub_ids or hub_id" if args[:hub_ids].empty?
+        raise ArgumentError, 'Must provide hub_ids or hub_id' if args[:hub_ids].empty?
       end
     end
   end

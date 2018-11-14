@@ -31,7 +31,7 @@ class ContactsController < ApplicationController
     update_data = JSON.parse(params[:update])
 
     contact = Contact.find(params[:id])
-    loc = contact.address ||Address.new
+    loc = contact.address || Address.new
     update_data.delete('id')
     update_data.delete('userId')
     update_data.delete('addressId')

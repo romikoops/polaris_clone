@@ -18,7 +18,7 @@ class Address < ApplicationRecord
   has_many :stops, through: :hubs
   belongs_to :country, optional: true
 
-  scope :nexus, -> { where(address_type: "nexus") }
+  scope :nexus, -> { where(address_type: 'nexus') }
 
   before_validation :sanitize_zip_code!
 
@@ -28,12 +28,12 @@ class Address < ApplicationRecord
   reverse_geocoded_by :latitude, :longitude do |address, results|
     if geo = results.first
       premise_data = geo.address_components.find do |address_component|
-        address_component["types"] == ["premise"]
+        address_component['types'] == ['premise']
       end || {}
-      address.premise          = premise_data["long_name"]
+      address.premise          = premise_data['long_name']
       address.street_number    = geo.street_number
       address.street           = geo.route
-      address.street_address   = geo.street_number.to_s + " " + geo.route.to_s
+      address.street_address   = geo.street_number.to_s + ' ' + geo.route.to_s
       address.geocoded_address = geo.address
       address.city             = geo.city
       address.zip_code         = geo.postal_code
@@ -49,12 +49,12 @@ class Address < ApplicationRecord
     if truck_carriage
       geocoded_address(user_input)
     else
-     Address.where(id: hub_id).first
+      Address.where(id: hub_id).first
     end
   end
 
   def self.from_short_name(input, address_type)
-    city, country_name = *input.split(" ,")
+    city, country_name = *input.split(' ,')
     country = Country.geo_find_by_name(country_name)
     address = Address.find_by(city: city, country: country, address_type: address_type)
     return address unless address.nil?
@@ -94,7 +94,7 @@ class Address < ApplicationRecord
     l.city
   end
 
-  def self.geocode_all_from_address_fields!(options={})
+  def self.geocode_all_from_address_fields!(options = {})
     # Example Usage:
     #   1.Address.geocode_all_from_address_fields
     #         Updates addresses with nil geocoded_address
@@ -104,7 +104,7 @@ class Address < ApplicationRecord
     #         Return Array of all addresses
 
     filter = options[:force] ? nil : { geocoded_address: nil }
-   Address.where(filter).map(&:geocode_from_address_fields!)
+    Address.where(filter).map(&:geocode_from_address_fields!)
   end
 
   def self.create_and_geocode(raw_address_params)
@@ -131,7 +131,7 @@ class Address < ApplicationRecord
   end
 
   def self.nexuses
-    where(address_type: "nexus")
+    where(address_type: 'nexus')
   end
 
   def self.nexuses_client(client)
@@ -173,17 +173,15 @@ class Address < ApplicationRecord
     end
   end
 
-  
-
   def hubs_by_type_seeder(hub_type, tenant_id)
     hubs = self.hubs.where(hub_type: hub_type, tenant_id: tenant_id)
     if hubs.empty?
       name = case hub_type
-             when "ocean"
+             when 'ocean'
                "#{self.name} Port"
-             when "air"
+             when 'air'
                "#{self.name} Airport"
-             when "rail"
+             when 'rail'
                "#{self.name} Railyard"
              else
                self.name
@@ -197,12 +195,12 @@ class Address < ApplicationRecord
 
   def pretty_hub_type
     case address_type
-    when "hub_train"
-      "Train Hub"
-    when "hub_ocean"
-      "Port"
+    when 'hub_train'
+      'Train Hub'
+    when 'hub_ocean'
+      'Port'
     else
-      raise "Unknown Hub Type!"
+      raise 'Unknown Hub Type!'
     end
   end
 
@@ -211,9 +209,9 @@ class Address < ApplicationRecord
   end
 
   def full_address
-    part1 = [street, street_number].delete_if(&:blank?).join(" ")
-    part2 = [zip_code, city, country.name].delete_if(&:blank?).join(", ")
-    [part1, part2].delete_if(&:blank?).join(", ")
+    part1 = [street, street_number].delete_if(&:blank?).join(' ')
+    part2 = [zip_code, city, country.name].delete_if(&:blank?).join(', ')
+    [part1, part2].delete_if(&:blank?).join(', ')
   end
 
   def lat_lng_string
@@ -221,7 +219,7 @@ class Address < ApplicationRecord
   end
 
   def closest_hub
-    hubs = Address.where(address_type: "nexus")
+    hubs = Address.where(address_type: 'nexus')
     distances = []
     hubs.each do |hub|
       distances << Geocoder::Calculations.distance_between([latitude, longitude], [hub.latitude, hub.longitude])
@@ -244,7 +242,7 @@ class Address < ApplicationRecord
   end
 
   def closest_hubs
-    hubs = Address.where(address_type: "nexus")
+    hubs = Address.where(address_type: 'nexus')
     distances = {}
     hubs.each_with_index do |hub, i|
       distances[i] = Geocoder::Calculations.distance_between([latitude, longitude], [hub.latitude, hub.longitude])
@@ -274,11 +272,11 @@ class Address < ApplicationRecord
 
   def to_custom_hash
     custom_hash = { country: country.try(:name) }
-    %i[
+    %i(
       id city street street_number zip_code
       geocoded_address latitude longitude
       address_type name
-    ].each do |attribute|
+    ).each do |attribute|
       custom_hash[attribute] = self[attribute]
     end
 
@@ -288,11 +286,11 @@ class Address < ApplicationRecord
   private
 
   def self.address_params(raw_address_params)
-    country = Country.geo_find_by_name(raw_address_params["country"])
+    country = Country.geo_find_by_name(raw_address_params['country'])
 
     filtered_params = raw_address_params.try(:permit,
-      :latitude, :longitude, :geocoded_address, :street,
-      :street_number, :zip_code, :city) || raw_address_params
+                                             :latitude, :longitude, :geocoded_address, :street,
+                                             :street_number, :zip_code, :city) || raw_address_params
 
     filtered_params.to_h.merge(country: country)
   end
@@ -300,6 +298,6 @@ class Address < ApplicationRecord
   def sanitize_zip_code!
     return if zip_code.nil?
 
-    self.zip_code = zip_code.gsub(/[^a-zA-z\d]/, "")
+    self.zip_code = zip_code.gsub(/[^a-zA-z\d]/, '')
   end
 end

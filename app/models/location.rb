@@ -54,14 +54,14 @@ class Location < ApplicationRecord
     name_2 = raw_name_2.split.map(&:capitalize).join(' ')
     name_1_test = raw_name_1.try(:split)
     name_1 = name_1_test.nil? ? name_2 : name_1_test.map(&:capitalize).join(' ')
-    keys = %w[postal_code suburb neighbourhood city province country]
+    keys = %w(postal_code suburb neighbourhood city province country)
     final_result = nil
     keys.to_a.reverse_each.with_index do |name_i, i|
       results_1 = where(name_i => name_1)
 
       next if results_1.empty?
       results_1.each do |result|
-        sub_keys = keys.slice!(0, keys.length - (i+1))
+        sub_keys = keys.slice!(0, keys.length - (i + 1))
         sub_keys.to_a.reverse_each.with_index do |name_j, j|
           sub_results = results_1.where(name_j => name_2)
           specific_result = sub_results.where(sub_keys.reverse[j + 1] => name_2).first
@@ -72,14 +72,13 @@ class Location < ApplicationRecord
       end
     end
     return final_result unless final_result.nil?
-    keys.to_a.reverse_each.with_index do |name_i, i|
+    keys.to_a.reverse_each.with_index do |name_i, _i|
       final_result = where(name_i => name_2).first
 
       next if final_result
     end
 
-    return final_result
-
+    final_result
   end
 
   def self.cascading_find_by_name(raw_name)

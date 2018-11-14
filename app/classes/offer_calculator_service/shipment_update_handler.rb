@@ -24,11 +24,11 @@ module OfferCalculatorService
       # Setting trucking also sets has_on_carriage and has_pre_carriage
       @shipment.trucking = trucking_params.to_h
 
-      { origin: "pre", destination: "on" }.each do |target, carriage|
+      { origin: 'pre', destination: 'on' }.each do |target, carriage|
         next unless @shipment.has_carriage?(carriage)
         address = Address.create_from_raw_params!(address_params(target))
         raise_trucking_address_error(target) if trucking_address_invalid?(address)
-        @shipment.trucking["#{carriage}_carriage"]["address_id"] = address.id
+        @shipment.trucking["#{carriage}_carriage"]['address_id'] = address.id
       end
     end
 
@@ -114,8 +114,8 @@ module OfferCalculatorService
     end
 
     def raise_trucking_address_error(target)
-      raise ApplicationError::InvalidPickupAddress   if target == "origin"
-      raise ApplicationError::InvalidDeliveryAddress if target == "destination"
+      raise ApplicationError::InvalidPickupAddress   if target == 'origin'
+      raise ApplicationError::InvalidDeliveryAddress if target == 'destination'
     end
 
     def trucking_params

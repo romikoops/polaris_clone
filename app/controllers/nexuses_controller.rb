@@ -20,14 +20,14 @@ class NexusesController < ApplicationController
   private
 
   def find_available_nexuses
-    nexus_ids = params[:nexus_ids].split(",").map(&:to_i)
-    hub_ids   = params[:hub_ids].split(",").map(&:to_i)
+    nexus_ids = params[:nexus_ids].split(',').map(&:to_i)
+    hub_ids   = params[:hub_ids].split(',').map(&:to_i)
     target    = params[:target]
 
-    itinerary_ids = params[:itinerary_ids].split(",").map(&:to_i)
+    itinerary_ids = params[:itinerary_ids].split(',').map(&:to_i)
     itineraries = current_user.tenant.itineraries.joins(:stops)
-      .where(id: itinerary_ids)
-      .where('stops.hub_id': hub_ids)
+                              .where(id: itinerary_ids)
+                              .where('stops.hub_id': hub_ids)
 
     available_hub_ids = itineraries.map do |itinerary|
       if hub_ids.blank?
@@ -41,7 +41,7 @@ class NexusesController < ApplicationController
   end
 
   def format_for_select_box(available_hub_ids_grouped_by_nexus)
-   Address.where(id: available_hub_ids_grouped_by_nexus.keys).map do |nexus|
+    Address.where(id: available_hub_ids_grouped_by_nexus.keys).map do |nexus|
       {
         label: nexus[:name],
         value: nexus.as_json.merge(hub_ids: available_hub_ids_grouped_by_nexus[nexus.id])

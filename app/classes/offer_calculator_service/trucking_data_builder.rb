@@ -3,7 +3,7 @@
 module OfferCalculatorService
   class TruckingDataBuilder < Base
     def perform(hubs)
-      { origin: "pre", destination: "on" }
+      { origin: 'pre', destination: 'on' }
         .select { |_, carriage| @shipment.has_carriage?(carriage) }
         .each_with_object({}) do |(target, carriage), obj|
           obj[carriage] = data_for_hubs(hubs[target], carriage)
@@ -14,7 +14,7 @@ module OfferCalculatorService
 
     def data_for_hubs(hub_ids, carriage)
       trucking_details = @shipment.trucking["#{carriage}_carriage"]
-      address          = Address.find(trucking_details["address_id"])
+      address          = Address.find(trucking_details['address_id'])
 
       trucking_pricing_finder = TruckingPricingFinder.new(
         trucking_details: trucking_details,
@@ -24,7 +24,7 @@ module OfferCalculatorService
       )
       Hub.where(id: hub_ids).each_with_object({}) do |hub, obj|
         distance = calc_distance(address, hub)
-        
+
         trucking_pricings = trucking_pricing_finder.perform(hub.id, distance)
 
         trucking_charge_data = data_for_trucking_charges(trucking_pricings, distance)

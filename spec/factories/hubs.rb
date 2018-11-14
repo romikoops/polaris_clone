@@ -2,10 +2,10 @@
 
 FactoryBot.define do
   factory :hub do
-  	trait :with_lat_lng do
-  		latitude "57.694253"
-  		longitude "11.854048"
-  	end
+    trait :with_lat_lng do
+      latitude '57.694253'
+      longitude '11.854048'
+    end
 
     name 'Gothenburg Port'
     hub_type 'ocean'

@@ -181,7 +181,6 @@ class ShipmentsController < ApplicationController
   end
 
   def get_quote_index
-
     response = Rails.cache.fetch("#{quoted_shipments.cache_key}/shipment_index", expires_in: 12.hours) do
       per_page = params.fetch(:per_page, 4).to_f
       quoted = quoted_shipments.order(updated_at: :desc)

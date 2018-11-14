@@ -32,10 +32,10 @@ class Nexus < ApplicationRecord
 
   def self.migrate_hubs_from_location
     hub_type_name = {
-      "ocean" => "Port",
-      "air"   => "Airport",
-      "rail"  => "Railyard",
-      "truck" => "Depot"
+      'ocean' => 'Port',
+      'air'   => 'Airport',
+      'rail'  => 'Railyard',
+      'truck' => 'Depot'
     }
 
     hubs = Hub.all
@@ -43,8 +43,8 @@ class Nexus < ApplicationRecord
       next if hub.nexus.is_a? Nexus
       old_nexus = Address.find_by(id: hub.nexus_id)
       unless old_nexus
-        nexus_name = hub.name.gsub(" #{hub_type_name[hub.hub_type]}", "")
-        old_nexus = Address.where("name ILIKE ? AND location_type = ?", nexus_name, "nexus").first
+        nexus_name = hub.name.gsub(" #{hub_type_name[hub.hub_type]}", '')
+        old_nexus = Address.where('name ILIKE ? AND location_type = ?', nexus_name, 'nexus').first
       end
       new_nexus = Nexus.find_by(name: old_nexus.name, tenant_id: hub.tenant_id)
       new_nexus ||= Nexus.create!(
@@ -62,10 +62,10 @@ class Nexus < ApplicationRecord
 
   def self.migrate_shipments_from_location
     hub_type_name = {
-      "ocean" => "Port",
-      "air"   => "Airport",
-      "rail"  => "Railyard",
-      "truck" => "Depot"
+      'ocean' => 'Port',
+      'air'   => 'Airport',
+      'rail'  => 'Railyard',
+      'truck' => 'Depot'
     }
 
     shipments = Shipment.all
@@ -74,8 +74,8 @@ class Nexus < ApplicationRecord
       %w(origin destination).each do |dir|
         old_nexus = Address.find_by(id: shipment["#{dir}_nexus_id"])
         unless old_nexus
-          nexus_name = shipment["#{dir}_hub"].name.gsub(" #{shipment_type_name[shipment.shipment_type]}", "")
-          old_nexus = Address.where("name ILIKE ? AND location_type = ?", nexus_name, "nexus").first
+          nexus_name = shipment["#{dir}_hub"].name.gsub(" #{shipment_type_name[shipment.shipment_type]}", '')
+          old_nexus = Address.where('name ILIKE ? AND location_type = ?', nexus_name, 'nexus').first
         end
         new_nexus = Nexus.find_by(name: old_nexus.name, tenant_id: shipment.tenant_id)
         new_nexus ||= Nexus.create!(
@@ -95,7 +95,7 @@ class Nexus < ApplicationRecord
 
   def self.update_country
     Nexus.all.each do |nexus|
-      old_nexus = Address.where("name ILIKE ? AND location_type = ?", nexus.name, "nexus").first
+      old_nexus = Address.where('name ILIKE ? AND location_type = ?', nexus.name, 'nexus').first
       nexus.country_id = old_nexus.country_id
       nexus.save!
     end
@@ -106,7 +106,7 @@ class Nexus < ApplicationRecord
   end
 
   def self.from_short_name(input, tenant_id)
-    city, country_name = *input.split(" ,")
+    city, country_name = *input.split(' ,')
 
     country = Country.geo_find_by_name(country_name)
 
@@ -123,7 +123,7 @@ class Nexus < ApplicationRecord
       name:       city,
       latitude:   temp_address.latitude,
       longitude:  temp_address.longitude,
-      photo:      "",
+      photo:      '',
       country_id: country_to_save.id,
       tenant_id:  tenant_id
     )

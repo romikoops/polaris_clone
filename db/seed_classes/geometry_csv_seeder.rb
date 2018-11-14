@@ -37,10 +37,10 @@ class GeometryCsvSeeder
         end
 
         Location.import([data],
-          on_duplicate_key_update: {
-            conflict_target: %i(postal_code suburb neighbourhood city province country),
-            columns:         [:bounds]
-          })
+                        on_duplicate_key_update: {
+                          conflict_target: %i(postal_code suburb neighbourhood city province country),
+                          columns:         [:bounds]
+                        })
       end
     end
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)
@@ -77,21 +77,20 @@ class GeometryCsvSeeder
       csv = CSV.new(gz, col_sep: "\t", quote_char: "'")
 
       csv.each do |row|
-
         postal_code = row.first
         area_code, = postal_code.match(/([A-Z]+)(\d+)/).captures
         Location.import([{
-          country: 'United Kingdom of Great Britain and Northern Ireland',
-          neighbourhood: nil,
-          city: nil,
-          bounds: RGeo::GeoJSON.decode(row.second),
-          postal_code: postal_code,
-          province: nil
-        }],
-        on_duplicate_key_update: {
-          conflict_target: %i(postal_code suburb neighbourhood city province country),
-          columns:         %i(bounds)
-        })
+                          country: 'United Kingdom of Great Britain and Northern Ireland',
+                          neighbourhood: nil,
+                          city: nil,
+                          bounds: RGeo::GeoJSON.decode(row.second),
+                          postal_code: postal_code,
+                          province: nil
+                        }],
+                        on_duplicate_key_update: {
+                          conflict_target: %i(postal_code suburb neighbourhood city province country),
+                          columns:         %i(bounds)
+                        })
       end
     end
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)

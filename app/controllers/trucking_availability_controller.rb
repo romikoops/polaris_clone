@@ -37,7 +37,7 @@ class TruckingAvailabilityController < ApplicationController
       tenant_id: params[:tenant_id],
       load_type: params[:load_type],
       address: Address.new(latitude: params[:lat], longitude: params[:lng]).reverse_geocode,
-      hub_ids:   params[:hub_ids].split(",").map(&:to_i),
+      hub_ids:   params[:hub_ids].split(',').map(&:to_i),
       carriage:  params[:carriage]
     )
   end

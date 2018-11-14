@@ -1,31 +1,32 @@
+# frozen_string_literal: true
 
 FactoryBot.define do
   factory :trucking_destination do
-  	trait :zipcode do
-  		zipcode "15211"
-  	end
-  	
-  	trait :with_location do
-  		association :location
-  	end
+    trait :zipcode do
+      zipcode '15211'
+    end
 
-  	trait :distance do
-  		distance 172
-  	end
+    trait :with_location do
+      association :location
+    end
+
+    trait :distance do
+      distance 172
+    end
 
     trait :zipcode_sequence do
       sequence(:zipcode) do |n|
-        (15000 + n - 1).to_s
+        (15_000 + n - 1).to_s
       end
     end
 
     trait :zipcode_broken_sequence do
       sequence(:zipcode) do |n|
         gap = n > 40 ? 10 : 0
-        (15000 + n - 1 + gap).to_s
+        (15_000 + n - 1 + gap).to_s
       end
     end
 
-    country_code "SE"
+    country_code 'SE'
   end
 end

@@ -5,7 +5,7 @@ module DocumentService
     include AwsConfig
     include WritingTool
     attr_reader :tenant, :hubs, :filename, :directory, :workbook, :worksheet
-    
+
     def initialize(options)
       @tenant = Tenant.find(options[:tenant_id])
       @hubs = @tenant.hubs
@@ -14,7 +14,7 @@ module DocumentService
       workbook_hash = add_worksheet_to_workbook(create_workbook(@directory), header_values)
       @workbook = workbook_hash[:workbook]
       @worksheet = workbook_hash[:worksheet]
-      @mandatory_charges = @hubs.each_with_object({}) {|hub, r_hash| r_hash[hub.id] = hub.mandatory_charge}
+      @mandatory_charges = @hubs.each_with_object({}) { |hub, r_hash| r_hash[hub.id] = hub.mandatory_charge }
     end
 
     def perform
@@ -24,7 +24,7 @@ module DocumentService
         row += 1
       end
       workbook.close
-      write_to_aws(directory, tenant, filename, "hubs_sheet")
+      write_to_aws(directory, tenant, filename, 'hubs_sheet')
     end
 
     def write_hub_to_sheet(row, hub)

@@ -24,13 +24,13 @@ module DocumentService
         pricing.deep_symbolize_keys!
         next if pricing[:expiration_date] < DateTime.now
         current_itinerary     = current_itinerary(pricing)
-        origin_aux_data       = address_and_aux_data(pricing, 0, "id")
+        origin_aux_data       = address_and_aux_data(pricing, 0, 'id')
         current_origin        = origin_aux_data[:address]
-        destination_aux_data  = address_and_aux_data(pricing, 1, "id")
+        destination_aux_data  = address_and_aux_data(pricing, 1, 'id')
         current_destination   = destination_aux_data[:address]
         carrier               = carrier(pricing)
-        key_origin = aux_data[:itineraries][pricing[:itinerary_id]].dig("stops", 0, "id")
-        key_destination = aux_data[:itineraries][pricing[:itinerary_id]].dig("stops", 1, "id")
+        key_origin = aux_data[:itineraries][pricing[:itinerary_id]].dig('stops', 0, 'id')
+        key_destination = aux_data[:itineraries][pricing[:itinerary_id]].dig('stops', 1, 'id')
         unless aux_data[:transit_times]["#{key_origin}_#{key_destination}"]
           layover = layover_hash(current_itinerary, pricing)
           destination_layover = layover[:destination_layover]
@@ -46,14 +46,14 @@ module DocumentService
           if fee[:range] && !fee[:range].empty?
             fee[:range].each do |range_fee|
               data = writeable_data(current_itinerary,
-                pricing, current_origin,
-                current_destination,
-                current_transit_time,
-                current_vehicle,
-                key,
-                fee,
-                carrier,
-                range_fee)
+                                    pricing, current_origin,
+                                    current_destination,
+                                    current_transit_time,
+                                    current_vehicle,
+                                    key,
+                                    fee,
+                                    carrier,
+                                    range_fee)
               data << range_fee[:min]
               data << range_fee[:max]
               @worksheet = write_to_sheet(worksheet, row, column, data)
@@ -61,13 +61,13 @@ module DocumentService
             end
           else
             data = writeable_data(current_itinerary,
-              pricing, current_origin,
-              current_destination,
-              current_transit_time,
-              current_vehicle,
-              key,
-              fee,
-              carrier)
+                                  pricing, current_origin,
+                                  current_destination,
+                                  current_transit_time,
+                                  current_vehicle,
+                                  key,
+                                  fee,
+                                  carrier)
             @worksheet = write_to_sheet(worksheet, row, column, data)
             row += 1
           end
@@ -76,16 +76,16 @@ module DocumentService
         next unless pricing[:exceptions] && !pricing[:exceptions].empty?
         pricing[:exceptions].each do |ex_pricing|
           ex_pricing[:data].each do |key, fee|
-            data = ["TRUE", nil, current_itinerary.mode_of_transport, pricing[:load_type], ex_pricing[:effective_date], ex_pricing[:expiration_date], current_origin.name, current_destination.name, current_transit_time, pricing[:wm_rate], current_vehicle.name, key, fee[:currency], fee[:rate_basis], fee[:min], fee[:rate]]
-            data << fee[:hw_threshold] || ""
-            data << fee[:hw_rate_basis] || ""
+            data = ['TRUE', nil, current_itinerary.mode_of_transport, pricing[:load_type], ex_pricing[:effective_date], ex_pricing[:expiration_date], current_origin.name, current_destination.name, current_transit_time, pricing[:wm_rate], current_vehicle.name, key, fee[:currency], fee[:rate_basis], fee[:min], fee[:rate]]
+            data << fee[:hw_threshold] || ''
+            data << fee[:hw_rate_basis] || ''
             @worksheet = write_to_sheet(worksheet, row, 1, data)
             row += 1
           end
         end
       end
       workbook.close
-      write_to_aws(dir, tenant, filename, "pricings_sheet")
+      write_to_aws(dir, tenant, filename, 'pricings_sheet')
     end
 
     private
@@ -128,7 +128,7 @@ module DocumentService
     end
 
     def address_and_aux_data(pricing, key1, key2)
-      stop_id = aux_data[:itineraries][pricing[:itinerary_id]].dig("stops", key1, key2)
+      stop_id = aux_data[:itineraries][pricing[:itinerary_id]].dig('stops', key1, key2)
       aux_data[:nexuses][stop_id] = stop(stop_id).hub.nexus unless aux_data[:nexuses][stop_id]
       { address: aux_data[:nexuses][stop_id], aux_data: aux_data }
     end
@@ -142,8 +142,8 @@ module DocumentService
 
     def layover_hash(current_itinerary, pricing)
       tmp_trip = current_itinerary.trips.last
-      key_origin = aux_data[:itineraries][pricing[:itinerary_id]]["stops"][0]["id"]
-      key_destination = aux_data[:itineraries][pricing[:itinerary_id]]["stops"][1]["id"]
+      key_origin = aux_data[:itineraries][pricing[:itinerary_id]]['stops'][0]['id']
+      key_destination = aux_data[:itineraries][pricing[:itinerary_id]]['stops'][1]['id']
       if tmp_trip
         destination_layover = nil
         origin_layover = nil
@@ -155,7 +155,7 @@ module DocumentService
         diff = ((tmp_trip.end_date - tmp_trip.start_date) / 86_400).to_i
         aux_data[:transit_times]["#{key_origin}_#{key_destination}"] = diff
       else
-        aux_data[:transit_times]["#{key_origin}_#{key_destination}"] = ""
+        aux_data[:transit_times]["#{key_origin}_#{key_destination}"] = ''
       end
 
       {

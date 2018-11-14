@@ -8,7 +8,6 @@ class UsersController < ApplicationController
 
   def home
     response = Rails.cache.fetch("#{current_user.shipments.cache_key}/dashboard_index", expires_in: 12.hours) do
-      
       @contacts = current_user.contacts.where(alias: false).map do |contact|
         contact.as_json(
           include: { address: { include: { country: { only: :name } },
@@ -141,7 +140,7 @@ class UsersController < ApplicationController
   def rejected_shipments
     @rejected_shipments ||= current_user.shipments.rejected
   end
-  
+
   def archived_shipments
     @archived_shipments ||= current_user.shipments.archived
   end
