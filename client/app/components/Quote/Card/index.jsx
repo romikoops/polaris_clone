@@ -216,9 +216,13 @@ class QuoteCard extends PureComponent {
     const earlierDate = schedules[0] ? firstSchedule.closing_date : false
     const showEarlierBtn = earlierDate && moment(earlierDate).diff(moment(), t('common:days')) > 5
 
+    const responsiveFlex = isQuote(tenant) ? 'flex-lg-80 offset-lg-20' : ''
+
     return (
-      <div
-        className={`flex-100 flex-lg-80 offset-lg-20 layout-row layout-wrap offer_result ${styles.wrapper} ${this.state.isChecked ? styles.wrapper_selected : ''}`}
+      <div className={`
+        flex-100 layout-row layout-wrap offer_result ${responsiveFlex}
+        ${styles.wrapper} ${this.state.isChecked ? styles.wrapper_selected : ''}
+      `}
       >
         {this.state.isChecked ? (
           <div className={`${styles.wrapper_gradient}`}>
