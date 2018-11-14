@@ -1,5 +1,5 @@
 import { Promise } from 'es6-promise-promise'
-import getApiHost from '../constants/api.constants'
+import { getFullApiHost } from '../constants/api.constants'
 import { authHeader } from '../helpers'
 
 const { fetch, FormData } = window
@@ -29,7 +29,7 @@ function getHubs (page, hubType, countryId, status) {
     query += `&country_ids=${countryId}`
   }
 
-  return fetch(`${getApiHost()}/admin/hubs?page=${page || 1}${query}`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/hubs?page=${page || 1}${query}`, requestOptions)
     .then(handleResponse)
 }
 function getAllHubs () {
@@ -38,7 +38,7 @@ function getAllHubs () {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/hubs/all/processed`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/hubs/all/processed`, requestOptions)
     .then(handleResponse)
 }
 function uploadDocument (doc, type, url) {
@@ -51,7 +51,7 @@ function uploadDocument (doc, type, url) {
     body: formData
   }
 
-  return fetch(`${getApiHost()}${url}`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}${url}`, requestOptions).then(handleResponse)
 }
 
 function searchHubs (text, page, hubType, countryId, status) {
@@ -73,7 +73,7 @@ function searchHubs (text, page, hubType, countryId, status) {
     query += `&country_ids=${countryId}`
   }
 
-  return fetch(`${getApiHost()}/admin/search/hubs?page=${page || 1}${query}`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/search/hubs?page=${page || 1}${query}`, requestOptions)
     .then(handleResponse)
 }
 function searchShipments (text, target, page, perPage) {
@@ -85,7 +85,7 @@ function searchShipments (text, target, page, perPage) {
 
   query += `query=${text}&page=${page || 1}&per_page=${perPage}`
 
-  return fetch(`${getApiHost()}/admin/search/shipments/${target}?${query}`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/search/shipments/${target}?${query}`, requestOptions)
     .then(handleResponse)
 }
 
@@ -95,7 +95,7 @@ function getItineraries () {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/itineraries`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/itineraries`, requestOptions).then(handleResponse)
 }
 
 function getItinerary (id) {
@@ -104,7 +104,7 @@ function getItinerary (id) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/itineraries/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/itineraries/${id}`, requestOptions).then(handleResponse)
 }
 function viewTrucking (id) {
   const requestOptions = {
@@ -112,7 +112,7 @@ function viewTrucking (id) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/trucking/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/trucking/${id}`, requestOptions).then(handleResponse)
 }
 function getLayovers (id) {
   const requestOptions = {
@@ -120,7 +120,7 @@ function getLayovers (id) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/itineraries/${id}/layovers`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/itineraries/${id}/layovers`, requestOptions)
     .then(handleResponse)
 }
 
@@ -130,7 +130,7 @@ function getHub (id) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/hubs/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/hubs/${id}`, requestOptions).then(handleResponse)
 }
 
 function wizardHubs (file) {
@@ -141,7 +141,7 @@ function wizardHubs (file) {
     headers: { ...authHeader() },
     body: formData
   }
-  const uploadUrl = `${getApiHost()}/admin/hubs/process_csv`
+  const uploadUrl = `${getFullApiHost()}/admin/hubs/process_csv`
 
   return fetch(uploadUrl, requestOptions).then(handleResponse)
 }
@@ -154,7 +154,7 @@ function wizardSCharge (file) {
     headers: { ...authHeader() },
     body: formData
   }
-  const uploadUrl = `${getApiHost()}/admin/local_charges/process_csv`
+  const uploadUrl = `${getFullApiHost()}/admin/local_charges/process_csv`
 
   return fetch(uploadUrl, requestOptions).then(handleResponse)
 }
@@ -167,7 +167,7 @@ function wizardPricings (file) {
     headers: { ...authHeader() },
     body: formData
   }
-  const uploadUrl = `${getApiHost()}/admin/pricings/train_and_ocean_pricings/process_csv`
+  const uploadUrl = `${getFullApiHost()}/admin/pricings/train_and_ocean_pricings/process_csv`
 
   return fetch(uploadUrl, requestOptions).then(handleResponse)
 }
@@ -182,9 +182,9 @@ function wizardTrucking (type, file) {
   }
   let uploadUrl
   if (type === 'zipcode') {
-    uploadUrl = `${getApiHost()}/admin/trucking/trucking_zip_pricings`
+    uploadUrl = `${getFullApiHost()}/admin/trucking/trucking_zip_pricings`
   } else if (type === 'city') {
-    uploadUrl = `${getApiHost()}/admin/trucking/trucking_city_pricings`
+    uploadUrl = `${getFullApiHost()}/admin/trucking/trucking_city_pricings`
   }
 
   return fetch(uploadUrl, requestOptions).then(handleResponse)
@@ -198,7 +198,7 @@ function wizardOpenPricings (file) {
     headers: { ...authHeader() },
     body: formData
   }
-  const uploadUrl = `${getApiHost()}/admin/open_pricings/train_and_ocean_pricings/process_csv`
+  const uploadUrl = `${getFullApiHost()}/admin/open_pricings/train_and_ocean_pricings/process_csv`
 
   return fetch(uploadUrl, requestOptions).then(handleResponse)
 }
@@ -209,7 +209,7 @@ function getServiceCharges () {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/local_charges`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/local_charges`, requestOptions).then(handleResponse)
 }
 function getShipments (_pages, perPage) {
   const pages = _pages || {
@@ -231,7 +231,7 @@ function getShipments (_pages, perPage) {
   })
   if (perPage) query += `per_page=${perPage}`
 
-  return fetch(`${getApiHost()}/admin/shipments?${query}`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/shipments?${query}`, requestOptions).then(handleResponse)
 }
 function deltaShipmentsPage (target, page, perPage) {
   const requestOptions = {
@@ -240,7 +240,7 @@ function deltaShipmentsPage (target, page, perPage) {
   }
   const query = `page=${page || 1}&target=${target}&per_page=${perPage}`
 
-  return fetch(`${getApiHost()}/admin/shipments/pages/delta_page_handler?${query}`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/shipments/pages/delta_page_handler?${query}`, requestOptions).then(handleResponse)
 }
 
 function getDashboard () {
@@ -249,7 +249,7 @@ function getDashboard () {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/dashboard`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/dashboard`, requestOptions).then(handleResponse)
 }
 
 function getShipment (id) {
@@ -258,7 +258,7 @@ function getShipment (id) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/shipments/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/shipments/${id}`, requestOptions).then(handleResponse)
 }
 
 function getItineraryPricings (id) {
@@ -267,7 +267,7 @@ function getItineraryPricings (id) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/route_pricings/${id}`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/route_pricings/${id}`, requestOptions)
     .then(handleResponse)
 }
 
@@ -277,7 +277,7 @@ function confirmShipment (id, action) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ shipment_action: action })
   }
-  const url = `${getApiHost()}/admin/shipments/${id}`
+  const url = `${getFullApiHost()}/admin/shipments/${id}`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -295,7 +295,7 @@ function getPricings (pages) {
     pageQuery = pageQuery.slice(0, -1)
   }
 
-  return fetch(`${getApiHost()}/admin/pricings?${pageQuery}`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/pricings?${pageQuery}`, requestOptions)
     .then(handleResponse)
 }
 
@@ -305,7 +305,7 @@ function searchPricings (text, page, mot) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/search/pricings?page=${page || 1}
+  return fetch(`${getFullApiHost()}/admin/search/pricings?page=${page || 1}
     &mot=${mot}&text=${text}`, requestOptions)
     .then(handleResponse)
 }
@@ -316,7 +316,7 @@ function deletePricing (pricing) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/pricings/${pricing.id}`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/pricings/${pricing.id}`, requestOptions)
     .then(handleResponse)
 }
 
@@ -326,7 +326,7 @@ function getClientPricings (id) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/client_pricings/${id}`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/client_pricings/${id}`, requestOptions)
     .then(handleResponse)
 }
 
@@ -336,7 +336,7 @@ function getClients () {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/clients`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/clients`, requestOptions).then(handleResponse)
 }
 
 function getClient (id) {
@@ -345,7 +345,7 @@ function getClient (id) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/clients/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/clients/${id}`, requestOptions).then(handleResponse)
 }
 
 function getSchedules () {
@@ -354,7 +354,7 @@ function getSchedules () {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/schedules`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/schedules`, requestOptions).then(handleResponse)
 }
 
 function getTrucking () {
@@ -363,7 +363,7 @@ function getTrucking () {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/trucking`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/trucking`, requestOptions).then(handleResponse)
 }
 
 function getVehicleTypes (itineraryId) {
@@ -372,7 +372,7 @@ function getVehicleTypes (itineraryId) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/vehicle_types?itinerary_id=${itineraryId}`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/vehicle_types?itinerary_id=${itineraryId}`, requestOptions).then(handleResponse)
 }
 
 function autoGenSchedules (data) {
@@ -382,7 +382,7 @@ function autoGenSchedules (data) {
     body: JSON.stringify(data)
   }
 
-  return fetch(`${getApiHost()}/admin/schedules/auto_generate`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/schedules/auto_generate`, requestOptions)
     .then(handleResponse)
 }
 
@@ -393,7 +393,7 @@ function updatePricing (id, data) {
     body: JSON.stringify(data)
   }
 
-  return fetch(`${getApiHost()}/admin/pricings/update/${id}`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/pricings/update/${id}`, requestOptions)
     .then(handleResponse)
 }
 function assignDedicatedPricings (pricing, clientIds) {
@@ -403,7 +403,7 @@ function assignDedicatedPricings (pricing, clientIds) {
     body: JSON.stringify({ pricing, clientIds })
   }
 
-  return fetch(`${getApiHost()}/admin/pricings/assign_dedicated`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/pricings/assign_dedicated`, requestOptions)
     .then(handleResponse)
 }
 function getPricingsTest (data) {
@@ -413,7 +413,7 @@ function getPricingsTest (data) {
     body: JSON.stringify({ data })
   }
 
-  return fetch(`${getApiHost()}/admin/pricings/test/${data.itineraryId}`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/pricings/test/${data.itineraryId}`, requestOptions)
     .then(handleResponse)
 }
 
@@ -424,7 +424,7 @@ function updateServiceCharge (id, data) {
     body: JSON.stringify({ data })
   }
 
-  return fetch(`${getApiHost()}/admin/local_charges/${id}`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/local_charges/${id}`, requestOptions)
     .then(handleResponse)
 }
 
@@ -437,7 +437,7 @@ function newClient (data) {
     body: formData
   }
 
-  return fetch(`${getApiHost()}/admin/clients`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/clients`, requestOptions).then(handleResponse)
 }
 
 function activateHub (hubId) {
@@ -446,7 +446,7 @@ function activateHub (hubId) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/hubs/${hubId}/set_status`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/hubs/${hubId}/set_status`, requestOptions)
     .then(handleResponse)
 }
 
@@ -457,7 +457,7 @@ function documentAction (docId, action) {
     body: JSON.stringify(action)
   }
 
-  return fetch(`${getApiHost()}/admin/documents/action/${docId}`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/documents/action/${docId}`, requestOptions)
     .then(handleResponse)
 }
 
@@ -467,7 +467,7 @@ function deleteDocument (documentId) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/documents/${documentId}`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/documents/${documentId}`, requestOptions).then(handleResponse)
 }
 
 function saveNewHub (hub, address) {
@@ -477,7 +477,7 @@ function saveNewHub (hub, address) {
     body: JSON.stringify({ hub, address })
   }
 
-  return fetch(`${getApiHost()}/admin/hubs`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/hubs`, requestOptions).then(handleResponse)
 }
 function deleteHub (hubId) {
   const requestOptions = {
@@ -485,7 +485,7 @@ function deleteHub (hubId) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
 
-  return fetch(`${getApiHost()}/admin/hubs/${hubId}/delete`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/hubs/${hubId}/delete`, requestOptions)
     .then(handleResponse)
 }
 
@@ -495,7 +495,7 @@ function deleteClient (id) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
 
-  return fetch(`${getApiHost()}/admin/clients/${id}`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/clients/${id}`, requestOptions)
     .then(handleResponse)
 }
 function editHub (hubId, object) {
@@ -505,7 +505,7 @@ function editHub (hubId, object) {
     body: JSON.stringify(object)
   }
 
-  return fetch(`${getApiHost()}/admin/hubs/${hubId}`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/hubs/${hubId}`, requestOptions)
     .then(handleResponse)
 }
 function newRoute (itinerary) {
@@ -515,7 +515,7 @@ function newRoute (itinerary) {
     body: JSON.stringify({ itinerary })
   }
 
-  return fetch(`${getApiHost()}/admin/itineraries`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/itineraries`, requestOptions).then(handleResponse)
 }
 function saveNewTrucking (obj) {
   const requestOptions = {
@@ -524,7 +524,7 @@ function saveNewTrucking (obj) {
     body: JSON.stringify({ obj })
   }
 
-  return fetch(`${getApiHost()}/admin/trucking`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/trucking`, requestOptions).then(handleResponse)
 }
 function assignManager (obj) {
   const requestOptions = {
@@ -533,7 +533,7 @@ function assignManager (obj) {
     body: JSON.stringify({ obj })
   }
 
-  return fetch(`${getApiHost()}/admin/user_managers/assign`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/user_managers/assign`, requestOptions)
     .then(handleResponse)
 }
 function editShipmentPrice (id, priceObj) {
@@ -543,7 +543,7 @@ function editShipmentPrice (id, priceObj) {
     body: JSON.stringify({ priceObj })
   }
 
-  return fetch(`${getApiHost()}/admin/shipments/${id}/edit_price`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/shipments/${id}/edit_price`, requestOptions)
     .then(handleResponse)
 }
 function editShipmentServicePrice (id, data) {
@@ -553,7 +553,7 @@ function editShipmentServicePrice (id, data) {
     body: JSON.stringify(data)
   }
 
-  return fetch(`${getApiHost()}/admin/shipments/${id}/edit_service_price`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/shipments/${id}/edit_service_price`, requestOptions)
     .then(handleResponse)
 }
 function editLocalCharges (data) {
@@ -563,7 +563,7 @@ function editLocalCharges (data) {
     body: JSON.stringify({ data })
   }
 
-  return fetch(`${getApiHost()}/admin/local_charges/${data.id}/edit`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/local_charges/${data.id}/edit`, requestOptions)
     .then(handleResponse)
 }
 function editCustomsFees (data) {
@@ -573,7 +573,7 @@ function editCustomsFees (data) {
     body: JSON.stringify({ data })
   }
 
-  return fetch(`${getApiHost()}/admin/customs_fees/${data.id}/edit`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/customs_fees/${data.id}/edit`, requestOptions)
     .then(handleResponse)
 }
 function editShipmentTime (id, timeObj) {
@@ -583,7 +583,7 @@ function editShipmentTime (id, timeObj) {
     body: JSON.stringify({ timeObj })
   }
 
-  return fetch(`${getApiHost()}/admin/shipments/${id}/edit_time`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/shipments/${id}/edit_time`, requestOptions)
     .then(handleResponse)
 }
 function deleteItinerary (id) {
@@ -592,7 +592,7 @@ function deleteItinerary (id) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
 
-  return fetch(`${getApiHost()}/admin/itineraries/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/itineraries/${id}`, requestOptions).then(handleResponse)
 }
 function deleteTrip (id) {
   const requestOptions = {
@@ -600,7 +600,7 @@ function deleteTrip (id) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
 
-  return fetch(`${getApiHost()}/admin/schedules/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/schedules/${id}`, requestOptions).then(handleResponse)
 }
 function uploadTrucking (url, file, direction) {
   const formData = new FormData()
@@ -612,7 +612,7 @@ function uploadTrucking (url, file, direction) {
     body: formData
   }
 
-  return fetch(`${getApiHost()}${url}`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}${url}`, requestOptions).then(handleResponse)
 }
 function newHubImage (id, file) {
   const formData = new FormData()
@@ -623,7 +623,7 @@ function newHubImage (id, file) {
     body: formData
   }
 
-  return fetch(`${getApiHost()}/admin/hubs/${id}/image`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/hubs/${id}/image`, requestOptions).then(handleResponse)
 }
 
 function loadItinerarySchedules (id) {
@@ -632,7 +632,7 @@ function loadItinerarySchedules (id) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
 
-  return fetch(`${getApiHost()}/admin/schedules/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${getFullApiHost()}/admin/schedules/${id}`, requestOptions).then(handleResponse)
 }
 function saveItineraryNotes (id, notes) {
   const requestOptions = {
@@ -641,7 +641,7 @@ function saveItineraryNotes (id, notes) {
     body: JSON.stringify({ notes })
   }
 
-  return fetch(`${getApiHost()}/admin/itineraries/${id}/edit_notes`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/itineraries/${id}/edit_notes`, requestOptions)
     .then(handleResponse)
 }
 
@@ -651,7 +651,7 @@ function deleteItineraryNote (itineraryId, noteId) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
 
-  return fetch(`${getApiHost()}/admin/itineraries/${itineraryId}/notes/${noteId}`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/itineraries/${itineraryId}/notes/${noteId}`, requestOptions)
     .then(handleResponse)
 }
 
@@ -662,7 +662,7 @@ function editTruckingPrice (pricing) {
     body: JSON.stringify({ pricing })
   }
 
-  return fetch(`${getApiHost()}/admin/trucking/${pricing.id}/edit`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/trucking/${pricing.id}/edit`, requestOptions)
     .then(handleResponse)
 }
 function updateHubMandatoryCharges (id, charges) {
@@ -672,7 +672,7 @@ function updateHubMandatoryCharges (id, charges) {
     body: JSON.stringify({ mandatoryCharge: charges })
   }
 
-  return fetch(`${getApiHost()}/admin/hubs/${id}/update_mandatory_charges`, requestOptions)
+  return fetch(`${getFullApiHost()}/admin/hubs/${id}/update_mandatory_charges`, requestOptions)
     .then(handleResponse)
 }
 function updateEmails (emails, tenant) {

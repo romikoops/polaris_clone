@@ -110,7 +110,7 @@ class Admin extends Component {
                       theme={theme}
                       setCurrentUrl={this.setCurrentUrl}
                       {...props}
-                      scope={tenant.data.scope}
+                      scope={tenant.scope}
                       clients={clients}
                       confirmShipmentData={confirmShipmentData}
                       shipments={shipments}
@@ -187,7 +187,7 @@ class Admin extends Component {
                       setCurrentUrl={this.setCurrentUrl}
                       {...props}
                       hubs={hubHash}
-                      scope={tenant.data.scope}
+                      scope={tenant.scope}
                       adminDispatch={adminDispatch}
                       scheduleData={schedules}
                     />
@@ -353,8 +353,9 @@ Admin.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    users, authentication, tenant, admin, remark, document
+    users, authentication, app, admin, document, remark
   } = state
+  const { tenant } = app
   const { user, loggedIn } = authentication
   const documentLoading = document.loading
 
@@ -364,7 +365,7 @@ function mapStateToProps (state) {
     tenant,
     remark,
     documentLoading,
-    theme: tenant.data.theme,
+    theme: tenant.theme,
     loggedIn,
     adminData: admin
   }

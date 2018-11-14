@@ -52,8 +52,10 @@ class CacheClearer extends Component {
 
 function mapStateToProps (state) {
   const {
-    users, authentication, tenant, bookingData, admin
+    users, authentication, app, bookingData, admin
   } = state
+  const { tenant } = app
+
   return {
     users,
     authentication,

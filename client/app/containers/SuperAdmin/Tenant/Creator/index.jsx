@@ -714,10 +714,11 @@ SuperAdminTenantCreator.defaultProps = {
 }
 
 function mapStateToProps (state) {
-  const { authentication, tenant, app } = state
+  const { authentication, app } = state
   const { user, loggedIn } = authentication
-  const { theme } = tenant.data
-  const { tenants } = app
+  const { tenant, tenants } = app
+  const { theme } = tenant
+
   return {
     user,
     tenant,

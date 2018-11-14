@@ -145,9 +145,10 @@ PricingList.propTypes = {
 
 function mapStateToProps (state) {
   const {
-    authentication, tenant, users
+    authentication, app, users
   } = state
-  const { theme } = tenant.data
+  const { tenant } = app
+  const { theme } = tenant
   const { user, loggedIn } = authentication
   const {
     pricings

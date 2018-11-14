@@ -24,7 +24,7 @@ class Landing extends Component {
       tenant, loggedIn, authDispatch, userDispatch, user
     } = this.props
 
-    if (tenant.data.scope.closed_shop && (!user || user.guest || !loggedIn)) {
+    if (tenant.scope.closed_shop && (!user || user.guest || !loggedIn)) {
       authDispatch.showLogin()
     } else if (loggedIn) {
       userDispatch.goTo('/booking')
@@ -32,7 +32,7 @@ class Landing extends Component {
       const unixTimeStamp = moment().unix().toString()
       const randNum = Math.floor(Math.random() * 100).toString()
       const randSuffix = unixTimeStamp + randNum
-      const email = `guest${randSuffix}@${tenant.data.subdomain}.com`
+      const email = `guest${randSuffix}@${tenant.subdomain}.com`
 
       authDispatch.register(
         {
@@ -41,7 +41,7 @@ class Landing extends Component {
           password_confirmation: 'guestpassword',
           first_name: 'Guest',
           last_name: '',
-          tenant_id: tenant.data.id,
+          tenant_id: tenant.id,
           guest: true
         },
         '/booking'
@@ -198,8 +198,9 @@ function mapDispatchToProps (dispatch) {
 }
 function mapStateToProps (state) {
   const {
-    users, authentication, tenant, admin
+    users, authentication, admin, app
   } = state
+  const { tenant } = app
   const {
     user, loggedIn, loggingIn, registering, showModal
   } = authentication

@@ -16,7 +16,7 @@ function handleAccept (user, tenant, loggedIn, authDispatch) {
     const unixTimeStamp = moment().unix().toString()
     const randNum = Math.floor(Math.random() * 100).toString()
     const randSuffix = unixTimeStamp + randNum
-    const email = `guest${randSuffix}@${tenant.data.subdomain}.com`
+    const email = `guest${randSuffix}@${tenant.subdomain}.com`
 
     authDispatch.register({
       email,
@@ -24,7 +24,7 @@ function handleAccept (user, tenant, loggedIn, authDispatch) {
       password_confirmation: 'guestpassword',
       first_name: 'Guest',
       last_name: '',
-      tenant_id: tenant.data.id,
+      tenant_id: tenant.id,
       guest: true,
       cookies: true
     })

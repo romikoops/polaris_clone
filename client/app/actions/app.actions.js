@@ -3,6 +3,7 @@ import { push } from 'react-router-redux'
 import { appConstants } from '../constants'
 import getApiHost from '../constants/api.constants'
 import { appService } from '../services'
+
 import {
   shipmentActions,
   userActions,
@@ -17,8 +18,11 @@ const { fetch } = window
 
 function setTenant (tenantId) {
   function request () {
+    // TODO
   }
   function success (payload) {
+    const { localStorage } = window
+    localStorage.setItem('tenantUrl', payload.url)
     return { type: 'TEST', payload }
   }
   function failure (error) {
@@ -27,7 +31,7 @@ function setTenant (tenantId) {
   return (dispatch) => {
     appService.setTenant(tenantId).then(
       (resp) => {
-        dispatch(success(resp))
+        dispatch(success(resp.data))
       },
       () => {
         // TODO
@@ -49,7 +53,7 @@ function fetchCurrencies (type) {
 
   return (dispatch) => {
     dispatch(request(type))
-    appService.fetchCurrencies(type).then(
+    appService.fetchCurrencies().then(
       (resp) => {
         const currData = resp.data
         dispatch(success(currData))

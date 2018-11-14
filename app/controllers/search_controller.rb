@@ -8,7 +8,7 @@ class SearchController < ApplicationController
   def search_hs_codes
     text = params[:query] != "" ? params[:query] : "plastics"
     resp = text_search_fn(false, "hsCodes", text)
-    tenant = Tenant.find_by_subdomain(params[:subdomain_id])
+    tenant = Tenant.find(params[:tenant_id])
     results = []
     resp.each do |r|
       if !tenant.scope["dangerous_goods"] && !r["dangerous"]
@@ -31,7 +31,7 @@ class SearchController < ApplicationController
   private
 
   def require_login
-    unless user_signed_in? && current_user && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
+    unless user_signed_in? && current_user && current_user.tenant_id === params[:tenant_id]
       flash[:error] = "You are not authorized to access this section."
       redirect_to root_path
     end

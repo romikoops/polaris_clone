@@ -174,7 +174,8 @@ DocumentsDownloader.defaultProps = {
 }
 
 function mapStateToProps (state) {
-  const { authentication, tenant, document } = state
+  const { authentication, document, app } = state
+  const { tenant } = app
   const { user, loggedIn } = authentication
   const { downloadUrls, viewer, loading } = document
 

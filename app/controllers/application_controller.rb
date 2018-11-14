@@ -43,7 +43,7 @@ class ApplicationController < ActionController::API
   end
 
   def find_tenant
-    @tenant = Tenant.find_by(subdomain: params[:subdomain_id])
+    @tenant = Tenant.find(params[:tenant_id])
   end
   
   def append_info_to_payload(payload)

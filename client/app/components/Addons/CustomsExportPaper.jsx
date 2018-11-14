@@ -21,7 +21,7 @@ class CustomsExportPaper extends PureComponent {
  tenant, addon, t, documents, fileFn, deleteDoc 
 } = this.props
     const charge = addon.fees.total
-    const { theme } = tenant.data
+    const { theme } = tenant
     const acceptedBox = (
       <div
         className={`flex-100 layout-row layout-wrap ${styles.customs_box}  ${styles.box_content} ${
@@ -66,7 +66,7 @@ class CustomsExportPaper extends PureComponent {
           <p className="flex-100">
             <b>
               {`${t('shipment:customsExportPaperTwo')} ${t('shipment:customsExportPaperThree')}${
-                tenant.data.name
+                tenant.name
               }
               ${t('shipment:customsExportPaperFour')}`}
             </b>
@@ -126,7 +126,7 @@ class CustomsExportPaper extends PureComponent {
                 <div className="flex-90 layout-row layout-align-start-center">
                   <label htmlFor="addon_toggle_true">
                     <p className="flex-none" style={{ marginRight: '5px' }}>
-                      {`${t('cargo:clearanceHead')} ${tenant.data.name} ${t('shipment:customsExportPaperFive')}`}
+                      {`${t('cargo:clearanceHead')} ${tenant.name} ${t('shipment:customsExportPaperFive')}`}
                     </p>
                   </label>
                 </div>
@@ -143,7 +143,7 @@ class CustomsExportPaper extends PureComponent {
                 <div className="flex-90 layout-row layout-align-start-center">
                   <label htmlFor="addon_toggle_false">
                     <p className="flex-none" style={{ marginRight: '5px' }}>
-                      {`${t('cargo:clearanceNoHead')} ${tenant.data.name} ${t('shipment:customsExportPaperFive')}`}
+                      {`${t('cargo:clearanceNoHead')} ${tenant.name} ${t('shipment:customsExportPaperFive')}`}
                     </p>
                   </label>
                 </div>

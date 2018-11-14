@@ -12,7 +12,7 @@ import IncotermExtras from './'
 const editedTenant = {
   ...tenant,
   data: {
-    ...tenant.data,
+    ...tenant,
     scope: {
       detailed_billing: true,
       has_customs: true,

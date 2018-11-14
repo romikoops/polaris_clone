@@ -92,7 +92,7 @@ class AdminShipments extends Component {
                   adminDispatch={adminDispatch}
                   loading={loading}
                   hubs={hubs}
-                  scope={tenant.data.scope}
+                  scope={tenant.scope}
                   handleShipmentAction={this.handleShipmentAction}
                   shipmentData={shipment}
                   clients={clients}
@@ -239,7 +239,8 @@ AdminShipments.defaultProps = {
 }
 
 function mapStateToProps (state) {
-  const { authentication, tenant, admin } = state
+  const { authentication, app, admin } = state
+  const { tenant } = app
   const { user, loggedIn } = authentication
   const {
     clients, shipment, shipments, hubs, loading

@@ -1,5 +1,5 @@
 import { Promise } from 'es6-promise-promise'
-import { getApiHost, getFullApiHost }from '../constants/api.constants'
+import { getApiHost, getFullApiHost } from '../constants/api.constants'
 import { authHeader } from '../helpers'
 
 const { fetch } = window

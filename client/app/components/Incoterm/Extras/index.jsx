@@ -15,7 +15,7 @@ function IncotermExtras ({
     ...gradientTextGenerator('rgb(0, 0, 0)', 'rgb(25, 25, 25)'),
     opacity: '0.5'
   }
-  const { scope } = tenant.data
+  const { scope } = tenant
   const customsStyle =
     feeHash && feeHash.customs ? selectedStyle : deselectedStyle
   const insuranceStyle =

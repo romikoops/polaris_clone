@@ -52,10 +52,10 @@ describe 'Pricing requests', type: :request do
 
     sign_in(:user)
 
-    context '#subdomain_admin_pricings_path' do
+    context '#tenant_admin_pricings_path' do
 
       it 'Queries the DB for itineraries, sorted by MOT' do
-        get subdomain_admin_pricings_path(subdomain_id: 'demo'), params: { pages: pages }
+        get tenant_admin_pricings_path(subdomain_id: 'demo'), params: { pages: pages }
         expect(response).to have_http_status(:success)
         expect(json[:success]).to be_truthy
         expect(json[:data].dig(:detailedItineraries, :air, 0, :mode_of_transport)).to eq('air')
@@ -67,7 +67,7 @@ describe 'Pricing requests', type: :request do
       end
     end
 
-    context '#subdomain_admin_pricings_search_path' do
+    context '#tenant_admin_pricings_search_path' do
       let(:params) do
         {
           mot: 'ocean',

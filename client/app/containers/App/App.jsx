@@ -24,9 +24,10 @@ import GenericError from '../../components/ErrorHandling/Generic'
 class App extends Component {
   constructor (props) {
     super(props)
-
-    const { tenant, isFetching, appDispatch } = props
-    const tenantId = '45'
+  }
+  componentWillMount () {
+    const { appDispatch } = this.props
+    const tenantId = '1'
     appDispatch.setTenant(tenantId)
     // if (!tenant && !isFetching) {
     //   const subdomain = getSubdomain()
@@ -34,19 +35,20 @@ class App extends Component {
     // }
   }
   componentDidMount () {
-    const { appDispatch } = this.props
+    // const { appDispatch, tenant } = this.props
     // const subdomain = getSubdomain()
     // appDispatch.fetchTenantIfNeeded(subdomain)
-    // appDispatch.fetchCurrencies()
+    const { appDispatch } = this.props
+    appDispatch.fetchCurrencies()
     this.isUserExpired()
   }
   componentDidUpdate (prevProps) {
-    if ((this.props.selectedSubdomain !== prevProps.selectedSubdomain ||
-      (!this.props.tenant && !this.props.isFetching) ||
-    (this.props.tenant && !this.props.tenant.data && !this.props.isFetching))) {
-      // const { appDispatch, selectedSubdomain } = this.props
-      // appDispatch.fetchTenantIfNeeded(selectedSubdomain)
-    }
+    //   if ((this.props.selectedSubdomain !== prevProps.selectedSubdomain ||
+  //     (!this.props.tenant && !this.props.isFetching) ||
+  //   (this.props.tenant && !this.props.tenant.data && !this.props.isFetching))) {
+  //     // const { appDispatch, selectedSubdomain } = this.props
+  //     // appDispatch.fetchTenantIfNeeded(selectedSubdomain)
+  //   }
   }
   isUserExpired () {
     const { appDispatch, user } = this.props
@@ -71,17 +73,15 @@ class App extends Component {
       loggingIn,
       app
     } = this.props
-
-    if (!app || !app.test) return ''
-
-    if (!tenant || (tenant && !tenant.data)) {
+    
+    if (!tenant) {
       return <Loading theme={defaultTheme} text="loading..." />
     }
-    const { theme } = tenant.data
+    const { theme } = tenant
 
     // Update document title
-    if (tenant.data.name) {
-      document.title = `${tenant.data.name} | ItsMyCargo`
+    if (tenant.name) {
+      document.title = `${tenant.name} | ItsMyCargo`
     }
 
     return (
@@ -95,12 +95,11 @@ class App extends Component {
         />
         <div className="flex-100 mc layout-row  layout-align-start">
           {showMessages || sending ? <MessageCenter /> : ''}
-          {isFetching || loading ? <Loading theme={theme} text="loading..." /> : ''}
+          {loading ? <Loading theme={theme} text="loading..." /> : ''}
           {user &&
           user.id &&
           tenant &&
-          tenant.data &&
-          user.tenant_id !== tenant.data.id &&
+          user.tenant_id !== tenant.id &&
             user.role &&
             user.role.name !== 'super_admin' ? (
               <Redirect to="/signout" />
@@ -171,8 +170,7 @@ class App extends Component {
 }
 
 App.propTypes = {
-  selectedSubdomain: PropTypes.string.isRequired,
-  isFetching: PropTypes.bool.isRequired,
+
   tenant: PropTypes.tenant,
   user: PropTypes.user,
   loggedIn: PropTypes.bool,
@@ -198,8 +196,7 @@ function mapStateToProps (state) {
   const {
     selectedSubdomain, authentication, messaging, admin, users, app
   } = state
-  if (!app || !app.test) return {}
-  const tenant = app.test
+  const { tenant } = app
   const { showMessages, sending } = messaging
   const { user, loggedIn, loggingIn } = authentication
   const { isFetching } = tenant || {

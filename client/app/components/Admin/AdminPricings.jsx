@@ -106,7 +106,7 @@ class AdminPricings extends Component {
               render={props => (
                 <AdminPricingsIndex
                   theme={theme}
-                  scope={tenant.data.scope}
+                  scope={tenant.scope}
                   hubs={hubs}
                   hubHash={hubHash}
                   clients={filteredClients}
@@ -180,7 +180,7 @@ class AdminPricings extends Component {
                   clientPricings={clientPricings}
                   theme={theme}
                   hubs={hubs}
-                  scope={tenant.data.scope}
+                  scope={tenant.scope}
                   hubHash={hubHash}
                   pricingData={pricingData}
                   clients={filteredClients}
@@ -248,8 +248,9 @@ AdminPricings.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    authentication, tenant, admin, document
+    authentication, app, admin, document
   } = state
+  const { tenant } = app
   const { user, loggedIn } = authentication
   const {
     clients,

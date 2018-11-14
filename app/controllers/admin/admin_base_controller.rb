@@ -15,6 +15,6 @@ class Admin::AdminBaseController < ApplicationController
   end
 
   def is_current_tenant?
-    current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id])&.id
+    current_user.tenant_id === params[:tenant_id]
   end
 end

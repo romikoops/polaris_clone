@@ -21,8 +21,14 @@ class TenantsController < ApplicationController
 
   def show
     tenant_id = params[:id]
-    ref = "#{request.referrer}/#{tenant_id}"
+    base_url =
+      case Rails.env
+      when 'production'  then "#{request.referrer}tenants/#{tenant_id}"
+      when 'development' then "http://localhost:3000/tenants/#{tenant_id}"
+      when 'test'        then "http://localhost:3000/tenants/#{tenant_id}"
+      end
+    # ref = "#{request.referrer}tenants/#{tenant_id}"
     tenant = Tenant.find(tenant_id)
-    response_handler(url: ref, tenant: tenant)
+    response_handler(url: base_url, tenant: tenant)
   end
 end

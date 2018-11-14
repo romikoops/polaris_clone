@@ -19,7 +19,7 @@ export default function app (state = {}, action) {
     case 'TEST':
       return {
         ...state,
-        test: action.payload
+        ...action.payload
       }
     case appConstants.FETCH_CURRENCIES_REQUEST: {
       return state

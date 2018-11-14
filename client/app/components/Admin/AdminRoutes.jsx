@@ -145,7 +145,8 @@ AdminRoutes.defaultProps = {
 }
 
 function mapStateToProps (state) {
-  const { authentication, tenant, admin } = state
+  const { authentication, app, admin } = state
+  const { tenant } = app
   const { user, loggedIn } = authentication
   const {
     clients, hubs, itinerary, itineraries, loading, mapData

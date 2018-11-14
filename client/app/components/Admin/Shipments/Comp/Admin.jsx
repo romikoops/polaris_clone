@@ -237,9 +237,10 @@ ShipmentsCompAdmin.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    authentication, tenant, admin, document
+    authentication, app, admin, document
   } = state
-  const { theme } = tenant.data
+  const { tenant } = app
+  const { theme } = tenant
   const { user, loggedIn } = authentication
   const {
     clients, shipments, confirmShipmentData

@@ -245,8 +245,9 @@ MessageCenter.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    users, authentication, tenant, messaging, admin
+    users, authentication, app, messaging, admin
   } = state
+  const { tenant } = app
   const { user, loggedIn } = authentication
   const {
     conversations, unread, shipment, loading, shipments
@@ -258,7 +259,7 @@ function mapStateToProps (state) {
     users,
     conversations,
     tenant,
-    theme: tenant.data.theme,
+    theme: tenant.theme,
     loggedIn,
     unread,
     shipment,

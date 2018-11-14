@@ -13,7 +13,6 @@ import { gradientTextGenerator, totalPriceString, totalPrice, numberSpacing } fr
 import Checkbox from '../Checkbox/Checkbox'
 import CargoItemGroup from '../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
-import DocumentsForm from '../Documents/Form'
 import Contact from '../Contact/Contact'
 import IncotermRow from '../Incoterm/Row'
 import IncotermExtras from '../Incoterm/Extras'

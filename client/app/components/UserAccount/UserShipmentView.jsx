@@ -175,7 +175,7 @@ class UserShipmentView extends Component {
     if (!shipmentData || !hubs || !user) {
       return ''
     }
-    const { scope } = tenant.data
+    const { scope } = tenant
     const {
       shipment,
       cargoItems,
@@ -300,7 +300,7 @@ class UserShipmentView extends Component {
           {statusFinished}
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">
-          {shipment.status !== 'quoted' && !tenant.data.scope.quotation_tool ? (
+          {shipment.status !== 'quoted' && !tenant.scope.quotation_tool ? (
             <UserShipmentContent
               theme={theme}
               gradientBorderStyle={gradientBorderStyle}

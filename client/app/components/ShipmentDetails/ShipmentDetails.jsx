@@ -313,7 +313,7 @@ export class ShipmentDetails extends Component {
   }
 
   presetMandatoryCarriage () {
-    const { scope } = this.props.tenant.data
+    const { scope } = this.props.tenant
     Object.keys(scope.carriage_options).forEach((carriage) => {
       const carriageOptionScope = scope.carriage_options[carriage][this.state.shipment.direction]
       if (carriageOptionScope === 'mandatory') {
@@ -527,7 +527,7 @@ export class ShipmentDetails extends Component {
     const [index, suffixName] = name.split('-')
     this.setState((prevState) => {
       const { cargoItems, cargoItemsErrors } = prevState
-      const { scope } = this.props.tenant.data
+      const { scope } = this.props.tenant
 
       if (!cargoItems[index] || !cargoItemsErrors[index]) return {}
       if (typeof value === 'boolean') {
@@ -630,7 +630,7 @@ export class ShipmentDetails extends Component {
       origin, destination, selectedDay, incoterm
     } = this.state
     const { tenant } = this.props
-    const { scope } = this.props.tenant.data
+    const { scope } = this.props.tenant
     const requiresFullAddress = scope.require_full_address
 
     if (
@@ -653,7 +653,7 @@ export class ShipmentDetails extends Component {
       return
     }
 
-    if (!incoterm && this.props.tenant.data.scope.incoterm_info_level === 'full') {
+    if (!incoterm && this.props.tenant.scope.incoterm_info_level === 'full') {
       this.incrementNextStageAttemps()
       ShipmentDetails.scrollTo('incoterms')
 
@@ -702,7 +702,7 @@ export class ShipmentDetails extends Component {
     const carriage = target.replace('has_', '')
 
     // Break out of function, in case the change should not apply, based on the tenant scope.
-    const { scope } = this.props.tenant.data
+    const { scope } = this.props.tenant
     const carriageOptionScope = scope.carriage_options[carriage][this.state.shipment.direction]
     const changeShouldApply = carriageOptionScope === 'optional' || (options && options.force)
     if (!changeShouldApply) return
@@ -793,7 +793,7 @@ export class ShipmentDetails extends Component {
 
     if (!filteredRouteIndexes.length) return ''
 
-    const { theme, scope } = tenant.data
+    const { theme, scope } = tenant
     let cargoDetails
     if (showRegistration) this.props.hideRegistration()
     if (!shipmentData.shipment || !shipmentData.cargoItemTypes) return ''
