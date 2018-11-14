@@ -75,7 +75,6 @@ module ExcelTool
 
     def find_or_create_tenant_vehicle(row, itinerary)
       tenant_vehicle = find_tenant_vehicle(row, itinerary)
-      tenant_vehicle ||= create_tenant_vehicle(row, itinerary)
       tenant_vehicle
     end
 
@@ -102,7 +101,7 @@ module ExcelTool
       end_date = row[:eta]
       stops = itinerary.stops.order(:index)
 
-      tenant_vehicle_id = find_or_create_tenant_vehicle(row, itinerary).vehicle_id
+      tenant_vehicle_id = find_or_create_tenant_vehicle(row, itinerary).id
       generator_results = itinerary.generate_schedules_from_sheet(stops, start_date,
         end_date, tenant_vehicle_id, row[:closing_date], row[:vessel], row[:voyage_code])
       results[:trips] = generator_results[:trips]
