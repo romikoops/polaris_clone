@@ -51,7 +51,6 @@ class Location < ApplicationRecord
   end
 
   def self.cascading_find_by_two_names(raw_name_1, raw_name_2)
-    # binding.pry
     name_2 = raw_name_2.split.map(&:capitalize).join(' ')
     name_1_test = raw_name_1.try(:split)
     name_1 = name_1_test.nil? ? name_2 : name_1_test.map(&:capitalize).join(' ')

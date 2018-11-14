@@ -5,8 +5,8 @@ FactoryBot.define do
   		zipcode "15211"
   	end
   	
-  	trait :with_geometry do
-  		association :geometry
+  	trait :with_location do
+  		association :location
   	end
 
   	trait :distance do

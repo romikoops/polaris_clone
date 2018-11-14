@@ -287,7 +287,7 @@ class ShipmentLocationBox extends Component {
     let icon
     if (target === 'origin') {
       icon = {
-        url: colourSVG('address', theme),
+        url: colourSVG('location', theme),
         anchor: new this.props.gMaps.Point(18, 18),
         scaledSize: new this.props.gMaps.Size(36, 36)
       }

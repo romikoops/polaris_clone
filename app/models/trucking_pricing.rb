@@ -63,7 +63,6 @@ class TruckingPricing < ApplicationRecord
   end
 
   def self.find_by_filter(args = {})
-    binding.pry
     FindByFilter.new(args.merge(klass: self)).perform
   end
 

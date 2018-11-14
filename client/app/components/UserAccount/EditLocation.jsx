@@ -68,7 +68,7 @@ class EditLocation extends Component {
     const { theme } = this.props
     const newMarkers = []
     const icon = {
-      url: colourSVG('address', theme),
+      url: colourSVG('location', theme),
       anchor: new this.props.gMaps.Point(25, 50),
       scaledSize: new this.props.gMaps.Size(36, 36)
     }

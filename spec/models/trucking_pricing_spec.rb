@@ -9,7 +9,7 @@ describe TruckingPricing, type: :model do
     	let(:hub)    { create(:hub, :with_lat_lng, tenant: tenant) }
 
     	let(:trucking_destination_zipcode) 	 { create(:trucking_destination, :zipcode) }
-    	let(:trucking_destination_geometry)  { create(:trucking_destination, :with_geometry) }
+    	let(:trucking_destination_geometry)  { create(:trucking_destination, :with_location) }
     	let(:trucking_destination_distance)  { create(:trucking_destination, :distance) }
 
       let(:trucking_pricing) { create(:trucking_pricing, tenant: tenant) }
@@ -225,7 +225,7 @@ describe TruckingPricing, type: :model do
         it 'returns empty array if no pricings were found' do
           create(:hub_trucking,
             hub:                  hub,
-            trucking_destination: create(:trucking_destination, :with_geometry),
+            trucking_destination: create(:trucking_destination, :with_location),
             trucking_pricing:     trucking_pricing
           )
           expect(described_class.find_by_hub_id(-1)).to eq([])
@@ -278,7 +278,7 @@ describe TruckingPricing, type: :model do
         it 'finds the correct pricing and destinations', pending: 'broken tests' do
           create(:hub_trucking,
             hub:                  hub,
-            trucking_destination: create(:trucking_destination, :with_geometry),
+            trucking_destination: create(:trucking_destination, :with_location),
             trucking_pricing:     trucking_pricing
           )
 
