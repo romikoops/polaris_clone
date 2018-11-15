@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 Tenant.find_each do |tenant|
   admin_user = tenant.users.find_by(email: 'shopadmin@itsmycargo.com')
-  if !admin_user
+  unless admin_user
     tenant.users.create!(
       role: Role.find_by_name('admin'),
 
@@ -9,7 +11,7 @@ Tenant.find_each do |tenant|
       last_name: 'Admin',
       phone: '123456789',
 
-      email: "shopadmin@itsmycargo.com",
+      email: 'shopadmin@itsmycargo.com',
       password: 'IMC123456789',
       password_confirmation: 'IMC123456789',
 
@@ -17,7 +19,7 @@ Tenant.find_each do |tenant|
     )
   end
   shipper_user = tenant.users.find_by(email: 'shipper@itsmycargo.com')
-  if !shipper_user
+  unless shipper_user
     tenant.users.create!(
       role: Role.find_by_name('shipper'),
 
@@ -25,7 +27,7 @@ Tenant.find_each do |tenant|
       first_name: 'IMC',
       last_name: 'Shipper',
       phone: '123456789',
-      email: "shipper@itsmycargo.com",
+      email: 'shipper@itsmycargo.com',
       password: 'IMC123456789',
       password_confirmation: 'IMC123456789',
 
