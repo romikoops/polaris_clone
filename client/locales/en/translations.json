@@ -366,7 +366,8 @@
     "fillFormCargoDetails": "(Fill the form with your cargo details)",
     "nonStackableFirst": "We currently do not offer freight rates for non-stackable cargo in our Web Shop.",
     "nonStackableSecond": "Please contact our customer service department to place an order for your non-stackable cargo:",
-    "feesIn": "Sub Total in {{currency}}"
+    "feesIn": "Sub Total in {{currency}}",
+    "exportCustomsPaper": "Export Customs Paper (MRN)"
   },
   "bookconf": {
     "_component": "BookingConfirmation",

@@ -438,6 +438,9 @@ class CargoDetails extends Component {
               <CustomsExportPaper
                 addon={addons.customs_export_paper}
                 tenant={tenant}
+                documents={documents}
+                fileFn={this.fileFn}
+                deleteDoc={this.deleteDoc}
                 toggleCustomAddon={this.toggleCustomAddon}
               />
             </div>

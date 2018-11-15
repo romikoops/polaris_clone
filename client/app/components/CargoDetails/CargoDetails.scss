@@ -89,6 +89,18 @@
     opacity: 1;
     height: 230px;
   }
+  .no_customs_exp_paper_box {
+    transition: all 1s ease;
+    visibility: hidden;
+    opacity: 0;
+    height: 0px;
+    overflow: hidden;
+  }
+  .no_customs_exp_paper_box.show {
+    visibility: visible;
+    opacity: 1;
+    // height: 300px;
+  }
   .show {
     height: 250px;
   }
