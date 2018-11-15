@@ -231,11 +231,13 @@ chrome:
   <<: *cucumber-metadata
   services:
     - selenium/standalone-chrome:3
+    
+# Disabling Firefox tests as logging is impossible at the moment
 
-firefox:
-  <<: *cucumber-metadata
-  services:
-    - selenium/standalone-firefox:3
+# firefox:
+#   <<: *cucumber-metadata
+#   services:
+#     - selenium/standalone-firefox:3
 
 # Cross Browser Testing
 # Disable most of browsers as we only have 1 parallel test (and 1 queued)
