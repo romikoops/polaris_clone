@@ -235,7 +235,8 @@ module PricingTools
     weight_kg = cargo_hash[:weight]
     min = fee['min'] || 0
     max = fee['max'] || DEFAULT_MAX
-    case fee['rate_basis']
+    rate_basis = RateBasis.get_internal_key(fee['rate_basis'])
+    case rate_basis
     when 'PER_KG_RANGE'
       fee_range = fee['range'].find do |range|
         weight_kg >= range['min'] && weight_kg <= range['max']
@@ -299,7 +300,9 @@ module PricingTools
   end
 
   def fee_value(fee, cargo_hash, scope)
-    result = case fee['rate_basis']
+    rate_basis = RateBasis.get_internal_key(fee['rate_basis'])
+
+    result = case rate_basis
              when 'PER_SHIPMENT', 'PER_BILL'
               (fee['value'] || fee['rate']).to_d
              when 'PER_ITEM', 'PER_CONTAINER'
@@ -347,6 +350,9 @@ module PricingTools
                [res, max].min
              when /RANGE/
                handle_range_fee(fee, cargo_hash)
+    end
+    if result.nil?
+      binding.pry
     end
     round_fee(result, scope['continuous_rounding'])
   end

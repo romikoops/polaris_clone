@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_09_123344) do
+ActiveRecord::Schema.define(version: 2018_11_13_124857) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -570,6 +570,13 @@ ActiveRecord::Schema.define(version: 2018_11_09_123344) do
     t.string "target_email"
     t.integer "user_id"
     t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "rate_bases", force: :cascade do |t|
+    t.string "external_code"
+    t.string "internal_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
