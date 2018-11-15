@@ -201,6 +201,7 @@ function ShipmentQuotationContent ({
                 theme={theme}
                 scope={scope}
                 quote={shipment.selected_offer}
+                mot={shipment.mode_of_transport}
               />
               <div className="flex-100 layout-wrap layout-align-start-stretch">
                 <div className={`flex-100 layout-row layout-align-start-stretch ${quoteStyles.total_row}`}>

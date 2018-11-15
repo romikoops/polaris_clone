@@ -499,7 +499,12 @@
     "quotedShipments": "Quoted Shipments",
     "searchShipments": "Search Shipments",
     "quoteNo": "Quote No: {{number}}",
-    "cargo" : "cargo"
+    "cargo" : "cargo",
+    "motCargo": "{{mot}} Freight",
+    "air": "Air",
+    "rail": "Rail",
+    "ocean": "Ocean",
+    "truck": "Truck"
   },
   "user": {
     "newAlias": "New Alias",
