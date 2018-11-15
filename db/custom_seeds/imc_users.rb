@@ -1,4 +1,4 @@
-Tenant.all.each do |tenant|
+Tenant.find_each do |tenant|
   admin_user = tenant.users.find_by(email: 'shopadmin@itsmycargo.com')
   if !admin_user
     tenant.users.create!(
