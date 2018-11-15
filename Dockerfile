@@ -38,6 +38,7 @@ ENV MALLOC_ARENA_MAX 2
 
 # Minimal requirements to run a Rails app
 RUN apk add --no-cache --update \
+  less \
   nodejs \
   npm \
   postgresql-client \
