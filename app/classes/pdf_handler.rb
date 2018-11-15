@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class PdfHandler
+  BreezyError = Class.new(StandardError)
+
   attr_reader :name, :full_name, :pdf, :url, :path
 
   def initialize(args = {})
@@ -41,15 +43,15 @@ class PdfHandler
 
   def generate
     doc_erb = ErbTemplate.new(
-      layout:   @layout,
+      layout: @layout,
       template: @template,
-      locals:   {
-        shipment:  @shipment,
+      locals: {
+        shipment: @shipment,
         shipments: @shipments,
-        quotes:    @quotes,
-        logo:      @logo,
+        quotes: @quotes,
+        logo: @logo,
         load_type: @load_type,
-        tenant:    @shipment.tenant,
+        tenant: @shipment.tenant,
         cargo_data: @cargo_data
       }
     )
@@ -57,23 +59,8 @@ class PdfHandler
       doc_erb.render
     ).submit
 
-    if response.code.to_i == 201
-      File.open('tmp/' + @full_name, 'wb') { |file| file.write(response.body) }
-      @path = 'tmp/' + @full_name
-      @pdf  = File.open(@path)
-      self
-    else
-      raise
-    end
-  end
+    raise BreezyError, response.body if response.code.to_i != 201
 
-  def upload
-    @doc = DocumentTools.new_upload_backend(@pdf, @shipment, @name, @shipment.user)
-    @url = @doc.get_signed_url
-  end
-
-  def upload_quotes
-    @doc = DocumentTools.new_upload_backend_with_quotes(@pdf, @shipment, @quotation, @name, @shipment.user)
-    @url = @doc.get_signed_url
+    response.body
   end
 end

@@ -26,10 +26,10 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     shipments = shipment_association.order(booking_placed_at: :desc).paginate(page: params[:page], per_page: per_page)
 
     response_handler(
-      shipments:          shipments.map(&:with_address_index_json),
+      shipments: shipments.map(&:with_address_index_json),
       num_shipment_pages: shipments.total_pages,
-      target:             params[:target],
-      page:               params[:page]
+      target: params[:target],
+      page: params[:page]
     )
   end
 
@@ -37,15 +37,15 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     response = Rails.cache.fetch("#{@shipment.cache_key}/view_shipment", expires_in: 12.hours) do
       prepare_response
       response_hash = {
-        shipment:        shipment_as_json,
-        cargoItems:      @cargo_items,
-        containers:      @containers,
+        shipment: shipment_as_json,
+        cargoItems: @cargo_items,
+        containers: @containers,
         aggregatedCargo: @shipment.aggregated_cargo,
-        contacts:        contacts,
-        documents:       @documents,
-        locations:       locations,
-        cargoItemTypes:  cargo_item_types,
-        accountHolder:   @shipment.user
+        contacts: contacts,
+        documents: @documents,
+        locations: locations,
+        cargoItemTypes: cargo_item_types,
+        accountHolder: @shipment.user
       }
     end
     response_handler(
@@ -77,15 +77,15 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       available_filters: [
         :user_search
       ],
-      sanitize_params:   true
+      sanitize_params: true
     )) || return
     per_page = params.fetch(:per_page, 4).to_f
     shipments = filterrific.find.paginate(page: params[:page], per_page: per_page)
     response_handler(
-      shipments:          shipments.map(&:with_address_index_json),
+      shipments: shipments.map(&:with_address_index_json),
       num_shipment_pages: shipments.total_pages,
-      target:             params[:target],
-      page:               params[:page]
+      target: params[:target],
+      page: params[:page]
     )
   end
 
@@ -129,10 +129,9 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     @document = Document.find(params[:id])
     @user = @document.user
     decide_document_action
-    tmp = @document.as_json
-    tmp['signed_url'] = @document.get_signed_url
 
-    response_handler(tmp)
+    signed_url = @document.file.attached? && rails_blob_url(@document.file, disposition: 'attachment')
+    response_handler(@document.as_json.merge(signed_url: signed_url))
   end
 
   def document_delete
@@ -168,21 +167,21 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       rj_shipments = rejected_shipments.order(booking_placed_at: :desc).paginate(page: params[:rejected_page], per_page: per_page)
       a_shipments = archived_shipments.order(booking_placed_at: :desc).paginate(page: params[:archived_page], per_page: per_page)
       num_pages = {
-        finished:  f_shipments.total_pages,
+        finished: f_shipments.total_pages,
         requested: r_shipments.total_pages,
-        open:      o_shipments.total_pages,
-        rejected:  rj_shipments.total_pages,
-        archived:  a_shipments.total_pages
+        open: o_shipments.total_pages,
+        rejected: rj_shipments.total_pages,
+        archived: a_shipments.total_pages
       }
       {
-        requested:          r_shipments.map(&:with_address_index_json),
-        open:               o_shipments.map(&:with_address_index_json),
-        finished:           f_shipments.map(&:with_address_index_json),
-        rejected:           rj_shipments.map(&:with_address_index_json),
-        archived:           a_shipments.map(&:with_address_index_json),
-        pages:              {
-          open:      params[:open_page],
-          finished:  params[:finished_page],
+        requested: r_shipments.map(&:with_address_index_json),
+        open: o_shipments.map(&:with_address_index_json),
+        finished: f_shipments.map(&:with_address_index_json),
+        rejected: rj_shipments.map(&:with_address_index_json),
+        archived: a_shipments.map(&:with_address_index_json),
+        pages: {
+          open: params[:open_page],
+          finished: params[:finished_page],
           requested: params[:requested_page],
           rejected: params[:rejected_page],
           archived: params[:archived_page]
@@ -200,12 +199,12 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       quoted = quoted_shipments.order(:updated_at)
                                .paginate(page: params[:quoted_page], per_page: per_page)
       num_pages = {
-        quoted:  quoted.total_pages
+        quoted: quoted.total_pages
       }
       {
-        quoted:         quoted.map(&:with_address_index_json),
-        pages:              {
-          quoted:      params[:quoted_page]
+        quoted: quoted.map(&:with_address_index_json),
+        pages: {
+          quoted: params[:quoted_page]
         },
         num_shipment_pages: num_pages
       }
@@ -216,8 +215,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   def resp_error
     ApplicationError.new(
       http_code: 400,
-      code:      SecureRandom.uuid,
-      message:   @shipments.errors.full_messages.join("\n")
+      code: SecureRandom.uuid,
+      message: @shipments.errors.full_messages.join("\n")
     )
   end
 
@@ -284,21 +283,25 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def new_planned_origin_drop_off_date
     return if params[:timeObj]['newOriginDropOffDate'] == 'Invalid date'
+
     DateTime.parse(params[:timeObj]['newOriginDropOffDate'])
   end
 
   def new_planned_destination_collection_date
     return if params[:timeObj]['newDestinationCollectionDate'] == 'Invalid date'
+
     DateTime.parse(params[:timeObj]['newDestinationCollectionDate'])
   end
 
   def new_planned_delivery_date
     return if params[:timeObj]['newDeliveryDate'] == 'Invalid date'
+
     DateTime.parse(params[:timeObj]['newDeliveryDate'])
   end
 
   def new_planned_pickup_date
     return if params[:timeObj]['newPickupDate'] == 'Invalid date'
+
     DateTime.parse(params[:timeObj]['newPickupDate'])
   end
 
@@ -326,7 +329,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def locations
     @locations ||= {
-      origin:      @shipment.origin_nexus,
+      origin: @shipment.origin_nexus,
       destination: @shipment.destination_nexus
     }
   end
@@ -342,11 +345,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def populate_documents
-    @documents = []
-    @shipment.documents.each do |doc|
-      tmp = doc.as_json
-      tmp['signed_url'] = doc.get_signed_url
-      @documents << tmp
+    @documents = @shipment.documents.select { |doc| doc.file.attached? }.map do |doc|
+      doc.as_json.merge(signed_url: rails_blob_url(doc.file, disposition: 'attachment'))
     end
   end
 
@@ -360,8 +360,9 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     @shipment_contacts = @shipment.shipment_contacts
     @shipment_contacts.each do |sc|
       next unless sc.contact
-      contacts.push(contact:  sc.contact,
-                    type:     sc.contact_type,
+
+      contacts.push(contact: sc.contact,
+                    type: sc.contact_type,
                     location: sc.contact.location)
     end
   end
@@ -388,6 +389,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   def add_hs_code
     @containers.each do |cn|
       next unless cn&.hs_codes
+
       cn.hs_codes.each do |hs|
         hs_codes << hs
       end
@@ -428,11 +430,11 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def documents
     @documents ||= {
-      'requested_shipments' => Document.get_documents_for_array(tenant_shipment.requested),
-      'open_shipments'      => Document.get_documents_for_array(tenant_shipment.open),
-      'finished_shipments'  => Document.get_documents_for_array(tenant_shipment.finished),
-      'rejected_shipments'  => Document.get_documents_for_array(tenant_shipment.rejected),
-      'archived_shipments'  => Document.get_documents_for_array(tenant_shipment.archived)
+      'requested_shipments' => Document.where(shipment_id: tenant_shipment.requested.select(:id)).group_by(&:doc_type),
+      'open_shipments' => Document.where(shipment_id: tenant_shipment.open.select(:id)).group_by(&:doc_type),
+      'finished_shipments' => Document.where(shipment_id: tenant_shipment.finished.select(:id)).group_by(&:doc_type),
+      'rejected_shipments' => Document.where(shipment_id: tenant_shipment.rejected.select(:id)).group_by(&:doc_type),
+      'archived_shipments' => Document.where(shipment_id: tenant_shipment.archived.select(:id)).group_by(&:doc_type)
     }
   end
 
@@ -446,24 +448,24 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def approved_document_message
     {
-      title:       'Document Approved',
-      message:     "Your document #{@document.text} was approved",
+      title: 'Document Approved',
+      message: "Your document #{@document.text} was approved",
       shipmentRef: @document.shipment.imc_reference
     }
   end
 
   def rejected_document_message
     {
-      title:       'Document Rejected',
-      message:     "Your document #{@document.text} was rejected: #{params[:text]}",
+      title: 'Document Rejected',
+      message: "Your document #{@document.text} was rejected: #{params[:text]}",
       shipmentRef: @document.shipment.imc_reference
     }
   end
 
   def price_message
     {
-      title:       'Shipment Price Change',
-      message:     "Your shipment #{update_shipment.imc_reference} has an updated price. \
+      title: 'Shipment Price Change',
+      message: "Your shipment #{update_shipment.imc_reference} has an updated price. \
         Your new total is #{params[:priceObj]['currency']} #{params[:priceObj]['value']}. \
         For any issues, please contact your support agent.",
       shipmentRef: update_shipment.imc_reference
@@ -472,8 +474,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def schedule_message
     {
-      title:       'Shipment Schedule Updated',
-      message:     "Your shipment #{update_schedule_shipment.imc_reference} has an updated schedule. \
+      title: 'Shipment Schedule Updated',
+      message: "Your shipment #{update_schedule_shipment.imc_reference} has an updated schedule. \
         Your new estimated departure is #{params[:timeObj]['newEtd']}, estimated to \
         arrive at #{params[:timeObj]['newEta']}. For any issues, please contact your \
         support agent.",
@@ -483,8 +485,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def booking_accepted_message
     {
-      title:       'Booking Accepted',
-      message:     "Your booking has been accepted! If you have any further questions or \
+      title: 'Booking Accepted',
+      message: "Your booking has been accepted! If you have any further questions or \
         edits to your booking please contact the support department.",
       shipmentRef: @shipment.imc_reference
     }
@@ -492,8 +494,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def booking_declined_message
     {
-      title:       'Booking Declined',
-      message:     "Your booking has been declined! This could be due to a number of \
+      title: 'Booking Declined',
+      message: "Your booking has been declined! This could be due to a number of \
         reasons including cargo size/weight and goods type. For more info contact \
         us through the support channels.",
       shipmentRef: @shipment.imc_reference

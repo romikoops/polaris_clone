@@ -48,6 +48,12 @@ spec:
           value: review
         - name: DATABASE_URL
           value: {{ $databaseUrl | quote }}
+        - name: K8S_NAMESPACE
+          value: {{ .Release.Namespace | quote }}
+        - name: API_HOST
+          value: "api.{{ include "hostname" .Values.service.url }}"
+        - name: REVIEW_URL
+          value: {{ include "hostname" .Values.service.url }}
         - name: RAILS_MASTER_KEY
           valueFrom:
             secretKeyRef:
@@ -71,6 +77,12 @@ spec:
           value: "5"
         - name: DATABASE_URL
           value: {{ $databaseUrl | quote }}
+        - name: K8S_NAMESPACE
+          value: {{ .Release.Namespace | quote }}
+        - name: API_HOST
+          value: "api.{{ include "hostname" .Values.service.url }}"
+        - name: REVIEW_URL
+          value: {{ include "hostname" .Values.service.url }}
         - name: CORS_ORIGINS
           value: "https:\\/\\/.*\\.{{ include "hostname" .Values.service.url | replace "." "\\\\." }}"
         - name: RAILS_MASTER_KEY
@@ -99,8 +111,14 @@ spec:
         image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
         imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
         env:
+        - name: API_HOST
+          value: "api.{{ include "hostname" .Values.service.url }}"
         - name: API_URL
           value: "https://api.{{ include "hostname" .Values.service.url }}"
+        - name: K8S_NAMESPACE
+          value: {{ .Release.Namespace | quote }}
+        - name: REVIEW_URL
+          value: {{ include "hostname" .Values.service.url }}
         ports:
         - name: http-frontend
           containerPort: 80

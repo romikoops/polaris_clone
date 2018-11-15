@@ -14,14 +14,12 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def choose_offer
-    shipment = Shipment.find(params[:shipment_id])
     resp = ShippingTools.choose_offer(params, current_user)
 
     response_handler(resp)
   end
 
   def send_quotes
-    shipment = Shipment.find(params[:shipment_id])
     ShippingTools.save_and_send_quotes(shipment, params[:quotes], params[:email])
     response_handler(params)
   end
@@ -32,15 +30,38 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def download_quotations
-    shipment = Shipment.find(params[:shipment_id])
-    url = ShippingTools.save_pdf_quotes(shipment, current_user.tenant, params[:options][:quotes])
-    response_handler(key: 'quotations', url: url)
+    @document = Document.create!(
+      shipment: shipment,
+      # quotation: quotation, # TODO: Implement proper quotation tools
+      text: "quotation_#{shipment.imc_reference}",
+      doc_type: 'quotation',
+      user: current_user,
+      tenant: current_user.tenant,
+      file: {
+        io: StringIO.new(ShippingTools.save_pdf_quotes(shipment, current_user.tenant, params[:options][:quotes])),
+        filename: "quotation_#{shipment.imc_reference}.pdf",
+        content_type: 'application/pdf'
+      }
+    )
+
+    response_handler(key: 'quotations', url: rails_blob_url(@document.file, disposition: 'attachment'))
   end
 
   def download_shipment
-    shipment = Shipment.find(params[:shipment_id])
-    url = ShippingTools.generate_and_upload_shipment_pdf(shipment)
-    response_handler(key: 'shipment_recap', url: url)
+    @document = Document.create!(
+      shipment: shipment,
+      text: "shipment_recap_#{shipment.imc_reference}",
+      doc_type: 'shipment_recap',
+      user: shipment.user,
+      tenant: shipment.user.tenant,
+      file: {
+        io: StringIO.new(ShippingTools.generate_shipment_pdf(shipment: shipment)),
+        filename: "shipment_recap_#{shipment.imc_reference}.pdf",
+        content_type: 'application/pdf'
+      }
+    )
+
+    response_handler(key: 'shipment_recap', url: rails_blob_url(@document.file, disposition: 'attachment'))
   end
 
   def view_more_schedules
@@ -54,5 +75,9 @@ class Shipments::BookingProcessController < ApplicationController
     ShippingTools.tenant_notification_email(resp.user, resp)
     ShippingTools.shipper_notification_email(resp.user, resp)
     response_handler(shipment: resp)
+  end
+
+  def shipment
+    @shipment ||= Shipment.find(params[:shipment_id])
   end
 end

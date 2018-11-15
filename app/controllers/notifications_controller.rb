@@ -5,13 +5,13 @@ class NotificationsController < ApplicationController
   include NotificationTools
   include Response
   def index
-    if current_user && current_user.role.name == "shipper"
+    if current_user && current_user.role.name == 'shipper'
       messages = get_messages_for_user(current_user)
       response_handler(messages)
-    elsif current_user && current_user.role.name == "admin"
+    elsif current_user && current_user.role.name == 'admin'
       messages = get_messages_for_admin(current_user)
       response_handler(messages)
-    elsif current_user && current_user.role.name == "sub_admin"
+    elsif current_user && current_user.role.name == 'sub_admin'
       messages = get_messages_for_manager(current_user)
       response_handler(messages)
     else
@@ -21,8 +21,8 @@ class NotificationsController < ApplicationController
 
   def send_message
     message = params[:message].as_json
-    isAdmin = current_user.role.name.include?("admin")
-    user = isAdmin ? Shipment.find_by_imc_reference(message["shipmentRef"]).user : current_user
+    isAdmin = current_user.role.name.include?('admin')
+    user = isAdmin ? Shipment.find_by_imc_reference(message['shipmentRef']).user : current_user
     resp = add_message_to_convo(user, message, isAdmin)
     response_handler(resp)
   end
@@ -47,14 +47,11 @@ class NotificationsController < ApplicationController
       @contacts.push(contact: sc.contact, type: sc.contact_type, location: sc.contact.location)
     end
     hubs = { startHub: {}, endHub: {} }
-    
-    @documents = []
-    @shipment.documents.each do |doc|
-      tmp = doc.as_json
-      tmp["signed_url"] = doc.get_signed_url
-      @documents << tmp
+
+    @documents = @shipment.documents.map do |doc|
+      doc.as_json.merge(signed_url: rails_blob_url(doc.file, disposition: 'attachment'))
     end
-    resp = { shipment: @shipment.with_address_options_json(), cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules, hubs: hubs }
+    resp = { shipment: @shipment.with_address_options_json, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules, hubs: hubs }
     response_handler(resp)
   end
 

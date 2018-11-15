@@ -3,15 +3,14 @@
 class DocumentsController < ApplicationController
   skip_before_action :require_authentication!
 
-  def  download_redirect
-    @url = Document.get_file_url(params[:document_id])
-    redirect_to @url
+  def download_redirect
+
+    redirect_to rails_blob_url(Document.find(params[:document_id]).file, disposition: 'attachment')
   end
 
   def delete
-    @document = Document.find(params[:document_id])
-    if current_user && current_user.id == @document.user_id
-      Document.delete_document(params[:document_id])
+    @document = Document.find_by(id: params[:document_id], user_id: current_user.id)
+    if @document.destroy
       response_handler(deleted: true)
     else
       response_handler(deleted: false)

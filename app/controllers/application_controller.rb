@@ -51,10 +51,11 @@ class ApplicationController < ActionController::API
     )
     Raven.tags_context(
       agency: current_user&.agency_id&.present?,
+      namespace: ENV['K8S_NAMESPACE'],
       tenant: current_tenant&.subdomain
     )
     Raven.extra_context(
-      agency: current_user&.agency&.slice(%i{id name}),
+      agency: current_user&.agency&.slice(%i(id name)),
       params: params.to_unsafe_h,
       url: request.url,
       scope: current_tenant&.scope
