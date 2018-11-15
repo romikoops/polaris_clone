@@ -240,6 +240,7 @@ export class BookingDetails extends Component {
     return parsed + customs.val + insurance.val
   }
   toNextStage () {
+    const mandatoryFormFields = this.props.tenant.data.scope.mandatory_form_fields || {}
     const {
       addons,
       cargoNotes,
@@ -262,7 +263,7 @@ export class BookingDetails extends Component {
 
       return
     }
-    if (cargoNotes === '' || !cargoNotes) {
+    if ((cargoNotes === '' || !cargoNotes) && mandatoryFormFields.description_of_goods) {
       scrollTo('cargo_notes')
       this.setState({ finishBookingAttempted: true })
 
@@ -300,7 +301,8 @@ export class BookingDetails extends Component {
 
       return
     }
-    scrollTo('totalGoodsValue', -50)
+    
+    scrollTo('totalGoodsValue', -150)
   }
   backToDashboard (e) {
     e.preventDefault()

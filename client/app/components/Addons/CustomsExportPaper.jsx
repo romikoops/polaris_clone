@@ -53,7 +53,8 @@ class CustomsExportPaper extends PureComponent {
       </div>
     )
     const noCustomsText = `${t('cargo:noCustomsHead')} ${tenant.data.name} ${t('cargo:noCustomsTail')}`
-    const heightVal = this.state.addonView ? 0 : 300 + (35 * documents.export_customs_paper.length)
+    const documentCount = documents.export_customs_paper ? documents.export_customs_paper.length + 1 : 1
+    const heightVal = this.state.addonView ? 0 : 300 + (35 * documentCount)
     const declinedBox = (
       <div
         className={`flex-100 layout-row layout-align-start-center layout-wrap ${

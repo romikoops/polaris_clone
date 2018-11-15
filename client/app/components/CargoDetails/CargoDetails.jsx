@@ -186,6 +186,7 @@ class CargoDetails extends Component {
     } = this.props
 
     const { scope } = tenant.data
+    const mandatoryFormFields = scope.mandatory_form_fields || {}
     const {
       addons,
       customs,
@@ -503,12 +504,12 @@ class CargoDetails extends Component {
                         name="totalGoodsValue"
                         onBlur={this.handleChange}
                         submitAttempted={finishBookingAttempted}
-                        validations={{ nonNegative: (values, value) => value > 0 }}
+                        validations={{ nonNegative: (values, value) => !mandatoryFormFields.total_goods_value || value > 0 }}
                         validationErrors={{
                           nonNegative: t('common:greaterZero'),
                           isDefaultRequiredValue: t('common:greaterZero')
                         }}
-                        required
+                        required={mandatoryFormFields.total_goods_value}
                       />
                     </div>
                     <div className="flex-33 layout-row">
@@ -549,7 +550,7 @@ class CargoDetails extends Component {
                       validationErrors={{
                         isDefaultRequiredValue: t('common:nonEmpty')
                       }}
-                      required
+                      required={mandatoryFormFields.description_of_goods}
                     />
                   </div>
                 </div>

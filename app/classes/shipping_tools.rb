@@ -314,7 +314,11 @@ module ShippingTools
     destination_hub = shipment.destination_hub
     origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
     destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
-
+    options = { methods: %i(selected_offer mode_of_transport service_level vessel_name carrier), include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }] }
+    shipment_as_json = shipment.as_json(options).merge(
+      pickup_address:   shipment.pickup_address_with_country,
+      delivery_address: shipment.delivery_address_with_country
+    )
     locations = {
       startHub: { data: origin_hub, location: origin_hub.nexus.to_custom_hash },
       endHub: { data: destination_hub, location: destination_hub.nexus.to_custom_hash },
@@ -323,9 +327,9 @@ module ShippingTools
     }
 
     {
-      shipment: shipment.as_options_json,
-      cargoItems: cargo_items      || nil,
-      containers: containers       || nil,
+      shipment:        shipment_as_json,
+      cargoItems:      cargo_items      || nil,
+      containers:      containers       || nil,
       aggregatedCargo: aggregated_cargo || nil,
       locations: locations,
       consignee: consignee,
