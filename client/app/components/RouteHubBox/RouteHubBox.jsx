@@ -145,7 +145,7 @@ class RouteHubBox extends Component {
             {originAddress}
           </div>
           <div
-            className={`${styles.connection_graphics} flex-33  layout-row layout-align-center-center layout-wrap`}
+            className={`${styles.connection_graphics} flex-33 layout-row layout-align-center-center layout-wrap`}
           >
             <div className="flex-100 layout-row layout-align-center-center">
               <div

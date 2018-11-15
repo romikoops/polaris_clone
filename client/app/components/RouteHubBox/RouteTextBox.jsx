@@ -35,9 +35,11 @@ class RouteTextBox extends Component {
       </div>
     ]
   }
+
   static dashedGradient (color1, color2) {
     return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`
   }
+  
   render () {
     const {
       theme, shipment, t
