@@ -45,9 +45,7 @@ subdomains.each do |sub|
   hub = tenant.hubs.find_by_name('Shanghai Port')
   trucking = "data/greencarrier/greencarrier__trucking_ltl__shanghai_port.xlsx"
   req = { 'key' => trucking }
-  ExcelTool::OverrideTruckingRateByHub.new(
-          params: req, _user: shipper, hub_id: hub.id
-        ).perform
+  ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
   puts 'Shanghai Airport ftl'
   hub = tenant.hubs.find_by_name('Shanghai Port')
   trucking = "data/greencarrier/greencarrier__trucking_ftl__shanghai_port.xlsx"

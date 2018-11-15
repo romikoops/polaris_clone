@@ -43,12 +43,7 @@ module DataInserter
       end
 
       def find_port_data
-        port = Port.where(code: @hub_data[:code]).first
-        if port
-          return port
-        else
-          return geocode_port_data
-        end
+        Port.find_by(code: @hub_data[:code]) || geocode_port_data
       end
 
       def default_mandatory_charge

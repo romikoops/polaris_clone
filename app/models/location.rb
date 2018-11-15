@@ -75,7 +75,7 @@ class Location < ApplicationRecord
     keys.to_a.reverse_each.with_index do |name_i, _i|
       final_result = where(name_i => name_2).first
 
-      next if final_result
+      break if final_result
     end
 
     final_result
@@ -92,19 +92,4 @@ class Location < ApplicationRecord
     nil
   end
 
-  # def self.within(lat:, lng:, distance: 0.25)
-  #   # TODO: implement using ST_DWithin, and benchmark against this implementation
-
-  #   where(
-  #     Arel::Nodes::InfixOperation.new(
-  #       '<',
-  #       arel_table[:bounds].st_distance("POINT(#{lng} #{lat})"),
-  #       Arel::Nodes.build_quoted(distance)
-  #     )
-  #   )
-  # end
-
-  # def self.order_distance(lat:, lng:)
-  #   order(arel_table[:bounds].st_distance("POINT(#{lng} #{lat})"))
-  # end
 end

@@ -103,8 +103,7 @@ module ExcelTool
         longitude:        hub_row[:longitude],
         country:          country,
         city:             hub_row[:hub_name],
-        geocoded_address: hub_row[:geocoded_address],
-        address_type: nil
+        geocoded_address: hub_row[:geocoded_address]
       )
     end
 

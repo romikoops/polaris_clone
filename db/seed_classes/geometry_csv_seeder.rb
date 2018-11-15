@@ -14,7 +14,6 @@ class GeometryCsvSeeder
     Zlib::GzipReader.open(TMP_PATH) do |gz|
       csv = CSV.new(gz, headers: true)
       csv.each do |row|
-        # binding.pry
         case row['place_type']
         when 'suburb'
           data = {

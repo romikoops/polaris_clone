@@ -5,20 +5,12 @@ class Address < ApplicationRecord
   has_many :users, through: :user_addresses, dependent: :destroy
   has_many :shipments
   has_many :contacts
-  has_many :ports, foreign_key: :nexus_id
   has_many :ports
   has_one :hub
 
-  # has_many :hubs, foreign_key: :nexus_id do
-  #   def tenant_id(tenant_id)
-  #     where(tenant_id: tenant_id)
-  #   end
-  # end
-  has_many :routes
   has_many :stops, through: :hubs
   belongs_to :country, optional: true
 
-  scope :nexus, -> { where(address_type: 'nexus') }
 
   before_validation :sanitize_zip_code!
 
@@ -130,22 +122,6 @@ class Address < ApplicationRecord
     create!(address_params(raw_address_params))
   end
 
-  def self.nexuses
-    where(address_type: 'nexus')
-  end
-
-  def self.nexuses_client(client)
-    client.pricings.map(&:route).map(&:get_nexuses).flatten.uniq
-  end
-
-  def self.nexuses_prepared
-    nexuses.pluck(:id, :name).to_h.invert
-  end
-
-  def self.nexuses_prepared_client(client)
-    nexuses_client(client).pluck(:id, :name).to_h.invert
-  end
-
   def self.all_with_primary_for(user)
     addresses = user.addresses
     addresses.map do |loc|
@@ -170,37 +146,6 @@ class Address < ApplicationRecord
       raise "This 'Location' object is not associated with a user!"
     else
       return !!user_loc.primary
-    end
-  end
-
-  def hubs_by_type_seeder(hub_type, tenant_id)
-    hubs = self.hubs.where(hub_type: hub_type, tenant_id: tenant_id)
-    if hubs.empty?
-      name = case hub_type
-             when 'ocean'
-               "#{self.name} Port"
-             when 'air'
-               "#{self.name} Airport"
-             when 'rail'
-               "#{self.name} Railyard"
-             else
-               self.name
-             end
-      hub =  self.hubs.create!(hub_type: hub_type, tenant_id: tenant_id, name: name, latitude: latitude, longitude: longitude, address_id: id, nexus_id: id)
-      return self.hubs.where(hub_type: hub_type, tenant_id: tenant_id)
-    else
-      hubs
-    end
-  end
-
-  def pretty_hub_type
-    case address_type
-    when 'hub_train'
-      'Train Hub'
-    when 'hub_ocean'
-      'Port'
-    else
-      raise 'Unknown Hub Type!'
     end
   end
 
