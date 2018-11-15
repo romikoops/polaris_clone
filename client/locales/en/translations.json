@@ -64,7 +64,7 @@
     "commercialInvoice": "Commercial Invoice",
     "createdAt": "Created at",
     "dangerousGoods": "Dangerous Goods",
-    "descriptionGoods": "Description of Goods",
+    "descriptionGoods": "Description of Goods (HS Codes if available)",
     "documents": "Documents",
     "faresFees": "Fares & Fees",
     "fastestRoute": "Fastest route",
@@ -518,7 +518,8 @@
     "air": "Air",
     "rail": "Rail",
     "ocean": "Ocean",
-    "truck": "Truck"
+    "truck": "Truck",
+    "vesselName": "Vessel Name"
   },
   "user": {
     "newAlias": "New Alias",

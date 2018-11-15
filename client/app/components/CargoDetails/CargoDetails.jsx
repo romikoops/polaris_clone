@@ -193,6 +193,7 @@ class CargoDetails extends Component {
       documents,
       shipment
     } = shipmentData
+    
 
     const incotermBox = (
       <div className="flex-100 layout-wrap layout-row">

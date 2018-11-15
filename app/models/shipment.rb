@@ -237,6 +237,8 @@ class Shipment < ApplicationRecord
     send("#{load_type}s=", value)
   end
 
+  
+
   def selected_day_attribute
     has_pre_carriage? ? :planned_pickup_date : :planned_origin_drop_off_date
   end
@@ -423,6 +425,21 @@ class Shipment < ApplicationRecord
     self.itinerary = current_itinerary
 
     return_bool
+  end
+
+  def service_level
+    return nil if !trip
+    trip.tenant_vehicle.name
+  end
+
+  def carrier
+    return nil if !trip
+    trip.tenant_vehicle&.carrier&.name
+  end
+
+  def vessel_name
+    return nil if !trip
+    trip.vessel
   end
 
   private
