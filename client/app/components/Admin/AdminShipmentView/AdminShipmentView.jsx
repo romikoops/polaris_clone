@@ -796,7 +796,7 @@ class AdminShipmentView extends Component {
               shipmentData={shipmentData}
               handlePriceChange={this.handlePriceChange}
               saveNewEditedPrice={this.saveNewEditedPrice}
-              uploadClientDocument={adminDispatch.uploadDocument}
+              adminDispatch={adminDispatch}
             />
           ) : (
             <ShipmentQuotationContent
