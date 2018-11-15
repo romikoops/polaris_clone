@@ -419,9 +419,8 @@ module ShippingTools
     shipment.closing_date      = @schedule['closing_date']
     shipment.planned_etd       = @schedule['etd']
     shipment.planned_eta       = @schedule['eta']
-    documents = {}
+    documents = Hash.new { |h, k| h[k] = [] }
     shipment.documents.each do |doc|
-      documents[doc.doc_type] = [] unless documents[doc.doc_type]
       documents[doc.doc_type] << doc
     end
 

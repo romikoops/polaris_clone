@@ -162,7 +162,12 @@ exports[`shallow render 1`] = `
       </div>
     </div>
     <div
-      className="flex-100 layout-row layout-align-start-center layout-wrap no_customs_box show"
+      className="flex-100 layout-row layout-align-start-center layout-wrap no_customs_exp_paper_box show"
+      style={
+        Object {
+          "height": "335px",
+        }
+      }
     >
       <div
         className="flex-100 layout-row layout-align-start-center layout-wrap"
@@ -175,6 +180,75 @@ exports[`shallow render 1`] = `
               will need a copy of the Customs Export Paper.
           </b>
         </p>
+      </div>
+      <div
+        className="flex-60 layout-row layout-align-start-center layout-wrap"
+      >
+        <p
+          className="flex-100 margin_5"
+        >
+          <b>
+            A customs declaration is mandatory to pass a national border when exporting or importing. If you choose to handle the customs clearance on your own, undefined will need a copy of the customs declaration.
+          </b>
+        </p>
+        <p
+          className="flex-100 margin_5"
+        >
+          <b>
+            When you ship goods from outside the European Union (EU), you may be charged customs duty and/or VAT according to local regulations.
+          </b>
+        </p>
+      </div>
+      <div
+        className="flex-33 no_max layout-row layout-align-end-center"
+      />
+      <div
+        className="flex-60 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100"
+        >
+          <TextHeading
+            color=""
+            size={3}
+            text="Export Customs Paper (MRN)"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap"
+          name="export_customs_paper"
+        >
+          <div
+            className="flex-100 layout-row"
+          >
+            <DocumentsMultiForm
+              deleteFn={false}
+              dispatchFn={false}
+              documents={Array []}
+              t={[Function]}
+              text="Export Customs Paper (MRN)"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              tooltip=""
+              type="export_customs_paper"
+              uploadFn={null}
+            />
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -33,7 +33,7 @@ exports[`shallow render 1`] = `
         className="help_content flex-100 layout-row layout-align-start-start layout-wrap"
       >
         <div
-          className="email_row flex-100 layout-row layout-align-space-between-center"
+          className="email_row flex-100 layout-row layout-align-space-between-center layout-wrap"
         >
           <div
             className="flex-30 layout-row layout-align-start-center"
@@ -47,23 +47,46 @@ exports[`shallow render 1`] = `
             </p>
           </div>
           <div
-            className="email_box flex-70 layout-row layout-align-start-center"
+            className="email_box flex-70 layout-row layout-align-start-center layout-wrap"
           >
-            <i
-              className="fa fa-envelope flex-none"
-              style={
-                Object {
-                  "color": "#333",
-                  "marginRight": "10px",
-                }
-              }
-            />
-            <a
-              className="flex-80 pointy"
-              href="mailto:general@general.com"
+            <div
+              className="flex-100 layout-row layout-align-start-center"
             >
-              general@general.com
-            </a>
+              <i
+                className="fa fa-envelope flex-none"
+                style={
+                  Object {
+                    "color": "#333",
+                    "marginRight": "10px",
+                  }
+                }
+              />
+              <a
+                className="flex-80 pointy"
+                href="mailto:general@general.com"
+              >
+                general@general.com
+              </a>
+            </div>
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <i
+                className="fa fa-phone flex-none"
+                style={
+                  Object {
+                    "color": "#333",
+                    "marginRight": "10px",
+                  }
+                }
+              />
+              <a
+                className="flex-80 pointy"
+                href="tel:+49 123445567"
+              >
+                +49 123445567
+              </a>
+            </div>
           </div>
         </div>
         <div

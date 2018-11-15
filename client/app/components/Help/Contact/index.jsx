@@ -6,7 +6,7 @@ import { capitalize } from '../../../helpers'
 import { Modal } from '../../Modal/Modal'
 
 const HelpContact = ({ tenant, t }) => {
-  const { theme, emails } = tenant.data
+  const { theme, emails, phones } = tenant.data
   const iconStyle = { color: theme.colors.primary, marginRight: '10px' }
   const emailsToRender = Object.keys(emails.support)
     .filter(ek => ek !== 'general')
@@ -38,16 +38,25 @@ const HelpContact = ({ tenant, t }) => {
       <div
         className={`${styles.help_content} flex-100 layout-row layout-align-start-start layout-wrap`}
       >
-        <div className={`${styles.email_row} flex-100 layout-row layout-align-space-between-center`}>
+        <div className={`${styles.email_row} flex-100 layout-row layout-align-space-between-center layout-wrap`}>
           <div className="flex-30 layout-row layout-align-start-center">
             <p className="flex-none no_m"><strong>{t('help:enquiries')}</strong></p>
           </div>
-          <div className={`${styles.email_box} flex-70 layout-row layout-align-start-center`}>
-            <i className="fa fa-envelope flex-none" style={iconStyle} />
-            <a href={`mailto:${emails.support.general}`} className="flex-80 pointy">
-              {emails.support.general}
-            </a>
+          <div className={`${styles.email_box} flex-70 layout-row layout-align-start-center layout-wrap`}>
+            <div className="flex-100 layout-row layout-align-start-center">
+              <i className="fa fa-envelope flex-none" style={iconStyle} />
+              <a href={`mailto:${emails.support.general}`} className="flex-80 pointy">
+                {emails.support.general}
+              </a>
+            </div>
+            { phones.support ? (<div className="flex-100 layout-row layout-align-start-center">
+              <i className="fa fa-phone flex-none" style={iconStyle} />
+              <a href={`tel:${phones.support}`} className="flex-80 pointy">
+                {phones.support}
+              </a>
+            </div>) : '' }
           </div>
+
         </div>
         {emailsToRender}
       </div>

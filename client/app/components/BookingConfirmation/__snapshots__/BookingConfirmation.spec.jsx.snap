@@ -217,11 +217,6 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 >
                   Expected Time of Dropoff:
                 </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
               </div>
               <div
                 className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
@@ -262,11 +257,6 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                   className="flex-70 "
                 >
                   Expected Time of Collection:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
                 </p>
               </div>
             </div>
@@ -1340,11 +1330,6 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 >
                   Expected Time of Dropoff:
                 </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
               </div>
               <div
                 className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
@@ -1385,11 +1370,6 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                   className="flex-70 "
                 >
                   Expected Time of Collection:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
                 </p>
               </div>
             </div>
@@ -2493,11 +2473,6 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 >
                   Expected Time of Dropoff:
                 </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
               </div>
               <div
                 className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
@@ -2538,11 +2513,6 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                   className="flex-70 "
                 >
                   Expected Time of Collection:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
                 </p>
               </div>
             </div>
@@ -3727,11 +3697,6 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 >
                   Expected Time of Dropoff:
                 </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
               </div>
               <div
                 className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
@@ -3790,11 +3755,6 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                   className="flex-70 "
                 >
                   Expected Time of Delivery:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
                 </p>
               </div>
             </div>
@@ -4853,11 +4813,6 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 >
                   Expected Time of Pickup:
                 </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
               </div>
               <div
                 className="flex-100 layout-row layout-align-center-center buffer_10"
@@ -4914,11 +4869,6 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                   className="flex-70 "
                 >
                   Expected Time of Collection:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
                 </p>
               </div>
             </div>
@@ -5977,11 +5927,6 @@ exports[`shallow render 1`] = `
                 >
                   Expected Time of Dropoff:
                 </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
               </div>
               <div
                 className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
@@ -6022,11 +5967,6 @@ exports[`shallow render 1`] = `
                   className="flex-70 "
                 >
                   Expected Time of Collection:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
                 </p>
               </div>
             </div>
@@ -7085,11 +7025,6 @@ exports[`with cargo items 1`] = `
                 >
                   Expected Time of Dropoff:
                 </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
               </div>
               <div
                 className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
@@ -7130,11 +7065,6 @@ exports[`with cargo items 1`] = `
                   className="flex-70 "
                 >
                   Expected Time of Collection:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
                 </p>
               </div>
             </div>
@@ -8514,11 +8444,6 @@ exports[`with containers 1`] = `
                 >
                   Expected Time of Dropoff:
                 </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
               </div>
               <div
                 className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
@@ -8559,11 +8484,6 @@ exports[`with containers 1`] = `
                   className="flex-70 "
                 >
                   Expected Time of Collection:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
                 </p>
               </div>
             </div>
