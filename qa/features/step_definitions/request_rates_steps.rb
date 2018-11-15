@@ -13,10 +13,10 @@ When('I request the first public rate') do
     pricings_rows = pricing_table.all('.rt-tr-group')
     pricings_rows.each do |p_row|
       next if @rate_row
-      is_requested = p_row.has_content?('Requested')
-      next if is_requested
 
       button = p_row.find('button')
+      next if !button
+      
       @rate_row = p_row
       button.click
     end
