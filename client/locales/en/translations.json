@@ -166,7 +166,13 @@
     "modeOfTransport": "Mode of Transport",
     "rate": "Rate",
     "booking": "Booking",
-    "quotation": "Quotation"
+    "quotation": "Quotation",
+    "max" : "Max",
+    "personal": "Personal",
+    "fcl_20": "FCL 20'",
+    "fcl_40": "FCL 40'",
+    "fcl_40_hq": "FCL 40' HQ",
+    "lcl": "Cargo item"
   },
   "admin": {
     "lowerLimit": "Lower Limit",
@@ -287,7 +293,9 @@
     "carrier": "Carrier",
     "loadType": "Load Type",
     "request": "Request",
-    "pricings": "Pricings"
+    "pricings": "Pricings",
+    "dedicatedPricingCount": "No. Dedicated Pricings",
+    "openPricingCount": "No. Open Pricings"
   },
   "cargo": {
     "cargoDetails": "Cargo Details",
