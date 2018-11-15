@@ -14,8 +14,9 @@ When('I request the first public rate') do
     pricings_rows.each do |p_row|
       next if @rate_row
 
+      has_button = p_row.has_selector?('button')
+      next if !has_button
       button = p_row.find('button')
-      next if !button
       
       @rate_row = p_row
       button.click
