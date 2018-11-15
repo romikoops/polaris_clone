@@ -15,7 +15,6 @@ import InsuranceDetails from '../../components/InsuranceDetails/InsuranceDetails
 import { appActions, authenticationActions, userActions } from '../../actions'
 import { defaultTheme, moment } from '../../constants'
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
-import getSubdomain from '../../helpers/subdomain'
 import MessageCenter from '../../containers/MessageCenter/MessageCenter'
 import ResetPasswordForm from '../../components/ResetPasswordForm'
 import CookieConsentBar from '../../components/CookieConsentBar'
@@ -29,26 +28,11 @@ class App extends Component {
     const { appDispatch } = this.props
     const tenantId = '1'
     appDispatch.setTenant(tenantId)
-    // if (!tenant && !isFetching) {
-    //   const subdomain = getSubdomain()
-    //   appDispatch.fetchTenantIfNeeded(subdomain)
-    // }
   }
   componentDidMount () {
-    // const { appDispatch, tenant } = this.props
-    // const subdomain = getSubdomain()
-    // appDispatch.fetchTenantIfNeeded(subdomain)
     const { appDispatch } = this.props
     appDispatch.fetchCurrencies()
     this.isUserExpired()
-  }
-  componentDidUpdate (prevProps) {
-    //   if ((this.props.selectedSubdomain !== prevProps.selectedSubdomain ||
-  //     (!this.props.tenant && !this.props.isFetching) ||
-  //   (this.props.tenant && !this.props.tenant.data && !this.props.isFetching))) {
-  //     // const { appDispatch, selectedSubdomain } = this.props
-  //     // appDispatch.fetchTenantIfNeeded(selectedSubdomain)
-  //   }
   }
   isUserExpired () {
     const { appDispatch, user } = this.props
@@ -64,16 +48,13 @@ class App extends Component {
   render () {
     const {
       tenant,
-      isFetching,
       user,
       loggedIn,
       showMessages,
       sending,
-      loading,
-      loggingIn,
-      app
+      loading
     } = this.props
-    
+
     if (!tenant) {
       return <Loading theme={defaultTheme} text="loading..." />
     }

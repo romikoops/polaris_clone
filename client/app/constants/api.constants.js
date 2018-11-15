@@ -4,9 +4,8 @@ export function getApiHost () {
   return `${getConfig().api_url}/tenants`
 }
 
-export function getFullApiHost () {
+export function getTenantApiUrl () {
   const { localStorage } = window
-  const url = localStorage.getItem('tenantUrl')
 
-  return url
+  return `${getConfig().api_url}/tenants/${localStorage.getItem('tenantId')}`
 }

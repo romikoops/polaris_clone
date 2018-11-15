@@ -15,6 +15,6 @@ class Admin::AdminBaseController < ApplicationController
   end
 
   def is_current_tenant?
-    current_user.tenant_id === params[:tenant_id]
+    current_user.tenant_id == params[:tenant_id].to_i
   end
 end

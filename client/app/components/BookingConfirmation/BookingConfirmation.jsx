@@ -367,7 +367,7 @@ class BookingConfirmation extends Component {
                   originFees={shipment.selected_offer.export}
                   destinationFees={shipment.selected_offer.import}
                   feeHash={feeHash}
-                  tenant={{ data: tenant }}
+                  tenant={tenant}
                 />
               </div>
             </div>
@@ -400,7 +400,7 @@ class BookingConfirmation extends Component {
                   theme={theme}
                   feeHash={feeHash}
                   shipment={shipment}
-                  tenant={{ data: tenant }}
+                  tenant={tenant}
                 />
               </div>
             </div>

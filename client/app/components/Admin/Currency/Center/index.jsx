@@ -212,7 +212,7 @@ class AdminCurrencyCenter extends Component {
 
   render () {
     const { currencies, tenant } = this.props
-    const { theme } = tenant && tenant ? tenant : {}
+    const { theme } = tenant
     const {
       currentBase, calculator, results, rateBool, rates, newValues, editBool, searchString
     } = this.state

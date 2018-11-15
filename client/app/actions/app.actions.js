@@ -18,23 +18,28 @@ const { fetch } = window
 
 function setTenant (tenantId) {
   function request () {
-    // TODO
+    return { type: appConstants.SET_TENANT_REQUEST }
   }
   function success (payload) {
     const { localStorage } = window
-    localStorage.setItem('tenantUrl', payload.url)
-    return { type: 'TEST', payload }
+    localStorage.setItem('tenantId', payload.tenant.id)
+
+    return { type: appConstants.SET_TENANT_SUCCESS, payload }
   }
   function failure (error) {
+    return { type: appConstants.FETCH_CURRENCIES_ERROR, error }
   }
 
   return (dispatch) => {
+    dispatch(request)
     appService.setTenant(tenantId).then(
       (resp) => {
         dispatch(success(resp.data))
       },
-      () => {
-        // TODO
+      (error) => {
+        error.then((data) => {
+          dispatch(failure({ type: 'error', text: data.message }))
+        })
       }
     )
   }

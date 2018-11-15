@@ -20,15 +20,17 @@ class TenantsController < ApplicationController
   end
 
   def show
-    tenant_id = params[:id]
-    base_url =
-      case Rails.env
-      when 'production'  then "#{request.referrer}tenants/#{tenant_id}"
-      when 'development' then "http://localhost:3000/tenants/#{tenant_id}"
-      when 'test'        then "http://localhost:3000/tenants/#{tenant_id}"
-      end
-    # ref = "#{request.referrer}tenants/#{tenant_id}"
-    tenant = Tenant.find(tenant_id)
-    response_handler(url: base_url, tenant: tenant)
+    envs = [
+      URI(request.referrer).host.split('.').first,
+      ENV['DEV_SUBDOMAIN']
+    ]
+    tenant = envs.find do |subdomain|
+      t = Tenant.find_by(subdomain: subdomain)     
+    end
+    if tenant.nil?
+      tenant = Tenant.find(params[:id])
+    end
+    
+    response_handler(tenant: tenant)
   end
 end

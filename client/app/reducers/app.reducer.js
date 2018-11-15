@@ -3,24 +3,22 @@ import { appConstants } from '../constants'
 
 export default function app (state = {}, action) {
   switch (action.type) {
-    // case appConstants.SET_TENANT_REQUEST: {
-    //   return state
-    // }
-    // case appConstants.SET_TENANT_SUCCESS: {
-    //   return action.payload
-    // }
-    // case appConstants.SET_TENANT_ERROR: {
-    //   const currErr = merge({}, state, {
-    //     error: action.payload,
-    //     loading: false
-    //   })
-    //   return currErr
-    // }
-    case 'TEST':
+    case appConstants.SET_TENANT_REQUEST: {
+      return state
+    }
+    case appConstants.SET_TENANT_SUCCESS: {
       return {
         ...state,
         ...action.payload
       }
+    }
+    case appConstants.SET_TENANT_ERROR: {
+      const err = merge({}, state, {
+        error: action.payload
+      })
+
+      return err
+    }
     case appConstants.FETCH_CURRENCIES_REQUEST: {
       return state
     }
@@ -29,6 +27,7 @@ export default function app (state = {}, action) {
         currencies: action.payload,
         loading: false
       })
+
       return currSucc
     }
     case appConstants.FETCH_CURRENCIES_ERROR: {
@@ -36,6 +35,7 @@ export default function app (state = {}, action) {
         error: action.payload,
         loading: false
       })
+
       return currErr
     }
     case appConstants.FETCH_COUNTRIES_REQUEST: {
@@ -64,6 +64,7 @@ export default function app (state = {}, action) {
         currencyList: action.payload,
         loading: false
       })
+
       return currSucc
     }
     case appConstants.REFRESH_CURRENCIES_ERROR: {
@@ -71,6 +72,7 @@ export default function app (state = {}, action) {
         error: action.payload,
         loading: false
       })
+
       return currErr
     }
     case appConstants.FETCH_CURRENCIES_FOR_BASE_REQUEST: {
@@ -88,6 +90,7 @@ export default function app (state = {}, action) {
         error: action.payload,
         loading: false
       })
+
       return currErr
     }
     case appConstants.TOGGLE_CURRENCIES_REQUEST: {
@@ -98,6 +101,7 @@ export default function app (state = {}, action) {
         currencyList: action.payload.rates,
         loading: false
       })
+
       return currSucc
     }
     case appConstants.TOGGLE_CURRENCIES_ERROR: {
@@ -105,6 +109,7 @@ export default function app (state = {}, action) {
         error: action.payload,
         loading: false
       })
+
       return currErr
     }
     case appConstants.RECEIVE_TENANTS: {
@@ -126,12 +131,14 @@ export default function app (state = {}, action) {
         error: action.payload,
         loading: false
       })
+
       return currSetErr
     }
     case appConstants.SET_CURRENCY_REQUEST: {
       const currSetReq = merge({}, state, {
         loading: true
       })
+
       return currSetReq
     }
     default:

@@ -1,5 +1,5 @@
 import { Promise } from 'es6-promise-promise'
-import { getFullApiHost } from '../constants/api.constants'
+import { getTenantApiUrl } from '../constants/api.constants'
 import { authHeader, toQueryString } from '../helpers'
 
 const { fetch, localStorage, FormData } = window
@@ -26,7 +26,7 @@ function getAll () {
     headers: authHeader()
   }
 
-  return fetch(`${getFullApiHost()}/shipments`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/shipments`, requestOptions).then(handleResponse)
 }
 
 function getShipment (id) {
@@ -35,7 +35,7 @@ function getShipment (id) {
     headers: authHeader()
   }
 
-  return fetch(`${getFullApiHost()}/shipments/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/shipments/${id}`, requestOptions).then(handleResponse)
 }
 
 function getSchedulesForResult (args) {
@@ -43,7 +43,7 @@ function getSchedulesForResult (args) {
     method: 'GET',
     headers: authHeader()
   }
-  const url = `${getFullApiHost()}/shipments/${args.shipmentId}/view_more_schedules`
+  const url = `${getTenantApiUrl()}/shipments/${args.shipmentId}/view_more_schedules`
   const params = { trip_id: args.tripId, delta: args.delta }
 
   return fetch(`${url}?${toQueryString(params)}`, requestOptions).then(handleResponse)
@@ -55,7 +55,7 @@ function newShipment (details) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ details })
   }
-  const url = `${getFullApiHost()}/create_shipment`
+  const url = `${getTenantApiUrl()}/create_shipment`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -66,7 +66,7 @@ function getOffers (data) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }
-  const url = `${getFullApiHost()}/shipments/${data.shipment.id}/get_offers`
+  const url = `${getTenantApiUrl()}/shipments/${data.shipment.id}/get_offers`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -77,7 +77,7 @@ function chooseOffer (data) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }
-  const url = `${getFullApiHost()}/shipments/${data.id}/choose_offer`
+  const url = `${getTenantApiUrl()}/shipments/${data.id}/choose_offer`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -87,7 +87,7 @@ function sendQuotes (data) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }
-  const url = `${getFullApiHost()}/shipments/${data.shipment.id}/send_quotes`
+  const url = `${getTenantApiUrl()}/shipments/${data.shipment.id}/send_quotes`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -98,7 +98,7 @@ function setShipmentContacts (data) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }
-  const url = `${getFullApiHost()}/shipments/${data.shipment.id}/update_shipment`
+  const url = `${getTenantApiUrl()}/shipments/${data.shipment.id}/update_shipment`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -107,7 +107,7 @@ function requestShipment (id) {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
-  const url = `${getFullApiHost()}/shipments/${id}/request_shipment`
+  const url = `${getTenantApiUrl()}/shipments/${id}/request_shipment`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -117,7 +117,7 @@ function getNotes (noteIds) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(noteIds)
   }
-  const url = `${getFullApiHost()}/notes/fetch`
+  const url = `${getTenantApiUrl()}/notes/fetch`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -132,7 +132,7 @@ function uploadDocument (doc, type, url) {
     body: formData
   }
 
-  return fetch(getFullApiHost() + url, requestOptions).then(handleResponse)
+  return fetch(getTenantApiUrl() + url, requestOptions).then(handleResponse)
 }
 
 function updateCurrency (currency) {
@@ -141,7 +141,7 @@ function updateCurrency (currency) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ currency })
   }
-  const url = `${getFullApiHost()}/currencies/set`
+  const url = `${getTenantApiUrl()}/currencies/set`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -152,7 +152,7 @@ function deleteDocument (documentId) {
     headers: authHeader()
   }
 
-  return fetch(`${getFullApiHost()}/documents/delete/${documentId}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/documents/delete/${documentId}`, requestOptions).then(handleResponse)
 }
 
 function updateContact (data) {
@@ -164,7 +164,7 @@ function updateContact (data) {
     body: formData
   }
 
-  return fetch(`${getFullApiHost()}/contacts/${data.id}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/contacts/${data.id}`, requestOptions).then(handleResponse)
 }
 
 export const shipmentService = {

@@ -41,10 +41,6 @@ class ApplicationController < ActionController::API
   def current_tenant
     @current_tenant ||= current_user&.tenant
   end
-
-  def find_tenant
-    @tenant = Tenant.find(params[:tenant_id])
-  end
   
   def append_info_to_payload(payload)
     super

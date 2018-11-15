@@ -1,5 +1,5 @@
 import { Promise } from 'es6-promise-promise'
-import { getFullApiHost } from '../constants/api.constants'
+import { getTenantApiUrl } from '../constants/api.constants'
 import { authHeader } from '../helpers'
 
 const { fetch } = window
@@ -20,7 +20,7 @@ function getUserConversations () {
     headers: authHeader()
   }
 
-  return fetch(`${getFullApiHost()}/messaging/get`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/messaging/get`, requestOptions).then(handleResponse)
 }
 
 function getAdminConversations () {
@@ -29,7 +29,7 @@ function getAdminConversations () {
     headers: authHeader()
   }
 
-  return fetch(`${getFullApiHost()}/messaging/get_admin`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/messaging/get_admin`, requestOptions).then(handleResponse)
 }
 
 function sendUserMessage (message) {
@@ -38,7 +38,7 @@ function sendUserMessage (message) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ message })
   }
-  const url = `${getFullApiHost()}/messaging/send`
+  const url = `${getTenantApiUrl()}/messaging/send`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -49,7 +49,7 @@ function getShipmentData (ref) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ ref })
   }
-  const url = `${getFullApiHost()}/messaging/data`
+  const url = `${getTenantApiUrl()}/messaging/data`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -59,7 +59,7 @@ function getShipmentsData (keys) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ keys })
   }
-  const url = `${getFullApiHost()}/messaging/shipments`
+  const url = `${getTenantApiUrl()}/messaging/shipments`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -70,7 +70,7 @@ function markAsRead (shipmentRef) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ shipmentRef })
   }
-  const url = `${getFullApiHost()}/messaging/mark`
+  const url = `${getTenantApiUrl()}/messaging/mark`
 
   return fetch(url, requestOptions).then(handleResponse)
 }

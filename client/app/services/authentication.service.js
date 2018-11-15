@@ -1,5 +1,5 @@
 import { Promise } from 'es6-promise-promise'
-import { getFullApiHost } from '../constants/api.constants'
+import { getTenantApiUrl } from '../constants/api.constants'
 import { authHeader } from '../helpers'
 import getSubdomain from '../helpers/subdomain'
 
@@ -20,7 +20,7 @@ function login (data) {
     body: JSON.stringify({ email: data.email, password: data.password })
   }
 
-  return fetch(`${getFullApiHost()}/auth/sign_in`, requestOptions)
+  return fetch(`${getTenantApiUrl()}/auth/sign_in`, requestOptions)
     .then((response) => {
       if (!response.ok) {
         return Promise.reject(response.json())
@@ -66,7 +66,7 @@ function register (user) {
     body: JSON.stringify(user)
   }
 
-  return fetch(`${getFullApiHost()}/auth/`, requestOptions)
+  return fetch(`${getTenantApiUrl()}/auth/`, requestOptions)
     .then((response) => {
       if (!response.ok) {
         return Promise.reject(response.statusText)
@@ -107,7 +107,7 @@ function updateUser (user, req) {
     body: JSON.stringify({ update: req })
   }
 
-  return fetch(`${getFullApiHost()}/users/${user.id}/update`, requestOptions)
+  return fetch(`${getTenantApiUrl()}/users/${user.id}/update`, requestOptions)
     .then((response) => {
       if (!response.ok) {
         return Promise.reject(response.statusText)

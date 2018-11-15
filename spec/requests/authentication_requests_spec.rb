@@ -7,7 +7,7 @@ describe 'Authentication by token', type: :request do
 
   context 'user logged out' do
     it 'responds correctly, requiring authentication' do
-      get subdomain_user_home_path(subdomain_id: tenant.subdomain, user_id: user.id)
+      get subdomain_user_home_path(tenant_id: tenant.id, user_id: user.id)
 
       expect(response).to have_http_status(:unauthorized)
       expect(json[:success]).to be_falsy
