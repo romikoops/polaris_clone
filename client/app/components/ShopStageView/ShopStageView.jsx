@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { cookieActions } from '../../actions'
 import styles from './ShopStageView.scss'
 import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
@@ -187,7 +190,13 @@ class ShopStageView extends Component {
             <p className="flex-none fade"> {this.state.stageHeader} </p>
           </div>
         </div>
-        <div className={`${styles.stage_row} layout-row flex-100 layout-align-center`}>
+        <div
+          className={`${styles.stage_row} layout-row flex-100 layout-align-center`}
+          ref={(div) => {
+            if (!div) return
+            this.props.cookieDispatch.updateCookieHeight(div.offsetHeight)
+          }}
+        >
           {backBtn}
           <div>
             <div
@@ -214,7 +223,10 @@ ShopStageView.propTypes = {
   currentStage: PropTypes.number,
   disabledClick: PropTypes.bool,
   hasNextStage: PropTypes.bool,
-  goForward: PropTypes.func
+  goForward: PropTypes.func,
+  cookieDispatch: PropTypes.shape({
+    updateCookieHeight: PropTypes.func
+  }).isRequired
 }
 
 ShopStageView.defaultProps = {
@@ -226,4 +238,10 @@ ShopStageView.defaultProps = {
   goForward: null
 }
 
-export default withNamespaces(['common', 'help'])(ShopStageView)
+function mapDispatchToProps (dispatch) {
+  return {
+    cookieDispatch: bindActionCreators(cookieActions, dispatch)
+  }
+}
+
+export default connect(null, mapDispatchToProps)(withNamespaces(['common', 'help'])(ShopStageView))
