@@ -8,6 +8,10 @@ import {
   user
 } from '../../mocks'
 
+jest.mock('react-redux', () => ({
+  connect: (mapStateToProps, mapDispatchToProps) => Component => Component
+}))
+
 // eslint-disable-next-line
 import CookieConsentBar from './'
 
@@ -15,18 +19,18 @@ const propsBase = {
   theme,
   tenant,
   user,
-  loggedIn: true,
+  loggedIn: false,
   authDispatch: {
     updateUser: identity,
     register: identity
   }
 }
 
-test.skip('shallow render', () => {
+test('shallow render', () => {
   expect(shallow(<CookieConsentBar {...propsBase} />)).toMatchSnapshot()
 })
 
-test.skip('state.showModal is true', () => {
+test('state.showModal is true', () => {
   const wrapper = shallow(<CookieConsentBar {...propsBase} />)
   wrapper.setState({ showModal: true })
 

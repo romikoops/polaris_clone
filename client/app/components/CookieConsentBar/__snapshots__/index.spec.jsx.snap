@@ -1,159 +1,273 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`shallow render 1`] = `
-<div
-  className="cookie_flex "
-  style={
-    Object {
-      "background": "#fafafa",
-      "filter": "grayscale(60%)",
+<React.Fragment>
+  <div
+    className="cookie_flex"
+    style={
+      Object {
+        "background": "white",
+        "bottom": NaN,
+      }
     }
-  }
->
-  <p
-    className="cookie_text"
   >
-    This website uses cookies to enhance your user experience. 
-    <a
-      href="https://www.itsmycargo.com/en/privacy"
-      target="_blank"
+    <div
+      className="flex-65 layout-row box_left"
     >
-      Learn more
-    </a>
-  </p>
-  <ConsentButton
-    active={true}
-    disabled={false}
-    handleDisabled={null}
-    handleNext={[Function]}
-    text="Accept"
-    theme={
-      Object {
-        "colors": Object {
-          "primary": "#333",
-          "secondary": "#fafafa",
-        },
-      }
-    }
-  />
-  <ConsentButton
-    active={true}
-    disabled={false}
-    handleDisabled={null}
-    handleNext={[Function]}
-    text="Decline"
-    theme={
-      Object {
-        "colors": Object {
-          "primary": "#333",
-          "secondary": "#fafafa",
-        },
-      }
-    }
-  />
-</div>
+      <div>
+        <div
+          className="title"
+        >
+          This site use cookies
+        </div>
+        <div
+          className="description"
+        >
+          We and our advertising partners use these cookies to deliver advertisements, to make them more relevant and meaningful to visitors to our website, and to track the efficiency of our advertising campaigns, both on our services and on other websites.
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-35 layout-row layout-row"
+    >
+      <div
+        className="flex-100 layout-row layout-align-center padding_top"
+      >
+        <div
+          className="flex-35 layout-row show_details"
+        >
+          <a
+            href="#"
+            onClick={[Function]}
+          >
+            Show Details
+          </a>
+        </div>
+        <div
+          className="flex-60 layout-row"
+        >
+          <button
+            className="accept_all"
+            onClick={[Function]}
+            type="button"
+          >
+            <i
+              className="fa fa-check"
+            />
+            accept all
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</React.Fragment>
 `;
 
 exports[`state.showModal is true 1`] = `
-<div
-  className="cookie_flex "
-  style={
-    Object {
-      "background": "#fafafa",
-      "filter": "grayscale(60%)",
-    }
-  }
->
-  <Modal
-    component={
-      <div
-        className="cookie_modal"
-      >
-        <p>
-          We use cookies to enhance your user experience. 
-           
-          <br />
-          <br />
-          The consent is not mandatory but necessary to continue using our website. Are you sure you want to decline the usage of cookies?
-        </p>
-        <ConsentButton
-          active={true}
-          disabled={false}
-          handleDisabled={null}
-          handleNext={[Function]}
-          text="ok, accept"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <ConsentButton
-          active={true}
-          disabled={false}
-          handleDisabled={null}
-          handleNext={[Function]}
-          text="cookies policy"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-      </div>
-    }
-    flexOptions=""
-    horizontalPadding="40px"
-    minHeight=""
-    parentToggle={[Function]}
-    verticalPadding="30px"
-  />
-  <p
-    className="cookie_text"
-  >
-    This website uses cookies to enhance your user experience. 
-    <a
-      href="https://www.itsmycargo.com/en/privacy"
-      target="_blank"
+<React.Fragment>
+  <React.Fragment>
+    <div
+      className="modal_background"
+      onClick={[Function]}
+    />
+    <div
+      className="modal flex-100 layout-column"
     >
-      Learn more
-    </a>
-  </p>
-  <ConsentButton
-    active={true}
-    disabled={false}
-    handleDisabled={null}
-    handleNext={[Function]}
-    text="Accept"
-    theme={
+      <div
+        className="flex-20 layout-column"
+      >
+        <div
+          className="flex-100 layout-column"
+        >
+          <div
+            className="flex-50 layout-column modal_title"
+          >
+            Cookie declaration
+          </div>
+          <div
+            className="flex-50 layout-column modal_description"
+          >
+            We use cookies to personalize content and ads, to provide social media features and to analyze our traffic.
+          </div>
+        </div>
+      </div>
+      <div
+        className="modal_separator"
+      />
+      <div
+        className="flex-10 layout-column modal_section_title"
+      >
+        Mandatory
+      </div>
+      <div
+        className="flex-20 layout-column"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <div
+            className="flex-80 layout-row modal_section_text"
+          >
+            These cookies are necessary for the Website to function and cannot be turned off in our systems. They are usually only set in response to actions made by you which amount to a request for information or services, such as logging in or filling in forms on our Website.
+          </div>
+          <div
+            className="flex-35 layout-row modal_section_button"
+          >
+            <i
+              className="mandatory fa fa-3x fa-toggle-on"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-10 layout-column modal_section_title"
+      >
+        Marketing
+      </div>
+      <div
+        className="flex-20 layout-column"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <div
+            className="flex-80 layout-row modal_section_text"
+          >
+            These cookies enable us to provide enhanced functionality and personalization for our website. They may be set by us or by third party providers whose services we have added to our pages.
+          </div>
+          <div
+            className="flex-35 layout-row modal_section_button"
+          >
+            <i
+              className="fa fa-3x active fa-toggle-on"
+              onClick={[Function]}
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-10 layout-column modal_section_title"
+      >
+        Tracking
+      </div>
+      <div
+        className="flex-20 layout-column"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <div
+            className="flex-80 layout-row modal_section_text"
+          >
+            These cookies may be set through our site by our advertising partners. They may be used by those companies to build a profile of your interests and show you relevant adverts on other websites.
+          </div>
+          <div
+            className="flex-35 layout-row modal_section_button"
+          >
+            <i
+              className="fa fa-3x active fa-toggle-on"
+              onClick={[Function]}
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="modal_separator"
+      />
+      <div
+        className="flex-20 layout-column"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <div
+            className="flex-60 layout-row"
+          />
+          <div
+            className="flex-20 layout-row show_details"
+          >
+            <a
+              href="https://www.itsmycargo.com/en/privacy"
+              target="_blank"
+            >
+              Learn more
+            </a>
+          </div>
+          <div
+            className="flex-20 layout-row"
+          >
+            <button
+              className="accept_all"
+              onClick={[Function]}
+              type="button"
+            >
+              <i
+                className="fa fa-check"
+              />
+              Accept
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </React.Fragment>
+  <div
+    className="cookie_flex"
+    style={
       Object {
-        "colors": Object {
-          "primary": "#333",
-          "secondary": "#fafafa",
-        },
+        "background": "white",
+        "bottom": NaN,
       }
     }
-  />
-  <ConsentButton
-    active={true}
-    disabled={false}
-    handleDisabled={null}
-    handleNext={[Function]}
-    text="Decline"
-    theme={
-      Object {
-        "colors": Object {
-          "primary": "#333",
-          "secondary": "#fafafa",
-        },
-      }
-    }
-  />
-</div>
+  >
+    <div
+      className="flex-65 layout-row box_left"
+    >
+      <div>
+        <div
+          className="title"
+        >
+          This site use cookies
+        </div>
+        <div
+          className="description"
+        >
+          We and our advertising partners use these cookies to deliver advertisements, to make them more relevant and meaningful to visitors to our website, and to track the efficiency of our advertising campaigns, both on our services and on other websites.
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-35 layout-row layout-row"
+    >
+      <div
+        className="flex-100 layout-row layout-align-center padding_top"
+      >
+        <div
+          className="flex-35 layout-row show_details"
+        >
+          <a
+            href="#"
+            onClick={[Function]}
+          >
+            Show Details
+          </a>
+        </div>
+        <div
+          className="flex-60 layout-row"
+        >
+          <button
+            className="accept_all"
+            onClick={[Function]}
+            type="button"
+          >
+            <i
+              className="fa fa-check"
+            />
+            accept all
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</React.Fragment>
 `;
