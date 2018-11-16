@@ -187,6 +187,7 @@ export class ShipmentsCompAdmin extends Component {
               dispatches={adminDispatch}
               shipments={mergedShipments[status]}
               theme={theme}
+              status={status}
               confirmShipmentData={confirmShipmentData}
               searchText={search[status]}
               tooltip={adminTip[status]}

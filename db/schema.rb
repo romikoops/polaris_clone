@@ -646,6 +646,7 @@ ActiveRecord::Schema.define(version: 2018_11_13_124857) do
     t.datetime "planned_delivery_date"
     t.datetime "planned_destination_collection_date"
     t.datetime "desired_start_date"
+    t.integer "stage"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 
