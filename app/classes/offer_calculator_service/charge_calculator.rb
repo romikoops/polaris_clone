@@ -30,6 +30,7 @@ module OfferCalculatorService
 
       @grand_total_charge.update_price!
       @grand_total_charge.save
+
       @grand_total_charge
     end
 
@@ -55,9 +56,9 @@ module OfferCalculatorService
           @user
         )
 
-        unless local_charges_data.empty?
-          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('export'))
-        end
+        raise ApplicationError::UnavailableLocalCharges if local_charges_data.except('total').empty?
+
+        create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('export'))
       end
 
       if @shipment.has_on_carriage || @schedule.destination_hub.mandatory_charge.import_charges
@@ -72,9 +73,9 @@ module OfferCalculatorService
           @user
         )
 
-        unless local_charges_data.empty?
-          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('import'))
-        end
+        raise ApplicationError::UnavailableLocalCharges if local_charges_data.except('total').empty?
+
+        create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('import'))
       end
     end
 

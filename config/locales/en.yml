@@ -44,10 +44,13 @@ en:
         Exceded maximum total chargeable weight for the modes
         of transport available in the selected route.
       "
-    # ...:
-    #   http_code: 400
-    #   code: 1002
-    #   message: ""
+    unavailable_local_charges:
+      http_code: 400
+      code: 1002
+      message: "
+        The availability of this route is pending confirmation
+        of the applicable local charges.
+      "
     no_trucking_time:
       http_code: 400
       code: 1003
