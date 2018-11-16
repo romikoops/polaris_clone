@@ -428,6 +428,21 @@ class CargoDetails extends Component {
 
     return (
       <div name="cargoDetailsBox" className="flex-100 layout-row layout-wrap padd_top">
+        {scope.customs_export_paper && addons.customs_export_paper
+          ? <div className="flex-100 layout-row layout-align-center padd_top">
+            <div
+              className={`flex-none ${
+                defaults.content_width
+              } layout-row layout-wrap section_padding`}
+            >
+              <CustomsExportPaper
+                addon={addons.customs_export_paper}
+                tenant={tenant}
+                toggleCustomAddon={this.toggleCustomAddon}
+              />
+            </div>
+          </div>
+          : ''}
         {this.state.showModal ? modal : ''}
         <div className="flex-100 layout-row layout-align-center">
           <div className={`flex-none ${defaults.content_width} layout-row layout-wrap`}>
@@ -582,7 +597,7 @@ class CargoDetails extends Component {
                     />
                   </div>
                 </div>
-                
+
                 <div className="flex-100 layout-row layout-wrap" name="commercial_invoice">
                   <div className="flex-100 layout-row margin_5">
                     <DocumentsMultiForm
@@ -813,21 +828,7 @@ class CargoDetails extends Component {
             ) : (
               ''
             )}
-            {scope.customs_export_paper && addons.customs_export_paper
-              ? <div className="flex-100 layout-row layout-align-center padd_top">
-                <div
-                  className={`flex-none ${
-                    defaults.content_width
-                  } layout-row layout-wrap section_padding`}
-                >
-                  <CustomsExportPaper
-                    addon={addons.customs_export_paper}
-                    tenant={tenant}
-                    toggleCustomAddon={this.toggleCustomAddon}
-                  />
-                </div>
-              </div>
-              : ''}
+
           </div>
         ) : (
           ''

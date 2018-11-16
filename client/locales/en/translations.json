@@ -512,7 +512,7 @@
     "quotedShipments": "Quoted Shipments",
     "searchShipments": "Search Shipments",
     "quoteNo": "Quote No: {{number}}",
-    "cargo" : "cargo",
+    "cargo" : "Freight",
     "motCargo": "{{mot}} Freight",
     "air": "Air",
     "rail": "Rail",
@@ -660,7 +660,8 @@
     "estimatedTT": "Estimated T/T"
   },
   "overrides": {
-    "fivestarExport": "Total Local Charges"
+    "fivestarExport": "Total Local Charges",
+    "speedtransExport": "FOB Charges"
   },
   "disclaimers": {
     "fivestarExwFob": "Ex-Works to FOB at port of choice",
