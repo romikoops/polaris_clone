@@ -43,17 +43,14 @@ class AdminShipmentContent extends Component {
   }
   constructor (props) {
     super(props)
-
     this.state = {
-      fileType: { label: `${this.props.t('common:packingSheet')}`, value: 'packing_sheet' },
-      documentUrl: `/shipments/${this.props.shipment.id}/upload/packing_sheet`
+      fileType: { label: `${this.props.t('common:packingSheet')}`, value: 'packing_sheet' }
     }
     this.setFileType = this.setFileType.bind(this)
   }
+
   setFileType (ev) {
-    const shipmentId = this.props.shipment.id
-    const url = `/shipments/${shipmentId}/upload/${ev.value}`
-    this.setState({ fileType: ev, documentUrl: url })
+    this.setState({ fileType: ev })
   }
   render () {
     const {
@@ -94,8 +91,7 @@ class AdminShipmentContent extends Component {
     } = shipmentData
 
     const {
-      fileType,
-      documentUrl
+      fileType
     } = this.state
 
     const docChecker = {
@@ -105,7 +101,8 @@ class AdminShipmentContent extends Component {
 
     const docView = []
     const missingDocs = []
-
+    const documentUrl = `/shipments/${shipment.id}/upload/${fileType.value}`
+    
     if (documents) {
       documents.forEach((doc) => {
         docChecker[doc.doc_type] = true
