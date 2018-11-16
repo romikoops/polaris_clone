@@ -4,6 +4,10 @@ import { identity, tenant, theme } from '../../mocks'
 // eslint-disable-next-line no-named-as-default
 import ShopStageView from './ShopStageView'
 
+jest.mock('react-redux', () => ({
+  connect: (x, y) => Component => Component
+}))
+
 const createWrapper = propsInput => mount(<ShopStageView {...propsInput} />)
 
 const propsBase = {
@@ -12,7 +16,16 @@ const propsBase = {
   setStage: identity,
   currentStage: 1,
   shopType: 'FOO_SHOP_TYPE',
-  disabledClick: false
+  disabledClick: false,
+  cookieDispatch: {
+    updateCookieHeight: jest.fn()
+  },
+  store: {
+    getState: jest.fn(),
+    subscribe: jest.fn()
+  },
+  storeDispatch: jest.fn(),
+  appDispatch: jest.fn()
 }
 
 test('shallow rendering', () => {
