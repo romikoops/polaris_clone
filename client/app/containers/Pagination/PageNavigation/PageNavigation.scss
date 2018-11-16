@@ -1,0 +1,25 @@
+:local {
+  .page_navigation {
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    margin: 10px 0;
+  }
+  .navigation_button {
+    background: white;
+    color: #BDBDBD;
+    i {
+      font-size: 25px;
+    }
+    &:hover {
+      color: #4F4F4F;
+    }
+  }
+  .back {
+    padding-left: 15px;
+  }
+  .forward {
+    padding-right: 15px;
+  }
+}
