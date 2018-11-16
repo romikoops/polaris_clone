@@ -64,7 +64,7 @@
     "commercialInvoice": "Commercial Invoice",
     "createdAt": "Created at",
     "dangerousGoods": "Dangerous Goods",
-    "descriptionGoods": "Description of Goods",
+    "descriptionGoods": "Description of Goods (HS Codes if available)",
     "documents": "Documents",
     "faresFees": "Fares & Fees",
     "fastestRoute": "Fastest route",
@@ -166,7 +166,13 @@
     "modeOfTransport": "Mode of Transport",
     "rate": "Rate",
     "booking": "Booking",
-    "quotation": "Quotation"
+    "quotation": "Quotation",
+    "max" : "Max",
+    "personal": "Personal",
+    "fcl_20": "FCL 20'",
+    "fcl_40": "FCL 40'",
+    "fcl_40_hq": "FCL 40' HQ",
+    "lcl": "Cargo item"
   },
   "admin": {
     "lowerLimit": "Lower Limit",
@@ -287,7 +293,9 @@
     "carrier": "Carrier",
     "loadType": "Load Type",
     "request": "Request",
-    "pricings": "Pricings"
+    "pricings": "Pricings",
+    "dedicatedPricingCount": "No. Dedicated Pricings",
+    "openPricingCount": "No. Open Pricings"
   },
   "cargo": {
     "cargoDetails": "Cargo Details",
@@ -358,7 +366,8 @@
     "fillFormCargoDetails": "(Fill the form with your cargo details)",
     "nonStackableFirst": "We currently do not offer freight rates for non-stackable cargo in our Web Shop.",
     "nonStackableSecond": "Please contact our customer service department to place an order for your non-stackable cargo:",
-    "feesIn": "Sub Total in {{currency}}"
+    "feesIn": "Sub Total in {{currency}}",
+    "exportCustomsPaper": "Export Customs Paper (MRN)"
   },
   "bookconf": {
     "_component": "BookingConfirmation",
@@ -439,6 +448,11 @@
     "seeMoreShipments": "See more shipments",
     "myShipmentAddresses": "My Shipment Addresses",
     "noShipments": "No Shipments yet",
+    "asShipmentsRequested": "As shipments are requested, they will appear here",
+    "asShipmentsOpened": "As shipments are opened, they will appear here",
+    "asShipmentsFinished": "As shipments are finished, they will appear here",
+    "asShipmentsRejected": "As shipments are rejected, they will appear here",
+    "asShipmentsArchived": "As shipments are archived, they will appear here",
     "noShipmentsAvailable": "No shipments available",
     "noShipmentExplaination": "As shipments are requested, they will appear here",
     "noAddresses": "No addresses yet",
@@ -499,7 +513,13 @@
     "quotedShipments": "Quoted Shipments",
     "searchShipments": "Search Shipments",
     "quoteNo": "Quote No: {{number}}",
-    "cargo" : "cargo"
+    "cargo" : "Freight",
+    "motCargo": "{{mot}} Freight",
+    "air": "Air",
+    "rail": "Rail",
+    "ocean": "Ocean",
+    "truck": "Truck",
+    "vesselName": "Vessel Name"
   },
   "user": {
     "newAlias": "New Alias",
@@ -642,7 +662,8 @@
     "estimatedTT": "Estimated T/T"
   },
   "overrides": {
-    "fivestarExport": "Total Local Charges"
+    "fivestarExport": "Total Local Charges",
+    "speedtransExport": "FOB Charges"
   },
   "disclaimers": {
     "fivestarExwFob": "Ex-Works to FOB at port of choice",

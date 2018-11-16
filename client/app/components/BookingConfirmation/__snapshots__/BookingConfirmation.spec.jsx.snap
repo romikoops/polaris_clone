@@ -217,11 +217,6 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 >
                   Expected Time of Dropoff:
                 </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
               </div>
               <div
                 className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
@@ -262,11 +257,6 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                   className="flex-70 "
                 >
                   Expected Time of Collection:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
                 </p>
               </div>
             </div>
@@ -942,7 +932,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="shipment_card layout-row flex-100 layout-align-space-between-center"
     >
       <div
         className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -971,117 +961,121 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
           />
         </div>
         <div
-          className="flex-65 layout-row layout-align-start-center"
+          className="layout-row layout-align-space-between-start flex-100"
         >
           <div
-            className="flex-15 layout-row layout-align-center-center"
-          >
-            <Checkbox
-              checked={false}
-              className="ccb_accept_terms"
-              disabled={false}
-              id="accept_terms"
-              onChange={[Function]}
-              onClick={null}
-              size={null}
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-          <label
-            className="pointy"
-            htmlFor="accept_terms"
+            className="layout-row layout-align-start-center flex-65"
           >
             <div
-              className="flex layout-row layout-align-start-center"
+              className="flex-15 layout-row layout-align-center-center"
+            >
+              <Checkbox
+                checked={false}
+                className="ccb_accept_terms"
+                disabled={false}
+                id="accept_terms"
+                onChange={[Function]}
+                onClick={null}
+                size={null}
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+            <label
+              className="pointy layout-align-center-start flex-85"
+              htmlFor="accept_terms"
             >
               <div
-                className="flex-5"
-              />
-              <div
-                className="flex-95 layout-row layout-wrap layout-align-start-center"
+                className="layout-row layout-align-start-center"
               >
                 <div
-                  className="flex-100 layout-row layout-align-start-center"
-                >
-                  <TextHeading
-                    color=""
-                    size={4}
-                    text="By checking this box"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                  />
-                </div>
+                  className="flex-5"
+                />
                 <div
-                  className="flex-100 layout-row layout-align-start-start"
+                  className="flex-95 layout-row layout-wrap layout-align-start-center"
                 >
-                  <ul
-                    className="flex-100 terms_list"
+                  <div
+                    className="flex-100 layout-row layout-align-start-center"
                   >
-                    <li
-                      key="RANDOM_KEY_26"
+                    <TextHeading
+                      color=""
+                      size={4}
+                      text="By checking this box"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="flex-100 layout-column layout-align-start-start"
+                  >
+                    <ul
+                      className="flex-50 terms_list"
                     >
-                       
-                      FOO_TERM
-                    </li>
-                    <li
-                      key="RANDOM_KEY_27"
-                    >
-                       
-                      BAR_TERM
-                    </li>
-                  </ul>
+                      <li
+                        key="RANDOM_KEY_26"
+                      >
+                         
+                        FOO_TERM
+                      </li>
+                      <li
+                        key="RANDOM_KEY_27"
+                      >
+                         
+                        BAR_TERM
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-          </label>
-        </div>
-        <div
-          className="flex-33 layout-row height_100"
-          style={
-            Object {
-              "height": "150px",
-              "marginBottom": "15px",
-            }
-          }
-        >
+            </label>
+          </div>
           <div
-            className="flex-none layout-row layout-align-end-end"
-          >
-            <RoundButton
-              active={false}
-              back={false}
-              classNames=""
-              disabled={false}
-              flexContainer="100"
-              handleDisabled={null}
-              handleNext={[Function]}
-              icon=""
-              iconClass=""
-              inverse={false}
-              size=""
-              text="Finish Booking Request"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
+            className="layout-row layout-align-start-end flex-33"
+            style={
+              Object {
+                "height": "150px",
+                "marginBottom": "15px",
               }
-            />
+            }
+          >
+            <div
+              className="flex-none layout-row layout-align-end-end"
+            >
+              <RoundButton
+                active={false}
+                back={false}
+                classNames=""
+                disabled={false}
+                flexContainer="100"
+                handleDisabled={null}
+                handleNext={[Function]}
+                icon=""
+                iconClass=""
+                inverse={false}
+                size=""
+                text="Finish Booking Request"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -1340,11 +1334,6 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 >
                   Expected Time of Dropoff:
                 </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
               </div>
               <div
                 className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
@@ -1385,11 +1374,6 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                   className="flex-70 "
                 >
                   Expected Time of Collection:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
                 </p>
               </div>
             </div>
@@ -2101,7 +2085,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="shipment_card layout-row flex-100 layout-align-space-between-center"
     >
       <div
         className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -2130,117 +2114,121 @@ exports[`props.shipmentData.documents is truthy 1`] = `
           />
         </div>
         <div
-          className="flex-65 layout-row layout-align-start-center"
+          className="layout-row layout-align-space-between-start flex-100"
         >
           <div
-            className="flex-15 layout-row layout-align-center-center"
-          >
-            <Checkbox
-              checked={false}
-              className="ccb_accept_terms"
-              disabled={false}
-              id="accept_terms"
-              onChange={[Function]}
-              onClick={null}
-              size={null}
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-          <label
-            className="pointy"
-            htmlFor="accept_terms"
+            className="layout-row layout-align-start-center flex-65"
           >
             <div
-              className="flex layout-row layout-align-start-center"
+              className="flex-15 layout-row layout-align-center-center"
+            >
+              <Checkbox
+                checked={false}
+                className="ccb_accept_terms"
+                disabled={false}
+                id="accept_terms"
+                onChange={[Function]}
+                onClick={null}
+                size={null}
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+            <label
+              className="pointy layout-align-center-start flex-85"
+              htmlFor="accept_terms"
             >
               <div
-                className="flex-5"
-              />
-              <div
-                className="flex-95 layout-row layout-wrap layout-align-start-center"
+                className="layout-row layout-align-start-center"
               >
                 <div
-                  className="flex-100 layout-row layout-align-start-center"
-                >
-                  <TextHeading
-                    color=""
-                    size={4}
-                    text="By checking this box"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                  />
-                </div>
+                  className="flex-5"
+                />
                 <div
-                  className="flex-100 layout-row layout-align-start-start"
+                  className="flex-95 layout-row layout-wrap layout-align-start-center"
                 >
-                  <ul
-                    className="flex-100 terms_list"
+                  <div
+                    className="flex-100 layout-row layout-align-start-center"
                   >
-                    <li
-                      key="RANDOM_KEY_32"
+                    <TextHeading
+                      color=""
+                      size={4}
+                      text="By checking this box"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="flex-100 layout-column layout-align-start-start"
+                  >
+                    <ul
+                      className="flex-50 terms_list"
                     >
-                       
-                      FOO_TERM
-                    </li>
-                    <li
-                      key="RANDOM_KEY_33"
-                    >
-                       
-                      BAR_TERM
-                    </li>
-                  </ul>
+                      <li
+                        key="RANDOM_KEY_32"
+                      >
+                         
+                        FOO_TERM
+                      </li>
+                      <li
+                        key="RANDOM_KEY_33"
+                      >
+                         
+                        BAR_TERM
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-          </label>
-        </div>
-        <div
-          className="flex-33 layout-row height_100"
-          style={
-            Object {
-              "height": "150px",
-              "marginBottom": "15px",
-            }
-          }
-        >
+            </label>
+          </div>
           <div
-            className="flex-none layout-row layout-align-end-end"
-          >
-            <RoundButton
-              active={false}
-              back={false}
-              classNames=""
-              disabled={false}
-              flexContainer="100"
-              handleDisabled={null}
-              handleNext={[Function]}
-              icon=""
-              iconClass=""
-              inverse={false}
-              size=""
-              text="Finish Booking Request"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
+            className="layout-row layout-align-start-end flex-33"
+            style={
+              Object {
+                "height": "150px",
+                "marginBottom": "15px",
               }
-            />
+            }
+          >
+            <div
+              className="flex-none layout-row layout-align-end-end"
+            >
+              <RoundButton
+                active={false}
+                back={false}
+                classNames=""
+                disabled={false}
+                flexContainer="100"
+                handleDisabled={null}
+                handleNext={[Function]}
+                icon=""
+                iconClass=""
+                inverse={false}
+                size=""
+                text="Finish Booking Request"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -2493,11 +2481,6 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 >
                   Expected Time of Dropoff:
                 </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
               </div>
               <div
                 className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
@@ -2538,11 +2521,6 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                   className="flex-70 "
                 >
                   Expected Time of Collection:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
                 </p>
               </div>
             </div>
@@ -3335,7 +3313,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="shipment_card layout-row flex-100 layout-align-space-between-center"
     >
       <div
         className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -3364,117 +3342,121 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
           />
         </div>
         <div
-          className="flex-65 layout-row layout-align-start-center"
+          className="layout-row layout-align-space-between-start flex-100"
         >
           <div
-            className="flex-15 layout-row layout-align-center-center"
-          >
-            <Checkbox
-              checked={false}
-              className="ccb_accept_terms"
-              disabled={false}
-              id="accept_terms"
-              onChange={[Function]}
-              onClick={null}
-              size={null}
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-          <label
-            className="pointy"
-            htmlFor="accept_terms"
+            className="layout-row layout-align-start-center flex-65"
           >
             <div
-              className="flex layout-row layout-align-start-center"
+              className="flex-15 layout-row layout-align-center-center"
+            >
+              <Checkbox
+                checked={false}
+                className="ccb_accept_terms"
+                disabled={false}
+                id="accept_terms"
+                onChange={[Function]}
+                onClick={null}
+                size={null}
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+            <label
+              className="pointy layout-align-center-start flex-85"
+              htmlFor="accept_terms"
             >
               <div
-                className="flex-5"
-              />
-              <div
-                className="flex-95 layout-row layout-wrap layout-align-start-center"
+                className="layout-row layout-align-start-center"
               >
                 <div
-                  className="flex-100 layout-row layout-align-start-center"
-                >
-                  <TextHeading
-                    color=""
-                    size={4}
-                    text="By checking this box"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                  />
-                </div>
+                  className="flex-5"
+                />
                 <div
-                  className="flex-100 layout-row layout-align-start-start"
+                  className="flex-95 layout-row layout-wrap layout-align-start-center"
                 >
-                  <ul
-                    className="flex-100 terms_list"
+                  <div
+                    className="flex-100 layout-row layout-align-start-center"
                   >
-                    <li
-                      key="RANDOM_KEY_41"
+                    <TextHeading
+                      color=""
+                      size={4}
+                      text="By checking this box"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="flex-100 layout-column layout-align-start-start"
+                  >
+                    <ul
+                      className="flex-50 terms_list"
                     >
-                       
-                      FOO_TERM
-                    </li>
-                    <li
-                      key="RANDOM_KEY_42"
-                    >
-                       
-                      BAR_TERM
-                    </li>
-                  </ul>
+                      <li
+                        key="RANDOM_KEY_41"
+                      >
+                         
+                        FOO_TERM
+                      </li>
+                      <li
+                        key="RANDOM_KEY_42"
+                      >
+                         
+                        BAR_TERM
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-          </label>
-        </div>
-        <div
-          className="flex-33 layout-row height_100"
-          style={
-            Object {
-              "height": "150px",
-              "marginBottom": "15px",
-            }
-          }
-        >
+            </label>
+          </div>
           <div
-            className="flex-none layout-row layout-align-end-end"
-          >
-            <RoundButton
-              active={false}
-              back={false}
-              classNames=""
-              disabled={false}
-              flexContainer="100"
-              handleDisabled={null}
-              handleNext={[Function]}
-              icon=""
-              iconClass=""
-              inverse={false}
-              size=""
-              text="Finish Booking Request"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
+            className="layout-row layout-align-start-end flex-33"
+            style={
+              Object {
+                "height": "150px",
+                "marginBottom": "15px",
               }
-            />
+            }
+          >
+            <div
+              className="flex-none layout-row layout-align-end-end"
+            >
+              <RoundButton
+                active={false}
+                back={false}
+                classNames=""
+                disabled={false}
+                flexContainer="100"
+                handleDisabled={null}
+                handleNext={[Function]}
+                icon=""
+                iconClass=""
+                inverse={false}
+                size=""
+                text="Finish Booking Request"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -3727,11 +3709,6 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 >
                   Expected Time of Dropoff:
                 </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
               </div>
               <div
                 className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
@@ -3790,11 +3767,6 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                   className="flex-70 "
                 >
                   Expected Time of Delivery:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
                 </p>
               </div>
             </div>
@@ -4461,7 +4433,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="shipment_card layout-row flex-100 layout-align-space-between-center"
     >
       <div
         className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -4490,117 +4462,121 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           />
         </div>
         <div
-          className="flex-65 layout-row layout-align-start-center"
+          className="layout-row layout-align-space-between-start flex-100"
         >
           <div
-            className="flex-15 layout-row layout-align-center-center"
-          >
-            <Checkbox
-              checked={false}
-              className="ccb_accept_terms"
-              disabled={false}
-              id="accept_terms"
-              onChange={[Function]}
-              onClick={null}
-              size={null}
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-          <label
-            className="pointy"
-            htmlFor="accept_terms"
+            className="layout-row layout-align-start-center flex-65"
           >
             <div
-              className="flex layout-row layout-align-start-center"
+              className="flex-15 layout-row layout-align-center-center"
+            >
+              <Checkbox
+                checked={false}
+                className="ccb_accept_terms"
+                disabled={false}
+                id="accept_terms"
+                onChange={[Function]}
+                onClick={null}
+                size={null}
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+            <label
+              className="pointy layout-align-center-start flex-85"
+              htmlFor="accept_terms"
             >
               <div
-                className="flex-5"
-              />
-              <div
-                className="flex-95 layout-row layout-wrap layout-align-start-center"
+                className="layout-row layout-align-start-center"
               >
                 <div
-                  className="flex-100 layout-row layout-align-start-center"
-                >
-                  <TextHeading
-                    color=""
-                    size={4}
-                    text="By checking this box"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                  />
-                </div>
+                  className="flex-5"
+                />
                 <div
-                  className="flex-100 layout-row layout-align-start-start"
+                  className="flex-95 layout-row layout-wrap layout-align-start-center"
                 >
-                  <ul
-                    className="flex-100 terms_list"
+                  <div
+                    className="flex-100 layout-row layout-align-start-center"
                   >
-                    <li
-                      key="RANDOM_KEY_53"
+                    <TextHeading
+                      color=""
+                      size={4}
+                      text="By checking this box"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="flex-100 layout-column layout-align-start-start"
+                  >
+                    <ul
+                      className="flex-50 terms_list"
                     >
-                       
-                      FOO_TERM
-                    </li>
-                    <li
-                      key="RANDOM_KEY_54"
-                    >
-                       
-                      BAR_TERM
-                    </li>
-                  </ul>
+                      <li
+                        key="RANDOM_KEY_53"
+                      >
+                         
+                        FOO_TERM
+                      </li>
+                      <li
+                        key="RANDOM_KEY_54"
+                      >
+                         
+                        BAR_TERM
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-          </label>
-        </div>
-        <div
-          className="flex-33 layout-row height_100"
-          style={
-            Object {
-              "height": "150px",
-              "marginBottom": "15px",
-            }
-          }
-        >
+            </label>
+          </div>
           <div
-            className="flex-none layout-row layout-align-end-end"
-          >
-            <RoundButton
-              active={false}
-              back={false}
-              classNames=""
-              disabled={false}
-              flexContainer="100"
-              handleDisabled={null}
-              handleNext={[Function]}
-              icon=""
-              iconClass=""
-              inverse={false}
-              size=""
-              text="Finish Booking Request"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
+            className="layout-row layout-align-start-end flex-33"
+            style={
+              Object {
+                "height": "150px",
+                "marginBottom": "15px",
               }
-            />
+            }
+          >
+            <div
+              className="flex-none layout-row layout-align-end-end"
+            >
+              <RoundButton
+                active={false}
+                back={false}
+                classNames=""
+                disabled={false}
+                flexContainer="100"
+                handleDisabled={null}
+                handleNext={[Function]}
+                icon=""
+                iconClass=""
+                inverse={false}
+                size=""
+                text="Finish Booking Request"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -4853,11 +4829,6 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 >
                   Expected Time of Pickup:
                 </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
               </div>
               <div
                 className="flex-100 layout-row layout-align-center-center buffer_10"
@@ -4914,11 +4885,6 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                   className="flex-70 "
                 >
                   Expected Time of Collection:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
                 </p>
               </div>
             </div>
@@ -5585,7 +5551,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="shipment_card layout-row flex-100 layout-align-space-between-center"
     >
       <div
         className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -5614,117 +5580,121 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
           />
         </div>
         <div
-          className="flex-65 layout-row layout-align-start-center"
+          className="layout-row layout-align-space-between-start flex-100"
         >
           <div
-            className="flex-15 layout-row layout-align-center-center"
-          >
-            <Checkbox
-              checked={false}
-              className="ccb_accept_terms"
-              disabled={false}
-              id="accept_terms"
-              onChange={[Function]}
-              onClick={null}
-              size={null}
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-          <label
-            className="pointy"
-            htmlFor="accept_terms"
+            className="layout-row layout-align-start-center flex-65"
           >
             <div
-              className="flex layout-row layout-align-start-center"
+              className="flex-15 layout-row layout-align-center-center"
+            >
+              <Checkbox
+                checked={false}
+                className="ccb_accept_terms"
+                disabled={false}
+                id="accept_terms"
+                onChange={[Function]}
+                onClick={null}
+                size={null}
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+            <label
+              className="pointy layout-align-center-start flex-85"
+              htmlFor="accept_terms"
             >
               <div
-                className="flex-5"
-              />
-              <div
-                className="flex-95 layout-row layout-wrap layout-align-start-center"
+                className="layout-row layout-align-start-center"
               >
                 <div
-                  className="flex-100 layout-row layout-align-start-center"
-                >
-                  <TextHeading
-                    color=""
-                    size={4}
-                    text="By checking this box"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                  />
-                </div>
+                  className="flex-5"
+                />
                 <div
-                  className="flex-100 layout-row layout-align-start-start"
+                  className="flex-95 layout-row layout-wrap layout-align-start-center"
                 >
-                  <ul
-                    className="flex-100 terms_list"
+                  <div
+                    className="flex-100 layout-row layout-align-start-center"
                   >
-                    <li
-                      key="RANDOM_KEY_47"
+                    <TextHeading
+                      color=""
+                      size={4}
+                      text="By checking this box"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="flex-100 layout-column layout-align-start-start"
+                  >
+                    <ul
+                      className="flex-50 terms_list"
                     >
-                       
-                      FOO_TERM
-                    </li>
-                    <li
-                      key="RANDOM_KEY_48"
-                    >
-                       
-                      BAR_TERM
-                    </li>
-                  </ul>
+                      <li
+                        key="RANDOM_KEY_47"
+                      >
+                         
+                        FOO_TERM
+                      </li>
+                      <li
+                        key="RANDOM_KEY_48"
+                      >
+                         
+                        BAR_TERM
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-          </label>
-        </div>
-        <div
-          className="flex-33 layout-row height_100"
-          style={
-            Object {
-              "height": "150px",
-              "marginBottom": "15px",
-            }
-          }
-        >
+            </label>
+          </div>
           <div
-            className="flex-none layout-row layout-align-end-end"
-          >
-            <RoundButton
-              active={false}
-              back={false}
-              classNames=""
-              disabled={false}
-              flexContainer="100"
-              handleDisabled={null}
-              handleNext={[Function]}
-              icon=""
-              iconClass=""
-              inverse={false}
-              size=""
-              text="Finish Booking Request"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
+            className="layout-row layout-align-start-end flex-33"
+            style={
+              Object {
+                "height": "150px",
+                "marginBottom": "15px",
               }
-            />
+            }
+          >
+            <div
+              className="flex-none layout-row layout-align-end-end"
+            >
+              <RoundButton
+                active={false}
+                back={false}
+                classNames=""
+                disabled={false}
+                flexContainer="100"
+                handleDisabled={null}
+                handleNext={[Function]}
+                icon=""
+                iconClass=""
+                inverse={false}
+                size=""
+                text="Finish Booking Request"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -5977,11 +5947,6 @@ exports[`shallow render 1`] = `
                 >
                   Expected Time of Dropoff:
                 </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
               </div>
               <div
                 className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
@@ -6022,11 +5987,6 @@ exports[`shallow render 1`] = `
                   className="flex-70 "
                 >
                   Expected Time of Collection:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
                 </p>
               </div>
             </div>
@@ -6693,7 +6653,7 @@ exports[`shallow render 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="shipment_card layout-row flex-100 layout-align-space-between-center"
     >
       <div
         className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -6722,117 +6682,121 @@ exports[`shallow render 1`] = `
           />
         </div>
         <div
-          className="flex-65 layout-row layout-align-start-center"
+          className="layout-row layout-align-space-between-start flex-100"
         >
           <div
-            className="flex-15 layout-row layout-align-center-center"
-          >
-            <Checkbox
-              checked={false}
-              className="ccb_accept_terms"
-              disabled={false}
-              id="accept_terms"
-              onChange={[Function]}
-              onClick={null}
-              size={null}
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-          <label
-            className="pointy"
-            htmlFor="accept_terms"
+            className="layout-row layout-align-start-center flex-65"
           >
             <div
-              className="flex layout-row layout-align-start-center"
+              className="flex-15 layout-row layout-align-center-center"
+            >
+              <Checkbox
+                checked={false}
+                className="ccb_accept_terms"
+                disabled={false}
+                id="accept_terms"
+                onChange={[Function]}
+                onClick={null}
+                size={null}
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+            <label
+              className="pointy layout-align-center-start flex-85"
+              htmlFor="accept_terms"
             >
               <div
-                className="flex-5"
-              />
-              <div
-                className="flex-95 layout-row layout-wrap layout-align-start-center"
+                className="layout-row layout-align-start-center"
               >
                 <div
-                  className="flex-100 layout-row layout-align-start-center"
-                >
-                  <TextHeading
-                    color=""
-                    size={4}
-                    text="By checking this box"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                  />
-                </div>
+                  className="flex-5"
+                />
                 <div
-                  className="flex-100 layout-row layout-align-start-start"
+                  className="flex-95 layout-row layout-wrap layout-align-start-center"
                 >
-                  <ul
-                    className="flex-100 terms_list"
+                  <div
+                    className="flex-100 layout-row layout-align-start-center"
                   >
-                    <li
-                      key="RANDOM_KEY_4"
+                    <TextHeading
+                      color=""
+                      size={4}
+                      text="By checking this box"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="flex-100 layout-column layout-align-start-start"
+                  >
+                    <ul
+                      className="flex-50 terms_list"
                     >
-                       
-                      FOO_TERM
-                    </li>
-                    <li
-                      key="RANDOM_KEY_5"
-                    >
-                       
-                      BAR_TERM
-                    </li>
-                  </ul>
+                      <li
+                        key="RANDOM_KEY_4"
+                      >
+                         
+                        FOO_TERM
+                      </li>
+                      <li
+                        key="RANDOM_KEY_5"
+                      >
+                         
+                        BAR_TERM
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-          </label>
-        </div>
-        <div
-          className="flex-33 layout-row height_100"
-          style={
-            Object {
-              "height": "150px",
-              "marginBottom": "15px",
-            }
-          }
-        >
+            </label>
+          </div>
           <div
-            className="flex-none layout-row layout-align-end-end"
-          >
-            <RoundButton
-              active={false}
-              back={false}
-              classNames=""
-              disabled={false}
-              flexContainer="100"
-              handleDisabled={null}
-              handleNext={[Function]}
-              icon=""
-              iconClass=""
-              inverse={false}
-              size=""
-              text="Finish Booking Request"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
+            className="layout-row layout-align-start-end flex-33"
+            style={
+              Object {
+                "height": "150px",
+                "marginBottom": "15px",
               }
-            />
+            }
+          >
+            <div
+              className="flex-none layout-row layout-align-end-end"
+            >
+              <RoundButton
+                active={false}
+                back={false}
+                classNames=""
+                disabled={false}
+                flexContainer="100"
+                handleDisabled={null}
+                handleNext={[Function]}
+                icon=""
+                iconClass=""
+                inverse={false}
+                size=""
+                text="Finish Booking Request"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -7085,11 +7049,6 @@ exports[`with cargo items 1`] = `
                 >
                   Expected Time of Dropoff:
                 </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
               </div>
               <div
                 className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
@@ -7130,11 +7089,6 @@ exports[`with cargo items 1`] = `
                   className="flex-70 "
                 >
                   Expected Time of Collection:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
                 </p>
               </div>
             </div>
@@ -8122,7 +8076,7 @@ exports[`with cargo items 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="shipment_card layout-row flex-100 layout-align-space-between-center"
     >
       <div
         className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -8151,117 +8105,121 @@ exports[`with cargo items 1`] = `
           />
         </div>
         <div
-          className="flex-65 layout-row layout-align-start-center"
+          className="layout-row layout-align-space-between-start flex-100"
         >
           <div
-            className="flex-15 layout-row layout-align-center-center"
-          >
-            <Checkbox
-              checked={false}
-              className="ccb_accept_terms"
-              disabled={false}
-              id="accept_terms"
-              onChange={[Function]}
-              onClick={null}
-              size={null}
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-          <label
-            className="pointy"
-            htmlFor="accept_terms"
+            className="layout-row layout-align-start-center flex-65"
           >
             <div
-              className="flex layout-row layout-align-start-center"
+              className="flex-15 layout-row layout-align-center-center"
+            >
+              <Checkbox
+                checked={false}
+                className="ccb_accept_terms"
+                disabled={false}
+                id="accept_terms"
+                onChange={[Function]}
+                onClick={null}
+                size={null}
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+            <label
+              className="pointy layout-align-center-start flex-85"
+              htmlFor="accept_terms"
             >
               <div
-                className="flex-5"
-              />
-              <div
-                className="flex-95 layout-row layout-wrap layout-align-start-center"
+                className="layout-row layout-align-start-center"
               >
                 <div
-                  className="flex-100 layout-row layout-align-start-center"
-                >
-                  <TextHeading
-                    color=""
-                    size={4}
-                    text="By checking this box"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                  />
-                </div>
+                  className="flex-5"
+                />
                 <div
-                  className="flex-100 layout-row layout-align-start-start"
+                  className="flex-95 layout-row layout-wrap layout-align-start-center"
                 >
-                  <ul
-                    className="flex-100 terms_list"
+                  <div
+                    className="flex-100 layout-row layout-align-start-center"
                   >
-                    <li
-                      key="RANDOM_KEY_20"
+                    <TextHeading
+                      color=""
+                      size={4}
+                      text="By checking this box"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="flex-100 layout-column layout-align-start-start"
+                  >
+                    <ul
+                      className="flex-50 terms_list"
                     >
-                       
-                      FOO_TERM
-                    </li>
-                    <li
-                      key="RANDOM_KEY_21"
-                    >
-                       
-                      BAR_TERM
-                    </li>
-                  </ul>
+                      <li
+                        key="RANDOM_KEY_20"
+                      >
+                         
+                        FOO_TERM
+                      </li>
+                      <li
+                        key="RANDOM_KEY_21"
+                      >
+                         
+                        BAR_TERM
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-          </label>
-        </div>
-        <div
-          className="flex-33 layout-row height_100"
-          style={
-            Object {
-              "height": "150px",
-              "marginBottom": "15px",
-            }
-          }
-        >
+            </label>
+          </div>
           <div
-            className="flex-none layout-row layout-align-end-end"
-          >
-            <RoundButton
-              active={false}
-              back={false}
-              classNames=""
-              disabled={false}
-              flexContainer="100"
-              handleDisabled={null}
-              handleNext={[Function]}
-              icon=""
-              iconClass=""
-              inverse={false}
-              size=""
-              text="Finish Booking Request"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
+            className="layout-row layout-align-start-end flex-33"
+            style={
+              Object {
+                "height": "150px",
+                "marginBottom": "15px",
               }
-            />
+            }
+          >
+            <div
+              className="flex-none layout-row layout-align-end-end"
+            >
+              <RoundButton
+                active={false}
+                back={false}
+                classNames=""
+                disabled={false}
+                flexContainer="100"
+                handleDisabled={null}
+                handleNext={[Function]}
+                icon=""
+                iconClass=""
+                inverse={false}
+                size=""
+                text="Finish Booking Request"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -8514,11 +8472,6 @@ exports[`with containers 1`] = `
                 >
                   Expected Time of Dropoff:
                 </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
               </div>
               <div
                 className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
@@ -8559,11 +8512,6 @@ exports[`with containers 1`] = `
                   className="flex-70 "
                 >
                   Expected Time of Collection:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
                 </p>
               </div>
             </div>
@@ -9509,7 +9457,7 @@ exports[`with containers 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="shipment_card layout-row flex-100 layout-align-space-between-center"
     >
       <div
         className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -9538,117 +9486,121 @@ exports[`with containers 1`] = `
           />
         </div>
         <div
-          className="flex-65 layout-row layout-align-start-center"
+          className="layout-row layout-align-space-between-start flex-100"
         >
           <div
-            className="flex-15 layout-row layout-align-center-center"
-          >
-            <Checkbox
-              checked={false}
-              className="ccb_accept_terms"
-              disabled={false}
-              id="accept_terms"
-              onChange={[Function]}
-              onClick={null}
-              size={null}
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-          <label
-            className="pointy"
-            htmlFor="accept_terms"
+            className="layout-row layout-align-start-center flex-65"
           >
             <div
-              className="flex layout-row layout-align-start-center"
+              className="flex-15 layout-row layout-align-center-center"
+            >
+              <Checkbox
+                checked={false}
+                className="ccb_accept_terms"
+                disabled={false}
+                id="accept_terms"
+                onChange={[Function]}
+                onClick={null}
+                size={null}
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+            <label
+              className="pointy layout-align-center-start flex-85"
+              htmlFor="accept_terms"
             >
               <div
-                className="flex-5"
-              />
-              <div
-                className="flex-95 layout-row layout-wrap layout-align-start-center"
+                className="layout-row layout-align-start-center"
               >
                 <div
-                  className="flex-100 layout-row layout-align-start-center"
-                >
-                  <TextHeading
-                    color=""
-                    size={4}
-                    text="By checking this box"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                  />
-                </div>
+                  className="flex-5"
+                />
                 <div
-                  className="flex-100 layout-row layout-align-start-start"
+                  className="flex-95 layout-row layout-wrap layout-align-start-center"
                 >
-                  <ul
-                    className="flex-100 terms_list"
+                  <div
+                    className="flex-100 layout-row layout-align-start-center"
                   >
-                    <li
-                      key="RANDOM_KEY_12"
+                    <TextHeading
+                      color=""
+                      size={4}
+                      text="By checking this box"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="flex-100 layout-column layout-align-start-start"
+                  >
+                    <ul
+                      className="flex-50 terms_list"
                     >
-                       
-                      FOO_TERM
-                    </li>
-                    <li
-                      key="RANDOM_KEY_13"
-                    >
-                       
-                      BAR_TERM
-                    </li>
-                  </ul>
+                      <li
+                        key="RANDOM_KEY_12"
+                      >
+                         
+                        FOO_TERM
+                      </li>
+                      <li
+                        key="RANDOM_KEY_13"
+                      >
+                         
+                        BAR_TERM
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-          </label>
-        </div>
-        <div
-          className="flex-33 layout-row height_100"
-          style={
-            Object {
-              "height": "150px",
-              "marginBottom": "15px",
-            }
-          }
-        >
+            </label>
+          </div>
           <div
-            className="flex-none layout-row layout-align-end-end"
-          >
-            <RoundButton
-              active={false}
-              back={false}
-              classNames=""
-              disabled={false}
-              flexContainer="100"
-              handleDisabled={null}
-              handleNext={[Function]}
-              icon=""
-              iconClass=""
-              inverse={false}
-              size=""
-              text="Finish Booking Request"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
+            className="layout-row layout-align-start-end flex-33"
+            style={
+              Object {
+                "height": "150px",
+                "marginBottom": "15px",
               }
-            />
+            }
+          >
+            <div
+              className="flex-none layout-row layout-align-end-end"
+            >
+              <RoundButton
+                active={false}
+                back={false}
+                classNames=""
+                disabled={false}
+                flexContainer="100"
+                handleDisabled={null}
+                handleNext={[Function]}
+                icon=""
+                iconClass=""
+                inverse={false}
+                size=""
+                text="Finish Booking Request"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
           </div>
         </div>
       </div>

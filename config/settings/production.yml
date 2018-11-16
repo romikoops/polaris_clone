@@ -1,14 +1,14 @@
 aws:
-  access_key_id: <%= Rails.application.credentials.production_aws_access_key_id %>
-  secret_access_key: <%= Rails.application.credentials.production_aws_secret_access_key %>
+  access_key_id: <%= Rails.application.credentials.dig(:production, :aws, :access_key_id) %>
+  secret_access_key: <%= Rails.application.credentials.dig(:production, :aws, :secret_access_key) %>
   region: eu-central-1
   bucket: assets.itsmycargo.com
 
 fixer:
-  api_key: <%= Rails.application.credentials.production_fixer_api_key %>
+  api_key: <%= Rails.application.credentials.dig(:production, :fixer, :api_key) %>
 
 google:
-  api_key: <%= Rails.application.credentials.production_google_api_key %>
+  api_key: <%= Rails.application.credentials.dig(:production, :google, :api_key) %>
 
 mailer:
   queue: https://sqs.eu-central-1.amazonaws.com/003688427525/mailers
@@ -17,4 +17,4 @@ smtp:
   host: smtp.sendgrid.net
   domain: itsmycargo.com
   username: apikey
-  password: <%= Rails.application.credentials.production_smtp_password %>
+  password: <%= Rails.application.credentials.dig(:production, :smtp, :password) %>

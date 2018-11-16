@@ -134,7 +134,7 @@ exports[`detailed billing working properly 1`] = `
               <h4
                 className="date_title"
               >
-                Pick-up Date
+                Closing Date
               </h4>
             </div>
             <div
@@ -185,7 +185,7 @@ exports[`detailed billing working properly 1`] = `
                   className="flex-none sched_elem"
                 >
                    
-                  07-10-2018
+                  08-10-2018
                    
                 </p>
               </div>
@@ -561,7 +561,7 @@ exports[`shallow rendering 1`] = `
               <h4
                 className="date_title"
               >
-                Pick-up Date
+                Closing Date
               </h4>
             </div>
             <div
@@ -612,7 +612,7 @@ exports[`shallow rendering 1`] = `
                   className="flex-none sched_elem"
                 >
                    
-                  07-10-2018
+                  08-10-2018
                    
                 </p>
               </div>
@@ -988,7 +988,7 @@ exports[`show schedule options working 1`] = `
               <h4
                 className="date_title"
               >
-                Pick-up Date
+                Closing Date
               </h4>
             </div>
             <div
@@ -1039,7 +1039,7 @@ exports[`show schedule options working 1`] = `
                   className="flex-none sched_elem"
                 >
                    
-                  07-10-2018
+                  08-10-2018
                    
                 </p>
               </div>
@@ -1415,7 +1415,7 @@ exports[`show schedules set to true 1`] = `
               <h4
                 className="date_title"
               >
-                Pick-up Date
+                Closing Date
               </h4>
             </div>
             <div
@@ -1466,7 +1466,7 @@ exports[`show schedules set to true 1`] = `
                   className="flex-none sched_elem"
                 >
                    
-                  07-10-2018
+                  08-10-2018
                    
                 </p>
               </div>

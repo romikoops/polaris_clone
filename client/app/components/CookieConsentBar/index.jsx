@@ -35,17 +35,30 @@ class CookieConsentBar extends React.PureComponent {
   constructor (props) {
     super(props)
     this.state = {
-      showModal: false
+      showModal: false,
+      atBottom: false
     }
     this.toggleShowModal = this.toggleShowModal.bind(this)
     this.handleDecline = this.handleDecline.bind(this)
+    this.cookieBarLimit = this.cookieBarLimit.bind(this)
   }
+
+  componentDidMount () {
+    console.log(`this is the height:${this.props.height}`)
+    window.addEventListener('scroll', this.cookieBarLimit)
+  }
+
   handleDecline () {
     this.setState({ showModal: true })
   }
 
   toggleShowModal () {
     this.setState(prevState => ({ showModal: !prevState.showModal }))
+  }
+
+  cookieBarLimit () {
+    console.log(window.scrollY - window.innerHeight)
+    this.setState({ atBottom: window.scrollY >= this.props.height - window.outerHeight })
   }
 
   render () {
@@ -55,7 +68,8 @@ class CookieConsentBar extends React.PureComponent {
       tenant,
       loggedIn,
       authDispatch,
-      t
+      t,
+      height
     } = this.props
 
     const modal = (
@@ -91,7 +105,7 @@ class CookieConsentBar extends React.PureComponent {
     return (
       <div
         className={`${styles.cookie_flex} ${user && user.optin_status && user.optin_status.cookies ? styles.hidden : ''}`}
-        style={{ background: cookieBackground, filter: 'grayscale(60%)' }}
+        style={{ background: cookieBackground, filter: 'grayscale(60%)', bottom: height }}
       >
         { this.state.showModal && modal}
         <p className={styles.cookie_text}>
@@ -131,10 +145,14 @@ CookieConsentBar.defaultProps = {
   theme: {}
 }
 
+function mapStateToProps (state) {
+  return state.cookie
+}
+
 function mapDispatchToProps (dispatch) {
   return {
     authDispatch: bindActionCreators(authenticationActions, dispatch)
   }
 }
 
-export default withNamespaces('common')(connect(null, mapDispatchToProps)(CookieConsentBar))
+export default withNamespaces('common')(connect(mapStateToProps, mapDispatchToProps)(CookieConsentBar))

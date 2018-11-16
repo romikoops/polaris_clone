@@ -8,7 +8,7 @@ Rails.application.configure do
   Mail.register_interceptor(
     RecipientInterceptor.new(
       ENV.fetch('EMAIL_RECIPIENTS', 'development+qa@itsmycargo.com'),
-      subject_prefix: ENV.fetch('EMAIL_SUBJECT_PREFIX') { '[REVIEW]' }
+      subject_prefix: ENV.fetch('EMAIL_SUBJECT_PREFIX') { "[REVIEW] (#{ENV['K8S_NAMESPACE']})" }
     )
   )
 end

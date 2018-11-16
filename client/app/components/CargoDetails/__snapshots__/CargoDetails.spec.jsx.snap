@@ -119,7 +119,7 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
                   innerRef={[Function]}
                   name="totalGoodsValue"
                   onBlur={[Function]}
-                  required={true}
+                  required={false}
                   submitAttempted={false}
                   type="number"
                   validationError=""
@@ -327,7 +327,7 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
                 innerRef={[Function]}
                 name="cargoNotes"
                 onBlur={[Function]}
-                required={true}
+                required={false}
                 submitAttempted={false}
                 type="textarea"
                 validationError=""
@@ -659,7 +659,7 @@ exports[`customsData[target].unknown 1`] = `
                   innerRef={[Function]}
                   name="totalGoodsValue"
                   onBlur={[Function]}
-                  required={true}
+                  required={false}
                   submitAttempted={false}
                   type="number"
                   validationError=""
@@ -867,7 +867,7 @@ exports[`customsData[target].unknown 1`] = `
                 innerRef={[Function]}
                 name="cargoNotes"
                 onBlur={[Function]}
-                required={true}
+                required={false}
                 submitAttempted={false}
                 type="textarea"
                 validationError=""
@@ -1199,7 +1199,7 @@ exports[`fee && !fee.unknown && fee.total.value 1`] = `
                   innerRef={[Function]}
                   name="totalGoodsValue"
                   onBlur={[Function]}
-                  required={true}
+                  required={false}
                   submitAttempted={false}
                   type="number"
                   validationError=""
@@ -1407,7 +1407,7 @@ exports[`fee && !fee.unknown && fee.total.value 1`] = `
                 innerRef={[Function]}
                 name="cargoNotes"
                 onBlur={[Function]}
-                required={true}
+                required={false}
                 submitAttempted={false}
                 type="textarea"
                 validationError=""
@@ -1626,6 +1626,33 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
   name="cargoDetailsBox"
 >
   <div
+    className="flex-100 layout-row layout-align-center padd_top"
+  >
+    <div
+      className="flex-none content_width layout-row layout-wrap section_padding"
+    >
+      <CustomsExportPaper
+        addon={true}
+        deleteDoc={[Function]}
+        documents={Array []}
+        fileFn={[Function]}
+        t={[Function]}
+        tenant={
+          Object {
+            "data": Object {
+              "scope": Object {
+                "customs_export_paper": true,
+                "has_customs": true,
+                "has_insurance": true,
+              },
+            },
+          }
+        }
+        toggleCustomAddon={[Function]}
+      />
+    </div>
+  </div>
+  <div
     className="flex-100 layout-row layout-align-center"
   >
     <div
@@ -1739,7 +1766,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                   innerRef={[Function]}
                   name="totalGoodsValue"
                   onBlur={[Function]}
-                  required={true}
+                  required={false}
                   submitAttempted={false}
                   type="number"
                   validationError=""
@@ -1947,7 +1974,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                 innerRef={[Function]}
                 name="cargoNotes"
                 onBlur={[Function]}
-                required={true}
+                required={false}
                 submitAttempted={false}
                 type="textarea"
                 validationError=""
@@ -2672,30 +2699,6 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
         </div>
       </div>
     </div>
-    <div
-      className="flex-100 layout-row layout-align-center padd_top"
-    >
-      <div
-        className="flex-none content_width layout-row layout-wrap section_padding"
-      >
-        <CustomsExportPaper
-          addon={true}
-          t={[Function]}
-          tenant={
-            Object {
-              "data": Object {
-                "scope": Object {
-                  "customs_export_paper": true,
-                  "has_customs": true,
-                  "has_insurance": true,
-                },
-              },
-            }
-          }
-          toggleCustomAddon={[Function]}
-        />
-      </div>
-    </div>
   </div>
 </div>
 `;
@@ -2819,7 +2822,7 @@ exports[`shallow render 1`] = `
                   innerRef={[Function]}
                   name="totalGoodsValue"
                   onBlur={[Function]}
-                  required={true}
+                  required={false}
                   submitAttempted={false}
                   type="number"
                   validationError=""
@@ -3027,7 +3030,7 @@ exports[`shallow render 1`] = `
                 innerRef={[Function]}
                 name="cargoNotes"
                 onBlur={[Function]}
-                required={true}
+                required={false}
                 submitAttempted={false}
                 type="textarea"
                 validationError=""
@@ -3359,7 +3362,7 @@ exports[`shipment.has_pre_carriage ? 1`] = `
                   innerRef={[Function]}
                   name="totalGoodsValue"
                   onBlur={[Function]}
-                  required={true}
+                  required={false}
                   submitAttempted={false}
                   type="number"
                   validationError=""
@@ -3567,7 +3570,7 @@ exports[`shipment.has_pre_carriage ? 1`] = `
                 innerRef={[Function]}
                 name="cargoNotes"
                 onBlur={[Function]}
-                required={true}
+                required={false}
                 submitAttempted={false}
                 type="textarea"
                 validationError=""
@@ -3899,7 +3902,7 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
                   innerRef={[Function]}
                   name="totalGoodsValue"
                   onBlur={[Function]}
-                  required={true}
+                  required={false}
                   submitAttempted={false}
                   type="number"
                   validationError=""
@@ -4107,7 +4110,7 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
                 innerRef={[Function]}
                 name="cargoNotes"
                 onBlur={[Function]}
-                required={true}
+                required={false}
                 submitAttempted={false}
                 type="textarea"
                 validationError=""
@@ -4469,7 +4472,7 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
                   innerRef={[Function]}
                   name="totalGoodsValue"
                   onBlur={[Function]}
-                  required={true}
+                  required={false}
                   submitAttempted={false}
                   type="number"
                   validationError=""
@@ -4677,7 +4680,7 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
                 innerRef={[Function]}
                 name="cargoNotes"
                 onBlur={[Function]}
-                required={true}
+                required={false}
                 submitAttempted={false}
                 type="textarea"
                 validationError=""
@@ -5176,7 +5179,7 @@ exports[`this.props.insurance.bool ? 1`] = `
                   innerRef={[Function]}
                   name="totalGoodsValue"
                   onBlur={[Function]}
-                  required={true}
+                  required={false}
                   submitAttempted={false}
                   type="number"
                   validationError=""
@@ -5384,7 +5387,7 @@ exports[`this.props.insurance.bool ? 1`] = `
                 innerRef={[Function]}
                 name="cargoNotes"
                 onBlur={[Function]}
-                required={true}
+                required={false}
                 submitAttempted={false}
                 type="textarea"
                 validationError=""
@@ -5716,7 +5719,7 @@ exports[`totalGoodsValue.value > 20000 1`] = `
                   innerRef={[Function]}
                   name="totalGoodsValue"
                   onBlur={[Function]}
-                  required={true}
+                  required={false}
                   submitAttempted={false}
                   type="number"
                   validationError=""
@@ -5924,7 +5927,7 @@ exports[`totalGoodsValue.value > 20000 1`] = `
                 innerRef={[Function]}
                 name="cargoNotes"
                 onBlur={[Function]}
-                required={true}
+                required={false}
                 submitAttempted={false}
                 type="textarea"
                 validationError=""

@@ -26,6 +26,7 @@ class QuoteChargeBreakdown extends Component {
 
   determineSubKey (charge) {
     const { scope } = this.props
+
     switch (scope.fee_detail) {
       case 'key':
         return this.displayKeyOnly(charge[0])
@@ -40,6 +41,7 @@ class QuoteChargeBreakdown extends Component {
 
   displayKeyOnly (key) {
     const { t } = this.props
+
     switch (key) {
       case 'trucking_lcl' || 'trucking_fcl':
         return t('cargo:truckingRate')
@@ -51,6 +53,7 @@ class QuoteChargeBreakdown extends Component {
 
   displayKeyAndName (fee) {
     const { t } = this.props
+    
     switch (fee[0]) {
       case 'trucking_lcl' || 'trucking_fcl':
         return t('cargo:truckingRate')
@@ -60,11 +63,14 @@ class QuoteChargeBreakdown extends Component {
     }
   }
   quoteKeys () {
-    return Object.keys(this.props.quote).filter(key => !this.unbreakableKeys.includes(key))
+    const keysInOrder = ['trucking_pre', 'export', 'cargo', 'import', 'trucking_on']
+    const availableQuoteKeys = Object.keys(this.props.quote).filter(key => !this.unbreakableKeys.includes(key))
+    return keysInOrder.filter(key => availableQuoteKeys.includes(key))
   }
 
   generateContent (key) {
     const { quote, t, scope } = this.props
+
     const contentSections = Object.entries(quote[`${key}`])
       .map(array => array.filter(value => !this.unbreakableKeys.includes(value)))
       .filter(value => value.length !== 1)
@@ -119,6 +125,7 @@ class QuoteChargeBreakdown extends Component {
 
   overrideTranslations (key) {
     const { t, scope } = this.props
+
     if (scope.translation_overrides && scope.translation_overrides[key]) {
       return capitalize(t(scope.translation_overrides[key]))
     }
@@ -126,10 +133,28 @@ class QuoteChargeBreakdown extends Component {
     return capitalize(t(key))
   }
 
+  renderSubTitle (key) {
+    const { t, mot, scope } = this.props
+
+    if (scope.translation_overrides && scope.translation_overrides[key]) {
+      return this.overrideTranslations(`shipment:${key}`)
+    }
+
+    switch (key) {
+      case 'trucking_pre':
+        return t('shipment:pickUp')
+      case 'trucking_on':
+        return t('shipment:delivery')
+      case 'cargo':
+        return t('shipment:motCargo', { mot: t(`shipment:${mot}`) })
+      default:
+        return ''
+    }
+  }
+
   render () {
     const {
       theme,
-      t,
       quote,
       scope
     } = this.props
@@ -152,13 +177,7 @@ class QuoteChargeBreakdown extends Component {
                 className="flex-none layout-row layout-align-start-center"
               />
               <div className="flex-45 layout-row layout-align-start-center">
-                {key === 'trucking_pre' ? (
-                  <span>{t('shipment:pickUp')}</span>
-                ) : ''}
-                {key === 'trucking_on' ? (
-                  <span>{t('shipment:delivery')}</span>
-                ) : ''}
-                <span>{key === 'trucking_pre' || key === 'trucking_on' ? '' : this.overrideTranslations(`shipment:${key}`) }</span>
+                <span>{this.renderSubTitle(key)}</span>
               </div>
               <div className="flex-50 layout-row layout-align-end-center">
                 <p>
@@ -181,7 +200,8 @@ QuoteChargeBreakdown.propTypes = {
   theme: PropTypes.theme,
   scope: PropTypes.scope.isRequired,
   t: PropTypes.func.isRequired,
-  quote: PropTypes.node.isRequired
+  quote: PropTypes.node.isRequired,
+  mot: PropTypes.string.isRequired
 }
 
 QuoteChargeBreakdown.defaultProps = {

@@ -2,10 +2,8 @@
 
 module ShippingTools
   include PricingTools
-  include MongoTools
   include NotificationTools
   extend PricingTools
-  extend DocumentTools
   extend NotificationTools
 
   def self.create_shipments_from_quotation(shipment, results)
@@ -13,8 +11,8 @@ module ShippingTools
     results.each do |result|
       schedule = result['schedules'].first
       trip = Trip.find(schedule['trip_id'])
-      on_carriage_hash = !!result['quote']['trucking_on'] ? shipment.trucking['on_carriage'] : nil
-      pre_carriage_hash = !!result['quote']['trucking_pre'] ? shipment.trucking['pre_carriage'] : nil
+      on_carriage_hash = (shipment.trucking['on_carriage'] if !!result['quote']['trucking_on'])
+      pre_carriage_hash = (shipment.trucking['pre_carriage'] if !!result['quote']['trucking_pre'])
       new_shipment = main_quote.shipments.create!(
         status: 'quoted',
         user_id: shipment.user_id,
@@ -44,7 +42,6 @@ module ShippingTools
         new_charge_breakdown.dup_charges(charge_breakdown: charge_breakdown)
       end
       new_shipment.save!
-
     end
     main_quote
   end
@@ -54,18 +51,14 @@ module ShippingTools
     load_type = details['loadType'].underscore
     direction = details['direction']
     shipment = Shipment.new(
-      user_id:   current_user.id,
-      status:    'booking_process_started',
+      user_id: current_user.id,
+      status: 'booking_process_started',
       load_type: load_type,
       direction: direction,
       tenant_id: tenant.id
     )
-    unless shipment.save
-      puts shipment.errors.full_messages
+    shipment.save!
 
-      # TBD - Create custom errors (ApplicationError)
-      shipment.save!
-    end
     if tenant.scope['closed_quotation_tool']
       user_pricing_id = current_user.agency.agency_manager_id
       itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
@@ -84,13 +77,13 @@ module ShippingTools
     )
 
     {
-      shipment:                 shipment,
-      routes:                   routes_data[:route_hashes],
+      shipment: shipment,
+      routes: routes_data[:route_hashes],
       lookup_tables_for_routes: routes_data[:look_ups],
-      cargo_item_types:         tenant.cargo_item_types,
-      max_dimensions:           tenant.max_dimensions,
+      cargo_item_types: tenant.cargo_item_types,
+      max_dimensions: tenant.max_dimensions,
       max_aggregate_dimensions: tenant.max_aggregate_dimensions,
-      last_trip_date:           last_trip_date
+      last_trip_date: last_trip_date
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
@@ -103,17 +96,17 @@ module ShippingTools
     offer_calculator.shipment.save!
     last_trip_date = last_trip(current_user)
     {
-      shipment:        offer_calculator.shipment,
-      results:         offer_calculator.detailed_schedules,
-      originHubs:      offer_calculator.hubs[:origin],
+      shipment: offer_calculator.shipment,
+      results: offer_calculator.detailed_schedules,
+      originHubs: offer_calculator.hubs[:origin],
       destinationHubs: offer_calculator.hubs[:destination],
-      cargoUnits:      offer_calculator.shipment.cargo_units,
+      cargoUnits: offer_calculator.shipment.cargo_units,
       aggregatedCargo: offer_calculator.shipment.aggregated_cargo,
-      lastTripDate:    last_trip_date
+      lastTripDate: last_trip_date
     }
   end
 
-  def self.generate_and_upload_shipment_pdf(shipment)
+  def self.generate_shipment_pdf(shipment:)
     cargo_count = shipment.cargo_units.count
     load_type = ''
     if shipment.load_type == 'cargo_item' && cargo_count > 1
@@ -122,25 +115,20 @@ module ShippingTools
       load_type = 'Cargo Item'
     elsif shipment.load_type == 'container' && cargo_count > 1
       load_type = 'Containers'
-    elsif shipment.load_type == 'container' && cargo_count === 1
+    elsif shipment.load_type == 'container' && cargo_count == 1
       load_type = 'Container'
     end
 
     shipment_recap = PdfHandler.new(
-      layout:    'pdfs/simple.pdf.html.erb',
-      template:  'shipments/pdfs/shipment_recap.pdf.html.erb',
-      margin:    { top: 10, bottom: 5, left: 8, right: 8 },
-      shipment:  shipment,
+      layout: 'pdfs/simple.pdf.html.erb',
+      template: 'shipments/pdfs/shipment_recap.pdf.html.erb',
+      margin: { top: 10, bottom: 5, left: 8, right: 8 },
+      shipment: shipment,
       load_type: load_type,
-      name:      'shipment_recap'
+      name: 'shipment_recap'
     )
 
     shipment_recap.generate
-    shipment_recap.upload
-  end
-
-  def create_document(file, shipment, type, user)
-    DocumentTools.new_upload(file, shipment, type, user)
   end
 
   def self.update_shipment(params, current_user)
@@ -152,7 +140,7 @@ module ShippingTools
     hsTexts = shipment_data[:hsTexts].as_json
     shipment.assign_attributes(
       total_goods_value: shipment_data[:totalGoodsValue],
-      cargo_notes:       shipment_data[:cargoNotes]
+      cargo_notes: shipment_data[:cargoNotes]
     )
     shipment.incoterm_text = shipment_data[:incotermText] if shipment_data[:incotermText]
 
@@ -191,45 +179,45 @@ module ShippingTools
     if shipment_data[:insurance][:bool]
       @insurance_charge = Charge.create(
         children_charge_category: ChargeCategory.from_code('insurance'),
-        charge_category:          ChargeCategory.grand_total,
-        charge_breakdown:         charge_breakdown,
-        price:                    Price.create(currency: shipment.user.currency, value: shipment_data[:insurance][:value]),
-        parent:                   charge_breakdown.charge('grand_total')
+        charge_category: ChargeCategory.grand_total,
+        charge_breakdown: charge_breakdown,
+        price: Price.create(currency: shipment.user.currency, value: shipment_data[:insurance][:value]),
+        parent: charge_breakdown.charge('grand_total')
       )
     end
     if shipment_data[:customs][:total][:val].to_d > 0 || shipment_data[:customs][:total][:hasUnknown]
       @customs_charge = Charge.create(
         children_charge_category: ChargeCategory.from_code('customs'),
-        charge_category:          ChargeCategory.grand_total,
-        charge_breakdown:         charge_breakdown,
-        price:                    Price.create(
+        charge_category: ChargeCategory.grand_total,
+        charge_breakdown: charge_breakdown,
+        price: Price.create(
           currency: shipment_data[:customs][:total][:currency],
           value: shipment_data[:customs][:total][:val]
         ),
-        parent:                   charge_breakdown.charge('grand_total')
+        parent: charge_breakdown.charge('grand_total')
       )
       if shipment_data[:customs][:import][:bool]
         @import_customs_charge = Charge.create(
           children_charge_category: ChargeCategory.from_code('import_customs'),
-          charge_category:          ChargeCategory.grand_total,
-          charge_breakdown:         charge_breakdown,
-          price:                    Price.create(
+          charge_category: ChargeCategory.grand_total,
+          charge_breakdown: charge_breakdown,
+          price: Price.create(
             currency: shipment_data[:customs][:import][:currency],
             value: shipment_data[:customs][:import][:val]
           ),
-          parent:                   @customs_charge
+          parent: @customs_charge
         )
       end
       if shipment_data[:customs][:export][:bool]
         @export_customs_charge = Charge.create(
           children_charge_category: ChargeCategory.from_code('export_customs'),
-          charge_category:          ChargeCategory.grand_total,
-          charge_breakdown:         charge_breakdown,
-          price:                    Price.create(
+          charge_category: ChargeCategory.grand_total,
+          charge_breakdown: charge_breakdown,
+          price: Price.create(
             currency: shipment_data[:customs][:total][:currency],
             value: shipment_data[:customs][:export][:val]
           ),
-          parent:                   @customs_charge
+          parent: @customs_charge
         )
       end
 
@@ -238,23 +226,23 @@ module ShippingTools
     if shipment_data[:addons][:customs_export_paper]
       @addons_charge = Charge.create(
         children_charge_category: ChargeCategory.from_code('addons'),
-        charge_category:          ChargeCategory.grand_total,
-        charge_breakdown:         charge_breakdown,
-        price:                    Price.create(
+        charge_category: ChargeCategory.grand_total,
+        charge_breakdown: charge_breakdown,
+        price: Price.create(
           currency: shipment_data[:addons][:customs_export_paper][:currency],
           value: shipment_data[:addons][:customs_export_paper][:value]
         ),
-        parent:                   charge_breakdown.charge('grand_total')
+        parent: charge_breakdown.charge('grand_total')
       )
       @customs_export_paper = Charge.create(
         children_charge_category: ChargeCategory.from_code('customs_export_paper'),
-        charge_category:          ChargeCategory.grand_total,
-        charge_breakdown:         charge_breakdown,
-        price:                    Price.create(
+        charge_category: ChargeCategory.grand_total,
+        charge_breakdown: charge_breakdown,
+        price: Price.create(
           currency: shipment_data[:addons][:customs_export_paper][:currency],
           value: shipment_data[:addons][:customs_export_paper][:value]
         ),
-        parent:                   @addons_charge
+        parent: @addons_charge
       )
       @addons_charge.update_price!
     end
@@ -307,10 +295,10 @@ module ShippingTools
       aggregated_cargo.save!
     end
 
-    documents = shipment.documents.map do |doc|
-      tmp = doc.as_json
-      tmp['signed_url'] = doc.get_signed_url
-      tmp
+    documents = shipment.documents.select { |doc| doc.file.attached? }.map do |doc|
+      doc.as_json.merge(
+        signed_url: Rails.application.routes.url_helpers.rails_blob_url(doc.file, disposition: 'attachment')
+      )
     end
 
     shipment.eori = params[:shipment][:eori]
@@ -321,25 +309,29 @@ module ShippingTools
     destination_hub = shipment.destination_hub
     origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
     destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
-
+    options = { methods: %i(selected_offer mode_of_transport service_level vessel_name carrier), include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }] }
+    shipment_as_json = shipment.as_json(options).merge(
+      pickup_address:   shipment.pickup_address_with_country,
+      delivery_address: shipment.delivery_address_with_country
+    )
     locations = {
-      startHub:    { data: origin_hub,      location: origin_hub.nexus.to_custom_hash },
-      endHub:      { data: destination_hub, location: destination_hub.nexus.to_custom_hash },
-      origin:      origin.to_custom_hash,
+      startHub: { data: origin_hub, location: origin_hub.nexus.to_custom_hash },
+      endHub: { data: destination_hub, location: destination_hub.nexus.to_custom_hash },
+      origin: origin.to_custom_hash,
       destination: destination.to_custom_hash
     }
 
     {
-      shipment:        shipment.as_options_json,
+      shipment:        shipment_as_json,
       cargoItems:      cargo_items      || nil,
       containers:      containers       || nil,
       aggregatedCargo: aggregated_cargo || nil,
-      locations:       locations,
-      consignee:       consignee,
-      notifyees:       notifyees,
-      shipper:         shipper,
-      documents:       documents,
-      cargoItemTypes:  cargo_item_types
+      locations: locations,
+      consignee: consignee,
+      notifyees: notifyees,
+      shipper: shipper,
+      documents: documents,
+      cargoItemTypes: cargo_item_types
     }
   end
 
@@ -368,8 +360,8 @@ module ShippingTools
     end
 
     {
-      title:       'Booking Received',
-      message:     message,
+      title: 'Booking Received',
+      message: message,
       shipmentRef: shipment.imc_reference
     }
   end
@@ -422,22 +414,22 @@ module ShippingTools
     shipment.closing_date      = @schedule['closing_date']
     shipment.planned_etd       = @schedule['etd']
     shipment.planned_eta       = @schedule['eta']
-    documents = {}
+    documents = Hash.new { |h, k| h[k] = [] }
     shipment.documents.each do |doc|
-      documents[doc.doc_type] = doc
+      documents[doc.doc_type] << doc
     end
 
     @user_locations = current_user.user_locations.map do |uloc|
       {
         location: uloc.location.to_custom_hash,
-        contact:  current_user.attributes
+        contact: current_user.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
 
     @contacts = current_user.contacts.map do |contact|
       {
         location: contact.location.try(:to_custom_hash) || {},
-        contact:  contact.attributes
+        contact: contact.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
 
@@ -480,33 +472,33 @@ module ShippingTools
     customs_fee = {
       import: destination_customs_fee ? import_fees : { unknown: true },
       export: origin_customs_fee ? export_fees : { unknown: true },
-      total:  total_fees
+      total: total_fees
     }
     hubs = {
-      startHub: { data: @origin_hub,      location: @origin_hub.nexus },
-      endHub:   { data: @destination_hub, location: @destination_hub.nexus }
+      startHub: { data: @origin_hub, location: @origin_hub.nexus },
+      endHub: { data: @destination_hub, location: @destination_hub.nexus }
     }
-    options = { methods: %i(selected_offer mode_of_transport), include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }] }
+    options = { methods: %i(selected_offer mode_of_transport service_level vessel_name carrier), include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }] }
     origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
     destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
     shipment_as_json = shipment.as_json(options).merge(
-      pickup_address:   shipment.pickup_address_with_country,
+      pickup_address: shipment.pickup_address_with_country,
       delivery_address: shipment.delivery_address_with_country
     )
     {
-      shipment:       shipment_as_json,
-      hubs:           hubs,
-      contacts:       @contacts,
-      userLocations:  @user_locations,
-      schedule:       @schedule,
+      shipment: shipment_as_json,
+      hubs: hubs,
+      contacts: @contacts,
+      userLocations: @user_locations,
+      schedule: @schedule,
       dangerousGoods: @dangerous,
-      documents:      documents,
-      containers:     containers,
-      cargoItems:     cargo_items,
-      customs:        customs_fee,
-      addons:         addons,
-      locations:      {
-        origin:      origin.try(:to_custom_hash),
+      documents: documents,
+      containers: containers,
+      cargoItems: cargo_items,
+      customs: customs_fee,
+      addons: addons,
+      locations: {
+        origin: origin.try(:to_custom_hash),
         destination: destination.try(:to_custom_hash)
       }
     }
@@ -541,11 +533,11 @@ module ShippingTools
     )
 
     {
-      shipment:                 shipment,
-      routes:                   routes_data[:route_hashes],
+      shipment: shipment,
+      routes: routes_data[:route_hashes],
       lookup_tables_for_routes: routes_data[:look_ups],
-      cargo_item_types:         tenant.cargo_item_types,
-      max_dimensions:           tenant.max_dimensions,
+      cargo_item_types: tenant.cargo_item_types,
+      max_dimensions: tenant.max_dimensions,
       max_aggregate_dimensions: tenant.max_aggregate_dimensions
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
@@ -604,17 +596,6 @@ module ShippingTools
     shipment.aggregated_cargo.create!(aggregated_cargo_json)
   end
 
-  def get_shipment_pdf(params)
-    shipment = Shipment.find_by_id(params[:shipment_id])
-    pdf_string = render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_shipper.pdf', locals: { shipment: shipment })
-    response = BreezyPDFLite::RenderRequest.new(pdf_string).submit
-    if response.code.to_i == 201
-      send_data response.body, filename: 'Booking_' + shipment.imc_reference + '.pdf'
-    else
-      raise
-    end
-  end
-
   def self.save_pdf_quotes(shipment, tenant, schedules)
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
     @quotes = main_quote.shipments.map(&:selected_offer)
@@ -622,18 +603,17 @@ module ShippingTools
     logo = Base64.encode64(HTTP.get(tenant.theme['logoLarge']).body)
 
     quotation = PdfHandler.new(
-      layout:      'pdfs/simple.pdf.html.erb',
-      template:    'shipments/pdfs/quotations.pdf.erb',
-      margin:      { top: 10, bottom: 5, left: 8, right: 8 },
-      shipment:    shipment,
-      shipments:   main_quote.shipments,
-      quotes:      @quotes,
-      logo:        logo,
-      quotation:   main_quote,
-      name:        'quotation'
+      layout: 'pdfs/simple.pdf.html.erb',
+      template: 'shipments/pdfs/quotations.pdf.erb',
+      margin: { top: 10, bottom: 5, left: 8, right: 8 },
+      shipment: shipment,
+      shipments: main_quote.shipments,
+      quotes: @quotes,
+      logo: logo,
+      quotation: main_quote,
+      name: 'quotation'
     )
     quotation.generate
-    quotation.upload_quotes
   end
 
   def self.save_and_send_quotes(shipment, schedules, email)
@@ -658,44 +638,6 @@ module ShippingTools
 
   def self.last_trip(user)
     user.tenant.trips.order(:start_date)&.last&.start_date
-  end
-
-  def build_and_upload_pdf(args)
-    doc_erb = ErbTemplate.new(
-      layout:   args[:layout],
-      template: args[:template],
-      locals:   { shipment: args[:shipment] }
-    )
-
-    response = BreezyPDFLite::RenderRequest.new(
-      doc_erb.render
-    ).submit
-
-    if response.code.to_i == 201
-      doc_name = "#{args[:name]}_#{args[:shipment].imc_reference}.pdf"
-
-      File.open('tmp/' + doc_name, 'wb') { |file| file.write(response.body) }
-      doc_pdf = File.open('tmp/' + doc_name)
-
-      doc = DocumentTools.new_upload_backend(doc_pdf, args[:shipment], args[:name], current_user)
-      doc_url = doc.get_signed_url
-
-      { name: doc_name, url: doc_url }
-    else
-      raise
-    end
-  end
-
-  def send_booking_emails(shipment)
-    shipper_pdf = BreezyPDFLite::RenderRequest.new(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_shipper.pdf', locals: { shipment: shipment })).submit.body
-    trucker_pdf = BreezyPDFLite::RenderRequest.new(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_trucker.pdf', locals: { shipment: shipment })).submit.body
-    consolidator_pdf = BreezyPDFLite::RenderRequest.new(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_consolidator.pdf', locals: { shipment: shipment })).submit.body
-    receiver_pdf = BreezyPDFLite::RenderRequest.new(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_receiver.pdf', locals: { shipment: shipment })).submit.body
-    ShipmentMailer.summary_mail_shipper(shipment, 'Booking_' + shipment.imc_reference + '.pdf', shipper_pdf).deliver_now
-    ShipmentMailer.summary_mail_trucker(shipment, 'Booking_' + shipment.imc_reference + '.pdf', trucker_pdf).deliver_now
-    ShipmentMailer.summary_mail_consolidator(shipment, 'Booking_' + shipment.imc_reference + '.pdf', consolidator_pdf).deliver_now
-    ShipmentMailer.summary_mail_receiver(shipment, 'Booking_' + shipment.imc_reference + '.pdf', receiver_pdf).deliver_now
-    # TBD - Set up flash message
   end
 
   def get_hs_code_hash(codes)

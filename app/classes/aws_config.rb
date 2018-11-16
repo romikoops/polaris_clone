@@ -5,17 +5,17 @@ module AwsConfig
   module ClassMethods
     def aws_signer
       Aws::S3::Presigner.new(
-        access_key_id:     Settings.aws.access_key_id,
+        access_key_id: Settings.aws.access_key_id,
         secret_access_key: Settings.aws.secret_access_key,
-        region:            Settings.aws.region
+        region: Settings.aws.region
       )
     end
 
     def aws_client
       Aws::S3::Client.new(
-        access_key_id:     Settings.aws.access_key_id,
+        access_key_id: Settings.aws.access_key_id,
         secret_access_key: Settings.aws.secret_access_key,
-        region:            Settings.aws.region
+        region: Settings.aws.region
       )
     end
 
@@ -28,26 +28,21 @@ module AwsConfig
     end
 
     def create_on_aws(file, shipment)
-      obj_key = path(shipment) + '/' + file.name
-      public_awsurl = awsurl + obj_key
-      aws_signer.put_object(bucket: Settings.aws.bucket, key: obj_key, body: file, content_type: file.content_type, acl: 'private')
-      shipment.documents.create(url: public_awsurl, shipment_id: shipment['uuid'], text: file.name)
-    end
-
-    def delete_documents(docs)
-      docs.each do |doc|
-        aws_client.delete_object(bucket: Settings.aws.bucket, key: doc.url)
-        doc.delete
-      end
+      shipment.documents.create!(
+        file: { io: file, filename: file.name, content_type: file.content_type },
+        user_id: shipment.user_id,
+        shipment_id: shipment['uuid'],
+        text: file.name
+      )
     end
 
     def upload(args = {})
       aws_client.put_object(
-        bucket:       args[:bucket],
-        key:          args[:key],
-        body:         args[:file],
+        bucket: args[:bucket],
+        key: args[:key],
+        body: args[:file],
         content_type: args[:content_type],
-        acl:          args[:acl]
+        acl: args[:acl]
       )
     end
 
@@ -95,10 +90,6 @@ module AwsConfig
 
     def get_file_url(key, bucket = Settings.aws.bucket)
       aws_signer.presigned_url(:get_object, bucket: bucket, key: key, response_content_disposition: 'attachment')
-    end
-
-    def delete_documents(docs)
-      self.class.delete_documents(docs)
     end
 
     def upload(args = {})

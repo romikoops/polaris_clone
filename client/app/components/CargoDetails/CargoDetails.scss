@@ -46,11 +46,6 @@
     height: max-content;
     overflow: visible;
   }
-  .box_content.hidden {
-    // overflow: hidden;
-    // height: 0px;
-    // padding-top: 0px;
-  }
   .incoterm_info {
     text-decoration: underline;
     font-size: 11px;
@@ -88,6 +83,17 @@
     visibility: visible;
     opacity: 1;
     height: 230px;
+  }
+  .no_customs_exp_paper_box {
+    transition: all 1s ease;
+    visibility: hidden;
+    opacity: 0;
+    height: 0px;
+    overflow: hidden;
+  }
+  .no_customs_exp_paper_box.show {
+    visibility: visible;
+    opacity: 1;
   }
   .show {
     height: 250px;

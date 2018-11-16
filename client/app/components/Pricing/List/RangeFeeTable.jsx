@@ -18,6 +18,18 @@ class RangeFeeTable extends PureComponent {
     }
   }
 
+  determineStringToRender (value, target) {
+    const { scope } = this.props.tenant.data
+    if (!scope) return value
+    if (scope.cargo_price_notes && scope.cargo_price_notes.cargo && target === 'rate') {
+      return scope.cargo_price_notes.cargo
+    } else if (scope.cargo_price_notes && scope.cargo_price_notes.cargo && target === 'min') {
+      return ''
+    }
+
+    return value
+  }
+
   render () {
     const { t, row } = this.props
     if (!row || (row && !row.original)) return ''
@@ -31,16 +43,36 @@ class RangeFeeTable extends PureComponent {
 
       return tempFee
     })
-
+    const cellClass = styles.pricing_cell
     const columns = [
+      {
+        expander: true,
+        Header: () => <strong>More</strong>,
+        width: 65,
+        Expander: ({ isExpanded, ...rest }) => {
+          if(rest.original.range) {
+            return(
+              <div>
+                {isExpanded
+                  ? <div><i className="fa fa-caret-up"></i></div>
+                  : <div><i className="fa fa-caret-right"></i></div>
+                }
+              </div>
+            )
+          } else {
+            return null
+          }
+        },
+      },
       {
         Header: (<div className="flex layout-row layout-center-center">
           {determineSortingCaret('fee_code', sorted)}
           <p className="flex-none">{t('common:feeCode')}</p>
         </div>),
         id: 'fee_code',
+        className: cellClass,
         accessor: d => d.feeCode,
-        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+        Cell: rowData => (<div className={` flex layout-row layout-align-start-center`}>
           <p className="flex-none"> {rowData.row.fee_code}</p>
         </div>)
       },
@@ -49,9 +81,10 @@ class RangeFeeTable extends PureComponent {
           {determineSortingCaret('rate_basis', sorted)}
           <p className="flex-none">{t('common:rateBasis')}</p>
         </div>),
+        className: cellClass,
         id: 'rate_basis',
         accessor: d => d.rate_basis,
-        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+        Cell: rowData => (<div className={` flex layout-row layout-align-start-center`}>
           <p className="flex-none"> {rowData.row.rate_basis}</p>
         </div>)
       },
@@ -60,9 +93,10 @@ class RangeFeeTable extends PureComponent {
           {determineSortingCaret('currency', sorted)}
           <p className="flex-none">{t('common:currency')}</p>
         </div>),
+        className: cellClass,
         id: 'currency',
         accessor: d => d.currency,
-        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+        Cell: rowData => (<div className={` flex layout-row layout-align-start-center`}>
           <p className="flex-none"> {rowData.row.currency}</p>
         </div>)
       },
@@ -72,9 +106,25 @@ class RangeFeeTable extends PureComponent {
           <p className="flex-none">{t('common:minimum')}</p>
         </div>),
         id: 'min',
+        className: cellClass,
         accessor: d => d.min,
-        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+        Cell: rowData => (<div className={` flex layout-row layout-align-start-center`}>
           <p className="flex-none"> {rowData.row.min}</p>
+        </div>)
+      },
+      {
+        Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret('rate', sorted)}
+          <p className="flex-none">{t('common:rate')}</p>
+        </div>),
+        id: 'rate',
+        className: cellClass,
+        style: { 'white-space': 'unset' },
+        accessor: d => d.rate,
+        Cell: rowData => (<div className={` flex-100 layout-row layout-align-start-center`}>
+          <p className="flex-100">
+            {this.determineStringToRender(rowData.row.rate, 'rate')}
+          </p>
         </div>)
       }
     ]
@@ -87,8 +137,9 @@ class RangeFeeTable extends PureComponent {
               <p className="flex-none">{t('common:minimum')}</p>
             </div>),
             id: 'min',
+            className: cellClass,
             accessor: d => d.min,
-            Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+            Cell: rowData => (<div className={` flex layout-row layout-align-start-center`}>
               <p className="flex-none"> {rowData.row.min}</p>
             </div>)
           },
@@ -98,8 +149,9 @@ class RangeFeeTable extends PureComponent {
               <p className="flex-none">{t('common:max')}</p>
             </div>),
             id: 'max',
+            className: cellClass,
             accessor: d => d.max,
-            Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+            Cell: rowData => (<div className={` flex layout-row layout-align-start-center`}>
               <p className="flex-none"> {rowData.row.max}</p>
             </div>)
           },
@@ -109,8 +161,9 @@ class RangeFeeTable extends PureComponent {
               <p className="flex-none">{t('common:rate')}</p>
             </div>),
             id: 'rate',
+            className: cellClass,
             accessor: d => d.rate,
-            Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+            Cell: rowData => (<div className={` flex layout-row layout-align-start-center`}>
               <p className="flex-none"> {rowData.row.rate}</p>
             </div>)
           }
@@ -133,8 +186,20 @@ class RangeFeeTable extends PureComponent {
             desc: true
           }
         ]}
+        getTdProps={(state, rowInfo, column, instance) => {
+          return {
+            onClick: (e, handleOriginal) => {
+              if (handleOriginal && !rowInfo.original.range && column.expander) {
+                null
+              } else {
+                handleOriginal();
+              }
+            }
+          };
+        }}
         defaultPageSize={data.length}
-        SubComponent={d => (
+        SubComponent={d => { 
+          return d.original.range ? (
           <div className={styles.nested_table}>
             <ReactTable
               data={d.original.range}
@@ -151,7 +216,7 @@ class RangeFeeTable extends PureComponent {
               defaultPageSize={d.original.range.length}
             />
           </div>
-        )}
+        ): ''}}
       />
     )
   }

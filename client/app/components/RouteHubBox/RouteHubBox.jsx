@@ -4,6 +4,7 @@ import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
 import styles from './RouteHubBox.scss'
 import { moment } from '../../constants'
+import { capitalize } from '../../helpers'
 
 class RouteHubBox extends Component {
   static faIcon (sched) {
@@ -144,7 +145,7 @@ class RouteHubBox extends Component {
             {originAddress}
           </div>
           <div
-            className={`${styles.connection_graphics} flex-25 layout-row layout-align-center-center`}
+            className={`${styles.connection_graphics} flex-33 layout-row layout-align-center-center layout-wrap`}
           >
             <div className="flex-100 layout-row layout-align-center-center">
               <div
@@ -157,6 +158,17 @@ class RouteHubBox extends Component {
                 <div className="flex" style={dashedLineStyles} />
                 <br />
                 {timeDiff}
+              </div>
+            </div>
+            <div className="flex-100 layout-row layout-wrap">
+              <div className="flex-100 layout-row layout-align-center-center">
+                {shipment.carrier ? <p className="flex-none">{`${t('shipment:carrier')}: ${capitalize(shipment.carrier)}`}</p> : '' }
+              </div>
+              <div className="flex-100 layout-row layout-align-center-center">
+                <p className="flex-none">{`${t('shipment:serviceLevel')}: ${capitalize(shipment.service_level)}`}</p>
+              </div>
+              <div className="flex-100 layout-row layout-align-center-center">
+                {shipment.vessel_name ? <p className="flex-none">{`${t('shipment:vesselName')}: ${capitalize(shipment.vessel_name)}`}</p> : '' }
               </div>
             </div>
           </div>

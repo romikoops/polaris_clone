@@ -16,6 +16,7 @@ import { RoundButton } from '../../RoundButton/RoundButton'
 
 class PricesTable extends PureComponent {
   static determineFeeTable (row) {
+
     if (
       Object.values(row.original.data)
         .filter(val => val.range && val.range.length > 0)
@@ -114,12 +115,12 @@ class PricesTable extends PureComponent {
       },
       {
         Header: (<div className="flex layout-row layout-center-center">
-          {determineSortingCaret('load_type', sorted)}
+          {determineSortingCaret('cargo_class', sorted)}
           <p className="flex-none">{t('account:loadType')}</p>
         </div>),
-        accessor: 'load_type',
+        accessor: 'cargo_class',
         Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
-          <p className="flex-none"> {t(`common:${rowData.row.load_type}`)}</p>
+          <p className="flex-none"> {t(`common:${rowData.row.cargo_class}`)}</p>
         </div>)
       },
       {
@@ -139,7 +140,7 @@ class PricesTable extends PureComponent {
               text={t('account:request')}
             /> : ''}
           {!rowData.original.user_id && rowData.original.requested ? t('common:requested') : ''}
-          {rowData.original.user_id ? t('common:yes') : '' }
+          {rowData.original.user_id ? t('common:personal') : '' }
         </div>)
       }
     ]

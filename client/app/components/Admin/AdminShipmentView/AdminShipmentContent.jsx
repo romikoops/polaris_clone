@@ -9,7 +9,6 @@ import GradientBorder from '../../GradientBorder'
 import { moment, docOptions, documentTypes } from '../../../constants'
 import { numberSpacing, totalPrice } from '../../../helpers'
 import ShipmentOverviewShowCard from './ShipmentOverviewShowCard'
-import DocumentsForm from '../../Documents/Form'
 import ContactDetailsRow from './ContactDetailsRow'
 import GreyBox from '../../GreyBox/GreyBox'
 import { NamedSelect } from '../../NamedSelect/NamedSelect'
@@ -43,17 +42,18 @@ class AdminShipmentContent extends Component {
   }
   constructor (props) {
     super(props)
-
     this.state = {
-      fileType: { label: `${this.props.t('common:packingSheet')}`, value: 'packing_sheet' },
-      documentUrl: `/shipments/${this.props.shipment.id}/upload/packing_sheet`
+      fileType: { label: `${this.props.t('common:packingSheet')}`, value: 'packing_sheet' }
     }
     this.setFileType = this.setFileType.bind(this)
   }
+
   setFileType (ev) {
-    const shipmentId = this.props.shipment.id
-    const url = `/shipments/${shipmentId}/upload/${ev.value}`
-    this.setState({ fileType: ev, documentUrl: url })
+    this.setState({ fileType: ev })
+  }
+  deleteDoc (doc) {
+    const { adminDispatch } = this.props
+    adminDispatch.deleteDocument(doc.id)
   }
   render () {
     const {
@@ -65,6 +65,7 @@ class AdminShipmentContent extends Component {
       switchIcon,
       dnrEditKeys,
       pickupDate,
+      adminDispatch,
       deliveryDate,
       originDropOffDate,
       destinationCollectionDate,
@@ -82,8 +83,7 @@ class AdminShipmentContent extends Component {
       cargoView,
       saveNewEditedPrice,
       t,
-      handlePriceChange,
-      uploadClientDocument
+      handlePriceChange
     } = this.props
 
     const {
@@ -94,8 +94,7 @@ class AdminShipmentContent extends Component {
     } = shipmentData
 
     const {
-      fileType,
-      documentUrl
+      fileType
     } = this.state
 
     const docChecker = {
@@ -105,22 +104,45 @@ class AdminShipmentContent extends Component {
 
     const docView = []
     const missingDocs = []
-
+    const documentUrl = `/shipments/${shipment.id}/upload/${fileType.value}`
+    
     if (documents) {
-      documents.forEach((doc) => {
-        docChecker[doc.doc_type] = true
-        docView.push(<div className="flex-xs-100 flex-sm-45 flex-33 flex-gt-lg-25 layout-align-start-center layout-row" style={{ padding: '10px' }}>
-          <DocumentsForm
-            theme={theme}
-            type={doc.doc_type}
-            dispatchFn={file => this.fileFn(file)}
-            text={documentTypes[doc.doc_type]}
-            doc={doc}
-            viewer
-            deleteFn={file => this.deleteDoc(file)}
-          />
+      const uploadedDocs = documents.reduce((docObj, item) => {
+        docObj[item.doc_type] = docObj[item.doc_type] || []
+        docObj[item.doc_type].push(item)
+
+        return docObj
+      }, {})
+
+      Object.keys(uploadedDocs).forEach((key) => {
+        docChecker[key] = true
+
+        docView.push(<div className={`flex-35 layout-row layout-align-start-start layout-padding ${adminStyles.uploaded_doc}`}>
+          <i className="fa fa-check flex-none" style={{ color: 'rgb(13, 177, 75)' }} />
+          <div className="layout-row flex layout-wrap" style={{ marginBottom: '12px' }}>
+            <h4 className="flex-100 layout-row">{documentTypes[key]}</h4>
+            {uploadedDocs[key].map(doc => (
+              <div className="flex-100 layout-row">
+                <a
+                  href={doc.signed_url}
+                  className={`${styles.eye_link} flex-none layout-row layout-align-center-center`}
+                  target="_blank"
+                >
+                  <i className="fa fa-eye pointy flex-none" />
+                </a>
+                <i
+                  className="fa fa-trash pointy flex-none"
+                  onClick={() => this.deleteDoc(doc)}
+                />
+                <p className="flex layout-row">
+                  {doc.text}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>)
       })
+
     }
     Object.keys(docChecker).forEach((key) => {
       if (!docChecker[key]) {
@@ -613,7 +635,7 @@ class AdminShipmentContent extends Component {
                             url={documentUrl}
                             type={fileType.value}
                             text={fileType.label}
-                            uploadFn={uploadClientDocument}
+                            uploadFn={adminDispatch.uploadClientDocument}
                           />
                         </div>
                       </div>

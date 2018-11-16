@@ -4,9 +4,17 @@ import { theme, tenant } from '../../mocks'
 // eslint-disable-next-line import/no-named-as-default
 import Footer from './Footer'
 
+jest.mock('react-redux', () => ({
+  connect: (x, y) => Component => Component
+}))
+
 const propsBase = {
   theme,
-  tenant
+  tenant,
+  store: {
+    getState: jest.fn(),
+    subscribe: jest.fn()
+  }
 }
 
 test('shallow render', () => {

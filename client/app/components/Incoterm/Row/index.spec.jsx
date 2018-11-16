@@ -6,7 +6,8 @@ jest.mock('../../../helpers', () => ({
   gradientTextGenerator: (x, y) =>
     ({ background: `-webkit-linear-gradient(left, ${x},${y})` }),
   determineSpecialism: x => x,
-  switchIcon: x => x
+  switchIcon: x => x,
+  numberSpacing: x => x
 }))
 // eslint-disable-next-line
 import IncotermRow from './'

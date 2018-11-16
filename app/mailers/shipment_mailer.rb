@@ -13,7 +13,8 @@ class ShipmentMailer < ApplicationMailer
     @shipment = shipment
     base_url =
       case Rails.env
-      when 'production'  then "http://#{@shipment.tenant.subdomain}.itsmycargo.com/"
+      when 'production'  then "https://#{@shipment.tenant.subdomain}.itsmycargo.com/"
+      when 'review'      then "https://#{@shipment.tenant.subdomain}.#{ENV['REVIEW_URL']}"
       when 'development' then 'http://localhost:8080/'
       when 'test'        then 'http://localhost:8080/'
       end
@@ -23,9 +24,9 @@ class ShipmentMailer < ApplicationMailer
     create_pdf_attachment(@shipment)
     attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
     mail_options = {
-      to:      tenant.email_for(:sales, shipment.mode_of_transport),
+      to: tenant.email_for(:sales, shipment.mode_of_transport),
       # to: TESTING_EMAIL,
-      bcc:     'warwick@itsmycargo.com',
+      bcc: 'warwick@itsmycargo.com',
       subject: 'Your booking through ItsMyCargo'
     }
 
@@ -37,13 +38,13 @@ class ShipmentMailer < ApplicationMailer
     tenant = user.tenant
     @shipment = shipment
 
-    create_pdf_attachment(@shipment) 
+    create_pdf_attachment(@shipment)
     attachments.inline['logo.png']       = URI.open(tenant.theme['logoLarge']).read
     attachments.inline['logo_small.png'] = URI.try(:open, tenant.theme['logoSmall']).try(:read)
     mail_options = {
-      to:      user.email.blank? ? 'itsmycargodev@gmail.com' : user.email,
+      to: user.email.blank? ? 'itsmycargodev@gmail.com' : user.email,
       # to: TESTING_EMAIL,
-      bcc:     ['bookingemails@itsmycargo.com', 'warwick@itsmycargo.com'],
+      bcc: ['bookingemails@itsmycargo.com', 'warwick@itsmycargo.com'],
       subject: 'Your booking through ItsMyCargo'
     }
 
@@ -59,9 +60,9 @@ class ShipmentMailer < ApplicationMailer
     attachments.inline['logo.png']       = URI.open(tenant.theme['logoLarge']).read
     attachments.inline['logo_small.png'] = try(:open, tenant.theme['logoSmall']).try(:read)
     mail_options = {
-      to:      user.email.blank? ? 'itsmycargodev@gmail.com' : user.email,
+      to: user.email.blank? ? 'itsmycargodev@gmail.com' : user.email,
       # to: TESTING_EMAIL,
-      bcc:     ['bookingemails@itsmycargo.com', 'warwick@itsmycargo.com'],
+      bcc: ['bookingemails@itsmycargo.com', 'warwick@itsmycargo.com'],
       subject: 'Your booking through ItsMyCargo'
     }
 
@@ -72,11 +73,11 @@ class ShipmentMailer < ApplicationMailer
 
   def generate_and_upload_bill_of_lading
     bill_of_lading = PdfHandler.new(
-      layout:   'pdfs/simple.pdf.html.erb',
+      layout: 'pdfs/simple.pdf.html.erb',
       template: 'shipments/pdfs/bill_of_lading.pdf.html.erb',
-      margin:   { top: 10, bottom: 5, left: 8, right: 8 },
+      margin: { top: 10, bottom: 5, left: 8, right: 8 },
       shipment: @shipment,
-      name:     'bill_of_lading'
+      name: 'bill_of_lading'
     )
 
     bill_of_lading.generate
@@ -84,8 +85,7 @@ class ShipmentMailer < ApplicationMailer
   end
 
   def create_pdf_attachment(shipment)
-    ShippingTools.generate_and_upload_shipment_pdf(shipment)
-    pdf_name = "shipment_recap_#{shipment.imc_reference}.pdf"
-    attachments.inline[pdf_name] = File.read('tmp/' + pdf_name)
+    pdf = ShippingTools.generate_shipment_pdf(shipment: shipment)
+    attachments.inline["shipment_#{shipment.imc_reference}.pdf"] = pdf
   end
 end

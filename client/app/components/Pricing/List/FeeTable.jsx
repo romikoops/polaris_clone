@@ -31,6 +31,7 @@ class FeeTable extends PureComponent {
 
   render () {
     const { t, row, tenant } = this.props
+    
     if (!row || (row && !row.original)) return ''
     const { scope } = tenant.data
     const fees = row.original.data

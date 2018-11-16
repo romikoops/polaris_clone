@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import Tabs from '../Tabs/Tabs'
@@ -9,7 +10,6 @@ import styles from '../Admin/AdminShipments.scss'
 import adminStyles from '../Admin/Admin.scss'
 import GradientBorder from '../GradientBorder'
 import ShipmentOverviewShowCard from '../Admin/AdminShipmentView/ShipmentOverviewShowCard'
-import DocumentsForm from '../Documents/Form'
 import { moment, documentTypes, docOptions } from '../../constants'
 import {
   switchIcon,
@@ -42,17 +42,14 @@ class UserShipmentContent extends Component {
     super(props)
 
     this.state = {
-      fileType: { label: `${this.props.t('common:packingSheet')}`, value: 'packing_sheet' },
-      documentUrl: `/shipments/${this.props.match.params.id}/upload/packing_sheet`
+      fileType: { label: `${this.props.t('common:packingSheet')}`, value: 'packing_sheet' }
     }
 
     this.setFileType = this.setFileType.bind(this)
   }
 
   setFileType (ev) {
-    const shipmentId = this.props.shipmentData.shipment.id
-    const url = `/shipments/${shipmentId}/upload/${ev.value}`
-    this.setState({ fileType: ev, documentUrl: url })
+    this.setState({ fileType: ev })
   }
   deleteDoc (doc) {
     const { userDispatch } = this.props
@@ -84,12 +81,16 @@ class UserShipmentContent extends Component {
       cargoView,
       t
     } = this.props
-    const { fileType, documentUrl } = this.state
+    const { fileType } = this.state
+
     const {
       contacts,
       shipment,
       documents
     } = shipmentData
+
+    const documentUrl = `/shipments/${shipment.id}/upload/${fileType.value}`
+
     const originDropOffDate = (
       <p className={`flex-none letter_3 ${styles.date}`}>
         {`${formattedDate(shipment.planned_origin_drop_off_date)}`}
@@ -121,7 +122,7 @@ class UserShipmentContent extends Component {
     if (documents) {
       const uploadedDocs = documents.reduce((docObj, item) => {
         docObj[item.doc_type] = docObj[item.doc_type] || []
-        docObj[item.doc_type].push(item.text)
+        docObj[item.doc_type].push(item)
 
         return docObj
       }, {})
@@ -133,14 +134,21 @@ class UserShipmentContent extends Component {
           <i className="fa fa-check flex-none" style={{ color: 'rgb(13, 177, 75)' }} />
           <div className="layout-row flex layout-wrap" style={{ marginBottom: '12px' }}>
             <h4 className="flex-100 layout-row">{documentTypes[key]}</h4>
-            {uploadedDocs[key].map(text => (
+            {uploadedDocs[key].map(doc => (
               <div className="flex-100 layout-row">
+                <a
+                  href={doc.signed_url}
+                  className={`${styles.eye_link} flex-none layout-row layout-align-center-center`}
+                  target="_blank"
+                >
+                  <i className="fa fa-eye pointy flex-none" />
+                </a>
                 <i
                   className="fa fa-trash pointy flex-none"
-                  onClick={() => this.deleteDoc(documents.filter(doc => doc.text === text)[0])}
+                  onClick={() => this.deleteDoc(doc)}
                 />
                 <p className="flex layout-row">
-                  {text}
+                  {doc.text}
                 </p>
               </div>
             ))}
