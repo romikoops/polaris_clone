@@ -5,6 +5,7 @@ module DataInserter
     def perform
       super
 
+<<<<<<< HEAD
       data = format_to_legacy(@data)
       binding.pry
 
@@ -13,6 +14,20 @@ module DataInserter
         values[:rows_data].each_with_index do |row, row_i|
           tenant_vehicle = find_or_create_tenant_vehicle(row)
           find_or_create_local_charges(row, tenant_vehicle)
+=======
+      data.each_with_index do |(k_sheet_name, values), sheet_i|
+        data_extraction_method = values[:data_extraction_method]
+
+        values[:rows_data].each_with_index do |row, row_i|
+          itinerary = find_or_initialize_itinerary(row)
+          stops = find_or_initialize_stops(row, itinerary)
+          itinerary.stops << stops
+          itinerary.save!
+
+          tenant_vehicle = find_or_create_tenant_vehicle(row)
+          generate_trips(itinerary, row, tenant_vehicle) if should_generate_trips?
+          create_pricing_with_pricing_details(data_extraction_method, row, tenant_vehicle, itinerary)
+>>>>>>> 64ffd21aa... IMC-511 local charges reader works
 
           puts "Status: Sheet \"#{k_sheet_name}\" (##{sheet_i + 1}) | Row ##{row_i + 1}"
         end
@@ -21,6 +36,7 @@ module DataInserter
 
     private
 
+<<<<<<< HEAD
     def data_valid?(_data)
       # TODO: Implement validation
       true
@@ -119,5 +135,8 @@ module DataInserter
       ChargeCategory.find_or_create_by!(code: row[:fee_code], name: row[:fee])
       standard_charge_params.merge(specific_charge_params)
     end
+=======
+    # ..........
+>>>>>>> 64ffd21aa... IMC-511 local charges reader works
   end
 end

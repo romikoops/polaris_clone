@@ -20,7 +20,11 @@ module DataReader
       @xlsx.each_with_pagename do |sheet_name, sheet_data|
         headers = parse_headers(sheet_data.first)
         determine_data_extraction_method(headers)
-        @sheets_data[sheet_name] = { data_extraction_method: data_extraction_method }
+        @sheets_data[sheet_name] = if data_extraction_method
+                                     { data_extraction_method: data_extraction_method }
+                                   else
+                                     {}
+                                   end
 
         raise StandardError, "The headers of sheet \"#{sheet_name}\" are not valid." unless headers_valid?(headers)
 
