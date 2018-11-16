@@ -245,17 +245,6 @@ class BookingConfirmation extends Component {
       ? `${t('bookconf:expectedDelivery')}:`
       : `${t('bookconf:expectedCollection')}:`
 
-    const plannedTime = shipment.has_pre_carriage
-      ? `${moment(shipment.planned_pickup_date)
-        .format('DD/MM/YYYY')}`
-      : `${moment(shipment.planned_origin_drop_off_date).format('DD/MM/YYYY')}`
-
-    const collectionTime = shipment.has_on_carriage
-      ? `${moment(shipment.planned_eta)
-        .subtract(shipment.trucking.on_carriage.trucking_time_in_seconds, 'seconds')
-        .format('DD/MM/YYYY')}`
-      : `${moment(shipment.planned_eta).add(2, 'days').format('DD/MM/YYYY')}`
-
     const ShipmentCard = (
       <div className={SHIPMENT_CARD_CONTAINER}>
         <div style={themeTitled} className={HEADING}>
@@ -314,9 +303,6 @@ class BookingConfirmation extends Component {
                   <p className="flex-70 ">
                     {expectedTime}
                   </p>
-                  <p className="flex-30  center">
-                    {plannedTime}
-                  </p>
                 </div>
                 {LocationsOrigin}
                 <div className={`${WRAP_ROW(80)} ${ALIGN_START} buffer_10`}>
@@ -338,7 +324,6 @@ class BookingConfirmation extends Component {
                 {LocationsDestination}
                 <div className={`${WRAP_ROW(80)} ${ALIGN_START} buffer_10`}>
                   <p className="flex-70 ">{expectedEnd}</p>
-                  <p className="flex-30 center">{collectionTime}</p>
                 </div>
 
               </div>

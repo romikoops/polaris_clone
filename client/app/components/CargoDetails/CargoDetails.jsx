@@ -186,6 +186,7 @@ class CargoDetails extends Component {
     } = this.props
 
     const { scope } = tenant.data
+    const mandatoryFormFields = scope.mandatory_form_fields || {}
     const {
       addons,
       customs,
@@ -193,6 +194,7 @@ class CargoDetails extends Component {
       documents,
       shipment
     } = shipmentData
+    
 
     const incotermBox = (
       <div className="flex-100 layout-wrap layout-row">
@@ -428,6 +430,24 @@ class CargoDetails extends Component {
 
     return (
       <div name="cargoDetailsBox" className="flex-100 layout-row layout-wrap padd_top">
+        {scope.customs_export_paper && addons.customs_export_paper
+          ? <div className="flex-100 layout-row layout-align-center padd_top">
+            <div
+              className={`flex-none ${
+                defaults.content_width
+              } layout-row layout-wrap section_padding`}
+            >
+              <CustomsExportPaper
+                addon={addons.customs_export_paper}
+                tenant={tenant}
+                documents={documents}
+                fileFn={this.fileFn}
+                deleteDoc={this.deleteDoc}
+                toggleCustomAddon={this.toggleCustomAddon}
+              />
+            </div>
+          </div>
+          : ''}
         {this.state.showModal ? modal : ''}
         <div className="flex-100 layout-row layout-align-center">
           <div className={`flex-none ${defaults.content_width} layout-row layout-wrap`}>
@@ -484,12 +504,12 @@ class CargoDetails extends Component {
                         name="totalGoodsValue"
                         onBlur={this.handleChange}
                         submitAttempted={finishBookingAttempted}
-                        validations={{ nonNegative: (values, value) => value > 0 }}
+                        validations={{ nonNegative: (values, value) => !mandatoryFormFields.total_goods_value || value > 0 }}
                         validationErrors={{
                           nonNegative: t('common:greaterZero'),
                           isDefaultRequiredValue: t('common:greaterZero')
                         }}
-                        required
+                        required={mandatoryFormFields.total_goods_value}
                       />
                     </div>
                     <div className="flex-33 layout-row">
@@ -530,7 +550,7 @@ class CargoDetails extends Component {
                       validationErrors={{
                         isDefaultRequiredValue: t('common:nonEmpty')
                       }}
-                      required
+                      required={mandatoryFormFields.description_of_goods}
                     />
                   </div>
                 </div>
@@ -582,7 +602,7 @@ class CargoDetails extends Component {
                     />
                   </div>
                 </div>
-                
+
                 <div className="flex-100 layout-row layout-wrap" name="commercial_invoice">
                   <div className="flex-100 layout-row margin_5">
                     <DocumentsMultiForm
@@ -813,21 +833,7 @@ class CargoDetails extends Component {
             ) : (
               ''
             )}
-            {scope.customs_export_paper && addons.customs_export_paper
-              ? <div className="flex-100 layout-row layout-align-center padd_top">
-                <div
-                  className={`flex-none ${
-                    defaults.content_width
-                  } layout-row layout-wrap section_padding`}
-                >
-                  <CustomsExportPaper
-                    addon={addons.customs_export_paper}
-                    tenant={tenant}
-                    toggleCustomAddon={this.toggleCustomAddon}
-                  />
-                </div>
-              </div>
-              : ''}
+
           </div>
         ) : (
           ''

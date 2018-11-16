@@ -142,8 +142,6 @@ class QuoteCard extends PureComponent {
       tenant,
       result,
       cargo,
-      pickup,
-      truckingTime,
       aggregatedCargo,
       t
     } = this.props
@@ -170,9 +168,7 @@ class QuoteCard extends PureComponent {
           <div className="flex-100 layout-row">
             <p className={`flex-none ${styles.sched_elem}`}>
               {' '}
-              {pickup
-                ? moment(schedule.closing_date).subtract(truckingTime, 'seconds').format('DD-MM-YYYY')
-                : moment(schedule.closing_date).format('DD-MM-YYYY')}{' '}
+              {moment(schedule.closing_date).format('DD-MM-YYYY')}{' '}
             </p>
           </div>
         </div>
@@ -289,7 +285,7 @@ class QuoteCard extends PureComponent {
               <div className={`flex-100 layout-row ${styles.dates_row} ${styles.dates_container} ${styles.dates_header}`}>
                 <div className="flex-75 layout-row">
                   <div className="flex-25 layout-row">
-                    <h4 className={styles.date_title}>{pickup ? t('common:pickupDate') : t('common:closingDate')}</h4>
+                    <h4 className={styles.date_title}>{t('common:closingDate')}</h4>
                   </div>
                   <div className="flex-25 layout-row">
                     <h4 className={styles.date_title}>{`${t('common:etd')} ${QuoteCard.returnHubType(originHub)}`}</h4>
@@ -394,13 +390,11 @@ QuoteCard.propTypes = {
   theme: PropTypes.theme,
   t: PropTypes.func.isRequired,
   tenant: PropTypes.tenant,
-  truckingTime: PropTypes.number,
   result: PropTypes.objectOf(PropTypes.any),
   cargo: PropTypes.arrayOf(PropTypes.any),
   handleClick: PropTypes.func,
   selectResult: PropTypes.func,
   handleScheduleRequest: PropTypes.func,
-  pickup: PropTypes.bool,
   isChecked: PropTypes.bool,
   aggregatedCargo: PropTypes.objectOf(PropTypes.string)
 }

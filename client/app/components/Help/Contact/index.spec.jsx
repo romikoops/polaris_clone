@@ -13,6 +13,9 @@ const tenantBase = {
         bar: 'bar@bar.com',
         general: 'general@general.com'
       }
+    },
+    phones: {
+      support: '+49 123445567'
     }
   }
 }

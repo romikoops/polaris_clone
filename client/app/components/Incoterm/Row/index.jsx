@@ -2,7 +2,7 @@ import React from 'react'
 import { withNamespaces } from 'react-i18next'
 import styles from './index.scss'
 import PropTypes from '../../../prop-types'
-import { gradientTextGenerator, determineSpecialism, switchIcon } from '../../../helpers'
+import { gradientTextGenerator, determineSpecialism, switchIcon, numberSpacing } from '../../../helpers'
 
 function IncotermRow ({
   theme,
@@ -43,7 +43,7 @@ function IncotermRow ({
         } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
       >
         <p className="flex-none no_m letter_3 center">{feeHash.cargo.total.currency}</p>
-        <p className="flex-none no_m letter_3 center">{feeHash.cargo.total.total}</p>
+        <p className="flex-none no_m letter_3 center">{numberSpacing(feeHash.cargo.total.value, 2)}</p>
       </div>
     ) : (
       ''
@@ -61,7 +61,7 @@ function IncotermRow ({
           ''
         )}
         <p className="flex-none no_m letter_3 center">
-          {feeHash.export.total ? `${parseFloat(feeHash.export.total.value).toFixed(2)}` : t('common:none')}
+          {feeHash.export.total ? `${numberSpacing(feeHash.export.total.value, 2)}` : t('common:none')}
         </p>
       </div>
     ) : (
@@ -80,7 +80,7 @@ function IncotermRow ({
           ''
         )}
         <p className="flex-none no_m letter_3 center">
-          {feeHash.import.total ? `${parseFloat(feeHash.import.total.value).toFixed(2)}` : t('common:none')}
+          {feeHash.import.total ? `${numberSpacing(feeHash.import.total.value, 2)}` : t('common:none')}
         </p>
       </div>
     ) : (
@@ -100,7 +100,7 @@ function IncotermRow ({
         )}
         <p className="flex-none no_m letter_3 center">
           {feeHash.trucking_pre.total
-            ? `${parseFloat(feeHash.trucking_pre.total.value).toFixed(2)}`
+            ? `${numberSpacing(feeHash.trucking_pre.total.value, 2)}`
             : t('common:none')}
         </p>
       </div>
@@ -121,7 +121,7 @@ function IncotermRow ({
         )}
         <p className="flex-none no_m letter_3 center">
           {feeHash.trucking_on.total
-            ? `${parseFloat(feeHash.trucking_on.total.value).toFixed(2)}`
+            ? `${numberSpacing(feeHash.trucking_on.total.value, 2)}`
             : t('common:none')}
         </p>
       </div>

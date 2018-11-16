@@ -425,6 +425,18 @@ class Shipment < ApplicationRecord
     return_bool
   end
 
+  def service_level
+    trip&.tenant_vehicle&.name
+  end
+
+  def carrier
+    trip&.tenant_vehicle&.carrier&.name
+  end
+
+  def vessel_name
+    trip&.vessel
+  end
+
   private
 
   def update_carriage_properties!

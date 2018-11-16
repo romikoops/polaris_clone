@@ -11,12 +11,8 @@ module ShippingTools
     results.each do |result|
       schedule = result['schedules'].first
       trip = Trip.find(schedule['trip_id'])
-      on_carriage_hash = if !!result['quote']['trucking_on']
-        shipment.trucking['on_carriage']
-      end
-      pre_carriage_hash = if !!result['quote']['trucking_pre']
-        shipment.trucking['pre_carriage']
-      end
+      on_carriage_hash = (shipment.trucking['on_carriage'] if !!result['quote']['trucking_on'])
+      pre_carriage_hash = (shipment.trucking['pre_carriage'] if !!result['quote']['trucking_pre'])
       new_shipment = main_quote.shipments.create!(
         status: 'quoted',
         user_id: shipment.user_id,
@@ -46,7 +42,6 @@ module ShippingTools
         new_charge_breakdown.dup_charges(charge_breakdown: charge_breakdown)
       end
       new_shipment.save!
-
     end
     main_quote
   end
@@ -314,7 +309,11 @@ module ShippingTools
     destination_hub = shipment.destination_hub
     origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
     destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
-
+    options = { methods: %i(selected_offer mode_of_transport service_level vessel_name carrier), include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }] }
+    shipment_as_json = shipment.as_json(options).merge(
+      pickup_address:   shipment.pickup_address_with_country,
+      delivery_address: shipment.delivery_address_with_country
+    )
     locations = {
       startHub: { data: origin_hub, location: origin_hub.nexus.to_custom_hash },
       endHub: { data: destination_hub, location: destination_hub.nexus.to_custom_hash },
@@ -323,9 +322,9 @@ module ShippingTools
     }
 
     {
-      shipment: shipment.as_options_json,
-      cargoItems: cargo_items      || nil,
-      containers: containers       || nil,
+      shipment:        shipment_as_json,
+      cargoItems:      cargo_items      || nil,
+      containers:      containers       || nil,
       aggregatedCargo: aggregated_cargo || nil,
       locations: locations,
       consignee: consignee,
@@ -415,9 +414,9 @@ module ShippingTools
     shipment.closing_date      = @schedule['closing_date']
     shipment.planned_etd       = @schedule['etd']
     shipment.planned_eta       = @schedule['eta']
-    documents = {}
+    documents = Hash.new { |h, k| h[k] = [] }
     shipment.documents.each do |doc|
-      documents[doc.doc_type] = doc
+      documents[doc.doc_type] << doc
     end
 
     @user_locations = current_user.user_locations.map do |uloc|
@@ -479,7 +478,7 @@ module ShippingTools
       startHub: { data: @origin_hub, location: @origin_hub.nexus },
       endHub: { data: @destination_hub, location: @destination_hub.nexus }
     }
-    options = { methods: %i(selected_offer mode_of_transport), include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }] }
+    options = { methods: %i(selected_offer mode_of_transport service_level vessel_name carrier), include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }] }
     origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
     destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
     shipment_as_json = shipment.as_json(options).merge(
