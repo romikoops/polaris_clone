@@ -107,7 +107,7 @@ exports[`props.feeHash is empty object 1`] = `
         <h4
           className="flex-none no_m"
         >
-          Customs Export Paper
+          Export Customs Paper (MRN)
         </h4>
       </div>
     </div>
@@ -230,7 +230,7 @@ exports[`shallow render 1`] = `
         <h4
           className="flex-none no_m"
         >
-          Customs Export Paper
+          Export Customs Paper (MRN)
         </h4>
       </div>
     </div>

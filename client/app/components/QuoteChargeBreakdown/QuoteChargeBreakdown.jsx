@@ -63,7 +63,9 @@ class QuoteChargeBreakdown extends Component {
     }
   }
   quoteKeys () {
-    return Object.keys(this.props.quote).filter(key => !this.unbreakableKeys.includes(key))
+    const keysInOrder = ['trucking_pre', 'export', 'cargo', 'import', 'trucking_on']
+    const availableQuoteKeys = Object.keys(this.props.quote).filter(key => !this.unbreakableKeys.includes(key))
+    return keysInOrder.filter(key => availableQuoteKeys.includes(key))
   }
 
   generateContent (key) {

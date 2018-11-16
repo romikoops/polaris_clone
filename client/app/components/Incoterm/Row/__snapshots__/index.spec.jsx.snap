@@ -95,7 +95,9 @@ exports[`destinationFees is true 1`] = `
       </p>
       <p
         className="flex-none no_m letter_3 center"
-      />
+      >
+        199
+      </p>
     </div>
   </div>
    
@@ -407,7 +409,9 @@ exports[`firstStep is true 1`] = `
       </p>
       <p
         className="flex-none no_m letter_3 center"
-      />
+      >
+        199
+      </p>
     </div>
   </div>
    
@@ -583,7 +587,9 @@ exports[`onCarriage is true 1`] = `
       </p>
       <p
         className="flex-none no_m letter_3 center"
-      />
+      >
+        199
+      </p>
     </div>
   </div>
    
@@ -757,7 +763,9 @@ exports[`preCarriage is true 1`] = `
       </p>
       <p
         className="flex-none no_m letter_3 center"
-      />
+      >
+        199
+      </p>
     </div>
   </div>
    
@@ -933,7 +941,9 @@ exports[`shallow render 1`] = `
       </p>
       <p
         className="flex-none no_m letter_3 center"
-      />
+      >
+        199
+      </p>
     </div>
   </div>
    

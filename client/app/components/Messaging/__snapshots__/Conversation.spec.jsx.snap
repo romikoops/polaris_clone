@@ -305,6 +305,7 @@ exports[`state.showDetails is true 1`] = `
               "value": 77,
             },
           },
+          "service_level": "standard",
           "status": "FOO_STATUS",
           "total_price": Object {
             "currency": "USD",

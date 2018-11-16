@@ -64,7 +64,7 @@
     "commercialInvoice": "Commercial Invoice",
     "createdAt": "Created at",
     "dangerousGoods": "Dangerous Goods",
-    "descriptionGoods": "Description of Goods",
+    "descriptionGoods": "Description of Goods (HS Codes if available)",
     "documents": "Documents",
     "faresFees": "Fares & Fees",
     "fastestRoute": "Fastest route",
@@ -366,7 +366,8 @@
     "fillFormCargoDetails": "(Fill the form with your cargo details)",
     "nonStackableFirst": "We currently do not offer freight rates for non-stackable cargo in our Web Shop.",
     "nonStackableSecond": "Please contact our customer service department to place an order for your non-stackable cargo:",
-    "feesIn": "Sub Total in {{currency}}"
+    "feesIn": "Sub Total in {{currency}}",
+    "exportCustomsPaper": "Export Customs Paper (MRN)"
   },
   "bookconf": {
     "_component": "BookingConfirmation",
@@ -512,12 +513,13 @@
     "quotedShipments": "Quoted Shipments",
     "searchShipments": "Search Shipments",
     "quoteNo": "Quote No: {{number}}",
-    "cargo" : "cargo",
+    "cargo" : "Freight",
     "motCargo": "{{mot}} Freight",
     "air": "Air",
     "rail": "Rail",
     "ocean": "Ocean",
-    "truck": "Truck"
+    "truck": "Truck",
+    "vesselName": "Vessel Name"
   },
   "user": {
     "newAlias": "New Alias",
@@ -660,7 +662,8 @@
     "estimatedTT": "Estimated T/T"
   },
   "overrides": {
-    "fivestarExport": "Total Local Charges"
+    "fivestarExport": "Total Local Charges",
+    "speedtransExport": "FOB Charges"
   },
   "disclaimers": {
     "fivestarExwFob": "Ex-Works to FOB at port of choice",

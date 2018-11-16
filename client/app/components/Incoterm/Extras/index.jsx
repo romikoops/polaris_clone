@@ -140,7 +140,7 @@ function IncotermExtras ({
       </div>
       <div className="flex layout-row layout-align-center-space-around layout-wrap">
         <div className={`${styles.fee_text} flex-100 layout-row layout-align-center-center `}>
-          <h4 className="flex-none no_m">{t('shipment:adb')}</h4>
+          <h4 className="flex-none no_m">{t('cargo:exportCustomsPaper')}</h4>
         </div>
         {scope.detailed_billing && feeHash.addons && feeHash.addons.customs_export_paper ? exportPaperFeesValue : ''}
         {!scope.detailed_billing && feeHash.addons && feeHash.addons.customs_export_paper ? requested : ''}
@@ -175,4 +175,4 @@ IncotermExtras.defaultProps = {
   tenant: {}
 }
 
-export default withNamespaces(['common', 'shipment'])(IncotermExtras)
+export default withNamespaces(['common', 'shipment', 'cargo'])(IncotermExtras)

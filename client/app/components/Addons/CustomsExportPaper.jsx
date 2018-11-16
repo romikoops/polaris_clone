@@ -4,6 +4,7 @@ import PropTypes from '../../prop-types'
 import styles from '../CargoDetails/CargoDetails.scss'
 import TextHeading from '../TextHeading/TextHeading'
 import Checkbox from '../Checkbox/Checkbox'
+import DocumentsMultiForm from '../Documents/MultiForm'
 
 class CustomsExportPaper extends PureComponent {
   constructor (props) {
@@ -16,7 +17,9 @@ class CustomsExportPaper extends PureComponent {
     this.setState({ addonView: bool }, () => this.props.toggleCustomAddon('customs_export_paper'))
   }
   render () {
-    const { tenant, addon, t } = this.props
+    const {
+ tenant, addon, t, documents, fileFn, deleteDoc 
+} = this.props
     const charge = addon.fees.total
     const { theme } = tenant.data
     const acceptedBox = (
@@ -49,12 +52,15 @@ class CustomsExportPaper extends PureComponent {
         </div>
       </div>
     )
-
+    const noCustomsText = `${t('cargo:noCustomsHead')} ${tenant.data.name} ${t('cargo:noCustomsTail')}`
+    const documentCount = documents.export_customs_paper ? documents.export_customs_paper.length + 1 : 1
+    const heightVal = this.state.addonView ? 0 : 300 + (35 * documentCount)
     const declinedBox = (
       <div
         className={`flex-100 layout-row layout-align-start-center layout-wrap ${
-          styles.no_customs_box
+          styles.no_customs_exp_paper_box
         } ${!this.state.addonView ? styles.show : ''}`}
+        style={{height: `${heightVal}px`}}
       >
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
           <p className="flex-100">
@@ -65,6 +71,40 @@ class CustomsExportPaper extends PureComponent {
               ${t('shipment:customsExportPaperFour')}`}
             </b>
           </p>
+        </div>
+        <div className="flex-60 layout-row layout-align-start-center layout-wrap">
+          <p className="flex-100 margin_5">
+            <b>
+              {noCustomsText}
+            </b>
+          </p>
+          <p className="flex-100 margin_5">
+            <b>
+              {t('cargo:euRules')}
+            </b>
+          </p>
+        </div>
+        <div className="flex-33 no_max layout-row layout-align-end-center" />
+        <div className="flex-60 layout-row layout-wrap">
+          <div className="flex-100">
+            <TextHeading
+              theme={theme}
+              size={3}
+              text={t('cargo:exportCustomsPaper')}
+            />
+          </div>
+          <div className="flex-100 layout-row layout-wrap" name="export_customs_paper">
+            <div className="flex-100 layout-row">
+              <DocumentsMultiForm
+                theme={theme}
+                type="export_customs_paper"
+                text={t('cargo:exportCustomsPaper')}
+                dispatchFn={fileFn}
+                documents={documents.export_customs_paper}
+                deleteFn={deleteDoc}
+              />
+            </div>
+          </div>
         </div>
       </div>
     )
@@ -132,12 +172,18 @@ CustomsExportPaper.propTypes = {
   tenant: PropTypes.tenant,
   t: PropTypes.func.isRequired,
   addon: PropTypes.objectOf(PropTypes.any),
-  toggleCustomAddon: PropTypes.func
+  toggleCustomAddon: PropTypes.func,
+  fileFn: PropTypes.func,
+  deleteDoc: PropTypes.func,
+  documents: PropTypes.objectOf(PropTypes.string)
 }
 CustomsExportPaper.defaultProps = {
   tenant: {},
   addon: {},
-  toggleCustomAddon: false
+  toggleCustomAddon: false,
+  fileFn: false,
+  deleteDoc: false,
+  documents: {}
 }
 
 export default withNamespaces(['cargo', 'shipment'])(CustomsExportPaper)
