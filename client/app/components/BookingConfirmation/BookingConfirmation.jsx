@@ -566,30 +566,31 @@ class BookingConfirmation extends Component {
     )
 
     const AgreeAndSubmit = (
-      <div className={SHIPMENT_CARD}>
+      <div className={`${styles.shipment_card} layout-row flex-100 ${ALIGN_BETWEEN_CENTER}`}>
         <div className={LAYOUT_WRAP}>
 
           <div style={themeTitled} className={HEADING}>
             {HeadingFactory(t('common:agree'))}
           </div>
-
-          <div className={CHECKBOX}>
-            <div className={CHECKBOX_CELL}>
-              <Checkbox
-                id="accept_terms"
-                className="ccb_accept_terms"
-                onChange={this.toggleAcceptTerms}
-                checked={this.state.acceptTerms}
-                theme={theme}
-              />
+          <div className="layout-row layout-align-space-between-start flex-100">
+            <div className="layout-row layout-align-start-center flex-65">
+              <div className={`${ROW(15)} ${ALIGN_CENTER}`}>
+                <Checkbox
+                  id="accept_terms"
+                  className="ccb_accept_terms"
+                  onChange={this.toggleAcceptTerms}
+                  checked={this.state.acceptTerms}
+                  theme={theme}
+                />
+              </div>
+              <label htmlFor="accept_terms" className="pointy layout-align-center-start flex-85">
+                {Terms}
+              </label>
             </div>
-            <label htmlFor="accept_terms" className="pointy">
-              {Terms}
-            </label>
-          </div>
 
-          <div className={ACCEPT} style={acceptStyle}>
-            {acceptTerms ? acceptedBtn : nonAcceptedBtn}
+            <div className="layout-row layout-align-start-end flex-33" style={acceptStyle}>
+              {acceptTerms ? acceptedBtn : nonAcceptedBtn}
+            </div>
           </div>
 
         </div>
@@ -871,7 +872,7 @@ function getTerms ({ theme, terms, t }) {
   const termBullets = terms.map(term => <li key={v4()}> {term}</li>)
 
   return (
-    <div className={`${ROW()} ${ALIGN_START_CENTER}`}>
+    <div className={`layout-row ${ALIGN_START_CENTER}`}>
       <div className="flex-5" />
       <div className={`${WRAP_ROW(95)} ${ALIGN_START_CENTER}`}>
         <div className={`${ROW(100)} ${ALIGN_START_CENTER}`}>
@@ -881,8 +882,8 @@ function getTerms ({ theme, terms, t }) {
             size={4}
           />
         </div>
-        <div className={`${ROW(100)} ${ALIGN_START}`}>
-          <ul className={`flex-100 ${styles.terms_list}`}>{termBullets}</ul>
+        <div className="flex-100 layout-column layout-align-start-start">
+          <ul className={`flex-50 ${styles.terms_list}`}>{termBullets}</ul>
         </div>
       </div>
     </div>

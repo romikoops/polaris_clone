@@ -23,7 +23,7 @@ class GenericError extends Component {
       // You can render any custom fallback UI
       return (
         <div className="layout-fill layout-row layout-wrap layout-align-center-center">
-          <div className={`flex-none layout-row layout-wrap layout-padding ${styles.error_box}`}>
+          <div className={`flex-30 layout-row layout-wrap layout-align-center-center layout-padding ${styles.error_box}`}>
             <div className="flex-100 layout-row layout-align-center-center">
               <img className="flex-none" src={theme.logoLarge} alt={theme.logoSmall} />
             </div>
