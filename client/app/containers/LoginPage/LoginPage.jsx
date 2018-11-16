@@ -4,7 +4,6 @@ import Formsy from 'formsy-react'
 import PropTypes from '../../prop-types'
 import { authenticationActions } from '../../actions'
 import { RoundButton } from '../../components/RoundButton/RoundButton'
-import Alert from '../../components/Alert/Alert'
 import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner'
 import styles from './LoginPage.scss'
 import FormsyInput from '../../components/FormsyInput/FormsyInput'
@@ -16,29 +15,12 @@ class LoginPage extends React.Component {
 
     this.state = {
       submitAttempted: false,
-      focus: {},
-      alertVisible: false
+      focus: {}
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
     this.handleFocus = this.handleFocus.bind(this)
-    this.hideAlert = this.hideAlert.bind(this)
-  }
-  componentWillMount () {
-    if (this.props.loginAttempt && !this.state.alertVisible) {
-      this.setState({ alertVisible: true })
-    }
-  }
-
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.loginAttempt && !this.state.alertVisible) {
-      this.setState({ alertVisible: true })
-    }
-  }
-
-  hideAlert () {
-    this.setState({ alertVisible: false })
   }
 
   handleSubmit (model) {
@@ -81,15 +63,7 @@ class LoginPage extends React.Component {
     if (this.state.forgotPassword) {
       return <ForgotPassword focusStyles={focusStyles} theme={theme} />
     }
-    const alert = this.state.alertVisible ? (
-      <Alert
-        message={{ type: 'error', text: 'Wrong email or password' }}
-        onClose={this.hideAlert}
-        timeout={10000}
-      />
-    ) : (
-      ''
-    )
+    
     const ie11Positioning =
       navigator.userAgent.includes('MSIE') || document.documentMode ? styles.login_ie_11 : ''
 
@@ -100,7 +74,6 @@ class LoginPage extends React.Component {
         onValidSubmit={this.handleSubmit}
         onInvalidSubmit={this.handleInvalidSubmit}
       >
-        {alert}
         <div className="form-group">
           <label htmlFor="email">Email</label>
           <FormsyInput

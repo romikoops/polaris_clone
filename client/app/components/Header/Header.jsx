@@ -16,22 +16,28 @@ import {
   shipmentActions
 } from '../../actions'
 import FlashMessages from '../FlashMessages/FlashMessages'
+import Alert from '../Alert/Alert'
 
 class Header extends Component {
   constructor (props) {
     super(props)
     this.state = {
       showLogin: false,
-      isTop: true
+      isTop: true,
+      alertVisible: false
     }
     this.goHome = this.goHome.bind(this)
     this.toggleShowLogin = this.toggleShowLogin.bind(this)
     this.toggleShowMessages = this.toggleShowMessages.bind(this)
     this.checkIsTop = this.checkIsTop.bind(this)
+    this.hideAlert = this.hideAlert.bind(this)
   }
   componentWillMount () {
     if (this.props.loginAttempt && !this.state.showLogin) {
       this.setState({ showLogin: true })
+    }
+    if (this.props.loginAttempt && !this.state.alertVisible) {
+      this.setState({ alertVisible: true })
     }
   }
   componentDidMount () {
@@ -48,6 +54,9 @@ class Header extends Component {
         showLogin: false
       })
     }
+    if (nextProps.loginAttempt && !this.state.alertVisible) {
+      this.setState({ alertVisible: true })
+    }
   }
   componentWillUnmount () {
     document.removeEventListener('scroll', this.checkIsTop)
@@ -60,6 +69,9 @@ class Header extends Component {
   }
   goHome () {
     this.props.appDispatch.goTo('/')
+  }
+  hideAlert () {
+    this.setState({ alertVisible: false })
   }
   toggleShowLogin () {
     const { showModal, authenticationDispatch, noRedirect } = this.props
@@ -177,6 +189,16 @@ class Header extends Component {
         parentToggle={this.toggleShowLogin}
       />
     )
+    const alert = this.state.alertVisible ? (
+      <Alert
+        message={{ type: 'error', text: 'Wrong email or password' }}
+        onClose={this.hideAlert}
+        timeout={10000}
+        isLogin
+      />
+    ) : (
+      ''
+    )
 
     const headerClass =
       `${styles.header} layout-row flex-100 layout-wrap layout-align-center ` +
@@ -202,6 +224,7 @@ class Header extends Component {
             { this.props.showModal && loginModal }
           </div>
         </div>
+        {alert}
         { hasErrors
           ? <div className={`flex-none layout-row ${styles.error_messages}`}>
             <FlashMessages messages={error[currentStage]} />
