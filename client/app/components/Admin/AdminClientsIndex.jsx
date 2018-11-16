@@ -128,6 +128,18 @@ class AdminClientsIndex extends Component {
         />
       </div>
     )
+    const changeEmail = (
+      <div className="flex-none layout-row">
+        <RoundButton
+          theme={theme}
+          size="small"
+          text="Change Emails"
+          active
+          handleNext={this.props.toggleNewClient}
+          iconClass="fa-plus"
+        />
+      </div>
+    )
     const results = this.applyFilters(searchResults)
     const typeFilters = Object.keys(searchFilters.companies).map(htk => (
       <div className={`${styles.action_section} flex-100 layout-row layout-align-center-center layout-wrap`}>
@@ -278,9 +290,53 @@ class AdminClientsIndex extends Component {
                     </div>
                   )}
                 />
+                <CollapsingBar
+                  showArrow
+                  collapsed={!expander.email}
+                  theme={theme}
+                  styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                  handleCollapser={() => this.toggleExpander('email')}
+                  text="Tenant Emails"
+                  faClass="fa fa-envelope"
+                  content={(
+                    <div
+                      className={`${
+                        styles.action_section
+                      } flex-100 layout-row layout-align-center-center layout-wrap`}
+                    >
+                      {changeEmail}
+                    </div>
+                  )}
+                />
               </div>
             }
           />
+          {/* <SideOptionsBox
+            header="Shop Emails"
+            flexOptions="flex-100"
+            content={
+              <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                <CollapsingBar
+                  showArrow
+                  collapsed={!expander.email}
+                  theme={theme}
+                  styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                  handleCollapser={() => this.toggleExpander('email')}
+                  text="Tenant Emails"
+                  faClass="fa fa-envelope"
+                  content={(
+                    <div
+                      className={`${
+                        styles.action_section
+                      } flex-100 layout-row layout-align-center-center layout-wrap`}
+                    >
+                      {changeEmail}
+                    </div>
+                  )}
+                />
+              </div>
+            }
+          /> */}
         </div>
       </div>
     )

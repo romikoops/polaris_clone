@@ -675,6 +675,16 @@ function updateHubMandatoryCharges (id, charges) {
   return fetch(`${getApiHost()}/admin/hubs/${id}/update_mandatory_charges`, requestOptions)
     .then(handleResponse)
 }
+function updateEmails (emails) {
+  const requestOptions = {
+    method: 'PATCH',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ emails })
+  }
+
+  return fetch(`${getApiHost()}/admin/tenants/`, requestOptions)
+    .then(handleResponse)
+}
 
 export const adminService = {
   getHubs,
@@ -737,7 +747,8 @@ export const adminService = {
   searchShipments,
   deltaShipmentsPage,
   searchPricings,
-  uploadDocument
+  uploadDocument,
+  updateEmails
 }
 
 export default adminService

@@ -15,6 +15,7 @@ import AdminSchedules from '../../components/Admin/AdminSchedules'
 import AdminPricings from '../../components/Admin/AdminPricings'
 import AdminTrucking from '../../components/Admin/AdminTrucking'
 import AdminWizard from '../../components/Admin/AdminWizard/AdminWizard'
+import AdminSettings from '../../components/Admin/AdminSettings/AdminSettings'
 import Loading from '../../components/Loading/Loading'
 import Header from '../../components/Header/Header'
 import SideNav from '../../components/SideNav/SideNav'
@@ -154,6 +155,18 @@ class Admin extends Component {
                   render={props => (
                     <AdminCurrencyCenter theme={theme} setCurrentUrl={this.setCurrentUrl} />
                   )}
+                />
+                <Route
+                  path="/admin/settings"
+                  render={props => (<AdminSettings
+                    theme={theme}
+                    setCurrentUrl={this.setCurrentUrl}
+                    {...props}
+                    clients={clients}
+                    tenant={tenant}
+                    loading={loading}
+                    adminDispatch={adminDispatch}
+                  />)}
                 />
 
                 <SuperAdminPrivateRoute

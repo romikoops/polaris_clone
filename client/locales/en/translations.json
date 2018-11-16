@@ -200,7 +200,8 @@
     "jumpTo": "Jump To...",
     "routeStops": "Route Stops",
     "schedules": "Schedules",
-    "confirmDeleteRoute": "This will delete the route and all related data (pricings, schedules etc)"
+    "confirmDeleteRoute": "This will delete the route and all related data (pricings, schedules etc)",
+    "updateShopEmails": "Update Shop Emails"
   },
   "itbox": {
     "component": "IncotermBox",
@@ -295,7 +296,9 @@
     "request": "Request",
     "pricings": "Pricings",
     "dedicatedPricingCount": "No. Dedicated Pricings",
-    "openPricingCount": "No. Open Pricings"
+    "openPricingCount": "No. Open Pricings",
+    "settings": "Settings",
+    "accountSettings": "Account Settings"
   },
   "cargo": {
     "cargoDetails": "Cargo Details",
