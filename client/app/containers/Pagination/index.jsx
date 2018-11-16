@@ -13,9 +13,9 @@ class Pagination extends React.PureComponent {
     this.handlePage = this.handlePage.bind(this)
   }
 
-  componentWillReceiveProps (nextProps, nextState) {
+  componentWillReceiveProps (nextProps) {
     this.setState(prevState => (
-      nextState.page > this.getNumPages(nextProps) ? { page: 1 } : {}
+      prevState.page > this.getNumPages(nextProps) ? { page: 1 } : {}
     ))
   }
 
