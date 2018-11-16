@@ -3,42 +3,56 @@ import PropTypes from '../../prop-types'
 import CollapsingHeading from './Heading'
 import CollapsingContent from './Content'
 
-export default function CollapsingBar ({
-  collapsed,
-  theme,
-  handleCollapser,
-  headerWrapClasses,
-  content,
-  text,
-  faClass,
-  minHeight,
-  contentHeader,
-  mainWrapperStyle,
-  showArrow,
-  hideContent
-}) {
-  return (
-    <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-      <CollapsingHeading
-        text={text}
-        showArrow={showArrow}
-        contentHeader={contentHeader}
-        collapsed={collapsed}
-        theme={theme}
-        headerWrapClasses={headerWrapClasses}
-        handleCollapser={handleCollapser}
-        faClass={faClass}
-        mainWrapperStyle={mainWrapperStyle}
-      />
-      {!hideContent ? (
+export default class CollapsingBar extends React.PureComponent {
+  constructor (props) {
+    super(props)
+
+    this.state = { collapsed: props.startCollapsed }
+
+    this.handleCollapser = this.handleCollapser.bind(this)
+  }
+
+  handleCollapser () {
+    this.setState(prevState => ({ collapsed: !prevState.collapsed }))
+  }
+
+  render () {
+    const {
+      collapsed,
+      theme,
+      handleCollapser,
+      headerWrapClasses,
+      content,
+      text,
+      faClass,
+      minHeight,
+      contentHeader,
+      mainWrapperStyle,
+      showArrow,
+      children
+    } = this.props
+
+    return (
+      <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+        <CollapsingHeading
+          text={text}
+          showArrow={showArrow}
+          contentHeader={contentHeader}
+          collapsed={collapsed != null ? collapsed : this.state.collapsed}
+          theme={theme}
+          headerWrapClasses={headerWrapClasses}
+          handleCollapser={handleCollapser || this.handleCollapser}
+          faClass={faClass}
+          mainWrapperStyle={mainWrapperStyle}
+        />
         <CollapsingContent
-          collapsed={collapsed}
-          content={content}
+          collapsed={collapsed != null ? collapsed : this.state.collapsed}
+          content={content || children}
           minHeight={minHeight}
         />
-      ) : ''}
-    </div>
-  )
+      </div>
+    )
+  }
 }
 
 CollapsingBar.propTypes = {
@@ -48,16 +62,17 @@ CollapsingBar.propTypes = {
   mainWrapperStyle: PropTypes.objectOf(PropTypes.any),
   content: PropTypes.node,
   contentHeader: PropTypes.node,
-  hideContent: PropTypes.bool,
   text: PropTypes.string,
   headerWrapClasses: PropTypes.string,
   faClass: PropTypes.string,
   minHeight: PropTypes.string,
-  showArrow: PropTypes.bool
+  showArrow: PropTypes.bool,
+  children: PropTypes.arrayOf(PropTypes.node),
+  startCollapsed: PropTypes.bool
 }
 
 CollapsingBar.defaultProps = {
-  collapsed: false,
+  collapsed: null,
   theme: null,
   handleCollapser: null,
   content: '',
@@ -65,9 +80,9 @@ CollapsingBar.defaultProps = {
   headerWrapClasses: '',
   mainWrapperStyle: {},
   text: '',
-  hideContent: false,
   faClass: '',
-  contentStyle: {},
   minHeight: '',
-  showArrow: false
+  showArrow: false,
+  children: null,
+  startCollapsed: false
 }
