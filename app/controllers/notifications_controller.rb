@@ -48,7 +48,7 @@ class NotificationsController < ApplicationController
     end
     hubs = { startHub: {}, endHub: {} }
 
-    @documents = @shipment.documents.map do |doc|
+    @documents = @shipment.documents.select { |doc| doc.file.attached? }.map do |doc|
       doc.as_json.merge(signed_url: rails_blob_url(doc.file, disposition: 'attachment'))
     end
     resp = { shipment: @shipment.with_address_options_json, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules, hubs: hubs }
