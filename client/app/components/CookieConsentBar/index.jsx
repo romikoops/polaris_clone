@@ -36,7 +36,7 @@ class CookieConsentBar extends React.PureComponent {
     super(props)
     this.state = {
       showModal: false,
-      atBottom: false
+      bottom: 0
     }
     this.toggleShowModal = this.toggleShowModal.bind(this)
     this.handleDecline = this.handleDecline.bind(this)
@@ -44,7 +44,6 @@ class CookieConsentBar extends React.PureComponent {
   }
 
   componentDidMount () {
-    console.log(`this is the height:${this.props.height}`)
     window.addEventListener('scroll', this.cookieBarLimit)
   }
 
@@ -57,8 +56,13 @@ class CookieConsentBar extends React.PureComponent {
   }
 
   cookieBarLimit () {
-    console.log(window.scrollY - window.innerHeight)
-    this.setState({ atBottom: window.scrollY >= this.props.height - window.outerHeight })
+    const scrollLimit = document.documentElement.scrollHeight - document.documentElement.clientHeight
+
+    if (window.scrollY < scrollLimit - this.props.height) {
+      this.setState({ bottom: 0 })
+    } else {
+      this.setState({ bottom: this.props.height })
+    }
   }
 
   render () {
@@ -69,9 +73,11 @@ class CookieConsentBar extends React.PureComponent {
       loggedIn,
       authDispatch,
       t,
-      height
+      fixedHeight
     } = this.props
-
+    const {
+      bottom
+    } = this.state
     const modal = (
       <Modal
         component={
@@ -105,7 +111,7 @@ class CookieConsentBar extends React.PureComponent {
     return (
       <div
         className={`${styles.cookie_flex} ${user && user.optin_status && user.optin_status.cookies ? styles.hidden : ''}`}
-        style={{ background: cookieBackground, filter: 'grayscale(60%)', bottom: height }}
+        style={{ background: cookieBackground, filter: 'grayscale(60%)', bottom: (fixedHeight || 0) + bottom }}
       >
         { this.state.showModal && modal}
         <p className={styles.cookie_text}>
