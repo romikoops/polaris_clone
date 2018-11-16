@@ -11,12 +11,8 @@ module ShippingTools
     results.each do |result|
       schedule = result['schedules'].first
       trip = Trip.find(schedule['trip_id'])
-      on_carriage_hash = if !!result['quote']['trucking_on']
-        shipment.trucking['on_carriage']
-      end
-      pre_carriage_hash = if !!result['quote']['trucking_pre']
-        shipment.trucking['pre_carriage']
-      end
+      on_carriage_hash = (shipment.trucking['on_carriage'] if !!result['quote']['trucking_on'])
+      pre_carriage_hash = (shipment.trucking['pre_carriage'] if !!result['quote']['trucking_pre'])
       new_shipment = main_quote.shipments.create!(
         status: 'quoted',
         user_id: shipment.user_id,
@@ -46,7 +42,6 @@ module ShippingTools
         new_charge_breakdown.dup_charges(charge_breakdown: charge_breakdown)
       end
       new_shipment.save!
-
     end
     main_quote
   end
