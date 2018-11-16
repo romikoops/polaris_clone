@@ -42,17 +42,14 @@ class UserShipmentContent extends Component {
     super(props)
 
     this.state = {
-      fileType: { label: `${this.props.t('common:packingSheet')}`, value: 'packing_sheet' },
-      documentUrl: `/shipments/${this.props.match.params.id}/upload/packing_sheet`
+      fileType: { label: `${this.props.t('common:packingSheet')}`, value: 'packing_sheet' }
     }
 
     this.setFileType = this.setFileType.bind(this)
   }
 
   setFileType (ev) {
-    const shipmentId = this.props.shipmentData.shipment.id
-    const url = `/shipments/${shipmentId}/upload/${ev.value}`
-    this.setState({ fileType: ev, documentUrl: url })
+    this.setState({ fileType: ev })
   }
   deleteDoc (doc) {
     const { userDispatch } = this.props
@@ -84,12 +81,16 @@ class UserShipmentContent extends Component {
       cargoView,
       t
     } = this.props
-    const { fileType, documentUrl } = this.state
+    const { fileType } = this.state
+
     const {
       contacts,
       shipment,
       documents
     } = shipmentData
+
+    const documentUrl = `/shipments/${shipment.id}/upload/${fileType.value}`
+
     const originDropOffDate = (
       <p className={`flex-none letter_3 ${styles.date}`}>
         {`${formattedDate(shipment.planned_origin_drop_off_date)}`}
