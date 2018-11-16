@@ -56,6 +56,7 @@ Rails.application.configure do
   # Use a real queuing backend for Active Job (and separate queues per environment)
   config.active_job.queue_adapter = :shoryuken
   config.action_mailer.deliver_later_queue_name = Settings.mailer.queue
+  config.active_storage.queue = Settings.mailer.queue
 
   config.action_mailer.perform_caching = false
 
