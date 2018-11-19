@@ -1,5 +1,5 @@
 import { authHeader } from '../helpers'
-import getApiHost from '../constants/api.constants'
+import { getTenantApiUrl } from '../constants/api.constants'
 
 const { fetch } = window
 
@@ -10,7 +10,7 @@ export default function emailServerValidation (key, id, value, callback) {
   }
   const query = `${key}=${value}`
 
-  return fetch(`${getApiHost()}/contacts/validations/form?${query}`, requestOptions)
+  return fetch(`${getTenantApiUrl()}/contacts/validations/form?${query}`, requestOptions)
     .then(response => response.json())
     .then((response) => {
       if (response) {

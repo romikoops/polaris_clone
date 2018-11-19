@@ -5,18 +5,16 @@ import { theme } from '../../../mocks'
 import HelpContact from './'
 
 const tenantBase = {
-  data: {
-    theme,
-    emails: {
-      support: {
-        foo: 'foo@foo.com',
-        bar: 'bar@bar.com',
-        general: 'general@general.com'
-      }
-    },
-    phones: {
-      support: '+49 123445567'
+  theme,
+  emails: {
+    support: {
+      foo: 'foo@foo.com',
+      bar: 'bar@bar.com',
+      general: 'general@general.com'
     }
+  },
+  phones: {
+    support: '+49 123445567'
   }
 }
 

@@ -6,7 +6,7 @@ import { Promise } from 'es6-promise-promise'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
-import getApiHost from '../../../constants/api.constants'
+import { getTenantApiUrl } from '../../../constants/api.constants'
 import { authHeader, gradientTextGenerator } from '../../../helpers'
 import styles from './index.scss'
 import AdminPromptConfirm from '../../Admin/Prompt/Confirm'
@@ -82,7 +82,7 @@ class DocumentsForm extends React.Component {
         headers: { ...authHeader() },
         body: formData
       }
-      const uploadUrl = getApiHost() + url
+      const uploadUrl = getTenantApiUrl() + url
 
       return fetch(uploadUrl, requestOptions).then(DocumentsForm.handleResponse)
     }

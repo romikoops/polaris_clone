@@ -37,11 +37,9 @@ test('variable textInputBool is true', () => {
   const props = {
     ...propsBase,
     tenant: {
-      data: {
-        scope: {
-          ...tenant.data.scope,
-          cargo_info_level: 'text'
-        }
+      scope: {
+        ...tenant.scope,
+        cargo_info_level: 'text'
       }
     }
   }

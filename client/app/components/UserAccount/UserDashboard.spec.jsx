@@ -38,7 +38,7 @@ const propsBase = {
   match: { url: 'google.com' },
   seeAll: identity,
   user,
-  scope: tenant.data.scope,
+  scope: tenant.scope,
   hubs: {},
   dashboard: {
     shipments,

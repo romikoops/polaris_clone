@@ -14,13 +14,13 @@ function handleResponse (response) {
   return respJSON
 }
 
-function setTenant (tenantId) {
+function setTenant () {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/${tenantId}`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/`, requestOptions).then(handleResponse)
 }
 
 function fetchCurrencies () {

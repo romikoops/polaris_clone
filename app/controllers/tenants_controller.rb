@@ -20,17 +20,14 @@ class TenantsController < ApplicationController
   end
 
   def show
-    envs = [
+    subdomain = [
       URI(request.referrer).host.split('.').first,
       ENV['DEV_SUBDOMAIN']
-    ]
-    tenant = envs.find do |subdomain|
-      t = Tenant.find_by(subdomain: subdomain)     
+    ].find do |subdom|
+      Tenant.exists?(subdomain: subdom)
     end
-    if tenant.nil?
-      tenant = Tenant.find(params[:id])
-    end
-    
+    tenant = Tenant.find_by(subdomain: subdomain)
+
     response_handler(tenant: tenant)
   end
 end

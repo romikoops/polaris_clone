@@ -14,11 +14,8 @@ import IncotermRow from './'
 
 const editedTenant = {
   ...tenant,
-  data: {
-    ...tenant.data,
-    scope: {
-      detailed_billing: true
-    }
+  scope: {
+    detailed_billing: true
   }
 }
 const propsBase = {

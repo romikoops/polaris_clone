@@ -682,7 +682,7 @@ function updateEmails (emails, tenant) {
     body: JSON.stringify({ tenant: { emails } })
   }
 
-  return fetch(`${getApiHost()}/admin/tenants/${tenant.data.id}`, requestOptions)
+  return fetch(`${getTenantApiUrl()}/admin/tenants/${tenant.data.id}`, requestOptions)
     .then(handleResponse)
 }
 

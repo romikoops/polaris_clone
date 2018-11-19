@@ -112,7 +112,7 @@ exports[`shallow render 1`] = `
           className="flex-15 layout-row layout-align-center-center"
         >
           <a
-            href=""
+            href="https://foosubdomain.itsmycargo.com/terms_and_conditions"
             target="_blank"
           >
             Terms and Conditions
@@ -246,7 +246,7 @@ exports[`theme is falsy 1`] = `
           className="flex-15 layout-row layout-align-center-center"
         >
           <a
-            href=""
+            href="https://foosubdomain.itsmycargo.com/terms_and_conditions"
             target="_blank"
           >
             Terms and Conditions

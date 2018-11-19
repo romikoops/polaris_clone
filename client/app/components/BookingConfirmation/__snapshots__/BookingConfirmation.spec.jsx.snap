@@ -361,33 +361,18 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
-                    "data": Object {
-                      "data": Object {
-                        "id": 123,
-                        "scope": Object {
-                          "closed_quotation_tool": true,
-                          "modes_of_transport": Object {
-                            "air": Object {},
-                            "ocean": Object {
-                              "OCEAN_LOAD_TYPE": true,
-                            },
-                            "rail": Object {},
-                            "truck": Object {},
-                          },
-                        },
-                        "subdomain": "foosubdomain",
-                        "theme": Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        },
-                      },
-                      "scope": Object {
-                        "terms": Array [
-                          "FOO_TERM",
-                          "BAR_TERM",
-                        ],
+                    "id": 123,
+                    "scope": Object {
+                      "terms": Array [
+                        "FOO_TERM",
+                        "BAR_TERM",
+                      ],
+                    },
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
                       },
                     },
                   }
@@ -508,33 +493,18 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
-                    "data": Object {
-                      "data": Object {
-                        "id": 123,
-                        "scope": Object {
-                          "closed_quotation_tool": true,
-                          "modes_of_transport": Object {
-                            "air": Object {},
-                            "ocean": Object {
-                              "OCEAN_LOAD_TYPE": true,
-                            },
-                            "rail": Object {},
-                            "truck": Object {},
-                          },
-                        },
-                        "subdomain": "foosubdomain",
-                        "theme": Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        },
-                      },
-                      "scope": Object {
-                        "terms": Array [
-                          "FOO_TERM",
-                          "BAR_TERM",
-                        ],
+                    "id": 123,
+                    "scope": Object {
+                      "terms": Array [
+                        "FOO_TERM",
+                        "BAR_TERM",
+                      ],
+                    },
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
                       },
                     },
                   }
@@ -1478,33 +1448,18 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
-                    "data": Object {
-                      "data": Object {
-                        "id": 123,
-                        "scope": Object {
-                          "closed_quotation_tool": true,
-                          "modes_of_transport": Object {
-                            "air": Object {},
-                            "ocean": Object {
-                              "OCEAN_LOAD_TYPE": true,
-                            },
-                            "rail": Object {},
-                            "truck": Object {},
-                          },
-                        },
-                        "subdomain": "foosubdomain",
-                        "theme": Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        },
-                      },
-                      "scope": Object {
-                        "terms": Array [
-                          "FOO_TERM",
-                          "BAR_TERM",
-                        ],
+                    "id": 123,
+                    "scope": Object {
+                      "terms": Array [
+                        "FOO_TERM",
+                        "BAR_TERM",
+                      ],
+                    },
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
                       },
                     },
                   }
@@ -1625,33 +1580,18 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
-                    "data": Object {
-                      "data": Object {
-                        "id": 123,
-                        "scope": Object {
-                          "closed_quotation_tool": true,
-                          "modes_of_transport": Object {
-                            "air": Object {},
-                            "ocean": Object {
-                              "OCEAN_LOAD_TYPE": true,
-                            },
-                            "rail": Object {},
-                            "truck": Object {},
-                          },
-                        },
-                        "subdomain": "foosubdomain",
-                        "theme": Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        },
-                      },
-                      "scope": Object {
-                        "terms": Array [
-                          "FOO_TERM",
-                          "BAR_TERM",
-                        ],
+                    "id": 123,
+                    "scope": Object {
+                      "terms": Array [
+                        "FOO_TERM",
+                        "BAR_TERM",
+                      ],
+                    },
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
                       },
                     },
                   }
@@ -2625,33 +2565,18 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
-                    "data": Object {
-                      "data": Object {
-                        "id": 123,
-                        "scope": Object {
-                          "closed_quotation_tool": true,
-                          "modes_of_transport": Object {
-                            "air": Object {},
-                            "ocean": Object {
-                              "OCEAN_LOAD_TYPE": true,
-                            },
-                            "rail": Object {},
-                            "truck": Object {},
-                          },
-                        },
-                        "subdomain": "foosubdomain",
-                        "theme": Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        },
-                      },
-                      "scope": Object {
-                        "terms": Array [
-                          "FOO_TERM",
-                          "BAR_TERM",
-                        ],
+                    "id": 123,
+                    "scope": Object {
+                      "terms": Array [
+                        "FOO_TERM",
+                        "BAR_TERM",
+                      ],
+                    },
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
                       },
                     },
                   }
@@ -2772,33 +2697,18 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
-                    "data": Object {
-                      "data": Object {
-                        "id": 123,
-                        "scope": Object {
-                          "closed_quotation_tool": true,
-                          "modes_of_transport": Object {
-                            "air": Object {},
-                            "ocean": Object {
-                              "OCEAN_LOAD_TYPE": true,
-                            },
-                            "rail": Object {},
-                            "truck": Object {},
-                          },
-                        },
-                        "subdomain": "foosubdomain",
-                        "theme": Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        },
-                      },
-                      "scope": Object {
-                        "terms": Array [
-                          "FOO_TERM",
-                          "BAR_TERM",
-                        ],
+                    "id": 123,
+                    "scope": Object {
+                      "terms": Array [
+                        "FOO_TERM",
+                        "BAR_TERM",
+                      ],
+                    },
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
                       },
                     },
                   }
@@ -3871,33 +3781,18 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
-                    "data": Object {
-                      "data": Object {
-                        "id": 123,
-                        "scope": Object {
-                          "closed_quotation_tool": true,
-                          "modes_of_transport": Object {
-                            "air": Object {},
-                            "ocean": Object {
-                              "OCEAN_LOAD_TYPE": true,
-                            },
-                            "rail": Object {},
-                            "truck": Object {},
-                          },
-                        },
-                        "subdomain": "foosubdomain",
-                        "theme": Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        },
-                      },
-                      "scope": Object {
-                        "terms": Array [
-                          "FOO_TERM",
-                          "BAR_TERM",
-                        ],
+                    "id": 123,
+                    "scope": Object {
+                      "terms": Array [
+                        "FOO_TERM",
+                        "BAR_TERM",
+                      ],
+                    },
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
                       },
                     },
                   }
@@ -4018,33 +3913,18 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
-                    "data": Object {
-                      "data": Object {
-                        "id": 123,
-                        "scope": Object {
-                          "closed_quotation_tool": true,
-                          "modes_of_transport": Object {
-                            "air": Object {},
-                            "ocean": Object {
-                              "OCEAN_LOAD_TYPE": true,
-                            },
-                            "rail": Object {},
-                            "truck": Object {},
-                          },
-                        },
-                        "subdomain": "foosubdomain",
-                        "theme": Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        },
-                      },
-                      "scope": Object {
-                        "terms": Array [
-                          "FOO_TERM",
-                          "BAR_TERM",
-                        ],
+                    "id": 123,
+                    "scope": Object {
+                      "terms": Array [
+                        "FOO_TERM",
+                        "BAR_TERM",
+                      ],
+                    },
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
                       },
                     },
                   }
@@ -4989,33 +4869,18 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
-                    "data": Object {
-                      "data": Object {
-                        "id": 123,
-                        "scope": Object {
-                          "closed_quotation_tool": true,
-                          "modes_of_transport": Object {
-                            "air": Object {},
-                            "ocean": Object {
-                              "OCEAN_LOAD_TYPE": true,
-                            },
-                            "rail": Object {},
-                            "truck": Object {},
-                          },
-                        },
-                        "subdomain": "foosubdomain",
-                        "theme": Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        },
-                      },
-                      "scope": Object {
-                        "terms": Array [
-                          "FOO_TERM",
-                          "BAR_TERM",
-                        ],
+                    "id": 123,
+                    "scope": Object {
+                      "terms": Array [
+                        "FOO_TERM",
+                        "BAR_TERM",
+                      ],
+                    },
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
                       },
                     },
                   }
@@ -5136,33 +5001,18 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
-                    "data": Object {
-                      "data": Object {
-                        "id": 123,
-                        "scope": Object {
-                          "closed_quotation_tool": true,
-                          "modes_of_transport": Object {
-                            "air": Object {},
-                            "ocean": Object {
-                              "OCEAN_LOAD_TYPE": true,
-                            },
-                            "rail": Object {},
-                            "truck": Object {},
-                          },
-                        },
-                        "subdomain": "foosubdomain",
-                        "theme": Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        },
-                      },
-                      "scope": Object {
-                        "terms": Array [
-                          "FOO_TERM",
-                          "BAR_TERM",
-                        ],
+                    "id": 123,
+                    "scope": Object {
+                      "terms": Array [
+                        "FOO_TERM",
+                        "BAR_TERM",
+                      ],
+                    },
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
                       },
                     },
                   }
@@ -6091,33 +5941,18 @@ exports[`shallow render 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
-                    "data": Object {
-                      "data": Object {
-                        "id": 123,
-                        "scope": Object {
-                          "closed_quotation_tool": true,
-                          "modes_of_transport": Object {
-                            "air": Object {},
-                            "ocean": Object {
-                              "OCEAN_LOAD_TYPE": true,
-                            },
-                            "rail": Object {},
-                            "truck": Object {},
-                          },
-                        },
-                        "subdomain": "foosubdomain",
-                        "theme": Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        },
-                      },
-                      "scope": Object {
-                        "terms": Array [
-                          "FOO_TERM",
-                          "BAR_TERM",
-                        ],
+                    "id": 123,
+                    "scope": Object {
+                      "terms": Array [
+                        "FOO_TERM",
+                        "BAR_TERM",
+                      ],
+                    },
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
                       },
                     },
                   }
@@ -6238,33 +6073,18 @@ exports[`shallow render 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
-                    "data": Object {
-                      "data": Object {
-                        "id": 123,
-                        "scope": Object {
-                          "closed_quotation_tool": true,
-                          "modes_of_transport": Object {
-                            "air": Object {},
-                            "ocean": Object {
-                              "OCEAN_LOAD_TYPE": true,
-                            },
-                            "rail": Object {},
-                            "truck": Object {},
-                          },
-                        },
-                        "subdomain": "foosubdomain",
-                        "theme": Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        },
-                      },
-                      "scope": Object {
-                        "terms": Array [
-                          "FOO_TERM",
-                          "BAR_TERM",
-                        ],
+                    "id": 123,
+                    "scope": Object {
+                      "terms": Array [
+                        "FOO_TERM",
+                        "BAR_TERM",
+                      ],
+                    },
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
                       },
                     },
                   }
@@ -7193,33 +7013,18 @@ exports[`with cargo items 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
-                    "data": Object {
-                      "data": Object {
-                        "id": 123,
-                        "scope": Object {
-                          "closed_quotation_tool": true,
-                          "modes_of_transport": Object {
-                            "air": Object {},
-                            "ocean": Object {
-                              "OCEAN_LOAD_TYPE": true,
-                            },
-                            "rail": Object {},
-                            "truck": Object {},
-                          },
-                        },
-                        "subdomain": "foosubdomain",
-                        "theme": Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        },
-                      },
-                      "scope": Object {
-                        "terms": Array [
-                          "FOO_TERM",
-                          "BAR_TERM",
-                        ],
+                    "id": 123,
+                    "scope": Object {
+                      "terms": Array [
+                        "FOO_TERM",
+                        "BAR_TERM",
+                      ],
+                    },
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
                       },
                     },
                   }
@@ -7340,33 +7145,18 @@ exports[`with cargo items 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
-                    "data": Object {
-                      "data": Object {
-                        "id": 123,
-                        "scope": Object {
-                          "closed_quotation_tool": true,
-                          "modes_of_transport": Object {
-                            "air": Object {},
-                            "ocean": Object {
-                              "OCEAN_LOAD_TYPE": true,
-                            },
-                            "rail": Object {},
-                            "truck": Object {},
-                          },
-                        },
-                        "subdomain": "foosubdomain",
-                        "theme": Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        },
-                      },
-                      "scope": Object {
-                        "terms": Array [
-                          "FOO_TERM",
-                          "BAR_TERM",
-                        ],
+                    "id": 123,
+                    "scope": Object {
+                      "terms": Array [
+                        "FOO_TERM",
+                        "BAR_TERM",
+                      ],
+                    },
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
                       },
                     },
                   }
@@ -8616,33 +8406,18 @@ exports[`with containers 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
-                    "data": Object {
-                      "data": Object {
-                        "id": 123,
-                        "scope": Object {
-                          "closed_quotation_tool": true,
-                          "modes_of_transport": Object {
-                            "air": Object {},
-                            "ocean": Object {
-                              "OCEAN_LOAD_TYPE": true,
-                            },
-                            "rail": Object {},
-                            "truck": Object {},
-                          },
-                        },
-                        "subdomain": "foosubdomain",
-                        "theme": Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        },
-                      },
-                      "scope": Object {
-                        "terms": Array [
-                          "FOO_TERM",
-                          "BAR_TERM",
-                        ],
+                    "id": 123,
+                    "scope": Object {
+                      "terms": Array [
+                        "FOO_TERM",
+                        "BAR_TERM",
+                      ],
+                    },
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
                       },
                     },
                   }
@@ -8763,33 +8538,18 @@ exports[`with containers 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
-                    "data": Object {
-                      "data": Object {
-                        "id": 123,
-                        "scope": Object {
-                          "closed_quotation_tool": true,
-                          "modes_of_transport": Object {
-                            "air": Object {},
-                            "ocean": Object {
-                              "OCEAN_LOAD_TYPE": true,
-                            },
-                            "rail": Object {},
-                            "truck": Object {},
-                          },
-                        },
-                        "subdomain": "foosubdomain",
-                        "theme": Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        },
-                      },
-                      "scope": Object {
-                        "terms": Array [
-                          "FOO_TERM",
-                          "BAR_TERM",
-                        ],
+                    "id": 123,
+                    "scope": Object {
+                      "terms": Array [
+                        "FOO_TERM",
+                        "BAR_TERM",
+                      ],
+                    },
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
                       },
                     },
                   }

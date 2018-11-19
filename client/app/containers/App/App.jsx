@@ -26,8 +26,7 @@ class App extends Component {
   }
   componentWillMount () {
     const { appDispatch } = this.props
-    const tenantId = '1'
-    appDispatch.setTenant(tenantId)
+    appDispatch.setTenant()
   }
   componentDidMount () {
     const { appDispatch } = this.props
@@ -156,7 +155,6 @@ App.propTypes = {
   user: PropTypes.user,
   loggedIn: PropTypes.bool,
   appDispatch: PropTypes.shape({
-    fetchTenantIfNeeded: PropTypes.func,
     setTenant: PropTypes.func
   }).isRequired,
   sending: PropTypes.bool,

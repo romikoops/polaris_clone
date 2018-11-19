@@ -28,10 +28,6 @@ class ApplicationController < ActionController::API
     require_non_guest_authentication! if current_tenant.scope['closed_shop']
   end
 
-  def get_tenant
-    binding.pry
-  end
-
   def require_non_guest_authentication!
     raise ApplicationError::NotAuthenticated if current_user.guest?
   end
@@ -41,7 +37,7 @@ class ApplicationController < ActionController::API
   def current_tenant
     @current_tenant ||= current_user&.tenant
   end
-  
+
   def append_info_to_payload(payload)
     super
     payload[:tenant] = current_tenant&.subdomain

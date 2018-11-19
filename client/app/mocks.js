@@ -113,22 +113,20 @@ export const history = {
 }
 
 export const tenant = {
-  data: {
-    id: 123,
-    scope: {
-      modes_of_transport: {
-        ocean: {
-          OCEAN_LOAD_TYPE: true
-        },
-        air: {},
-        truck: {},
-        rail: {}
+  id: 123,
+  scope: {
+    modes_of_transport: {
+      ocean: {
+        OCEAN_LOAD_TYPE: true
       },
-      closed_quotation_tool: true
+      air: {},
+      truck: {},
+      rail: {}
     },
-    theme,
-    subdomain: 'foosubdomain'
-  }
+    closed_quotation_tool: true
+  },
+  theme,
+  subdomain: 'foosubdomain'
 }
 
 export const req = {

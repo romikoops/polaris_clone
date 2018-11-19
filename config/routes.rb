@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     confirmations: 'users_devise_token_auth/confirmations',
     passwords: 'users_devise_token_auth/passwords'
   }, skip: [:omniauth_callbacks]
-    
+
   resource :tenant, only: [:show]
 
   resources :tenants, only: [:show] do

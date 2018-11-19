@@ -7,7 +7,7 @@ import styles from './HSCodeRow.scss'
 import {
   CONTAINER_DESCRIPTIONS,
   // CONTAINER_TARE_WEIGHTS,
-  getApiHost
+  getTenantApiUrl
 } from '../../constants'
 import { Tooltip } from '../Tooltip/Tooltip'
 import TextHeading from '../TextHeading/TextHeading'
@@ -71,14 +71,14 @@ class HSCodeRow extends Component {
       }
 
       return window
-        .fetch(`${getApiHost()}/search/hscodes`, requestOptions)
+        .fetch(`${getTenantApiUrl()}/search/hscodes`, requestOptions)
         .then(response => response.json())
         .then(json => ({ options: json.data }))
       // }
       // return [];
     }
 
-    const textInputBool = tenant && tenant.data && tenant.data.scope && tenant.data.scope.cargo_info_level && tenant.data.scope.cargo_info_level === 'text'
+    const textInputBool = tenant && tenant.scope && tenant.scope.cargo_info_level && tenant.scope.cargo_info_level === 'text'
     const HSCell = ({ code, cargoId }) => (
       <div className={`flex-33 layout-row ${styles.hs_cell}`}>
         <p className="flex-none">{code.value}</p>

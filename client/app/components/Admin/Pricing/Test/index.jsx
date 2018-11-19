@@ -126,7 +126,7 @@ class AdminPricingTest extends Component {
     const {
       theme
       // scope
-    } = tenant.data
+    } = tenant
     const {
       request, response, error, reusedShipment
     } = bookingData

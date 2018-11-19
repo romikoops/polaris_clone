@@ -1639,12 +1639,10 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
         t={[Function]}
         tenant={
           Object {
-            "data": Object {
-              "scope": Object {
-                "customs_export_paper": true,
-                "has_customs": true,
-                "has_insurance": true,
-              },
+            "scope": Object {
+              "customs_export_paper": true,
+              "has_customs": true,
+              "has_insurance": true,
             },
           }
         }
@@ -4353,7 +4351,7 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
 </div>
 `;
 
-exports[`tenant.data.scope.has_insurance is true 1`] = `
+exports[`tenant.scope.has_insurance is true 1`] = `
 <div
   className="flex-100 layout-row layout-wrap padd_top"
   name="cargoDetailsBox"

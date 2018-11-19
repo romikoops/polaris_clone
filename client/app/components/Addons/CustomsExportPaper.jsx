@@ -52,7 +52,7 @@ class CustomsExportPaper extends PureComponent {
         </div>
       </div>
     )
-    const noCustomsText = `${t('cargo:noCustomsHead')} ${tenant.data.name} ${t('cargo:noCustomsTail')}`
+    const noCustomsText = `${t('cargo:noCustomsHead')} ${tenant.name} ${t('cargo:noCustomsTail')}`
     const documentCount = documents.export_customs_paper ? documents.export_customs_paper.length + 1 : 1
     const heightVal = this.state.addonView ? 0 : 300 + (35 * documentCount)
     const declinedBox = (

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { appActions } from '../../actions'
 import { moment } from '../../constants'
-import getApiHost from '../constants/api.constants'
+import { getTenantApiUrl } from '../constants/api.constants'
 import { authHeader } from '../../helpers'
 
 const { localStorage, fetch } = window
@@ -16,7 +16,7 @@ class CacheClearer extends Component {
       method: 'GET',
       headers: authHeader()
     }
-    return fetch(`${getApiHost()}/messaging/get`, requestOptions).then((data) => {
+    return fetch(`${getTenantApiUrl()}/messaging/get`, requestOptions).then((data) => {
       if (data.reset && moment(data.reset.time).isAfter(moment(resetTime))) {
         localStorage.removeItem('state')
         localStorage.removeItem('user')

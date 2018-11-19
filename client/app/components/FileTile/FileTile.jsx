@@ -9,7 +9,7 @@ import { authHeader } from '../../helpers'
 import styles from './FileTile.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { moment, documentTypes } from '../../constants'
-import getApiHost from '../../constants/api.constants'
+import { getTenantApiUrl } from '../../constants/api.constants'
 
 const docTypes = documentTypes
 class FileTile extends React.Component {
@@ -71,7 +71,7 @@ class FileTile extends React.Component {
     if (this.uploaderInput.files.length) {
       this.uploaderInput.value = ''
     }
-    const uploadUrl = getApiHost() + url
+    const uploadUrl = getTenantApiUrl() + url
 
     return fetch(uploadUrl, requestOptions).then(FileTile.handleResponse)
   }

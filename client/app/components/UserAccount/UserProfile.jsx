@@ -12,7 +12,7 @@ import {
   gradientTextGenerator,
   authHeader
 } from '../../helpers'
-import getApiHost from '../../constants/api.constants'
+import { getTenantApiUrl } from '../../constants/api.constants'
 import { currencyOptions } from '../../constants'
 import DocumentsDownloader from '../Documents/Downloader'
 import { Modal } from '../Modal/Modal'
@@ -111,7 +111,7 @@ class UserProfile extends Component {
       email: this.props.user.email,
       redirect_url: ''
     }
-    fetch(`${getApiHost()}/auth/password`, {
+    fetch(`${getTenantApiUrl()}/auth/password`, {
       method: 'POST',
       headers: { ...authHeader(), 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
