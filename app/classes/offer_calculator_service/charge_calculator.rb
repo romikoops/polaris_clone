@@ -23,10 +23,10 @@ module OfferCalculatorService
         price:                    Price.create(currency: @shipment.user.currency)
       )
 
-      calc_local_charges
+      local_charge_result = calc_local_charges
       create_trucking_charges
       cargo_result = calc_cargo_charges
-      return nil if cargo_result.nil?
+      return nil if cargo_result.nil? || local_charge_result.nil?
 
       @grand_total_charge.update_price!
       @grand_total_charge.save
@@ -56,9 +56,9 @@ module OfferCalculatorService
           @user
         )
 
-        raise ApplicationError::UnavailableLocalCharges if local_charges_data.except('total').empty?
+        return nil if local_charges_data.except('total').empty?
 
-        create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('export'))
+        pre_carriage = create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('export'))
       end
 
       if @shipment.has_on_carriage || @schedule.destination_hub.mandatory_charge.import_charges
@@ -73,10 +73,12 @@ module OfferCalculatorService
           @user
         )
 
-        raise ApplicationError::UnavailableLocalCharges if local_charges_data.except('total').empty?
+        return nil if local_charges_data.except('total').empty?
 
-        create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('import'))
+        on_carriage = create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('import'))
       end
+
+      { pre_carriage: pre_carriage, on_carriage: on_carriage }
     end
 
     def create_trucking_charges

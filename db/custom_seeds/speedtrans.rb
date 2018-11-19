@@ -24,7 +24,7 @@ subdomains.each do |sub|
 
   public_pricings = 'data/speedtrans/speedtrans__freight_rates.xlsx'
   req = { 'key' => public_pricings }
-  ExcelTool::FreightRatesOverwriter.new(params: req, _user: shipper, generate: true).perform
+  ExcelTool::FreightRatesOverwriter.new(params: req, _user: shipper, generate: false).perform
 
   # # # # #   # # # # # Overwrite public pricings from excel sheet
 
@@ -34,6 +34,12 @@ subdomains.each do |sub|
   ExcelTool::OverwriteLocalCharges.new(params: req, user: shipper).perform
   # #   # # # # # # Overwrite trucking data from excel sheet
 
+  ### Insert schedules
+  schedules = 'data/speedtrans/speedtrans__schedules.xlsx'
+  req = { 'key' => schedules }
+  ExcelTool::ScheduleOverwriter.new(params: req, mot: "ocean", _user: shipper).perform
+
+  ####### 
   puts 'Hamburg Port'
   hub = tenant.hubs.find_by_name('Hamburg Port')
   trucking = 'data/speedtrans/speedtrans__trucking_ltl__hamburg_port.xlsx'
