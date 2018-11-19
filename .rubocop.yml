@@ -4,6 +4,7 @@ AllCops:
     - 'bin/*'
     - 'client/**/*'
     - 'db/schema.rb'
+    - 'engines/*/bin/*'
     - 'lib/*/bin/*'
     - 'qa/bin/*'
     - Rakefile
@@ -12,24 +13,30 @@ Metrics/AbcSize:
   Max: 25
   Exclude:
     - db/migrate/*.rb
+    - engines/*/db/migrate/*.rb
 
 Metrics/BlockLength:
   Max: 25
   Exclude:
     - config/**/*.rb
     - db/migrate/*.rb
+    - engines/*/db/migrate/*.rb
+    - engines/*/spec/**/*_spec.rb
     - spec/**/*_spec.rb
 
 Metrics/LineLength:
   Max: 120
   Exclude:
-    - spec/**/*_spec.rb
+    - engines/*/spec/**/*_spec.rb
     - qa/features/**/*.feature
+    - spec/**/*_spec.rb
 
 Metrics/MethodLength:
   Max: 25
   Exclude:
     - db/migrate/*.rb
+    - engines/*/db/migrate/*.rb
+    - engines/*/spec/**/*_spec.rb
     - spec/**/*_spec.rb
 
 Metrics/ParameterLists:
