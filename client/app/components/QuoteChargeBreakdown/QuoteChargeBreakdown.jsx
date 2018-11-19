@@ -135,8 +135,8 @@ class QuoteChargeBreakdown extends Component {
 
   renderSubTitle (key) {
     const { t, mot, scope } = this.props
-
-    if (scope.translation_overrides && scope.translation_overrides[key]) {
+    
+    if (scope.translation_overrides && scope.translation_overrides[`shipment:${key}`]) {
       return this.overrideTranslations(`shipment:${key}`)
     }
 
@@ -148,7 +148,7 @@ class QuoteChargeBreakdown extends Component {
       case 'cargo':
         return t('shipment:motCargo', { mot: t(`shipment:${mot}`) })
       default:
-        return ''
+        return t(`shipment:${key}`)
     }
   }
 
