@@ -33,12 +33,12 @@ module DataInserter
     end
 
     def perform
-      raise StandardError, "The data doesn't contain the correct format!" unless data_valid?(data)
+      raise StandardError, "The data doesn't contain the correct format!" unless data_valid?(@data)
     end
 
     private
 
-    attr_reader :data, :options
+    attr_reader :options
 
     def post_initialize
       raise NotImplementedError, "This method must be implemented in #{self.class.name}."

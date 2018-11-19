@@ -30,11 +30,14 @@ module DataReader
 
         # Parse all but first row
         rows_data = []
-        ((sheet_data.first_row + 1)..sheet_data.last_row).each do |row_index|
-          parsed_row = parse_row_data(sheet_data.row(row_index))
-          rows_data << build_row_obj(headers, parsed_row)
+        ((sheet_data.first_row + 1)..sheet_data.last_row).each do |row_nr|
+          parsed_row = parse_row_data(sheet_data.row(row_nr))
+          rows_data << build_row_obj(headers, parsed_row).merge(row_nr: row_nr)
         end
 
+        # TODO: restructure_rows_data should actually happen in the inserters,
+        # such that the customization for the readers is just limited to checking
+        # header validity.
         @sheets_data[sheet_name][:rows_data] = restructure_rows_data(rows_data)
       end
 

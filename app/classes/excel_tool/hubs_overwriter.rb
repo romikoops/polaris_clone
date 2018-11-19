@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module ExcelTool
-  class HubsOverwriter < BaseTool
-    attr_reader :first_sheet, :country, :nexus, :user, :hub_row, :location, :mandatory_charge
+  class HubsOverwriter < ExcelTool::BaseTool
+    attr_reader :first_sheet, :country, :nexus, :user, :hub_row, :address, :mandatory_charge
 
     def post_initialize(args)
       @first_sheet = xlsx.sheet(xlsx.sheets.first)
@@ -79,21 +79,14 @@ module ExcelTool
 
     def _nexus
       Nexus.find_by(
-<<<<<<< HEAD
         name:             hub_row[:hub_name],
         country:          country,
         tenant_id:        @user.tenant_id
-=======
-        name: hub_row[:hub_name],
-        country: country,
-        tenant_id: @user.tenant_id
->>>>>>> e12a7bb1b... IMC-621 FCL insertion works with all methods
       )
     end
 
     def _nexus_create
       Nexus.create!(
-<<<<<<< HEAD
         name:             hub_row[:hub_name],
         latitude:         hub_row[:latitude],
         longitude:        hub_row[:longitude],
@@ -111,26 +104,6 @@ module ExcelTool
         country:          country,
         city:             hub_row[:hub_name],
         geocoded_address: hub_row[:geocoded_address]
-=======
-        name: hub_row[:hub_name],
-        latitude: hub_row[:latitude],
-        longitude: hub_row[:longitude],
-        photo: hub_row[:photo],
-        country: country,
-        tenant_id: @user.tenant_id
-      )
-    end
-
-    def find_or_create_location
-      Location.find_or_create_by(
-        name: hub_row[:hub_name],
-        latitude: hub_row[:latitude],
-        longitude: hub_row[:longitude],
-        country: country,
-        city: hub_row[:hub_name],
-        geocoded_address: hub_row[:geocoded_address],
-        location_type: nil
->>>>>>> e12a7bb1b... IMC-621 FCL insertion works with all methods
       )
     end
 
@@ -144,22 +117,15 @@ module ExcelTool
 
     def hub
       @hub = Hub.find_by(
-<<<<<<< HEAD
         nexus_id:  nexus.id,
         tenant_id: user.tenant_id,
         hub_type:  hub_row[:hub_type],
-=======
-        nexus_id: nexus.id,
-        tenant_id: user.tenant_id,
-        hub_type: hub_row[:hub_type],
->>>>>>> e12a7bb1b... IMC-621 FCL insertion works with all methods
         name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}"
       )
     end
 
     def update_hub
       @hub.update_attributes(
-<<<<<<< HEAD
         nexus_id:         nexus.id,
         address_id:      address.id,
         tenant_id:        user.tenant_id,
@@ -169,17 +135,6 @@ module ExcelTool
         longitude:        hub_row[:longitude],
         name:             "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
         photo:            hub_row[:photo],
-=======
-        nexus_id: nexus.id,
-        location_id: location.id,
-        tenant_id: user.tenant_id,
-        hub_type: hub_row[:hub_type],
-        trucking_type: hub_row[:trucking_type],
-        latitude: hub_row[:latitude],
-        longitude: hub_row[:longitude],
-        name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
-        photo: hub_row[:photo],
->>>>>>> e12a7bb1b... IMC-621 FCL insertion works with all methods
         mandatory_charge: @mandatory_charge
       )
     end
@@ -198,7 +153,6 @@ module ExcelTool
 
     def create_nexus_hub
       nexus.hubs.create!(
-<<<<<<< HEAD
         nexus_id:         nexus.id,
         address_id:      address.id,
         tenant_id:        user.tenant_id,
@@ -208,17 +162,6 @@ module ExcelTool
         longitude:        hub_row[:longitude],
         name:             "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
         photo:            hub_row[:photo],
-=======
-        nexus_id: nexus.id,
-        location_id: location.id,
-        tenant_id: user.tenant_id,
-        hub_type: hub_row[:hub_type],
-        trucking_type: hub_row[:trucking_type],
-        latitude: hub_row[:latitude],
-        longitude: hub_row[:longitude],
-        name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
-        photo: hub_row[:photo],
->>>>>>> e12a7bb1b... IMC-621 FCL insertion works with all methods
         mandatory_charge: @mandatory_charge
       )
     end
@@ -235,17 +178,10 @@ module ExcelTool
       end
     end
 
-<<<<<<< HEAD
     def update_address_geocode
       unless address.street_number
         address.reverse_geocode
         address.save!
-=======
-    def update_location_geocode
-      unless location.street_number
-        location.reverse_geocode
-        location.save!
->>>>>>> e12a7bb1b... IMC-621 FCL insertion works with all methods
       end
     end
 
@@ -278,13 +214,8 @@ module ExcelTool
         @nexus = _nexus
         @nexus ||= _nexus_create
 
-<<<<<<< HEAD
         @address = find_or_create_address
         update_address_geocode
-=======
-        @location = find_or_create_location
-        update_location_geocode
->>>>>>> e12a7bb1b... IMC-621 FCL insertion works with all methods
         update_or_create_hub
         results[:nexuses] << nexus
         stats[:nexuses][:number_updated] += 1

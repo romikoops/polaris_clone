@@ -35,7 +35,7 @@ module ExcelTool
           end
         end
         save_dangerous_fees(hub_fees, tenant_vehicles, hub)
-        binding.pry
+
         update_result_and_stats_fees(hub_fees, tenant_vehicles, hub)
         update_result_and_stats_customs(customs, tenant_vehicles, hub)
       end
@@ -260,7 +260,6 @@ module ExcelTool
         'load_type'         => lt,
         'tenant_vehicle_id' => tv_id != 'general' ? tv_id : nil,
         'counterpart_hub_id' => hub_key != 'general' ? hub_key : nil
-
       }
     end
 
@@ -304,6 +303,7 @@ module ExcelTool
 
     def update_hashes(row, hub_fees, customs, tenant_vehicles, counterparts)
       charge = build_charge(row)
+
       if row[:fee_code] != 'CUST'
         hub_fees = local_charge_load_setter(
           hub_fees,
@@ -324,7 +324,7 @@ module ExcelTool
           row[:mot],
           counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || 'general'
         )
-    end
+      end
     end
 
     def update_result_and_stats_fees(hub_fees, tenant_vehicles, hub)
