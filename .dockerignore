@@ -13,3 +13,4 @@ dump/
 log/*
 node_modules/
 tmp/*
+!tmp/docker/

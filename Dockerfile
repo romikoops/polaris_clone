@@ -19,7 +19,9 @@ RUN npm install -g 'mjml@4.2.0'
 
 WORKDIR /app
 
+COPY tmp/docker/ ./
 COPY Gemfile Gemfile.lock ./
+RUN find .
 RUN bundle config --global frozen 1 \
     && bundle install -j4 --retry 3 \
     # Remove unneeded files (cached *.gem, *.o, *.c)
