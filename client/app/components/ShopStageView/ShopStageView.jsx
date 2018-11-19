@@ -26,6 +26,10 @@ class ShopStageView extends Component {
     this.setStageHeader(nextProps.currentStage)
   }
 
+  componentWillUnmount () {
+    this.props.cookieDispatch.updateCookieHeight({ fixedHeight: 0 })
+  }
+
   setStageHeader (currentStage) {
     const { header } = this.applicableStages.find(stage => stage.step === currentStage) || {}
     this.setState({ stageHeader: header })
@@ -194,7 +198,7 @@ class ShopStageView extends Component {
           className={`${styles.stage_row} layout-row flex-100 layout-align-center`}
           ref={(div) => {
             if (!div) return
-            this.props.cookieDispatch.updateCookieHeight(div.offsetHeight)
+            this.props.cookieDispatch.updateCookieHeight({ fixedHeight: div.offsetHeight })
           }}
         >
           {backBtn}
