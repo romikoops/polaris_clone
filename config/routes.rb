@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     passwords: 'users_devise_token_auth/passwords'
   }, skip: [:omniauth_callbacks]
     
-  resource :tenant, only: [:show], path: '/'
+  resource :tenant, only: [:show]
 
   resources :tenants, only: [:show] do
     namespace :admin do
