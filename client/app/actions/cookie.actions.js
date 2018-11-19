@@ -1,5 +1,5 @@
-function updateCookieHeight (height) {
-  return (dispatch) => { dispatch({ type: 'UPDATE_COOKIE_HEIGHT', payload: height }) }
+function updateCookieHeight (payload) {
+  return (dispatch) => { dispatch({ type: 'UPDATE_COOKIE_HEIGHT', payload }) }
 }
 
 const cookieActions = {

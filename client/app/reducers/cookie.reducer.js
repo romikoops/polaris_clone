@@ -3,7 +3,7 @@ export default function cookie (state = {}, action) {
     case 'UPDATE_COOKIE_HEIGHT':
       return {
         ...state,
-        height: action.payload
+        ...action.payload
       }
     default:
       return state
