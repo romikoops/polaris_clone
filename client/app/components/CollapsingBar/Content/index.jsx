@@ -40,7 +40,7 @@ export default class CollapsingContent extends React.PureComponent {
           transition: `max-height ${Math.log(1 + this.state.panelHeight) / 10}s linear`
         }}
       >
-        <div ref={(div) => { this.panel = div }}>
+        <div className={styles.inner_wrapper} ref={(div) => { this.panel = div }}>
           { content }
           { children }
         </div>
