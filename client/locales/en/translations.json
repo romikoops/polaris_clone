@@ -172,7 +172,9 @@
     "fcl_20": "FCL 20'",
     "fcl_40": "FCL 40'",
     "fcl_40_hq": "FCL 40' HQ",
-    "lcl": "Cargo item"
+    "lcl": "Cargo item",
+    "route": "Route",
+    "route_plural": "Routes"
   },
   "admin": {
     "lowerLimit": "Lower Limit",
@@ -577,6 +579,7 @@
     "noRoutes": "No routes from this address",
     "noRoutesFound": "No Routes Found",
     "noRoutesBetween": "No routes found between {{origin}} and {{destination}}",
+    "noRoutesAvailable": "No routes available",
     "maxValue": "Value must be less than",
     "nonNegative": "Must be greater than 0",
     "maxWeight": "Maximum weight is",
