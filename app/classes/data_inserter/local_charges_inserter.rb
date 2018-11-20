@@ -6,13 +6,27 @@ module DataInserter
       super
 
       data = format_to_legacy(@data)
+      data = expand_fcl_to_all_sizes(data)
+      data = assign_correct_hubs(data)
 
-      data.each_with_index do |(k_sheet_name, values), sheet_i|
-        values[:rows_data].each_with_index do |row, row_i|
-          tenant_vehicle = find_or_create_tenant_vehicle(row)
-          find_or_create_local_charges(row, tenant_vehicle)
+      available_carriers = all_carriers_of_tenant
 
-          puts "Status: Sheet \"#{k_sheet_name}\" (##{sheet_i + 1}) | Row ##{row_i + 1}"
+      # binding.pry
+
+      data.each do |local_charge_params|
+        if local_charge_params[:carrier] == 'all'
+          available_carriers.each do |carrier|
+            tenant_vehicles = find_or_create_tenant_vehicles(local_charge_params, carrier)
+            tenant_vehicles.each do |tenant_vehicle|
+              find_or_create_local_charges(local_charge_params, tenant_vehicle)
+            end
+          end
+        else
+          carrier = find_or_create_carrier(local_charge_params)
+          tenant_vehicles = find_or_create_tenant_vehicles(local_charge_params, carrier)
+          tenant_vehicles.each do |tenant_vehicle|
+            find_or_create_local_charges(local_charge_params, tenant_vehicle)
+          end
         end
       end
     end
@@ -24,8 +38,29 @@ module DataInserter
       true
     end
 
-    def errors_from_charge_params_with_errors(charge_params_with_errors)
-      charge_params_with_errors[:errors]
+    def assign_correct_hubs(data)
+      data.map do |params|
+        mot = params[:mot]
+        # TODO: `port` is wrong, should be hub!
+        begin
+          hub_id = @tenant.hubs.find_by(name: append_hub_suffix(params[:port], mot), hub_type: mot).id
+          rescue
+            binding.pry
+          end
+        params[:hub_id] = hub_id
+        counterpart_hub_id = if params[:counterpart_hub] == 'all'
+                               nil
+                             else
+                               binding.pry
+                               @tenant.hubs.find_by(name: append_hub_suffix(params[:counterpart_hub], mot), hub_type: mot).id
+                             end
+        params[:counterpart_hub_id] = counterpart_hub_id
+        params
+      end
+    end
+
+    def all_carriers_of_tenant
+      Carrier.where(id: @tenant.tenant_vehicles.pluck(:carrier_id).compact.uniq)
     end
 
     def format_to_legacy(data)
@@ -65,32 +100,46 @@ module DataInserter
       all_local_charges_params
     end
 
-    def service_level(row)
-      row[:service_level] || 'standard'
+    def expand_fcl_to_all_sizes(data)
+      plain_fcl_local_charges_params = data.select { |local_charge_params| local_charge_params[:load_type] == 'fcl' }
+      expanded_local_charges_params = %w(fcl_20 fcl_40 fcl_40_hq).reduce([]) do |memo, fcl_size|
+        memo + plain_fcl_local_charges_params.map do |local_charge_params|
+          temp = local_charge_params.dup
+          temp[:load_type] = fcl_size
+          temp
+        end
+      end
+      data = data.reject { |local_charge_params| local_charge_params[:load_type] == 'fcl' }
+      data + expanded_local_charges_params
     end
 
-    def find_or_create_carrier(row)
-      Carrier.find_or_create_by(name: row[:carrier])
+    def service_level(params)
+      params[:service_level] || 'standard'
     end
 
-    def find_or_create_tenant_vehicle(row)
-      service_level = service_level(row)
-      carrier = find_or_create_carrier(row)
+    def find_or_create_carrier(params)
+      Carrier.find_or_create_by(name: params[:carrier])
+    end
+
+    def find_or_create_tenant_vehicles(params, carrier)
+      service_level = service_level(params)
+      return @tenant.tenant_vehicles if service_level == 'all'
+
       tenant_vehicle = TenantVehicle.find_by(name: service_level,
-                                             mode_of_transport: row[:mot],
+                                             mode_of_transport: params[:mot],
                                              tenant_id: @tenant.id,
                                              carrier: carrier)
 
       # TODO: fix!! `Vehicle` shouldn't be creating a `TenantVehicle`!:
-      tenant_vehicle || Vehicle.create_from_name(service_level,
-                                                 row[:mot],
-                                                 @tenant.id,
-                                                 carrier.name) # returns a `TenantVehicle`!
+      tenant_vehicle ||= Vehicle.create_from_name(service_level,
+                                                  params[:mot],
+                                                  @tenant.id,
+                                                  carrier.name) # returns a `TenantVehicle`!
+      [tenant_vehicle]
     end
 
-    def find_or_create_local_charges(row, tenant_vehicle)
-      charge_params = build_charge_params(row)
-      local_charge = LocalCharge.find_or_initialize_by(charge_params)
+    def find_or_create_local_charges(params, tenant_vehicle)
+      local_charge = LocalCharge.find_or_initialize_by(params)
       local_charge.tenant_vehicle = tenant_vehicle
       local_charge.save!
     end

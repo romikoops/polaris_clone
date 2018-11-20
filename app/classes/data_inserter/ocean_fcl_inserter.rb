@@ -50,15 +50,6 @@ module DataInserter
       [row[:origin], row[:destination]]
     end
 
-    def append_hub_suffix(name, mot)
-      name + ' ' + {
-        'ocean' => 'Port',
-        'air'   => 'Airport',
-        'rail'  => 'Railyard',
-        'truck' => 'Depot'
-      }[mot]
-    end
-
     def find_or_initialize_stops(row, itinerary)
       stop_names = stop_names(row)
       mot = itinerary.mode_of_transport

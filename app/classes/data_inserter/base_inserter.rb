@@ -47,5 +47,14 @@ module DataInserter
     def data_valid?(_data)
       raise NotImplementedError, "This method must be implemented in #{self.class.name}."
     end
+
+    def append_hub_suffix(name, mot)
+      name + ' ' + {
+        'ocean' => 'Port',
+        'air'   => 'Airport',
+        'rail'  => 'Railyard',
+        'truck' => 'Depot'
+      }[mot]
+    end
   end
 end
