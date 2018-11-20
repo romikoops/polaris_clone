@@ -6,8 +6,6 @@ module DataInserter
       super
 
       data = format_to_legacy(@data)
-      binding.pry
-
 
       data.each_with_index do |(k_sheet_name, values), sheet_i|
         values[:rows_data].each_with_index do |row, row_i|
@@ -26,9 +24,14 @@ module DataInserter
       true
     end
 
+    def errors_from_charge_params_with_errors(charge_params_with_errors)
+      charge_params_with_errors[:errors]
+    end
+
     def format_to_legacy(data)
-      data.each do |_k_sheet_name, values|
-        chunked_rows_data = values[:rows_data].chunk do |row|
+      all_local_charges_params = []
+      data.values.each do |per_sheet_values|
+        chunked_rows_data = per_sheet_values[:rows_data].chunk do |row|
           row.slice(:port,
                     :country,
                     :counterpart_hub,
@@ -41,15 +44,25 @@ module DataInserter
                     :dangerous)
         end
 
-        chunked_rows_data.map do |local_charge_identifier, rows|
-          local_charge_identifier[:fees] = {}
+        error_strings = []
+        per_sheet_local_charges_params = chunked_rows_data.map do |local_charge_identifier, rows|
+          local_charge_params = local_charge_identifier
+          local_charge_params[:fees] = {}
           rows.each do |row|
-            charge_params = build_charge_params(row)
-            local_charge_identifier[:fees][row[:fee_code]] = charge_params
+            charge_params_with_errors = build_charge_params_with_error_data(row)
+            if charge_params_with_errors[:errors]
+              error_strings << charge_params_with_errors[:errors].map { |error| "Missing value for #{error[:rate_basis_name]} in row ##{error[:row_nr]}! Did you enter the value in the correct column?" }.join("\n")
+            end
+            charge_params = charge_params_with_errors[:charge_params]
+            local_charge_params[:fees][row[:fee_code]] = charge_params
           end
-          local_charge_identifier
+          local_charge_params
         end
+
+        raise StandardError, error_strings.join("\n") unless error_strings.empty?
+        all_local_charges_params += per_sheet_local_charges_params
       end
+      all_local_charges_params
     end
 
     def service_level(row)
@@ -82,7 +95,7 @@ module DataInserter
       local_charge.save!
     end
 
-    def build_charge_params(row)
+    def build_charge_params_with_error_data(row)
       rate_basis = RateBasis.get_internal_key(row[:rate_basis].upcase)
       standard_charge_params = { currency: row[:currency],
                                  expiration_date: row[:expiration_date],
@@ -112,12 +125,14 @@ module DataInserter
                                  raise StandardError, "RATE_BASIS \"#{row[:rate_basis].upcase}\" not found!"
                                end
 
-      specific_charge_params.values.each do |value|
-        raise StandardError, "Missing value for #{rate_basis.upcase} in row ##{row[:row_nr]}! Did you enter the vaue in the correct column?" if value.nil?
+      errors = specific_charge_params.values.reduce([]) do |memo, value|
+        memo << { row_nr: row[:row_nr], rate_basis_name: rate_basis.upcase } if value.nil?
       end
 
       ChargeCategory.find_or_create_by!(code: row[:fee_code], name: row[:fee])
-      standard_charge_params.merge(specific_charge_params)
+
+      charge_params = { charge_params: standard_charge_params.merge(specific_charge_params) }
+      charge_params.merge(errors: errors)
     end
   end
 end
