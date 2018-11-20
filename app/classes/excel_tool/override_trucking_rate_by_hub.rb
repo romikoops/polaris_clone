@@ -141,10 +141,10 @@ module ExcelTool
         zones[zone_name] = [] if zones[zone_name].nil?
 
         if row_data[1] && !row_data[2]
-          row_zip = row_data[1].is_a?(Numeric) ? row_data[1].to_i : row_data[1]
+          row_zip = row_data[1].is_a?(Numeric) ? row_data[1].to_i : row_data[1].strip
           @zip_char_length ||= row_zip.to_s.length
           zones[zone_name] << if identifier_type == 'distance' && identifier_modifier == 'return'
-                                { ident: (row_zip / 2.0).ceil, country: row_data[3] }
+                                { ident: (row_zip / 2.0).ceil, country: row_data[3].strip }
                               else
                                 { ident: row_zip, country: row_data[3] }
                               end
@@ -153,16 +153,16 @@ module ExcelTool
           range = row_data[2].delete(' ').split('-')
           @zip_char_length ||= range[0].length
           zones[zone_name] << if identifier_type == 'distance' && identifier_modifier == 'return'
-                                { min: (range[0].to_i / 2.0).ceil, max: (range[1].to_i / 2.0).ceil, country: row_data[3] }
+                                { min: (range[0].to_i / 2.0).ceil, max: (range[1].to_i / 2.0).ceil, country: row_data[3].strip }
                               else
-                                { min: range[0].to_i, max: range[1].to_i, country: row_data[3] }
+                                { min: range[0].to_i, max: range[1].to_i, country: row_data[3].strip }
                               end
 
         elsif row_data[1] && row_data[2]
           zones[zone_name] << {
-            ident:     row_data[1],
-            sub_ident: row_data[2],
-            country:   row_data[3]
+            ident:     row_data[1].strip,
+            sub_ident: row_data[2].strip,
+            country:   row_data[3].strip
           }
         end
       end
@@ -529,7 +529,8 @@ module ExcelTool
 
     def find_geometry(idents_and_country)
       geometry = if @identifier_modifier == 'postal_code'
-                   Location.find_by_postal_code(idents_and_country[:ident].capitalize)
+        
+                   Location.find_by_postal_code(idents_and_country[:ident].upcase)
                  else
                    Location.cascading_find_by_names(
                      idents_and_country[:sub_ident],
@@ -538,6 +539,7 @@ module ExcelTool
                  end
 
       if geometry.nil?
+        binding.pry
         geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
         raise "no geometry found for #{idents_and_country.values.join(', ')}" if geocoder_results.first.nil?
         coordinates = geocoder_results.first.geometry['location']
