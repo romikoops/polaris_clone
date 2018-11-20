@@ -11,21 +11,19 @@ module DataInserter
 
       available_carriers = all_carriers_of_tenant
 
-      # binding.pry
-
-      data.each do |local_charge_params|
-        if local_charge_params[:carrier] == 'all'
+      data.each do |params|
+        if params[:carrier] == 'all'
           available_carriers.each do |carrier|
-            tenant_vehicles = find_or_create_tenant_vehicles(local_charge_params, carrier)
+            tenant_vehicles = find_or_create_tenant_vehicles(params, carrier)
             tenant_vehicles.each do |tenant_vehicle|
-              find_or_create_local_charges(local_charge_params, tenant_vehicle)
+              find_or_create_local_charges(params, tenant_vehicle)
             end
           end
         else
-          carrier = find_or_create_carrier(local_charge_params)
-          tenant_vehicles = find_or_create_tenant_vehicles(local_charge_params, carrier)
+          carrier = find_or_create_carrier(params)
+          tenant_vehicles = find_or_create_tenant_vehicles(params, carrier)
           tenant_vehicles.each do |tenant_vehicle|
-            find_or_create_local_charges(local_charge_params, tenant_vehicle)
+            find_or_create_local_charges(params, tenant_vehicle)
           end
         end
       end
@@ -41,17 +39,19 @@ module DataInserter
     def assign_correct_hubs(data)
       data.map do |params|
         mot = params[:mot]
-        # TODO: `port` is wrong, should be hub!
+
         begin
-          hub_id = @tenant.hubs.find_by(name: append_hub_suffix(params[:port], mot), hub_type: mot).id
-          rescue
-            binding.pry
-          end
+          # TODO: `port` is wrong, should be hub!
+          hub_name = append_hub_suffix(params[:port], mot)
+          hub_id = @tenant.hubs.find_by(name: hub_name, hub_type: mot).id
+        rescue StandardError
+          raise "Hub \"#{hub_name}\" not found!"
+        end
+
         params[:hub_id] = hub_id
         counterpart_hub_id = if params[:counterpart_hub] == 'all'
                                nil
                              else
-                               binding.pry
                                @tenant.hubs.find_by(name: append_hub_suffix(params[:counterpart_hub], mot), hub_type: mot).id
                              end
         params[:counterpart_hub_id] = counterpart_hub_id
@@ -81,17 +81,17 @@ module DataInserter
 
         error_strings = []
         per_sheet_local_charges_params = chunked_rows_data.map do |local_charge_identifier, rows|
-          local_charge_params = local_charge_identifier
-          local_charge_params[:fees] = {}
+          params = local_charge_identifier
+          params[:fees] = {}
           rows.each do |row|
             charge_params_with_errors = build_charge_params_with_error_data(row)
             if charge_params_with_errors[:errors]
               error_strings << charge_params_with_errors[:errors].map { |error| "Missing value for #{error[:rate_basis_name]} in row ##{error[:row_nr]}! Did you enter the value in the correct column?" }.join("\n")
             end
             charge_params = charge_params_with_errors[:charge_params]
-            local_charge_params[:fees][row[:fee_code]] = charge_params
+            params[:fees][row[:fee_code]] = charge_params
           end
-          local_charge_params
+          params
         end
 
         raise StandardError, error_strings.join("\n") unless error_strings.empty?
@@ -101,15 +101,15 @@ module DataInserter
     end
 
     def expand_fcl_to_all_sizes(data)
-      plain_fcl_local_charges_params = data.select { |local_charge_params| local_charge_params[:load_type] == 'fcl' }
+      plain_fcl_local_charges_params = data.select { |params| params[:load_type] == 'fcl' }
       expanded_local_charges_params = %w(fcl_20 fcl_40 fcl_40_hq).reduce([]) do |memo, fcl_size|
-        memo + plain_fcl_local_charges_params.map do |local_charge_params|
-          temp = local_charge_params.dup
+        memo + plain_fcl_local_charges_params.map do |params|
+          temp = params.dup
           temp[:load_type] = fcl_size
           temp
         end
       end
-      data = data.reject { |local_charge_params| local_charge_params[:load_type] == 'fcl' }
+      data = data.reject { |params| params[:load_type] == 'fcl' }
       data + expanded_local_charges_params
     end
 
@@ -139,7 +139,10 @@ module DataInserter
     end
 
     def find_or_create_local_charges(params, tenant_vehicle)
-      local_charge = LocalCharge.find_or_initialize_by(params)
+      params[:mode_of_transport] = params[:mot]
+      local_charge_params = params.except(:mot, :port, :country, :counterpart_hub, :counterpart_country, :carrier, :service_level)
+      local_charge = LocalCharge.find_or_initialize_by(local_charge_params)
+      local_charge.tenant = @tenant
       local_charge.tenant_vehicle = tenant_vehicle
       local_charge.save!
     end

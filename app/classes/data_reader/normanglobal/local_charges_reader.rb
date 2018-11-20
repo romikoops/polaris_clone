@@ -49,7 +49,7 @@ module DataReader
                                      counterpart_country)
 
         col_names_to_capitalize.each do |col_name|
-          row[col_name].capitalize!
+          row[col_name] = row[col_name].titleize
         end
 
         col_names_containing_all = %i(counterpart_hub
