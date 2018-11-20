@@ -34,8 +34,8 @@ exports[`shallow render 1`] = `
     >
       <input
         className="flex-none input"
-        id="location"
-        name="location"
+        id="address"
+        name="address"
         onChange={[Function]}
         placeholder="Search for address"
         type="string"
@@ -64,7 +64,7 @@ exports[`shallow render 1`] = `
       <input
         className="flex-none input"
         id="not-auto"
-        name="location-number"
+        name="address-number"
         onChange={[Function]}
         placeholder="Street Number"
         type="string"
@@ -72,7 +72,7 @@ exports[`shallow render 1`] = `
       />
       <input
         className="flex-none input"
-        name="location-street"
+        name="address-street"
         onChange={[Function]}
         placeholder="Street"
         type="string"
@@ -80,7 +80,7 @@ exports[`shallow render 1`] = `
       />
       <input
         className="flex-none input"
-        name="location-zipCode"
+        name="address-zipCode"
         onChange={[Function]}
         placeholder="Postal Code"
         type="string"
@@ -88,7 +88,7 @@ exports[`shallow render 1`] = `
       />
       <input
         className="flex-none input"
-        name="location-city"
+        name="address-city"
         onChange={[Function]}
         placeholder="City"
         type="string"
@@ -96,7 +96,7 @@ exports[`shallow render 1`] = `
       />
       <input
         className="flex-none input"
-        name="location-country"
+        name="address-country"
         onChange={[Function]}
         placeholder="Country"
         type="string"

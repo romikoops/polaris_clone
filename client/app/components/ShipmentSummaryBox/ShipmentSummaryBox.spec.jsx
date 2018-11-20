@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import {
   route,
   user,
-  locations,
+  addresses,
   shipment,
   identity,
   theme
@@ -58,8 +58,8 @@ const edittedShipment = {
 }
 
 const hubs = {
-  startHub: { location: { geocoded_address: 'FOO_ADDRESS' }, data: { name: 'FOO' } },
-  endHub: { location: { geocoded_address: 'BAR_ADDRESS' }, data: { name: 'BAR' } }
+  startHub: { address: { geocoded_address: 'FOO_ADDRESS' }, data: { name: 'FOO' } },
+  endHub: { address: { geocoded_address: 'BAR_ADDRESS' }, data: { name: 'BAR' } }
 }
 
 const propsBase = {
@@ -72,7 +72,7 @@ const propsBase = {
   route,
   user,
   total: 9,
-  locations
+  addresses
 }
 
 let originalDate

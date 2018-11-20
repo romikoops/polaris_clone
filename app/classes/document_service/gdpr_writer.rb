@@ -5,7 +5,7 @@ module DocumentService
     include AwsConfig
     include WritingTool
     attr_reader :tenant, :user_contacts, :filename, :directory, :workbook, :worksheet, :user, :user_aliases,
-                :user_shipments, :user_messages, :user_locations, :user_sheet, :alias_sheet, :contacts_sheet, :shipment_sheet
+                :user_shipments, :user_messages, :user_addresses, :user_sheet, :alias_sheet, :contacts_sheet, :shipment_sheet
 
     def initialize(options)
       @user = User.find(options[:user_id])
@@ -13,7 +13,7 @@ module DocumentService
       @user_aliases = @user.contacts.where(alias: true)
       @user_shipments = @user.shipments
       @user_messages = @user.conversations
-      @user_locations = @user.user_locations
+      @user_addresses = @user.user_addresses
       @filename = "#{@user.first_name}_#{@user.last_name}_GDPR.xlsx"
       @directory = "tmp/#{@filename}"
       @workbook = create_workbook(@directory)
@@ -64,8 +64,8 @@ module DocumentService
       row = 1
       user_aliases.each do |ua|
         ua.as_json.each do |k, value|
-          if k.to_s == 'location_id'
-            loc = find_location(value)
+          if k.to_s == 'address_id'
+            loc = find_address(value)
             loc.set_geocoded_address_from_fields! unless loc.geocoded_address
             alias_sheet.write(row, 0, k.humanize)
             alias_sheet.write(row, 1, loc.geocoded_address)
@@ -83,8 +83,8 @@ module DocumentService
       row = 1
       user_contacts.each do |uc|
         uc.as_json.each do |k, value|
-          if k.to_s == 'location_id'
-            loc = find_location(value)
+          if k.to_s == 'address_id'
+            loc = find_address(value)
             loc.set_geocoded_address_from_fields! unless loc.geocoded_address
             contacts_sheet.write(row, 0, k.humanize)
             contacts_sheet.write(row, 1, loc.geocoded_address)
@@ -98,8 +98,8 @@ module DocumentService
       end
     end
 
-    def find_location(id)
-      Location.find(id)
+    def find_address(id)
+      Address.find(id)
     end
 
     def shipment_headers
@@ -128,13 +128,13 @@ module DocumentService
       row = 1
       user_shipments.each do |shipment|
         next unless shipment.status != 'booking_process_started'
-        shipment_sheet.write(row, 0, shipment.origin_hub.location.geocoded_address)
-        shipment_sheet.write(row, 1, shipment.destination_hub.location.geocoded_address)
+        shipment_sheet.write(row, 0, shipment.origin_hub.address.geocoded_address)
+        shipment_sheet.write(row, 1, shipment.destination_hub.address.geocoded_address)
         shipment_sheet.write(row, 2, shipment.imc_reference)
         shipment_sheet.write(row, 3, shipment.status)
         shipment_sheet.write(row, 4, shipment.load_type.humanize)
-        shipment_sheet.write(row, 5, shipment.has_pre_carriage ? "Yes" : "No")
-        shipment_sheet.write(row, 6, shipment.has_on_carriage ? "Yes" : "No")
+        shipment_sheet.write(row, 5, shipment.has_pre_carriage ? 'Yes' : 'No')
+        shipment_sheet.write(row, 6, shipment.has_on_carriage ? 'Yes' : 'No')
         shipment_sheet.write(row, 7, shipment.planned_etd)
         shipment_sheet.write(row, 8, shipment.planned_eta)
         shipment_sheet.write(row, 9, "#{shipment.total_price[:currency]} #{shipment.total_price[:value].to_d.round(2)}")

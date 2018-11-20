@@ -163,3 +163,11 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i(mingw mswin x64_mingw jruby)
+
+# Engines
+Dir['engines/*/*.gemspec'].each do |gemspec_path|
+  engine_path = File.dirname(gemspec_path)
+  gem_name = File.basename(engine_path)
+
+  gem gem_name, path: engine_path
+end

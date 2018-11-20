@@ -64,7 +64,7 @@ export class AdminHubCardContent extends Component {
           content={(
             <div className="layout-column flex-100">
               <div className="layout-column layout-padding flex-50 layout-align-center-start">
-                <p>{hub ? hub.location.city : ''}<br />
+                <p>{hub ? hub.address.city : ''}<br />
                   {hub ? stationType(hub.data.hub_type) : ''}
                 </p>
               </div>

@@ -1217,7 +1217,7 @@ export default function admin (state = {}, action) {
       })
     case adminConstants.EDIT_HUB_SUCCESS: {
       const newHubs = state.hubs.filter(x => x.id !== action.payload.hub.id)
-      newHubs.push({ data: action.payload.hub, location: action.payload.location })
+      newHubs.push({ data: action.payload.hub, address: action.payload.address })
 
       return {
         ...state,
@@ -1226,7 +1226,7 @@ export default function admin (state = {}, action) {
         hub: {
           ...state.hub,
           hub: action.payload.hub,
-          location: action.payload.location
+          address: action.payload.address
         }
       }
     }

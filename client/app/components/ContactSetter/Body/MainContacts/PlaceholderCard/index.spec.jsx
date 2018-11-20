@@ -21,7 +21,7 @@ const propsBase = {
   theme,
   contactData: {
     contact,
-    location: {}
+    address: {}
   },
   contactType: 'FOO_CONTACT_TYPE',
   showAddressBook: identity

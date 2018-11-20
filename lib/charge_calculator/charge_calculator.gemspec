@@ -2,11 +2,10 @@
 
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'charge_calculator/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'charge_calculator'
-  spec.version       = ChargeCalculator::VERSION
+  spec.version       = '0.0.1'
   spec.authors       = ['Francisco P Coutinho']
   spec.email         = ['francisco.coutinho@itsmycargo.com']
 

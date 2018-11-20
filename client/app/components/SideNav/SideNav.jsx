@@ -237,7 +237,7 @@ class SideNav extends Component {
       case 'dashboard':
         userDispatch.getDashboard(user.id, true)
         break
-      case 'locations':
+      case 'addresses':
         userDispatch.getLocations(user.id, true)
         break
       case 'profile':

@@ -7,12 +7,11 @@ Dir["#{Rails.root}/spec/support/auxiliary_constants/shipments/*.rb"].each do |fi
 end
 
 describe 'Shipment requests', type: :request do
-
   let(:trip) { create(:trip) }
   let(:user) { create(:user, tenant: tenant) }
   let(:shipment) { create(:shipment, load_type: load_type, direction: direction, user: user, tenant: tenant, origin_nexus: origin_nexus, destination_nexus: destination_nexus, trip: itinerary.trips.first, itinerary: itinerary) }
-  let(:origin_nexus) { create(:location, hub: origin_hub) }
-  let(:destination_nexus) { create(:location, hub: destination_hub) }
+  let(:origin_nexus) { create(:address, hub: origin_hub) }
+  let(:destination_nexus) { create(:address, hub: destination_hub) }
   let!(:itinerary) { create(:itinerary, tenant: tenant, stops: [origin_stop, destination_stop], layovers: [origin_layover, destination_layover], trips: [trip]) }
   let(:origin_hub) { create(:hub, tenant: tenant) }
   let(:destination_hub) { create(:hub, tenant: tenant) }
@@ -27,14 +26,13 @@ describe 'Shipment requests', type: :request do
   let(:charge_breakdown)          { create(:charge_breakdown, trip_id: trip.id, shipment: shipment) }
   let(:price)                     { create(:price) }
 
-  let!(:charge) {
+  let!(:charge) do
     create(:charge,
-      charge_breakdown:         charge_breakdown,
-      charge_category:          ChargeCategory.base_node,
-      children_charge_category: ChargeCategory.grand_total,
-      price:                    price
-    )
-  }
+           charge_breakdown:         charge_breakdown,
+           charge_category:          ChargeCategory.base_node,
+           children_charge_category: ChargeCategory.grand_total,
+           price:                    price)
+  end
 
   context 'user logged in' do
     let(:direction) { 'import' }
@@ -74,47 +72,47 @@ describe 'Shipment requests', type: :request do
           },
           originHubs: [
             {
-              id: origin_hub.id, tenant_id: tenant.id, location_id: origin_hub.location_id, name: 'Gothenburg Port', hub_type: 'ocean', latitude: nil, longitude: nil, hub_status: 'active', hub_code: 'GOO1', trucking_type: nil, photo: nil, nexus_id: origin_hub.nexus_id
+              id: origin_hub.id, tenant_id: tenant.id, address_id: origin_hub.address_id, name: 'Gothenburg Port', hub_type: 'ocean', latitude: nil, longitude: nil, hub_status: 'active', hub_code: 'GOO1', trucking_type: nil, photo: nil, nexus_id: origin_hub.nexus_id
             }
           ],
           destinationHubs: [
             {
-              id: destination_hub.id, tenant_id: tenant.id, location_id: destination_hub.location_id, name: 'Gothenburg Port', hub_type: 'ocean', latitude: nil, longitude: nil, hub_status: 'active', hub_code: 'GOO1', trucking_type: nil, photo: nil, nexus_id: destination_hub.nexus_id
+              id: destination_hub.id, tenant_id: tenant.id, address_id: destination_hub.address_id, name: 'Gothenburg Port', hub_type: 'ocean', latitude: nil, longitude: nil, hub_status: 'active', hub_code: 'GOO1', trucking_type: nil, photo: nil, nexus_id: destination_hub.nexus_id
             }
           ],
           cargoUnits: [
             {
-              id: Container.last.id+1, shipment_id: shipment.id, weight_class: '<= 5.0t', payload_in_kg: '0.0', tare_weight: '0.0', gross_weight: '0.0', dangerous_goods: false, cargo_class: "fcl_20", hs_codes: [], customs_text: nil, quantity: 1, unit_price: { value: '1111.0', currency: 'EUR' }
+              id: Container.last.id + 1, shipment_id: shipment.id, weight_class: '<= 5.0t', payload_in_kg: '0.0', tare_weight: '0.0', gross_weight: '0.0', dangerous_goods: false, cargo_class: 'fcl_20', hs_codes: [], customs_text: nil, quantity: 1, unit_price: { value: '1111.0', currency: 'EUR' }
             }
           ]
         }
       end
 
       it 'Retrieves the shipment data required for the next step in the booking proccess.', pending: 'Outdated spec' do
-        stub_request(:get, "https://maps.googleapis.com/maps/api/geocode/json?address=%7B:country=%3E%22Sweden%22%7D&key=AIzaSyBEJhYgBzz9MVTOybSNSu5IMPz5eC2-J5M&language=en&sensor=false")
+        stub_request(:get, 'https://maps.googleapis.com/maps/api/geocode/json?address=%7B:country=%3E%22Sweden%22%7D&key=AIzaSyBEJhYgBzz9MVTOybSNSu5IMPz5eC2-J5M&language=en&sensor=false')
           .with(headers: {
-            'Accept' => '*/*',
-            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-            'User-Agent' => 'Ruby'
-          })
+                  'Accept' => '*/*',
+                  'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+                  'User-Agent' => 'Ruby'
+                })
           .to_return(
             status: 200,
-            body: {"data"=>{"address_components"=>[{"long_name"=>"Sweden", "short_name"=>"SE", "types"=>["country", "political"]}], "formatted_address"=>"Sweden", "geometry"=>{"bounds"=>{"northeast"=>{"lat"=>69.0599709, "lng"=>24.1773101}, "southwest"=>{"lat"=>55.0059799, "lng"=>10.5798}}, "location"=>{"lat"=>60.12816100000001, "lng"=>18.643501}, "location_type"=>"APPROXIMATE", "viewport"=>{"northeast"=>{"lat"=>69.0599709, "lng"=>24.1773101}, "southwest"=>{"lat"=>55.0059799, "lng"=>10.5798}}}, "partial_match"=>true, "place_id"=>"ChIJ8fA1bTmyXEYRYm-tjaLruCI", "types"=>["country", "political"]}}.to_json,
+            body: { 'data' => { 'address_components' => [{ 'long_name' => 'Sweden', 'short_name' => 'SE', 'types' => %w(country political) }], 'formatted_address' => 'Sweden', 'geometry' => { 'bounds' => { 'northeast' => { 'lat' => 69.0599709, 'lng' => 24.1773101 }, 'southwest' => { 'lat' => 55.0059799, 'lng' => 10.5798 } }, 'address' => { 'lat' => 60.12816100000001, 'lng' => 18.643501 }, 'address_type' => 'APPROXIMATE', 'viewport' => { 'northeast' => { 'lat' => 69.0599709, 'lng' => 24.1773101 }, 'southwest' => { 'lat' => 55.0059799, 'lng' => 10.5798 } } }, 'partial_match' => true, 'place_id' => 'ChIJ8fA1bTmyXEYRYm-tjaLruCI', 'types' => %w(country political) } }.to_json,
             headers: {}
           )
 
         stub_request(:get, "http://data.fixer.io/latest?access_key=#{Settings.fixer.api_key}&base=EUR")
           .with(
             headers: {
-              'Connection'=>'close',
-              'Host'=>'data.fixer.io',
-              'User-Agent'=>'http.rb/3.3.0'
+              'Connection' => 'close',
+              'Host' => 'data.fixer.io',
+              'User-Agent' => 'http.rb/3.3.0'
             }
           )
           .to_return(status: 200, body: { base: 'EUR', rates: { AUD: 1.5983, BGN: 1.9558, BRL: 4.1892, CAD: 1.5557, CHF: 1.197, CNY: 7.7449, CZK: 25.34, DKK: 7.4477, GBP: 0.87608, HKD: 9.6568, HRK: 7.411, HUF: 310.52, IDR: 17_143.0, ILS: 4.3435, INR: 81.39, ISK: 123.3, JPY: 132.41, KRW: 1316.3, MXN: 22.742, MYR: 4.7924, NOK: 9.605, NZD: 1.7032, PHP: 64.179, PLN: 4.1677, RON: 4.6586, RUB: 75.738, SEK: 10.37, SGD: 1.6172, THB: 38.552, TRY: 4.9803, USD: 1.2309, ZAR: 14.801 } }.to_json, headers: {})
 
         post subdomain_shipment_get_offers_path(subdomain_id: 'demo', shipment_id: shipment.id),
-          params: { shipment: { selected_day: planned_origin_drop_off_date, origin: { nexus_id: origin_nexus.id, nexus_name: origin_nexus.name, latitude: origin_nexus.latitude, longitude: origin_nexus.longitude }, destination: { nexus_id: destination_nexus.id, nexus_name: destination_nexus.name, latitude: destination_nexus.latitude, longitude: destination_nexus.longitude }, incoterm: '', delay: '10', trucking: trucking, containers_attributes: [{ payload_in_kg: 0, sizeClass: 'fcl_20', tareWeight: 0, quantity: 1, dangerous_goods: false }] } }
+             params: { shipment: { selected_day: planned_origin_drop_off_date, origin: { nexus_id: origin_nexus.id, nexus_name: origin_nexus.name, latitude: origin_nexus.latitude, longitude: origin_nexus.longitude }, destination: { nexus_id: destination_nexus.id, nexus_name: destination_nexus.name, latitude: destination_nexus.latitude, longitude: destination_nexus.longitude }, incoterm: '', delay: '10', trucking: trucking, containers_attributes: [{ payload_in_kg: 0, sizeClass: 'fcl_20', tareWeight: 0, quantity: 1, dangerous_goods: false }] } }
         expect(response).to have_http_status(:success)
         expect(json[:success]).to be_truthy
         expect(json[:data]).to deep_include(response_data)
@@ -129,12 +127,12 @@ describe 'Shipment requests', type: :request do
           },
           hubs: {
             startHub: {
-              data: { id: origin_hub.id, tenant_id: tenant.id, location_id: origin_hub.location_id, name: origin_hub.name, hub_type: origin_hub.hub_type, latitude: nil, longitude: nil, hub_status: origin_hub.hub_status, hub_code: origin_hub.hub_code, trucking_type: nil, photo: nil, nexus_id: origin_hub.nexus_id },
-              location: origin_hub.nexus.given_attributes
+              data: { id: origin_hub.id, tenant_id: tenant.id, address_id: origin_hub.address_id, name: origin_hub.name, hub_type: origin_hub.hub_type, latitude: nil, longitude: nil, hub_status: origin_hub.hub_status, hub_code: origin_hub.hub_code, trucking_type: nil, photo: nil, nexus_id: origin_hub.nexus_id },
+              address: origin_hub.nexus.given_attributes
             },
             endHub: {
-              data: { id: destination_hub.id, tenant_id: tenant.id, location_id: destination_hub.location_id, name: destination_hub.name, hub_type: destination_hub.hub_type, latitude: destination_hub.latitude, longitude: destination_hub.longitude, hub_status: destination_hub.hub_status, hub_code: destination_hub.hub_code, nexus_id: destination_hub.nexus_id },
-              location: destination_hub.nexus.given_attributes
+              data: { id: destination_hub.id, tenant_id: tenant.id, address_id: destination_hub.address_id, name: destination_hub.name, hub_type: destination_hub.hub_type, latitude: destination_hub.latitude, longitude: destination_hub.longitude, hub_status: destination_hub.hub_status, hub_code: destination_hub.hub_code, nexus_id: destination_hub.nexus_id },
+              address: destination_hub.nexus.given_attributes
             }
           },
           contacts: [], userLocations: [],
@@ -148,12 +146,12 @@ describe 'Shipment requests', type: :request do
             }
           ],
           cargoItems: [], customs: { import: { unknown: true }, export: { unknown: true }, total: { total: { value: 0, currency: 'EUR' } } },
-          locations: {
+          addresses: {
             origin: {
-              id: origin_nexus.id, name: origin_nexus.name, location_type: nil, latitude: origin_nexus.latitude, longitude: origin_nexus.longitude, geocoded_address: origin_nexus.geocoded_address, zip_code: origin_nexus.zip_code, city: origin_nexus.city
+              id: origin_nexus.id, name: origin_nexus.name, address_type: nil, latitude: origin_nexus.latitude, longitude: origin_nexus.longitude, geocoded_address: origin_nexus.geocoded_address, zip_code: origin_nexus.zip_code, city: origin_nexus.city
             },
             destination: {
-              id: destination_nexus.id, name: destination_nexus.name, location_type: nil, latitude: destination_nexus.latitude, longitude: destination_nexus.longitude, geocoded_address: destination_nexus.geocoded_address, zip_code: destination_nexus.zip_code, city: destination_nexus.city
+              id: destination_nexus.id, name: destination_nexus.name, address_type: nil, latitude: destination_nexus.latitude, longitude: destination_nexus.longitude, geocoded_address: destination_nexus.geocoded_address, zip_code: destination_nexus.zip_code, city: destination_nexus.city
             }
           }
         }
@@ -166,7 +164,7 @@ describe 'Shipment requests', type: :request do
           schedule: {
             origin_hub:             origin_hub.as_json(only: %i(id name)),
             destination_hub:        destination_hub.as_json(only: %i(id name)),
-            mode_of_transport:      "ocean",
+            mode_of_transport:      'ocean',
             itinerary_id:           itinerary.id,
             eta:                    destination_layover.eta.iso8601(3),
             etd:                    origin_layover.etd.iso8601(3),
@@ -185,7 +183,7 @@ describe 'Shipment requests', type: :request do
     end
 
     context '#subdomain_shipment_update_shipment_path' do
-      let(:cargo_notes) { "example note" }
+      let(:cargo_notes) { 'example note' }
       let(:response_data) do
         {
           shipment:   {}, # TBD
@@ -196,12 +194,12 @@ describe 'Shipment requests', type: :request do
             }
           ],
           aggregatedCargo: nil,
-          locations: {
+          addresses: {
             origin: {
-              id: origin_nexus.id, name: origin_nexus.name, location_type: nil, latitude: origin_nexus.latitude, longitude: origin_nexus.longitude, geocoded_address: origin_nexus.geocoded_address, zip_code: origin_nexus.zip_code, city: origin_nexus.city
+              id: origin_nexus.id, name: origin_nexus.name, address_type: nil, latitude: origin_nexus.latitude, longitude: origin_nexus.longitude, geocoded_address: origin_nexus.geocoded_address, zip_code: origin_nexus.zip_code, city: origin_nexus.city
             },
             destination: {
-              id: destination_nexus.id, name: destination_nexus.name, location_type: nil, latitude: destination_nexus.latitude, longitude: destination_nexus.longitude, geocoded_address: destination_nexus.geocoded_address, zip_code: destination_nexus.zip_code, city: destination_nexus.city
+              id: destination_nexus.id, name: destination_nexus.name, address_type: nil, latitude: destination_nexus.latitude, longitude: destination_nexus.longitude, geocoded_address: destination_nexus.geocoded_address, zip_code: destination_nexus.zip_code, city: destination_nexus.city
             }
           },
           consignee:      {}, # TBD
@@ -217,60 +215,60 @@ describe 'Shipment requests', type: :request do
       end
 
       it 'Sets the shipment contacts & data', pending: 'Outdated spec' do
-        require "geocoder"
+        require 'geocoder'
         # Countries
 
         # UK
-        stub_request(:get, "https://maps.googleapis.com/maps/api/geocode/json?address=%7B:country=%3E%22UK%22%7D&key=AIzaSyBEJhYgBzz9MVTOybSNSu5IMPz5eC2-J5M&language=en&sensor=false")
+        stub_request(:get, 'https://maps.googleapis.com/maps/api/geocode/json?address=%7B:country=%3E%22UK%22%7D&key=AIzaSyBEJhYgBzz9MVTOybSNSu5IMPz5eC2-J5M&language=en&sensor=false')
           .with(headers: {
-            'Accept'=>'*/*',
-            'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-            'User-Agent'=>'Ruby'
-          })
+                  'Accept' => '*/*',
+                  'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+                  'User-Agent' => 'Ruby'
+                })
           .to_return(
             status: 200,
-            body: {"results"=>[{"address_components"=>[{"long_name"=>"United Kingdom", "short_name"=>"GB", "types"=>["country", "political"]}], "formatted_address"=>"United Kingdom", "geometry"=>{"bounds"=>{"northeast"=>{"lat"=>60.91569999999999, "lng"=>33.9165549}, "southwest"=>{"lat"=>34.5614, "lng"=>-8.8988999}}, "location"=>{"lat"=>55.378051, "lng"=>-3.435973}, "location_type"=>"APPROXIMATE", "viewport"=>{"northeast"=>{"lat"=>60.91569999999999, "lng"=>33.9165549}, "southwest"=>{"lat"=>34.5614, "lng"=>-8.8988999}}}, "partial_match"=>true, "place_id"=>"ChIJqZHHQhE7WgIReiWIMkOg-MQ", "types"=>["country", "political"]}], "status"=>"OK"}.to_json,
+            body: { 'results' => [{ 'address_components' => [{ 'long_name' => 'United Kingdom', 'short_name' => 'GB', 'types' => %w(country political) }], 'formatted_address' => 'United Kingdom', 'geometry' => { 'bounds' => { 'northeast' => { 'lat' => 60.91569999999999, 'lng' => 33.9165549 }, 'southwest' => { 'lat' => 34.5614, 'lng' => -8.8988999 } }, 'address' => { 'lat' => 55.378051, 'lng' => -3.435973 }, 'address_type' => 'APPROXIMATE', 'viewport' => { 'northeast' => { 'lat' => 60.91569999999999, 'lng' => 33.9165549 }, 'southwest' => { 'lat' => 34.5614, 'lng' => -8.8988999 } } }, 'partial_match' => true, 'place_id' => 'ChIJqZHHQhE7WgIReiWIMkOg-MQ', 'types' => %w(country political) }], 'status' => 'OK' }.to_json,
             headers: {}
           )
 
         # Sweden
-        stub_request(:get, "https://maps.googleapis.com/maps/api/geocode/json?address=%7B:country=%3E%22Sweden%22%7D&key=AIzaSyBEJhYgBzz9MVTOybSNSu5IMPz5eC2-J5M&language=en&sensor=false")
+        stub_request(:get, 'https://maps.googleapis.com/maps/api/geocode/json?address=%7B:country=%3E%22Sweden%22%7D&key=AIzaSyBEJhYgBzz9MVTOybSNSu5IMPz5eC2-J5M&language=en&sensor=false')
           .with(headers: {
-            'Accept'=>'*/*',
-            'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-            'User-Agent'=>'Ruby'
-          })
+                  'Accept' => '*/*',
+                  'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+                  'User-Agent' => 'Ruby'
+                })
           .to_return(
             status: 200,
-            body: {"results"=>[{"address_components"=>[{"long_name"=>"Sweden", "short_name"=>"SE", "types"=>["country", "political"]}], "formatted_address"=>"Sweden", "geometry"=>{"bounds"=>{"northeast"=>{"lat"=>69.0599709, "lng"=>24.1773101}, "southwest"=>{"lat"=>55.0059799, "lng"=>10.5798}}, "location"=>{"lat"=>60.12816100000001, "lng"=>18.643501}, "location_type"=>"APPROXIMATE", "viewport"=>{"northeast"=>{"lat"=>69.0599709, "lng"=>24.1773101}, "southwest"=>{"lat"=>55.0059799, "lng"=>10.5798}}}, "partial_match"=>true, "place_id"=>"ChIJ8fA1bTmyXEYRYm-tjaLruCI", "types"=>["country", "political"]}], "status"=>"OK"}.to_json,
+            body: { 'results' => [{ 'address_components' => [{ 'long_name' => 'Sweden', 'short_name' => 'SE', 'types' => %w(country political) }], 'formatted_address' => 'Sweden', 'geometry' => { 'bounds' => { 'northeast' => { 'lat' => 69.0599709, 'lng' => 24.1773101 }, 'southwest' => { 'lat' => 55.0059799, 'lng' => 10.5798 } }, 'address' => { 'lat' => 60.12816100000001, 'lng' => 18.643501 }, 'address_type' => 'APPROXIMATE', 'viewport' => { 'northeast' => { 'lat' => 69.0599709, 'lng' => 24.1773101 }, 'southwest' => { 'lat' => 55.0059799, 'lng' => 10.5798 } } }, 'partial_match' => true, 'place_id' => 'ChIJ8fA1bTmyXEYRYm-tjaLruCI', 'types' => %w(country political) }], 'status' => 'OK' }.to_json,
             headers: {}
           )
 
         # Addresses
 
         # Tuna St
-        stub_request(:get, "https://maps.googleapis.com/maps/api/geocode/json?address=Tuna%20St%2064,%2090731%20San%20Pedro,%20Sweden&key=AIzaSyBEJhYgBzz9MVTOybSNSu5IMPz5eC2-J5M&language=en&sensor=false")
+        stub_request(:get, 'https://maps.googleapis.com/maps/api/geocode/json?address=Tuna%20St%2064,%2090731%20San%20Pedro,%20Sweden&key=AIzaSyBEJhYgBzz9MVTOybSNSu5IMPz5eC2-J5M&language=en&sensor=false')
           .with(headers: {
-            'Accept'=>'*/*',
-            'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-            'User-Agent'=>'Ruby'
-          })
+                  'Accept' => '*/*',
+                  'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+                  'User-Agent' => 'Ruby'
+                })
           .to_return(
             status: 200,
-            body: {"results"=>[{"address_components"=>[{"long_name"=>"Sweden", "short_name"=>"SE", "types"=>["country", "political"]}], "formatted_address"=>"Sweden", "geometry"=>{"bounds"=>{"northeast"=>{"lat"=>69.0599709, "lng"=>24.1773101}, "southwest"=>{"lat"=>55.0059799, "lng"=>10.5798}}, "location"=>{"lat"=>60.12816100000001, "lng"=>18.643501}, "location_type"=>"APPROXIMATE", "viewport"=>{"northeast"=>{"lat"=>69.0599709, "lng"=>24.1773101}, "southwest"=>{"lat"=>55.0059799, "lng"=>10.5798}}}, "partial_match"=>true, "place_id"=>"ChIJ8fA1bTmyXEYRYm-tjaLruCI", "types"=>["country", "political"]}], "status"=>"OK"}.to_json,
+            body: { 'results' => [{ 'address_components' => [{ 'long_name' => 'Sweden', 'short_name' => 'SE', 'types' => %w(country political) }], 'formatted_address' => 'Sweden', 'geometry' => { 'bounds' => { 'northeast' => { 'lat' => 69.0599709, 'lng' => 24.1773101 }, 'southwest' => { 'lat' => 55.0059799, 'lng' => 10.5798 } }, 'address' => { 'lat' => 60.12816100000001, 'lng' => 18.643501 }, 'address_type' => 'APPROXIMATE', 'viewport' => { 'northeast' => { 'lat' => 69.0599709, 'lng' => 24.1773101 }, 'southwest' => { 'lat' => 55.0059799, 'lng' => 10.5798 } } }, 'partial_match' => true, 'place_id' => 'ChIJ8fA1bTmyXEYRYm-tjaLruCI', 'types' => %w(country political) }], 'status' => 'OK' }.to_json,
             headers: {}
           )
 
         # College Rd
-        stub_request(:get, "https://maps.googleapis.com/maps/api/geocode/json?address=College%20Rd%201,%20PO13LX%20Portsmouth&key=AIzaSyBEJhYgBzz9MVTOybSNSu5IMPz5eC2-J5M&language=en&sensor=false")
+        stub_request(:get, 'https://maps.googleapis.com/maps/api/geocode/json?address=College%20Rd%201,%20PO13LX%20Portsmouth&key=AIzaSyBEJhYgBzz9MVTOybSNSu5IMPz5eC2-J5M&language=en&sensor=false')
           .with(headers: {
-            'Accept'=>'*/*',
-            'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-            'User-Agent'=>'Ruby'
-          })
+                  'Accept' => '*/*',
+                  'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+                  'User-Agent' => 'Ruby'
+                })
           .to_return(
             status: 200,
-            body: {"results"=>[{"address_components"=>[{"long_name"=>"1", "short_name"=>"1", "types"=>["street_number"]}, {"long_name"=>"College Road", "short_name"=>"College Rd", "types"=>["route"]}, {"long_name"=>"Portsmouth", "short_name"=>"Portsmouth", "types"=>["postal_town"]}, {"long_name"=>"Portsmouth", "short_name"=>"Portsmouth", "types"=>["administrative_area_level_2", "political"]}, {"long_name"=>"England", "short_name"=>"England", "types"=>["administrative_area_level_1", "political"]}, {"long_name"=>"United Kingdom", "short_name"=>"GB", "types"=>["country", "political"]}, {"long_name"=>"PO1 3LX", "short_name"=>"PO1 3LX", "types"=>["postal_code"]}], "formatted_address"=>"1 College Rd, Portsmouth PO1 3LX, UK", "geometry"=>{"location"=>{"lat"=>50.8000106, "lng"=>-1.1066824}, "location_type"=>"ROOFTOP", "viewport"=>{"northeast"=>{"lat"=>50.8013595802915, "lng"=>-1.105333419708498}, "southwest"=>{"lat"=>50.7986616197085, "lng"=>-1.108031380291502}}}, "place_id"=>"ChIJsY5dan9ddEgR8NM3lL61DpM", "types"=>["premise"]}], "status"=>"OK"}.to_json,
+            body: { 'results' => [{ 'address_components' => [{ 'long_name' => '1', 'short_name' => '1', 'types' => ['street_number'] }, { 'long_name' => 'College Road', 'short_name' => 'College Rd', 'types' => ['route'] }, { 'long_name' => 'Portsmouth', 'short_name' => 'Portsmouth', 'types' => ['postal_town'] }, { 'long_name' => 'Portsmouth', 'short_name' => 'Portsmouth', 'types' => %w(administrative_area_level_2 political) }, { 'long_name' => 'England', 'short_name' => 'England', 'types' => %w(administrative_area_level_1 political) }, { 'long_name' => 'United Kingdom', 'short_name' => 'GB', 'types' => %w(country political) }, { 'long_name' => 'PO1 3LX', 'short_name' => 'PO1 3LX', 'types' => ['postal_code'] }], 'formatted_address' => '1 College Rd, Portsmouth PO1 3LX, UK', 'geometry' => { 'address' => { 'lat' => 50.8000106, 'lng' => -1.1066824 }, 'address_type' => 'ROOFTOP', 'viewport' => { 'northeast' => { 'lat' => 50.8013595802915, 'lng' => -1.105333419708498 }, 'southwest' => { 'lat' => 50.7986616197085, 'lng' => -1.108031380291502 } } }, 'place_id' => 'ChIJsY5dan9ddEgR8NM3lL61DpM', 'types' => ['premise'] }], 'status' => 'OK' }.to_json,
             headers: {}
           )
 
@@ -282,8 +280,8 @@ describe 'Shipment requests', type: :request do
             notifyees: [],
             hsCodes: {},
             totalGoodsValue: {
-              value: "1000",
-              currency: "EUR"
+              value: '1000',
+              currency: 'EUR'
             },
             cargoNotes: cargo_notes,
             insurance: {
@@ -296,7 +294,7 @@ describe 'Shipment requests', type: :request do
               total: { val: 0 }
             },
             hsTexts: {},
-            incotermText: "",
+            incotermText: '',
             customsCredit: false
           }
         }
@@ -312,7 +310,7 @@ describe 'Shipment requests', type: :request do
       let(:response_data) do
         {
           shipment: {
-            status: "requested_by_unconfirmed_account", id: shipment.id, load_type: load_type, direction: direction, origin_nexus_id: origin_nexus.id, destination_nexus_id: destination_nexus.id, uuid: shipment.uuid, imc_reference: shipment.imc_reference, tenant_id: tenant.id, itinerary_id: itinerary.id, trucking: trucking, customs_credit: false, total_price: nil, total_goods_value: nil, trip_id: trip.id, eori: nil, notes: nil, incoterm: nil, insurance: nil, customs: nil
+            status: 'requested_by_unconfirmed_account', id: shipment.id, load_type: load_type, direction: direction, origin_nexus_id: origin_nexus.id, destination_nexus_id: destination_nexus.id, uuid: shipment.uuid, imc_reference: shipment.imc_reference, tenant_id: tenant.id, itinerary_id: itinerary.id, trucking: trucking, customs_credit: false, total_price: nil, total_goods_value: nil, trip_id: trip.id, eori: nil, notes: nil, incoterm: nil, insurance: nil, customs: nil
           }
         }
       end

@@ -30,11 +30,11 @@ const propsBase = {
   theme,
   shipper: {
     contact,
-    location: {}
+    address: {}
   },
   consignee: {
     contact: {},
-    location: {}
+    address: {}
   },
   direction: 'FOO_DIRECTION',
   showAddressBook: identity

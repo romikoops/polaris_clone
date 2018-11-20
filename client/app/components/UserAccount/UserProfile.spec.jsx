@@ -38,7 +38,7 @@ const propsBase = {
     setCurrency: identity
   },
   aliases: [],
-  locations: [],
+  addresses: [],
   authDispatch: {
     updateUser: identity
   },

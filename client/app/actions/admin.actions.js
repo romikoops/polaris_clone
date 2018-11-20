@@ -1340,7 +1340,7 @@ function deleteDocument (docId) {
   }
 }
 
-function saveNewHub (hub, location) {
+function saveNewHub (hub, address) {
   function request (hubData) {
     return { type: adminConstants.NEW_HUB_REQUEST, payload: hubData }
   }
@@ -1354,7 +1354,7 @@ function saveNewHub (hub, location) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.saveNewHub(hub, location).then(
+    adminService.saveNewHub(hub, address).then(
       (data) => {
         dispatch(success(data))
       },

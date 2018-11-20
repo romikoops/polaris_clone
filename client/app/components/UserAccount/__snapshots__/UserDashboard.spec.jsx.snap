@@ -154,8 +154,7 @@ exports[`shallow render 1`] = `
         </div>
       </div>
       <UserLocations
-        cols={3}
-        locations={
+        addresses={
           Array [
             Object {
               "city": "FOO_CITY",
@@ -171,6 +170,7 @@ exports[`shallow render 1`] = `
             },
           ]
         }
+        cols={3}
         makePrimary={[Function]}
         setNav={[Function]}
         t={[Function]}

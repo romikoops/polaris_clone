@@ -23,25 +23,25 @@ class UserLocations extends Component {
   }
 
   componentDidMount () {
-    this.props.setNav('locations')
+    this.props.setNav('addresses')
     window.scrollTo(0, 0)
   }
 
-  destroyLocation (locationId) {
+  destroyLocation (addressId) {
     const { userDispatch, user } = this.props
-    userDispatch.destroyLocation(user.id, locationId, false)
+    userDispatch.destroyLocation(user.id, addressId, false)
   }
 
-  saveLocationEdit (location) {
+  saveLocationEdit (address) {
     const { userDispatch, user } = this.props
-    userDispatch.editUserLocation(user.id, location)
+    userDispatch.editUserLocation(user.id, address)
     this.toggleActiveView()
   }
 
-  editLocation (location) {
+  editLocation (address) {
     this.setState({
       activeView: 'editLocation',
-      editLocation: location
+      editLocation: address
     })
   }
 
@@ -56,14 +56,14 @@ class UserLocations extends Component {
     this.toggleActiveView()
   }
 
-  makePrimary (locationId) {
+  makePrimary (addressId) {
     const { userDispatch, user } = this.props
-    userDispatch.makePrimary(user.id, locationId)
+    userDispatch.makePrimary(user.id, addressId)
   }
 
   render () {
     const { theme, cols, t } = this.props
-    const locInfo = this.props.locations
+    const locInfo = this.props.addresses
 
     const gradientFontStyle =
       theme && theme.colors
@@ -74,7 +74,7 @@ class UserLocations extends Component {
       case 'allLocations':
         activeView = locInfo
           ? (<UserLocationsBox
-            locations={locInfo}
+            addresses={locInfo}
             makePrimary={this.makePrimary}
             toggleActiveView={this.toggleActiveView}
             destroyLocation={this.destroyLocation}
@@ -94,7 +94,7 @@ class UserLocations extends Component {
             theme={this.props.theme}
             component={EditLocation}
             toggleActiveView={this.toggleActiveView}
-            locationId={undefined}
+            addressId={undefined}
             saveLocation={this.saveLocation}
           />
         )
@@ -105,8 +105,8 @@ class UserLocations extends Component {
             theme={this.props.theme}
             component={EditLocation}
             toggleActiveView={this.toggleActiveView}
-            locationId={undefined}
-            location={this.state.editLocation}
+            addressId={undefined}
+            address={this.state.editLocation}
             saveLocation={this.saveLocationEdit}
           />
         )
@@ -114,7 +114,7 @@ class UserLocations extends Component {
       default:
         activeView = locInfo
           ? (<UserLocationsBox
-            locations={locInfo}
+            addresses={locInfo}
             makePrimary={this.makePrimary}
             toggleActiveView={this.toggleActiveView}
             destroyLocation={this.destroyLocation}
@@ -143,12 +143,12 @@ UserLocations.propTypes = {
     destroyLocation: PropTypes.func
   }).isRequired,
   cols: PropTypes.number,
-  locations: PropTypes.arrayOf(PropTypes.location)
+  addresses: PropTypes.arrayOf(PropTypes.address)
 }
 
 UserLocations.defaultProps = {
   theme: null,
-  locations: [],
+  addresses: [],
   cols: 3
 }
 

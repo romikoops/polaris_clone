@@ -60,6 +60,25 @@ ActiveRecord::Schema.define(version: 2018_11_13_124857) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "addresses", force: :cascade do |t|
+    t.string "name"
+    t.string "location_type"
+    t.float "latitude"
+    t.float "longitude"
+    t.string "geocoded_address"
+    t.string "street"
+    t.string "street_number"
+    t.string "zip_code"
+    t.string "city"
+    t.string "street_address"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "province"
+    t.string "photo"
+    t.string "premise"
+    t.integer "country_id"
+  end
+
   create_table "agencies", force: :cascade do |t|
     t.string "name"
     t.integer "tenant_id"
@@ -150,7 +169,7 @@ ActiveRecord::Schema.define(version: 2018_11_13_124857) do
 
   create_table "contacts", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "location_id"
+    t.integer "address_id"
     t.string "company_name"
     t.string "first_name", comment: "MASKED WITH FUNCTION anon.random_first_name()"
     t.string "last_name", comment: "MASKED WITH FUNCTION anon.random_last_name()"
@@ -269,7 +288,7 @@ ActiveRecord::Schema.define(version: 2018_11_13_124857) do
 
   create_table "hubs", force: :cascade do |t|
     t.integer "tenant_id"
-    t.integer "location_id"
+    t.integer "address_id"
     t.string "name"
     t.string "hub_type"
     t.float "latitude"
@@ -382,22 +401,15 @@ ActiveRecord::Schema.define(version: 2018_11_13_124857) do
   end
 
   create_table "locations", force: :cascade do |t|
-    t.string "name"
-    t.string "location_type"
-    t.float "latitude"
-    t.float "longitude"
-    t.string "geocoded_address"
-    t.string "street"
-    t.string "street_number"
-    t.string "zip_code"
+    t.string "postal_code"
+    t.string "suburb"
+    t.string "neighbourhood"
     t.string "city"
-    t.string "street_address"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "province"
-    t.string "photo"
-    t.string "premise"
-    t.integer "country_id"
+    t.string "country"
+    t.string "admin_level"
+    t.geometry "bounds", limit: {:srid=>0, :type=>"geometry"}
+    t.index ["postal_code", "suburb", "neighbourhood", "city", "province", "country"], name: "uniq_index", unique: true
   end
 
   create_table "mandatory_charges", force: :cascade do |t|
@@ -494,7 +506,7 @@ ActiveRecord::Schema.define(version: 2018_11_13_124857) do
     t.string "web"
     t.string "code"
     t.integer "nexus_id"
-    t.integer "location_id"
+    t.integer "address_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -646,7 +658,6 @@ ActiveRecord::Schema.define(version: 2018_11_13_124857) do
     t.datetime "planned_delivery_date"
     t.datetime "planned_destination_collection_date"
     t.datetime "desired_start_date"
-    t.integer "stage"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 
@@ -746,7 +757,7 @@ ActiveRecord::Schema.define(version: 2018_11_13_124857) do
     t.integer "distance"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "geometry_id"
+    t.integer "location_id"
     t.index ["city_name"], name: "index_trucking_destinations_on_city_name"
     t.index ["country_code"], name: "index_trucking_destinations_on_country_code"
     t.index ["distance"], name: "index_trucking_destinations_on_distance"
@@ -776,9 +787,9 @@ ActiveRecord::Schema.define(version: 2018_11_13_124857) do
     t.integer "trucking_pricing_scope_id"
   end
 
-  create_table "user_locations", force: :cascade do |t|
+  create_table "user_addresses", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "location_id"
+    t.integer "address_id"
     t.string "category"
     t.boolean "primary", default: false
     t.datetime "created_at", null: false

@@ -52,11 +52,11 @@ ShipmentContactsBoxMainContacts.propTypes = {
   theme: PropTypes.theme,
   shipper: PropTypes.shape({
     contact: PropTypes.object,
-    location: PropTypes.object
+    address: PropTypes.object
   }).isRequired,
   consignee: PropTypes.shape({
     contact: PropTypes.object,
-    location: PropTypes.object
+    address: PropTypes.object
   }).isRequired,
   direction: PropTypes.string.isRequired,
   showAddressBook: PropTypes.func.isRequired,

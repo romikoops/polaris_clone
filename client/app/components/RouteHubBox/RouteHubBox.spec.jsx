@@ -1,16 +1,16 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, shipment, locations } from '../../mocks'
+import { theme, shipment, addresses } from '../../mocks'
 
 import RouteHubBox from './RouteHubBox'
 
 const editedShipment = {
   ...shipment,
   origin_hub: {
-    startHub: { location: { } }
+    startHub: { address: { } }
   },
   destination_hub: {
-    startHub: { location: { } }
+    startHub: { address: { } }
   }
 
 }

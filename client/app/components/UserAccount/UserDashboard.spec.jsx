@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, user, shipments, location, tenant } from '../../mocks'
+import { theme, identity, user, shipments, address, tenant } from '../../mocks'
 
 jest.mock('../../helpers', () => ({
   gradientTextGenerator: x => x
@@ -44,7 +44,7 @@ const propsBase = {
     shipments,
     pricings: {},
     contacts: [],
-    locations: [location]
+    addresses: [address]
   }
 }
 

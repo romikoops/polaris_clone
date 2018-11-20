@@ -67,9 +67,9 @@ class AdminHubs extends Component {
   closeModal () {
     this.setState({ newHub: false })
   }
-  saveNewHub (hub, location) {
+  saveNewHub (hub, address) {
     const { adminDispatch } = this.props
-    adminDispatch.saveNewHub(hub, location)
+    adminDispatch.saveNewHub(hub, address)
   }
 
   render () {

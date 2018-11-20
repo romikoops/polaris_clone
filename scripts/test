@@ -30,7 +30,7 @@ end
 
 def bundle!
   path = ENV['CI'] ? '--path vendor' : ''
-  system("bundle check #{path}") || system!("bundle install -j $(nproc) #{path}")
+  system("bundle check #{path}") || system!("bundle install #{path}")
 end
 
 def runner(dir:, name:)

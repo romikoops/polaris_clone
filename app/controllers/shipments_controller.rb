@@ -123,7 +123,7 @@ class ShipmentsController < ApplicationController
     end
 
     contacts = shipment.shipment_contacts.map do |sc|
-      { contact: sc.contact, type: sc.contact_type, location: sc.contact.location } if sc.contact
+      { contact: sc.contact, type: sc.contact_type, address: sc.contact.address } if sc.contact
     end
 
     documents = shipment.documents.map do |doc|
@@ -181,7 +181,6 @@ class ShipmentsController < ApplicationController
   end
 
   def get_quote_index
-
     response = Rails.cache.fetch("#{quoted_shipments.cache_key}/shipment_index", expires_in: 12.hours) do
       per_page = params.fetch(:per_page, 4).to_f
       quoted = quoted_shipments.order(updated_at: :desc)

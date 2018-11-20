@@ -13,7 +13,7 @@ export class AdminHubEdit extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      location: props.hub.location,
+      address: props.hub.address,
       hub: props.hub
     }
     this.handlePlaceChange = this.handlePlaceChange.bind(this)
@@ -25,23 +25,23 @@ export class AdminHubEdit extends Component {
   }
   componentDidMount () {
     if (this.props.hub) {
-      this.setExistingLocation(this.props.hub.location)
+      this.setExistingLocation(this.props.hub.address)
     }
   }
   componentWillReceiveProps (nextProps) {
     if (nextProps.hub && !this.state.hub.id) {
       this.setState({ hub: nextProps.hub })
     }
-    if (nextProps.hub && nextProps.hub.location && !this.state.location.id) {
-      this.setExistingLocation(nextProps.hub.location)
+    if (nextProps.hub && nextProps.hub.address && !this.state.address.id) {
+      this.setExistingLocation(nextProps.hub.address)
     }
   }
-  setExistingLocation (locationObj) {
-    const location = {
-      ...locationObj,
-      country: locationObj.country.name
+  setExistingLocation (addressObj) {
+    const address = {
+      ...addressObj,
+      country: addressObj.country.name
     }
-    this.setState({ location })
+    this.setState({ address })
   }
   handlePlaceChange (place) {
     const tmpAddress = {
@@ -79,12 +79,12 @@ export class AdminHubEdit extends Component {
     tmpAddress.fullAddress = place.formatted_address
     tmpAddress.geocoded_address = place.formatted_address
     this.setState({
-      location: tmpAddress,
+      address: tmpAddress,
       hub: {
         ...this.state.hub,
         name: tmpAddress.city
       },
-      autocomplete: { ...this.state.autocomplete, location: true }
+      autocomplete: { ...this.state.autocomplete, address: true }
     })
   }
   handleAddressChange (event) {
@@ -111,7 +111,7 @@ export class AdminHubEdit extends Component {
   }
   resetAuto () {
     this.setState({
-      autocomplete: { ...this.state.autocomplete, location: false }
+      autocomplete: { ...this.state.autocomplete, address: false }
     })
   }
   handleTruckingType (ev) {
@@ -141,29 +141,29 @@ export class AdminHubEdit extends Component {
   }
 
   saveHubEdit () {
-    const { hub, location } = this.state
+    const { hub, address } = this.state
     const preppedLocation = {}
     const preppedHub = {}
-    preppedLocation.street_number = location.street_number
-    preppedLocation.street = location.street
-    preppedLocation.zip_code = location.zip_code
-    preppedLocation.city = location.city
-    preppedLocation.country = location.country
-    preppedLocation.latitude = location.latitude
-    preppedLocation.longitude = location.longitude
-    preppedLocation.geocoded_address = location.geocoded_address
+    preppedLocation.street_number = address.street_number
+    preppedLocation.street = address.street
+    preppedLocation.zip_code = address.zip_code
+    preppedLocation.city = address.city
+    preppedLocation.country = address.country
+    preppedLocation.latitude = address.latitude
+    preppedLocation.longitude = address.longitude
+    preppedLocation.geocoded_address = address.geocoded_address
 
     preppedHub.name = hub.name
-    preppedHub.latitude = location.latitude
-    preppedHub.longitude = location.longitude
+    preppedHub.latitude = address.latitude
+    preppedHub.longitude = address.longitude
     this.props.adminDispatch
-      .editHub(hub.id, { data: preppedHub, location: preppedLocation })
+      .editHub(hub.id, { data: preppedHub, address: preppedLocation })
     this.props.close()
   }
 
   render () {
     const { theme, close } = this.props
-    const { hub, location } = this.state
+    const { hub, address } = this.state
     const iconStyle = gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
 
     return (
@@ -185,7 +185,7 @@ export class AdminHubEdit extends Component {
               theme={theme}
               component={PlaceSearch}
               handlePlaceChange={this.handlePlaceChange}
-              location={hub.location}
+              address={hub.address}
             />
           </div>
           <div
@@ -218,11 +218,11 @@ export class AdminHubEdit extends Component {
                   >
                     <p className="flex-100">Latitude</p>
                     <input
-                      name="location-latitude"
+                      name="address-latitude"
                       className="flex-none"
                       type="string"
                       onChange={this.handleAddressChange}
-                      value={location.latitude}
+                      value={address.latitude}
                       placeholder="Latitude"
                     />
                   </div>
@@ -234,11 +234,11 @@ export class AdminHubEdit extends Component {
                   >
                     <p className="flex-100">Longitude</p>
                     <input
-                      name="location-longitude"
+                      name="address-longitude"
                       className="flex-none"
                       type="string"
                       onChange={this.handleAddressChange}
-                      value={location.longitude}
+                      value={address.longitude}
                       placeholder="Longitude"
                     />
                   </div>
@@ -274,22 +274,22 @@ export class AdminHubEdit extends Component {
                   <p className="flex-100">No.</p>
                   <input
                     id="not-auto"
-                    name="location-street_number"
+                    name="address-street_number"
                     className="flex-none"
                     type="string"
                     onChange={this.handleAddressChange}
-                    value={location.street_number}
+                    value={address.street_number}
                     placeholder="Number"
                   />
                 </div>
                 <div className={`flex-75 layout-row layout-wrap layout-align-center-center ${styles.material_input}`}>
                   <p className="flex-100">Street</p>
                   <input
-                    name="location-street"
+                    name="address-street"
                     className="flex-none"
                     type="string"
                     onChange={this.handleAddressChange}
-                    value={location.street}
+                    value={address.street}
                     placeholder="Street"
                   />
                 </div>
@@ -298,22 +298,22 @@ export class AdminHubEdit extends Component {
                 <div className={`flex-30 layout-row layout-wrap layout-align-center-center ${styles.material_input}`}>
                   <p className="flex-100">Zipcode</p>
                   <input
-                    name="location-zipCode"
+                    name="address-zipCode"
                     className="flex-none"
                     type="string"
                     onChange={this.handleAddressChange}
-                    value={location.zip_code}
+                    value={address.zip_code}
                     placeholder="Zip Code"
                   />
                 </div>
                 <div className={`flex-65 layout-row layout-wrap ayout-align-center-center ${styles.material_input}`}>
                   <p className="flex-100">City</p>
                   <input
-                    name="location-city"
+                    name="address-city"
                     className="flex-none"
                     type="string"
                     onChange={this.handleAddressChange}
-                    value={location.city}
+                    value={address.city}
                     placeholder="City"
                   />
                 </div>
@@ -323,11 +323,11 @@ export class AdminHubEdit extends Component {
                 <div className={`flex-100 layout-row layout-wrap layout-align-center-center ${styles.material_input}`}>
                   <p className="flex-100">Country</p>
                   <input
-                    name="location-country"
+                    name="address-country"
                     className="flex-none"
                     type="string"
                     onChange={this.handleAddressChange}
-                    value={location.country}
+                    value={address.country}
                     placeholder="Country"
                   />
                 </div>

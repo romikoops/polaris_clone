@@ -2,7 +2,7 @@ Dear <%= @shipment.receiver.full_name %>,<br>
 <br>
 We have received a booking for a shipment from <%= @shipment.user.company_name %> that you are the consignee for. The ItsMyCargo Booking Reference is <%= @shipment.imc_reference %>.<br>
 <br>
-Attached you find all details regarding the shipment as a pdf-file, including Estimated Time of Arrival at Port: <%= @shipment.end_port_location.city_country %>.<br>
+Attached you find all details regarding the shipment as a pdf-file, including Estimated Time of Arrival at Port: <%= @shipment.end_port_address.city_country %>.<br>
 <br>
 Please note that your cargo has been shipped under the Incoterms&reg; (2010) "CFR". This means you are responsible for the last part of the transportation chain from the Endport. If you need assistance organizing this, please contact us at <%= mail_to("support@itsmycargo.com", "support@itsmycargo.com") %> .<br>
 <br>

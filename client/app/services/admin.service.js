@@ -470,11 +470,11 @@ function deleteDocument (documentId) {
   return fetch(`${getApiHost()}/admin/documents/${documentId}`, requestOptions).then(handleResponse)
 }
 
-function saveNewHub (hub, location) {
+function saveNewHub (hub, address) {
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
-    body: JSON.stringify({ hub, location })
+    body: JSON.stringify({ hub, address })
   }
 
   return fetch(`${getApiHost()}/admin/hubs`, requestOptions).then(handleResponse)

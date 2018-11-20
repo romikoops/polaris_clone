@@ -370,8 +370,8 @@ module MultiTenantTools
     )
     # shipper.skip_confirmation!
     shipper.save!
-    # Create dummy locations for shipper
-    dummy_locations = [
+    # Create dummy addresses for shipper
+    dummy_addresses = [
       {
         street:        'Kehrwieder',
         street_number: '2',
@@ -402,9 +402,9 @@ module MultiTenantTools
       }
     ]
 
-    dummy_locations.each do |l|
-      loc = Location.create_and_geocode(l)
-      shipper.locations << loc
+    dummy_addresses.each do |l|
+      loc = Address.create_and_geocode(l)
+      shipper.addresses << loc
     end
 
     # Create dummy contacts for shipper address book
@@ -447,8 +447,8 @@ module MultiTenantTools
     ]
 
     dummy_contacts.each_with_index do |contact, i|
-      loc = Location.find_or_create_by(dummy_locations[i])
-      contact[:location_id] = loc.id
+      loc = Address.find_or_create_by(dummy_addresses[i])
+      contact[:address_id] = loc.id
       shipper.contacts.create(contact)
     end
 

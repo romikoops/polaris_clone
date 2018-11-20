@@ -7,12 +7,12 @@ import styles from './UserAccount.scss'
 import defaults from '../../styles/default_classes.scss'
 import { filters } from '../../helpers'
 
-function determinePerPage (locations) {
+function determinePerPage (addresses) {
   const width = window.innerWidth
   const perPage = width >= 1920 ? 5 : 3
-  const pages = Math.ceil(locations.length / perPage)
+  const pages = Math.ceil(addresses.length / perPage)
 
-  return { perPage, locations, pages }
+  return { perPage, addresses, pages }
 }
 
 class UserLocationsBox extends PureComponent {
@@ -23,7 +23,7 @@ class UserLocationsBox extends PureComponent {
       pages: 1,
       perPage: 6,
       searchText: '',
-      locations: []
+      addresses: []
     }
     this.nextPage = this.nextPage.bind(this)
     this.prevPage = this.prevPage.bind(this)
@@ -32,18 +32,18 @@ class UserLocationsBox extends PureComponent {
   }
 
   componentWillMount () {
-    this.setState(determinePerPage(this.props.locations))
+    this.setState(determinePerPage(this.props.addresses))
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.locations === this.props.locations) return
+    if (nextProps.addresses === this.props.addresses) return
 
     this.setState((prevState) => {
       if (!this.prevPage.searchText) {
-        return { locations: nextProps.locations }
+        return { addresses: nextProps.addresses }
       }
 
-      return { locations: this.filterLocations(prevState.searchText) }
+      return { addresses: this.filterLocations(prevState.searchText) }
     })
   }
 
@@ -58,25 +58,25 @@ class UserLocationsBox extends PureComponent {
   }
 
   filterLocations (value) {
-    const { locations } = this.props
+    const { addresses } = this.props
 
     return filters.handleSearchChange(
       value,
       [
-        'location.country',
-        'location.city',
-        'location.geocoded_address',
-        'location.street',
-        'location.street_number'
+        'address.country',
+        'address.city',
+        'address.geocoded_address',
+        'address.street',
+        'address.street_number'
       ],
-      locations
+      addresses
     )
   }
 
   handleSearchChange (e) {
-    const locations = this.filterLocations(e.target.value)
+    const addresses = this.filterLocations(e.target.value)
 
-    this.setState({ searchText: e.target.value, locations, page: 1 })
+    this.setState({ searchText: e.target.value, addresses, page: 1 })
   }
 
   render () {
@@ -91,15 +91,15 @@ class UserLocationsBox extends PureComponent {
     } = this.props
 
     const {
-      page, pages, perPage, locations, searchText
+      page, pages, perPage, addresses, searchText
     } = this.state
-    const locationCards = [<div
+    const addressCards = [<div
       key="addLocationButton"
       className={`pointy ${cols === 2 ? 'flex-45' : 'flex-30'} flex-md-45 margin_bottom layout-row layout-align-start-stretch tile_padding ${styles.loc_info}`}
       onClick={() => toggleActiveView('newLocation')}
     >
       <div
-        className={`${styles['location-box']} ${
+        className={`${styles['address-box']} ${
           styles['new-address']
         } layout-row layout-align-center-center layout-wrap`}
       >
@@ -117,19 +117,19 @@ class UserLocationsBox extends PureComponent {
     const startIndex = (page - 1) * perPage
     const endIndex = page * perPage
 
-    if (locations.length) {
-      locations.sort((a, b) => {
+    if (addresses.length) {
+      addresses.sort((a, b) => {
         if (a.user.primary !== b.user.primary) {
           return a.user.primary ? -1 : 1
         }
 
-        return a.location.id - b.location.id
+        return a.address.id - b.address.id
       }).slice(startIndex, endIndex).forEach((op) => {
-        locationCards.push(<div
+        addressCards.push(<div
           key={v4()}
           className={`${cols === 2 ? 'flex-45' : 'flex-30'} flex-md-45 margin_bottom tile_padding layout-row layout-align-start-stretch ${styles.loc_info}`}
         >
-          <div className={`${styles['location-box']} flex-100 layout-column`}>
+          <div className={`${styles['address-box']} flex-100 layout-column`}>
             <div className={`${styles.header} layout-row layout-align-end-center`}>
               {op.user.primary ? (
                 <i className={`fa fa-star clip ${styles.icon_primary}`} style={gradient} />
@@ -139,7 +139,7 @@ class UserLocationsBox extends PureComponent {
                     <div
                       className={`${styles.makePrimary} pointy`}
                       onClick={() => {
-                        makePrimary(op.location.id)
+                        makePrimary(op.address.id)
                         this.setState({ page: 1 })
                       }}
                     >
@@ -148,32 +148,32 @@ class UserLocationsBox extends PureComponent {
                   </div>
                 </div>
               )}
-              <span className={`${defaults.emulate_link}`} onClick={() => editLocation(op.location)}>
+              <span className={`${defaults.emulate_link}`} onClick={() => editLocation(op.address)}>
                 <i className="fa fa-pencil" />
               </span>
               <span
                 className={`${defaults.emulate_link}`}
                 onClick={() =>
-                  destroyLocation(op.location.id)
+                  destroyLocation(op.address.id)
                 }
               >
                 <i className={`fa fa-trash ${styles.icon_trash}`} />
               </span>
             </div>
-            <div className={`layout-row flex-100 ${styles.location_address}`}>
+            <div className={`layout-row flex-100 ${styles.address_address}`}>
               <i className="flex-10 fa fa-map-marker clip" style={gradient} />
               <div className={`${styles.content} flex layout-wrap layout-align-space-between`}>
-                {op && op.location.street_number && op.location.street ? (
-                  <p className="flex-100">{op.location.street_number} {op.location.street} </p>
+                {op && op.address.street_number && op.address.street ? (
+                  <p className="flex-100">{op.address.street_number} {op.address.street} </p>
                 ) : ''}
-                {op.location.city ? (
-                  <p className="flex-100"><strong>{op.location.city}</strong></p>
+                {op.address.city ? (
+                  <p className="flex-100"><strong>{op.address.city}</strong></p>
                 ) : ''}
-                {op.location.zip_code ? (
-                  <p className="flex-100">{op.location.zip_code}</p>
+                {op.address.zip_code ? (
+                  <p className="flex-100">{op.address.zip_code}</p>
                 ) : ''}
-                {op.location.country ? (
-                  <p className="flex-100"> <Truncate lines={2}>{op.location.country} </Truncate></p>
+                {op.address.country ? (
+                  <p className="flex-100"> <Truncate lines={2}>{op.address.country} </Truncate></p>
                 ) : ''}
               </div>
             </div>
@@ -205,7 +205,7 @@ class UserLocationsBox extends PureComponent {
           </div>
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start height_100">
-          {locationCards}
+          {addressCards}
         </div>
         <div className="flex-95 layout-row layout-align-center-center margin_bottom">
           <div
@@ -238,7 +238,7 @@ class UserLocationsBox extends PureComponent {
   }
 }
 UserLocationsBox.propTypes = {
-  locations: PropTypes.arrayOf(PropTypes.object),
+  addresses: PropTypes.arrayOf(PropTypes.object),
   makePrimary: PropTypes.func,
   toggleActiveView: PropTypes.func,
   destroyLocation: PropTypes.func,
@@ -249,7 +249,7 @@ UserLocationsBox.propTypes = {
 }
 
 UserLocationsBox.defaultProps = {
-  locations: [],
+  addresses: [],
   makePrimary: null,
   toggleActiveView: null,
   destroyLocation: null,

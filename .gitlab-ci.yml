@@ -139,6 +139,8 @@ docker:
 
   script:
     - registry_login
+    - apk add --update --no-cache rsync
+    - scripts/prepare-docker.sh
     - scripts/build.sh
 
   dependencies: []
@@ -231,7 +233,7 @@ chrome:
   <<: *cucumber-metadata
   services:
     - selenium/standalone-chrome:3
-    
+
 # Disabling Firefox tests as logging is impossible at the moment
 
 # firefox:

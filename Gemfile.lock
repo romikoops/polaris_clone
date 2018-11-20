@@ -1,3 +1,11 @@
+PATH
+  remote: engines/core
+  specs:
+    core (0.0.1)
+      activerecord-postgis-adapter (= 5.2.1)
+      pg (= 0.21.0)
+      rails (= 5.2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -1040,6 +1048,7 @@ DEPENDENCIES
   byebug
   chronic
   config
+  core!
   debase
   devise_token_auth (~> 0.1.43)
   dotenv-rails

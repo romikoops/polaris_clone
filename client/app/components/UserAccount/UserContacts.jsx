@@ -373,7 +373,7 @@ UserContacts.propTypes = {
   contactData: PropTypes.shape({
     contact: PropTypes.contact,
     shipments: PropTypes.shipments,
-    location: PropTypes.location
+    address: PropTypes.address
   }).isRequired
 }
 
