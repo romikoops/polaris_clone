@@ -44,7 +44,7 @@ class NotificationsController < ApplicationController
     @shipment_contacts = @shipment.shipment_contacts
     @contacts = []
     @shipment_contacts.each do |sc|
-      @contacts.push(contact: sc.contact, type: sc.contact_type, location: sc.contact.location)
+      @contacts.push(contact: sc.contact, type: sc.contact_type, address: sc.contact.address)
     end
     hubs = { startHub: {}, endHub: {} }
 

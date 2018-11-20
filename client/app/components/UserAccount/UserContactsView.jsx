@@ -266,7 +266,7 @@ class UserContactsView extends Component {
     if (!contactData) {
       return ''
     }
-    const { contact, shipments, location } = contactData
+    const { contact, shipments, address } = contactData
     const textStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -326,7 +326,7 @@ class UserContactsView extends Component {
             handleShipmentAction={this.handleShipmentAction}
           />
         </div>
-        {location ? (
+        {address ? (
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
             <div className="flex-100 layout-row layout-align-space-between-center">
               <div
@@ -337,7 +337,7 @@ class UserContactsView extends Component {
             </div>
             <AdminAddressTile
               key={v4()}
-              address={location}
+              address={address}
               theme={theme}
               client={contact}
               showDelete={false}
@@ -361,7 +361,7 @@ UserContactsView.propTypes = {
   contactData: PropTypes.shape({
     contact: PropTypes.contact,
     shipments: PropTypes.arrayOf(PropTypes.object),
-    location: PropTypes.location
+    address: PropTypes.address
   }).isRequired,
 
   userDispatch: PropTypes.shape({

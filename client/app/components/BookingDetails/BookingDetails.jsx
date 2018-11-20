@@ -35,7 +35,7 @@ export class BookingDetails extends Component {
         lastName: '',
         phone: ''
       },
-      location: {
+      address: {
         city: '',
         country: '',
         street: '',
@@ -322,7 +322,7 @@ export class BookingDetails extends Component {
 
     const {
       hubs,
-      locations,
+      addresses,
       shipment,
       userLocations,
       contacts
@@ -339,7 +339,7 @@ export class BookingDetails extends Component {
     } = this.state
 
     const maybeRouteHubBox = shipment && theme && hubs
-      ? <RouteHubBox shipment={shipment} theme={theme} locations={locations} />
+      ? <RouteHubBox shipment={shipment} theme={theme} addresses={addresses} />
       : ''
 
     const ContactSetterComponent = (

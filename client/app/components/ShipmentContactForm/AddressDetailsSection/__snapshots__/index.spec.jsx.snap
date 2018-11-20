@@ -67,7 +67,7 @@ exports[`shallow rendering 1`] = `
             }
           }
           innerRef={[Function]}
-          name="location-street"
+          name="address-street"
           placeholder="Street"
           required={true}
           submitAttempted={false}
@@ -92,7 +92,7 @@ exports[`shallow rendering 1`] = `
             }
           }
           innerRef={[Function]}
-          name="location-streetNumber"
+          name="address-streetNumber"
           placeholder="Number"
           required={true}
           submitAttempted={false}
@@ -120,7 +120,7 @@ exports[`shallow rendering 1`] = `
             }
           }
           innerRef={[Function]}
-          name="location-city"
+          name="address-city"
           placeholder="City"
           required={true}
           submitAttempted={false}
@@ -149,7 +149,7 @@ exports[`shallow rendering 1`] = `
             }
           }
           innerRef={[Function]}
-          name="location-zipCode"
+          name="address-zipCode"
           placeholder="Postal Code"
           required={true}
           submitAttempted={false}
@@ -174,7 +174,7 @@ exports[`shallow rendering 1`] = `
             }
           }
           innerRef={[Function]}
-          name="location-country"
+          name="address-country"
           placeholder="Country"
           required={true}
           submitAttempted={false}
@@ -193,7 +193,7 @@ exports[`shallow rendering 1`] = `
       </div>
       <Formsy(FormsyInput)
         innerRef={[Function]}
-        name="location-geocodedAddress"
+        name="address-geocodedAddress"
         placeholder=""
         required={false}
         type="hidden"

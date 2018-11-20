@@ -79,8 +79,8 @@ class TruckingPricing < ApplicationRecord
   # Instance Methods
   def nexus_id
     ActiveRecord::Base.connection.execute("
-      SELECT locations.id FROM locations
-      JOIN hubs ON hubs.nexus_id = locations.id
+      SELECT addresses.id FROM addresses
+      JOIN hubs ON hubs.nexus_id = addresses.id
       JOIN hub_truckings ON hub_truckings.hub_id = hubs.id
       JOIN trucking_pricings ON hub_truckings.trucking_pricing_id = trucking_pricings.id
       WHERE trucking_pricings.id = #{id}

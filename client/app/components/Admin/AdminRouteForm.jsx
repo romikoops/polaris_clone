@@ -11,7 +11,7 @@ export class AdminRouteForm extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      location: {},
+      address: {},
       route: {
         name: '',
         stops: [{ id: null, value: null }, { id: null, value: null }]

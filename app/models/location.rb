@@ -1,305 +1,96 @@
 # frozen_string_literal: true
 
 class Location < ApplicationRecord
-  has_many :user_locations
-  has_many :users, through: :user_locations, dependent: :destroy
-  has_many :shipments
-  has_many :contacts
-  has_many :ports, foreign_key: :nexus_id
-  has_many :ports
-  has_one :hub
+  # validates :postal_code, :city, :province, :country, presence: true
+  validates :postal_code, uniqueness: {
+    scope:   %i(neighbourhood city province country),
+    message: ->(obj, _) { "is a duplicate for the names: #{obj.names.log_format}" }
+  }
 
-  # has_many :hubs, foreign_key: :nexus_id do
-  #   def tenant_id(tenant_id)
-  #     where(tenant_id: tenant_id)
-  #   end
-  # end
-  has_many :routes
-  has_many :stops, through: :hubs
-  belongs_to :country, optional: true
-
-  scope :nexus, -> { where(location_type: "nexus") }
-
-  before_validation :sanitize_zip_code!
-
-  # Geocoding
-  geocoded_by :geocoded_address
-
-  reverse_geocoded_by :latitude, :longitude do |location, results|
-    if geo = results.first
-      premise_data = geo.address_components.find do |address_component|
-        address_component["types"] == ["premise"]
-      end || {}
-      location.premise          = premise_data["long_name"]
-      location.street_number    = geo.street_number
-      location.street           = geo.route
-      location.street_address   = geo.street_number.to_s + " " + geo.route.to_s
-      location.geocoded_address = geo.address
-      location.city             = geo.city
-      location.zip_code         = geo.postal_code
-
-      location.country          = Country.find_by(code: geo.country_code)
-    end
-
-    location
+  def self.find_by_coordinates(lat:, lng:)
+    where('ST_Contains(bounds, ST_Point(:lng, :lat))', lat: lat, lng: lng).first
   end
 
-  # Class methods
-  def self.get_geocoded_location(user_input, hub_id, truck_carriage)
-    if truck_carriage
-      geocoded_location(user_input)
+  def contains?(lat:, lng:)
+    # TODO: Remove subqueries and write specs
+
+    sanitized_query = sanitize_sql(["
+			SELECT ST_Contains(
+			  (SELECT bounds::geometry FROM locations WHERE id = :id),
+				(SELECT ST_Point(:lng, :lat)::geometry)
+			) AS contains
+	  ", id: id, lat: lat, lng: lng])
+
+    results = ActiveRecord::Base.connection.execute(sanitized_query).first
+
+    results['contains']
+  end
+
+  def names
+    [postal_code, neighbourhood, city, province, country]
+  end
+
+  def self.find_by_coordinates(lat, lng)
+    where("
+			SELECT ST_Contains(
+				locations.bounds::geometry,
+				(SELECT ST_Point(:lng, :lat)::geometry)
+			)
+	  ", lat: lat, lng: lng).first
+  end
+
+  def self.cascading_find_by_names(*args)
+    case args.length
+    when 1
+      cascading_find_by_name(*args)
+    when 2
+      cascading_find_by_two_names(*args)
     else
-      Location.where(id: hub_id).first
+      raise ArgumentError, "wrong number of arguments (given #{args.length}, expected 2)"
     end
   end
 
-  def self.from_short_name(input, location_type)
-    city, country_name = *input.split(" ,")
-    country = Country.geo_find_by_name(country_name)
-    location = Location.find_by(city: city, country: country, location_type: location_type)
-    return location unless location.nil?
+  def self.cascading_find_by_two_names(raw_name_1, raw_name_2)
+    name_2 = raw_name_2.split.map(&:capitalize).join(' ')
+    name_1_test = raw_name_1.try(:split)
+    name_1 = name_1_test.nil? ? name_2 : name_1_test.map(&:capitalize).join(' ')
+    keys = %w(postal_code suburb neighbourhood city province country)
+    final_result = nil
+    keys.to_a.reverse_each.with_index do |name_i, i|
+      results_1 = where(name_i => name_1)
 
-    temp_location = Location.new(geocoded_address: input)
-    temp_location.geocode
-    temp_location.reverse_geocode
+      next if results_1.empty?
+      results_1.each do |result|
+        sub_keys = keys.slice!(0, keys.length - (i + 1))
+        sub_keys.to_a.reverse_each.with_index do |name_j, j|
+          sub_results = results_1.where(name_j => name_2)
+          next if !sub_keys.reverse[j + 1]
+          specific_result = sub_results.where(sub_keys.reverse[j + 1] => name_2).first
+          result = specific_result || sub_results.first
 
-    location = Location.find_by(city: temp_location.city, country: temp_location.country, location_type: location_type)
-    return location unless location.nil?
-
-    location = temp_location
-
-    location.name = city
-    location.location_type = location_type
-    location.save!
-    location
-  end
-
-  def set_geocoded_address_from_fields!
-    rawAddress = "#{street} #{street_number}, #{premise}, #{zip_code} #{city}, #{country.try(:name)}"
-    self.geocoded_address = rawAddress.remove_extra_spaces
-  end
-
-  def geocode_from_address_fields!
-    set_geocoded_address_from_fields!
-    geocode
-    save!
-    self
-  end
-
-  def self.get_trucking_city(string)
-    l = new(geocoded_address: string)
-    l.geocode
-    l.reverse_geocode
-
-    l.city
-  end
-
-  def self.geocode_all_from_address_fields!(options={})
-    # Example Usage:
-    #   1. Location.geocode_all_from_address_fields
-    #         Updates locations with nil geocoded_address
-    #         Return Array of updated locations
-    #   2. Location.geocode_all_from_address_fields(force: true)
-    #         Updates all locations
-    #         Return Array of all locations
-
-    filter = options[:force] ? nil : { geocoded_address: nil }
-    Location.where(filter).map(&:geocode_from_address_fields!)
-  end
-
-  def self.create_and_geocode(raw_location_params)
-    location = Location.find_or_create_by(location_params(raw_location_params))
-    location.geocode_from_address_fields! if location.geocoded_address.nil?
-    location.reverse_geocode if location.zip_code.nil?
-    location
-  end
-
-  def self.geocoded_location(user_input)
-    location = Location.new(geocoded_address: user_input)
-    location.geocode
-    location.reverse_geocode
-    location.save!
-    location
-  end
-
-  def self.new_from_raw_params(raw_location_params)
-    new(location_params(raw_location_params))
-  end
-
-  def self.create_from_raw_params!(raw_location_params)
-    create!(location_params(raw_location_params))
-  end
-
-  def self.nexuses
-    where(location_type: "nexus")
-  end
-
-  def self.nexuses_client(client)
-    client.pricings.map(&:route).map(&:get_nexuses).flatten.uniq
-  end
-
-  def self.nexuses_prepared
-    nexuses.pluck(:id, :name).to_h.invert
-  end
-
-  def self.nexuses_prepared_client(client)
-    nexuses_client(client).pluck(:id, :name).to_h.invert
-  end
-
-  def self.all_with_primary_for(user)
-    locations = user.locations
-    locations.map do |loc|
-      prim = { primary: loc.is_primary_for?(user) }
-      loc.to_custom_hash.merge(prim)
+          final_result = result unless result.nil?
+        end
+      end
     end
-  end
+    return final_result unless final_result.nil?
+    keys.to_a.reverse_each.with_index do |name_i, _i|
+      final_result = where(name_i => name_2).first
 
-  # Instance methods
-
-  def set_country_by_name!(name)
-    self.country = Country.geo_find_by_name(name)
-  end
-
-  def set_country_by_code!(code)
-    self.country = Country.find_by(code: code)
-  end
-
-  def is_primary_for?(user)
-    user_loc = UserLocation.find_by(location_id: id, user_id: user.id)
-    if user_loc.nil?
-      raise "This 'Location' object is not associated with a user!"
-    else
-      return !!user_loc.primary
-    end
-  end
-
-  
-
-  def hubs_by_type_seeder(hub_type, tenant_id)
-    hubs = self.hubs.where(hub_type: hub_type, tenant_id: tenant_id)
-    if hubs.empty?
-      name = case hub_type
-             when "ocean"
-               "#{self.name} Port"
-             when "air"
-               "#{self.name} Airport"
-             when "rail"
-               "#{self.name} Railyard"
-             else
-               self.name
-             end
-      hub =  self.hubs.create!(hub_type: hub_type, tenant_id: tenant_id, name: name, latitude: latitude, longitude: longitude, location_id: id, nexus_id: id)
-      return self.hubs.where(hub_type: hub_type, tenant_id: tenant_id)
-    else
-      hubs
-    end
-  end
-
-  def pretty_hub_type
-    case location_type
-    when "hub_train"
-      "Train Hub"
-    when "hub_ocean"
-      "Port"
-    else
-      raise "Unknown Hub Type!"
-    end
-  end
-
-  def city_country
-    "#{city}, #{country.name}"
-  end
-
-  def full_address
-    part1 = [street, street_number].delete_if(&:blank?).join(" ")
-    part2 = [zip_code, city, country.name].delete_if(&:blank?).join(", ")
-    [part1, part2].delete_if(&:blank?).join(", ")
-  end
-
-  def lat_lng_string
-    "#{latitude},#{longitude}"
-  end
-
-  def closest_hub
-    hubs = Location.where(location_type: "nexus")
-    distances = []
-    hubs.each do |hub|
-      distances << Geocoder::Calculations.distance_between([latitude, longitude], [hub.latitude, hub.longitude])
+      break if final_result
     end
 
-    lowest_distance = distances.min
-    hubs[distances.find_index(lowest_distance)]
+    final_result
   end
 
-  def closest_location_with_distance
-    nexuses = Nexus.all
-    distances = nexuses.map do |nexus|
-      Geocoder::Calculations.distance_between(
-        [latitude, longitude],
-        [nexus.latitude, nexus.longitude]
-      )
-    end
-    lowest_distance = distances.reject(&:nan?).min
-    [nexuses[distances.find_index(lowest_distance)], lowest_distance]
-  end
+  def self.cascading_find_by_name(raw_name)
+    name = raw_name.split.map(&:capitalize).join(' ')
 
-  def closest_hubs
-    hubs = Location.where(location_type: "nexus")
-    distances = {}
-    hubs.each_with_index do |hub, i|
-      distances[i] = Geocoder::Calculations.distance_between([latitude, longitude], [hub.latitude, hub.longitude])
+    (1..4).to_a.reverse_each do |i|
+      result = where("name_#{i} ILIKE ?", name).first
+      return result unless result.nil?
     end
 
-    distances = distances.sort_by { |_k, v| v }
-    hubs_array = []
-    distances.each do |key, _value|
-      hubs_array << hubs[key]
-    end
-
-    hubs_array
+    nil
   end
 
-  def furthest_hub(hubs)
-    hubs.max do |hub_x, hub_y|
-      hub_x.distance_to(self) <=> hub_y.distance_to(self)
-    end
-  end
-
-  def get_zip_code
-    reverse_geocode if zip_code.nil?
-
-    sanitize_zip_code!
-    zip_code
-  end
-
-  def to_custom_hash
-    custom_hash = { country: country.try(:name) }
-    %i[
-      id city street street_number zip_code
-      geocoded_address latitude longitude
-      location_type name
-    ].each do |attribute|
-      custom_hash[attribute] = self[attribute]
-    end
-
-    custom_hash
-  end
-
-  private
-
-  def self.location_params(raw_location_params)
-    country = Country.geo_find_by_name(raw_location_params["country"])
-
-    filtered_params = raw_location_params.try(:permit,
-      :latitude, :longitude, :geocoded_address, :street,
-      :street_number, :zip_code, :city) || raw_location_params
-
-    filtered_params.to_h.merge(country: country)
-  end
-
-  def sanitize_zip_code!
-    return if zip_code.nil?
-
-    self.zip_code = zip_code.gsub(/[^a-zA-z\d]/, "")
-  end
 end

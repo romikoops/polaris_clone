@@ -252,11 +252,11 @@ class Itinerary < ApplicationRecord
   end
 
   def origin_nexuses
-    Location.where(id: origin_nexus_ids)
+    Nexus.where(id: origin_nexus_ids)
   end
 
   def destination_nexuses
-    Location.where(id: destination_nexus_ids)
+    Nexus.where(id: destination_nexus_ids)
   end
 
   def users_with_pricing
@@ -380,7 +380,7 @@ class Itinerary < ApplicationRecord
     ", origin_hub_ids, destination_hub_ids)
   end
 
-  def self.for_locations(shipment, trucking_data)
+  def self.for_addresses(shipment, trucking_data)
     if trucking_data && trucking_data['pre_carriage']
       start_hub_ids = trucking_data['pre_carriage'].keys
       start_hubs = Hub.where(id: start_hub_ids)
@@ -424,7 +424,7 @@ class Itinerary < ApplicationRecord
             hub: {
               include: {
                 nexus:    { only: %i(id name) },
-                location: { only: %i(longitude latitude geocoded_address) }
+                address: { only: %i(longitude latitude geocoded_address) }
               },
               only:    %i(id name)
             }

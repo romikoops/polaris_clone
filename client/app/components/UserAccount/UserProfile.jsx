@@ -73,9 +73,9 @@ class UserProfile extends Component {
     appDispatch.setCurrency(value)
   }
 
-  makePrimary (locationId) {
+  makePrimary (addressId) {
     const { userDispatch, user } = this.props
-    userDispatch.makePrimary(user.id, locationId)
+    userDispatch.makePrimary(user.id, addressId)
   }
   editProfile () {
     const { user } = this.props
@@ -193,7 +193,7 @@ class UserProfile extends Component {
   }
   render () {
     const {
-      user, aliases, locations, theme, userDispatch, tenant, t
+      user, aliases, addresses, theme, userDispatch, tenant, t
     } = this.props
     if (!user) {
       return ''
@@ -614,7 +614,7 @@ class UserProfile extends Component {
             </div>
             <UserLocations
               setNav={() => {}}
-              locations={locations}
+              addresses={addresses}
               makePrimary={this.makePrimary}
               userDispatch={userDispatch}
               theme={theme}
@@ -638,7 +638,7 @@ UserProfile.propTypes = {
     setCurrency: PropTypes.func
   }).isRequired,
   aliases: PropTypes.arrayOf(PropTypes.object),
-  locations: PropTypes.arrayOf(PropTypes.object),
+  addresses: PropTypes.arrayOf(PropTypes.object),
   authDispatch: PropTypes.shape({
     updateUser: PropTypes.func
   }).isRequired,
@@ -653,7 +653,7 @@ UserProfile.propTypes = {
 UserProfile.defaultProps = {
   theme: null,
   aliases: [],
-  locations: [],
+  addresses: [],
   tenant: {}
 }
 

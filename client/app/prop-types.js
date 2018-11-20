@@ -64,7 +64,7 @@ PropTypes.shipment = PropTypes.shape({
   schedule_set: PropTypes.array
 })
 
-PropTypes.location = PropTypes.shape({
+PropTypes.address = PropTypes.shape({
   primary: PropTypes.bool,
   id: PropTypes.number,
   street_number: PropTypes.string,
@@ -84,7 +84,7 @@ PropTypes.address = PropTypes.shape({
 })
 
 PropTypes.hub = PropTypes.shape({
-  location: PropTypes.location,
+  address: PropTypes.address,
   name: PropTypes.string
 })
 
@@ -116,7 +116,7 @@ PropTypes.charge = PropTypes.shape({
   id: PropTypes.number
 })
 
-PropTypes.locations = PropTypes.shape({
+PropTypes.addresses = PropTypes.shape({
   origin: PropTypes.object,
   destination: PropTypes.object
 })

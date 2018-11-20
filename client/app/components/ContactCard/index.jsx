@@ -7,7 +7,7 @@ import { gradientTextGenerator } from '../../helpers'
 export default function ContactCard ({
   contactData, theme, contactType, select
 }) {
-  const { contact, location } = contactData
+  const { contact, address } = contactData
   const iconStyle = {
     ...gradientTextGenerator(theme.colors.primary, theme.colors.secondary),
     width: '28px',
@@ -15,12 +15,12 @@ export default function ContactCard ({
   }
   const fullAddress = (
     <p className="flex-100" style={{ margin: 0 }}>
-      {location.street ? `${location.street}, ` : ''}
-      {location.streetNumber ? `${location.streetNumber}, ` : ''}
-      {location.zipCode ? `${location.zipCode}, ` : ''}
-      {location.city ? `${location.city}` : ''}
-      {location.country ? ', ' : ''}
-      {location.country ? `${location.country}, ` : ''}
+      {address.street ? `${address.street}, ` : ''}
+      {address.streetNumber ? `${address.streetNumber}, ` : ''}
+      {address.zipCode ? `${address.zipCode}, ` : ''}
+      {address.city ? `${address.city}` : ''}
+      {address.country ? ', ' : ''}
+      {address.country ? `${address.country}, ` : ''}
     </p>
   )
 
@@ -59,7 +59,7 @@ export default function ContactCard ({
         <div className="flex-100 layout-row layout-align-start-center">
           <i className="fa fa-globe flex-none clip" style={iconStyle} />
           <p className="flex-100">
-            {(location && location.geocodedAddress) || fullAddress}
+            {(address && address.geocodedAddress) || fullAddress}
           </p>
         </div>
       </div>
@@ -70,7 +70,7 @@ export default function ContactCard ({
 ContactCard.propTypes = {
   contactData: PropTypes.shape({
     contact: PropTypes.object,
-    location: PropTypes.object
+    address: PropTypes.object
   }).isRequired,
   theme: PropTypes.theme,
   select: PropTypes.func.isRequired,

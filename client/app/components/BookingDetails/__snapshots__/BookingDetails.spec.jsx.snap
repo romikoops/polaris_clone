@@ -10,7 +10,7 @@ exports[`shallow render 1`] = `
   }
 >
   <RouteHubBox
-    locations={
+    addresses={
       Object {
         "destination": Object {
           "city": "BAR_CITY",
@@ -188,12 +188,7 @@ exports[`shallow render 1`] = `
       setHsCode={[Function]}
       shipmentData={
         Object {
-          "cargoItems": Array [],
-          "contacts": Array [],
-          "containers": Array [],
-          "documents": Array [],
-          "hubs": Object {},
-          "locations": Object {
+          "addresses": Object {
             "destination": Object {
               "city": "BAR_CITY",
               "country": "China",
@@ -211,6 +206,11 @@ exports[`shallow render 1`] = `
             },
             "startHub": "FOO_START_HUB",
           },
+          "cargoItems": Array [],
+          "contacts": Array [],
+          "containers": Array [],
+          "documents": Array [],
+          "hubs": Object {},
           "schedules": Array [
             Object {
               "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
@@ -517,12 +517,7 @@ exports[`theme is falsy 1`] = `
       setHsCode={[Function]}
       shipmentData={
         Object {
-          "cargoItems": Array [],
-          "contacts": Array [],
-          "containers": Array [],
-          "documents": Array [],
-          "hubs": Object {},
-          "locations": Object {
+          "addresses": Object {
             "destination": Object {
               "city": "BAR_CITY",
               "country": "China",
@@ -540,6 +535,11 @@ exports[`theme is falsy 1`] = `
             },
             "startHub": "FOO_START_HUB",
           },
+          "cargoItems": Array [],
+          "contacts": Array [],
+          "containers": Array [],
+          "documents": Array [],
+          "hubs": Object {},
           "schedules": Array [
             Object {
               "hub_route_key": "OCEAN_HUB_ROUTE_KEY",

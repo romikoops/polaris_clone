@@ -31,13 +31,13 @@ function Contact (props) {
             </p>
 
             <address className={` ${styles.address} flex-100 center`}>
-              {contact.location
-                ? `${contact.location.street || ''} ${contact.location.street_number || ''}`
+              {contact.address
+                ? `${contact.address.street || ''} ${contact.address.street_number || ''}`
                 : ''}{' '}
               <br />
-              {contact.location ? `${contact.location.zip_code} ${contact.location.city}` : ''}
+              {contact.address ? `${contact.address.zip_code} ${contact.address.city}` : ''}
               <br />
-              {contact.location ? `${contact.location.country}` : ''}
+              {contact.address ? `${contact.address.country}` : ''}
             </address>
           </div>
         </div>

@@ -61,7 +61,7 @@ export class AdminTruckingIndex extends Component {
     }
     hubs.forEach((hub) => {
       tmpFilters.hubType[hub.data.hub_type] = true
-      tmpFilters.countries[hub.location.country] = true
+      tmpFilters.countries[hub.address.country] = true
     })
     this.setState({
       searchFilters: tmpFilters,
@@ -87,7 +87,7 @@ export class AdminTruckingIndex extends Component {
     const countryKeys = Object.keys(searchFilters.countries)
       .filter(key => searchFilters.countries[key])
     if (countryKeys.length > 0) {
-      filter2 = filter1.filter(a => countryKeys.includes(a.location.country))
+      filter2 = filter1.filter(a => countryKeys.includes(a.address.country))
     } else {
       filter2 = filter1
     }
@@ -98,7 +98,7 @@ export class AdminTruckingIndex extends Component {
     if (searchFilters.query && searchFilters.query !== '') {
       filter4 = filters.handleSearchChange(
         searchFilters.query,
-        ['data.name', 'data.hub_type', 'location.country'],
+        ['data.name', 'data.hub_type', 'address.country'],
         filter3
       )
     } else {

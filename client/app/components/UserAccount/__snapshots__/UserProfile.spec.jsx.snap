@@ -370,7 +370,7 @@ exports[`props.aliases is truthy 1`] = `
       </div>
       <UserLocations
         cols={2}
-        locations={Array []}
+        addresses={Array []}
         makePrimary={[Function]}
         setNav={[Function]}
         theme={
@@ -744,7 +744,7 @@ exports[`shallow render 1`] = `
       </div>
       <UserLocations
         cols={2}
-        locations={Array []}
+        addresses={Array []}
         makePrimary={[Function]}
         setNav={[Function]}
         theme={
@@ -1087,7 +1087,7 @@ exports[`state.editBool is true 1`] = `
       </div>
       <UserLocations
         cols={2}
-        locations={Array []}
+        addresses={Array []}
         makePrimary={[Function]}
         setNav={[Function]}
         theme={

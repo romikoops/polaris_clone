@@ -49,39 +49,39 @@ class Admin::ItinerariesController < Admin::AdminBaseController
     itinerary = Itinerary.find_or_create_by(name: itinerary_row[0])
     new_ids << itinerary.id
     itinerary.trade_direction = itinerary_row[1].downcase
-    location_data = itinerary_row[2..-1]
+    address_data = itinerary_row[2..-1]
     current_hub_type = nil
-    location_data.each_with_index do |el, i|
+    address_data.each_with_index do |el, i|
       if i.even?
         current_hub_type = el
       else
-        location = hub_location(current_hub_type, el)
-        rl = find_or_create_itinerary_location(itinerary, location, i)
-        itinerary.update_attributes(starthub: rl.location) if i == 1
-        itinerary.update_attributes(endhub: rl.location) if i == location_data.length - 1
+        address = hub_address(current_hub_type, el)
+        rl = find_or_create_itinerary_address(itinerary, address, i)
+        itinerary.update_attributes(starthub: rl.address) if i == 1
+        itinerary.update_attributes(endhub: rl.address) if i == address_data.length - 1
       end
     end
   end
 
-  def find_or_create_itinerary_location(itinerary, location, index)
+  def find_or_create_itinerary_address(itinerary, address, index)
     ItineraryLocation.find_or_create_by(itinerary:             itinerary,
-                                        location:              location,
+                                        address:              address,
                                         position_in_hub_chain: (index + 1) / 2)
   end
 
-  def hub_location(current_hub_type, el)
-    Location.find_by(location_type: "hub_#{current_hub_type.downcase}", hub_name: el)
+  def hub_address(current_hub_type, el)
+    Address.find_by(address_type: "hub_#{current_hub_type.downcase}", hub_name: el)
   end
 
   def first_sheet
-    xlsx = open_file(params["xlsx"])
+    xlsx = open_file(params['xlsx'])
     xlsx.sheet(xlsx.sheets.first)
   end
 
   def itinerary_params
     {
-      mode_of_transport: params["itinerary"]["mot"],
-      name:              params["itinerary"]["name"],
+      mode_of_transport: params['itinerary']['mot'],
+      name:              params['itinerary']['name'],
       tenant_id:         current_user.tenant_id
     }
   end
@@ -92,7 +92,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def params_stops
-    params["itinerary"]["stops"].map.with_index { |h, i| Stop.new(hub_id: h, index: i) }
+    params['itinerary']['stops'].map.with_index { |h, i| Stop.new(hub_id: h, index: i) }
   end
 
   def app_error(message)
@@ -117,8 +117,8 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   def itinerary_with_notes
     itinerary = Itinerary.find(params[:id])
     itinerary.notes.find_or_create_by!(body:   params[:notes][:body],
-                            header: params[:notes][:header],
-                            level:  params[:notes][:level])
+                                       header: params[:notes][:header],
+                                       level:  params[:notes][:level])
     itinerary.notes
   end
 

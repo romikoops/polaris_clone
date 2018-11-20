@@ -41,11 +41,11 @@ class Admin::ShipmentsController < Admin::AdminBaseController
         cargoItems: @cargo_items,
         containers: @containers,
         aggregatedCargo: @shipment.aggregated_cargo,
-        contacts: contacts,
-        documents: @documents,
-        locations: locations,
-        cargoItemTypes: cargo_item_types,
-        accountHolder: @shipment.user
+        contacts:        contacts,
+        documents:       @documents,
+        addresses:       addresses,
+        cargoItemTypes:  cargo_item_types,
+        accountHolder:   @shipment.user
       }
     end
     response_handler(
@@ -117,7 +117,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     @shipment = Shipment.find(params[:id])
     @containers = Container.where(shipment_id: @shipment.id)
     @container_descriptions = CONTAINER_DESCRIPTIONS.invert
-    @all_hubs = Location.all_hubs_prepared
+    @all_hubs = Address.all_hubs_prepared
   end
 
   def update
@@ -327,9 +327,9 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     @shipment.with_address_options_json
   end
 
-  def locations
-    @locations ||= {
-      origin: @shipment.origin_nexus,
+  def addresses
+    @addresses ||= {
+      origin:      @shipment.origin_nexus,
       destination: @shipment.destination_nexus
     }
   end
@@ -360,10 +360,9 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     @shipment_contacts = @shipment.shipment_contacts
     @shipment_contacts.each do |sc|
       next unless sc.contact
-
-      contacts.push(contact: sc.contact,
-                    type: sc.contact_type,
-                    location: sc.contact.location)
+      contacts.push(contact:  sc.contact,
+                    type:     sc.contact_type,
+                    address: sc.contact.address)
     end
   end
 

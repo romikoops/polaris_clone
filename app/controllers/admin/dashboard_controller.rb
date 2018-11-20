@@ -31,7 +31,7 @@ class Admin::DashboardController < Admin::AdminBaseController
     @detailed_itineraries = detailed_itin_json
     hubs = current_user.tenant.hubs
     @hubs = hubs.limit(8).map do |hub|
-      { data: hub, location: hub.location.to_custom_hash }
+      { data: hub, address: hub.address.to_custom_hash }
     end
     @map_data = current_user.tenant.map_data
     @tenant = Tenant.find(current_user.tenant_id)

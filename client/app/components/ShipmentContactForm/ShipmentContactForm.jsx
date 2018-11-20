@@ -13,22 +13,22 @@ const { fetch, FormData } = window
 
 class ShipmentContactForm extends Component {
   static mapInputs (inputs) {
-    const location = {}
+    const address = {}
     const contact = {}
     Object.keys(inputs).forEach((k) => {
-      if (k.split('-')[0] === 'location') {
-        location[k.split('-')[1]] = inputs[k]
+      if (k.split('-')[0] === 'address') {
+        address[k.split('-')[1]] = inputs[k]
       } else {
         contact[k] = inputs[k]
       }
     })
 
-    return { location, contact }
+    return { address, contact }
   }
   constructor (props) {
     super(props)
     this.state = {
-      contactData: { contact: {}, location: {} },
+      contactData: { contact: {}, address: {} },
       setContactAttempted: false
     }
     this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
@@ -75,10 +75,10 @@ class ShipmentContactForm extends Component {
     newLocation.longitude = place.geometry.location.lng()
     newLocation.geocodedAddress = place.formatted_address
     this.setState({
-      contactData: { ...this.state.contactData, location: newLocation }
+      contactData: { ...this.state.contactData, address: newLocation }
     })
     this.setState({
-      autocomplete: { ...this.state.autocomplete, location: true }
+      autocomplete: { ...this.state.autocomplete, address: true }
     })
   }
   handleSubmit (contactData) {
@@ -90,11 +90,11 @@ class ShipmentContactForm extends Component {
       companyName: contactData.contact.companyName,
       phone: contactData.contact.phone,
       email: contactData.contact.email,
-      number: contactData.location.number,
-      street: contactData.location.street,
-      city: contactData.location.city,
-      zipCode: contactData.location.zipCode,
-      country: contactData.location.country
+      number: contactData.address.number,
+      street: contactData.address.street,
+      city: contactData.address.city,
+      zipCode: contactData.address.zipCode,
+      country: contactData.address.country
     }
 
     const formData = new FormData()
@@ -119,9 +119,9 @@ class ShipmentContactForm extends Component {
 
     const editedContact = {
       ...contactData.contact,
-      ...contactData.location,
+      ...contactData.address,
       id: this.props.selectedContact.contact.id,
-      locationId: this.props.selectedContact.location.id
+      addressId: this.props.selectedContact.address.id
     }
 
     shipmentDispatch.updateContact(editedContact)
@@ -129,10 +129,10 @@ class ShipmentContactForm extends Component {
       contact: {
         ...contactData.contact,
         id: this.props.selectedContact.contact.id,
-        locationId: this.props.selectedContact.location.id
+        addressId: this.props.selectedContact.address.id
       },
-      location: {
-        ...contactData.location
+      address: {
+        ...contactData.address
       }
     })
 
@@ -183,7 +183,7 @@ class ShipmentContactForm extends Component {
         handlePlaceChange={place => this.handlePlaceChange(place)}
         setContactAttempted={this.state.setContactAttempted}
         setContactBtn={setContactBtn}
-        newLocation={this.state.contactData.location}
+        newLocation={this.state.contactData.address}
       />
     )
 

@@ -5,18 +5,10 @@ exports[`shallow render 1`] = `
   className="layout-row flex-100 layout-wrap layout-margin"
 >
   <UserLocationsBox
-    cols={3}
-    destroyLocation={[Function]}
-    editLocation={[Function]}
-    gradient={
-      Object {
-        "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-      }
-    }
-    locations={
+    addresses={
       Array [
         Object {
-          "location": Object {
+          "address": Object {
             "city": "FOO_CITY",
             "country": "Germany",
             "geocodedAddress": "FOO_GEOCODED_ADDRESS",
@@ -43,7 +35,7 @@ exports[`shallow render 1`] = `
           },
         },
         Object {
-          "location": Object {
+          "address": Object {
             "city": "FOO_CITY",
             "country": "Germany",
             "geocodedAddress": "FOO_GEOCODED_ADDRESS",
@@ -70,6 +62,14 @@ exports[`shallow render 1`] = `
           },
         },
       ]
+    }
+    cols={3}
+    destroyLocation={[Function]}
+    editLocation={[Function]}
+    gradient={
+      Object {
+        "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+      }
     }
     makePrimary={[Function]}
     t={[Function]}

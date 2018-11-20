@@ -12,6 +12,7 @@ exports[`shallow render 1`] = `
     <ShipmentContactsBoxMainContactsContactCard
       contactData={
         Object {
+          "address": Object {},
           "contact": Object {
             "companyName": "FOO_CONTACT_COMPANY",
             "email": "foo@bar.baz",
@@ -19,7 +20,6 @@ exports[`shallow render 1`] = `
             "lastName": "Doe",
             "phone": "0761452887",
           },
-          "location": Object {},
         }
       }
       contactType="shipper"
@@ -54,8 +54,8 @@ exports[`shallow render 1`] = `
     <ShipmentContactsBoxMainContactsContactCard
       contactData={
         Object {
+          "address": Object {},
           "contact": Object {},
-          "location": Object {},
         }
       }
       contactType="consignee"

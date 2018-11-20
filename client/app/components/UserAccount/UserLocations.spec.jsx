@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow, mount } from 'enzyme'
-import { theme, identity, user, location, change } from '../../mocks'
+import { theme, identity, user, address, change } from '../../mocks'
 
 jest.mock('uuid', () => {
   let counter = -1
@@ -26,7 +26,7 @@ import UserLocations from './UserLocations'
 const createWrapper = propsInput => mount(<UserLocations {...propsInput} />)
 
 const editedLocationPrimary = {
-  location,
+  address,
   user: {
     ...user,
     primary: true
@@ -34,7 +34,7 @@ const editedLocationPrimary = {
 }
 
 const editedLocation = {
-  location,
+  address,
   user: {
     ...user,
     primary: false
@@ -50,7 +50,7 @@ const propsBase = {
     newUserLocation: identity,
     destroyLocation: identity
   },
-  locations: [editedLocation, editedLocationPrimary]
+  addresses: [editedLocation, editedLocationPrimary]
 }
 
 test('shallow render', () => {

@@ -22,16 +22,16 @@ function getLocations (userId) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/users/${userId}/locations`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/users/${userId}/addresses`, requestOptions).then(handleResponse)
 }
 
-function destroyLocation (userId, locationId) {
+function destroyLocation (userId, addressId) {
   const requestOptions = {
     method: 'DELETE',
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/users/${userId}/locations/${locationId}`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/users/${userId}/addresses/${addressId}`, requestOptions).then(handleResponse)
 }
 
 function searchShipments (text, target, page, perPage) {
@@ -61,13 +61,13 @@ function searchContacts (text, page, perPage) {
     .then(handleResponse)
 }
 
-function makePrimary (userId, locationId) {
+function makePrimary (userId, addressId) {
   const requestOptions = {
     method: 'PATCH',
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/users/${userId}/locations/${locationId}`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/users/${userId}/addresses/${addressId}`, requestOptions).then(handleResponse)
 }
 
 function optOut (userId, target) {
@@ -105,7 +105,7 @@ function getById (id) {
 
 function editUserLocation (userId, data) {
   const formData = new FormData()
-  formData.append('edit_location', JSON.stringify(data))
+  formData.append('edit_address', JSON.stringify(data))
   const requestOptions = {
     method: 'POST',
     headers: authHeader(),
@@ -113,7 +113,7 @@ function editUserLocation (userId, data) {
   }
 
   return fetch(
-    `${getApiHost()}/users/${userId}/locations/${data.id}/edit`,
+    `${getApiHost()}/users/${userId}/addresses/${data.id}/edit`,
     requestOptions
   ).then(handleResponse)
 }
@@ -210,14 +210,14 @@ function updateContact (data) {
 
 function newUserLocation (userId, data) {
   const formData = new FormData()
-  formData.append('new_location', JSON.stringify(data))
+  formData.append('new_address', JSON.stringify(data))
   const requestOptions = {
     method: 'POST',
     headers: authHeader(),
     body: formData
   }
 
-  return fetch(`${getApiHost()}/users/${userId}/locations`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/users/${userId}/addresses`, requestOptions).then(handleResponse)
 }
 
 function newContact (data) {

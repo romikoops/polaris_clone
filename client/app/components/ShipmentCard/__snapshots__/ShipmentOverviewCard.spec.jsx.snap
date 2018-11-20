@@ -33,7 +33,7 @@ exports[`admin is true 1`] = `
             hubs={
               Object {
                 "foo": Object {
-                  "location": Object {
+                  "address": Object {
                     "city": "FOO_CITY",
                     "country": "Germany",
                     "geocodedAddress": "FOO_GEOCODED_ADDRESS",

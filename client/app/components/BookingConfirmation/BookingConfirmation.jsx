@@ -173,13 +173,13 @@ class BookingConfirmation extends Component {
       consignee,
       containers,
       documents,
-      locations,
+      addresses,
       notifyees,
       shipment,
       shipper
     } = shipmentData
 
-    if (!shipment || !locations || !cargoItemTypes) return <h1>{t('bookconf:loading')}</h1>
+    if (!shipment || !addresses || !cargoItemTypes) return <h1>{t('bookconf:loading')}</h1>
 
     const { acceptTerms, collapser } = this.state
     const terms = getTenantTerms(tenant, t)
@@ -233,8 +233,8 @@ class BookingConfirmation extends Component {
 
     const HeadingFactory = HeadingFactoryFn(theme)
     const Terms = getTerms({ theme, terms, t })
-    const LocationsOrigin = getLocationsOrigin({ shipment, locations })
-    const LocationsDestination = getLocationsDestination({ shipment, locations })
+    const LocationsOrigin = getLocationsOrigin({ shipment, addresses })
+    const LocationsDestination = getLocationsDestination({ shipment, addresses })
     const arrivalTime = getArrivalTime(shipment)
     const status = shipmentStatii[shipment.status]
 
@@ -875,15 +875,15 @@ function getTerms ({ theme, terms, t }) {
   )
 }
 
-function getLocationsDestination ({ shipment, locations }) {
+function getLocationsDestination ({ shipment, addresses }) {
   return shipment.has_on_carriage ? (
     <div className={`${ROW(100)} ${ALIGN_CENTER} buffer_10`}>
       <address className="flex-none">
-        {`${locations.destination.street_number} ${locations.destination.street}`}{' '}
+        {`${addresses.destination.street_number} ${addresses.destination.street}`}{' '}
         , <br />
-        {`${locations.destination.city}`}, <br />
-        {`${locations.destination.zip_code}`},
-        {` ${locations.destination.country}`}
+        {`${addresses.destination.city}`}, <br />
+        {`${addresses.destination.zip_code}`},
+        {` ${addresses.destination.country}`}
       </address>
     </div>
   ) : (
@@ -891,14 +891,14 @@ function getLocationsDestination ({ shipment, locations }) {
   )
 }
 
-function getLocationsOrigin ({ shipment, locations }) {
+function getLocationsOrigin ({ shipment, addresses }) {
   return shipment.has_pre_carriage ? (
     <div className={`${ROW(100)} ${ALIGN_CENTER} buffer_10`}>
       <address className="flex-none">
-        {`${locations.origin.street_number} ${locations.origin.street}`},
-        {` ${locations.origin.city}`}, <br />
-        {`${locations.origin.zip_code}`},
-        {` ${locations.origin.country}`}
+        {`${addresses.origin.street_number} ${addresses.origin.street}`},
+        {` ${addresses.origin.city}`}, <br />
+        {`${addresses.origin.zip_code}`},
+        {` ${addresses.origin.country}`}
       </address>
     </div>
   ) : (

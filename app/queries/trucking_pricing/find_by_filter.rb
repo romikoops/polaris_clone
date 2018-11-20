@@ -5,16 +5,16 @@ module Queries
     class FindByFilter
       MANDATORY_ARGS = %i(load_type tenant_id carriage).freeze
 
-      def initialize(args={})
+      def initialize(args = {})
         argument_errors(args)
 
         @klass = args[:klass]
 
-        @latitude     = args[:latitude]     || args[:location].try(:latitude)  || 0
-        @longitude    = args[:longitude]    || args[:location].try(:longitude) || 0
-        @zipcode      = args[:zipcode]      || args[:location].try(:get_zip_code)
-        @city_name    = args[:city_name]    || args[:location].try(:city)
-        @country_code = args[:country_code] || args[:location].try(:country).try(:code)
+        @latitude     = args[:latitude]     || args[:address].try(:latitude)  || 0
+        @longitude    = args[:longitude]    || args[:address].try(:longitude) || 0
+        @zipcode      = args[:zipcode]      || args[:address].try(:get_zip_code)
+        @city_name    = args[:city_name]    || args[:address].try(:city)
+        @country_code = args[:country_code] || args[:address].try(:country).try(:code)
 
         @tenant_id    = args[:tenant_id]
         @load_type    = args[:load_type]
@@ -40,7 +40,7 @@ module Queries
           .where(nexuses_condition)
           .where(hubs_condition)
           .where(trucking_destination_where_statement, trucking_destination_conditions_binds)
-          .select("hubs.id AS preloaded_hub_id, trucking_pricings.*")
+          .select('hubs.id AS preloaded_hub_id, trucking_pricings.*')
       end
 
       private
@@ -51,12 +51,12 @@ module Queries
             (trucking_destinations.zipcode IS NOT NULL)
             AND (trucking_destinations.zipcode = :zipcode)
           ) OR (
-            (trucking_destinations.geometry_id IS NOT NULL)
+            (trucking_destinations.location_id IS NOT NULL)
             AND (
               SELECT ST_Contains(
                 (
-                  SELECT data::geometry FROM geometries
-                  WHERE id = trucking_destinations.geometry_id
+                  SELECT bounds::geometry FROM locations
+                  WHERE id = trucking_destinations.location_id
                 ),
                 (SELECT ST_Point(:longitude, :latitude)::geometry)
               ) AS contains
@@ -118,9 +118,9 @@ module Queries
       end
 
       def raise_if_country_code_error(args)
-        return unless args[:location].try(:country).try(:code).nil? && args[:country_code].nil?
+        return unless args[:address].try(:country).try(:code).nil? && args[:country_code].nil?
 
-        raise ArgumentError, "Must provide country_code"
+        raise ArgumentError, 'Must provide country_code'
       end
 
       def raise_if_no_valid_filter_error(args)

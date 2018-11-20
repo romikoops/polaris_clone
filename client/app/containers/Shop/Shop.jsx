@@ -365,7 +365,7 @@ Shop.propTypes = {
   }).isRequired,
   contactData: PropTypes.shape({
     contact: PropTypes.contact,
-    location: PropTypes.location
+    address: PropTypes.address
   }).isRequired,
   shipmentDispatch: PropTypes.shape({
     updateContact: PropTypes.func,

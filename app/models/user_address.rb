@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class UserLocation < ApplicationRecord
+class UserAddress < ApplicationRecord
   belongs_to :user
-  belongs_to :location
+  belongs_to :address
   before_validation :set_primary
 
   validates :primary, uniqueness: {
@@ -10,11 +10,11 @@ class UserLocation < ApplicationRecord
     message: "'primary' has already been taken by this User"
   }, if: -> { primary }
 
-  validates :location, uniqueness: { scope: :user }
+  validates :address, uniqueness: { scope: :user }
 
   private
 
   def set_primary
-    self.primary = true if user.user_locations.pluck(:primary).none?
+    self.primary = true if user.user_addresses.pluck(:primary).none?
   end
 end

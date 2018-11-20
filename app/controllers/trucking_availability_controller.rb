@@ -36,8 +36,8 @@ class TruckingAvailabilityController < ApplicationController
     TruckingPricing.find_by_filter(
       tenant_id: params[:tenant_id],
       load_type: params[:load_type],
-      location:  Location.new(latitude: params[:lat], longitude: params[:lng]).reverse_geocode,
-      hub_ids:   params[:hub_ids].split(",").map(&:to_i),
+      address: Address.new(latitude: params[:lat], longitude: params[:lng]).reverse_geocode,
+      hub_ids:   params[:hub_ids].split(',').map(&:to_i),
       carriage:  params[:carriage]
     )
   end

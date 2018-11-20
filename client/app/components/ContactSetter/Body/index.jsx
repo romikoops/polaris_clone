@@ -15,7 +15,7 @@ export default class ContactSetterBody extends Component {
         email: '',
         phone: ''
       },
-      location: {
+      address: {
         street: '',
         number: '',
         zipCode: '',

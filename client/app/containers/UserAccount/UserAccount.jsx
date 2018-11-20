@@ -90,7 +90,7 @@ class UserAccount extends Component {
       case 'dashboard':
         userDispatch.getDashboard(user.id, true)
         break
-      case 'locations':
+      case 'addresses':
         userDispatch.getLocations(user.id, true)
         break
       case 'profile':
@@ -103,14 +103,14 @@ class UserAccount extends Component {
         break
     }
   }
-  destroyLocation (locationId) {
+  destroyLocation (addressId) {
     const { userDispatch, user } = this.props
-    userDispatch.destroyLocation(user.id, locationId)
+    userDispatch.destroyLocation(user.id, addressId)
   }
 
-  makePrimary (locationId) {
+  makePrimary (addressId) {
     const { userDispatch, user } = this.props
-    userDispatch.makePrimary(user.id, locationId)
+    userDispatch.makePrimary(user.id, addressId)
   }
   render () {
     const {
@@ -196,7 +196,7 @@ class UserAccount extends Component {
                         theme={theme}
                         setCurrentUrl={this.setCurrentUrl}
                         {...props}
-                        locations={users.dashboard.locations}
+                        addresses={users.dashboard.addresses}
                         getLocations={this.getLocations}
                         destroyLocation={this.destroyLocation}
                         makePrimary={this.makePrimary}
@@ -204,7 +204,7 @@ class UserAccount extends Component {
                     )}
                   />
                   <Route
-                    path="/account/locations"
+                    path="/account/addresses"
                     render={props => (
                       <UserLocations
                         setNav={this.setNavLink}
@@ -212,7 +212,7 @@ class UserAccount extends Component {
                         setCurrentUrl={this.setCurrentUrl}
                         {...props}
                         user={user}
-                        locations={users.dashboard.locations}
+                        addresses={users.dashboard.addresses}
                         getLocations={this.getLocations}
                         destroyLocation={this.destroyLocation}
                         makePrimary={this.makePrimary}
@@ -232,7 +232,7 @@ class UserAccount extends Component {
                         tenant={tenant}
                         aliases={dashboard.aliases}
                         {...props}
-                        locations={dashboard.locations}
+                        addresses={dashboard.addresses}
                         userDispatch={userDispatch}
                         authDispatch={authDispatch}
                       />
@@ -248,7 +248,7 @@ class UserAccount extends Component {
                         user={user}
                         aliases={dashboard.aliases}
                         {...props}
-                        locations={dashboard.locations}
+                        addresses={dashboard.addresses}
                         userDispatch={userDispatch}
                         authDispatch={authDispatch}
                       />

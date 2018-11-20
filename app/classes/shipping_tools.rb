@@ -146,21 +146,21 @@ module ShippingTools
 
     # Shipper
     resource = shipment_data.require(:shipper)
-    contact_location = Location.create_and_geocode(contact_location_params(resource))
-    contact_params = contact_params(resource, contact_location.id)
+    contact_address = Address.create_and_geocode(contact_address_params(resource))
+    contact_params = contact_params(resource, contact_address.id)
     contact = search_contacts(contact_params, current_user)
     shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: 'shipper')
-    shipper = { data: contact, location: contact_location.to_custom_hash }
-    # NOT CORRECT: UserLocation.create(user: current_user, location: contact_location) if shipment.export?
+    shipper = { data: contact, address: contact_address.to_custom_hash }
+    # NOT CORRECT:UserAddress.create(user: current_user, address: contact_address) if shipment.export?
 
     # Consignee
     resource = shipment_data.require(:consignee)
-    contact_location = Location.create_and_geocode(contact_location_params(resource))
-    contact_params = contact_params(resource, contact_location.id)
+    contact_address = Address.create_and_geocode(contact_address_params(resource))
+    contact_params = contact_params(resource, contact_address.id)
     contact = search_contacts(contact_params, current_user)
     shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'consignee')
-    consignee = { data: contact, location: contact_location.to_custom_hash }
-    # NOT CORRECT: UserLocation.create(user: current_user, location: contact_location) if shipment.import?
+    consignee = { data: contact, address: contact_address.to_custom_hash }
+    # NOT CORRECT:UserAddress.create(user: current_user, address: contact_address) if shipment.import?
 
     # Notifyees
     notifyees = shipment_data[:notifyees].try(:map) do |resource|
@@ -314,7 +314,7 @@ module ShippingTools
       pickup_address:   shipment.pickup_address_with_country,
       delivery_address: shipment.delivery_address_with_country
     )
-    locations = {
+    addresses = {
       startHub: { data: origin_hub, location: origin_hub.nexus.to_custom_hash },
       endHub: { data: destination_hub, location: destination_hub.nexus.to_custom_hash },
       origin: origin.to_custom_hash,
@@ -326,12 +326,12 @@ module ShippingTools
       cargoItems:      cargo_items      || nil,
       containers:      containers       || nil,
       aggregatedCargo: aggregated_cargo || nil,
-      locations: locations,
-      consignee: consignee,
-      notifyees: notifyees,
-      shipper: shipper,
-      documents: documents,
-      cargoItemTypes: cargo_item_types
+      addresses:       addresses,
+      consignee:       consignee,
+      notifyees:       notifyees,
+      shipper:         shipper,
+      documents:       documents,
+      cargoItemTypes:  cargo_item_types
     }
   end
 
@@ -366,17 +366,17 @@ module ShippingTools
     }
   end
 
-  def self.contact_location_params(resource)
-    resource.require(:location)
+  def self.contact_address_params(resource)
+    resource.require(:address)
             .permit(:street, :streetNumber, :zipCode, :city, :country)
             .to_h.deep_transform_keys(&:underscore)
   end
 
-  def self.contact_params(resource, location_id = nil)
+  def self.contact_params(resource, address_id = nil)
     resource.require(:contact)
             .permit(:companyName, :firstName, :lastName, :email, :phone)
             .to_h.deep_transform_keys(&:underscore)
-            .merge(location_id: location_id)
+            .merge(address_id: address_id)
   end
 
   def self.choose_offer(params, current_user)
@@ -419,17 +419,17 @@ module ShippingTools
       documents[doc.doc_type] << doc
     end
 
-    @user_locations = current_user.user_locations.map do |uloc|
+    @user_addresses = current_user.user_addresses.map do |uloc|
       {
-        location: uloc.location.to_custom_hash,
-        contact: current_user.attributes
+        address: uloc.address.to_custom_hash,
+        contact:  current_user.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
 
     @contacts = current_user.contacts.map do |contact|
       {
-        location: contact.location.try(:to_custom_hash) || {},
-        contact: contact.attributes
+        address: contact.address.try(:to_custom_hash) || {},
+        contact:  contact.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
 
@@ -475,8 +475,8 @@ module ShippingTools
       total: total_fees
     }
     hubs = {
-      startHub: { data: @origin_hub, location: @origin_hub.nexus },
-      endHub: { data: @destination_hub, location: @destination_hub.nexus }
+      startHub: { data: @origin_hub,      address: @origin_hub.nexus },
+      endHub:   { data: @destination_hub, address: @destination_hub.nexus }
     }
     options = { methods: %i(selected_offer mode_of_transport service_level vessel_name carrier), include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }] }
     origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
@@ -486,19 +486,19 @@ module ShippingTools
       delivery_address: shipment.delivery_address_with_country
     )
     {
-      shipment: shipment_as_json,
-      hubs: hubs,
-      contacts: @contacts,
-      userLocations: @user_locations,
-      schedule: @schedule,
+      shipment:       shipment_as_json,
+      hubs:           hubs,
+      contacts:       @contacts,
+      userLocations:  @user_addresses,
+      schedule:       @schedule,
       dangerousGoods: @dangerous,
-      documents: documents,
-      containers: containers,
-      cargoItems: cargo_items,
-      customs: customs_fee,
-      addons: addons,
-      locations: {
-        origin: origin.try(:to_custom_hash),
+      documents:      documents,
+      containers:     containers,
+      cargoItems:     cargo_items,
+      customs:        customs_fee,
+      addons:         addons,
+      addresses:      {
+        origin:      origin.try(:to_custom_hash),
         destination: destination.try(:to_custom_hash)
       }
     }
@@ -548,7 +548,7 @@ module ShippingTools
     if existing_contact
       return existing_contact
     else
-      current_user.contacts.create(contact_params(resource, contact_location.id))
+      current_user.contacts.create(contact_params(resource, contact_address.id))
     end
   end
 

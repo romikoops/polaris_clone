@@ -27,7 +27,7 @@ const propsBase = {
   theme,
   contactData: {
     contact,
-    location: {}
+    address: {}
   },
   removeFunc: identity
 }

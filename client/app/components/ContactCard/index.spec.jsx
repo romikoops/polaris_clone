@@ -24,7 +24,7 @@ const editedUser = {
 const propsBase = {
   contactData: {
     contact: editedUser,
-    location: {}
+    address: {}
   },
   theme,
   select: identity,

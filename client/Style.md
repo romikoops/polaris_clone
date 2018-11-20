@@ -317,7 +317,7 @@ Case 1:
 
 `
 const { acceptTerms, collapser } = this.state
-const hubsObj = { startHub: locations.startHub, endHub: locations.endHub }
+const hubsObj = { startHub: addresses.startHub, endHub: addresses.endHub }
 const terms = getTerms(tenant)
 const textStyle = getTextStyle(theme)
 const createdDate = getCreatedDate(shipment)
@@ -326,7 +326,7 @@ const createdDate = getCreatedDate(shipment)
 `
 // with readability blank line
 const { acceptTerms, collapser } = this.state
-const hubsObj = { startHub: locations.startHub, endHub: locations.endHub }
+const hubsObj = { startHub: addresses.startHub, endHub: addresses.endHub }
 
 const terms = getTerms(tenant)
 const textStyle = getTextStyle(theme)

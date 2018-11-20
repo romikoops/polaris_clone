@@ -47,10 +47,10 @@ class AddressDetailsSection extends PureComponent {
     newLocation.longitude = place.geometry.location.lng()
     newLocation.geocodedAddress = place.formatted_address
     this.setState({
-      contactData: { ...this.state.contactData, location: newLocation }
+      contactData: { ...this.state.contactData, address: newLocation }
     })
     this.setState({
-      autocomplete: { ...this.state.autocomplete, location: true }
+      autocomplete: { ...this.state.autocomplete, address: true }
     })
   }
   render () {
@@ -89,8 +89,8 @@ class AddressDetailsSection extends PureComponent {
                 wrapperClassName={`${styles.wrapper_input} flex-75`}
                 className={styles.input}
                 type="text"
-                value={contactData.location.street}
-                name="location-street"
+                value={contactData.address.street}
+                name="address-street"
                 placeholder={t('user:street')}
                 submitAttempted={setContactAttempted}
                 errorMessageStyles={{
@@ -108,8 +108,8 @@ class AddressDetailsSection extends PureComponent {
                 wrapperClassName={`${styles.wrapper_input} offset-5 flex-15`}
                 className={styles.input}
                 type="text"
-                value={contactData.location.streetNumber}
-                name="location-streetNumber"
+                value={contactData.address.streetNumber}
+                name="address-streetNumber"
                 placeholder={t('user:number')}
                 submitAttempted={setContactAttempted}
                 errorMessageStyles={{
@@ -127,8 +127,8 @@ class AddressDetailsSection extends PureComponent {
                 wrapperClassName={`${styles.wrapper_input} flex-95`}
                 className={styles.input}
                 type="text"
-                value={contactData.location.city}
-                name="location-city"
+                value={contactData.address.city}
+                name="address-city"
                 placeholder={t('user:city')}
                 submitAttempted={setContactAttempted}
                 errorMessageStyles={{
@@ -148,8 +148,8 @@ class AddressDetailsSection extends PureComponent {
                 wrapperClassName={`${styles.wrapper_input} flex-40`}
                 className={styles.input}
                 type="text"
-                value={contactData.location.zipCode}
-                name="location-zipCode"
+                value={contactData.address.zipCode}
+                name="address-zipCode"
                 placeholder={t('user:postalCode')}
                 submitAttempted={setContactAttempted}
                 errorMessageStyles={{
@@ -167,8 +167,8 @@ class AddressDetailsSection extends PureComponent {
                 wrapperClassName={`${styles.wrapper_input} offset-5 flex-50`}
                 className={styles.input}
                 type="text"
-                value={contactData.location.country}
-                name="location-country"
+                value={contactData.address.country}
+                name="address-country"
                 placeholder={t('user:country')}
                 submitAttempted={setContactAttempted}
                 errorMessageStyles={{
@@ -186,8 +186,8 @@ class AddressDetailsSection extends PureComponent {
             <FormsyInput
               wrapperClassName="flex-100"
               type="hidden"
-              value={contactData.location.geocodedAddress}
-              name="location-geocodedAddress"
+              value={contactData.address.geocodedAddress}
+              name="address-geocodedAddress"
               placeholder=""
             />
             <div

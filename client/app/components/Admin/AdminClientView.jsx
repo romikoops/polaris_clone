@@ -99,7 +99,7 @@ export class AdminClientView extends Component {
       selectedManager, selectedRole, showAddManager, confirm
     } = this.state
     const {
-      client, shipments, locations, managerAssignments
+      client, shipments, addresses, managerAssignments
     } = clientData
     const textStyle =
       theme && theme.colors
@@ -153,7 +153,7 @@ export class AdminClientView extends Component {
     ) : (
       ''
     )
-    const locationArr = locations.map(loc => (
+    const addressArr = addresses.map(loc => (
       <AdminAddressTile
         key={v4()}
         address={loc}
@@ -344,7 +344,7 @@ export class AdminClientView extends Component {
             </div>
           </div>
           <div className="layout-row flex-100 layout-wrap layout-align-space-between-stretch margin_bottom">
-            {locationArr}
+            {addressArr}
           </div>
         </div>
         {confimPrompt}
@@ -361,7 +361,7 @@ AdminClientView.propTypes = {
   clientData: PropTypes.shape({
     client: PropTypes.client,
     shipments: PropTypes.shipments,
-    locations: PropTypes.arrayOf(PropTypes.location)
+    addresses: PropTypes.arrayOf(PropTypes.location)
   })
 }
 

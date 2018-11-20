@@ -29,7 +29,7 @@ export class AdminHubView extends Component {
     super(props)
     this.state = {
       currentFeeLoadType: { value: 'lcl', label: 'Lcl' },
-      editedHub: { data: {}, location: {} },
+      editedHub: { data: {}, address: {} },
       mandatoryCharge: {},
       editView: false,
       page: 1,
@@ -49,7 +49,7 @@ export class AdminHubView extends Component {
     }
     if (!this.state.editedHub.data.name) {
       this.setState({
-        editedHub: { data: nextProps.hubData.hub, location: nextProps.hubData.location }
+        editedHub: { data: nextProps.hubData.hub, address: nextProps.hubData.address }
       })
     }
     if (this.props.hubData && nextProps.hubData) {
@@ -188,7 +188,7 @@ export class AdminHubView extends Component {
     }
 
     const {
-      hub, relatedHubs, routes, location, charges, customs, serviceLevels, counterpartHubs
+      hub, relatedHubs, routes, address, charges, customs, serviceLevels, counterpartHubs
     } = hubData
     if (!hub) {
       return ''
@@ -277,8 +277,8 @@ export class AdminHubView extends Component {
     }
   `
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
-    const addressString1 = `${hub.location.street_number || ''} ${hub.location.street || ''}, ${hub.location.zip_code || ''}`
-    const addressString2 = `${hub.location.city || ''} ${hub.location.country.name || ''}`
+    const addressString1 = `${hub.address.street_number || ''} ${hub.address.street || ''}, ${hub.address.zip_code || ''}`
+    const addressString2 = `${hub.address.city || ''} ${hub.address.country.name || ''}`
     const mandatoryChargeBox = (<MandatoryChargeBox
       mandatoryCharge={mandatoryCharge}
       theme={theme}
@@ -376,9 +376,9 @@ export class AdminHubView extends Component {
                 </div>
               )}
             />
-            <div className={`flex layout-row flex-xs-100 flex-sm-100 ${hubStyles.location_data_box}`}>
+            <div className={`flex layout-row flex-xs-100 flex-sm-100 ${hubStyles.address_data_box}`}>
               <div className={`flex-55 layout-row ${hubStyles.address_box}`}>
-                <div className={`flex-none layout-column layout-align-center-center ${hubStyles.location_icon}`}>
+                <div className={`flex-none layout-column layout-align-center-center ${hubStyles.address_icon}`}>
                   <i className="flex-none fa fa-map-marker clip" style={gradientIcon} />
                 </div>
                 <div className="flex layout-align-space-around-start">
@@ -391,12 +391,12 @@ export class AdminHubView extends Component {
               </div>
               <div className={`flex-45 layout-row ${hubStyles.lat_lng_box}`}>
                 <div className="flex-50 layout-column layout-align-center-center">
-                  <p className={` ${hubStyles.lat_lng}`}>{location.latitude}</p>
+                  <p className={` ${hubStyles.lat_lng}`}>{address.latitude}</p>
                   <p className={` ${hubStyles.lat_lng}`}>Latitude</p>
                 </div>
                 <div className={`flex-none ${hubStyles.lat_lng_divider}`} />
                 <div className="flex-50 layout-column layout-align-center-center">
-                  <p className={` ${hubStyles.lat_lng}`}>{location.longitude}</p>
+                  <p className={` ${hubStyles.lat_lng}`}>{address.longitude}</p>
                   <p className={` ${hubStyles.lat_lng}`}>Longitude</p>
                 </div>
               </div>
@@ -413,7 +413,7 @@ export class AdminHubView extends Component {
               <GmapsWrapper
                 theme={theme}
                 component={Map}
-                location={hub.location}
+                address={hub.address}
                 height="170px"
                 zoom={12}
               />
@@ -476,7 +476,7 @@ AdminHubView.propTypes = {
     customs: PropTypes.array,
     serviceLevels: PropTypes.array,
     counterpartHubs: PropTypes.array,
-    location: PropTypes.objectOf(PropTypes.any),
+    address: PropTypes.objectOf(PropTypes.any),
     mandatoryCharges: PropTypes.objectOf(PropTypes.any)
   })
 }

@@ -10,7 +10,7 @@ class Stop < ApplicationRecord
         hub: {
           include: {
             nexus:    { only: %i(id name) },
-            location: { only: %i(longitude latitude geocoded_address) }
+            address: { only: %i(longitude latitude geocoded_address) }
           },
           only:    %i(id name)
         }

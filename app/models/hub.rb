@@ -4,7 +4,7 @@ class Hub < ApplicationRecord
   has_paper_trail
   belongs_to :tenant
   belongs_to :nexus
-  belongs_to :location
+  belongs_to :address
 
   has_many :addons
   has_many :stops,    dependent: :destroy
@@ -19,9 +19,9 @@ class Hub < ApplicationRecord
   belongs_to :mandatory_charge, optional: true
 
   MOT_HUB_NAME = {
-    "ocean" => "Port",
-    "air"   => "Airport",
-    "rail"  => "Railway Station"
+    'ocean' => 'Port',
+    'air'   => 'Airport',
+    'rail'  => 'Railway Station'
   }.freeze
 
   self.per_page = 9
@@ -31,7 +31,7 @@ class Hub < ApplicationRecord
 
     hubs = Hub.all
     hubs.each do |h|
-      h.nexus_id = h.location_id
+      h.nexus_id = h.address_id
       h.save!
     end
   end
@@ -48,7 +48,7 @@ class Hub < ApplicationRecord
 
     groups = connection.execute(sanitized_query).to_a
     groups.each_with_object({}) do |group, obj|
-      obj[group["nexus_id"]] = group["serialized_hub_ids"].split(",").map(&:to_i)
+      obj[group['nexus_id']] = group['serialized_hub_ids'].split(',').map(&:to_i)
     end
   end
 
@@ -65,21 +65,21 @@ class Hub < ApplicationRecord
   end
 
   def self.ports
-    where(hub_type: "ocean")
+    where(hub_type: 'ocean')
   end
 
   def self.prepped(user)
     where(tenant_id: user.tenant_id).map do |hub|
-      { data: hub, location: hub.location.to_custom_hash }
+      { data: hub, address: hub.address.to_custom_hash }
     end
   end
 
   def self.air_ports
-    where(hub_type: "air")
+    where(hub_type: 'air')
   end
 
   def self.rail
-    where(hub_type: "rail")
+    where(hub_type: 'rail')
   end
 
   def truck_type_availability
@@ -105,29 +105,30 @@ class Hub < ApplicationRecord
   end
 
   def lat_lng_string
-    "#{location.latitude},#{location.longitude}"
+    "#{address.latitude},#{address.longitude}"
   end
 
   def lat_lng_array
-    [location.latitude, location.longitude]
+    [address.latitude, address.longitude]
   end
+
   def lng_lat_array
-    # loc = location
-    [location.longitude, location.latitude]
+    # loc = address
+    [address.longitude, address.latitude]
   end
 
   def distance_to(loc)
-    Geocoder::Calculations.distance_between([loc.latitude, loc.longitude], [location.latitude, location.longitude])
+    Geocoder::Calculations.distance_between([loc.latitude, loc.longitude], [address.latitude, address.longitude])
   end
 
   def toggle_hub_status!
     case hub_status
-    when "active"
-      update_attribute(:hub_status, "inactive")
-    when "inactive"
-      update_attribute(:hub_status, "active")
+    when 'active'
+      update_attribute(:hub_status, 'inactive')
+    when 'inactive'
+      update_attribute(:hub_status, 'active')
     else
-      raise "Location contains invalid hub status!"
+      raise 'Location contains invalid hub status!'
     end
     save!
   end
@@ -135,18 +136,19 @@ class Hub < ApplicationRecord
   def copy_to_hub(hub_id)
     hub_truckings.each do |ht|
       nht = ht.as_json
-      nht.delete("id")
-      nht["hub_id"] = hub_id
+      nht.delete('id')
+      nht['hub_id'] = hub_id
       tp = ht.trucking_pricing
       ntp = tp.as_json
-      ntp.delete("id")
+      ntp.delete('id')
       ntps = TruckingPricing.create!(ntp)
-      nht["trucking_pricing_id"] = ntps.id
+      nht['trucking_pricing_id'] = ntps.id
       HubTrucking.create!(nht)
     end
   end
+
   def get_customs(load_type, mot, direction, tenant_vehicle_id, destination_hub_id)
-    dest_customs = self.customs_fees.find_by(
+    dest_customs = customs_fees.find_by(
       load_type: load_type,
       direction: direction,
       mode_of_transport: mot,
@@ -156,7 +158,7 @@ class Hub < ApplicationRecord
     if dest_customs
       return dest_customs
     else
-      customs = self.customs_fees.find_by(
+      customs = customs_fees.find_by(
         load_type: load_type,
         direction: direction,
         mode_of_transport: mot,
@@ -166,13 +168,13 @@ class Hub < ApplicationRecord
     end
   end
 
-  def as_options_json(options={})
+  def as_options_json(options = {})
     new_options = options.reverse_merge(
       include: {
-        nexus:    { only: %i[id name] },
-        location: {
+        nexus:    { only: %i(id name) },
+        address: {
           include: {
-            country: { only: %i[name]}
+            country: { only: %i(name) }
           }
         }
       }

@@ -12,7 +12,7 @@ export class AdminHubForm extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      location: {},
+      address: {},
       hub: {
         name: '',
         hubType: '',
@@ -62,12 +62,12 @@ export class AdminHubForm extends Component {
     tmpAddress.fullAddress = place.formatted_address
     tmpAddress.geocoded_address = place.formatted_address
     this.setState({
-      location: tmpAddress,
+      address: tmpAddress,
       hub: {
         ...this.state.hub,
         name: tmpAddress.city
       },
-      autocomplete: { ...this.state.autocomplete, location: true }
+      autocomplete: { ...this.state.autocomplete, address: true }
     })
   }
   handleAddressChange (event) {
@@ -87,7 +87,7 @@ export class AdminHubForm extends Component {
   resetAuto () {
     // this.state.autoListener[target].clearListeners();
     this.setState({
-      autocomplete: { ...this.state.autocomplete, location: false }
+      autocomplete: { ...this.state.autocomplete, address: false }
     })
   }
   handleTruckingType (ev) {
@@ -116,30 +116,30 @@ export class AdminHubForm extends Component {
     })
   }
   saveNewHub () {
-    const { hub, location } = this.state
+    const { hub, address } = this.state
     const preppedLocation = {}
     const preppedHub = {}
-    preppedLocation.street_number = location.street_number
-    preppedLocation.street = location.street
-    preppedLocation.zip_code = location.zipCode
-    preppedLocation.city = location.city
-    preppedLocation.country = location.country
-    preppedLocation.latitude = location.latitude
-    preppedLocation.longitude = location.longitude
-    preppedLocation.geocoded_address = location.geocoded_address
+    preppedLocation.street_number = address.street_number
+    preppedLocation.street = address.street
+    preppedLocation.zip_code = address.zipCode
+    preppedLocation.city = address.city
+    preppedLocation.country = address.country
+    preppedLocation.latitude = address.latitude
+    preppedLocation.longitude = address.longitude
+    preppedLocation.geocoded_address = address.geocoded_address
 
     preppedHub.name = hub.name
     preppedHub.hub_type = hub.hubType
     preppedHub.trucking_type = hub.truckingType
-    preppedHub.latitude = location.latitude
-    preppedHub.longitude = location.longitude
+    preppedHub.latitude = address.latitude
+    preppedHub.longitude = address.longitude
     this.props.saveHub(preppedHub, preppedLocation)
     this.props.close()
   }
 
   render () {
     const { theme } = this.props
-    const { hub, location } = this.state
+    const { hub, address } = this.state
     const hubTypes = [
       { value: 'ocean', label: 'Port' },
       { value: 'air', label: 'Airport' },
@@ -226,21 +226,21 @@ export class AdminHubForm extends Component {
               <div className="flex-20 layout-row layout-align-center-center input_box_full">
                 <input
                   id="not-auto"
-                  name="location-street_number"
+                  name="address-street_number"
                   className={`flex-none ${styles.input}`}
                   type="string"
                   onChange={this.handleAddressChange}
-                  value={location.street_number}
+                  value={address.street_number}
                   placeholder="Number"
                 />
               </div>
               <div className="flex-75 layout-row layout-align-center-center input_box_full">
                 <input
-                  name="location-street"
+                  name="address-street"
                   className={`flex-none ${styles.input}`}
                   type="string"
                   onChange={this.handleAddressChange}
-                  value={location.street}
+                  value={address.street}
                   placeholder="Street"
                 />
               </div>
@@ -248,21 +248,21 @@ export class AdminHubForm extends Component {
             <div className="flex-100 layout-row layout-align-space-around-center">
               <div className="flex-30 layout-row layout-align-center-center input_box_full">
                 <input
-                  name="location-zipCode"
+                  name="address-zipCode"
                   className={`flex-none ${styles.input}`}
                   type="string"
                   onChange={this.handleAddressChange}
-                  value={location.zipCode}
+                  value={address.zipCode}
                   placeholder="Zip Code"
                 />
               </div>
               <div className="flex-65 layout-row layout-align-center-center input_box_full">
                 <input
-                  name="location-city"
+                  name="address-city"
                   className={`flex-none ${styles.input}`}
                   type="string"
                   onChange={this.handleAddressChange}
-                  value={location.city}
+                  value={address.city}
                   placeholder="City"
                 />
               </div>
@@ -271,11 +271,11 @@ export class AdminHubForm extends Component {
             <div className="flex-100 layout-row layout-align-space-around-center">
               <div className="flex-100 layout-row layout-align-center-center input_box_full">
                 <input
-                  name="location-country"
+                  name="address-country"
                   className={`flex-none ${styles.input}`}
                   type="string"
                   onChange={this.handleAddressChange}
-                  value={location.country}
+                  value={address.country}
                   placeholder="Country"
                 />
               </div>
@@ -290,7 +290,7 @@ export class AdminHubForm extends Component {
               theme={theme}
               size="small"
               text="Clear"
-              handleNext={() => this.resetAuto('location')}
+              handleNext={() => this.resetAuto('address')}
               iconClass="fa-times"
             />
           </div>

@@ -71,15 +71,15 @@ function reuseContacts (contacts) {
   const resp = {
     consignee: {
       contact: camelizeKeys(oldConsignee.contact),
-      location: camelizeKeys(oldConsignee.location)
+      address: camelizeKeys(oldConsignee.address)
     },
     shipper: {
       contact: camelizeKeys(oldShipper.contact),
-      location: camelizeKeys(oldShipper.location)
+      address: camelizeKeys(oldShipper.address)
     },
     notifyees: oldNotifyees.length > 0 ? oldNotifyees.map(n => ({
       contact: camelizeKeys(n.contact),
-      location: camelizeKeys(n.location)
+      address: camelizeKeys(n.address)
     })) : []
   }
 

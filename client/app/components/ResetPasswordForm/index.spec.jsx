@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { user, theme, location } from '../../mocks'
+import { user, theme, address } from '../../mocks'
 
 import ResetPasswordForm from './'
 
 const propsBase = {
-  user, theme, location
+  user, theme, address
 }
 
 test('shallow rendering', () => {

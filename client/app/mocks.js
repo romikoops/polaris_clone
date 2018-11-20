@@ -180,7 +180,7 @@ export const shipmentData = {
   cargoItems: [],
   containers: [],
   schedules: schedulesInShipmentData,
-  locations: {
+  addresses: {
     startHub: 'FOO_START_HUB',
     endHub: 'FOO_END_HUB',
     destination: {
@@ -236,7 +236,7 @@ export const shipment = {
   }
 }
 
-export const location = {
+export const address = {
   primary: true,
   id: 246,
   street_number: 579,
@@ -249,7 +249,7 @@ export const location = {
   country: 'Germany'
 }
 
-export const address = {
+export const address2 = {
   id: 13579,
   street_number: '1',
   street: 'Uhlandweg',
@@ -259,7 +259,7 @@ export const address = {
 }
 
 export const hub = {
-  location,
+  address,
   name: 'FOO_HUB_NAME'
 }
 
@@ -291,7 +291,7 @@ export const charge = {
   id: 654297
 }
 
-export const locations = {
+export const addresses = {
   origin: {},
   destination: {}
 }

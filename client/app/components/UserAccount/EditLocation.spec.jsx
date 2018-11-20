@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, gMaps, location } from '../../mocks'
+import { theme, identity, gMaps, address } from '../../mocks'
 
 jest.mock('react-redux', () => ({
   connect: () => Component => Component
@@ -14,7 +14,7 @@ const propsBase = {
   saveLocation: identity,
   gMaps,
   geocodedAddress: 'FOO_GEO_ADDRESS',
-  location
+  address
 }
 
 test('shallow render', () => {
