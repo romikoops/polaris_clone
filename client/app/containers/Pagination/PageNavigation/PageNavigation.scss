@@ -9,11 +9,19 @@
   .navigation_button {
     background: white;
     color: #BDBDBD;
+    width: 120px;
+    cursor: pointer;
+
     i {
       font-size: 25px;
     }
     &:hover {
       color: #4F4F4F;
+    }
+
+    &.disabled {
+      cursor: default;
+      color: #E0E0E0;
     }
   }
   .back {
