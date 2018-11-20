@@ -351,9 +351,7 @@ module PricingTools
              when /RANGE/
                handle_range_fee(fee, cargo_hash)
     end
-    if result.nil?
-      binding.pry
-    end
+
     round_fee(result, scope['continuous_rounding'])
   end
 
