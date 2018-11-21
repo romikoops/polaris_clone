@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import Tabs from '../Tabs/Tabs'
@@ -426,14 +425,14 @@ class UserShipmentContent extends Component {
                 </div>
               </div>
               <div className={`flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding ${styles.services_box}`}>
-                <div className="flex-100 layout-row">
+                <div className="flex-100 layout-row layout-wrap">
                   <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
                     <div className="layout-align-start-center layout-row flex">
                       <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>x&nbsp;{cargoCount}</span>
                       <p className="layout-align-sm-end-center layout-align-xs-end-center">{UserShipmentContent.calcCargoLoad(feeHash, shipment.load_type, t)}</p>
                     </div>
                   </div>
-                  <h2 className="layout-align-start-center layout-row flex">
+                  <h2 className="layout-align-start-center layout-row flex-100">
                     {numberSpacing(totalPrice(shipment).value, 2)} {totalPrice(shipment).currency}
                   </h2>
                 </div>

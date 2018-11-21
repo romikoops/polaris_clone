@@ -187,6 +187,8 @@ class AdminShipmentCard extends Component {
           </div>
         </div>
       )
+    const cargoCount = shipment.cargo_units ? shipment.cargo_units.reduce((sum, cargoUnit) => (sum + +cargoUnit.quantity), 0) : ''
+    const cargoTypeString = shipment.load_type = 'container' ? t('cargo:container') : t('cargo:cargoItem')
 
     return (
       <div
@@ -278,11 +280,11 @@ class AdminShipmentCard extends Component {
             <div className="layout-row flex-10">
               <div className="layout-row layout-align-center-center">
                 <span className={`${styles.smallText}`}>
-                  <b>x</b><span className={`${styles.bigText}`}>{shipment.cargo_units ? shipment.cargo_units.length : ''}</span>
+                  <b>x</b><span className={`${styles.bigText}`}>{cargoCount}</span>
                 </span>
               </div>
             </div>
-            <span className="flex-35">{t('cargo:cargoItem')}</span>
+            <span className="flex-35">{cargoTypeString}</span>
             <span className="flex-25 layout-row">
               <i
                 className="fa fa-check-square clip"

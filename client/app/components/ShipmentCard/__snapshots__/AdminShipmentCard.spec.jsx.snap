@@ -181,7 +181,7 @@ exports[`shallow rendering 1`] = `
             <span
               className="bigText"
             >
-              1
+              2
             </span>
           </span>
         </div>
@@ -189,7 +189,7 @@ exports[`shallow rendering 1`] = `
       <span
         className="flex-35"
       >
-        Cargo Item
+        Container
       </span>
       <span
         className="flex-25 layout-row"

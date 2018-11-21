@@ -56,7 +56,7 @@ exports[`loading is true 1`] = `
           },
         }
       }
-      cargoCount={-2}
+      cargoCount={0}
       cargoView={Array []}
       deselectedStyle={
         Object {
@@ -422,7 +422,7 @@ exports[`shallow render 1`] = `
           },
         }
       }
-      cargoCount={-2}
+      cargoCount={0}
       cargoView={Array []}
       deselectedStyle={
         Object {
@@ -788,7 +788,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
           },
         }
       }
-      cargoCount={-2}
+      cargoCount={NaN}
       cargoView={
         Array [
           <CargoItemGroup
@@ -1228,7 +1228,7 @@ exports[`shipmentData.contacts is present 1`] = `
           },
         }
       }
-      cargoCount={-2}
+      cargoCount={0}
       cargoView={Array []}
       deselectedStyle={
         Object {
@@ -1640,7 +1640,7 @@ exports[`shipmentData.documents is present 1`] = `
           },
         }
       }
-      cargoCount={-2}
+      cargoCount={0}
       cargoView={Array []}
       deselectedStyle={
         Object {

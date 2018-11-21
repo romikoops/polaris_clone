@@ -718,7 +718,9 @@ class AdminShipmentView extends Component {
       </p>
     )
 
-    const cargoCount = Object.keys(feeHash.cargo).length - 2
+    const cargoCount = shipment.load_type === 'container'
+      ? containers.reduce((sum, cargoUnit) => (sum + +cargoUnit.quantity), 0)
+      : cargoItems.reduce((sum, cargoUnit) => (sum + +cargoUnit.quantity), 0)
     const dnrEditKeys = ['in_process', 'finished', 'confirmed']
     const renderActionButtons = ({ status }) => {
       switch (status) {
