@@ -8,12 +8,6 @@ class Address < ApplicationRecord
   has_many :ports, foreign_key: :nexus_id
   has_many :ports
   has_one :hub
-
-  # has_many :hubs, foreign_key: :nexus_id do
-  #   def tenant_id(tenant_id)
-  #     where(tenant_id: tenant_id)
-  #   end
-  # end
   has_many :routes
   has_many :stops, through: :hubs
   belongs_to :country, optional: true
@@ -160,26 +154,6 @@ class Address < ApplicationRecord
       raise "This 'Location' object is not associated with a user!"
     else
       return !!user_loc.primary
-    end
-  end
-
-  def hubs_by_type_seeder(hub_type, tenant_id)
-    hubs = self.hubs.where(hub_type: hub_type, tenant_id: tenant_id)
-    if hubs.empty?
-      name = case hub_type
-             when 'ocean'
-               "#{self.name} Port"
-             when 'air'
-               "#{self.name} Airport"
-             when 'rail'
-               "#{self.name} Railyard"
-             else
-               self.name
-             end
-      hub =  self.hubs.create!(hub_type: hub_type, tenant_id: tenant_id, name: name, latitude: latitude, longitude: longitude, address_id: id, nexus_id: id)
-      return self.hubs.where(hub_type: hub_type, tenant_id: tenant_id)
-    else
-      hubs
     end
   end
 

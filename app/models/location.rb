@@ -2,7 +2,7 @@
 
 class Location < ApplicationRecord
   include PgSearch
-  # validates :postal_code, :city, :province, :country, presence: true
+
   validates :postal_code, uniqueness: {
     scope:   %i(neighbourhood city province country),
     message: ->(obj, _) { "is a duplicate for the names: #{obj.names.log_format}" }
@@ -107,19 +107,4 @@ class Location < ApplicationRecord
     nil
   end
 
-  # def self.within(lat:, lng:, distance: 0.25)
-  #   # TODO: implement using ST_DWithin, and benchmark against this implementation
-
-  #   where(
-  #     Arel::Nodes::InfixOperation.new(
-  #       '<',
-  #       arel_table[:bounds].st_distance("POINT(#{lng} #{lat})"),
-  #       Arel::Nodes.build_quoted(distance)
-  #     )
-  #   )
-  # end
-
-  # def self.order_distance(lat:, lng:)
-  #   order(arel_table[:bounds].st_distance("POINT(#{lng} #{lat})"))
-  # end
 end
