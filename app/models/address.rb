@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Address < ApplicationRecord
   has_many :user_addresses
   has_many :users, through: :user_addresses, dependent: :destroy
@@ -136,9 +138,6 @@ class Address < ApplicationRecord
     client.pricings.map(&:route).map(&:get_nexuses).flatten.uniq
   end
 
-  def contains?(lat:, lng:)
-    # TODO: Remove subqueries and write specs
-
   def self.nexuses_prepared_client(client)
     nexuses_client(client).pluck(:id, :name).to_h.invert
   end
@@ -149,11 +148,6 @@ class Address < ApplicationRecord
       prim = { primary: loc.is_primary_for?(user) }
       loc.to_custom_hash.merge(prim)
     end
-  end
-
-    results = ActiveRecord::Base.connection.execute(sanitized_query).first
-
-    results['contains']
   end
 
   def names
@@ -269,6 +263,13 @@ class Address < ApplicationRecord
     end
 
     nil
+  end
+
+  def get_zip_code
+    reverse_geocode if zip_code.nil?
+
+    sanitize_zip_code!
+    zip_code
   end
 
   private
