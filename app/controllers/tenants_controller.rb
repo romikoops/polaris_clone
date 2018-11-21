@@ -6,7 +6,8 @@ class TenantsController < ApplicationController
   skip_before_action :require_authentication!
   skip_before_action :require_non_guest_authentication!
   def index
-    tenants = Tenant.all.map { |t| { label: t.name, value: t } }
+    tenants = []
+    tenants = Tenant.all.map { |t| { label: t.name, value: t } } unless Rails.env.production?
     response_handler(tenants)
   end
 

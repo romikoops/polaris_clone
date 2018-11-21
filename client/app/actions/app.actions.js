@@ -25,7 +25,7 @@ function setTenant () {
     return { type: appConstants.SET_TENANT_SUCCESS, payload }
   }
   function failure (error) {
-    return { type: appConstants.FETCH_CURRENCIES_ERROR, error }
+    return { type: appConstants.SET_TENANT_ERROR, error }
   }
 
   return (dispatch) => {
@@ -33,6 +33,62 @@ function setTenant () {
     appService.setTenant().then(
       (resp) => {
         dispatch(success(resp.data))
+      },
+      (error) => {
+        error.then((data) => {
+          dispatch(failure({ type: 'error', text: data.message }))
+        })
+      }
+    )
+  }
+}
+
+function setTenants () {
+  function request () {
+    return { type: appConstants.SET_TENANTS_REQUEST }
+  }
+  function success (payload) {
+    return { type: appConstants.SET_TENANTS_SUCCESS, payload }
+  }
+  function failure (error) {
+    return { type: appConstants.SET_TENANTS_ERROR, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request)
+    appService.setTenants().then(
+      (resp) => {
+        dispatch(success(resp.data))
+      },
+      (error) => {
+        error.then((data) => {
+          dispatch(failure({ type: 'error', text: data.message }))
+        })
+      }
+    )
+  }
+}
+
+function setNewTenant (tenantId) {
+  function request () {
+    return { type: appConstants.SET_TENANT_REQUEST }
+  }
+  function success (payload) {
+    const { localStorage } = window
+    localStorage.setItem('tenantId', payload)
+
+    return { type: appConstants.SET_TENANT_SUCCESS, payload }
+  }
+  function failure (error) {
+    return { type: appConstants.SET_TENANT_ERROR, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request)
+    appService.setNewTenant(tenantId).then(
+      (resp) => {
+        console.log(resp)
+        dispatch(success(tenantId))
       },
       (error) => {
         error.then((data) => {
@@ -281,6 +337,8 @@ export const appActions = {
   setCurrency,
   clearLoading,
   setTenant,
+  setNewTenant,
+  setTenants,
   goTo,
   fetchTenants,
   setTheme,

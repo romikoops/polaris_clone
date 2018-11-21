@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import UserAccount from '../UserAccount/UserAccount'
 import Landing from '../Landing/Landing'
 import Shop from '../Shop/Shop'
+import TenantMenu from '../../components/TenantMenu'
 import Admin from '../Admin/Admin'
 import AdminShipmentAction from '../../components/Redirects/AdminShipmentAction'
 import { SignOut } from '../../components/SignOut/SignOut'
@@ -23,10 +24,12 @@ import GenericError from '../../components/ErrorHandling/Generic'
 class App extends Component {
   constructor (props) {
     super(props)
+    this.isUserExpired = this.isUserExpired.bind(this)
   }
   componentWillMount () {
     const { appDispatch } = this.props
     appDispatch.setTenant()
+    appDispatch.setTenants()
   }
   componentDidMount () {
     const { appDispatch } = this.props
@@ -47,16 +50,19 @@ class App extends Component {
   render () {
     const {
       tenant,
+      tenants,
       user,
       loggedIn,
       showMessages,
       sending,
+      appDispatch,
       loading
     } = this.props
 
     if (!tenant) {
       return <Loading theme={defaultTheme} text="loading..." />
     }
+    if (!tenants) return ''
     const { theme } = tenant
 
     // Update document title
@@ -66,6 +72,7 @@ class App extends Component {
 
     return (
       <div className="layout-fill layout-row layout-wrap layout-align-start hundred text-break">
+        <TenantMenu tenants={tenants} appDispatch={appDispatch} />
         <CookieConsentBar
           user={user}
           theme={theme}
@@ -175,7 +182,7 @@ function mapStateToProps (state) {
   const {
     selectedSubdomain, authentication, messaging, admin, users, app
   } = state
-  const { tenant } = app
+  const { tenant, tenants } = app
   const { showMessages, sending } = messaging
   const { user, loggedIn, loggingIn } = authentication
   const { isFetching } = tenant || {
@@ -186,6 +193,7 @@ function mapStateToProps (state) {
   return {
     selectedSubdomain,
     tenant,
+    tenants,
     user,
     loggedIn,
     loggingIn,

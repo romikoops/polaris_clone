@@ -7,12 +7,39 @@ export default function app (state = {}, action) {
       return state
     }
     case appConstants.SET_TENANT_SUCCESS: {
+      const { tenants, tenant } = state
+      let ret
+      if (tenant) {
+        ret = {
+          ...state,
+          tenant: tenants.filter(t => t.value.id === action.payload)[0].value
+        }
+
+        return ret
+      }
+
       return {
         ...state,
         ...action.payload
       }
     }
     case appConstants.SET_TENANT_ERROR: {
+      const err = merge({}, state, {
+        error: action.payload
+      })
+
+      return err
+    }
+    case appConstants.SET_TENANTS_REQUEST: {
+      return state
+    }
+    case appConstants.SET_TENANTS_SUCCESS: {
+      return {
+        ...state,
+        tenants: action.payload
+      }
+    }
+    case appConstants.SET_TENANTS_ERROR: {
       const err = merge({}, state, {
         error: action.payload
       })
