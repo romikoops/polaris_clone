@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Switch, Route, withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
-import { adminActions } from '../../actions'
+import { adminActions, tenantActions } from '../../actions'
 import Footer from '../../components/Footer/Footer'
 import { AdminDashboard, AdminServiceCharges, SuperAdmin } from '../../components/Admin'
 import AdminShipments from '../../components/Admin/AdminShipments'
@@ -15,6 +15,7 @@ import AdminSchedules from '../../components/Admin/AdminSchedules'
 import AdminPricings from '../../components/Admin/AdminPricings'
 import AdminTrucking from '../../components/Admin/AdminTrucking'
 import AdminWizard from '../../components/Admin/AdminWizard/AdminWizard'
+import AdminSettings from '../../components/Admin/AdminSettings/AdminSettings'
 import Loading from '../../components/Loading/Loading'
 import Header from '../../components/Header/Header'
 import SideNav from '../../components/SideNav/SideNav'
@@ -43,7 +44,7 @@ class Admin extends Component {
   }
   render () {
     const {
-      theme, adminData, adminDispatch, user, documentLoading, tenant
+      theme, adminData, adminDispatch, tenantDispatch, user, documentLoading, tenant
     } = this.props
 
     const {
@@ -154,6 +155,18 @@ class Admin extends Component {
                   render={props => (
                     <AdminCurrencyCenter theme={theme} setCurrentUrl={this.setCurrentUrl} />
                   )}
+                />
+                <Route
+                  path="/admin/settings"
+                  render={props => (<AdminSettings
+                    theme={theme}
+                    setCurrentUrl={this.setCurrentUrl}
+                    {...props}
+                    clients={clients}
+                    tenant={tenant}
+                    loading={loading}
+                    tenantDispatch={tenantDispatch}
+                  />)}
                 />
 
                 <SuperAdminPrivateRoute
@@ -319,6 +332,9 @@ Admin.propTypes = {
     getDashboard: PropTypes.func,
     getRoutes: PropTypes.func,
     goTo: PropTypes.func
+  }).isRequired,
+  tenantDispatch: PropTypes.shape({
+    updateEmails: PropTypes.func
   }).isRequired
 }
 
@@ -349,7 +365,8 @@ function mapStateToProps (state) {
 }
 function mapDispatchToProps (dispatch) {
   return {
-    adminDispatch: bindActionCreators(adminActions, dispatch)
+    adminDispatch: bindActionCreators(adminActions, dispatch),
+    tenantDispatch: bindActionCreators(tenantActions, dispatch)
   }
 }
 

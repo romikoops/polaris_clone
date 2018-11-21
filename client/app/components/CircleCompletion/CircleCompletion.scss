@@ -1,0 +1,29 @@
+:local {
+  .circle {
+    width: 100px;
+    height: 100px;
+    line-height: 0;
+    margin: 50px;
+    color: white;
+    border: white solid 2px;
+    border-radius: 50%;
+    text-align: center;
+    transition: 1s;
+  }
+
+  .circle_animate {
+    transform: rotate(360deg)
+  }
+  .icon {
+    font-size: 50px;
+    padding-top: 25px;
+  }
+  .display_none {
+    opacity: 0;
+    transition: 1s;
+  }
+  .display {
+    opacity: 1;
+    transition: 0.5s;
+  }
+}

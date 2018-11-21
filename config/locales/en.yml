@@ -71,6 +71,10 @@ en:
       http_code: 400
       code: 1007
       message: "Unable to build delivery location from address fields."
+    invalid_tenant:
+      http_code: 400
+      code: 1011
+      message: "Unable to update tenant"
     
 
     # Authentication Errors

@@ -1,9 +1,9 @@
 import fetch from 'isomorphic-fetch'
 import { Promise } from 'es6-promise-promise'
 import * as Sentry from '@sentry/browser'
-import {
-  tenantConstants
-} from '../constants'
+import { tenantConstants } from '../constants'
+import { tenantService } from '../services/tenant.service'
+import { alertActions } from './'
 import getApiHost from '../constants/api.constants'
 
 function requestTenant (subdomain) {
@@ -67,6 +67,7 @@ function shouldFetchTenant (state, subdomain) {
   if (tenant.isFetching) {
     return false
   }
+
   return tenant.didInvalidate
 }
 
@@ -87,6 +88,43 @@ function fetchTenantIfNeeded (subdomain) {
     return Promise.resolve()
   }
 }
+
+function updateEmails (newEmails, tenant) {
+  function request (tenantData) {
+    return {
+      type: tenantConstants.UPDATE_EMAILS_REQUEST,
+      tenantData
+    }
+  }
+  function success (emails) {
+    return {
+      type: tenantConstants.UPDATE_EMAILS_SUCCESS,
+      payload: emails
+    }
+  }
+  function failure (error) {
+    return { type: tenantConstants.UPDATE_EMAILS_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request(newEmails, tenant))
+
+    tenantService.updateEmails(newEmails, tenant).then(
+      (resp) => {
+        const { emails } = resp.data
+        dispatch(success(emails))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function updateReduxStore (payload) {
+  return dispatch => dispatch({ type: 'GENERAL_UPDATE', payload })
+}
+
 const tenantActions = {
   requestTenant,
   logOut,
@@ -94,7 +132,9 @@ const tenantActions = {
   invalidateSubdomain,
   fetchTenant,
   fetchTenantIfNeeded,
-  shouldFetchTenant
+  shouldFetchTenant,
+  updateEmails,
+  updateReduxStore
 }
 
 export default tenantActions

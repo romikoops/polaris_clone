@@ -121,6 +121,13 @@ class SideNav extends Component {
         url: '/admin/currencies',
         target: 'currencies',
         tooltip: menuTip.currencies
+      },
+      {
+        key: v4(),
+        icon: 'fa-cog',
+        text: t('account:settings'),
+        url: '/admin/settings',
+        target: 'settings'
       }
     ]
     const width = window.innerWidth
@@ -208,6 +215,9 @@ class SideNav extends Component {
         break
       case 'currencies':
         adminDispatch.goTo('/admin/currencies')
+        break
+      case 'settings':
+        adminDispatch.goTo('/admin/settings')
         break
       case 'superadmin':
         adminDispatch.goTo('/admin/superadmin')
