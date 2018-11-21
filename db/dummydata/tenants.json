@@ -793,7 +793,8 @@
     "logoLarge": "https://assets.itsmycargo.com/assets/tenants/normanglobal/normanglobal_logo.png",
     "logoSmall": "https://assets.itsmycargo.com/assets/tenants/normanglobal/normanglobal_logo.png",
     "logoWhite": "https://assets.itsmycargo.com/assets/tenants/normanglobal/normanglobal_logo_white.png",
-    "background": "https://assets.itsmycargo.com/assets/backgrounds/bg_normanglobal.jpg"
+    "background": "https://assets.itsmycargo.com/assets/backgrounds/bg_normanglobal.jpg",
+    "bookingProcessImage": "https://assets.itsmycargo.com/assets/tenants/normanglobal/normtrucks.jpg"
   },
   "addresses": {
     "components": [],

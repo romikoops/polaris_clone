@@ -6,6 +6,11 @@ exports[`shallow rendering 1`] = `
 >
   <div
     className="shop_banner layout-row flex-100 layout-align-center"
+    style={
+      Object {
+        "backgroundImage": "url('https://assets.itsmycargo.com/assets/cityimages/ssview_container_yard.jpg')",
+      }
+    }
   >
     <div
       className="fade"
