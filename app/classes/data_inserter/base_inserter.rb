@@ -49,12 +49,12 @@ module DataInserter
     end
 
     def append_hub_suffix(name, mot)
-      name + ' ' + {
-        'ocean' => 'Port',
-        'air'   => 'Airport',
-        'rail'  => 'Railyard',
-        'truck' => 'Depot'
-      }[mot]
+      name + ' ' + case mot
+                   when 'ocean' then 'Port'
+                   when 'air'   then 'Airport'
+                   when 'rail'  then 'Railyard'
+                   when 'truck' then 'Depot'
+                   end
     end
   end
 end

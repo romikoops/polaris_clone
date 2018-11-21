@@ -123,7 +123,7 @@ module DataInserter
 
     def find_or_create_tenant_vehicles(params, carrier)
       service_level = service_level(params)
-      return @tenant.tenant_vehicles if service_level == 'all'
+      return TenantVehicle.where(carrier: carrier, tenant: @tenant, mode_of_transport: params[:mot]) if service_level == 'all'
 
       tenant_vehicle = TenantVehicle.find_by(name: service_level,
                                              mode_of_transport: params[:mot],
@@ -140,10 +140,9 @@ module DataInserter
 
     def find_or_create_local_charges(params, tenant_vehicle)
       params[:mode_of_transport] = params[:mot]
+      params[:tenant_vehicle_id] = tenant_vehicle.id
       local_charge_params = params.except(:mot, :port, :country, :counterpart_hub, :counterpart_country, :carrier, :service_level)
-      local_charge = LocalCharge.find_or_initialize_by(local_charge_params)
-      local_charge.tenant = @tenant
-      local_charge.tenant_vehicle = tenant_vehicle
+      local_charge = @tenant.local_charges.find_or_initialize_by(local_charge_params)
       local_charge.save!
     end
 
