@@ -1,11 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styles from './index.scss'
-// import {
-//   AdminSearchableShipments,
-//   AdminSearchableRoutes,
-//   AdminSearchableClients
-// } from '../../AdminSearchables'
 import { documentGlossary } from '../../../../constants'
 import { history } from '../../../../helpers'
 import TextHeading from '../../../TextHeading/TextHeading'
