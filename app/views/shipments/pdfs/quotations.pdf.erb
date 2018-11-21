@@ -22,7 +22,9 @@
         <% end %>
     </div>
     <div>
-      <p><%= tenant.scope.pdf_remarks %></p>
+      <% tenant.remarks.each do  |remark|%>
+      <p><%= remark %></p>
+      <% end %>
     </div>
   </div>
 

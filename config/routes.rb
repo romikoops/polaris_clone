@@ -21,6 +21,7 @@ Rails.application.routes.draw do
         end
       end
       resources :tenants, only: [:update]
+      resources :remarks, only: %i(index create update destroy)
 
       get 'shipments/pages/delta_page_handler', to: 'shipments#delta_page_handler'
       get 'search/shipments/:target', to: 'shipments#search_shipments'
