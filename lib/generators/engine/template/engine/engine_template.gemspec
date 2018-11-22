@@ -6,6 +6,7 @@ $LOAD_PATH.push File.expand_path('lib', __dir__)
 Gem::Specification.new do |s|
   s.name        = 'engine_template'
   s.version     = '0.0.1'
+  s.license     = 'PROPRIETARY'
   s.authors     = ['GITUSER_NAME']
   s.email       = ['GITUSER_EMAIL']
   s.summary     = 'Summary of EngineTemplate.'
@@ -18,7 +19,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'ffaker'
   s.add_development_dependency 'fuubar'
   s.add_development_dependency 'pry'
-  s.add_development_dependency 'rspec_junit_formatter'
   s.add_development_dependency 'rspec-rails'
+  s.add_development_dependency 'rspec_junit_formatter'
   s.add_development_dependency 'simplecov'
 end

@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-
 require 'rails_helper'
 
 describe Vehicle, type: :model do
-
   context 'validations' do
     describe '#name' do
       it { should validate_presence_of(:name) }
@@ -14,7 +12,6 @@ describe Vehicle, type: :model do
 
   context 'class methods' do
     describe '.create_from_name' do
-
       let(:tenant) { create(:tenant) }
       let(:vehicle_name) { 'standard' }
       let(:mode_of_transport) { 'air' }
@@ -59,10 +56,8 @@ describe Vehicle, type: :model do
           expect { described_class.create_from_name(vehicle_name, mode_of_transport, tenant.id) }.not_to change { TransportCategory.count }.from(TransportCategory.count)
         end
       end
-
     end
   end
-
 end
 
 # == Schema Information

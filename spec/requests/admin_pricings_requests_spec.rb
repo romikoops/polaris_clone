@@ -76,7 +76,6 @@ describe 'Pricing requests', type: :request do
       end
 
       it 'Queries the DB for itineraries, sorted by MOT' do
-        # binding.pry
         get tenant_admin_search_pricings_path(tenant_id: tenant.id), params: params
         expect(response).to have_http_status(:success)
         expect(json[:success]).to be_truthy

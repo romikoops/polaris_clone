@@ -5,8 +5,8 @@ default: &default
 
 development:
   <<: *default
-  database: dummy_development
+  database: imcr_development
 
 test:
   <<: *default
-  database: dummy_test
+  database: imcr_test

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 require 'rails_helper'
 
 describe TruckingPricing, type: :model do
@@ -63,9 +62,9 @@ describe TruckingPricing, type: :model do
       context 'zipcode identifier' do
         let!(:hub_trucking_zipcode) do
           create(:hub_trucking,
-                 hub:                  hub,
+                 hub: hub,
                  trucking_destination: trucking_destination_zipcode,
-                 trucking_pricing:     trucking_pricing)
+                 trucking_pricing: trucking_pricing)
         end
 
         it 'finds the correct trucking_pricing with avulsed address filters' do
@@ -112,9 +111,9 @@ describe TruckingPricing, type: :model do
       context 'geometry identifier' do
         let!(:hub_trucking_geometry) do
           create(:hub_trucking,
-                 hub:                  hub,
+                 hub: hub,
                  trucking_destination: trucking_destination_geometry,
-                 trucking_pricing:     trucking_pricing)
+                 trucking_pricing: trucking_pricing)
         end
         it 'finds the correct trucking_pricing with avulsed address filters' do
           trucking_pricings = described_class.find_by_filter(
@@ -160,9 +159,9 @@ describe TruckingPricing, type: :model do
       context 'distance identifier' do
         let!(:hub_trucking_distance) do
           create(:hub_trucking,
-                 hub:                  hub,
+                 hub: hub,
                  trucking_destination: trucking_destination_distance,
-                 trucking_pricing:     trucking_pricing)
+                 trucking_pricing: trucking_pricing)
         end
         it 'finds the correct trucking_pricing with avulsed address filters', pending: 'Outdated spec' do
           trucking_pricings = described_class.find_by_filter(
@@ -222,69 +221,58 @@ describe TruckingPricing, type: :model do
 
         it 'returns empty array if no pricings were found' do
           create(:hub_trucking,
-                 hub:                  hub,
+                 hub: hub,
                  trucking_destination: create(:trucking_destination, :with_location),
-                 trucking_pricing:     trucking_pricing)
+                 trucking_pricing: trucking_pricing)
           expect(described_class.find_by_hub_id(-1)).to eq([])
         end
       end
 
       context 'zipcode identifier' do
-        it 'finds the correct pricing and destinations', pending: 'broken tests' do
+        it 'finds the correct pricing and destinations' do
           create_list(:trucking_destination, 100, :zipcode_sequence).each do |trucking_destination|
             create(:hub_trucking,
-                   hub:                  hub,
+                   hub: hub,
                    trucking_destination: trucking_destination,
-                   trucking_pricing:     trucking_pricing)
+                   trucking_pricing: trucking_pricing)
           end
 
           trucking_pricings = described_class.find_by_hub_id(hub.id)
 
-          expect(trucking_pricings).to match([
-                                               {
-                                                 'truckingPricing' => trucking_pricing.as_options_json,
-                                                 'zipcode'         => [%w(15000 15099)],
-                                                 'countryCode'     => 'SE'
-                                               }
-                                             ])
+          expect(trucking_pricings.first).to include('zipcode' => [%w(15000 15099)], 'countryCode' => 'SE')
+          expect(trucking_pricings.first['truckingPricing']).to include(trucking_pricing.as_options_json.except('created_at', 'updated_at'))
         end
 
-        it 'finds the correct pricing and destinations for multiple range groups per zone', pending: 'broken tests' do
-          create_list(:trucking_destination, 100, :zipcode_broken_sequence).each do |trucking_destination|
-            create(:hub_trucking,
-                   hub:                  hub,
-                   trucking_destination: trucking_destination,
-                   trucking_pricing:     trucking_pricing)
+        it 'finds the correct pricing and destinations for multiple range groups per zone' do
+          Timecop.freeze(Time.now) do
+            create_list(:trucking_destination, 100, :zipcode_broken_sequence).each do |trucking_destination|
+              create(:hub_trucking,
+                     hub: hub,
+                     trucking_destination: trucking_destination,
+                     trucking_pricing: trucking_pricing)
+            end
+
+            trucking_pricings = described_class.find_by_hub_id(hub.id)
+
+            expect(trucking_pricings.first).to include('zipcode' => [%w(15000 15039), %w(15050 15109)], 'countryCode' => 'SE')
+            expect(trucking_pricings.first['truckingPricing']).to include(trucking_pricing.as_options_json.except('created_at', 'updated_at'))
           end
-
-          trucking_pricings = described_class.find_by_hub_id(hub.id)
-
-          expect(trucking_pricings).to match([
-                                               {
-                                                 'truckingPricing' => trucking_pricing.as_options_json,
-                                                 'zipcode'         => [%w(15000 15039), %w(15050 15109)],
-                                                 'countryCode'     => 'SE'
-                                               }
-                                             ])
         end
       end
 
       context 'geometry identifier' do
-        it 'finds the correct pricing and destinations', pending: 'broken tests' do
-          create(:hub_trucking,
-                 hub:                  hub,
-                 trucking_destination: create(:trucking_destination, :with_location),
-                 trucking_pricing:     trucking_pricing)
+        it 'finds the correct pricing and destinations' do
+          Timecop.freeze(Time.now) do
+            create(:hub_trucking,
+                   hub: hub,
+                   trucking_destination: create(:trucking_destination, :with_location),
+                   trucking_pricing: trucking_pricing)
 
-          trucking_pricings = described_class.find_by_hub_id(hub.id)
+            trucking_pricings = described_class.find_by_hub_id(hub.id)
 
-          expect(trucking_pricings).to match([
-                                               {
-                                                 'truckingPricing' => trucking_pricing.as_options_json,
-                                                 'city'            => [%w(Testname4 Gothenburg)],
-                                                 'countryCode'     => 'SE'
-                                               }
-                                             ])
+            expect(trucking_pricings.first).to include('city' => [%w(Gothenburg Sweden)], 'countryCode' => 'SE')
+            expect(trucking_pricings.first['truckingPricing']).to include(trucking_pricing.as_options_json.except('created_at', 'updated_at'))
+          end
         end
       end
     end
