@@ -202,7 +202,10 @@
     "schedules": "Schedules",
     "confirmDeleteRoute": "This will delete the route and all related data (pricings, schedules etc)",
     "updateShopEmails": "Update Shop Emails",
-    "accountEmailsUpdated": "Account Emails Updated Successfully!"
+    "updateQuotationPDFRemarks": "Update PDF Remarks",
+    "addRemark": "Add Remark",
+    "accountEmailsUpdated": "Account Emails Updated Successfully!",
+    "accountRemarksUpdated": "Accound PDF Remarks Updated Successfully!"
   },
   "itbox": {
     "component": "IncotermBox",

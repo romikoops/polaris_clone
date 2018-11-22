@@ -45,11 +45,8 @@ export const tenant = (
         }
       }
     }
-    case tenantConstants.UPDATE_EMAILS_REQUEST: {
-      return {
-        ...state
-      }
-    }
+    case tenantConstants.UPDATE_EMAILS_REQUEST:
+      return state
     case tenantConstants.UPDATE_EMAILS_SUCCESS: {
       return {
         ...state,
@@ -60,11 +57,8 @@ export const tenant = (
         savedEmailSuccess: true
       }
     }
-    case tenantConstants.UPDATE_EMAILS_FAILURE: {
-      return {
-        ...state
-      }
-    }
+    case tenantConstants.UPDATE_EMAILS_FAILURE:
+      return state
     case tenantConstants.CLEAR_LOADING: {
       return {
         ...state,

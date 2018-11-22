@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Switch, Route, withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
-import { adminActions, tenantActions } from '../../actions'
+import { adminActions, tenantActions, remarkActions } from '../../actions'
 import Footer from '../../components/Footer/Footer'
 import { AdminDashboard, AdminServiceCharges, SuperAdmin } from '../../components/Admin'
 import AdminShipments from '../../components/Admin/AdminShipments'
@@ -44,7 +44,7 @@ class Admin extends Component {
   }
   render () {
     const {
-      theme, adminData, adminDispatch, tenantDispatch, user, documentLoading, tenant
+      theme, adminData, adminDispatch, tenantDispatch, remarkDispatch, user, documentLoading, tenant
     } = this.props
 
     const {
@@ -166,6 +166,7 @@ class Admin extends Component {
                     tenant={tenant}
                     loading={loading}
                     tenantDispatch={tenantDispatch}
+                    remarkDispatch={remarkDispatch}
                   />)}
                 />
 
@@ -335,6 +336,10 @@ Admin.propTypes = {
   }).isRequired,
   tenantDispatch: PropTypes.shape({
     updateEmails: PropTypes.func
+  }).isRequired,
+  remarkDispatch: PropTypes.shape({
+    addPdfRemark: PropTypes.func,
+    updatePdfRemarks: PropTypes.func
   }).isRequired
 }
 
@@ -348,7 +353,7 @@ Admin.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    users, authentication, tenant, admin, document
+    users, authentication, tenant, admin, remark, document
   } = state
   const { user, loggedIn } = authentication
   const documentLoading = document.loading
@@ -357,6 +362,7 @@ function mapStateToProps (state) {
     user,
     users,
     tenant,
+    remark,
     documentLoading,
     theme: tenant.data.theme,
     loggedIn,
@@ -366,7 +372,8 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     adminDispatch: bindActionCreators(adminActions, dispatch),
-    tenantDispatch: bindActionCreators(tenantActions, dispatch)
+    tenantDispatch: bindActionCreators(tenantActions, dispatch),
+    remarkDispatch: bindActionCreators(remarkActions, dispatch)
   }
 }
 

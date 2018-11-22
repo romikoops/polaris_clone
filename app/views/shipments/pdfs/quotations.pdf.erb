@@ -21,6 +21,11 @@
           <p>Customer ID: <%= shipment.user.external_id.to_i %></p>
         <% end %>
     </div>
+    <div>
+      <% tenant.remarks.each do  |remark|%>
+      <p><%= remark %></p>
+      <% end %>
+    </div>
   </div>
 
     <% shipments.map do |s| %>
