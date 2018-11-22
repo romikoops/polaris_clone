@@ -2,45 +2,66 @@
 
 module DataWriter
   class BaseWriter
-    attr_reader :xlsx, :sheets_data
+    # Expected data structure:
+    # {
+    #   Sheet1: [
+    #     {
+    #       header1: "...",
+    #       header2: 0.0,
+    #       ...
+    #     },
+    #     {
+    #       ...
+    #     }
+    #   ],
+    #   Sheet2: [
+    #     {
+    #       ...
+    #     }
+    #   ]
+    # }
 
-    def initialize(file_name:, sheets_data:)
-      @file_name = file_name
-      @sheets_data = sheets_data
+    attr_reader :tenant, :file_name, :sheets_data, :xlsx
+
+    def initialize(tenant:, file_name:)
+      @tenant = tenant
+      @file_name = file_name.remove(/.xlsx$/) + '.xlsx'
+      @sheets_data = nil
       @xlsx = nil
     end
 
     def perform
+      @sheets_data = load_and_prepare_data
       @xlsx = WriteXLSX.new(file_path, tempdir: Rails.root.join('tmp', 'write_xlsx/').to_s)
 
-      @sheets_data.each do |sheet_name, rows|
+      @sheets_data.each do |sheet_name, rows_data|
         worksheet = @xlsx.add_worksheet(sheet_name)
-        headers = extract_headers(rows.first)
+        raw_headers = extract_raw_headers(rows_data)
+        headers = transform_headers(raw_headers)
         setup_worksheet(worksheet, headers.length)
         write_headers(worksheet, headers)
-        write_rows_data(worksheet, rows)
+        write_rows_data(worksheet, raw_headers, rows_data)
       end
 
       @xlsx.close
     end
 
-    private
-
     def file_path
-      Rails.root.join('tmp', @file_name)
+      Rails.root.join('tmp', @file_name) unless @file_name.nil?
     end
 
-    def extract_raw_headers(_first_row)
+    private
+
+    def load_and_prepare_data
       raise NotImplementedError, "This method must be implemented in #{self.class.name}."
     end
 
-    def transform_headers(headers)
-      headers.map(&:upcase)
+    def transform_headers(raw_headers)
+      raw_headers.map(&:upcase)
     end
 
-    def extract_headers(first_row)
-      raw_headers = extract_raw_headers(first_row)
-      transform_headers(raw_headers)
+    def extract_raw_headers(rows_data)
+      rows_data.flat_map(&:keys).compact.uniq
     end
 
     def header_format
@@ -59,19 +80,25 @@ module DataWriter
       worksheet.freeze_panes(1, 0) # freeze first row
     end
 
-    def extract_row(_row_data)
-      raise NotImplementedError, "This method must be implemented in #{self.class.name}."
-    end
-
-    def write_row(worksheet, start_row_idx, start_col_idx, row_data)
-      row = extract_row(row_data)
+    def write_row(worksheet, start_row_idx, start_col_idx, raw_headers, row_data)
+      row = raw_headers.map { |header| row_data[header] }
       worksheet.write_row(start_row_idx, start_col_idx, row)
     end
 
-    def write_rows_data(worksheet, rows)
-      rows.each_with_index do |row_data, i|
-        write_row(worksheet, i + 1, 0, row_data)
+    def write_rows_data(worksheet, raw_headers, rows_data)
+      rows_data.each_with_index do |row_data, i|
+        write_row(worksheet, i + 1, 0, raw_headers, row_data)
       end
+    end
+
+    def remove_hub_suffix(name, mot)
+      str_to_remove = case mot
+                      when 'ocean' then 'Port'
+                      when 'air'   then 'Airport'
+                      when 'rail'  then 'Railyard'
+                      when 'truck' then 'Depot'
+                      end
+      name.remove(/ #{str_to_remove}$/)
     end
   end
 end

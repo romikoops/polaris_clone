@@ -4,12 +4,7 @@ module DataWriter
   class OceanLclWriter < BaseWriter
     private
 
-    def extract_raw_headers(first_row)
-      first_row.keys
-    end
-
-    def extract_row(row_data)
-      row_data.values
+    def load_and_prepare_data
     end
   end
 end

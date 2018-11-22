@@ -16,14 +16,14 @@ module DataInserter
           available_carriers.each do |carrier|
             tenant_vehicles = find_or_create_tenant_vehicles(params, carrier)
             tenant_vehicles.each do |tenant_vehicle|
-              find_or_create_local_charges(params, tenant_vehicle)
+              find_or_create_local_charge(params, tenant_vehicle)
             end
           end
         else
           carrier = find_or_create_carrier(params)
           tenant_vehicles = find_or_create_tenant_vehicles(params, carrier)
           tenant_vehicles.each do |tenant_vehicle|
-            find_or_create_local_charges(params, tenant_vehicle)
+            find_or_create_local_charge(params, tenant_vehicle)
           end
         end
       end
@@ -102,9 +102,9 @@ module DataInserter
       plain_fcl_local_charges_params = data.select { |params| params[:load_type] == 'fcl' }
       expanded_local_charges_params = %w(fcl_20 fcl_40 fcl_40_hq).reduce([]) do |memo, fcl_size|
         memo + plain_fcl_local_charges_params.map do |params|
-          temp = params.dup
-          temp[:load_type] = fcl_size
-          temp
+          params.dup.tap do |p|
+            p[:load_type] = fcl_size
+          end
         end
       end
       data = data.reject { |params| params[:load_type] == 'fcl' }
@@ -136,12 +136,12 @@ module DataInserter
       [tenant_vehicle]
     end
 
-    def find_or_create_local_charges(params, tenant_vehicle)
+    def find_or_create_local_charge(params, tenant_vehicle)
       params[:mode_of_transport] = params[:mot]
       params[:tenant_vehicle_id] = tenant_vehicle.id
       local_charge_params = params.except(:mot, :port, :country, :counterpart_hub, :counterpart_country, :carrier, :service_level)
       local_charge = @tenant.local_charges.find_or_initialize_by(local_charge_params)
-      local_charge.save!
+      local_charge.tap(&:save!)
     end
 
     def build_charge_params_with_error_data(row)
