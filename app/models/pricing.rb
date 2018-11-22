@@ -14,6 +14,7 @@ class Pricing < ApplicationRecord
   delegate :load_type, to: :transport_category
   delegate :cargo_class, to: :transport_category
   scope :for_load_type, ->(load_type) { joins(:transport_category).where('transport_categories.load_type': load_type) }
+  scope :for_cargo_class, ->(cargo_class) { joins(:transport_category).where('transport_categories.cargo_class': cargo_class) }
 
   self.per_page = 12
 

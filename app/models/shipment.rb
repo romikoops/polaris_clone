@@ -241,6 +241,10 @@ class Shipment < ApplicationRecord
     cargo_units.reduce(0){ |sum, unit| sum + unit.quantity }
   end
 
+  def valid_until
+    self&.itinerary&.pricings.for_cargo_class(self.cargo_units.pluck(:cargo_class)).where(tenant_vehicle_id: self.trip.tenant_vehicle_id).order(expiration_date: :asc).first&.expiration_date
+  end
+
   def selected_day_attribute
     has_pre_carriage? ? :planned_pickup_date : :planned_origin_drop_off_date
   end

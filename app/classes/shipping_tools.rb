@@ -7,7 +7,12 @@ module ShippingTools
   extend NotificationTools
 
   def self.create_shipments_from_quotation(shipment, results)
-    main_quote = Quotation.create(user_id: shipment.user_id)
+    existing_quote = Quotation.find_by(user_id: shipment.user_id, original_shipment_id: shipment.id)
+    if existing_quote && shipment.updated_at < existing_quote.updated_at
+      return existing_quote
+    end
+
+    main_quote = Quotation.create(user_id: shipment.user_id, original_shipment_id: shipment.id)
     results.each do |result|
       schedule = result['schedules'].first
       trip = Trip.find(schedule['trip_id'])
@@ -32,9 +37,9 @@ module ShippingTools
           on_carriage: on_carriage_hash
         },
         load_type: shipment.load_type,
-        itinerary: trip.itinerary
+        itinerary_id: trip.itinerary_id
       )
-      new_shipment.cargo_units = shipment.cargo_units
+      new_shipment.cargo_units = shipment.cargo_units.map(&:dup)
       shipment.charge_breakdowns.each do |charge_breakdown|
         new_charge_breakdown = charge_breakdown.dup
         new_charge_breakdown.update(shipment: new_shipment)

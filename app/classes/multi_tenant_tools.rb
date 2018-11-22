@@ -131,8 +131,8 @@ module MultiTenantTools
 
     # Handle "other_data" part of the hash (hacky)
     other_data = json_data.delete('other_data') || {}
-    TenantSeeder.update_cargo_item_types!(tenant, other_data['cargo_item_types'])
-    TenantSeeder.update_tenant_incoterms!(tenant, other_data['incoterms'])
+    update_cargo_item_types!(tenant, other_data['cargo_item_types'])
+    update_tenant_incoterms!(tenant, other_data['incoterms'])
 
     tenant.update_attributes(json_data)
   end
@@ -500,5 +500,52 @@ module MultiTenantTools
         caller_reference: invalStr.to_s, # required
       }
     )
+  end
+  def update_cargo_item_types!(tenant, cargo_item_types_attr)
+    return if cargo_item_types_attr.nil?
+
+    if cargo_item_types_attr == 'all'
+      CARGO_ITEM_TYPES.each do |cargo_item_type|
+        TenantCargoItemType.find_or_create_by(tenant: tenant, cargo_item_type: cargo_item_type)
+      end
+      return
+    end
+
+    if cargo_item_types_attr == 'no_dimensions'
+      CARGO_ITEM_TYPES_NO_DIMENSIONS.each do |cargo_item_type|
+        TenantCargoItemType.find_or_create_by(tenant: tenant, cargo_item_type: cargo_item_type)
+      end
+      return
+    end
+
+    tenant.tenant_cargo_item_types.destroy_all
+    cargo_item_types_attr.each do |cargo_item_type_attr|
+      cargo_item_type =
+        if cargo_item_type_attr.is_a? Hash
+          CargoItemType.find_by(cargo_item_type_attr)
+        else
+          CargoItemType.find_by(
+            category: cargo_item_type_attr,
+            dimension_x: nil,
+            dimension_y: nil,
+            area: nil
+          )
+        end
+      TenantCargoItemType.find_or_create_by(tenant: tenant, cargo_item_type: cargo_item_type)
+    end
+  end
+
+  def update_tenant_incoterms!(tenant, incoterm_array)
+    tenant.tenant_incoterms.destroy_all
+    if incoterm_array
+      incoterm_array.each do |code|
+        incoterm = Incoterm.find_by_code(code)
+        tenant.tenant_incoterms.find_or_create_by!(incoterm: incoterm)
+      end
+    else
+      Incoterm.all.each do |incoterm|
+        tenant.tenant_incoterms.find_or_create_by!(incoterm: incoterm)
+      end
+    end
   end
 end

@@ -83,9 +83,7 @@ module OfferCalculatorService
 
     def create_trucking_charges
       @trucking_data.each do |carriage, data|
-        charge_category = ChargeCategory.find_or_create_by(
-          name: "Trucking #{carriage.capitalize}-Carriage", code: "trucking_#{carriage}"
-        )
+        charge_category = ChargeCategory.find_or_create_by(code: "trucking_#{carriage}")
 
         parent_charge = create_parent_charge(charge_category)
 
