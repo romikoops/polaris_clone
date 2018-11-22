@@ -92,6 +92,10 @@ class Tenant < ApplicationRecord
     scope['open_quotation_tool'] || scope['closed_quotation_tool']
   end
 
+  def remarks
+    Remark.where(tenant_id: self.id)
+  end
+
   alias quotation_tool quotation_tool?
   deprecate :quotation_tool, deprecator: APP_DEPRECATION
 
