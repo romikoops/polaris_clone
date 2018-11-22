@@ -203,21 +203,29 @@ class Address < ApplicationRecord
     end
   end
 
+  def furthest_hub(hubs)
+    hubs.max do |hub_x, hub_y|
+      hub_x.distance_to(self) <=> hub_y.distance_to(self)
+    end
+  end
+
+
   def closest_hubs
-    hubs = Address.where(address_type: 'nexus')
+    hubs = Nexus.all
     distances = {}
     hubs.each_with_index do |hub, i|
       distances[i] = Geocoder::Calculations.distance_between([latitude, longitude], [hub.latitude, hub.longitude])
     end
-    return final_result unless final_result.nil?
-    keys.to_a.reverse_each.with_index do |name_i, _i|
-      final_result = where(name_i => name_2).first
 
-      break if final_result
+    distances = distances.sort_by { |_k, v| v }
+    hubs_array = []
+    distances.each do |key, _value|
+      hubs_array << hubs[key]
     end
 
-    final_result
+    hubs_array
   end
+
 
   def self.cascading_find_by_name(raw_name)
     name = raw_name.split.map(&:capitalize).join(' ')

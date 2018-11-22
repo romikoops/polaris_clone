@@ -6,7 +6,7 @@ class LocationsController < ApplicationController
 
   def index
     query = params[:query]
-    countries = [params[:countries]].map { |code| Country.find_by_code(code.upcase).name }
+    countries = [params[:countries]].map { |code| Country.find_by_code(code.upcase)&.name }.compact
     raw_results = Location.autocomplete(query)
     results = if countries.empty?
                 raw_results
