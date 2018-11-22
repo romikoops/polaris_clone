@@ -21,6 +21,16 @@ class TenantsController < ApplicationController
   end
 
   def show
+    response_handler(tenant: tenant)
+  end
+
+  def current
+    response_handler(tenant_id: tenant.id)
+  end
+
+  private
+
+  def tenant
     subdomain = [
       URI(request.referrer).host.split('.').first,
       ENV['DEV_SUBDOMAIN']
@@ -28,7 +38,5 @@ class TenantsController < ApplicationController
       Tenant.exists?(subdomain: subdom)
     end
     tenant = Tenant.find_by(subdomain: subdomain)
-
-    response_handler(tenant: tenant)
   end
 end

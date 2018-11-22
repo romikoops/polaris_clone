@@ -13,9 +13,13 @@ Rails.application.routes.draw do
     passwords: 'users_devise_token_auth/passwords'
   }, skip: [:omniauth_callbacks]
 
-  resource :tenant, only: [:show]
+  resource :tenant, only: [:show] do
+    member do
+      get 'current'
+    end
+  end
 
-  resources :tenants, only: [:index, :show] do
+  resources :tenants, only: %i(index show) do
     namespace :admin do
       resources :shipments do
         collection do

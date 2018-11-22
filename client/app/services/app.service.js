@@ -23,6 +23,15 @@ function setTenant () {
   return fetch(`${getApiHost()}/`, requestOptions).then(handleResponse)
 }
 
+function getTenantId () {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch(`${getApiHost()}/current`, requestOptions).then(handleResponse)
+}
+
 function setTenants () {
   const requestOptions = {
     method: 'GET',
@@ -32,7 +41,7 @@ function setTenants () {
   return fetch(`${getTenantIndex()}/`, requestOptions).then(handleResponse)
 }
 
-function setNewTenant (tenantId) {
+function overrideTenant (tenantId) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -117,8 +126,9 @@ const appService = {
   fetchCurrenciesForBase,
   refreshRates,
   setTenant,
+  getTenantId,
   setTenants,
-  setNewTenant,
+  overrideTenant,
   toggleTenantCurrencyMode,
   setTenantCurrencyRates
 }

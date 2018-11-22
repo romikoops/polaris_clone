@@ -21,7 +21,7 @@ class TenantMenu extends React.PureComponent {
   }
   switchTenant (tenant) {
     const { appDispatch } = this.props
-    appDispatch.setNewTenant(tenant.value.id)
+    appDispatch.overrideTenant(tenant.value.id)
     this.toggleExpander('tenant')
   }
   render () {
@@ -73,7 +73,7 @@ class TenantMenu extends React.PureComponent {
 
 TenantMenu.propTypes = {
   appDispatch: PropTypes.shape({
-    setNewTenant: PropTypes.func
+    overrideTenant: PropTypes.func
   }).isRequired,
   tenants: PropTypes.arrayOf(PropTypes.object)
 }

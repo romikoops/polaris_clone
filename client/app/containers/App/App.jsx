@@ -28,7 +28,7 @@ class App extends Component {
   }
   componentWillMount () {
     const { appDispatch } = this.props
-    appDispatch.setTenant()
+    appDispatch.getTenantId()
     appDispatch.setTenants()
   }
   componentDidMount () {
@@ -72,7 +72,11 @@ class App extends Component {
 
     return (
       <div className="layout-fill layout-row layout-wrap layout-align-start hundred text-break">
-        <TenantMenu tenants={tenants} appDispatch={appDispatch} />
+        {
+          tenants.length > 0 ? (
+            <TenantMenu tenants={tenants} appDispatch={appDispatch} />
+          ) : ''
+        }
         <CookieConsentBar
           user={user}
           theme={theme}
