@@ -717,10 +717,6 @@ class AdminShipmentView extends Component {
         {`${formattedDate(shipment.planned_delivery_date)}`}
       </p>
     )
-
-    const cargoCount = shipment.load_type === 'container'
-      ? containers.reduce((sum, cargoUnit) => (sum + +cargoUnit.quantity), 0)
-      : cargoItems.reduce((sum, cargoUnit) => (sum + +cargoUnit.quantity), 0)
     const dnrEditKeys = ['in_process', 'finished', 'confirmed']
     const renderActionButtons = ({ status }) => {
       switch (status) {
@@ -793,7 +789,6 @@ class AdminShipmentView extends Component {
               newPrices={newPrices}
               selectedStyle={selectedStyle}
               deselectedStyle={deselectedStyle}
-              cargoCount={cargoCount}
               cargoView={cargoView}
               shipmentData={shipmentData}
               handlePriceChange={this.handlePriceChange}

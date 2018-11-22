@@ -22,16 +22,16 @@ import FileUploader from '../FileUploader/FileUploader'
 import ShipmentNotes from '../ShipmentNotes'
 
 class UserShipmentContent extends Component {
-  static calcCargoLoad (feeHash, loadType, t) {
-    const cargoCount = Object.keys(feeHash.cargo).length
+  static calcCargoLoad (shipment, t) {
+    const { cargo_count, load_type } = shipment
     let noun = ''
-    if (loadType === 'cargo_item' && cargoCount > 1) {
+    if (load_type === 'cargo_item' && cargo_count > 1) {
       noun = `${t('cargo:cargoItems')}`
-    } else if (loadType === 'cargo_item' && cargoCount === 1) {
+    } else if (load_type === 'cargo_item' && cargo_count === 1) {
       noun = `${t('cargo:cargoItem')}`
-    } else if (loadType === 'container' && cargoCount > 1) {
+    } else if (load_type === 'container' && cargo_count > 1) {
       noun = `${t('cargo:containers')}`
-    } else if (loadType === 'container' && cargoCount === 1) {
+    } else if (load_type === 'container' && cargo_count === 1) {
       noun = `${t('cargo:container')}`
     }
 
@@ -76,7 +76,6 @@ class UserShipmentContent extends Component {
       shipmentData,
       feeHash,
       userDispatch,
-      cargoCount,
       cargoView,
       t
     } = this.props
@@ -428,8 +427,8 @@ class UserShipmentContent extends Component {
                 <div className="flex-100 layout-row layout-wrap">
                   <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
                     <div className="layout-align-start-center layout-row flex">
-                      <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>x&nbsp;{cargoCount}</span>
-                      <p className="layout-align-sm-end-center layout-align-xs-end-center">{UserShipmentContent.calcCargoLoad(feeHash, shipment.load_type, t)}</p>
+                      <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>x&nbsp;{shipment.cargo_count}</span>
+                      <p className="layout-align-sm-end-center layout-align-xs-end-center">{UserShipmentContent.calcCargoLoad(shipment, t)}</p>
                     </div>
                   </div>
                   <h2 className="layout-align-start-center layout-row flex-100">
@@ -544,7 +543,6 @@ UserShipmentContent.propTypes = {
   deselectedStyle: PropTypes.style,
   scope: PropTypes.objectOf(PropTypes.any),
   feeHash: PropTypes.objectOf(PropTypes.any),
-  cargoCount: PropTypes.number,
   shipmentData: PropTypes.shipmentData.isRequired,
   cargoView: PropTypes.node
 }
@@ -560,7 +558,6 @@ UserShipmentContent.defaultProps = {
   deselectedStyle: {},
   scope: {},
   feeHash: {},
-  cargoCount: 0,
   cargoView: null
 }
 

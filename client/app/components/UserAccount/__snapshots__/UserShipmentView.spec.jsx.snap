@@ -56,7 +56,6 @@ exports[`loading is true 1`] = `
           },
         }
       }
-      cargoCount={0}
       cargoView={Array []}
       deselectedStyle={
         Object {
@@ -155,6 +154,7 @@ exports[`loading is true 1`] = `
             },
           ],
           "shipment": Object {
+            "cargo_count": 1,
             "cargo_notes": "FOO_CARGO_NOTES",
             "eori": 1234,
             "has_on_carriage": false,
@@ -257,6 +257,7 @@ exports[`loading is true 1`] = `
           options={
             Object {
               "shipment": Object {
+                "cargo_count": 1,
                 "cargo_notes": "FOO_CARGO_NOTES",
                 "eori": 1234,
                 "has_on_carriage": false,
@@ -305,6 +306,7 @@ exports[`loading is true 1`] = `
           }
           shipment={
             Object {
+              "cargo_count": 1,
               "cargo_notes": "FOO_CARGO_NOTES",
               "eori": 1234,
               "has_on_carriage": false,
@@ -422,7 +424,6 @@ exports[`shallow render 1`] = `
           },
         }
       }
-      cargoCount={0}
       cargoView={Array []}
       deselectedStyle={
         Object {
@@ -521,6 +522,7 @@ exports[`shallow render 1`] = `
             },
           ],
           "shipment": Object {
+            "cargo_count": 1,
             "cargo_notes": "FOO_CARGO_NOTES",
             "eori": 1234,
             "has_on_carriage": false,
@@ -623,6 +625,7 @@ exports[`shallow render 1`] = `
           options={
             Object {
               "shipment": Object {
+                "cargo_count": 1,
                 "cargo_notes": "FOO_CARGO_NOTES",
                 "eori": 1234,
                 "has_on_carriage": false,
@@ -671,6 +674,7 @@ exports[`shallow render 1`] = `
           }
           shipment={
             Object {
+              "cargo_count": 1,
               "cargo_notes": "FOO_CARGO_NOTES",
               "eori": 1234,
               "has_on_carriage": false,
@@ -788,7 +792,6 @@ exports[`shipmentData.cargoItems is present 1`] = `
           },
         }
       }
-      cargoCount={NaN}
       cargoView={
         Array [
           <CargoItemGroup
@@ -961,6 +964,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
             },
           ],
           "shipment": Object {
+            "cargo_count": 1,
             "cargo_notes": "FOO_CARGO_NOTES",
             "eori": 1234,
             "has_on_carriage": false,
@@ -1063,6 +1067,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
           options={
             Object {
               "shipment": Object {
+                "cargo_count": 1,
                 "cargo_notes": "FOO_CARGO_NOTES",
                 "eori": 1234,
                 "has_on_carriage": false,
@@ -1111,6 +1116,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
           }
           shipment={
             Object {
+              "cargo_count": 1,
               "cargo_notes": "FOO_CARGO_NOTES",
               "eori": 1234,
               "has_on_carriage": false,
@@ -1228,7 +1234,6 @@ exports[`shipmentData.contacts is present 1`] = `
           },
         }
       }
-      cargoCount={0}
       cargoView={Array []}
       deselectedStyle={
         Object {
@@ -1373,6 +1378,7 @@ exports[`shipmentData.contacts is present 1`] = `
             },
           ],
           "shipment": Object {
+            "cargo_count": 1,
             "cargo_notes": "FOO_CARGO_NOTES",
             "eori": 1234,
             "has_on_carriage": false,
@@ -1475,6 +1481,7 @@ exports[`shipmentData.contacts is present 1`] = `
           options={
             Object {
               "shipment": Object {
+                "cargo_count": 1,
                 "cargo_notes": "FOO_CARGO_NOTES",
                 "eori": 1234,
                 "has_on_carriage": false,
@@ -1523,6 +1530,7 @@ exports[`shipmentData.contacts is present 1`] = `
           }
           shipment={
             Object {
+              "cargo_count": 1,
               "cargo_notes": "FOO_CARGO_NOTES",
               "eori": 1234,
               "has_on_carriage": false,
@@ -1640,7 +1648,6 @@ exports[`shipmentData.documents is present 1`] = `
           },
         }
       }
-      cargoCount={0}
       cargoView={Array []}
       deselectedStyle={
         Object {
@@ -1748,6 +1755,7 @@ exports[`shipmentData.documents is present 1`] = `
             },
           ],
           "shipment": Object {
+            "cargo_count": 1,
             "cargo_notes": "FOO_CARGO_NOTES",
             "eori": 1234,
             "has_on_carriage": false,
@@ -1850,6 +1858,7 @@ exports[`shipmentData.documents is present 1`] = `
           options={
             Object {
               "shipment": Object {
+                "cargo_count": 1,
                 "cargo_notes": "FOO_CARGO_NOTES",
                 "eori": 1234,
                 "has_on_carriage": false,
@@ -1898,6 +1907,7 @@ exports[`shipmentData.documents is present 1`] = `
           }
           shipment={
             Object {
+              "cargo_count": 1,
               "cargo_notes": "FOO_CARGO_NOTES",
               "eori": 1234,
               "has_on_carriage": false,
