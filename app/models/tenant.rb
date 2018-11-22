@@ -3,7 +3,6 @@
 class Tenant < ApplicationRecord
   include ImageTools
   include DataValidator
-  include MultiTenantTools
   has_many :shipments, dependent: :destroy
   has_many :hubs, dependent: :destroy
   has_many :nexuses, dependent: :destroy
@@ -78,10 +77,6 @@ class Tenant < ApplicationRecord
     ).perform
   end
 
-  def update_from_json
-    update_tenant_from_json(self.subdomain)
-  end
-
   def autogenerate_all_schedules(end_date)
     itineraries.each do |itinerary|
       itinerary.default_generate_schedules(end_date)
@@ -90,10 +85,6 @@ class Tenant < ApplicationRecord
 
   def quotation_tool?
     scope['open_quotation_tool'] || scope['closed_quotation_tool']
-  end
-
-  def remarks
-    Remark.where(tenant_id: self.id)
   end
 
   alias quotation_tool quotation_tool?

@@ -130,7 +130,8 @@ module ShippingTools
       margin: { top: 10, bottom: 5, left: 8, right: 8 },
       shipment: shipment,
       load_type: load_type,
-      name: 'shipment_recap'
+      name: 'shipment_recap',
+      remarks: Remark.where(tenant_id: shipment.tenant_id)
     )
 
     shipment_recap.generate
@@ -616,7 +617,8 @@ module ShippingTools
       quotes: @quotes,
       logo: logo,
       quotation: main_quote,
-      name: 'quotation'
+      name: 'quotation',
+      remarks: Remark.where(tenant_id: tenant.id)
     )
     quotation.generate
   end
