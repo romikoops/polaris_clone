@@ -63,8 +63,13 @@ export default function remark (state = {}, action) {
         category, subcategory, id, body
       } = action.payload
       const newRemark = { id, body }
-      newState[category] ? newState[category][subcategory].push(newRemark)
-        : newState[category] = newState[category] || {}
+      if (newState[category] && newState[category][subcategory]) {
+        newState[category][subcategory].push(newRemark)
+
+        return newState
+      }
+
+      newState[category] = newState[category] || {}
       newState[category][subcategory] =
           newState[category][subcategory] || []
       newState[category][subcategory].push(newRemark)
