@@ -69,7 +69,9 @@
           </div>
         </div>
 
-      <% s.selected_offer.except("total", "edited_total", "name").each do |charge_key, charge| %>
+      <% ['trucking_pre', 'export', 'cargo', 'import', 'trucking_on' ].each do |charge_key| %>
+        <% charge = s.selected_offer[charge_key]%>
+        <% next if !charge%>
         <div class="sub-prices">
           <div class="total-price-single">
             <h4><%= charge["name"] %></h4>
