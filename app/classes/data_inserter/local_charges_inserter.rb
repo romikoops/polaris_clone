@@ -2,9 +2,9 @@
 
 module DataInserter
   class LocalChargesInserter < BaseInserter
-    def perform
-      super
+    private
 
+    def post_perform
       data = format_to_legacy(@data)
       data = expand_fcl_to_all_sizes(data)
       data = assign_correct_hubs(data)
@@ -28,8 +28,6 @@ module DataInserter
         end
       end
     end
-
-    private
 
     def data_valid?(_data)
       # TODO: Implement validation

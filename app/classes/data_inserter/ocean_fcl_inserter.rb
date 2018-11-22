@@ -2,9 +2,9 @@
 
 module DataInserter
   class OceanFclInserter < BaseInserter
-    def perform
-      super
+    private
 
+    def post_perform
       data.each_with_index do |(k_sheet_name, values), sheet_i|
         data_extraction_method = values[:data_extraction_method]
 
@@ -22,8 +22,6 @@ module DataInserter
         end
       end
     end
-
-    private
 
     def should_generate_trips?
       @should_generate_trips ||= options[:should_generate_trips] || false
@@ -111,11 +109,11 @@ module DataInserter
       if row.has_key?(:range)
         min_rate_in_range = row[:range].map { |r| r['rate'] }.min
         pricing_detail_params.merge!(rate: min_rate_in_range,
-                                    min: 1 * min_rate_in_range,
-                                    range: row[:range])
+                                     min: 1 * min_rate_in_range,
+                                     range: row[:range])
       else
-        pricing_detail_params.merge!(rate: row[:fee],
-                                    min: 1 * row[:fee])
+        pricing_detail_params[:rate] = row[:fee]
+        pricing_detail_params[:min] = 1 * row[:fee]
       end
       [pricing_detail_params]
     end

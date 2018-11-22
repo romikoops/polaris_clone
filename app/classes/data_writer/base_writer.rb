@@ -5,30 +5,6 @@ module DataWriter
     attr_reader :xlsx, :sheets_data
 
     def initialize(file_name:, sheets_data:)
-      # Expected data structure:
-      # {
-      #   "Sheet1": [
-      #     {
-      #       header1: "...",
-      #       header2: 0.0,
-      #       fees: {
-      #         "fee1": 0.0
-      #       }
-      #     },
-      #     {
-      #       ...
-      #     }
-      #   ],
-      #   "Sheet2": [
-      #     {
-      #       ...
-      #     },
-      #     {
-      #       ...
-      #     }
-      #   ]
-      # }
-
       @file_name = file_name
       @sheets_data = sheets_data
       @xlsx = nil

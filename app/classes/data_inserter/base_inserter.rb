@@ -3,30 +3,6 @@
 module DataInserter
   class BaseInserter
     def initialize(tenant:, data:, options: {})
-      # Expected data structure:
-      # {
-      #   "Sheet1": [
-      #     {
-      #       header1: "...",
-      #       header2: 0.0,
-      #       fees: {
-      #         "fee1": 0.0
-      #       }
-      #     },
-      #     {
-      #       ...
-      #     }
-      #   ],
-      #   "Sheet2": [
-      #     {
-      #       ...
-      #     },
-      #     {
-      #       ...
-      #     }
-      #   ]
-      # }
-
       @tenant = tenant
       @data = data
       @options = options
@@ -34,6 +10,7 @@ module DataInserter
 
     def perform
       raise StandardError, "The data doesn't contain the correct format!" unless data_valid?(@data)
+      post_perform
     end
 
     private
