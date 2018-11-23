@@ -151,7 +151,6 @@ class QuoteCard extends PureComponent {
       schedules,
       finalResults
     } = result
-    
     const {
       showSchedules
     } = this.state
@@ -338,6 +337,7 @@ class QuoteCard extends PureComponent {
             theme={theme}
             scope={tenant.scope}
             quote={quote}
+            cargo={cargo}
             mot={result.meta.mode_of_transport}
           />
         </CollapsingContent>

@@ -327,6 +327,7 @@ exports[`detailed billing working properly 1`] = `
     minHeight=""
   >
     <QuoteChargeBreakdown
+      cargo={Array []}
       quote={
         Object {
           "total": Object {
@@ -752,6 +753,7 @@ exports[`shallow rendering 1`] = `
     minHeight=""
   >
     <QuoteChargeBreakdown
+      cargo={Array []}
       quote={
         Object {
           "total": Object {
@@ -1177,6 +1179,7 @@ exports[`show schedule options working 1`] = `
     minHeight=""
   >
     <QuoteChargeBreakdown
+      cargo={Array []}
       quote={
         Object {
           "total": Object {
@@ -1602,6 +1605,7 @@ exports[`show schedules set to true 1`] = `
     minHeight=""
   >
     <QuoteChargeBreakdown
+      cargo={Array []}
       quote={
         Object {
           "total": Object {

@@ -17,6 +17,10 @@ export function humanizeSnakeCase (str) {
   return str.split('_').map(capitalize).join(' ')
 }
 
+export function humanizeSnakeCaseUp (str) {
+  return str.split('_').map(s => s.toUpperCase()).join(' ')
+}
+
 export function capitalizeAndDashifyCamelCase (str) {
   return str.split(/(?=[A-Z])/).map(capitalize).join('-')
 }

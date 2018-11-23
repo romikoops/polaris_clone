@@ -374,7 +374,8 @@
     "nonStackableFirst": "We currently do not offer freight rates for non-stackable cargo in our Web Shop.",
     "nonStackableSecond": "Please contact our customer service department to place an order for your non-stackable cargo:",
     "feesIn": "Sub Total in {{currency}}",
-    "exportCustomsPaper": "Export Customs Paper (MRN)"
+    "exportCustomsPaper": "Export Customs Paper (MRN)",
+    "perUnitWeight": "Per Unit Weight"
   },
   "bookconf": {
     "_component": "BookingConfirmation",
