@@ -126,7 +126,7 @@ class AdminRemarksEditor extends Component {
             icon="fa fa-check"
             iconColor={theme.colors.primary || 'green'}
             animated={metaData.savedRemarkSuccess}
-            size="small"
+            size="50px"
             opacity={metaData.remarkId === remark.id ? '1' : '0'}
           />
           <RoundButton
