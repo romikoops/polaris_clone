@@ -82,6 +82,7 @@
   },
   "other_data": {
     "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"],
-    "incoterms": ["EXW", "FCA", "FOB", "FAS"]
+    "incoterms": ["EXW", "FCA", "FOB", "FAS"],
+    "custom_charge_categories": []
   }
 }
