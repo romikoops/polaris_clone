@@ -137,7 +137,7 @@ class Autocomplete extends PureComponent {
     this.setState((prevState) => {
       const { value } = target
       const { searchTimeout, input } = prevState
-      if (value === input) return {}
+      if (value === input || !value) return {}
 
       if (searchTimeout) clearTimeout(searchTimeout)
       const newTimeout = setTimeout(this.handleInputChange(value), 750)
