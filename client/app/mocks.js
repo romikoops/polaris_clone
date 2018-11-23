@@ -233,7 +233,7 @@ export const shipment = {
     value: '200.99',
     currency: 'USD'
   },
-  cargo_count: 1
+  cargo_count: 2
 }
 
 export const address = {
