@@ -28,6 +28,12 @@
       font-size: 12px;
     }
   }
+  .checkbox_row {
+    padding: 5px 10px;
+  }
+  .export_customs_title {
+    padding: 15px 10px;
+  }
   .prices h5, .prices h6{
     color: #39393A;
     font-size: 16px; 
@@ -40,6 +46,9 @@
     height: 0px;
     padding-top: 0px;
     overflow: hidden;
+  }
+  .export_upload {
+    padding: 15px 10px;
   }
   .box_content.show {
     visibility: visible;

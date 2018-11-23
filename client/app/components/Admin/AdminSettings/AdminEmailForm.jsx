@@ -61,9 +61,9 @@ class AdminEmailForm extends Component {
 
   render () {
     const { t, tenant, theme } = this.props
-    const emails = tenant.data.emails
+    const emails = tenant.emails
 
-    const emailKeys = Object.keys(tenant.data.emails)
+    const emailKeys = Object.keys(tenant.emails)
 
     const emailInputs = emailKeys.map(key => (
       <div>
