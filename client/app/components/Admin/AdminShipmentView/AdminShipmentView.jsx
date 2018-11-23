@@ -706,7 +706,7 @@ class AdminShipmentView extends Component {
             format="DD/MM/YYYY"
             formatDate={formatDate}
             parseDate={parseDate}
-            value={newTimes.deliveryTime.day}
+            value={newTimes.deliveryDate.day}
             onDayChange={e => this.handleDayChange(e, 'deliveryTime')}
             dayPickerProps={dayPickerPropsDeliveryDate}
           />
