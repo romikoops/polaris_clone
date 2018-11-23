@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styles from './Modal.scss'
-import { dimentionToPx } from '../../helpers/dimentionToPx'
+import { dimensionToPx } from '../../helpers/dimensionToPx'
 
 export class Modal extends Component {
   constructor (props) {
@@ -65,7 +65,7 @@ export class Modal extends Component {
     const { windowHeight } = this.state
     const { maxWidth, showExit } = this.props
 
-    const propsMinHeight = dimentionToPx({
+    const propsMinHeight = dimensionToPx({
       value: this.props.minHeight,
       windowHeight
     })
