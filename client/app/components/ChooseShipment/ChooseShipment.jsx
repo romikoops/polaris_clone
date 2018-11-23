@@ -13,7 +13,6 @@ class ChooseShipment extends Component {
   constructor (props) {
     super(props)
     this.state = {}
-
     this.cards = LOAD_TYPES.map(loadType => ({
       name: humanizedMotAndLoadType(props.scope, loadType.code),
       img: loadType.img,

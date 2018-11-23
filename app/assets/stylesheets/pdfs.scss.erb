@@ -31,7 +31,7 @@ i.fa {
   color: #4F4F4F !important;
   font-family: 'Roboto', sans-serif !important;
   .title {
-    padding-bottom: 48px;
+    padding-bottom: 35px;
     justify-content: space-between;
     h1 {
       font-size: 18px !important;
@@ -143,6 +143,21 @@ br{
   background: #F8F8F8 !important;
   -webkit-print-color-adjust: exact !important;
 }
+.validity {
+  padding: 5px 10px;
+  border-bottom: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.remarks {
+  margin-top: 35px;
+  padding: 10px 15px;
+  border-bottom: none;
+}
+.remarks p {
+  font-size: 10px;
+}
 .info {
   padding: 20px 35px;
   background: white;
@@ -162,6 +177,19 @@ br{
 .info p span {
   font-size: 18px;
   font-weight: bold;
+}
+.delivery-info {
+  padding: 20px 35px;
+  background: white;
+  border: 1.5px solid #E0E0E0;
+  border-bottom: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.delivery-info p {
+  font-size: 14px;
+  margin: 0;
 }
 .mot-icon {
   padding-right: 24px
@@ -232,6 +260,11 @@ br{
   padding-left: 35px;
   text-transform: capitalize;
 }
+.total-price-single p {
+  font-size: 12px;
+  margin: 10px 0;
+  padding-right: 35px;
+}
 .total-price-single h3 {
   font-size: 20px;
   font-weight: bold;
@@ -260,6 +293,10 @@ br{
   text-align: right;
   margin: 0;
 }
+.header-logo {
+  width: 150px;
+  height: auto;
+}
 .sub-prices {
   background: white;
 }
@@ -267,6 +304,7 @@ br{
   margin-bottom: 120px;
   page-break-inside: avoid;
   position: relative;
+  border: 2px solid #4F4F4F;
 }
 .shipment-info {
   flex-grow: 1;
@@ -564,7 +602,7 @@ br{
     }
   }
   .cargo-index {
-    padding-left: 35px;
+    padding-left: 30px;
     p {
       font-size: 25px; 
     }
@@ -575,6 +613,7 @@ br{
   }
   .cargo-subtitle {
     font-size: 8px;
+    flex-wrap: no-wrap;
   }
 }
 .cargo-details-all {

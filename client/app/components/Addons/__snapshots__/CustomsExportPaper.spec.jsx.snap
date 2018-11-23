@@ -8,7 +8,7 @@ exports[`shallow render 1`] = `
     className="flex-none content_width layout-row layout-wrap section_padding"
   >
     <div
-      className="flex-100 layout-row layout-align-space-between-start layout-wrap"
+      className="flex-100 layout-row layout-align-space-between-start layout-wrap export_customs_title"
     >
       <div
         className="flex-none layout-row layout-align-space-around-center"
@@ -16,7 +16,7 @@ exports[`shallow render 1`] = `
         <TextHeading
           color=""
           size={2}
-          text="Customs Export Paper"
+          text="Export Customs Paper (MRN)"
           theme={
             Object {
               "colors": Object {
@@ -27,191 +27,32 @@ exports[`shallow render 1`] = `
           }
         />
       </div>
-      <div
-        className="flex-33 layout-wrap layout-row layout-align-space-around-center"
+      <p
+        className="flex-100"
       >
-        <div
-          className="flex-100 layout-row layout-align-end-center"
-        >
-          <div
-            className="flex-90 layout-row layout-align-start-center"
-          >
-            <label
-              htmlFor="addon_toggle_true"
-            >
-              <p
-                className="flex-none"
-                style={
-                  Object {
-                    "marginRight": "5px",
-                  }
-                }
-              >
-                Yes, I want undefined to secure my Customs Export Paper (ADB)
-              </p>
-            </label>
-          </div>
-          <div
-            className="flex-10 layout-row layout-align-end-center"
-          >
-            <Checkbox
-              checked={false}
-              className=""
-              disabled={false}
-              id="addon_toggle_true"
-              onChange={[Function]}
-              onClick={null}
-              size={null}
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-        </div>
-        <div
-          className="flex-100 layout-row layout-align-end-center"
-        >
-          <div
-            className="flex-90 layout-row layout-align-start-center"
-          >
-            <label
-              htmlFor="addon_toggle_false"
-            >
-              <p
-                className="flex-none"
-                style={
-                  Object {
-                    "marginRight": "5px",
-                  }
-                }
-              >
-                No, I do not want undefined to secure my Customs Export Paper (ADB)
-              </p>
-            </label>
-          </div>
-          <div
-            className="flex-10 layout-row layout-align-end-center"
-          >
-            <Checkbox
-              checked={true}
-              className=""
-              disabled={false}
-              id="addon_toggle_false"
-              onChange={[Function]}
-              onClick={null}
-              size={null}
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-        </div>
-      </div>
+        <strong>
+           
+          The Export Customs Paper is mandatory for all shipments when exporting from Germany. If you choose to secure your Customs Export Paper on your own, {{tenant}} will need a copy of the Export Customs Paper including Master Reference Number.
+        </strong>
+      </p>
     </div>
     <div
-      className="flex-100 layout-row layout-wrap customs_box  box_content hidden"
+      className="flex-100 layout-row layout-align-start-start layout-wrap"
     >
       <div
-        className="flex-80 layout-row layout-wrap"
-      >
-        <p
-          className="flex-90"
-        >
-          <strong>
-             
-            When you ship goods from Germany the Customs Export Paper is required to pass through customs
-          </strong>
-        </p>
-        <p
-          className="flex-90"
-        >
-          Küster Speedtrans Übersee Spedition GmbH will organise the ABD on your behalf.
-          Initially USD 75.00 will be added to your booking. This includes 1 customs tariff number.
-          For each extra we will charge you USD 12.50 per customs tariff number.
-        </p>
-      </div>
-      <div
-        className=" prices flex-20 layout-row layout-wrap layout-align-start-start"
+        className="flex-100 layout-row layout-align-end-center checkbox_row"
       >
         <div
-          className="customs_total flex-100 layout-row  layout-align-end-center"
+          className="flex-10 layout-row layout-align-start-center"
         >
-          <p
-            className="flex-none"
-          >
-            Total
-          </p>
-          <h6
-            className="flex-none center"
-          >
-             
-             
-            NaN
-          </h6>
-        </div>
-      </div>
-    </div>
-    <div
-      className="flex-100 layout-row layout-align-start-center layout-wrap no_customs_exp_paper_box show"
-      style={
-        Object {
-          "height": "335px",
-        }
-      }
-    >
-      <div
-        className="flex-100 layout-row layout-align-start-center layout-wrap"
-      >
-        <p
-          className="flex-100"
-        >
-          <b>
-            A Customs Export Paper (ADB) is mandatory for all shipments when exporting from Germany. If you choose to secure your Customs Export Paper on your own,undefined
-              will need a copy of the Customs Export Paper.
-          </b>
-        </p>
-      </div>
-      <div
-        className="flex-60 layout-row layout-align-start-center layout-wrap"
-      >
-        <p
-          className="flex-100 margin_5"
-        >
-          <b>
-            A customs declaration is mandatory to pass a national border when exporting or importing. If you choose to handle the customs clearance on your own, undefined will need a copy of the customs declaration.
-          </b>
-        </p>
-        <p
-          className="flex-100 margin_5"
-        >
-          <b>
-            When you ship goods from outside the European Union (EU), you may be charged customs duty and/or VAT according to local regulations.
-          </b>
-        </p>
-      </div>
-      <div
-        className="flex-33 no_max layout-row layout-align-end-center"
-      />
-      <div
-        className="flex-60 layout-row layout-wrap"
-      >
-        <div
-          className="flex-100"
-        >
-          <TextHeading
-            color=""
-            size={3}
-            text="Export Customs Paper (MRN)"
+          <Checkbox
+            checked={false}
+            className=""
+            disabled={false}
+            id="addon_toggle_true"
+            onChange={[Function]}
+            onClick={null}
+            size={null}
             theme={
               Object {
                 "colors": Object {
@@ -223,31 +64,92 @@ exports[`shallow render 1`] = `
           />
         </div>
         <div
-          className="flex-100 layout-row layout-wrap"
-          name="export_customs_paper"
+          className="flex-90 layout-row layout-align-start-center"
         >
-          <div
-            className="flex-100 layout-row"
+          <label
+            htmlFor="addon_toggle_true"
           >
-            <DocumentsMultiForm
-              deleteFn={false}
-              dispatchFn={false}
-              documents={Array []}
-              t={[Function]}
-              text="Export Customs Paper (MRN)"
-              theme={
+            <p
+              className="flex-none"
+              style={
                 Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
+                  "marginRight": "5px",
                 }
               }
-              tooltip=""
-              type="export_customs_paper"
-              uploadFn={null}
-            />
-          </div>
+            >
+              Yes, I want {{tenant}} to organize the Export Customs Paper (MRN) on my behalf. Initially USD 75,00 will be added to my booking. This includes 1 customs tariff number. Each further customs tariff number will be charged with USD 12.50.
+            </p>
+          </label>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-end-center checkbox_row"
+      >
+        <div
+          className="flex-10 layout-row layout-align-start-center"
+        >
+          <Checkbox
+            checked={true}
+            className=""
+            disabled={false}
+            id="addon_toggle_false"
+            onChange={[Function]}
+            onClick={null}
+            size={null}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+        <div
+          className="flex-90 layout-row layout-align-start-center"
+        >
+          <label
+            htmlFor="addon_toggle_false"
+          >
+            <p
+              className="flex-none"
+              style={
+                Object {
+                  "marginRight": "5px",
+                }
+              }
+            >
+              No, I do not want {{tenant}} to secure my Export Customs Paper (MRN)
+            </p>
+          </label>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap export_upload"
+        name="export_customs_paper"
+      >
+        <div
+          className="flex-100 flex-gt-sm-50 layout-row"
+        >
+          <DocumentsMultiForm
+            deleteFn={false}
+            dispatchFn={false}
+            documents={Array []}
+            t={[Function]}
+            text="NO_TRANSLATION | key \\"shipment:exportCustomsPaper\\""
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            tooltip=""
+            type="export_customs_paper"
+            uploadFn={null}
+          />
         </div>
       </div>
     </div>

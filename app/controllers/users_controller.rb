@@ -59,8 +59,7 @@ class UsersController < ApplicationController
 
   def currencies
     currency = current_user.try(:currency) || 'EUR'
-    tenant_id = Tenant.find_by_subdomain(params[:subdomain_id]).id
-    results = get_currency_array(currency, tenant_id)
+    results = get_currency_array(currency, params[:tenant_id])
     response_handler(results)
   end
 

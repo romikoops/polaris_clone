@@ -15,6 +15,10 @@ export const appConstants = {
   SET_CURRENCY_ERROR: 'SET_CURRENCY_ERROR',
   SET_CURRENCY_REQUEST: 'SET_CURRENCY_REQUEST',
 
+  SET_TENANT_SUCCESS: 'SET_TENANT_SUCCESS',
+  SET_TENANT_ERROR: 'SET_TENANT_ERROR',
+  SET_TENANT_REQUEST: 'SET_TENANT_REQUEST',
+
   REQUEST_TENANT: 'REQUEST_TENANT',
   RECEIVE_TENANT: 'RECEIVE_TENANT',
   RECEIVE_TENANTS: 'RECEIVE_TENANTS',
@@ -112,7 +116,9 @@ export const adminMenutooltip = {
   client: 'Manage negotiated routes, prices and fees for your existing clients',
   routes: 'Configure all the routes displayed in the shop',
   setup:
-    'This option is only for the very first configuration of the shop or if you want to reset the shop system with new data. IMPORTANT: this will overwrite all existing data'
+    'This option is only for the very first configuration of the shop or if you want to reset the shop system with new data. IMPORTANT: this will overwrite all existing data',
+  settings:
+    'Adjust your account settings here.'
 }
 
 // Dashboard

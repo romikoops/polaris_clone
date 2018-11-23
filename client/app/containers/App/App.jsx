@@ -15,35 +15,23 @@ import InsuranceDetails from '../../components/InsuranceDetails/InsuranceDetails
 import { appActions, authenticationActions, userActions } from '../../actions'
 import { defaultTheme, moment } from '../../constants'
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
-import getSubdomain from '../../helpers/subdomain'
 import MessageCenter from '../../containers/MessageCenter/MessageCenter'
 import ResetPasswordForm from '../../components/ResetPasswordForm'
 import CookieConsentBar from '../../components/CookieConsentBar'
 import GenericError from '../../components/ErrorHandling/Generic'
 
 class App extends Component {
+  constructor (props) {
+    super(props)
+  }
   componentWillMount () {
-    const { tenant, isFetching, appDispatch } = this.props
-    if (!tenant && !isFetching) {
-      const subdomain = getSubdomain()
-      appDispatch.fetchTenantIfNeeded(subdomain)
-    }
-    this.isUserExpired()
+    const { appDispatch } = this.props
+    appDispatch.setTenant()
   }
   componentDidMount () {
     const { appDispatch } = this.props
-    const subdomain = getSubdomain()
-    appDispatch.fetchTenantIfNeeded(subdomain)
     appDispatch.fetchCurrencies()
     this.isUserExpired()
-  }
-  componentDidUpdate (prevProps) {
-    if ((this.props.selectedSubdomain !== prevProps.selectedSubdomain ||
-      (!this.props.tenant && !this.props.isFetching) ||
-    (this.props.tenant && !this.props.tenant.data && !this.props.isFetching))) {
-      const { appDispatch, selectedSubdomain } = this.props
-      appDispatch.fetchTenantIfNeeded(selectedSubdomain)
-    }
   }
   isUserExpired () {
     const { appDispatch, user } = this.props
@@ -59,22 +47,21 @@ class App extends Component {
   render () {
     const {
       tenant,
-      isFetching,
       user,
       loggedIn,
       showMessages,
       sending,
-      loading,
-      loggingIn
+      loading
     } = this.props
-    if (!tenant || (tenant && !tenant.data)) {
+
+    if (!tenant) {
       return <Loading theme={defaultTheme} text="loading..." />
     }
-    const { theme } = tenant.data
+    const { theme } = tenant
 
     // Update document title
-    if (tenant.data.name) {
-      document.title = `${tenant.data.name} | ItsMyCargo`
+    if (tenant.name) {
+      document.title = `${tenant.name} | ItsMyCargo`
     }
 
     return (
@@ -88,12 +75,11 @@ class App extends Component {
         />
         <div className="flex-100 mc layout-row  layout-align-start">
           {showMessages || sending ? <MessageCenter /> : ''}
-          {isFetching || loading ? <Loading theme={theme} text="loading..." /> : ''}
+          {loading ? <Loading theme={theme} text="loading..." /> : ''}
           {user &&
           user.id &&
           tenant &&
-          tenant.data &&
-          user.tenant_id !== tenant.data.id &&
+          user.tenant_id !== tenant.id &&
             user.role &&
             user.role.name !== 'super_admin' ? (
               <Redirect to="/signout" />
@@ -164,13 +150,12 @@ class App extends Component {
 }
 
 App.propTypes = {
-  selectedSubdomain: PropTypes.string.isRequired,
-  isFetching: PropTypes.bool.isRequired,
+
   tenant: PropTypes.tenant,
   user: PropTypes.user,
   loggedIn: PropTypes.bool,
   appDispatch: PropTypes.shape({
-    fetchTenantIfNeeded: PropTypes.func
+    setTenant: PropTypes.func
   }).isRequired,
   sending: PropTypes.bool,
   showMessages: PropTypes.bool,
@@ -188,8 +173,9 @@ App.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    selectedSubdomain, tenant, authentication, messaging, admin, users
+    selectedSubdomain, authentication, messaging, admin, users, app
   } = state
+  const { tenant } = app
   const { showMessages, sending } = messaging
   const { user, loggedIn, loggingIn } = authentication
   const { isFetching } = tenant || {
@@ -206,7 +192,8 @@ function mapStateToProps (state) {
     isFetching,
     showMessages,
     sending,
-    loading
+    loading,
+    app
   }
 }
 function mapDispatchToProps (dispatch) {

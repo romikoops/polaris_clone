@@ -18,8 +18,8 @@ class ShopStageView extends Component {
     super(props)
     this.state = {}
     this.applicableStages =
-      this.props.tenant.data.scope.closed_quotation_tool ||
-        this.props.tenant.data.scope.open_quotation_tool
+      this.props.tenant.scope.closed_quotation_tool ||
+        this.props.tenant.scope.open_quotation_tool
         ? QUOTE_STAGES : SHIPMENT_STAGES
   }
   componentWillReceiveProps (nextProps) {
@@ -112,6 +112,12 @@ class ShopStageView extends Component {
       tenant,
       t
     } = this.props
+
+    const { bookingProcessImage } = theme
+    const bookingProcessImageWrapped = bookingProcessImage
+      ? `url(${bookingProcessImage})`
+      : "url('https://assets.itsmycargo.com/assets/cityimages/ssview_container_yard.jpg')"
+
     const { showHelp } = this.state
     const stageBoxes = this.applicableStages.map(stage => this.stageBox(stage))
     const gradientStyle =
@@ -180,7 +186,10 @@ class ShopStageView extends Component {
 
     return (
       <div className="layout-row flex-100 layout-align-center layout-wrap">
-        <div className={`${styles.shop_banner} layout-row flex-100 layout-align-center`}>
+        <div
+          className={`${styles.shop_banner} layout-row flex-100 layout-align-center`}
+          style={{ backgroundImage: bookingProcessImageWrapped }}
+        >
           <div className={styles.fade} />
           <div
             className={`layout-row ${defs.content_width} layout-wrap layout-align-start-center ${

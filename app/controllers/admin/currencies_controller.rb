@@ -3,12 +3,12 @@ class Admin::CurrenciesController < ApplicationController
 
   def currencies
     currency = current_user ? current_user.currency : "USD"
-    results = get_currency_array(currency, current_user.tenant_id)
+    results = get_currency_array(currency, params[:tenant_id])
     response_handler(results)
   end
 
   def get_currencies_for_base
-    results = get_currency_array(params[:currency], current_user.tenant_id)
+    results = get_currency_array(params[:currency])
     response_handler(results)
   end
 
@@ -20,12 +20,12 @@ class Admin::CurrenciesController < ApplicationController
   def set_currency
     current_user.currency = params[:currency]
     current_user.save!
-    rates = get_rates(params[:currency], current_user.tenant_id)
+    rates = get_rates(params[:currency], params[:tenant_id])
     response_handler(user: current_user, rates: rates)
   end
 
   def toggle_mode
-    tenant = Tenant.find(current_user.tenant_id)
+    tenant = Tenant.find(params[:tenant_id])
     tenant.scope["fixed_exchange_rate"] = !tenant.scope["fixed_exchange_rate"]
     tenant.save!
     currency = tenant ? tenant.currency : "USD"
@@ -35,9 +35,9 @@ class Admin::CurrenciesController < ApplicationController
 
   def set_rates
 
-    currency = Currency.find_or_create_by(tenant_id: current_user.tenant_id, base: params[:base])
+    currency = Currency.find_or_create_by(tenant_id: params[:tenant_id], base: params[:base])
     currency.update_attributes(today: params[:rates])
-    results = get_currency_array(params[:base], current_user.tenant_id)
+    results = get_currency_array(params[:base], params[:tenant_id])
     response_handler(results)
   end
 

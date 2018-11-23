@@ -113,22 +113,20 @@ export const history = {
 }
 
 export const tenant = {
-  data: {
-    id: 123,
-    scope: {
-      modes_of_transport: {
-        ocean: {
-          OCEAN_LOAD_TYPE: true
-        },
-        air: {},
-        truck: {},
-        rail: {}
+  id: 123,
+  scope: {
+    modes_of_transport: {
+      ocean: {
+        OCEAN_LOAD_TYPE: true
       },
-      closed_quotation_tool: true
+      air: {},
+      truck: {},
+      rail: {}
     },
-    theme,
-    subdomain: 'foosubdomain'
-  }
+    closed_quotation_tool: true
+  },
+  theme,
+  subdomain: 'foosubdomain'
 }
 
 export const req = {
@@ -170,7 +168,8 @@ export const shipmentInShipmentData = {
   total_price: {
     value: 12,
     currency: 'USD'
-  }
+  },
+  cargo_count: 1
 }
 
 export const shipmentData = {
@@ -233,7 +232,8 @@ export const shipment = {
   total_price: {
     value: '200.99',
     currency: 'USD'
-  }
+  },
+  cargo_count: 2
 }
 
 export const address = {

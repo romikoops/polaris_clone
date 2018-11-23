@@ -14,6 +14,7 @@ import messaging from './messaging.reducer'
 import bookingSummary from './bookingSummary.reducer'
 import { tenant, selectedSubdomain } from './tenant.reducer'
 import cookie from './cookie.reducer'
+import remark from './remark.reducer'
 
 const filter = (state = '', action) => {
   switch (action.type) {
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
   admin,
   app,
   routing,
+  remark,
   messaging,
   bookingSummary,
   document,

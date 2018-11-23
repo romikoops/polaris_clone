@@ -3,14 +3,12 @@ import { v4 } from 'uuid'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import RouteFilterBox from '../RouteFilterBox/RouteFilterBox'
-import { currencyOptions, moment } from '../../constants'
+import { moment } from '../../constants'
 import styles from './ChooseOffer.scss'
 import { numberSpacing, isQuote } from '../../helpers'
 import DocumentsDownloader from '../Documents/Downloader'
 import defs from '../../styles/default_classes.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
-import TextHeading from '../TextHeading/TextHeading'
-import { NamedSelect } from '../NamedSelect/NamedSelect'
 import QuoteCard from '../Quote/Card'
 import { Modal } from '../Modal/Modal'
 
@@ -198,7 +196,7 @@ class ChooseOffer extends Component {
       shipmentData, user, shipmentDispatch, theme, tenant, originalSelectedDay, t
     } = this.props
     if (!shipmentData) return ''
-    const { scope } = tenant.data
+    const { scope } = tenant
 
     const { currentCurrency, isChecked } = this.state
     const {
@@ -210,15 +208,15 @@ class ChooseOffer extends Component {
     results.sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
     const availableMoTKeys = {}
     results.forEach((s) => {
-      if (tenant.data.scope.modes_of_transport[s.meta.mode_of_transport][shipment.load_type]) {
+      if (tenant.scope.modes_of_transport[s.meta.mode_of_transport][shipment.load_type]) {
         availableMoTKeys[s.meta.mode_of_transport] = true
       }
     })
     const closestRoutes = []
     const focusRoutes = []
     const altRoutes = []
-    const mKeys = Object.keys(tenant.data.scope.modes_of_transport)
-      .filter(motKey => tenant.data.scope.modes_of_transport[motKey][shipment.load_type])
+    const mKeys = Object.keys(tenant.scope.modes_of_transport)
+      .filter(motKey => tenant.scope.modes_of_transport[motKey][shipment.load_type])
     const motKeys = Object.keys(this.state.selectedMoT).filter(k => this.state.selectedMoT[k])
     const noMotKeys = Object.keys(this.state.selectedMoT).filter(k => !this.state.selectedMoT[k])
     const scheduleObj = {}

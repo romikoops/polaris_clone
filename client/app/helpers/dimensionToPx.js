@@ -1,4 +1,4 @@
-export const dimentionToPx = (data) => {
+export const dimensionToPx = (data) => {
   // This helper converts strings in px, vw, and vh
   // to and integer pixel value.
   //
@@ -14,11 +14,11 @@ export const dimentionToPx = (data) => {
   //      The basis for WindowWidth conversion
   //
   // Examples:
-  //      dimentionToPx({value: 90px})                    //=> 100
+  //      dimensionToPx({value: 90px})                    //=> 100
   //
-  //      dimentionToPx({value: 90px, windowHeight: 200}) //=> 90
+  //      dimensionToPx({value: 90px, windowHeight: 200}) //=> 90
   //
-  //      dimentionToPx({value: 90vh, windowHeight: 200}) //=> 180
+  //      dimensionToPx({value: 90vh, windowHeight: 200}) //=> 180
 
   if (!data || !data.value) return undefined
   let returnValue
@@ -39,4 +39,4 @@ export const dimentionToPx = (data) => {
   return -1
 }
 
-export default dimentionToPx
+export default dimensionToPx

@@ -121,6 +121,13 @@ class SideNav extends Component {
         url: '/admin/currencies',
         target: 'currencies',
         tooltip: menuTip.currencies
+      },
+      {
+        key: v4(),
+        icon: 'fa-cog',
+        text: t('account:settings'),
+        url: '/admin/settings',
+        target: 'settings'
       }
     ]
     const width = window.innerWidth
@@ -166,7 +173,7 @@ class SideNav extends Component {
 
   setAdminUrl (target) {
     const { adminDispatch, tenant } = this.props
-    const { scope } = tenant.data
+    const { scope } = tenant
     switch (target) {
       case 'hubs':
         adminDispatch.getHubs(true)
@@ -209,6 +216,9 @@ class SideNav extends Component {
       case 'currencies':
         adminDispatch.goTo('/admin/currencies')
         break
+      case 'settings':
+        adminDispatch.goTo('/admin/settings')
+        break
       case 'superadmin':
         adminDispatch.goTo('/admin/superadmin')
         break
@@ -221,7 +231,7 @@ class SideNav extends Component {
   }
   setUserUrl (target) {
     const { userDispatch, user, tenant } = this.props
-    const { scope } = tenant.data
+    const { scope } = tenant
     switch (target) {
       case 'pricings':
         userDispatch.goTo('/account/pricings')
@@ -286,7 +296,7 @@ class SideNav extends Component {
     const textStyle =
         theme && theme.colors
           ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-          : { color: 'black' }
+          : { background: 'black' }
 
     const navLinks = links.map((li, i) => {
       const toolId = v4()
@@ -379,15 +389,16 @@ SideNav.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    users, authentication, tenant, admin
+    users, authentication, app, admin
   } = state
+  const { tenant } = app
   const { user, loggedIn } = authentication
 
   return {
     user,
     users,
     tenant,
-    theme: tenant.data.theme,
+    theme: tenant.theme,
     loggedIn,
     adminData: admin
   }

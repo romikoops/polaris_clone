@@ -11,7 +11,8 @@ jest.mock('../../helpers', () => ({
   splitName: x => x,
   totalPrice: () => ({ currency: 'DZD' }),
   formattedPriceValue: () => 975,
-  numberSpacing: x => x
+  numberSpacing: x => x,
+  cargoPlurals: x => 'Cargo Item'
 }))
 jest.mock('uuid', () => {
   let counter = -1

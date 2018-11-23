@@ -51,6 +51,7 @@ exports[`admin is true 1`] = `
             }
             shipment={
               Object {
+                "cargo_count": 2,
                 "cargo_units": Array [
                   Object {
                     "dimension_x": 107,
@@ -142,6 +143,7 @@ exports[`shallow rendering 1`] = `
             }
             shipment={
               Object {
+                "cargo_count": 2,
                 "cargo_units": Array [
                   Object {
                     "dimension_x": 107,

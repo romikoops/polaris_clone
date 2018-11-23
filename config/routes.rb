@@ -6,20 +6,25 @@ Rails.application.routes.draw do
   get '/health_check', to: 'server_checks#health_check'
   get '/', to: 'server_checks#health_check'
 
-  mount_devise_token_auth_for 'User', at: 'subdomain/:subdomain_id/auth', controllers: {
+  mount_devise_token_auth_for 'User', at: 'tenants/:tenant_id/auth', controllers: {
     sessions: 'users_devise_token_auth/sessions',
     registrations: 'users_devise_token_auth/registrations',
     confirmations: 'users_devise_token_auth/confirmations',
     passwords: 'users_devise_token_auth/passwords'
   }, skip: [:omniauth_callbacks]
 
-  resources :subdomain, only: [:show] do
+  resource :tenant, only: [:show]
+
+  resources :tenants, only: [:show] do
     namespace :admin do
       resources :shipments do
         collection do
           get 'email_action'
         end
       end
+      resources :tenants, only: [:update]
+      resources :remarks, only: %i(index create update destroy)
+
       get 'shipments/pages/delta_page_handler', to: 'shipments#delta_page_handler'
       get 'search/shipments/:target', to: 'shipments#search_shipments'
       resources :trucking, only: %i(index create show)

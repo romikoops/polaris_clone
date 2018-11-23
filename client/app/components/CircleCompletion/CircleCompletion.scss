@@ -1,0 +1,83 @@
+:local {
+  .circle {
+    line-height: 0;
+    color: white;
+    border: white solid 2px;
+    border-radius: 50%;
+    text-align: center;
+    transition: 1s;
+    margin: 50px;
+  }
+
+  .display_none {
+    opacity: 0;
+    transition: 1s;
+  }
+  .display {
+    opacity: 1;
+    transition: 0.5s;
+  }
+}
+
+.circle_animate {
+  animation-name: circle_rotate;
+  -o-animation-name: circle_rotate;
+  -ms-animation-name: circle_rotate;
+  -webkit-animation-name: circle_rotate;
+  -moz-animation-name: circle_rotate;
+  animation-duration: 1s;
+  -o-animation-duration: 1s;
+  -ms-animation-duration: 1s;
+  -webkit-animation-duration: 1s;
+  -moz-animation-duration: 1s;
+}
+
+@keyframes circle_rotate {
+  0%{
+    transform: rotate(0deg);
+  }
+
+  100%{
+    transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes circle_rotate {
+  0%{
+    transform: rotate(0deg);
+  }
+
+  100%{
+    transform: rotate(360deg);
+  }
+}
+
+@-ms-keyframes circle_rotate {
+  0%{
+    transform: rotate(0deg);
+  }
+
+  100%{
+    transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes circle_rotate {
+  0%{
+    transform: rotate(0deg);
+  }
+
+  100%{
+    transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes circle_rotate {
+  0%{
+    transform: rotate(0deg);
+  }
+
+  100%{
+    transform: rotate(360deg);
+  }
+}

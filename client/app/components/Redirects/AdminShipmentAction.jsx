@@ -85,12 +85,14 @@ AdminShipmentAction.defaultProps = {
 }
 
 function mapStateToProps (state) {
-  const { authentication, tenant } = state
+  const { authentication, app } = state
+  const { tenant } = app
   const { user, loggedIn, showModal } = authentication
+  
   return {
     user,
     tenant,
-    theme: tenant.data.theme,
+    theme: tenant.theme,
     loggedIn,
     showModal
   }

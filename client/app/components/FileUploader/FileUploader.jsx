@@ -5,7 +5,7 @@ import { Promise } from 'es6-promise-promise'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
-import getApiHost from '../../constants/api.constants'
+import { getTenantApiUrl } from '../../constants/api.constants'
 import { authHeader } from '../../helpers'
 import { RoundButton } from '../RoundButton/RoundButton'
 import SquareButton from '../SquareButton'
@@ -68,7 +68,7 @@ class FileUploader extends React.Component {
       headers: { ...authHeader() },
       body: formData
     }
-    const uploadUrl = getApiHost() + url
+    const uploadUrl = getTenantApiUrl() + url
     fetch(uploadUrl, requestOptions).then(FileUploader.handleResponse)
     if (this.uploaderInput.files.length) {
       this.uploaderInput.value = ''

@@ -16,24 +16,24 @@ class OptOutTenant extends Component {
   }
   render () {
     const { theme, tenant, t } = this.props
-    if (!tenant.data) {
+    if (!tenant) {
       return ''
     }
 
     return (
       <div className={`${styles.container} flex-none layout-row layout-align-center-center layout-wrap`}>
         <div className="flex-100 layout-row layout-align-start-center">
-          <h3 className="flex-none">{tenant.data.name}{t('footer:terms')}</h3>
+          <h3 className="flex-none">{tenant.name}{t('footer:terms')}</h3>
         </div>
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
           <p className="flex-100">
-            {t('optout:useRequiredTenant', { tenantName: tenant.data.name })}
+            {t('optout:useRequiredTenant', { tenantName: tenant.name })}
           </p>
           <p className="flex-100">
             {t('optout:withdrawWarningHead')} {t('optout:withdrawWarningTail')}
           </p>
           <p className="flex-100">
-            {t('optout:agreeAgainTenant', { tenantName: tenant.data.name })}
+            {t('optout:agreeAgainTenant', { tenantName: tenant.name })}
           </p>
         </div>
         <div className="flex-100 layout-row layout-wrap layout-aling-center-center">
@@ -41,7 +41,7 @@ class OptOutTenant extends Component {
             {t('optout:optOutActionHead')}
           </p>
           <ul className="flex-100">
-            <li>{t('optout:accountMarked', { tenantName: tenant.data.name })}</li>
+            <li>{t('optout:accountMarked', { tenantName: tenant.name })}</li>
             <li>{t('optout:optOutActionTail')}</li>
           </ul>
         </div>

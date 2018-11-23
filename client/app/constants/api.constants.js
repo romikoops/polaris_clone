@@ -1,6 +1,11 @@
 import getConfig from '../constants/config.constants'
-import getSubdomain from '../helpers/subdomain'
 
-export default function getApiHost () {
-  return `${getConfig().api_url}/subdomain/${getSubdomain()}`
+export function getApiHost () {
+  return `${getConfig().api_url}/tenant`
+}
+
+export function getTenantApiUrl () {
+  const { localStorage } = window
+
+  return `${getConfig().api_url}/tenants/${localStorage.getItem('tenantId')}`
 }

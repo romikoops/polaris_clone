@@ -175,7 +175,7 @@ class UserShipmentView extends Component {
     if (!shipmentData || !hubs || !user) {
       return ''
     }
-    const { scope } = tenant.data
+    const { scope } = tenant
     const {
       shipment,
       cargoItems,
@@ -276,7 +276,6 @@ class UserShipmentView extends Component {
         {moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}
       </p>
     )
-    const cargoCount = Object.keys(feeHash.cargo).length - 2
     const etaJSX = (
       <p className={`flex-none letter_3 ${styles.date}`}>
         {moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}
@@ -300,7 +299,7 @@ class UserShipmentView extends Component {
           {statusFinished}
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">
-          {shipment.status !== 'quoted' && !tenant.data.scope.quotation_tool ? (
+          {shipment.status !== 'quoted' && !tenant.scope.quotation_tool ? (
             <UserShipmentContent
               theme={theme}
               gradientBorderStyle={gradientBorderStyle}
@@ -316,7 +315,6 @@ class UserShipmentView extends Component {
               shipmentData={shipmentData}
               user={user}
               userDispatch={userDispatch}
-              cargoCount={cargoCount}
             />) : (
             <ShipmentQuotationContent
               theme={theme}

@@ -1709,6 +1709,7 @@ function goTo (path) {
     dispatch(push(path))
   }
 }
+
 export const adminActions = {
   getHubs,
   newHubImage,

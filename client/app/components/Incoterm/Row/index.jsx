@@ -14,7 +14,7 @@ function IncotermRow ({
   tenant,
   t
 }) {
-  const speciality = determineSpecialism(tenant.data.scope.modes_of_transport)
+  const speciality = determineSpecialism(tenant.scope.modes_of_transport)
 
   const selectedStyle =
     theme && theme.colors
@@ -24,7 +24,7 @@ function IncotermRow ({
     ...gradientTextGenerator('rgb(0, 0, 0)', 'rgb(25, 25, 25)'),
     opacity: '0.25'
   }
-  const { scope } = tenant.data
+  const { scope } = tenant
   const preCarriageStyle = preCarriage ? selectedStyle : deselectedStyle
   const onCarriageStyle = onCarriage ? selectedStyle : deselectedStyle
   const originDocumentStyle = originFees ? selectedStyle : deselectedStyle

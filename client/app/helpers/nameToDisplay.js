@@ -6,6 +6,8 @@ export default function nameToDisplay (str) {
     shipper: 'sender',
     fcl_20: '20ft Container',
     fcl_40: '40ft Container',
+    fcl_40_hq: '40ft HQ Container',
+    lcl: 'Cargo Item',
     chassis: 'Chassis',
     side_lifter: 'Side Lifter'
   }

@@ -98,7 +98,7 @@ class QuoteCard extends PureComponent {
 
   buttonToDisplay () {
     const { tenant, result, t } = this.props
-    const { scope } = tenant.data
+    const { scope } = tenant
     const { showSchedules } = this.state
     const showPriceBreakdownBtn = (
       <div
@@ -145,13 +145,12 @@ class QuoteCard extends PureComponent {
       aggregatedCargo,
       t
     } = this.props
-    const { scope } = tenant.data
+    const { scope } = tenant
     const {
       quote,
       schedules,
       finalResults
     } = result
-    
     const {
       showSchedules
     } = this.state
@@ -336,8 +335,9 @@ class QuoteCard extends PureComponent {
         <CollapsingContent collapsed={showSchedules}>
           <QuoteChargeBreakdown
             theme={theme}
-            scope={tenant.data.scope}
+            scope={tenant.scope}
             quote={quote}
+            cargo={cargo}
             mot={result.meta.mode_of_transport}
           />
         </CollapsingContent>

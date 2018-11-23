@@ -32,7 +32,7 @@ module UsersDeviseTokenAuth
     end
 
     def find_resource(_, email)
-      tenant_id = Tenant.find_by(subdomain: params[:subdomain_id]).id
+      tenant_id = params[:tenant_id]
       query = "
         tenant_id = ?
         AND email = ?

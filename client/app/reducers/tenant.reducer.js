@@ -1,4 +1,4 @@
-import * as tenantActions from '../actions/tenant'
+import { tenantConstants } from '../constants'
 
 export const tenant = (
   state = {
@@ -9,18 +9,18 @@ export const tenant = (
   action
 ) => {
   switch (action.type) {
-    case tenantActions.INVALIDATE_SUBDOMAIN:
+    case tenantConstants.INVALIDATE_SUBDOMAIN:
       return {
         ...state,
         didInvalidate: true
       }
-    case tenantActions.REQUEST_TENANT:
+    case tenantConstants.REQUEST_TENANT:
       return {
         ...state,
         isFetching: true,
         didInvalidate: false
       }
-    case tenantActions.RECEIVE_TENANT:
+    case tenantConstants.RECEIVE_TENANT:
       return {
         ...state,
         isFetching: false,
@@ -29,14 +29,14 @@ export const tenant = (
         data: action.data,
         lastUpdated: action.receivedAt
       }
-    case tenantActions.RECEIVE_TENANT_ERROR:
+    case tenantConstants.RECEIVE_TENANT_ERROR:
       return {
         ...state,
         isFetching: false
       }
-    case tenantActions.CLEAR_TENANT:
+    case tenantConstants.CLEAR_TENANT:
       return {}
-    case tenantActions.SET_THEME: {
+    case tenantConstants.SET_THEME: {
       return {
         ...state,
         data: {
@@ -45,10 +45,30 @@ export const tenant = (
         }
       }
     }
-    case tenantActions.CLEAR_LOADING: {
+    case tenantConstants.UPDATE_EMAILS_REQUEST:
+      return state
+    case tenantConstants.UPDATE_EMAILS_SUCCESS: {
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          emails: action.payload
+        },
+        savedEmailSuccess: true
+      }
+    }
+    case tenantConstants.UPDATE_EMAILS_FAILURE:
+      return state
+    case tenantConstants.CLEAR_LOADING: {
       return {
         ...state,
         isFetching: false
+      }
+    }
+    case 'GENERAL_UPDATE': {
+      return {
+        ...state,
+        ...action.payload
       }
     }
     default:
@@ -58,7 +78,7 @@ export const tenant = (
 
 export const selectedSubdomain = (state = '', action) => {
   switch (action.type) {
-    case tenantActions.SELECT_SUBDOMAIN:
+    case tenantConstants.SELECT_SUBDOMAIN:
       return action.subdomain
     default:
       return state

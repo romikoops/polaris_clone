@@ -18,7 +18,7 @@ class FeeTable extends PureComponent {
   }
 
   determineStringToRender (value, target) {
-    const { scope } = this.props.tenant.data
+    const { scope } = this.props.tenant
     if (!scope) return value
     if (scope.cargo_price_notes && scope.cargo_price_notes.cargo && target === 'rate') {
       return scope.cargo_price_notes.cargo
@@ -33,7 +33,7 @@ class FeeTable extends PureComponent {
     const { t, row, tenant } = this.props
     
     if (!row || (row && !row.original)) return ''
-    const { scope } = tenant.data
+    const { scope } = tenant
     const fees = row.original.data
     if (!fees) return ''
     const { sorted } = this.state
@@ -136,9 +136,10 @@ FeeTable.propTypes = {
 
 function mapStateToProps (state) {
   const {
-    authentication, tenant, users
+    authentication, app, users
   } = state
-  const { theme } = tenant.data
+  const { tenant } = app
+  const { theme } = tenant
   const { user, loggedIn } = authentication
   const {
     pricings

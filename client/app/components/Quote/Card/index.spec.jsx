@@ -35,23 +35,21 @@ const propsBase = {
 const newProps = {
   ...propsBase,
   tenant: {
-    data: {
-      id: 123,
-      scope: {
-        detailed_billing: true,
-        modes_of_transport: {
-          ocean: {
-            OCEAN_LOAD_TYPE: true
-          },
-          air: {},
-          truck: {},
-          rail: {}
+    id: 123,
+    scope: {
+      detailed_billing: true,
+      modes_of_transport: {
+        ocean: {
+          OCEAN_LOAD_TYPE: true
         },
-        closed_quotation_tool: true
+        air: {},
+        truck: {},
+        rail: {}
       },
-      theme,
-      subdomain: 'foosubdomain'
-    }
+      closed_quotation_tool: true
+    },
+    theme,
+    subdomain: 'foosubdomain'
   }
 }
 

@@ -193,14 +193,15 @@ NotesWriter.defaultProps = {
 }
 
 function mapStateToProps (state) {
-  const { users, authentication, tenant } = state
+  const { users, authentication, app } = state
+  const { tenant } = app
   const { user, loggedIn } = authentication
 
   return {
     user,
     users,
     tenant,
-    theme: tenant.data.theme,
+    theme: tenant.theme,
     loggedIn
   }
 }

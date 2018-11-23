@@ -1,5 +1,5 @@
 function getScope (tenant) {
-  return (tenant && tenant.data && tenant.data.scope)
+  return (tenant && tenant.scope)
 }
 
 export default function isQuote (tenant) {

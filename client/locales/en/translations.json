@@ -200,7 +200,12 @@
     "jumpTo": "Jump To...",
     "routeStops": "Route Stops",
     "schedules": "Schedules",
-    "confirmDeleteRoute": "This will delete the route and all related data (pricings, schedules etc)"
+    "confirmDeleteRoute": "This will delete the route and all related data (pricings, schedules etc)",
+    "updateShopEmails": "Update Shop Emails",
+    "updateQuotationPDFRemarks": "Update PDF Remarks",
+    "addRemark": "Add Remark",
+    "accountEmailsUpdated": "Account Emails Updated Successfully!",
+    "accountRemarksUpdated": "Accound PDF Remarks Updated Successfully!"
   },
   "itbox": {
     "component": "IncotermBox",
@@ -295,7 +300,9 @@
     "request": "Request",
     "pricings": "Pricings",
     "dedicatedPricingCount": "No. Dedicated Pricings",
-    "openPricingCount": "No. Open Pricings"
+    "openPricingCount": "No. Open Pricings",
+    "settings": "Settings",
+    "accountSettings": "Account Settings"
   },
   "cargo": {
     "cargoDetails": "Cargo Details",
@@ -367,7 +374,8 @@
     "nonStackableFirst": "We currently do not offer freight rates for non-stackable cargo in our Web Shop.",
     "nonStackableSecond": "Please contact our customer service department to place an order for your non-stackable cargo:",
     "feesIn": "Sub Total in {{currency}}",
-    "exportCustomsPaper": "Export Customs Paper (MRN)"
+    "exportCustomsPaper": "Export Customs Paper (MRN)",
+    "perUnitWeight": "Per Unit Weight"
   },
   "bookconf": {
     "_component": "BookingConfirmation",
@@ -481,8 +489,10 @@
     "rejectedByAdmin": "Rejected by Admin",
     "rejected": "Rejected",
     "archived": "Archived",
-    "adb": "Customs Export Paper",
-    "customsExportPaper": "When you ship goods from Germany the Customs Export Paper is required to pass through customs",
+    "adb": "Export Customs Paper (MRN)",
+    "customsExportPaper": "The Export Customs Paper is mandatory for all shipments when exporting from Germany. If you choose to secure your Customs Export Paper on your own, {{tenant}} will need a copy of the Export Customs Paper including Master Reference Number.",
+    "exportCustomsPaperAccept": "Yes, I want {{tenant}} to organize the Export Customs Paper (MRN) on my behalf. Initially USD 75,00 will be added to my booking. This includes 1 customs tariff number. Each further customs tariff number will be charged with USD 12.50.",
+    "exportCustomsPaperDecline": "No, I do not want {{tenant}} to secure my Export Customs Paper (MRN)",
     "customsExportPaperTwo": "A Customs Export Paper (ADB) is mandatory for all shipments when exporting from Germany.",
     "customsExportPaperThree": "If you choose to secure your Customs Export Paper on your own,",
     "customsExportPaperFour": "will need a copy of the Customs Export Paper.",
@@ -541,6 +551,7 @@
     "userPassword": "User Password",
     "addLocation": "Add location",
     "userEmails": "UserEmails",
+    "emails": "Emails",
     "company": "Company",
     "addressDetails": "Address Details",
     "changeMyPassword": "Change my Password",
@@ -581,7 +592,7 @@
     "errorOccured": "An Error Occured",
     "ohNo": "Oh no!",
     "somethingWrong": "Something has gone wrong! A message has been sent to the support team and will be addressed shortly!",
-    "pleaseRetry": "Please retry and if this error keeps happening please contact your store representative",
+    "pleaseRetry": "Please retry and if this error keeps happening please contact your store representative.",
     "contactExists": "Contact already exists.",
     "didYouMean": "Did you mean"
   },

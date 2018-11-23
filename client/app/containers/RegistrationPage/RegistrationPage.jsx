@@ -85,7 +85,7 @@ class RegistrationPage extends React.Component {
       return
     }
     const user = Object.assign({}, model)
-    user.tenant_id = this.props.tenant.data.id
+    user.tenant_id = this.props.tenant.id
     user.guest = false
 
     const { req, authenticationDispatch } = this.props

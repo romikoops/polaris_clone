@@ -9,7 +9,10 @@ const propsBase = {
   addon: {
     fees: { total: 100 }
   },
-  toggleCustomAddon: jest.fn()
+  toggleCustomAddon: jest.fn(),
+  documents: {},
+  deleteDoc: false,
+  fileFn: false
 }
 
 test('shallow render', () => {

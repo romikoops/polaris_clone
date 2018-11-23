@@ -71,6 +71,22 @@ en:
       http_code: 400
       code: 1007
       message: "Unable to build delivery location from address fields."
+    invalid_remark:
+      http_code: 400
+      code: 1008
+      message: "Unable to build remark from user input."
+    unable_to_delete_remark:
+      http_code: 400,
+      code: 1009
+      message: "Unable to delete requested remark."
+    unable_to_update_emails:
+      http_code: 400,
+      code: 1010
+      message: "Unable to update shop emails."
+    invalid_tenant:
+      http_code: 400
+      code: 1011
+      message: "Unable to update tenant"
     
 
     # Authentication Errors

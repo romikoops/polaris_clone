@@ -56,3 +56,19 @@ export function checkOnCarriage (shipment, action) {
 export function isRequested (status) {
   return ['requested', 'requested_by_unconfirmed_account'].includes(status)
 }
+
+export function cargoPlurals (shipment, t) {
+  const { cargo_count, load_type } = shipment
+  let noun = ''
+  if (load_type === 'cargo_item' && cargo_count > 1) {
+    noun = `${t('cargo:cargoItems')}`
+  } else if (load_type === 'cargo_item' && cargo_count === 1) {
+    noun = `${t('cargo:cargoItem')}`
+  } else if (load_type === 'container' && cargo_count > 1) {
+    noun = `${t('cargo:containers')}`
+  } else if (load_type === 'container' && cargo_count === 1) {
+    noun = `${t('cargo:container')}`
+  }
+
+  return `${noun}`
+}

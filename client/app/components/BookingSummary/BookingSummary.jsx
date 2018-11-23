@@ -138,8 +138,9 @@ BookingSummary.defaultProps = {
 }
 
 function mapStateToProps (state) {
-  const { tenant, bookingSummary } = state
-  const { theme } = tenant.data
+  const { app, bookingSummary } = state
+  const { tenant } = app
+  const { theme } = tenant
 
   return { ...bookingSummary, theme }
 }

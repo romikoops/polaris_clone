@@ -23,6 +23,7 @@ exports[`props.shipment is truthy 1`] = `
       shipments={
         Array [
           Object {
+            "cargo_count": 2,
             "cargo_units": Array [
               Object {
                 "dimension_x": 107,

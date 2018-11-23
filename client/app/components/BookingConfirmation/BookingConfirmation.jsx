@@ -13,7 +13,6 @@ import { gradientTextGenerator, totalPriceString, totalPrice, numberSpacing } fr
 import Checkbox from '../Checkbox/Checkbox'
 import CargoItemGroup from '../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
-import DocumentsForm from '../Documents/Form'
 import Contact from '../Contact/Contact'
 import IncotermRow from '../Incoterm/Row'
 import IncotermExtras from '../Incoterm/Extras'
@@ -34,6 +33,7 @@ import {
   WRAP_ROW
 } from '../../classNames'
 import CargoContainerGroup from '../Cargo/Container/Group'
+import CollapsingBar from '../CollapsingBar/CollapsingBar'
 
 const ACCEPT = `${ROW(33)} height_100`
 
@@ -233,177 +233,120 @@ class BookingConfirmation extends Component {
 
     const HeadingFactory = HeadingFactoryFn(theme)
     const Terms = getTerms({ theme, terms, t })
-    const LocationsOrigin = getLocationsOrigin({ shipment, addresses })
-    const LocationsDestination = getLocationsDestination({ shipment, addresses })
-    const arrivalTime = getArrivalTime(shipment)
     const status = shipmentStatii[shipment.status]
 
-    const expectedTime = shipment.has_pre_carriage
-      ? `${t('bookconf:expectedPickup')}:`
-      : `${t('bookconf:expectedDropoff')}:`
-    const expectedEnd = shipment.has_on_carriage
-      ? `${t('bookconf:expectedDelivery')}:`
-      : `${t('bookconf:expectedCollection')}:`
-
     const ShipmentCard = (
-      <div className={SHIPMENT_CARD_CONTAINER}>
-        <div style={themeTitled} className={HEADING}>
-          {HeadingFactory(t('common:overview'))}
-          <div className={COLLAPSER} onClick={() => this.handleCollapser('overview')}>
-            {getChevronIcon(collapser.overview)}
+
+      <CollapsingBar
+        text={t('common:overview')}
+        parentClass={styles.shipment_card_border}
+        showArrow
+      >
+        <div className={INNER_WRAPPER}>
+
+          <div className={INNER_WRAPPER_CELL}>
+            <h4 className="flex-none">{`${t('bookconf:shipmentReference')}:`}</h4>
+            <h4 className="clip flex-none offset-5" style={textStyle}>
+              {shipment.imc_reference}
+            </h4>
           </div>
-        </div>
-        <div className={getPanelStyle(collapser.overview)}>
-          <div className={INNER_WRAPPER}>
 
-            <div className={INNER_WRAPPER_CELL}>
-              <h4 className="flex-none">{`${t('bookconf:shipmentReference')}:`}</h4>
-              <h4 className="clip flex-none offset-5" style={textStyle}>
-                {shipment.imc_reference}
-              </h4>
-            </div>
-
-            <div className={INNER_WRAPPER_CELL}>
-              <p className={SUBTITLE_NORMAL}>{`${t('common:status')}:`}</p>
-              <p className={SUBTITLE}>
-                {status}
-              </p>
-            </div>
-
-            <div className={INNER_WRAPPER_CELL}>
-              <p className={SUBTITLE_NORMAL}>{`${t('common:createdAt')}:`}</p>
-              <p className={SUBTITLE}>
-                {createdDate}
-              </p>
-            </div>
-
+          <div className={INNER_WRAPPER_CELL}>
+            <p className={SUBTITLE_NORMAL}>{`${t('common:status')}:`}</p>
+            <p className={SUBTITLE}>
+              {status}
+            </p>
           </div>
+
+          <div className={INNER_WRAPPER_CELL}>
+            <p className={SUBTITLE_NORMAL}>{`${t('common:createdAt')}:`}</p>
+            <p className={SUBTITLE}>
+              {createdDate}
+            </p>
+          </div>
+
         </div>
-      </div>
+      </CollapsingBar>
     )
 
     const Itinerary = (
-      <div className={ITINERARY}>
-        <div style={themeTitled} className={HEADING}>
-          {HeadingFactory(t('common:itinerary'))}
-          <div className={COLLAPSER} onClick={() => this.handleCollapser('itinerary')}>
-            {getChevronIcon(collapser.itinerary)}
-          </div>
+      <CollapsingBar
+        text={t('common:itinerary')}
+        parentClass={styles.shipment_card_border}
+        showArrow
+      >
+        <div className={INNER_WRAPPER}>
+          <RouteHubBox shipment={shipment} theme={theme} />
         </div>
-
-        <div className={getPanelStyle(collapser.itinerary)}>
-          <div className={INNER_WRAPPER}>
-            <RouteHubBox shipment={shipment} theme={theme} />
-            <div
-              className={`${ROW(100)} ${ALIGN_BETWEEN_CENTER}`}
-              style={{ position: 'relative' }}
-            >
-              <div className={`${WRAP_ROW(40)} ${ALIGN_CENTER_START}`}>
-                <div className={`${WRAP_ROW(80)} ${ALIGN_START} buffer_10`}>
-                  <p className="flex-70 ">
-                    {expectedTime}
-                  </p>
-                </div>
-                {LocationsOrigin}
-                <div className={`${WRAP_ROW(80)} ${ALIGN_START} buffer_10`}>
-                  <p className="flex-70 ">
-                    {t('bookconf:expectedDeparture')}
-                  </p>
-                  <p className="flex-30  center">
-                    {`${moment(shipment.planned_etd).format('DD/MM/YYYY')}`}
-                  </p>
-                </div>
-
-              </div>
-
-              <div className={`${WRAP_ROW(40)} ${ALIGN_CENTER_START}`}>
-                <div className={`${WRAP_ROW(80)} ${ALIGN_START} buffer_10`}>
-                  <p className="flex-70 ">{` ${t('bookconf:expectedArrival')}:`}</p>
-                  <p className="flex-30 center">{arrivalTime}</p>
-                </div>
-                {LocationsDestination}
-                <div className={`${WRAP_ROW(80)} ${ALIGN_START} buffer_10`}>
-                  <p className="flex-70 ">{expectedEnd}</p>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      </CollapsingBar>
     )
 
     const FaresAndFees = (
-      <div className={SHIPMENT_CARD}>
-        <div style={themeTitled} className={HEADING}>
-          {HeadingFactory(t('common:faresFees'))}
-          <div className={COLLAPSER} onClick={() => this.handleCollapser('charges')}>
-            {getChevronIcon(collapser.charges)}
-          </div>
-        </div>
-
-        <div className={getPanelStyle(collapser.charges)}>
-          <div className={INNER_WRAPPER}>
-            <div className={`${WRAP_ROW(100)} ${ALIGN_CENTER}`}>
-              <div className={`${ROW(100)} ${ALIGN_START_CENTER}`}>
-                <div className={`${ROW(70)} ${ALIGN_START_CENTER}`}>
-                  <TextHeading
-                    theme={theme}
-                    color="white"
-                    size={4}
-                    text="Freight, Duties & Carriage: "
-                  />
-                </div>
-                <div className={`${ROW(30)} ${ALIGN_END_CENTER}`}>
-                  <h5 className="flex-none letter_3">
-                    {`${totalPrice(shipment).currency} ${calcFareTotals(feeHash)}`}
-                  </h5>
-                </div>
-              </div>
-              <div className={BOOKING}>
-                <IncotermRow
+      <CollapsingBar
+        text={t('common:faresFees')}
+        parentClass={styles.shipment_card_border}
+        showArrow
+      >
+        <div className={INNER_WRAPPER}>
+          <div className={`${WRAP_ROW(100)} ${ALIGN_CENTER}`}>
+            <div className={`${ROW(100)} ${ALIGN_START_CENTER}`}>
+              <div className={`${ROW(70)} ${ALIGN_START_CENTER}`}>
+                <TextHeading
                   theme={theme}
-                  preCarriage={shipment.has_pre_carriage}
-                  onCarriage={shipment.has_on_carriage}
-                  originFees={shipment.selected_offer.export}
-                  destinationFees={shipment.selected_offer.import}
-                  feeHash={feeHash}
-                  tenant={{ data: tenant }}
+                  color="white"
+                  size={4}
+                  text="Freight, Duties & Carriage: "
                 />
+              </div>
+              <div className={`${ROW(30)} ${ALIGN_END_CENTER}`}>
+                <h5 className="flex-none letter_3">
+                  {`${totalPrice(shipment).currency} ${calcFareTotals(feeHash)}`}
+                </h5>
               </div>
             </div>
-            <div className={`${WRAP_ROW(100)} ${ALIGN_CENTER}`}>
-              <div className={`${ROW(100)} ${ALIGN_START_CENTER}`}>
-                <div className={`${ROW(70)} ${ALIGN_START_CENTER}`}>
-                  <TextHeading
-                    theme={theme}
-                    color="white"
-                    size={4}
-                    text="Additional Services: "
-                  />
-                </div>
-                <div className={`${WRAP_ROW(30)} ${ALIGN_END_CENTER}`}>
-                  <h5 className="flex-none letter_3">{`${
-                    totalPrice(shipment).currency
-                  } ${calcExtraTotals(feeHash)} `}</h5>
-                  { feeHash.customs && feeHash.customs.hasUnknown && (
-                    <div className={`${ROW(100)} ${ALIGN_END_CENTER}`}>
-                      <p className="flex-none center no_m" style={{ fontSize: '10px' }}>
-                            ( excl. charges subject to local regulations )
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className={BOOKING}>
-                <IncotermExtras
+            <div className={BOOKING}>
+              <IncotermRow
+                theme={theme}
+                preCarriage={shipment.has_pre_carriage}
+                onCarriage={shipment.has_on_carriage}
+                originFees={shipment.selected_offer.export}
+                destinationFees={shipment.selected_offer.import}
+                feeHash={feeHash}
+                tenant={tenant}
+              />
+            </div>
+          </div>
+          <div className={`${WRAP_ROW(100)} ${ALIGN_CENTER}`}>
+            <div className={`${ROW(100)} ${ALIGN_START_CENTER}`}>
+              <div className={`${ROW(70)} ${ALIGN_START_CENTER}`}>
+                <TextHeading
                   theme={theme}
-                  feeHash={feeHash}
-                  shipment={shipment}
-                  tenant={{ data: tenant }}
+                  color="white"
+                  size={4}
+                  text="Additional Services: "
                 />
               </div>
+              <div className={`${WRAP_ROW(30)} ${ALIGN_END_CENTER}`}>
+                <h5 className="flex-none letter_3">{`${
+                  totalPrice(shipment).currency
+                } ${calcExtraTotals(feeHash)} `}</h5>
+                { feeHash.customs && feeHash.customs.hasUnknown && (
+                  <div className={`${ROW(100)} ${ALIGN_END_CENTER}`}>
+                    <p className="flex-none center no_m" style={{ fontSize: '10px' }}>
+                            ( excl. charges subject to local regulations )
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className={BOOKING}>
+              <IncotermExtras
+                theme={theme}
+                feeHash={feeHash}
+                shipment={shipment}
+                tenant={tenant}
+              />
             </div>
           </div>
         </div>
@@ -421,185 +364,154 @@ class BookingConfirmation extends Component {
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
+
     )
 
     const ContactDetails = (
-      <div className={SHIPMENT_CARD}>
-        <div style={themeTitled} className={HEADING}>
-          {HeadingFactory(t('bookconf:contact'))}
-          <div
-            className={`${ROW(10)} ${ALIGN_CENTER}`}
-            onClick={() => this.handleCollapser('contacts')}
-          >
-            {getChevronIcon(collapser.contacts)}
+      <CollapsingBar
+        text={t('bookconf:contact')}
+        parentClass={styles.shipment_card_border}
+        showArrow
+      >
+        <div className={INNER_WRAPPER}>
+          <div className={SUMM_TOP}>
+            {shipperAndConsignee}
+          </div>
+          <div className={`${WRAP_ROW(100)} ${ALIGN_AROUND_CENTER}`}>
+            {' '}
+            {notifyeesJSX}{' '}
           </div>
         </div>
-        <div className={getPanelStyle(collapser.contacts)}>
-          <div className={INNER_WRAPPER}>
-            <div className={SUMM_TOP}>
-              {shipperAndConsignee}
-            </div>
-            <div className={`${WRAP_ROW(100)} ${ALIGN_AROUND_CENTER}`}>
-              {' '}
-              {notifyeesJSX}{' '}
-            </div>
-          </div>
-        </div>
-      </div>
+      </CollapsingBar>
+
     )
 
     const CargoDetails = (
-      <div className={SHIPMENT_CARD}>
-
-        <div style={themeTitled} className={HEADING} >
-          {HeadingFactory(t('bookconf:cargo'))}
-          <div className={COLLAPSER} onClick={() => this.handleCollapser('cargo')}>
-            {getChevronIcon(collapser.cargo)}
+      <CollapsingBar
+        text={t('bookconf:cargo')}
+        parentClass={styles.shipment_card_border}
+        showArrow
+      >
+        <div className={INNER_WRAPPER}>
+          <div className={LAYOUT_WRAP}>
+            {cargoView}
           </div>
         </div>
+      </CollapsingBar>
 
-        <div className={getPanelStyle(collapser.cargo)}>
-          <div className={INNER_WRAPPER}>
-            <div className={LAYOUT_WRAP}>
-              {cargoView}
-            </div>
-          </div>
-        </div>
-
-      </div>
     )
 
     const AdditionalInformation = (
-      <div className={SHIPMENT_CARD}>
-        <div style={themeTitled} className={HEADING}>
-          {HeadingFactory(t('common:additional'))}
-          <div
-            className={`${ROW(10)} ${ALIGN_CENTER}`}
-            onClick={() => this.handleCollapser('extraInfo')}
-          >
-            {getChevronIcon(collapser.extraInfo)}
-          </div>
-        </div>
+      <CollapsingBar
+        text={t('common:additional')}
+        parentClass={styles.shipment_card_border}
+        showArrow
+      >
+        <div className={INNER_WRAPPER}>
+          <div className={LAYOUT_WRAP}>
+            <div className={`${ROW(100)} ${ALIGN_START_CENTER}`}>
+              {TotalGoodsValue(shipment, t)}
+              {Eori(shipment, t)}
 
-        <div className={getPanelStyle(collapser.extraInfo)}>
-          <div className={INNER_WRAPPER}>
-            <div className={LAYOUT_WRAP}>
-              <div className={`${ROW(100)} ${ALIGN_START_CENTER}`}>
-                {TotalGoodsValue(shipment, t)}
-                {Eori(shipment, t)}
-
-                {shipment.cargo_notes ? (
-                  <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
-                    <p className="flex-100">
-                      <b>{`${t('bookconf:description')}:`}</b>
-                    </p>
-                    <p className="flex-100 no_m">{shipment.cargo_notes}</p>
-                  </div>
-                ) : (
-                  ''
-                )}
-                {shipment.notes ? (
-                  <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
-                    <p className="flex-100">
-                      <b>{`${t('common:notes')}:`}</b>
-                    </p>
-                    <p className="flex-100 no_m">{shipment.notes}</p>
-                  </div>
-                ) : (
-                  ''
-                )}
-                {shipment.incoterm_text ? (
-                  <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
-                    <p className="flex-100">
-                      <b>{`${t('common:incoterm')}:`}</b>
-                    </p>
-                    <p className="flex-100 no_m">{shipment.incoterm_text}</p>
-                  </div>
-                ) : (
-                  ''
-                )}
-              </div>
+              {shipment.cargo_notes ? (
+                <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
+                  <p className="flex-100">
+                    <b>{`${t('bookconf:description')}:`}</b>
+                  </p>
+                  <p className="flex-100 no_m">{shipment.cargo_notes}</p>
+                </div>
+              ) : (
+                ''
+              )}
+              {shipment.notes ? (
+                <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
+                  <p className="flex-100">
+                    <b>{`${t('common:notes')}:`}</b>
+                  </p>
+                  <p className="flex-100 no_m">{shipment.notes}</p>
+                </div>
+              ) : (
+                ''
+              )}
+              {shipment.incoterm_text ? (
+                <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
+                  <p className="flex-100">
+                    <b>{`${t('common:incoterm')}:`}</b>
+                  </p>
+                  <p className="flex-100 no_m">{shipment.incoterm_text}</p>
+                </div>
+              ) : (
+                ''
+              )}
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
+
     )
 
     const Documents = (
-      <div className={SHIPMENT_CARD}>
-
-        <div style={themeTitled} className={HEADING}>
-          {HeadingFactory(t('common:documents'))}
-          <div className={COLLAPSER} onClick={() => this.handleCollapser('documents')}>
-            {getChevronIcon(collapser.documents)}
+      <CollapsingBar
+        text={t('common:documents')}
+        parentClass={styles.shipment_card_border}
+        showArrow
+      >
+        <div className={INNER_WRAPPER}>
+          <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+            {docView}
+          </div>
+          <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+            {missingDocs}
           </div>
         </div>
+      </CollapsingBar>
 
-        <div className={getPanelStyle(collapser.documents)}>
-          <div className={INNER_WRAPPER}>
-            <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-              {docView}
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-              {missingDocs}
-            </div>
-          </div>
-        </div>
-
-      </div>
     )
 
     const AgreeAndSubmit = (
-      <div className={`${styles.shipment_card} layout-row flex-100 ${ALIGN_BETWEEN_CENTER}`}>
-        <div className={LAYOUT_WRAP}>
-
-          <div style={themeTitled} className={HEADING}>
-            {HeadingFactory(t('common:agree'))}
-          </div>
-          <div className="layout-row layout-align-space-between-start flex-100">
-            <div className="layout-row layout-align-start-center flex-65">
-              <div className={`${ROW(15)} ${ALIGN_CENTER}`}>
-                <Checkbox
-                  id="accept_terms"
-                  className="ccb_accept_terms"
-                  onChange={this.toggleAcceptTerms}
-                  checked={this.state.acceptTerms}
-                  theme={theme}
-                />
-              </div>
-              <label htmlFor="accept_terms" className="pointy layout-align-center-start flex-85">
-                {Terms}
-              </label>
+      <CollapsingBar
+        text={t('common:agree')}
+        parentClass={styles.shipment_card_border}
+      >
+        <div className="layout-row layout-align-space-between-start flex-100">
+          <div className="layout-row layout-align-start-center flex-65">
+            <div className={`${ROW(15)} ${ALIGN_CENTER}`}>
+              <Checkbox
+                id="accept_terms"
+                className="ccb_accept_terms"
+                onChange={this.toggleAcceptTerms}
+                checked={this.state.acceptTerms}
+                theme={theme}
+              />
             </div>
-
-            <div className="layout-row layout-align-start-end flex-33" style={acceptStyle}>
-              {acceptTerms ? acceptedBtn : nonAcceptedBtn}
-            </div>
+            <label htmlFor="accept_terms" className="pointy layout-align-center-start flex-85">
+              {Terms}
+            </label>
           </div>
 
+          <div className="layout-row layout-align-start-end flex-33" style={acceptStyle}>
+            {acceptTerms ? acceptedBtn : nonAcceptedBtn}
+          </div>
         </div>
-      </div>
+      </CollapsingBar>
     )
+    const compArray = [
+      ShipmentCard,
+      Itinerary,
+      FaresAndFees,
+      ContactDetails,
+      CargoDetails,
+      AdditionalInformation,
+      Documents,
+      AgreeAndSubmit]
 
     return (
       <div className={CONTAINER}>
         <div className={AFTER_CONTAINER}>
-          {ShipmentCard}
-
-          {Itinerary}
-
-          {FaresAndFees}
-
-          {ContactDetails}
-
-          {CargoDetails}
-
-          {AdditionalInformation}
-
-          {Documents}
-
-          {AgreeAndSubmit}
+          {compArray.map(comp => (<div className="flex-100 layout-row layout-align-center-center padding_top">
+            {comp}
+          </div>))}
 
           <hr className={`${styles.sec_break} flex-100`} />
 
@@ -875,37 +787,6 @@ function getTerms ({ theme, terms, t }) {
   )
 }
 
-function getLocationsDestination ({ shipment, addresses }) {
-  return shipment.has_on_carriage ? (
-    <div className={`${ROW(100)} ${ALIGN_CENTER} buffer_10`}>
-      <address className="flex-none">
-        {`${addresses.destination.street_number} ${addresses.destination.street}`}{' '}
-        , <br />
-        {`${addresses.destination.city}`}, <br />
-        {`${addresses.destination.zip_code}`},
-        {` ${addresses.destination.country}`}
-      </address>
-    </div>
-  ) : (
-    ''
-  )
-}
-
-function getLocationsOrigin ({ shipment, addresses }) {
-  return shipment.has_pre_carriage ? (
-    <div className={`${ROW(100)} ${ALIGN_CENTER} buffer_10`}>
-      <address className="flex-none">
-        {`${addresses.origin.street_number} ${addresses.origin.street}`},
-        {` ${addresses.origin.city}`}, <br />
-        {`${addresses.origin.zip_code}`},
-        {` ${addresses.origin.country}`}
-      </address>
-    </div>
-  ) : (
-    ''
-  )
-}
-
 function getChevronIcon (flag) {
   return flag
     ? <i className="fa fa-chevron-down pointy" />
@@ -914,12 +795,6 @@ function getChevronIcon (flag) {
 
 function getPanelStyle (flag) {
   return `${flag ? styles.collapsed : ''} ${styles.main_panel}`
-}
-
-function getArrivalTime (shipment) {
-  const format = 'DD/MM/YYYY'
-
-  return `${moment(shipment.planned_eta).format(format)}`
 }
 
 function TotalGoodsValue (shipment, t) {

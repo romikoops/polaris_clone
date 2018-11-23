@@ -237,6 +237,18 @@ class Shipment < ApplicationRecord
     send("#{load_type}s=", value)
   end
 
+  def cargo_count
+    cargo_units.reduce(0){ |sum, unit| sum + unit.quantity }
+  end
+
+  def valid_until
+    cargo_classes = cargo_units.pluck(:cargo_class)
+    self&.itinerary&.pricings
+        .for_cargo_class(cargo_classes)
+        .where(tenant_vehicle_id: trip.tenant_vehicle_id)
+        .order(expiration_date: :asc).first&.expiration_date
+  end
+
   def selected_day_attribute
     has_pre_carriage? ? :planned_pickup_date : :planned_origin_drop_off_date
   end
@@ -337,7 +349,7 @@ class Shipment < ApplicationRecord
 
   def as_options_json(options = {})
     new_options = options.reverse_merge(
-      methods: %i(selected_offer mode_of_transport),
+      methods: %i(selected_offer mode_of_transport cargo_count),
       include: [
         :destination_nexus,
         :origin_nexus,
@@ -358,7 +370,7 @@ class Shipment < ApplicationRecord
 
   def as_index_json(options = {})
     new_options = options.reverse_merge(
-      methods: %i(total_price mode_of_transport cargo_units selected_offer edited_total),
+      methods: %i(total_price mode_of_transport cargo_units cargo_count edited_total),
       include: [
         :destination_nexus,
         :origin_nexus,

@@ -13,30 +13,25 @@ exports[`user.role_id is 1 1`] = `
       tenant={
         Object {
           "data": Object {
-            "data": Object {
-              "id": 123,
-              "scope": Object {
-                "closed_quotation_tool": true,
-                "modes_of_transport": Object {
-                  "air": Object {},
-                  "ocean": Object {
-                    "OCEAN_LOAD_TYPE": true,
-                  },
-                  "rail": Object {},
-                  "truck": Object {},
-                },
-              },
-              "subdomain": "foosubdomain",
-              "theme": Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              },
-            },
+            "id": 123,
             "name": "FOO_NAME",
             "scope": Object {
               "closed_quotation_tool": true,
+              "modes_of_transport": Object {
+                "air": Object {},
+                "ocean": Object {
+                  "OCEAN_LOAD_TYPE": true,
+                },
+                "rail": Object {},
+                "truck": Object {},
+              },
+            },
+            "subdomain": "foosubdomain",
+            "theme": Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
             },
           },
         }
@@ -69,30 +64,25 @@ exports[`user.role_id is 1 1`] = `
       tenant={
         Object {
           "data": Object {
-            "data": Object {
-              "id": 123,
-              "scope": Object {
-                "closed_quotation_tool": true,
-                "modes_of_transport": Object {
-                  "air": Object {},
-                  "ocean": Object {
-                    "OCEAN_LOAD_TYPE": true,
-                  },
-                  "rail": Object {},
-                  "truck": Object {},
-                },
-              },
-              "subdomain": "foosubdomain",
-              "theme": Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              },
-            },
+            "id": 123,
             "name": "FOO_NAME",
             "scope": Object {
               "closed_quotation_tool": true,
+              "modes_of_transport": Object {
+                "air": Object {},
+                "ocean": Object {
+                  "OCEAN_LOAD_TYPE": true,
+                },
+                "rail": Object {},
+                "truck": Object {},
+              },
+            },
+            "subdomain": "foosubdomain",
+            "theme": Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
             },
           },
         }
@@ -127,30 +117,25 @@ exports[`user.role_id is 1 1`] = `
       tenant={
         Object {
           "data": Object {
-            "data": Object {
-              "id": 123,
-              "scope": Object {
-                "closed_quotation_tool": true,
-                "modes_of_transport": Object {
-                  "air": Object {},
-                  "ocean": Object {
-                    "OCEAN_LOAD_TYPE": true,
-                  },
-                  "rail": Object {},
-                  "truck": Object {},
-                },
-              },
-              "subdomain": "foosubdomain",
-              "theme": Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              },
-            },
+            "id": 123,
             "name": "FOO_NAME",
             "scope": Object {
               "closed_quotation_tool": true,
+              "modes_of_transport": Object {
+                "air": Object {},
+                "ocean": Object {
+                  "OCEAN_LOAD_TYPE": true,
+                },
+                "rail": Object {},
+                "truck": Object {},
+              },
+            },
+            "subdomain": "foosubdomain",
+            "theme": Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
             },
           },
         }
@@ -224,30 +209,25 @@ exports[`user.role_id is 2 1`] = `
       tenant={
         Object {
           "data": Object {
-            "data": Object {
-              "id": 123,
-              "scope": Object {
-                "closed_quotation_tool": true,
-                "modes_of_transport": Object {
-                  "air": Object {},
-                  "ocean": Object {
-                    "OCEAN_LOAD_TYPE": true,
-                  },
-                  "rail": Object {},
-                  "truck": Object {},
-                },
-              },
-              "subdomain": "foosubdomain",
-              "theme": Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              },
-            },
+            "id": 123,
             "name": "FOO_NAME",
             "scope": Object {
               "closed_quotation_tool": true,
+              "modes_of_transport": Object {
+                "air": Object {},
+                "ocean": Object {
+                  "OCEAN_LOAD_TYPE": true,
+                },
+                "rail": Object {},
+                "truck": Object {},
+              },
+            },
+            "subdomain": "foosubdomain",
+            "theme": Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
             },
           },
         }
@@ -280,30 +260,25 @@ exports[`user.role_id is 2 1`] = `
       tenant={
         Object {
           "data": Object {
-            "data": Object {
-              "id": 123,
-              "scope": Object {
-                "closed_quotation_tool": true,
-                "modes_of_transport": Object {
-                  "air": Object {},
-                  "ocean": Object {
-                    "OCEAN_LOAD_TYPE": true,
-                  },
-                  "rail": Object {},
-                  "truck": Object {},
-                },
-              },
-              "subdomain": "foosubdomain",
-              "theme": Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              },
-            },
+            "id": 123,
             "name": "FOO_NAME",
             "scope": Object {
               "closed_quotation_tool": true,
+              "modes_of_transport": Object {
+                "air": Object {},
+                "ocean": Object {
+                  "OCEAN_LOAD_TYPE": true,
+                },
+                "rail": Object {},
+                "truck": Object {},
+              },
+            },
+            "subdomain": "foosubdomain",
+            "theme": Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
             },
           },
         }
@@ -338,30 +313,25 @@ exports[`user.role_id is 2 1`] = `
       tenant={
         Object {
           "data": Object {
-            "data": Object {
-              "id": 123,
-              "scope": Object {
-                "closed_quotation_tool": true,
-                "modes_of_transport": Object {
-                  "air": Object {},
-                  "ocean": Object {
-                    "OCEAN_LOAD_TYPE": true,
-                  },
-                  "rail": Object {},
-                  "truck": Object {},
-                },
-              },
-              "subdomain": "foosubdomain",
-              "theme": Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              },
-            },
+            "id": 123,
             "name": "FOO_NAME",
             "scope": Object {
               "closed_quotation_tool": true,
+              "modes_of_transport": Object {
+                "air": Object {},
+                "ocean": Object {
+                  "OCEAN_LOAD_TYPE": true,
+                },
+                "rail": Object {},
+                "truck": Object {},
+              },
+            },
+            "subdomain": "foosubdomain",
+            "theme": Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
             },
           },
         }

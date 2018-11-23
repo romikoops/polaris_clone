@@ -22,7 +22,8 @@ jest.mock('../../helpers', () => ({
   splitName: x => x,
   formattedPriceValue: () => 1034,
   totalPrice: () => ({ currency: 'CNY' }),
-  numberSpacing: x => x
+  numberSpacing: x => x,
+  cargoPlurals: x => 'Cargo Item'
 }))
 jest.mock('moment', () => {
   const format = () => 19

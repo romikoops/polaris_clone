@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_13_124857) do
+ActiveRecord::Schema.define(version: 2018_11_23_145726) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -153,6 +153,7 @@ ActiveRecord::Schema.define(version: 2018_11_13_124857) do
     t.integer "cargo_unit_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "tenant_id"
   end
 
   create_table "charges", force: :cascade do |t|
@@ -584,6 +585,7 @@ ActiveRecord::Schema.define(version: 2018_11_13_124857) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "original_shipment_id"
   end
 
   create_table "rate_bases", force: :cascade do |t|
@@ -591,6 +593,16 @@ ActiveRecord::Schema.define(version: 2018_11_13_124857) do
     t.string "internal_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "remarks", force: :cascade do |t|
+    t.bigint "tenant_id"
+    t.string "category"
+    t.string "subcategory"
+    t.string "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tenant_id"], name: "index_remarks_on_tenant_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -865,6 +877,7 @@ ActiveRecord::Schema.define(version: 2018_11_13_124857) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "remarks", "tenants"
   add_foreign_key "shipments", "transport_categories"
   add_foreign_key "tenant_cargo_item_types", "cargo_item_types"
   add_foreign_key "tenant_cargo_item_types", "tenants"

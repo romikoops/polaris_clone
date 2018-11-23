@@ -39,7 +39,7 @@ export class AdminHubsComp extends Component {
     const {
       hubs, adminDispatch, loading, countries, appDispatch, tenant
     } = this.props
-    if (tenant && tenant.data) {
+    if (tenant) {
       this.setHubTypes()
     }
     if (!hubs && !loading) {
@@ -56,7 +56,7 @@ export class AdminHubsComp extends Component {
   }
   setHubTypes () {
     const { tenant } = this.props
-    const { scope } = tenant.data
+    const { scope } = tenant
     const newTypeObj = {}
     Object.keys(scope.modes_of_transport).forEach((mot) => {
       const boolSum = Object.values(scope.modes_of_transport[mot]).reduce((a, b) => a + b, 0)
@@ -373,14 +373,14 @@ AdminHubsComp.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    authentication, tenant, admin, document, app
+    authentication, admin, document, app
   } = state
-  const { theme } = tenant.data
+  const { countries, tenant } = app
+  const { theme } = tenant
   const { user, loggedIn } = authentication
   const {
     clients, hubs, hub, num_hub_pages // eslint-disable-line
   } = admin
-  const { countries } = app
 
   return {
     user,

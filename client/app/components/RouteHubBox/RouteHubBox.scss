@@ -2,7 +2,6 @@
   .hub_card {
     width: 300px;
     height: 200px;
-    // background: rgba(10,1,12,0.75);
     color: #FFFFFF;
     position: relative;
     background-size: cover;
@@ -25,15 +24,24 @@
     font-size: 18px;
     line-height: 26px;
   }
+  .time_diff {
+    margin-top: 25px;
+    p {
+      margin-bottom: 10px;
+    }
+  }
 
   .hub_card i {
     height: 30px;
     width: 30px;
     font-size: 30px;
     margin-top: 23px;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
+    color: white;
     font-size: 24px !important;
+  }
+  .itinerary_address {
+    font-weight: lighter !important;
+    text-align: end;
   }
 
   .connection_graphics {

@@ -67,7 +67,7 @@ export class AdminRoutesIndex extends Component {
     if (!itineraries) {
       return ''
     }
-    const { scope } = tenant.data
+    const { scope } = tenant
 
     const modesOfTransport = scope.modes_of_transport
     const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName =>
