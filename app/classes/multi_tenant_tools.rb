@@ -133,6 +133,7 @@ module MultiTenantTools
     other_data = json_data.delete('other_data') || {}
     update_cargo_item_types!(tenant, other_data['cargo_item_types'])
     update_tenant_incoterms!(tenant, other_data['incoterms'])
+    update_tenant_charge_categories!(tenant, other_data['custom_charge_categories'])
 
     tenant.update_attributes(json_data)
   end
@@ -545,6 +546,17 @@ module MultiTenantTools
     else
       Incoterm.all.each do |incoterm|
         tenant.tenant_incoterms.find_or_create_by!(incoterm: incoterm)
+      end
+    end
+  end
+
+  def update_tenant_charge_categories!(tenant, charge_categories) 
+    charge_categories.each do |charge_category|
+      existing_charge = ChargeCategory.find_by(code: charge_category['code'], tenant_id: tenant.id)
+      if existing_charge
+        existing_charge.update_attributes(name: charge_category['name'])
+      else
+        existing_charge = ChargeCategory.create!(code: charge_category['code'], tenant_id: tenant.id, name: charge_category['name'])
       end
     end
   end

@@ -58,7 +58,7 @@ module OfferCalculatorService
 
         return nil if local_charges_data.except('total').empty?
 
-        pre_carriage = create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('export'))
+        pre_carriage = create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('export', @user.tenant_id))
       end
 
       if @shipment.has_on_carriage || @schedule.destination_hub.mandatory_charge.import_charges
@@ -75,7 +75,7 @@ module OfferCalculatorService
 
         return nil if local_charges_data.except('total').empty?
 
-        on_carriage = create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('import'))
+        on_carriage = create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('import', @user.tenant_id))
       end
 
       { pre_carriage: pre_carriage, on_carriage: on_carriage }
@@ -83,7 +83,7 @@ module OfferCalculatorService
 
     def create_trucking_charges
       @trucking_data.each do |carriage, data|
-        charge_category = ChargeCategory.find_or_create_by(code: "trucking_#{carriage}")
+        charge_category = ChargeCategory.from_code("trucking_#{carriage}", @user.tenant_id)
 
         parent_charge = create_parent_charge(charge_category)
 
@@ -91,7 +91,7 @@ module OfferCalculatorService
         hub_data = data[hub.id]
 
         hub_data[:trucking_charge_data].each do |cargo_class, trucking_charges|
-          children_charge_category = ChargeCategory.from_code("trucking_#{cargo_class}")
+          children_charge_category = ChargeCategory.from_code("trucking_#{cargo_class}", @user.tenant_id)
 
           create_charges_from_fees_data!(
             trucking_charges, children_charge_category, charge_category, parent_charge
@@ -106,7 +106,7 @@ module OfferCalculatorService
         sum + cargo_unit.try(:quantity).to_i
       end
 
-      charge_category = ChargeCategory.from_code('cargo')
+      charge_category = ChargeCategory.from_code('cargo', @user.tenant_id)
       parent_charge = create_parent_charge(charge_category)
       cargo_unit_array = @shipment.aggregated_cargo ? [@shipment.aggregated_cargo] : @shipment.cargo_units
 
@@ -167,7 +167,7 @@ module OfferCalculatorService
         next if code.to_s == 'total' || charge.empty?
 
         Charge.create(
-          children_charge_category: ChargeCategory.from_code(code),
+          children_charge_category: ChargeCategory.from_code(code, @user.tenant_id),
           charge_category:          children_charge_category,
           charge_breakdown:         @charge_breakdown,
           parent:                   parent_charge,

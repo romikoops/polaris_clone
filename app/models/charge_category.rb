@@ -2,6 +2,7 @@
 
 class ChargeCategory < ApplicationRecord
   has_many :charges
+  belongs_to :tenant, optional: true
 
   validates :name, :code, presence: true
   validates :code, is_model: true, unless: ->(obj) { obj.cargo_unit_id.nil? }
@@ -38,7 +39,9 @@ class ChargeCategory < ApplicationRecord
     end
   end
 
-  def self.from_code(code)
+  def self.from_code(code, tenant_id)
+    tenant_charge_category = find_by(code: code, tenant_id: tenant_id)
+    return tenant_charge_category unless tenant_charge_category.nil?
     find_by_code(code) ||
       find_or_create_by(
         code: code,

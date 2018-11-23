@@ -87,6 +87,9 @@
   },
   "other_data": {
     "cargo_item_types": ["Pallet", "Carton (only palletized)", "Crate", "Stack", "Drum (only palletized)", "Skid"],
-    "incoterms": ["EXW", "FCA", "FOB", "FAS"]
+    "incoterms": ["EXW", "FCA", "FOB", "FAS"],
+    "custom_charge_categories": [
+      {"code": "export", "name": "Total Local Charges"}
+    ]
   }
 }

@@ -124,11 +124,13 @@ class QuoteChargeBreakdown extends Component {
   }
   fetchCargoData (id) {
     const { cargo } = this.props
+
     return cargo.filter(cargo => String(cargo.id) === String(id))[0]
   }
   determineContentToGenerate (key) {
     const { scope } = this.props
     if (key === 'cargo' && scope.fine_fee_detail) return this.generateUnitContent(key)
+
     return this.generateContent(key)
   }
   generateUnitContent (key) {
@@ -137,15 +139,15 @@ class QuoteChargeBreakdown extends Component {
     const unitSections = Object.entries(quote[`${key}`])
       .map(array => array.filter(value => !this.unbreakableKeys.includes(value)))
       .filter(value => value.length !== 1)
-   
+
 
     return unitSections.map((unitArray) => {
       const cargo = this.fetchCargoData(unitArray[0])
       const contentSections = Object.entries(unitArray[1])
         .map(array => array.filter(value => !this.unbreakableKeys.includes(value)))
         .filter(value => value.length !== 1)
-        const currencySections = {}
-        const currencyTotals = {}
+      const currencySections = {}
+      const currencyTotals = {}
       contentSections.forEach((price) => {
         const { currency, value } = price[1]
 
@@ -158,8 +160,8 @@ class QuoteChargeBreakdown extends Component {
         currencyTotals[currency] += parseFloat(value)
         currencySections[currency].push(price)
       })
-      const dimensions = cargo.cargo_class === 'lcl' ?
-        [
+      const dimensions = cargo.cargo_class === 'lcl'
+        ? [
           <p className="flex-none">{`W: ${cargo.dimension_x}cm L:${cargo.dimension_y}cm H: ${cargo.dimension_z}cm`}</p>,
           <p className="flex-none">{`${t('cargo:perUnitWeight')} ${cargo.payload_in_kg}kg`}</p>
         ] : [
@@ -197,6 +199,7 @@ class QuoteChargeBreakdown extends Component {
             </div> }
         </div>
       ))
+
       return (<div className="flex-100 layout-row layout-wrap">
         <div className={`flex-100 layout-row layout-align-space-between-center ${styles.cargo_summary}`}>
           <p className="flex-none">{`${cargo.quantity} x ${nameToDisplay(cargo.cargo_class)}`}</p>
@@ -215,25 +218,6 @@ class QuoteChargeBreakdown extends Component {
     }
 
     return capitalize(t(key))
-  }
-
-  renderSubTitle (key) {
-    const { t, mot, scope } = this.props
-
-    if (scope.translation_overrides && scope.translation_overrides[`shipment:${key}`]) {
-      return this.overrideTranslations(`shipment:${key}`)
-    }
-
-    switch (key) {
-      case 'trucking_pre':
-        return t('shipment:pickUp')
-      case 'trucking_on':
-        return t('shipment:delivery')
-      case 'cargo':
-        return t('shipment:motCargo', { mot: t(`shipment:${mot}`) })
-      default:
-        return t(`shipment:${key}`)
-    }
   }
 
   render () {
@@ -261,7 +245,7 @@ class QuoteChargeBreakdown extends Component {
                 className="flex-none layout-row layout-align-start-center"
               />
               <div className="flex-45 layout-row layout-align-start-center">
-                <span>{this.renderSubTitle(key)}</span>
+                <span>{quote[key].name}</span>
               </div>
               <div className="flex-50 layout-row layout-align-end-center">
                 <p>
