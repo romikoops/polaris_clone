@@ -14,18 +14,6 @@ import {
   formattedPriceValue,
   cargoPlurals
 } from '../../helpers'
-
-function loadIsComplete (confirmShipmentData, id, dispatches) {
-  return confirmShipmentData.accepted &&
-    id === confirmShipmentData.shipmentId &&
-    confirmShipmentData.action === 'accept'
-}
-function shouldRenderAnimation (confirmShipmentData, id, dispatches) {
-  return confirmShipmentData.requested &&
-    id === confirmShipmentData.shipmentId &&
-    confirmShipmentData.action === 'accept'
-}
-
 class AdminShipmentCard extends Component {
   constructor (props) {
     super(props)
@@ -104,6 +92,7 @@ class AdminShipmentCard extends Component {
     ) : (
       ''
     )
+
     const plannedDate =
     shipment.has_pre_carriage ? shipment.planned_pickup_date : shipment.planned_origin_drop_off_date
 
@@ -120,13 +109,6 @@ class AdminShipmentCard extends Component {
     const destinationHubObj = splitName(shipment.destination_hub.name)
     const originHubObj = splitName(shipment.origin_hub.name)
 
-    const loadingCheck = (
-      <div className={`${adminStyles.card_link} ${styles.loader_wrapper}`}>
-        <div className={`${styles.circle_loader} ${loadIsComplete(confirmShipmentData, shipment.id) ? styles.load_complete : ''}`}>
-          <div className={`${loadIsComplete(confirmShipmentData, shipment.id) ? styles.checkmark : ''} ${styles.draw}`} />
-        </div>
-      </div>
-    )
     const timeRow = plannedDate && shipment.planned_etd && shipment.planned_eta
       ? (<div className={`layout-row flex-100 layout-align-start-center
     ${styles.middle_bottom_box} ${styles.smallText}`}
@@ -198,7 +180,6 @@ class AdminShipmentCard extends Component {
           ${styles.container}`
         }
       >
-        {shouldRenderAnimation(confirmShipmentData, shipment.id) && loadIsComplete(confirmShipmentData, shipment.id) ? loadingCheck : ''}
         <hr className={`flex-100 layout-row ${styles.hr_divider}`} />
         {confimPrompt}
         <div className={adminStyles.card_link} onClick={() => this.handleView()} />

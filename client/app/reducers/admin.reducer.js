@@ -366,6 +366,15 @@ export default function admin (state = {}, action) {
         loading: false
       }
     }
+    case adminConstants.ACCEPT_ANIMATION: {
+      return {
+        ...state,
+        confirmShipmentData: {
+          confirmedShipment: true,
+          shipmentId: action.payload
+        }
+      }
+    }
     case adminConstants.CONFIRM_SHIPMENT_SUCCESS: {
       const req =
         state.shipments && state.shipments.requested

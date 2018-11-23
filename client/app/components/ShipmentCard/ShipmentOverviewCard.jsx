@@ -6,6 +6,7 @@ import UserShipmentCard from './UserShipmentCard'
 import AdminShipmentCard from './AdminShipmentCard'
 import ShipmentQuotationCard from './ShipmentQuotationCard'
 import styles from './ShipmentOverviewCard.scss'
+import CircleCompletion from '../CircleCompletion/CircleCompletion'
 import adminStyles from '../Admin/Admin.scss'
 
 class ShipmentOverviewCard extends Component {
@@ -27,6 +28,16 @@ class ShipmentOverviewCard extends Component {
     } = this.props
 
     return shipments.length > 0 ? shipments.map((shipment) => {
+      const ShipmentConfirmed = (
+        <CircleCompletion
+          icon="fa fa-check"
+          iconColor={theme.colors.primary || 'green'}
+          optionalText={t('admin:shipmentAccepted')}
+          opacity={confirmShipmentData.confirmedShipment ? '1' : '0'}
+          animated
+        />
+      )
+
       const QuoteCard = (
         <ShipmentQuotationCard
           shipment={shipment}
@@ -50,6 +61,9 @@ class ShipmentOverviewCard extends Component {
         />
       )
 
+      const ShipmentLoading = confirmShipmentData.confirmedShipment && confirmShipmentData.shipmentId === shipment.id
+        ? (ShipmentConfirmed) : (ShipCard)
+
       return (
         <div
           className="flex-100 flex-lg-50
@@ -58,7 +72,7 @@ class ShipmentOverviewCard extends Component {
           <GreyBox
             wrapperClassName="layout-row"
             contentClassName="layout-row flex-100"
-            content={shipment.status !== 'quoted' ? ShipCard : QuoteCard}
+            content={shipment.status !== 'quoted' ? ShipmentLoading : QuoteCard}
           />
         </div>
       )
@@ -114,4 +128,4 @@ ShipmentOverviewCard.defaultProps = {
   noTitle: false
 }
 
-export default withNamespaces('shipment')(ShipmentOverviewCard)
+export default withNamespaces(['shipment', 'admin'])(ShipmentOverviewCard)
