@@ -312,7 +312,7 @@ class BookingConfirmation extends Component {
                 originFees={shipment.selected_offer.export}
                 destinationFees={shipment.selected_offer.import}
                 feeHash={feeHash}
-                tenant={{ data: tenant }}
+                tenant={tenant}
               />
             </div>
           </div>
@@ -496,35 +496,22 @@ class BookingConfirmation extends Component {
         </div>
       </CollapsingBar>
     )
+    const compArray = [
+      ShipmentCard,
+      Itinerary,
+      FaresAndFees,
+      ContactDetails,
+      CargoDetails,
+      AdditionalInformation,
+      Documents,
+      AgreeAndSubmit]
 
     return (
       <div className={CONTAINER}>
         <div className={AFTER_CONTAINER}>
-          <div className="flex-100 layout-row layout-align-center-center padding_top">
-            {ShipmentCard}
-          </div>
-
-          <div className="flex-100 layout-row layout-align-center-center padding_top">
-            {Itinerary}
-          </div>
-          <div className="flex-100 layout-row layout-align-center-center padding_top">
-            {FaresAndFees}
-          </div>
-          <div className="flex-100 layout-row layout-align-center-center padding_top">
-            {ContactDetails}
-          </div>
-          <div className="flex-100 layout-row layout-align-center-center padding_top">
-            {CargoDetails}
-          </div>
-          <div className="flex-100 layout-row layout-align-center-center padding_top">
-            {AdditionalInformation}
-          </div>
-          <div className="flex-100 layout-row layout-align-center-center padding_top">
-            {Documents}
-          </div>
-          <div className="flex-100 layout-row layout-align-center-center padding_top">
-            {AgreeAndSubmit}
-          </div>
+          {compArray.map(comp => (<div className="flex-100 layout-row layout-align-center-center padding_top">
+            {comp}
+          </div>))}
 
           <hr className={`${styles.sec_break} flex-100`} />
 

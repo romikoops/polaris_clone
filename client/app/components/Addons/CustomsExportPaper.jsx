@@ -51,7 +51,7 @@ class CustomsExportPaper extends PureComponent {
               <div className="flex-90 layout-row layout-align-start-center">
                 <label htmlFor="addon_toggle_true">
                   <p className="flex-none" style={{ marginRight: '5px' }}>
-                    {t('shipment:exportCustomsPaperAccept', { tenant: tenant.data.name })}
+                    {t('shipment:exportCustomsPaperAccept', { tenant: tenant.name })}
                   </p>
                 </label>
               </div>
@@ -71,7 +71,7 @@ class CustomsExportPaper extends PureComponent {
               <div className="flex-90 layout-row layout-align-start-center">
                 <label htmlFor="addon_toggle_false">
                   <p className="flex-none" style={{ marginRight: '5px' }}>
-                    {t('shipment:exportCustomsPaperDecline', { tenant: tenant.data.name })}
+                    {t('shipment:exportCustomsPaperDecline', { tenant: tenant.name })}
                   </p>
                 </label>
               </div>
