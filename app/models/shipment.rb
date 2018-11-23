@@ -242,7 +242,11 @@ class Shipment < ApplicationRecord
   end
 
   def valid_until
-    self&.itinerary&.pricings.for_cargo_class(self.cargo_units.pluck(:cargo_class)).where(tenant_vehicle_id: self.trip.tenant_vehicle_id).order(expiration_date: :asc).first&.expiration_date
+    cargo_classes = cargo_units.pluck(:cargo_class)
+    self&.itinerary&.pricings
+        .for_cargo_class(cargo_classes)
+        .where(tenant_vehicle_id: trip.tenant_vehicle_id)
+        .order(expiration_date: :asc).first&.expiration_date
   end
 
   def selected_day_attribute
