@@ -45,6 +45,13 @@ class Location < ApplicationRecord
     RGeo::GeoJSON.encode(RGeo::GeoJSON::Feature.new(bounds))
   end
 
+  def as_result_json(options = {})
+    new_options = options.reverse_merge(
+      methods: %i(geojson description)
+    )
+    as_json(new_options)
+  end
+
   def self.find_by_coordinates(lat, lng)
     where("
 			SELECT ST_Contains(
