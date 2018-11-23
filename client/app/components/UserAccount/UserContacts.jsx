@@ -386,7 +386,8 @@ UserContacts.defaultProps = {
 }
 
 function mapStateToProps (state) {
-  const { authentication, tenant, users } = state
+  const { authentication, app, users } = state
+  const { tenant } = app
   const { user, loggedIn } = authentication
   const {
     contactData, contactsData, hubs, loading

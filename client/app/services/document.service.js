@@ -1,5 +1,5 @@
 import { Promise } from 'es6-promise-promise'
-import getApiHost from '../constants/api.constants'
+import { getTenantApiUrl } from '../constants/api.constants'
 import { authHeader } from '../helpers'
 
 const { fetch, FormData } = window
@@ -25,7 +25,7 @@ function uploadPricings (file, loadType, open) {
     ? `/admin/open_pricings/ocean_${loadType}_pricings/process_csv`
     : `/admin/pricings/ocean_${loadType}_pricings/process_csv`
 
-  return fetch(`${getApiHost()}${url}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}${url}`, requestOptions).then(handleResponse)
 }
 
 function uploadHubs (file) {
@@ -37,7 +37,7 @@ function uploadHubs (file) {
     body: formData
   }
 
-  return fetch(`${getApiHost()}/admin/hubs/process_csv`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/admin/hubs/process_csv`, requestOptions).then(handleResponse)
 }
 
 function downloadPricings (options) {
@@ -47,7 +47,7 @@ function downloadPricings (options) {
     body: JSON.stringify({ options })
   }
 
-  return fetch(`${getApiHost()}/admin/pricings/download`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/admin/pricings/download`, requestOptions).then(handleResponse)
 }
 
 function uploadSchedules (file, target) {
@@ -59,7 +59,7 @@ function uploadSchedules (file, target) {
     body: formData
   }
 
-  return fetch(`${getApiHost()}/admin/${target}_schedules/process_csv`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/admin/${target}_schedules/process_csv`, requestOptions).then(handleResponse)
 }
 
 function uploadItinerarySchedules (file, target) {
@@ -71,7 +71,7 @@ function uploadItinerarySchedules (file, target) {
     body: formData
   }
 
-  return fetch(`${getApiHost()}/admin/schedules/overwrite/${target}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/admin/schedules/overwrite/${target}`, requestOptions).then(handleResponse)
 }
 
 function uploadLocalCharges (file) {
@@ -83,7 +83,7 @@ function uploadLocalCharges (file) {
     body: formData
   }
 
-  return fetch(`${getApiHost()}/admin/local_charges/process_csv`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/admin/local_charges/process_csv`, requestOptions).then(handleResponse)
 }
 
 function downloadLocalCharges (options) {
@@ -93,7 +93,7 @@ function downloadLocalCharges (options) {
     body: JSON.stringify({ options })
   }
 
-  return fetch(`${getApiHost()}/admin/local_charges/download`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/admin/local_charges/download`, requestOptions).then(handleResponse)
 }
 
 function downloadQuotations (options) {
@@ -103,7 +103,7 @@ function downloadQuotations (options) {
     body: JSON.stringify({ options })
   }
 
-  return fetch(`${getApiHost()}/shipments/${options.shipment.id}/quotations/download`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/shipments/${options.shipment.id}/quotations/download`, requestOptions).then(handleResponse)
 }
 
 function downloadShipment (options) {
@@ -113,7 +113,7 @@ function downloadShipment (options) {
     body: JSON.stringify({ options })
   }
 
-  return fetch(`${getApiHost()}/shipments/${options.shipment.id}/shipment/download`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/shipments/${options.shipment.id}/shipment/download`, requestOptions).then(handleResponse)
 }
 
 function downloadHubs () {
@@ -122,7 +122,7 @@ function downloadHubs () {
     headers: { ...authHeader() }
   }
 
-  return fetch(`${getApiHost()}/admin/hubs/sheet/download`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/admin/hubs/sheet/download`, requestOptions).then(handleResponse)
 }
 
 function downloadGdpr (id) {
@@ -131,7 +131,7 @@ function downloadGdpr (id) {
     headers: { ...authHeader() }
   }
 
-  return fetch(`${getApiHost()}/users/${id}/gdpr/download`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/users/${id}/gdpr/download`, requestOptions).then(handleResponse)
 }
 
 function downloadSchedules (options) {
@@ -141,7 +141,7 @@ function downloadSchedules (options) {
     body: JSON.stringify({ options })
   }
 
-  return fetch(`${getApiHost()}/admin/schedules/download`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/admin/schedules/download`, requestOptions).then(handleResponse)
 }
 
 function downloadTrucking (options) {
@@ -151,7 +151,7 @@ function downloadTrucking (options) {
     body: JSON.stringify({ options })
   }
 
-  return fetch(`${getApiHost()}/admin/trucking/download`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/admin/trucking/download`, requestOptions).then(handleResponse)
 }
 
 export const documentService = {

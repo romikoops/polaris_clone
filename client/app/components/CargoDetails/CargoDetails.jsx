@@ -110,7 +110,7 @@ class CargoDetails extends Component {
       hsCodes, shipmentData, currencies, tenant, hsTexts
     } = this.props
     const { customs, cargoItems, containers } = shipmentData
-    if (tenant && tenant.data.scope.cargo_info_level === 'text') {
+    if (tenant && tenant.scope.cargo_info_level === 'text') {
       let hsCount = 0
       cargoItems.forEach((ci) => {
         if (hsTexts[ci.cargo_group_id]) {
@@ -169,7 +169,7 @@ class CargoDetails extends Component {
   }
   insuranceReadMore () {
     const { tenant } = this.props
-    const url = `http://${tenant.data.subdomain}.itsmycargo.com/insurance`
+    const url = `http://${tenant.subdomain}.itsmycargo.com/insurance`
     window.open(url, '_blank')
   }
   render () {
@@ -185,7 +185,7 @@ class CargoDetails extends Component {
       totalGoodsValue
     } = this.props
 
-    const { scope } = tenant.data
+    const { scope } = tenant
     const mandatoryFormFields = scope.mandatory_form_fields || {}
     const {
       addons,
@@ -225,7 +225,7 @@ class CargoDetails extends Component {
             </strong>
           </p>
           <p className="flex-90">
-            {t('cargo:insuranceContact', { tenantName: tenant.data.name })}
+            {t('cargo:insuranceContact', { tenantName: tenant.name })}
           </p>
         </div>
       </div>
@@ -250,7 +250,7 @@ class CargoDetails extends Component {
       />
     )
 
-    const handleText = `${t('cargo:handleHead')} ${tenant.data.name} ${t('cargo:handleTail')}:`
+    const handleText = `${t('cargo:handleHead')} ${tenant.name} ${t('cargo:handleTail')}:`
     const customsBox = (
       <div
         className={`flex-100 layout-row layout-wrap ${styles.customs_box}  ${styles.box_content} ${
@@ -372,7 +372,7 @@ class CargoDetails extends Component {
       </div>
     )
 
-    const noCustomsText = `${t('cargo:noCustomsHead')} ${tenant.data.name} ${t('cargo:noCustomsTail')}`
+    const noCustomsText = `${t('cargo:noCustomsHead')} ${tenant.name} ${t('cargo:noCustomsTail')}`
 
     const noCustomsBox = (
       <div
@@ -423,10 +423,10 @@ class CargoDetails extends Component {
       </div>
     )
 
-    const quoteInsurance = `${t('cargo:quoteInsuranceHead')} ${tenant.data.name} ${t('cargo:quoteInsuranceTail')}`
-    const quoteInsuranceNegative = `${t('cargo:quoteInsuranceNoHead')} ${tenant.data.name} ${t('cargo:quoteInsuranceNoTail')}`
-    const clearance = `${t('cargo:clearanceHead')} ${tenant.data.name} ${t('cargo:clearanceTail')}`
-    const clearanceNegative = `${t('cargo:clearanceNoHead')} ${tenant.data.name} ${t('cargo:clearanceNoTail')}`
+    const quoteInsurance = `${t('cargo:quoteInsuranceHead')} ${tenant.name} ${t('cargo:quoteInsuranceTail')}`
+    const quoteInsuranceNegative = `${t('cargo:quoteInsuranceNoHead')} ${tenant.name} ${t('cargo:quoteInsuranceNoTail')}`
+    const clearance = `${t('cargo:clearanceHead')} ${tenant.name} ${t('cargo:clearanceTail')}`
+    const clearanceNegative = `${t('cargo:clearanceNoHead')} ${tenant.name} ${t('cargo:clearanceNoTail')}`
 
     return (
       <div name="cargoDetailsBox" className="flex-100 layout-row layout-wrap padd_top">

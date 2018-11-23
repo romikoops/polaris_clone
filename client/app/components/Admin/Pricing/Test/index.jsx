@@ -126,7 +126,7 @@ class AdminPricingTest extends Component {
     const {
       theme
       // scope
-    } = tenant.data
+    } = tenant
     const {
       request, response, error, reusedShipment
     } = bookingData
@@ -270,12 +270,12 @@ AdminPricingTest.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    authentication, tenant, admin, app
+    authentication, admin, app
   } = state
   const {
     user, loggedIn, loggingIn, registering
   } = authentication
-  const { currencies } = app
+  const { currencies, tenant } = app
   const { itineraryPricings } = admin
 
   return {

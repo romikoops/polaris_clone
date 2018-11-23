@@ -1,5 +1,5 @@
 import { Promise } from 'es6-promise-promise'
-import getApiHost from '../constants/api.constants'
+import { getTenantApiUrl } from '../constants/api.constants'
 import { authHeader } from '../helpers'
 
 const { fetch } = window
@@ -20,7 +20,7 @@ function updateEmails (emails, tenant) {
     body: JSON.stringify({ tenant: { emails } })
   }
 
-  return fetch(`${getApiHost()}/admin/tenants/${tenant.data.id}`, requestOptions)
+  return fetch(`${getTenantApiUrl()}/admin/tenants/${tenant.data.id}`, requestOptions)
     .then(handleResponse)
 }
 

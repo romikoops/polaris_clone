@@ -172,7 +172,7 @@ class Shop extends Component {
       currencies
     } = this.props
     const { fakeLoading, stageTracker } = this.state
-    const { theme, scope } = tenant.data
+    const { theme, scope } = tenant
     const {
       modal, request, response, error, reusedShipment, contacts, originalSelectedDay
     } = bookingData
@@ -307,7 +307,7 @@ class Shop extends Component {
               <BookingConfirmation
                 {...props}
                 theme={theme}
-                tenant={tenant.data}
+                tenant={tenant}
                 user={user}
                 shipmentData={shipmentData}
                 setStage={this.selectShipmentStage}
@@ -324,7 +324,7 @@ class Shop extends Component {
               <ShipmentThankYou
                 {...props}
                 theme={theme}
-                tenant={tenant.data}
+                tenant={tenant}
                 user={user}
                 shipmentData={shipmentData}
                 setStage={this.selectShipmentStage}
@@ -398,12 +398,12 @@ Shop.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    users, authentication, tenant, bookingData, app
+    users, authentication, bookingData, app
   } = state
   const {
     user, loggedIn, loggingIn, registering
   } = authentication
-  const { currencies } = app
+  const { currencies, tenant } = app
   const { loading, modal } = bookingData
 
   return {

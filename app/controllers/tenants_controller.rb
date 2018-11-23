@@ -18,4 +18,16 @@ class TenantsController < ApplicationController
       json_response({}, 400)
     end
   end
+
+  def show
+    subdomain = [
+      URI(request.referrer).host.split('.').first,
+      ENV['DEV_SUBDOMAIN']
+    ].find do |subdom|
+      Tenant.exists?(subdomain: subdom)
+    end
+    tenant = Tenant.find_by(subdomain: subdomain)
+
+    response_handler(tenant: tenant)
+  end
 end

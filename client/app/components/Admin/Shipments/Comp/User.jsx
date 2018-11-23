@@ -241,9 +241,10 @@ ShipmentsCompUser.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    authentication, tenant, users, document
+    authentication, app, users, document
   } = state
-  const { theme } = tenant.data
+  const { tenant } = app
+  const { theme } = tenant
   const { user, loggedIn } = authentication
   const {
     shipments

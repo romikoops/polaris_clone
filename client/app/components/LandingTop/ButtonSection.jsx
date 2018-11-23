@@ -15,7 +15,7 @@ const MyAccount = connect(null, dispatch => (
 }) => (
   user && user.role && ['shipper', 'agent', 'agency_manager'].includes(user.role.name) &&
   !user.guest &&
-  !(tenant && tenant.data && tenant.data.scope && tenant.data.scope.closed_quotation_tool) && (
+  !(tenant && tenant.scope && tenant.scope.closed_quotation_tool) && (
     <div className="layout-row flex-50 flex-md-100 margin_bottom">
       <SquareButton
         text={t('common:accountTitle')}

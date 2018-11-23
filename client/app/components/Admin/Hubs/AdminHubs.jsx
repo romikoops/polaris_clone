@@ -95,7 +95,7 @@ class AdminHubs extends Component {
     ) : (
       ''
     )
-    const scope = tenant && tenant.data ? tenant.data.scope : {}
+    const scope = tenant ? tenant.scope : {}
 
     return (
       <GenericError theme={theme}>
@@ -194,13 +194,13 @@ AdminHubs.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    authentication, tenant, admin, document, app
+    authentication, admin, document, app
   } = state
   const { user, loggedIn } = authentication
   const {
     clients, hubs, hub, num_hub_pages // eslint-disable-line
   } = admin
-  const { countries } = app
+  const { countries, tenant } = app
 
   return {
     user,

@@ -58,26 +58,24 @@ exports[`detailed billing working properly 1`] = `
           preCarriage={false}
           tenant={
             Object {
-              "data": Object {
-                "id": 123,
-                "scope": Object {
-                  "closed_quotation_tool": true,
-                  "detailed_billing": true,
-                  "modes_of_transport": Object {
-                    "air": Object {},
-                    "ocean": Object {
-                      "OCEAN_LOAD_TYPE": true,
-                    },
-                    "rail": Object {},
-                    "truck": Object {},
+              "id": 123,
+              "scope": Object {
+                "closed_quotation_tool": true,
+                "detailed_billing": true,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
                   },
+                  "rail": Object {},
+                  "truck": Object {},
                 },
-                "subdomain": "foosubdomain",
-                "theme": Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
+              },
+              "subdomain": "foosubdomain",
+              "theme": Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
                 },
               },
             }
@@ -486,25 +484,23 @@ exports[`shallow rendering 1`] = `
           preCarriage={false}
           tenant={
             Object {
-              "data": Object {
-                "id": 123,
-                "scope": Object {
-                  "closed_quotation_tool": true,
-                  "modes_of_transport": Object {
-                    "air": Object {},
-                    "ocean": Object {
-                      "OCEAN_LOAD_TYPE": true,
-                    },
-                    "rail": Object {},
-                    "truck": Object {},
+              "id": 123,
+              "scope": Object {
+                "closed_quotation_tool": true,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
                   },
+                  "rail": Object {},
+                  "truck": Object {},
                 },
-                "subdomain": "foosubdomain",
-                "theme": Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
+              },
+              "subdomain": "foosubdomain",
+              "theme": Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
                 },
               },
             }
@@ -912,26 +908,24 @@ exports[`show schedule options working 1`] = `
           preCarriage={false}
           tenant={
             Object {
-              "data": Object {
-                "id": 123,
-                "scope": Object {
-                  "closed_quotation_tool": true,
-                  "detailed_billing": true,
-                  "modes_of_transport": Object {
-                    "air": Object {},
-                    "ocean": Object {
-                      "OCEAN_LOAD_TYPE": true,
-                    },
-                    "rail": Object {},
-                    "truck": Object {},
+              "id": 123,
+              "scope": Object {
+                "closed_quotation_tool": true,
+                "detailed_billing": true,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
                   },
+                  "rail": Object {},
+                  "truck": Object {},
                 },
-                "subdomain": "foosubdomain",
-                "theme": Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
+              },
+              "subdomain": "foosubdomain",
+              "theme": Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
                 },
               },
             }
@@ -1340,25 +1334,23 @@ exports[`show schedules set to true 1`] = `
           preCarriage={false}
           tenant={
             Object {
-              "data": Object {
-                "id": 123,
-                "scope": Object {
-                  "closed_quotation_tool": true,
-                  "modes_of_transport": Object {
-                    "air": Object {},
-                    "ocean": Object {
-                      "OCEAN_LOAD_TYPE": true,
-                    },
-                    "rail": Object {},
-                    "truck": Object {},
+              "id": 123,
+              "scope": Object {
+                "closed_quotation_tool": true,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
                   },
+                  "rail": Object {},
+                  "truck": Object {},
                 },
-                "subdomain": "foosubdomain",
-                "theme": Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
+              },
+              "subdomain": "foosubdomain",
+              "theme": Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
                 },
               },
             }

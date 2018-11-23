@@ -1,10 +1,9 @@
 import fetch from 'isomorphic-fetch'
-import { Promise } from 'es6-promise-promise'
 import * as Sentry from '@sentry/browser'
 import { tenantConstants } from '../constants'
 import { tenantService } from '../services/tenant.service'
 import { alertActions } from './'
-import getApiHost from '../constants/api.constants'
+import { getApiHost } from '../constants/api.constants'
 
 function requestTenant (subdomain) {
   return {
@@ -59,36 +58,6 @@ function fetchTenant (subdomain) {
   }
 }
 
-function shouldFetchTenant (state, subdomain) {
-  const tenant = state[subdomain]
-  if (!tenant) {
-    return true
-  }
-  if (tenant.isFetching) {
-    return false
-  }
-
-  return tenant.didInvalidate
-}
-
-function fetchTenantIfNeeded (subdomain) {
-  // Note that the function also receives getState()
-  // which lets you choose what to dispatch next.
-
-  // This is useful for avoiding a network request if
-  // a cached value is already available.
-
-  return (dispatch, getState) => {
-    if (shouldFetchTenant(getState(), subdomain)) {
-      // Dispatch a thunk from thunk!
-      return dispatch(fetchTenant(subdomain))
-    }
-
-    // Let the calling code know there's nothing to wait for.
-    return Promise.resolve()
-  }
-}
-
 function updateEmails (newEmails, tenant) {
   function request (tenantData) {
     return {
@@ -131,8 +100,6 @@ const tenantActions = {
   receiveTenant,
   invalidateSubdomain,
   fetchTenant,
-  fetchTenantIfNeeded,
-  shouldFetchTenant,
   updateEmails,
   updateReduxStore
 }

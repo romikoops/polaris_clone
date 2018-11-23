@@ -249,7 +249,7 @@ class NavBar extends Component {
     const iconStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-        : { color: 'black' }
+        : { background: 'black' }
     const pathPieces = location.pathname.split('/')
     pathPieces.splice(0, 1)
     const lastIndex =
@@ -333,8 +333,10 @@ function mapDispatchToProps (dispatch) {
   }
 }
 function mapStateToProps (state) {
-  const { users, admin, tenant } = state
-  const { theme } = tenant.data
+  const { users, admin, app } = state
+  const { tenant } = app
+  const { theme } = tenant
+  
   return {
     users,
     tenant,

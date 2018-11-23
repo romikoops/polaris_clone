@@ -89,7 +89,7 @@ class Message extends Component {
         </p>
       ) : (
         <p className={`flex-none ${styles.timestamp}`}>
-          {tenant.data.name} {t('account:admin')} @ {moment(message.updated_at).format('lll')}
+          {tenant.name} {t('account:admin')} @ {moment(message.updated_at).format('lll')}
         </p>
       )
     const meta = isAdmin ? adminMeta : userMeta

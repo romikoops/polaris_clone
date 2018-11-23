@@ -46,22 +46,22 @@ export default function getModals (props, toggleFunc, t) {
           <br />
 
           <span style={{ marginRight: '10px' }}> {t('dangerousGoods:contactPhone')}:</span>
-          <span>{tenant.data.phones.support}</span>
+          <span>{tenant.phones.support}</span>
           <br />
 
           <span style={{ marginRight: '20px' }}> {t('dangerousGoods:contactEmail')} </span>
           <br />
           <span style={{ marginRight: '20px', marginLeft: '10px', fontSize: '12px' }}> - {t('common:oceanFreight')}: </span>
           <span>
-            <a href={`mailto:${tenant.data.emails.support.ocean}?subject=Nonstackable Goods Request`}>
-              {tenant.data.emails.support.ocean}
+            <a href={`mailto:${tenant.emails.support.ocean}?subject=Nonstackable Goods Request`}>
+              {tenant.emails.support.ocean}
             </a>
           </span>
           <br />
           <span style={{ marginRight: '38px', marginLeft: '10px', fontSize: '12px' }}> - {t('common:airFreight')}: </span>
           <span>
-            <a href={`mailto:${tenant.data.emails.support.air}?subject=Nonstackable Goods Request`}>
-              {tenant.data.emails.support.air}
+            <a href={`mailto:${tenant.emails.support.air}?subject=Nonstackable Goods Request`}>
+              {tenant.emails.support.air}
             </a>
           </span>
         </p>
@@ -79,22 +79,22 @@ export default function getModals (props, toggleFunc, t) {
           <br />
 
           <span style={{ marginRight: '10px' }}> {t('dangerousGoods:contactPhone')}:</span>
-          <span>{tenant.data.phones.support}</span>
+          <span>{tenant.phones.support}</span>
           <br />
 
           <span style={{ marginRight: '20px' }}> {t('dangerousGoods:contactEmail')} </span>
           <br />
           <span style={{ marginRight: '20px', marginLeft: '10px', fontSize: '12px' }}> - {t('common:oceanFreight')}: </span>
           <span>
-            <a href={`mailto:${tenant.data.emails.support.ocean}?subject=Dangerous Goods Request`}>
-              {tenant.data.emails.support.ocean}
+            <a href={`mailto:${tenant.emails.support.ocean}?subject=Dangerous Goods Request`}>
+              {tenant.emails.support.ocean}
             </a>
           </span>
           <br />
           <span style={{ marginRight: '38px', marginLeft: '10px', fontSize: '12px' }}> - {t('common:airFreight')}: </span>
           <span>
-            <a href={`mailto:${tenant.data.emails.support.air}?subject=Dangerous Goods Request`}>
-              {tenant.data.emails.support.air}
+            <a href={`mailto:${tenant.emails.support.air}?subject=Dangerous Goods Request`}>
+              {tenant.emails.support.air}
             </a>
           </span>
         </p>
@@ -137,7 +137,7 @@ export default function getModals (props, toggleFunc, t) {
 
   Object.keys(modals).forEach((modalName) => {
     modals[modalName].jsx =
-      modalJSX(modalName, modals[modalName], tenant.data.theme, toggleFunc)
+      modalJSX(modalName, modals[modalName], tenant.theme, toggleFunc)
   })
 
   return modals

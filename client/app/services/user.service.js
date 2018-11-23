@@ -1,7 +1,7 @@
 import { Promise } from 'es6-promise-promise'
-import authHeader from '../helpers/auth-header'
+import { authHeader } from '../helpers/auth-header'
 import getSubdomain from '../helpers/subdomain'
-import getApiHost from '../constants/api.constants'
+import { getTenantApiUrl } from '../constants/api.constants'
 import { toQueryString } from '../helpers'
 
 const { fetch, FormData } = window
@@ -22,7 +22,7 @@ function getLocations (userId) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/users/${userId}/addresses`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/users/${userId}/addresses`, requestOptions).then(handleResponse)
 }
 
 function destroyLocation (userId, addressId) {
@@ -31,7 +31,7 @@ function destroyLocation (userId, addressId) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/users/${userId}/addresses/${addressId}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/users/${userId}/addresses/${addressId}`, requestOptions).then(handleResponse)
 }
 
 function searchShipments (text, target, page, perPage) {
@@ -44,7 +44,7 @@ function searchShipments (text, target, page, perPage) {
   query += `query=${text}&page=${page || 1}`
   if (perPage) query += `&per_page=${perPage}`
 
-  return fetch(`${getApiHost()}/search/shipments/${target}?${query}`, requestOptions)
+  return fetch(`${getTenantApiUrl()}/search/shipments/${target}?${query}`, requestOptions)
     .then(handleResponse)
 }
 function searchContacts (text, page, perPage) {
@@ -57,7 +57,7 @@ function searchContacts (text, page, perPage) {
   query += `query=${text}&page=${page || 1}`
   if (perPage) query += `&per_page=${perPage}`
 
-  return fetch(`${getApiHost()}/search/contacts?${query}`, requestOptions)
+  return fetch(`${getTenantApiUrl()}/search/contacts?${query}`, requestOptions)
     .then(handleResponse)
 }
 
@@ -67,7 +67,7 @@ function makePrimary (userId, addressId) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/users/${userId}/addresses/${addressId}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/users/${userId}/addresses/${addressId}`, requestOptions).then(handleResponse)
 }
 
 function optOut (userId, target) {
@@ -76,7 +76,7 @@ function optOut (userId, target) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/users/${userId}/opt_out/${target}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/users/${userId}/opt_out/${target}`, requestOptions).then(handleResponse)
 }
 
 function getStoredUser () {
@@ -91,7 +91,7 @@ function getAll () {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/users`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/users`, requestOptions).then(handleResponse)
 }
 
 function getById (id) {
@@ -100,7 +100,7 @@ function getById (id) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/users/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/users/${id}`, requestOptions).then(handleResponse)
 }
 
 function editUserLocation (userId, data) {
@@ -113,7 +113,7 @@ function editUserLocation (userId, data) {
   }
 
   return fetch(
-    `${getApiHost()}/users/${userId}/addresses/${data.id}/edit`,
+    `${getTenantApiUrl()}/users/${userId}/addresses/${data.id}/edit`,
     requestOptions
   ).then(handleResponse)
 }
@@ -135,7 +135,7 @@ function getHubs (id) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/users/${id}/hubs`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/users/${id}/hubs`, requestOptions).then(handleResponse)
 }
 function getShipment (id) {
   const requestOptions = {
@@ -143,7 +143,7 @@ function getShipment (id) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/shipments/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/shipments/${id}`, requestOptions).then(handleResponse)
 }
 
 function getDashboard (userId) {
@@ -152,7 +152,7 @@ function getDashboard (userId) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/users/${userId}/home`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/users/${userId}/home`, requestOptions).then(handleResponse)
 }
 
 function getContacts (params) {
@@ -160,7 +160,7 @@ function getContacts (params) {
     method: 'GET',
     headers: authHeader()
   }
-  const url = `${getApiHost()}/contacts?${toQueryString(params)}`
+  const url = `${getTenantApiUrl()}/contacts?${toQueryString(params)}`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -171,7 +171,7 @@ function deleteDocument (documentId) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/documents/delete/${documentId}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/documents/delete/${documentId}`, requestOptions).then(handleResponse)
 }
 
 function uploadDocument (doc, type, url) {
@@ -184,7 +184,7 @@ function uploadDocument (doc, type, url) {
     body: formData
   }
 
-  return fetch(getApiHost() + url, requestOptions).then(handleResponse)
+  return fetch(getTenantApiUrl() + url, requestOptions).then(handleResponse)
 }
 
 function getContact (id) {
@@ -193,7 +193,7 @@ function getContact (id) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/contacts/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/contacts/${id}`, requestOptions).then(handleResponse)
 }
 
 function updateContact (data) {
@@ -205,7 +205,7 @@ function updateContact (data) {
     body: formData
   }
 
-  return fetch(`${getApiHost()}/contacts/${data.id}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/contacts/${data.id}`, requestOptions).then(handleResponse)
 }
 
 function newUserLocation (userId, data) {
@@ -217,7 +217,7 @@ function newUserLocation (userId, data) {
     body: formData
   }
 
-  return fetch(`${getApiHost()}/users/${userId}/addresses`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/users/${userId}/addresses`, requestOptions).then(handleResponse)
 }
 
 function newContact (data) {
@@ -229,7 +229,7 @@ function newContact (data) {
     body: formData
   }
 
-  return fetch(`${getApiHost()}/contacts`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/contacts`, requestOptions).then(handleResponse)
 }
 
 function newAlias (data) {
@@ -241,7 +241,7 @@ function newAlias (data) {
     body: formData
   }
 
-  return fetch(`${getApiHost()}/contacts/new_alias`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/contacts/new_alias`, requestOptions).then(handleResponse)
 }
 
 function getShipments (pages, perPage) {
@@ -255,7 +255,7 @@ function getShipments (pages, perPage) {
   })
   if (perPage) query += `per_page=${perPage}`
 
-  return fetch(`${getApiHost()}/shipments?${query}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/shipments?${query}`, requestOptions).then(handleResponse)
 }
 
 function deltaShipmentsPage (target, page, perPage) {
@@ -266,7 +266,7 @@ function deltaShipmentsPage (target, page, perPage) {
   let query = `page=${page || 1}&target=${target}`
   if (perPage) query += `&per_page=${perPage}`
 
-  return fetch(`${getApiHost()}/shipments/pages/delta_page_handler?${query}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/shipments/pages/delta_page_handler?${query}`, requestOptions).then(handleResponse)
 }
 
 function deleteAlias (aliasId) {
@@ -275,7 +275,7 @@ function deleteAlias (aliasId) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/contacts/delete_alias/${aliasId}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/contacts/delete_alias/${aliasId}`, requestOptions).then(handleResponse)
 }
 
 function deleteContactAddress (addressId) {
@@ -284,7 +284,7 @@ function deleteContactAddress (addressId) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/contacts/delete_contact_address/${addressId}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/contacts/delete_contact_address/${addressId}`, requestOptions).then(handleResponse)
 }
 
 function saveAddressEdit (data) {
@@ -296,7 +296,7 @@ function saveAddressEdit (data) {
     body: formData
   }
 
-  return fetch(`${getApiHost()}/contacts/update_contact_address/${data.id}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/contacts/update_contact_address/${data.id}`, requestOptions).then(handleResponse)
 }
 function reuseShipment (id) {
   const requestOptions = {
@@ -304,7 +304,7 @@ function reuseShipment (id) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/shipments/${id}/reuse_booking_data`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/shipments/${id}/reuse_booking_data`, requestOptions).then(handleResponse)
 }
 
 function getPricings () {
@@ -313,7 +313,7 @@ function getPricings () {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/pricings`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/pricings`, requestOptions).then(handleResponse)
 }
 function getPricingsForItinerary (id) {
   const requestOptions = {
@@ -321,7 +321,7 @@ function getPricingsForItinerary (id) {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/pricings/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/pricings/${id}`, requestOptions).then(handleResponse)
 }
 function requestPricing (req) {
   const requestOptions = {
@@ -330,7 +330,7 @@ function requestPricing (req) {
     body: JSON.stringify(req)
   }
 
-  return fetch(`${getApiHost()}/pricings/${req.pricing_id}/request`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/pricings/${req.pricing_id}/request`, requestOptions).then(handleResponse)
 }
 
 export const userService = {

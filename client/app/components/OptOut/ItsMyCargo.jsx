@@ -16,7 +16,7 @@ class OptOutItsMyCargo extends Component {
   }
   render () {
     const { theme, tenant, t } = this.props
-    if (!tenant.data) {
+    if (!tenant) {
       return ''
     }
 

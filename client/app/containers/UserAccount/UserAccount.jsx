@@ -179,7 +179,7 @@ class UserAccount extends Component {
                         {...props}
                         user={user}
                         tenant={tenant}
-                        scope={tenant.data.scope}
+                        scope={tenant.scope}
                         setCurrentUrl={this.setCurrentUrl}
                         dashboard={dashboard}
                         hubs={hubHash}
@@ -436,10 +436,10 @@ UserAccount.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    authentication, tenant, shipments, users, app
+    authentication, shipments, users, app
   } = state
+  const { tenant, currencies } = app
   const { user, loggedIn } = authentication
-  const { currencies } = app
 
   return {
     users,

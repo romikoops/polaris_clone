@@ -18,8 +18,8 @@ class ShopStageView extends Component {
     super(props)
     this.state = {}
     this.applicableStages =
-      this.props.tenant.data.scope.closed_quotation_tool ||
-        this.props.tenant.data.scope.open_quotation_tool
+      this.props.tenant.scope.closed_quotation_tool ||
+        this.props.tenant.scope.open_quotation_tool
         ? QUOTE_STAGES : SHIPMENT_STAGES
   }
   componentWillReceiveProps (nextProps) {

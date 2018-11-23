@@ -284,25 +284,23 @@ exports[`shallow render 1`] = `
       t={[Function]}
       tenant={
         Object {
-          "data": Object {
-            "id": 123,
-            "scope": Object {
-              "closed_quotation_tool": true,
-              "modes_of_transport": Object {
-                "air": Object {},
-                "ocean": Object {
-                  "OCEAN_LOAD_TYPE": true,
-                },
-                "rail": Object {},
-                "truck": Object {},
+          "id": 123,
+          "scope": Object {
+            "closed_quotation_tool": true,
+            "modes_of_transport": Object {
+              "air": Object {},
+              "ocean": Object {
+                "OCEAN_LOAD_TYPE": true,
               },
+              "rail": Object {},
+              "truck": Object {},
             },
-            "subdomain": "foosubdomain",
-            "theme": Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
+          },
+          "subdomain": "foosubdomain",
+          "theme": Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
             },
           },
         }
@@ -613,25 +611,23 @@ exports[`theme is falsy 1`] = `
       t={[Function]}
       tenant={
         Object {
-          "data": Object {
-            "id": 123,
-            "scope": Object {
-              "closed_quotation_tool": true,
-              "modes_of_transport": Object {
-                "air": Object {},
-                "ocean": Object {
-                  "OCEAN_LOAD_TYPE": true,
-                },
-                "rail": Object {},
-                "truck": Object {},
+          "id": 123,
+          "scope": Object {
+            "closed_quotation_tool": true,
+            "modes_of_transport": Object {
+              "air": Object {},
+              "ocean": Object {
+                "OCEAN_LOAD_TYPE": true,
               },
+              "rail": Object {},
+              "truck": Object {},
             },
-            "subdomain": "foosubdomain",
-            "theme": Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
+          },
+          "subdomain": "foosubdomain",
+          "theme": Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
             },
           },
         }

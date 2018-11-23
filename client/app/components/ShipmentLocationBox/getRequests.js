@@ -1,10 +1,10 @@
-import getApiHost from '../../constants/api.constants'
+import { getTenantApiUrl } from '../../constants/api.constants'
 import { authHeader } from '../../helpers'
 
 const { fetch } = window
 
 function findNexus (lat, lng, callback) {
-  fetch(`${getApiHost()}/find_nexus?lat=${lat}&lng=${lng}`, {
+  fetch(`${getTenantApiUrl()}/find_nexus?lat=${lat}&lng=${lng}`, {
     method: 'GET',
     headers: authHeader()
   }).then((promise) => {
@@ -16,7 +16,7 @@ function findNexus (lat, lng, callback) {
 
 function findAvailability (lat, lng, tenantId, loadType, carriage, availableHubIds, callback) {
   fetch(
-    `${getApiHost()}/trucking_availability?` +
+    `${getTenantApiUrl()}/trucking_availability?` +
       `lat=${lat}&lng=${lng}&` +
       `tenant_id=${tenantId}&` +
       `load_type=${loadType}&` +
@@ -42,7 +42,7 @@ function findAvailability (lat, lng, tenantId, loadType, carriage, availableHubI
 
 function findTruckTypes (originNexusIds, destinationNexusIds, callback) {
   fetch(
-    `${getApiHost()}/truck_type_availability?` +
+    `${getTenantApiUrl()}/truck_type_availability?` +
       `origin_nexus_ids=${originNexusIds}&` +
       `destination_nexus_ids=${destinationNexusIds}`,
     {
@@ -59,7 +59,7 @@ function findTruckTypes (originNexusIds, destinationNexusIds, callback) {
 
 function nexuses (nexusIds, hubIds, target, itineraryIds, callback) {
   fetch(
-    `${getApiHost()}/nexuses?` +
+    `${getTenantApiUrl()}/nexuses?` +
       `itinerary_ids=${itineraryIds}&` +
       `target=${target}&` +
       `nexus_ids=${nexusIds}&` +
@@ -77,7 +77,7 @@ function nexuses (nexusIds, hubIds, target, itineraryIds, callback) {
 
 function incoterms (direction, preCarriage, onCarriage, callback) {
   fetch(
-    `${getApiHost()}/incoterms?` +
+    `${getTenantApiUrl()}/incoterms?` +
       `pre_carriage=${preCarriage}&` +
       `on_carriage=${onCarriage}&` +
       `direction=${direction}`,

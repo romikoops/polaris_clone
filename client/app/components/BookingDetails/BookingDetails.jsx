@@ -240,7 +240,7 @@ export class BookingDetails extends Component {
     return parsed + customs.val + insurance.val
   }
   toNextStage () {
-    const mandatoryFormFields = this.props.tenant.data.scope.mandatory_form_fields || {}
+    const mandatoryFormFields = this.props.tenant.scope.mandatory_form_fields || {}
     const {
       addons,
       cargoNotes,

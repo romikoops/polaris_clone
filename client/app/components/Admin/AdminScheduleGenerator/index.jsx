@@ -14,7 +14,7 @@ import { RoundButton } from '../../RoundButton/RoundButton'
 import { authHeader, capitalize } from '../../../helpers'
 import styles from '../Admin.scss'
 import WeekdayCheckboxes from './WeekdayCheckboxes'
-import getApiHost from '../../../constants/api.constants'
+import { getTenantApiUrl } from '../../../constants/api.constants'
 
 class AdminScheduleGenerator extends Component {
   static camelToCaps (string) {
@@ -85,7 +85,7 @@ class AdminScheduleGenerator extends Component {
   }
   getStopsForItinerary (itineraryId) {
     window
-      .fetch(`${getApiHost()}/admin/itineraries/${itineraryId}/stops`, {
+      .fetch(`${getTenantApiUrl()}/admin/itineraries/${itineraryId}/stops`, {
         method: 'GET',
         headers: authHeader()
       })

@@ -6,7 +6,7 @@ import { LoadingSpinner } from '../../../components/LoadingSpinner/LoadingSpinne
 import { RoundButton } from '../../../components/RoundButton/RoundButton'
 import styles from './ForgotPassword.scss'
 import FormsyInput from '../../../components/FormsyInput/FormsyInput'
-import getApiHost from '../../../constants/api.constants'
+import { getTenantApiUrl } from '../../../constants/api.constants'
 import { authHeader } from '../../../helpers'
 
 const { fetch } = window
@@ -24,10 +24,10 @@ export default class ForgotPassword extends React.PureComponent {
 
     const payload = {
       ...model,
-      redirect_url: getApiHost() // TBD - + 'path_to_password_reset'
+      redirect_url: getTenantApiUrl() // TBD - + 'path_to_password_reset'
     }
 
-    fetch(`${getApiHost()}/auth/password`, {
+    fetch(`${getTenantApiUrl()}/auth/password`, {
       method: 'POST',
       headers: { ...authHeader(), 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)

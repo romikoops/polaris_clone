@@ -47,9 +47,7 @@ const customsDataBase = {
 const propsBase = {
   theme,
   tenant: {
-    data: {
-      scope: {}
-    }
+    scope: {}
   },
   shipmentData: editedShipmentData,
   handleChange: identity,
@@ -87,12 +85,10 @@ test('scope.has_customs || scope.has_insurance', () => {
       }
     },
     tenant: {
-      data: {
-        scope: {
-          has_insurance: true,
-          has_customs: true,
-          customs_export_paper: true
-        }
+      scope: {
+        has_insurance: true,
+        has_customs: true,
+        customs_export_paper: true
       }
     }
   }
@@ -200,12 +196,10 @@ test('shipmentData.dangerousGoods is true', () => {
   expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
 })
 
-test('tenant.data.scope.has_insurance is true', () => {
+test('tenant.scope.has_insurance is true', () => {
   const tenant = {
-    data: {
-      scope: {
-        has_insurance: true
-      }
+    scope: {
+      has_insurance: true
     }
   }
   const props = {

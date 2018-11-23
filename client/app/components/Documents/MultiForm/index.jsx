@@ -4,11 +4,9 @@ import fetch from 'isomorphic-fetch'
 import Truncate from 'react-truncate'
 import { Promise } from 'es6-promise-promise'
 import ReactTooltip from 'react-tooltip'
-
-import { Link } from 'react-router-dom'
 import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
-import getApiHost from '../../../constants/api.constants'
+import { getTenantApiUrl } from '../../../constants/api.constants'
 import { authHeader, gradientTextGenerator } from '../../../helpers'
 import styles from './index.scss'
 
@@ -82,7 +80,7 @@ class DocumentsMultiForm extends React.Component {
         headers: { ...authHeader() },
         body: formData
       }
-      const uploadUrl = getApiHost() + url
+      const uploadUrl = getTenantApiUrl() + url
       return fetch(uploadUrl, requestOptions).then(DocumentsMultiForm.handleResponse)
     }
     return this.showFileTypeError()

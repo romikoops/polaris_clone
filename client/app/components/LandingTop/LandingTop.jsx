@@ -62,7 +62,7 @@ function LandingTop ({
               />
               <h2 className="flex-none">
                 <b>{t('landing:welcomeTextHead')}</b> <br />
-                <i> {tenant.data.name} </i> <b> <br />
+                <i> {tenant.name} </i> <b> <br />
                   {welcomeTextTail}</b>
               </h2>
               <div className={styles.wrapper_hr}>

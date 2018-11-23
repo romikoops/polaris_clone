@@ -13,7 +13,6 @@ import { gradientTextGenerator, totalPriceString, totalPrice, numberSpacing } fr
 import Checkbox from '../Checkbox/Checkbox'
 import CargoItemGroup from '../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
-import DocumentsForm from '../Documents/Form'
 import Contact from '../Contact/Contact'
 import IncotermRow from '../Incoterm/Row'
 import IncotermExtras from '../Incoterm/Extras'
@@ -368,7 +367,7 @@ class BookingConfirmation extends Component {
                   originFees={shipment.selected_offer.export}
                   destinationFees={shipment.selected_offer.import}
                   feeHash={feeHash}
-                  tenant={{ data: tenant }}
+                  tenant={tenant}
                 />
               </div>
             </div>
@@ -401,7 +400,7 @@ class BookingConfirmation extends Component {
                   theme={theme}
                   feeHash={feeHash}
                   shipment={shipment}
-                  tenant={{ data: tenant }}
+                  tenant={tenant}
                 />
               </div>
             </div>

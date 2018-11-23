@@ -12,7 +12,7 @@ import {
   gradientTextGenerator,
   authHeader
 } from '../../helpers'
-import getApiHost from '../../constants/api.constants'
+import { getTenantApiUrl } from '../../constants/api.constants'
 import { currencyOptions } from '../../constants'
 import DocumentsDownloader from '../Documents/Downloader'
 import { Modal } from '../Modal/Modal'
@@ -111,7 +111,7 @@ class UserProfile extends Component {
       email: this.props.user.email,
       redirect_url: ''
     }
-    fetch(`${getApiHost()}/auth/password`, {
+    fetch(`${getTenantApiUrl()}/auth/password`, {
       method: 'POST',
       headers: { ...authHeader(), 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -221,7 +221,7 @@ class UserProfile extends Component {
       </div>
     )
 
-    const toggleEditCurrency = !tenant.data.scope.fixed_currency ? (
+    const toggleEditCurrency = !tenant.scope.fixed_currency ? (
       <div className={`flex-40 layout-row layout-align-center-center layout-wrap ${styles.currency_box}`}>
         <div className="flex-75 layout-row layout-align-end-center layout-wrap">
           <div className="flex-100 layout-row layout-align-center-center ">
@@ -501,7 +501,7 @@ class UserProfile extends Component {
                   <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
                     <div className="flex-66 layout-row layout-align-start-center">
                       <p className="flex-none">
-                        { tenant && tenant.data && tenant.data.name }
+                        { tenant && tenant && tenant.name }
                         {' '}
                         <span
                           onClick={() => window.open('/terms_and_conditions', '_blank')}

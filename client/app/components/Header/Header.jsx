@@ -100,7 +100,7 @@ class Header extends Component {
       user
     } = this.props
     const { isTop } = this.state
-    const scope = tenant && tenant.data && tenant.data.id ? tenant.data.scope : {}
+    const scope = tenant && tenant.id ? tenant.scope : {}
     const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
     const accountLinks = user && user.role && user.role.name.includes('admin')
       ? [
@@ -163,7 +163,7 @@ class Header extends Component {
       </div>
     )
 
-    const loginComponent = (scope.closed_registration || !tenant.data.id) ? (
+    const loginComponent = (scope.closed_registration || !tenant.id) ? (
       <LoginPage
         theme={theme}
         req={req}
@@ -282,13 +282,13 @@ Header.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    authentication, tenant, shipment, app, messaging, bookingData
+    authentication, shipment, app, messaging, bookingData
   } = state
   const {
     user, loggedIn, loggingIn, registering, loginAttempt, showModal
   } = authentication
   const { unread, messages } = messaging
-  const { currencies } = app
+  const { currencies, tenant } = app
   const { error, currentStage } = bookingData
 
   return {

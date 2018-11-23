@@ -6,7 +6,7 @@ import { capitalize } from '../../../helpers'
 import { Modal } from '../../Modal/Modal'
 
 const HelpContact = ({ tenant, t }) => {
-  const { theme, emails, phones } = tenant.data
+  const { theme, emails, phones } = tenant
   const iconStyle = { color: theme.colors.primary, marginRight: '10px' }
   const emailsToRender = Object.keys(emails.support)
     .filter(ek => ek !== 'general')
