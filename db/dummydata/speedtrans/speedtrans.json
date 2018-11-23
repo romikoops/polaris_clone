@@ -105,6 +105,9 @@
   },
   "other_data": {
     "cargo_item_types": ["Pallet", "Carton", "Crate", "Bottle", "Stack", "Drum", "Skid", "Barrel"],
-    "incoterms": ["EXW", "CFR", "DDP", "FAS"]
+    "incoterms": ["EXW", "CFR", "DDP", "FAS"],
+    "custom_charge_categories": [
+      {"code": "export", "name": "FOB Charges"}
+    ]
   }
 }
