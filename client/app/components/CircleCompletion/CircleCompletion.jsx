@@ -1,6 +1,6 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styles from './CircleCompletion.scss'
+import { dimensionToPx } from '../../helpers'
 
 function CircleCompletion ({
   icon,
@@ -10,18 +10,13 @@ function CircleCompletion ({
   opacity,
   size
 }) {
-  let sizeClass
+  const animatedStyle = { border: `${iconColor} solid 2px`, color: iconColor }
+  const sanitizedSize = dimensionToPx({ value: size })
 
-  switch (size) {
-    case 'small':
-      sizeClass = styles.small
-      break
-    case 'medium':
-      sizeClass = styles.medium
-      break
-    default:
-      sizeClass = styles.medium
-      break
+  const style = {
+    height: sanitizedSize,
+    width: sanitizedSize,
+    ...(animated ? animatedStyle : {})
   }
 
   return (
@@ -30,30 +25,21 @@ function CircleCompletion ({
         {optionalText}
       </p>
       <div
-        className={animated ? `${styles.circle_animate} ${styles.circle} ${sizeClass}` : `${styles.circle} ${sizeClass}`}
-        style={animated ? { border: `${iconColor} solid 2px`, color: iconColor } : { color: 'white' }}
+        className={`${animated && 'circle_animate'} ${styles.circle} layout-row layout-align-center-center`}
+        style={style}
       >
-        <i className={`${icon} ${styles.icon}`} />
+        <i className={icon} style={{ fontSize: `${sanitizedSize / 2}px` }} />
       </div>
     </div>
-
   )
-}
-
-CircleCompletion.propTypes = {
-  icon: PropTypes.string,
-  optionalText: PropTypes.string,
-  animated: PropTypes.bool,
-  iconColor: PropTypes.string.isRequired,
-  size: PropTypes.string,
-  opacity: PropTypes.string
 }
 
 CircleCompletion.defaultProps = {
   icon: '',
   optionalText: '',
   animated: false,
-  size: 'medium',
-  opacity: ''
+  size: '100px',
+  opacity: 1
 }
+
 export default CircleCompletion
