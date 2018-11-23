@@ -192,7 +192,7 @@ exports[`shallow rendering 1`] = `
       <span
         className="flex-35"
       >
-        Container
+        Cargo Item
       </span>
       <span
         className="flex-25 layout-row"

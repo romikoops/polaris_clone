@@ -7,7 +7,7 @@ import styles from '../AdminShipments.scss'
 import adminStyles from '../Admin.scss'
 import GradientBorder from '../../GradientBorder'
 import { moment, docOptions, documentTypes } from '../../../constants'
-import { numberSpacing, totalPrice } from '../../../helpers'
+import { numberSpacing, totalPrice, cargoPlurals } from '../../../helpers'
 import ShipmentOverviewShowCard from './ShipmentOverviewShowCard'
 import ContactDetailsRow from './ContactDetailsRow'
 import GreyBox from '../../GreyBox/GreyBox'
@@ -16,21 +16,6 @@ import FileUploader from '../../FileUploader/FileUploader'
 import ShipmentNotes from '../../ShipmentNotes'
 
 class AdminShipmentContent extends Component {
-  static calcCargoLoad (shipment, t) {
-    const { cargo_count, load_type } = shipment
-    let noun = ''
-    if (load_type === 'cargo_item' && cargo_count > 1) {
-      noun = `${t('cargo:cargoItems')}`
-    } else if (load_type === 'cargo_item' && cargo_count === 1) {
-      noun = `${t('cargo:cargoItem')}`
-    } else if (load_type === 'container' && cargo_count > 1) {
-      noun = `${t('cargo:containers')}`
-    } else if (load_type === 'container' && cargo_count === 1) {
-      noun = `${t('cargo:container')}`
-    }
-
-    return `${noun}`
-  }
   static checkSelectedOffer (service) {
     let obj = {}
     if (service && service.total) {
@@ -562,7 +547,7 @@ class AdminShipmentContent extends Component {
                   <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
                     <div className="layout-align-start-center layout-row flex">
                       <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>x&nbsp;{shipment.cargo_count}</span>
-                      <p className="layout-align-sm-end-center layout-align-xs-end-center">{AdminShipmentContent.calcCargoLoad(shipment.load_type, t)}</p>
+                      <p className="layout-align-sm-end-center layout-align-xs-end-center">{cargoPlurals(shipment, t)}</p>
                     </div>
                   </div>
                   <h2 className="layout-align-start-center layout-row flex">

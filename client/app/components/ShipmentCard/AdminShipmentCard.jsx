@@ -11,7 +11,8 @@ import {
   switchIcon,
   splitName,
   totalPrice,
-  formattedPriceValue
+  formattedPriceValue,
+  cargoPlurals
 } from '../../helpers'
 
 function loadIsComplete (confirmShipmentData, id, dispatches) {
@@ -187,8 +188,7 @@ class AdminShipmentCard extends Component {
           </div>
         </div>
       )
-    const cargoCount = shipment.cargo_units ? shipment.cargo_units.reduce((sum, cargoUnit) => (sum + +cargoUnit.quantity), 0) : ''
-    const cargoTypeString = shipment.load_type = 'container' ? t('cargo:container') : t('cargo:cargoItem')
+    const cargoTypeString = cargoPlurals(shipment, t)
 
     return (
       <div
@@ -280,7 +280,7 @@ class AdminShipmentCard extends Component {
             <div className="layout-row flex-10">
               <div className="layout-row layout-align-center-center">
                 <span className={`${styles.smallText}`}>
-                  <b>x</b><span className={`${styles.bigText}`}>{cargoCount}</span>
+                  <b>x</b><span className={`${styles.bigText}`}>{shipment.cargo_count}</span>
                 </span>
               </div>
             </div>

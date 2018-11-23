@@ -9,7 +9,8 @@ import {
   gradientTextGenerator,
   switchIcon,
   numberSpacing,
-  splitName
+  splitName,
+  cargoPlurals
 } from '../../helpers'
 
 class UserShipmentCard extends Component {
@@ -103,7 +104,7 @@ class UserShipmentCard extends Component {
           </div>
         </div>
       )
-    const cargoTypeString = shipment.load_type = 'container' ? t('cargo:container') : t('cargo:cargoItem')
+    const cargoTypeString = cargoPlurals(shipment, t)
 
     return (
       <div

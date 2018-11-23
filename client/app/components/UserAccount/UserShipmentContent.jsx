@@ -14,7 +14,8 @@ import {
   switchIcon,
   totalPrice,
   formattedDate,
-  numberSpacing
+  numberSpacing,
+  cargoPlurals
 } from '../../helpers'
 import ContactDetailsRow from '../Admin/AdminShipmentView/ContactDetailsRow'
 import GreyBox from '../GreyBox/GreyBox'
@@ -22,21 +23,7 @@ import FileUploader from '../FileUploader/FileUploader'
 import ShipmentNotes from '../ShipmentNotes'
 
 class UserShipmentContent extends Component {
-  static calcCargoLoad (shipment, t) {
-    const { cargo_count, load_type } = shipment
-    let noun = ''
-    if (load_type === 'cargo_item' && cargo_count > 1) {
-      noun = `${t('cargo:cargoItems')}`
-    } else if (load_type === 'cargo_item' && cargo_count === 1) {
-      noun = `${t('cargo:cargoItem')}`
-    } else if (load_type === 'container' && cargo_count > 1) {
-      noun = `${t('cargo:containers')}`
-    } else if (load_type === 'container' && cargo_count === 1) {
-      noun = `${t('cargo:container')}`
-    }
 
-    return `${noun}`
-  }
   constructor (props) {
     super(props)
 
@@ -428,7 +415,7 @@ class UserShipmentContent extends Component {
                   <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
                     <div className="layout-align-start-center layout-row flex">
                       <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>x&nbsp;{shipment.cargo_count}</span>
-                      <p className="layout-align-sm-end-center layout-align-xs-end-center">{UserShipmentContent.calcCargoLoad(shipment, t)}</p>
+                      <p className="layout-align-sm-end-center layout-align-xs-end-center">{cargoPlurals(shipment, t)}</p>
                     </div>
                   </div>
                   <h2 className="layout-align-start-center layout-row flex-100">
