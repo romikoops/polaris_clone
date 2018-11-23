@@ -61,7 +61,7 @@ class CookieConsentBar extends React.PureComponent {
     if (window.scrollY < scrollLimit - this.props.height) {
       this.setState({ bottom: 0 })
     } else {
-      this.setState({ bottom: this.props.height })
+      this.setState({ bottom: Math.max(0, this.props.height - (scrollLimit - window.scrollY)) })
     }
   }
 
