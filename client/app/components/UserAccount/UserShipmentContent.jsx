@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import Tabs from '../Tabs/Tabs'
@@ -15,7 +14,8 @@ import {
   switchIcon,
   totalPrice,
   formattedDate,
-  numberSpacing
+  numberSpacing,
+  cargoPlurals
 } from '../../helpers'
 import ContactDetailsRow from '../Admin/AdminShipmentView/ContactDetailsRow'
 import GreyBox from '../GreyBox/GreyBox'
@@ -23,21 +23,7 @@ import FileUploader from '../FileUploader/FileUploader'
 import ShipmentNotes from '../ShipmentNotes'
 
 class UserShipmentContent extends Component {
-  static calcCargoLoad (feeHash, loadType, t) {
-    const cargoCount = Object.keys(feeHash.cargo).length
-    let noun = ''
-    if (loadType === 'cargo_item' && cargoCount > 1) {
-      noun = `${t('cargo:cargoItems')}`
-    } else if (loadType === 'cargo_item' && cargoCount === 1) {
-      noun = `${t('cargo:cargoItem')}`
-    } else if (loadType === 'container' && cargoCount > 1) {
-      noun = `${t('cargo:containers')}`
-    } else if (loadType === 'container' && cargoCount === 1) {
-      noun = `${t('cargo:container')}`
-    }
 
-    return `${noun}`
-  }
   constructor (props) {
     super(props)
 
@@ -77,7 +63,6 @@ class UserShipmentContent extends Component {
       shipmentData,
       feeHash,
       userDispatch,
-      cargoCount,
       cargoView,
       t
     } = this.props
@@ -426,14 +411,14 @@ class UserShipmentContent extends Component {
                 </div>
               </div>
               <div className={`flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding ${styles.services_box}`}>
-                <div className="flex-100 layout-row">
+                <div className="flex-100 layout-row layout-wrap">
                   <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
                     <div className="layout-align-start-center layout-row flex">
-                      <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>x&nbsp;{cargoCount}</span>
-                      <p className="layout-align-sm-end-center layout-align-xs-end-center">{UserShipmentContent.calcCargoLoad(feeHash, shipment.load_type, t)}</p>
+                      <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>x&nbsp;{shipment.cargo_count}</span>
+                      <p className="layout-align-sm-end-center layout-align-xs-end-center">{cargoPlurals(shipment, t)}</p>
                     </div>
                   </div>
-                  <h2 className="layout-align-start-center layout-row flex">
+                  <h2 className="layout-align-start-center layout-row flex-100">
                     {numberSpacing(totalPrice(shipment).value, 2)} {totalPrice(shipment).currency}
                   </h2>
                 </div>
@@ -545,7 +530,6 @@ UserShipmentContent.propTypes = {
   deselectedStyle: PropTypes.style,
   scope: PropTypes.objectOf(PropTypes.any),
   feeHash: PropTypes.objectOf(PropTypes.any),
-  cargoCount: PropTypes.number,
   shipmentData: PropTypes.shipmentData.isRequired,
   cargoView: PropTypes.node
 }
@@ -561,7 +545,6 @@ UserShipmentContent.defaultProps = {
   deselectedStyle: {},
   scope: {},
   feeHash: {},
-  cargoCount: 0,
   cargoView: null
 }
 

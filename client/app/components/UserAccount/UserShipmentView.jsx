@@ -276,7 +276,6 @@ class UserShipmentView extends Component {
         {moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}
       </p>
     )
-    const cargoCount = Object.keys(feeHash.cargo).length - 2
     const etaJSX = (
       <p className={`flex-none letter_3 ${styles.date}`}>
         {moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}
@@ -316,7 +315,6 @@ class UserShipmentView extends Component {
               shipmentData={shipmentData}
               user={user}
               userDispatch={userDispatch}
-              cargoCount={cargoCount}
             />) : (
             <ShipmentQuotationContent
               theme={theme}

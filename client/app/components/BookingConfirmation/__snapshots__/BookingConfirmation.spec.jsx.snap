@@ -100,6 +100,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
           <RouteHubBox
             shipment={
               Object {
+                "cargo_count": 1,
                 "cargo_notes": "FOO_CARGO_NOTES",
                 "eori": 1234,
                 "has_on_carriage": false,
@@ -320,6 +321,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 }
                 shipment={
                   Object {
+                    "cargo_count": 1,
                     "cargo_notes": "FOO_CARGO_NOTES",
                     "eori": 1234,
                     "has_on_carriage": false,
@@ -980,6 +982,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
           <RouteHubBox
             shipment={
               Object {
+                "cargo_count": 1,
                 "cargo_notes": "FOO_CARGO_NOTES",
                 "eori": 1234,
                 "has_on_carriage": false,
@@ -1200,6 +1203,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 }
                 shipment={
                   Object {
+                    "cargo_count": 1,
                     "cargo_notes": "FOO_CARGO_NOTES",
                     "eori": 1234,
                     "has_on_carriage": false,
@@ -1890,6 +1894,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
           <RouteHubBox
             shipment={
               Object {
+                "cargo_count": 1,
                 "cargo_notes": "FOO_CARGO_NOTES",
                 "eori": 1234,
                 "has_on_carriage": false,
@@ -2110,6 +2115,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 }
                 shipment={
                   Object {
+                    "cargo_count": 1,
                     "cargo_notes": "FOO_CARGO_NOTES",
                     "eori": 1234,
                     "has_on_carriage": false,
@@ -2881,6 +2887,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           <RouteHubBox
             shipment={
               Object {
+                "cargo_count": 1,
                 "cargo_notes": "FOO_CARGO_NOTES",
                 "eori": 1234,
                 "has_on_carriage": true,
@@ -3101,6 +3108,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 }
                 shipment={
                   Object {
+                    "cargo_count": 1,
                     "cargo_notes": "FOO_CARGO_NOTES",
                     "eori": 1234,
                     "has_on_carriage": true,
@@ -3746,6 +3754,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
           <RouteHubBox
             shipment={
               Object {
+                "cargo_count": 1,
                 "cargo_notes": "FOO_CARGO_NOTES",
                 "eori": 1234,
                 "has_on_carriage": false,
@@ -3966,6 +3975,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 }
                 shipment={
                   Object {
+                    "cargo_count": 1,
                     "cargo_notes": "FOO_CARGO_NOTES",
                     "eori": 1234,
                     "has_on_carriage": false,
@@ -4611,6 +4621,7 @@ exports[`shallow render 1`] = `
           <RouteHubBox
             shipment={
               Object {
+                "cargo_count": 1,
                 "cargo_notes": "FOO_CARGO_NOTES",
                 "eori": 1234,
                 "has_on_carriage": false,
@@ -4831,6 +4842,7 @@ exports[`shallow render 1`] = `
                 }
                 shipment={
                   Object {
+                    "cargo_count": 1,
                     "cargo_notes": "FOO_CARGO_NOTES",
                     "eori": 1234,
                     "has_on_carriage": false,
@@ -5476,6 +5488,7 @@ exports[`with cargo items 1`] = `
           <RouteHubBox
             shipment={
               Object {
+                "cargo_count": 1,
                 "cargo_notes": "FOO_CARGO_NOTES",
                 "eori": 1234,
                 "has_on_carriage": false,
@@ -5696,6 +5709,7 @@ exports[`with cargo items 1`] = `
                 }
                 shipment={
                   Object {
+                    "cargo_count": 1,
                     "cargo_notes": "FOO_CARGO_NOTES",
                     "eori": 1234,
                     "has_on_carriage": false,
@@ -5973,6 +5987,7 @@ exports[`with cargo items 1`] = `
               key="RANDOM_KEY_14"
               shipment={
                 Object {
+                  "cargo_count": 1,
                   "cargo_notes": "FOO_CARGO_NOTES",
                   "eori": 1234,
                   "has_on_carriage": false,
@@ -6146,6 +6161,7 @@ exports[`with cargo items 1`] = `
               key="RANDOM_KEY_15"
               shipment={
                 Object {
+                  "cargo_count": 1,
                   "cargo_notes": "FOO_CARGO_NOTES",
                   "eori": 1234,
                   "has_on_carriage": false,
@@ -6662,6 +6678,7 @@ exports[`with containers 1`] = `
           <RouteHubBox
             shipment={
               Object {
+                "cargo_count": 1,
                 "cargo_notes": "FOO_CARGO_NOTES",
                 "eori": 1234,
                 "has_on_carriage": false,
@@ -6882,6 +6899,7 @@ exports[`with containers 1`] = `
                 }
                 shipment={
                   Object {
+                    "cargo_count": 1,
                     "cargo_notes": "FOO_CARGO_NOTES",
                     "eori": 1234,
                     "has_on_carriage": false,
@@ -7141,6 +7159,7 @@ exports[`with containers 1`] = `
               key="RANDOM_KEY_6"
               shipment={
                 Object {
+                  "cargo_count": 1,
                   "cargo_notes": "FOO_CARGO_NOTES",
                   "eori": 1234,
                   "has_on_carriage": false,
@@ -7290,6 +7309,7 @@ exports[`with containers 1`] = `
               key="RANDOM_KEY_7"
               shipment={
                 Object {
+                  "cargo_count": 1,
                   "cargo_notes": "FOO_CARGO_NOTES",
                   "eori": 1234,
                   "has_on_carriage": false,

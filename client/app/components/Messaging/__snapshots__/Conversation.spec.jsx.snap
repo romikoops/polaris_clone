@@ -276,6 +276,7 @@ exports[`state.showDetails is true 1`] = `
       onChange={null}
       shipmentData={
         Object {
+          "cargo_count": 2,
           "cargo_units": Array [
             Object {
               "dimension_x": 107,

@@ -181,7 +181,7 @@ exports[`shallow rendering 1`] = `
             <span
               className="bigText"
             >
-              1
+              2
             </span>
           </span>
         </div>

@@ -7,7 +7,7 @@ import styles from '../AdminShipments.scss'
 import adminStyles from '../Admin.scss'
 import GradientBorder from '../../GradientBorder'
 import { moment, docOptions, documentTypes } from '../../../constants'
-import { numberSpacing, totalPrice } from '../../../helpers'
+import { numberSpacing, totalPrice, cargoPlurals } from '../../../helpers'
 import ShipmentOverviewShowCard from './ShipmentOverviewShowCard'
 import ContactDetailsRow from './ContactDetailsRow'
 import GreyBox from '../../GreyBox/GreyBox'
@@ -16,21 +16,6 @@ import FileUploader from '../../FileUploader/FileUploader'
 import ShipmentNotes from '../../ShipmentNotes'
 
 class AdminShipmentContent extends Component {
-  static calcCargoLoad (feeHash, loadType, t) {
-    const cargoCount = Object.keys(feeHash.cargo).length
-    let noun = ''
-    if (loadType === 'cargo_item' && cargoCount > 1) {
-      noun = `${t('cargo:cargoItems')}`
-    } else if (loadType === 'cargo_item' && cargoCount === 1) {
-      noun = `${t('cargo:cargoItem')}`
-    } else if (loadType === 'container' && cargoCount > 1) {
-      noun = `${t('cargo:containers')}`
-    } else if (loadType === 'container' && cargoCount === 1) {
-      noun = `${t('cargo:container')}`
-    }
-
-    return `${noun}`
-  }
   static checkSelectedOffer (service) {
     let obj = {}
     if (service && service.total) {
@@ -105,7 +90,7 @@ class AdminShipmentContent extends Component {
     const docView = []
     const missingDocs = []
     const documentUrl = `/shipments/${shipment.id}/upload/${fileType.value}`
-    
+
     if (documents) {
       const uploadedDocs = documents.reduce((docObj, item) => {
         docObj[item.doc_type] = docObj[item.doc_type] || []
@@ -142,7 +127,6 @@ class AdminShipmentContent extends Component {
           </div>
         </div>)
       })
-
     }
     Object.keys(docChecker).forEach((key) => {
       if (!docChecker[key]) {
@@ -562,8 +546,8 @@ class AdminShipmentContent extends Component {
                 <div className="layout-column flex-100">
                   <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
                     <div className="layout-align-start-center layout-row flex">
-                      <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>x&nbsp;{cargoCount}</span>
-                      <p className="layout-align-sm-end-center layout-align-xs-end-center">{AdminShipmentContent.calcCargoLoad(feeHash, shipment.load_type, t)}</p>
+                      <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>x&nbsp;{shipment.cargo_count}</span>
+                      <p className="layout-align-sm-end-center layout-align-xs-end-center">{cargoPlurals(shipment, t)}</p>
                     </div>
                   </div>
                   <h2 className="layout-align-start-center layout-row flex">
