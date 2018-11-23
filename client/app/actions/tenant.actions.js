@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/browser'
 import { tenantConstants } from '../constants'
 import { tenantService } from '../services/tenant.service'
 import { alertActions } from './'
-import { getApiHost } from '../constants/api.constants'
+import { getTenantApiUrl } from '../constants/api.constants'
 
 function requestTenant (subdomain) {
   return {
@@ -35,26 +35,6 @@ function invalidateSubdomain (subdomain) {
   return {
     type: tenantConstants.INVALIDATE_SUBDOMAIN,
     subdomain
-  }
-}
-
-function fetchTenant (subdomain) {
-  function failure (error) {
-    return {
-      type: tenantConstants.RECEIVE_TENANT_ERROR,
-      error
-    }
-  }
-
-  return (dispatch) => {
-    dispatch(requestTenant(subdomain))
-
-    return fetch(`${getApiHost()}/tenants/${subdomain}`)
-      .then(response => response.json())
-      .then(
-        json => dispatch(receiveTenant(subdomain, json)),
-        err => dispatch(failure(err))
-      )
   }
 }
 
@@ -99,7 +79,6 @@ const tenantActions = {
   logOut,
   receiveTenant,
   invalidateSubdomain,
-  fetchTenant,
   updateEmails,
   updateReduxStore
 }

@@ -42,7 +42,7 @@ function findAvailability (lat, lng, tenantId, loadType, carriage, availableHubI
 
 function searchLocations (input, countries, callback) {
   fetch(
-    `${getApiHost()}/locations?query=${input}&countries=${countries}`,
+    `${getTenantApiUrl()}/locations?query=${input}&countries=${countries}`,
     {
       method: 'GET',
       headers: authHeader()
