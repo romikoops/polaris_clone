@@ -19,6 +19,7 @@ class PdfHandler
     @quotation  = args[:quotation]
     @logo       = args[:logo]
     @load_type  = args[:load_type]
+    @remarks    = args[:remarks]
     @cargo_data = {
       vol: {},
       kg: {}
@@ -51,6 +52,7 @@ class PdfHandler
         quotes: @quotes,
         logo: @logo,
         load_type: @load_type,
+        remarks: @remarks,
         tenant: @shipment.tenant,
         cargo_data: @cargo_data
       }

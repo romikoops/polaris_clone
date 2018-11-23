@@ -1,4 +1,4 @@
-import getApiHost from '../constants/api.constants'
+import { getTenantApiUrl } from '../constants/api.constants'
 import { authHeader } from '../helpers'
 
 const { fetch } = window
@@ -18,7 +18,7 @@ function getRemarks () {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/admin/remarks`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/admin/remarks`, requestOptions).then(handleResponse)
 }
 
 function addRemark (category, subcategory, body) {
@@ -28,7 +28,7 @@ function addRemark (category, subcategory, body) {
     body: JSON.stringify({ category, subcategory, body })
   }
 
-  return fetch(`${getApiHost()}/admin/remarks`, requestOptions)
+  return fetch(`${getTenantApiUrl()}/admin/remarks`, requestOptions)
     .then(handleResponse)
 }
 
@@ -39,7 +39,7 @@ function updateRemarks (newRemark) {
     body: JSON.stringify({ remark: newRemark })
   }
 
-  return fetch(`${getApiHost()}/admin/remarks/${newRemark.id}`, requestOptions)
+  return fetch(`${getTenantApiUrl()}/admin/remarks/${newRemark.id}`, requestOptions)
     .then(handleResponse)
 }
 
@@ -49,7 +49,7 @@ function deleteRemark (remarkId) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
 
-  return fetch(`${getApiHost()}/admin/remarks/${remarkId}`, requestOptions)
+  return fetch(`${getTenantApiUrl()}/admin/remarks/${remarkId}`, requestOptions)
     .then(handleResponse)
 }
 
