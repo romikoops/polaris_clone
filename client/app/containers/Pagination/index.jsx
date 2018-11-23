@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from '../../prop-types'
 import PageNavigation from './PageNavigation'
+import { responsive } from '../../helpers'
 
 class Pagination extends React.PureComponent {
   constructor (props) {
@@ -8,19 +9,30 @@ class Pagination extends React.PureComponent {
 
     this.state = { page: 1 }
 
+    this.getPaginatedItems = this.getPaginatedItems.bind(this)
+    this.getNumPages = this.getNumPages.bind(this)
+    this.getPerPage = this.getPerPage.bind(this)
     this.nextPage = this.nextPage.bind(this)
     this.prevPage = this.prevPage.bind(this)
     this.handlePage = this.handlePage.bind(this)
+    this.handleResize = this.handleResize.bind(this)
+
+    window.addEventListener('resize', this.handleResize)
   }
 
-  componentWillReceiveProps (nextProps, nextState) {
+  componentWillReceiveProps (nextProps) {
     this.setState(prevState => (
-      nextState.page > this.getNumPages(nextProps) ? { page: 1 } : {}
+      prevState.page > this.getNumPages(nextProps) ? { page: 1 } : {}
     ))
   }
 
+  componentWillUnmount () {
+    window.removeEventListener('resize', this.handleResize)
+  }
+
   getPaginatedItems () {
-    const { items, perPage } = this.props
+    const { items } = this.props
+    const perPage = this.getPerPage()
 
     const { page } = this.state
 
@@ -31,9 +43,18 @@ class Pagination extends React.PureComponent {
   }
 
   getNumPages (props) {
-    const { perPage, items } = props || this.props
+    const { items } = props || this.props
 
-    return Math.ceil(items.length / perPage)
+    return Math.ceil(items.length / this.getPerPage())
+  }
+
+  getPerPage () {
+    const { perPage } = this.props
+
+    if (typeof perPage === 'number') return perPage
+    if (typeof perPage === 'string') return +perPage
+
+    return responsive.matchBreakpoint(perPage)
   }
 
   nextPage () {
@@ -46,6 +67,14 @@ class Pagination extends React.PureComponent {
 
   handlePage (delta) {
     this.setState(prevState => ({ page: prevState.page + (1 * delta) }))
+  }
+
+  handleResize (e) {
+    const prevBreakpoint = responsive.breakpoints.find(breakpoint => breakpoint > this.width)
+    const currBreakpoint = responsive.breakpoints.find(breakpoint => breakpoint > e.target.innerWidth)
+    if (prevBreakpoint !== currBreakpoint) this.forceUpdate()
+
+    this.width = e.target.innerWidth
   }
 
   render () {
@@ -65,7 +94,7 @@ class Pagination extends React.PureComponent {
 }
 
 Pagination.propTypes = {
-  perPage: PropTypes.number,
+  perPage: PropTypes.oneOf(PropTypes.number, PropTypes.objectOf(PropTypes.number)),
   paginationDispatch: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
   metaData: PropTypes.objectOf(PropTypes.any).isRequired,
