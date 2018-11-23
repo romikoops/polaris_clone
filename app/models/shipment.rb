@@ -233,12 +233,12 @@ class Shipment < ApplicationRecord
     send("#{load_type}s")
   end
 
-  def cargo_count
-    cargo_units.reduce(0){|sum, unit| sum + unit.quantity}
-  end
-
   def cargo_units=(value)
     send("#{load_type}s=", value)
+  end
+
+  def cargo_count
+    cargo_units.reduce(0){ |sum, unit| sum + unit.quantity }
   end
 
   def selected_day_attribute
