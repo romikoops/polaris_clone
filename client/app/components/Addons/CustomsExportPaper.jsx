@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
 import { withNamespaces } from 'react-i18next'
-import PropTypes from '../../prop-types'
 import styles from '../CargoDetails/CargoDetails.scss'
 import TextHeading from '../TextHeading/TextHeading'
 import Checkbox from '../Checkbox/Checkbox'
@@ -95,24 +94,6 @@ class CustomsExportPaper extends PureComponent {
       </div>
     )
   }
-}
-
-CustomsExportPaper.propTypes = {
-  tenant: PropTypes.tenant,
-  t: PropTypes.func.isRequired,
-  addon: PropTypes.objectOf(PropTypes.any),
-  toggleCustomAddon: PropTypes.func,
-  fileFn: PropTypes.func,
-  deleteDoc: PropTypes.func,
-  documents: PropTypes.objectOf(PropTypes.string)
-}
-CustomsExportPaper.defaultProps = {
-  tenant: {},
-  addon: {},
-  toggleCustomAddon: false,
-  fileFn: false,
-  deleteDoc: false,
-  documents: {}
 }
 
 export default withNamespaces(['cargo', 'shipment'])(CustomsExportPaper)
