@@ -4,6 +4,32 @@ exports[`theme has truthy properties 1`] = `
 <styled.div
   bg="green"
   className="layout-row flex-100 layout-align-center"
+  tenant={
+    Object {
+      "data": Object {
+        "id": 123,
+        "name": "FOO_NAME",
+        "scope": Object {
+          "closed_quotation_tool": true,
+          "modes_of_transport": Object {
+            "air": Object {},
+            "ocean": Object {
+              "OCEAN_LOAD_TYPE": true,
+            },
+            "rail": Object {},
+            "truck": Object {},
+          },
+        },
+        "subdomain": "foosubdomain",
+        "theme": Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        },
+      },
+    }
+  }
 >
   <div
     className="layout-row flex-100 layout-wrap"
@@ -227,6 +253,32 @@ exports[`user.role_id is 1 1`] = `
 <styled.div
   bg="https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg"
   className="layout-row flex-100 layout-align-center"
+  tenant={
+    Object {
+      "data": Object {
+        "id": 123,
+        "name": "FOO_NAME",
+        "scope": Object {
+          "closed_quotation_tool": true,
+          "modes_of_transport": Object {
+            "air": Object {},
+            "ocean": Object {
+              "OCEAN_LOAD_TYPE": true,
+            },
+            "rail": Object {},
+            "truck": Object {},
+          },
+        },
+        "subdomain": "foosubdomain",
+        "theme": Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        },
+      },
+    }
+  }
 >
   <div
     className="layout-row flex-100 layout-wrap"
@@ -438,6 +490,32 @@ exports[`user.role_id is 2 1`] = `
 <styled.div
   bg="https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg"
   className="layout-row flex-100 layout-align-center"
+  tenant={
+    Object {
+      "data": Object {
+        "id": 123,
+        "name": "FOO_NAME",
+        "scope": Object {
+          "closed_quotation_tool": true,
+          "modes_of_transport": Object {
+            "air": Object {},
+            "ocean": Object {
+              "OCEAN_LOAD_TYPE": true,
+            },
+            "rail": Object {},
+            "truck": Object {},
+          },
+        },
+        "subdomain": "foosubdomain",
+        "theme": Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        },
+      },
+    }
+  }
 >
   <div
     className="layout-row flex-100 layout-wrap"
