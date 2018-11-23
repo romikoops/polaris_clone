@@ -14,41 +14,22 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
     className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Overview"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Overview"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -93,44 +74,25 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </p>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card_itinerary flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Itinerary"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Itinerary"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -198,108 +160,26 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
               }
             }
           />
-          <div
-            className="flex-100 layout-row layout-align-space-between-center"
-            style={
-              Object {
-                "position": "relative",
-              }
-            }
-          >
-            <div
-              className="flex-40 layout-row layout-wrap layout-align-center-start"
-            >
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Dropoff:
-                </p>
-              </div>
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Departure
-                </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-40 layout-row layout-wrap layout-align-center-start"
-            >
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                   Expected Time of Arrival:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
-                </p>
-              </div>
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Collection:
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Fares & Fees"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Fares & Fees"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -521,81 +401,62 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
           </div>
         </div>
-      </div>
-      <div
-        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
-      >
         <div
-          className="flex-70 layout-row layout-align-start-center"
+          className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
         >
-          <h3
-            className="flex-none letter_3"
-          >
-            Shipment Total: 
-          </h3>
-        </div>
-        <div
-          className="flex-30 layout-row layout-wrap layout-align-end-center"
-        >
-          <h3
-            className="flex-none letter_3"
-          >
-            Viel zu mehr MKD
-          </h3>
           <div
-            className="flex-100 layout-row layout-align-end-center"
+            className="flex-70 layout-row layout-align-start-center"
           >
-            <p
-              className="flex-none center no_m"
-              style={
-                Object {
-                  "fontSize": "12px",
-                }
-              }
+            <h3
+              className="flex-none letter_3"
             >
-               
-              ( incl. Quoted Additional Services )
-            </p>
+              Shipment Total: 
+            </h3>
+          </div>
+          <div
+            className="flex-30 layout-row layout-wrap layout-align-end-center"
+          >
+            <h3
+              className="flex-none letter_3"
+            >
+              Viel zu mehr MKD
+            </h3>
+            <div
+              className="flex-100 layout-row layout-align-end-center"
+            >
+              <p
+                className="flex-none center no_m"
+                style={
+                  Object {
+                    "fontSize": "12px",
+                  }
+                }
+              >
+                 
+                ( incl. Quoted Additional Services )
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Contact Details"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Contact Details"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -623,44 +484,25 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
              
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Cargo Details"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Cargo Details"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -678,44 +520,25 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             />
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Additional Information"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Additional Information"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -809,44 +632,25 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Documents"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Documents"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -899,37 +703,26 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card layout-row flex-100 layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={false}
+        startCollapsed={false}
+        text="Agree and Submit"
+        theme={null}
       >
-        <div
-          className="heading_style flex-100 layout-row layout-align-space-between-center"
-          style={
-            Object {
-              "background": "#333",
-              "color": "white",
-            }
-          }
-        >
-          <TextHeading
-            color="white"
-            size={3}
-            text="Agree and Submit"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-          />
-        </div>
         <div
           className="layout-row layout-align-space-between-start flex-100"
         >
@@ -1048,7 +841,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <hr
       className="sec_break flex-100"
@@ -1101,41 +894,22 @@ exports[`props.shipmentData.documents is truthy 1`] = `
     className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Overview"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Overview"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -1180,44 +954,25 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </p>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card_itinerary flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Itinerary"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Itinerary"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -1285,108 +1040,26 @@ exports[`props.shipmentData.documents is truthy 1`] = `
               }
             }
           />
-          <div
-            className="flex-100 layout-row layout-align-space-between-center"
-            style={
-              Object {
-                "position": "relative",
-              }
-            }
-          >
-            <div
-              className="flex-40 layout-row layout-wrap layout-align-center-start"
-            >
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Dropoff:
-                </p>
-              </div>
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Departure
-                </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-40 layout-row layout-wrap layout-align-center-start"
-            >
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                   Expected Time of Arrival:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
-                </p>
-              </div>
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Collection:
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Fares & Fees"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Fares & Fees"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -1608,81 +1281,62 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
           </div>
         </div>
-      </div>
-      <div
-        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
-      >
         <div
-          className="flex-70 layout-row layout-align-start-center"
+          className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
         >
-          <h3
-            className="flex-none letter_3"
-          >
-            Shipment Total: 
-          </h3>
-        </div>
-        <div
-          className="flex-30 layout-row layout-wrap layout-align-end-center"
-        >
-          <h3
-            className="flex-none letter_3"
-          >
-            Viel zu mehr MKD
-          </h3>
           <div
-            className="flex-100 layout-row layout-align-end-center"
+            className="flex-70 layout-row layout-align-start-center"
           >
-            <p
-              className="flex-none center no_m"
-              style={
-                Object {
-                  "fontSize": "12px",
-                }
-              }
+            <h3
+              className="flex-none letter_3"
             >
-               
-              ( incl. Quoted Additional Services )
-            </p>
+              Shipment Total: 
+            </h3>
+          </div>
+          <div
+            className="flex-30 layout-row layout-wrap layout-align-end-center"
+          >
+            <h3
+              className="flex-none letter_3"
+            >
+              Viel zu mehr MKD
+            </h3>
+            <div
+              className="flex-100 layout-row layout-align-end-center"
+            >
+              <p
+                className="flex-none center no_m"
+                style={
+                  Object {
+                    "fontSize": "12px",
+                  }
+                }
+              >
+                 
+                ( incl. Quoted Additional Services )
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Contact Details"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Contact Details"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -1710,44 +1364,25 @@ exports[`props.shipmentData.documents is truthy 1`] = `
              
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Cargo Details"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Cargo Details"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -1756,44 +1391,25 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-start-center"
           />
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Additional Information"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Additional Information"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -1887,44 +1503,25 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Documents"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Documents"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -2022,37 +1619,26 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card layout-row flex-100 layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={false}
+        startCollapsed={false}
+        text="Agree and Submit"
+        theme={null}
       >
-        <div
-          className="heading_style flex-100 layout-row layout-align-space-between-center"
-          style={
-            Object {
-              "background": "#333",
-              "color": "white",
-            }
-          }
-        >
-          <TextHeading
-            color="white"
-            size={3}
-            text="Agree and Submit"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-          />
-        </div>
         <div
           className="layout-row layout-align-space-between-start flex-100"
         >
@@ -2171,7 +1757,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <hr
       className="sec_break flex-100"
@@ -2218,41 +1804,22 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
     className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Overview"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Overview"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -2297,44 +1864,25 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </p>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card_itinerary flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Itinerary"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Itinerary"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -2402,108 +1950,26 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
               }
             }
           />
-          <div
-            className="flex-100 layout-row layout-align-space-between-center"
-            style={
-              Object {
-                "position": "relative",
-              }
-            }
-          >
-            <div
-              className="flex-40 layout-row layout-wrap layout-align-center-start"
-            >
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Dropoff:
-                </p>
-              </div>
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Departure
-                </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-40 layout-row layout-wrap layout-align-center-start"
-            >
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                   Expected Time of Arrival:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
-                </p>
-              </div>
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Collection:
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Fares & Fees"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Fares & Fees"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -2725,81 +2191,62 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
           </div>
         </div>
-      </div>
-      <div
-        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
-      >
         <div
-          className="flex-70 layout-row layout-align-start-center"
+          className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
         >
-          <h3
-            className="flex-none letter_3"
-          >
-            Shipment Total: 
-          </h3>
-        </div>
-        <div
-          className="flex-30 layout-row layout-wrap layout-align-end-center"
-        >
-          <h3
-            className="flex-none letter_3"
-          >
-            Viel zu mehr MKD
-          </h3>
           <div
-            className="flex-100 layout-row layout-align-end-center"
+            className="flex-70 layout-row layout-align-start-center"
           >
-            <p
-              className="flex-none center no_m"
-              style={
-                Object {
-                  "fontSize": "12px",
-                }
-              }
+            <h3
+              className="flex-none letter_3"
             >
-               
-              ( incl. Quoted Additional Services )
-            </p>
+              Shipment Total: 
+            </h3>
+          </div>
+          <div
+            className="flex-30 layout-row layout-wrap layout-align-end-center"
+          >
+            <h3
+              className="flex-none letter_3"
+            >
+              Viel zu mehr MKD
+            </h3>
+            <div
+              className="flex-100 layout-row layout-align-end-center"
+            >
+              <p
+                className="flex-none center no_m"
+                style={
+                  Object {
+                    "fontSize": "12px",
+                  }
+                }
+              >
+                 
+                ( incl. Quoted Additional Services )
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Contact Details"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Contact Details"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -2953,44 +2400,25 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
              
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Cargo Details"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Cargo Details"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -2999,44 +2427,25 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-start-center"
           />
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Additional Information"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Additional Information"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -3130,44 +2539,25 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Documents"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Documents"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -3220,37 +2610,26 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card layout-row flex-100 layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={false}
+        startCollapsed={false}
+        text="Agree and Submit"
+        theme={null}
       >
-        <div
-          className="heading_style flex-100 layout-row layout-align-space-between-center"
-          style={
-            Object {
-              "background": "#333",
-              "color": "white",
-            }
-          }
-        >
-          <TextHeading
-            color="white"
-            size={3}
-            text="Agree and Submit"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-          />
-        </div>
         <div
           className="layout-row layout-align-space-between-start flex-100"
         >
@@ -3369,7 +2748,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <hr
       className="sec_break flex-100"
@@ -3416,41 +2795,22 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
     className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Overview"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Overview"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -3495,44 +2855,25 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </p>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card_itinerary flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Itinerary"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Itinerary"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -3600,126 +2941,26 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
               }
             }
           />
-          <div
-            className="flex-100 layout-row layout-align-space-between-center"
-            style={
-              Object {
-                "position": "relative",
-              }
-            }
-          >
-            <div
-              className="flex-40 layout-row layout-wrap layout-align-center-start"
-            >
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Dropoff:
-                </p>
-              </div>
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Departure
-                </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-40 layout-row layout-wrap layout-align-center-start"
-            >
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                   Expected Time of Arrival:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
-                </p>
-              </div>
-              <div
-                className="flex-100 layout-row layout-align-center-center buffer_10"
-              >
-                <address
-                  className="flex-none"
-                >
-                  9 BAR_STREET
-                   
-                  , 
-                  <br />
-                  BAR_CITY
-                  , 
-                  <br />
-                  845321
-                  ,
-                   China
-                </address>
-              </div>
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Delivery:
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Fares & Fees"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Fares & Fees"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -3941,81 +3182,62 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
           </div>
         </div>
-      </div>
-      <div
-        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
-      >
         <div
-          className="flex-70 layout-row layout-align-start-center"
+          className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
         >
-          <h3
-            className="flex-none letter_3"
-          >
-            Shipment Total: 
-          </h3>
-        </div>
-        <div
-          className="flex-30 layout-row layout-wrap layout-align-end-center"
-        >
-          <h3
-            className="flex-none letter_3"
-          >
-            Viel zu mehr MKD
-          </h3>
           <div
-            className="flex-100 layout-row layout-align-end-center"
+            className="flex-70 layout-row layout-align-start-center"
           >
-            <p
-              className="flex-none center no_m"
-              style={
-                Object {
-                  "fontSize": "12px",
-                }
-              }
+            <h3
+              className="flex-none letter_3"
             >
-               
-              ( incl. Quoted Additional Services )
-            </p>
+              Shipment Total: 
+            </h3>
+          </div>
+          <div
+            className="flex-30 layout-row layout-wrap layout-align-end-center"
+          >
+            <h3
+              className="flex-none letter_3"
+            >
+              Viel zu mehr MKD
+            </h3>
+            <div
+              className="flex-100 layout-row layout-align-end-center"
+            >
+              <p
+                className="flex-none center no_m"
+                style={
+                  Object {
+                    "fontSize": "12px",
+                  }
+                }
+              >
+                 
+                ( incl. Quoted Additional Services )
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Contact Details"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Contact Details"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -4043,44 +3265,25 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
              
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Cargo Details"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Cargo Details"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -4089,44 +3292,25 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-start-center"
           />
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Additional Information"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Additional Information"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -4220,44 +3404,25 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Documents"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Documents"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -4310,37 +3475,26 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card layout-row flex-100 layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={false}
+        startCollapsed={false}
+        text="Agree and Submit"
+        theme={null}
       >
-        <div
-          className="heading_style flex-100 layout-row layout-align-space-between-center"
-          style={
-            Object {
-              "background": "#333",
-              "color": "white",
-            }
-          }
-        >
-          <TextHeading
-            color="white"
-            size={3}
-            text="Agree and Submit"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-          />
-        </div>
         <div
           className="layout-row layout-align-space-between-start flex-100"
         >
@@ -4459,7 +3613,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <hr
       className="sec_break flex-100"
@@ -4506,41 +3660,22 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
     className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Overview"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Overview"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -4585,44 +3720,25 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </p>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card_itinerary flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Itinerary"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Itinerary"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -4690,124 +3806,26 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
               }
             }
           />
-          <div
-            className="flex-100 layout-row layout-align-space-between-center"
-            style={
-              Object {
-                "position": "relative",
-              }
-            }
-          >
-            <div
-              className="flex-40 layout-row layout-wrap layout-align-center-start"
-            >
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Pickup:
-                </p>
-              </div>
-              <div
-                className="flex-100 layout-row layout-align-center-center buffer_10"
-              >
-                <address
-                  className="flex-none"
-                >
-                  7 FOO_STREET
-                  ,
-                   FOO_CITY
-                  , 
-                  <br />
-                  21177
-                  ,
-                   Germany
-                </address>
-              </div>
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Departure
-                </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-40 layout-row layout-wrap layout-align-center-start"
-            >
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                   Expected Time of Arrival:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
-                </p>
-              </div>
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Collection:
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Fares & Fees"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Fares & Fees"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -5029,81 +4047,62 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
           </div>
         </div>
-      </div>
-      <div
-        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
-      >
         <div
-          className="flex-70 layout-row layout-align-start-center"
+          className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
         >
-          <h3
-            className="flex-none letter_3"
-          >
-            Shipment Total: 
-          </h3>
-        </div>
-        <div
-          className="flex-30 layout-row layout-wrap layout-align-end-center"
-        >
-          <h3
-            className="flex-none letter_3"
-          >
-            Viel zu mehr MKD
-          </h3>
           <div
-            className="flex-100 layout-row layout-align-end-center"
+            className="flex-70 layout-row layout-align-start-center"
           >
-            <p
-              className="flex-none center no_m"
-              style={
-                Object {
-                  "fontSize": "12px",
-                }
-              }
+            <h3
+              className="flex-none letter_3"
             >
-               
-              ( incl. Quoted Additional Services )
-            </p>
+              Shipment Total: 
+            </h3>
+          </div>
+          <div
+            className="flex-30 layout-row layout-wrap layout-align-end-center"
+          >
+            <h3
+              className="flex-none letter_3"
+            >
+              Viel zu mehr MKD
+            </h3>
+            <div
+              className="flex-100 layout-row layout-align-end-center"
+            >
+              <p
+                className="flex-none center no_m"
+                style={
+                  Object {
+                    "fontSize": "12px",
+                  }
+                }
+              >
+                 
+                ( incl. Quoted Additional Services )
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Contact Details"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Contact Details"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -5131,44 +4130,25 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
              
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Cargo Details"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Cargo Details"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -5177,44 +4157,25 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-start-center"
           />
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Additional Information"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Additional Information"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -5308,44 +4269,25 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Documents"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Documents"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -5398,37 +4340,26 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card layout-row flex-100 layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={false}
+        startCollapsed={false}
+        text="Agree and Submit"
+        theme={null}
       >
-        <div
-          className="heading_style flex-100 layout-row layout-align-space-between-center"
-          style={
-            Object {
-              "background": "#333",
-              "color": "white",
-            }
-          }
-        >
-          <TextHeading
-            color="white"
-            size={3}
-            text="Agree and Submit"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-          />
-        </div>
         <div
           className="layout-row layout-align-space-between-start flex-100"
         >
@@ -5547,7 +4478,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <hr
       className="sec_break flex-100"
@@ -5594,41 +4525,22 @@ exports[`shallow render 1`] = `
     className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Overview"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Overview"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -5673,44 +4585,25 @@ exports[`shallow render 1`] = `
             </p>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card_itinerary flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Itinerary"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Itinerary"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -5778,108 +4671,26 @@ exports[`shallow render 1`] = `
               }
             }
           />
-          <div
-            className="flex-100 layout-row layout-align-space-between-center"
-            style={
-              Object {
-                "position": "relative",
-              }
-            }
-          >
-            <div
-              className="flex-40 layout-row layout-wrap layout-align-center-start"
-            >
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Dropoff:
-                </p>
-              </div>
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Departure
-                </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-40 layout-row layout-wrap layout-align-center-start"
-            >
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                   Expected Time of Arrival:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
-                </p>
-              </div>
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Collection:
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Fares & Fees"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Fares & Fees"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -6101,81 +4912,62 @@ exports[`shallow render 1`] = `
             </div>
           </div>
         </div>
-      </div>
-      <div
-        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
-      >
         <div
-          className="flex-70 layout-row layout-align-start-center"
+          className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
         >
-          <h3
-            className="flex-none letter_3"
-          >
-            Shipment Total: 
-          </h3>
-        </div>
-        <div
-          className="flex-30 layout-row layout-wrap layout-align-end-center"
-        >
-          <h3
-            className="flex-none letter_3"
-          >
-            Viel zu mehr MKD
-          </h3>
           <div
-            className="flex-100 layout-row layout-align-end-center"
+            className="flex-70 layout-row layout-align-start-center"
           >
-            <p
-              className="flex-none center no_m"
-              style={
-                Object {
-                  "fontSize": "12px",
-                }
-              }
+            <h3
+              className="flex-none letter_3"
             >
-               
-              ( incl. Quoted Additional Services )
-            </p>
+              Shipment Total: 
+            </h3>
+          </div>
+          <div
+            className="flex-30 layout-row layout-wrap layout-align-end-center"
+          >
+            <h3
+              className="flex-none letter_3"
+            >
+              Viel zu mehr MKD
+            </h3>
+            <div
+              className="flex-100 layout-row layout-align-end-center"
+            >
+              <p
+                className="flex-none center no_m"
+                style={
+                  Object {
+                    "fontSize": "12px",
+                  }
+                }
+              >
+                 
+                ( incl. Quoted Additional Services )
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Contact Details"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Contact Details"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -6203,44 +4995,25 @@ exports[`shallow render 1`] = `
              
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Cargo Details"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Cargo Details"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -6249,44 +5022,25 @@ exports[`shallow render 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-start-center"
           />
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Additional Information"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Additional Information"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -6380,44 +5134,25 @@ exports[`shallow render 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Documents"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Documents"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -6470,37 +5205,26 @@ exports[`shallow render 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card layout-row flex-100 layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={false}
+        startCollapsed={false}
+        text="Agree and Submit"
+        theme={null}
       >
-        <div
-          className="heading_style flex-100 layout-row layout-align-space-between-center"
-          style={
-            Object {
-              "background": "#333",
-              "color": "white",
-            }
-          }
-        >
-          <TextHeading
-            color="white"
-            size={3}
-            text="Agree and Submit"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-          />
-        </div>
         <div
           className="layout-row layout-align-space-between-start flex-100"
         >
@@ -6619,7 +5343,7 @@ exports[`shallow render 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <hr
       className="sec_break flex-100"
@@ -6666,41 +5390,22 @@ exports[`with cargo items 1`] = `
     className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Overview"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Overview"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -6745,44 +5450,25 @@ exports[`with cargo items 1`] = `
             </p>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card_itinerary flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Itinerary"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Itinerary"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -6850,108 +5536,26 @@ exports[`with cargo items 1`] = `
               }
             }
           />
-          <div
-            className="flex-100 layout-row layout-align-space-between-center"
-            style={
-              Object {
-                "position": "relative",
-              }
-            }
-          >
-            <div
-              className="flex-40 layout-row layout-wrap layout-align-center-start"
-            >
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Dropoff:
-                </p>
-              </div>
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Departure
-                </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-40 layout-row layout-wrap layout-align-center-start"
-            >
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                   Expected Time of Arrival:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
-                </p>
-              </div>
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Collection:
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Fares & Fees"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Fares & Fees"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -7173,81 +5777,62 @@ exports[`with cargo items 1`] = `
             </div>
           </div>
         </div>
-      </div>
-      <div
-        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
-      >
         <div
-          className="flex-70 layout-row layout-align-start-center"
+          className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
         >
-          <h3
-            className="flex-none letter_3"
-          >
-            Shipment Total: 
-          </h3>
-        </div>
-        <div
-          className="flex-30 layout-row layout-wrap layout-align-end-center"
-        >
-          <h3
-            className="flex-none letter_3"
-          >
-            Viel zu mehr MKD
-          </h3>
           <div
-            className="flex-100 layout-row layout-align-end-center"
+            className="flex-70 layout-row layout-align-start-center"
           >
-            <p
-              className="flex-none center no_m"
-              style={
-                Object {
-                  "fontSize": "12px",
-                }
-              }
+            <h3
+              className="flex-none letter_3"
             >
-               
-              ( incl. Quoted Additional Services )
-            </p>
+              Shipment Total: 
+            </h3>
+          </div>
+          <div
+            className="flex-30 layout-row layout-wrap layout-align-end-center"
+          >
+            <h3
+              className="flex-none letter_3"
+            >
+              Viel zu mehr MKD
+            </h3>
+            <div
+              className="flex-100 layout-row layout-align-end-center"
+            >
+              <p
+                className="flex-none center no_m"
+                style={
+                  Object {
+                    "fontSize": "12px",
+                  }
+                }
+              >
+                 
+                ( incl. Quoted Additional Services )
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Contact Details"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Contact Details"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -7275,44 +5860,25 @@ exports[`with cargo items 1`] = `
              
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Cargo Details"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Cargo Details"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -7642,44 +6208,25 @@ exports[`with cargo items 1`] = `
             />
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Additional Information"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Additional Information"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -7773,44 +6320,25 @@ exports[`with cargo items 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Documents"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Documents"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -7863,37 +6391,26 @@ exports[`with cargo items 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card layout-row flex-100 layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={false}
+        startCollapsed={false}
+        text="Agree and Submit"
+        theme={null}
       >
-        <div
-          className="heading_style flex-100 layout-row layout-align-space-between-center"
-          style={
-            Object {
-              "background": "#333",
-              "color": "white",
-            }
-          }
-        >
-          <TextHeading
-            color="white"
-            size={3}
-            text="Agree and Submit"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-          />
-        </div>
         <div
           className="layout-row layout-align-space-between-start flex-100"
         >
@@ -8012,7 +6529,7 @@ exports[`with cargo items 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <hr
       className="sec_break flex-100"
@@ -8059,41 +6576,22 @@ exports[`with containers 1`] = `
     className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Overview"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Overview"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -8138,44 +6636,25 @@ exports[`with containers 1`] = `
             </p>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card_itinerary flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Itinerary"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Itinerary"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -8243,108 +6722,26 @@ exports[`with containers 1`] = `
               }
             }
           />
-          <div
-            className="flex-100 layout-row layout-align-space-between-center"
-            style={
-              Object {
-                "position": "relative",
-              }
-            }
-          >
-            <div
-              className="flex-40 layout-row layout-wrap layout-align-center-start"
-            >
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Dropoff:
-                </p>
-              </div>
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Departure
-                </p>
-                <p
-                  className="flex-30  center"
-                >
-                  19
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-40 layout-row layout-wrap layout-align-center-start"
-            >
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                   Expected Time of Arrival:
-                </p>
-                <p
-                  className="flex-30 center"
-                >
-                  19
-                </p>
-              </div>
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
-              >
-                <p
-                  className="flex-70 "
-                >
-                  Expected Time of Collection:
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Fares & Fees"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Fares & Fees"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -8566,81 +6963,62 @@ exports[`with containers 1`] = `
             </div>
           </div>
         </div>
-      </div>
-      <div
-        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
-      >
         <div
-          className="flex-70 layout-row layout-align-start-center"
+          className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
         >
-          <h3
-            className="flex-none letter_3"
-          >
-            Shipment Total: 
-          </h3>
-        </div>
-        <div
-          className="flex-30 layout-row layout-wrap layout-align-end-center"
-        >
-          <h3
-            className="flex-none letter_3"
-          >
-            Viel zu mehr MKD
-          </h3>
           <div
-            className="flex-100 layout-row layout-align-end-center"
+            className="flex-70 layout-row layout-align-start-center"
           >
-            <p
-              className="flex-none center no_m"
-              style={
-                Object {
-                  "fontSize": "12px",
-                }
-              }
+            <h3
+              className="flex-none letter_3"
             >
-               
-              ( incl. Quoted Additional Services )
-            </p>
+              Shipment Total: 
+            </h3>
+          </div>
+          <div
+            className="flex-30 layout-row layout-wrap layout-align-end-center"
+          >
+            <h3
+              className="flex-none letter_3"
+            >
+              Viel zu mehr MKD
+            </h3>
+            <div
+              className="flex-100 layout-row layout-align-end-center"
+            >
+              <p
+                className="flex-none center no_m"
+                style={
+                  Object {
+                    "fontSize": "12px",
+                  }
+                }
+              >
+                 
+                ( incl. Quoted Additional Services )
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Contact Details"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Contact Details"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -8668,44 +7046,25 @@ exports[`with containers 1`] = `
              
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Cargo Details"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Cargo Details"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -8993,44 +7352,25 @@ exports[`with containers 1`] = `
             />
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Additional Information"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Additional Information"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -9124,44 +7464,25 @@ exports[`with containers 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Documents"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={true}
+        startCollapsed={false}
+        text="Documents"
+        theme={null}
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -9214,37 +7535,26 @@ exports[`with containers 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <div
-      className="shipment_card layout-row flex-100 layout-align-space-between-center"
+      className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <div
-        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      <CollapsingBar
+        collapsed={null}
+        content=""
+        contentHeader=""
+        faClass=""
+        handleCollapser={null}
+        headerWrapClasses=""
+        mainWrapperStyle={Object {}}
+        minHeight=""
+        parentClass="shipment_card_border"
+        showArrow={false}
+        startCollapsed={false}
+        text="Agree and Submit"
+        theme={null}
       >
-        <div
-          className="heading_style flex-100 layout-row layout-align-space-between-center"
-          style={
-            Object {
-              "background": "#333",
-              "color": "white",
-            }
-          }
-        >
-          <TextHeading
-            color="white"
-            size={3}
-            text="Agree and Submit"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-          />
-        </div>
         <div
           className="layout-row layout-align-space-between-start flex-100"
         >
@@ -9363,7 +7673,7 @@ exports[`with containers 1`] = `
             </div>
           </div>
         </div>
-      </div>
+      </CollapsingBar>
     </div>
     <hr
       className="sec_break flex-100"

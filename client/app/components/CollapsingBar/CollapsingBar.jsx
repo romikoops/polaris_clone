@@ -29,11 +29,12 @@ export default class CollapsingBar extends React.PureComponent {
       contentHeader,
       mainWrapperStyle,
       showArrow,
-      children
+      children,
+      parentClass
     } = this.props
 
     return (
-      <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+      <div className={`flex-100 layout-row layout-align-start-center layout-wrap ${parentClass}`}>
         <CollapsingHeading
           text={text}
           showArrow={showArrow}
@@ -66,6 +67,7 @@ CollapsingBar.propTypes = {
   headerWrapClasses: PropTypes.string,
   faClass: PropTypes.string,
   minHeight: PropTypes.string,
+  parentClass: PropTypes.string,
   showArrow: PropTypes.bool,
   children: PropTypes.arrayOf(PropTypes.node),
   startCollapsed: PropTypes.bool
@@ -82,6 +84,7 @@ CollapsingBar.defaultProps = {
   text: '',
   faClass: '',
   minHeight: '',
+  parentClass: '',
   showArrow: false,
   children: null,
   startCollapsed: false

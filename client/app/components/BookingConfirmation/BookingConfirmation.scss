@@ -134,9 +134,12 @@
     background: lightgrey;
     padding: 0 15px;
     border-radius: 5px 5px 0 0;
-    h3, p {
+    h3, p, i {
       margin: 5px;
     }
+  }
+  .inner_wrapper {
+    padding: 15px;
   }
   .total_row {
     padding: 15px;
@@ -151,15 +154,16 @@
   }
   .shipment_card {
     margin: 25px 0;
+    padding: 5px 15px;
     box-shadow: 1px 2px 1px 1px lightgray;
-    border-radius: 5px 5px 2px 2px;
-
   }
-    .shipment_card_itinerary {
+  .shipment_card_border {
+    box-shadow: 1px 2px 1px 1px lightgray;
+  }
+  .shipment_card_itinerary {
     margin: 25px 0;
     box-shadow: 1px 2px 1px 1px lightgray;
-    border-radius: 5px 5px 2px 2px;
-    height: 550px;
+    flex-grow: 1;
   }
   .contact_text{
     margin: 3px;
