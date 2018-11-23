@@ -137,7 +137,7 @@ exports[`shallow render 1`] = `
             dispatchFn={false}
             documents={Array []}
             t={[Function]}
-            text="NO_TRANSLATION | key \\"shipment:exportCustomsPaper\\""
+            text="Export Customs Paper (MRN)"
             theme={
               Object {
                 "colors": Object {
