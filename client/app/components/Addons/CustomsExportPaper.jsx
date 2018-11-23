@@ -82,7 +82,7 @@ class CustomsExportPaper extends PureComponent {
                 <DocumentsMultiForm
                   theme={theme}
                   type="export_customs_paper"
-                  text={t('shipment:exportCustomsPaper')}
+                  text={t('shipment:adb')}
                   dispatchFn={fileFn}
                   documents={documents.export_customs_paper}
                   deleteFn={deleteDoc}
