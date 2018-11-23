@@ -39,7 +39,7 @@ class ChargeCategory < ApplicationRecord
     end
   end
 
-  def self.from_code(code, tenant_id)
+  def self.from_code(code, tenant_id=nil)
     tenant_charge_category = find_by(code: code, tenant_id: tenant_id)
     return tenant_charge_category unless tenant_charge_category.nil?
     find_by_code(code) ||
