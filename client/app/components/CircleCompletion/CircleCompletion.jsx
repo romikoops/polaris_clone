@@ -39,7 +39,8 @@ CircleCompletion.defaultProps = {
   optionalText: '',
   animated: false,
   size: '100px',
-  opacity: 1
+  opacity: 1,
+  fadeIn: false
 }
 
 export default CircleCompletion
