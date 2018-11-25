@@ -1,6 +1,7 @@
 {
   "plugins": ["jest"],
   "extends": ["airbnb", "standard", "plugin:jest/recommended"],
+  "parser": "babel-eslint",
   "rules": {
     "padding-line-between-statements": [
       1,
