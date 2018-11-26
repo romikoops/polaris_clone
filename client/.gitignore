@@ -1,3 +1,6 @@
+# Wallaby.js configuration file
+wallaby.js
+
 # Logs
 logs
 *.log
