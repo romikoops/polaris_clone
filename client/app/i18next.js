@@ -1,11 +1,9 @@
 import i18n from 'i18next'
-import resources from '../locales'
 import LngDetector from 'i18next-browser-languagedetector'
-import { reactI18nextModule } from 'react-i18next'
+import resources from '../locales'
 
 i18n
   .use(LngDetector)
-  .use(reactI18nextModule)
   .init({
     resources,
     fallbackLng: 'en',

@@ -1,6 +1,0 @@
-build:
-  version: 2016-03-14 # version of the build schema.
-  steps:
-    client:
-      name: _env(REGISTRY)/imc/client:_env(TAG)
-      dockerfile: Dockerfile
