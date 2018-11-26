@@ -6,9 +6,8 @@ module DataValidator
     include DocumentService
 
     def post_initialize(args)
-      # signed_url = get_file_url(args[:key], "assets.itsmycargo.com")
-      # @json_array = JSON.parse(open(signed_url).read).deep_symbolize_keys!
-      @json_array = JSON.parse(File.open("#{Rails.root}/app/classes/data_validator/greencarrier_pricing_data.json").read).deep_symbolize_keys!
+      signed_url = get_file_url(args[:key], "assets.itsmycargo.com")
+      @json_array = JSON.parse(open(signed_url).read).deep_symbolize_keys!
       @shipment_ids_to_destroy = []
       @user = args[:user] ||= @tenant.users.shipper.first
       @dummy_data = args[:data]

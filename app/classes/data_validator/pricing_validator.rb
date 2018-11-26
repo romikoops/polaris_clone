@@ -10,7 +10,6 @@ module DataValidator
 
     def post_initialize(args)
       signed_url = get_file_url(args[:key], "assets.itsmycargo.com")
-      # signed_url = File.open("#{Rails.root}/app/classes/data_validator/greencarrier_pricing_test_approved.xlsx")
       @xlsx = open_file(signed_url)
       @shipment_ids_to_destroy = []
       @user = args[:user] ||= @tenant.users.shipper.first
@@ -36,7 +35,7 @@ module DataValidator
           create_example_results
           calculate(sheet_name)
         rescue Exception => e # bad code.....
-          binding.pry
+          raise ApplicationError::BadData
         end
        
       end
@@ -60,7 +59,6 @@ module DataValidator
     end
 
     def create_sheet_rows
-      # binding.pry
       start = @sheet.first_row
       @sheet_rows = []
       while start <= @sheet.last_row
@@ -170,7 +168,6 @@ module DataValidator
         end
         cargos << new_cargo
       end
-      # binding.pry
       cargos
     end
 
@@ -225,7 +222,7 @@ module DataValidator
       begin
         example[:data][:load_type].camelize.constantize.extract(data_to_extract)
       rescue Exception => e # bad code.....
-        binding.pry
+        raise ApplicationError::BadData
       end
     end
 
