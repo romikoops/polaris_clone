@@ -257,4 +257,12 @@
       <% end %>
     </ul>
   </div>
+  <div class="remarks">
+    <h4>Notes: </h4>
+    <ul> <% notes.each do |note| %>
+      <li class="note-header"> <%= note.header %></li>
+      <li> <%= note.body  %></li>
+      <% end %>
+    </ul>
+  </div>
 </div>
