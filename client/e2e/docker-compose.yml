@@ -1,8 +1,0 @@
-version: '3'
-services:
-  e2e:
-    image: e2e:latest
-    network_mode: "host"
-    volumes:
-      - ./_screens:/e2e/_screens
-    command: yarn test
