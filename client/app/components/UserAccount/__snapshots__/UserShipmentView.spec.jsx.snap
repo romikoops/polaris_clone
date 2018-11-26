@@ -162,6 +162,8 @@ exports[`loading is true 1`] = `
             "incoterm_text": "FOO_INCOTERM_TEXT",
             "load_type": "OCEAN_LOAD_TYPE",
             "notes": "FOO_NOTES",
+            "planned_eta": "11/12/2018",
+            "planned_etd": "12/1/2019",
             "schedules_charges": Object {
               "AIR_HUB_ROUTE_KEY": Object {
                 "total": 200,
@@ -265,6 +267,8 @@ exports[`loading is true 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
+                "planned_eta": "11/12/2018",
+                "planned_etd": "12/1/2019",
                 "schedules_charges": Object {
                   "AIR_HUB_ROUTE_KEY": Object {
                     "total": 200,
@@ -314,6 +318,8 @@ exports[`loading is true 1`] = `
               "incoterm_text": "FOO_INCOTERM_TEXT",
               "load_type": "OCEAN_LOAD_TYPE",
               "notes": "FOO_NOTES",
+              "planned_eta": "11/12/2018",
+              "planned_etd": "12/1/2019",
               "schedules_charges": Object {
                 "AIR_HUB_ROUTE_KEY": Object {
                   "total": 200,
@@ -530,6 +536,8 @@ exports[`shallow render 1`] = `
             "incoterm_text": "FOO_INCOTERM_TEXT",
             "load_type": "OCEAN_LOAD_TYPE",
             "notes": "FOO_NOTES",
+            "planned_eta": "11/12/2018",
+            "planned_etd": "12/1/2019",
             "schedules_charges": Object {
               "AIR_HUB_ROUTE_KEY": Object {
                 "total": 200,
@@ -633,6 +641,8 @@ exports[`shallow render 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
+                "planned_eta": "11/12/2018",
+                "planned_etd": "12/1/2019",
                 "schedules_charges": Object {
                   "AIR_HUB_ROUTE_KEY": Object {
                     "total": 200,
@@ -682,6 +692,8 @@ exports[`shallow render 1`] = `
               "incoterm_text": "FOO_INCOTERM_TEXT",
               "load_type": "OCEAN_LOAD_TYPE",
               "notes": "FOO_NOTES",
+              "planned_eta": "11/12/2018",
+              "planned_etd": "12/1/2019",
               "schedules_charges": Object {
                 "AIR_HUB_ROUTE_KEY": Object {
                   "total": 200,
@@ -972,6 +984,8 @@ exports[`shipmentData.cargoItems is present 1`] = `
             "incoterm_text": "FOO_INCOTERM_TEXT",
             "load_type": "OCEAN_LOAD_TYPE",
             "notes": "FOO_NOTES",
+            "planned_eta": "11/12/2018",
+            "planned_etd": "12/1/2019",
             "schedules_charges": Object {
               "AIR_HUB_ROUTE_KEY": Object {
                 "total": 200,
@@ -1075,6 +1089,8 @@ exports[`shipmentData.cargoItems is present 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
+                "planned_eta": "11/12/2018",
+                "planned_etd": "12/1/2019",
                 "schedules_charges": Object {
                   "AIR_HUB_ROUTE_KEY": Object {
                     "total": 200,
@@ -1124,6 +1140,8 @@ exports[`shipmentData.cargoItems is present 1`] = `
               "incoterm_text": "FOO_INCOTERM_TEXT",
               "load_type": "OCEAN_LOAD_TYPE",
               "notes": "FOO_NOTES",
+              "planned_eta": "11/12/2018",
+              "planned_etd": "12/1/2019",
               "schedules_charges": Object {
                 "AIR_HUB_ROUTE_KEY": Object {
                   "total": 200,
@@ -1386,6 +1404,8 @@ exports[`shipmentData.contacts is present 1`] = `
             "incoterm_text": "FOO_INCOTERM_TEXT",
             "load_type": "OCEAN_LOAD_TYPE",
             "notes": "FOO_NOTES",
+            "planned_eta": "11/12/2018",
+            "planned_etd": "12/1/2019",
             "schedules_charges": Object {
               "AIR_HUB_ROUTE_KEY": Object {
                 "total": 200,
@@ -1489,6 +1509,8 @@ exports[`shipmentData.contacts is present 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
+                "planned_eta": "11/12/2018",
+                "planned_etd": "12/1/2019",
                 "schedules_charges": Object {
                   "AIR_HUB_ROUTE_KEY": Object {
                     "total": 200,
@@ -1538,6 +1560,8 @@ exports[`shipmentData.contacts is present 1`] = `
               "incoterm_text": "FOO_INCOTERM_TEXT",
               "load_type": "OCEAN_LOAD_TYPE",
               "notes": "FOO_NOTES",
+              "planned_eta": "11/12/2018",
+              "planned_etd": "12/1/2019",
               "schedules_charges": Object {
                 "AIR_HUB_ROUTE_KEY": Object {
                   "total": 200,
@@ -1763,6 +1787,8 @@ exports[`shipmentData.documents is present 1`] = `
             "incoterm_text": "FOO_INCOTERM_TEXT",
             "load_type": "OCEAN_LOAD_TYPE",
             "notes": "FOO_NOTES",
+            "planned_eta": "11/12/2018",
+            "planned_etd": "12/1/2019",
             "schedules_charges": Object {
               "AIR_HUB_ROUTE_KEY": Object {
                 "total": 200,
@@ -1866,6 +1892,8 @@ exports[`shipmentData.documents is present 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
+                "planned_eta": "11/12/2018",
+                "planned_etd": "12/1/2019",
                 "schedules_charges": Object {
                   "AIR_HUB_ROUTE_KEY": Object {
                     "total": 200,
@@ -1915,6 +1943,8 @@ exports[`shipmentData.documents is present 1`] = `
               "incoterm_text": "FOO_INCOTERM_TEXT",
               "load_type": "OCEAN_LOAD_TYPE",
               "notes": "FOO_NOTES",
+              "planned_eta": "11/12/2018",
+              "planned_etd": "12/1/2019",
               "schedules_charges": Object {
                 "AIR_HUB_ROUTE_KEY": Object {
                   "total": 200,
