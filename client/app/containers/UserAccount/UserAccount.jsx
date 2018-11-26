@@ -32,7 +32,7 @@ class UserAccount extends Component {
     this.state = { currentUrl: '/account' }
 
     this.getLocations = this.getLocations.bind(this)
-    this.destroyLocation = this.destroyLocation.bind(this)
+    this.destroyAddress = this.destroyAddress.bind(this)
     this.makePrimary = this.makePrimary.bind(this)
     this.setUrl = this.setUrl.bind(this)
     this.setCurrentUrl = this.setCurrentUrl.bind(this)
@@ -103,9 +103,9 @@ class UserAccount extends Component {
         break
     }
   }
-  destroyLocation (addressId) {
+  destroyAddress (addressId) {
     const { userDispatch, user } = this.props
-    userDispatch.destroyLocation(user.id, addressId)
+    userDispatch.destroyAddress(user.id, addressId)
   }
 
   makePrimary (addressId) {
@@ -198,7 +198,7 @@ class UserAccount extends Component {
                         {...props}
                         addresses={users.dashboard.addresses}
                         getLocations={this.getLocations}
-                        destroyLocation={this.destroyLocation}
+                        destroyAddress={this.destroyAddress}
                         makePrimary={this.makePrimary}
                       />
                     )}
@@ -214,7 +214,7 @@ class UserAccount extends Component {
                         user={user}
                         addresses={users.dashboard.addresses}
                         getLocations={this.getLocations}
-                        destroyLocation={this.destroyLocation}
+                        destroyAddress={this.destroyAddress}
                         makePrimary={this.makePrimary}
                       />
                     )}

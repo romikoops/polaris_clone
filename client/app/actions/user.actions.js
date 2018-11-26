@@ -185,17 +185,17 @@ function optOutCookies () {
 
 function destroyAddress (userId, addressId, redirect) {
   function request () {
-    return { type: userConstants.DESTROYLOCATION_REQUEST }
+    return { type: userConstants.DESTROYADDRESS_REQUEST }
   }
 
   function success (response) {
     const payload = response.data
 
-    return { type: userConstants.DESTROYLOCATION_SUCCESS, payload }
+    return { type: userConstants.DESTROYADDRESS_SUCCESS, payload }
   }
 
   function failure (error) {
-    return { type: userConstants.DESTROYLOCATION_FAILURE, error }
+    return { type: userConstants.DESTROYADDRESS_FAILURE, error }
   }
 
   return (dispatch) => {

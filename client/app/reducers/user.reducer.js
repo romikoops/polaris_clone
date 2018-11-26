@@ -72,12 +72,12 @@ export default function users (state = initialState, action) {
         loading: false,
         error: action.error
       }
-    case userConstants.DESTROYLOCATION_REQUEST:
+    case userConstants.DESTROYADDRESS_REQUEST:
       return {
         ...state,
         loading: true
       }
-    case userConstants.DESTROYLOCATION_SUCCESS:
+    case userConstants.DESTROYADDRESS_SUCCESS:
       return {
         ...state,
         dashboard: {
@@ -87,7 +87,7 @@ export default function users (state = initialState, action) {
         },
         loading: false
       }
-    case userConstants.DESTROYLOCATION_FAILURE:
+    case userConstants.DESTROYADDRESS_FAILURE:
       return {
         ...state,
         loading: false,
