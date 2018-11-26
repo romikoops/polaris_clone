@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { withNamespaces } from 'react-i18next'
-import PropTypes from '../../prop-types'
+import { v4 as uuidv4 } from 'uuid'
 import styles from './ShipmentLocationBox.scss'
 import listenerTools from '../../helpers/listeners'
 import errorStyles from '../../styles/errors.scss'
@@ -148,8 +148,8 @@ class Autocomplete extends PureComponent {
       if (searchTimeout.address) clearTimeout(searchTimeout.address)
       if (searchTimeout.area) clearTimeout(searchTimeout.area)
       if (value) {
-        newTimeout.address = setTimeout(this.handleInputChange(value), 750)
-        newTimeout.area = setTimeout(this.handleAreaInputChange(value), 750)
+        newTimeout.address = setTimeout(() => this.handleInputChange(value), 750)
+        newTimeout.area = setTimeout(() => this.handleAreaInputChange(value), 750)
       }
 
       return {
@@ -177,7 +177,7 @@ class Autocomplete extends PureComponent {
   }
 
   handleAreaInputChange (input) {
-    const timestamp = moment().unix()
+    const timestamp = moment().format('x')
     this.setState({ queryingLocations: true, queryTimeStamp: timestamp }, () => getRequests.searchLocations(input, this.props.countries, timestamp, (results, returnedTimestamp) => {
       if (this.state.queryTimeStamp > returnedTimestamp) return
       this.setState({ areaResults: results, hideResults: false, queryingLocations: false }, () => {
@@ -230,6 +230,7 @@ class Autocomplete extends PureComponent {
               className={`flex-100 layout-row layout-align-center-center pointy ${styles.autocomplete_card}`}
               style={isHighlighted ? highlightStyle : {}}
               onClick={() => this.handleArea(result)}
+              key={uuidv4()}
             >
               <p className="flex">{result.description}</p>
             </div>
@@ -249,6 +250,7 @@ class Autocomplete extends PureComponent {
           ${styles.autocomplete_card} pointy ccb_result`}
               style={isHighlighted ? highlightStyle : {}}
               onClick={() => this.handleAddress(result)}
+              key={uuidv4()}
             >
               <p className="flex">{result.description}</p>
             </div>)
@@ -310,25 +312,6 @@ class Autocomplete extends PureComponent {
       </div>
     )
   }
-}
-
-Autocomplete.propTypes = {
-  gMaps: PropTypes.objectOf(PropTypes.func).isRequired,
-  theme: PropTypes.theme,
-  t: PropTypes.func.isRequired,
-  map: PropTypes.func.isRequired,
-  input: PropTypes.string,
-  hasErrors: PropTypes.bool,
-  handlePlaceSelect: PropTypes.func.isRequired,
-  tabIndex: PropTypes.string,
-  countries: PropTypes.arrayOf(PropTypes.string)
-}
-Autocomplete.defaultProps = {
-  theme: {},
-  input: '',
-  hasErrors: false,
-  tabIndex: null,
-  countries: []
 }
 
 export default withNamespaces(['common', 'errors'])(Autocomplete)
