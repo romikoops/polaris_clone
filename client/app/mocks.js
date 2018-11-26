@@ -161,6 +161,8 @@ export const shipmentInShipmentData = {
   },
   has_on_carriage: false,
   has_pre_carriage: false,
+  planned_eta: '11/12/2018',
+  planned_etd: '12/1/2019',
   notes: 'FOO_NOTES',
   cargo_notes: 'FOO_CARGO_NOTES',
   eori: 1234,
