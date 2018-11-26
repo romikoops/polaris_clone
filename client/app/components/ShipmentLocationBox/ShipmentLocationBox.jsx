@@ -900,7 +900,7 @@ class ShipmentLocationBox extends Component {
         indexesToUse,
         indexes
       )
-      // debugger
+
       let fieldsHaveErrors = false
       if (targetTrucking && newFilteredRouteIndexes.length === 0) {
         newFilteredRouteIndexes = filteredRouteIndexes

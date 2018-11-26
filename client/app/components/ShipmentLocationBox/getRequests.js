@@ -40,7 +40,7 @@ function findAvailability (lat, lng, tenantId, loadType, carriage, availableHubI
   })
 }
 
-function searchLocations (input, countries, callback) {
+function searchLocations (input, countries, timestamp, callback) {
   fetch(
     `${getTenantApiUrl()}/locations?query=${input}&countries=${countries}`,
     {
@@ -53,7 +53,7 @@ function searchLocations (input, countries, callback) {
         const {
           results
         } = response.data
-        callback(results)
+        callback(results, timestamp)
       } else {
         callback([])
       }

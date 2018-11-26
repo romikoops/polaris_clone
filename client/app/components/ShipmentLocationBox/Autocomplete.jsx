@@ -6,6 +6,7 @@ import listenerTools from '../../helpers/listeners'
 import errorStyles from '../../styles/errors.scss'
 import getRequests from './getRequests'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
+import { moment } from '../../constants'
 
 class Autocomplete extends PureComponent {
   static filterResults (results, options) {
@@ -144,11 +145,12 @@ class Autocomplete extends PureComponent {
       const { searchTimeout, input } = prevState
       if (value === input) return {}
       const newTimeout = {}
-      if (searchTimeout.address && value) clearTimeout(searchTimeout.address)
-      newTimeout.address = setTimeout(this.handleInputChange(value), 750)
-
-      if (searchTimeout.area && value) clearTimeout(searchTimeout.area)
-      newTimeout.area = setTimeout(this.handleAreaInputChange(value), 1250)
+      if (searchTimeout.address) clearTimeout(searchTimeout.address)
+      if (searchTimeout.area) clearTimeout(searchTimeout.area)
+      if (value) {
+        newTimeout.address = setTimeout(this.handleInputChange(value), 750)
+        newTimeout.area = setTimeout(this.handleAreaInputChange(value), 750)
+      }
 
       return {
         input: value,
@@ -175,13 +177,14 @@ class Autocomplete extends PureComponent {
   }
 
   handleAreaInputChange (input) {
-    this.setState({ queryingLocations: true }, () => getRequests.searchLocations(input, this.props.countries, (results) => {
+    const timestamp = moment().unix()
+    this.setState({ queryingLocations: true, queryTimeStamp: timestamp }, () => getRequests.searchLocations(input, this.props.countries, timestamp, (results, returnedTimestamp) => {
+      if (this.state.queryTimeStamp > returnedTimestamp) return
       this.setState({ areaResults: results, hideResults: false, queryingLocations: false }, () => {
         this.initKeyboardListener()
         this.showResultsTimer()
       })
     }))
-    
   }
 
   handleAddress (result) {
