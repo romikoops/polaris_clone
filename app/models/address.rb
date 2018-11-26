@@ -244,7 +244,7 @@ class Address < ApplicationRecord
       custom_hash[attribute] = self[attribute]
     end
 
-    nil
+    custom_hash
   end
 
   def get_zip_code
