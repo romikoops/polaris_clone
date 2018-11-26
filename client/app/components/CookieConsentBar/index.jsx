@@ -2,6 +2,7 @@ import React from 'react'
 import { withNamespaces } from 'react-i18next'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { withGTM } from 'react-tag-manager'
 import { authenticationActions } from '../../actions'
 import PropTypes from '../../prop-types'
 import styles from './CookieConsentBar.scss'
@@ -13,26 +14,26 @@ import getCookie from './_modules/getCookie'
 const sampleData = {
   title: 'This site use cookies',
   description: trim(`
-  We and our advertising partners                    
-  use these cookies to deliver advertisements, 
+  We and our advertising partners
+  use these cookies to deliver advertisements,
   to make them more relevant and meaningful
   to visitors to our website, and to track
-  the efficiency of our advertising campaigns, 
+  the efficiency of our advertising campaigns,
   both on our services and on other websites.
   `),
   modalTitle: 'Cookie declaration',
   modalDescription: trim(`
-  We use cookies to personalize content and ads, 
-  to provide social media features and to analyze 
-  our traffic. 
+  We use cookies to personalize content and ads,
+  to provide social media features and to analyze
+  our traffic.
   `),
   modalMandatory: trim(`
   These cookies are necessary for the Website to function and cannot be turned off in our systems. They are usually only set in response to actions made by you which amount to a request for information or services, such as logging in or filling in forms on our Website.
   `),
-  modalMarketing: trim(`
+  modalAnalytics: trim(`
   These cookies enable us to provide enhanced functionality and personalization for our website. They may be set by us or by third party providers whose services we have added to our pages.
   `),
-  modalTracking: trim(`
+  modalMarketing: trim(`
   These cookies may be set through our site by our advertising partners. They may be used by those companies to build a profile of your interests and show you relevant adverts on other websites.
   `)
 }
@@ -77,7 +78,7 @@ function handleAccept (user, tenant, loggedIn, authDispatch) {
       .toString()
     const randNum = Math.floor(Math.random() * 100).toString()
     const randSuffix = unixTimeStamp + randNum
-    const email = `guest${randSuffix}@${tenant.subdomain}.com`
+    const email = `guest${randSuffix}@${tenant.subdomain}.itsmycargo.com`
 
     authDispatch.register({
       email,
@@ -92,13 +93,13 @@ function handleAccept (user, tenant, loggedIn, authDispatch) {
   }
 }
 
-class CookieConsentBar extends React.PureComponent {
+class PureCookieConsentBar extends React.PureComponent {
   static getDerivedStateFromProps (props, state) {
     if (props.height === state.lastHeight) {
       return null
     }
 
-    return { bottom: CookieConsentBar.updatedBottom(props), lastHeight: props.height }
+    return { bottom: PureCookieConsentBar.updatedBottom(props), lastHeight: props.height }
   }
 
   static updatedBottom (props) {
@@ -113,23 +114,27 @@ class CookieConsentBar extends React.PureComponent {
 
   constructor (props) {
     super(props)
-    const accepted = getCookie('consent_mandatory') === '1'
+    const consent = JSON.parse(getCookie('consent') || '{}')
+    const accepted = consent.mandatory === true
+
     this.state = {
       accepted,
+      consent,
+      bottom: PureCookieConsentBar.updatedBottom(props),
       showModal: false,
-      bottom: CookieConsentBar.updatedBottom(props),
-      trackingSelected: true,
+      analyticsSelected: true,
       marketingSelected: true
     }
     this.toggleModal = this.toggleModal.bind(this)
     this.toggleMarketing = this.toggleMarketing.bind(this)
-    this.toggleTracking = this.toggleTracking.bind(this)
+    this.toggleAnalytics = this.toggleAnalytics.bind(this)
     this.cookieBarLimit = this.cookieBarLimit.bind(this)
     this.accept = this.accept.bind(this)
   }
 
   componentDidMount () {
-    window.addEventListener('scroll', () => { this.setState({ bottom: CookieConsentBar.updatedBottom(this.props) }) })
+    window.addEventListener('scroll', () => { this.setState({ bottom: PureCookieConsentBar.updatedBottom(this.props) }) })
+    this.pushEvents()
   }
 
   cookieBarLimit () {
@@ -148,9 +153,9 @@ class CookieConsentBar extends React.PureComponent {
     this.setState(prevState => ({ showModal: !prevState.showModal }))
   }
 
-  toggleTracking () {
+  toggleAnalytics () {
     this.setState(prevState => ({
-      trackingSelected: !prevState.trackingSelected
+      analyticsSelected: !prevState.analyticsSelected
     }))
   }
 
@@ -161,16 +166,25 @@ class CookieConsentBar extends React.PureComponent {
   }
 
   accept () {
-    setCookie('consent_mandatory', '1')
-    setCookie(
-      'consent_marketing',
-      this.state.marketingSelected ? '1' : '0'
-    )
-    setCookie(
-      'consent_tracking',
-      this.state.trackingSelected ? '1' : '0'
-    )
-    this.setState({ accepted: true })
+    const consent = {
+      mandatory: true,
+      analytics: this.state.analyticsSelected,
+      marketing: this.state.marketingSelected
+    }
+
+    this.setState({
+      accepted: true,
+      consent
+    }, () => this.pushEvents())
+    setCookie('consent', JSON.stringify(consent))
+  }
+
+  pushEvents () {
+    const { GTM } = this.props
+
+    if (this.state.consent.mandatory) { GTM.api.trigger({ event: 'consent_mandatory', consent_mandatory: "1" }) }
+    if (this.state.consent.analytics) { GTM.api.trigger({ event: 'consent_analytics', consent_analytics: "1" }) }
+    if (this.state.consent.marketing) { GTM.api.trigger({ event: 'consent_marketing', consent_marketing: "1" }) }
   }
 
   render () {
@@ -187,7 +201,7 @@ class CookieConsentBar extends React.PureComponent {
       bottom,
       accepted,
       showModal,
-      trackingSelected,
+      analyticsSelected,
       marketingSelected
     } = this.state
 
@@ -255,12 +269,12 @@ class CookieConsentBar extends React.PureComponent {
           <div className={COLUMN(20)}>
             <div className={ROW(100)}>
               <div className={MODAL_SECTION_TEXT}>
-                {sampleData.modalTracking}
+                {sampleData.modalAnalytics}
               </div>
               <div className={MODAL_SECTION_BUTTON}>
                 <i
-                  onClick={this.toggleTracking}
-                  className={getToggleStyle(trackingSelected)}
+                  onClick={this.toggleAnalytics}
+                  className={getToggleStyle(analyticsSelected)}
                 />
               </div>
             </div>
@@ -340,7 +354,7 @@ class CookieConsentBar extends React.PureComponent {
   }
 }
 
-CookieConsentBar.propTypes = {
+PureCookieConsentBar.propTypes = {
   user: PropTypes.user,
   t: PropTypes.func.isRequired,
   loggedIn: PropTypes.bool,
@@ -348,7 +362,7 @@ CookieConsentBar.propTypes = {
   tenant: PropTypes.tenant
 }
 
-CookieConsentBar.defaultProps = {
+PureCookieConsentBar.defaultProps = {
   tenant: null,
   user: null,
   loggedIn: false
@@ -371,7 +385,9 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default withNamespaces(['common', 'bookconf'])(connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CookieConsentBar))
+@withGTM
+@connect(mapStateToProps, mapDispatchToProps)
+class CookieConsentBar extends PureCookieConsentBar {}
+
+export const TPureCookieConsentBar = withNamespaces()(PureCookieConsentBar)
+export default withNamespaces()(CookieConsentBar)

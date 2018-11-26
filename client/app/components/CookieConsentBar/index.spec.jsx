@@ -13,7 +13,7 @@ jest.mock('react-redux', () => ({
 }))
 
 // eslint-disable-next-line
-import CookieConsentBar from './'
+import { TPureCookieConsentBar as CookieConsentBar } from './'
 
 const propsBase = {
   theme,

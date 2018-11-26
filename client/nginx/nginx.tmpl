@@ -33,14 +33,15 @@ http {
     listen 80;
     server_name ~^(?<subdomain>[^\.]*?)\.(?<domain>.*)$;
 
-    location /config.201811280955.js {
+    location /config.201811291749.js {
       add_header Content-Type application/javascript;
       return 200 '
 window.keel = {
   apiUrl: \'{{ .Env.API_URL }}\',
   environment: \'review\',
   sentryUrl: \'https://16d43a033af648da8b2f2933f6e62717@sentry.itsmycargo.tech/3\',
-  tenantName: \'$tenant\'
+  tenantName: \'$tenant\',
+  gtmId: \'GTM-P29HCHV\'
 }
 ';
     }

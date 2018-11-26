@@ -16,6 +16,7 @@ exports[`size is 1 1`] = `
   >
     FOO_TEXT
      
+    <Component />
   </h1>
 </div>
 `;
@@ -36,6 +37,7 @@ exports[`size is 2 1`] = `
   >
     FOO_TEXT
      
+    <Component />
   </h2>
 </div>
 `;
@@ -56,6 +58,7 @@ exports[`size is 3 1`] = `
   >
     FOO_TEXT
      
+    <Component />
   </h3>
 </div>
 `;
@@ -76,6 +79,7 @@ exports[`size is 4 1`] = `
   >
     FOO_TEXT
      
+    <Component />
   </h4>
 </div>
 `;
