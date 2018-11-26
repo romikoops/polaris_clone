@@ -2,12 +2,15 @@
 
 module DataInserter
   class OceanFclInserter < BaseInserter
+    include OceanFclRestructurer
+
     private
 
     def post_perform
-      data.each_with_index do |(k_sheet_name, values), sheet_i|
-        data_extraction_method = values[:data_extraction_method]
+      restructured_data = restructure_data(@data)
 
+      restructured_data.each_with_index do |(k_sheet_name, values), sheet_i|
+        data_extraction_method = values[:data_extraction_method]
         values[:rows_data].each_with_index do |row, row_i|
           itinerary = find_or_initialize_itinerary(row)
           stops = find_or_initialize_stops(row, itinerary)
@@ -92,7 +95,7 @@ module DataInserter
 
     def pricing_details_with_dynamic_fee_cols_no_ranges(row)
       row[:fees].map do |fee_name, fee_value|
-        { rate_basis: row[:type],
+        { rate_basis: row[:rate_basis],
           rate: fee_value,
           min: 1 * fee_value,
           shipping_type: fee_name.upcase,
@@ -102,7 +105,7 @@ module DataInserter
     end
 
     def pricing_details_with_one_col_fee_and_ranges(row)
-      pricing_detail_params = { rate_basis: row[:type],
+      pricing_detail_params = { rate_basis: row[:rate_basis],
                                 shipping_type: row[:fee_code].upcase,
                                 currency_name: row[:currency].upcase,
                                 tenant_id: @tenant.id }

@@ -5,13 +5,13 @@ module DataInserter
     private
 
     def post_perform
-      data = format_to_legacy(@data)
-      data = expand_fcl_to_all_sizes(data)
-      data = assign_correct_hubs(data)
+      restructured_data = restructure_data(data)
+      restructured_data = expand_fcl_to_all_sizes(restructured_data)
+      restructured_data = assign_correct_hubs(restructured_data)
 
       available_carriers = all_carriers_of_tenant
 
-      data.each do |params|
+      restructured_data.each do |params|
         if params[:carrier] == 'all'
           available_carriers.each do |carrier|
             tenant_vehicles = find_or_create_tenant_vehicles(params, carrier)
@@ -39,19 +39,24 @@ module DataInserter
         mot = params[:mot]
 
         begin
-          # TODO: `port` is wrong, should be hub!
-          hub_name = append_hub_suffix(params[:port], mot)
+          hub_name = append_hub_suffix(params[:hub], mot)
           hub_id = @tenant.hubs.find_by(name: hub_name, hub_type: mot).id
         rescue StandardError
           raise "Hub \"#{hub_name}\" not found!"
         end
 
         params[:hub_id] = hub_id
-        counterpart_hub_id = if params[:counterpart_hub] == 'all'
-                               nil
-                             else
-                               @tenant.hubs.find_by(name: append_hub_suffix(params[:counterpart_hub], mot), hub_type: mot).id
-                             end
+        if params[:counterpart_hub]
+          counterpart_hub_id = if params[:counterpart_hub] == 'all'
+                                 nil
+                               else
+                                 counterpart_hub_name = append_hub_suffix(params[:counterpart_hub], mot)
+                                 counterpart_hub = @tenant.hubs.find_by(name: counterpart_hub_name, hub_type: mot)
+                                 raise StandardError, "Counterpart Hub with name \"#{counterpart_hub_name}\" not found!" unless counterpart_hub
+                                 counterpart_hub.id
+                               end
+        end
+
         params[:counterpart_hub_id] = counterpart_hub_id
         params
       end
@@ -61,11 +66,11 @@ module DataInserter
       Carrier.where(id: @tenant.tenant_vehicles.pluck(:carrier_id).compact.uniq)
     end
 
-    def format_to_legacy(data)
+    def restructure_data(data)
       all_local_charges_params = []
       data.values.each do |per_sheet_values|
         chunked_rows_data = per_sheet_values[:rows_data].chunk do |row|
-          row.slice(:port,
+          row.slice(:hub,
                     :country,
                     :counterpart_hub,
                     :counterpart_country,
@@ -139,7 +144,7 @@ module DataInserter
     def find_or_create_local_charge(params, tenant_vehicle)
       params[:mode_of_transport] = params[:mot]
       params[:tenant_vehicle_id] = tenant_vehicle.id
-      local_charge_params = params.except(:mot, :port, :country, :counterpart_hub, :counterpart_country, :carrier, :service_level)
+      local_charge_params = params.except(:mot, :hub, :country, :counterpart_hub, :counterpart_country, :carrier, :service_level)
       local_charge = @tenant.local_charges.find_or_initialize_by(local_charge_params)
       local_charge.tap(&:save!)
     end

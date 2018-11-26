@@ -2,6 +2,8 @@
 
 module DataInserter
   class BaseInserter
+    attr_reader :tenant, :data
+
     def initialize(tenant:, data:, options: {})
       @tenant = tenant
       @data = data
@@ -16,10 +18,6 @@ module DataInserter
     private
 
     attr_reader :options
-
-    def post_initialize
-      raise NotImplementedError, "This method must be implemented in #{self.class.name}."
-    end
 
     def data_valid?(_data)
       raise NotImplementedError, "This method must be implemented in #{self.class.name}."

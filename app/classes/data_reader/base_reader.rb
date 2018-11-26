@@ -4,29 +4,18 @@ module DataReader
   class BaseReader
     attr_reader :xlsx, :sheets_data
 
-    private
-
-    attr_reader :data_extraction_method
-
-    public
-
     def initialize(path:)
       @xlsx = open_spreadsheet_file(path)
       @sheets_data = {}
-      @data_extraction_method = nil
     end
 
     def perform
       @xlsx.each_with_pagename do |sheet_name, sheet_data|
         headers = parse_headers(sheet_data.first)
-        determine_data_extraction_method(headers)
-        @sheets_data[sheet_name] = if data_extraction_method
-                                     { data_extraction_method: data_extraction_method }
-                                   else
-                                     {}
-                                   end
+        data_extraction_method = determine_data_extraction_method(headers)
+        @sheets_data[sheet_name] = { data_extraction_method: data_extraction_method }
 
-        raise StandardError, "The headers of sheet \"#{sheet_name}\" are not valid." unless headers_valid?(headers)
+        raise StandardError, "The headers of sheet \"#{sheet_name}\" are not valid." unless headers_valid?(headers, data_extraction_method)
 
         # Parse all but first row
         rows_data = []
@@ -38,7 +27,7 @@ module DataReader
         # TODO: restructure_rows_data should actually happen in the inserters,
         # such that the customization for the readers is just limited to checking
         # header validity.
-        @sheets_data[sheet_name][:rows_data] = restructure_rows_data(rows_data)
+        @sheets_data[sheet_name][:rows_data] = sanitize_rows_data(rows_data)
       end
 
       @sheets_data
@@ -52,7 +41,6 @@ module DataReader
     end
 
     def determine_data_extraction_method(_headers)
-      raise NotImplementedError, "This method must be implemented in #{self.class.name}."
     end
 
     def parse_headers(header_row)

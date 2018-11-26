@@ -25,9 +25,5 @@ module DataReader
 
       valid_static_headers == headers
     end
-
-    def build_row_obj(headers, parsed_row)
-      headers.zip(parsed_row).to_h
-    end
   end
 end
