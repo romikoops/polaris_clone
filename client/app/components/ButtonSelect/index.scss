@@ -49,4 +49,13 @@
       margin: 0;
     }
   }
+  .backdrop {
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100vw;
+    height: 100vw;
+    z-index: 40;
+    background: transparent;
+  }
 }

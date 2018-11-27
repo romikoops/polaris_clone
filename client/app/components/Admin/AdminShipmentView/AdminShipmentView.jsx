@@ -516,8 +516,7 @@ class AdminShipmentView extends Component {
       (isRequested(shipment.status)) ? (
         <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box_process}`}>
           <p className="layout-align-center-center layout-row"> {t('common:requested')} </p>
-        </div>
-      ) : (
+        </div>) : (
         ''
       )
 
@@ -565,22 +564,16 @@ class AdminShipmentView extends Component {
 
     const actionDropDown = (
       <div className={`layout-row flex-15 flex-md-20 flex-sm-25 flex-xs-30 layout-align-center-center `}>
-        <GradientBorder
-          wrapperClassName={`
-          layout-row flex-15 flex-md-20 flex-sm-25 flex-xs-30 layout-align-center-center ${styles.status_box}`}
-          gradient={gradientBorderStyle}
-          className="layout-row flex-100 layout-align-center-center"
-          content={(
-            <ButtonSelect
-              options={this.statusOptions}
-              onClick={e => this.handleStatusChange(e)}
-              value={currentStatus}
-              defaultValue={defaultValue}
-              text={defaultVerb}
-            />
-          )}
+        <ButtonSelect
+          options={this.statusOptions}
+          onClick={e => this.handleStatusChange(e)}
+          value={currentStatus}
+          defaultValue={defaultValue}
+          text={defaultVerb}
+          gradient
+          theme={theme}
+          wrapperStyles={` ${styles.status_box}`}
         />
-        
       </div>
       
     )
