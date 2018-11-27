@@ -973,6 +973,15 @@
         "payload_in_kg": 3500,
         "chargeable_weight": 3500
       }
+    },
+    "max_dimensions": {
+      "general": {
+        "dimension_x": 300,
+        "dimension_y": 240,
+        "dimension_z": 220,
+        "payload_in_kg": 2000,
+        "chargeable_weight": 0
+      }
     }
   }
 }, {
