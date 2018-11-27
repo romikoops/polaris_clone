@@ -5,7 +5,7 @@
     right: 0;
     left: 0;
     z-index: 50;
-    min-height: 150px;
+    min-height: 160px;
   }
   .options_container {
     height: 0;
@@ -20,20 +20,27 @@
   .drop_down_button {
     border-left: 1px solid lightgray;
     padding: 5px;
+    height: 30px;
   }
   .main_button {
     font-family: 'Roboto';
     font-weight: 400;
     font-size: 14px;
+    height: 30px;
+    padding: 2.5px 5px;
     p {
       padding: 7px 5px 5px 5px;
       margin: 0;
     }
-    border: 0.5px lightgrey;
+  }
+  .show > .main_button {
+    border-bottom: 0.5px solid lightgrey;
   }
   .option_card {
     padding: 2.5px 5px;
     background: white;
+    border-top: 0.5px solid lightgray;
+    height: 30px;
     div {
       height: 20px;
     }

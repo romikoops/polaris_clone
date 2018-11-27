@@ -66,11 +66,11 @@ class AdminShipmentView extends Component {
   constructor (props) {
     super(props)
     this.statusOptions = [
-      {label: 'Requested', value: 'requested', icon: 'fa-hourglass-o'},
-      {label: 'Ignore', value: 'ignore', icon: 'fa-trash'},
-      {label: 'Archive', value: 'archive', icon: 'fa-archive'},
+      {label: 'Requested', value: 'requested', icon: 'fa-hourglass-o', iconColour: '#EF5B00'},
+      {label: 'Ignore', value: 'ignore', icon: 'fa-trash', iconColour: '#EB5757'},
+      {label: 'Archive', value: 'archive', icon: 'fa-archive', iconColour: '#F48A00'},
       {label: 'Finish', value: 'finished', icon: 'fa-flag-checkered'},
-      {label: 'Accept', value: 'accept', icon: 'fa-check'}
+      {label: 'Accept', value: 'accept', icon: 'fa-check', iconColour: '#6FCF97'}
     ]
     const { shipment } = this.props.shipmentData
     this.state = {
@@ -514,16 +514,9 @@ class AdminShipmentView extends Component {
 
     const statusRequested =
       (isRequested(shipment.status)) ? (
-        <GradientBorder
-          wrapperClassName={`
-          layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25
-          ${adminStyles.header_margin_buffer} ${styles.status_box_requested}`}
-          gradient={gradientBorderStyle}
-          className="layout-row flex-100 layout-align-center-center"
-          content={(
-            <p className="layout-align-center-center layout-row"> {t('common:requested')} </p>
-          )}
-        />
+        <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box_process}`}>
+          <p className="layout-align-center-center layout-row"> {t('common:requested')} </p>
+        </div>
       ) : (
         ''
       )
@@ -571,15 +564,23 @@ class AdminShipmentView extends Component {
     console.log({ defaultValue, defaultVerb })
 
     const actionDropDown = (
-      <div className={`layout-row flex-15 flex-md-20 flex-sm-25 flex-xs-30 layout-align-center-center ${adminStyles.header_margin_buffer}`}>
-        <ButtonSelect
-          options={this.statusOptions}
-          onClick={e => this.handleStatusChange(e)}
-          value={currentStatus}
-          defaultValue={defaultValue}
-          text={defaultVerb}
-          wrapperStyles={`${adminStyles.border_box} ${styles.status_box}`}
+      <div className={`layout-row flex-15 flex-md-20 flex-sm-25 flex-xs-30 layout-align-center-center `}>
+        <GradientBorder
+          wrapperClassName={`
+          layout-row flex-15 flex-md-20 flex-sm-25 flex-xs-30 layout-align-center-center ${styles.status_box}`}
+          gradient={gradientBorderStyle}
+          className="layout-row flex-100 layout-align-center-center"
+          content={(
+            <ButtonSelect
+              options={this.statusOptions}
+              onClick={e => this.handleStatusChange(e)}
+              value={currentStatus}
+              defaultValue={defaultValue}
+              text={defaultVerb}
+            />
+          )}
         />
+        
       </div>
       
     )
@@ -848,13 +849,13 @@ class AdminShipmentView extends Component {
             <p className="layout-align-start-center layout-row">Ref:&nbsp; <span>{shipment.imc_reference}</span></p>
             <p className="layout-row layout-align-end-end"><strong>Placed at:&nbsp;</strong> {createdDate}</p>
           </div>
-          {actionDropDown}
-          {/* {statusRequested}
+          {statusRequested}
           {statusInProcess}
           {statusFinished}
           {statusRejected}
           {statusArchived}
-          {renderActionButtons({ status: shipment.status })} */}
+          {actionDropDown}
+          {/* {renderActionButtons({ status: shipment.status })} */}
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">
           {shipment.status !== 'quoted' ? (

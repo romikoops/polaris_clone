@@ -1,11 +1,13 @@
 import React, { PureComponent } from 'react';
 import styles from './index.scss'
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 class ButtonSelect extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { 
-      showOptions: false
+      showOptions: false,
+      requestMade: false
     }
     this.toggleOptions = this.toggleOptions.bind(this)
   }
@@ -15,14 +17,16 @@ class ButtonSelect extends PureComponent {
     });
   }
   handleClick (status) {
-    if (this.state.showOptions) {
-      this.toggleOptions()
-    }
-    this.props.onClick(status)
+    this.setState({ requestMade: true  }, () => {
+      if (this.state.showOptions) {
+        this.toggleOptions()
+      }
+      this.props.onClick(status)
+    })
   }
   render() { 
-    const { text, onClick, defaultValue, options, theme, wrapperStyles } = this.props
-    const { showOptions } = this.state
+    const { text, defaultValue, options, wrapperStyles } = this.props
+    const { showOptions, requestMade } = this.state
     const  optionCards = options
       .filter(option => option.label !== text)
       .map(option => (
@@ -51,13 +55,13 @@ class ButtonSelect extends PureComponent {
               onClick={() => this.handleClick(defaultValue)}
             >
                 {defaultOption.icon ? (<div className="flex-20 layout-row layout-align-center-center">
-              <i className={`fa ${defaultOption.icon} flex-none`} style={{color: defaultOption.iconColour}}/>
-            </div>)
+                <i className={`fa ${defaultOption.icon} flex-none pointy`} style={{color: defaultOption.iconColour}}/>
+              </div>)
               : ''}
               <div className="flex-80 layout-row layout-align-center-center">
-            <p className="flex-none">{text.toUpperCase()}</p>
-          </div>
-              
+                <p className="flex-none">{text.toUpperCase()}</p>
+                { requestMade ? <LoadingSpinner size="extra_small" /> : '' }
+              </div>
             </div>
             <div
               className={`flex-none layout-row layout-align-center-center ${styles.drop_down_button}`}
