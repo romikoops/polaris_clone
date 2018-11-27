@@ -24,6 +24,7 @@ import {
 import CargoContainerGroup from '../../Cargo/Container/Group'
 import AdminShipmentContent from './AdminShipmentContent'
 import ShipmentQuotationContent from '../../UserAccount/ShipmentQuotationContent'
+import ButtonSelect from '../../ButtonSelect';
 
 class AdminShipmentView extends Component {
   static sumCargoFees (cargos) {
@@ -64,7 +65,13 @@ class AdminShipmentView extends Component {
   }
   constructor (props) {
     super(props)
-
+    this.statusOptions = [
+      {label: 'Requested', value: 'requested', icon: 'fa-hourglass-o'},
+      {label: 'Ignore', value: 'ignore', icon: 'fa-trash'},
+      {label: 'Archive', value: 'archive', icon: 'fa-archive'},
+      {label: 'Finish', value: 'finished', icon: 'fa-flag-checkered'},
+      {label: 'Accept', value: 'accept', icon: 'fa-check'}
+    ]
     const { shipment } = this.props.shipmentData
     this.state = {
       showEditPrice: false,
@@ -100,7 +107,8 @@ class AdminShipmentView extends Component {
         customs: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.customs),
         import: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.import),
         export: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.export)
-      }
+      },
+      currentStatus: this.statusOptions.filter(status => shipment.status.includes(status.value))[0]
     }
     this.handleDeny = this.handleDeny.bind(this)
     this.handleArchive = this.handleArchive.bind(this)
@@ -117,6 +125,8 @@ class AdminShipmentView extends Component {
     this.handleDayChange = this.handleDayChange.bind(this)
     this.handleTimeChange = this.handleTimeChange.bind(this)
     this.handlePriceChange = this.handlePriceChange.bind(this)
+
+    
   }
   componentDidMount () {
     const {
@@ -127,14 +137,7 @@ class AdminShipmentView extends Component {
     }
     window.scrollTo(0, 0)
   }
-  handleDeny () {
-    const { shipmentData, handleShipmentAction } = this.props
-    handleShipmentAction(shipmentData.shipment.id, 'decline')
-  }
-  handleArchive () {
-    const { shipmentData, handleShipmentAction } = this.props
-    handleShipmentAction(shipmentData.shipment.id, 'archive')
-  }
+ 
 
   handleCurrencySelect (selection) {
     this.setState({ currency: selection })
@@ -164,6 +167,29 @@ class AdminShipmentView extends Component {
     })
   }
 
+  handleStatusChange(status) {
+    switch (status) {
+      case 'ignore':
+        this.handleDeny()
+        break;
+      case 'accept':
+        this.handleAccept()
+        break;
+      case 'finished':
+        this.handleFinished()
+        break;
+      case 'archive':
+        this.handleArchive()
+        break;
+      case 'requested':
+        this.handleRequested()
+        break;
+    
+      default:
+        break;
+    }
+  }
+
   handleAccept () {
     const { shipmentData, handleShipmentAction } = this.props
     handleShipmentAction(shipmentData.shipment.id, 'accept')
@@ -171,6 +197,18 @@ class AdminShipmentView extends Component {
   handleFinished () {
     const { shipmentData, handleShipmentAction } = this.props
     handleShipmentAction(shipmentData.shipment.id, 'finished')
+  }
+  handleDeny () {
+    const { shipmentData, handleShipmentAction } = this.props
+    handleShipmentAction(shipmentData.shipment.id, 'decline')
+  }
+  handleArchive () {
+    const { shipmentData, handleShipmentAction } = this.props
+    handleShipmentAction(shipmentData.shipment.id, 'archive')
+  }
+  handleRequested () {
+    const { shipmentData, handleShipmentAction } = this.props
+    handleShipmentAction(shipmentData.shipment.id, 'requested')
   }
   handlePriceChange (key, value) {
     this.setState(prevState => ({
@@ -182,6 +220,41 @@ class AdminShipmentView extends Component {
         }
       }
     }))
+  }
+  determineAction (status) {
+    let defaultValue
+    let defaultVerb
+    if (!status) {
+      debugger
+    }
+    switch (status) {
+      case 'requested':
+        defaultValue = 'accept'
+        defaultVerb = 'Accept'
+        break;
+      case 'requested_by_unconfirmed_account':
+        defaultValue = 'accept'
+        defaultVerb = 'Accept'
+        break;
+      case 'confirmed':
+        defaultValue = 'finished'
+        defaultVerb = 'Finish'
+        break;
+      case 'declined':
+        defaultValue = 'archived'
+        defaultVerb = 'Archive'
+        break;
+      case 'finished':
+        defaultValue = 'archived'
+        defaultVerb = 'Archive'
+        break;
+
+      default:
+        defaultValue = ''
+        defaultVerb = ''
+        break;
+    }
+    return { defaultValue, defaultVerb }
   }
   toggleEditPrice () {
     this.setState({ showEditPrice: !this.state.showEditPrice })
@@ -388,7 +461,7 @@ class AdminShipmentView extends Component {
       aggregatedCargo
     } = shipmentData
     const {
-      showEditTime, showEditServicePrice, newTimes, newPrices
+      showEditTime, showEditServicePrice, newTimes, newPrices, currentStatus
     } = this.state
 
     const createdDate = shipment
@@ -479,6 +552,7 @@ class AdminShipmentView extends Component {
       ''
     )
 
+
     const statusRejected = (shipment.status === 'ignored') ? (
       <GradientBorder
         wrapperClassName={`
@@ -492,6 +566,22 @@ class AdminShipmentView extends Component {
       />
     ) : (
       ''
+    )
+    const { defaultValue, defaultVerb } = this.determineAction(shipment.status)
+    console.log({ defaultValue, defaultVerb })
+
+    const actionDropDown = (
+      <div className={`layout-row flex-15 flex-md-20 flex-sm-25 flex-xs-30 layout-align-center-center ${adminStyles.header_margin_buffer}`}>
+        <ButtonSelect
+          options={this.statusOptions}
+          onClick={e => this.handleStatusChange(e)}
+          value={currentStatus}
+          defaultValue={defaultValue}
+          text={defaultVerb}
+          wrapperStyles={`${adminStyles.border_box} ${styles.status_box}`}
+        />
+      </div>
+      
     )
 
     const feeHash = shipment.selected_offer
@@ -758,12 +848,13 @@ class AdminShipmentView extends Component {
             <p className="layout-align-start-center layout-row">Ref:&nbsp; <span>{shipment.imc_reference}</span></p>
             <p className="layout-row layout-align-end-end"><strong>Placed at:&nbsp;</strong> {createdDate}</p>
           </div>
-          {statusRequested}
+          {actionDropDown}
+          {/* {statusRequested}
           {statusInProcess}
           {statusFinished}
           {statusRejected}
           {statusArchived}
-          {renderActionButtons({ status: shipment.status })}
+          {renderActionButtons({ status: shipment.status })} */}
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">
           {shipment.status !== 'quoted' ? (

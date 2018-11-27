@@ -256,7 +256,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   def shipment_action
     case params[:shipment_action]
     when 'accept'
-      @shipment.accept!
+      @shipment.confirm!
       ShippingTools.shipper_confirmation_email(@shipment.user, @shipment)
       add_message_to_convo(@shipment.user, booking_accepted_message, true)
       response_handler(@shipment.with_address_options_json)
@@ -273,6 +273,9 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       response_handler(@shipment.with_address_options_json)
     when 'finished'
       @shipment.finish!
+      response_handler(@shipment.with_address_options_json)
+    when 'requested'
+      @shipment.requested!
       response_handler(@shipment.with_address_options_json)
     else
       raise 'Unknown action!'

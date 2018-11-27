@@ -1,0 +1,45 @@
+:local {
+  .wrapper_show {
+    position: absolute;
+    top: -19px;
+    right: 0;
+    left: 0;
+    z-index: 50;
+    min-height: 150px;
+  }
+  .options_container {
+    height: 0;
+    overflow: hidden;
+    visibility: none;
+  }
+  .options_container.show {
+    height: auto;
+    visibility: visible;
+    
+  }
+  .drop_down_button {
+    border-left: 1px solid lightgray;
+    padding: 5px;
+  }
+  .main_button {
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 14px;
+    p {
+      padding: 7px 5px 5px 5px;
+      margin: 0;
+    }
+    border: 0.5px lightgrey;
+  }
+  .option_card {
+    padding: 2.5px 5px;
+    background: white;
+    div {
+      height: 20px;
+    }
+    p {
+      padding: 5px;
+      margin: 0;
+    }
+  }
+}
