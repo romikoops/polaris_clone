@@ -5,12 +5,14 @@ class Address < ApplicationRecord
   has_many :users, through: :user_addresses, dependent: :destroy
   has_many :shipments
   has_many :contacts
+  has_many :ports, foreign_key: :nexus_id
   has_many :ports
   has_one :hub
-
+  has_many :routes
   has_many :stops, through: :hubs
   belongs_to :country, optional: true
 
+  scope :nexus, -> { where(address_type: 'nexus') }
 
   before_validation :sanitize_zip_code!
 
@@ -122,6 +124,18 @@ class Address < ApplicationRecord
     create!(address_params(raw_address_params))
   end
 
+  def self.nexuses
+    where(address_type: 'nexus')
+  end
+
+  def self.nexuses_client(client)
+    client.pricings.map(&:route).map(&:get_nexuses).flatten.uniq
+  end
+
+  def self.nexuses_prepared_client(client)
+    nexuses_client(client).pluck(:id, :name).to_h.invert
+  end
+
   def self.all_with_primary_for(user)
     addresses = user.addresses
     addresses.map do |loc|
@@ -130,14 +144,8 @@ class Address < ApplicationRecord
     end
   end
 
-  # Instance methods
-
-  def set_country_by_name!(name)
-    self.country = Country.geo_find_by_name(name)
-  end
-
-  def set_country_by_code!(code)
-    self.country = Country.find_by(code: code)
+  def names
+    [postal_code, neighbourhood, city, province, country]
   end
 
   def is_primary_for?(user)
@@ -146,6 +154,17 @@ class Address < ApplicationRecord
       raise "This 'Location' object is not associated with a user!"
     else
       return !!user_loc.primary
+    end
+  end
+
+  def pretty_hub_type
+    case address_type
+    when 'hub_train'
+      'Train Hub'
+    when 'hub_ocean'
+      'Port'
+    else
+      raise 'Unknown Hub Type!'
     end
   end
 
@@ -182,12 +201,17 @@ class Address < ApplicationRecord
         [nexus.latitude, nexus.longitude]
       )
     end
-    lowest_distance = distances.reject(&:nan?).min
-    [nexuses[distances.find_index(lowest_distance)], lowest_distance]
   end
 
+  def furthest_hub(hubs)
+    hubs.max do |hub_x, hub_y|
+      hub_x.distance_to(self) <=> hub_y.distance_to(self)
+    end
+  end
+
+
   def closest_hubs
-    hubs = Address.where(address_type: 'nexus')
+    hubs = Nexus.all
     distances = {}
     hubs.each_with_index do |hub, i|
       distances[i] = Geocoder::Calculations.distance_between([latitude, longitude], [hub.latitude, hub.longitude])
@@ -202,14 +226,9 @@ class Address < ApplicationRecord
     hubs_array
   end
 
-  def furthest_hub(hubs)
-    hubs.max do |hub_x, hub_y|
-      hub_x.distance_to(self) <=> hub_y.distance_to(self)
-    end
-  end
 
-  def get_zip_code
-    reverse_geocode if zip_code.nil?
+  def self.cascading_find_by_name(raw_name)
+    name = raw_name.split.map(&:capitalize).join(' ')
 
     sanitize_zip_code!
     zip_code
@@ -226,6 +245,13 @@ class Address < ApplicationRecord
     end
 
     custom_hash
+  end
+
+  def get_zip_code
+    reverse_geocode if zip_code.nil?
+
+    sanitize_zip_code!
+    zip_code
   end
 
   private

@@ -1,11 +1,18 @@
 # frozen_string_literal: true
 
 class Location < ApplicationRecord
-  # validates :postal_code, :city, :province, :country, presence: true
+  include PgSearch
+
   validates :postal_code, uniqueness: {
     scope:   %i(neighbourhood city province country),
     message: ->(obj, _) { "is a duplicate for the names: #{obj.names.log_format}" }
   }
+
+  pg_search_scope :autocomplete,
+                  :against => [:postal_code, :neighbourhood, :city, :province, :country],
+                  :using => {
+                    :tsearch => {:prefix => true}
+                  }
 
   def self.find_by_coordinates(lat:, lng:)
     where('ST_Contains(bounds, ST_Point(:lng, :lat))', lat: lat, lng: lng).first
@@ -28,6 +35,21 @@ class Location < ApplicationRecord
 
   def names
     [postal_code, neighbourhood, city, province, country]
+  end
+
+  def description
+    names.reject{|str| str.blank?}.compact.join(', ')
+  end
+
+  def geojson
+    RGeo::GeoJSON.encode(RGeo::GeoJSON::Feature.new(bounds))
+  end
+
+  def as_result_json(options = {})
+    new_options = options.reverse_merge(
+      methods: %i(geojson description)
+    )
+    as_json(new_options)
   end
 
   def self.find_by_coordinates(lat, lng)
@@ -64,7 +86,6 @@ class Location < ApplicationRecord
         sub_keys = keys.slice!(0, keys.length - (i + 1))
         sub_keys.to_a.reverse_each.with_index do |name_j, j|
           sub_results = results_1.where(name_j => name_2)
-          next if !sub_keys.reverse[j + 1]
           specific_result = sub_results.where(sub_keys.reverse[j + 1] => name_2).first
           result = specific_result || sub_results.first
 
@@ -76,7 +97,7 @@ class Location < ApplicationRecord
     keys.to_a.reverse_each.with_index do |name_i, _i|
       final_result = where(name_i => name_2).first
 
-      break if final_result
+      next if final_result
     end
 
     final_result

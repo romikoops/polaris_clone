@@ -55,27 +55,16 @@ class ChooseOffer extends Component {
     this.setDuration = this.setDuration.bind(this)
     this.setDepartureDate = this.setDepartureDate.bind(this)
     this.setMoT = this.setMoT.bind(this)
-    this.emailValue = this.emailValue.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.toggleLimits = this.toggleLimits.bind(this)
     this.handleScheduleRequest = this.handleScheduleRequest.bind(this)
+    this.getRoutes = this.getRoutes.bind(this)
   }
   componentDidMount () {
     const { prevRequest, setStage } = this.props
-    if (prevRequest && prevRequest.shipment) {
-      // this.loadPrevReq(prevRequest.shipment);
-    }
+
     window.scrollTo(0, 0)
     setStage(3)
-  }
-
-  shouldComponentUpdate () {
-    return !!(this.props.shipmentData && this.props.shipmentData.shipment)
-  }
-  componentWillUnmount () {
-    this.setState({
-      showModal: false
-    })
   }
 
   setDuration (val) {
@@ -102,21 +91,16 @@ class ChooseOffer extends Component {
   }
   handleClick (checked, value) {
     if (checked) {
-      this.state.selectedOffers.push(value)
-      this.setState({
-        selectedOffers: this.state.selectedOffers
-      })
+      this.setState(prevState => ({ selectedOffers: [...prevState.selectedOffers, value] }))
     } else {
-      this.setState({
-        selectedOffers: this.state.selectedOffers.filter(val => val !== value)
-      })
+      this.setState(prevState => ({ selectedOffers: prevState.selectedOffers.filter(_value => _value !== value) }))
     }
-    this.setState({
+    this.setState(prevState => ({
       isChecked: {
-        ...this.state.isChecked,
+        ...prevState.isChecked,
         [value.meta.charge_trip_id]: checked
       }
-    })
+    }))
   }
 
   handleScheduleRequest (args) {
@@ -152,11 +136,6 @@ class ChooseOffer extends Component {
     shipmentDispatch.getOffers(req, false)
     this.setState({ outerLimit: req.delay })
   }
-  emailValue (e) {
-    this.setState({
-      email: e.target.value
-    })
-  }
   downloadQuotations () {
     const { shipmentDispatch } = this.props
     shipmentDispatch.downloadQuotations()
@@ -191,6 +170,19 @@ class ChooseOffer extends Component {
 
     shipmentDispatch.sendQuotes({ shipment, quotes, email })
   }
+
+  getRoutes () {
+    const { shipmentData } = this.props
+    if (!shipmentData) return []
+
+    const { shipment, results } = shipmentData
+    if (!shipment || !results) return []
+
+    const motKeys = Object.keys(this.state.selectedMoT).filter(k => this.state.selectedMoT[k])
+
+    return results.filter(result => motKeys.includes(result.meta.mode_of_transport))
+  }
+
   render () {
     const {
       shipmentData, user, shipmentDispatch, theme, tenant, originalSelectedDay, t
@@ -198,46 +190,26 @@ class ChooseOffer extends Component {
     if (!shipmentData) return ''
     const { scope } = tenant
 
-    const { currentCurrency, isChecked } = this.state
+    const { isChecked } = this.state
     const {
       shipment, results, lastTripDate, aggregatedCargo
     } = shipmentData
     if (!shipment || !results) return ''
 
-    const depDay = originalSelectedDay || shipment.selected_day
-    results.sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
     const availableMoTKeys = {}
     results.forEach((s) => {
       if (tenant.scope.modes_of_transport[s.meta.mode_of_transport][shipment.load_type]) {
         availableMoTKeys[s.meta.mode_of_transport] = true
       }
     })
-    const closestRoutes = []
-    const focusRoutes = []
-    const altRoutes = []
-    const mKeys = Object.keys(tenant.scope.modes_of_transport)
-      .filter(motKey => tenant.scope.modes_of_transport[motKey][shipment.load_type])
-    const motKeys = Object.keys(this.state.selectedMoT).filter(k => this.state.selectedMoT[k])
-    const noMotKeys = Object.keys(this.state.selectedMoT).filter(k => !this.state.selectedMoT[k])
-    const scheduleObj = {}
-    mKeys.forEach((mk) => {
-      scheduleObj[mk] = results.filter(s => s.meta.mode_of_transport === mk)
-      scheduleObj[mk].sort((a, b) => Math.abs(moment(depDay).diff(a.closing_date)) - Math.abs(moment(depDay).diff(b.closing_date)))
-    })
-    motKeys.forEach((key) => {
-      if (scheduleObj[key]) {
-        const topSched = scheduleObj[key].shift()
-        if (topSched) {
-          closestRoutes.push(topSched)
-        }
-        scheduleObj[key].sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
-        focusRoutes.push(...scheduleObj[key])
-      }
-    })
-    noMotKeys.forEach((key) => {
-      altRoutes.push(...scheduleObj[key])
-    })
-    const focusRoutestoRender = focusRoutes
+
+    const routes = this.getRoutes()
+    const depDay = originalSelectedDay || shipment.selected_day
+    const isSingleResultRender = routes.length === 1
+
+    const selectedOffers = isSingleResultRender ? routes : this.state.selectedOffers
+
+    const routesToRender = routes
       .sort((a, b) => parseFloat(a.quote.total.value) - parseFloat(b.quote.total.value))
       .map(s => (
         <div key={v4()} className="margin_bottom flex-100">
@@ -247,37 +219,17 @@ class ChooseOffer extends Component {
             pickup={shipment.has_pre_carriage}
             startDate={shipment.desired_start_date}
             result={s}
-            isChecked={isChecked[s.meta.charge_trip_id]}
-            handleClick={e => this.handleClick(e, s)}
-            cargo={shipmentData.cargoUnits}
+            isFirst
+            isChecked={isChecked[s.meta.charge_trip_id] || isSingleResultRender}
+            onClickAdd={isSingleResultRender ? null : e => this.handleClick(e, s)}
             selectResult={this.chooseResult}
+            cargo={shipmentData.cargoUnits}
             aggregatedCargo={aggregatedCargo}
-            handleScheduleRequest={this.handleScheduleRequest}
+            onScheduleRequest={this.handleScheduleRequest}
             truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
           />
         </div>
       ))
-
-    const closestRoutestoRender = closestRoutes.map(s => (
-
-      <div key={v4()} className="margin_bottom flex-100">
-        <QuoteCard
-          theme={theme}
-          tenant={tenant}
-          pickup={shipment.has_pre_carriage}
-          startDate={shipment.desired_start_date}
-          result={s}
-          isFirst
-          isChecked={isChecked[s.meta.charge_trip_id]}
-          handleClick={e => this.handleClick(e, s)}
-          selectResult={this.chooseResult}
-          cargo={shipmentData.cargoUnits}
-          aggregatedCargo={aggregatedCargo}
-          handleScheduleRequest={this.handleScheduleRequest}
-          truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
-        />
-      </div>
-    ))
 
     return (
       <div
@@ -341,17 +293,14 @@ class ChooseOffer extends Component {
           </div> : ''}
           <div className="flex  offset-5 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-wrap">
-              {closestRoutestoRender}
-            </div>
-            <div className="flex-100 layout-row layout-wrap">
-              {focusRoutestoRender}
+              {routesToRender}
             </div>
           </div>
           {isQuote(tenant) ? (
             <div className={`flex-20 offset-5 quote_options layout-wrap layout-align-center-start ${styles.download_section}`}>
               <p className={`flex-100 layout-row ${styles.offer_title}`} >{isQuote(tenant) ? t('shipment:sendQuote') : t('shipment:selectedOffers') }</p>
-              {this.state.selectedOffers !== 0 ? (
-                this.state.selectedOffers.map((offer, i) =>
+              {selectedOffers.length !== 0 ? (
+                selectedOffers.map((offer, i) =>
                   (<div className={`flex-100 layout-row layout-align-start-center ${styles.selected_offer}`}>
                     { scope.hide_grand_total
                       ? <span> {t('shipment:quoteNo', { number: i + 1 })}</span>
@@ -365,8 +314,8 @@ class ChooseOffer extends Component {
                   <DocumentsDownloader
                     theme={theme}
                     target="quotations"
-                    disabled={this.state.selectedOffers.length < 1}
-                    options={{ quotes: this.state.selectedOffers, shipment }}
+                    disabled={selectedOffers.length < 1}
+                    options={{ quotes: selectedOffers, shipment }}
                     size="full"
                     shipment={shipment}
                   />
@@ -377,10 +326,10 @@ class ChooseOffer extends Component {
                   <RoundButton
                     theme={theme}
                     size="full"
-                    disabled={this.state.selectedOffers.length < 1}
-                    active={this.state.selectedOffers.length > 0}
+                    disabled={selectedOffers.length < 1}
+                    active={selectedOffers.length > 0}
                     text={t('account:sendViaEmail')}
-                    handleNext={() => this.selectQuotes(shipment, this.state.selectedOffers, this.props.user.email)}
+                    handleNext={() => this.selectQuotes(shipment, selectedOffers, this.props.user.email)}
                   />
                 </div>
               </div>
@@ -408,25 +357,6 @@ class ChooseOffer extends Component {
       </div>
     )
   }
-}
-ChooseOffer.propTypes = {
-  theme: PropTypes.theme,
-  user: PropTypes.user.isRequired,
-  t: PropTypes.func.isRequired,
-  shipmentData: PropTypes.shipmentData.isRequired,
-  chooseOffer: PropTypes.func,
-  modal: PropTypes.bool,
-  req: PropTypes.objectOf(PropTypes.any),
-  setStage: PropTypes.func.isRequired,
-  goTo: PropTypes.func.isRequired,
-  originalSelectedDay: PropTypes.string,
-  prevRequest: PropTypes.shape({
-    shipment: PropTypes.shipment
-  }),
-  shipmentDispatch: PropTypes.shape({
-    goTo: PropTypes.func
-  }).isRequired,
-  tenant: PropTypes.tenant
 }
 
 ChooseOffer.defaultProps = {

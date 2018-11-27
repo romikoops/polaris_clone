@@ -4,7 +4,7 @@ import GreyBox from '../GreyBox/GreyBox'
 import ShipmentOverviewCard from '../ShipmentCard/ShipmentOverviewCard'
 import { AdminHubCard } from './AdminHubCard'
 import { AdminClientCardIndex } from './AdminClientCardIndex'
-import { AdminRouteList } from './AdminRouteList'
+import AdminRouteList from './RouteList'
 import { WorldMap } from './DashboardMap/WorldMap'
 import { gradientTextGenerator } from '../../helpers'
 import isQuote from '../../helpers/tenant'
@@ -32,6 +32,7 @@ export class AdminDashboard extends Component {
     this.handleClick = this.handleClick.bind(this)
     this.determinePerPage = this.determinePerPage.bind(this)
     this.handleShipmentAction = this.handleShipmentAction.bind(this)
+    this.handleRouteHover = this.handleRouteHover.bind(this)
   }
   componentDidMount () {
     window.scrollTo(0, 0)
@@ -43,12 +44,8 @@ export class AdminDashboard extends Component {
     window.removeEventListener('resize', this.determinePerPage)
   }
 
-  handleRouteHover (id) {
-    this.setState((prevState) => {
-      const { hoverId } = prevState
-
-      return { hoverId: hoverId === id ? false : id }
-    })
+  handleRouteHover (route) {
+    this.setState((prevState) => ({ hoverId: prevState.hoverId === route.id ? false : route.id }))
   }
 
   handleViewHubs () {
@@ -119,9 +116,10 @@ export class AdminDashboard extends Component {
       <div className="layout-row flex-100 layout-align-space-between-stretch layout-wrap">
         <div className="flex-gt-md-50 layout-padding flex-100">
           <AdminRouteList
-            itineraries={itineraries}
-            handleClick={itinerary => adminDispatch.loadItinerarySchedules(itinerary.id, true)}
-            hoverFn={e => this.handleRouteHover(e)}
+            routes={itineraries}
+            onClickRoute={itinerary => adminDispatch.loadItinerarySchedules(itinerary.id, true)}
+            onMouseEnterRoute={this.handleRouteHover}
+            onMouseLeaveRoute={this.handleRouteHover}
             theme={theme}
           />
         </div>

@@ -163,16 +163,16 @@ class UserLocationsBox extends PureComponent {
             <div className={`layout-row flex-100 ${styles.address_address}`}>
               <i className="flex-10 fa fa-map-marker clip" style={gradient} />
               <div className={`${styles.content} flex layout-wrap layout-align-space-between`}>
-                {op && op.address.street_number && op.address.street ? (
+                {op && op.address && op.address.street_number && op.address.street ? (
                   <p className="flex-100">{op.address.street_number} {op.address.street} </p>
                 ) : ''}
-                {op.address.city ? (
+                {op.address && op.address.city ? (
                   <p className="flex-100"><strong>{op.address.city}</strong></p>
                 ) : ''}
-                {op.address.zip_code ? (
+                {op.address && op.address.zip_code ? (
                   <p className="flex-100">{op.address.zip_code}</p>
                 ) : ''}
-                {op.address.country ? (
+                {op.address && op.address.country ? (
                   <p className="flex-100"> <Truncate lines={2}>{op.address.country} </Truncate></p>
                 ) : ''}
               </div>

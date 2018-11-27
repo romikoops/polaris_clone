@@ -40,6 +40,27 @@ function findAvailability (lat, lng, tenantId, loadType, carriage, availableHubI
   })
 }
 
+function searchLocations (input, countries, timestamp, callback) {
+  fetch(
+    `${getTenantApiUrl()}/locations?query=${input}&countries=${countries}`,
+    {
+      method: 'GET',
+      headers: authHeader()
+    }
+  ).then((promise) => {
+    promise.json().then((response) => {
+      if (response.data) {
+        const {
+          results
+        } = response.data
+        callback(results, timestamp)
+      } else {
+        callback([])
+      }
+    })
+  })
+}
+
 function findTruckTypes (originNexusIds, destinationNexusIds, callback) {
   fetch(
     `${getTenantApiUrl()}/truck_type_availability?` +
@@ -97,7 +118,8 @@ const getRequests = {
   findAvailability,
   nexuses,
   incoterms,
-  findTruckTypes
+  findTruckTypes,
+  searchLocations
 }
 
 export default getRequests

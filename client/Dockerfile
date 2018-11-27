@@ -11,12 +11,14 @@ RUN apk add --update --no-cache \
   lcms2-dev \
   libjpeg-turbo-utils \
   libpng-dev \
+  libtool \
   libwebp-tools \
+  nasm \
   optipng \
   pngquant
 
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm install --production
 
 COPY . .
 
@@ -34,7 +36,7 @@ RUN \
     RELEASE=$RELEASE \
     npm run build
 # Clear out source-maps
-RUN rm -v dist/*.js.map
+RUN rm -v dist/*.js.map.gz
 
 # Deployment Image
 FROM nginx:alpine

@@ -7,10 +7,11 @@ import Header from '../Header/Header'
 import ButtonSection from './ButtonSection'
 import isQuote from '../../helpers/tenant'
 
+const footerHeight = '60px'
 const StyledTop = styled.div`
   background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
     url(${props => props.bg});
-  height: 100vh;
+  height: ${props => (isQuote(props.tenant) ? `calc(100vh - ${footerHeight})` : '100vh')};
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
@@ -47,7 +48,7 @@ function LandingTop ({
   }
 
   return (
-    <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
+    <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage} tenant={tenant}>
       <div className="layout-row flex-100 layout-wrap">
         <div className="flex-100 layout-row">
           <Header user={user} theme={theme} isLanding scrollable invert noMessages />

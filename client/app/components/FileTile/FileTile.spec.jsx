@@ -32,9 +32,9 @@ jest.mock('../../constants', () => {
     invoice: 'Invoice',
     miscellaneous: 'Miscellaneous'
   }
-  const getApiHost = () => 'BASE_URL'
+  const getTenantApiUrl = () => 'BASE_URL'
 
-  return { moment, documentTypes, getApiHost }
+  return { moment, documentTypes, getTenantApiUrl }
 })
 // eslint-disable-next-line
 import FileTile from './FileTile'

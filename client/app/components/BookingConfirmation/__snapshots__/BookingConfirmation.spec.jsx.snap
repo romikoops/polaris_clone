@@ -108,6 +108,8 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
+                "planned_eta": "2018-12-01T12:14:08+01:00",
+                "planned_etd": "2018-11-12T12:14:08+01:00",
                 "schedules_charges": Object {
                   "AIR_HUB_ROUTE_KEY": Object {
                     "total": 200,
@@ -329,6 +331,8 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                     "incoterm_text": "FOO_INCOTERM_TEXT",
                     "load_type": "OCEAN_LOAD_TYPE",
                     "notes": "FOO_NOTES",
+                    "planned_eta": "2018-12-01T12:14:08+01:00",
+                    "planned_etd": "2018-11-12T12:14:08+01:00",
                     "schedules_charges": Object {
                       "AIR_HUB_ROUTE_KEY": Object {
                         "total": 200,
@@ -990,6 +994,8 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
+                "planned_eta": "2018-12-01T12:14:08+01:00",
+                "planned_etd": "2018-11-12T12:14:08+01:00",
                 "schedules_charges": Object {
                   "AIR_HUB_ROUTE_KEY": Object {
                     "total": 200,
@@ -1211,6 +1217,8 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                     "incoterm_text": "FOO_INCOTERM_TEXT",
                     "load_type": "OCEAN_LOAD_TYPE",
                     "notes": "FOO_NOTES",
+                    "planned_eta": "2018-12-01T12:14:08+01:00",
+                    "planned_etd": "2018-11-12T12:14:08+01:00",
                     "schedules_charges": Object {
                       "AIR_HUB_ROUTE_KEY": Object {
                         "total": 200,
@@ -1902,6 +1910,8 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
+                "planned_eta": "2018-12-01T12:14:08+01:00",
+                "planned_etd": "2018-11-12T12:14:08+01:00",
                 "schedules_charges": Object {
                   "AIR_HUB_ROUTE_KEY": Object {
                     "total": 200,
@@ -2123,6 +2133,8 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                     "incoterm_text": "FOO_INCOTERM_TEXT",
                     "load_type": "OCEAN_LOAD_TYPE",
                     "notes": "FOO_NOTES",
+                    "planned_eta": "2018-12-01T12:14:08+01:00",
+                    "planned_etd": "2018-11-12T12:14:08+01:00",
                     "schedules_charges": Object {
                       "AIR_HUB_ROUTE_KEY": Object {
                         "total": 200,
@@ -2895,6 +2907,8 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
+                "planned_eta": "2018-12-01T12:14:08+01:00",
+                "planned_etd": "2018-11-12T12:14:08+01:00",
                 "schedules_charges": Object {
                   "AIR_HUB_ROUTE_KEY": Object {
                     "total": 200,
@@ -3116,6 +3130,8 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                     "incoterm_text": "FOO_INCOTERM_TEXT",
                     "load_type": "OCEAN_LOAD_TYPE",
                     "notes": "FOO_NOTES",
+                    "planned_eta": "2018-12-01T12:14:08+01:00",
+                    "planned_etd": "2018-11-12T12:14:08+01:00",
                     "schedules_charges": Object {
                       "AIR_HUB_ROUTE_KEY": Object {
                         "total": 200,
@@ -3762,6 +3778,8 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
+                "planned_eta": "2018-12-01T12:14:08+01:00",
+                "planned_etd": "2018-11-12T12:14:08+01:00",
                 "schedules_charges": Object {
                   "AIR_HUB_ROUTE_KEY": Object {
                     "total": 200,
@@ -3983,6 +4001,8 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                     "incoterm_text": "FOO_INCOTERM_TEXT",
                     "load_type": "OCEAN_LOAD_TYPE",
                     "notes": "FOO_NOTES",
+                    "planned_eta": "2018-12-01T12:14:08+01:00",
+                    "planned_etd": "2018-11-12T12:14:08+01:00",
                     "schedules_charges": Object {
                       "AIR_HUB_ROUTE_KEY": Object {
                         "total": 200,
@@ -4629,6 +4649,8 @@ exports[`shallow render 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
+                "planned_eta": "2018-12-01T12:14:08+01:00",
+                "planned_etd": "2018-11-12T12:14:08+01:00",
                 "schedules_charges": Object {
                   "AIR_HUB_ROUTE_KEY": Object {
                     "total": 200,
@@ -4850,6 +4872,8 @@ exports[`shallow render 1`] = `
                     "incoterm_text": "FOO_INCOTERM_TEXT",
                     "load_type": "OCEAN_LOAD_TYPE",
                     "notes": "FOO_NOTES",
+                    "planned_eta": "2018-12-01T12:14:08+01:00",
+                    "planned_etd": "2018-11-12T12:14:08+01:00",
                     "schedules_charges": Object {
                       "AIR_HUB_ROUTE_KEY": Object {
                         "total": 200,
@@ -5496,6 +5520,8 @@ exports[`with cargo items 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
+                "planned_eta": "2018-12-01T12:14:08+01:00",
+                "planned_etd": "2018-11-12T12:14:08+01:00",
                 "schedules_charges": Object {
                   "AIR_HUB_ROUTE_KEY": Object {
                     "total": 200,
@@ -5717,6 +5743,8 @@ exports[`with cargo items 1`] = `
                     "incoterm_text": "FOO_INCOTERM_TEXT",
                     "load_type": "OCEAN_LOAD_TYPE",
                     "notes": "FOO_NOTES",
+                    "planned_eta": "2018-12-01T12:14:08+01:00",
+                    "planned_etd": "2018-11-12T12:14:08+01:00",
                     "schedules_charges": Object {
                       "AIR_HUB_ROUTE_KEY": Object {
                         "total": 200,
@@ -5995,6 +6023,8 @@ exports[`with cargo items 1`] = `
                   "incoterm_text": "FOO_INCOTERM_TEXT",
                   "load_type": "OCEAN_LOAD_TYPE",
                   "notes": "FOO_NOTES",
+                  "planned_eta": "2018-12-01T12:14:08+01:00",
+                  "planned_etd": "2018-11-12T12:14:08+01:00",
                   "schedules_charges": Object {
                     "AIR_HUB_ROUTE_KEY": Object {
                       "total": 200,
@@ -6169,6 +6199,8 @@ exports[`with cargo items 1`] = `
                   "incoterm_text": "FOO_INCOTERM_TEXT",
                   "load_type": "OCEAN_LOAD_TYPE",
                   "notes": "FOO_NOTES",
+                  "planned_eta": "2018-12-01T12:14:08+01:00",
+                  "planned_etd": "2018-11-12T12:14:08+01:00",
                   "schedules_charges": Object {
                     "AIR_HUB_ROUTE_KEY": Object {
                       "total": 200,
@@ -6686,6 +6718,8 @@ exports[`with containers 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
+                "planned_eta": "2018-12-01T12:14:08+01:00",
+                "planned_etd": "2018-11-12T12:14:08+01:00",
                 "schedules_charges": Object {
                   "AIR_HUB_ROUTE_KEY": Object {
                     "total": 200,
@@ -6907,6 +6941,8 @@ exports[`with containers 1`] = `
                     "incoterm_text": "FOO_INCOTERM_TEXT",
                     "load_type": "OCEAN_LOAD_TYPE",
                     "notes": "FOO_NOTES",
+                    "planned_eta": "2018-12-01T12:14:08+01:00",
+                    "planned_etd": "2018-11-12T12:14:08+01:00",
                     "schedules_charges": Object {
                       "AIR_HUB_ROUTE_KEY": Object {
                         "total": 200,
@@ -7167,6 +7203,8 @@ exports[`with containers 1`] = `
                   "incoterm_text": "FOO_INCOTERM_TEXT",
                   "load_type": "OCEAN_LOAD_TYPE",
                   "notes": "FOO_NOTES",
+                  "planned_eta": "2018-12-01T12:14:08+01:00",
+                  "planned_etd": "2018-11-12T12:14:08+01:00",
                   "schedules_charges": Object {
                     "AIR_HUB_ROUTE_KEY": Object {
                       "total": 200,
@@ -7317,6 +7355,8 @@ exports[`with containers 1`] = `
                   "incoterm_text": "FOO_INCOTERM_TEXT",
                   "load_type": "OCEAN_LOAD_TYPE",
                   "notes": "FOO_NOTES",
+                  "planned_eta": "2018-12-01T12:14:08+01:00",
+                  "planned_etd": "2018-11-12T12:14:08+01:00",
                   "schedules_charges": Object {
                     "AIR_HUB_ROUTE_KEY": Object {
                       "total": 200,

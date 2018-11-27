@@ -114,31 +114,33 @@ class UserShipmentContent extends Component {
 
       Object.keys(uploadedDocs).forEach((key) => {
         docChecker[key] = true
-
-        docView.push(<div className={`flex-35 layout-row layout-align-start-start layout-padding ${adminStyles.uploaded_doc}`}>
-          <i className="fa fa-check flex-none" style={{ color: 'rgb(13, 177, 75)' }} />
-          <div className="layout-row flex layout-wrap" style={{ marginBottom: '12px' }}>
-            <h4 className="flex-100 layout-row">{documentTypes[key]}</h4>
-            {uploadedDocs[key].map(doc => (
-              <div className="flex-100 layout-row">
-                <a
-                  href={doc.signed_url}
-                  className={`${styles.eye_link} flex-none layout-row layout-align-center-center`}
-                  target="_blank"
-                >
-                  <i className="fa fa-eye pointy flex-none" />
-                </a>
-                <i
-                  className="fa fa-trash pointy flex-none"
-                  onClick={() => this.deleteDoc(doc)}
-                />
-                <p className="flex layout-row">
-                  {doc.text}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>)
+        
+        if (key !== 'shipment_recap') {
+          docView.push(<div className={`flex-35 layout-row layout-align-start-start layout-padding ${adminStyles.uploaded_doc}`}>
+            <i className="fa fa-check flex-none" style={{ color: 'rgb(13, 177, 75)' }} />
+            <div className="layout-row flex layout-wrap" style={{ marginBottom: '12px' }}>
+              <h4 className="flex-100 layout-row">{documentTypes[key]}</h4>
+              {uploadedDocs[key].map(doc => (
+                <div className="flex-100 layout-row">
+                  <a
+                    href={doc.signed_url}
+                    className={`${styles.eye_link} flex-none layout-row layout-align-center-center`}
+                    target="_blank"
+                  >
+                    <i className="fa fa-eye pointy flex-none" />
+                  </a>
+                  <i
+                    className="fa fa-trash pointy flex-none"
+                    onClick={() => this.deleteDoc(doc)}
+                  />
+                  <p className="flex layout-row">
+                    {doc.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>)
+        }
       })
     }
 
@@ -292,7 +294,7 @@ class UserShipmentContent extends Component {
                             style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle}
                           />
                           <p>
-                            {t('shipment:originDocumentation')}
+                            {t('shipment:originLocalCharges')}
                           </p>
                         </div>
                         {scope.detailed_billing && feeHash.export ? <div className="flex layout-row layout-align-end-center">
@@ -317,7 +319,7 @@ class UserShipmentContent extends Component {
                             style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
                           />
                           <p>
-                            {t('shipment:destinationDocumentation')}
+                            {t('shipment:destinationLocalCharges')}
                           </p>
                         </div>
                         {scope.detailed_billing && feeHash.import ? <div className="flex layout-row layout-align-end-center">

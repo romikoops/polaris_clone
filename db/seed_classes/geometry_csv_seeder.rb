@@ -76,6 +76,7 @@ class GeometryCsvSeeder
       csv = CSV.new(gz, col_sep: "\t", quote_char: "'")
 
       csv.each do |row|
+
         postal_code = row.first
         area_code, = postal_code.match(/([A-Z]+)(\d+)/).captures
         Location.import([{

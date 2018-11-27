@@ -1703,3 +1703,402 @@ exports[`show schedules set to true 1`] = `
   </div>
 </div>
 `;
+
+exports[`single result rendering removes the "add" button 1`] = `
+<div
+  className="
+        flex-100 layout-row layout-wrap offer_result flex-lg-80 offset-lg-20
+        wrapper 
+      "
+>
+  <div
+    className="flex-100 layout-row layout-align-start-center container"
+  >
+    <div
+      className="flex-10 layout-row layout-align-center-center mot_icon"
+    >
+      <i
+        className="fa fa-anchor clip "
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-60 layout-row layout-align-start-center origin_destination"
+    >
+      <div
+        className="layout-column layout-align-center-start"
+      >
+        <p>
+          From
+          : 
+          <span>
+            Gothenburg
+          </span>
+        </p>
+        <p>
+          To
+          : 
+          <span>
+            Shanghai
+          </span>
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex layout-row layout-wrap layout-align-end-center"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-end-center charge_icons"
+      >
+        <ChargeIcons
+          destinationFees={false}
+          mot=""
+          onCarriage={false}
+          originFees={false}
+          preCarriage={false}
+          tenant={
+            Object {
+              "id": 123,
+              "scope": Object {
+                "closed_quotation_tool": true,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              },
+              "subdomain": "foosubdomain",
+              "theme": Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              },
+            }
+          }
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-end-center unit_info"
+      >
+        <p
+          className="flex-100 layout-row layout-align-end-center"
+        >
+          Kg
+          : 
+          <span>
+            0.0
+             kg
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-start-center"
+    style={
+      Object {
+        "paddingBottom": "18px",
+      }
+    }
+  />
+  <CollapsingContent
+    collapsed={true}
+    content={
+      <div
+        className="flex-100 layout-wrap layout-row"
+      >
+        <div
+          className="flex-100 layout-row dates_row dates_container dates_header"
+        >
+          <div
+            className="flex-75 layout-row"
+          >
+            <div
+              className="flex-25 layout-row"
+            >
+              <h4
+                className="date_title"
+              >
+                Closing Date
+              </h4>
+            </div>
+            <div
+              className="flex-25 layout-row"
+            >
+              <h4
+                className="date_title"
+              >
+                ETD 
+              </h4>
+            </div>
+            <div
+              className="flex-25 layout-row"
+            >
+              <h4
+                className="date_title"
+              >
+                ETA  
+              </h4>
+            </div>
+            <div
+              className="flex-25 layout-row"
+            >
+              <h4
+                className="date_title"
+              >
+                Estimated T/T
+              </h4>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row"
+          />
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center dates_container"
+        >
+          <div
+            className="flex-75 layout-row dates_row"
+          >
+            <div
+              className="flex-25 layout-wrap layout-row layout-align-center-center"
+            >
+              <div
+                className="flex-100 layout-row"
+              >
+                <p
+                  className="flex-none sched_elem"
+                >
+                   
+                  08-10-2018
+                   
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-25 layout-wrap layout-row layout-align-center-center"
+            >
+              <div
+                className="flex-100 layout-row"
+              >
+                <p
+                  className="flex-none sched_elem"
+                >
+                   
+                  08-10-2018
+                   
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-25 layout-wrap layout-row layout-align-center-center"
+            >
+              <div
+                className="flex-100 layout-row"
+              >
+                <p
+                  className="flex-none sched_elem"
+                >
+                   
+                  08-10-2018
+                   
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-25 layout-wrap layout-row layout-align-center-center"
+            >
+              <div
+                className="flex-100 layout-row"
+              >
+                <p
+                  className="flex-none sched_elem"
+                >
+                   
+                  0
+                   Days
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-wrap"
+            style={
+              Object {
+                "textAlign": "right",
+              }
+            }
+          >
+            <RoundButton
+              active={false}
+              back={false}
+              classNames="quote_card_select"
+              disabled={false}
+              flexContainer="100"
+              handleDisabled={null}
+              handleNext={[Function]}
+              icon=""
+              iconClass=""
+              inverse={false}
+              size="small"
+              text="Select"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-space-around-center date_btns"
+        >
+          <div
+            className="flex-30 layout-row layout-align-center-center
+                   disabled date_btn"
+            onClick={null}
+          >
+            <div
+              className="flex-none layout-row layout-align-space-around-center"
+            >
+              <i
+                className="flex-none fa fa-chevron-left"
+              />
+              <p
+                className="flex-none"
+              >
+                Earlier Departures
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-40 layout-row layout-align-center"
+          >
+            <p
+              className="flex-100 center"
+            >
+              Oct 8, 2018 -
+                      Oct 8, 2018
+                    
+            </p>
+          </div>
+          <div
+            className="flex-30 layout-row layout-align-center-center
+                   date_btn date_btn"
+            onClick={[Function]}
+          >
+            <div
+              className="flex-none layout-row layout-align-space-around-center"
+            >
+              <p
+                className="flex-none"
+              >
+                Later Departures
+              </p>
+              <i
+                className="flex-none fa fa-chevron-right"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+    minHeight=""
+  />
+  <CollapsingContent
+    collapsed={false}
+    content=""
+    minHeight=""
+  >
+    <QuoteChargeBreakdown
+      cargo={Array []}
+      quote={
+        Object {
+          "total": Object {
+            "currency": "EUR",
+            "value": 100,
+          },
+        }
+      }
+      scope={
+        Object {
+          "closed_quotation_tool": true,
+          "modes_of_transport": Object {
+            "air": Object {},
+            "ocean": Object {
+              "OCEAN_LOAD_TYPE": true,
+            },
+            "rail": Object {},
+            "truck": Object {},
+          },
+        }
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </CollapsingContent>
+  <div
+    className="flex-100 layout-wrap layout-align-start-stretch"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch layout-wrap total_row"
+    >
+      <div
+        className="flex layout-row layout-align-start-center"
+      >
+        <span
+          style={
+            Object {
+              "textAlign": "right",
+            }
+          }
+        >
+          Total
+        </span>
+      </div>
+      <div
+        className="flex-75  layout-row layout-align-end-center"
+      >
+        <p
+          style={Object {}}
+        >
+          100.00 EUR
+        </p>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-end-center"
+      >
+        <div
+          className="flex-60 layout-row layout-align-end-center layout-wrap"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

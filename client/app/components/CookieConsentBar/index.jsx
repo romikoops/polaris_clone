@@ -32,19 +32,35 @@ function handleAccept (user, tenant, loggedIn, authDispatch) {
 }
 
 class CookieConsentBar extends React.PureComponent {
+  static getDerivedStateFromProps (props, state) {
+    if (props.height === state.lastHeight) {
+      return null
+    } else {
+      return { bottom: CookieConsentBar.updatedBottom(props), lastHeight: props.height }
+    }
+  }
+
+  static updatedBottom (props) {
+    const scrollLimit = document.documentElement.scrollHeight - document.documentElement.clientHeight
+
+    if (window.scrollY < scrollLimit - props.height) {
+      return 0
+    } else {
+      return Math.max(0, props.height - (scrollLimit - window.scrollY))
+    }
+  }
   constructor (props) {
     super(props)
     this.state = {
       showModal: false,
-      bottom: 0
+      bottom: CookieConsentBar.updatedBottom(props)
     }
     this.toggleShowModal = this.toggleShowModal.bind(this)
     this.handleDecline = this.handleDecline.bind(this)
-    this.cookieBarLimit = this.cookieBarLimit.bind(this)
   }
 
   componentDidMount () {
-    window.addEventListener('scroll', this.cookieBarLimit)
+    window.addEventListener('scroll', () => { this.setState({ bottom: CookieConsentBar.updatedBottom(this.props) }) })
   }
 
   handleDecline () {
@@ -53,16 +69,6 @@ class CookieConsentBar extends React.PureComponent {
 
   toggleShowModal () {
     this.setState(prevState => ({ showModal: !prevState.showModal }))
-  }
-
-  cookieBarLimit () {
-    const scrollLimit = document.documentElement.scrollHeight - document.documentElement.clientHeight
-
-    if (window.scrollY < scrollLimit - this.props.height) {
-      this.setState({ bottom: 0 })
-    } else {
-      this.setState({ bottom: Math.max(0, this.props.height - (scrollLimit - window.scrollY)) })
-    }
   }
 
   render () {
@@ -152,7 +158,11 @@ CookieConsentBar.defaultProps = {
 }
 
 function mapStateToProps (state) {
-  return state.cookie
+  return {
+    height: 0,
+    fixedHeight: 0,
+    ...state.cookie
+  }
 }
 
 function mapDispatchToProps (dispatch) {

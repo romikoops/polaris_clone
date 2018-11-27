@@ -48,7 +48,6 @@ module DataInserter
 
       def default_mandatory_charge
         if @hub_data[:routing]&.include?('RTM') && @direction == 'import'
-
           @mandatory_charge = MandatoryCharge.find_by(export_charges: true, import_charges: false, pre_carriage: false, on_carriage: false)
         elsif @hub_data[:country] && ['Japan', 'United States of America', 'USA', 'Usa'].include?(@hub_data[:country]) && @direction == 'export'
           @mandatory_charge = MandatoryCharge.find_by(export_charges: false, import_charges: true, pre_carriage: false, on_carriage: false)
@@ -82,15 +81,6 @@ module DataInserter
         end
         awesome_print @hub.mandatory_charge
         @hubs << { hub: @hub, data: @hub_data }
-      end
-
-      def hub_type_name
-        @hub_type_name ||= {
-          'ocean' => 'Port',
-          'air'   => 'Airport',
-          'rail'  => 'Railyard',
-          'truck' => 'Depot'
-        }
       end
 
       def geocode_port_data

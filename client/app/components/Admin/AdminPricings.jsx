@@ -8,7 +8,6 @@ import {
   AdminPricingClientView,
   AdminPricingRouteView,
   AdminPricingsClientIndex,
-  AdminPricingsRouteIndex
 } from './'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions, documentActions } from '../../actions'
@@ -125,19 +124,6 @@ class AdminPricings extends Component {
                 <AdminPricingsClientIndex
                   theme={theme}
                   clients={filteredClients}
-                  adminTools={adminDispatch}
-                  {...props}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/admin/pricings/routes"
-              render={props => (
-                <AdminPricingsRouteIndex
-                  theme={theme}
-                  hubs={hubs}
-                  itineraries={itineraries || pricingData.itineraries}
                   adminTools={adminDispatch}
                   {...props}
                 />

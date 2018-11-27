@@ -9,4 +9,5 @@ export const store = createStore(
   typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
   applyMiddleware(thunkMiddleware, loggerMiddleware)
 )
+
 export default store

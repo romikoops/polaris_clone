@@ -60,12 +60,11 @@ class Landing extends Component {
 
     const loadingScreen = this.props.loading ? <Loading theme={theme} /> : ''
 
-    const minHeightForFooter = window.innerHeight - 350
-    const footerStyle = { minHeight: `${minHeightForFooter}px`, position: 'relative', paddingBottom: '125px' }
+    const innerWrapperStyle = { position: 'relative', paddingBottom: isQuote(tenant) ? '60px' : '125px' }
 
     return (
       <div className={`${styles.wrapper_landing} layout-row flex-100 layout-wrap`}>
-        <div className=" layout-row flex-100 layout-wrap" style={footerStyle}>
+        <div className=" layout-row flex-100 layout-wrap" style={innerWrapperStyle}>
           {loadingScreen}
           <LandingTop
             className="flex-100"
