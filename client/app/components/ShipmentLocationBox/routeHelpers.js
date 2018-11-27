@@ -9,8 +9,16 @@ function routeOption (route) {
     }
   }
 }
+
+function centerFromGeoJson (lats, lngs) {
+  const reducer = (accumulator, currentValue) => accumulator + currentValue;
+  const centerLat = lats.reduce(reducer) / lats.length
+  const centerLng = lngs.reduce(reducer) / lngs.length
+  return { lat: centerLat, lng: centerLng }
+}
 const routeHelpers = {
-  routeOption
+  routeOption,
+  centerFromGeoJson
 }
 
 export default routeHelpers

@@ -65,7 +65,7 @@ module DocumentService
       user_aliases.each do |ua|
         ua.as_json.each do |k, value|
           if k.to_s == 'address_id'
-            loc = find_address(value)
+            loc = Address.find(value)
             loc.set_geocoded_address_from_fields! unless loc.geocoded_address
             alias_sheet.write(row, 0, k.humanize)
             alias_sheet.write(row, 1, loc.geocoded_address)
@@ -84,7 +84,7 @@ module DocumentService
       user_contacts.each do |uc|
         uc.as_json.each do |k, value|
           if k.to_s == 'address_id'
-            loc = find_address(value)
+            loc = Address.find(value)
             loc.set_geocoded_address_from_fields! unless loc.geocoded_address
             contacts_sheet.write(row, 0, k.humanize)
             contacts_sheet.write(row, 1, loc.geocoded_address)
@@ -96,10 +96,6 @@ module DocumentService
         end
         row += 1
       end
-    end
-
-    def find_address(id)
-      Address.find(id)
     end
 
     def shipment_headers

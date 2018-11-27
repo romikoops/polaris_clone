@@ -140,7 +140,6 @@ class QuoteChargeBreakdown extends Component {
       .map(array => array.filter(value => !this.unbreakableKeys.includes(value)))
       .filter(value => value.length !== 1)
 
-
     return unitSections.map((unitArray) => {
       const cargo = this.fetchCargoData(unitArray[0])
       const contentSections = Object.entries(unitArray[1])

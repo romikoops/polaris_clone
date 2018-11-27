@@ -4,7 +4,7 @@ module ExcelTool
   class OverrideTruckingRateByHub < ExcelTool::BaseTool
     attr_reader :defaults, :trucking_pricing_by_zone, :sheets, :zone_sheet,
                 :fees_sheet, :num_rows, :zip_char_length, :identifier_type, :identifier_modifier, :zones,
-                :all_ident_values_and_countries, :charges
+                :all_ident_values_and_countries, :charges, :locations
 
     def post_initialize(_args)
       @defaults = {}
@@ -19,6 +19,7 @@ module ExcelTool
       @zones = {}
       @all_ident_values_and_countries = {}
       @charges = {}
+      @locations = []
     end
 
     def perform
@@ -27,6 +28,7 @@ module ExcelTool
       load_ident_values_and_countries
       load_fees_and_charges
       overwrite_zonal_trucking_rates_by_hub
+      import_locations
       end_time = DateTime.now
       diff = (end_time - start_time) / 86_400
       { results: results, stats: stats }
@@ -169,8 +171,13 @@ module ExcelTool
     end
 
     def load_ident_values_and_countries
+      current_country = { name: nil, code: nil }
       zones.each do |zone_name, idents_and_countries|
+        current_country = { name: Country.find_by_code(idents_and_countries.first[:country]).name, code: idents_and_countries.first[:country] }
         all_ident_values_and_countries[zone_name] = idents_and_countries.flat_map do |idents_and_country|
+          if current_country[:code] != idents_and_country[:country]
+            current_country = { name: Country.find_by_code(idents_and_country[:country]).name, code: idents_and_country[:country] }
+          end
           if idents_and_country[:min] && idents_and_country[:max]
             (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
               stats[:trucking_destinations][:number_created] += 1
@@ -181,6 +188,7 @@ module ExcelTool
               else
                 ident_value = ident
               end
+              @locations << { postal_code: ident_value, country: current_country[:name] }
               { ident: ident_value, country: idents_and_country[:country] }
             end
           elsif identifier_type == 'location_id'
@@ -193,6 +201,14 @@ module ExcelTool
           end
         end
       end
+    end
+
+    def import_locations
+      Location.import(@locations,
+                      on_duplicate_key_update: {
+                        conflict_target: %i(postal_code suburb neighbourhood city province country),
+                        columns:         %i(bounds)
+                      })
     end
 
     def parse_fees_sheet

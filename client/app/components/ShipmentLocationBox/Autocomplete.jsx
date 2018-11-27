@@ -1,9 +1,12 @@
 import React, { PureComponent } from 'react'
 import { withNamespaces } from 'react-i18next'
-import PropTypes from '../../prop-types'
+import { v4 as uuidv4 } from 'uuid'
 import styles from './ShipmentLocationBox.scss'
 import listenerTools from '../../helpers/listeners'
 import errorStyles from '../../styles/errors.scss'
+import getRequests from './getRequests'
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
+import { moment } from '../../constants'
 
 class Autocomplete extends PureComponent {
   static filterResults (results, options) {
@@ -25,24 +28,27 @@ class Autocomplete extends PureComponent {
       areaResults: [],
       hideResults: false,
       highlightIndex: 0,
-      highlightSection: 'area'
+      highlightSection: 'area',
+      searchTimeout: {}
     }
     this.handleInputChange = this.handleInputChange.bind(this)
     this.shouldTriggerInputChange = this.shouldTriggerInputChange.bind(this)
-    this.handleSelect = this.handleSelect.bind(this)
+    this.handleArea = this.handleArea.bind(this)
+    this.handleAddress = this.handleAddress.bind(this)
     this.deltaHighlightIndex = this.deltaHighlightIndex.bind(this)
     this.handleKeyEvent = this.handleKeyEvent.bind(this)
     this.showResultsTimer = this.showResultsTimer.bind(this)
 
     const { gMaps } = props
 
-    this.areaService = new gMaps.places.AutocompleteService({ types: ['regions'] })
     this.addressService = new gMaps.places.AutocompleteService({ types: ['address'] })
   }
 
   componentWillReceiveProps (nextProps) {
+    if (typeof this.addressService === undefined) {
+      this.addressService = new nextProps.gMaps.places.AutocompleteService({ types: ['address'] })
+    }
     if (this.props.input === nextProps.input) return
-
     this.setState(prevState => (nextProps.input === prevState.input ? {} : { input: nextProps.input }))
   }
 
@@ -137,10 +143,14 @@ class Autocomplete extends PureComponent {
     this.setState((prevState) => {
       const { value } = target
       const { searchTimeout, input } = prevState
-      if (value === input || !value) return {}
-
-      if (searchTimeout) clearTimeout(searchTimeout)
-      const newTimeout = setTimeout(this.handleInputChange(value), 750)
+      if (value === input) return {}
+      const newTimeout = {}
+      if (searchTimeout.address) clearTimeout(searchTimeout.address)
+      if (searchTimeout.area) clearTimeout(searchTimeout.area)
+      if (value) {
+        newTimeout.address = setTimeout(() => this.handleInputChange(value), 750)
+        newTimeout.area = setTimeout(() => this.handleAreaInputChange(value), 750)
+      }
 
       return {
         input: value,
@@ -150,16 +160,12 @@ class Autocomplete extends PureComponent {
   }
 
   handleInputChange (input) {
-    this.areaService.getPlacePredictions({ input }, (results) => {
-      if (results && results.length > 0) {
-        const filteredResults = Autocomplete.filterResults(results, { types: ['postal_code', 'locality'] })
-        this.setState({ areaResults: filteredResults, hideResults: false }, () => {
-          this.initKeyboardListener()
-          this.showResultsTimer()
-        })
-      }
-    })
-    this.addressService.getPlacePredictions({ input }, (results) => {
+    const { countries } = this.props
+    const options = { input }
+    if (countries.length > 0) {
+      options.componentRestrictions = { country: countries }
+    }
+    this.addressService.getPlacePredictions(options, (results) => {
       if (results && results.length > 0) {
         const filteredResults = Autocomplete.filterResults(results, {})
         this.setState({ addressResults: filteredResults, hideResults: false }, () => {
@@ -169,11 +175,32 @@ class Autocomplete extends PureComponent {
       }
     })
   }
-  handleSelect (result) {
+
+  handleAreaInputChange (input) {
+    const timestamp = moment().format('x')
+    this.setState({ queryingLocations: true, queryTimeStamp: timestamp }, () => getRequests.searchLocations(input, this.props.countries, timestamp, (results, returnedTimestamp) => {
+      if (this.state.queryTimeStamp > returnedTimestamp) return
+      this.setState({ areaResults: results, hideResults: false, queryingLocations: false }, () => {
+        this.initKeyboardListener()
+        this.showResultsTimer()
+      })
+    }))
+  }
+
+  handleAddress (result) {
     listenerTools.removeHandler(document, 'keydown', this.handleKeyEvent)
 
     const { handlePlaceSelect } = this.props
     this.getPlace(result.place_id, place => handlePlaceSelect(place))
+
+    this.setState({ hideResults: true, listenerSet: false })
+  }
+  handleArea (result) {
+    listenerTools.removeHandler(document, 'keydown', this.handleKeyEvent)
+
+    const { handleLocationSelect } = this.props
+    handleLocationSelect(result)
+
     this.setState({ hideResults: true, listenerSet: false })
   }
   shouldExpandResults () {
@@ -183,7 +210,7 @@ class Autocomplete extends PureComponent {
   render () {
     const { t, hasErrors, theme } = this.props
     const {
-      addressResults, areaResults, input, highlightIndex, highlightSection, hideResults
+      addressResults, areaResults, input, highlightIndex, highlightSection, hideResults, queryingLocations
     } = this.state
     const hasAddressResults = addressResults.length > 0
     const hasAreaResults = areaResults.length > 0
@@ -202,7 +229,8 @@ class Autocomplete extends PureComponent {
             <div
               className={`flex-100 layout-row layout-align-center-center pointy ${styles.autocomplete_card}`}
               style={isHighlighted ? highlightStyle : {}}
-              onClick={() => this.handleSelect(result)}
+              onClick={() => this.handleArea(result)}
+              key={uuidv4()}
             >
               <p className="flex">{result.description}</p>
             </div>
@@ -221,7 +249,8 @@ class Autocomplete extends PureComponent {
               className={`flex-100 layout-row layout-align-center-center
           ${styles.autocomplete_card} pointy ccb_result`}
               style={isHighlighted ? highlightStyle : {}}
-              onClick={() => this.handleSelect(result)}
+              onClick={() => this.handleAddress(result)}
+              key={uuidv4()}
             >
               <p className="flex">{result.description}</p>
             </div>)
@@ -258,13 +287,13 @@ class Autocomplete extends PureComponent {
           <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.autocomplete_inner}`}>
             <div className={`
               flex-100 layout-row layout-wrap layout-align-start-start area
-              ${styles.results_section} ${!hasAreaResults ? styles.hide_results : ''}
+              ${styles.results_section} ${!hasAreaResults && !queryingLocations ? styles.hide_results : ''}
             `}
             >
               <div className={`flex-100 layout-row layout-align-start-center ${styles.results_section_header}`}>
                 <p className="flex-none">{t('common:areaPostalCodes')}</p>
               </div>
-              {areaResultCards}
+              {queryingLocations ? <LoadingSpinner size="small" /> : areaResultCards}
             </div>
             <div className={`flex-100 layout-row layout-wrap layout-align-start-start address
                 ${styles.results_section} ${!hasAddressResults ? styles.hide_results : ''}`}
@@ -283,23 +312,6 @@ class Autocomplete extends PureComponent {
       </div>
     )
   }
-}
-
-Autocomplete.propTypes = {
-  gMaps: PropTypes.objectOf(PropTypes.func).isRequired,
-  theme: PropTypes.theme,
-  t: PropTypes.func.isRequired,
-  map: PropTypes.func.isRequired,
-  input: PropTypes.string,
-  hasErrors: PropTypes.bool,
-  handlePlaceSelect: PropTypes.func.isRequired,
-  tabIndex: PropTypes.string
-}
-Autocomplete.defaultProps = {
-  theme: {},
-  input: '',
-  hasErrors: false,
-  tabIndex: null
 }
 
 export default withNamespaces(['common', 'errors'])(Autocomplete)
