@@ -117,7 +117,12 @@ class Autocomplete extends PureComponent {
   handleSelectFromIndex () {
     const { highlightSection, highlightIndex } = this.state
     const results = this.state[`${highlightSection}Results`]
-    this.handleSelect(results[highlightIndex])
+
+    if (highlightSection === 'area') {
+      this.handleArea(results[highlightIndex])
+    } else {
+      this.handleAddress(results[highlightIndex])
+    }
   }
 
   deltaHighlightIndex (delta) {

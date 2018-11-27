@@ -161,8 +161,8 @@ export const shipmentInShipmentData = {
   },
   has_on_carriage: false,
   has_pre_carriage: false,
-  planned_eta: '11/12/2018',
-  planned_etd: '12/1/2019',
+  planned_etd: '2018-11-12T12:14:08+01:00',
+  planned_eta: '2018-12-01T12:14:08+01:00',
   notes: 'FOO_NOTES',
   cargo_notes: 'FOO_CARGO_NOTES',
   eori: 1234,
@@ -227,7 +227,6 @@ export const shipment = {
   }],
   status: 'FOO_STATUS',
   clientName: 'FOO_CLIENT_NAME',
-  planned_etd: 789,
   imc_reference: 'FOO_IMC_REFERENCE',
   schedule_set: [],
   service_level: 'standard',
@@ -235,7 +234,9 @@ export const shipment = {
     value: '200.99',
     currency: 'USD'
   },
-  cargo_count: 2
+  cargo_count: 2,
+  planned_etd: '2018-11-12T12:14:08+01:00',
+  planned_eta: '2018-12-01T12:14:08+01:00'
 }
 
 export const address = {
@@ -286,7 +287,7 @@ export const vehicleType = {
 export const schedule = {
   hub_route_key: 'FOO_SCHEDULE_ROUTE_KEY',
   id: 555777,
-  eta: 441188
+  eta: '2018-12-01T12:14:08+01:00'
 }
 
 export const charge = {

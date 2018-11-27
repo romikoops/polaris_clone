@@ -48,7 +48,21 @@ exports[`shallow rendering 1`] = `
     </div>
     <div
       className="layout-row flex-20 layout-align-start-center ett"
-    />
+    >
+      <div>
+        <b>
+          19
+           
+          days
+        </b>
+        <br />
+        <span
+          className="grey"
+        >
+          Estimated Transit Time
+        </span>
+      </div>
+    </div>
   </div>
   <div
     className="layout-row flex-100 layout-align-space-between-stretch middle_top_box"
