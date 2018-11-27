@@ -2,9 +2,22 @@ import React, { PureComponent } from 'react'
 import PropTypes from '../../prop-types'
 
 export default class Tabs extends PureComponent {
+  static getDerivedStateFromProps (props, state) {
+    if (props.tabReset && !state.tabWasReset) {
+      return {
+        tabWasReset: true,
+        activeTabIndex: 0 
+      }
+    }
+    return {
+      tabWasReset: false
+    }
+  }
+
   constructor (props, context) {
     super(props, context)
     this.state = {
+      tabWasReset: false,
       activeTabIndex: this.props.defaultActiveTabIndex ? this.props.defaultActiveTabIndex : 0
     }
     this.handleTabClick = this.handleTabClick.bind(this)

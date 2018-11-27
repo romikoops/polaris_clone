@@ -110,7 +110,7 @@ class AdminClientsIndex extends Component {
     })
   }
   render () {
-    const { theme, adminDispatch } = this.props
+    const { theme, adminDispatch, tabReset } = this.props
     const {
       expander, searchFilters, searchResults, page, numPages, numPerPage
     } = this.state
@@ -200,6 +200,7 @@ class AdminClientsIndex extends Component {
           <Tabs
             wrapperTabs="layout-row flex-25 flex-sm-40 flex-xs-80"
             paddingFixes
+            tabReset={tabReset}
           >
             <Tab
               tabTitle="Open"
