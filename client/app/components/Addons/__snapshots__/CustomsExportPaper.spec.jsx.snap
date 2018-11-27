@@ -32,7 +32,7 @@ exports[`shallow render 1`] = `
       >
         <strong>
            
-          The Export Customs Paper is mandatory for all shipments when exporting from Germany. If you choose to secure your Customs Export Paper on your own, {{tenant}} will need a copy of the Export Customs Paper including Master Reference Number.
+          The Export Customs Paper is mandatory for all shipments when exporting from Germany. If you choose to secure your Export Customs Paper on your own, {{tenant}} will need a copy of the Export Customs Paper including Master Reference Number.
         </strong>
       </p>
     </div>

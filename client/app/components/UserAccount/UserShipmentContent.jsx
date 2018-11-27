@@ -292,7 +292,7 @@ class UserShipmentContent extends Component {
                             style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle}
                           />
                           <p>
-                            {t('shipment:originDocumentation')}
+                            {t('shipment:originLocalCharges')}
                           </p>
                         </div>
                         {scope.detailed_billing && feeHash.export ? <div className="flex layout-row layout-align-end-center">
@@ -317,7 +317,7 @@ class UserShipmentContent extends Component {
                             style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
                           />
                           <p>
-                            {t('shipment:destinationDocumentation')}
+                            {t('shipment:destinationLocalCharges')}
                           </p>
                         </div>
                         {scope.detailed_billing && feeHash.import ? <div className="flex layout-row layout-align-end-center">

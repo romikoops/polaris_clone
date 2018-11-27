@@ -316,7 +316,7 @@ class AdminShipmentContent extends Component {
                               style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle}
                             />
                             <p>
-                              {t('shipment:originDocumentation')}
+                              {t('shipment:originLocalCharges')}
                             </p>
                           </div>
                           {feeHash.export ? <div className="flex-100 layout-row layout-align-end-center">
@@ -363,7 +363,7 @@ class AdminShipmentContent extends Component {
                               style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
                             />
                             <p>
-                              {t('shipment:destinationDocumentation')}
+                              {t('shipment:destinationLocalCharges')}
                             </p>
                           </div>
                           {feeHash.import ? <div className="flex-100 layout-row layout-align-end-center">

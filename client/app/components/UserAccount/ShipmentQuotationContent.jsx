@@ -130,7 +130,7 @@ function ShipmentQuotationContent ({
                           style={feeHash.export ? selectedStyle : deselectedStyle}
                         />
                         <p>
-                          {t('shipment:originDocumentation')}
+                          {t('shipment:originLocalCharges')}
                         </p>
                       </div>
                     </div>
@@ -145,7 +145,7 @@ function ShipmentQuotationContent ({
                           style={feeHash.import ? selectedStyle : deselectedStyle}
                         />
                         <p>
-                          {t('shipment:destinationDocumentation')}
+                          {t('shipment:destinationLocalCharges')}
                         </p>
                       </div>
                     </div>
