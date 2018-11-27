@@ -48,18 +48,36 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def download_shipment
-    @document = Document.create!(
-      shipment: shipment,
-      text: "shipment_recap_#{shipment.imc_reference}",
-      doc_type: 'shipment_recap',
-      user: shipment.user,
-      tenant: shipment.user.tenant,
-      file: {
-        io: StringIO.new(ShippingTools.generate_shipment_pdf(shipment: shipment)),
-        filename: "shipment_recap_#{shipment.imc_reference}.pdf",
-        content_type: 'application/pdf'
-      }
-    )
+    shipment_pdf = shipment.documents.where(doc_type: 'shipment_recap').last
+
+    if shipment_pdf.nil?
+      @document = Document.create!(
+        shipment: shipment,
+        text: "shipment_recap_#{shipment.imc_reference}",
+        doc_type: 'shipment_recap',
+        user: shipment.user,
+        tenant: shipment.user.tenant,
+        file: {
+          io: StringIO.new(ShippingTools.generate_shipment_pdf(shipment: shipment)),
+          filename: "shipment_recap_#{shipment.imc_reference}.pdf",
+          content_type: 'application/pdf'
+        }
+      )
+    else
+      @document = shipment_pdf
+      @document.update!(
+        shipment: shipment,
+        text: "shipment_recap_#{shipment.imc_reference}",
+        doc_type: 'shipment_recap',
+        user: shipment.user,
+        tenant: shipment.user.tenant,
+        file: {
+          io: StringIO.new(ShippingTools.generate_shipment_pdf(shipment: shipment)),
+          filename: "shipment_recap_#{shipment.imc_reference}.pdf",
+          content_type: 'application/pdf'
+        }
+      )
+    end
 
     response_handler(key: 'shipment_recap', url: rails_blob_url(@document.file, disposition: 'attachment'))
   end
