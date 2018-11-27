@@ -200,14 +200,14 @@ exports[`props.shipment.schedule_set.length < 1 1`] = `
             className="flex-none sched_elem"
           >
              
-            789
+            2018-11-12T12:14:08+01:00
              
           </p>
           <p
             className="flex-none sched_elem"
           >
              
-            789
+            2018-11-12T12:14:08+01:00
              
           </p>
         </div>
@@ -233,12 +233,14 @@ exports[`props.shipment.schedule_set.length < 1 1`] = `
             className="flex-none sched_elem"
           >
              
+            2018-12-01T12:14:08+01:00
              
           </p>
           <p
             className="flex-none sched_elem"
           >
              
+            2018-12-01T12:14:08+01:00
              
           </p>
         </div>
@@ -264,6 +266,7 @@ exports[`props.shipment.schedule_set.length < 1 1`] = `
             className="flex-none sched_elem"
           >
              
+            2018-12-01T12:14:08+01:00
               
              Days
           </p>
@@ -474,14 +477,14 @@ exports[`shallow render 1`] = `
             className="flex-none sched_elem"
           >
              
-            789
+            2018-11-12T12:14:08+01:00
              
           </p>
           <p
             className="flex-none sched_elem"
           >
              
-            789
+            2018-11-12T12:14:08+01:00
              
           </p>
         </div>
@@ -507,12 +510,14 @@ exports[`shallow render 1`] = `
             className="flex-none sched_elem"
           >
              
+            2018-12-01T12:14:08+01:00
              
           </p>
           <p
             className="flex-none sched_elem"
           >
              
+            2018-12-01T12:14:08+01:00
              
           </p>
         </div>
@@ -538,6 +543,7 @@ exports[`shallow render 1`] = `
             className="flex-none sched_elem"
           >
              
+            2018-12-01T12:14:08+01:00
               
              Days
           </p>

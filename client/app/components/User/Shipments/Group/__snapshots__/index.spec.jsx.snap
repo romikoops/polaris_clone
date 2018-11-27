@@ -44,7 +44,8 @@ exports[`props.shipment is truthy 1`] = `
             "origin_hub": Object {
               "name": "FOO_ORIGIN_HUB",
             },
-            "planned_etd": 789,
+            "planned_eta": "2018-12-01T12:14:08+01:00",
+            "planned_etd": "2018-11-12T12:14:08+01:00",
             "schedule_set": Array [
               Object {
                 "hub_route_key": "foo-bar",

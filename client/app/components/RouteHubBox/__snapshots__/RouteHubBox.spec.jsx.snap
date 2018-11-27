@@ -69,7 +69,7 @@ exports[`shallow rendering 1`] = `
           <p
             className="flex-none"
           >
-            01/01/1970
+            12/11/2018
           </p>
         </div>
       </div>
@@ -126,6 +126,27 @@ exports[`shallow rendering 1`] = `
             }
           />
           <br />
+          <div
+            className="flex-100 layout-row layout-align-space-between-stretch time_diff"
+          >
+            <p
+              className="no_m center flex-none"
+            >
+               
+              <b>
+                Estimated Transit Time
+                :
+              </b>
+            </p>
+            <p
+              className="flex-none no_m center"
+            >
+               
+              19
+               days
+               
+            </p>
+          </div>
         </div>
       </div>
       <div
@@ -212,7 +233,7 @@ exports[`shallow rendering 1`] = `
           <p
             className="flex-none"
           >
-            26/11/2018
+            01/12/2018
           </p>
         </div>
       </div>
