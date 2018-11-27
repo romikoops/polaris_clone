@@ -5,15 +5,16 @@ module DataInserter
     def restructure_data(data)
       data.inject({}) do |memo, (k_sheet_name, values)|
         data_extraction_method = values[:data_extraction_method]
-        rows_data = case values[:data_extraction_method]
-                    when 'dynamic_fee_cols_no_ranges'
-                      restructure_with_dynamic_fee_cols_no_ranges(values[:rows_data])
-                    when 'one_col_fee_and_ranges'
-                      restructure_with_one_col_fee_and_ranges(values[:rows_data])
-                    else
-                      []
-                    end
-        memo.merge(k_sheet_name => { data_extraction_method: data_extraction_method, rows_data: rows_data })
+        restructured_rows_data = values[:rows_data].map { |row_data| row_data.except(:row_nr) }
+        restructured_rows_data = case data_extraction_method
+                                 when 'dynamic_fee_cols_no_ranges'
+                                   restructure_with_dynamic_fee_cols_no_ranges(restructured_rows_data)
+                                 when 'one_col_fee_and_ranges'
+                                   restructure_with_one_col_fee_and_ranges(restructured_rows_data)
+                                 else
+                                   []
+                                 end
+        memo.merge(k_sheet_name => { data_extraction_method: data_extraction_method, rows_data: restructured_rows_data })
       end
     end
 

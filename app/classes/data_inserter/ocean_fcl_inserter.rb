@@ -94,11 +94,11 @@ module DataInserter
     end
 
     def pricing_details_with_dynamic_fee_cols_no_ranges(row)
-      row[:fees].map do |fee_name, fee_value|
+      row[:fees].map do |fee_code, fee_value|
         { rate_basis: row[:rate_basis],
           rate: fee_value,
           min: 1 * fee_value,
-          shipping_type: fee_name.upcase,
+          shipping_type: fee_code.upcase,
           currency_name: row[:currency].upcase,
           tenant_id: @tenant.id }
       end

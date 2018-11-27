@@ -21,6 +21,7 @@ class Pricing < ApplicationRecord
     Arel::Nodes::SqlLiteral.new("(#{arel_table[:effective_date].name}, #{arel_table[:expiration_date].name})"),
     Arel::Nodes::SqlLiteral.new("(DATE '#{start_date}', DATE '#{end_date}')")
   ))}
+  scope :all_fcl, -> { joins(:transport_category).where('transport_categories.cargo_class LIKE ?', 'fcl%') }
 
   validates :transport_category, uniqueness: {
     scope: %i(itinerary_id tenant_id user_id tenant_vehicle_id effective_date expiration_date)
@@ -91,7 +92,7 @@ class Pricing < ApplicationRecord
     new_pricing_data.delete('service_level')
     new_pricing_data['user_id'] = user_id
     pricing_details = new_pricing_data.delete('data')
-    
+
     pricing_to_update.update(new_pricing_data)
     pricing_details.each do |shipping_type, pricing_detail_data|
       currency = pricing_detail_data.delete('currency')
