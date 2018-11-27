@@ -248,7 +248,6 @@ exports[`loading is true 1`] = `
           style={
             Object {
               "paddingBottom": "14px",
-              "paddingRight": "15px",
               "textAlign": "center",
             }
           }
@@ -258,102 +257,94 @@ exports[`loading is true 1`] = `
         <Connect(DocumentsDownloader)
           options={
             Object {
-              "shipment": Object {
-                "cargo_count": 1,
-                "cargo_notes": "FOO_CARGO_NOTES",
-                "eori": 1234,
-                "has_on_carriage": false,
-                "has_pre_carriage": false,
-                "incoterm_text": "FOO_INCOTERM_TEXT",
-                "load_type": "OCEAN_LOAD_TYPE",
-                "notes": "FOO_NOTES",
-                "planned_eta": "2018-12-01T12:14:08+01:00",
-                "planned_etd": "2018-11-12T12:14:08+01:00",
-                "schedules_charges": Object {
-                  "AIR_HUB_ROUTE_KEY": Object {
-                    "total": 200,
+              "shipmentData": Object {
+                "addresses": Object {
+                  "destination": Object {
+                    "city": "BAR_CITY",
+                    "country": "China",
+                    "street": "BAR_STREET",
+                    "street_number": 9,
+                    "zip_code": 845321,
                   },
-                  "OCEAN_HUB_ROUTE_KEY": Object {
-                    "total": 40,
+                  "endHub": "FOO_END_HUB",
+                  "origin": Object {
+                    "city": "FOO_CITY",
+                    "country": "Germany",
+                    "street": "FOO_STREET",
+                    "street_number": 7,
+                    "zip_code": 21177,
                   },
-                  "RAIL_HUB_ROUTE_KEY": Object {
-                    "total": 125,
+                  "startHub": "FOO_START_HUB",
+                },
+                "cargoItems": Array [],
+                "contacts": Array [],
+                "containers": Array [],
+                "documents": Array [],
+                "schedules": Array [
+                  Object {
+                    "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+                    "mode_of_transport": "ocean",
                   },
-                  "TRUCK_HUB_ROUTE_KEY": Object {
-                    "total": 75,
+                  Object {
+                    "hub_route_key": "AIR_HUB_ROUTE_KEY",
+                    "mode_of_transport": "air",
                   },
-                },
-                "selected_offer": Object {
-                  "cargo": Object {},
-                  "total": Object {
-                    "value": 77,
+                  Object {
+                    "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+                    "mode_of_transport": "truck",
                   },
-                },
-                "total_goods_value": Object {
-                  "currency": "USD",
-                  "value": 15,
-                },
-                "total_price": Object {
-                  "currency": "USD",
-                  "value": 12,
-                },
-                "trucking": Object {
-                  "on_carriage": Object {
-                    "trucking_time_in_seconds": 55,
+                  Object {
+                    "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+                    "mode_of_transport": "rail",
                   },
-                  "pre_carriage": Object {
-                    "trucking_time_in_seconds": 55,
+                ],
+                "shipment": Object {
+                  "cargo_count": 1,
+                  "cargo_notes": "FOO_CARGO_NOTES",
+                  "eori": 1234,
+                  "has_on_carriage": false,
+                  "has_pre_carriage": false,
+                  "incoterm_text": "FOO_INCOTERM_TEXT",
+                  "load_type": "OCEAN_LOAD_TYPE",
+                  "notes": "FOO_NOTES",
+                  "planned_eta": "2018-12-01T12:14:08+01:00",
+                  "planned_etd": "2018-11-12T12:14:08+01:00",
+                  "schedules_charges": Object {
+                    "AIR_HUB_ROUTE_KEY": Object {
+                      "total": 200,
+                    },
+                    "OCEAN_HUB_ROUTE_KEY": Object {
+                      "total": 40,
+                    },
+                    "RAIL_HUB_ROUTE_KEY": Object {
+                      "total": 125,
+                    },
+                    "TRUCK_HUB_ROUTE_KEY": Object {
+                      "total": 75,
+                    },
                   },
-                },
-              },
-            }
-          }
-          shipment={
-            Object {
-              "cargo_count": 1,
-              "cargo_notes": "FOO_CARGO_NOTES",
-              "eori": 1234,
-              "has_on_carriage": false,
-              "has_pre_carriage": false,
-              "incoterm_text": "FOO_INCOTERM_TEXT",
-              "load_type": "OCEAN_LOAD_TYPE",
-              "notes": "FOO_NOTES",
-              "planned_eta": "2018-12-01T12:14:08+01:00",
-              "planned_etd": "2018-11-12T12:14:08+01:00",
-              "schedules_charges": Object {
-                "AIR_HUB_ROUTE_KEY": Object {
-                  "total": 200,
-                },
-                "OCEAN_HUB_ROUTE_KEY": Object {
-                  "total": 40,
-                },
-                "RAIL_HUB_ROUTE_KEY": Object {
-                  "total": 125,
-                },
-                "TRUCK_HUB_ROUTE_KEY": Object {
-                  "total": 75,
-                },
-              },
-              "selected_offer": Object {
-                "cargo": Object {},
-                "total": Object {
-                  "value": 77,
-                },
-              },
-              "total_goods_value": Object {
-                "currency": "USD",
-                "value": 15,
-              },
-              "total_price": Object {
-                "currency": "USD",
-                "value": 12,
-              },
-              "trucking": Object {
-                "on_carriage": Object {
-                  "trucking_time_in_seconds": 55,
-                },
-                "pre_carriage": Object {
-                  "trucking_time_in_seconds": 55,
+                  "selected_offer": Object {
+                    "cargo": Object {},
+                    "total": Object {
+                      "value": 77,
+                    },
+                  },
+                  "total_goods_value": Object {
+                    "currency": "USD",
+                    "value": 15,
+                  },
+                  "total_price": Object {
+                    "currency": "USD",
+                    "value": 12,
+                  },
+                  "trucking": Object {
+                    "on_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
+                    "pre_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
+                  },
                 },
               },
             }
@@ -622,7 +613,6 @@ exports[`shallow render 1`] = `
           style={
             Object {
               "paddingBottom": "14px",
-              "paddingRight": "15px",
               "textAlign": "center",
             }
           }
@@ -632,102 +622,94 @@ exports[`shallow render 1`] = `
         <Connect(DocumentsDownloader)
           options={
             Object {
-              "shipment": Object {
-                "cargo_count": 1,
-                "cargo_notes": "FOO_CARGO_NOTES",
-                "eori": 1234,
-                "has_on_carriage": false,
-                "has_pre_carriage": false,
-                "incoterm_text": "FOO_INCOTERM_TEXT",
-                "load_type": "OCEAN_LOAD_TYPE",
-                "notes": "FOO_NOTES",
-                "planned_eta": "2018-12-01T12:14:08+01:00",
-                "planned_etd": "2018-11-12T12:14:08+01:00",
-                "schedules_charges": Object {
-                  "AIR_HUB_ROUTE_KEY": Object {
-                    "total": 200,
+              "shipmentData": Object {
+                "addresses": Object {
+                  "destination": Object {
+                    "city": "BAR_CITY",
+                    "country": "China",
+                    "street": "BAR_STREET",
+                    "street_number": 9,
+                    "zip_code": 845321,
                   },
-                  "OCEAN_HUB_ROUTE_KEY": Object {
-                    "total": 40,
+                  "endHub": "FOO_END_HUB",
+                  "origin": Object {
+                    "city": "FOO_CITY",
+                    "country": "Germany",
+                    "street": "FOO_STREET",
+                    "street_number": 7,
+                    "zip_code": 21177,
                   },
-                  "RAIL_HUB_ROUTE_KEY": Object {
-                    "total": 125,
+                  "startHub": "FOO_START_HUB",
+                },
+                "cargoItems": Array [],
+                "contacts": Array [],
+                "containers": Array [],
+                "documents": Array [],
+                "schedules": Array [
+                  Object {
+                    "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+                    "mode_of_transport": "ocean",
                   },
-                  "TRUCK_HUB_ROUTE_KEY": Object {
-                    "total": 75,
+                  Object {
+                    "hub_route_key": "AIR_HUB_ROUTE_KEY",
+                    "mode_of_transport": "air",
                   },
-                },
-                "selected_offer": Object {
-                  "cargo": Object {},
-                  "total": Object {
-                    "value": 77,
+                  Object {
+                    "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+                    "mode_of_transport": "truck",
                   },
-                },
-                "total_goods_value": Object {
-                  "currency": "USD",
-                  "value": 15,
-                },
-                "total_price": Object {
-                  "currency": "USD",
-                  "value": 12,
-                },
-                "trucking": Object {
-                  "on_carriage": Object {
-                    "trucking_time_in_seconds": 55,
+                  Object {
+                    "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+                    "mode_of_transport": "rail",
                   },
-                  "pre_carriage": Object {
-                    "trucking_time_in_seconds": 55,
+                ],
+                "shipment": Object {
+                  "cargo_count": 1,
+                  "cargo_notes": "FOO_CARGO_NOTES",
+                  "eori": 1234,
+                  "has_on_carriage": false,
+                  "has_pre_carriage": false,
+                  "incoterm_text": "FOO_INCOTERM_TEXT",
+                  "load_type": "OCEAN_LOAD_TYPE",
+                  "notes": "FOO_NOTES",
+                  "planned_eta": "2018-12-01T12:14:08+01:00",
+                  "planned_etd": "2018-11-12T12:14:08+01:00",
+                  "schedules_charges": Object {
+                    "AIR_HUB_ROUTE_KEY": Object {
+                      "total": 200,
+                    },
+                    "OCEAN_HUB_ROUTE_KEY": Object {
+                      "total": 40,
+                    },
+                    "RAIL_HUB_ROUTE_KEY": Object {
+                      "total": 125,
+                    },
+                    "TRUCK_HUB_ROUTE_KEY": Object {
+                      "total": 75,
+                    },
                   },
-                },
-              },
-            }
-          }
-          shipment={
-            Object {
-              "cargo_count": 1,
-              "cargo_notes": "FOO_CARGO_NOTES",
-              "eori": 1234,
-              "has_on_carriage": false,
-              "has_pre_carriage": false,
-              "incoterm_text": "FOO_INCOTERM_TEXT",
-              "load_type": "OCEAN_LOAD_TYPE",
-              "notes": "FOO_NOTES",
-              "planned_eta": "2018-12-01T12:14:08+01:00",
-              "planned_etd": "2018-11-12T12:14:08+01:00",
-              "schedules_charges": Object {
-                "AIR_HUB_ROUTE_KEY": Object {
-                  "total": 200,
-                },
-                "OCEAN_HUB_ROUTE_KEY": Object {
-                  "total": 40,
-                },
-                "RAIL_HUB_ROUTE_KEY": Object {
-                  "total": 125,
-                },
-                "TRUCK_HUB_ROUTE_KEY": Object {
-                  "total": 75,
-                },
-              },
-              "selected_offer": Object {
-                "cargo": Object {},
-                "total": Object {
-                  "value": 77,
-                },
-              },
-              "total_goods_value": Object {
-                "currency": "USD",
-                "value": 15,
-              },
-              "total_price": Object {
-                "currency": "USD",
-                "value": 12,
-              },
-              "trucking": Object {
-                "on_carriage": Object {
-                  "trucking_time_in_seconds": 55,
-                },
-                "pre_carriage": Object {
-                  "trucking_time_in_seconds": 55,
+                  "selected_offer": Object {
+                    "cargo": Object {},
+                    "total": Object {
+                      "value": 77,
+                    },
+                  },
+                  "total_goods_value": Object {
+                    "currency": "USD",
+                    "value": 15,
+                  },
+                  "total_price": Object {
+                    "currency": "USD",
+                    "value": 12,
+                  },
+                  "trucking": Object {
+                    "on_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
+                    "pre_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
+                  },
                 },
               },
             }
@@ -1070,7 +1052,6 @@ exports[`shipmentData.cargoItems is present 1`] = `
           style={
             Object {
               "paddingBottom": "14px",
-              "paddingRight": "15px",
               "textAlign": "center",
             }
           }
@@ -1080,102 +1061,107 @@ exports[`shipmentData.cargoItems is present 1`] = `
         <Connect(DocumentsDownloader)
           options={
             Object {
-              "shipment": Object {
-                "cargo_count": 1,
-                "cargo_notes": "FOO_CARGO_NOTES",
-                "eori": 1234,
-                "has_on_carriage": false,
-                "has_pre_carriage": false,
-                "incoterm_text": "FOO_INCOTERM_TEXT",
-                "load_type": "OCEAN_LOAD_TYPE",
-                "notes": "FOO_NOTES",
-                "planned_eta": "2018-12-01T12:14:08+01:00",
-                "planned_etd": "2018-11-12T12:14:08+01:00",
-                "schedules_charges": Object {
-                  "AIR_HUB_ROUTE_KEY": Object {
-                    "total": 200,
+              "shipmentData": Object {
+                "addresses": Object {
+                  "destination": Object {
+                    "city": "BAR_CITY",
+                    "country": "China",
+                    "street": "BAR_STREET",
+                    "street_number": 9,
+                    "zip_code": 845321,
                   },
-                  "OCEAN_HUB_ROUTE_KEY": Object {
-                    "total": 40,
+                  "endHub": "FOO_END_HUB",
+                  "origin": Object {
+                    "city": "FOO_CITY",
+                    "country": "Germany",
+                    "street": "FOO_STREET",
+                    "street_number": 7,
+                    "zip_code": 21177,
                   },
-                  "RAIL_HUB_ROUTE_KEY": Object {
-                    "total": 125,
+                  "startHub": "FOO_START_HUB",
+                },
+                "cargoItemTypes": Object {
+                  "bar": "BAR_CARGO_TYPE",
+                  "foo": "FOO_CARGO_TYPE",
+                },
+                "cargoItems": Array [
+                  Object {
+                    "cargo_item_type_id": "foo",
+                    "id": 0,
                   },
-                  "TRUCK_HUB_ROUTE_KEY": Object {
-                    "total": 75,
+                  Object {
+                    "cargo_item_type_id": "bar",
+                    "id": 1,
                   },
-                },
-                "selected_offer": Object {
-                  "cargo": Object {},
-                  "total": Object {
-                    "value": 77,
+                ],
+                "contacts": Array [],
+                "containers": Array [],
+                "documents": Array [],
+                "schedules": Array [
+                  Object {
+                    "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+                    "mode_of_transport": "ocean",
                   },
-                },
-                "total_goods_value": Object {
-                  "currency": "USD",
-                  "value": 15,
-                },
-                "total_price": Object {
-                  "currency": "USD",
-                  "value": 12,
-                },
-                "trucking": Object {
-                  "on_carriage": Object {
-                    "trucking_time_in_seconds": 55,
+                  Object {
+                    "hub_route_key": "AIR_HUB_ROUTE_KEY",
+                    "mode_of_transport": "air",
                   },
-                  "pre_carriage": Object {
-                    "trucking_time_in_seconds": 55,
+                  Object {
+                    "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+                    "mode_of_transport": "truck",
                   },
-                },
-              },
-            }
-          }
-          shipment={
-            Object {
-              "cargo_count": 1,
-              "cargo_notes": "FOO_CARGO_NOTES",
-              "eori": 1234,
-              "has_on_carriage": false,
-              "has_pre_carriage": false,
-              "incoterm_text": "FOO_INCOTERM_TEXT",
-              "load_type": "OCEAN_LOAD_TYPE",
-              "notes": "FOO_NOTES",
-              "planned_eta": "2018-12-01T12:14:08+01:00",
-              "planned_etd": "2018-11-12T12:14:08+01:00",
-              "schedules_charges": Object {
-                "AIR_HUB_ROUTE_KEY": Object {
-                  "total": 200,
-                },
-                "OCEAN_HUB_ROUTE_KEY": Object {
-                  "total": 40,
-                },
-                "RAIL_HUB_ROUTE_KEY": Object {
-                  "total": 125,
-                },
-                "TRUCK_HUB_ROUTE_KEY": Object {
-                  "total": 75,
-                },
-              },
-              "selected_offer": Object {
-                "cargo": Object {},
-                "total": Object {
-                  "value": 77,
-                },
-              },
-              "total_goods_value": Object {
-                "currency": "USD",
-                "value": 15,
-              },
-              "total_price": Object {
-                "currency": "USD",
-                "value": 12,
-              },
-              "trucking": Object {
-                "on_carriage": Object {
-                  "trucking_time_in_seconds": 55,
-                },
-                "pre_carriage": Object {
-                  "trucking_time_in_seconds": 55,
+                  Object {
+                    "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+                    "mode_of_transport": "rail",
+                  },
+                ],
+                "shipment": Object {
+                  "cargo_count": 1,
+                  "cargo_notes": "FOO_CARGO_NOTES",
+                  "eori": 1234,
+                  "has_on_carriage": false,
+                  "has_pre_carriage": false,
+                  "incoterm_text": "FOO_INCOTERM_TEXT",
+                  "load_type": "OCEAN_LOAD_TYPE",
+                  "notes": "FOO_NOTES",
+                  "planned_eta": "2018-12-01T12:14:08+01:00",
+                  "planned_etd": "2018-11-12T12:14:08+01:00",
+                  "schedules_charges": Object {
+                    "AIR_HUB_ROUTE_KEY": Object {
+                      "total": 200,
+                    },
+                    "OCEAN_HUB_ROUTE_KEY": Object {
+                      "total": 40,
+                    },
+                    "RAIL_HUB_ROUTE_KEY": Object {
+                      "total": 125,
+                    },
+                    "TRUCK_HUB_ROUTE_KEY": Object {
+                      "total": 75,
+                    },
+                  },
+                  "selected_offer": Object {
+                    "cargo": Object {},
+                    "total": Object {
+                      "value": 77,
+                    },
+                  },
+                  "total_goods_value": Object {
+                    "currency": "USD",
+                    "value": 15,
+                  },
+                  "total_price": Object {
+                    "currency": "USD",
+                    "value": 12,
+                  },
+                  "trucking": Object {
+                    "on_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
+                    "pre_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
+                  },
                 },
               },
             }
@@ -1490,7 +1476,6 @@ exports[`shipmentData.contacts is present 1`] = `
           style={
             Object {
               "paddingBottom": "14px",
-              "paddingRight": "15px",
               "textAlign": "center",
             }
           }
@@ -1500,102 +1485,140 @@ exports[`shipmentData.contacts is present 1`] = `
         <Connect(DocumentsDownloader)
           options={
             Object {
-              "shipment": Object {
-                "cargo_count": 1,
-                "cargo_notes": "FOO_CARGO_NOTES",
-                "eori": 1234,
-                "has_on_carriage": false,
-                "has_pre_carriage": false,
-                "incoterm_text": "FOO_INCOTERM_TEXT",
-                "load_type": "OCEAN_LOAD_TYPE",
-                "notes": "FOO_NOTES",
-                "planned_eta": "2018-12-01T12:14:08+01:00",
-                "planned_etd": "2018-11-12T12:14:08+01:00",
-                "schedules_charges": Object {
-                  "AIR_HUB_ROUTE_KEY": Object {
-                    "total": 200,
+              "shipmentData": Object {
+                "addresses": Object {
+                  "destination": Object {
+                    "city": "BAR_CITY",
+                    "country": "China",
+                    "street": "BAR_STREET",
+                    "street_number": 9,
+                    "zip_code": 845321,
                   },
-                  "OCEAN_HUB_ROUTE_KEY": Object {
-                    "total": 40,
+                  "endHub": "FOO_END_HUB",
+                  "origin": Object {
+                    "city": "FOO_CITY",
+                    "country": "Germany",
+                    "street": "FOO_STREET",
+                    "street_number": 7,
+                    "zip_code": 21177,
                   },
-                  "RAIL_HUB_ROUTE_KEY": Object {
-                    "total": 125,
+                  "startHub": "FOO_START_HUB",
+                },
+                "cargoItems": Array [],
+                "contacts": Array [
+                  Object {
+                    "contact": Object {
+                      "first_name": "FOO_FIRST_NAME",
+                      "last_name": "FOO_LAST_NAME",
+                    },
+                    "type": "notifyee",
                   },
-                  "TRUCK_HUB_ROUTE_KEY": Object {
-                    "total": 75,
+                  Object {
+                    "address": Object {
+                      "city": "FOO_CITY",
+                      "country": "Germany",
+                      "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                      "id": 246,
+                      "primary": true,
+                      "street": "FOO_STREET",
+                      "streetNumber": 579,
+                      "street_number": 579,
+                      "zipCode": "22456",
+                      "zip_code": "22456",
+                    },
+                    "contact": Object {
+                      "first_name": "BAR_FIRST_NAME",
+                      "last_name": "BAR_LAST_NAME",
+                    },
+                    "type": "shipper",
                   },
-                },
-                "selected_offer": Object {
-                  "cargo": Object {},
-                  "total": Object {
-                    "value": 77,
+                  Object {
+                    "address": Object {
+                      "city": "FOO_CITY",
+                      "country": "Germany",
+                      "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                      "id": 246,
+                      "primary": true,
+                      "street": "FOO_STREET",
+                      "streetNumber": 579,
+                      "street_number": 579,
+                      "zipCode": "22456",
+                      "zip_code": "22456",
+                    },
+                    "contact": Object {
+                      "first_name": "BAZ_FIRST_NAME",
+                      "last_name": "BAZ_LAST_NAME",
+                    },
+                    "type": "consignee",
                   },
-                },
-                "total_goods_value": Object {
-                  "currency": "USD",
-                  "value": 15,
-                },
-                "total_price": Object {
-                  "currency": "USD",
-                  "value": 12,
-                },
-                "trucking": Object {
-                  "on_carriage": Object {
-                    "trucking_time_in_seconds": 55,
+                ],
+                "containers": Array [],
+                "documents": Array [],
+                "schedules": Array [
+                  Object {
+                    "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+                    "mode_of_transport": "ocean",
                   },
-                  "pre_carriage": Object {
-                    "trucking_time_in_seconds": 55,
+                  Object {
+                    "hub_route_key": "AIR_HUB_ROUTE_KEY",
+                    "mode_of_transport": "air",
                   },
-                },
-              },
-            }
-          }
-          shipment={
-            Object {
-              "cargo_count": 1,
-              "cargo_notes": "FOO_CARGO_NOTES",
-              "eori": 1234,
-              "has_on_carriage": false,
-              "has_pre_carriage": false,
-              "incoterm_text": "FOO_INCOTERM_TEXT",
-              "load_type": "OCEAN_LOAD_TYPE",
-              "notes": "FOO_NOTES",
-              "planned_eta": "2018-12-01T12:14:08+01:00",
-              "planned_etd": "2018-11-12T12:14:08+01:00",
-              "schedules_charges": Object {
-                "AIR_HUB_ROUTE_KEY": Object {
-                  "total": 200,
-                },
-                "OCEAN_HUB_ROUTE_KEY": Object {
-                  "total": 40,
-                },
-                "RAIL_HUB_ROUTE_KEY": Object {
-                  "total": 125,
-                },
-                "TRUCK_HUB_ROUTE_KEY": Object {
-                  "total": 75,
-                },
-              },
-              "selected_offer": Object {
-                "cargo": Object {},
-                "total": Object {
-                  "value": 77,
-                },
-              },
-              "total_goods_value": Object {
-                "currency": "USD",
-                "value": 15,
-              },
-              "total_price": Object {
-                "currency": "USD",
-                "value": 12,
-              },
-              "trucking": Object {
-                "on_carriage": Object {
-                  "trucking_time_in_seconds": 55,
-                },
-                "pre_carriage": Object {
-                  "trucking_time_in_seconds": 55,
+                  Object {
+                    "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+                    "mode_of_transport": "truck",
+                  },
+                  Object {
+                    "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+                    "mode_of_transport": "rail",
+                  },
+                ],
+                "shipment": Object {
+                  "cargo_count": 1,
+                  "cargo_notes": "FOO_CARGO_NOTES",
+                  "eori": 1234,
+                  "has_on_carriage": false,
+                  "has_pre_carriage": false,
+                  "incoterm_text": "FOO_INCOTERM_TEXT",
+                  "load_type": "OCEAN_LOAD_TYPE",
+                  "notes": "FOO_NOTES",
+                  "planned_eta": "2018-12-01T12:14:08+01:00",
+                  "planned_etd": "2018-11-12T12:14:08+01:00",
+                  "schedules_charges": Object {
+                    "AIR_HUB_ROUTE_KEY": Object {
+                      "total": 200,
+                    },
+                    "OCEAN_HUB_ROUTE_KEY": Object {
+                      "total": 40,
+                    },
+                    "RAIL_HUB_ROUTE_KEY": Object {
+                      "total": 125,
+                    },
+                    "TRUCK_HUB_ROUTE_KEY": Object {
+                      "total": 75,
+                    },
+                  },
+                  "selected_offer": Object {
+                    "cargo": Object {},
+                    "total": Object {
+                      "value": 77,
+                    },
+                  },
+                  "total_goods_value": Object {
+                    "currency": "USD",
+                    "value": 15,
+                  },
+                  "total_price": Object {
+                    "currency": "USD",
+                    "value": 12,
+                  },
+                  "trucking": Object {
+                    "on_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
+                    "pre_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
+                  },
                 },
               },
             }
@@ -1873,7 +1896,6 @@ exports[`shipmentData.documents is present 1`] = `
           style={
             Object {
               "paddingBottom": "14px",
-              "paddingRight": "15px",
               "textAlign": "center",
             }
           }
@@ -1883,102 +1905,103 @@ exports[`shipmentData.documents is present 1`] = `
         <Connect(DocumentsDownloader)
           options={
             Object {
-              "shipment": Object {
-                "cargo_count": 1,
-                "cargo_notes": "FOO_CARGO_NOTES",
-                "eori": 1234,
-                "has_on_carriage": false,
-                "has_pre_carriage": false,
-                "incoterm_text": "FOO_INCOTERM_TEXT",
-                "load_type": "OCEAN_LOAD_TYPE",
-                "notes": "FOO_NOTES",
-                "planned_eta": "2018-12-01T12:14:08+01:00",
-                "planned_etd": "2018-11-12T12:14:08+01:00",
-                "schedules_charges": Object {
-                  "AIR_HUB_ROUTE_KEY": Object {
-                    "total": 200,
+              "shipmentData": Object {
+                "addresses": Object {
+                  "destination": Object {
+                    "city": "BAR_CITY",
+                    "country": "China",
+                    "street": "BAR_STREET",
+                    "street_number": 9,
+                    "zip_code": 845321,
                   },
-                  "OCEAN_HUB_ROUTE_KEY": Object {
-                    "total": 40,
+                  "endHub": "FOO_END_HUB",
+                  "origin": Object {
+                    "city": "FOO_CITY",
+                    "country": "Germany",
+                    "street": "FOO_STREET",
+                    "street_number": 7,
+                    "zip_code": 21177,
                   },
-                  "RAIL_HUB_ROUTE_KEY": Object {
-                    "total": 125,
+                  "startHub": "FOO_START_HUB",
+                },
+                "cargoItems": Array [],
+                "contacts": Array [],
+                "containers": Array [],
+                "documents": Array [
+                  Object {
+                    "doc_type": "foo",
+                    "id": 0,
                   },
-                  "TRUCK_HUB_ROUTE_KEY": Object {
-                    "total": 75,
+                  Object {
+                    "doc_type": "bar",
+                    "id": 1,
                   },
-                },
-                "selected_offer": Object {
-                  "cargo": Object {},
-                  "total": Object {
-                    "value": 77,
+                ],
+                "schedules": Array [
+                  Object {
+                    "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+                    "mode_of_transport": "ocean",
                   },
-                },
-                "total_goods_value": Object {
-                  "currency": "USD",
-                  "value": 15,
-                },
-                "total_price": Object {
-                  "currency": "USD",
-                  "value": 12,
-                },
-                "trucking": Object {
-                  "on_carriage": Object {
-                    "trucking_time_in_seconds": 55,
+                  Object {
+                    "hub_route_key": "AIR_HUB_ROUTE_KEY",
+                    "mode_of_transport": "air",
                   },
-                  "pre_carriage": Object {
-                    "trucking_time_in_seconds": 55,
+                  Object {
+                    "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+                    "mode_of_transport": "truck",
                   },
-                },
-              },
-            }
-          }
-          shipment={
-            Object {
-              "cargo_count": 1,
-              "cargo_notes": "FOO_CARGO_NOTES",
-              "eori": 1234,
-              "has_on_carriage": false,
-              "has_pre_carriage": false,
-              "incoterm_text": "FOO_INCOTERM_TEXT",
-              "load_type": "OCEAN_LOAD_TYPE",
-              "notes": "FOO_NOTES",
-              "planned_eta": "2018-12-01T12:14:08+01:00",
-              "planned_etd": "2018-11-12T12:14:08+01:00",
-              "schedules_charges": Object {
-                "AIR_HUB_ROUTE_KEY": Object {
-                  "total": 200,
-                },
-                "OCEAN_HUB_ROUTE_KEY": Object {
-                  "total": 40,
-                },
-                "RAIL_HUB_ROUTE_KEY": Object {
-                  "total": 125,
-                },
-                "TRUCK_HUB_ROUTE_KEY": Object {
-                  "total": 75,
-                },
-              },
-              "selected_offer": Object {
-                "cargo": Object {},
-                "total": Object {
-                  "value": 77,
-                },
-              },
-              "total_goods_value": Object {
-                "currency": "USD",
-                "value": 15,
-              },
-              "total_price": Object {
-                "currency": "USD",
-                "value": 12,
-              },
-              "trucking": Object {
-                "on_carriage": Object {
-                  "trucking_time_in_seconds": 55,
-                },
-                "pre_carriage": Object {
-                  "trucking_time_in_seconds": 55,
+                  Object {
+                    "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+                    "mode_of_transport": "rail",
+                  },
+                ],
+                "shipment": Object {
+                  "cargo_count": 1,
+                  "cargo_notes": "FOO_CARGO_NOTES",
+                  "eori": 1234,
+                  "has_on_carriage": false,
+                  "has_pre_carriage": false,
+                  "incoterm_text": "FOO_INCOTERM_TEXT",
+                  "load_type": "OCEAN_LOAD_TYPE",
+                  "notes": "FOO_NOTES",
+                  "planned_eta": "2018-12-01T12:14:08+01:00",
+                  "planned_etd": "2018-11-12T12:14:08+01:00",
+                  "schedules_charges": Object {
+                    "AIR_HUB_ROUTE_KEY": Object {
+                      "total": 200,
+                    },
+                    "OCEAN_HUB_ROUTE_KEY": Object {
+                      "total": 40,
+                    },
+                    "RAIL_HUB_ROUTE_KEY": Object {
+                      "total": 125,
+                    },
+                    "TRUCK_HUB_ROUTE_KEY": Object {
+                      "total": 75,
+                    },
+                  },
+                  "selected_offer": Object {
+                    "cargo": Object {},
+                    "total": Object {
+                      "value": 77,
+                    },
+                  },
+                  "total_goods_value": Object {
+                    "currency": "USD",
+                    "value": 15,
+                  },
+                  "total_price": Object {
+                    "currency": "USD",
+                    "value": 12,
+                  },
+                  "trucking": Object {
+                    "on_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
+                    "pre_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
+                  },
                 },
               },
             }
