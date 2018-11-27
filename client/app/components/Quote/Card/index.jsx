@@ -59,10 +59,10 @@ class QuoteCard extends PureComponent {
     }
   }
   handleClickChecked () {
-    const { handleClick } = this.props
+    const { onClickAdd } = this.props
     this.setState(prevState => ({
       isChecked: !prevState.isChecked
-    }), () => handleClick(this.state.isChecked))
+    }), () => onClickAdd(this.state.isChecked))
   }
   toggleExpander (key) {
     this.setState({
@@ -90,10 +90,10 @@ class QuoteCard extends PureComponent {
   }
 
   handleSchedulesRequest (delta) {
-    const { result, handleScheduleRequest } = this.props
+    const { result, onScheduleRequest } = this.props
     const { schedules } = result
     const tripId = delta > 0 ? schedules[schedules.length - 1].trip_id : schedules[0].trip_id
-    handleScheduleRequest({ tripId, delta })
+    onScheduleRequest({ tripId, delta })
   }
 
   buttonToDisplay () {
@@ -143,6 +143,7 @@ class QuoteCard extends PureComponent {
       result,
       cargo,
       aggregatedCargo,
+      onClickAdd,
       t
     } = this.props
     const { scope } = tenant
@@ -353,7 +354,7 @@ class QuoteCard extends PureComponent {
                   ? ''
                   : `${formattedPriceValue(quote.total.value)} ${quote.total.currency}`}
               </p>
-              {isQuote(tenant) ? (
+              {isQuote(tenant) && onClickAdd ? (
                 <div className="flex-gt-md-25 flex-33 layout-row layout-align-end-center">
                   <RoundButton
                     active={!this.state.isChecked}
@@ -386,19 +387,6 @@ class QuoteCard extends PureComponent {
   }
 }
 
-QuoteCard.propTypes = {
-  theme: PropTypes.theme,
-  t: PropTypes.func.isRequired,
-  tenant: PropTypes.tenant,
-  result: PropTypes.objectOf(PropTypes.any),
-  cargo: PropTypes.arrayOf(PropTypes.any),
-  handleClick: PropTypes.func,
-  selectResult: PropTypes.func,
-  handleScheduleRequest: PropTypes.func,
-  isChecked: PropTypes.bool,
-  aggregatedCargo: PropTypes.objectOf(PropTypes.string)
-}
-
 QuoteCard.defaultProps = {
   theme: null,
   truckingTime: 0,
@@ -406,8 +394,8 @@ QuoteCard.defaultProps = {
   result: {},
   cargo: [],
   selectResult: null,
-  handleScheduleRequest: null,
-  handleClick: null,
+  onScheduleRequest: null,
+  onClickAdd: null,
   pickup: false,
   isChecked: false,
   aggregatedCargo: {}

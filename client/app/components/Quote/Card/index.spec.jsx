@@ -29,7 +29,9 @@ const propsBase = {
   },
   cargo: [],
   pickup: true,
-  aggregatedCargo: {}
+  aggregatedCargo: {},
+  onClickAdd: () => {},
+  onScheduleRequest: () => {}
 }
 
 const newProps = {
@@ -53,6 +55,12 @@ const newProps = {
   }
 }
 
+test('single result rendering removes the "add" button', () => {
+  const { onClickAdd, ...otherProps } = propsBase
+
+  expect(shallow(<QuoteCard {...otherProps} />)).toMatchSnapshot()
+})
+
 const shallowTest = shallow(<QuoteCard {...propsBase} />)
 
 test('shallow rendering', () => {
@@ -74,3 +82,4 @@ test('show schedule options working', () => {
   newShallow.setState({ showSchedules: true })
   expect(newShallow).toMatchSnapshot()
 })
+
