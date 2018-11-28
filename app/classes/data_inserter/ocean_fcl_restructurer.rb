@@ -2,6 +2,8 @@
 
 module DataInserter
   module OceanFclRestructurer
+    private
+
     def restructure_data(data)
       data.inject({}) do |memo, (k_sheet_name, values)|
         data_extraction_method = values[:data_extraction_method]
