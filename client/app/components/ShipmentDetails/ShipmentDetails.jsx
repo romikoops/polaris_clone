@@ -932,7 +932,7 @@ export class ShipmentDetails extends Component {
     return (
       <div
         className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start"
-        style={{ minHeight: '1485px' }}
+        style={{ minHeight: '100%' }}
       >
         {modals &&
           Object.keys(modals)
