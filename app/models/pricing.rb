@@ -22,6 +22,7 @@ class Pricing < ApplicationRecord
     Arel::Nodes::SqlLiteral.new("(DATE '#{start_date}', DATE '#{end_date}')")
   ))}
   scope :all_fcl, -> { joins(:transport_category).where('transport_categories.cargo_class LIKE ?', 'fcl%') }
+  scope :all_air, -> { joins(:itinerary).where('itineraries.mode_of_transport': 'air') }
 
   validates :transport_category, uniqueness: {
     scope: %i(itinerary_id tenant_id user_id tenant_vehicle_id effective_date expiration_date)

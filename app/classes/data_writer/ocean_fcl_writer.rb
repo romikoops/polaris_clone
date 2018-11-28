@@ -25,7 +25,7 @@ module DataWriter
     end
 
     def build_rows_data_with_dynamic_headers(data_with_dynamic_headers, dynamic_headers)
-      return nil unless data_with_dynamic_headers
+      return nil unless data_with_dynamic_headers && dynamic_headers
 
       sort!(data_with_dynamic_headers)
       data_with_dynamic_headers.map do |attributes|

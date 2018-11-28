@@ -115,11 +115,10 @@ module DataWriter
     def sort!(data)
       data.sort_by! do |h|
         [
-          h[:origin_country_name],
+          h[:destination_country_name],
+          h[:destination_hub_name],
           h[:origin_country_name],
           h[:origin_hub_name],
-          h[:origin_country_name],
-          h[:destination_hub_name],
           h[:carrier_name],
           h[:service_level],
           h[:load_type],

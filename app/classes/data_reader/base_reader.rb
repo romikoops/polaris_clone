@@ -20,13 +20,10 @@ module DataReader
         # Parse all but first row
         rows_data = []
         ((sheet_data.first_row + 1)..sheet_data.last_row).each do |row_nr|
-          parsed_row = parse_row_data(sheet_data.row(row_nr))
-          rows_data << build_row_obj(headers, parsed_row).merge(row_nr: row_nr)
+          row = stripped_whitespaces(sheet_data.row(row_nr))
+          rows_data << build_row_obj(headers, row).merge(row_nr: row_nr)
         end
 
-        # TODO: restructure_rows_data should actually happen in the inserters,
-        # such that the customization for the readers is just limited to checking
-        # header validity.
         @sheets_data[sheet_name][:rows_data] = sanitize_rows_data(rows_data)
       end
 
@@ -55,16 +52,15 @@ module DataReader
       raise NotImplementedError, "This method must be implemented in #{self.class.name}."
     end
 
-    def parse_row_data(row_data)
-      # TODO: More sanitization
+    def stripped_whitespaces(row_data)
       row_data.map! { |el| el.is_a?(String) ? el.strip : el }
     end
 
-    def build_row_obj(headers, parsed_row)
-      headers.zip(parsed_row).to_h
+    def build_row_obj(headers, row)
+      headers.zip(row).to_h
     end
 
-    def restructure_rows_data(_rows_data)
+    def sanitize_rows_data(_rows_data)
       raise NotImplementedError, "This method must be implemented in #{self.class.name}."
     end
   end
