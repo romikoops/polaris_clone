@@ -13,7 +13,7 @@
     visibility: none;
   }
   .options_container.show {
-    height: auto;
+    min-height: 160px;
     visibility: visible;
     
   }
@@ -60,7 +60,16 @@
   }
   .spinner_box {
     position: absolute;
-    right: 0px;
+    right: 25px;
+    top: 2px;
+    transform: scale(0.2);
     transform-origin: top right;
+  }
+  .inner_wrapper {
+    position: relative;
+  }
+  .inner_wrapper_shoiw {
+    min-height: 160px;
+    position: relative;
   }
 }

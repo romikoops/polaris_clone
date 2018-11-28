@@ -901,6 +901,12 @@ function confirmShipment (id, action, redirect) {
       payload: shipmentData
     }
   }
+  function successRequested (shipmentData) {
+    return {
+      type: adminConstants.REQUESTED_SHIPMENT_SUCCESS,
+      payload: shipmentData
+    }
+  }
   function successArchive (shipmentData) {
     return {
       type: adminConstants.ARCHIVE_SHIPMENT_SUCCESS,
@@ -927,6 +933,8 @@ function confirmShipment (id, action, redirect) {
           dispatch(successDeny(shipmentData))
         } else if (action === 'archive') {
           dispatch(successArchive(shipmentData))
+        } else if (action === 'requested') {
+          dispatch(successRequested(shipmentData))
         } else {
           dispatch(successArchive(shipmentData))
         }

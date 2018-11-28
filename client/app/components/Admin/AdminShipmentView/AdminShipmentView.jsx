@@ -19,7 +19,8 @@ import {
   switchIcon,
   totalPrice,
   isRequested,
-  formattedDate
+  formattedDate,
+  isQuote
 } from '../../../helpers'
 import CargoContainerGroup from '../../Cargo/Container/Group'
 import AdminShipmentContent from './AdminShipmentContent'
@@ -509,7 +510,7 @@ class AdminShipmentView extends Component {
     )
 
 
-    const actionDropDown = (
+    const actionDropDown = isQuote({scope}) ? '' : (
       <div className="layout-row flex-15 flex-md-20 flex-sm-25 flex-xs-30 layout-align-center-center ">
         <StatusSelectButton
           options={this.statusOptions}

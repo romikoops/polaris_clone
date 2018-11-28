@@ -48,7 +48,6 @@ class StatusSelectButton extends PureComponent {
     const { status } = this.props.shipment
     let defaultValue
     let defaultVerb
-    debugger
     switch (status) {
       case 'requested':
         defaultValue = 'accept'
@@ -63,6 +62,10 @@ class StatusSelectButton extends PureComponent {
         defaultVerb = 'Finish'
         break
       case 'declined':
+        defaultValue = 'archived'
+        defaultVerb = 'Archive'
+        break
+      case 'ignored':
         defaultValue = 'archived'
         defaultVerb = 'Archive'
         break
@@ -81,11 +84,11 @@ class StatusSelectButton extends PureComponent {
 
   render () {
     const {
-      wrapperStyles, gradient, theme, showSpinner, shipment
+      wrapperStyles, gradient, theme, showSpinner
     } = this.props
-    
+
     const { showOptions } = this.state
-    const { defaultValue, defaultVerb } = this.determineAction(shipment.status)
+    const { defaultValue, defaultVerb } = this.determineAction()
     const gradientBorderStyle =
     theme && theme.colors
       ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
@@ -110,6 +113,7 @@ class StatusSelectButton extends PureComponent {
       ))
     const optionsClasses = showOptions ? `${styles.options_container} ${styles.show}` : styles.options_container
     const wrapperExpanded = showOptions ? `${styles.wrapper_show} ` : ''
+    const innerWrapper = showOptions ? styles.inner_wrapper : styles.inner_wrapper_show
     const defaultOption = this.statusOptions.filter(option => option.label === defaultVerb)[0] || {}
     const content = [<div className="flex-100 layout-row layout-align-end">
       <div
@@ -127,7 +131,7 @@ class StatusSelectButton extends PureComponent {
 
           { showSpinner ? (
             <div className={`flex-none layout-row layout-align-center-center ${styles.spinner_box}`}>
-              <LoadingSpinner size="extra_small" />
+              <LoadingSpinner />
             </div>
           ) : '' }
         </div>
@@ -140,7 +144,7 @@ class StatusSelectButton extends PureComponent {
       </div>
     </div>,
     <div
-      className={`flex-100 layout-row layout-wrap ${optionsClasses}`}
+      className={`flex-100 layout-row layout-wrap layout-align-center-start ${optionsClasses}`}
     >
       {optionCards}
     </div>]
@@ -153,7 +157,7 @@ class StatusSelectButton extends PureComponent {
             <GradientBorder
               wrapperClassName={`flex-100 layout-row layout-row layout-wrap ${wrapperStyles} ${wrapperExpanded}`}
               gradient={gradientBorderStyle}
-              className="layout-row flex-100 layout-align-center-center layout-wrap relative"
+              className={`layout-row flex-100 layout-align-center-start layout-wrap ${innerWrapper}`}
               content={content}
             />
           )
