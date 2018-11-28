@@ -623,7 +623,7 @@ function getShipments (pages, perPage, params, redirect) {
   }
 }
 
-function deltaShipmentsPage (target, page, perPage) {
+function deltaShipmentsPage (target, page, perPage, params) {
   function request (shipmentData) {
     return { type: adminConstants.ADMIN_GET_SHIPMENTS_PAGE_REQUEST, payload: shipmentData }
   }
@@ -637,7 +637,7 @@ function deltaShipmentsPage (target, page, perPage) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.deltaShipmentsPage(target, page, perPage).then(
+    adminService.deltaShipmentsPage(target, page, perPage, params).then(
       (data) => {
         dispatch(success(data))
       },

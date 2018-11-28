@@ -72,3 +72,38 @@ export function cargoPlurals (shipment, t) {
 
   return `${noun}`
 }
+
+export function loadOriginNexus (nexuses) {
+  const origin = nexuses.origin_nexuses.map(nexus => ({
+    label: nexus.name,
+    value: nexus.id
+  }))
+
+  return origin
+}
+export function loadDestinationNexus (nexuses) {
+  const destination = nexuses.destination_nexuses.map(nexus => ({
+    label: nexus.name,
+    value: nexus.id
+  }))
+
+  return destination
+}
+export function loadClients (clients) {
+  const clientArr = clients.map(client => ({
+    label: `${client.first_name} ${client.last_name}`,
+    value: client.id
+  }))
+  return clientArr
+}
+
+export function loadMot () {
+  const mots = ['Ocean', 'Air', 'Rail']
+
+  const loadMot = mots.map(mot => ({
+    label: mot,
+    value: mot.toLowerCase()
+  }))
+
+  return loadMot
+}

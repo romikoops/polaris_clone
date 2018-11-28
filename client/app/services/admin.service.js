@@ -235,14 +235,16 @@ function getShipments (_pages, perPage, params, redirect) {
 
   return fetch(`${getTenantApiUrl()}/admin/shipments?${query}${queryString}`, requestOptions).then(handleResponse)
 }
-function deltaShipmentsPage (target, page, perPage) {
+function deltaShipmentsPage (target, page, perPage, params) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
   const query = `page=${page || 1}&target=${target}&per_page=${perPage}`
 
-  return fetch(`${getTenantApiUrl()}/admin/shipments/pages/delta_page_handler?${query}`, requestOptions).then(handleResponse)
+  const queryString = params ? toQueryString(params, true) : ''
+
+  return fetch(`${getTenantApiUrl()}/admin/shipments/pages/delta_page_handler?${query}${queryString}`, requestOptions).then(handleResponse)
 }
 
 function getDashboard () {

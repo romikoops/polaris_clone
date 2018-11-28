@@ -5,7 +5,7 @@ import PropTypes from '../../../../prop-types'
 import styles from '../../Admin.scss'
 import { concatArrays, uniqueItems, filters } from '../../../../helpers'
 import ShipmentOverviewCard from '../../../ShipmentCard/ShipmentOverviewCard'
-import NamedSelect from '../../../NamedSelect/NamedSelect'
+import { LoadingSpinner } from '../../../LoadingSpinner/LoadingSpinner'
 
 export class AdminShipmentsBox extends Component {
   static switchShipment (status, t) {
@@ -75,7 +75,9 @@ export class AdminShipmentsBox extends Component {
     //   concatArrays(countriesOriginIds, countriesDestinationIds).includes(country.id)))
 
     if (this.props.getShipmentsRequest) {
-      return 'Im loading'
+      return (
+        <LoadingSpinner size="small" />
+      )
     }
 
     return (

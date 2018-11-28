@@ -9,8 +9,7 @@ export function concatArrays (first, second) {
 }
 
 export function uniqueItems (array) {
-  const uniqItems = Array.from(new Set(array))
-
+  const uniqItems = [...new Set(array.flat())]
   return uniqItems
 }
 

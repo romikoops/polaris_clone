@@ -12,15 +12,15 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   def delta_page_handler
     case params[:target]
     when 'requested'
-      shipment_association = tenant_shipments.requested
+      shipment_association = requested_shipments
     when 'open'
-      shipment_association = tenant_shipments.open
+      shipment_association = open_shipments
     when 'finished'
-      shipment_association = tenant_shipments.finished
+      shipment_association = finished_shipments
     when 'rejected'
-      shipment_association = tenant_shipments.rejected
+      shipment_association = rejected_shipments
     when 'archived'
-      shipment_association = tenant_shipments.archived
+      shipment_association = archived_shipments
     end
     per_page = params.fetch(:per_page, 4).to_f
     shipments = shipment_association.order(booking_placed_at: :desc).paginate(page: params[:page], per_page: per_page)
@@ -436,6 +436,14 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
     if params[:destination_nexus]
       @filtered_tenant_shipments = @filtered_tenant_shipments.where(destination_nexus_id: params[:destination_nexus].split(','))
+    end
+
+    if params[:hub_type] && params[:hub_type] != ''
+      @filtered_tenant_shipments = @filtered_tenant_shipments.send(params[:hub_type])
+    end
+
+    if params[:clients]
+      @filtered_tenant_shipments = @filtered_tenant_shipments.where(user_id: params[:clients].split(','))
     end
 
     @filtered_tenant_shipments
