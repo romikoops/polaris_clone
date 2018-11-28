@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
-import { AdminClientTile, AdminPriceEditor } from './'
+import { AdminClientTile, AdminPriceEditor } from '.'
 import styles from './Admin.scss'
 import shipmentStyles from './AdminShipments.scss'
 import AdminPromptConfirm from './Prompt/Confirm'
@@ -17,12 +17,14 @@ import GradientBorder from '../GradientBorder'
 import ShipmentOverviewShowCard from './AdminShipmentView/ShipmentOverviewShowCard'
 import AdminPricingDedicated from './Pricing/Dedicated'
 import { AdminPricingBox } from './Pricing/Box'
+import AdminPricingTable from './Pricing/Table'
 import CollapsingContent from '../CollapsingBar/Content'
 
 export class AdminPricingRouteView extends Component {
   static backToIndex () {
     history.goBack()
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -36,6 +38,7 @@ export class AdminPricingRouteView extends Component {
     this.closeClientView = this.closeClientView.bind(this)
     this.viewClient = this.viewClient.bind(this)
   }
+
   componentDidMount () {
     const {
       routePricings, loading, adminActions, match
@@ -54,13 +57,16 @@ export class AdminPricingRouteView extends Component {
       editorBool: true
     })
   }
+
   addNewPricings () {
     this.setState({ showPricingAdder: !this.state.showPricingAdder })
   }
+
   viewClient (client) {
     const { adminActions } = this.props
     adminActions.getClientPricings(client.id, true)
   }
+
   closeEdit () {
     this.setState({
       editPricing: false,
@@ -69,12 +75,15 @@ export class AdminPricingRouteView extends Component {
       editorBool: false
     })
   }
+
   selectClient (client) {
     this.setState({ selectedClient: client })
   }
+
   closeClientView () {
     this.setState({ selectedClient: false })
   }
+
   toggleExpander (key) {
     this.setState({
       expander: {
@@ -83,21 +92,25 @@ export class AdminPricingRouteView extends Component {
       }
     })
   }
+
   deletePricing () {
     const { adminActions } = this.props
     const { pricingToDelete } = this.state
     adminActions.deletePricing(pricingToDelete)
     this.closeConfirm()
   }
+
   confirmDelete (pricing) {
     this.setState({
       confirm: true,
       pricingToDelete: pricing
     })
   }
+
   closeConfirm () {
     this.setState({ confirm: false })
   }
+
   render () {
     const {
       t, theme, pricingData, itineraryPricings, clients, adminActions, scope
@@ -243,73 +256,68 @@ export class AdminPricingRouteView extends Component {
           <div
             className="flex-95 layout-row layout-wrap layout-align-space-between-center"
           >
-            <AdminPricingBox
-              itinerary={itinerary}
-              charges={itineraryPricingData}
-              theme={theme}
-              serviceLevels={serviceLevels}
-              adminDispatch={adminActions}
-              title={t('admin:openPricing')}
-            />
+            <AdminPricingTable itineraryId={itinerary.id} cssClasses="flex-100" />
           </div>
         </div>
 
-        {scope.show_beta_features ? <div
-          className="flex-95 layout-row layout-wrap layout-align-center-center buffer_10"
-        >
-          <div className="layout-padding flex-100 layout-align-start-center greyBg">
-            <span><b>{t('admin:dedicatedPricings')}</b></span>
-          </div>
-          <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={showPricingAdder ? { display: 'none' } : {}}>
-            <div className="layout-row flex-100 layout-align-start-center slider_container">
-              <div className="flex-100 layout-row layout-align-start-start card_margin_right slider_inner">
-                <div className={`flex-20 layout-row ${styles.set_button_height} tile_padding pointy`} onClick={() => this.addNewPricings()}>
-                  <GreyBox
-                    wrapperClassName="layout-row flex-100"
-                    contentClassName="layout-column flex layout-align-center-center"
-                    content={(
-                      <div>
-                        <h1><strong>+</strong></h1>
-                        <p>{t('admin:newDedicatedPricing')}</p>
-                      </div>
-                    )}
-                  />
+        {scope.show_beta_features ? (
+          <div
+            className="flex-95 layout-row layout-wrap layout-align-center-center buffer_10"
+          >
+            <div className="layout-padding flex-100 layout-align-start-center greyBg">
+              <span><b>{t('admin:dedicatedPricings')}</b></span>
+            </div>
+            <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={showPricingAdder ? { display: 'none' } : {}}>
+              <div className="layout-row flex-100 layout-align-start-center slider_container">
+                <div className="flex-100 layout-row layout-align-start-start card_margin_right slider_inner">
+                  <div className={`flex-20 layout-row ${styles.set_button_height} tile_padding pointy`} onClick={() => this.addNewPricings()}>
+                    <GreyBox
+                      wrapperClassName="layout-row flex-100"
+                      contentClassName="layout-column flex layout-align-center-center"
+                      content={(
+                        <div>
+                          <h1><strong>+</strong></h1>
+                          <p>{t('admin:newDedicatedPricing')}</p>
+                        </div>
+                      )}
+                    />
+                  </div>
+                  {clientTiles}
                 </div>
-                {clientTiles}
               </div>
+
+              <CollapsingContent
+                collapsed={!expander[selectedClient.id]}
+                minHeight="900px"
+                content={(
+                  <div>
+                    <AdminPricingBox
+                      itinerary={itinerary}
+                      serviceLevels={serviceLevels}
+                      charges={userPricings.filter(up => up.user_id === selectedClient.id)}
+                      theme={theme}
+                      adminDispatch={adminActions}
+                      title={`${t('admin:dedicatedPricingFor')} ${selectedClient.first_name} ${selectedClient.last_name}`}
+                    />
+                  </div>
+                )}
+              />
+            </div>
+            <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={showPricingAdder ? {} : { display: 'none' }}>
+              <AdminPricingDedicated
+                theme={theme}
+                serviceLevels={serviceLevels}
+                backBtn={() => this.addNewPricings()}
+                closePricingView={() => this.addNewPricings()}
+                adminDispatch={adminActions}
+                charges={itineraryPricingData}
+                clients={clients}
+                initialEdit={showPricingAdder}
+              />
             </div>
 
-            <CollapsingContent
-              collapsed={!expander[selectedClient.id]}
-              minHeight="900px"
-              content={
-                <div>
-                  <AdminPricingBox
-                    itinerary={itinerary}
-                    serviceLevels={serviceLevels}
-                    charges={userPricings.filter(up => up.user_id === selectedClient.id)}
-                    theme={theme}
-                    adminDispatch={adminActions}
-                    title={`${t('admin:dedicatedPricingFor')} ${selectedClient.first_name} ${selectedClient.last_name}`}
-                  />
-                </div>
-              }
-            />
           </div>
-          <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={showPricingAdder ? {} : { display: 'none' }}>
-            <AdminPricingDedicated
-              theme={theme}
-              serviceLevels={serviceLevels}
-              backBtn={() => this.addNewPricings()}
-              closePricingView={() => this.addNewPricings()}
-              adminDispatch={adminActions}
-              charges={itineraryPricingData}
-              clients={clients}
-              initialEdit={showPricingAdder}
-            />
-          </div>
-
-        </div> : '' }
+        ) : '' }
 
         {confimPrompt}
         {editorBool ? (
