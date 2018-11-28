@@ -125,17 +125,9 @@ module MultiTenantTools
   def update_tenant_from_json(subdomain)
     json_data = JSON.parse(
       asset_bucket.get_object(bucket: 'assets.itsmycargo.com', key: "data/#{subdomain}/#{subdomain}.json").body.read
-    )
+    ).deep_symbolize_keys
 
-    tenant = Tenant.find_by_subdomain(json_data['subdomain'])
-
-    # Handle "other_data" part of the hash (hacky)
-    other_data = json_data.delete('other_data') || {}
-    update_cargo_item_types!(tenant, other_data['cargo_item_types'])
-    update_tenant_incoterms!(tenant, other_data['incoterms'])
-    update_tenant_charge_categories!(tenant, other_data['custom_charge_categories'])
-
-    tenant.update_attributes(json_data)
+    TenantSeeder.update_tenant(json_data)
   end
 
   def create_new_tenant_site(subdomains)
@@ -501,63 +493,5 @@ module MultiTenantTools
         caller_reference: invalStr.to_s, # required
       }
     )
-  end
-  def update_cargo_item_types!(tenant, cargo_item_types_attr)
-    return if cargo_item_types_attr.nil?
-
-    if cargo_item_types_attr == 'all'
-      CARGO_ITEM_TYPES.each do |cargo_item_type|
-        TenantCargoItemType.find_or_create_by(tenant: tenant, cargo_item_type: cargo_item_type)
-      end
-      return
-    end
-
-    if cargo_item_types_attr == 'no_dimensions'
-      CARGO_ITEM_TYPES_NO_DIMENSIONS.each do |cargo_item_type|
-        TenantCargoItemType.find_or_create_by(tenant: tenant, cargo_item_type: cargo_item_type)
-      end
-      return
-    end
-
-    tenant.tenant_cargo_item_types.destroy_all
-    cargo_item_types_attr.each do |cargo_item_type_attr|
-      cargo_item_type =
-        if cargo_item_type_attr.is_a? Hash
-          CargoItemType.find_by(cargo_item_type_attr)
-        else
-          CargoItemType.find_by(
-            category: cargo_item_type_attr,
-            dimension_x: nil,
-            dimension_y: nil,
-            area: nil
-          )
-        end
-      TenantCargoItemType.find_or_create_by(tenant: tenant, cargo_item_type: cargo_item_type)
-    end
-  end
-
-  def update_tenant_incoterms!(tenant, incoterm_array)
-    tenant.tenant_incoterms.destroy_all
-    if incoterm_array
-      incoterm_array.each do |code|
-        incoterm = Incoterm.find_by_code(code)
-        tenant.tenant_incoterms.find_or_create_by!(incoterm: incoterm)
-      end
-    else
-      Incoterm.all.each do |incoterm|
-        tenant.tenant_incoterms.find_or_create_by!(incoterm: incoterm)
-      end
-    end
-  end
-
-  def update_tenant_charge_categories!(tenant, charge_categories) 
-    charge_categories.each do |charge_category|
-      existing_charge = ChargeCategory.find_by(code: charge_category['code'], tenant_id: tenant.id)
-      if existing_charge
-        existing_charge.update_attributes(name: charge_category['name'])
-      else
-        existing_charge = ChargeCategory.create!(code: charge_category['code'], tenant_id: tenant.id, name: charge_category['name'])
-      end
-    end
   end
 end

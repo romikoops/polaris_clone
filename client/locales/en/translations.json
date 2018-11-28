@@ -207,7 +207,8 @@
     "updateQuotationPDFRemarks": "Update PDF Remarks",
     "addRemark": "Add Remark",
     "accountEmailsUpdated": "Account Emails Updated Successfully!",
-    "accountRemarksUpdated": "Accound PDF Remarks Updated Successfully!"
+    "accountRemarksUpdated": "Account PDF Remarks Updated Successfully!",
+    "shipmentAccepted": "Shipment accepted!"
   },
   "itbox": {
     "component": "IncotermBox",

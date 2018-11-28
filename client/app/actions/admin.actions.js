@@ -883,6 +883,12 @@ function confirmShipment (id, action, redirect) {
       payload: shipmentData
     }
   }
+  function acceptAnimation (shipmentData) {
+    return {
+      type: adminConstants.ACCEPT_ANIMATION,
+      payload: shipmentData.id
+    }
+  }
   function successFinished (shipmentData) {
     return {
       type: adminConstants.FINISHED_SHIPMENT_SUCCESS,
@@ -911,7 +917,10 @@ function confirmShipment (id, action, redirect) {
       (resp) => {
         const shipmentData = resp.data
         if (action === 'accept') {
-          dispatch(successAccept(shipmentData))
+          dispatch(acceptAnimation(shipmentData))
+          setTimeout(() => {
+            dispatch(successAccept(shipmentData))
+          }, 5000)
         } else if (action === 'finished') {
           dispatch(successFinished(shipmentData))
         } else if (['decline', 'ignore'].includes(action)) {
