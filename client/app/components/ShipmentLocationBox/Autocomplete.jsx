@@ -278,7 +278,7 @@ class Autocomplete extends PureComponent {
     return (
       <div className={`auto_origin ccb_carriage flex-100 layout-row layout-align-center-center ${styles.autocomplete_container}`}>
         <div
-          className={`flex-none ${!hideResults && hasResults ? styles.exit_click : styles.hidden}`}
+          className={`flex-none ccb_backdrop ${!hideResults && hasResults ? styles.exit_click : styles.hidden}`}
           onClick={() => {
             this.setState({ hideResults: true, listenerSet: false })
             listenerTools.removeHandler(document, 'keydown', this.handleKeyEvent)

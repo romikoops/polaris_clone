@@ -31,17 +31,20 @@ When('I select {string} as {string}') do |place, type|
           find('input').send_keys(c)
           sleep(1.0 / 10.0)
         end
-        all(:css, '.ccb_result').first.click
+        first_result = all(:css, '.ccb_result', wait: 30).first
+        first_result.click if first_result
       end
     end
 
     name_xpath = "@name='#{type.downcase}-street'"
 
     # focus the form to avoid it collapsing
-    find(:xpath, ".//input[#{name_xpath}]").send_keys('')
+    find(:xpath, ".//input[#{name_xpath}]", wait: 20).send_keys('')
 
     # wait untill form is autofilled filled
     find(:xpath, ".//input[#{name_xpath} and not(@value='')]", wait: 60)
+    backdrop = find('.ccb_backdrop')
+    backdrop.click() if backdrop
   else
     elem = find('div', class: 'Select-placeholder', text: type, wait: 60)
     elem.sibling('.Select-input').find('input').send_keys(place)
@@ -59,6 +62,7 @@ When('I have shipment of {int} {string} with weight of {int}kg') do |count, size
   # Select container size
   elem = find("input[name='0-container_size']", visible: false)
   control = elem.sibling(class: 'Select-control')
+
   control.find(class: 'Select-arrow-zone').click
 
   find('.Select-option', text: size).click
