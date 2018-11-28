@@ -33,7 +33,7 @@ http {
     listen 80;
     server_name ~^(?<subdomain>[^\.]*?)\.(?<domain>.*)$;
 
-    location /config.201811280939.js {
+    location /config.201811280955.js {
       add_header Content-Type application/javascript;
       return 200 '
 window.keel = {
