@@ -594,7 +594,7 @@ function getTrucking (redirect) {
   }
 }
 
-function getShipments (pages, perPage, redirect) {
+function getShipments (pages, perPage, params, redirect) {
   function request (shipmentData) {
     return { type: adminConstants.ADMIN_GET_SHIPMENTS_REQUEST, payload: shipmentData }
   }
@@ -608,7 +608,7 @@ function getShipments (pages, perPage, redirect) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.getShipments(pages, perPage).then(
+    adminService.getShipments(pages, perPage, params, redirect).then(
       (data) => {
         dispatch(success(data))
         if (redirect) {

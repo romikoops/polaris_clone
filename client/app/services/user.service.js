@@ -160,7 +160,7 @@ function getContacts (params) {
     method: 'GET',
     headers: authHeader()
   }
-  const url = `${getTenantApiUrl()}/contacts?${toQueryString(params)}`
+  const url = `${getTenantApiUrl()}/contacts?${toQueryString(params, false)}`
 
   return fetch(url, requestOptions).then(handleResponse)
 }

@@ -37,6 +37,6 @@ export function isDefined (obj) {
   return typeof obj !== 'undefined'
 }
 
-export function toQueryString (obj) {
-  return Object.keys(obj).map(key => `${key}=${obj[key]}`).join('&')
+export function toQueryString (obj, connect) {
+  return Object.keys(obj).map(key => `${connect ? '&' : ''}${key}=${obj[key]}`).join('&')
 }

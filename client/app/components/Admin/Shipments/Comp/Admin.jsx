@@ -3,11 +3,29 @@ import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { adminDashboard as adminTip } from '../../../../constants'
-import { filters, capitalize } from '../../../../helpers'
+import { filters, uniqueItems, capitalize } from '../../../../helpers'
 import Tabs from '../../../Tabs/Tabs'
 import Tab from '../../../Tabs/Tab'
 import { adminActions, appActions } from '../../../../actions'
 import AdminShipmentsBox from './box' // eslint-disable-line
+import NamedSelect from '../../../NamedSelect/NamedSelect'
+
+function loadOriginNexus (nexuses) {
+  const origin = nexuses.origin_nexuses.map(nexus => ({
+    label: nexus.name,
+    value: nexus.id
+  }))
+
+  return origin
+}
+function loadDestinationNexus (nexuses) {
+  const destination = nexuses.destination_nexuses.map(nexus => ({
+    label: nexus.name,
+    value: nexus.id
+  }))
+
+  return destination
+}
 
 export class ShipmentsCompAdmin extends Component {
   static prepShipment (baseShipment, clients) {
@@ -30,10 +48,16 @@ export class ShipmentsCompAdmin extends Component {
         finished: '',
         archived: '',
         rejected: ''
-      }
+      },
+      searchFilters: {
+        countries: []
+      },
+      page: 1
     }
     this.viewShipment = this.viewShipment.bind(this)
     this.determinePerPage = this.determinePerPage.bind(this)
+    this.handleInput = this.handleInput.bind(this)
+    this.handleFilters = this.handleFilters.bind(this)
   }
   componentDidMount () {
     window.scrollTo(0, 0)
@@ -44,10 +68,10 @@ export class ShipmentsCompAdmin extends Component {
     window.removeEventListener('resize', this.determinePerPage)
   }
 
-  getShipmentsFromPage (pages) {
+  getShipmentsFromPage (pages, params) {
     const { adminDispatch } = this.props
     const { perPage } = this.state
-    adminDispatch.getShipments(pages, perPage, false)
+    adminDispatch.getShipments(pages, perPage, params, false)
   }
   getTargetShipmentsFromPage (target, page) {
     const { adminDispatch } = this.props
@@ -75,53 +99,13 @@ export class ShipmentsCompAdmin extends Component {
     adminDispatch.searchShipments(text, target, page, perPage)
   }
 
-  toggleExpander (key) {
-    this.setState({
-      expander: {
-        ...this.state.expander,
-        [key]: !this.state.expander[key]
-      }
-    })
-  }
-  toggleFilterValue (target, key) {
-    this.setState({
-      searchFilters: {
-        ...this.state.searchFilters,
-        [target]: {
-          ...this.state.searchFilters[target],
-          [key]: !this.state.searchFilters[target][key]
-        }
-      }
-    }, () => this.handleFilters())
-  }
-  handleInput (selection) {
-    const selectValues = selection
-    delete selectValues.name
-
-    this.setState({
-      searchFilters: {
-        ...this.state.searchFilters,
-        countries: Object.values(selectValues)
-      }
-    }, () => this.handleFilters())
-  }
-
   handlePage (target, delta) {
-    const { perPage } = this.state
     const { pages } = this.props.shipments
     const nextPage = +pages[target] + (1 * delta)
     const realPage = nextPage > 0 ? nextPage : 1
-    this.getTargetShipmentsFromPage(target, realPage, perPage)
+    this.getTargetShipmentsFromPage(target, realPage)
   }
-  handleFilters () {
-    this.setState((prevState) => {
-      const { perPage } = this.state
-      const { pages } = this.props.shipments
-      this.getShipmentsFromPage(pages, perPage)
 
-      return { page: prevState.page }
-    })
-  }
   nextPage (target) {
     this.handlePage(target, 1)
   }
@@ -134,14 +118,52 @@ export class ShipmentsCompAdmin extends Component {
 
   handleSearchQuery (e, target) {
     const { value } = e.target
-    const { perPage } = this.state
 
     this.setState({
       search: {
         ...this.state.search,
         [target]: value
       }
-    }, () => this.searchShipmentsFromPage(value, target, 1, perPage))
+    }, () => this.searchShipmentsFromPage(value, target, 1))
+  }
+
+  handleInput (selection) {
+    const { name, ...others } = selection
+
+    this.setState(prevState => ({
+      searchFilters: {
+        ...prevState.searchFilters,
+        [name]: Object.values(others).map(x => x.value)
+      }
+    }), () => this.handleFilters())
+  }
+  handleFilters () {
+    const { searchFilters } = this.state
+    const { pages } = this.props.shipments
+
+    const hubTypes = searchFilters.hubType
+      ? Object.keys(searchFilters.hubType).filter(key => searchFilters.hubType[key])
+      : null
+    const originNexuses = searchFilters.originNexus && searchFilters.originNexus.length > 0
+      ? searchFilters.originNexus
+      : null
+    const destinationNexuses = searchFilters.destinationNexus && searchFilters.destinationNexus.length > 0
+      ? searchFilters.destinationNexus
+      : null
+
+    const params = {}
+
+    if (hubTypes) {
+      params.hub_type = hubTypes
+    }
+    if (originNexuses) {
+      params.origin_nexus = originNexuses
+    }
+    if (destinationNexuses) {
+      params.destination_nexus = destinationNexuses
+    }
+
+    this.getShipmentsFromPage(pages, params)
   }
 
   render () {
@@ -160,6 +182,7 @@ export class ShipmentsCompAdmin extends Component {
     if (!shipments || !shipments.pages || !hubs || !clients) {
       return ''
     }
+
     const { pages } = shipments
     const clientHash = {}
     clients.forEach((cl) => {
@@ -174,6 +197,18 @@ export class ShipmentsCompAdmin extends Component {
     })
     const keysToRender = statusKeys.includes('quoted')
       ? statusKeys : ['requested', 'open', 'finished', 'rejected', 'archived']
+
+    // const mots = uniqueItems(shipments.map(shipment => shipment.mode_of_transport))
+
+    // const loadCountries = shipmentsCountries.map(country => ({
+    //   label: country.name,
+    //   value: country.id
+    // }))
+    // const loadMot = mots.map(mot => ({
+    //   label: mot,
+    //   value: shipments.filter(shipment => shipment.mode_of_transport === mot)
+    // }))
+
     const listView = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <Tabs>
@@ -182,21 +217,65 @@ export class ShipmentsCompAdmin extends Component {
             theme={theme}
             paddingFixes
           >
-            <AdminShipmentsBox
-              handleClick={this.viewShipment}
-              dispatches={adminDispatch}
-              shipments={mergedShipments[status]}
-              theme={theme}
-              status={status}
-              confirmShipmentData={confirmShipmentData}
-              searchText={search[status]}
-              tooltip={adminTip[status]}
-              page={pages[status]}
-              numPages={numShipmentsPages[status]}
-              prevPage={() => this.prevPage(status)}
-              nextPage={() => this.nextPage(status)}
-              handleSearchChange={e => this.handleSearchQuery(e, status)}
-            />
+            <div>
+              <div className="flex-100 layout-row">
+                <div className="flex-20 layout-row">
+            origin
+                  <NamedSelect
+                    className="flex-100 selectors"
+                    multi
+                    name="originNexus"
+                    value={this.state.searchFilters.originNexus}
+                    autoload={false}
+                    options={filters.sortByAlphabet(loadOriginNexus(shipments.nexuses[status]), 'label')}
+                    onChange={e => this.handleInput(e)}
+                  />
+                </div>
+                <div className="flex-20 layout-row">
+            destination
+                  <NamedSelect
+                    className="flex-100 selectors"
+                    multi
+                    name="destinationNexus"
+                    value={this.state.searchFilters.destinationNexus}
+                    autoload={false}
+                    options={filters.sortByAlphabet(loadDestinationNexus(shipments.nexuses[status]), 'label')}
+                    onChange={e => this.handleInput(e)}
+                  />
+                </div>
+                {/* <div className="flex-20 layout-row">
+                  <NamedSelect
+                    className="flex-100 selectors"
+                    multi
+                    name="hubType"
+                    value={this.state.searchFilters.hubType}
+                    autoload={false}
+                    options={loadMot.sort()}
+                    onChange={e => this.handleInput(e)}
+                  />
+                </div> */}
+              </div>
+              <AdminShipmentsBox
+                handleClick={this.viewShipment}
+                dispatches={adminDispatch}
+                shipments={mergedShipments[status]}
+                theme={theme}
+                nexuses={shipments.nexuses[status]}
+                countries={shipments.countries}
+                countriesIds={shipments[status]}
+                status={status}
+                confirmShipmentData={confirmShipmentData}
+                tooltip={adminTip[status]}
+                searchFilters={this.state.searchFilters}
+                page={pages[status]}
+                numPages={numShipmentsPages[status]}
+                prevPage={() => this.prevPage(status)}
+                nextPage={() => this.nextPage(status)}
+                handleSearchChange={e => this.handleSearchQuery(e, status)}
+                handleInput={e => this.handleInput(e)}
+                getShipmentsRequest={this.props.getShipmentsRequest}
+              />
+            </div>
           </Tab>))}
         </Tabs>
       </div>
@@ -243,7 +322,7 @@ function mapStateToProps (state) {
   const { theme } = tenant
   const { user, loggedIn } = authentication
   const {
-    clients, shipments, confirmShipmentData
+    clients, shipments, confirmShipmentData, getShipmentsRequest
   } = admin
   const { num_shipment_pages } = shipments  // eslint-disable-line
 
@@ -256,7 +335,8 @@ function mapStateToProps (state) {
     shipments,
     numShipmentsPages: num_shipment_pages,
     clients,
-    document
+    document,
+    getShipmentsRequest
   }
 }
 function mapDispatchToProps (dispatch) {

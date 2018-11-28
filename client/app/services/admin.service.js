@@ -1,6 +1,6 @@
 import { Promise } from 'es6-promise-promise'
 import { getTenantApiUrl } from '../constants/api.constants'
-import { authHeader } from '../helpers'
+import { authHeader, toQueryString } from '../helpers'
 
 const { fetch, FormData } = window
 
@@ -211,7 +211,7 @@ function getServiceCharges () {
 
   return fetch(`${getTenantApiUrl()}/admin/local_charges`, requestOptions).then(handleResponse)
 }
-function getShipments (_pages, perPage) {
+function getShipments (_pages, perPage, params, redirect) {
   const pages = _pages || {
     open: 1,
     requested: 1,
@@ -231,7 +231,9 @@ function getShipments (_pages, perPage) {
   })
   if (perPage) query += `per_page=${perPage}`
 
-  return fetch(`${getTenantApiUrl()}/admin/shipments?${query}`, requestOptions).then(handleResponse)
+  const queryString = params ? toQueryString(params, true) : ''
+
+  return fetch(`${getTenantApiUrl()}/admin/shipments?${query}${queryString}`, requestOptions).then(handleResponse)
 }
 function deltaShipmentsPage (target, page, perPage) {
   const requestOptions = {

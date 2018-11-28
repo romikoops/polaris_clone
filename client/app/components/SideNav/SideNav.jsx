@@ -199,7 +199,7 @@ class SideNav extends Component {
       case 'shipments': {
         const shipPages = scope.closed_quotation_tool || scope.open_quotation_tool
           ? { quoted: 1 } : { requested: 1, open: 1, finished: 1 }
-        adminDispatch.getShipments(shipPages, this.perPage, true)
+        adminDispatch.getShipments(shipPages, this.perPage, {}, true)
         break }
       case 'clients':
         adminDispatch.getClients(true)
@@ -239,7 +239,7 @@ class SideNav extends Component {
       case 'shipments': {
         const shipPages = scope.closed_quotation_tool || scope.open_quotation_tool
           ? { quoted: 1 } : { requested: 1, open: 1, finished: 1 }
-        userDispatch.getShipments(shipPages, this.perPage, true)
+        userDispatch.getShipments(shipPages, this.perPage, {}, true)
         break }
       case 'contacts':
         userDispatch.getContacts({ page: 1 }, true)
