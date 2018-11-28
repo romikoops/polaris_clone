@@ -105,8 +105,11 @@ module DataInserter
     end
 
     def pricing_details_with_one_col_fee_and_ranges(row)
+      fee_code = row[:fee_code].upcase
+      ChargeCategory.find_or_create_by!(code: fee_code, name: row[:fee_name], tenant_id: tenant.id)
+
       pricing_detail_params = { rate_basis: row[:rate_basis],
-                                shipping_type: row[:fee_code].upcase,
+                                shipping_type: fee_code,
                                 currency_name: row[:currency].upcase,
                                 tenant_id: @tenant.id }
       if row.has_key?(:range)

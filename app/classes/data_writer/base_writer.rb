@@ -36,6 +36,8 @@ module DataWriter
 
       @sheets_data.each do |sheet_name, rows_data|
         worksheet = @xlsx.add_worksheet(sheet_name)
+        next if rows_data.blank?
+
         raw_headers = extract_raw_headers(rows_data)
         headers = transform_headers(raw_headers)
         setup_worksheet(worksheet, headers.length)
@@ -65,10 +67,10 @@ module DataWriter
     end
 
     def header_format
-      return @format if @format
-      @format = @xlsx.add_format
-      @format.set_bold
-      @format
+      return @header_format if @header_format
+      @header_format = @xlsx.add_format
+      @header_format.set_bold
+      @header_format
     end
 
     def write_headers(worksheet, headers)
@@ -80,14 +82,29 @@ module DataWriter
       worksheet.freeze_panes(1, 0) # freeze first row
     end
 
-    def write_row(worksheet, start_row_idx, start_col_idx, raw_headers, row_data)
-      row = raw_headers.map { |header| row_data[header] }
-      worksheet.write_row(start_row_idx, start_col_idx, row)
+    def date_dd_mm_yyyy_format
+      return @date_dd_mm_yyyy_format if @date_dd_mm_yyyy_format
+      @date_dd_mm_yyyy_format = @xlsx.add_format
+      @date_dd_mm_yyyy_format.set_num_format('dd.mm.yyyy')
+      @date_dd_mm_yyyy_format
+    end
+
+    def format_and_write_row(worksheet, start_row_idx, start_col_idx, raw_headers, row_data)
+      raw_headers.each_with_index do |header, i|
+        cell_content = row_data[header]
+
+        if cell_content.is_a?(ActiveSupport::TimeWithZone)
+          cell_content = cell_content.to_datetime.iso8601(3).remove(/\+.+$/)
+          worksheet.write_date_time(start_row_idx, start_col_idx + i, cell_content, date_dd_mm_yyyy_format)
+        else
+          worksheet.write(start_row_idx, start_col_idx + i, cell_content)
+        end
+      end
     end
 
     def write_rows_data(worksheet, raw_headers, rows_data)
       rows_data.each_with_index do |row_data, i|
-        write_row(worksheet, i + 1, 0, raw_headers, row_data)
+        format_and_write_row(worksheet, i + 1, 0, raw_headers, row_data)
       end
     end
 
