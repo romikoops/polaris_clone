@@ -28,9 +28,9 @@ module.exports = {
       }),
       new OptimizeCSSAssetsPlugin({})
     ],
-    splitChunks: {
-      chunks: 'all'
-    }
+    // splitChunks: {
+    //   chunks: 'all'
+    // }
   },
 
   module: {
@@ -56,13 +56,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: [
-              '@babel/preset-env',
-              '@babel/preset-react'
-            ],
-            plugins: [
-              ['@babel/plugin-proposal-decorators', { decoratorsBeforeExport: true }]
-            ]
+            cacheDirectory: true
           }
         }
       },
@@ -128,7 +122,12 @@ module.exports = {
       RELEASE: ''
     }),
 
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin(
+      [path.resolve(__dirname, '../dist')],
+      {
+        root: path.resolve(__dirname, '../')
+      }
+    ),
 
     new CopyWebpackPlugin([
       { from: 'app/config.js' }
