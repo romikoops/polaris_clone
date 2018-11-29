@@ -1086,7 +1086,7 @@ class ShipmentLocationBox extends PureComponent {
           onClick={() => this.changeAddressFormVisibility('origin')}
         >
           <i className={`${styles.down} flex-none fa fa-angle-double-down`} />
-          <i className={`${styles.up} flex-none fa fa-angle-double-up`} />
+          <i className={`${styles.up} flex-none fa fa-angle-double-up ccb_pre_carriage_expand`} />
         </div>
         <div
           className={`${styles.address_form} flex-100 layout-row layout-wrap layout-align-center ccb_pre_address_form`}
@@ -1234,7 +1234,7 @@ class ShipmentLocationBox extends PureComponent {
           onClick={() => this.changeAddressFormVisibility('destination')}
         >
           <i className={`${styles.down} flex-none fa fa-angle-double-down`} />
-          <i className={`${styles.up} flex-none fa fa-angle-double-up`} />
+          <i className={`${styles.up} flex-none fa fa-angle-double-up ccb_on_carriage_expand`} />
         </div>
         <div className={`${styles.address_form} ${toggleLogic} flex-100 layout-row layout-wrap layout-align-center ccb_on_address_form`}>
           { fetchingtruckingAvailability ? <LoadingSpinner size="medium" /> : '' }

@@ -50,7 +50,8 @@ When('I select {string} as {string}') do |place, type|
     
     #if inputs cant be found expand the address fields
     if inputs.empty?
-      expander = elem.find('.fa-angle-double-up', wait: 30)
+      elem = find('div', class: "ccb_#{type.downcase}_carriage_input", wait: 60)
+      expander = elem.find('i', class: "ccb_#{type.downcase}_carriage_expand", wait: 30)
       expander.click unless expander.nil?
     end
 
