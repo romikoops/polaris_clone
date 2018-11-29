@@ -15,7 +15,7 @@ const StyledTop = styled.div`
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
-  padding-bottom: 120px;
+  padding-bottom: 150px;
   box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.7);
   position: relative;
 `
@@ -86,11 +86,11 @@ function LandingTop ({
                 }
               </div>
             </div>
-            <ButtonSection {...buttonSectionProps} className="hide_h_xs" />
+            <ButtonSection {...buttonSectionProps} className="hide_h_xxs" />
           </div>
         </div>
         <div className="flex-50 layout-row layout-align-center layout-wrap">
-          <ButtonSection {...buttonSectionProps} className="show_h_xs" />
+          <ButtonSection {...buttonSectionProps} className="hide_h_gt_xxs" />
         </div>
       </div>
     </StyledTop>

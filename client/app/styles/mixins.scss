@@ -1,19 +1,24 @@
-@import './defaults';
+@mixin responsive-font($responsive, $min, $max: false, $fallback: false) {
+  $responsive-unitless: $responsive / ($responsive - $responsive + 1);
+  $dimension: if(unit($responsive) == 'vh', 'height', 'width');
+  $min-breakpoint: $min / $responsive-unitless * 100;
+  
+  @media (max-#{$dimension}: #{$min-breakpoint}) {
+    font-size: $min;
+  }
+  
+  @if $max {
+    $max-breakpoint: $max / $responsive-unitless * 100;
+    
+    @media (min-#{$dimension}: #{$max-breakpoint}) {
+      font-size: $max;
+    }
+  }
+  
+  @if $fallback {
+    font-size: $fallback;
+  }
+  
+  font-size: $responsive;
 
-.content-width {
-  width: 1000px;
-}
-.button_padding {
-  padding: 60px 5px;
-}
-.padd_top {
-    padding-top: 35px;
-}
-
-.spacing-sm-left {
-  margin-left: $spacing-sm-side;
-}
-
-.spacing-sm-right {
-  margin-right: $spacing-sm-side;
 }

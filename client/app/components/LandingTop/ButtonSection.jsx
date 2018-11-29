@@ -16,7 +16,7 @@ const MyAccount = connect(null, dispatch => (
   user && user.role && ['shipper', 'agent', 'agency_manager'].includes(user.role.name) &&
   !user.guest &&
   !(tenant && tenant.scope && tenant.scope.closed_quotation_tool) && (
-    <div className="layout-row flex-50 flex-md-100 margin_bottom">
+    <div className="layout-row flex-100 flex-gt-sm-50 margin_bottom">
       <SquareButton
         text={t('common:accountTitle')}
         theme={theme}
@@ -34,7 +34,7 @@ const ToAdmin = connect(null, dispatch => (
   user, theme, adminDispatch, t
 }) => (
   user && user.role && ['admin', 'sub_admin', 'super_admin'].includes(user.role.name) && (
-    <div className="layout-row flex-50 flex-md-100 margin_bottom">
+    <div className="layout-row flex-100 flex-gt-sm-50 margin_bottom">
       <SquareButton
         text={t('landing:adminDashboard')}
         theme={theme}
@@ -50,7 +50,7 @@ const FindRates = withNamespaces(['landing'])(({
   user, theme, bookNow, t
 }) => (
   (!user || ['shipper', 'agent', 'agency_manager'].includes(user.role.name)) && (
-    <div className="layout-row flex-50 flex-md-100 margin_bottom">
+    <div className="layout-row flex-100 flex-gt-sm-50 margin_bottom">
       <SquareButton text={t('landing:callToAction')} theme={theme} handleNext={bookNow} size="small" active />
     </div>
   )
@@ -66,7 +66,7 @@ const ButtonSection = ({
       ${styles.content_wrapper} ${className} flex-100 layout-row layout-wrap layout-align-center-center
     `}
     >
-      <div className={`layout-row layout-align-start-center ${styles.wrapper_btns} flex-75`}>
+      <div className={`layout-row layout-wrap layout-align-start-center ${styles.wrapper_btns} flex-75`}>
         <MyAccount {...buttonProps} />
         <ToAdmin {...buttonProps} />
         <FindRates {...buttonProps} bookNow={bookNow} />
