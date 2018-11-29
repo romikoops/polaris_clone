@@ -9,7 +9,6 @@ import Tab from '../../../Tabs/Tab'
 import { adminActions, appActions } from '../../../../actions'
 import AdminShipmentsBox from './box' // eslint-disable-line
 import NamedSelect from '../../../NamedSelect/NamedSelect'
-import shipment from '../../../../reducers/shipment.reducer';
 
 export class ShipmentsCompAdmin extends Component {
   static prepShipment (baseShipment, clients) {

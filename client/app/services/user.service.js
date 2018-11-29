@@ -244,21 +244,31 @@ function newAlias (data) {
   return fetch(`${getTenantApiUrl()}/contacts/new_alias`, requestOptions).then(handleResponse)
 }
 
-function getShipments (pages, perPage) {
+function getShipments (_pages, perPage, params, redirect) {
+  const pages = _pages || {
+    open: 1,
+    requested: 1,
+    archived: 1,
+    rejected: 1,
+    finished: 1
+  }
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
   let query = ''
-  Object.keys(pages).forEach((status) => {
+  const queryKeys = Object.keys(pages)
+  queryKeys.forEach((status, i) => {
     query += `${status}_page=${pages[status] || 1}&`
   })
   if (perPage) query += `per_page=${perPage}`
 
-  return fetch(`${getTenantApiUrl()}/shipments?${query}`, requestOptions).then(handleResponse)
+  const queryString = params ? toQueryString(params, true) : ''
+
+  return fetch(`${getTenantApiUrl()}/shipments?${query}${queryString}`, requestOptions).then(handleResponse)
 }
 
-function deltaShipmentsPage (target, page, perPage) {
+function deltaShipmentsPage (target, page, perPage, params) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -266,7 +276,10 @@ function deltaShipmentsPage (target, page, perPage) {
   let query = `page=${page || 1}&target=${target}`
   if (perPage) query += `&per_page=${perPage}`
 
-  return fetch(`${getTenantApiUrl()}/shipments/pages/delta_page_handler?${query}`, requestOptions).then(handleResponse)
+  const queryString = params ? toQueryString(params, true) : ''
+
+  return fetch(`${getTenantApiUrl()}/shipments/pages/delta_page_handler?${query}${queryString}`, requestOptions)
+    .then(handleResponse)
 }
 
 function deleteAlias (aliasId) {

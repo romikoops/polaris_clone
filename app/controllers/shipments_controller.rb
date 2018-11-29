@@ -13,36 +13,30 @@ class ShipmentsController < ApplicationController
   def delta_page_handler
     case params[:target]
     when 'requested'
-      shipment_association = current_user.shipments.requested
+      shipment_association = requested_shipments
                                          .order(booking_placed_at: :desc)
-                                         .paginate(page: params[:page], per_page: per_page)
     when 'open'
-      shipment_association = current_user.shipments.open
+      shipment_association = open_shipments
                                          .order(booking_placed_at: :desc)
-                                         .paginate(page: params[:page], per_page: per_page)
     when 'rejected'
-      shipment_association = current_user.shipments.rejected
+      shipment_association = rejected_shipments
                                          .order(booking_placed_at: :desc)
-                                         .paginate(page: params[:page], per_page: per_page)
     when 'finished'
-      shipment_association = current_user.shipments.finished
+      shipment_association = finished_shipments
                                          .order(booking_placed_at: :desc)
-                                         .paginate(page: params[:page], per_page: per_page)
     when 'archived'
-      shipment_association = current_user.shipments.archived
+      shipment_association = archived_shipments
                                          .order(booking_placed_at: :desc)
-                                         .paginate(page: params[:page], per_page: per_page)
     when 'quoted'
-      shipment_association = current_user.shipments.quoted
+      shipment_association = quoted_shipments
                                          .order(booking_placed_at: :desc)
-                                         .paginate(page: params[:page], per_page: per_page)
     end
     per_page = params.fetch(:per_page, 4).to_f
-    shipments = shipment_association.map(&:with_address_index_json)
+    shipments = shipment_association.order(booking_placed_at: :desc).paginate(page: params[:page], per_page: per_page)
 
     response_handler(
-      shipments: shipments,
-      num_shipment_pages: shipment_association.total_pages,
+      shipments: shipments.map(&:with_address_index_json),
+      num_shipment_pages: shipments.total_pages,
       target: params[:target],
       page: params[:page]
     )
@@ -64,17 +58,17 @@ class ShipmentsController < ApplicationController
     ]
     case params[:target]
     when 'requested'
-      shipment_association = current_user.shipments.requested.order(booking_placed_at: :desc)
+      shipment_association = requested_shipments.order(booking_placed_at: :desc)
     when 'open'
-      shipment_association = current_user.shipments.open.order(booking_placed_at: :desc)
+      shipment_association = open_shipments.order(booking_placed_at: :desc)
     when 'finished'
-      shipment_association = current_user.shipments.finished.order(booking_placed_at: :desc)
+      shipment_association = finished_shipments.order(booking_placed_at: :desc)
     when 'rejected'
-      shipment_association = current_user.shipments.rejected.order(booking_placed_at: :desc)
+      shipment_association = rejected_shipments.order(booking_placed_at: :desc)
     when 'archived'
-      shipment_association = current_user.shipments.archived.order(booking_placed_at: :desc)
+      shipment_association = archived_shipments.order(booking_placed_at: :desc)
     when 'quoted'
-      shipment_association = current_user.shipments.quoted.order(booking_placed_at: :desc)
+      shipment_association = quoted_shipments.order(booking_placed_at: :desc)
     end
     per_page = params.fetch(:per_page, 4).to_f
 
@@ -88,7 +82,7 @@ class ShipmentsController < ApplicationController
 
     response_handler(
       shipments: shipments.map(&:with_address_index_json),
-      num_shipment_pages: shipment.total_pages,
+      num_shipment_pages: shipments.total_pages,
       target: params[:target],
       page: params[:page]
     )
@@ -174,6 +168,28 @@ class ShipmentsController < ApplicationController
           rejected: params[:rejected_page],
           archived: params[:archived_page]
         },
+        nexuses: {
+          open: {
+            origin_nexuses: Nexus.where(id: current_user.shipments.open.distinct.pluck(:origin_nexus_id)),
+            destination_nexuses: Nexus.where(id: current_user.shipments.open.distinct.pluck(:destination_nexus_id))
+          },
+          requested: {
+            origin_nexuses: Nexus.where(id: current_user.shipments.requested.distinct.pluck(:origin_nexus_id)),
+            destination_nexuses: Nexus.where(id: current_user.shipments.requested.distinct.pluck(:destination_nexus_id))
+          },
+          rejected: {
+            origin_nexuses: Nexus.where(id: current_user.shipments.rejected.distinct.pluck(:origin_nexus_id)),
+            destination_nexuses: Nexus.where(id: current_user.shipments.rejected.distinct.pluck(:destination_nexus_id))
+          },
+          finished: {
+            origin_nexuses: Nexus.where(id: current_user.shipments.finished.distinct.pluck(:origin_nexus_id)),
+            destination_nexuses: Nexus.where(id: current_user.shipments.finished.distinct.pluck(:destination_nexus_id))
+          },
+          archived: {
+            origin_nexuses: Nexus.where(id: current_user.shipments.archived.distinct.pluck(:origin_nexus_id)),
+            destination_nexuses: Nexus.where(id: current_user.shipments.archived.distinct.pluck(:destination_nexus_id))
+          }
+        },
         num_shipment_pages: num_pages
       }
     end
@@ -199,27 +215,50 @@ class ShipmentsController < ApplicationController
     response_handler(response)
   end
 
+  def filtered_user_shipments
+    return @filtered_user_shipments unless @filtered_user_shipments.nil?
+
+    @filtered_user_shipments = current_user.shipments
+
+    if params[:origin_nexus]
+      @filtered_user_shipments = @filtered_user_shipments.where(origin_nexus_id: params[:origin_nexus].split(','))
+    end
+
+    if params[:destination_nexus]
+      @filtered_user_shipments = @filtered_user_shipments.where(destination_nexus_id: params[:destination_nexus].split(','))
+    end
+
+    if params[:hub_type] && params[:hub_type] != ''
+
+      hub_type_array = params[:hub_type].split(',')
+
+      @filtered_user_shipments = @filtered_user_shipments.modes_of_transport(*hub_type_array)
+    end
+
+    @filtered_user_shipments
+  end
+
   def requested_shipments
-    @requested_shipments ||= current_user.shipments.requested
+    @requested_shipments ||= filtered_user_shipments.requested
   end
 
   def quoted_shipments
-    @quoted_shipments ||= current_user.shipments.quoted
+    @quoted_shipments ||= filtered_user_shipments.quoted
   end
 
   def open_shipments
-    @open_shipments ||= current_user.shipments.open
+    @open_shipments ||= filtered_user_shipments.open
   end
 
   def rejected_shipments
-    @rejected_shipments ||= current_user.shipments.rejected
+    @rejected_shipments ||= filtered_user_shipments.rejected
   end
 
   def archived_shipments
-    @archived_shipments ||= current_user.shipments.archived
+    @archived_shipments ||= filtered_user_shipments.archived
   end
 
   def finished_shipments
-    @finished_shipments ||= current_user.shipments.finished
+    @finished_shipments ||= filtered_user_shipments.finished
   end
 end

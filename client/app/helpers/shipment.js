@@ -94,16 +94,17 @@ export function loadClients (clients) {
     label: `${client.first_name} ${client.last_name}`,
     value: client.id
   }))
+
   return clientArr
 }
 
 export function loadMot () {
   const mots = ['Ocean', 'Air', 'Rail']
 
-  const loadMot = mots.map(mot => ({
+  const formattedMots = mots.map(mot => ({
     label: mot,
     value: mot.toLowerCase()
   }))
 
-  return loadMot
+  return formattedMots
 }

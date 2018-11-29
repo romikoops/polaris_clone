@@ -243,7 +243,7 @@ function makePrimary (userId, addressId, redirect) {
   }
 }
 
-function getShipments (pages, perPage, redirect) {
+function getShipments (pages, perPage, params, redirect) {
   function request (shipmentData) {
     return { type: userConstants.GET_SHIPMENTS_REQUEST, payload: shipmentData }
   }
@@ -259,7 +259,7 @@ function getShipments (pages, perPage, redirect) {
   return (dispatch) => {
     dispatch(request())
 
-    userService.getShipments(pages, perPage).then(
+    userService.getShipments(pages, perPage, params, redirect).then(
       (data) => {
         dispatch(success(data))
         if (redirect) {
@@ -274,7 +274,7 @@ function getShipments (pages, perPage, redirect) {
   }
 }
 
-function deltaShipmentsPage (target, page, perPage) {
+function deltaShipmentsPage (target, page, perPage, params) {
   function request (shipmentData) {
     return { type: userConstants.GET_SHIPMENTS_PAGE_REQUEST, payload: shipmentData }
   }
@@ -290,7 +290,7 @@ function deltaShipmentsPage (target, page, perPage) {
   return (dispatch) => {
     dispatch(request())
 
-    userService.deltaShipmentsPage(target, page, perPage).then(
+    userService.deltaShipmentsPage(target, page, perPage, params).then(
       (data) => {
         dispatch(success(data))
       },

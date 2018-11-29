@@ -37,7 +37,6 @@ function sortByAlphabet (array, key) {
   })
 
   return array
-  
 }
 
 const filters = {

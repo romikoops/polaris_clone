@@ -431,19 +431,25 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     @filtered_tenant_shipments = tenant_shipments
 
     if params[:origin_nexus]
-      @filtered_tenant_shipments = @filtered_tenant_shipments.where(origin_nexus_id: params[:origin_nexus].split(','))
+      @filtered_tenant_shipments = @filtered_tenant_shipments.where(origin_nexus_id: params[:origin_nexus]
+                                                             .split(','))
     end
 
     if params[:destination_nexus]
-      @filtered_tenant_shipments = @filtered_tenant_shipments.where(destination_nexus_id: params[:destination_nexus].split(','))
+      @filtered_tenant_shipments = @filtered_tenant_shipments.where(destination_nexus_id: params[:destination_nexus]
+                                                             .split(','))
     end
 
     if params[:hub_type] && params[:hub_type] != ''
-      @filtered_tenant_shipments = @filtered_tenant_shipments.send(params[:hub_type])
+
+      hub_type_array = params[:hub_type].split(',')
+
+      @filtered_tenant_shipments = @filtered_tenant_shipments.modes_of_transport(*hub_type_array)
     end
 
     if params[:clients]
-      @filtered_tenant_shipments = @filtered_tenant_shipments.where(user_id: params[:clients].split(','))
+      @filtered_tenant_shipments = @filtered_tenant_shipments.where(user_id: params[:clients]
+                                                             .split(','))
     end
 
     @filtered_tenant_shipments

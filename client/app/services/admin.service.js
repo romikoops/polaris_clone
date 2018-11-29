@@ -244,7 +244,8 @@ function deltaShipmentsPage (target, page, perPage, params) {
 
   const queryString = params ? toQueryString(params, true) : ''
 
-  return fetch(`${getTenantApiUrl()}/admin/shipments/pages/delta_page_handler?${query}${queryString}`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/admin/shipments/pages/delta_page_handler?${query}${queryString}`, requestOptions)
+    .then(handleResponse)
 }
 
 function getDashboard () {
