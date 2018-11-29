@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { withNamespaces } from 'react-i18next'
 import Select from 'react-select'
 import Toggle from 'react-toggle'
@@ -55,7 +55,7 @@ const StyledSelect = styled(Select)`
   }
 `
 
-class ShipmentLocationBox extends Component {
+class ShipmentLocationBox extends PureComponent {
   static sortOptions (array) {
     return array.sort((a, b) => {
       const textA = a.label.toUpperCase()
@@ -692,14 +692,6 @@ class ShipmentLocationBox extends Component {
               this.props.handleSelectLocation(target, fieldsHaveErrors)
             })
           } else {
-            this.setState({
-              [`${target}FieldsHaveErrors`]: false,
-              truckingHubs: {
-                ...this.state.truckingHubs,
-                [target]: hubIds
-              },
-              lastTarget: target
-            }, () => this.prepForSelect(target))
             this.props.handleSelectLocation(target, this.state[`${target}FieldsHaveErrors`])
             this.props.setNotesIds(nexusIds, target)
             if (isLocationObj) {
@@ -717,8 +709,14 @@ class ShipmentLocationBox extends Component {
               ...prevState.truckingOptions,
               [`${prefix}Carriage`]: truckingAvailable
             },
+            [`${target}FieldsHaveErrors`]: false,
+            truckingHubs: {
+              ...this.state.truckingHubs,
+              [target]: hubIds
+            },
             lastTarget: target
           }), () => {
+            this.prepForSelect(target)
             setTimeout(() => {
               if (!this.isOnFocus[target]) this.changeAddressFormVisibility(target, false)
             }, 5000)

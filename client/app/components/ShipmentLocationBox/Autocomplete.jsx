@@ -45,11 +45,13 @@ class Autocomplete extends PureComponent {
   }
 
   componentWillReceiveProps (nextProps) {
+
     if (typeof this.addressService === undefined) {
-      this.addressService = new nextProps.gMaps.places.AutocompleteService({ types: ['address'] })
+      const props = nextProps || this.props
+      this.addressService = new props.gMaps.places.AutocompleteService({ types: ['address'] })
     }
-    if (this.props.input === nextProps.input) return
-    this.setState(prevState => (nextProps.input === prevState.input ? {} : { input: nextProps.input }))
+    if ((this.props.input === nextProps.input) || (this.state.input === nextProps.input)) return
+    this.setState(prevState => (nextProps.input === prevState.input ? {} : { input: nextProps.input, setFromProps: true }))
   }
 
   componentWillUnmount () {
@@ -200,6 +202,7 @@ class Autocomplete extends PureComponent {
 
     this.setState({ hideResults: true, listenerSet: false })
   }
+
   handleArea (result) {
     listenerTools.removeHandler(document, 'keydown', this.handleKeyEvent)
 
@@ -208,10 +211,12 @@ class Autocomplete extends PureComponent {
 
     this.setState({ hideResults: true, listenerSet: false })
   }
+
   shouldExpandResults () {
     listenerTools.addHandler(document, 'keydown', this.handleKeyEvent)
     this.setState({ hideResults: false })
   }
+
   render () {
     const { t, hasErrors, theme } = this.props
     const {
@@ -304,7 +309,10 @@ class Autocomplete extends PureComponent {
                 ${styles.results_section} ${!hasAddressResults ? styles.hide_results : ''}`}
             >
               <div className={`flex-100 layout-row layout-align-start-center ${styles.results_section_header}`}>
-                <p className="flex-none"> {t('common:addresses')}</p>
+                <p className="flex-none"> 
+{' '}
+{t('common:addresses')}
+</p>
               </div>
               {addressResultCards}
             </div>
