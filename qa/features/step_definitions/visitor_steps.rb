@@ -50,12 +50,11 @@ When('I select {string} as {string}') do |place, type|
     
     #if inputs cant be found expand the address fields
     if inputs.empty?
-      elem = find('div', class: "ccb_#{type.downcase}_carriage_input", wait: 60)
-      expander = elem.find(".ccb_#{type.downcase}_carriage_expand", wait: 30)
+      expander = find(".ccb_#{type.downcase}_carriage_expand", wait: 30)
       expander.click unless expander.nil?
     end
 
-    expect(page).to have_xpath(".//input[#{name_xpath} and not(@value='')]", wait: 30)
+    expect(page).to have_xpath(".//input[#{name_xpath} and not(@value='')]", wait: 30, visible: false)
    
   else
     elem = find('div', class: 'Select-placeholder', text: type, wait: 60)
