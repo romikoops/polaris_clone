@@ -50,9 +50,10 @@ When('I select {string} as {string}') do |place, type|
     
     #if inputs cant be found expand the address fields
     if inputs.empty?
-      expander = find('.fa-angle-double-up', wait: 30)
+      expander = elem.find('.fa-angle-double-up', wait: 30)
       expander.click unless expander.nil?
     end
+
     expect(page).to have_xpath(".//input[#{name_xpath} and not(@value='')]", wait: 30)
    
   else
