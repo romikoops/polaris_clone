@@ -1,4 +1,5 @@
-import '@babel/polyfill'
+import '@babel/polyfill' // Required for polyfill fetch for IE11
+import 'whatwg-fetch' // Required for polyfill fetch for IE11
 import React from 'react'
 import { render } from 'react-dom'
 import * as Sentry from '@sentry/browser'
@@ -18,7 +19,7 @@ Sentry.init({
 const store = configureStore()
 
 render(
-  <I18nextProvider i18n={i18n} >
+  <I18nextProvider i18n={i18n}>
     <Root store={store} history={history} />
   </I18nextProvider>,
   document.getElementById('root')
