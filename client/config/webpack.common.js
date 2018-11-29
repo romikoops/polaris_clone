@@ -130,7 +130,7 @@ module.exports = {
     ),
 
     new CopyWebpackPlugin([
-      { from: 'app/config.js' }
+      { from: 'app/config.201811280955.js' }
     ]),
 
     new MiniCssExtractPlugin({
@@ -153,7 +153,7 @@ module.exports = {
       release: process.env.RELEASE,
       include: 'dist/',
       ignoreFile: '.sentrycliignore',
-      ignore: ['config.js']
+      ignore: ['config.201811280955.js']
     })
   ]
 }
