@@ -10,7 +10,7 @@ import {
   authenticationActions,
   documentActions,
   tenantActions
-} from './'
+} from '.'
 
 const { fetch } = window
 
