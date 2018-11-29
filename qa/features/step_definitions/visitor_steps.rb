@@ -49,6 +49,7 @@ When('I select {string} as {string}') do |place, type|
       expander = find('.fa-angle-double-up', wait: 30)
       expander.click unless expander.nil?
     end
+    find(:xpath, ".//input[#{name_xpath} and not(@value='')]", wait: 20)
    
   else
     elem = find('div', class: 'Select-placeholder', text: type, wait: 60)
