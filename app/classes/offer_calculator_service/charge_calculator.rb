@@ -7,8 +7,9 @@ module OfferCalculatorService
 
     def initialize(args = {})
       @trucking_data = args[:trucking_data]
-      @schedule      = args[:schedule]
+      @schedule      = args[:data][:schedules].first
       @user          = args[:user]
+      @data         = args[:data]
       super(args[:shipment])
     end
 
@@ -116,7 +117,7 @@ module OfferCalculatorService
       cargo_unit_array.each do |cargo_unit|
         charge_result = send("determine_#{@shipment.load_type}_price",
                              cargo_unit,
-                             @schedule,
+                             @data[:pricing_ids][cargo_unit.cargo_class],
                              @user,
                              total_units,
                              @shipment.planned_pickup_date,

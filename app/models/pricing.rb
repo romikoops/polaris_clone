@@ -15,6 +15,12 @@ class Pricing < ApplicationRecord
   delegate :cargo_class, to: :transport_category
   scope :for_load_type, ->(load_type) { joins(:transport_category).where('transport_categories.load_type': load_type) }
   scope :for_cargo_class, ->(cargo_class) { joins(:transport_category).where('transport_categories.cargo_class': cargo_class) }
+  scope :for_dates, ->(start_date, end_date) { 
+    where(Arel::Nodes::InfixOperation.new(
+    'OVERLAPS', 
+    Arel::Nodes::SqlLiteral.new("(#{arel_table[:effective_date].name}, #{arel_table[:expiration_date].name})"),
+    Arel::Nodes::SqlLiteral.new("(DATE '#{start_date}', DATE '#{end_date}')")
+  ))}
 
   self.per_page = 12
 
