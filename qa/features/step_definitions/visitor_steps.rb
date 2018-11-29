@@ -37,19 +37,23 @@ When('I select {string} as {string}') do |place, type|
     end
 
     #find a close backdrop if it is there
+
     backdrop = all('.ccb_backdrop')
     backdrop.first.click() unless backdrop.empty?
     name_xpath = "@name='#{type.downcase}-street'"
 
+    # wait for trucking rpcing to return
+    expect(page).to have_no_css('#floatingCirclesG', wait: 60)
+    
     # wait untill form is autofilled filled
     inputs = all(:xpath, ".//input[#{name_xpath} and not(@value='')]")
-
+    
     #if inputs cant be found expand the address fields
     if inputs.empty?
       expander = find('.fa-angle-double-up', wait: 30)
       expander.click unless expander.nil?
     end
-    find(:xpath, ".//input[#{name_xpath} and not(@value='')]", wait: 20)
+    expect(page).to have_xpath(".//input[#{name_xpath} and not(@value='')]", wait: 30)
    
   else
     elem = find('div', class: 'Select-placeholder', text: type, wait: 60)
