@@ -8,7 +8,9 @@ import '../../styles/react-toggle.scss'
 import '../../styles/select-css-custom.scss'
 import styles from './ShipmentLocationBox.scss'
 import errorStyles from '../../styles/errors.scss'
-import { colorSVG, determineSpecialism, isDefined, onlyUnique } from '../../helpers'
+import {
+  colorSVG, determineSpecialism, isDefined, onlyUnique
+} from '../../helpers'
 import { mapStyling } from '../../constants/map.constants'
 import { capitalize } from '../../helpers/stringTools'
 import addressFromPlace from './addressFromPlace'
@@ -20,6 +22,7 @@ import TruckingDetails from '../TruckingDetails/TruckingDetails'
 import Autocomplete from './Autocomplete'
 import removeTabIndex from './removeTabIndex'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
+import CircleCompletion from '../CircleCompletion/CircleCompletion'
 
 const colourSVG = colorSVG
 const mapStyles = mapStyling
@@ -61,6 +64,7 @@ class ShipmentLocationBox extends Component {
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
     })
   }
+
   constructor (props) {
     super(props)
 
@@ -101,6 +105,10 @@ class ShipmentLocationBox extends Component {
       countries: {
         origin: [],
         destination: []
+      },
+      truckingFound: {
+        origin: false,
+        destination: false
       }
     }
 
@@ -267,6 +275,7 @@ class ShipmentLocationBox extends Component {
       }, 750)
     }
   }
+
   setOriginNexus (event) {
     if (event) {
       const origin = {
@@ -300,6 +309,7 @@ class ShipmentLocationBox extends Component {
       }
     }
   }
+
   setLocationMap (location, target) {
     const {
       map, locationData, directionsDisplay, directionsService, markers
@@ -344,6 +354,7 @@ class ShipmentLocationBox extends Component {
 
     return latLng
   }
+
   setMarker (address, name, target) {
     const {
       markers, map, directionsDisplay, directionsService
@@ -527,6 +538,7 @@ class ShipmentLocationBox extends Component {
 
     this.selectLocation(place, target)
   }
+
   handleLocationChange (location, target) {
     this.changeAddressFormVisibility(target, true)
 
@@ -545,6 +557,7 @@ class ShipmentLocationBox extends Component {
 
     this.selectLocation(address, target)
   }
+
   filterTruckTypesByHub (truckTypeObject) {
     this.setState({ truckTypeObject })
   }
@@ -717,6 +730,7 @@ class ShipmentLocationBox extends Component {
       [target]: tmpAddress
     }), () => this.props.setTargetAddress(target, tmpAddress))
   }
+
   handleAddressFormFocus (event) {
     const target = event.target.name.split('-')[0]
     this.isOnFocus[target] = event.type === 'focus'
@@ -728,6 +742,7 @@ class ShipmentLocationBox extends Component {
       this.triggerPlaceChanged(newAutotext, target)
     }
   }
+
   toggleModal () {
     this.setState({ showModal: !this.state.showModal })
   }
@@ -806,6 +821,7 @@ class ShipmentLocationBox extends Component {
     this.setState({ addressFromModal: !this.state.addressFromModal })
     this.setNexusesFromRoute(route)
   }
+
   loadReusedShipment () {
     const { reusedShipment, shipmentData } = this.props
     const { routes } = shipmentData
@@ -847,6 +863,7 @@ class ShipmentLocationBox extends Component {
 
     this.setState(newState)
   }
+
   clearAddressFields (target) {
     const targets = target ? [target] : ['origin', 'destination']
     targets.forEach((t) => {
@@ -940,6 +957,7 @@ class ShipmentLocationBox extends Component {
       }
     })
   }
+
   prepTruckTypes (routes, target) {
     const { selectedTrucking } = this.props
     const truckingTarget = target === 'origin' ? 'pre_carriage' : 'on_carriage'
@@ -1000,7 +1018,8 @@ class ShipmentLocationBox extends Component {
       originTruckingAvailable,
       destinationTruckingAvailable,
       fetchingtruckingAvailability,
-      countries
+      countries,
+      truckingFound
     } = this.state
 
     if (availableDestinationNexuses) destinationOptions = ShipmentLocationBox.sortOptions(availableDestinationNexuses)
@@ -1062,10 +1081,12 @@ class ShipmentLocationBox extends Component {
         <div
           className={`${styles.address_form} flex-100 layout-row layout-wrap layout-align-center`}
         >
-          { fetchingtruckingAvailability ? <LoadingSpinner size="small" />
-            : <div
-              className="flex-100 layout-row layout-wrap layout-align-center"
-            >
+          { fetchingtruckingAvailability ? <LoadingSpinner size="small" /> : '' }
+          { truckingFound.origin ? <CircleCompletion size="small" /> : '' }
+          { (!fetchingtruckingAvailability && !truckingFound.origin) ? (
+            <div
+  className="flex-100 layout-row layout-wrap layout-align-center"
+>
               <div
                 className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}
               >
@@ -1155,6 +1176,8 @@ class ShipmentLocationBox extends Component {
                 </div>
               </div>
             </div>
+          )
+            : ''
           }
         </div>
       </div>
@@ -1192,98 +1215,100 @@ class ShipmentLocationBox extends Component {
         </div>
         <div className={`${styles.address_form} ${toggleLogic} flex-100 layout-row layout-wrap layout-align-center`}>
           { fetchingtruckingAvailability ? <LoadingSpinner size="small" />
-            : <div
-              className="flex-100 layout-row layout-wrap layout-align-center"
-            >
+            : (
               <div
-                className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}
-              >
-                <p className="flex-none">{t('shipment:enterDelivery')}</p>
-              </div>
-
-              <input
-                name="destination-street"
-                className={
-                  `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !destination.street && requireFullAddress ? styles.with_errors : ''}`
-                }
-                onChange={this.handleAddressChange}
-                onFocus={this.handleAddressFormFocus}
-                onBlur={this.handleAddressFormFocus}
-                value={destination.street || ''}
-                autoComplete="off"
-                placeholder={t('user:street')}
-                disabled={!this.state.showDestinationFields}
-              />
-              <input
-                name="destination-number"
-                className={
-                  `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !destination.number && requireFullAddress ? styles.with_errors : ''}`
-                }
-                type="string"
-                onChange={this.handleAddressChange}
-                onFocus={this.handleAddressFormFocus}
-                onBlur={this.handleAddressFormFocus}
-                value={destination.number || ''}
-                autoComplete="off"
-                placeholder={t('user:number')}
-                disabled={!this.state.showDestinationFields}
-              />
-              <input
-                name="destination-zipCode"
-                className={
-                  `flex-90 ${styles.zipCode} ${styles.input}` +
-              `${nextStageAttempts > 0 && !destination.number ? styles.with_errors : ''}`
-                }
-                onChange={this.handleAddressChange}
-                onFocus={this.handleAddressFormFocus}
-                onBlur={this.handleAddressFormFocus}
-                value={destination.zipCode || ''}
-                autoComplete="off"
-                placeholder={t('user:postalCode')}
-                disabled={!this.state.showDestinationFields}
-              />
-              <input
-                name="destination-city"
-                className={
-                  `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !destination.city ? styles.with_errors : ''}`
-                }
-                onChange={this.handleAddressChange}
-                onFocus={this.handleAddressFormFocus}
-                onBlur={this.handleAddressFormFocus}
-                value={destination.city || ''}
-                autoComplete="off"
-                placeholder={t('user:city')}
-                disabled={!this.state.showDestinationFields}
-              />
-              <input
-                name="destination-country"
-                className={
-                  `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !destination.country ? styles.with_errors : ''}`
-                }
-                onChange={this.handleAddressChange}
-                onFocus={this.handleAddressFormFocus}
-                onBlur={this.handleAddressFormFocus}
-                value={destination.country || ''}
-                autoComplete="off"
-                placeholder={t('user:country')}
-                disabled={!this.state.showDestinationFields}
-              />
-              <div className="flex-100 layout-row layout-align-start-center">
+  className="flex-100 layout-row layout-wrap layout-align-center"
+>
                 <div
-                  className={`${styles.clear_sec} flex-none layout-row layout-align-end-center`}
-                  onClick={() => this.resetAuto('destination')}
+                  className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}
                 >
-                  <i className="fa fa-times flex-none" />
-                  <p className="offset-5 flex-none" style={{ paddingRight: '10px' }}>
-                    {t('common:clear')}
-                  </p>
+                  <p className="flex-none">{t('shipment:enterDelivery')}</p>
+                </div>
+
+                <input
+                  name="destination-street"
+                  className={
+                    `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !destination.street && requireFullAddress ? styles.with_errors : ''}`
+                  }
+                  onChange={this.handleAddressChange}
+                  onFocus={this.handleAddressFormFocus}
+                  onBlur={this.handleAddressFormFocus}
+                  value={destination.street || ''}
+                  autoComplete="off"
+                  placeholder={t('user:street')}
+                  disabled={!this.state.showDestinationFields}
+                />
+                <input
+                  name="destination-number"
+                  className={
+                    `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !destination.number && requireFullAddress ? styles.with_errors : ''}`
+                  }
+                  type="string"
+                  onChange={this.handleAddressChange}
+                  onFocus={this.handleAddressFormFocus}
+                  onBlur={this.handleAddressFormFocus}
+                  value={destination.number || ''}
+                  autoComplete="off"
+                  placeholder={t('user:number')}
+                  disabled={!this.state.showDestinationFields}
+                />
+                <input
+                  name="destination-zipCode"
+                  className={
+                    `flex-90 ${styles.zipCode} ${styles.input}` +
+              `${nextStageAttempts > 0 && !destination.number ? styles.with_errors : ''}`
+                  }
+                  onChange={this.handleAddressChange}
+                  onFocus={this.handleAddressFormFocus}
+                  onBlur={this.handleAddressFormFocus}
+                  value={destination.zipCode || ''}
+                  autoComplete="off"
+                  placeholder={t('user:postalCode')}
+                  disabled={!this.state.showDestinationFields}
+                />
+                <input
+                  name="destination-city"
+                  className={
+                    `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !destination.city ? styles.with_errors : ''}`
+                  }
+                  onChange={this.handleAddressChange}
+                  onFocus={this.handleAddressFormFocus}
+                  onBlur={this.handleAddressFormFocus}
+                  value={destination.city || ''}
+                  autoComplete="off"
+                  placeholder={t('user:city')}
+                  disabled={!this.state.showDestinationFields}
+                />
+                <input
+                  name="destination-country"
+                  className={
+                    `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !destination.country ? styles.with_errors : ''}`
+                  }
+                  onChange={this.handleAddressChange}
+                  onFocus={this.handleAddressFormFocus}
+                  onBlur={this.handleAddressFormFocus}
+                  value={destination.country || ''}
+                  autoComplete="off"
+                  placeholder={t('user:country')}
+                  disabled={!this.state.showDestinationFields}
+                />
+                <div className="flex-100 layout-row layout-align-start-center">
+                  <div
+                    className={`${styles.clear_sec} flex-none layout-row layout-align-end-center`}
+                    onClick={() => this.resetAuto('destination')}
+                  >
+                    <i className="fa fa-times flex-none" />
+                    <p className="offset-5 flex-none" style={{ paddingRight: '10px' }}>
+                      {t('common:clear')}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )
           }
         </div>
       </div>
@@ -1385,35 +1410,46 @@ class ShipmentLocationBox extends Component {
             >
               <div className="flex-45 layout-row layout-wrap layout-align-start-start mc">
                 {speciality !== 'truck'
-                  ? <div
-                    className={
-                      'flex-45 layout-row layout-align-start layout-wrap ' +
+                  ? (
+                    <div
+                      className={
+                        'flex-45 layout-row layout-align-start layout-wrap ' +
                       `${styles.toggle_box} ` +
                       `${!truckingOptions.preCarriage ? styles.not_available : ''}`
-                    }
-                  >
-                    { originTruckingAvailable ? <TruckingTooltip
+                      }
+>
+                      { originTruckingAvailable ? (
+<TruckingTooltip
                       truckingBoolean={!originTruckingAvailable}
                       truckingOptions={truckingOptions}
                       carriage="preCarriage"
                       hubName={this.state.oSelect.label}
                       direction={shipment.direction}
                       scope={scope}
-                    /> : '' }
+                    />
+) : '' }
 
-                    { originTruckingAvailable ? <Toggle
+                      { originTruckingAvailable ? (
+<Toggle
                       className="flex-none ccb_pre_carriage"
                       id="has_pre_carriage"
                       name="has_pre_carriage"
                       tabIndex="-1"
                       checked={this.props.has_pre_carriage}
                       onChange={this.handleTrucking}
-                    /> : '' }
-                    <label htmlFor="pre-carriage" style={{ marginLeft: '15px' }}>
-                      {t('shipment:pickUp')}
-                    </label>
-                    {loadType === 'container' && this.props.has_pre_carriage ? preCarriageTruckTypes : ''}
-                  </div> : <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">{t('shipment:pickUp')}:</p></div>}
+                    />
+) : '' }
+                      <label htmlFor="pre-carriage" style={{ marginLeft: '15px' }}>
+                        {t('shipment:pickUp')}
+                      </label>
+                      {loadType === 'container' && this.props.has_pre_carriage ? preCarriageTruckTypes : ''}
+                    </div>
+                  ) : (
+<div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">
+{t('shipment:pickUp')}
+:
+</p></div>
+)}
                 <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
                   {this.props.has_pre_carriage ? originAuto : ''}
                   {displayLocationOptions('origin')}
@@ -1428,35 +1464,46 @@ class ShipmentLocationBox extends Component {
 
               <div className="flex-45 layout-row layout-wrap layout-align-end-start">
                 {speciality !== 'truck'
-                  ? <div
-                    className={
-                      'flex-45 layout-row layout-align-start layout-wrap ' +
+                  ? (
+                    <div
+                      className={
+                        'flex-45 layout-row layout-align-start layout-wrap ' +
                       `${styles.toggle_box} ` +
                       `${!truckingOptions.onCarriage ? styles.not_available : ''}`
-                    }
-                  >
-                    { destinationTruckingAvailable ? <TruckingTooltip
+                      }
+>
+                      { destinationTruckingAvailable ? (
+<TruckingTooltip
                       truckingBoolean={!destinationTruckingAvailable}
                       truckingOptions={truckingOptions}
                       carriage="onCarriage"
                       hubName={this.state.dSelect.label}
                       direction={shipment.direction}
                       scope={scope}
-                    /> : '' }
+                    />
+) : '' }
 
-                    <label htmlFor="on-carriage" style={{ marginRight: '15px' }}>
-                      {t('shipment:delivery')}
-                    </label>
-                    { destinationTruckingAvailable ? <Toggle
+                      <label htmlFor="on-carriage" style={{ marginRight: '15px' }}>
+                        {t('shipment:delivery')}
+                      </label>
+                      { destinationTruckingAvailable ? (
+<Toggle
                       className="flex-none ccb_on_carriage"
                       id="has_on_carriage"
                       name="has_on_carriage"
                       tabIndex="-1"
                       checked={this.props.has_on_carriage}
                       onChange={this.handleTrucking}
-                    /> : '' }
-                    {loadType === 'container' && this.props.has_on_carriage ? onCarriageTruckTypes : ''}
-                  </div> : <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">{t('shipment:delivery')}:</p></div>}
+                    />
+) : '' }
+                      {loadType === 'container' && this.props.has_on_carriage ? onCarriageTruckTypes : ''}
+                    </div>
+                  ) : (
+<div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">
+{t('shipment:delivery')}
+:
+</p></div>
+)}
                 <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
                   {this.props.has_on_carriage ? destAuto : ''}
                   {displayLocationOptions('destination')}
