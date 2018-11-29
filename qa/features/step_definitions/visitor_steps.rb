@@ -36,15 +36,20 @@ When('I select {string} as {string}') do |place, type|
       end
     end
 
+    #find a close backdrop if it is there
+    backdrop = all('.ccb_backdrop')
+    backdrop.first.click() unless backdrop.empty?
     name_xpath = "@name='#{type.downcase}-street'"
 
-    # focus the form to avoid it collapsing
-    find(:xpath, ".//input[#{name_xpath}]", wait: 20).send_keys('')
-
     # wait untill form is autofilled filled
-    find(:xpath, ".//input[#{name_xpath} and not(@value='')]", wait: 60)
-    backdrop = find('.ccb_backdrop')
-    backdrop.click() if backdrop
+    inputs = all(:xpath, ".//input[#{name_xpath} and not(@value='')]")
+
+    #if inputs cant be found expand the address fields
+    if inputs.empty?
+      expander = find('.fa-angle-double-up', wait: 30)
+      expander.click unless expander.nil?
+    end
+   
   else
     elem = find('div', class: 'Select-placeholder', text: type, wait: 60)
     elem.sibling('.Select-input').find('input').send_keys(place)
