@@ -23,7 +23,8 @@ jest.mock('../../helpers', () => ({
   totalPrice: () => ({
     currency: 'CHF'
   }),
-  totalPriceString: () => 'Viel zu mehr MKD'
+  totalPriceString: () => 'Viel zu mehr MKD',
+  capitalize: x => x
 }))
 jest.mock('../../constants', () => {
   const format = () => 19

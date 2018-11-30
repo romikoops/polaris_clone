@@ -7,7 +7,9 @@ import styles from '../AdminShipments.scss'
 import adminStyles from '../Admin.scss'
 import GradientBorder from '../../GradientBorder'
 import { moment, docOptions, documentTypes } from '../../../constants'
-import { numberSpacing, totalPrice, cargoPlurals } from '../../../helpers'
+import {
+ numberSpacing, totalPrice, cargoPlurals, capitalize 
+} from '../../../helpers'
 import ShipmentOverviewShowCard from './ShipmentOverviewShowCard'
 import ContactDetailsRow from './ContactDetailsRow'
 import GreyBox from '../../GreyBox/GreyBox'
@@ -25,6 +27,7 @@ class AdminShipmentContent extends Component {
 
     return obj
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -36,10 +39,12 @@ class AdminShipmentContent extends Component {
   setFileType (ev) {
     this.setState({ fileType: ev })
   }
+
   deleteDoc (doc) {
     const { adminDispatch } = this.props
     adminDispatch.deleteDocument(doc.id)
   }
+
   render () {
     const {
       theme,
@@ -182,7 +187,11 @@ class AdminShipmentContent extends Component {
                     {switchIcon()}
                   </div>
                   <p>{t('shipment:estimatedTimeDelivery')}</p>
-                  <h5>{moment(shipment.planned_eta).diff(moment(shipment.planned_etd), `${t('common:days')}`)} {t('common:days')}</h5>
+                  <h5>
+{moment(shipment.planned_eta).diff(moment(shipment.planned_etd), `${t('common:days')}`)} 
+{' '}
+{t('common:days')}
+</h5>
                 </div>
               </div>
 
@@ -229,7 +238,8 @@ class AdminShipmentContent extends Component {
                             <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
                             <p>{t('shipment:pickUp')}</p>
                           </div>
-                          {feeHash.trucking_pre ? <div className="flex-100 layout-row layout-align-end-center">
+                          {feeHash.trucking_pre ? (
+<div className="flex-100 layout-row layout-align-end-center">
                             <p>
                               {feeHash.trucking_pre ? feeHash.trucking_pre.total.currency : ''}
                               { ' ' }
@@ -238,6 +248,7 @@ class AdminShipmentContent extends Component {
                                 : parseFloat(feeHash.trucking_pre.total.value).toFixed(2)}
                             </p>
                           </div>
+)
                             : '' }
                           {showEditServicePrice && shipment.selected_offer.trucking_pre ? (
                             <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
@@ -273,7 +284,8 @@ class AdminShipmentContent extends Component {
                             />
                             <p>{t('shipment:delivery')}</p>
                           </div>
-                          {feeHash.trucking_on ? <div className="flex-100 layout-row layout-align-end-center">
+                          {feeHash.trucking_on ? (
+<div className="flex-100 layout-row layout-align-end-center">
                             <p>
                               {feeHash.trucking_on ? feeHash.trucking_on.total.currency : ''}
                               { ' ' }
@@ -282,6 +294,7 @@ class AdminShipmentContent extends Component {
                                 : parseFloat(feeHash.trucking_on.total.value).toFixed(2)}
                             </p>
                           </div>
+)
                             : ''}
                           {showEditServicePrice && shipment.selected_offer.trucking_on ? (
                             <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
@@ -320,7 +333,8 @@ class AdminShipmentContent extends Component {
                               {t('shipment:originLocalCharges')}
                             </p>
                           </div>
-                          {feeHash.export ? <div className="flex-100 layout-row layout-align-end-center">
+                          {feeHash.export ? (
+<div className="flex-100 layout-row layout-align-end-center">
                             <p>
                               {feeHash.export ? feeHash.export.total.currency : ''}
                               { ' ' }
@@ -329,6 +343,7 @@ class AdminShipmentContent extends Component {
                                 : parseFloat(feeHash.export.total.value).toFixed(2)}
                             </p>
                           </div>
+)
                             : ''}
                           {showEditServicePrice && shipment.selected_offer.export ? (
                             <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
@@ -367,7 +382,8 @@ class AdminShipmentContent extends Component {
                               {t('shipment:destinationLocalCharges')}
                             </p>
                           </div>
-                          {feeHash.import ? <div className="flex-100 layout-row layout-align-end-center">
+                          {feeHash.import ? (
+<div className="flex-100 layout-row layout-align-end-center">
                             <p>
                               {feeHash.import ? feeHash.import.total.currency : ''}
                               { ' ' }
@@ -376,6 +392,7 @@ class AdminShipmentContent extends Component {
                                 : parseFloat(feeHash.import.total.value).toFixed(2)}
                             </p>
                           </div>
+)
                             : ''}
                           {showEditServicePrice && shipment.selected_offer.import ? (
                             <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
@@ -408,10 +425,11 @@ class AdminShipmentContent extends Component {
                               className="fa fa-ship clip flex-none layout-align-center-center"
                               style={selectedStyle}
                             />
-                            <p>{t('shipment:freight')}</p>
+                            <p>{t('shipment:motCargo', { mot: capitalize(shipment.mode_of_transport) })}</p>
                           </div>
                           {feeHash.cargo
-                            ? <div className="flex-100 layout-row layout-align-end-center">
+                            ? (
+<div className="flex-100 layout-row layout-align-end-center">
                               <p>
                                 {feeHash.cargo ? feeHash.cargo.total.currency : ''}
                                 { ' ' }
@@ -420,6 +438,7 @@ class AdminShipmentContent extends Component {
                                   : parseFloat(feeHash.cargo.total.value).toFixed(2)}
                               </p>
                             </div>
+)
                             : ''}
                           {showEditServicePrice && shipment.selected_offer.cargo ? (
                             <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
@@ -461,7 +480,8 @@ class AdminShipmentContent extends Component {
                             <p>{t('shipment:customs')}</p>
                           </div>
                           {feeHash.customs
-                            ? <div className="flex-100 layout-row layout-align-end-center">
+                            ? (
+<div className="flex-100 layout-row layout-align-end-center">
                               <p>
                                 {feeHash.customs ? feeHash.customs.total.currency : ''}
                                 { ' ' }
@@ -470,6 +490,7 @@ class AdminShipmentContent extends Component {
                                   : parseFloat(feeHash.customs.total.value).toFixed(2)}
                               </p>
                             </div>
+)
                             : '' }
                         </div>
 
@@ -484,7 +505,8 @@ class AdminShipmentContent extends Component {
                             <p>{t('shipment:insurance')}</p>
                           </div>
                           {feeHash.insurance && (feeHash.insurance.value || feeHash.insurance.edited_total)
-                            ? <div className="flex-100 layout-row layout-align-end-center">
+                            ? (
+<div className="flex-100 layout-row layout-align-end-center">
                               <p>
                                 {feeHash.insurance ? feeHash.insurance.currency : ''}
                                 { ' ' }
@@ -496,11 +518,14 @@ class AdminShipmentContent extends Component {
                                   : ''}
                               </p>
                             </div>
+)
                             : '' }
                           {feeHash.insurance && !feeHash.insurance.value && !feeHash.insurance.edited_total
-                            ? <div className="flex-100 layout-row layout-align-end-center">
+                            ? (
+<div className="flex-100 layout-row layout-align-end-center">
                               <p>{t('shipment:requested')}</p>
-                            </div> : ''}
+                            </div>
+) : ''}
                           {showEditServicePrice && shipment.selected_offer.insurance ? (
                             <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
                               <span
@@ -547,12 +572,17 @@ class AdminShipmentContent extends Component {
                 <div className="layout-column flex-100">
                   <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
                     <div className="layout-align-start-center layout-row flex">
-                      <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>x&nbsp;{shipment.cargo_count}</span>
+                      <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>
+x&nbsp;
+{shipment.cargo_count}
+</span>
                       <p className="layout-align-sm-end-center layout-align-xs-end-center">{cargoPlurals(shipment, t)}</p>
                     </div>
                   </div>
                   <h2 className="layout-align-start-center layout-row flex">
-                    {numberSpacing(totalPrice(shipment).value, 2)} {totalPrice(shipment).currency}
+                    {numberSpacing(totalPrice(shipment).value, 2)} 
+{' '}
+{totalPrice(shipment).currency}
                   </h2>
                 </div>
               </div>
