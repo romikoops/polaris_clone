@@ -295,6 +295,7 @@ stop_review:
   export GCP_REGISTRY=eu.gcr.io/itsmycargo-main
   export DEVOPS_CHART=chart/
   [[ "$TRACE" ]] && set -x
+  set -e
 
   function install_dependencies() {
     apk add --no-cache --update git
@@ -320,7 +321,7 @@ stop_review:
 
   function delete() {
     if [[ -n "$(helm ls --all --short "^$CI_ENVIRONMENT_SLUG$")" ]]; then
-      helm delete --purge "$name"
+      helm delete --purge "$CI_ENVIRONMENT_SLUG"
     fi
 
     kubectl delete namespace ${CI_ENVIRONMENT_SLUG} || true
