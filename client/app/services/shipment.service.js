@@ -121,6 +121,15 @@ function getNotes (noteIds) {
 
   return fetch(url, requestOptions).then(handleResponse)
 }
+function getLastAvailableDate (params) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  const url = `${getTenantApiUrl()}/itineraries/last_available_date?${toQueryString(params)}`
+
+  return fetch(url, requestOptions).then(handleResponse)
+}
 
 function uploadDocument (doc, type, url) {
   const formData = new FormData()
@@ -182,7 +191,8 @@ export const shipmentService = {
   requestShipment,
   updateCurrency,
   getNotes,
-  getSchedulesForResult
+  getSchedulesForResult,
+  getLastAvailableDate
 }
 
 export default shipmentService

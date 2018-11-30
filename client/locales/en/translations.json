@@ -829,6 +829,7 @@
     "maxLength": "Maximum length is",
     "noRoutesFrom": "No routes found from {{origin}}",
     "noRoutesTo": "No routes found to {{destination}}",
+    "noSchedulesForRoute": "There are no schedules available for this route.",
     "maxWidth": "Maximum width is",
     "invalidResetPasswordOne": "You attempted to submit an invalid reset password. ",
     "invalidResetPasswordTwo": "If you wish to reset your password, ",
