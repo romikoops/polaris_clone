@@ -15,7 +15,8 @@ import {
   totalPrice,
   formattedDate,
   numberSpacing,
-  cargoPlurals
+  cargoPlurals,
+  capitalize
 } from '../../helpers'
 import ContactDetailsRow from '../Admin/AdminShipmentView/ContactDetailsRow'
 import GreyBox from '../GreyBox/GreyBox'
@@ -341,7 +342,7 @@ class UserShipmentContent extends Component {
                             className="fa fa-ship clip flex-none layout-align-center-center"
                             style={selectedStyle}
                           />
-                          <p>{t('shipment:freight')}</p>
+                          <p>{t('shipment:motCargo', { mot: capitalize(shipment.mode_of_transport)})}</p>
                         </div>
                         {scope.detailed_billing && feeHash.cargo
                           ? <div className="flex layout-row layout-align-end-center">
