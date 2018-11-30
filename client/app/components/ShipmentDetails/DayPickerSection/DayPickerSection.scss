@@ -1,0 +1,42 @@
+:local {
+  .date_sec {
+    padding: 50px 0;
+    border-bottom: 1px solid #EDEDED;
+    h3 {
+      margin: 0;
+    }
+  }
+  .dpb {
+    position: relative;
+    height: 36px;
+    width: 250px;
+  }
+  .dpb_icon {
+    height: 38px;
+    width: 38px;
+    border: 1px solid #F2F2F2;
+    border-radius: 3px 0 0 3px;
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);    
+    i {
+      font-size: 20px;
+    }
+  }
+  .dpb div input {
+    height: 36px;
+    width: 214px;
+    border: 1px solid #F2F2F2;
+    border-radius: 0 3px 3px 0;
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    padding: 0 9px;
+    z-index: 20;
+  }
+
+  .dpb.with_errors div input {
+    background-color: rgba(232, 114, 88, 0.3);
+    &::placeholder {
+      color: rgb(211, 104, 80);
+    }
+  }
+}

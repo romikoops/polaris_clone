@@ -15,7 +15,7 @@ const propsBase = {
   shipment,
   tenantScope: { incoterm_info_level: 'simple' },
   incoterm: 'FOO_INCOTERM',
-  setIncoTerm: identity,
+  setIncoterm: identity,
   errorStyles: {},
   showIncotermError: false,
   nextStageAttempt: false,

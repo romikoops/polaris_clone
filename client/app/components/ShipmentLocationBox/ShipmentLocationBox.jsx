@@ -23,6 +23,7 @@ import Autocomplete from './Autocomplete'
 import removeTabIndex from './removeTabIndex'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 import CircleCompletion from '../CircleCompletion/CircleCompletion'
+import { get } from 'lodash'
 
 const mapStyles = mapStyling
 
@@ -170,7 +171,7 @@ class ShipmentLocationBox extends PureComponent {
       const speciality = determineSpecialism(nextProps.scope.modes_of_transport)
       this.setState({ speciality })
     }
-    if (nextProps.prevRequest !== this.props.prevRequest && nextProps.prevRequest.shipment) {
+    if (!this.props.prevRequest && get(nextProps, 'prevRequest.shipment')) {
       this.loadPrevReq(nextProps)
     }
     if (typeof this.state.map === 'undefined') {
@@ -938,6 +939,7 @@ class ShipmentLocationBox extends PureComponent {
       let newFilteredRouteIndexes = {
         ...filteredRouteIndexes
       }
+
       newFilteredRouteIndexes[target] = routeFilters.scopeIndexes(
         filteredRouteIndexes.all,
         indexes

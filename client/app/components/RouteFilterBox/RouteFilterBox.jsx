@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
-import PropTypes from '../../prop-types'
 import '../../styles/day-picker-custom.scss'
 import { moment, LOAD_TYPES } from '../../constants'
 import { switchIcon, capitalize } from '../../helpers'
@@ -46,14 +45,12 @@ class RouteFilterBox extends Component {
   }
   render () {
     const {
-      theme, pickup, shipment, availableMotKeys, cargos, lastTripDate, t
+      theme, pickup, shipment, availableMotKeys, cargos, lastAvailableDate, t
     } = this.props
     const dayPickerProps = {
       disabledDays: {
-        before: new Date(moment()
-          .add(7, 'days')
-          .format()),
-        after: new Date(moment(lastTripDate))
+        before: new Date(moment().format()),
+        after: new Date(moment(lastAvailableDate))
       },
       month: new Date(
         moment()
@@ -132,19 +129,6 @@ class RouteFilterBox extends Component {
     )
   }
 }
-RouteFilterBox.propTypes = {
-  departureDate: PropTypes.number,
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  cargos: PropTypes.arrayOf(PropTypes.any),
-  setDurationFilter: PropTypes.func.isRequired,
-  setMoT: PropTypes.func.isRequired,
-  setDepartureDate: PropTypes.func.isRequired,
-  pickup: PropTypes.bool,
-  shipment: PropTypes.objectOf(PropTypes.any),
-  availableMotKeys: PropTypes.objectOf(PropTypes.bool),
-  lastTripDate: PropTypes.string
-}
 
 RouteFilterBox.defaultProps = {
   departureDate: 0,
@@ -153,7 +137,7 @@ RouteFilterBox.defaultProps = {
   cargos: [],
   shipment: {},
   availableMotKeys: {},
-  lastTripDate: ''
+  lastAvailableDate: ''
 }
 
 export default withNamespaces(['shipment', 'cargo'])(RouteFilterBox)

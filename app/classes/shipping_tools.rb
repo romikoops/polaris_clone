@@ -72,7 +72,6 @@ module ShippingTools
         Pricing.where(itinerary_id: id).for_load_type(load_type).empty?
       end
     end
-    last_trip_date = last_trip(current_user)
 
     routes_data = Route.detailed_hashes_from_itinerary_ids(
       itinerary_ids,
@@ -85,8 +84,7 @@ module ShippingTools
       lookup_tables_for_routes: routes_data[:look_ups],
       cargo_item_types: tenant.cargo_item_types,
       max_dimensions: tenant.max_dimensions,
-      max_aggregate_dimensions: tenant.max_aggregate_dimensions,
-      last_trip_date: last_trip_date
+      max_aggregate_dimensions: tenant.max_aggregate_dimensions
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
@@ -97,15 +95,13 @@ module ShippingTools
     offer_calculator.perform
 
     offer_calculator.shipment.save!
-    last_trip_date = last_trip(current_user)
     {
       shipment: offer_calculator.shipment,
       results: offer_calculator.detailed_schedules,
       originHubs: offer_calculator.hubs[:origin],
       destinationHubs: offer_calculator.hubs[:destination],
       cargoUnits: offer_calculator.shipment.cargo_units,
-      aggregatedCargo: offer_calculator.shipment.aggregated_cargo,
-      lastTripDate: last_trip_date
+      aggregatedCargo: offer_calculator.shipment.aggregated_cargo
     }
   end
 
@@ -639,10 +635,6 @@ module ShippingTools
       user,
       shipment
     ).deliver_later
-  end
-
-  def self.last_trip(user)
-    user.tenant.trips.order(:start_date)&.last&.start_date
   end
 
   def get_hs_code_hash(codes)
