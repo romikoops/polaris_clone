@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { withNamespaces } from 'react-i18next'
 import Select from 'react-select'
 import Toggle from 'react-toggle'
@@ -8,7 +8,9 @@ import '../../styles/react-toggle.scss'
 import '../../styles/select-css-custom.scss'
 import styles from './ShipmentLocationBox.scss'
 import errorStyles from '../../styles/errors.scss'
-import { colorSVG, determineSpecialism, isDefined, onlyUnique } from '../../helpers'
+import {
+  colorSVG, determineSpecialism, isDefined, onlyUnique
+} from '../../helpers'
 import { mapStyling } from '../../constants/map.constants'
 import { capitalize } from '../../helpers/stringTools'
 import addressFromPlace from './addressFromPlace'
@@ -20,6 +22,7 @@ import TruckingDetails from '../TruckingDetails/TruckingDetails'
 import Autocomplete from './Autocomplete'
 import removeTabIndex from './removeTabIndex'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
+import CircleCompletion from '../CircleCompletion/CircleCompletion'
 
 const colourSVG = colorSVG
 const mapStyles = mapStyling
@@ -52,7 +55,7 @@ const StyledSelect = styled(Select)`
   }
 `
 
-class ShipmentLocationBox extends Component {
+class ShipmentLocationBox extends PureComponent {
   static sortOptions (array) {
     return array.sort((a, b) => {
       const textA = a.label.toUpperCase()
@@ -61,6 +64,7 @@ class ShipmentLocationBox extends Component {
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
     })
   }
+
   constructor (props) {
     super(props)
 
@@ -101,6 +105,10 @@ class ShipmentLocationBox extends Component {
       countries: {
         origin: [],
         destination: []
+      },
+      truckingFound: {
+        origin: false,
+        destination: false
       }
     }
 
@@ -267,6 +275,7 @@ class ShipmentLocationBox extends Component {
       }, 750)
     }
   }
+
   setOriginNexus (event) {
     if (event) {
       const origin = {
@@ -300,6 +309,7 @@ class ShipmentLocationBox extends Component {
       }
     }
   }
+
   setLocationMap (location, target) {
     const {
       map, locationData, directionsDisplay, directionsService, markers
@@ -344,6 +354,7 @@ class ShipmentLocationBox extends Component {
 
     return latLng
   }
+
   setMarker (address, name, target) {
     const {
       markers, map, directionsDisplay, directionsService
@@ -527,6 +538,7 @@ class ShipmentLocationBox extends Component {
 
     this.selectLocation(place, target)
   }
+
   handleLocationChange (location, target) {
     this.changeAddressFormVisibility(target, true)
 
@@ -545,6 +557,7 @@ class ShipmentLocationBox extends Component {
 
     this.selectLocation(address, target)
   }
+
   filterTruckTypesByHub (truckTypeObject) {
     this.setState({ truckTypeObject })
   }
@@ -603,14 +616,27 @@ class ShipmentLocationBox extends Component {
     })
   }
 
+  showCompletionTick (target) {
+    this.setState(prevState => ({
+      truckingFound: {
+        ...prevState.truckingFound,
+        [target]: true
+      }
+    }))
+    setTimeout(() => {
+      this.setState(prevState => ({
+        truckingFound: {
+          ...prevState.truckingFound,
+          [target]: false
+        }
+      }))
+    }, 1500)
+  }
+
   selectLocation (place, target) {
     this.setState({ fetchingtruckingAvailability: true }, () => {
       const counterpart = target === 'origin' ? 'destination' : 'origin'
       const isLocationObj = (place.latitude && place.longitude)
-
-      setTimeout(() => {
-        if (!this.isOnFocus[target]) this.changeAddressFormVisibility(target, false)
-      }, 6000)
 
       const { shipmentData, filteredRouteIndexes } = this.props
       const { lookupTablesForRoutes, routes, shipment } = shipmentData
@@ -666,14 +692,6 @@ class ShipmentLocationBox extends Component {
               this.props.handleSelectLocation(target, fieldsHaveErrors)
             })
           } else {
-            this.setState({
-              [`${target}FieldsHaveErrors`]: false,
-              truckingHubs: {
-                ...this.state.truckingHubs,
-                [target]: hubIds
-              },
-              lastTarget: target
-            }, () => this.prepForSelect(target))
             this.props.handleSelectLocation(target, this.state[`${target}FieldsHaveErrors`])
             this.props.setNotesIds(nexusIds, target)
             if (isLocationObj) {
@@ -684,14 +702,24 @@ class ShipmentLocationBox extends Component {
               })
             }
           }
-
-          this.setState({
+          this.showCompletionTick(target)
+          this.setState(prevState => ({
             fetchingtruckingAvailability: false,
             truckingOptions: {
-              ...this.state.truckingOptions,
+              ...prevState.truckingOptions,
               [`${prefix}Carriage`]: truckingAvailable
             },
+            [`${target}FieldsHaveErrors`]: false,
+            truckingHubs: {
+              ...this.state.truckingHubs,
+              [target]: hubIds
+            },
             lastTarget: target
+          }), () => {
+            this.prepForSelect(target)
+            setTimeout(() => {
+              if (!this.isOnFocus[target]) this.changeAddressFormVisibility(target, false)
+            }, 5000)
           })
         }
       )
@@ -717,6 +745,7 @@ class ShipmentLocationBox extends Component {
       [target]: tmpAddress
     }), () => this.props.setTargetAddress(target, tmpAddress))
   }
+
   handleAddressFormFocus (event) {
     const target = event.target.name.split('-')[0]
     this.isOnFocus[target] = event.type === 'focus'
@@ -728,6 +757,7 @@ class ShipmentLocationBox extends Component {
       this.triggerPlaceChanged(newAutotext, target)
     }
   }
+
   toggleModal () {
     this.setState({ showModal: !this.state.showModal })
   }
@@ -806,6 +836,7 @@ class ShipmentLocationBox extends Component {
     this.setState({ addressFromModal: !this.state.addressFromModal })
     this.setNexusesFromRoute(route)
   }
+
   loadReusedShipment () {
     const { reusedShipment, shipmentData } = this.props
     const { routes } = shipmentData
@@ -847,6 +878,7 @@ class ShipmentLocationBox extends Component {
 
     this.setState(newState)
   }
+
   clearAddressFields (target) {
     const targets = target ? [target] : ['origin', 'destination']
     targets.forEach((t) => {
@@ -940,6 +972,7 @@ class ShipmentLocationBox extends Component {
       }
     })
   }
+
   prepTruckTypes (routes, target) {
     const { selectedTrucking } = this.props
     const truckingTarget = target === 'origin' ? 'pre_carriage' : 'on_carriage'
@@ -1000,7 +1033,8 @@ class ShipmentLocationBox extends Component {
       originTruckingAvailable,
       destinationTruckingAvailable,
       fetchingtruckingAvailability,
-      countries
+      countries,
+      truckingFound
     } = this.state
 
     if (availableDestinationNexuses) destinationOptions = ShipmentLocationBox.sortOptions(availableDestinationNexuses)
@@ -1060,10 +1094,20 @@ class ShipmentLocationBox extends Component {
           <i className={`${styles.up} flex-none fa fa-angle-double-up`} />
         </div>
         <div
-          className={`${styles.address_form} flex-100 layout-row layout-wrap layout-align-center`}
+          className={`${styles.address_form} flex-100 layout-row layout-wrap layout-align-center ccb_pre_address_form`}
         >
-          { fetchingtruckingAvailability ? <LoadingSpinner size="small" />
-            : <div
+          { fetchingtruckingAvailability ? <LoadingSpinner size="medium" /> : '' }
+          { truckingFound.origin ? (
+            <CircleCompletion
+              icon="fa fa-check"
+              iconColor="white"
+              animated={truckingFound.origin}
+              size="150px"
+              opacity={truckingFound.origin ? '1' : '0'}
+            />
+          ) : '' }
+          { (!fetchingtruckingAvailability && !truckingFound.origin) ? (
+            <div
               className="flex-100 layout-row layout-wrap layout-align-center"
             >
               <div
@@ -1155,6 +1199,8 @@ class ShipmentLocationBox extends Component {
                 </div>
               </div>
             </div>
+          )
+            : ''
           }
         </div>
       </div>
@@ -1190,9 +1236,19 @@ class ShipmentLocationBox extends Component {
           <i className={`${styles.down} flex-none fa fa-angle-double-down`} />
           <i className={`${styles.up} flex-none fa fa-angle-double-up`} />
         </div>
-        <div className={`${styles.address_form} ${toggleLogic} flex-100 layout-row layout-wrap layout-align-center`}>
-          { fetchingtruckingAvailability ? <LoadingSpinner size="small" />
-            : <div
+        <div className={`${styles.address_form} ${toggleLogic} flex-100 layout-row layout-wrap layout-align-center ccb_on_address_form`}>
+          { fetchingtruckingAvailability ? <LoadingSpinner size="medium" /> : '' }
+          { truckingFound.destination ? (
+            <CircleCompletion
+              icon="fa fa-check"
+              iconColor="white"
+              animated={truckingFound.destination}
+              size="150px"
+              opacity={truckingFound.destination ? '1' : '0'}
+            />
+          ) : '' }
+          { (!fetchingtruckingAvailability && !truckingFound.destination) ? (
+            <div
               className="flex-100 layout-row layout-wrap layout-align-center"
             >
               <div
@@ -1284,6 +1340,7 @@ class ShipmentLocationBox extends Component {
                 </div>
               </div>
             </div>
+          ) : ''
           }
         </div>
       </div>
@@ -1385,35 +1442,48 @@ class ShipmentLocationBox extends Component {
             >
               <div className="flex-45 layout-row layout-wrap layout-align-start-start mc">
                 {speciality !== 'truck'
-                  ? <div
-                    className={
-                      'flex-45 layout-row layout-align-start layout-wrap ' +
+                  ? (
+                    <div
+                      className={
+                        'flex-45 layout-row layout-align-start layout-wrap ' +
                       `${styles.toggle_box} ` +
                       `${!truckingOptions.preCarriage ? styles.not_available : ''}`
-                    }
-                  >
-                    { originTruckingAvailable ? <TruckingTooltip
-                      truckingBoolean={!originTruckingAvailable}
-                      truckingOptions={truckingOptions}
-                      carriage="preCarriage"
-                      hubName={this.state.oSelect.label}
-                      direction={shipment.direction}
-                      scope={scope}
-                    /> : '' }
+                      }
+                    >
+                      { originTruckingAvailable ? (
+                        <TruckingTooltip
+                          truckingBoolean={!originTruckingAvailable}
+                          truckingOptions={truckingOptions}
+                          carriage="preCarriage"
+                          hubName={this.state.oSelect.label}
+                          direction={shipment.direction}
+                          scope={scope}
+                        />
+                      ) : '' }
 
-                    { originTruckingAvailable ? <Toggle
-                      className="flex-none ccb_pre_carriage"
-                      id="has_pre_carriage"
-                      name="has_pre_carriage"
-                      tabIndex="-1"
-                      checked={this.props.has_pre_carriage}
-                      onChange={this.handleTrucking}
-                    /> : '' }
-                    <label htmlFor="pre-carriage" style={{ marginLeft: '15px' }}>
-                      {t('shipment:pickUp')}
-                    </label>
-                    {loadType === 'container' && this.props.has_pre_carriage ? preCarriageTruckTypes : ''}
-                  </div> : <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">{t('shipment:pickUp')}:</p></div>}
+                      { originTruckingAvailable ? (
+                        <Toggle
+                          className="flex-none ccb_pre_carriage"
+                          id="has_pre_carriage"
+                          name="has_pre_carriage"
+                          tabIndex="-1"
+                          checked={this.props.has_pre_carriage}
+                          onChange={this.handleTrucking}
+                        />
+                      ) : '' }
+                      <label htmlFor="pre-carriage" style={{ marginLeft: '15px' }}>
+                        {t('shipment:pickUp')}
+                      </label>
+                      {loadType === 'container' && this.props.has_pre_carriage ? preCarriageTruckTypes : ''}
+                    </div>
+                  ) : (
+                    <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}>
+                      <p className="flex-none">
+                        {t('shipment:pickUp')}
+:
+                      </p>
+                    </div>
+                  )}
                 <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
                   {this.props.has_pre_carriage ? originAuto : ''}
                   {displayLocationOptions('origin')}
@@ -1428,35 +1498,48 @@ class ShipmentLocationBox extends Component {
 
               <div className="flex-45 layout-row layout-wrap layout-align-end-start">
                 {speciality !== 'truck'
-                  ? <div
-                    className={
-                      'flex-45 layout-row layout-align-start layout-wrap ' +
+                  ? (
+                    <div
+                      className={
+                        'flex-45 layout-row layout-align-start layout-wrap ' +
                       `${styles.toggle_box} ` +
                       `${!truckingOptions.onCarriage ? styles.not_available : ''}`
-                    }
-                  >
-                    { destinationTruckingAvailable ? <TruckingTooltip
-                      truckingBoolean={!destinationTruckingAvailable}
-                      truckingOptions={truckingOptions}
-                      carriage="onCarriage"
-                      hubName={this.state.dSelect.label}
-                      direction={shipment.direction}
-                      scope={scope}
-                    /> : '' }
+                      }
+                    >
+                      { destinationTruckingAvailable ? (
+                        <TruckingTooltip
+                          truckingBoolean={!destinationTruckingAvailable}
+                          truckingOptions={truckingOptions}
+                          carriage="onCarriage"
+                          hubName={this.state.dSelect.label}
+                          direction={shipment.direction}
+                          scope={scope}
+                        />
+                      ) : '' }
 
-                    <label htmlFor="on-carriage" style={{ marginRight: '15px' }}>
-                      {t('shipment:delivery')}
-                    </label>
-                    { destinationTruckingAvailable ? <Toggle
-                      className="flex-none ccb_on_carriage"
-                      id="has_on_carriage"
-                      name="has_on_carriage"
-                      tabIndex="-1"
-                      checked={this.props.has_on_carriage}
-                      onChange={this.handleTrucking}
-                    /> : '' }
-                    {loadType === 'container' && this.props.has_on_carriage ? onCarriageTruckTypes : ''}
-                  </div> : <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">{t('shipment:delivery')}:</p></div>}
+                      <label htmlFor="on-carriage" style={{ marginRight: '15px' }}>
+                        {t('shipment:delivery')}
+                      </label>
+                      { destinationTruckingAvailable ? (
+                        <Toggle
+                          className="flex-none ccb_on_carriage"
+                          id="has_on_carriage"
+                          name="has_on_carriage"
+                          tabIndex="-1"
+                          checked={this.props.has_on_carriage}
+                          onChange={this.handleTrucking}
+                        />
+                      ) : '' }
+                      {loadType === 'container' && this.props.has_on_carriage ? onCarriageTruckTypes : ''}
+                    </div>
+                  ) : (
+                    <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}>
+                      <p className="flex-none">
+                        {t('shipment:delivery')}
+:
+                      </p>
+                    </div>
+                  )}
                 <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
                   {this.props.has_on_carriage ? destAuto : ''}
                   {displayLocationOptions('destination')}
