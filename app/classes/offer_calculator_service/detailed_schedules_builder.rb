@@ -76,13 +76,13 @@ module OfferCalculatorService
       schedule_groupings = schedules.group_by do |schedule|
         "#{schedule.mode_of_transport}_#{schedule.vehicle_name}_#{schedule.carrier_name}"
       end
-      schedule_groupings.each do |_key, array|
-        array.sort_by{|sched| sched.eta }
+      schedule_groupings.each do |_key, schedules_array|
+        schedules_array.sort_by!{|sched| sched.eta }
 
         # Find the pricings for the cargo classes and effective date ranges then group by cargo_class
-        pricings_by_cargo_class = array.first.trip.itinerary.pricings
+        pricings_by_cargo_class = schedules_array.first.trip.itinerary.pricings
           .for_cargo_class(cargo_classes)
-          .for_dates(array.first.etd, array.last.eta)
+          .for_dates(schedules_array.first.etd, schedules_array.last.eta)
           .select{|pricing| (pricing.user_id == user.id) || pricing.user_id.nil?}
           .group_by { |pricing| "#{pricing.transport_category_id}"}
 
@@ -94,7 +94,7 @@ module OfferCalculatorService
             pricing_ids: {
               "#{pricing.transport_category.cargo_class}" => pricing.id
             },
-            schedules: array.select{|sched| sched.etd < pricing.expiration_date && sched.etd > pricing.effective_date}.sort_by{|sched| sched.eta }
+            schedules: schedules_array.select{|sched| sched.etd < pricing.expiration_date && sched.etd > pricing.effective_date}.sort_by!{|sched| sched.eta }
           }
           other_pricings.each do |other_pricing|
             if other_pricing.effective_date < obj[:schedules].first.etd && other_pricing.expiration_date > obj[:schedules].last.eta
