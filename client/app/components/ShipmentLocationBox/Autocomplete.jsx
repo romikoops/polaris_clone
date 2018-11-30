@@ -45,7 +45,6 @@ class Autocomplete extends PureComponent {
   }
 
   componentWillReceiveProps (nextProps) {
-
     if (typeof this.addressService === undefined) {
       const props = nextProps || this.props
       this.addressService = new props.gMaps.places.AutocompleteService({ types: ['address'] })
@@ -309,10 +308,10 @@ class Autocomplete extends PureComponent {
                 ${styles.results_section} ${!hasAddressResults ? styles.hide_results : ''}`}
             >
               <div className={`flex-100 layout-row layout-align-start-center ${styles.results_section_header}`}>
-                <p className="flex-none"> 
-{' '}
-{t('common:addresses')}
-</p>
+                <p className="flex-none">
+                  {' '}
+                  {t('common:addresses')}
+                </p>
               </div>
               {addressResultCards}
             </div>
