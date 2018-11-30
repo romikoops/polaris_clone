@@ -1,4 +1,4 @@
-import getConfig from '../constants/config.constants'
+import getConfig from './config.constants'
 
 export function getApiHost () {
   return `${getConfig().api_url}/tenant`
