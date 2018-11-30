@@ -39,6 +39,7 @@ When('I select {string} as {string}') do |place, type|
     #find a close backdrop if it is there
 
     backdrop = all('.ccb_backdrop')
+    # backdrop = all('._2q8SSmc1EogFClHxQ2Skg9')
     backdrop.first.click() unless backdrop.empty?
     name_xpath = "@name='#{type.downcase}-street'"
 
@@ -50,6 +51,8 @@ When('I select {string} as {string}') do |place, type|
     
     #if inputs cant be found expand the address fields
     if inputs.empty?
+      elem = find('div', class: "ccb_#{type.downcase}_carriage_input", wait: 60)
+      # expander = elem.sibling('._2w5ZL-uKGDOghADh63yTY-').find("i", wait: 30, visible: false)
       expander = find(".ccb_#{type.downcase}_expand", wait: 30, visible: false)
       expander.click unless expander.nil?
     end
@@ -116,6 +119,9 @@ When('I confirm cargo does not contain dangerous good') do
 end
 
 Then('I expect to see offers') do
+ 
+  expect(page).to have_no_css('._3eMhXk9o_GSrFvFJTF5o-Q', wait: 60)
+  # expect(page).to have_no_css('.ccb_loading', wait: 60)
   offers = all('.offer_result')
   expect(offers.count).to be >= 1
 end

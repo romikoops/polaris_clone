@@ -56,7 +56,7 @@ class Loading extends Component {
     }
 
     return (
-      <div className={`layout-row layout-align-center-center ${styles.loader_box}`}>
+      <div className={`layout-row layout-align-center-center ccb_loading ${styles.loader_box}`}>
         <div className={`${styles.cube} ${styles.preload}`}>
           {/* <div
           className={`layout-row layout-align-center-center ${styles.loader_box}`}
