@@ -66,14 +66,6 @@ class Admin::PricingsController < Admin::AdminBaseController
     itinerary = Itinerary.find(params[:id])
     pricings = ordinary_pricings(itinerary)
     user_pricings = user_pricing(itinerary)
-    # service_levels = itinerary.trips.pluck(:tenant_vehicle_id).uniq.map do |tv_id|
-    #   tenant_vehicle = TenantVehicle.find(tv_id)
-    #   carrier_name = tenant_vehicle.carrier ?
-    #   "#{tenant_vehicle.carrier.name} - #{tenant_vehicle.name}" :
-    #   tenant_vehicle.name
-    #   { label: carrier_name.to_s, value: tenant_vehicle.vehicle_id }
-    # end
-    # stops = itinerary.stops.map { |s| { stop: s, hub: s.hub.as_options_json } }
     response_handler(
       pricings: pricings,
       itinerary_id:            itinerary.id,
