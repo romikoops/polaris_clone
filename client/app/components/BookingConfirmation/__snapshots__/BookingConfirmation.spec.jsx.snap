@@ -680,7 +680,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 <h4
                   className="flex-100"
                 >
-                  Packing Sheet
+                  Packing List
                 </h4>
                 <p>
                   Not Uploaded
@@ -1602,7 +1602,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 <h4
                   className="flex-100"
                 >
-                  Packing Sheet
+                  Packing List
                 </h4>
                 <p>
                   Not Uploaded
@@ -2599,7 +2599,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 <h4
                   className="flex-100"
                 >
-                  Packing Sheet
+                  Packing List
                 </h4>
                 <p>
                   Not Uploaded
@@ -3470,7 +3470,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 <h4
                   className="flex-100"
                 >
-                  Packing Sheet
+                  Packing List
                 </h4>
                 <p>
                   Not Uploaded
@@ -4341,7 +4341,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 <h4
                   className="flex-100"
                 >
-                  Packing Sheet
+                  Packing List
                 </h4>
                 <p>
                   Not Uploaded
@@ -5212,7 +5212,7 @@ exports[`shallow render 1`] = `
                 <h4
                   className="flex-100"
                 >
-                  Packing Sheet
+                  Packing List
                 </h4>
                 <p>
                   Not Uploaded
@@ -6410,7 +6410,7 @@ exports[`with cargo items 1`] = `
                 <h4
                   className="flex-100"
                 >
-                  Packing Sheet
+                  Packing List
                 </h4>
                 <p>
                   Not Uploaded
@@ -7566,7 +7566,7 @@ exports[`with containers 1`] = `
                 <h4
                   className="flex-100"
                 >
-                  Packing Sheet
+                  Packing List
                 </h4>
                 <p>
                   Not Uploaded
