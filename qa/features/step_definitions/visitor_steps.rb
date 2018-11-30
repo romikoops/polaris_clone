@@ -32,14 +32,24 @@ When('I select {string} as {string}') do |place, type|
           sleep(1.0 / 10.0)
         end
         first_result = all(:css, '.ccb_result', wait: 30).first
-        first_result.click if first_result
+        if first_result
+          first_result.click
+        else
+          find('input').fill_in('')
+          place.split('').each do |c|
+            find('input').send_keys(c)
+            sleep(1.0 / 10.0)
+          end
+          first_result = all(:css, '.ccb_result', wait: 30).first
+          first_result.click if first_result
+        end
       end
     end
 
     #find a close backdrop if it is there
 
-    backdrop = all('.ccb_backdrop')
-    # backdrop = all('._2q8SSmc1EogFClHxQ2Skg9')
+    # backdrop = all('.ccb_backdrop')
+    backdrop = all('._2q8SSmc1EogFClHxQ2Skg9')
     backdrop.first.click() unless backdrop.empty?
     name_xpath = "@name='#{type.downcase}-street'"
 
@@ -52,12 +62,12 @@ When('I select {string} as {string}') do |place, type|
     #if inputs cant be found expand the address fields
     if inputs.empty?
       elem = find('div', class: "ccb_#{type.downcase}_carriage_input", wait: 60)
-      # expander = elem.sibling('._2w5ZL-uKGDOghADh63yTY-').find("i", wait: 30, visible: false)
-      expander = find(".ccb_#{type.downcase}_expand", wait: 30, visible: false)
+      expander = elem.sibling('._2w5ZL-uKGDOghADh63yTY-').find(".LJsnTPdMmgBjNKpRmcqkC", wait: 30, visible: false)
+      # expander = find(".ccb_#{type.downcase}_expand", wait: 30, visible: false)
       expander.click unless expander.nil?
     end
 
-    expect(page).to have_xpath(".//input[#{name_xpath} and not(@value='')]", wait: 60, visible: false)
+    # expect(page).to have_xpath(".//input[#{name_xpath} and not(@value='')]", wait: 60, visible: false)
    
   else
     elem = find('div', class: 'Select-placeholder', text: type, wait: 60)
