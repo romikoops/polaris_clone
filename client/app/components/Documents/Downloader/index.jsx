@@ -28,34 +28,34 @@ class DocumentsDownloader extends React.Component {
 
   requestDocument () {
     const { target, documentDispatch, options } = this.props
-    const shipment = { shipment: options.shipmentData.shipment }
+
     switch (target) {
       case 'pricing':
-        documentDispatch.downloadPricings(shipment)
+        documentDispatch.downloadPricings(options)
         break
       case 'hubs':
         documentDispatch.downloadHubs()
         break
       case 'trucking':
-        documentDispatch.downloadTrucking(shipment)
+        documentDispatch.downloadTrucking(options)
         break
       case 'local_charges':
-        documentDispatch.downloadLocalCharges(shipment)
+        documentDispatch.downloadLocalCharges(options)
         break
       case 'schedules':
-        documentDispatch.downloadSchedules(shipment)
+        documentDispatch.downloadSchedules(options)
         break
       case 'clients':
         documentDispatch.downloadClients()
         break
       case 'gdpr':
-        documentDispatch.downloadGdpr(shipment)
+        documentDispatch.downloadGdpr(options)
         break
       case 'shipment_recap':
-        documentDispatch.downloadShipment(shipment)
+        documentDispatch.downloadShipment(options)
         break
       case 'quotations':
-        documentDispatch.downloadQuotations(shipment)
+        documentDispatch.downloadQuotations(options)
         break
 
       default:
