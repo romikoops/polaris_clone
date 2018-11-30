@@ -57,7 +57,7 @@ When('I select {string} as {string}') do |place, type|
       expander.click unless expander.nil?
     end
 
-    # expect(page).to have_xpath(".//input[#{name_xpath} and not(@value='')]", wait: 30, visible: false)
+    expect(page).to have_xpath(".//input[#{name_xpath} and not(@value='')]", wait: 60, visible: false)
    
   else
     elem = find('div', class: 'Select-placeholder', text: type, wait: 60)
