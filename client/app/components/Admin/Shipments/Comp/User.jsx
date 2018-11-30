@@ -266,6 +266,7 @@ export class ShipmentsCompUser extends Component {
               prevPage={() => this.prevPage(status)}
               nextPage={() => this.nextPage(status)}
               handleSearchChange={e => this.handleSearchQuery(e, status)}
+              getShipmentsRequest={this.props.getShipmentsRequest}
             />
           </Tab>) : (<Tab isUniq>
             <AdminShipmentsBox
@@ -323,7 +324,8 @@ function mapStateToProps (state) {
   const { theme } = tenant
   const { user, loggedIn } = authentication
   const {
-    shipments
+    shipments,
+    getShipmentsRequest
   } = users
   const { num_shipment_pages } = shipments ? shipments : {shipments: {}}  // eslint-disable-line
 
@@ -334,7 +336,8 @@ function mapStateToProps (state) {
     theme,
     shipments,
     numShipmentsPages: num_shipment_pages,
-    document
+    document,
+    getShipmentsRequest
   }
 }
 function mapDispatchToProps (dispatch) {

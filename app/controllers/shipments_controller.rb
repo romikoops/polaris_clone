@@ -216,26 +216,26 @@ class ShipmentsController < ApplicationController
   end
 
   def filtered_user_shipments
-    return @filtered_user_shipments unless @filtered_user_shipments.nil?
+    @filtered_user_shipments ||= begin
+      @filtered_user_shipments = current_user.shipments
 
-    @filtered_user_shipments = current_user.shipments
+      if params[:origin_nexus]
+        @filtered_user_shipments = @filtered_user_shipments.where(origin_nexus_id: params[:origin_nexus].split(','))
+      end
 
-    if params[:origin_nexus]
-      @filtered_user_shipments = @filtered_user_shipments.where(origin_nexus_id: params[:origin_nexus].split(','))
+      if params[:destination_nexus]
+        @filtered_user_shipments = @filtered_user_shipments.where(destination_nexus_id: params[:destination_nexus].split(','))
+      end
+
+      if params[:hub_type] && params[:hub_type] != ''
+
+        hub_type_array = params[:hub_type].split(',')
+
+        @filtered_user_shipments = @filtered_user_shipments.modes_of_transport(*hub_type_array)
+      end
+
+      @filtered_user_shipments
     end
-
-    if params[:destination_nexus]
-      @filtered_user_shipments = @filtered_user_shipments.where(destination_nexus_id: params[:destination_nexus].split(','))
-    end
-
-    if params[:hub_type] && params[:hub_type] != ''
-
-      hub_type_array = params[:hub_type].split(',')
-
-      @filtered_user_shipments = @filtered_user_shipments.modes_of_transport(*hub_type_array)
-    end
-
-    @filtered_user_shipments
   end
 
   def requested_shipments

@@ -426,33 +426,33 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def filtered_tenant_shipments
-    return @filtered_tenant_shipments unless @filtered_tenant_shipments.nil?
+    @filtered_tenant_shipments ||= begin
+      @filtered_tenant_shipments = tenant_shipments
 
-    @filtered_tenant_shipments = tenant_shipments
+      if params[:origin_nexus]
+        @filtered_tenant_shipments = @filtered_tenant_shipments.where(origin_nexus_id: params[:origin_nexus]
+                                                              .split(','))
+      end
 
-    if params[:origin_nexus]
-      @filtered_tenant_shipments = @filtered_tenant_shipments.where(origin_nexus_id: params[:origin_nexus]
-                                                             .split(','))
+      if params[:destination_nexus]
+        @filtered_tenant_shipments = @filtered_tenant_shipments.where(destination_nexus_id: params[:destination_nexus]
+                                                              .split(','))
+      end
+
+      if params[:hub_type] && params[:hub_type] != ''
+
+        hub_type_array = params[:hub_type].split(',')
+
+        @filtered_tenant_shipments = @filtered_tenant_shipments.modes_of_transport(*hub_type_array)
+      end
+
+      if params[:clients]
+        @filtered_tenant_shipments = @filtered_tenant_shipments.where(user_id: params[:clients]
+                                                              .split(','))
+      end
+
+      @filtered_tenant_shipments
     end
-
-    if params[:destination_nexus]
-      @filtered_tenant_shipments = @filtered_tenant_shipments.where(destination_nexus_id: params[:destination_nexus]
-                                                             .split(','))
-    end
-
-    if params[:hub_type] && params[:hub_type] != ''
-
-      hub_type_array = params[:hub_type].split(',')
-
-      @filtered_tenant_shipments = @filtered_tenant_shipments.modes_of_transport(*hub_type_array)
-    end
-
-    if params[:clients]
-      @filtered_tenant_shipments = @filtered_tenant_shipments.where(user_id: params[:clients]
-                                                             .split(','))
-    end
-
-    @filtered_tenant_shipments
   end
 
   def requested_shipments
