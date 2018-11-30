@@ -50,7 +50,7 @@ When('I select {string} as {string}') do |place, type|
     
     #if inputs cant be found expand the address fields
     if inputs.empty?
-      expander = find(".ccb_#{type.downcase}_carriage_expand", wait: 30, visible: false)
+      expander = find(".ccb_#{type.downcase}_expand", wait: 30, visible: false)
       expander.click unless expander.nil?
     end
 
