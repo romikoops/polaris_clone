@@ -127,6 +127,11 @@ Rails.application.routes.draw do
       get 'gdpr/download', to: 'users#download_gdpr'
       post 'opt_out/:target', to: 'users#opt_out'
     end
+
+    namespace :itineraries do
+      resource :last_available_date, only: :show
+    end
+
     get 'pricings', to: 'pricings#index'
     get 'pricings/:id', to: 'pricings#show'
     post 'pricings/:id/request', to: 'pricings#request_dedicated_pricing'
