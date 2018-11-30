@@ -2,7 +2,7 @@ import React from 'react'
 import { withNamespaces } from 'react-i18next'
 import styles from './index.scss'
 import PropTypes from '../../../prop-types'
-import { gradientTextGenerator, determineSpecialism, switchIcon, numberSpacing } from '../../../helpers'
+import { gradientTextGenerator, determineSpecialism, switchIcon, numberSpacing, capitalize } from '../../../helpers'
 
 function IncotermRow ({
   theme,
@@ -12,6 +12,7 @@ function IncotermRow ({
   destinationFees,
   feeHash,
   tenant,
+  mot,
   t
 }) {
   const speciality = determineSpecialism(tenant.scope.modes_of_transport)
@@ -163,7 +164,7 @@ function IncotermRow ({
         className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
       >
         <p className={`flex-none no_m center ${originDocumentTextStyle}`}>
-          {t('shipment:origin')} <br /> {t('shipment:documentation')}
+          {t('shipment:originLocalCharges')}
         </p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? originFeesValue : ''}
@@ -178,7 +179,7 @@ function IncotermRow ({
         className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
       >
         <p className={`flex-none no_m center ${destinationDocumentTextStyle}`}>
-          {t('shipment:destination')} <br /> {t('shipment:documentation')}
+          {t('shipment:destinationLocalCharges')}
         </p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? destinationFeesValue : ''}
@@ -192,7 +193,7 @@ function IncotermRow ({
       <div
         className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
       >
-        <p className="flex-none no_m">{t('shipment:freight')}</p>
+        <p className="flex-none no_m">{t('shipment:motCargo', {mot: capitalize(mot)})}</p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? freightFeesValue : ''}
     </div>

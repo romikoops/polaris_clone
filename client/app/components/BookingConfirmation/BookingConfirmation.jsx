@@ -312,6 +312,7 @@ class BookingConfirmation extends Component {
                 originFees={shipment.selected_offer.export}
                 destinationFees={shipment.selected_offer.import}
                 feeHash={feeHash}
+                mot={shipment.mode_of_transport}
                 tenant={tenant}
               />
             </div>

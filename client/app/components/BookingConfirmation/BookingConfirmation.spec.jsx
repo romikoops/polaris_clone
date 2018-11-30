@@ -23,7 +23,8 @@ jest.mock('../../helpers', () => ({
   totalPrice: () => ({
     currency: 'CHF'
   }),
-  totalPriceString: () => 'Viel zu mehr MKD'
+  totalPriceString: () => 'Viel zu mehr MKD',
+  capitalize: x => x
 }))
 jest.mock('../../constants', () => {
   const format = () => 19
@@ -43,7 +44,7 @@ jest.mock('../../constants', () => {
     rejected: 'Rejected'
   }
   const documentTypes = {
-    packing_sheet: 'Packing Sheet',
+    packing_sheet: 'Packing List',
     commercial_invoice: 'Commercial Invoice',
     customs_declaration: 'Customs Declaration',
     customs_value_declaration: 'Customs Value Declaration',

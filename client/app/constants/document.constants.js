@@ -36,7 +36,7 @@ export const documentGlossary = {
 }
 
 export const docOptions = [
-  { label: 'Packing Sheet', value: 'packing_sheet' },
+  { label: 'Packing List', value: 'packing_sheet' },
   { label: 'Commercial Invoice', value: 'commercial_invoice' },
   { label: 'Customs Declaration', value: 'customs_declaration' },
   { label: 'Customs Value Declaration', value: 'customs_value_declaration' },

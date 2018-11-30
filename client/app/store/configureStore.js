@@ -5,37 +5,38 @@ import thunkMiddleware from 'redux-thunk'
 import throttle from 'lodash/throttle'
 import { createLogger } from 'redux-logger'
 import * as Sentry from '@sentry/browser'
+import beaconMiddleWare from '../helpers/beacon'
 import createSentryMiddleware from '../helpers/sentry-middleware'
 
 import { saveState, loadState } from '../helpers'
 import rootReducer from '../reducers'
-import DevTools from '../containers/DevTools'
 
-const isDevelopment = process.env.NODE_ENV === 'development'
+/* eslint-disable no-underscore-dangle */
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+/* eslint-enable */
 
 export const history = createHistory()
+let middleware = [
+  createSentryMiddleware(Sentry),
+  thunkMiddleware,
+  routerMiddleware(history),
+  beaconMiddleWare
+]
+
+if (process.env.NODE_ENV !== 'production') {
+  middleware = [...middleware, createLogger({ diff: true })]
+}
+
 export function configureStore () {
-  const store = isDevelopment ? createStore(
+  const store =
+  createStore(
     rootReducer,
     loadState(),
-    compose(
-      applyMiddleware(...[
-        routerMiddleware(history),
-        thunkMiddleware,
-        createLogger()
-      ].filter(Boolean)),
-      DevTools.instrument()
+    composeEnhancers(
+      applyMiddleware(...middleware)
     )
   )
-    : createStore(
-      rootReducer,
-      loadState(),
-      compose(applyMiddleware(...[
-        createSentryMiddleware(Sentry),
-        thunkMiddleware,
-        routerMiddleware(history)
-      ].filter(Boolean)))
-    )
+
   store.subscribe(
     throttle(() => {
       const oldState = store.getState()
@@ -49,5 +50,6 @@ export function configureStore () {
     }),
     1000
   )
+
   return store
 }

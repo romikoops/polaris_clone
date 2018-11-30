@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
@@ -8,7 +9,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const SentryCliPlugin = require('@sentry/webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const webpack = require('webpack')
 
 module.exports = {
   entry: './app/index.jsx',
@@ -119,7 +119,8 @@ module.exports = {
     new Dotenv(),
     new webpack.EnvironmentPlugin({
       BASE_URL: '//localhost:3000',
-      RELEASE: ''
+      RELEASE: '',
+      GTM_ID: 'GTM-P29HCHV'
     }),
 
     new CleanWebpackPlugin(
@@ -130,7 +131,7 @@ module.exports = {
     ),
 
     new CopyWebpackPlugin([
-      { from: 'app/config.201811280955.js' }
+      { from: 'app/config.201811291749.js' }
     ]),
 
     new MiniCssExtractPlugin({
@@ -153,7 +154,7 @@ module.exports = {
       release: process.env.RELEASE,
       include: 'dist/',
       ignoreFile: '.sentrycliignore',
-      ignore: ['config.201811280955.js']
+      ignore: ['config.201811291749.js']
     })
   ]
 }
