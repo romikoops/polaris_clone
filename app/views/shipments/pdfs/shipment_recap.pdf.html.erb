@@ -407,7 +407,7 @@
               <%= shipment.cargo_notes %>
             </p>
           </div>
-            
+  
           <div class="display-flex">
             <span>Notes: </span>
             <p>
@@ -418,6 +418,19 @@
               <% end %>
             </p>
           </div>
+          
+          <% if remarks.exists? %>
+            <div class="remarks">
+              <h4>Remarks:</h4>
+              <ul>
+                <% remarks.each do |remark|%>
+                    <% unless remark.body.empty? %>
+                    <li><%= remark.body %></li>
+                    <% end %>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
