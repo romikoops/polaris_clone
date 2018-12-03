@@ -15,10 +15,23 @@ class QuoteMailer < ApplicationMailer
     @theme = tenant.theme
     @email = email[/[^@]+/]
 
-    generate_and_upload_quotation(@quotes)
+    quotation = generate_and_upload_quotation(@quotes)
+    @document = Document.create!(
+      shipment: shipment,
+      # quotation: quotation, # TODO: Implement proper quotation tools
+      text: "quotation_#{shipment.imc_reference}",
+      doc_type: 'quotation',
+      user: @user,
+      tenant: @user.tenant,
+      file: {
+        io: StringIO.new(quotation),
+        filename: "quotation_#{shipment.imc_reference}.pdf",
+        content_type: 'application/pdf'
+      }
+    )
     pdf_name = "quotation_#{@shipment.imc_reference}.pdf"
     attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
-    attachments.inline[pdf_name] = File.read('tmp/' + pdf_name)
+    attachments.inline[pdf_name] = quotation
     mail(
       to: email,
       subject: "Quotation for #{@shipment.imc_reference}"
@@ -40,9 +53,9 @@ class QuoteMailer < ApplicationMailer
       quotation:   @quotation,
       quotes:      quotes,
       color:       @user.tenant.theme['colors']['primary'],
-      name:        'quotation'
+      name:        'quotation',
+      remarks:    Remark.where(tenant_id: @user.tenant_id)
     )
     quotation.generate
-    quotation.upload_quotes
   end
 end
