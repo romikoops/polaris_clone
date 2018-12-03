@@ -28,6 +28,7 @@ class AdminClients extends Component {
     this.state = {
       newClientBool: false,
       newClient: {},
+      tabReset: false,
       errors: {
         companyName: true,
         firstName: true,
@@ -69,10 +70,16 @@ class AdminClients extends Component {
     const { adminDispatch } = this.props
     adminDispatch.confirmShipment(id, action)
   }
+  resetTabIndex () {
+    this.setState ({
+      tabReset: true
+    })
+  }
   toggleNewClient () {
     this.setState({
       newClientBool: !this.state.newClientBool,
-      newClientAttempt: false
+      newClientAttempt: false,
+      tabReset: false
     })
   }
   handleFormChange (event, hasError) {
@@ -123,6 +130,7 @@ class AdminClients extends Component {
     const { adminDispatch } = this.props
     adminDispatch.newClient(client)
     this.toggleNewClient()
+    this.resetTabIndex()
   }
 
   handleInvalidSubmit () {
@@ -130,7 +138,7 @@ class AdminClients extends Component {
   }
 
   render () {
-    const { newClient, newClientBool } = this.state
+    const { newClient, newClientBool, tabReset } = this.state
     const {
       theme, clients, hubs, hubHash, client, adminDispatch
     } = this.props
@@ -451,6 +459,7 @@ class AdminClients extends Component {
                   hubs={hubs}
                   adminDispatch={adminDispatch}
                   viewClient={this.viewClient}
+                  tabReset={tabReset}
                   toggleNewClient={() => this.toggleNewClient()}
                   {...props}
                 />
