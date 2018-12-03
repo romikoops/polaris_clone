@@ -86,6 +86,7 @@ class Location < ApplicationRecord
         sub_keys = keys.slice!(0, keys.length - (i + 1))
         sub_keys.to_a.reverse_each.with_index do |name_j, j|
           sub_results = results_1.where(name_j => name_2)
+          next if !sub_keys.reverse[j + 1]
           specific_result = sub_results.where(sub_keys.reverse[j + 1] => name_2).first
           result = specific_result || sub_results.first
 
