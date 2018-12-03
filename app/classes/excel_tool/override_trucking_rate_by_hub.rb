@@ -193,6 +193,7 @@ module ExcelTool
             end
           elsif identifier_type == 'location_id'
             geometry = find_geometry(idents_and_country)
+            next if geometry.nil?
             stats[:trucking_destinations][:number_created] += 1
 
             { ident: geometry&.id, country: idents_and_country[:country] }
@@ -545,7 +546,6 @@ module ExcelTool
 
     def find_geometry(idents_and_country)
       geometry = if @identifier_modifier == 'postal_code'
-        
                    Location.find_by_postal_code(idents_and_country[:ident].upcase)
                  else
                    Location.cascading_find_by_names(
@@ -556,12 +556,10 @@ module ExcelTool
 
       if geometry.nil?
         geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
-        raise "no geometry found for #{idents_and_country.values.join(', ')}" if geocoder_results.first.nil?
+        return nil if geocoder_results.first.nil?
         coordinates = geocoder_results.first.geometry['location']
         geometry = Geometry.find_by_coordinates(coordinates['lat'], coordinates['lng'])
       end
-
-      raise "no geometry found for #{idents_and_country.values.join(', ')}" if geometry.nil?
 
       geometry
     end
