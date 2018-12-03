@@ -1,18 +1,19 @@
 import React from 'react'
 import { Modal } from '../Modal/Modal'
 import AlertModalBody from '../AlertModalBody/AlertModalBody'
+import { capitalize } from '../../helpers/stringTools'
 
 function modalJSX (name, modal, theme, toggleFunc) {
   return (
     <Modal
-      component={
+      component={(
         <AlertModalBody
           message={modal.message}
           logo={theme.logoSmall}
           toggleAlertModal={() => toggleFunc(name)}
           maxWidth={modal.maxWidth}
         />
-      }
+      )}
       parentToggle={() => toggleFunc(name)}
     />
   )
@@ -35,35 +36,72 @@ export default function getModals (props, toggleFunc, t) {
     t('dangerousGoods:miscellaneous'),
     t('dangerousGoods:partlyDangerous')
   ]
+
+  const supportEmailObjs = tenant.emails.support
+  const supportEmailTexts = supportEmailObjs ? Object.keys(supportEmailObjs).map((keyDepartment) => {
+    const department = (() => {
+      switch (keyDepartment.toLowerCase()) {
+        case 'ocean':
+          return t('common:oceanFreight')
+        case 'air':
+          return t('common:airFreight')
+        default:
+          return capitalize(keyDepartment)
+      }
+    })()
+
+    return (
+      <span>
+        <span style={{ marginLeft: '10px' }}>
+          {'- '}
+          {department}
+          {': '}
+        </span>
+        <span>
+          <a href={`mailto:${supportEmailObjs[keyDepartment]}?subject=Nonstackable Goods Request`}>
+            {supportEmailObjs[keyDepartment]}
+          </a>
+        </span>
+        <br />
+      </span>
+    )
+  }) : ''
+
   const modals = {
     nonStackable: {
       message: (
         <p style={{ textAlign: 'justify', lineHeight: '1.5' }}>
           <span>
-            {t('common:hi')} {user.first_name} {user.last_name},<br />
-            {t('cargo:nonStackableFirst')} {t('cargo:nonStackableSecond')}<br />
+            {t('common:hi')}
+            {' '}
+            {user.first_name}
+            {' '}
+            {user.last_name}
+            {','}
+            <br />
+            {t('cargo:nonStackableFirst')}
+            {' '}
+            {t('cargo:nonStackableSecond')}
+            <br />
           </span>
           <br />
 
-          <span style={{ marginRight: '10px' }}> {t('dangerousGoods:contactPhone')}:</span>
+          <span style={{ marginRight: '10px' }}>
+            {' '}
+            {t('dangerousGoods:contactPhone')}
+            {':'}
+          </span>
           <span>{tenant.phones.support}</span>
           <br />
-
-          <span style={{ marginRight: '20px' }}> {t('dangerousGoods:contactEmail')} </span>
+          {supportEmailObjs ? (
+            <span style={{ marginRight: '20px' }}>
+              {' '}
+              {t('dangerousGoods:contactEmail')}
+              {':'}
+            </span>
+          ) : ''}
           <br />
-          <span style={{ marginRight: '20px', marginLeft: '10px', fontSize: '12px' }}> - {t('common:oceanFreight')}: </span>
-          <span>
-            <a href={`mailto:${tenant.emails.support.ocean}?subject=Nonstackable Goods Request`}>
-              {tenant.emails.support.ocean}
-            </a>
-          </span>
-          <br />
-          <span style={{ marginRight: '38px', marginLeft: '10px', fontSize: '12px' }}> - {t('common:airFreight')}: </span>
-          <span>
-            <a href={`mailto:${tenant.emails.support.air}?subject=Nonstackable Goods Request`}>
-              {tenant.emails.support.air}
-            </a>
-          </span>
+          {supportEmailTexts}
         </p>
       ),
       maxWidth: '600px',
@@ -73,30 +111,36 @@ export default function getModals (props, toggleFunc, t) {
       message: (
         <p style={{ textAlign: 'justify', lineHeight: '1.5' }}>
           <span>
-            {t('common:hi')} {user.first_name} {user.last_name},<br />
-            {t('dangerousGoods:noDangerousFirst')} {t('dangerousGoods:noDangerousSecond')}<br />
+            {t('common:hi')}
+            {' '}
+            {user.first_name}
+            {' '}
+            {user.last_name}
+            {','}
+            <br />
+            {t('dangerousGoods:noDangerousFirst')}
+            {' '}
+            {t('dangerousGoods:noDangerousSecond')}
+            <br />
           </span>
           <br />
 
-          <span style={{ marginRight: '10px' }}> {t('dangerousGoods:contactPhone')}:</span>
+          <span style={{ marginRight: '10px' }}>
+            {' '}
+            {t('dangerousGoods:contactPhone')}
+            {':'}
+          </span>
           <span>{tenant.phones.support}</span>
           <br />
-
-          <span style={{ marginRight: '20px' }}> {t('dangerousGoods:contactEmail')} </span>
+          {supportEmailObjs ? (
+            <span style={{ marginRight: '20px' }}>
+              {' '}
+              {t('dangerousGoods:contactEmail')}
+              {':'}
+            </span>
+          ) : ''}
           <br />
-          <span style={{ marginRight: '20px', marginLeft: '10px', fontSize: '12px' }}> - {t('common:oceanFreight')}: </span>
-          <span>
-            <a href={`mailto:${tenant.emails.support.ocean}?subject=Dangerous Goods Request`}>
-              {tenant.emails.support.ocean}
-            </a>
-          </span>
-          <br />
-          <span style={{ marginRight: '38px', marginLeft: '10px', fontSize: '12px' }}> - {t('common:airFreight')}: </span>
-          <span>
-            <a href={`mailto:${tenant.emails.support.air}?subject=Dangerous Goods Request`}>
-              {tenant.emails.support.air}
-            </a>
-          </span>
+          {supportEmailTexts}
         </p>
       ),
       maxWidth: '600px',
@@ -107,26 +151,47 @@ export default function getModals (props, toggleFunc, t) {
         <div>
           <h3>{t('dangerousGoods:dangerousCaps')}</h3>
           <p style={{ textAlign: 'justify', lineHeight: '1.5' }}>
-            {'\''}{t('dangerousGoods:dangerousGoods')}{'\''} {t('dangerousGoods:dangerousGoodsOne')}
-            {t('dangerousGoods:dangerousGoodsTwo')}<br />
+            {'\''}
+            {t('dangerousGoods:dangerousGoods')}
+            {'\''}
+            {' '}
+            {t('dangerousGoods:dangerousGoodsOne')}
+            {t('dangerousGoods:dangerousGoodsTwo')}
             <br />
-            {t('dangerousGoods:dangerousGoodsThree')} {t('dangerousGoods:dangerousGoodsFour')}
-            {t('dangerousGoods:dangerousGoodsFive')} {t('dangerousGoods:dangerousGoodsSix')}
-            {t('dangerousGoods:dangerousGoodsSeven')}<br />
             <br />
-            {t('dangerousGoods:dangerousGoodsEight')} {t('dangerousGoods:dangerousGoodsNine')}<br />
+            {t('dangerousGoods:dangerousGoodsThree')}
+            {' '}
+            {t('dangerousGoods:dangerousGoodsFour')}
+            {t('dangerousGoods:dangerousGoodsFive')}
+            {' '}
+            {t('dangerousGoods:dangerousGoodsSix')}
+            {t('dangerousGoods:dangerousGoodsSeven')}
+            <br />
+            <br />
+            {t('dangerousGoods:dangerousGoodsEight')}
+            {' '}
+            {t('dangerousGoods:dangerousGoodsNine')}
+            <br />
             <br />
             {t('dangerousGoods:dangerousGoodsTen')}
             {t('dangerousGoods:dangerousGoodsEleven')}
-            {t('dangerousGoods:dangerousGoodsTwelve')}<br />
+            {t('dangerousGoods:dangerousGoodsTwelve')}
+            <br />
             <br />
             {t('dangerousGoods:dangerousGoodsThirteen')}
             {t('dangerousGoods:dangerousGoodsFourteen')}
-            {t('dangerousGoods:dangerousGoodsFifteen')}<br />
+            {t('dangerousGoods:dangerousGoodsFifteen')}
+            <br />
             <br />
           </p>
           <ol>
-            { dangerousGoodsClasses.map(dangerousGoodsClass => <li> { dangerousGoodsClass} </li>) }
+            { dangerousGoodsClasses.map(dangerousGoodsClass => (
+              <li>
+                {' '}
+                { dangerousGoodsClass}
+                {' '}
+              </li>
+            )) }
           </ol>
         </div>
       ),
