@@ -13,7 +13,7 @@ When('I click the link to log in') do
 end
 When('I accept the cookies if the bar is there') do
   # button = find('button', class: 'S2dJZ4GCoTCWo4F7HGPQK')
-  button = find('button', class: '.ccb_accept_cookies')
+  button = find('button', class: '.ccb_accept_cookies', wait: 30)
   button.click unless button.nil?
   
 end
