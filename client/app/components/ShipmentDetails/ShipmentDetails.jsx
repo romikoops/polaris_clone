@@ -131,7 +131,12 @@ export class ShipmentDetails extends Component {
       },
       prevRequestLoaded: false,
       availableMotsForRoute: [],
-      filteredRouteIndexes: []
+      filteredRouteIndexes: {
+        all: [],
+        origin: [],
+        destination: [],
+        selected: []
+      }
     }
     this.truckTypes = {
       container: ['side_lifter', 'chassis'],
@@ -215,7 +220,7 @@ export class ShipmentDetails extends Component {
       return false
     }
     if (nextProps.shipmentData.routes && nextProps.shipmentData.routes.length > 0 &&
-    nextState.filteredRouteIndexes.length === 0) {
+    nextState.filteredRouteIndexes.all.length === 0) {
       this.getInitalFilteredRouteIndexes()
     }
 
@@ -301,7 +306,7 @@ export class ShipmentDetails extends Component {
         [target]: address
       }
     }, () => {
-      bookingSummaryDispatch.update({[target]: address})
+      bookingSummaryDispatch.update({ [target]: address })
     })
   }
 
@@ -318,8 +323,17 @@ export class ShipmentDetails extends Component {
       if (!routes) {
         return { filteredRouteIndexes }
       }
-      if (filteredRouteIndexes.length === 0) {
-        return { filteredRouteIndexes: routes.map((_, i) => i) }
+      if (filteredRouteIndexes.all.length === 0) {
+        const indexes = routes.map((_, i) => i)
+
+        return {
+          filteredRouteIndexes: {
+            all: indexes,
+            destination: indexes,
+            origin: indexes,
+            selected: []
+          }
+        }
       }
 
       return { filteredRouteIndexes }
@@ -350,6 +364,7 @@ export class ShipmentDetails extends Component {
     const newContainerErrors = obj.containers_attributes.map(cia => ({
       payload_in_kg: false
     }))
+
     this.getInitalFilteredRouteIndexes()
     this.setState(prevState => ({
       cargoItems: obj.cargo_items_attributes,
@@ -701,6 +716,7 @@ export class ShipmentDetails extends Component {
       origin,
       destination,
       incoterm,
+      direction: this.state.shipment.direction,
       selected_day: selectedDay || moment().format('DD/MM/YYYY'),
       trucking: this.state.shipment.trucking,
       cargo_items_attributes: this.state.cargoItems,
@@ -723,6 +739,7 @@ export class ShipmentDetails extends Component {
     const carriageOptionScope = scope.carriage_options[carriage][this.state.shipment.direction]
     const changeShouldApply = carriageOptionScope === 'optional' || (options && options.force)
     if (!changeShouldApply) return
+    
 
     this.setState({ [target]: value }, () => this.updateIncoterms())
 
@@ -811,7 +828,7 @@ export class ShipmentDetails extends Component {
 
     const { modals, filteredRouteIndexes } = this.state
 
-    if (!filteredRouteIndexes.length) return ''
+    if (!filteredRouteIndexes.all.length) return ''
 
     const { theme, scope } = tenant
     let cargoDetails

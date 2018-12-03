@@ -52,6 +52,7 @@ module ShippingTools
   end
 
   def self.create_shipment(details, current_user)
+   
     tenant = current_user.tenant
     load_type = details['loadType'].underscore
     direction = details['direction']
