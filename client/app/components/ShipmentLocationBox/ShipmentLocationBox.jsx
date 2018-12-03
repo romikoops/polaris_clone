@@ -961,6 +961,7 @@ class ShipmentLocationBox extends PureComponent {
       if (targetTrucking && carriage) this.prepTruckTypes(newFilteredRoutes, target)
       if (newFilteredRouteIndexes.length === 0) {
         this.setRouteError(counterpartLocation.label, targetLocation.label)
+        this.props.setTargetAddress(target, {})
       }
 
       this.props.updateFilteredRouteIndexes(newFilteredRouteIndexes)

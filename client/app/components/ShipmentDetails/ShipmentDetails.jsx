@@ -281,6 +281,7 @@ export class ShipmentDetails extends Component {
   }
 
   setTargetAddress (target, address) {
+    const { bookingSummaryDispatch } = this.props
     this.setState((prevState) => {
       if (prevState.prevRequest) {
         return {
@@ -299,6 +300,8 @@ export class ShipmentDetails extends Component {
       return {
         [target]: address
       }
+    }, () => {
+      bookingSummaryDispatch.update({[target]: address})
     })
   }
 

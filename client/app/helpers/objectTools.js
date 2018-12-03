@@ -1,3 +1,4 @@
+import { has } from 'lodash'
 import { camelize } from './stringTools'
 
 export const isEmpty = obj => (
@@ -39,4 +40,14 @@ export function isDefined (obj) {
 
 export function toQueryString (obj, connect) {
   return Object.keys(obj).map(key => `${connect ? '&' : ''}${key}=${obj[key]}`).join('&')
+}
+
+export function dig (obj, keyArray) {
+  const valueExists = has(obj, keyArray)
+  if (!valueExists) return null
+  let value = obj
+  keyArray.forEach((key) => {
+    value = value[key]
+  })
+  return value
 }
