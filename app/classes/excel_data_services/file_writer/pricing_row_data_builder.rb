@@ -21,7 +21,7 @@ module ExcelDataServices
         currency: :currency_name
       }.freeze
 
-      STATIC_HEADERS_WITH_STATIC_FEE_COL_ATTRIBUTES_LOOKUP = STATIC_HEADERS_ATTRIBUTES_LOOKUP.merge(
+      ONE_COL_FEE_AND_RANGES_ATTRIBUTES_LOOKUP = STATIC_HEADERS_ATTRIBUTES_LOOKUP.merge(
         range_min: :range_min,
         range_max: :range_max,
         fee_code: :shipping_type,
@@ -134,7 +134,7 @@ module ExcelDataServices
         sort!(data_static_fee_col)
         data_static_fee_col = expand_ranges(data_static_fee_col)
         data_static_fee_col.map do |attributes|
-          STATIC_HEADERS_WITH_STATIC_FEE_COL_ATTRIBUTES_LOOKUP.inject({}) do |row_data, (key, value)|
+          ONE_COL_FEE_AND_RANGES_ATTRIBUTES_LOOKUP.inject({}) do |row_data, (key, value)|
             row_data.merge!(key => attributes[value])
           end
         end

@@ -16,7 +16,7 @@ module ExcelDataServices
           data_extraction_method = determine_data_extraction_method(headers)
           @sheets_data[sheet_name] = { data_extraction_method: data_extraction_method }
 
-          raise StandardError, "The headers of sheet \"#{sheet_name}\" are not valid." unless headers_valid?(headers, data_extraction_method)
+          validate_headers(headers, sheet_name, data_extraction_method)
 
           # Parse all but first row
           rows_data = []
@@ -33,6 +33,28 @@ module ExcelDataServices
 
       private
 
+      ONE_COL_FEE_AND_RANGES_HEADERS = %i(
+        effective_date
+        expiration_date
+        customer_email
+        origin
+        country_origin
+        destination
+        country_destination
+        mot
+        carrier
+        service_level
+        load_type
+        rate_basis
+        range_min
+        range_max
+        fee_code
+        fee_name
+        currency
+        fee_min
+        fee
+      ).freeze
+
       def open_spreadsheet_file(path)
         path = path.to_s
         Roo::Spreadsheet.open(path)
@@ -47,6 +69,26 @@ module ExcelDataServices
           el.gsub!(%r{[^a-z0-9\-\/\_]+}, '_') # underscore instead of unwanted characters
           el.to_sym
         end
+      end
+
+      def build_valid_headers
+        raise NotImplementedError, "This method must be implemented in #{self.class.name}."
+      end
+
+      def validate_headers(headers, sheet_name, data_extraction_method)
+        valid_headers = build_valid_headers(data_extraction_method)
+        passing_headers = valid_headers.select.with_index { |el, i| el == headers[i] }
+        failing_headers_indices = valid_headers.each_with_object([]).with_index { |(el, indices), i| indices << i if el != headers[i] }
+        failing_headers = headers.values_at(*failing_headers_indices)
+        failing_headers_sould_be = valid_headers - passing_headers
+
+        unless failing_headers.blank?
+          raise StandardError, "The following headers of sheet \"#{sheet_name}\" are not valid:\n" \
+                               "IS       : \"#{failing_headers.join(', ')}\",\n" \
+                               "SHOULD BE: \"#{failing_headers_sould_be.join(', ')}\""
+        end
+
+        true
       end
 
       def headers_valid?(_headers)

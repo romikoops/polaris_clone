@@ -5,38 +5,40 @@ module ExcelDataServices
     class LocalCharges < Base
       private
 
-      VALID_STATIC_HEADERS = %i(hub
-                                country
-                                effective_date
-                                expiration_date
-                                counterpart_hub
-                                counterpart_country
-                                service_level
-                                carrier
-                                fee_code
-                                fee
-                                mot
-                                load_type
-                                direction
-                                currency
-                                rate_basis
-                                minimum
-                                maximum
-                                base
-                                ton
-                                cbm
-                                kg
-                                item
-                                shipment
-                                bill
-                                container
-                                wm
-                                range_min
-                                range_max
-                                dangerous).freeze
+      VALID_STATIC_HEADERS = %i(
+        hub
+        country
+        effective_date
+        expiration_date
+        counterpart_hub
+        counterpart_country
+        service_level
+        carrier
+        fee_code
+        fee
+        mot
+        load_type
+        direction
+        currency
+        rate_basis
+        minimum
+        maximum
+        base
+        ton
+        cbm
+        kg
+        item
+        shipment
+        bill
+        container
+        wm
+        range_min
+        range_max
+        dangerous
+      ).freeze
 
-      def headers_valid?(headers, _data_extraction_method)
-        VALID_STATIC_HEADERS == headers
+      def build_valid_headers(_data_extraction_method)
+        VALID_STATIC_HEADERS
       end
 
       def correct_capitalization(row)

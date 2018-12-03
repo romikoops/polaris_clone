@@ -51,7 +51,6 @@ class DocumentsDownloader extends React.Component {
       case 'quotations':
         documentDispatch.downloadQuotations(options)
         break
-
       default:
         break
     }

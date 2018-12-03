@@ -128,12 +128,13 @@ module ExcelDataServices
                                   tenant_id: @tenant.id }
         if row.has_key?(:range)
           min_rate_in_range = row[:range].map { |r| r['rate'] }.min
+          min_rate = row[:fee_min].blank? ? 1 * min_rate_in_range : row[:fee_min]
           pricing_detail_params.merge!(rate: min_rate_in_range,
-                                       min: 1 * min_rate_in_range,
+                                       min: min_rate,
                                        range: row[:range])
         else
           pricing_detail_params[:rate] = row[:fee]
-          pricing_detail_params[:min] = 1 * row[:fee]
+          pricing_detail_params[:min] = row[:fee_min].blank? ? 1 * row[:fee] : row[:fee_min]
         end
         [pricing_detail_params]
       end

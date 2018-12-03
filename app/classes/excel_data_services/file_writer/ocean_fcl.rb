@@ -7,7 +7,7 @@ module ExcelDataServices
 
       private
 
-      STATIC_HEADERS_DYNAMIC_HEADERS_ATTRIBUTES_LOOKUP = STATIC_HEADERS_ATTRIBUTES_LOOKUP.merge(
+      DYNAMIC_FEE_COLS_NO_RANGES_ATTRIBUTES_LOOKUP = STATIC_HEADERS_ATTRIBUTES_LOOKUP.merge(
         transit_time: :transit_time
       ).freeze
 
@@ -32,7 +32,7 @@ module ExcelDataServices
         data_with_dynamic_headers.map do |attributes|
           row_data = {}
 
-          STATIC_HEADERS_DYNAMIC_HEADERS_ATTRIBUTES_LOOKUP.each do |key, value|
+          DYNAMIC_FEE_COLS_NO_RANGES_ATTRIBUTES_LOOKUP.each do |key, value|
             row_data.merge!(key => attributes[value])
           end
 
