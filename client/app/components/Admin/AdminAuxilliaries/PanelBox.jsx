@@ -44,7 +44,9 @@ export class PanelBox extends Component {
           </div>
         </div>
       )
-    } else if (fee.cbm !== undefined && fee.ton !== undefined) {
+    }
+
+    if (fee.cbm !== undefined && fee.ton !== undefined) {
       return (
         <div className="flex-100 layout-row layout-align-start-center">
           <div className="flex-25 layout-row layout-align-start-center input_box layout-wrap">
@@ -79,6 +81,7 @@ export class PanelBox extends Component {
         </div>
       )
     }
+
     return (
       <div className="flex-25 layout-row layout-align-start-center input_box layout-wrap">
         <p className="flex-100 sup">{cells[i][target].table[iw].fees[fk].label}</p>
@@ -91,6 +94,7 @@ export class PanelBox extends Component {
       </div>
     )
   }
+
   render () {
     const {
       // theme,
@@ -126,23 +130,25 @@ export class PanelBox extends Component {
               {ws.city ? (
                 <p className="flex-none sup">{`${ws.city} ${ws.country} ${stepBasis.label}`}</p>
               ) : (
-                <p className="flex-none sup">{`${ws[lowerKey]} - ${ws[upperKey]} ${
-                  stepBasis.label
-                }`}</p>
+                <p className="flex-none sup">
+                  {`${ws[lowerKey]} - ${ws[upperKey]} ${
+                    stepBasis.label
+                  }`}
+                </p>
               )}
             </div>
-            {Object.keys(cells[i][target].table[iw].fees).map(fk =>
-              PanelBox.panelSwitcher(
-                cells[i][target].table[iw].fees[fk],
-                cells,
-                i,
-                iw,
-                target,
-                fk,
-                handleRateChange
-              ))}
+            {Object.keys(cells[i][target].table[iw].fees).map(fk => PanelBox.panelSwitcher(
+              cells[i][target].table[iw].fees[fk],
+              cells,
+              i,
+              iw,
+              target,
+              fk,
+              handleRateChange
+            ))}
           </div>)
         })
+
         return (
           <div
             // eslint-disable-next-line react/no-array-index-key
@@ -157,13 +163,17 @@ export class PanelBox extends Component {
               layout-align-space-between-start"
             >
               {cellLowerKey === 'city' ? (
-                <p className="flex-none">{`${truckingBasis.label}: ${s[target][cellLowerKey]}, ${
-                  s[target][cellUpperKey]
-                }`}</p>
+                <p className="flex-none">
+                  {`${truckingBasis.label}: ${s[target][cellLowerKey]}, ${
+                    s[target][cellUpperKey]
+                  }`}
+                </p>
               ) : (
-                <p className="flex-none">{`${truckingBasis.label} Range ${
-                  s[target][cellLowerKey]
-                } - ${s[target][cellUpperKey]}`}</p>
+                <p className="flex-none">
+                  {`${truckingBasis.label} Range ${
+                    s[target][cellLowerKey]
+                  } - ${s[target][cellUpperKey]}`}
+                </p>
               )}
               <div
                 className="flex-10 layout-row layout-align-center-center"
@@ -194,6 +204,7 @@ export class PanelBox extends Component {
         )
       })
       : []
+
     return <div className="flex-100 layout-row layout-align-start-start layout-wrap">{panel}</div>
   }
 }

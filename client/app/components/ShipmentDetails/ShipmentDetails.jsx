@@ -19,7 +19,9 @@ import ShipmentCargoItems from '../ShipmentCargoItems/ShipmentCargoItems'
 import ShipmentAggregatedCargo from '../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
 import TextHeading from '../TextHeading/TextHeading'
 import IncotermBox from '../Incoterm/Box'
-import { camelize, isEmpty, chargeableWeight, isQuote } from '../../helpers'
+import {
+  camelize, isEmpty, chargeableWeight, isQuote
+} from '../../helpers'
 import Checkbox from '../Checkbox/Checkbox'
 import NotesRow from '../Notes/Row'
 import '../../styles/select-css-custom.scss'
@@ -61,6 +63,7 @@ export class ShipmentDetails extends Component {
 
     return cargo
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -165,6 +168,7 @@ export class ShipmentDetails extends Component {
     this.loadPrevReq = this.loadPrevReq.bind(this)
     this.updateFilteredRouteIndexes = this.updateFilteredRouteIndexes.bind(this)
   }
+
   componentWillMount () {
     const { prevRequest, setStage, reusedShipment } = this.props
     if (reusedShipment && reusedShipment.shipment && !this.state.prevRequestLoaded) {
@@ -178,15 +182,18 @@ export class ShipmentDetails extends Component {
 
     setStage(2)
   }
+
   componentDidMount () {
     window.scrollTo(0, 0)
   }
+
   componentWillReceiveProps (nextProps) {
     if (!this.state.shipment) {
       const { shipment } = nextProps.shipmentData
       this.setState({ shipment })
     }
   }
+
   shouldComponentUpdate (nextProps, nextState) {
     if (!nextState.modals) {
       const modals = getModals(
@@ -223,11 +230,13 @@ export class ShipmentDetails extends Component {
       nextProps.shipmentData.routes
     )
   }
+
   componentWillUpdate () {
     if (this.state.shipment && !this.state.mandatoryCarriageIsPreset) {
       this.presetMandatoryCarriage()
     }
   }
+
   componentDidUpdate () {
     const {
       shipment,
@@ -256,6 +265,7 @@ export class ShipmentDetails extends Component {
       incoterm: opt.value.id
     })
   }
+
   setNotesIds (ids, target) {
     const { noteIds } = this.state
     const { shipmentDispatch, shipmentData } = this.props
@@ -269,6 +279,7 @@ export class ShipmentDetails extends Component {
     }
     this.setState({ noteIds })
   }
+
   setTargetAddress (target, address) {
     this.setState((prevState) => {
       if (prevState.prevRequest) {
@@ -354,8 +365,8 @@ export class ShipmentDetails extends Component {
       prevRequestLoaded: true
     }))
   }
-  loadReusedShipment (obj) {
 
+  loadReusedShipment (obj) {
     const newCargoItemsErrors = obj.cargoItems.map(cia => ({
       payload_in_kg: false,
       dimension_x: false,
@@ -405,6 +416,7 @@ export class ShipmentDetails extends Component {
   handleDayChange (selectedDay) {
     this.setState({ selectedDay })
   }
+
   deleteCargo (target, index) {
     const cargoArr = this.state[target]
     const errorsArr = this.state[`${target}Errors`]
@@ -413,6 +425,7 @@ export class ShipmentDetails extends Component {
     this.setState({ [target]: cargoArr })
     this.setState({ [`${target}Errors`]: errorsArr })
   }
+
   handleSelectLocation (target, bool) {
     this.setState({
       addressFormsHaveErrors: {
@@ -421,6 +434,7 @@ export class ShipmentDetails extends Component {
       }
     })
   }
+
   handleAddressChange (event) {
     const eventKeys = event.target.name.split('-')
     const key1 = eventKeys[0]
@@ -725,12 +739,14 @@ export class ShipmentDetails extends Component {
     if (!artificialEvent.target.id) return
     this.handleTruckingDetailsChange(artificialEvent)
   }
+
   handleIncotermResults (results) {
     if (results.length === 1) {
       this.setIncoTerm(results[0])
     }
     this.setState({ incotermsArray: results })
   }
+
   updateIncoterms () {
     const { direction } = this.props.shipmentData.shipment
     // eslint-disable-next-line camelcase
@@ -739,6 +755,7 @@ export class ShipmentDetails extends Component {
       this.handleIncotermResults(incotermResults)
     })
   }
+
   handleNextStageDisabled () {
     this.setState(prevState => ({
       shakeClass: {
@@ -975,13 +992,15 @@ export class ShipmentDetails extends Component {
             <NotesRow notes={notes} theme={theme} />
           </div>
         </div>
-        {isQuote(tenant) ? '' : <div
-          className={`${
-            styles.date_sec
-          } layout-row flex-100 layout-wrap layout-align-center-center`}
-        >
-          {dayPickerSection}
-        </div> }
+        {isQuote(tenant) ? '' : (
+          <div
+            className={`${
+              styles.date_sec
+            } layout-row flex-100 layout-wrap layout-align-center-center`}
+          >
+            {dayPickerSection}
+          </div>
+        ) }
         <div className={`layout-row flex-100 layout-wrap layout-align-center ${styles.cargo_sec}`}>
           {shipmentData.shipment.load_type === 'cargo_item' && (
             <div className="content_width_booking layout-row layout-wrap layout-align-center">
@@ -1045,10 +1064,9 @@ export class ShipmentDetails extends Component {
                     <Checkbox
                       id="stackable_goods_confirmation"
                       theme={theme}
-                      onChange={() =>
-                        this.setState({
-                          stackableGoodsConfirmed: !this.state.stackableGoodsConfirmed
-                        })
+                      onChange={() => this.setState({
+                        stackableGoodsConfirmed: !this.state.stackableGoodsConfirmed
+                      })
                       }
                       size="30px"
                       name="stackable_goods_confirmation"
@@ -1061,8 +1079,11 @@ export class ShipmentDetails extends Component {
                         {t('cargo:confirmStackable')}
                         <br />
                         <span style={{ fontSize: '11px', width: '100%' }}>
-                          ({t('cargo:nonStackable')}{' '}
-                          {t('cargo:cargoUnits')})
+                          (
+                          {t('cargo:nonStackable')}
+                          {' '}
+                          {t('cargo:cargoUnits')}
+                          )
                         </span>
                       </p>
                     </label>
@@ -1084,11 +1105,9 @@ export class ShipmentDetails extends Component {
                     <Checkbox
                       id="no_dangerous_goods_confirmation"
                       theme={theme}
-                      onChange={() =>
-                        this.setState({
-                          noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
-                        })
-                      }
+                      onChange={() => this.setState({
+                        noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
+                      })}
                       size="30px"
                       name="no_dangerous_goods_confirmation"
                       checked={this.state.noDangerousGoodsConfirmed}
@@ -1097,7 +1116,8 @@ export class ShipmentDetails extends Component {
                   <div className="flex">
                     <label htmlFor="no_dangerous_goods_confirmation" className="pointy">
                       <p style={{ margin: 0, fontSize: '14px' }}>
-                        {t('cargo:confirmSafe')}{' '}
+                        {t('cargo:confirmSafe')}
+                        {' '}
                         <span
                           className="emulate_link blue_link"
                           onClick={() => this.toggleModal('dangerousGoodsInfo')}
