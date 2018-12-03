@@ -134,8 +134,14 @@ class Shipment < ApplicationRecord
   # end
 
   %i(ocean air rail).each do |mot|
-    scope mot, -> { joins(:itinerary).where('itineraries.mode_of_transport = ?', mot) }
+    scope mot, -> { joins(:itinerary).where(Itinerary.arel_table[:mode_of_transport].eq(mot)) }
   end
+
+  scope :modes_of_transport, lambda { |*mots|
+    mots[1..-1].reduce(send(mots.first)) do |result, mot|
+      result.or(send(mot))
+    end
+  }
 
   # Class methods
 

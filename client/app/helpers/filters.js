@@ -28,8 +28,20 @@ function sortByDate (array, key) {
   return array.sort((a, b) => new Date(b[key]) - new Date(a[key]))
 }
 
+function sortByAlphabet (array, key) {
+  array.sort((a, b) => {
+    const nameA = a[key].toUpperCase()
+    const nameB = b[key].toUpperCase()
+
+    return nameA.localeCompare(nameB)
+  })
+
+  return array
+}
+
 const filters = {
   handleSearchChange,
-  sortByDate
+  sortByDate,
+  sortByAlphabet
 }
 export default filters

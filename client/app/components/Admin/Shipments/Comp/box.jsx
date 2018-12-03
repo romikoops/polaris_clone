@@ -3,7 +3,9 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../../../prop-types'
 import styles from '../../Admin.scss'
+import { concatArrays, uniqueItems, filters } from '../../../../helpers'
 import ShipmentOverviewCard from '../../../ShipmentCard/ShipmentOverviewCard'
+import { LoadingSpinner } from '../../../LoadingSpinner/LoadingSpinner'
 
 export class AdminShipmentsBox extends Component {
   static switchShipment (status, t) {
@@ -34,17 +36,7 @@ export class AdminShipmentsBox extends Component {
 
   constructor (props) {
     super(props)
-
     this.handleClick = this.handleClick.bind(this)
-  }
-
-  seeAll () {
-    const { seeAll, dispatches } = this.props
-    if (seeAll) {
-      seeAll()
-    } else {
-      dispatches.getShipments(true)
-    }
   }
 
   handleClick (shipment) {
@@ -62,6 +54,7 @@ export class AdminShipmentsBox extends Component {
       userView,
       page,
       status,
+      nexuses,
       dispatches,
       nextPage,
       prevPage,
@@ -69,9 +62,23 @@ export class AdminShipmentsBox extends Component {
       numPages,
       shipments,
       t,
+      searchFilters,
+      handleInput,
+      countries,
       confirmShipmentData,
       searchText
     } = this.props
+
+    // const countriesOriginIds = shipments.map(shipment => shipment.origin_nexus.country_id)
+    // const countriesDestinationIds = shipments.map(shipment => shipment.destination_nexus.country_id)
+    // const shipmentsCountries = countries.filter(country => (
+    //   concatArrays(countriesOriginIds, countriesDestinationIds).includes(country.id)))
+
+    if (this.props.getShipmentsRequest) {
+      return (
+        <LoadingSpinner size="small" />
+      )
+    }
 
     return (
       <div

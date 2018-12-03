@@ -257,7 +257,8 @@ export default function admin (state = {}, action) {
     case adminConstants.ADMIN_GET_SHIPMENTS_REQUEST: {
       return {
         ...state,
-        loading: true
+        getShipmentsRequest: true,
+        loading: false
       }
     }
     case adminConstants.ADMIN_GET_SHIPMENTS_SUCCESS:
@@ -267,12 +268,14 @@ export default function admin (state = {}, action) {
           ...state.dashboard,
           shipments: action.payload.data
         },
+        getShipmentsRequest: false,
         shipments: action.payload.data,
         loading: false
       }
     case adminConstants.ADMIN_GET_SHIPMENTS_FAILURE: {
       const errShips = merge({}, state, {
         error: { shipments: action.error },
+        getShipmentsRequest: false,
         loading: false
       })
 
