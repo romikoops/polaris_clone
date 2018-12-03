@@ -17,7 +17,7 @@ import TermsAndConditions from '../../components/TermsAndConditions/TermsAndCond
 import InsuranceDetails from '../../components/InsuranceDetails/InsuranceDetails'
 import { appActions, authenticationActions, userActions } from '../../actions'
 import { defaultTheme, moment } from '../../constants'
-import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
+import { PrivateRoute, AdminPrivateRoute, NonAdminPrivateRoute } from '../../routes/index'
 import MessageCenter from '../MessageCenter/MessageCenter'
 import ResetPasswordForm from '../../components/ResetPasswordForm'
 import CookieConsentBar from '../../components/CookieConsentBar'
@@ -126,7 +126,7 @@ class App extends Component {
                 render={props => <ResetPasswordForm user={user} theme={theme} {...props} />}
               />
 
-              <PrivateRoute
+              <NonAdminPrivateRoute
                 path="/booking"
                 component={Shop}
                 user={user}
