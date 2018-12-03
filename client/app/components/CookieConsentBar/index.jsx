@@ -318,7 +318,7 @@ class PureCookieConsentBar extends React.PureComponent {
     const acceptAll = (
       <div className={ROW(60)}>
         <button
-          className={styles.accept_all}
+          className={`ccb_accept_cookies ${styles.accept_all}`}
           type="button"
           onClick={clickAccept}
         >

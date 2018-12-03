@@ -19,10 +19,11 @@ end
 When('I select {string} as {string}') do |place, type|
   if place[/\d+/]
     if type == 'Origin'
-      find('.ccb_pre_carriage', wait: 60).click
+      trucking_dir = 'pre'
     elsif type == 'Destination'
-      find('.ccb_on_carriage', wait: 60).click
+      trucking_dir = 'on'
     end
+    find(".ccb_#{trucking_dir}_carriage", wait: 60).click
     elem = find('div', class: "ccb_#{type.downcase}_carriage_input", wait: 60)
     within(elem) do
       box = find('.ccb_carriage')
@@ -48,24 +49,28 @@ When('I select {string} as {string}') do |place, type|
 
     #find a close backdrop if it is there
 
-    # backdrop = all('.ccb_backdrop')
-    backdrop = all('._2q8SSmc1EogFClHxQ2Skg9')
+    backdrop = all('.ccb_backdrop')
+    # backdrop = all('._2q8SSmc1EogFClHxQ2Skg9')
     backdrop.first.click() unless backdrop.empty?
     name_xpath = "@name='#{type.downcase}-street'"
 
     # wait for trucking rpcing to return
+    
+    # elem = find('div', class: "ccb_#{trucking_dir}_address_form", wait: 60)
+    # require 'pry'; binding.pry
     expect(page).to have_no_css('#floatingCirclesG', wait: 60)
+    expect(page).to have_css(".ccb_#{type.downcase}_found", wait: 60, visible: false)
     
     # wait untill form is autofilled filled
-    inputs = all(:xpath, ".//input[#{name_xpath} and not(@value='')]")
+    # inputs = all(:xpath, ".//input[#{name_xpath} and not(@value='')]")
     
-    #if inputs cant be found expand the address fields
-    if inputs.empty?
-      elem = find('div', class: "ccb_#{type.downcase}_carriage_input", wait: 60)
-      expander = elem.sibling('._2w5ZL-uKGDOghADh63yTY-').find(".LJsnTPdMmgBjNKpRmcqkC", wait: 30, visible: false)
-      # expander = find(".ccb_#{type.downcase}_expand", wait: 30, visible: false)
-      expander.click unless expander.nil?
-    end
+    # #if inputs cant be found expand the address fields
+    # if inputs.empty?
+    #   elem = find('div', class: "ccb_#{type.downcase}_carriage_input", wait: 60)
+    #   expander = elem.sibling('._2w5ZL-uKGDOghADh63yTY-').find(".LJsnTPdMmgBjNKpRmcqkC", wait: 30, visible: false)
+    #   # expander = find(".ccb_#{type.downcase}_expand", wait: 30, visible: false)
+    #   expander.click unless expander.nil?
+    # end
 
     # expect(page).to have_xpath(".//input[#{name_xpath} and not(@value='')]", wait: 60, visible: false)
    

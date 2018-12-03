@@ -1088,6 +1088,7 @@ class ShipmentLocationBox extends PureComponent {
           <i className={`${styles.down} flex-none fa fa-angle-double-down`} />
           <i className={`${styles.up} flex-none fa fa-angle-double-up ccb_origin_expand`} />
         </div>
+
         <div
           className={`${styles.address_form} flex-100 layout-row layout-wrap layout-align-center ccb_pre_address_form`}
         >
@@ -1428,9 +1429,16 @@ class ShipmentLocationBox extends PureComponent {
     if (this.props.hideMap) {
       mapStyle.display = 'none'
     }
+    let truckingClass = ''
+    if (truckingFound.origin) {
+      truckingClass += 'ccb_origin_found'
+    }
+    if (truckingFound.destination) {
+      truckingClass += 'ccb_destination_found'
+    }
 
     return (
-      <div className="layout-row flex-100 layout-wrap layout-align-center-center">
+      <div className={`layout-row flex-100 layout-wrap layout-align-center-center ${truckingClass}`}>
         <div
           className={`layout-row flex-100 layout-wrap layout-align-center-start ${styles.slbox}`}
         >
