@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../prop-types'
@@ -38,6 +39,7 @@ export class AdminClientTile extends Component {
   }
   render () {
     const {
+      t,
       theme,
       client,
       deleteable,
@@ -77,7 +79,7 @@ export class AdminClientTile extends Component {
           } ${defaults.border_divider}`}
         >
           <i className="flex-none fa fa-envelope clip" style={gradientStyle} />
-          <p className="flex-90">Email</p>
+          <p className="flex-90">{t('user:email')}</p>
         </div>
         <div
           className={`flex-100 layout-row layout-align-start-center ${styles.client_text}`}
@@ -90,7 +92,7 @@ export class AdminClientTile extends Component {
           }`}
         >
           <i className="flex-none fa fa-building clip" style={gradientStyle} />
-          <p className="flex-90">Company</p>
+          <p className="flex-90">{t('user:company')}</p>
         </div>
         <div
           className={`
@@ -104,10 +106,10 @@ export class AdminClientTile extends Component {
     const deleter = (
       <div className="flex-95 layout-row layout-wrap layout-align-start-start height_100">
         <div className="flex-100 layout-row layout-align-start-center">
-          <h3 className="flex-none sec_header_text"> Delete Alias?</h3>
+          <h3 className="flex-none sec_header_text">{t('admin:deleteAlias')}</h3>
         </div>
         <div className="flex-100 layout-row layout-align-start-center">
-          <p className="flex-none sec_subheader_text"> Are you sure</p>
+          <p className="flex-none sec_subheader_text">{t('admin:areYouSure')}</p>
         </div>
         <div
           className="flex-100 layout-column layout-align-center-space-between"
@@ -117,7 +119,7 @@ export class AdminClientTile extends Component {
             <RoundButton
               theme={theme}
               size="small"
-              text="No"
+              text={t('common:no')}
               handleNext={this.toggleShowDelete}
               iconClass="fa-ban"
             />
@@ -127,7 +129,7 @@ export class AdminClientTile extends Component {
               theme={theme}
               size="small"
               active
-              text="Yes"
+              text={t('common:yes')}
               handleNext={this.deleteThis}
               iconClass="fa-trash"
             />
@@ -190,6 +192,7 @@ export class AdminClientTile extends Component {
   }
 }
 AdminClientTile.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   client: PropTypes.client.isRequired,
   navFn: PropTypes.func,
@@ -215,4 +218,4 @@ AdminClientTile.defaultProps = {
   handleCollapser: null
 }
 
-export default AdminClientTile
+export default withNamespaces(['admin', 'common', 'user'])(AdminClientTile)

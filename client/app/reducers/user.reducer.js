@@ -155,7 +155,8 @@ export default function users (state = initialState, action) {
 
     case userConstants.GET_SHIPMENTS_REQUEST: {
       const reqShips = merge({}, state, {
-        loading: true
+        getShipmentsRequest: true,
+        loading: false
       })
 
       return reqShips
@@ -163,12 +164,14 @@ export default function users (state = initialState, action) {
     case userConstants.GET_SHIPMENTS_SUCCESS: {
       return {
         ...state,
+        getShipmentsRequest: false,
         shipments: action.payload.data,
         loading: false
       }
     }
     case userConstants.GET_SHIPMENTS_FAILURE: {
       const errShips = merge({}, state, {
+        getShipmentsRequest: false,
         loading: false,
         error: { shipments: action.error }
       })

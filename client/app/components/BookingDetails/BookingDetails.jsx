@@ -10,7 +10,7 @@ import CargoDetails from '../CargoDetails/CargoDetails'
 import ContactSetter from '../ContactSetter/ContactSetter'
 import { RoundButton } from '../RoundButton/RoundButton'
 import RouteHubBox from '../RouteHubBox/RouteHubBox'
-import { isEmpty } from '../../helpers/objectTools'
+import { isEmpty, camelizeKeys } from '../../helpers/objectTools'
 
 import {
   trim,
@@ -92,14 +92,37 @@ export class BookingDetails extends Component {
     this.toggleCustomsCredit = this.toggleCustomsCredit.bind(this)
   }
   componentDidMount () {
-    const { prevRequest, setStage, hideRegistration } = this.props
-    if (prevRequest && prevRequest.shipment) {
+    const { prevRequest, setStage, hideRegistration, reusedShipment } = this.props
+    if (reusedShipment && reusedShipment.shipment && !this.state.prevRequestLoaded) {
+      this.loadReusedShipment(reusedShipment)
+    } else if (prevRequest && prevRequest.shipment) {
       this.loadPrevReq(prevRequest.shipment)
     }
     hideRegistration()
     setStage(4)
     window.scrollTo(0, 0)
   }
+
+  loadReusedShipment (obj) {
+    obj.contacts.forEach ((_contact, index) =>  {
+        const contactData = {
+          address: camelizeKeys(_contact.address),
+          contact: camelizeKeys(_contact.contact)
+        }
+        if (_contact.type === "notifyee") {
+        }
+        this.setContact(contactData, _contact.type, index)
+      })
+    this.setState(prevState => ({
+      cargoNotes: obj.shipment.cargo_notes,
+      incotermText: obj.shipment.incoterm_text,
+      totalGoodsValue: obj.shipment.total_goods_value,
+      notes: obj.shipment.notes,
+      customs: obj.shipment.customs || prevState.customs,
+      insurance: obj.shipment.insurance || prevState.insurance
+    }))
+  }
+
   setHsCode (id, codes) {
     const exCodes = this.state.hsCodes[id]
       ? [...this.state.hsCodes[id], ...codes]

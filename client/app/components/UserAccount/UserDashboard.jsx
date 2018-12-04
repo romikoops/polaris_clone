@@ -85,7 +85,7 @@ class UserDashboard extends Component {
 
   handleViewShipments () {
     const { userDispatch } = this.props
-    userDispatch.getShipments({}, 4, true)
+    userDispatch.getShipments({}, 4, {}, true)
   }
 
   render () {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './Admin.scss'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
@@ -34,6 +35,7 @@ export class AdminPriceCreator extends Component {
         result = op
       }
     })
+
     return result || options[0]
   }
   static prepForSelect (arr, labelKey, valueKey, glossary) {
@@ -252,7 +254,7 @@ export class AdminPriceCreator extends Component {
 
   render () {
     const {
-      theme, itineraries, detailedItineraries, transportCategories, clients
+      t, theme, itineraries, detailedItineraries, transportCategories, clients
     } = this.props
     const {
       route, hubRoute, cargoClass, steps, transportCategory, client, showPanel
@@ -273,7 +275,7 @@ export class AdminPriceCreator extends Component {
     }
     const routeOpts = AdminPriceCreator.prepForSelect(itineraries, 'name', false, false)
     const clientOpts = clients.map(a => ({ value: a, label: `${a.first_name} ${a.last_name}` }))
-    clientOpts.push({ value: 'OPEN', label: 'Open' })
+    clientOpts.push({ value: 'OPEN', label: t('common:open') })
     const hubRouteOpts = route
       ? detailedItineraries
         .filter(di => di.id === route.value.id)
@@ -371,7 +373,7 @@ export class AdminPriceCreator extends Component {
     const selectCargoClass = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-align-start-center">
-          <h4 className="flex-100 letter_3">Select a Cargo Type</h4>
+          <h4 className="flex-100 letter_3">{t('admin:selectCargoType')}</h4>
           <div className="flex-75 layout-row">
             <NamedSelect
               name="cargoClass"
@@ -388,7 +390,7 @@ export class AdminPriceCreator extends Component {
     const selectRoute = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-align-start-center">
-          <h4 className="flex-100 letter_3">Select a route</h4>
+          <h4 className="flex-100 letter_3">{t('admin:selectRoute')}</h4>
           <div className="flex-75 layout-row">
             <NamedSelect
               name="route"
@@ -405,7 +407,7 @@ export class AdminPriceCreator extends Component {
     const selectHubRoute = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-align-start-center">
-          <h4 className="flex-100 letter_3">Select a specific combination of Hubs</h4>
+          <h4 className="flex-100 letter_3">{t('admin:selecSspecificHubs')}</h4>
           <div className="flex-75 layout-row">
             <NamedSelect
               name="hubRoute"
@@ -422,7 +424,7 @@ export class AdminPriceCreator extends Component {
     const selectClient = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-align-start-center">
-          <h4 className="flex-100 letter_3">Select users this pricing applies to</h4>
+          <h4 className="flex-100 letter_3">{t('admin:selectUsers')}</h4>
           <div className="flex-75 layout-row">
             <NamedSelect
               name="client"
@@ -439,7 +441,7 @@ export class AdminPriceCreator extends Component {
     const selectTransportCategory = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-align-start-center">
-          <h4 className="flex-100 letter_3">Select the type of good shipped</h4>
+          <h4 className="flex-100 letter_3">{t('admin:selectTypeGood')}</h4>
           <div className="flex-75 layout-row">
             <NamedSelect
               name="transportCategory"
@@ -455,31 +457,31 @@ export class AdminPriceCreator extends Component {
     )
     const cargoClassResult = (
       <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-        <h4 className="flex-none letter_3">Cargo Class: </h4>
+        <h4 className="flex-none letter_3">{t('admin:cargoClass')}</h4>
         <h4 className="flex-none letter_3">{cargoClass.label}</h4>
       </div>
     )
     const routeResult = (
       <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-        <h4 className="flex-none letter_3">Route: </h4>
+        <h4 className="flex-none letter_3">{t('admin:route')}</h4>
         <h4 className="flex-none letter_3">{route.label}</h4>
       </div>
     )
     const hubRouteResult = (
       <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-        <h4 className="flex-none letter_3">Sub Route: </h4>
+        <h4 className="flex-none letter_3">{t('admin:subRoute')}</h4>
         <h4 className="flex-none letter_3">{hubRoute.label}</h4>
       </div>
     )
     const transportCategoryResult = (
       <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-        <h4 className="flex-none letter_3">Transport Category: </h4>
+        <h4 className="flex-none letter_3">{t('admin:transportCategory')}</h4>
         <h4 className="flex-none letter_3">{transportCategory.label}</h4>
       </div>
     )
     const clientResult = (
       <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-        <h4 className="flex-none letter_3">Client: </h4>
+        <h4 className="flex-none letter_3">{t('admin:client')}</h4>
         <h4 className="flex-none letter_3">{client.label}</h4>
       </div>
     )
@@ -513,9 +515,11 @@ export class AdminPriceCreator extends Component {
           </div>
         )
       }
+
       return ''
     })
     const panelViewClass = showPanel ? styles.fee_panel_open : styles.fee_panel_closed
+
     return (
       <div
         className={` ${
@@ -544,7 +548,7 @@ export class AdminPriceCreator extends Component {
               }`}
             >
               <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
-                New Pricing
+                {t('admin:newPricing')}
               </p>
             </div>
             <div className="flex-100 layout-row layout-align-start-center">
@@ -568,7 +572,7 @@ export class AdminPriceCreator extends Component {
               <RoundButton
                 theme={theme}
                 size="small"
-                text="Save"
+                text={t('admin:save')}
                 active
                 handleNext={this.saveEdit}
                 iconClass="fa-floppy-o"
@@ -596,6 +600,7 @@ export class AdminPriceCreator extends Component {
   }
 }
 AdminPriceCreator.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   closeForm: PropTypes.func,
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
@@ -613,4 +618,4 @@ AdminPriceCreator.defaultProps = {
   clients: []
 }
 
-export default AdminPriceCreator
+export default withNamespaces('admin')(AdminPriceCreator)

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './index.scss'
 import { documentGlossary } from '../../../../constants'
@@ -21,13 +22,14 @@ export class AdminUploadsSuccess extends Component {
     const hubKeys = shipment.schedule_set[0].hub_route_key.split('-')
     shipment.originHub = hubsObj[hubKeys[0]] ? hubsObj[hubKeys[0]].name : ''
     shipment.destinationHub = hubsObj[hubKeys[1]] ? hubsObj[hubKeys[1]].name : ''
+
     return shipment
   }
 
   render () {
     console.log(this.props)
     // const {selectedShipment} = this.state;
-    const { theme, data } = this.props
+    const { t, theme, data } = this.props
     const { stats, results } = data
     console.log(results)
     const statView = Object.keys(stats)
@@ -40,13 +42,14 @@ export class AdminUploadsSuccess extends Component {
             </p>
           </div>
           <div className="flex-33 layout-row layout-align-start-center">
-            <p className="flex-none">{`No. created: ${stats[k].number_created}`}</p>
+            <p className="flex-none">{`${t('admin:numberCreated')} ${stats[k].number_created}`}</p>
           </div>
           <div className="flex-33 layout-row layout-align-start-center">
-            <p className="flex-none">{`No. updated: ${stats[k].number_updated}`}</p>
+            <p className="flex-none">{`${t('admin:numberUpdated')} ${stats[k].number_updated}`}</p>
           </div>
         </div>
       ))
+
     return (
       <div
         className={`flex-none layout-row layout-wrap layout-align-center-center ${
@@ -65,14 +68,14 @@ export class AdminUploadsSuccess extends Component {
           }`}
         >
           <div className="flex-100 layout-row layout-align-start-center">
-            <TextHeading theme={theme} text="Upload Successful!" size={3} />
+            <TextHeading theme={theme} text={t('admin:uploadSuccessful')} size={3} />
           </div>
           <div className="flex-100 layout-row layout-align-start-center layout-wrap">
             {statView}
           </div>
           <div className="flex-100 layout-row layout-align-end-center layout-wrap">
             <RoundButton
-              text="Continue"
+              text={t('admin:continue')}
               theme={theme}
               size="small"
               handleNext={this.props.closeDialog}
@@ -86,6 +89,7 @@ export class AdminUploadsSuccess extends Component {
   }
 }
 AdminUploadsSuccess.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   data: PropTypes.objectOf(PropTypes.any),
   closeDialog: PropTypes.func.isRequired
@@ -96,4 +100,4 @@ AdminUploadsSuccess.defaultProps = {
   data: {}
 }
 
-export default AdminUploadsSuccess
+export default withNamespaces('admin')(AdminUploadsSuccess)

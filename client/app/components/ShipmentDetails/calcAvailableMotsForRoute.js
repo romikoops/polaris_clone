@@ -4,7 +4,7 @@ export default function calcAvailableMotsForRoute (
   filteredRouteIndexes
 ) {
   const modesOfTransport = []
-  filteredRouteIndexes.forEach((idx) => {
+  filteredRouteIndexes.selected.forEach((idx) => {
     const { modeOfTransport } = routes[idx]
     if (modesOfTransport.includes(modeOfTransport)) return
 
@@ -18,8 +18,8 @@ export function shouldUpdateAvailableMotsForRoute (
   thisStateFilteredRouteIndexes,
   nextStateFilteredRouteIndexes
 ) {
-  for (let i = 0; i < thisStateFilteredRouteIndexes.length; i++) {
-    if (thisStateFilteredRouteIndexes[i] !== nextStateFilteredRouteIndexes[i]) {
+  for (let i = 0; i < thisStateFilteredRouteIndexes.selected.length; i++) {
+    if (thisStateFilteredRouteIndexes.selected[i] !== nextStateFilteredRouteIndexes.selected[i]) {
       return true
     }
   }

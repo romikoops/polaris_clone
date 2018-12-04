@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import styled from 'styled-components'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
@@ -112,7 +113,7 @@ export class AdminRouteForm extends Component {
   }
 
   render () {
-    const { theme, hubs } = this.props
+    const { t, theme, hubs } = this.props
     const { route, selectValues } = this.state
     const filteredHubs = hubs ? this.excludeHubs(hubs) : []
     const StyledSelect = styled(NamedSelect)`
@@ -145,11 +146,11 @@ export class AdminRouteForm extends Component {
         className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.form_row}`}
       >
         <div className="flex-100 flex-gt-sm-50 layout-align-start-center">
-          <p className="flex-none">Stop {i}</p>
+          <p className="flex-none">{t('admin:stop')} {i}</p>
         </div>
         <div className="flex-100 flex-gt-sm-50 layout-align-end-center">
           <StyledSelect
-            placeholder="Origin"
+            placeholder={t('shipment:origin')}
             className={styles.select}
             name={i}
             value={selectValues[i]}
@@ -172,7 +173,7 @@ export class AdminRouteForm extends Component {
         >
           <div className="flex-100 layout-row layout-wrap layout-align-start-center">
             <h2 className="flex-none clip letter_3" style={textStyle}>
-                Add a New Route
+              {t('admin:addNewRoute')}
             </h2>
           </div>
           <div
@@ -181,11 +182,11 @@ export class AdminRouteForm extends Component {
             }`}
           >
             <div className="flex-100 flex-gt-sm-50 layout-align-start-center">
-              <p className="flex-none">Mode of Transport</p>
+              <p className="flex-none">{t('admin:modeOfTransport')}</p>
             </div>
             <div className="flex-100 flex-gt-sm-50 layout-align-end-center">
               <StyledSelect
-                placeholder="Mode of Transport"
+                placeholder={t('admin:modeOfTransport')}
                 className={styles.select}
                 name="mot"
                 value={selectValues.mot}
@@ -201,7 +202,7 @@ export class AdminRouteForm extends Component {
               onClick={this.addStop}
             >
               <i className="fa fa-plus-cicle-o" />
-              <p className="flex-none no_m">Add Stop</p>
+              <p className="flex-none no_m">{t('admin:addStop')}</p>
             </div>
           </div>
           <div
@@ -210,7 +211,7 @@ export class AdminRouteForm extends Component {
             }`}
           >
             <div className="flex-100 flex-gt-sm-50 layout-align-start-center">
-              <p className="flex-none">Name</p>
+              <p className="flex-none">{t('admin:name')}</p>
             </div>
             <div className="flex-100 flex-gt-sm-50 layout-align-end-center input_box_full">
               <input
@@ -227,7 +228,7 @@ export class AdminRouteForm extends Component {
             className="flex-none"
             theme={theme}
             size="small"
-            text="Save Route"
+            text={t('admin:saveRoute')}
             active
             handleNext={this.saveNewRoute}
             iconClass="fa-floppy"
@@ -240,6 +241,7 @@ export class AdminRouteForm extends Component {
 }
 
 AdminRouteForm.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   saveRoute: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
@@ -251,4 +253,4 @@ AdminRouteForm.defaultProps = {
   hubs: []
 }
 
-export default AdminRouteForm
+export default withNamespaces(['admin', 'shipment'])(AdminRouteForm)

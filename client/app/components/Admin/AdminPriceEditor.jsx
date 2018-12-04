@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import {
@@ -37,6 +38,7 @@ export class AdminPriceEditor extends Component {
         result = op
       }
     })
+
     return result || options[0]
   }
   constructor (props) {
@@ -246,7 +248,7 @@ export class AdminPriceEditor extends Component {
     this.props.closeEdit()
   }
   render () {
-    const { theme, hubRoute } = this.props
+    const { t, theme, hubRoute } = this.props
     const textStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -411,8 +413,8 @@ export class AdminPriceEditor extends Component {
     const confimPrompt = confirm ? (
       <AdminPromptConfirm
         theme={theme}
-        heading="Are you sure?"
-        text="These changes will be instantly available in your store"
+        heading={t('common:areYouSure')}
+        text={t('admin:instantlyAvailable')}
         confirm={() => this.saveEdit()}
         deny={() => this.closeConfirm()}
       />
@@ -436,9 +438,11 @@ export class AdminPriceEditor extends Component {
           </div>
         )
       }
+
       return ''
     })
     const panelViewClass = showPanel ? styles.fee_panel_open : styles.fee_panel_closed
+
     return (
       <div
         className={` ${
@@ -468,7 +472,7 @@ export class AdminPriceEditor extends Component {
               }`}
             >
               <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
-                Edit Pricing
+                {t('admin:editPricing')}
               </p>
             </div>
             <div className="flex-100 layout-row layout-align-start-center">
@@ -480,11 +484,11 @@ export class AdminPriceEditor extends Component {
             <div className="flex-100 layout-row layout-align-start-center">
               <div className="flex-100 layout-row layout-align-start-center">
                 <i className="fa fa-calendar-check-o clip" style={textStyle} />
-                <p className="flex-none offset-5">Applicable Period</p>
+                <p className="flex-none offset-5">{t('admin:applicablePeriod')}</p>
               </div>
               <div className="flex-100 layout-row layout-align-start-center">
                 <div className={`flex-40 layout-row layout-align-start-center layout-wrap ${styles.dpb}`}>
-                  <p className="flex-100">Effective Date</p>
+                  <p className="flex-100">{t('admin:effectiveDate')}</p>
                   <DayPickerInput
                     name="dayPicker"
                     // placeholder="DD/MM/YYYY"
@@ -498,7 +502,7 @@ export class AdminPriceEditor extends Component {
                   />
                 </div>
                 <div className={`flex-40 layout-row layout-align-start-center layout-wrap ${styles.dpb}`}>
-                  <p className="flex-100">Expiration Date</p>
+                  <p className="flex-100">{t('admin:expirationDate')}</p>
                   <DayPickerInput
                     name="dayPicker"
                     // placeholder="DD/MM/YYYY"
@@ -518,7 +522,7 @@ export class AdminPriceEditor extends Component {
               <RoundButton
                 theme={theme}
                 size="small"
-                text="Add Fee"
+                text={t('admin:addFee')}
                 active
                 handleNext={this.showAddFeePanel}
                 iconClass="fa-plus"
@@ -528,7 +532,7 @@ export class AdminPriceEditor extends Component {
               <RoundButton
                 theme={theme}
                 size="small"
-                text="Save"
+                text={t('admin:save')}
                 active
                 handleNext={() => this.confirmSave()}
                 iconClass="fa-floppy-o"
@@ -556,6 +560,7 @@ export class AdminPriceEditor extends Component {
   }
 }
 AdminPriceEditor.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   closeEdit: PropTypes.func.isRequired,
   adminTools: PropTypes.shape({
@@ -574,4 +579,4 @@ AdminPriceEditor.defaultProps = {
   theme: null
 }
 
-export default AdminPriceEditor
+export default withNamespaces(['admin', 'common'])(AdminPriceEditor)

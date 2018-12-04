@@ -24,7 +24,6 @@ import removeTabIndex from './removeTabIndex'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 import CircleCompletion from '../CircleCompletion/CircleCompletion'
 
-const colourSVG = colorSVG
 const mapStyles = mapStyling
 
 function backgroundColor (props) {
@@ -107,6 +106,10 @@ class ShipmentLocationBox extends PureComponent {
         destination: []
       },
       truckingFound: {
+        origin: false,
+        destination: false
+      },
+      showTick: {
         origin: false,
         destination: false
       }
@@ -367,13 +370,13 @@ class ShipmentLocationBox extends PureComponent {
     let icon
     if (target === 'origin') {
       icon = {
-        url: colourSVG('location', theme),
+        url: colorSVG('address', theme),
         anchor: new this.props.gMaps.Point(18, 36),
         scaledSize: new this.props.gMaps.Size(36, 36)
       }
     } else {
       icon = {
-        url: colourSVG('flag', theme),
+        url: colorSVG('flag', theme),
         anchor: new this.props.gMaps.Point(10, 25),
         scaledSize: new this.props.gMaps.Size(36, 36)
       }
@@ -621,12 +624,16 @@ class ShipmentLocationBox extends PureComponent {
       truckingFound: {
         ...prevState.truckingFound,
         [target]: true
+      },
+      showTick: {
+        ...prevState.showTick,
+        [target]: true
       }
     }))
     setTimeout(() => {
       this.setState(prevState => ({
-        truckingFound: {
-          ...prevState.truckingFound,
+        showTick: {
+          ...prevState.showTick,
           [target]: false
         }
       }))
@@ -903,13 +910,14 @@ class ShipmentLocationBox extends PureComponent {
         truckingHubs, oSelect, dSelect
       } = prevState
       const { filteredRouteIndexes } = this.props
+      const targetFilteredRouteIndexes = filteredRouteIndexes[target]
       const { lookupTablesForRoutes, routes } = this.props.shipmentData
       const targetLocation = target === 'origin' ? oSelect : dSelect
       const targetTrucking = truckingHubs[target]
       const counterpart = target === 'origin' ? 'destination' : 'origin'
       const counterpartLocation = target === 'origin' ? dSelect : oSelect
       const counterpartTrucking = truckingHubs[counterpart]
-      let indexes = filteredRouteIndexes.slice()
+      let indexes = targetFilteredRouteIndexes.slice()
       const unfilteredRouteIndexes = routes.map((_, i) => i)
       if (targetLocation.label) {
         indexes = routeFilters.selectFromLookupTable(
@@ -925,17 +933,21 @@ class ShipmentLocationBox extends PureComponent {
         indexes = unfilteredRouteIndexes
       }
 
-      const indexesToUse = (counterpartLocation.label || counterpartTrucking)
-        ? filteredRouteIndexes : unfilteredRouteIndexes
-
-      let newFilteredRouteIndexes = routeFilters.scopeIndexes(
-        indexesToUse,
+      let newFilteredRouteIndexes = {
+        ...filteredRouteIndexes
+      }
+      newFilteredRouteIndexes[target] = routeFilters.scopeIndexes(
+        filteredRouteIndexes.all,
         indexes
+      )
+      newFilteredRouteIndexes.selected = routeFilters.scopeIndexes(
+        newFilteredRouteIndexes.origin,
+        newFilteredRouteIndexes.destination
       )
 
       let fieldsHaveErrors = false
-      if (targetTrucking && newFilteredRouteIndexes.length === 0) {
-        newFilteredRouteIndexes = filteredRouteIndexes
+      if (targetTrucking && newFilteredRouteIndexes[target].length === 0) {
+        newFilteredRouteIndexes[target] = filteredRouteIndexes
         fieldsHaveErrors = true
         const addressFormsHaveErrors =
           fieldsHaveErrors || prevState[`${counterpart}FieldsHaveErrors`]
@@ -944,7 +956,7 @@ class ShipmentLocationBox extends PureComponent {
       const newFilteredRoutes = []
       const selectOptions = []
       const counterpartNexusIds = []
-      indexes.forEach((idx) => {
+      newFilteredRouteIndexes[target].forEach((idx) => {
         const route = routes[idx]
         newFilteredRoutes.push(route)
         if (counterpartNexusIds.includes(route[counterpart].nexusId)) return
@@ -954,13 +966,14 @@ class ShipmentLocationBox extends PureComponent {
         selectOptions.push(routeHelpers.routeOption(route[counterpart]))
       })
 
-      const truckingBoolean = newFilteredRouteIndexes.some(i => routes[i][counterpart].truckTypes.length > 0)
+      const truckingBoolean = newFilteredRouteIndexes[target].some(i => routes[i][counterpart].truckTypes.length > 0)
 
       const carriage = target === 'destination' ? this.props.has_on_carriage : this.props.has_pre_carriage
 
       if (targetTrucking && carriage) this.prepTruckTypes(newFilteredRoutes, target)
-      if (newFilteredRouteIndexes.length === 0) {
+      if (newFilteredRouteIndexes.selected.length === 0) {
         this.setRouteError(counterpartLocation.label, targetLocation.label)
+        this.props.setTargetAddress(target, {})
       }
 
       this.props.updateFilteredRouteIndexes(newFilteredRouteIndexes)
@@ -1003,16 +1016,6 @@ class ShipmentLocationBox extends PureComponent {
     }
   }
 
-  isSwitchable () {
-    const { oSelect, dSelect, autoText } = this.state
-
-    return (
-      (!!oSelect.label && autoText.destination !== '') ||
-      (!!dSelect.label && autoText.origin !== '') ||
-      (!!dSelect.label && !!oSelect.label) ||
-      (autoText.origin !== '' && autoText.destination !== '')
-    )
-  }
 
   render () {
     const {
@@ -1034,7 +1037,8 @@ class ShipmentLocationBox extends PureComponent {
       destinationTruckingAvailable,
       fetchingtruckingAvailability,
       countries,
-      truckingFound
+      truckingFound,
+      showTick
     } = this.state
 
     if (availableDestinationNexuses) destinationOptions = ShipmentLocationBox.sortOptions(availableDestinationNexuses)
@@ -1091,22 +1095,23 @@ class ShipmentLocationBox extends PureComponent {
           onClick={() => this.changeAddressFormVisibility('origin')}
         >
           <i className={`${styles.down} flex-none fa fa-angle-double-down`} />
-          <i className={`${styles.up} flex-none fa fa-angle-double-up`} />
+          <i className={`${styles.up} flex-none fa fa-angle-double-up ccb_origin_expand`} />
         </div>
+
         <div
           className={`${styles.address_form} flex-100 layout-row layout-wrap layout-align-center ccb_pre_address_form`}
         >
           { fetchingtruckingAvailability ? <LoadingSpinner size="medium" /> : '' }
-          { truckingFound.origin ? (
+          { showTick.origin ? (
             <CircleCompletion
               icon="fa fa-check"
               iconColor="white"
-              animated={truckingFound.origin}
+              animated={showTick.origin}
               size="150px"
-              opacity={truckingFound.origin ? '1' : '0'}
+              opacity={showTick.origin ? '1' : '0'}
             />
           ) : '' }
-          { (!fetchingtruckingAvailability && !truckingFound.origin) ? (
+          { (!fetchingtruckingAvailability && !showTick.origin) ? (
             <div
               className="flex-100 layout-row layout-wrap layout-align-center"
             >
@@ -1129,6 +1134,7 @@ class ShipmentLocationBox extends PureComponent {
                 value={origin.street || ''}
                 autoComplete="off"
                 placeholder={t('user:street')}
+                disabled={!this.state.showOriginFields}
               />
               <input
                 id="not-auto"
@@ -1144,6 +1150,7 @@ class ShipmentLocationBox extends PureComponent {
                 value={origin.number || ''}
                 autoComplete="off"
                 placeholder={t('user:number')}
+                disabled={!this.state.showOriginFields}
               />
               <input
                 name="origin-zipCode"
@@ -1158,6 +1165,7 @@ class ShipmentLocationBox extends PureComponent {
                 value={origin.zipCode || ''}
                 autoComplete="off"
                 placeholder={t('user:postalCode')}
+                disabled={!this.state.showOriginFields}
               />
               <input
                 name="origin-city"
@@ -1172,6 +1180,7 @@ class ShipmentLocationBox extends PureComponent {
                 value={origin.city || ''}
                 autoComplete="off"
                 placeholder={t('user:city')}
+                disabled={!this.state.showOriginFields}
               />
               <input
                 name="origin-country"
@@ -1186,6 +1195,7 @@ class ShipmentLocationBox extends PureComponent {
                 value={origin.country || ''}
                 autoComplete="off"
                 placeholder={t('user:country')}
+                disabled={!this.state.showOriginFields}
               />
               <div className="flex-100 layout-row layout-align-start-center">
                 <div
@@ -1194,7 +1204,7 @@ class ShipmentLocationBox extends PureComponent {
                 >
                   <i className="fa fa-times flex-none" />
                   <p className="offset-5 flex-none" style={{ paddingRight: '10px' }}>
-                  Clear
+                    Clear
                   </p>
                 </div>
               </div>
@@ -1217,6 +1227,7 @@ class ShipmentLocationBox extends PureComponent {
           handlePlaceSelect={place => this.handlePlaceChange(place, 'origin')}
           handleLocationSelect={place => this.handleLocationChange(place, 'origin')}
           countries={countries.origin}
+          scope={scope}
         />
       </div>
     )
@@ -1234,20 +1245,20 @@ class ShipmentLocationBox extends PureComponent {
           onClick={() => this.changeAddressFormVisibility('destination')}
         >
           <i className={`${styles.down} flex-none fa fa-angle-double-down`} />
-          <i className={`${styles.up} flex-none fa fa-angle-double-up`} />
+          <i className={`${styles.up} flex-none fa fa-angle-double-up ccb_destination_expand`} />
         </div>
         <div className={`${styles.address_form} ${toggleLogic} flex-100 layout-row layout-wrap layout-align-center ccb_on_address_form`}>
           { fetchingtruckingAvailability ? <LoadingSpinner size="medium" /> : '' }
-          { truckingFound.destination ? (
+          { showTick.destination ? (
             <CircleCompletion
               icon="fa fa-check"
               iconColor="white"
-              animated={truckingFound.destination}
+              animated={showTick.destination}
               size="150px"
-              opacity={truckingFound.destination ? '1' : '0'}
+              opacity={showTick.destination ? '1' : '0'}
             />
           ) : '' }
-          { (!fetchingtruckingAvailability && !truckingFound.destination) ? (
+          { (!fetchingtruckingAvailability && !showTick.destination) ? (
             <div
               className="flex-100 layout-row layout-wrap layout-align-center"
             >
@@ -1359,6 +1370,7 @@ class ShipmentLocationBox extends PureComponent {
             handlePlaceSelect={place => this.handlePlaceChange(place, 'destination')}
             handleLocationSelect={place => this.handleLocationChange(place, 'destination')}
             countries={countries.destination}
+            scope={scope}
           />
         </div>
       </div>
@@ -1428,9 +1440,16 @@ class ShipmentLocationBox extends PureComponent {
     if (this.props.hideMap) {
       mapStyle.display = 'none'
     }
+    let truckingClass = ''
+    if (truckingFound.origin) {
+      truckingClass += ' ccb_origin_found'
+    }
+    if (truckingFound.destination) {
+      truckingClass += ' ccb_destination_found'
+    }
 
     return (
-      <div className="layout-row flex-100 layout-wrap layout-align-center-center">
+      <div className={`layout-row flex-100 layout-wrap layout-align-center-center ${truckingClass}`}>
         <div
           className={`layout-row flex-100 layout-wrap layout-align-center-start ${styles.slbox}`}
         >

@@ -3,12 +3,15 @@
 Given 'I am logged in as a shipper successfully' do
   step 'I am at the landing'
   step 'I am logged out'
+
   step 'I click the link to log in'
   step 'I expect to see the log in modal'
 
   step 'I enter the correct credentials'
   step 'I click the sign in button'
+  
   step 'I expect to be redirected to the account page'
+  step 'I accept the cookies if the bar is there'
 end
 
 When 'I set trucking from {string} to {string}' do |address, type|

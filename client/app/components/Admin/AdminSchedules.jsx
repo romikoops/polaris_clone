@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { documentActions } from '../../actions'
 import FileUploader from '../FileUploader/FileUploader'
 import styles from './Admin.scss'
-import { AdminUploadsSuccess } from './Uploads/Success'
+import AdminUploadsSuccess from './Uploads/Success'
 import AdminScheduleGenerator from './AdminScheduleGenerator'
 import DocumentsDownloader from '../Documents/Downloader'
 import { filters, capitalize } from '../../helpers'
@@ -138,6 +139,7 @@ class AdminSchedules extends Component {
   }
   render () {
     const {
+      t,
       theme,
       hubs,
       scheduleData,
@@ -169,7 +171,7 @@ class AdminSchedules extends Component {
         <RoundButton
           theme={theme}
           size="small"
-          text="New"
+          text={t('admin:new')}
           active
           handleNext={this.toggleView}
           iconClass="fa-plus"
@@ -192,7 +194,7 @@ class AdminSchedules extends Component {
 
     const sideMenuNodes = [
       (<SideOptionsBox
-        header="Data manager"
+        header={t('admin:dataManager')}
         content={(
           <div className="flex-100 layout-row layout-wrap layout-align-center-start">
             <CollapsingBar
@@ -200,7 +202,7 @@ class AdminSchedules extends Component {
               collapsed={!expander.upload}
               theme={theme}
               handleCollapser={() => this.toggleExpander('upload')}
-              text="Upload Data"
+              text={t('admin:uploadData')}
               faClass="fa fa-cloud-upload"
               content={(
                 <div>
@@ -209,12 +211,12 @@ class AdminSchedules extends Component {
                       styles.action_section
                     } flex-100 layout-row layout-align-center-center layout-wrap`}
                   >
-                    <p className="flex-80">Upload Air Schedules Sheet</p>
+                    <p className="flex-80">{t('admin:uploadAirSchedules')}</p>
                     <FileUploader
                       theme={theme}
                       dispatchFn={file => documentDispatch.uploadSchedules(file, 'air')}
                       type="xlsx"
-                      text="Air Schedules .xlsx"
+                      text={t('admin:airSchedulesExcel')}
                     />
                   </div>
                   <div
@@ -222,12 +224,12 @@ class AdminSchedules extends Component {
                       styles.action_section
                     } flex-100 layout-row layout-align-center-center layout-wrap`}
                   >
-                    <p className="flex-80">Upload Train Schedules Sheet</p>
+                    <p className="flex-80">{t('admin:uploadTrainSchedules')}</p>
                     <FileUploader
                       theme={theme}
                       dispatchFn={file => documentDispatch.uploadSchedules(file, 'train')}
                       type="xlsx"
-                      text="Train Schedules .xlsx"
+                      text={t('admin:trainSchedulesExcel')}
                     />
                   </div>
                   <div
@@ -235,12 +237,12 @@ class AdminSchedules extends Component {
                       styles.action_section
                     } flex-100 layout-row layout-align-center-center layout-wrap`}
                   >
-                    <p className="flex-80">Upload Vessel Schedules Sheet</p>
+                    <p className="flex-80">{t('admin:uploadVesselSchedules')}</p>
                     <FileUploader
                       theme={theme}
                       dispatchFn={file => documentDispatch.uploadSchedules(file, 'vessel')}
                       type="xlsx"
-                      text="Vessel Schedules .xlsx"
+                      text={t('admin:vesselSchedulesExcel')}
                     />
                   </div>
                   <div
@@ -248,12 +250,12 @@ class AdminSchedules extends Component {
                       styles.action_section
                     } flex-100 layout-row layout-align-center-center layout-wrap`}
                   >
-                    <p className="flex-80">Upload Trucking Schedules Sheet</p>
+                    <p className="flex-80">{t('admin:uploadTruckingSchedules')}</p>
                     <FileUploader
                       theme={theme}
                       dispatchFn={file => documentDispatch.uploadSchedules(file, 'truck')}
                       type="xlsx"
-                      text="Truck Schedules .xlsx"
+                      text={t('admin:truckSchedulesExcel')}
                     />
                   </div>
                 </div>
@@ -264,7 +266,7 @@ class AdminSchedules extends Component {
               collapsed={!expander.download}
               theme={theme}
               handleCollapser={() => this.toggleExpander('download')}
-              text="Download Data"
+              text={t('admin:downloadData')}
               faClass="fa fa-cloud-download"
               content={(
                 <div>
@@ -273,7 +275,7 @@ class AdminSchedules extends Component {
                       styles.action_section
                     } flex-100 layout-row layout-wrap layout-align-center-center`}
                   >
-                    <p className="flex-100">Download Schedules Sheet</p>
+                    <p className="flex-100">{t('admin:downloadSchedulesSheet')}</p>
                     <DocumentsDownloader theme={theme} target="schedules" />
                   </div>
                 </div>
@@ -284,7 +286,7 @@ class AdminSchedules extends Component {
               collapsed={!expander.new}
               theme={theme}
               handleCollapser={() => this.toggleExpander('new')}
-              text="Create new schedules"
+              text={t('admin:createNewSchedules')}
               faClass="fa fa-plus-circle"
               content={(
                 <div
@@ -341,6 +343,7 @@ class AdminSchedules extends Component {
   }
 }
 AdminSchedules.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   scheduleData: PropTypes.shape({
@@ -385,4 +388,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminSchedules)
+export default withNamespaces('admin')(connect(mapStateToProps, mapDispatchToProps)(AdminSchedules))

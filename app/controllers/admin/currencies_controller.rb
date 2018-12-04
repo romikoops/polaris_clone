@@ -8,12 +8,12 @@ class Admin::CurrenciesController < ApplicationController
   end
 
   def get_currencies_for_base
-    results = get_currency_array(params[:currency])
+    results = get_currency_array(params[:currency], params[:tenant_id])
     response_handler(results)
   end
 
   def refresh_for_base
-    results = refresh_rates_array(params[:currency])
+    results = refresh_rates_array(params[:currency], params[:tenant_id])
     response_handler(results)
   end
 

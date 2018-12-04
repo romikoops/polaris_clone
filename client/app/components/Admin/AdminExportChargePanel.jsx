@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
@@ -19,7 +20,9 @@ export class AdminExportChargePanel extends Component {
   }
   render () {
     // const { expanded } = this.state;
-    const { theme, hub, charge } = this.props
+    const {
+      t, theme, hub, charge
+    } = this.props
     if (!hub || !charge) {
       return ''
     }
@@ -51,6 +54,7 @@ export class AdminExportChargePanel extends Component {
         />)
       }
     })
+
     return (
       <div className={`flex-100 ${styles.charge_card} layout-row layout-wrap`}>
         <div className={`${styles.charge_header} layout-row layout-wrap flex-100`}>
@@ -84,7 +88,7 @@ export class AdminExportChargePanel extends Component {
             }`}
           >
             <div className="flex-100 layout-row layout-align-start-start">
-              <h3 className="flex-none offset-5">Export</h3>
+              <h3 className="flex-none offset-5">{t('admin:export')}</h3>
             </div>
             <div className="flex-100 layout-row layout-align-center-start layout-wrap">
               {exportArr}
@@ -96,6 +100,7 @@ export class AdminExportChargePanel extends Component {
   }
 }
 AdminExportChargePanel.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   target: PropTypes.string.isRequired,
   hub: PropTypes.hub,
@@ -114,4 +119,4 @@ AdminExportChargePanel.defaultProps = {
   charge: null
 }
 
-export default AdminExportChargePanel
+export default withNamespaces('admin')(AdminExportChargePanel)

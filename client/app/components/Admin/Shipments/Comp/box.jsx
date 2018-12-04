@@ -3,7 +3,9 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../../../prop-types'
 import styles from '../../Admin.scss'
+import { concatArrays, uniqueItems, filters } from '../../../../helpers'
 import ShipmentOverviewCard from '../../../ShipmentCard/ShipmentOverviewCard'
+import { LoadingSpinner } from '../../../LoadingSpinner/LoadingSpinner'
 
 export class AdminShipmentsBox extends Component {
   static switchShipment (status, t) {
@@ -34,17 +36,7 @@ export class AdminShipmentsBox extends Component {
 
   constructor (props) {
     super(props)
-
     this.handleClick = this.handleClick.bind(this)
-  }
-
-  seeAll () {
-    const { seeAll, dispatches } = this.props
-    if (seeAll) {
-      seeAll()
-    } else {
-      dispatches.getShipments(true)
-    }
   }
 
   handleClick (shipment) {
@@ -58,20 +50,32 @@ export class AdminShipmentsBox extends Component {
 
   render () {
     const {
+      t,
       theme,
       userView,
       page,
       status,
+      nexuses,
       dispatches,
       nextPage,
       prevPage,
       handleSearchChange,
       numPages,
       shipments,
-      t,
       confirmShipmentData,
       searchText
     } = this.props
+
+    // const countriesOriginIds = shipments.map(shipment => shipment.origin_nexus.country_id)
+    // const countriesDestinationIds = shipments.map(shipment => shipment.destination_nexus.country_id)
+    // const shipmentsCountries = countries.filter(country => (
+    //   concatArrays(countriesOriginIds, countriesDestinationIds).includes(country.id)))
+
+    if (this.props.getShipmentsRequest) {
+      return (
+        <LoadingSpinner size="small" />
+      )
+    }
 
     return (
       <div
@@ -90,7 +94,7 @@ export class AdminShipmentsBox extends Component {
               type="text"
               name="search"
               value={searchText}
-              placeholder="Search Shipments"
+              placeholder={t('admin:searchShipments')}
               onChange={handleSearchChange}
             />
           </div>
@@ -103,9 +107,9 @@ export class AdminShipmentsBox extends Component {
                 styles.sec_subheader
               }`}
             >
-              <p className={` ${styles.sec_subheader_text} flex-none`}>{t('shipment:noShipments')}</p>
+              <p className={` ${styles.sec_subheader_text} flex-none`}>{t('admin:waitingShipments')}</p>
             </div>
-            {AdminShipmentsBox.switchShipment(status, t)}
+            <p className="flex-none">{t('admin:shipmentsAreRequested')}</p>
           </div>
         ) : (
           <ShipmentOverviewCard
@@ -126,7 +130,7 @@ export class AdminShipmentsBox extends Component {
             onClick={parseInt(page, 10) > 1 ? prevPage : null}
           >
             <i className="fa fa-chevron-left" />
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;{t('common:basicBack')}</p>
           </div>
           {}
           <p>{page}</p>
@@ -137,7 +141,7 @@ export class AdminShipmentsBox extends Component {
                     `}
             onClick={parseInt(page, 10) < numPages ? nextPage : null}
           >
-            <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
+            <p>{t('common:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
             <i className="fa fa-chevron-right" />
           </div>
         </div>
@@ -148,6 +152,7 @@ export class AdminShipmentsBox extends Component {
   }
 }
 AdminShipmentsBox.propTypes = {
+  t: PropTypes.func.isRequired,
   shipments: PropTypes.arrayOf(PropTypes.shipment).isRequired,
   handleClick: PropTypes.func,
   dispatches: PropTypes.shape({
@@ -181,4 +186,4 @@ AdminShipmentsBox.defaultProps = {
   searchText: ''
 }
 
-export default withNamespaces('shipment')(AdminShipmentsBox)
+export default withNamespaces(['admin', 'common'])(AdminShipmentsBox)

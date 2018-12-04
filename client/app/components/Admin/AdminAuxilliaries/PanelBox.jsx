@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 // import Formsy from 'formsy-react'
 import styles from '../Admin.scss'
@@ -44,7 +45,9 @@ export class PanelBox extends Component {
           </div>
         </div>
       )
-    } else if (fee.cbm !== undefined && fee.ton !== undefined) {
+    }
+
+    if (fee.cbm !== undefined && fee.ton !== undefined) {
       return (
         <div className="flex-100 layout-row layout-align-start-center">
           <div className="flex-25 layout-row layout-align-start-center input_box layout-wrap">
@@ -79,6 +82,7 @@ export class PanelBox extends Component {
         </div>
       )
     }
+
     return (
       <div className="flex-25 layout-row layout-align-start-center input_box layout-wrap">
         <p className="flex-100 sup">{cells[i][target].table[iw].fees[fk].label}</p>
@@ -91,9 +95,11 @@ export class PanelBox extends Component {
       </div>
     )
   }
+
   render () {
     const {
       // theme,
+      t,
       cells,
       cellSteps,
       handleRateChange,
@@ -126,23 +132,25 @@ export class PanelBox extends Component {
               {ws.city ? (
                 <p className="flex-none sup">{`${ws.city} ${ws.country} ${stepBasis.label}`}</p>
               ) : (
-                <p className="flex-none sup">{`${ws[lowerKey]} - ${ws[upperKey]} ${
-                  stepBasis.label
-                }`}</p>
+                <p className="flex-none sup">
+                  {`${ws[lowerKey]} - ${ws[upperKey]} ${
+                    stepBasis.label
+                  }`}
+                </p>
               )}
             </div>
-            {Object.keys(cells[i][target].table[iw].fees).map(fk =>
-              PanelBox.panelSwitcher(
-                cells[i][target].table[iw].fees[fk],
-                cells,
-                i,
-                iw,
-                target,
-                fk,
-                handleRateChange
-              ))}
+            {Object.keys(cells[i][target].table[iw].fees).map(fk => PanelBox.panelSwitcher(
+              cells[i][target].table[iw].fees[fk],
+              cells,
+              i,
+              iw,
+              target,
+              fk,
+              handleRateChange
+            ))}
           </div>)
         })
+
         return (
           <div
             // eslint-disable-next-line react/no-array-index-key
@@ -157,11 +165,13 @@ export class PanelBox extends Component {
               layout-align-space-between-start"
             >
               {cellLowerKey === 'city' ? (
-                <p className="flex-none">{`${truckingBasis.label}: ${s[target][cellLowerKey]}, ${
-                  s[target][cellUpperKey]
-                }`}</p>
+                <p className="flex-none">
+                  {`${truckingBasis.label}: ${s[target][cellLowerKey]}, ${
+                    s[target][cellUpperKey]
+                  }`}
+                </p>
               ) : (
-                <p className="flex-none">{`${truckingBasis.label} Range ${
+                <p className="flex-none">{`${truckingBasis.label} ${t('admin:range')} ${
                   s[target][cellLowerKey]
                 } - ${s[target][cellUpperKey]}`}</p>
               )}
@@ -177,7 +187,7 @@ export class PanelBox extends Component {
             >
               <div className="flex-25 layout-row layout-wrap layout-align-start-start">
                 <div className="flex-100 layout-row layout-align-start-center">
-                  <p className="flex-none sup">Minimum charge (Flat Rate)</p>
+                  <p className="flex-none sup">{t('admin:minimumCharge')}</p>
                 </div>
                 <div className="flex-100 layout-row layout-align-start-center input_box">
                   <input
@@ -194,11 +204,13 @@ export class PanelBox extends Component {
         )
       })
       : []
+
     return <div className="flex-100 layout-row layout-align-start-start layout-wrap">{panel}</div>
   }
 }
 PanelBox.propTypes = {
   // theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   cells: PropTypes.arrayOf(PropTypes.object),
   cellSteps: PropTypes.arrayOf(PropTypes.object),
   handleRateChange: PropTypes.func.isRequired,
@@ -224,4 +236,4 @@ PanelBox.defaultProps = {
   stepBasis: {},
   truckingBasis: {}
 }
-export default PanelBox
+export default withNamespaces('admin')(PanelBox)

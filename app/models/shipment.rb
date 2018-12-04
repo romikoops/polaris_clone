@@ -134,8 +134,14 @@ class Shipment < ApplicationRecord
   # end
 
   %i(ocean air rail).each do |mot|
-    scope mot, -> { joins(:itinerary).where('itineraries.mode_of_transport = ?', mot) }
+    scope mot, -> { joins(:itinerary).where(Itinerary.arel_table[:mode_of_transport].eq(mot)) }
   end
+
+  scope :modes_of_transport, lambda { |*mots|
+    mots[1..-1].reduce(send(mots.first)) do |result, mot|
+      result.or(send(mot))
+    end
+  }
 
   # Class methods
 
@@ -238,7 +244,7 @@ class Shipment < ApplicationRecord
   end
 
   def cargo_count
-    cargo_units.reduce(0){ |sum, unit| sum + unit.quantity }
+    cargo_units.reduce(0) { |sum, unit| sum + unit.quantity }
   end
 
   def valid_until
@@ -311,12 +317,17 @@ class Shipment < ApplicationRecord
     !!selected_offer.dig('insurance')
   end
 
-  def accept!
+  def confirm!
     update!(status: 'confirmed')
   end
 
   def finish!
     update!(status: 'finished')
+  end
+
+  def request!
+    new_status = user.confirmed? ? 'requested' : 'requested_by_unconfirmed_account'
+    update!(status: new_status)
   end
 
   def decline!

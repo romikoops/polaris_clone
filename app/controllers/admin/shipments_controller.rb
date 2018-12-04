@@ -12,15 +12,15 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   def delta_page_handler
     case params[:target]
     when 'requested'
-      shipment_association = tenant_shipment.requested
+      shipment_association = requested_shipments
     when 'open'
-      shipment_association = tenant_shipment.open
+      shipment_association = open_shipments
     when 'finished'
-      shipment_association = tenant_shipment.finished
+      shipment_association = finished_shipments
     when 'rejected'
-      shipment_association = tenant_shipment.rejected
+      shipment_association = rejected_shipments
     when 'archived'
-      shipment_association = tenant_shipment.archived
+      shipment_association = archived_shipments
     end
     per_page = params.fetch(:per_page, 4).to_f
     shipments = shipment_association.order(booking_placed_at: :desc).paginate(page: params[:page], per_page: per_page)
@@ -186,6 +186,28 @@ class Admin::ShipmentsController < Admin::AdminBaseController
           rejected: params[:rejected_page],
           archived: params[:archived_page]
         },
+        nexuses: {
+          open: {
+            origin_nexuses: Nexus.where(id: tenant_shipments.open.distinct.pluck(:origin_nexus_id)),
+            destination_nexuses: Nexus.where(id: tenant_shipments.open.distinct.pluck(:destination_nexus_id))
+          },
+          requested: {
+            origin_nexuses: Nexus.where(id: tenant_shipments.requested.distinct.pluck(:origin_nexus_id)),
+            destination_nexuses: Nexus.where(id: tenant_shipments.requested.distinct.pluck(:destination_nexus_id))
+          },
+          rejected: {
+            origin_nexuses: Nexus.where(id: tenant_shipments.rejected.distinct.pluck(:origin_nexus_id)),
+            destination_nexuses: Nexus.where(id: tenant_shipments.rejected.distinct.pluck(:destination_nexus_id))
+          },
+          finished: {
+            origin_nexuses: Nexus.where(id: tenant_shipments.finished.distinct.pluck(:origin_nexus_id)),
+            destination_nexuses: Nexus.where(id: tenant_shipments.finished.distinct.pluck(:destination_nexus_id))
+          },
+          archived: {
+            origin_nexuses: Nexus.where(id: tenant_shipments.archived.distinct.pluck(:origin_nexus_id)),
+            destination_nexuses: Nexus.where(id: tenant_shipments.archived.distinct.pluck(:destination_nexus_id))
+          }
+        },
         num_shipment_pages: num_pages
       }
     end
@@ -234,7 +256,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   def shipment_action
     case params[:shipment_action]
     when 'accept'
-      @shipment.accept!
+      @shipment.confirm!
       ShippingTools.shipper_confirmation_email(@shipment.user, @shipment)
       add_message_to_convo(@shipment.user, booking_accepted_message, true)
       response_handler(@shipment.with_address_options_json)
@@ -251,6 +273,9 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       response_handler(@shipment.with_address_options_json)
     when 'finished'
       @shipment.finish!
+      response_handler(@shipment.with_address_options_json)
+    when 'requested'
+      @shipment.request!
       response_handler(@shipment.with_address_options_json)
     else
       raise 'Unknown action!'
@@ -399,41 +424,71 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     @contacts ||= []
   end
 
-  def tenant_shipment
-    @shipment ||= Shipment.where(tenant_id: current_user.tenant_id)
+  def tenant_shipments
+    @tenant_shipments ||= Shipment.where(tenant_id: current_user.tenant_id)
+  end
+
+  def filtered_tenant_shipments
+    @filtered_tenant_shipments ||= begin
+      @filtered_tenant_shipments = tenant_shipments
+
+      if params[:origin_nexus]
+        @filtered_tenant_shipments = @filtered_tenant_shipments.where(origin_nexus_id: params[:origin_nexus]
+                                                              .split(','))
+      end
+
+      if params[:destination_nexus]
+        @filtered_tenant_shipments = @filtered_tenant_shipments.where(destination_nexus_id: params[:destination_nexus]
+                                                              .split(','))
+      end
+
+      if params[:hub_type] && params[:hub_type] != ''
+
+        hub_type_array = params[:hub_type].split(',')
+
+        @filtered_tenant_shipments = @filtered_tenant_shipments.modes_of_transport(*hub_type_array)
+      end
+
+      if params[:clients]
+        @filtered_tenant_shipments = @filtered_tenant_shipments.where(user_id: params[:clients]
+                                                              .split(','))
+      end
+
+      @filtered_tenant_shipments
+    end
   end
 
   def requested_shipments
-    @requested_shipments ||= tenant_shipment.requested
+    @requested_shipments ||= filtered_tenant_shipments.requested
   end
 
   def open_shipments
-    @open_shipments ||= tenant_shipment.open
+    @open_shipments ||= filtered_tenant_shipments.open
   end
 
   def quoted_shipments
-    @quoted_shipments ||= tenant_shipment.quoted
+    @quoted_shipments ||= filtered_tenant_shipments.quoted
   end
 
   def finished_shipments
-    @finished_shipments ||= tenant_shipment.finished
+    @finished_shipments ||= filtered_tenant_shipments.finished
   end
 
   def rejected_shipments
-    @rejected_shipments ||= tenant_shipment.rejected
+    @rejected_shipments ||= filtered_tenant_shipments.rejected
   end
 
   def archived_shipments
-    @archived_shipments ||= tenant_shipment.archived
+    @archived_shipments ||= filtered_tenant_shipments.archived
   end
 
   def documents
     @documents ||= {
-      'requested_shipments' => Document.where(shipment_id: tenant_shipment.requested.select(:id)).group_by(&:doc_type),
-      'open_shipments' => Document.where(shipment_id: tenant_shipment.open.select(:id)).group_by(&:doc_type),
-      'finished_shipments' => Document.where(shipment_id: tenant_shipment.finished.select(:id)).group_by(&:doc_type),
-      'rejected_shipments' => Document.where(shipment_id: tenant_shipment.rejected.select(:id)).group_by(&:doc_type),
-      'archived_shipments' => Document.where(shipment_id: tenant_shipment.archived.select(:id)).group_by(&:doc_type)
+      'requested_shipments' => Document.where(shipment_id: tenant_shipments.requested.select(:id)).group_by(&:doc_type),
+      'open_shipments' => Document.where(shipment_id: tenant_shipments.open.select(:id)).group_by(&:doc_type),
+      'finished_shipments' => Document.where(shipment_id: tenant_shipments.finished.select(:id)).group_by(&:doc_type),
+      'rejected_shipments' => Document.where(shipment_id: tenant_shipments.rejected.select(:id)).group_by(&:doc_type),
+      'archived_shipments' => Document.where(shipment_id: tenant_shipments.archived.select(:id)).group_by(&:doc_type)
     }
   end
 

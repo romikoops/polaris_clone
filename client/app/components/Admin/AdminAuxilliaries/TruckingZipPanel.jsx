@@ -1,10 +1,11 @@
 import React from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 // import styles from '../Admin.scss'
 // import { NamedSelect } from '../../NamedSelect/NamedSelect'
 
 export const TruckingZipPanel = ({
-  cells, rateBasis, handleRateChange, handleMinimumChange, weightSteps, currency, newCell
+  t, cells, rateBasis, handleRateChange, handleMinimumChange, weightSteps, currency, newCell
 }) => cells.map((s, i) => {
   const wsInputs = []
   weightSteps.forEach((ws, iw) => {
@@ -18,6 +19,7 @@ export const TruckingZipPanel = ({
       </div>
     </div>)
   })
+
   return (
     // eslint-disable-next-line react/no-array-index-key
     <div key={`cell_${i}`} className="flex-100 layout-row layout-align-start-center layout-wrap">
@@ -27,7 +29,7 @@ export const TruckingZipPanel = ({
       <div className="flex-100 layout-row layout-align-start-center layout-wrap">
         <div className="flex-25 layout-row layout-wrap layout-align-start-start">
           <div className="flex-100 layout-row layout-align-start-center">
-            <p className="flex-none sup">Minimum charge (Flat Rate)</p>
+            <p className="flex-none sup">{t('admin:minimumCharge')}</p>
           </div>
           <div className="flex-100 layout-row layout-align-start-center input_box">
             <input type="number" value={s.min_value} onChange={handleMinimumChange} name={`${i}-minimum`} />
@@ -40,6 +42,7 @@ export const TruckingZipPanel = ({
 })
 
 TruckingZipPanel.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   cells: PropTypes.arrayOf(PropTypes.object).isRequired,
   weightSteps: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -51,4 +54,4 @@ TruckingZipPanel.propTypes = {
 TruckingZipPanel.defaultProps = {
   theme: {}
 }
-export default TruckingZipPanel
+export default withNamespaces('admin')(TruckingZipPanel)

@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
 import { AdminHubTile } from './Hubs/AdminHubTile'
-import { AdminChargePanel } from './AdminChargePanel'
+import AdminChargePanel from './AdminChargePanel'
 import FileUploader from '../../components/FileUploader/FileUploader'
 import GenericError from '../../components/ErrorHandling/Generic'
 
@@ -24,7 +25,7 @@ export class AdminServiceCharges extends Component {
   }
   render () {
     const {
-      theme, hubs, charges, adminTools
+      t, theme, hubs, charges, adminTools
     } = this.props
     const { selectedHub } = this.state
     let hubList
@@ -84,6 +85,7 @@ export class AdminServiceCharges extends Component {
   }
 }
 AdminServiceCharges.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   charges: PropTypes.arrayOf(PropTypes.charge),
@@ -98,4 +100,4 @@ AdminServiceCharges.defaultProps = {
   charges: []
 }
 
-export default AdminServiceCharges
+export default withNamespaces('admin')(AdminServiceCharges)

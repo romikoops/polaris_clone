@@ -3,11 +3,7 @@ import { push } from 'react-router-redux'
 import { shipmentConstants } from '../constants'
 import { shipmentService } from '../services'
 import { alertActions, userActions, appActions } from './'
-// import { getSubdomain } from '../helpers/subdomain'
 
-// const subdomainKey = getSubdomain()
-// const cookieKey = `${subdomainKey}_user`
-// const userData = JSON.parse(window.localStorage.getItem(cookieKey))
 function newShipment (type, redirect, reused) {
   function request (shipmentData, isReused) {
     return { type: shipmentConstants.NEW_SHIPMENT_REQUEST, shipmentData, isReused }

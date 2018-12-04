@@ -1,21 +1,22 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './AdminHubCard.scss'
 import { gradientBorderGenerator } from '../../helpers'
 import GradientBorder from '../GradientBorder'
 
-function stationType (transportMode) {
+function stationType (transportMode, t) {
   let type
 
   switch (transportMode) {
     case 'ocean':
-      type = 'Port'
+      type = t('admin:port')
       break
     case 'air':
-      type = 'Airport'
+      type = t('admin:airport')
       break
     case 'train':
-      type = 'Station'
+      type = t('admin:station')
       break
     default:
       type = ''
@@ -34,7 +35,7 @@ export class AdminHubCardContent extends Component {
 
   render () {
     const {
-      hub, theme
+      t, hub, theme
     } = this.props
 
     const gradientBorderStyle =
@@ -64,8 +65,10 @@ export class AdminHubCardContent extends Component {
           content={(
             <div className="layout-column flex-100">
               <div className="layout-column layout-padding flex-50 layout-align-center-start">
-                <p>{hub ? hub.address.city : ''}<br />
-                  {hub ? stationType(hub.data.hub_type) : ''}
+                <p>
+                  {hub ? hub.address.city : ''}
+                  <br />
+                  {hub ? stationType(hub.data.hub_type, t) : ''}
                 </p>
               </div>
               <div className="layout-column flex-50">
@@ -80,6 +83,7 @@ export class AdminHubCardContent extends Component {
 }
 
 AdminHubCardContent.propTypes = {
+  t: PropTypes.func.isRequired,
   hub: PropTypes.hub,
   theme: PropTypes.theme
 }
@@ -89,4 +93,4 @@ AdminHubCardContent.defaultProps = {
   theme: null
 }
 
-export default AdminHubCardContent
+export default withNamespaces('admin')(AdminHubCardContent)

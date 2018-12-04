@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './AdminScheduleLine.scss'
 import { moment } from '../../constants'
@@ -20,6 +21,7 @@ export class AdminScheduleLine extends Component {
         icon = <i className="fa fa-ship" />
         break
     }
+
     return icon
   }
 
@@ -27,7 +29,9 @@ export class AdminScheduleLine extends Component {
     return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`
   }
   render () {
-    const { theme, schedule, hubs } = this.props
+    const {
+      t, theme, schedule, hubs
+    } = this.props
     if (!schedule || !schedule.hub_route_key) {
       return ''
     }
@@ -59,6 +63,7 @@ export class AdminScheduleLine extends Component {
                   : 'black',
       backgroundSize: '16px 2px, 100% 2px'
     }
+
     return (
       <div
         key={schedule.id}
@@ -116,7 +121,7 @@ export class AdminScheduleLine extends Component {
                   className={styles.date_title}
                   style={gradientFontStyle}
                 >
-                                    Pick-up Date
+                  {t('shipment:pickUpDay')}
                 </h4>
               </div>
               <div className="flex-100 layout-row">
@@ -137,7 +142,7 @@ export class AdminScheduleLine extends Component {
                   style={gradientFontStyle}
                 >
                   {' '}
-                                    Date of Departure
+                  {t('admin:dateOfDeparture')}
                 </h4>
               </div>
               <div className="flex-100 layout-row">
@@ -158,7 +163,7 @@ export class AdminScheduleLine extends Component {
                   style={gradientFontStyle}
                 >
                   {' '}
-                                    ETA terminal
+                  {t('admin:etaTerminal')}
                 </h4>
               </div>
               <div className="flex-100 layout-row">
@@ -179,6 +184,7 @@ export class AdminScheduleLine extends Component {
   }
 }
 AdminScheduleLine.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   schedule: PropTypes.objectOf(PropTypes.any),
   hubs: PropTypes.arrayOf(PropTypes.hub),
@@ -192,4 +198,4 @@ AdminScheduleLine.defaultProps = {
   pickupDate: null
 }
 
-export default AdminScheduleLine
+export default withNamespaces(['admin', 'shipment'])(AdminScheduleLine)

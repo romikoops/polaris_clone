@@ -1,11 +1,12 @@
 import React from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './index.scss'
 import TextHeading from '../../../TextHeading/TextHeading'
 import { RoundButton } from '../../../RoundButton/RoundButton'
 
-export default function AdminPromptConfirm ({
-  heading, theme, text, confirm, deny
+function AdminPromptConfirm ({
+  heading, theme, text, confirm, deny, t
 }) {
   return (
     <div className={`${styles.confirm_backdrop} flex-none layout-row layout-align-center-center`}>
@@ -29,7 +30,7 @@ export default function AdminPromptConfirm ({
             <RoundButton
               theme={theme}
               size="small"
-              text="Cancel"
+              text={t('common:cancel')}
               handleNext={e => deny(e)}
               iconClass="fa-ban"
             />
@@ -39,7 +40,7 @@ export default function AdminPromptConfirm ({
               theme={theme}
               size="small"
               active
-              text="Yes, I'm sure"
+              text={t('admin:confirm')}
               handleNext={e => confirm(e)}
               iconClass="fa-check"
             />
@@ -50,6 +51,7 @@ export default function AdminPromptConfirm ({
   )
 }
 AdminPromptConfirm.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme.isRequired,
   heading: PropTypes.string,
   text: PropTypes.string,
@@ -61,3 +63,5 @@ AdminPromptConfirm.defaultProps = {
   heading: '',
   text: ''
 }
+
+export default withNamespaces('admin')(AdminPromptConfirm)

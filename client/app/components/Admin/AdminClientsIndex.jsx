@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
@@ -110,7 +111,7 @@ class AdminClientsIndex extends Component {
     })
   }
   render () {
-    const { theme, adminDispatch } = this.props
+    const { t, theme, adminDispatch, tabReset } = this.props
     const {
       expander, searchFilters, searchResults, page, numPages, numPerPage
     } = this.state
@@ -121,7 +122,7 @@ class AdminClientsIndex extends Component {
         <RoundButton
           theme={theme}
           size="small"
-          text="New"
+          text={t('admin:new')}
           active
           handleNext={this.props.toggleNewClient}
           iconClass="fa-plus"
@@ -174,7 +175,7 @@ class AdminClientsIndex extends Component {
           onClick={page > 1 ? () => this.deltaPage(-1) : null}
         >
           <i className="fa fa-chevron-left" />
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;{t('common:basicBack')}</p>
         </div>
         {}
         <p>{page}</p>
@@ -185,7 +186,7 @@ class AdminClientsIndex extends Component {
           `}
           onClick={page < numPages ? () => this.deltaPage(1) : null}
         >
-          <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          <p>{t('common:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
           <i className="fa fa-chevron-right" />
         </div>
       </div>
@@ -200,9 +201,10 @@ class AdminClientsIndex extends Component {
           <Tabs
             wrapperTabs="layout-row flex-25 flex-sm-40 flex-xs-80"
             paddingFixes
+            tabReset={tabReset}
           >
             <Tab
-              tabTitle="Open"
+              tabTitle={t('common:open')}
               theme={theme}
             >
               <div className="flex-100 layout-row layout-align-start-start layout-wrap header_buffer tab_size" style={{ minHeight: '560px' }}>
@@ -211,7 +213,7 @@ class AdminClientsIndex extends Component {
               </div>
             </Tab>
             <Tab
-              tabTitle="Dedicated"
+              tabTitle={t('admin:dedicated')}
               theme={theme}
             >
               <div className="flex-100 layout-row layout-align-start-start layout-wrap header_buffer tab_size">
@@ -224,7 +226,7 @@ class AdminClientsIndex extends Component {
         </div>
         <div className="flex-20 layout-wrap layout-row layout-align-end-end">
           <SideOptionsBox
-            header="Filters"
+            header={t('admin:filters')}
             flexOptions="flex-100"
             content={
               <div>
@@ -236,7 +238,7 @@ class AdminClientsIndex extends Component {
                     type="text"
                     className="flex-100"
                     value={searchFilters.query}
-                    placeholder="Search..."
+                    placeholder={t('admin:search')}
                     onChange={e => this.handleSearchQuery(e)}
                   />
                 </div>
@@ -247,7 +249,7 @@ class AdminClientsIndex extends Component {
                     theme={theme}
                     styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                     handleCollapser={() => this.toggleExpander('companies')}
-                    text="Company"
+                    text={t('user:company')}
                     faClass="fa fa-building"
                     content={typeFilters}
                   />
@@ -256,7 +258,7 @@ class AdminClientsIndex extends Component {
             }
           />
           <SideOptionsBox
-            header="Data manager"
+            header={t('admin:dataManager')}
             flexOptions="flex-100"
             content={
               <div className="flex-100 layout-row layout-wrap layout-align-center-start">
@@ -266,7 +268,7 @@ class AdminClientsIndex extends Component {
                   theme={theme}
                   styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                   handleCollapser={() => this.toggleExpander('new')}
-                  text="Create New Client"
+                  text={t('admin:createNewClient')}
                   faClass="fa fa-plus-circle"
                   content={(
                     <div
@@ -288,6 +290,7 @@ class AdminClientsIndex extends Component {
 }
 
 AdminClientsIndex.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   clients: PropTypes.arrayOf(PropTypes.clients),
   adminDispatch: PropTypes.shape({
@@ -301,4 +304,4 @@ AdminClientsIndex.defaultProps = {
   clients: []
 }
 
-export default AdminClientsIndex
+export default withNamespaces(['admin', 'user', 'common'])(AdminClientsIndex)

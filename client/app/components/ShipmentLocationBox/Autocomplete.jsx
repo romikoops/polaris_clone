@@ -40,17 +40,18 @@ class Autocomplete extends PureComponent {
     this.showResultsTimer = this.showResultsTimer.bind(this)
 
     const { gMaps } = props
-
-    this.addressService = new gMaps.places.AutocompleteService({ types: ['address'] })
+    if (gMaps) {
+      this.addressService = new gMaps.places.AutocompleteService({ types: ['address'] })
+    }
   }
 
   componentWillReceiveProps (nextProps) {
-    if (typeof this.addressService === undefined) {
-      const props = nextProps || this.props
-      this.addressService = new props.gMaps.places.AutocompleteService({ types: ['address'] })
+    if (typeof this.addressService === 'undefined') {
+      const gMaps = nextProps.gMaps || this.props.gMaps
+      this.addressService = new gMaps.places.AutocompleteService({ types: ['address'] })
     }
     if ((this.props.input === nextProps.input) || (this.state.input === nextProps.input)) return
-    this.setState(prevState => (nextProps.input === prevState.input ? {} : { input: nextProps.input, setFromProps: true }))
+    this.setState(() => (nextProps.input === '' ? {} : { input: nextProps.input, setFromProps: true }))
   }
 
   componentWillUnmount () {
@@ -111,7 +112,14 @@ class Autocomplete extends PureComponent {
         }
       }
 
-      return prevState
+      const newTimeout = setTimeout(() => {
+        this.setState({ hideResults: true })
+      }, 5000)
+
+      return {
+        hideResults,
+        resultsTimeout: newTimeout
+      }
     })
   }
 
@@ -145,7 +153,8 @@ class Autocomplete extends PureComponent {
 
   shouldTriggerInputChange (event) {
     const { target } = event
-
+    const { scope } = this.props
+    
     this.setState((prevState) => {
       const { value } = target
       const { searchTimeout, input } = prevState
@@ -155,7 +164,7 @@ class Autocomplete extends PureComponent {
       if (searchTimeout.area) clearTimeout(searchTimeout.area)
       if (value) {
         newTimeout.address = setTimeout(() => this.handleInputChange(value), 750)
-        newTimeout.area = setTimeout(() => this.handleAreaInputChange(value), 750)
+        newTimeout.area = scope.require_full_address ? null : setTimeout(() => this.handleAreaInputChange(value), 750)
       }
 
       return {
@@ -171,6 +180,7 @@ class Autocomplete extends PureComponent {
     if (countries.length > 0) {
       options.componentRestrictions = { country: countries }
     }
+    
     this.addressService.getPlacePredictions(options, (results) => {
       if (results && results.length > 0) {
         const filteredResults = Autocomplete.filterResults(results, {})
@@ -217,12 +227,12 @@ class Autocomplete extends PureComponent {
   }
 
   render () {
-    const { t, hasErrors, theme } = this.props
+    const { t, hasErrors, theme, scope } = this.props
     const {
       addressResults, areaResults, input, highlightIndex, highlightSection, hideResults, queryingLocations
     } = this.state
     const hasAddressResults = addressResults.length > 0
-    const hasAreaResults = areaResults.length > 0
+    const hasAreaResults = !scope.require_full_address && areaResults.length > 0
     const hasResults = hasAddressResults || hasAreaResults
     const numResults = hasAddressResults && hasAreaResults ? 4 : 6
     const highlightStyle = {
@@ -270,7 +280,7 @@ class Autocomplete extends PureComponent {
     return (
       <div className={`auto_origin ccb_carriage flex-100 layout-row layout-align-center-center ${styles.autocomplete_container}`}>
         <div
-          className={`flex-none ${!hideResults && hasResults ? styles.exit_click : styles.hidden}`}
+          className={`flex-none ccb_backdrop ${!hideResults && hasResults ? styles.exit_click : styles.hidden}`}
           onClick={() => {
             this.setState({ hideResults: true, listenerSet: false })
             listenerTools.removeHandler(document, 'keydown', this.handleKeyEvent)

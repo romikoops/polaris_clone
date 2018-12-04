@@ -1,3 +1,4 @@
+import i18next from 'i18next'
 import { authenticationConstants } from '../constants'
 import getSubdomain from '../helpers/subdomain'
 
@@ -48,7 +49,7 @@ export default function (state = initialState, action) {
     case authenticationConstants.LOGIN_FAILURE:
       return {
         ...(action.loginFailure.persistState ? state : {}),
-        error: action.loginFailure.error,
+        error: { message: i18next.t('errors:invalidCredentials') },
         loginAttempt: true,
         loggingIn: false,
         showModal: true
@@ -101,6 +102,15 @@ export default function (state = initialState, action) {
         ...state,
         user: action.user
       }
+    case authenticationConstants.ADMIN_CREATE_SHIPMENT_ATTEMPT: {
+      return {
+        ...state,
+        error: { message: i18next.t('errors:adminCreateShipmentAttempt') },
+        loginAttempt: true,
+        loggingIn: false,
+        showModal: false
+      }
+    }
     default:
       return state
   }

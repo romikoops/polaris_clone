@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { connect } from 'react-redux'
 import Select from 'react-select'
 import { bindActionCreators } from 'redux'
@@ -23,6 +24,7 @@ class AdminScheduleGenerator extends Component {
       .map(x => capitalize(x))
       .join(' ')
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -52,6 +54,7 @@ class AdminScheduleGenerator extends Component {
     this.getStopsForItinerary = this.getStopsForItinerary.bind(this)
     this.toggleWeekdays = this.toggleWeekdays.bind(this)
   }
+
   componentWillMount () {
     if (this.props.itinerary.id) {
       const { itinerary } = this.props
@@ -62,6 +65,7 @@ class AdminScheduleGenerator extends Component {
       })
     }
   }
+
   componentDidMount () {
     const { hubs, adminDispatch, itinerary } = this.props
     adminDispatch.getVehicleTypes(itinerary.id)
@@ -80,9 +84,11 @@ class AdminScheduleGenerator extends Component {
   setMoT (ev) {
     this.setState({ mot: ev })
   }
+
   setVehicleType (ev) {
     this.setState({ vehicleType: ev })
   }
+
   getStopsForItinerary (itineraryId) {
     window
       .fetch(`${getTenantApiUrl()}/admin/itineraries/${itineraryId}/stops`, {
@@ -96,24 +102,29 @@ class AdminScheduleGenerator extends Component {
         })
       })
   }
+
   toggleWeekdays (ord) {
     this.setState(prevState => ({
       weekdays: { ...prevState.weekdays, [ord]: !prevState.weekdays[ord] }
     }))
   }
+
   handleIntervalChange (ev) {
     const { name, value } = ev.target
     const stops = this.state.stopIntervals
     stops[name] = value
     this.setState({ stopIntervals: stops })
   }
+
   handleDayChange (ev) {
     this.setState({ startDate: moment(ev).format('DD/MM/YYYY') })
   }
+
   handleDuration (ev) {
     const { name, value } = ev.target
     this.setState({ [name]: value })
   }
+
   genSchedules () {
     const { adminDispatch } = this.props
     const {
@@ -143,12 +154,15 @@ class AdminScheduleGenerator extends Component {
 
     adminDispatch.autoGenSchedules(req)
   }
+
   handleClosingDateChange (e) {
     const { value } = e.target
     this.setState({ closingDateBuffer: value })
   }
+
   render () {
     const {
+      t,
       theme,
       vehicleTypes,
       itineraries
@@ -231,38 +245,36 @@ class AdminScheduleGenerator extends Component {
     )
     const stopIntervalInputs = stops && stops.length > 0 ? (
 
-      stops.map((s, i) =>
-        (stops[i + 1] ? (
-          <div key={s.id} className="flex-none layout-row layout-align-start-start layout-wrap">
-            <div className="flex-100 layout-row layout-align-start-center">
-              <p className="flex-none">{stops[i].hub.name}</p>
-              <p className="flex-none">-></p>
-              <p className="flex-none">{stops[i + 1].hub.name}</p>
-            </div>
-            <div className="flex-100 layout-row layout-align-start-center input_box_full">
-              <input
-                type="number"
-                min="1"
-                value={stopIntervals[i]}
-                name={i}
-                placeholder="Days"
-                onChange={ev => this.handleIntervalChange(ev)}
-              />
-            </div>
+      stops.map((s, i) => (stops[i + 1] ? (
+        <div key={s.id} className="flex-none layout-row layout-align-start-start layout-wrap">
+          <div className="flex-100 layout-row layout-align-start-center">
+            <p className="flex-none">{stops[i].hub.name}</p>
+            <p className="flex-none">-></p>
+            <p className="flex-none">{stops[i + 1].hub.name}</p>
           </div>
-        ) : (
-          ''
-        )))
+          <div className="flex-100 layout-row layout-align-start-center input_box_full">
+            <input
+              type="number"
+              min="1"
+              value={stopIntervals[i]}
+              name={i}
+              placeholder="Days"
+              onChange={ev => this.handleIntervalChange(ev)}
+            />
+          </div>
+        </div>
+      ) : (
+        ''
+      )))
     ) : (
       <p className="flex-none">
-        There are no stops available on this route. Please add some on the Routes page or upload a
-        new Pricing for the route
+        {t('admin:noStopsAvailable')}
       </p>
     )
     const actionButton =
       stops && stops.length > 0 ? (
         <RoundButton
-          text="Generate"
+          text={t('admin:generate')}
           handleNext={this.genSchedules}
           iconClass="fa-plus-o"
           theme={theme}
@@ -279,7 +291,7 @@ class AdminScheduleGenerator extends Component {
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
           >
             <p className={` ${styles.sec_header_text} flex-none`}>
-              Auto Generate
+              {t('admin:autoGenerate')}
               <i
                 className="fa fa-info-circle"
                 data-for="autoGenTooltip"
@@ -306,7 +318,7 @@ class AdminScheduleGenerator extends Component {
                 styles.sec_subheader
               }`}
             >
-              <p className={` ${styles.sec_subheader_text} flex-none`}>Set Route</p>
+              <p className={` ${styles.sec_subheader_text} flex-none`}>{t('admin:setRoute')}</p>
             </div>
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
               <div className="flex-50 layout-row layout-align-start-center">
@@ -326,7 +338,7 @@ class AdminScheduleGenerator extends Component {
                 styles.sec_subheader
               }`}
             >
-              <p className={` ${styles.sec_subheader_text} flex-none`}>Set Vehicle Type</p>
+              <p className={` ${styles.sec_subheader_text} flex-none`}>{t('admin:setVehicleType')}</p>
             </div>
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
               <div className="flex-50 layout-row layout-align-start-center">{vehicleSelect}</div>
@@ -338,7 +350,7 @@ class AdminScheduleGenerator extends Component {
                 styles.sec_subheader
               }`}
             >
-              <p className={` ${styles.sec_subheader_text} flex-none`}>Set Journey Times</p>
+              <p className={` ${styles.sec_subheader_text} flex-none`}>{t('admin:setJourneyTimes')}</p>
             </div>
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
               {stopIntervalInputs}
@@ -351,7 +363,7 @@ class AdminScheduleGenerator extends Component {
               }`}
             >
               <p className={` ${styles.sec_subheader_text} flex-none`}>
-                Set Effective Period and Duration
+                {t('admin:setPeriodDuration')}
               </p>
             </div>
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
@@ -362,7 +374,7 @@ class AdminScheduleGenerator extends Component {
               >
                 <DayPickerInput
                   name="startdate"
-                  placeholder="Start Date"
+                  placeholder={t('admin:startDate')}
                   datePickerProps={{ format: 'DD/MM/YYYY' }}
                   value={startDate}
                   onDayChange={this.handleDayChange}
@@ -376,7 +388,7 @@ class AdminScheduleGenerator extends Component {
               >
                 <DayPickerInput
                   name="enddate"
-                  placeholder="End Date"
+                  placeholder={t('admin:endDate')}
                   datePickerProps={{ format: 'DD/MM/YYYY' }}
                   value={endDate}
                   onDayChange={this.handleDayChange}
@@ -392,7 +404,13 @@ class AdminScheduleGenerator extends Component {
               }`}
             >
               <p className={` ${styles.sec_subheader_text} flex-none`}>
-                Set Closing Date <i>(days before departure)</i>
+                {t('admin:setClosingDate')}
+                {' '}
+                <i>
+(
+                  {t('admin:daysBeforeDeparture')}
+)
+                </i>
               </p>
             </div>
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
@@ -403,7 +421,7 @@ class AdminScheduleGenerator extends Component {
                     min="1"
                     value={closingDateBuffer}
                     name="closingDatebuffer"
-                    placeholder="Days"
+                    placeholder={t('common:capitalDays')}
                     onChange={ev => this.handleClosingDateChange(ev)}
                   />
                 </div>
@@ -416,7 +434,7 @@ class AdminScheduleGenerator extends Component {
                 styles.sec_subheader
               }`}
             >
-              <p className={` ${styles.sec_subheader_text} flex-none`}>Set Departure Days</p>
+              <p className={` ${styles.sec_subheader_text} flex-none`}>{t('admin:setDepartureDays')}</p>
             </div>
 
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
@@ -440,6 +458,7 @@ class AdminScheduleGenerator extends Component {
   }
 }
 AdminScheduleGenerator.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   adminDispatch: PropTypes.shape({
@@ -475,4 +494,4 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminScheduleGenerator)
+export default withNamespaces(['admin', 'common'])(connect(mapStateToProps, mapDispatchToProps)(AdminScheduleGenerator))

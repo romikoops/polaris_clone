@@ -46,7 +46,7 @@ function getSchedulesForResult (args) {
   const url = `${getTenantApiUrl()}/shipments/${args.shipmentId}/view_more_schedules`
   const params = { trip_id: args.tripId, delta: args.delta }
 
-  return fetch(`${url}?${toQueryString(params)}`, requestOptions).then(handleResponse)
+  return fetch(`${url}?${toQueryString(params, false)}`, requestOptions).then(handleResponse)
 }
 
 function newShipment (details) {

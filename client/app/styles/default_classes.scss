@@ -482,13 +482,23 @@
     padding-top: $spacing-sm;
   }
 
-  @media (max-height: 620px) {
+  @media (max-height: 599px) {
+    .hide_h_xxs {
+      display: none
+    }
+  }
+  @media (min-height: 600px) and (max-height: 849px) {
     .hide_h_xs {
       display: none
     }
   }
-  @media (min-height: 620px) {
-    .show_h_xs {
+  @media (min-height: 600px) {
+    .hide_h_gt_xxs {
+      display: none
+    }
+  }
+  @media (min-height: 850px) {
+    .hide_h_gt_xs {
       display: none
     }
   }

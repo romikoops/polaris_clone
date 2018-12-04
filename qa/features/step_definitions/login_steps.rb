@@ -11,6 +11,13 @@ end
 When('I click the link to log in') do
   find('a', text: 'Log In / Register').click
 end
+When('I accept the cookies if the bar is there') do
+  # button = find('button', class: 'S2dJZ4GCoTCWo4F7HGPQK')
+  if page.has_css?('#ccb_accept_cookies', wait: 20)
+    find('#ccb_accept_cookies', visible: false).click()
+  end
+  
+end
 
 Then('I expect to see the log in modal') do
   expect(page).to have_button('Sign In')

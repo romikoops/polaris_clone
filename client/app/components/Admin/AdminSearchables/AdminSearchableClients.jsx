@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import Fuse from 'fuse.js'
 import PropTypes from '../../../prop-types'
@@ -92,6 +93,7 @@ export class AdminSearchableClients extends Component {
   }
   render () {
     const {
+      t,
       theme,
       title,
       placeholder,
@@ -140,7 +142,7 @@ export class AdminSearchableClients extends Component {
               <input
                 type="text"
                 name="search"
-                placeholder={placeholder || 'Search clients'}
+                placeholder={placeholder || t('admin:searchClients')}
                 onChange={this.handleSearchChange}
               />
             </div> : '' }
@@ -157,7 +159,7 @@ export class AdminSearchableClients extends Component {
             onClick={parseInt(page, 10) > 1 ? this.prevPage : null}
           >
             <i className="fa fa-chevron-left" />
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;{t('common:basicBack')}</p>
           </div>
           {}
           <p>{page} / {pages} </p>
@@ -168,7 +170,7 @@ export class AdminSearchableClients extends Component {
             `}
             onClick={parseInt(page, 10) < pages ? this.nextPage : null}
           >
-            <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
+            <p>{t('admin:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
             <i className="fa fa-chevron-right" />
           </div>
         </div>
@@ -177,6 +179,7 @@ export class AdminSearchableClients extends Component {
   }
 }
 AdminSearchableClients.propTypes = {
+  t: PropTypes.func.isRequired,
   clients: PropTypes.arrayOf(PropTypes.client).isRequired,
   handleClick: PropTypes.func,
   adminDispatch: PropTypes.shape({
@@ -204,4 +207,4 @@ AdminSearchableClients.defaultProps = {
   title: ''
 }
 
-export default AdminSearchableClients
+export default withNamespaces(['admin', 'common'])(AdminSearchableClients)

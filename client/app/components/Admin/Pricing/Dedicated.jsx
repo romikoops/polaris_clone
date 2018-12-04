@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import '../../../styles/day-picker-custom.scss'
 import styles from '../Admin.scss'
@@ -396,7 +397,7 @@ export class AdminPricingDedicated extends Component {
 
   render () {
     const {
-      theme, clients, backBtn, initialEdit
+      t, theme, clients, backBtn, initialEdit
     } = this.props
 
     const {
@@ -473,7 +474,7 @@ export class AdminPricingDedicated extends Component {
           <span className="hover_text">{'< Back'}</span>
         </div>
         <div className="flex-100 layout-row">
-          <h2>Define dedicated charges</h2>
+          <h2>{t('admin:defineCharges')}</h2>
         </div>
         <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles2.edit_wrapper}`}>
           <div className={`flex-100 layout-row ${styles.cargo_class_row}`}>
@@ -489,7 +490,7 @@ export class AdminPricingDedicated extends Component {
               inverse
               theme={theme}
               handleNext={() => this.assignUsers()}
-              text="Next >"
+              text={`${t('common:next')} >`}
               size="small"
               active
             />
@@ -549,7 +550,7 @@ export class AdminPricingDedicated extends Component {
             <input
               type="text"
               name="search"
-              placeholder="Search clients"
+              placeholder={t('admin:searchClients"')}
               onChange={this.handleSearchChange}
             />
           </div>
@@ -561,7 +562,7 @@ export class AdminPricingDedicated extends Component {
           <RoundButton
             theme={theme}
             handleNext={() => this.savePricings()}
-            text="Save Pricings"
+            text={t('admin:savePricings')}
             size="small"
             active
           />
@@ -577,6 +578,7 @@ export class AdminPricingDedicated extends Component {
   }
 }
 AdminPricingDedicated.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   charges: PropTypes.arrayOf(PropTypes.any),
@@ -592,4 +594,4 @@ AdminPricingDedicated.defaultProps = {
   initialEdit: false
 }
 
-export default AdminPricingDedicated
+export default withNamespaces(['admin', 'common'])(AdminPricingDedicated)

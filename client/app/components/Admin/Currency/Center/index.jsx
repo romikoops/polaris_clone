@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Toggle from 'react-toggle'
@@ -38,19 +39,21 @@ const CurrencyViewTile = ({
           />
         </div>
         { results[currency.key]
-          ? (<div
-            className="flex-100 layout-row layout-align-space-around-center layout-wrap"
-          >
-            <p className="flex-90 margin_5 center">
-              {`${baseCurrency.key} ${calculator[currency.key].toFixed(2)}`}
-            </p>
-            <p className="flex-90 no_m center">
+          ? (
+            <div
+              className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+            >
+              <p className="flex-90 margin_5 center">
+                {`${baseCurrency.key} ${calculator[currency.key].toFixed(2)}`}
+              </p>
+              <p className="flex-90 no_m center">
                      =
-            </p>
-            <p className="flex-90 margin_5 center">
-              {`${currency.key} ${results[currency.key].toFixed(2)}`}
-            </p>
-          </div>)
+              </p>
+              <p className="flex-90 margin_5 center">
+                {`${currency.key} ${results[currency.key].toFixed(2)}`}
+              </p>
+            </div>
+          )
           : ''}
       </div>
 
@@ -123,6 +126,7 @@ class AdminCurrencyCenter extends Component {
       searchString: ''
     }
   }
+
   componentWillMount () {
     if (this.props.currencies.length === 0) {
       this.props.appDispatch.fetchCurrenciesForBase('USD')
@@ -133,6 +137,7 @@ class AdminCurrencyCenter extends Component {
     }
     this.props.setCurrentUrl('/admin/currencies')
   }
+
   componentWillReceiveProps (nextProps) {
     if (!this.state.currentBase.label && nextProps.currencies.length > 0) {
       const baseCurrency = nextProps.currencies.filter(currency => currency.rate === 1)[0]
@@ -145,6 +150,7 @@ class AdminCurrencyCenter extends Component {
       this.setDefaultValues()
     }
   }
+
   setValue (e, currency) {
     const { value } = e.target
     this.setState({
@@ -154,6 +160,7 @@ class AdminCurrencyCenter extends Component {
       }
     })
   }
+
   setDefaultValues () {
     const { currencies } = this.props
     const newValues = {}
@@ -168,6 +175,7 @@ class AdminCurrencyCenter extends Component {
     const { currentBase } = this.state
     appDispatch.refreshRates(currentBase.value)
   }
+
   convertValue (e, currency) {
     const { value } = e.target
     const convertedValue = value * currency.rate
@@ -189,16 +197,19 @@ class AdminCurrencyCenter extends Component {
       appDispatch.toggleTenantCurrencyMode()
     })
   }
+
   handleBaseChange (selection) {
     const { appDispatch } = this.props
     this.setState({ currentBase: selection }, () => {
       appDispatch.fetchCurrenciesForBase(selection.value)
     })
   }
+
   handleSearch (event) {
     const { value } = event.target
     this.setState({ searchString: value })
   }
+
   saveChanges () {
     const { appDispatch, currencies } = this.props
     const { newValues } = this.state
@@ -206,12 +217,13 @@ class AdminCurrencyCenter extends Component {
     appDispatch.setTenantCurrencyRates(baseCurrency, newValues)
     this.toggleEdit()
   }
+
   toggleEdit () {
     this.setState(prevState => ({ editBool: !prevState.editBool }))
   }
 
   render () {
-    const { currencies, tenant } = this.props
+    const { t, currencies, tenant } = this.props
     const { theme } = tenant
     const {
       currentBase, calculator, results, rateBool, rates, newValues, editBool, searchString
@@ -242,56 +254,68 @@ class AdminCurrencyCenter extends Component {
       .filter(currency => currency !== baseCurrency)
       .filter(currency => currency.key.includes(searchString.toUpperCase()))
       .map(currency => (editBool
-        ? <CurrencySetTile
-          currency={currency}
-          setValue={(e, curr) => this.setValue(e, curr)}
-          saveChanges={e => this.saveChanges(e)}
-          theme={theme}
-          newValues={newValues}
-        />
-        : <CurrencyViewTile
-          currency={currency}
-          convertValue={(e, curr) => this.convertValue(e, curr)}
-          results={results}
-          baseCurrency={baseCurrency}
-          calculator={calculator}
-          theme={theme}
-        />))
+        ? (
+          <CurrencySetTile
+            currency={currency}
+            setValue={(e, curr) => this.setValue(e, curr)}
+            saveChanges={e => this.saveChanges(e)}
+            theme={theme}
+            newValues={newValues}
+          />
+        )
+        : (
+          <CurrencyViewTile
+            currency={currency}
+            convertValue={(e, curr) => this.convertValue(e, curr)}
+            results={results}
+            baseCurrency={baseCurrency}
+            calculator={calculator}
+            theme={theme}
+          />
+        )))
     const editorButtons = editBool
-      ? (<div className="flex-100 layout-row layout-wrap layout-align-center-center" style={{ marginTop: '10px' }}>
-        <SquareButton
-          className="flex-90"
-          handleNext={() => this.saveChanges()}
-          theme={theme}
-          size="small"
-          text="Save Rates"
-        />
-        <SquareButton
-          className="flex-90"
-          handleNext={() => this.toggleEdit()}
-          theme={theme}
-          size="small"
-          text="Cancel Edit"
-        />
-      </div>)
-      : (<div className="flex-100 layout-row layout-align-center-center" style={{ marginTop: '10px' }}>
-        <SquareButton
-          className="flex-90"
-          handleNext={() => this.toggleEdit()}
-          theme={theme}
-          size="small"
-          text="Edit Rates"
-        />  </div>)
+      ? (
+        <div className="flex-100 layout-row layout-wrap layout-align-center-center" style={{ marginTop: '10px' }}>
+          <SquareButton
+            className="flex-90"
+            handleNext={() => this.saveChanges()}
+            theme={theme}
+            size="small"
+            text={t('admin:saveRates')}
+          />
+          <SquareButton
+            className="flex-90"
+            handleNext={() => this.toggleEdit()}
+            theme={theme}
+            size="small"
+            text={t('admin:cancelEdit')}
+          />
+        </div>
+      )
+      : (
+        <div className="flex-100 layout-row layout-align-center-center" style={{ marginTop: '10px' }}>
+          <SquareButton
+            className="flex-90"
+            handleNext={() => this.toggleEdit()}
+            theme={theme}
+            size="small"
+            text={t('admin:editRates')}
+          />
+          {' '}
+        </div>
+      )
 
-    const refreshButton = (<div className="flex-100 layout-row layout-align-center-center" style={{ marginTop: '10px' }}>
-      <SquareButton
-        className="flex-90"
-        handleNext={() => this.refreshRates()}
-        theme={theme}
-        size="small"
-        text="Refresh Rates"
-      />
-    </div>)
+    const refreshButton = (
+      <div className="flex-100 layout-row layout-align-center-center" style={{ marginTop: '10px' }}>
+        <SquareButton
+          className="flex-90"
+          handleNext={() => this.refreshRates()}
+          theme={theme}
+          size="small"
+          text={t('admin:refreshRates')}
+        />
+      </div>
+    )
 
     return (
       <GenericError theme={theme}>
@@ -362,6 +386,7 @@ class AdminCurrencyCenter extends Component {
 }
 
 AdminCurrencyCenter.propTypes = {
+  t: PropTypes.func.isRequired,
   tenant: PropTypes.tenant,
   setCurrentUrl: PropTypes.func.isRequired,
   currencies: PropTypes.arrayOf(PropTypes.any),
@@ -389,4 +414,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminCurrencyCenter)
+export default withNamespaces('admin')(connect(mapStateToProps, mapDispatchToProps)(AdminCurrencyCenter))

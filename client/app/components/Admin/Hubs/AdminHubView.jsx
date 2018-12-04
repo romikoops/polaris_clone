@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
 import { AdminHubTile } from '../'
 import styles from '../Admin.scss'
 import { adminClicked as clickTool } from '../../../constants'
-import { AdminHubFees } from './Fees'
+import AdminHubFees from './Fees'
 import AdminPromptConfirm from '../Prompt/Confirm'
 import hubStyles from './index.scss'
 import '../../../styles/react-toggle.scss'
@@ -19,10 +20,10 @@ import {
 import MandatoryChargeBox from './MandatoryChargeBox'
 import GreyBox from '../../GreyBox/GreyBox'
 import ItineraryRow from '../Itineraries/ItineraryRow'
-import { AdminHubEdit } from './AdminHubEdit'
+import AdminHubEdit from './AdminHubEdit'
 import { SimpleMap as Map } from '../../Maps/SimpleMap'
 import GmapsWrapper from '../../../hocs/GmapsWrapper'
-import GradientBorder from '../../GradientBorder';
+import GradientBorder from '../../GradientBorder'
 
 export class AdminHubView extends Component {
   constructor (props) {
@@ -172,7 +173,7 @@ export class AdminHubView extends Component {
 
   render () {
     const {
-      theme, hubData, hubHash, adminActions
+      theme, hubData, hubHash, adminActions, t
     } = this.props
     const {
       currentFeeLoadType,
@@ -214,8 +215,8 @@ export class AdminHubView extends Component {
     const confimPrompt = confirm ? (
       <AdminPromptConfirm
         theme={theme}
-        heading="Are you sure?"
-        text={`This will delete the hub ${hub.name} and all related data`}
+        heading={t('common:areYouSure')}
+        text={t('admin:deleteHub', { name: hub.name })}
         confirm={() => this.deleteHub(hub.id)}
         deny={() => this.closeConfirm()}
       />
@@ -310,7 +311,7 @@ export class AdminHubView extends Component {
         >
           {/* style={page === 1 ? { display: 'none' } : {}} */}
           <i className="fa fa-chevron-left" />
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;{t('common:basicBack')}</p>
         </div>
         {}
         <p>{page}</p>
@@ -321,7 +322,7 @@ export class AdminHubView extends Component {
               `}
           onClick={page < numPages ? () => this.deltaPage(1) : null}
         >
-          <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          <p>{t('common:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
           <i className="fa fa-chevron-right" />
         </div>
       </div>
@@ -340,7 +341,7 @@ export class AdminHubView extends Component {
           >
             <div className={`flex layout-row layout-align-start-center ${hubStyles.header_bar_grey}`}>
               <p className={`flex-none ${hubStyles.header_bar_grey_text}`}>
-                Hub
+                {t('admin:hub')}
               </p>
             </div>
             {hub.hub_status === 'active' ? deactivate : activate}
@@ -384,20 +385,20 @@ export class AdminHubView extends Component {
                 <div className="flex layout-align-space-around-start">
                   <div className="flex-none layout-row layout-wrap ">
                     <p className={`flex-100  ${hubStyles.address_part_1}`}>{addressString1}<br />
-                    <strong>{addressString2}</strong>
+                      <strong>{addressString2}</strong>
                     </p>
                   </div>
                 </div>
               </div>
               <div className={`flex-45 layout-row ${hubStyles.lat_lng_box}`}>
                 <div className="flex-50 layout-column layout-align-center-center">
-                  <p className={` ${hubStyles.lat_lng}`}>{address.latitude}</p>
-                  <p className={` ${hubStyles.lat_lng}`}>Latitude</p>
+                  <p className={` ${hubStyles.lat_lng}`}>{location.latitude}</p>
+                  <p className={` ${hubStyles.lat_lng}`}>{t('admin:latitude')}</p>
                 </div>
                 <div className={`flex-none ${hubStyles.lat_lng_divider}`} />
                 <div className="flex-50 layout-column layout-align-center-center">
-                  <p className={` ${hubStyles.lat_lng}`}>{address.longitude}</p>
-                  <p className={` ${hubStyles.lat_lng}`}>Longitude</p>
+                  <p className={` ${hubStyles.lat_lng}`}>{location.longitude}</p>
+                  <p className={` ${hubStyles.lat_lng}`}>{t('admin:longitude')}</p>
                 </div>
               </div>
             </div>
@@ -435,7 +436,7 @@ export class AdminHubView extends Component {
               <GreyBox
                 wrapperClassName="layout-row flex-100 layout-align-start-start"
                 contentClassName="layout-row flex-100 layout-wrap"
-                title="Mandatory Charges"
+                title={t('admin:mandatoryCharges')}
                 content={mandatoryChargeBox}
               />
             </div>
@@ -444,11 +445,11 @@ export class AdminHubView extends Component {
               <GreyBox
                 wrapperClassName="layout-row flex-100 layout-align-center-stretch"
                 contentClassName="layout-row flex-100 layout-wrap"
-                title="Itineraries"
-                content={routes.length === 0 ? 
-                  (<div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                    No itineraries yet
-                  </div>) 
+                title={t('admin:itineraries')}
+                content={routes.length === 0
+                  ? (<div className="flex-100 layout-row layout-align-center-center layout-wrap">
+                    {t('admin:noItineraries')}
+                  </div>)
                   : itinerariesBox}
               />
             </div>
@@ -461,6 +462,7 @@ export class AdminHubView extends Component {
   }
 }
 AdminHubView.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   hubHash: PropTypes.objectOf(PropTypes.hub),
   adminActions: PropTypes.shape({
@@ -487,4 +489,4 @@ AdminHubView.defaultProps = {
   hubHash: {}
 }
 
-export default AdminHubView
+export default withNamespaces(['admin', 'common'])(AdminHubView)

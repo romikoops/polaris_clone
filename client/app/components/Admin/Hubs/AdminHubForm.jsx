@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import Select from 'react-select'
 import styled from 'styled-components'
 import PropTypes from '../../../prop-types'
@@ -26,6 +27,7 @@ export class AdminHubForm extends Component {
     this.handleTruckingType = this.handleTruckingType.bind(this)
     this.handleHubType = this.handleHubType.bind(this)
   }
+
   handlePlaceChange (place) {
     const tmpAddress = {
       number: '',
@@ -70,6 +72,7 @@ export class AdminHubForm extends Component {
       autocomplete: { ...this.state.autocomplete, address: true }
     })
   }
+
   handleAddressChange (event) {
     const eventKeys = event.target.name.split('-')
     const key1 = eventKeys[0]
@@ -84,12 +87,14 @@ export class AdminHubForm extends Component {
     })
     // console.log(this.state[key1]);
   }
+
   resetAuto () {
     // this.state.autoListener[target].clearListeners();
     this.setState({
       autocomplete: { ...this.state.autocomplete, address: false }
     })
   }
+
   handleTruckingType (ev) {
     this.setState({
       hub: {
@@ -98,6 +103,7 @@ export class AdminHubForm extends Component {
       }
     })
   }
+
   handleHubType (ev) {
     const { hub } = this.state
     let newName
@@ -115,6 +121,7 @@ export class AdminHubForm extends Component {
       }
     })
   }
+
   saveNewHub () {
     const { hub, address } = this.state
     const preppedLocation = {}
@@ -138,13 +145,13 @@ export class AdminHubForm extends Component {
   }
 
   render () {
-    const { theme } = this.props
+    const { theme, t } = this.props
     const { hub, address } = this.state
     const hubTypes = [
-      { value: 'ocean', label: 'Port' },
-      { value: 'air', label: 'Airport' },
-      { value: 'rail', label: 'Railyard' },
-      { value: 'trucking', label: 'Trucking Depot' }
+      { value: 'ocean', label: t('admin:port') },
+      { value: 'air', label: t('admin:airport') },
+      { value: 'rail', label: t('admin:railyard') },
+      { value: 'trucking', label: t('admin:truckingDepot') }
     ]
 
     const StyledSelect = styled(Select)`
@@ -179,12 +186,12 @@ export class AdminHubForm extends Component {
         <div className="flex-100 layout-row layout-wrap layout-align-start-center">
           <div className="flex-5" />
           <h2 className="flex-none clip letter_3 margin_5" style={textStyle}>
-              Add a New Hub
+            {t('admin:addNewHub')}
           </h2>
         </div>
         <div className={`flex-100 layout-row layout-align-start-center layout-wrap ${styles.map_padding}`}>
           <div className="flex-100 layout-row layout-align-start-center margin_5">
-            <p className="flex-none offset-5">1: Find the Hub (or nearest location) on the map</p>
+            <p className="flex-none offset-5">{t('admin:findHubOrLocation')}</p>
           </div>
           <GmapsWrapper
             theme={theme}
@@ -198,7 +205,7 @@ export class AdminHubForm extends Component {
           }`}
         >
           <div className="flex-50 layout-row layout-wrap layout-align-start-start height_100">
-            <p className="flex-100">2: Ensure the name and hub type is correct</p>
+            <p className="flex-100">{t('admin:ensureNameHub')}</p>
             <div className="flex-80 layout-row layout-align-center-center input_box_full">
               <input
                 name="hub-name"
@@ -206,12 +213,12 @@ export class AdminHubForm extends Component {
                 type="string"
                 onChange={this.handleAddressChange}
                 value={hub.name}
-                placeholder="Name"
+                placeholder={t('admin:name')}
               />
             </div>
             <div className="flex-80 layout-row layout-align-center-center">
               <StyledSelect
-                placeholder="Hub Type"
+                placeholder={t('admin:hubType')}
                 className={styles.select}
                 name="hub-type"
                 value={hub.hubType}
@@ -221,7 +228,7 @@ export class AdminHubForm extends Component {
             </div>
           </div>
           <div className="flex-50 layout-row layout-wrap layout-align-end-space-around">
-            <p className="flex-100">3: Complete the address fields as needed</p>
+            <p className="flex-100">{t('admin:fillAddress')}</p>
             <div className="flex-100 layout-row layout-align-space-around-center">
               <div className="flex-20 layout-row layout-align-center-center input_box_full">
                 <input
@@ -231,7 +238,7 @@ export class AdminHubForm extends Component {
                   type="string"
                   onChange={this.handleAddressChange}
                   value={address.street_number}
-                  placeholder="Number"
+                  placeholder={t('user:number')}
                 />
               </div>
               <div className="flex-75 layout-row layout-align-center-center input_box_full">
@@ -241,7 +248,7 @@ export class AdminHubForm extends Component {
                   type="string"
                   onChange={this.handleAddressChange}
                   value={address.street}
-                  placeholder="Street"
+                  placeholder={t('user:street')}
                 />
               </div>
             </div>
@@ -253,7 +260,7 @@ export class AdminHubForm extends Component {
                   type="string"
                   onChange={this.handleAddressChange}
                   value={address.zipCode}
-                  placeholder="Zip Code"
+                  placeholder={t('user:zipCode')}
                 />
               </div>
               <div className="flex-65 layout-row layout-align-center-center input_box_full">
@@ -263,7 +270,7 @@ export class AdminHubForm extends Component {
                   type="string"
                   onChange={this.handleAddressChange}
                   value={address.city}
-                  placeholder="City"
+                  placeholder={t('user:city')}
                 />
               </div>
             </div>
@@ -276,7 +283,7 @@ export class AdminHubForm extends Component {
                   type="string"
                   onChange={this.handleAddressChange}
                   value={address.country}
-                  placeholder="Country"
+                  placeholder={t('user:country')}
                 />
               </div>
             </div>
@@ -289,7 +296,7 @@ export class AdminHubForm extends Component {
             <RoundButton
               theme={theme}
               size="small"
-              text="Clear"
+              text={t('common:clear')}
               handleNext={() => this.resetAuto('address')}
               iconClass="fa-times"
             />
@@ -298,7 +305,7 @@ export class AdminHubForm extends Component {
             <RoundButton
               theme={theme}
               size="small"
-              text="Save Hub"
+              text={t('admin:saveHub')}
               active
               handleNext={this.saveNewHub}
               iconClass="fa-floppy"
@@ -313,6 +320,7 @@ export class AdminHubForm extends Component {
 }
 
 AdminHubForm.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   saveHub: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired
@@ -322,4 +330,4 @@ AdminHubForm.defaultProps = {
   theme: null
 }
 
-export default AdminHubForm
+export default withNamespaces(['admin', 'user', 'common'])(AdminHubForm)

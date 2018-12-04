@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
 // import { AdminHubTile } from '../';
@@ -19,7 +20,7 @@ export class AdminWizardServiceCharges extends Component {
     this.props.adminTools.goTo('/admin/wizard/pricings')
   }
   render () {
-    const { theme, adminTools } = this.props
+    const { theme, adminTools, t } = this.props
     const scUrl = '/admin/hubs/process_csv'
     const textStyle = {
       background:
@@ -32,7 +33,7 @@ export class AdminWizardServiceCharges extends Component {
         <RoundButton
           theme={theme}
           size="small"
-          text="Back"
+          text={t('common:basicBack')}
           handleNext={AdminWizardServiceCharges.back}
           iconClass="fa-chevron-left"
         />
@@ -44,7 +45,7 @@ export class AdminWizardServiceCharges extends Component {
           theme={theme}
           size="small"
           active
-          text="Next"
+          text={t('common:next')}
           handleNext={this.nextStep}
           iconClass="fa-chevron-right"
         />
@@ -56,13 +57,13 @@ export class AdminWizardServiceCharges extends Component {
         <div className="flex-100 layout-row layout-wrap layout-align-start-start">
           <div className={`flex-100 layout-row layout-align-start-center ${styles.sec_title}`}>
             <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
-              Service Charges
+              {t('admin:serviceCharges')}
             </p>
           </div>
           <div
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}
           >
-            <p className="flex-none">Upload Service Charge Sheet</p>
+            <p className="flex-none">{t('admin:uploadService')}</p>
             <FileUploader
               theme={theme}
               url={scUrl}
@@ -87,6 +88,7 @@ export class AdminWizardServiceCharges extends Component {
 }
 AdminWizardServiceCharges.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   adminTools: PropTypes.shape({
     goTo: PropTypes.func
   }).isRequired
@@ -96,4 +98,4 @@ AdminWizardServiceCharges.defaultProps = {
   theme: null
 }
 
-export default AdminWizardServiceCharges
+export default withNamespaces(['common', 'admin'])(AdminWizardServiceCharges)

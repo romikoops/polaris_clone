@@ -1,10 +1,13 @@
 import React from 'react'
+import { withNamespaces } from 'react-i18next'
 import styles from '../Card.scss'
 import PropTypes from '../../../../prop-types'
 import { gradientCSSGenerator } from '../../../../helpers'
 
 function CardTitle (props) {
-  const { titles, faIcon, theme } = props
+  const {
+    titles, faIcon, theme, t
+  } = props
 
   const colorTheme =
     theme && theme.colors
@@ -24,7 +27,7 @@ function CardTitle (props) {
           <i className={`fa fa-${faIcon}`} style={setIconColor} />
           <div>
             <h5>{titles}</h5>
-            <p>Routes</p>
+            <p>{t('account:routes')}</p>
           </div>
         </div>
       </div>
@@ -35,7 +38,8 @@ function CardTitle (props) {
 CardTitle.propTypes = {
   titles: PropTypes.string.isRequired,
   faIcon: PropTypes.string.isRequired,
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme.isRequired
 }
 CardTitle.defaultProps = {}
-export default CardTitle
+export default withNamespaces('account')(CardTitle)

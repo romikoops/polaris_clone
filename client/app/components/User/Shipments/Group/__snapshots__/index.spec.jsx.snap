@@ -66,6 +66,7 @@ exports[`props.shipment is truthy 1`] = `
           },
         ]
       }
+      t={[Function]}
       theme={
         Object {
           "colors": Object {

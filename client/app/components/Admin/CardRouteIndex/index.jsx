@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
 import styles from './Card.scss'
@@ -11,7 +12,7 @@ import {
 import PricingSearchBar from './SubComponents/PricingSearchBar'
 import { filters } from '../../../helpers'
 
-export default class CardRoutesIndex extends Component {
+class CardRoutesIndex extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -63,7 +64,9 @@ export default class CardRoutesIndex extends Component {
   }
   generateCards (mot, limit) {
     const { page, numPerPage } = this.state
-    const { itineraries, hubs, theme } = this.props
+    const {
+      itineraries, hubs, theme, t
+    } = this.props
     let itinerariesArr = []
     const sliceStartIndex = (page - 1) * numPerPage
     const sliceEndIndex = (page * numPerPage)
@@ -81,7 +84,7 @@ export default class CardRoutesIndex extends Component {
       ))
 
     if (itinerariesArr.length < 1) {
-      itinerariesArr.push(<h3 className="flex-none">No routes to display</h3>)
+      itinerariesArr.push(<h3 className="flex-none">{t('admin:noRoutes')}</h3>)
     }
 
     return itinerariesArr
@@ -89,6 +92,7 @@ export default class CardRoutesIndex extends Component {
 
   updateSearch (array) {
     const { searchText } = this.state
+
     return filters.handleSearchChange(searchText, ['name'], array)
   }
   handlePricingSearch (event) {
@@ -113,7 +117,7 @@ export default class CardRoutesIndex extends Component {
   render () {
     const { searchText, page, numPages } = this.state
     const {
-      limit, scope, toggleNew, mot, newText, sideMenuNodes
+      limit, scope, toggleNew, mot, newText, sideMenuNodes, t
     } = this.props
     if (!scope) return ''
 
@@ -143,7 +147,7 @@ export default class CardRoutesIndex extends Component {
                 onClick={page > 1 ? () => this.deltaPage(-1) : null}
               >
                 <i className="fa fa-chevron-left" />
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;{t('common:basicBack')}</p>
               </div>
               {}
               <p>{page}</p>
@@ -154,7 +158,7 @@ export default class CardRoutesIndex extends Component {
                     `}
                 onClick={page < numPages ? () => this.deltaPage(1) : null}
               >
-                <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                <p>{t('common:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
                 <i className="fa fa-chevron-right" />
               </div>
             </div>
@@ -165,7 +169,7 @@ export default class CardRoutesIndex extends Component {
 
           <div className="hide-sm hide-xs flex-100">
             <PricingSearchBar
-              onChange={(e, t) => this.handlePricingSearch(e, t)}
+              onChange={(e, target) => this.handlePricingSearch(e, target)}
               value={searchText}
               target={mot}
             />
@@ -183,6 +187,7 @@ export default class CardRoutesIndex extends Component {
   }
 }
 CardRoutesIndex.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   itineraries: PropTypes.arrayOf(PropTypes.itinerary),
@@ -211,3 +216,5 @@ CardRoutesIndex.defaultProps = {
   newText: '',
   sideMenuNodes: null
 }
+
+export default withNamespaces(['admin', 'common'])(CardRoutesIndex)

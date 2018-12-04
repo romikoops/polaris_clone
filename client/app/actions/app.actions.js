@@ -14,23 +14,20 @@ import {
 
 const { fetch } = window
 
-function setTenant () {
+function setTenants () {
   function request () {
-    return { type: appConstants.SET_TENANT_REQUEST }
+    return { type: appConstants.SET_TENANTS_REQUEST }
   }
   function success (payload) {
-    const { localStorage } = window
-    localStorage.setItem('tenantId', payload.tenant.id)
-
-    return { type: appConstants.SET_TENANT_SUCCESS, payload }
+    return { type: appConstants.SET_TENANTS_SUCCESS, payload }
   }
   function failure (error) {
-    return { type: appConstants.FETCH_CURRENCIES_ERROR, error }
+    return { type: appConstants.SET_TENANTS_ERROR, error }
   }
 
   return (dispatch) => {
     dispatch(request)
-    appService.setTenant().then(
+    appService.setTenants().then(
       (resp) => {
         dispatch(success(resp.data))
       },
@@ -40,6 +37,82 @@ function setTenant () {
         })
       }
     )
+  }
+}
+
+function overrideTenant (tenantId) {
+  function request () {
+    return { type: appConstants.OVERRIDE_TENANT_REQUEST }
+  }
+  function success (payload) {
+    const { localStorage } = window
+    localStorage.setItem('overriddenTenantId', payload)
+
+    return { type: appConstants.OVERRIDE_TENANT_SUCCESS, payload }
+  }
+  function failure (error) {
+    return { type: appConstants.OVERRIDE_TENANT_ERROR, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request)
+    appService.overrideTenant(tenantId).then(
+      (resp) => {
+        dispatch(success(tenantId))
+      },
+      (error) => {
+        error.then((data) => {
+          dispatch(failure({ type: 'error', text: data.message }))
+        })
+      }
+    )
+  }
+}
+
+function getTenantId () {
+  const { localStorage } = window
+  const overriddenTenantId = localStorage.getItem('overriddenTenantId')
+  function request () {
+    return { type: appConstants.SET_TENANT_REQUEST }
+  }
+  function success (payload) {
+    localStorage.setItem('tenantId', payload.tenant.id)
+
+    return { type: appConstants.SET_TENANT_SUCCESS, payload }
+  }
+  function newIdSuccess (payload) {
+    return { type: appConstants.OVERRIDE_TENANT_SUCCESS, payload }
+  }
+  function failure (error) {
+    return { type: appConstants.SET_TENANT_ERROR, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request)
+    if (overriddenTenantId) {
+      appService.getTenantId().then(
+        (resp) => {
+          dispatch(newIdSuccess(overriddenTenantId))
+        },
+        (error) => {
+          error.then((data) => {
+            dispatch(failure({ type: 'error', text: data.message }))
+          })
+        }
+      )
+    } else {
+      dispatch(request)
+      appService.setTenant().then(
+        (resp) => {
+          dispatch(success(resp.data))
+        },
+        (error) => {
+          error.then((data) => {
+            dispatch(failure({ type: 'error', text: data.message }))
+          })
+        }
+      )
+    }
   }
 }
 
@@ -280,7 +353,9 @@ export const appActions = {
   invalidateSubdomain,
   setCurrency,
   clearLoading,
-  setTenant,
+  overrideTenant,
+  setTenants,
+  getTenantId,
   goTo,
   fetchTenants,
   setTheme,

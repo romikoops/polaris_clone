@@ -1,5 +1,5 @@
 import { Promise } from 'es6-promise-promise'
-import { getApiHost, getTenantApiUrl } from '../constants/api.constants'
+import { getApiHost, getTenantApiUrl, getTenantIndex } from '../constants/api.constants'
 import { authHeader } from '../helpers'
 
 const { fetch } = window
@@ -21,6 +21,33 @@ function setTenant () {
   }
 
   return fetch(`${getApiHost()}/`, requestOptions).then(handleResponse)
+}
+
+function getTenantId () {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch(`${getApiHost()}/current`, requestOptions).then(handleResponse)
+}
+
+function setTenants () {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch(`${getTenantIndex()}/`, requestOptions).then(handleResponse)
+}
+
+function overrideTenant (tenantId) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch(`${getTenantIndex()}/${tenantId}`, requestOptions).then(handleResponse)
 }
 
 function fetchCurrencies () {
@@ -99,6 +126,9 @@ const appService = {
   fetchCurrenciesForBase,
   refreshRates,
   setTenant,
+  getTenantId,
+  setTenants,
+  overrideTenant,
   toggleTenantCurrencyMode,
   setTenantCurrencyRates
 }

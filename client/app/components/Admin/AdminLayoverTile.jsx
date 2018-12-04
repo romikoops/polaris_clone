@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './AdminLayoverTile.scss'
 import { moment } from '../../constants'
@@ -21,7 +22,7 @@ export class AdminLayoverTile extends Component {
     }
   }
   render () {
-    const { theme, layoverData } = this.props
+    const { t, theme, layoverData } = this.props
     if (!layoverData) {
       return ''
     }
@@ -38,7 +39,7 @@ export class AdminLayoverTile extends Component {
     const arrival = (
       <div className="flex-100 layout-row layout-align-start-center layout-wrap">
         <div className={`flex-100 layout-row layout-align-start-center ${styles.time_header}`}>
-          <p className="flex-none no_m">Arrival</p>
+          <p className="flex-none no_m">{t('admin:arrival')}</p>
         </div>
         <div className={`flex-100 layout-row layout-align-end-center ${styles.time_text}`}>
           <p className="flex-none no_m">{moment(layover.eta).format('YYYY-MM-DD HH:mm')}</p>
@@ -62,7 +63,7 @@ export class AdminLayoverTile extends Component {
             {layover.eta ? arrival : ''}
             <div className="flex-100 layout-row layout-align-start-center layout-wrap">
               <div className={`flex-100 layout-row layout-align-start-center ${styles.time_header}`}>
-                <p className="flex-none no_m">Departure</p>
+                <p className="flex-none no_m">{t('admin:departure')}</p>
               </div>
               <div className={`flex-100 layout-row layout-align-end-center ${styles.time_text}`}>
                 <p className="flex-none no_m">{moment(layover.etd).format('YYYY-MM-DD HH:mm')}</p>
@@ -75,6 +76,7 @@ export class AdminLayoverTile extends Component {
   }
 }
 AdminLayoverTile.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   hub: PropTypes.objectOf(PropTypes.any).isRequired,
   navFn: PropTypes.func.isRequired,
@@ -88,4 +90,4 @@ AdminLayoverTile.defaultProps = {
   target: null
 }
 
-export default AdminLayoverTile
+export default withNamespaces('admin')(AdminLayoverTile)

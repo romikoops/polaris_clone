@@ -116,7 +116,9 @@ class QuoteChargeBreakdown extends Component {
                   <p style={{ textAlign: 'right', width: '100%' }}>{scope.cargo_price_notes[key]}</p>
                 ) : (
                   <p>
-                    {`${numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;${(price[1].currency || price[1].total.currency)}`}
+                    {numberSpacing(price[1].value || price[1].total.value, 2)}
+                    &nbsp;
+                    {(price[1].currency || price[1].total.currency)}
                   </p>
                 )}
               </div>
@@ -205,7 +207,9 @@ class QuoteChargeBreakdown extends Component {
                     <p style={{ textAlign: 'right', width: '100%' }}>{scope.cargo_price_notes[key]}</p>
                   ) : (
                     <p>
-                      {`${numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;${(price[1].currency || price[1].total.currency)}`}
+                      {numberSpacing(price[1].value || price[1].total.value, 2)}
+                      &nbsp;
+                      {(price[1].currency || price[1].total.currency)}
                     </p>
                   )}
                 </div>

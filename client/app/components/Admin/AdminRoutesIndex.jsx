@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 
 import styles from './Admin.scss'
@@ -61,7 +62,7 @@ export class AdminRoutesIndex extends Component {
 
   render () {
     const {
-      theme, itineraries, adminDispatch, tenant, toggleNewRoute
+      t, theme, itineraries, adminDispatch, tenant, toggleNewRoute
     } = this.props
 
     if (!itineraries) {
@@ -78,7 +79,6 @@ export class AdminRoutesIndex extends Component {
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: '#E0E0E0' }
 
-
     const motTabs = modeOfTransportNames.sort().map(mot => (<Tab
       tabTitle={capitalize(mot)}
       theme={theme}
@@ -89,7 +89,7 @@ export class AdminRoutesIndex extends Component {
         theme={theme}
         scope={scope}
         mot={mot}
-        newText="New Route"
+        newText={t('admin:newRoutePlain')}
         adminDispatch={adminDispatch}
         toggleNew={toggleNewRoute}
         handleClick={id => adminDispatch.getItinerary(id, true)}
@@ -112,6 +112,7 @@ export class AdminRoutesIndex extends Component {
   }
 }
 AdminRoutesIndex.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   loading: PropTypes.bool,
   adminDispatch: PropTypes.shape({
@@ -128,4 +129,4 @@ AdminRoutesIndex.defaultProps = {
   tenant: { data: {} }
 }
 
-export default AdminRoutesIndex
+export default withNamespaces('admin')(AdminRoutesIndex)

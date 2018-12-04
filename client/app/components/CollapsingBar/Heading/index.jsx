@@ -34,7 +34,7 @@ export default function CollapsingHeading ({
         </div>
       )}
       <div
-        className="flex-10 layout-row layout-align-center-center"
+        className={`flex-10 layout-row layout-align-center-center ${styles.arrow_index}`}
       >
         {showArrow ? (
           <i className={`${collapsed ? styles.collapsed : ''} fa fa-chevron-down pointy`} />

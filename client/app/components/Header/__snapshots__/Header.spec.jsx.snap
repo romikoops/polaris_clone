@@ -18,10 +18,11 @@ exports[`noMessages is true 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center"
+      className="layout-row flex layout-align-center-center pointy"
     >
       <img
         alt=""
+        className="undefined"
         onClick={[Function]}
         src=""
         style={
@@ -101,10 +102,11 @@ exports[`shallow render 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center"
+      className="layout-row flex layout-align-center-center pointy"
     >
       <img
         alt=""
+        className="undefined"
         onClick={[Function]}
         src=""
         style={
@@ -184,10 +186,11 @@ exports[`showModal is true 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center"
+      className="layout-row flex layout-align-center-center pointy"
     >
       <img
         alt=""
+        className="undefined"
         onClick={[Function]}
         src=""
         style={
@@ -267,10 +270,11 @@ exports[`showRegistration is true 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center"
+      className="layout-row flex layout-align-center-center pointy"
     >
       <img
         alt=""
+        className="undefined"
         onClick={[Function]}
         src=""
         style={
@@ -350,10 +354,11 @@ exports[`unread > 0 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center"
+      className="layout-row flex layout-align-center-center pointy"
     >
       <img
         alt=""
+        className="undefined"
         onClick={[Function]}
         src=""
         style={
@@ -433,10 +438,11 @@ exports[`user is falsy 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center"
+      className="layout-row flex layout-align-center-center pointy"
     >
       <img
         alt=""
+        className="undefined"
         onClick={[Function]}
         src=""
         style={
@@ -503,10 +509,11 @@ exports[`user.role_id === 2 1`] = `
     }
   >
     <div
-      className="layout-row flex layout-align-start-center"
+      className="layout-row flex layout-align-center-center pointy"
     >
       <img
         alt=""
+        className="undefined"
         onClick={[Function]}
         src=""
         style={

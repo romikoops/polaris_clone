@@ -1,4 +1,6 @@
 @import '../../styles/defaults';
+@import '../../styles/mixins';
+
 :local {
   .content_wrapper {
      @media screen and (-ms-high-contrast: active),
@@ -7,30 +9,42 @@
      }
   }
   .tenant_logo_landing {
-      width: 200px;
-      margin-top: 130px;
-       @media screen and (-ms-high-contrast: active),
-       (-ms-high-contrast: none) {
-         margin-top: 90px;
-       }
-       @media (max-width: 600px) {
-        width: 100px;
-      }
-      @media (max-width: 960px) {
-        width: 125px;
-      }
-      @media (max-width: 1024px) {
-        width: 150px;
-      }
+    width: 200px;
+    margin-top: 130px;
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+      margin-top: 100px;
     }
+    @media (max-width: 1024px), (max-height: 850px)  {
+      margin-top: 100px;
+      width: 170px;
+    }
+    @media (max-width: 960px), (max-height: 600px) {
+      margin-top: 60px;
+      width: 135px;
+    }
+    @media (max-width: 600px), (max-height: 400px) {
+      margin-top: 40px;
+      width: 110px;
+    }
+  }
+
   .banner_text {
     color: white;
-    // width: 451px;
     width: 75%;
 
-
     h2 {
-      font-size: 3vw;
+      @include responsive-font(3vw, 25px, 5vh, 20px);
+
+      @media (max-width: 1024px), (max-height: 850px)  {
+        margin: 28px 0;
+      }
+      @media (max-width: 960px), (max-height: 600px) {
+        margin: 20px 0;
+      }
+      @media (max-width: 600px), (max-height: 400px) {
+        margin: 15px 0;
+      }
+  
       font-weight: normal;
     }
     .wrapper_h3 {
@@ -48,6 +62,17 @@
     .wrapper_hr {
       width: 55%;
       margin-bottom: 50px;
+
+      @media (max-width: 1024px), (max-height: 850px)  {
+        margin-bottom: 28px;
+      }
+      @media (max-width: 960px), (max-height: 600px) {
+        margin-bottom: 20px;
+      }
+      @media (max-width: 600px), (max-height: 400px) {
+        margin-bottom: 15px;
+      }
+
       hr {
         border-color: white;
         border-width: 0.5px;
@@ -108,18 +133,5 @@
     bottom: 0;
     opacity: 0.7;
     z-index: 0;
-  }
-  .responsive {
-    z-index: 1;
-    @media (min-width: 768px) and (max-width: 1024px) {
-      margin-top: 10% !important;
-      padding-top: 100px !important;
-      height: 300px !important;
-    }
-    @media (min-width: 1024px) and (max-width: 1366px) {
-      margin-top: 20% !important;
-      padding-top: 60px !important;
-      height: 300px !important;
-    }
   }
 }
