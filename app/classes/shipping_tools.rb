@@ -8,9 +8,7 @@ module ShippingTools
 
   def self.create_shipments_from_quotation(shipment, results)
     existing_quote = Quotation.find_by(user_id: shipment.user_id, original_shipment_id: shipment.id)
-    if existing_quote && shipment.updated_at < existing_quote.updated_at
-      return existing_quote
-    end
+    return existing_quote if existing_quote && shipment.updated_at < existing_quote.updated_at
 
     main_quote = Quotation.create(user_id: shipment.user_id, original_shipment_id: shipment.id)
     results.each do |result|
@@ -52,7 +50,6 @@ module ShippingTools
   end
 
   def self.create_shipment(details, current_user)
-   
     tenant = current_user.tenant
     load_type = details['loadType'].underscore
     direction = details['direction']

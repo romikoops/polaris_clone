@@ -244,7 +244,7 @@ class Shipment < ApplicationRecord
   end
 
   def cargo_count
-    cargo_units.reduce(0){ |sum, unit| sum + unit.quantity }
+    cargo_units.reduce(0) { |sum, unit| sum + unit.quantity }
   end
 
   def valid_until

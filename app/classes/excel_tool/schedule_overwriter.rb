@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ExcelTool
   class ScheduleOverwriter < ExcelTool::BaseTool
     attr_reader :first_sheet, :mot, :user
@@ -22,21 +24,22 @@ module ExcelTool
         if itinerary
           update_results_and_stats_hashes(row, itinerary)
         else
-          raise "Route cannot be found!"
+          raise 'Route cannot be found!'
         end
       end
       { results: results, stats: stats }
     end
 
     def create_tenant_vehicle(row, itinerary)
-      service_level = row[:service_level] ? row[:service_level] : "standard"
+      service_level = row[:service_level] || 'standard'
       Vehicle.create_from_name(
-        service_level, itinerary.mode_of_transport, @user.tenant_id, row[:carrier])
+        service_level, itinerary.mode_of_transport, @user.tenant_id, row[:carrier]
+      )
     end
 
     def _stats
       {
-        type:     "schedules",
+        type:     'schedules',
         layovers: {
           number_updated: 0,
           number_created: 0
@@ -57,14 +60,14 @@ module ExcelTool
 
     def schedules
       first_sheet.parse(
-        vessel:        "VESSEL",
-        voyage_code:   "VOYAGE_CODE",
-        from:          "FROM",
-        to:            "TO",
-        closing_date:  "CLOSING_DATE",
-        eta:           "ETA",
-        etd:           "ETD",
-        service_level: "SERVICE_LEVEL",
+        vessel:        'VESSEL',
+        voyage_code:   'VOYAGE_CODE',
+        from:          'FROM',
+        to:            'TO',
+        closing_date:  'CLOSING_DATE',
+        eta:           'ETA',
+        etd:           'ETD',
+        service_level: 'SERVICE_LEVEL',
         carrier:       'CARRIER'
       )
     end
@@ -92,7 +95,7 @@ module ExcelTool
         name:              row[:service_level]
       )
       tv ||= Vehicle.create_from_name(service_level, itinerary.mode_of_transport, @user.tenant_id, row[:carrier])
-      
+
       tv
     end
 
@@ -103,7 +106,7 @@ module ExcelTool
 
       tenant_vehicle_id = find_or_create_tenant_vehicle(row, itinerary).id
       generator_results = itinerary.generate_schedules_from_sheet(stops, start_date,
-        end_date, tenant_vehicle_id, row[:closing_date], row[:vessel], row[:voyage_code])
+                                                                  end_date, tenant_vehicle_id, row[:closing_date], row[:vessel], row[:voyage_code])
       results[:trips] = generator_results[:trips]
       results[:layovers] = generator_results[:layovers]
       stats[:trips][:number_created] = generator_results[:trips].count
