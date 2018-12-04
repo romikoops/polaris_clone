@@ -7,14 +7,10 @@ export default function app (state = {}, action) {
       return state
     }
     case appConstants.SET_TENANT_SUCCESS: {
-      const { tenants } = state
-      if (!tenants) return state
-      const ret = {
-          ...state,
-          tenant: action.payload.tenant
-        }
-
-      return ret
+      return {
+        ...state,
+        tenant: action.payload.tenant
+      }
     }
     case appConstants.SET_TENANT_ERROR: {
       const err = merge({}, state, {

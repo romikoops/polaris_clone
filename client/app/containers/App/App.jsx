@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
+import {
+ Switch, Route, Redirect, withRouter
+} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import UserAccount from '../UserAccount/UserAccount'
 import Landing from '../Landing/Landing'
@@ -16,7 +18,7 @@ import InsuranceDetails from '../../components/InsuranceDetails/InsuranceDetails
 import { appActions, authenticationActions, userActions } from '../../actions'
 import { defaultTheme, moment } from '../../constants'
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
-import MessageCenter from '../../containers/MessageCenter/MessageCenter'
+import MessageCenter from '../MessageCenter/MessageCenter'
 import ResetPasswordForm from '../../components/ResetPasswordForm'
 import CookieConsentBar from '../../components/CookieConsentBar'
 import GenericError from '../../components/ErrorHandling/Generic'
@@ -26,16 +28,19 @@ class App extends Component {
     super(props)
     this.isUserExpired = this.isUserExpired.bind(this)
   }
+
   componentWillMount () {
     const { appDispatch } = this.props
     appDispatch.getTenantId()
     appDispatch.setTenants()
   }
+
   componentDidMount () {
     const { appDispatch } = this.props
     appDispatch.fetchCurrencies()
     this.isUserExpired()
   }
+
   isUserExpired () {
     const { appDispatch, user } = this.props
     const { localStorage } = window
@@ -47,6 +52,7 @@ class App extends Component {
       appDispatch.goTo('/signout')
     }
   }
+
   render () {
     const {
       tenant,
@@ -62,7 +68,7 @@ class App extends Component {
     if (!tenant) {
       return <Loading theme={defaultTheme} text="loading..." />
     }
-    if (!tenants) return ''
+
     const { theme } = tenant
 
     // Update document title
@@ -73,7 +79,7 @@ class App extends Component {
     return (
       <div className="layout-fill layout-row layout-wrap layout-align-start hundred text-break">
         {
-          tenants.length > 0 ? (
+          tenants && tenants.length > 0 ? (
             <TenantMenu tenants={tenants} appDispatch={appDispatch} />
           ) : ''
         }
@@ -153,7 +159,7 @@ class App extends Component {
               />
 
             </Switch>
-          </GenericError >
+          </GenericError>
         </div>
       </div>
     )
