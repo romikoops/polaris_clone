@@ -39,7 +39,7 @@ export const tooltips = {
   pickup_location:
     'Please specify the exact address of the pickup location and double-check for certainty.',
   start_port_location: 'This is the start port of your shipment.',
-  planned_pickup_date: 'Date states when cargo is ready for pickup',
+  planned_pickup_date: 'Date states when cargo is ready for pickup. Pick-Up of Cargo will usually occur within the first 48 hours of this date.',
   planned_dropoff_date:
     'Date states when you chose to deliver cargo to appointed terminal',
   shipper_name: 'Example: John Smith, ItsMyCargo IVS.',

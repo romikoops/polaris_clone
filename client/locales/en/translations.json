@@ -535,7 +535,8 @@
     "rail": "Rail",
     "ocean": "Ocean",
     "truck": "Truck",
-    "vesselName": "Vessel Name"
+    "vesselName": "Vessel Name",
+    "pickupTakesTwoDays": "Pick-Up of Cargo will usually occur within the first 48 hours of this date."
   },
   "user": {
     "newAlias": "New Alias",

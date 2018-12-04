@@ -89,7 +89,7 @@ class RouteFilterBox extends Component {
       <div className={styles.filterbox}>
         <div className={styles.pickup_date}>
           <div>
-            <TextHeading theme={theme} size={4} text={pickup ? t('shipment:pickUpDate') : t('common:closingDate')} />
+            <TextHeading theme={theme} size={4} text={pickup ? t('cargo:cargoReadyDate') : t('cargo:availableAtTerm')} />
           </div>
           <div className={`flex-none layout-row ${styles.dpb}`}>
             <div className={`flex-none layout-row layout-align-center-center ${styles.dpb_icon}`}>
@@ -124,7 +124,9 @@ class RouteFilterBox extends Component {
         <div>
           <p style={{ fontSize: '10px', marginTop: '0' }}>{t('shipment:ttNoGuarantee')}</p>
           <p style={{ fontSize: '10px', marginTop: '0' }}>{t('shipment:invoicedLocalCurrency')}</p>
-
+          {pickup ?
+           <p style={{ fontSize: '10px', marginTop: '0' }}>***{t('shipment:pickupTakesTwoDays')}</p>
+            : '' }
         </div>
       </div>
     )
@@ -154,4 +156,4 @@ RouteFilterBox.defaultProps = {
   lastTripDate: ''
 }
 
-export default withNamespaces('shipment')(RouteFilterBox)
+export default withNamespaces(['shipment', 'cargo'])(RouteFilterBox)
