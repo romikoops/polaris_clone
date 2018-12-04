@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import PropTypes from '../../prop-types'
 import NavDropdown from '../NavDropdown/NavDropdown'
 import LoginRegistrationWrapper from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
 import styles from './Header.scss'
@@ -33,6 +32,7 @@ class Header extends Component {
     this.checkIsTop = this.checkIsTop.bind(this)
     this.hideAlert = this.hideAlert.bind(this)
   }
+
   componentWillMount () {
     if (this.props.loginAttempt && !this.state.showLogin) {
       this.setState({ showLogin: true })
@@ -41,9 +41,11 @@ class Header extends Component {
       this.setState({ alertVisible: true })
     }
   }
+
   componentDidMount () {
     document.addEventListener('scroll', this.checkIsTop)
   }
+
   componentWillReceiveProps (nextProps) {
     if (nextProps.showRegistration) {
       this.setState({
@@ -59,21 +61,26 @@ class Header extends Component {
       this.setState({ alertVisible: true })
     }
   }
+
   componentWillUnmount () {
     document.removeEventListener('scroll', this.checkIsTop)
   }
+
   checkIsTop () {
     const isTop = window.pageYOffset < 130
     if (isTop !== this.state.isTop) {
       this.setState({ isTop })
     }
   }
+
   goHome () {
     this.props.appDispatch.goTo('/')
   }
+
   hideAlert () {
     this.setState({ alertVisible: false })
   }
+
   toggleShowLogin () {
     const { showModal, authenticationDispatch, noRedirect } = this.props
     if (showModal) {
@@ -82,10 +89,12 @@ class Header extends Component {
       authenticationDispatch.showLogin({ noRedirect })
     }
   }
+
   toggleShowMessages () {
     const { messageDispatch } = this.props
     messageDispatch.showMessageCenter()
   }
+
   render () {
     const {
       component,
@@ -98,7 +107,8 @@ class Header extends Component {
       t,
       tenant,
       theme,
-      user
+      user,
+      authentication
     } = this.props
     const { isTop } = this.state
     const scope = tenant && tenant.id ? tenant.scope : {}
@@ -116,19 +126,21 @@ class Header extends Component {
           text: t('nav:signOut'),
           fontAwesomeIcon: 'fa-sign-out',
           key: 'signOut'
-        }]
-      : [{
-        url: '/account',
-        text: t('nav:account'),
-        fontAwesomeIcon: 'fa-cog',
-        key: 'settings'
-      },
-      {
-        url: '/signout',
-        text: t('nav:signOut'),
-        fontAwesomeIcon: 'fa-sign-out',
-        key: 'signOut'
-      }
+        }
+      ]
+      : [
+        {
+          url: '/account',
+          text: t('nav:account'),
+          fontAwesomeIcon: 'fa-cog',
+          key: 'settings'
+        },
+        {
+          url: '/signout',
+          text: t('nav:signOut'),
+          fontAwesomeIcon: 'fa-sign-out',
+          key: 'signOut'
+        }
       ]
 
     let logoUrl = ''
@@ -190,11 +202,12 @@ class Header extends Component {
         parentToggle={this.toggleShowLogin}
       />
     )
+
     const alert = this.state.alertVisible ? (
       <Alert
-        message={{ type: 'error', text: 'Wrong email or password' }}
+        message={{ type: 'error', text: authentication.error.message }}
         onClose={this.hideAlert}
-        timeout={10000}
+        timeout={50000}
         isLogin
       />
     ) : (
@@ -227,38 +240,14 @@ class Header extends Component {
         </div>
         {alert}
         { hasErrors
-          ? <div className={`flex-none layout-row ${styles.error_messages}`}>
-            <FlashMessages messages={error[currentStage]} />
-          </div> : '' }
+          ? (
+            <div className={`flex-none layout-row ${styles.error_messages}`}>
+              <FlashMessages messages={error[currentStage]} />
+            </div>
+          ) : '' }
       </div>
     )
   }
-}
-
-Header.propTypes = {
-  tenant: PropTypes.tenant,
-  theme: PropTypes.theme,
-  user: PropTypes.user,
-  registering: PropTypes.bool,
-  noRedirect: PropTypes.bool,
-  loggingIn: PropTypes.bool,
-  isLanding: PropTypes.bool,
-  invert: PropTypes.bool,
-  t: PropTypes.func.isRequired,
-  loginAttempt: PropTypes.bool,
-  messageDispatch: PropTypes.shape({
-    getUserConversations: PropTypes.func
-  }).isRequired,
-  messages: PropTypes.arrayOf(PropTypes.object),
-  showRegistration: PropTypes.bool,
-  req: PropTypes.req,
-  scrollable: PropTypes.bool,
-  appDispatch: PropTypes.func.isRequired,
-  authenticationDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
-  component: PropTypes.node,
-  showModal: PropTypes.bool,
-  error: PropTypes.objectOf(PropTypes.any),
-  currentStage: PropTypes.string
 }
 
 Header.defaultProps = {
@@ -306,7 +295,8 @@ function mapStateToProps (state) {
     messages,
     showModal,
     error,
-    currentStage
+    currentStage,
+    authentication
   }
 }
 

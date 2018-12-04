@@ -15,10 +15,12 @@ class Alert extends Component {
 
     return classes[type] || classes.success
   }
+
   constructor (props) {
     super(props)
     this.close = this.close.bind(this)
   }
+
   componentDidMount () {
     this.timer = setTimeout(
       this.close,
@@ -30,13 +32,20 @@ class Alert extends Component {
     clearTimeout(this.timer)
   }
 
+  getText () {
+    const { message, t } = this.props
+    if (typeof message.text === 'object') return t('errors:errorOccured')
+
+    return message.text
+  }
+
   close () {
     const { onClose, message } = this.props
     onClose(message)
   }
 
   render () {
-    const { message, t } = this.props
+    const { message } = this.props
     const alertClassName = `alert ${Alert.alertClass(message.type)} fade in`
 
     return (
@@ -48,7 +57,7 @@ class Alert extends Component {
             }) => (
               <div className={alertClassName} style={style}>
                 <div className={styles.alert_inner_wrapper} />
-                { typeof message.text === 'object' ? t('errors:errorOccured') : message.text }
+                { this.getText() }
                 <i className="fa fa-times close" onClick={this.close} />
               </div>
             )

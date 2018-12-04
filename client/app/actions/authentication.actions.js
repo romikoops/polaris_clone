@@ -49,6 +49,9 @@ function login (data) {
   function failure (loginFailure) {
     return { type: authenticationConstants.LOGIN_FAILURE, loginFailure }
   }
+  function adminCreateShipmentAttempt () {
+    return { type: authenticationConstants.ADMIN_CREATE_SHIPMENT_ATTEMPT }
+  }
 
   return (dispatch) => {
     dispatch(request({ email: data.email, password: data.password }))
@@ -58,8 +61,13 @@ function login (data) {
         dispatch(success(response.data))
 
         if (shipmentReq) {
-          shipmentReq.user_id = response.data.id
-          dispatch(shipmentActions.chooseOffer(shipmentReq))
+          if (['shipper', 'agent'].includes(response.data.role.name)) {
+            shipmentReq.user_id = response.data.id
+            dispatch(shipmentActions.chooseOffer(shipmentReq))
+          } else {
+            dispatch(adminCreateShipmentAttempt())
+            dispatch(adminActions.getDashboard(true))
+          }
         } else if (
           ['admin', 'super_admin', 'sub_admin'].includes(response.data.role.name) && !data.noRedirect
         ) {

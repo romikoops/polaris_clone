@@ -831,6 +831,8 @@
     "invalidResetPasswordOne": "You attempted to submit an invalid reset password. ",
     "invalidResetPasswordTwo": "If you wish to reset your password, ",
     "invalidResetPasswordThree": "please follow a valid link sent to your email.",
+    "invalidCredentials": "Wrong email or password",
+    "adminCreateShipmentAttempt": "Support for booking a shipment with an admin account is currently in development. Please login with a client or agent account.",
     "mustMatchPassword": "Must match password",
     "errorOccured": "An Error Occured",
     "ohNo": "Oh no!",
