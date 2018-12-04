@@ -19,10 +19,6 @@ function logOut () {
 }
 
 function receiveTenant (subdomain, json) {
-  Sentry.configureScope((scope) => {
-    scope.setTag('tenant', subdomain)
-  })
-
   return {
     type: tenantConstants.RECEIVE_TENANT,
     subdomain,

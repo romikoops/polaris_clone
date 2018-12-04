@@ -116,9 +116,6 @@ function register (user, target) {
 }
 function setUser (user) {
   window.localStorage.setItem(cookieKey, JSON.stringify(user.data))
-  Sentry.configureScope((scope) => {
-    scope.setUser({ id: user.data.id, email: user.data.email })
-  })
 
   return { type: authenticationConstants.SET_USER, user: user.data }
 }
