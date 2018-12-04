@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
 import { AdminChargeSection } from './'
@@ -77,7 +78,9 @@ export class AdminChargePanel extends Component {
 
   render () {
     const { editCharge, tmpObj } = this.state
-    const { theme, hub, charge } = this.props
+    const {
+      t, theme, hub, charge
+    } = this.props
     if (!hub || !charge) {
       return ''
     }
@@ -94,7 +97,7 @@ export class AdminChargePanel extends Component {
           <RoundButton
             theme={theme}
             size="small"
-            text="Save"
+            text={t('admin:save')}
             active
             handleNext={this.saveEdit}
             iconClass="fa-floppy-o"
@@ -137,6 +140,7 @@ export class AdminChargePanel extends Component {
         />)
       }
     })
+
     return (
       <div className={`flex-100 ${styles.charge_card} layout-row layout-wrap`}>
         <div className={`${styles.charge_header} layout-row layout-wrap flex-100`}>
@@ -176,7 +180,7 @@ export class AdminChargePanel extends Component {
             }`}
           >
             <div className="flex-100 layout-row layout-align-start-start">
-              <h3 className="flex-none">Import</h3>
+              <h3 className="flex-none">{t('admin:import')}</h3>
             </div>
             <div className="flex-100 layout-row layout-align-space-between-start layout-wrap">
               {importArr}
@@ -188,7 +192,7 @@ export class AdminChargePanel extends Component {
             }`}
           >
             <div className="flex-100 layout-row layout-align-start-start">
-              <h3 className="flex-none">Export</h3>
+              <h3 className="flex-none">{t('admin:export')}</h3>
             </div>
             <div className="flex-100 layout-row layout-align-space-between-start layout-wrap">
               {exportArr}
@@ -201,6 +205,7 @@ export class AdminChargePanel extends Component {
   }
 }
 AdminChargePanel.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   navFn: PropTypes.func.isRequired,
   backFn: PropTypes.func.isRequired,
@@ -220,4 +225,4 @@ AdminChargePanel.defaultProps = {
   hub: null
 }
 
-export default AdminChargePanel
+export default withNamespaces('admin')(AdminChargePanel)

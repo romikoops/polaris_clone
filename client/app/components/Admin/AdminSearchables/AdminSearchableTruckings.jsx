@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import Fuse from 'fuse.js'
 import PropTypes from '../../../prop-types'
@@ -44,6 +45,7 @@ export class AdminSearchableTruckings extends Component {
       this.setState({
         truckings: this.props.truckings
       })
+
       return
     }
     const search = (key) => {
@@ -58,6 +60,7 @@ export class AdminSearchableTruckings extends Component {
         keys: [key]
       }
       const fuse = new Fuse(this.props.truckings, options)
+
       return fuse.search(event.target.value)
     }
 
@@ -69,7 +72,7 @@ export class AdminSearchableTruckings extends Component {
   }
   render () {
     const {
-      theme, seeAll, showTooltip, icon, tooltip
+      theme, seeAll, showTooltip, icon, tooltip, t
     } = this.props
     const { truckings } = this.state
     let truckingsArr
@@ -97,6 +100,7 @@ export class AdminSearchableTruckings extends Component {
         </div>
       </div>
     )
+
     return (
       <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`} >
         <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`} >
@@ -107,7 +111,7 @@ export class AdminSearchableTruckings extends Component {
                   <TextHeading
                     theme={theme}
                     size={1}
-                    text="Trucking Cities"
+                    text={t('admin:truckingCities')}
                   />
                 </div>
                 { showTooltip ? <Tooltip
@@ -129,7 +133,7 @@ export class AdminSearchableTruckings extends Component {
             <input
               type="text"
               name="search"
-              placeholder="Search trucking cities"
+              placeholder={t('admin:searchTruckingCities')}
               onChange={this.handleSearchChange}
             />
           </div>
@@ -141,7 +145,7 @@ export class AdminSearchableTruckings extends Component {
               className="flex-none layout-row layout-align-center-center"
               onClick={this.seeAll}
             >
-              <p className="flex-none">See all</p>
+              <p className="flex-none">{t('admin:seeAll')}</p>
             </div>
           </div>
         ) : (
@@ -155,6 +159,7 @@ export class AdminSearchableTruckings extends Component {
 AdminSearchableTruckings.propTypes = {
   truckings: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleClick: PropTypes.func,
+  t: PropTypes.func.isRequired,
   adminDispatch: PropTypes.shape({
     getHub: PropTypes.func,
     goTo: PropTypes.func
@@ -175,4 +180,4 @@ AdminSearchableTruckings.defaultProps = {
   tooltip: ''
 }
 
-export default AdminSearchableTruckings
+export default withNamespaces('admin')(AdminSearchableTruckings)

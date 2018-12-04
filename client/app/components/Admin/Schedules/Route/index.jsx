@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
@@ -8,7 +9,7 @@ import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 
 import { documentActions } from '../../../../actions'
-import { AdminUploadsSuccess } from './../../Uploads/Success'
+import AdminUploadsSuccess from './../../Uploads/Success'
 import FileUploader from '../../../FileUploader/FileUploader'
 import { RoundButton } from '../../../RoundButton/RoundButton'
 import styles from '../../Admin.scss'
@@ -161,6 +162,7 @@ class AdminSchedulesRoute extends Component {
   }
   render () {
     const {
+      t,
       theme,
       hubs,
       scheduleData,
@@ -186,7 +188,7 @@ class AdminSchedulesRoute extends Component {
     )
     const columns = [
       {
-        Header: 'Closing Date',
+        Header: t('common:closingDate'),
         accessor: 'closing_date',
         Cell: row => (
           moment(row.value).format('ll')
@@ -207,11 +209,11 @@ class AdminSchedulesRoute extends Component {
         )
       },
       {
-        Header: 'Voyage Code',
+        Header: t('admin:voyageCode'),
         accessor: 'voyage_code'
       },
       {
-        Header: 'Vessel Name',
+        Header: t('admin:vesselName'),
         accessor: 'vessel'
       }
     ]
@@ -261,7 +263,7 @@ class AdminSchedulesRoute extends Component {
     const backButton = (
       <RoundButton
         theme={theme}
-        text="Back to list"
+        text={t('admin:backToList')}
         size="small"
         iconClass="fa-th-list"
         handleNext={this.toggleView}
@@ -274,10 +276,10 @@ class AdminSchedulesRoute extends Component {
           styles.sec_upload
         }`}
       >
-        <p className="flex-80">Create/ Upload Schedules</p>
+        <p className="flex-80">{t('admin:createUploadSchedules')}</p>
         <RoundButton
           theme={theme}
-          text="New"
+          text={t('admin:new')}
           active
           size="small"
           iconClass="fa-plus"
@@ -402,6 +404,7 @@ class AdminSchedulesRoute extends Component {
   }
 }
 AdminSchedulesRoute.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   scheduleData: PropTypes.shape({
@@ -440,4 +443,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminSchedulesRoute)
+export default withNamespaces(['admin', 'common', 'account'])(connect(mapStateToProps, mapDispatchToProps)(AdminSchedulesRoute))

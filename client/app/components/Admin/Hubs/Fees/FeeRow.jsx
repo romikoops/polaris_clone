@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import { withNamespaces } from 'react-i18next'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import styles from './index.scss'
 import PropTypes from '../../../../prop-types'
@@ -182,7 +183,7 @@ class FeeRow extends PureComponent {
   render () {
     const { edit, confirm } = this.state
     const {
-      fee, theme, selectOptions, direction, editCharge
+      t, fee, theme, selectOptions, direction, editCharge
     } = this.props
     if (!selectOptions) {
       return ''
@@ -190,8 +191,8 @@ class FeeRow extends PureComponent {
     const confimPrompt = confirm ? (
       <AdminPromptConfirm
         theme={theme}
-        heading="Are you sure?"
-        text="These changes will be instantly available in your store"
+        heading={t('common:areYouSure')}
+        text={t('admin:instantlyAvailable')}
         confirm={() => this.closeAndSave()}
         deny={() => this.closeConfirm()}
       />
@@ -239,6 +240,7 @@ class FeeRow extends PureComponent {
 }
 
 FeeRow.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme.isRequired,
   target: PropTypes.string.isRequired,
   saveEdit: PropTypes.func.isRequired,
@@ -251,4 +253,4 @@ FeeRow.propTypes = {
   selectOptions: PropTypes.objectOf(PropTypes.any).isRequired
 }
 FeeRow.defaultProps = {}
-export default FeeRow
+export default withNamespaces(['admin', 'common'])(FeeRow)

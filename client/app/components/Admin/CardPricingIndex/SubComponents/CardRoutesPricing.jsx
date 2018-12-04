@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from '../Card.scss'
 import { gradientTextGenerator, switchIcon } from '../../../../helpers'
@@ -17,7 +18,7 @@ class CardRoutesPricing extends Component {
 
   render () {
     const {
-      handleClick, onDisabledClick, disabled, itinerary, theme
+      handleClick, onDisabledClick, disabled, itinerary, theme, t
     } = this.props
     const gradientFontStyle =
       theme && theme.colors
@@ -38,13 +39,13 @@ class CardRoutesPricing extends Component {
           <div className={styles.top_routes}>
             <div>
               <p>
-              From:{' '}
+                {t('common:from')}:{' '}
                 <strong>
                   <span> {originNexus} </span>
                 </strong>
               </p>
               <p>
-              To:{' '}
+                {t('common:to')}:{' '}
                 <strong>
                   <span> {destinationNexus} </span>
                 </strong>
@@ -54,10 +55,10 @@ class CardRoutesPricing extends Component {
           </div>
           <div className={styles.bottom_routes}>
             {itinerary.users_with_pricing ? <p>
-              <strong> {itinerary.users_with_pricing} </strong> clients
+              <strong> {itinerary.users_with_pricing} </strong> {t('admin:clients')}
             </p> : '' }
             { itinerary.pricing_count ? <p>
-              <strong> {itinerary.pricing_count} </strong> pricings
+              <strong> {itinerary.pricing_count} </strong> {t('admin:pricingsSC')}
             </p> : '' }
           </div>
         </div>
@@ -71,6 +72,7 @@ CardRoutesPricing.propTypes = {
   handleClick: PropTypes.func.isRequired,
   onDisabledClick: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme
 }
 CardRoutesPricing.defaultProps = {
@@ -78,4 +80,4 @@ CardRoutesPricing.defaultProps = {
   theme: {}
 }
 
-export default CardRoutesPricing
+export default withNamespaces(['admin', 'common'])(CardRoutesPricing)

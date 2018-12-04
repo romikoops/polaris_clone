@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './Admin.scss'
 import userStyles from '../UserAccount/UserAccount.scss'
 
-export class AdminAddressTile extends Component {
+class AdminAddressTile extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -39,10 +40,12 @@ export class AdminAddressTile extends Component {
 
   render () {
     const {
+      t,
       theme,
       address,
       showDelete
     } = this.props
+
     const { showEdit, editor } = this.state
     if (!address) {
       return ''
@@ -73,7 +76,7 @@ export class AdminAddressTile extends Component {
           }
         >
           <input
-            placeholder="Street number"
+            placeholder={t('user:streetNumber')}
             type="text"
             value={editor.street_number}
             name="street_number"
@@ -87,7 +90,7 @@ export class AdminAddressTile extends Component {
           }
         >
           <input
-            placeholder="Street"
+            placeholder={t('admin:street')}
             type="text"
             value={editor.street}
             name="street"
@@ -101,7 +104,7 @@ export class AdminAddressTile extends Component {
           }
         >
           <input
-            placeholder="City"
+            placeholder={t('user:city')}
             type="text"
             value={editor.city}
             name="city"
@@ -115,7 +118,7 @@ export class AdminAddressTile extends Component {
           }
         >
           <input
-            placeholder="ZIP Code"
+            placeholder={t('admin:zipCodeCapitalCaps')}
             type="text"
             value={editor.zip_code}
             name="zip_code"
@@ -129,7 +132,7 @@ export class AdminAddressTile extends Component {
           }
         >
           <input
-            placeholder="Country"
+            placeholder={t('user:country')}
             type="text"
             value={editor.country}
             name="country"
@@ -205,6 +208,7 @@ export class AdminAddressTile extends Component {
   }
 }
 AdminAddressTile.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   saveEdit: PropTypes.func.isRequired,
   deleteAddress: PropTypes.func.isRequired,
@@ -218,4 +222,4 @@ AdminAddressTile.defaultProps = {
   showDelete: true
 }
 
-export default AdminAddressTile
+export default withNamespaces(['admin', 'user'])(AdminAddressTile)

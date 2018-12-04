@@ -1,9 +1,11 @@
 import React from 'react'
+import { withNamespaces } from 'react-i18next'
 import styles from '../AdminShipments.scss'
 import PropTypes from '../../../prop-types'
 import { gradientTextGenerator } from '../../../helpers'
 
-export default function ShipmentOverviewShowCard ({
+function ShipmentOverviewShowCard ({
+  t,
   estimatedTime,
   carriage,
   noCarriage,
@@ -70,13 +72,13 @@ export default function ShipmentOverviewShowCard ({
                     <div className="flex-40 layout-row">
                       <i className={`flex-20 fa fa-check-square clip ${styles.check_square_sm}`} style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
                       <h4 className="flex-70 layout-row">
-                        Pick-up
+                        {t('shipment:pickUp')}
                       </h4>
                     </div>
                     <div className="flex-60 layout-row">
                       <i className={`flex-15 fa fa-check-square clip ${styles.check_square_sm}`} style={!shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
                       <h4 className="flex-85 layout-row">
-                        Drop-off
+                        {t('admin:dropOff')}
                       </h4>
                     </div>
                   </div>
@@ -112,13 +114,13 @@ export default function ShipmentOverviewShowCard ({
                     <div className="flex-40 layout-row">
                       <i className={`flex-20 fa fa-check-square clip ${styles.check_square_sm}`} style={shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
                       <h4 className="flex-80 layout-row">
-                      Delivery
+                        {t('shipment:delivery')}
                       </h4>
                     </div>
                     <div className="flex-60 layout-row">
                       <i className={`flex-15 fa fa-check-square clip ${styles.check_square_sm}`} style={!shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
                       <h4 className="flex-85 layout-row">
-                      Collection
+                        {t('admin:collection')}
                       </h4>
                     </div>
                   </div>
@@ -156,6 +158,7 @@ export default function ShipmentOverviewShowCard ({
 }
 
 ShipmentOverviewShowCard.propTypes = {
+  t: PropTypes.func.isRequired,
   estimatedTime: PropTypes.node.isRequired,
   carriage: PropTypes.node.isRequired,
   noCarriage: PropTypes.node.isRequired,
@@ -178,3 +181,5 @@ ShipmentOverviewShowCard.defaultProps = {
   theme: null,
   isAdmin: false
 }
+
+export default withNamespaces(['admin', 'shipment'])(ShipmentOverviewShowCard)

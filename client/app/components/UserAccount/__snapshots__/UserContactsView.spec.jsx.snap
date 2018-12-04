@@ -253,6 +253,7 @@ exports[`props.loading is true 1`] = `
       }
       key="RANDOM_KEY_1"
       showDelete={false}
+      t={[Function]}
       theme={
         Object {
           "colors": Object {
@@ -403,6 +404,7 @@ exports[`shallow render 1`] = `
       }
       key="RANDOM_KEY_0"
       showDelete={false}
+      t={[Function]}
       theme={
         Object {
           "colors": Object {
@@ -550,6 +552,7 @@ exports[`state.editBool is true 1`] = `
       }
       key="RANDOM_KEY_3"
       showDelete={false}
+      t={[Function]}
       theme={
         Object {
           "colors": Object {

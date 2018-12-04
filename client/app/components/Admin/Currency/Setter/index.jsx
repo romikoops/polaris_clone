@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Toggle from 'react-toggle'
@@ -70,8 +71,8 @@ export class AdminCurrencySetter extends Component {
     })
   }
   render () {
-    const { currencies, tenant } = this.props
-    const { theme } = tenant || {}
+    const { t, currencies, tenant } = this.props
+    const { theme } = tenant && tenant.data ? tenant.data : {}
     const {
       currentBase, calculator, results, rateBool, rates
     } = this.state
@@ -114,7 +115,7 @@ export class AdminCurrencySetter extends Component {
                 <input
                   className="flex-90"
                   type="number"
-                  placeholder="Quick convert"
+                  placeholder={t('admin:quickConvert')}
                   name={currency.key}
                   value={calculator[currency.key]}
                   onChange={e => this.convertValue(e, currency)}
@@ -139,10 +140,11 @@ export class AdminCurrencySetter extends Component {
           </div>
         </div>
       ))
+
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-align-start-center">
-          <TextHeading size={3} text="Currency Center" />
+          <TextHeading size={3} text={t('admin:currencyCenter')} />
         </div>
         <div className="flex-100 layout-row layout-align-center-start layout-wrap">
           <div className="flex-80 layout-row layout-align-center-center layout-wrap">
@@ -154,7 +156,7 @@ export class AdminCurrencySetter extends Component {
           <div className="flex-20 layout-row layout-wrap layout-align-center-start">
             <div className="flex-90 layout-row layout-align-space-between-start">
               <div className="flex-90 layout-row layout-align-space-between-center">
-                <p className="flex-none">Live Rates</p>
+                <p className="flex-none">{t('admin:liveRates')}</p>
                 <div className="flex-5" />
                 <Toggle
                   className="flex-none"
@@ -164,11 +166,11 @@ export class AdminCurrencySetter extends Component {
                   onChange={e => this.handleRateToggle(e)}
                 />
                 <div className="flex-5" />
-                <p className="flex-none">Set Rates</p>
+                <p className="flex-none">{t('admin:setRates')}</p>
               </div>
             </div>
             <div className="flex-90 layout-row layout-align-space-between-start">
-              <p className="flex-none">Base Currency</p>
+              <p className="flex-none">{t('admin:baseCurrency')}</p>
               <p className="flex-none">{baseCurrency.key}</p>
             </div>
             <div className="flex-100 layout-row layout-align-center-center">
@@ -185,7 +187,7 @@ export class AdminCurrencySetter extends Component {
                 handleNext={() => this.refreshRates()}
                 theme={theme}
                 size="small"
-                text="Refresh Rates"
+                text={t('admin:refreshRates')}
               />
             </div>
           </div>
@@ -197,6 +199,7 @@ export class AdminCurrencySetter extends Component {
 }
 
 AdminCurrencySetter.propTypes = {
+  t: PropTypes.func.isRequired,
   tenant: PropTypes.tenant,
   currencies: PropTypes.arrayOf(PropTypes.any),
   appDispatch: PropTypes.objectOf(PropTypes.func)
@@ -209,8 +212,9 @@ AdminCurrencySetter.defaultProps = {
 }
 
 function mapStateToProps (state) {
-  const { app } = state
-  const { currencyList, tenant } = app
+  const { app, tenant } = state
+  const { currencyList } = app
+
   return {
     currencies: currencyList,
     tenant
@@ -222,4 +226,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminCurrencySetter)
+export default withNamespaces('admin')(connect(mapStateToProps, mapDispatchToProps)(AdminCurrencySetter))

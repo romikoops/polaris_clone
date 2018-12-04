@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from '../Card.scss'
 import { gradientTextGenerator, switchIcon } from '../../../../helpers'
@@ -17,7 +18,7 @@ class CardRoutes extends Component {
 
   render () {
     const {
-      handleClick, onDisabledClick, disabled, itinerary, theme
+      handleClick, onDisabledClick, disabled, itinerary, theme, t
     } = this.props
     const gradientFontStyle =
       theme && theme.colors
@@ -38,13 +39,13 @@ class CardRoutes extends Component {
           <div className={styles.top_routes}>
             <div>
               <p>
-              From:{' '}
+                {t('common:from')}:{' '}
                 <strong>
                   <span> {originNexus} </span>
                 </strong>
               </p>
               <p>
-              To:{' '}
+                {t('common:to')}:{' '}
                 <strong>
                   <span> {destinationNexus} </span>
                 </strong>
@@ -59,6 +60,7 @@ class CardRoutes extends Component {
 }
 
 CardRoutes.propTypes = {
+  t: PropTypes.func.isRequired,
   itinerary: PropTypes.objectOf(PropTypes.any).isRequired,
   handleClick: PropTypes.func.isRequired,
   onDisabledClick: PropTypes.func.isRequired,
@@ -70,4 +72,4 @@ CardRoutes.defaultProps = {
   theme: {}
 }
 
-export default CardRoutes
+export default withNamespaces('common')(CardRoutes)

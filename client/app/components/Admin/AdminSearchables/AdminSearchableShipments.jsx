@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 // import { v4 } from 'uuid'
 import Fuse from 'fuse.js'
 import PropTypes from '../../../prop-types'
@@ -89,6 +90,7 @@ export class AdminSearchableShipments extends Component {
       theme,
       userView,
       seeAll,
+      t,
       title,
       dispatches
     } = this.props
@@ -127,7 +129,7 @@ export class AdminSearchableShipments extends Component {
             <input
               type="text"
               name="search"
-              placeholder="Search Shipments"
+              placeholder={t('admin:searchShipments')}
               onChange={this.handleSearchChange}
             />
           </div>
@@ -145,7 +147,7 @@ export class AdminSearchableShipments extends Component {
               className="flex-none layout-row layout-align-center-center pointy"
               onClick={this.seeAll}
             >
-              <p className="flex-none">See all</p>
+              <p className="flex-none">{t('admin:seeAll')}</p>
             </div>
           </div>
         ) : (
@@ -163,6 +165,7 @@ AdminSearchableShipments.propTypes = {
     goTo: PropTypes.func
   }).isRequired,
   seeAll: PropTypes.func,
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   limit: PropTypes.number,
   userView: PropTypes.bool,
@@ -178,4 +181,4 @@ AdminSearchableShipments.defaultProps = {
   title: ''
 }
 
-export default AdminSearchableShipments
+export default withNamespaces('admin')(AdminSearchableShipments)

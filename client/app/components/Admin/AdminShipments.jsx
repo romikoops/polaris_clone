@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { Switch, Route } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -6,7 +7,7 @@ import PropTypes from '../../prop-types'
 import { AdminShipmentsIndex } from './'
 import AdminShipmentView from './AdminShipmentView/AdminShipmentView'
 import { adminActions } from '../../actions'
-import { AdminShipmentsGroup } from './Shipments/Group'
+import AdminShipmentsGroup from './Shipments/Group'
 import GenericError from '../../components/ErrorHandling/Generic'
 
 class AdminShipments extends Component {
@@ -45,6 +46,7 @@ class AdminShipments extends Component {
 
   render () {
     const {
+      t,
       theme,
       hubs,
       shipments,
@@ -58,7 +60,7 @@ class AdminShipments extends Component {
     } = this.props
     // ;
     if (!shipments || !hubs || !clients) {
-      return <h1>NO SHIPMENTS DATA (OR REFRESH PAGE)</h1>
+      return <h1>{t('admin:noShipmentData')}</h1>
     }
 
     return (
@@ -108,7 +110,7 @@ class AdminShipments extends Component {
               render={props => (
                 <AdminShipmentsGroup
                   theme={theme}
-                  title="Requested"
+                  title={t('shipment:requested')}
                   target="requested"
                   adminDispatch={adminDispatch}
                   loading={loading}
@@ -128,7 +130,7 @@ class AdminShipments extends Component {
               render={props => (
                 <AdminShipmentsGroup
                   theme={theme}
-                  title="Open"
+                  title={t('common:open')}
                   target="open"
                   adminDispatch={adminDispatch}
                   loading={loading}
@@ -148,7 +150,7 @@ class AdminShipments extends Component {
               render={props => (
                 <AdminShipmentsGroup
                   theme={theme}
-                  title="Finished"
+                  title={t('common:finished')}
                   target="finished"
                   adminDispatch={adminDispatch}
                   loading={loading}
@@ -168,7 +170,7 @@ class AdminShipments extends Component {
               render={props => (
                 <AdminShipmentsGroup
                   theme={theme}
-                  title="Rejected"
+                  title={t('shpment:rejected')}
                   target="rejected"
                   adminDispatch={adminDispatch}
                   loading={loading}
@@ -188,7 +190,7 @@ class AdminShipments extends Component {
               render={props => (
                 <AdminShipmentsGroup
                   theme={theme}
-                  title="Archived"
+                  title={t('shipment:archived')}
                   target="archived"
                   adminDispatch={adminDispatch}
                   loading={loading}
@@ -209,6 +211,7 @@ class AdminShipments extends Component {
   }
 }
 AdminShipments.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   shipments: PropTypes.arrayOf(PropTypes.shipment),
@@ -263,4 +266,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminShipments)
+export default withNamespaces(['common', 'shipment'])(connect(mapStateToProps, mapDispatchToProps)(AdminShipments))

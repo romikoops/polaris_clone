@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
+import GenericError from '../../components/ErrorHandling/Generic'
 import PropTypes from '../../prop-types'
 import {
   AdminPricingsIndex,
@@ -11,9 +13,8 @@ import {
 } from './'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions, documentActions } from '../../actions'
-import { AdminUploadsSuccess } from './Uploads/Success'
-import { AdminTruckingView } from './AdminTruckingView'
-import GenericError from '../../components/ErrorHandling/Generic'
+import AdminUploadsSuccess from './Uploads/Success'
+import AdminTruckingView from './AdminTruckingView'
 
 class AdminPricings extends Component {
   constructor (props) {
@@ -53,6 +54,7 @@ class AdminPricings extends Component {
   render () {
     const { selectedPricing } = this.state
     const {
+      t,
       theme,
       hubs,
       pricingData,
@@ -75,7 +77,7 @@ class AdminPricings extends Component {
         <RoundButton
           theme={theme}
           size="small"
-          text="Back"
+          text={t('common:basicBack')}
           handleNext={this.backToIndex}
           iconClass="fa-chevron-left"
         />
@@ -183,6 +185,7 @@ class AdminPricings extends Component {
   }
 }
 AdminPricings.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   dispatch: PropTypes.func.isRequired,
@@ -275,4 +278,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminPricings)
+export default withNamespaces('common')(connect(mapStateToProps, mapDispatchToProps)(AdminPricings))

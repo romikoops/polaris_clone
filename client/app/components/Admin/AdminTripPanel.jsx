@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './AdminTripPanel.scss'
 import { moment } from '../../constants'
@@ -23,6 +24,7 @@ export class AdminTripPanel extends Component {
         icon = <i className="fa fa-ship" />
         break
     }
+
     return icon
   }
 
@@ -57,7 +59,7 @@ export class AdminTripPanel extends Component {
   }
   render () {
     const {
-      theme, trip, itinerary, layovers, showPanel
+      t, theme, trip, itinerary, layovers, showPanel
     } = this.props
     const { confirm } = this.state
     if (!trip || !itinerary) {
@@ -66,8 +68,8 @@ export class AdminTripPanel extends Component {
     const confimPrompt = confirm ? (
       <AdminPromptConfirm
         theme={theme}
-        heading="Are you sure?"
-        text="This will delete the schedule and all related data"
+        heading={t('common:areYouSure')}
+        text={t('admin:confirmDeleteSchedule')}
         confirm={() => this.deleteTrip(trip.trip_id)}
         deny={() => this.closeConfirm()}
       />
@@ -101,6 +103,7 @@ export class AdminTripPanel extends Component {
       layovers && layovers[trip.trip_id]
         ? layovers[trip.trip_id].map(l => <AdminLayoverTile layoverData={l} theme={theme} />)
         : []
+
     return (
       <div key={trip.trip_id} className={`flex-100 layout-row layout-wrap ${styles.route_result}`}>
         {confimPrompt}
@@ -140,7 +143,7 @@ export class AdminTripPanel extends Component {
               <div className="flex-100 layout-row">
                 <h4 className={styles.date_title} style={gradientFontStyle}>
                   {' '}
-                  Closing Date
+                  {t('common:closingDate')}
                 </h4>
               </div>
               <div className="flex-100 layout-row">
@@ -161,7 +164,7 @@ export class AdminTripPanel extends Component {
               <div className="flex-100 layout-row">
                 <h4 className={styles.date_title} style={gradientFontStyle}>
                   {' '}
-                  Date of Departure
+                  {t('admin:dateOfDeparture')}
                 </h4>
               </div>
               <div className="flex-100 layout-row">
@@ -182,7 +185,7 @@ export class AdminTripPanel extends Component {
               <div className="flex-100 layout-row">
                 <h4 className={styles.date_title} style={gradientFontStyle}>
                   {' '}
-                  ETA terminal
+                  {t('admin:etaTerminal')}
                 </h4>
               </div>
               <div className="flex-100 layout-row">
@@ -209,7 +212,7 @@ export class AdminTripPanel extends Component {
         <div className={`flex-100 layout-row layout-wrap ${panelStyle} ${styles.layover_panel}`}>
           <div className="flex-100 layout-row layout-align-start-center">
             <h4 className="flex-none clip" style={gradientFontStyle}>
-              Stops
+              {t('admin:stops')}
             </h4>
           </div>
           {layoverArray}
@@ -219,6 +222,7 @@ export class AdminTripPanel extends Component {
   }
 }
 AdminTripPanel.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   trip: PropTypes.objectOf(PropTypes.any),
   showPanel: PropTypes.bool,
@@ -237,4 +241,4 @@ AdminTripPanel.defaultProps = {
   adminDispatch: {}
 }
 
-export default AdminTripPanel
+export default withNamespaces(['admin', 'common'])(AdminTripPanel)

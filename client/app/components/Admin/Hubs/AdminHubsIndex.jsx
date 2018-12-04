@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
 import FileUploader from '../../../components/FileUploader/FileUploader'
@@ -31,7 +31,7 @@ export class AdminHubsIndex extends Component {
   render () {
     const { expander } = this.state
     const {
-      theme, viewHub, toggleNewHub, documentDispatch, scope
+      t, theme, viewHub, toggleNewHub, documentDispatch, scope
     } = this.props
     const hubUrl = '/admin/hubs/process_csv'
     const scUrl = '/admin/service_charges/process_csv'
@@ -40,7 +40,7 @@ export class AdminHubsIndex extends Component {
         <RoundButton
           theme={theme}
           size="small"
-          text="New Hub"
+          text={t('admin:newHub')}
           active
           handleNext={() => toggleNewHub()}
           iconClass="fa-plus"
@@ -52,7 +52,7 @@ export class AdminHubsIndex extends Component {
     }
 
     const actionNodes = [<SideOptionsBox
-      header="Data manager"
+      header={t('admin:dataManager')}
       flexOptions="flex"
       content={(
         <div className="flex-100 layout-row layout-wrap layout-align-center-start">
@@ -62,7 +62,7 @@ export class AdminHubsIndex extends Component {
             theme={theme}
             styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
             handleCollapser={() => this.toggleExpander('upload')}
-            text="Upload Data"
+            text={t('admin:uploadData')}
             faClass="fa fa-cloud-upload"
             content={(
               <div>
@@ -71,12 +71,12 @@ export class AdminHubsIndex extends Component {
                     styles.action_section
                   } flex-100 layout-row layout-align-center-center layout-wrap`}
                 >
-                  <p className="flex-100 center">Upload Hubs Sheet</p>
+                  <p className="flex-100 center">{t('admin:uploadHubs')}</p>
                   <FileUploader
                     theme={theme}
                     url={hubUrl}
                     type="xlsx"
-                    text="Hub .xlsx"
+                    text={t('admin:hubExcel')}
                     dispatchFn={documentDispatch.uploadHubs}
                   />
                 </div>
@@ -85,12 +85,12 @@ export class AdminHubsIndex extends Component {
                     styles.action_section
                   } flex-100 layout-row layout-align-center-center layout-wrap`}
                 >
-                  <p className="flex-100 center">Upload Local Charges Sheet</p>
+                  <p className="flex-100 center">{t('admin:uploadLocalCharges')}</p>
                   <FileUploader
                     theme={theme}
                     url={scUrl}
                     type="xlsx"
-                    text="Hub .xlsx"
+                    text={t('admin:hubExcel')}
                     dispatchFn={documentDispatch.uploadLocalCharges}
                   />
                 </div>
@@ -103,7 +103,7 @@ export class AdminHubsIndex extends Component {
             theme={theme}
             styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
             handleCollapser={() => this.toggleExpander('download')}
-            text="Download Data"
+            text={t('admin:downloadData')}
             faClass="fa fa-cloud-download"
             content={(
               <div>
@@ -112,7 +112,7 @@ export class AdminHubsIndex extends Component {
                     styles.action_section
                   } flex-100 layout-row layout-wrap layout-align-center-center`}
                 >
-                  <p className="flex-100 center">Download Hubs Sheet</p>
+                  <p className="flex-100 center">{t('admin:downloadHubs')}</p>
                   <DocumentsDownloader theme={theme} target="hubs" />
                 </div>
                 <div
@@ -120,7 +120,7 @@ export class AdminHubsIndex extends Component {
                     styles.action_section
                   } flex-100 layout-row layout-wrap layout-align-center-center`}
                 >
-                  <p className="flex-100 center">Download Ocean Local Charges Sheet</p>
+                  <p className="flex-100 center">{t('admin:downloadOceanLocalCharges')}</p>
                   <DocumentsDownloader
                     theme={theme}
                     target="local_charges"
@@ -132,7 +132,7 @@ export class AdminHubsIndex extends Component {
                     styles.action_section
                   } flex-100 layout-row layout-wrap layout-align-center-center`}
                 >
-                  <p className="flex-100 center">Download Air Local Charges Sheet</p>
+                  <p className="flex-100 center">{t('admin:downloadLocalCharges')}</p>
                   <DocumentsDownloader
                     theme={theme}
                     target="local_charges"
@@ -148,7 +148,7 @@ export class AdminHubsIndex extends Component {
             theme={theme}
             styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
             handleCollapser={() => this.toggleExpander('new')}
-            text="Create New Hub"
+            text={t('admin:createNewHub')}
             faClass="fa fa-plus-circle"
             content={(
               <div
@@ -177,6 +177,7 @@ export class AdminHubsIndex extends Component {
 }
 
 AdminHubsIndex.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   scope: PropTypes.objectOf(PropTypes.bool),
@@ -194,4 +195,4 @@ AdminHubsIndex.defaultProps = {
   scope: {}
 }
 
-export default AdminHubsIndex
+export default withNamespaces('admin')(AdminHubsIndex)

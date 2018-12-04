@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
@@ -65,7 +66,7 @@ export class AdminPricePanel extends Component {
   }
   render () {
     const {
-      theme, pricingData, clientPricings, adminActions
+      t, theme, pricingData, clientPricings, adminActions
     } = this.props
     const {
       editorBool, editTransport, editPricing, editHubRoute
@@ -91,7 +92,7 @@ export class AdminPricePanel extends Component {
         <RoundButton
           theme={theme}
           size="small"
-          text="Back"
+          text={t('common:basicBack')}
           handleNext={AdminPricePanel.backToIndex}
           iconClass="fa-chevron-left"
         />
@@ -110,7 +111,7 @@ export class AdminPricePanel extends Component {
         </div>
 
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-          <h4 className="flex-none"> No dedicated pricings available</h4>
+          <h4 className="flex-none">{t('admin:noDedicatedPricings')}</h4>
         </div>
       </div>
     )
@@ -211,21 +212,21 @@ export class AdminPricePanel extends Component {
           <div
             className={`flex-33 layout-row layout-align-start-center ${styles.price_row_detail}`}
           >
-            <p className="flex-none">Mode of Transport:</p>
+            <p className="flex-none">{t('admin:modeOfTransport')}:</p>
             <div className="flex-5" />
             <p className="flex-none"> {transport.mode_of_transport}</p>
           </div>
           <div
             className={`flex-33 layout-row layout-align-start-center ${styles.price_row_detail}`}
           >
-            <p className="flex-none">Cargo Type: </p>
+            <p className="flex-none">{t('admin:cargoType')}</p>
             <div className="flex-5" />
             <p className="flex-none">{transport.name}</p>
           </div>
           <div
             className={`flex-33 layout-row layout-align-start-center ${styles.price_row_detail}`}
           >
-            <p className="flex-none">Cargo Class:</p>
+            <p className="flex-none">{t('admin:cargoClass')}</p>
             <div className="flex-5" />
             <p className="flex-none"> {containerDescriptions[transport.cargo_class]}</p>
           </div>
@@ -254,8 +255,10 @@ export class AdminPricePanel extends Component {
             />)
           }
         })
+
         return innerInner
       })
+
       return (
         <div
           key={v4()}
@@ -279,6 +282,7 @@ export class AdminPricePanel extends Component {
           diArr.push(di)
         }
       })
+
       return (
         <RoutePricingBox
           key={v4()}
@@ -324,6 +328,7 @@ export class AdminPricePanel extends Component {
   }
 }
 AdminPricePanel.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   clientPricings: PropTypes.shape({
     customer_id: PropTypes.number
@@ -342,4 +347,4 @@ AdminPricePanel.defaultProps = {
   pricingData: {}
 }
 
-export default AdminPricePanel
+export default withNamespaces(['admin', 'common'])(AdminPricePanel)

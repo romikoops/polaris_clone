@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import Fuse from 'fuse.js'
 // import Truncate from 'react-truncate'
@@ -21,7 +22,7 @@ import { TruckingDisplayPanel } from './AdminAuxilliaries'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import DocumentsSelector from '../../components/Documents/Selector'
 import { documentActions } from '../../actions'
-import { AdminUploadsSuccess } from './Uploads/Success'
+import AdminUploadsSuccess from './Uploads/Success'
 import DocumentsDownloader from '../../components/Documents/Downloader'
 import { cargoClassOptions } from '../../constants'
 import GreyBox from '../GreyBox/GreyBox'
@@ -188,7 +189,7 @@ export class AdminTruckingView extends Component {
   }
   render () {
     const {
-      theme, truckingDetail, adminDispatch, document
+      t, theme, truckingDetail, adminDispatch, document
     } = this.props
     if (!truckingDetail) {
       return ''
@@ -288,7 +289,7 @@ export class AdminTruckingView extends Component {
         })
       ) : (
         <div className="flex-100 layout-row layout-align-center-center">
-          <p className="flex-none">No truckings available</p>
+          <p className="flex-none">{t('admin:noTruckingsAvailable')}</p>
         </div>
       )
     const backBtn = (
@@ -298,14 +299,14 @@ export class AdminTruckingView extends Component {
       >
         <div className="flex-none layout-row layout-align-center-center">
           <i className="flex-none fa fa-angle-left" />
-          <p className="flex-none">&nbsp;&nbsp;Back to list</p>
+          <p className="flex-none">&nbsp;&nbsp;{t('admin:backToList')}</p>
         </div>
       </div>)
     const truckView = currentTruckingPricing ? displayPanel : searchResults
     const truckFilter = loadTypeBool
       ? (<div className="flex-100 layout-row layout-align-space-between-center">
         <div className="flex-90 layout-row layout-align-space-between-center">
-          <p className="flex-none">Side Lifter</p>
+          <p className="flex-none">{t('admin:sideLifter')}</p>
           <div className="flex-5" />
           <Toggle
             className="flex-none"
@@ -315,7 +316,7 @@ export class AdminTruckingView extends Component {
             onChange={e => this.handleTruckToggle(e)}
           />
           <div className="flex-5" />
-          <p className="flex-none">Chassis</p>
+          <p className="flex-none">{t('admin:chassis')}</p>
         </div>
       </div>) : ''
 
@@ -364,7 +365,7 @@ export class AdminTruckingView extends Component {
         <div className="flex-20 layout-row layout-wrap layout-align-center-start">
 
           <SideOptionsBox
-            header="Filters"
+            header={t('admin:filters')}
             flexOptions="layout-column flex-100 flex-md-30"
             content={(
               <div>
@@ -374,7 +375,7 @@ export class AdminTruckingView extends Component {
                   <input
                     type="text"
                     value={searchFilter}
-                    placeholder="Search Trucking Zones"
+                    placeholder={t('admin:searchTruckingZones')}
                     onChange={e => this.handleSearchChange(e)}
                   />
                 </div>
@@ -385,7 +386,7 @@ export class AdminTruckingView extends Component {
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('load_type')}
                     styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                    text="Load Type"
+                    text={t('admin:loadType')}
                     faClass="fa fa-ship"
                     content={(
                       <div className="flex-90 layout-row layout-align-space-between-center">
@@ -412,11 +413,11 @@ export class AdminTruckingView extends Component {
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('direction')}
                     styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                    text="Import / Export"
+                    text={`${t('admin:import')} / ${t('admin:export')}`}
                     faClass="fa fa-star-half-o"
                     content={(
                       <div className="flex-90 layout-row layout-align-space-between-center">
-                        <p className="flex-none">Export</p>
+                        <p className="flex-none">{t('admin:export')}</p>
                         <div className="flex-5" />
                         <Toggle
                           className="flex-none"
@@ -426,7 +427,7 @@ export class AdminTruckingView extends Component {
                           onChange={e => this.handleDirectionToggle(e)}
                         />
                         <div className="flex-5" />
-                        <p className="flex-none">Import</p>
+                        <p className="flex-none">{t('admin:import')}</p>
                       </div>
                     )}
                   />
@@ -439,7 +440,7 @@ export class AdminTruckingView extends Component {
                       theme={theme}
                       handleCollapser={() => this.toggleExpander('truck_type')}
                       styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                      text="Import / Export"
+                      text={`${t('admin:import')} / ${t('admin:export')}`}
                       faClass="fa fa-flag"
                       content={truckFilter}
                     />
@@ -452,11 +453,11 @@ export class AdminTruckingView extends Component {
                       theme={theme}
                       handleCollapser={() => this.toggleExpander('cargo_class')}
                       styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                      text="Cargo Class"
+                      text={t('admin:cargoClassPlain')}
                       faClass="fa fa-flag"
                       content={(
                         <NamedSelect
-                          placeholder="Cargo Class"
+                          placeholder={t('admin:cargoClassPlain')}
                           className={styles.select}
                           name="cargo_class"
                           value={cargoClass}
@@ -471,7 +472,7 @@ export class AdminTruckingView extends Component {
           />
 
           <SideOptionsBox
-            header="Data manager"
+            header={t('admin:dataManager')}
             flexOptions="layout-column flex-100 flex-md-30 margin_bottom"
             content={(
               <div>
@@ -482,7 +483,7 @@ export class AdminTruckingView extends Component {
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('upload')}
                     styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                    text="Upload Data"
+                    text={t('admin:uploadData')}
                     faClass="fa fa-cloud-upload"
                     content={(
                       <div
@@ -490,12 +491,12 @@ export class AdminTruckingView extends Component {
                           styles.action_section
                         } flex-100 layout-row layout-align-center-center layout-wrap`}
                       >
-                        <p className="flex-90 center">Upload Trucking Zones Sheet</p>
+                        <p className="flex-90 center">{t('admin:uploadTruckingZonesSheet')}</p>
                         <DocumentsSelector
                           theme={theme}
                           dispatchFn={(file, dir) => this.handleUpload(file, dir)}
                           type="xlsx"
-                          text="Routes .xlsx"
+                          text={t('admin:routesExcel')}
                         />
                       </div>
                     )}
@@ -508,7 +509,7 @@ export class AdminTruckingView extends Component {
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('download')}
                     styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                    text="Download Data"
+                    text={t('admin:downloadData')}
                     faClass="fa fa-cloud-download"
                     content={(
                       <div>
@@ -517,7 +518,7 @@ export class AdminTruckingView extends Component {
                             styles.action_section
                           } flex-100 layout-row layout-wrap layout-align-center-center`}
                         >
-                          <p className="flex-100 center">Download Cargo Item Sheet</p>
+                          <p className="flex-100 center">{t('admin:downloadCargoItemSheet')}</p>
                           <DocumentsDownloader
                             theme={theme}
                             target="trucking"
@@ -529,7 +530,7 @@ export class AdminTruckingView extends Component {
                             styles.action_section
                           } flex-100 layout-row layout-wrap layout-align-center-center`}
                         >
-                          <p className="flex-100 center">Download Container Sheet</p>
+                          <p className="flex-100 center">{t('admin:downloadContainerSheet')}</p>
                           <DocumentsDownloader
                             theme={theme}
                             target="trucking"
@@ -549,6 +550,7 @@ export class AdminTruckingView extends Component {
   }
 }
 AdminTruckingView.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   adminDispatch: PropTypes.shape({
     uploadTrucking: PropTypes.func
@@ -581,4 +583,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminTruckingView)
+export default withNamespaces('admin')(connect(mapStateToProps, mapDispatchToProps)(AdminTruckingView))

@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import GreyBox from '../GreyBox/GreyBox'
 import styles from './AdminClientCardIndex.scss'
 import { gradientTextGenerator } from '../../helpers'
 
-function listClients (clients, theme, viewClient) {
+function listClients (clients, theme, viewClient, t) {
   const gradientFontStyle =
     theme && theme.colors
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -37,9 +38,9 @@ function listClients (clients, theme, viewClient) {
           </div>
         </div>
         <span className={`layout-column layout-align-center-end flex-25 ${styles.smallText}`}>
-          <b>Last active</b><br />
+          <b>{t('admin:lastActive')}</b><br />
           <span className={`${styles.grey}`}>
-            {moment().diff(moment(client.updated_at), 'days')} days ago
+            {t('admin:daysAgo', { days: moment().diff(moment(client.updated_at), 'days') })}
           </span>
         </span>
       </div>
@@ -53,7 +54,7 @@ function listClients (clients, theme, viewClient) {
         />
       </div>
     )
-  }) : (<span className={`${styles.listelement}`}>No shipments available</span>)
+  }) : (<span className={`${styles.listelement}`}>{t('shipment:noShipmentsAvailable')}</span>)
 }
 
 export class AdminClientCardIndex extends Component {
@@ -65,16 +66,16 @@ export class AdminClientCardIndex extends Component {
 
   render () {
     const {
-      clients, theme, viewClient
+      t, clients, theme, viewClient
     } = this.props
 
     return (
       <div className={`layout-column flex-100 layout-align-start-stretch ${styles.listComponent}`}>
         <div className="layout-padding layout-align-start-center greyBg">
-          <span><b>Clients</b></span>
+          <span><b>{t('admin:clients')}</b></span>
         </div>
         <div className={`layout-align-start-stretch ${styles.list} ${styles.scrolling}`}>
-          {listClients(clients, theme, viewClient)}
+          {listClients(clients, theme, viewClient, t)}
         </div>
       </div>
     )
@@ -82,6 +83,7 @@ export class AdminClientCardIndex extends Component {
 }
 
 AdminClientCardIndex.propTypes = {
+  t: PropTypes.func.isRequired,
   clients: PropTypes.arrayOf(PropTypes.client),
   viewClient: PropTypes.func,
   theme: PropTypes.theme
@@ -93,4 +95,4 @@ AdminClientCardIndex.defaultProps = {
   theme: null
 }
 
-export default AdminClientCardIndex
+export default withNamespaces(['admin', 'shipment'])(AdminClientCardIndex)

@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import { withNamespaces } from 'react-i18next'
 import styles from './index.scss'
 import PropTypes from '../../../prop-types'
 import AdminPromptConfirm from '../Prompt/Confirm'
@@ -46,15 +47,15 @@ class MandatoryChargeBox extends PureComponent {
   render () {
     const { mandatoryCharge, confirm } = this.state
     const {
-      theme
+      theme, t
     } = this.props
     if (!mandatoryCharge.id) return ''
 
     const confimPrompt = confirm ? (
       <AdminPromptConfirm
         theme={theme}
-        heading="Are you sure?"
-        text="These changes will be instantly available in your store"
+        heading={t('common:areYouSure')}
+        text={t('admin:instantlyAvailable')}
         confirm={() => this.closeAndSave()}
         deny={() => this.closeConfirm()}
       />
@@ -73,9 +74,7 @@ class MandatoryChargeBox extends PureComponent {
         { confimPrompt }
         <div className={`flex-100 layout-row layout-align-start-center layout-wrap ${styles.mandatory_charges_box}`}>
           <div className={`flex-75 layout-row layout-align-space-around-center ${styles.charges_row_padding}`}>
-            <label htmlFor="import" className="pointy">
-              <p>Import Fees</p>
-            </label>
+            <p className="flex-none">{t('admin:importFees')}</p>
             <Checkbox
               id="import"
               theme={theme}
@@ -85,9 +84,7 @@ class MandatoryChargeBox extends PureComponent {
             />
           </div>
           <div className={`flex-75 layout-row layout-align-space-around-center ${styles.charges_row_padding}`}>
-            <label htmlFor="export" className="pointy">
-              <p>Export Fees</p>
-            </label>
+            <p className="flex-none">{t('admin:exportFees')}</p>
             <Checkbox
               id="export"
               theme={theme}
@@ -100,7 +97,7 @@ class MandatoryChargeBox extends PureComponent {
         <div className="flex-100 layout-row layout-align-end-center">
           {editHasOccured ? (
             <div className={`${styles.save_icon_btn} flex-none layout-row layout-align-end-center pointy`} onClick={() => this.confirmSave()}>
-              <p className="flex-none">Save</p>
+              <p className="flex-none">{t('admin:save')}</p>
               <div className={`${styles.save_icon_btn} flex-none layout-row pointy`}>
                 <i className="fa fa-floppy-o clip" style={iconTheme} />
               </div>
@@ -115,9 +112,10 @@ class MandatoryChargeBox extends PureComponent {
 }
 
 MandatoryChargeBox.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme.isRequired,
   saveChanges: PropTypes.func.isRequired,
   mandatoryCharge: PropTypes.func.isRequired
 }
 MandatoryChargeBox.defaultProps = {}
-export default MandatoryChargeBox
+export default withNamespaces(['admin', 'common]'])(MandatoryChargeBox)

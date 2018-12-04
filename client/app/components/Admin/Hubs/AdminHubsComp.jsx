@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -169,6 +170,7 @@ export class AdminHubsComp extends Component {
   render () {
     const { searchFilters, expander } = this.state
     const {
+      t,
       theme,
       actionNodes,
       hubs,
@@ -182,7 +184,7 @@ export class AdminHubsComp extends Component {
     }
     const typeFilters = Object.keys(searchFilters.hubType).map((hubType) => {
       const typeNames = {
-        ocean: 'Port', air: 'Airport', rail: 'Railyard', truck: 'Depot'
+        ocean: t('admin:port'), air: t('admin:airport'), rail: t('admin:railyard'), truck: t('admin:depot')
       }
 
       return (
@@ -259,7 +261,7 @@ export class AdminHubsComp extends Component {
                   onClick={this.state.page > 1 ? this.prevPage : null}
                 >
                   <i className="fa fa-chevron-left" />
-                  <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;{t('common:basicBack')}</p>
                 </div>
                 {}
                 <p>{this.state.page}</p>
@@ -270,7 +272,7 @@ export class AdminHubsComp extends Component {
                     `}
                   onClick={this.state.page < numHubPages ? this.nextPage : null}
                 >
-                  <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                  <p>{t('common:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
                   <i className="fa fa-chevron-right" />
                 </div>
               </div>
@@ -282,7 +284,7 @@ export class AdminHubsComp extends Component {
 
               <div className={`${styles.filter_panel} flex layout-row`}>
                 <SideOptionsBox
-                  header="Filters"
+                  header={t('admin:filters')}
                   flexOptions="flex"
                   content={(
                     <div>
@@ -293,7 +295,7 @@ export class AdminHubsComp extends Component {
                           type="text"
                           className="flex-100"
                           value={searchFilters.query}
-                          placeholder="Search..."
+                          placeholder={t('admin:search')}
                           onChange={e => this.handleSearchQuery(e)}
                         />
                       </div>
@@ -302,7 +304,7 @@ export class AdminHubsComp extends Component {
                           collapsed={!expander.hubType}
                           theme={theme}
                           handleCollapser={() => this.toggleExpander('hubType')}
-                          text="Hub Type"
+                          text={t('admin:hubType')}
                           faClass="fa fa-ship"
                           showArrow
                           content={typeFilters}
@@ -311,7 +313,7 @@ export class AdminHubsComp extends Component {
                           collapsed={!expander.status}
                           theme={theme}
                           handleCollapser={() => this.toggleExpander('status')}
-                          text="Status"
+                          text={t('common:status')}
                           faClass="fa fa-ship"
                           showArrow
                           content={statusFilters}
@@ -321,7 +323,7 @@ export class AdminHubsComp extends Component {
                           theme={theme}
                           minHeight="270px"
                           handleCollapser={() => this.toggleExpander('countries')}
-                          text="Country"
+                          text={t('user:country')}
                           faClass="fa fa-flag"
                           showArrow
                           content={namedCountries}
@@ -345,6 +347,7 @@ export class AdminHubsComp extends Component {
 
 AdminHubsComp.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   numHubPages: PropTypes.number.isRequired,
   countries: PropTypes.arrayOf(PropTypes.any),
@@ -402,4 +405,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminHubsComp)
+export default withNamespaces('admin')(connect(mapStateToProps, mapDispatchToProps)(AdminHubsComp))

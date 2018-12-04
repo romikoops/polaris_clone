@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
-import { AdminHubCardContent } from './AdminHubCardContent'
+import AdminHubCardContent from './AdminHubCardContent'
 import styles from './AdminHubCards.scss'
 
-function listHubs (hubs, adminDispatch, theme) {
+function listHubs (hubs, adminDispatch, theme, t) {
   return Object.keys(hubs).length > 0 ? Object.keys(hubs).map((hubKey) => {
     const HubCard = (
       <div
@@ -18,7 +19,7 @@ function listHubs (hubs, adminDispatch, theme) {
     )
 
     return HubCard
-  }) : (<span className={`${styles.hub}`}>No hubs available</span>)
+  }) : (<span className={`${styles.hub}`}>{t('admin:noAvailableHubs')}</span>)
 }
 
 export class AdminHubCard extends Component {
@@ -30,6 +31,7 @@ export class AdminHubCard extends Component {
 
   render () {
     const {
+      t,
       hubs,
       adminDispatch,
       theme
@@ -38,10 +40,10 @@ export class AdminHubCard extends Component {
     return (
       <div className={`layout-column flex-100 layout-align-space-between-stretch ${styles.container}`}>
         <div className="layout-padding layout-align-start-center greyBg">
-          <span><b>Hubs</b></span>
+          <span><b>{t('admin:hubs')}</b></span>
         </div>
         <div className={`layout-wrap layout-row flex-100 ${styles.scrolling}`}>
-          {listHubs(hubs, adminDispatch, theme)}
+          {listHubs(hubs, adminDispatch, theme, t)}
         </div>
       </div>
     )
@@ -49,6 +51,7 @@ export class AdminHubCard extends Component {
 }
 
 AdminHubCard.propTypes = {
+  t: PropTypes.func.isRequired,
   adminDispatch: PropTypes.objectOf(PropTypes.func),
   hubs: PropTypes.objectOf(PropTypes.hub),
   theme: PropTypes.theme
@@ -60,4 +63,4 @@ AdminHubCard.defaultProps = {
   theme: null
 }
 
-export default AdminHubCard
+export default withNamespaces('admin')(AdminHubCard)

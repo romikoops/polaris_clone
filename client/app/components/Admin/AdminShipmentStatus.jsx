@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './AdminShipmentStatus.scss'
 
@@ -14,39 +15,39 @@ export class AdminShipmentStatus extends Component {
     return (
       <div className="layout-column flex-100 layout-wrap layout-align-start-stretch">
         <div className="layout-column flex-20 layout-wrap layout-align-start-center">
-          <span className={`${styles.title}`}>Shipment status</span>
-          <span className={`${styles.subtitle}`}>This month</span>
+          <span className={`${styles.title}`}>{this.props.t('admin:shipmentStatus')}</span>
+          <span className={`${styles.subtitle}`}>{this.props.t('admin:thisMonth')}</span>
         </div>
         <div className="layout-row flex-80 layout-wrap layout-align-center-center">
           <div className="layout-column flex-33 layout-wrap layout-align-center-center">
             <span className={`${styles.amount}`}>
               {this.state.shipments.finished ? this.state.shipments.finished.length : 0}
             </span><br />
-            <span className={`${styles.amounttitle}`}>Shipments</span>
+            <span className={`${styles.amounttitle}`}>{this.props.t('account:shipments')}</span>
           </div>
           <div className="layout-column flex-33 layout-wrap layout-align-center-center">
             <span className={`${styles.amount}`}>
               {this.state.shipments.open ? this.state.shipments.open.length : 0}
             </span><br />
-            <span className={`${styles.amounttitle}`}>Active</span>
+            <span className={`${styles.amounttitle}`}>{this.props.t('admin:active')}</span>
           </div>
           <div className="layout-column flex-33 layout-wrap layout-align-center-center">
             <span className={`${styles.amount}`}>
               {this.state.shipments.requested ? this.state.shipments.requested.length : 0}
             </span><br />
-            <span className={`${styles.amounttitle}`}>Requested</span>
+            <span className={`${styles.amounttitle}`}>{this.props.t('account:requested')}</span>
           </div>
           <div className="layout-column flex-33 layout-wrap layout-align-center-center">
             <span className={`${styles.amount}`}>
               {this.state.shipments.rejected ? this.state.shipments.rejected.length : 0}
             </span><br />
-            <span className={`${styles.amounttitle}`}>Rejected</span>
+            <span className={`${styles.amounttitle}`}>{this.props.t('account:rejected')}</span>
           </div>
           <div className="layout-column flex-33 layout-wrap layout-align-center-center">
             <span className={`${styles.amount}`}>
               {this.state.shipments.archived ? this.state.shipments.archived.length : 0}
             </span><br />
-            <span className={`${styles.amounttitle}`}>Archived</span>
+            <span className={`${styles.amounttitle}`}>{this.props.t('account:archived')}</span>
           </div>
         </div>
       </div>
@@ -55,6 +56,7 @@ export class AdminShipmentStatus extends Component {
 }
 
 AdminShipmentStatus.propTypes = {
+  t: PropTypes.func.isRequired,
   shipments: PropTypes.shape({
     open: PropTypes.arrayOf(PropTypes.shipment),
     requested: PropTypes.arrayOf(PropTypes.shipment),
@@ -68,4 +70,4 @@ AdminShipmentStatus.defaultProps = {
   shipments: {}
 }
 
-export default AdminShipmentStatus
+export default withNamespaces(['admin', 'account'])(AdminShipmentStatus)

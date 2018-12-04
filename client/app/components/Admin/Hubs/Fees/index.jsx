@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import '../../../../styles/day-picker-custom.scss'
 import styles from '../../Admin.scss'
@@ -18,7 +19,6 @@ import { gradientGenerator, capitalize } from '../../../../helpers'
 import FeeRow from './FeeRow'
 import FeeRangeRow from './FeeRangeRow'
 import { NamedSelect } from '../../../NamedSelect/NamedSelect'
-
 
 const rateOpts = rateBasises
 const currencyOpts = currencyOptions
@@ -434,7 +434,9 @@ export class AdminHubFees extends Component {
   }
 
   render () {
-    const { theme, serviceLevels, counterpartHubs } = this.props
+    const {
+      t, theme, serviceLevels, counterpartHubs
+    } = this.props
 
     const {
       selectOptions,
@@ -491,7 +493,7 @@ export class AdminHubFees extends Component {
     }) : (
       <div className="flex-100">
         <p className={`${styles2.no_results}`}>
-          There are no results.
+          {t('admin:noResults')}
         </p>
       </div>
     )
@@ -517,7 +519,7 @@ export class AdminHubFees extends Component {
       <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles2.container}`}>
         <div className={`flex-100 layout-row layout-align-space-between-center ${styles2.header_bar_grey}`}>
           <div className="flex-30 layout-row layout-align-start-center">
-            <p className={`flex-none ${styles2.text}`} >Fees & Charges</p>
+            <p className={`flex-none ${styles2.text}`} >{t('admin:feesAndCharges')}</p>
           </div>
           <div className="flex-30 layout-row layout-align-end-center">
             <div
@@ -525,14 +527,14 @@ export class AdminHubFees extends Component {
               style={bgStyle}
               onClick={() => this.handleDirectionChange()}
             >
-              <p className="flex-none">Import</p>
+              <p className="flex-none">{t('admin:import')}</p>
             </div>
             <div
               className={`flex-none layout-row layout-align-center-center pointy ${styles2.toggle} ${expStyle}`}
               style={bgStyle}
               onClick={() => this.handleDirectionChange()}
             >
-              <p className="flex-none">Export</p>
+              <p className="flex-none">{t('admin:export')}</p>
             </div>
           </div>
         </div>
@@ -569,6 +571,7 @@ export class AdminHubFees extends Component {
   }
 }
 AdminHubFees.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   charges: PropTypes.arrayOf(PropTypes.any),
@@ -584,4 +587,4 @@ AdminHubFees.defaultProps = {
   counterpartHubs: []
 }
 
-export default AdminHubFees
+export default withNamespaces('admin')(AdminHubFees)

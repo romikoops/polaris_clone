@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import styles from './index.scss'
 import PropTypes from '../../../prop-types'
@@ -16,6 +17,7 @@ class ItineraryRow extends PureComponent {
 
   render () {
     const {
+      t,
       theme,
       itinerary
     } = this.props
@@ -35,7 +37,7 @@ class ItineraryRow extends PureComponent {
           <div className={`flex-none ${styles.divider}`} />
           <div className={`flex layout-row layout-wrap layout-align-center-center ${styles.itinerary_row_city}`}>
             <p className={`flex-100 ${styles.city_name}`}>{startCity}</p>
-            <p className={`flex-100 ${styles.city_context}`}>Departure</p>
+            <p className={`flex-100 ${styles.city_context}`}>{t('admin:departure')}</p>
           </div>
           <div className={`flex-15 layout-row layout-align-center-center ${styles.chevron_icon}`}>
             <i
@@ -45,17 +47,17 @@ class ItineraryRow extends PureComponent {
           </div>
           <div className={`flex layout-row layout-wrap layout-align-center-center ${styles.itinerary_row_city}`}>
             <p className={`flex-100 ${styles.city_name}`}>{endCity}</p>
-            <p className={`flex-100 ${styles.city_context}`}>Arrival;</p>
+            <p className={`flex-100 ${styles.city_context}`}>{t('admin:arrival')}</p>
           </div>
         </div>
         <div className={`flex layout-row layout-align-center-center pointy ${styles.itinerary_row_box} ${styles.itinerary_row_btn}`} onClick={() => this.viewSchedules()} >
           <div className={`flex-none ${styles.divider}`} />
-          <p className="flex-none">View Schedules</p>
+          <p className="flex-none">{t('admin:viewSchedules')}</p>
         </div>
 
         <div className={`flex layout-row layout-align-center-center pointy ${styles.itinerary_row_box} ${styles.itinerary_row_btn}`} onClick={() => this.viewPricings()}>
           <div className={`flex-none ${styles.divider}`} />
-          <p className="flex-none">View Pricings</p>
+          <p className="flex-none">{t('admin:viewPricings')}</p>
         </div>
       </div>
     )
@@ -63,6 +65,7 @@ class ItineraryRow extends PureComponent {
 }
 
 ItineraryRow.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   itinerary: PropTypes.objectOf(PropTypes.any).isRequired,
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired
@@ -70,4 +73,4 @@ ItineraryRow.propTypes = {
 ItineraryRow.defaultProps = {
   theme: {}
 }
-export default ItineraryRow
+export default withNamespaces('admin')(ItineraryRow)

@@ -3,7 +3,7 @@ import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 // import { UserShipmentRow } from './';
-import { AdminAddressTile } from '../Admin'
+import AdminAddressTile from '../Admin/AdminAddressTile'
 import styles from './UserAccount.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { AdminSearchableShipments } from '../Admin/AdminSearchables'
