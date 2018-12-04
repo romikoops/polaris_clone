@@ -108,6 +108,10 @@ class ShipmentLocationBox extends PureComponent {
       truckingFound: {
         origin: false,
         destination: false
+      },
+      showTick: {
+        origin: false,
+        destination: false
       }
     }
 
@@ -620,12 +624,16 @@ class ShipmentLocationBox extends PureComponent {
       truckingFound: {
         ...prevState.truckingFound,
         [target]: true
+      },
+      showTick: {
+        ...prevState.showTick,
+        [target]: true
       }
     }))
     setTimeout(() => {
       this.setState(prevState => ({
-        truckingFound: {
-          ...prevState.truckingFound,
+        showTick: {
+          ...prevState.showTick,
           [target]: false
         }
       }))
@@ -1029,7 +1037,8 @@ class ShipmentLocationBox extends PureComponent {
       destinationTruckingAvailable,
       fetchingtruckingAvailability,
       countries,
-      truckingFound
+      truckingFound,
+      showTick
     } = this.state
 
     if (availableDestinationNexuses) destinationOptions = ShipmentLocationBox.sortOptions(availableDestinationNexuses)
@@ -1093,16 +1102,16 @@ class ShipmentLocationBox extends PureComponent {
           className={`${styles.address_form} flex-100 layout-row layout-wrap layout-align-center ccb_pre_address_form`}
         >
           { fetchingtruckingAvailability ? <LoadingSpinner size="medium" /> : '' }
-          { truckingFound.origin ? (
+          { showTick.origin ? (
             <CircleCompletion
               icon="fa fa-check"
               iconColor="white"
-              animated={truckingFound.origin}
+              animated={showTick.origin}
               size="150px"
-              opacity={truckingFound.origin ? '1' : '0'}
+              opacity={showTick.origin ? '1' : '0'}
             />
           ) : '' }
-          { (!fetchingtruckingAvailability && !truckingFound.origin) ? (
+          { (!fetchingtruckingAvailability && !showTick.origin) ? (
             <div
               className="flex-100 layout-row layout-wrap layout-align-center"
             >
@@ -1240,16 +1249,16 @@ class ShipmentLocationBox extends PureComponent {
         </div>
         <div className={`${styles.address_form} ${toggleLogic} flex-100 layout-row layout-wrap layout-align-center ccb_on_address_form`}>
           { fetchingtruckingAvailability ? <LoadingSpinner size="medium" /> : '' }
-          { truckingFound.destination ? (
+          { showTick.destination ? (
             <CircleCompletion
               icon="fa fa-check"
               iconColor="white"
-              animated={truckingFound.destination}
+              animated={showTick.destination}
               size="150px"
-              opacity={truckingFound.destination ? '1' : '0'}
+              opacity={showTick.destination ? '1' : '0'}
             />
           ) : '' }
-          { (!fetchingtruckingAvailability && !truckingFound.destination) ? (
+          { (!fetchingtruckingAvailability && !showTick.destination) ? (
             <div
               className="flex-100 layout-row layout-wrap layout-align-center"
             >
