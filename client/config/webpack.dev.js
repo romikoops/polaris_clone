@@ -1,5 +1,6 @@
 const merge = require('webpack-merge')
 const common = require('./webpack.common.js')
+const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 
 module.exports = merge(common, {
   mode: 'development',
@@ -13,5 +14,9 @@ module.exports = merge(common, {
 
   output: {
     filename: '[name].js'
-  }
+  },
+
+  plugins: [
+    new ProgressBarPlugin()
+  ]
 })
