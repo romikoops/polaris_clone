@@ -320,11 +320,13 @@ exports[`detailed billing working properly 1`] = `
       </div>
     }
     minHeight=""
+    wrapperContentClasses=""
   />
   <CollapsingContent
     collapsed={false}
     content=""
     minHeight=""
+    wrapperContentClasses=""
   >
     <QuoteChargeBreakdown
       cargo={Array []}
@@ -746,11 +748,13 @@ exports[`shallow rendering 1`] = `
       </div>
     }
     minHeight=""
+    wrapperContentClasses=""
   />
   <CollapsingContent
     collapsed={false}
     content=""
     minHeight=""
+    wrapperContentClasses=""
   >
     <QuoteChargeBreakdown
       cargo={Array []}
@@ -1172,11 +1176,13 @@ exports[`show schedule options working 1`] = `
       </div>
     }
     minHeight=""
+    wrapperContentClasses=""
   />
   <CollapsingContent
     collapsed={true}
     content=""
     minHeight=""
+    wrapperContentClasses=""
   >
     <QuoteChargeBreakdown
       cargo={Array []}
@@ -1598,11 +1604,13 @@ exports[`show schedules set to true 1`] = `
       </div>
     }
     minHeight=""
+    wrapperContentClasses=""
   />
   <CollapsingContent
     collapsed={true}
     content=""
     minHeight=""
+    wrapperContentClasses=""
   >
     <QuoteChargeBreakdown
       cargo={Array []}
@@ -2023,11 +2031,13 @@ exports[`single result rendering removes the "add" button 1`] = `
       </div>
     }
     minHeight=""
+    wrapperContentClasses=""
   />
   <CollapsingContent
     collapsed={false}
     content=""
     minHeight=""
+    wrapperContentClasses=""
   >
     <QuoteChargeBreakdown
       cargo={Array []}

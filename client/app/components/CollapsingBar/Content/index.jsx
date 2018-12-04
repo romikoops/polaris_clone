@@ -27,13 +27,13 @@ export default class CollapsingContent extends React.PureComponent {
   }
   render () {
     const {
-      collapsed, content, children, minHeight
+      collapsed, content, children, minHeight, wrapperContentClasses
     } = this.props
     const { firstRender } = this.state
 
     return (
       <div
-        className={`${collapsed && !firstRender ? styles.collapsed : ''} ${styles.main_panel}`}
+        className={`${collapsed && !firstRender ? styles.collapsed : ''} ${styles.main_panel} ${wrapperContentClasses}`}
         style={{
           minHeight: `${!collapsed ? minHeight : ''}`,
           maxHeight: this.state.panelHeight,
@@ -53,12 +53,14 @@ CollapsingContent.propTypes = {
   collapsed: Proptypes.bool,
   content: Proptypes.node,
   minHeight: Proptypes.string,
+  wrapperContentClasses: Proptypes.string,
   children: Proptypes.arrayOf(Proptypes.node)
 }
 
 CollapsingContent.defaultProps = {
   collapsed: false,
   content: '',
+  wrapperContentClasses: '',
   minHeight: '',
   children: null
 }

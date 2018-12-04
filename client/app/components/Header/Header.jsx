@@ -24,7 +24,8 @@ class Header extends Component {
     this.state = {
       showLogin: false,
       isTop: true,
-      alertVisible: false
+      alertVisible: false,
+      showTenants: false
     }
     this.goHome = this.goHome.bind(this)
     this.toggleShowLogin = this.toggleShowLogin.bind(this)
@@ -131,10 +132,10 @@ class Header extends Component {
       ]
 
     let logoUrl = ''
+    let logoStyle
     const logoDisplay = {
       display: `${isTop && invert ? 'none' : 'block'}`
     }
-    let logoStyle
 
     if (theme && theme.logoWide) {
       logoUrl = theme.logoWide
@@ -209,12 +210,12 @@ class Header extends Component {
     return (
       <div className={headerClass} style={{ color: invert ? 'white' : 'black' }}>
         <div className="flex-100 layout-row" style={{ padding: '0 15px' }}>
-          <div className="layout-row flex layout-align-start-center">
+          <div className="layout-row flex layout-align-center-center pointy">
             <img
               src={logoUrl}
-              className={logoStyle}
-              alt=""
+              className={`${logoStyle}`}
               style={logoDisplay}
+              alt=""
               onClick={this.goHome}
             />
           </div>
@@ -288,7 +289,7 @@ function mapStateToProps (state) {
     user, loggedIn, loggingIn, registering, loginAttempt, showModal
   } = authentication
   const { unread, messages } = messaging
-  const { currencies, tenant } = app
+  const { currencies, tenant, tenants } = app
   const { error, currentStage } = bookingData
 
   return {
@@ -300,6 +301,7 @@ function mapStateToProps (state) {
     loginAttempt,
     shipment,
     currencies,
+    tenants,
     unread,
     messages,
     showModal,

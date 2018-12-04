@@ -13,7 +13,7 @@ const GoogleTagManager = (events) => {
 const eventsMap = {
   SET_TENANT_SUCCESS: (action, prevState, nextState) => ({
     event: action.type,
-    tenant: nextState.app.tenant.subdomain
+    tenant: action.payload.tenant.subdomain
   })
 }
 

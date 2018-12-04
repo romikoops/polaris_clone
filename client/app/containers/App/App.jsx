@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
+import {
+ Switch, Route, Redirect, withRouter
+} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import UserAccount from '../UserAccount/UserAccount'
 import Landing from '../Landing/Landing'
 import Shop from '../Shop/Shop'
+import TenantMenu from '../../components/TenantMenu'
 import Admin from '../Admin/Admin'
 import AdminShipmentAction from '../../components/Redirects/AdminShipmentAction'
 import { SignOut } from '../../components/SignOut/SignOut'
@@ -15,7 +18,7 @@ import InsuranceDetails from '../../components/InsuranceDetails/InsuranceDetails
 import { appActions, authenticationActions, userActions } from '../../actions'
 import { defaultTheme, moment } from '../../constants'
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
-import MessageCenter from '../../containers/MessageCenter/MessageCenter'
+import MessageCenter from '../MessageCenter/MessageCenter'
 import ResetPasswordForm from '../../components/ResetPasswordForm'
 import CookieConsentBar from '../../components/CookieConsentBar'
 import GenericError from '../../components/ErrorHandling/Generic'
@@ -23,16 +26,21 @@ import GenericError from '../../components/ErrorHandling/Generic'
 class App extends Component {
   constructor (props) {
     super(props)
+    this.isUserExpired = this.isUserExpired.bind(this)
   }
+
   componentWillMount () {
     const { appDispatch } = this.props
-    appDispatch.setTenant()
+    appDispatch.getTenantId()
+    appDispatch.setTenants()
   }
+
   componentDidMount () {
     const { appDispatch } = this.props
     appDispatch.fetchCurrencies()
     this.isUserExpired()
   }
+
   isUserExpired () {
     const { appDispatch, user } = this.props
     const { localStorage } = window
@@ -44,19 +52,23 @@ class App extends Component {
       appDispatch.goTo('/signout')
     }
   }
+
   render () {
     const {
       tenant,
+      tenants,
       user,
       loggedIn,
       showMessages,
       sending,
+      appDispatch,
       loading
     } = this.props
 
     if (!tenant) {
       return <Loading theme={defaultTheme} text="loading..." />
     }
+
     const { theme } = tenant
 
     // Update document title
@@ -66,6 +78,11 @@ class App extends Component {
 
     return (
       <div className="layout-fill layout-row layout-wrap layout-align-start hundred text-break">
+        {
+          tenants && tenants.length > 0 ? (
+            <TenantMenu tenants={tenants} appDispatch={appDispatch} />
+          ) : ''
+        }
         <CookieConsentBar
           user={user}
           theme={theme}
@@ -142,7 +159,7 @@ class App extends Component {
               />
 
             </Switch>
-          </GenericError >
+          </GenericError>
         </div>
       </div>
     )
@@ -175,7 +192,7 @@ function mapStateToProps (state) {
   const {
     selectedSubdomain, authentication, messaging, admin, users, app
   } = state
-  const { tenant } = app
+  const { tenant, tenants } = app
   const { showMessages, sending } = messaging
   const { user, loggedIn, loggingIn } = authentication
   const { isFetching } = tenant || {
@@ -186,6 +203,7 @@ function mapStateToProps (state) {
   return {
     selectedSubdomain,
     tenant,
+    tenants,
     user,
     loggedIn,
     loggingIn,

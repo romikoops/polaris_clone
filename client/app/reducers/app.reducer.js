@@ -9,10 +9,46 @@ export default function app (state = {}, action) {
     case appConstants.SET_TENANT_SUCCESS: {
       return {
         ...state,
-        ...action.payload
+        tenant: action.payload.tenant
       }
     }
     case appConstants.SET_TENANT_ERROR: {
+      const err = merge({}, state, {
+        error: action.payload
+      })
+
+      return err
+    }
+    case appConstants.OVERRIDE_TENANT_REQUEST: {
+      return state
+    }
+    case appConstants.OVERRIDE_TENANT_SUCCESS: {
+      const { tenants } = state
+      const newTenant = tenants.filter(t => t.value.id === parseInt(action.payload, 10))[0]
+      const ret = {
+          ...state,
+          tenant: newTenant.value
+        }
+
+      return ret
+    }
+    case appConstants.OVERRIDE_TENANT_ERROR: {
+      const err = merge({}, state, {
+        error: action.payload
+      })
+
+      return err
+    }
+    case appConstants.SET_TENANTS_REQUEST: {
+      return state
+    }
+    case appConstants.SET_TENANTS_SUCCESS: {
+      return {
+        ...state,
+        tenants: action.payload
+      }
+    }
+    case appConstants.SET_TENANTS_ERROR: {
       const err = merge({}, state, {
         error: action.payload
       })
