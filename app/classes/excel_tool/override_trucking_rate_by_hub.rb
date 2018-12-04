@@ -558,7 +558,7 @@ module ExcelTool
         geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
         return nil if geocoder_results.first.nil?
         coordinates = geocoder_results.first.geometry['location']
-        geometry = Geometry.find_by_coordinates(coordinates['lat'], coordinates['lng'])
+        geometry = Location.find_by_coordinates(coordinates['lat'], coordinates['lng'])
       end
 
       geometry
