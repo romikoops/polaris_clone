@@ -1129,6 +1129,7 @@ class ShipmentLocationBox extends PureComponent {
                 value={origin.street || ''}
                 autoComplete="off"
                 placeholder={t('user:street')}
+                disabled={!this.state.showOriginFields}
               />
               <input
                 id="not-auto"
@@ -1144,6 +1145,7 @@ class ShipmentLocationBox extends PureComponent {
                 value={origin.number || ''}
                 autoComplete="off"
                 placeholder={t('user:number')}
+                disabled={!this.state.showOriginFields}
               />
               <input
                 name="origin-zipCode"
@@ -1158,6 +1160,7 @@ class ShipmentLocationBox extends PureComponent {
                 value={origin.zipCode || ''}
                 autoComplete="off"
                 placeholder={t('user:postalCode')}
+                disabled={!this.state.showOriginFields}
               />
               <input
                 name="origin-city"
@@ -1172,6 +1175,7 @@ class ShipmentLocationBox extends PureComponent {
                 value={origin.city || ''}
                 autoComplete="off"
                 placeholder={t('user:city')}
+                disabled={!this.state.showOriginFields}
               />
               <input
                 name="origin-country"
@@ -1186,6 +1190,7 @@ class ShipmentLocationBox extends PureComponent {
                 value={origin.country || ''}
                 autoComplete="off"
                 placeholder={t('user:country')}
+                disabled={!this.state.showOriginFields}
               />
               <div className="flex-100 layout-row layout-align-start-center">
                 <div
@@ -1194,7 +1199,7 @@ class ShipmentLocationBox extends PureComponent {
                 >
                   <i className="fa fa-times flex-none" />
                   <p className="offset-5 flex-none" style={{ paddingRight: '10px' }}>
-                  Clear
+                    Clear
                   </p>
                 </div>
               </div>
