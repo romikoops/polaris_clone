@@ -37,8 +37,7 @@ function findAvailability (lat, lng, tenantId, loadType, carriage, availableHubI
         callback(false, [], [], {})
       }
     })
-  }).catch((error) => {
-    console.log(error)
+  }).catch(() => {
     callback(false, [], [], {})
   })
 }

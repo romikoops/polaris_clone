@@ -1,5 +1,5 @@
 import { bookingSummaryConstants } from '../constants'
-import { dig } from '../helpers'
+import { get } from 'lodash'
 
 function update (data) {
   const payload = {
@@ -31,7 +31,7 @@ function update (data) {
     }
   }
 
-  if (dig(data, ['shipment', 'load_type']) === 'container' && data.containers) {
+  if (get(data, ['shipment', 'load_type'], null) === 'container' && data.containers) {
     data.containers.forEach((container) => {
       payload.totalWeight += container.quantity * container.payload_in_kg
     })
