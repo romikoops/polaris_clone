@@ -5,7 +5,6 @@ import styles from './Maps.scss'
 import { colorSVG } from '../../helpers'
 import { mapStyling } from '../../constants/map.constants'
 
-const colourSVG = colorSVG
 const mapStyles = mapStyling
 const baseMapStyle = {
   width: '100%',
@@ -54,7 +53,7 @@ class PlaceSearch extends Component {
     const { theme } = this.props
     const newMarkers = []
     const icon = {
-      url: colourSVG('address', theme),
+      url: colorSVG('address', theme),
       anchor: new this.props.gMaps.Point(25, 50),
       scaledSize: new this.props.gMaps.Size(36, 36)
     }

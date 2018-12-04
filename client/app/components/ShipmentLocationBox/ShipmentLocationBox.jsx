@@ -24,7 +24,6 @@ import removeTabIndex from './removeTabIndex'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 import CircleCompletion from '../CircleCompletion/CircleCompletion'
 
-const colourSVG = colorSVG
 const mapStyles = mapStyling
 
 function backgroundColor (props) {
@@ -367,13 +366,13 @@ class ShipmentLocationBox extends PureComponent {
     let icon
     if (target === 'origin') {
       icon = {
-        url: colourSVG('location', theme),
+        url: colorSVG('address', theme),
         anchor: new this.props.gMaps.Point(18, 36),
         scaledSize: new this.props.gMaps.Size(36, 36)
       }
     } else {
       icon = {
-        url: colourSVG('flag', theme),
+        url: colorSVG('flag', theme),
         anchor: new this.props.gMaps.Point(10, 25),
         scaledSize: new this.props.gMaps.Size(36, 36)
       }
