@@ -47,7 +47,8 @@ exports[`shallow render 1`] = `
           className="flex-60 layout-row"
         >
           <button
-            className="accept_all"
+            className=" accept_all"
+            id="ccb_accept_cookies"
             onClick={[Function]}
             type="button"
           >
@@ -254,7 +255,8 @@ exports[`state.showModal is true 1`] = `
           className="flex-60 layout-row"
         >
           <button
-            className="accept_all"
+            className=" accept_all"
+            id="ccb_accept_cookies"
             onClick={[Function]}
             type="button"
           >

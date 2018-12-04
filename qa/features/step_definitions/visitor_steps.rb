@@ -19,29 +19,42 @@ end
 When('I select {string} as {string}') do |place, type|
   if place[/\d+/]
     if type == 'Origin'
-      find('.ccb_pre_carriage', wait: 60).click
+      trucking_dir = 'pre'
     elsif type == 'Destination'
-      find('.ccb_on_carriage', wait: 60).click
+      trucking_dir = 'on'
     end
+    find(".ccb_#{trucking_dir}_carriage", wait: 60).click
     elem = find('div', class: "ccb_#{type.downcase}_carriage_input", wait: 60)
     within(elem) do
       box = find('.ccb_carriage')
       within(box) do
-        place.split('').each do |c|
+        letters = place.split('')
+        letters.each_with_index do |c, i|
           find('input').send_keys(c)
-          sleep(1.0 / 10.0)
+          pause = (i / letters.length > 0.9) ? 1 : 0.1
+          sleep(pause)
         end
-        all(:css, '.ccb_result').first.click
+        first_result = all(:css, '.ccb_result', wait: 30).first
+        if first_result
+          first_result.click
+        end
       end
     end
 
+    #find a close backdrop if it is there
+
+    backdrop = all('.ccb_backdrop')
+
+    backdrop.first.click() unless backdrop.empty?
     name_xpath = "@name='#{type.downcase}-street'"
 
-    # focus the form to avoid it collapsing
-    find(:xpath, ".//input[#{name_xpath}]").send_keys('')
+    # wait for trucking pricing to return
 
-    # wait untill form is autofilled filled
-    find(:xpath, ".//input[#{name_xpath} and not(@value='')]", wait: 60)
+    expect(page).to have_no_css('#floatingCirclesG', wait: 60)
+    expect(page).to have_css(".ccb_#{type.downcase}_found", wait: 60, visible: false)
+    
+  
+   
   else
     elem = find('div', class: 'Select-placeholder', text: type, wait: 60)
     elem.sibling('.Select-input').find('input').send_keys(place)
@@ -59,6 +72,7 @@ When('I have shipment of {int} {string} with weight of {int}kg') do |count, size
   # Select container size
   elem = find("input[name='0-container_size']", visible: false)
   control = elem.sibling(class: 'Select-control')
+
   control.find(class: 'Select-arrow-zone').click
 
   find('.Select-option', text: size).click
@@ -101,6 +115,8 @@ When('I confirm cargo does not contain dangerous good') do
 end
 
 Then('I expect to see offers') do
+
+  expect(page).to have_no_css('.ccb_loading', wait: 60)
   offers = all('.offer_result')
   expect(offers.count).to be >= 1
 end

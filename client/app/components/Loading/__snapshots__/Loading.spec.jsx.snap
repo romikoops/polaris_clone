@@ -2,7 +2,7 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="layout-row layout-align-center-center loader_box"
+  className="layout-row layout-align-center-center ccb_loading loader_box"
 >
   <div
     className="cube preload"
@@ -85,7 +85,7 @@ exports[`shallow render 1`] = `
 
 exports[`theme is falsy 1`] = `
 <div
-  className="layout-row layout-align-center-center loader_box"
+  className="layout-row layout-align-center-center ccb_loading loader_box"
 >
   <div
     className="cube preload"
@@ -168,7 +168,7 @@ exports[`theme is falsy 1`] = `
 
 exports[`theme.logoLarge is truthy 1`] = `
 <div
-  className="layout-row layout-align-center-center loader_box"
+  className="layout-row layout-align-center-center ccb_loading loader_box"
 >
   <div
     className="cube preload"
