@@ -70,7 +70,7 @@ module ExcelTool
     end
 
     def find_itinerary(row)
-      @user.tenant.itineraries.find_by(name: "#{row[:from]} - #{row[:to]}", mode_of_transport: mot)
+      Itinerary.find_by(name: "#{row[:from]} - #{row[:to]}", mode_of_transport: mot, tenant_id: @user.tenant_id)
     end
 
     def find_or_create_tenant_vehicle(row, itinerary)
