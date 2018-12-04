@@ -3,14 +3,12 @@ import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
-import GenericError from '../../components/ErrorHandling/Generic'
-import PropTypes from '../../prop-types'
+import GenericError from "../ErrorHandling/Generic"
 import {
   AdminPricingsIndex,
   AdminPricingClientView,
-  AdminPricingRouteView,
-  AdminPricingsClientIndex,
-} from './'
+  AdminPricingRouteView
+} from "."
 import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions, documentActions } from '../../actions'
 import AdminUploadsSuccess from './Uploads/Success'
@@ -26,6 +24,7 @@ class AdminPricings extends Component {
     this.backToIndex = this.backToIndex.bind(this)
     this.closeSuccessDialog = this.closeSuccessDialog.bind(this)
   }
+
   componentDidMount () {
     const {
       pricingData, loading, adminDispatch, match
@@ -35,6 +34,7 @@ class AdminPricings extends Component {
     }
     this.props.setCurrentUrl(match.url)
   }
+
   viewRoute (route) {
     const { adminDispatch } = this.props
     adminDispatch.getRoute(route.id, true)
@@ -46,6 +46,7 @@ class AdminPricings extends Component {
     this.setState({ selectedPricing: false })
     dispatch(history.push('/admin/routes'))
   }
+
   closeSuccessDialog () {
     const { documentDispatch } = this.props
     documentDispatch.closeViewer()
@@ -63,7 +64,7 @@ class AdminPricings extends Component {
       adminDispatch,
       clients,
       clientPricings,
-      itineraryPricings,
+      pricings,
       documentDispatch,
       document,
       tenant,
@@ -172,7 +173,7 @@ class AdminPricings extends Component {
                   hubHash={hubHash}
                   pricingData={pricingData}
                   clients={filteredClients}
-                  itineraryPricings={itineraryPricings}
+                  pricings={pricings.show}
                   adminActions={adminDispatch}
                   {...props}
                 />
@@ -183,56 +184,6 @@ class AdminPricings extends Component {
       </GenericError>
     )
   }
-}
-AdminPricings.propTypes = {
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  hubs: PropTypes.arrayOf(PropTypes.hub),
-  dispatch: PropTypes.func.isRequired,
-  setCurrentUrl: PropTypes.func.isRequired,
-  history: PropTypes.history.isRequired,
-  loading: PropTypes.bool,
-  adminDispatch: PropTypes.shape({
-    getPricings: PropTypes.func,
-    getRoute: PropTypes.func
-  }).isRequired,
-  documentDispatch: PropTypes.shape({
-    uploadPricings: PropTypes.func
-  }).isRequired,
-  pricingData: PropTypes.shape({
-    itineraries: PropTypes.array
-  }),
-  itineraries: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.number })),
-  hubHash: PropTypes.objectOf(PropTypes.hub),
-  clients: PropTypes.arrayOf(PropTypes.client),
-  clientPricings: PropTypes.shape({
-    client: PropTypes.client,
-    userPricings: PropTypes.object
-  }).isRequired,
-  routePricings: PropTypes.shape({
-    route: PropTypes.object,
-    routePricingData: PropTypes.object
-  }).isRequired,
-  document: PropTypes.objectOf(PropTypes.any).isRequired,
-  itineraryPricings: PropTypes.objectOf(PropTypes.any).isRequired,
-  tenant: PropTypes.tenant,
-  trucking: PropTypes.shape({
-    truckingHubs: PropTypes.array,
-    truckingPrices: PropTypes.array
-  }).isRequired,
-  truckingDetail: PropTypes.shape({ truckingHub: PropTypes.object, pricing: PropTypes.object })
-}
-
-AdminPricings.defaultProps = {
-  theme: null,
-  hubs: [],
-  loading: false,
-  pricingData: null,
-  hubHash: {},
-  clients: [],
-  itineraries: [],
-  tenant: null,
-  truckingDetail: null
 }
 
 function mapStateToProps (state) {
@@ -248,7 +199,7 @@ function mapStateToProps (state) {
     itineraries,
     transportCategories,
     clientPricings,
-    itineraryPricings,
+    pricings,
     loading,
     trucking,
     truckingDetail
@@ -264,7 +215,7 @@ function mapStateToProps (state) {
     clientPricings,
     itineraries,
     clients,
-    itineraryPricings,
+    pricings,
     loading,
     document,
     trucking,

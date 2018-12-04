@@ -67,9 +67,10 @@ class Admin::PricingsController < Admin::AdminBaseController
     pricings = ordinary_pricings(itinerary)
     user_pricings = user_pricing(itinerary)
     response_handler(
-      pricings: pricings,
-      itinerary_id:            itinerary.id,
-      userPricings:         user_pricings
+      pricings:             pricings,
+      itinerary:            itinerary,
+      userPricings:         user_pricings,
+      stops:                itinerary.stops.map(&:as_options_json)
     )
   end
 

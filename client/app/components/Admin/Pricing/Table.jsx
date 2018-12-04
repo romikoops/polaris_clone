@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { withNamespaces } from 'react-i18next'
 import ReactTable from 'react-table'
-import { has } from 'lodash'
+import { has, get } from 'lodash'
 import 'react-table/react-table.css'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -19,8 +19,7 @@ class AdminPricesTable extends PureComponent {
 
     if (
       Object.values(row.original.data)
-        .filter(val => val.range && val.range.length > 0)
-        .length > 0
+        .some(val => val.range && val.range.length > 0)
     ) {
       return (<div className={styles.nested_table}>
         <AdminRangeFeeTable row={row} className={styles.nested_table} />
@@ -59,14 +58,11 @@ class AdminPricesTable extends PureComponent {
 
   render () {
     const {
-      t, pricings, theme, itineraryId, cssClasses
+      t, pricings, theme, itineraryId, classNames
     } = this.props
     const { sorted } = this.state
-
-    if (!pricings) return ''
-    const { show } = pricings
-    if (!show) return ''
-    const data = show[itineraryId]
+    
+    const data = get(pricings, ['show', itineraryId], false)
     if (!data) return ''
     const columns = [
       {
@@ -127,7 +123,7 @@ class AdminPricesTable extends PureComponent {
 
     return (
       <ReactTable
-        className={`${styles.no_footer} ${cssClasses}`}
+        className={`${styles.no_footer} ${classNames}`}
         data={data.pricings}
         columns={columns}
         defaultSorted={[

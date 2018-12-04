@@ -1,8 +1,8 @@
 import React from 'react'
 import { withNamespaces } from 'react-i18next'
+import { get } from 'lodash'
 import styles from '../AdminShipments.scss'
 import PropTypes from '../../../prop-types'
-import { gradientTextGenerator } from '../../../helpers'
 
 function ShipmentOverviewShowCard ({
   t,
@@ -17,51 +17,53 @@ function ShipmentOverviewShowCard ({
   isAdmin,
   shipment,
   theme,
-  text
+  text,
+  showtruckingAvailability
 }) {
-  const selectedStyle =
-      theme && theme.colors
-        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-        : { color: '#E0E0E0' }
-  const deselectedStyle = {
-    ...gradientTextGenerator('#DCDBDC', '#DCDBDC')
-  }
+  const selectedStyle = { color: get(theme, ['colors', 'primary'], '#058E05') }
+  const deselectedStyle = { color: '#DCDBDC' }
+  const hasFTL = hub.available_trucking ? hub.available_trucking.includes('container') : false
+  const hasLTL = hub.available_trucking ? hub.available_trucking.includes('cargo_item') : false
 
   return (
     <div className="flex-100 layout-row">
       <div className={`${styles.info_hub_box} flex-60 layout-column`}>
         <h3>{hub.name}</h3>
-        {estimatedTime ? <div className="layout-row layout-align-start-center">
-          <div className="flex-60 layout-align-center-start">
-            <span>
-              {text}
-            </span>
-            <div className="layout-row layout-align-start-center">
-              {estimatedTime}
+        {estimatedTime ? (
+          <div className="layout-row layout-align-start-center">
+            <div className="flex-60 layout-align-center-start">
+              <span>
+                {text}
+              </span>
+              <div className="layout-row layout-align-start-center">
+                {estimatedTime}
+              </div>
             </div>
+            {isAdmin
+              ? (
+                <div className="layout-row flex-40 layout-align-center-stretch">
+                  {editTime ? (
+                    <span className="flex-100 layout-align-center-stretch">
+                      <div
+                        onClick={handleSaveTime}
+                        className={`layout-row flex-50 ${styles.save} layout-align-center-center`}
+                      >
+                        <i className="fa fa-check" />
+                      </div>
+                      <div
+                        onClick={toggleEditTime}
+                        className={`layout-row flex-50 ${styles.cancel} layout-align-center-center`}
+                      >
+                        <i className="fa fa-times" />
+                      </div>
+                    </span>
+                  ) : (
+                    <i onClick={toggleEditTime} className={`fa fa-edit ${styles.editIcon}`} />
+                  )}
+                </div>
+              ) : '' }
           </div>
-          {isAdmin
-            ? (<div className="layout-row flex-40 layout-align-center-stretch">
-              {editTime ? (
-                <span className="flex-100 layout-align-center-stretch">
-                  <div
-                    onClick={handleSaveTime}
-                    className={`layout-row flex-50 ${styles.save} layout-align-center-center`}
-                  >
-                    <i className="fa fa-check" />
-                  </div>
-                  <div
-                    onClick={toggleEditTime}
-                    className={`layout-row flex-50 ${styles.cancel} layout-align-center-center`}
-                  >
-                    <i className="fa fa-times" />
-                  </div>
-                </span>
-              ) : (
-                <i onClick={toggleEditTime} className={`fa fa-edit ${styles.editIcon}`} />
-              )}
-            </div>) : '' }
-        </div> : '' }
+        ) : '' }
 
         {text === 'ETD'
           ? (

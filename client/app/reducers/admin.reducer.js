@@ -859,7 +859,7 @@ export default function admin (state = {}, action) {
           ...state.pricings,
           show: {
             ...state.pricings.show,
-            [action.payload.itinerary_id]: action.payload
+            [action.payload.itinerary.id]: action.payload
           }
         },
         loading: false

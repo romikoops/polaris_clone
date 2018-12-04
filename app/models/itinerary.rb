@@ -35,6 +35,7 @@ class Itinerary < ApplicationRecord
       closing_date: closing_date,
       load_type: parse_load_type(load_type)
     )
+    binding.pry unless trip.save
     return results unless trip.save
 
     results[:trips] << trip

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
-import PropTypes from '../../prop-types'
 import { AdminClientTile, AdminPriceEditor } from '.'
 import styles from './Admin.scss'
 import shipmentStyles from './AdminShipments.scss'
@@ -41,9 +40,9 @@ export class AdminPricingRouteView extends Component {
 
   componentDidMount () {
     const {
-      routePricings, loading, adminActions, match
+      pricings, loading, adminActions, match
     } = this.props
-    if (!routePricings && !loading) {
+    if (!pricings[match.params.id] && !loading) {
       adminActions.getItineraryPricings(parseInt(match.params.id, 10), false)
     }
     window.scrollTo(0, 0)
@@ -113,8 +112,9 @@ export class AdminPricingRouteView extends Component {
 
   render () {
     const {
-      t, theme, pricingData, itineraryPricings, clients, adminActions, scope
+      theme, pricings, clients, adminActions, scope, match
     } = this.props
+    const itineraryId = match.params.id
     const {
       editorBool,
       editTransport,
@@ -126,21 +126,19 @@ export class AdminPricingRouteView extends Component {
       showPricingAdder
     } = this.state
     const { selectedClient } = this.state
-    if (!pricingData || !itineraryPricings) {
-      return ''
-    }
+
     const fauxShipment = {
     }
     const {
       itinerary,
       itineraryPricingData,
       stops,
-      userPricings,
-      serviceLevels
-    } = itineraryPricings
-    if (!itinerary || !itineraryPricingData) {
+      userPricings
+    } = pricings[itineraryId]
+    if (!itinerary) {
       return ''
     }
+
     fauxShipment.origin_hub = stops[0].hub
     fauxShipment.destination_hub = stops[stops.length - 1].hub
 
@@ -179,7 +177,7 @@ export class AdminPricingRouteView extends Component {
       ''
     )
 
-    const clientTiles = userPricings.map((up, i) => {
+    const clientTiles = userPricings ? userPricings.map((up, i) => {
       const client = clients.filter(cl => cl.id === up.user_id)[0]
 
       if (!client) {
@@ -206,7 +204,7 @@ export class AdminPricingRouteView extends Component {
           ) : '' }
         </div>
       )
-    })
+    }) : []
 
     return (
       <div
@@ -222,6 +220,8 @@ export class AdminPricingRouteView extends Component {
                 <ShipmentOverviewShowCard
                   hub={stops[0].hub}
                   bg={bg1}
+                  showtruckingAvailability
+                  theme={theme}
                 />
               </div>
             )}
@@ -246,6 +246,8 @@ export class AdminPricingRouteView extends Component {
                 <ShipmentOverviewShowCard
                   hub={stops[1].hub}
                   bg={bg2}
+                  showtruckingAvailability
+                  theme={theme}
                 />
               </div>
             )}
@@ -256,7 +258,7 @@ export class AdminPricingRouteView extends Component {
           <div
             className="flex-95 layout-row layout-wrap layout-align-space-between-center"
           >
-            <AdminPricingTable itineraryId={itinerary.id} cssClasses="flex-100" />
+            <AdminPricingTable itineraryId={itinerary.id} classNames="flex-100" />
           </div>
         </div>
 
@@ -337,38 +339,6 @@ export class AdminPricingRouteView extends Component {
       </div>
     )
   }
-}
-AdminPricingRouteView.propTypes = {
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  adminActions: PropTypes.shape({
-    getRoutePricings: PropTypes.func
-  }).isRequired,
-  routePricings: PropTypes.shape({
-    route: PropTypes.object,
-    routePricingData: PropTypes.object
-  }),
-  pricingData: PropTypes.shape({
-    pricings: PropTypes.array,
-    hubRoutes: PropTypes.array,
-    transportCategories: PropTypes.array
-  }),
-  clients: PropTypes.arrayOf(PropTypes.client),
-  loading: PropTypes.bool,
-  match: PropTypes.match.isRequired,
-  scope: PropTypes.shape({
-    show_beta_features: PropTypes.bool
-  }),
-  itineraryPricings: PropTypes.objectOf(PropTypes.any).isRequired
-}
-
-AdminPricingRouteView.defaultProps = {
-  theme: null,
-  loading: false,
-  routePricings: null,
-  pricingData: null,
-  clients: [],
-  scope: {}
 }
 
 export default withNamespaces(['admin', 'common'])(AdminPricingRouteView)
