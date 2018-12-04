@@ -14,11 +14,11 @@ variables:
     - dev
 
 stages:
+  - test
   - build
   - review
   - cleanup
   - QA
-  - test
   - acceptance
 
 image: alpine:3.8
