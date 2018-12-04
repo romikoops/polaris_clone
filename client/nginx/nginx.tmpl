@@ -39,9 +39,10 @@ http {
 window.keel = {
   apiUrl: \'{{ .Env.API_URL }}\',
   environment: \'review\',
+  namespace: \'{{ .Env.K8S_NAMESPACE }}\',
   sentryUrl: \'https://16d43a033af648da8b2f2933f6e62717@sentry.itsmycargo.tech/3\',
   tenantName: \'$tenant\',
-  gtmId: \'GTM-P29HCHV\'
+  gtmId: \'{{ .Env.GTM_ID }}\'
 }
 ';
     }
