@@ -51,7 +51,6 @@ When('I select {string} as {string}') do |place, type|
     # wait for trucking rpcing to return
     
     # elem = find('div', class: "ccb_#{trucking_dir}_address_form", wait: 60)
-    # require 'pry'; binding.pry
     expect(page).to have_no_css('#floatingCirclesG', wait: 60)
     expect(page).to have_css(".ccb_#{type.downcase}_found", wait: 60, visible: false)
     
