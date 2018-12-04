@@ -1442,10 +1442,10 @@ class ShipmentLocationBox extends PureComponent {
     }
     let truckingClass = ''
     if (truckingFound.origin) {
-      truckingClass += 'ccb_origin_found'
+      truckingClass += ' ccb_origin_found'
     }
     if (truckingFound.destination) {
-      truckingClass += 'ccb_destination_found'
+      truckingClass += ' ccb_destination_found'
     }
 
     return (
