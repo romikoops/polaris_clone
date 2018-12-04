@@ -1,0 +1,75 @@
+:local {
+  .wrapper_show {
+    position: absolute;
+    top: -19px;
+    right: 0;
+    left: 0;
+    z-index: 50;
+    min-height: 160px;
+  }
+  .options_container {
+    height: 0;
+    overflow: hidden;
+    visibility: none;
+  }
+  .options_container.show {
+    min-height: 160px;
+    visibility: visible;
+    
+  }
+  .drop_down_button {
+    border-left: 1px solid lightgray;
+    padding: 5px;
+    height: 30px;
+  }
+  .main_button {
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 14px;
+    height: 30px;
+    padding: 2.5px 5px;
+    p {
+      padding: 7px 5px 5px 5px;
+      margin: 0;
+    }
+  }
+  .show > .main_button {
+    border-bottom: 0.5px solid lightgrey;
+  }
+  .option_card {
+    padding: 2.5px 5px;
+    background: white;
+    border-top: 0.5px solid lightgray;
+    height: 30px;
+    div {
+      height: 20px;
+    }
+    p {
+      padding: 5px;
+      margin: 0;
+    }
+  }
+  .backdrop {
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100vw;
+    height: 100vw;
+    z-index: 40;
+    background: transparent;
+  }
+  .spinner_box {
+    position: absolute;
+    right: 25px;
+    top: 2px;
+    transform: scale(0.2);
+    transform-origin: top right;
+  }
+  .inner_wrapper {
+    position: relative;
+  }
+  .inner_wrapper_shoiw {
+    min-height: 160px;
+    position: relative;
+  }
+}

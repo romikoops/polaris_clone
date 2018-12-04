@@ -317,12 +317,17 @@ class Shipment < ApplicationRecord
     !!selected_offer.dig('insurance')
   end
 
-  def accept!
+  def confirm!
     update!(status: 'confirmed')
   end
 
   def finish!
     update!(status: 'finished')
+  end
+
+  def request!
+    new_status = user.confirmed? ? 'requested' : 'requested_by_unconfirmed_account'
+    update!(status: new_status)
   end
 
   def decline!

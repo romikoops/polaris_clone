@@ -366,6 +366,7 @@ export default function admin (state = {}, action) {
           requested: true,
           action: action.payload.action
         },
+        showSpinner: true,
         loading: false
       }
     }
@@ -431,6 +432,67 @@ export default function admin (state = {}, action) {
 
       return {
         ...state,
+        showSpinner: false,
+        dashboard: newDashboard,
+        shipments: newShipments,
+        shipment: newShipment,
+        loading: false,
+        confirmShipmentData: {
+          shipmentId: action.payload.id,
+          requested: false,
+          accepted: true,
+          action: action.payload.action
+        }
+      }
+    }
+    case adminConstants.REQUESTED_SHIPMENT_SUCCESS: {
+      const req =
+        state.shipments && state.shipments.requested
+          ? state.shipments.requested.filter(x => x.id !== action.payload.id)
+          : []
+      const dashReq =
+        state.dashboard && state.dashboard.shipments && state.dashboard.shipments.requested
+          ? state.dashboard.shipments.requested.filter(x => x.id !== action.payload.id)
+          : []
+      const open = state.shipments && state.shipments.open ? state.shipments.open.filter(x => x.id !== action.payload.id) : []
+      req.push(action.payload)
+      dashReq.push(action.payload)
+      const shipment = state.shipment && state.shipment.shipment ? {
+        ...state.shipment.shipment,
+        ...action.payload
+      } : {}
+      const newDashboard = state.dashboard ? {
+        ...state.dashboard,
+        shipments: {
+          ...state.dashboard.shipments,
+          requested: dashReq
+        }
+      } : {
+        shipments: {
+          requested: dashReq
+        }
+      }
+      const newShipments = state.shipments
+        ? {
+          ...state.shipments,
+          open,
+          requested: req
+        }
+        : {
+          open,
+          requested: req
+        }
+      const newShipment = state.shipment
+        ? {
+          ...state.shipment,
+          shipment
+        } : {
+          shipment
+        }
+
+      return {
+        ...state,
+        showSpinner: false,
         dashboard: newDashboard,
         shipments: newShipments,
         shipment: newShipment,
@@ -445,6 +507,7 @@ export default function admin (state = {}, action) {
     }
     case adminConstants.CONFIRM_SHIPMENT_FAILURE: {
       const errConfShip = merge({}, state, {
+        showSpinner: false,
         error: { shipments: action.error },
         loading: false,
         confirmShipmentData: {
@@ -488,6 +551,7 @@ export default function admin (state = {}, action) {
 
       return {
         ...state,
+        showSpinner: false,
         dashboard: {
           ...state.dashboard,
           shipments: {
@@ -534,6 +598,7 @@ export default function admin (state = {}, action) {
       dashRejected.push(action.payload)
       const newState = {
         ...state,
+        showSpinner: false,
         dashboard: {
           ...state.dashboard,
           shipments: {
@@ -558,6 +623,7 @@ export default function admin (state = {}, action) {
     case adminConstants.DENY_SHIPMENT_FAILURE:
       return {
         ...state,
+        showSpinner: false,
         error: { shipments: action.error },
         loading: false
       }
@@ -577,6 +643,7 @@ export default function admin (state = {}, action) {
 
       return {
         ...state,
+        showSpinner: false,
         dashboard: {
           ...state.dashboard,
           shipments: {
