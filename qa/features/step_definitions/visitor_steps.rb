@@ -36,7 +36,7 @@ When('I select {string} as {string}') do |place, type|
         if first_result
           first_result.click
         else
-          find('input').fill_in('')
+          fill_in('input', with: '')
           place.split('').each do |c|
             find('input').send_keys(c)
             sleep(1.0 / 10.0)
