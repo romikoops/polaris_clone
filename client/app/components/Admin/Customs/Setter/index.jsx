@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import Toggle from 'react-toggle'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
@@ -35,6 +36,7 @@ export class AdminCustomsSetter extends Component {
         result = op
       }
     })
+
     return result || options[0]
   }
   static prepForSelect (arr, labelKey, valueKey, glossary) {
@@ -271,7 +273,7 @@ export class AdminCustomsSetter extends Component {
     })
   }
   render () {
-    const { theme } = this.props
+    const { theme, t } = this.props
 
     const textStyle = {
       background:
@@ -486,11 +488,13 @@ export class AdminCustomsSetter extends Component {
           </div>
         )
       }
+
       return ''
     })
     const panelViewClass = showPanel ? styles.hub_fee_panel_open : styles.hub_fee_panel_closed
     const impStyle = directionBool ? styles.toggle_off : styles.toggle_on
     const expStyle = directionBool ? styles.toggle_on : styles.toggle_off
+
     return (
       <div
         className={` ${styles.fee_box} flex-none layout-row layout-wrap layout-align-center-center`}
@@ -505,10 +509,10 @@ export class AdminCustomsSetter extends Component {
                 <TextHeading theme={theme} text={direction.label} size={4} />
               </div>
               <div className="flex-40 layout-row layout-align-end-center">
-                <p className={`${impStyle} flex-none five_m`}>Import</p>
+                <p className={`${impStyle} flex-none five_m`}>{t('admin:import')}</p>
                 <p />
                 <Toggle checked={directionBool} onChange={e => this.handleDirectionChange(e)} />
-                <p className={`${expStyle} flex-none five_m`}>Export</p>
+                <p className={`${expStyle} flex-none five_m`}>{t('admin:export')}</p>
               </div>
               <div
                 className="flex-10 layout-row layout-align-end-center"
@@ -532,10 +536,9 @@ export class AdminCustomsSetter extends Component {
                   <RoundButton
                     theme={theme}
                     size="small"
-                    text="Add Fee"
+                    text={t('admin:addFee')}
                     active
                     handleNext={this.showAddFeePanel}
-                    P
                     iconClass="fa-plus"
                   />
                 </div>
@@ -547,7 +550,7 @@ layout-align-end-center layout-row"
                   <RoundButton
                     theme={theme}
                     size="small"
-                    text="Save"
+                    text={t('admin:save')}
                     active
                     handleNext={this.saveEdit}
                     iconClass="fa-floppy-o"
@@ -580,6 +583,7 @@ layout-align-end-center layout-row"
   }
 }
 AdminCustomsSetter.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   charges: PropTypes.objectOf(PropTypes.any)
@@ -589,4 +593,4 @@ AdminCustomsSetter.defaultProps = {
   charges: {}
 }
 
-export default AdminCustomsSetter
+export default withNamespaces('admin')(AdminCustomsSetter)

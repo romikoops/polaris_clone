@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import Formsy from 'formsy-react'
 import styles from './Admin.scss'
@@ -347,7 +348,7 @@ export class AdminTruckingCreator extends Component {
   }
 
   render () {
-    const { theme } = this.props
+    const { t, theme } = this.props
     const {
       nexus,
       rateBasis,
@@ -485,7 +486,7 @@ export class AdminTruckingCreator extends Component {
             className="flex-33 layout-row layout-wrap layout-align-center-start"
           >
             <div className="flex-100 layout-row">
-              <p className="flex-none">{`${AdminTruckingCreator.grammarize(rateBasis.label)} Range:  ${ws.min} - ${ws.max}`}</p>
+              <p className="flex-none">{`${AdminTruckingCreator.grammarize(rateBasis.label)} ${t('admin:range')}:  ${ws.min} - ${ws.max}`}</p>
             </div>
           </div>
         ))}
@@ -494,9 +495,7 @@ export class AdminTruckingCreator extends Component {
     const setcellSteps = (
       <div className="flex-100 layout-row layout-align-start-center layout-wrap height_100">
         <div className="flex-100 layout-row layout-align-start-center">
-          <p className="flex-none">{`Set pricing weight steps. Values ${
-            rateBasis.label
-          } and inclusive`}</p>
+          <p className="flex-none">{t('admin:setPricingWeightSteps', { label: rateBasis.label })}</p>
         </div>
         <Formsy
           onValidSubmit={this.addWeightStep}
@@ -516,7 +515,7 @@ export class AdminTruckingCreator extends Component {
               name="min"
               value={newStep.min}
               validations="isNumeric"
-              placeholder="Lower Limit"
+              placeholder={t('admin:lowerLimit')}
             />
           </div>
           <div
@@ -533,14 +532,14 @@ export class AdminTruckingCreator extends Component {
               name="max"
               value={newStep.max}
               validations="isNumeric"
-              placeholder="Upper Limit"
+              placeholder={t('admin:upperLimit')}
             />
           </div>
           <div className="flex-33 layout-row layout-align-center-center">
             <RoundButton
               theme={theme}
               size="small"
-              text="Add another"
+              text={t('admin:addAnother')}
               iconClass="fa-plus-square-o"
             />
           </div>
@@ -567,7 +566,7 @@ export class AdminTruckingCreator extends Component {
         <RoundButton
           theme={theme}
           size="small"
-          text="Save"
+          text={t('admin:save')}
           active
           handleNext={this.saveEdit}
           iconClass="fa-floppy-o"
@@ -600,7 +599,7 @@ export class AdminTruckingCreator extends Component {
               }`}
             >
               <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
-                New Trucking Pricing
+                {t('admin:newTruckingPricing')}
               </p>
             </div>
             <div className="flex-100 layout-row layout-align-start-center">
@@ -621,6 +620,7 @@ export class AdminTruckingCreator extends Component {
   }
 }
 AdminTruckingCreator.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   closeForm: PropTypes.func.isRequired,
@@ -631,4 +631,4 @@ AdminTruckingCreator.defaultProps = {
   hub: {}
 }
 
-export default AdminTruckingCreator
+export default withNamespaces('admin')(AdminTruckingCreator)

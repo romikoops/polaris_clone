@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from '../../Admin.scss'
 import { AdminSearchableShipments } from '../../AdminSearchables'
@@ -21,6 +22,7 @@ export class AdminShipmentsGroup extends Component {
     const hubKeys = shipment.schedule_set[0].hub_route_key.split('-')
     shipment.originHub = hubsObj[hubKeys[0]] ? hubsObj[hubKeys[0]].name : ''
     shipment.destinationHub = hubsObj[hubKeys[1]] ? hubsObj[hubKeys[1]].name : ''
+
     return shipment
   }
   constructor (props) {
@@ -38,6 +40,7 @@ export class AdminShipmentsGroup extends Component {
     console.log(this.props)
     // const {selectedShipment} = this.state;
     const {
+      t,
       theme,
       hubs,
       shipments,
@@ -83,7 +86,7 @@ export class AdminShipmentsGroup extends Component {
                 <RoundButton
                   theme={theme}
                   size="small"
-                  text="Back"
+                  text={t('common:basicBack')}
                   handleNext={() => AdminShipmentsGroup.goBack()}
                   iconClass="fa-chevron-left"
                 />
@@ -94,9 +97,9 @@ export class AdminShipmentsGroup extends Component {
                 styles.sec_subheader
               }`}
             >
-              <p className={` ${styles.sec_subheader_text} flex-none`}> No Shipments yet</p>
+              <p className={` ${styles.sec_subheader_text} flex-none`}>{t('admin:waitingShipments')}</p>
             </div>
-            <p className="flex-none"> As shipments are requested, they will appear here</p>
+            <p className="flex-none">{t('admin:shipmentsAreRequested')}</p>
           </div>
         ) : (
           ''
@@ -110,6 +113,7 @@ export class AdminShipmentsGroup extends Component {
   }
 }
 AdminShipmentsGroup.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   title: PropTypes.string,
   target: PropTypes.string,
@@ -133,4 +137,4 @@ AdminShipmentsGroup.defaultProps = {
   target: ''
 }
 
-export default AdminShipmentsGroup
+export default withNamespaces(['admin', 'common'])(AdminShipmentsGroup)

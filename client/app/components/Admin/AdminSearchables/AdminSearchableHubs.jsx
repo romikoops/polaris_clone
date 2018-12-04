@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import Fuse from 'fuse.js'
 import PropTypes from '../../../prop-types'
@@ -99,7 +100,7 @@ export class AdminSearchableHubs extends Component {
   }
   render () {
     const {
-      theme, seeAll, sideScroll
+      theme, seeAll, sideScroll, t
     } = this.props
     const { hubs } = this.state
     let hubsArr
@@ -141,7 +142,9 @@ export class AdminSearchableHubs extends Component {
               className="flex-none layout-row layout-align-center-center pointy"
               onClick={this.seeAll}
             >
-              <p className="flex-none">See all</p>
+              <p className="flex-none">
+                {t('admin:seeAll')}
+              </p>
             </div>
           </div>
         ) : (
@@ -160,6 +163,7 @@ AdminSearchableHubs.propTypes = {
     goTo: PropTypes.func
   }).isRequired,
   seeAll: PropTypes.func,
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   sideScroll: PropTypes.bool,
   hideFilters: PropTypes.bool,
@@ -175,4 +179,4 @@ AdminSearchableHubs.defaultProps = {
   limit: 0
 }
 
-export default AdminSearchableHubs
+export default withNamespaces('admin')(AdminSearchableHubs)

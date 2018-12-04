@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 // import Select from 'react-select'
 // import styled from 'styled-components'
 import PropTypes from '../../../prop-types'
@@ -9,7 +10,7 @@ import '../../../styles/select-css-custom.scss'
 import SquareButton from '../../SquareButton'
 import { gradientTextGenerator } from '../../../helpers'
 
-export class AdminHubEdit extends Component {
+class AdminHubEdit extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -162,7 +163,7 @@ export class AdminHubEdit extends Component {
   }
 
   render () {
-    const { theme, close } = this.props
+    const { theme, close, t } = this.props
     const { hub, address } = this.state
     const iconStyle = gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
 
@@ -177,7 +178,7 @@ export class AdminHubEdit extends Component {
           <div className="flex-100 layout-row layout-wrap layout-align-start-center">
             <div className="flex-5" />
             <h2 className="flex-none letter_3 no_m" >
-              Edit Hub
+              {t('admin:editHub')}
             </h2>
           </div>
           <div className="flex-100 layout-row layout-align-start-center layout-wrap">
@@ -199,14 +200,14 @@ export class AdminHubEdit extends Component {
                 <div
                   className={`flex-80 layout-row layout-wrap layout-align-center-center ${styles.material_input}`}
                 >
-                  <p className="flex-100">Hub Name</p>
+                  <p className="flex-100">{t('admin:hubName')}</p>
                   <input
                     name="hub-name"
                     className="flex-none"
                     type="string"
                     onChange={this.handleAddressChange}
                     value={hub.name}
-                    placeholder="Name"
+                    placeholder={t('admin:name')}
                   />
                 </div>
               </div>
@@ -216,14 +217,14 @@ export class AdminHubEdit extends Component {
                   <div
                     className={`flex-80 layout-row layout-wrap layout-align-center-center ${styles.material_input}`}
                   >
-                    <p className="flex-100">Latitude</p>
+                    <p className="flex-100">{t('admin:latitude')}</p>
                     <input
                       name="address-latitude"
                       className="flex-none"
                       type="string"
                       onChange={this.handleAddressChange}
                       value={address.latitude}
-                      placeholder="Latitude"
+                      placeholder={t('admin:latitude')}
                     />
                   </div>
                 </div>
@@ -232,14 +233,14 @@ export class AdminHubEdit extends Component {
                   <div
                     className={`flex-80 layout-row layout-wrap layout-align-center-center ${styles.material_input}`}
                   >
-                    <p className="flex-100">Longitude</p>
+                    <p className="flex-100">{t('admin:longitude')}</p>
                     <input
                       name="address-longitude"
                       className="flex-none"
                       type="string"
                       onChange={this.handleAddressChange}
                       value={address.longitude}
-                      placeholder="Longitude"
+                      placeholder={t('admin:longitude')}
                     />
                   </div>
                 </div>
@@ -252,7 +253,7 @@ export class AdminHubEdit extends Component {
                       className={`${styles.upload_image} flex-none pointy layout-row layout-align-space-around-center`}
                       onClick={e => this.clickUploaderInput(e)}
                     >
-                      <p className={`${styles.upload_title}`}>Upload New Image</p>
+                      <p className={`${styles.upload_title}`}>{t('admin:uploadNewImage')}</p>
                       <i className="fa fa-cloud-upload clip flex-none" style={iconStyle} />
                     </div>
                     <input
@@ -271,7 +272,7 @@ export class AdminHubEdit extends Component {
             <div className="flex-50 layout-row layout-wrap layout-align-end-space-around">
               <div className="flex-100 layout-row layout-align-space-around-center">
                 <div className={`flex-20 layout-row layout-wrap layout-align-center-center ${styles.material_input}`}>
-                  <p className="flex-100">No.</p>
+                  <p className="flex-100">{t('admin:numberShorten')}</p>
                   <input
                     id="not-auto"
                     name="address-street_number"
@@ -279,56 +280,56 @@ export class AdminHubEdit extends Component {
                     type="string"
                     onChange={this.handleAddressChange}
                     value={address.street_number}
-                    placeholder="Number"
+                    placeholder={t('user:number')}
                   />
                 </div>
                 <div className={`flex-75 layout-row layout-wrap layout-align-center-center ${styles.material_input}`}>
-                  <p className="flex-100">Street</p>
+                  <p className="flex-100">{t('user:street')}</p>
                   <input
                     name="address-street"
                     className="flex-none"
                     type="string"
                     onChange={this.handleAddressChange}
                     value={address.street}
-                    placeholder="Street"
+                    placeholder={t('user:street')}
                   />
                 </div>
               </div>
               <div className="flex-100 layout-row layout-align-space-around-center">
                 <div className={`flex-30 layout-row layout-wrap layout-align-center-center ${styles.material_input}`}>
-                  <p className="flex-100">Zipcode</p>
+                  <p className="flex-100">{t('admin:zipCode')}</p>
                   <input
                     name="address-zipCode"
                     className="flex-none"
                     type="string"
                     onChange={this.handleAddressChange}
                     value={address.zip_code}
-                    placeholder="Zip Code"
+                    placeholder={t('user:zipCode')}
                   />
                 </div>
                 <div className={`flex-65 layout-row layout-wrap ayout-align-center-center ${styles.material_input}`}>
-                  <p className="flex-100">City</p>
+                  <p className="flex-100">{t('user:city')}</p>
                   <input
                     name="address-city"
                     className="flex-none"
                     type="string"
                     onChange={this.handleAddressChange}
                     value={address.city}
-                    placeholder="City"
+                    placeholder={t('user:city')}
                   />
                 </div>
               </div>
 
               <div className="flex-100 layout-row layout-align-space-around-center">
                 <div className={`flex-100 layout-row layout-wrap layout-align-center-center ${styles.material_input}`}>
-                  <p className="flex-100">Country</p>
+                  <p className="flex-100">{t('user:country')}</p>
                   <input
                     name="address-country"
                     className="flex-none"
                     type="string"
                     onChange={this.handleAddressChange}
                     value={address.country}
-                    placeholder="Country"
+                    placeholder={t('user:country')}
                   />
                 </div>
               </div>
@@ -339,7 +340,7 @@ export class AdminHubEdit extends Component {
               <SquareButton
                 theme={theme}
                 size="small"
-                text="Save Hub"
+                text={t('admin:saveHub')}
 
                 handleNext={this.saveHubEdit}
                 iconClass="fa-floppy"
@@ -354,6 +355,7 @@ export class AdminHubEdit extends Component {
 }
 
 AdminHubEdit.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   hub: PropTypes.hub.isRequired,
   close: PropTypes.func.isRequired,
@@ -365,4 +367,4 @@ AdminHubEdit.defaultProps = {
   adminDispatch: {}
 }
 
-export default AdminHubEdit
+export default withNamespaces(['admin', 'common', 'user'])(AdminHubEdit)

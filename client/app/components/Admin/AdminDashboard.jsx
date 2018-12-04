@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import GreyBox from '../GreyBox/GreyBox'
 import ShipmentOverviewCard from '../ShipmentCard/ShipmentOverviewCard'
-import { AdminHubCard } from './AdminHubCard'
-import { AdminClientCardIndex } from './AdminClientCardIndex'
+import AdminHubCard from './AdminHubCard'
+import AdminClientCardIndex from './AdminClientCardIndex'
 import AdminRouteList from './RouteList'
 import { WorldMap } from './DashboardMap/WorldMap'
 import { gradientTextGenerator } from '../../helpers'
 import isQuote from '../../helpers/tenant'
 import styles from './AdminDashboard.scss'
-import GenericError from '../../components/ErrorHandling/Generic'
+import GenericError from '../ErrorHandling/Generic'
 
 export class AdminDashboard extends Component {
   static prepShipment (baseShipment, clients, hubsObj) {
@@ -34,18 +35,20 @@ export class AdminDashboard extends Component {
     this.handleShipmentAction = this.handleShipmentAction.bind(this)
     this.handleRouteHover = this.handleRouteHover.bind(this)
   }
+
   componentDidMount () {
     window.scrollTo(0, 0)
     this.determinePerPage()
     window.addEventListener('resize', this.determinePerPage)
     this.props.setCurrentUrl(this.props.match.url)
   }
+
   componentWillUnmount () {
     window.removeEventListener('resize', this.determinePerPage)
   }
 
   handleRouteHover (route) {
-    this.setState((prevState) => ({ hoverId: prevState.hoverId === route.id ? false : route.id }))
+    this.setState(prevState => ({ hoverId: prevState.hoverId === route.id ? false : route.id }))
   }
 
   handleViewHubs () {
@@ -62,10 +65,12 @@ export class AdminDashboard extends Component {
     const { adminDispatch } = this.props
     adminDispatch.getShipments(1, 1, 1, 4, true)
   }
+
   handleShipmentAction (id, action) {
     const { adminDispatch } = this.props
     adminDispatch.confirmShipment(id, action)
   }
+
   handleClick (shipment) {
     const { handleClick, adminDispatch } = this.props
     if (handleClick) {
@@ -74,6 +79,7 @@ export class AdminDashboard extends Component {
       adminDispatch.getShipment(shipment.id, true)
     }
   }
+
   determinePerPage () {
     const width = window.innerWidth
     const perPage = width >= 1920 ? 3 : 2
@@ -82,6 +88,7 @@ export class AdminDashboard extends Component {
 
   render () {
     const {
+      t,
       user,
       clients,
       shipments,
@@ -150,11 +157,16 @@ export class AdminDashboard extends Component {
               <span className="layout-row flex-10 layout-align-center-center">
                 <i className={`fa fa-user clip ${styles.bigProfile}`} style={gradientFontStyle} />
               </span>
-              <span className={`${styles.welcome} flex-90 layout-row`}>Welcome back,&nbsp; <b>{user.first_name}</b></span>
+              <span className={`${styles.welcome} flex-90 layout-row`}>
+                {t('common:welcomeBack')}
+,&nbsp;
+                {' '}
+                <b>{user.first_name}</b>
+              </span>
             </div>
           </div>
           <div className="layout-padding flex-100 layout-align-start-center greyBg">
-            <span><b>{isQuote(tenant) ? 'Quoted Shipments' : 'Requested Shipments' }</b></span>
+            <span><b>{isQuote(tenant) ? t('admin:quotedShipments') : t('admin:requestedShipments')}</b></span>
           </div>
           <ShipmentOverviewCard
             admin
@@ -168,7 +180,7 @@ export class AdminDashboard extends Component {
             handleAction={this.handleShipmentAction}
           />
           <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>
-            <span className="flex-15" onClick={() => this.handleViewShipments()}><u><b>See more shipments</b></u></span>
+            <span className="flex-15" onClick={() => this.handleViewShipments()}><u><b>{t('shipment:seeMoreShipments')}</b></u></span>
             <div className={`flex-85 ${styles.separator}`} />
           </div>
           <div className="margin_bottom flex-100">
@@ -185,7 +197,7 @@ export class AdminDashboard extends Component {
                 theme={theme}
               />
               <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>
-                <span className="flex-15" onClick={() => this.handleViewHubs()}><u><b>See more</b></u></span>
+                <span className="flex-15" onClick={() => this.handleViewHubs()}><u><b>{t('admin:seeMore')}</b></u></span>
                 <div className={`flex-85 ${styles.separator}`} />
               </div>
             </div>
@@ -210,6 +222,7 @@ export class AdminDashboard extends Component {
 AdminDashboard.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.any,
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   tenant: PropTypes.tenant.isRequired,
   dashData: PropTypes.shape({
@@ -245,4 +258,4 @@ AdminDashboard.defaultProps = {
   hubHash: {}
 }
 
-export default AdminDashboard
+export default withNamespaces(['admin', 'common', 'shipment'])(AdminDashboard)

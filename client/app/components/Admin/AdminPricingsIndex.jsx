@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router'
-import { AdminPriceCreator } from './'
+import { AdminPriceCreator }from './'
 import CardPricingIndex from './CardPricingIndex'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
@@ -68,7 +69,7 @@ export class AdminPricingsIndex extends Component {
 
   render () {
     const {
-      theme, pricingData, clients, adminDispatch, scope, hubHash
+      t, theme, pricingData, clients, adminDispatch, scope, hubHash
     } = this.props
     const { newPricing } = this.state
     if (!pricingData) {
@@ -120,7 +121,7 @@ export class AdminPricingsIndex extends Component {
       )}
     </Tab>))
     motTabs.push(<Tab
-      tabTitle="Trucking"
+      tabTitle={t('admin:trucking')}
       theme={theme}
       mot="truck"
     >
@@ -146,6 +147,7 @@ export class AdminPricingsIndex extends Component {
   }
 }
 AdminPricingsIndex.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   clients: PropTypes.arrayOf(PropTypes.client),
   adminDispatch: PropTypes.shape({
@@ -172,4 +174,4 @@ AdminPricingsIndex.defaultProps = {
   scope: null
 }
 
-export default AdminPricingsIndex
+export default withNamespaces('admin')(AdminPricingsIndex)

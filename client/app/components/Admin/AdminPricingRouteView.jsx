@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import { AdminClientTile, AdminPriceEditor } from './'
@@ -14,7 +15,7 @@ import {
 } from '../../helpers'
 import GradientBorder from '../GradientBorder'
 import ShipmentOverviewShowCard from './AdminShipmentView/ShipmentOverviewShowCard'
-import { AdminPricingDedicated } from './Pricing/Dedicated'
+import AdminPricingDedicated from './Pricing/Dedicated'
 import { AdminPricingBox } from './Pricing/Box'
 import CollapsingContent from '../CollapsingBar/Content'
 
@@ -99,7 +100,7 @@ export class AdminPricingRouteView extends Component {
   }
   render () {
     const {
-      theme, pricingData, itineraryPricings, clients, adminActions, scope
+      t, theme, pricingData, itineraryPricings, clients, adminActions, scope
     } = this.props
     const {
       editorBool,
@@ -156,8 +157,8 @@ export class AdminPricingRouteView extends Component {
     const confimPrompt = confirm ? (
       <AdminPromptConfirm
         theme={theme}
-        heading="Are you sure?"
-        text="This will delete the pricing immediately and all related data"
+        heading={t('common:areYouSure')}
+        text={t('admin:confirmDeletePricingImmediately')}
         confirm={() => this.deletePricing(pricingToDelete)}
         deny={() => this.closeConfirm()}
       />
@@ -248,7 +249,7 @@ export class AdminPricingRouteView extends Component {
               theme={theme}
               serviceLevels={serviceLevels}
               adminDispatch={adminActions}
-              title="Open Pricing"
+              title={t('admin:openPricing')}
             />
           </div>
         </div>
@@ -257,7 +258,7 @@ export class AdminPricingRouteView extends Component {
           className="flex-95 layout-row layout-wrap layout-align-center-center buffer_10"
         >
           <div className="layout-padding flex-100 layout-align-start-center greyBg">
-            <span><b>Dedicated Pricings</b></span>
+            <span><b>{t('admin:dedicatedPricings')}</b></span>
           </div>
           <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={showPricingAdder ? { display: 'none' } : {}}>
             <div className="layout-row flex-100 layout-align-start-center slider_container">
@@ -269,7 +270,7 @@ export class AdminPricingRouteView extends Component {
                     content={(
                       <div>
                         <h1><strong>+</strong></h1>
-                        <p>New Dedicated Pricing</p>
+                        <p>{t('admin:newDedicatedPricing')}</p>
                       </div>
                     )}
                   />
@@ -289,7 +290,7 @@ export class AdminPricingRouteView extends Component {
                     charges={userPricings.filter(up => up.user_id === selectedClient.id)}
                     theme={theme}
                     adminDispatch={adminActions}
-                    title={`Dedicated Pricing for ${selectedClient.first_name} ${selectedClient.last_name}`}
+                    title={`${t('admin:dedicatedPricingFor')} ${selectedClient.first_name} ${selectedClient.last_name}`}
                   />
                 </div>
               }
@@ -330,6 +331,7 @@ export class AdminPricingRouteView extends Component {
   }
 }
 AdminPricingRouteView.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   adminActions: PropTypes.shape({
     getRoutePricings: PropTypes.func
@@ -361,4 +363,4 @@ AdminPricingRouteView.defaultProps = {
   scope: {}
 }
 
-export default AdminPricingRouteView
+export default withNamespaces(['admin', 'common'])(AdminPricingRouteView)

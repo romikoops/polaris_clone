@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 // import Formsy from 'formsy-react'
 import styles from '../Admin.scss'
@@ -98,6 +99,7 @@ export class PanelBox extends Component {
   render () {
     const {
       // theme,
+      t,
       cells,
       cellSteps,
       handleRateChange,
@@ -169,11 +171,9 @@ export class PanelBox extends Component {
                   }`}
                 </p>
               ) : (
-                <p className="flex-none">
-                  {`${truckingBasis.label} Range ${
-                    s[target][cellLowerKey]
-                  } - ${s[target][cellUpperKey]}`}
-                </p>
+                <p className="flex-none">{`${truckingBasis.label} ${t('admin:range')} ${
+                  s[target][cellLowerKey]
+                } - ${s[target][cellUpperKey]}`}</p>
               )}
               <div
                 className="flex-10 layout-row layout-align-center-center"
@@ -187,7 +187,7 @@ export class PanelBox extends Component {
             >
               <div className="flex-25 layout-row layout-wrap layout-align-start-start">
                 <div className="flex-100 layout-row layout-align-start-center">
-                  <p className="flex-none sup">Minimum charge (Flat Rate)</p>
+                  <p className="flex-none sup">{t('admin:minimumCharge')}</p>
                 </div>
                 <div className="flex-100 layout-row layout-align-start-center input_box">
                   <input
@@ -210,6 +210,7 @@ export class PanelBox extends Component {
 }
 PanelBox.propTypes = {
   // theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   cells: PropTypes.arrayOf(PropTypes.object),
   cellSteps: PropTypes.arrayOf(PropTypes.object),
   handleRateChange: PropTypes.func.isRequired,
@@ -235,4 +236,4 @@ PanelBox.defaultProps = {
   stepBasis: {},
   truckingBasis: {}
 }
-export default PanelBox
+export default withNamespaces('admin')(PanelBox)

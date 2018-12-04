@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './AdminScheduleLine.scss'
 import { moment } from '../../constants'
 import { gradientTextGenerator } from '../../helpers'
 
-export default class AdminLayoverRow extends Component {
+class AdminLayoverRow extends Component {
   static switchIcon (sched) {
     let icon
     switch (sched.mode_of_transport) {
@@ -21,6 +22,7 @@ export default class AdminLayoverRow extends Component {
         icon = <i className="fa fa-ship" />
         break
     }
+
     return icon
   }
   static dashedGradient (color1, color2) {
@@ -30,7 +32,7 @@ export default class AdminLayoverRow extends Component {
   }
   render () {
     const {
-      theme, schedule, hub, itinerary
+      t, theme, schedule, hub, itinerary
     } = this.props
     if (!schedule || !hub || !itinerary) {
       return ''
@@ -41,6 +43,7 @@ export default class AdminLayoverRow extends Component {
                   : { color: 'black' }
     const startTime = schedule.eta ? schedule.eta : schedule.start_date
     const endTime = schedule.etd ? schedule.etd : schedule.end_date
+
     return (
       <div
         key={schedule.id}
@@ -78,7 +81,7 @@ export default class AdminLayoverRow extends Component {
                   style={gradientFontStyle}
                 >
                   {' '}
-                                    Date of Arrival
+                  {t('admin:dateOfArrival')}
                 </h4>
               </div>
               <div className="flex-100 layout-row">
@@ -99,7 +102,7 @@ export default class AdminLayoverRow extends Component {
                   style={gradientFontStyle}
                 >
                   {' '}
-                                    Date of Departure
+                  {t('shipment:dateOfDeparture')}
                 </h4>
               </div>
               <div className="flex-100 layout-row">
@@ -120,8 +123,11 @@ export default class AdminLayoverRow extends Component {
   }
 }
 AdminLayoverRow.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme.isRequired,
   schedule: PropTypes.objectOf(PropTypes.object).isRequired,
   hub: PropTypes.objectOf(PropTypes.any).isRequired,
   itinerary: PropTypes.objectOf(PropTypes.any).isRequired
 }
+
+export default withNamespaces(['admin', 'shipment'])(AdminLayoverRow)

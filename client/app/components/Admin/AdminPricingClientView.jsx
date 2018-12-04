@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../prop-types'
@@ -84,7 +85,7 @@ export class AdminPricingClientView extends Component {
 
   render () {
     const {
-      theme, pricingData, clientPricings, adminActions
+      t, theme, pricingData, clientPricings, adminActions
     } = this.props
     const {
       editorBool,
@@ -101,8 +102,8 @@ export class AdminPricingClientView extends Component {
     const confimPrompt = confirm ? (
       <AdminPromptConfirm
         theme={theme}
-        heading="Are you sure?"
-        text="This will delete the pricing immediately and all related data"
+        heading={t('common:areYouSure')}
+        text={t('admin:confirmDeletePricing')}
         confirm={() => this.deletePricing(pricingToDelete)}
         deny={() => this.closeConfirm()}
       />
@@ -127,7 +128,7 @@ export class AdminPricingClientView extends Component {
         </div>
 
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-          <h4 className="flex-none"> No dedicated pricings available</h4>
+          <h4 className="flex-none">{t('admin:noDedicatedPricings')}</h4>
         </div>
       </div>
     )
@@ -246,7 +247,7 @@ export class AdminPricingClientView extends Component {
               styles.price_row_detail
             }`}
           >
-            <p className="flex-none">Cargo Type: </p>
+            <p className="flex-none">{t('admin:cargoType')}</p>
             <p className="flex-none">{transport.name}</p>
           </div>
           <div
@@ -254,7 +255,7 @@ export class AdminPricingClientView extends Component {
               styles.price_row_detail
             }`}
           >
-            <p className="flex-none">Cargo Class:</p>
+            <p className="flex-none">{t('admin:cargoClass')}</p>
             <p className="flex-none"> {containerDescriptions[transport.cargo_class]}</p>
           </div>
           {panel}
@@ -330,6 +331,7 @@ export class AdminPricingClientView extends Component {
   }
 }
 AdminPricingClientView.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   adminActions: PropTypes.shape({
     getClientPricings: PropTypes.func
@@ -353,4 +355,4 @@ AdminPricingClientView.defaultProps = {
   loading: false
 }
 
-export default AdminPricingClientView
+export default withNamespaces(['admin', 'common'])(AdminPricingClientView)

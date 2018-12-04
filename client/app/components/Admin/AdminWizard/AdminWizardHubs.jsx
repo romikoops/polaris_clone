@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
@@ -21,7 +22,9 @@ export class AdminWizardHubs extends Component {
     this.props.adminTools.goTo('/admin/wizard/service_charges')
   }
   render () {
-    const { theme, newHubs, adminTools } = this.props
+    const {
+      theme, newHubs, adminTools, t
+    } = this.props
     let hubList
     if (newHubs && newHubs.length > 0) {
       hubList = newHubs.map(hub => (
@@ -41,7 +44,7 @@ export class AdminWizardHubs extends Component {
         <RoundButton
           theme={theme}
           size="small"
-          text="Back"
+          text={t('common:basicBack')}
           handleNext={AdminWizardHubs.back}
           iconClass="fa-chevron-left"
         />
@@ -53,7 +56,7 @@ export class AdminWizardHubs extends Component {
           theme={theme}
           size="small"
           active
-          text="Next"
+          text={t('common:next')}
           handleNext={this.nextStep}
           iconClass="fa-chevron-right"
         />
@@ -64,12 +67,12 @@ export class AdminWizardHubs extends Component {
       <div className="flex-100 layout-row layout-wrap layout-align-start-center">
         <div className="flex-100 layout-row layout-wrap layout-align-start-start">
           <div className={`flex-100 layout-row layout-align-start-center ${styles.sec_title}`}>
-            <TextHeading theme={theme} size={2} text="hubs" />
+            <TextHeading theme={theme} size={2} text={t('admin:hubs')} />
           </div>
           <div
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}
           >
-            <p className="flex-none">Upload Hubs Sheet</p>
+            <p className="flex-none">{t('admin:uploadHubs')}</p>
             <FileUploader
               theme={theme}
               url={hubUrl}
@@ -92,6 +95,7 @@ export class AdminWizardHubs extends Component {
 }
 AdminWizardHubs.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   adminTools: PropTypes.shape({
     goTo: PropTypes.func
   }).isRequired,
@@ -103,4 +107,4 @@ AdminWizardHubs.defaultProps = {
   newHubs: []
 }
 
-export default AdminWizardHubs
+export default withNamespaces(['admin', 'common'])(AdminWizardHubs)

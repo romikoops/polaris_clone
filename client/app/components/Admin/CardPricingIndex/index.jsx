@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
 import styles from './Card.scss'
@@ -16,7 +17,7 @@ import {
 import CollapsingBar from '../../CollapsingBar/CollapsingBar'
 import { RoundButton } from '../../RoundButton/RoundButton'
 
-export default class CardPricingIndex extends Component {
+class CardPricingIndex extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -117,7 +118,7 @@ export default class CardPricingIndex extends Component {
   render () {
     const { searchText, page, expander } = this.state
     const {
-      theme, scope, toggleCreator, mot, allNumPages
+      theme, scope, toggleCreator, mot, allNumPages, t
     } = this.props
 
     const newButton = (
@@ -125,7 +126,7 @@ export default class CardPricingIndex extends Component {
         <RoundButton
           theme={theme}
           size="small"
-          text="New"
+          text={t('admin:new')}
           active
           handleNext={toggleCreator}
           iconClass="fa-plus"
@@ -161,7 +162,7 @@ export default class CardPricingIndex extends Component {
                 onClick={page > 1 ? () => this.deltaPage(-1) : null}
               >
                 <i className="fa fa-chevron-left" />
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;{t('common:basicBack')}</p>
               </div>
               {}
               <p>{page}</p>
@@ -172,7 +173,7 @@ export default class CardPricingIndex extends Component {
                     `}
                 onClick={page < numPages ? () => this.deltaPage(1) : null}
               >
-                <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                <p>{t('common:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
                 <i className="fa fa-chevron-right" />
               </div>
             </div>
@@ -183,12 +184,12 @@ export default class CardPricingIndex extends Component {
 
           <div className="hide-sm hide-xs layout-row layout-wrap  flex-100">
             <PricingSearchBar
-              onChange={(e, t) => this.handlePricingSearch(e, t)}
+              onChange={(e, target) => this.handlePricingSearch(e, target)}
               value={searchText}
               target={mot}
             />
             <SideOptionsBox
-              header="Data manager"
+              header={t('admin:dataManager')}
               flexOptions="flex-100"
               content={
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
@@ -198,7 +199,7 @@ export default class CardPricingIndex extends Component {
                     theme={theme}
                     styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                     handleCollapser={() => this.toggleExpander('upload')}
-                    text="Upload Data"
+                    text={t('admin:uploadData')}
                     faClass="fa fa-cloud-upload"
                     content={(
                       <div
@@ -209,14 +210,14 @@ export default class CardPricingIndex extends Component {
                             adminStyles.action_section
                           } flex-100 layout-row layout-wrap layout-align-center-center`}
                         >
-                          <p className="flex-100">Upload FCL/LCL Pricings Sheet</p>
+                          <p className="flex-100">{t('admin:uploadPricing')}</p>
                           <FileUploader
                             theme={theme}
                             dispatchFn={e => this.lclUpload(e)}
                             tooltip={priceTip.upload_lcl}
                             type="xlsx"
                             size="full"
-                            text="Dedicated Pricings .xlsx"
+                            text={t('admin:dedicatedPricing')}
                           />
 
                         </div>
@@ -230,7 +231,7 @@ export default class CardPricingIndex extends Component {
                     theme={theme}
                     styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                     handleCollapser={() => this.toggleExpander('download')}
-                    text="Download Data"
+                    text={t('admin:downloadData')}
                     faClass="fa fa-cloud-download"
                     content={(
                       <div
@@ -241,7 +242,7 @@ export default class CardPricingIndex extends Component {
                             adminStyles.action_section
                           } flex-100 layout-row layout-wrap layout-align-center-center`}
                         >
-                          <p className="flex-100">{`Download ${capitalize(mot)} Pricings Sheet`}</p>
+                          <p className="flex-100">{t('admin:downloadPricing', { mot: capitalize(mot) })}</p>
                           <DocumentsDownloader
                             theme={theme}
                             target="pricing"
@@ -258,7 +259,7 @@ export default class CardPricingIndex extends Component {
                     theme={theme}
                     styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                     handleCollapser={() => this.toggleExpander('new')}
-                    text="Create New Pricing"
+                    text={t('admin:createNewPricing')}
                     faClass="fa fa-plus-circle"
                     content={(
                       <div
@@ -281,6 +282,7 @@ export default class CardPricingIndex extends Component {
 }
 CardPricingIndex.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   itineraries: PropTypes.arrayOf(PropTypes.itinerary),
   toggleCreator: PropTypes.func,
@@ -306,3 +308,5 @@ CardPricingIndex.defaultProps = {
   scope: null,
   toggleCreator: null
 }
+
+export default withNamespaces(['admin', 'common'])(CardPricingIndex)

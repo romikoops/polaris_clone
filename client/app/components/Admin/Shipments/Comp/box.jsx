@@ -50,6 +50,7 @@ export class AdminShipmentsBox extends Component {
 
   render () {
     const {
+      t,
       theme,
       userView,
       page,
@@ -61,10 +62,6 @@ export class AdminShipmentsBox extends Component {
       handleSearchChange,
       numPages,
       shipments,
-      t,
-      searchFilters,
-      handleInput,
-      countries,
       confirmShipmentData,
       searchText
     } = this.props
@@ -97,7 +94,7 @@ export class AdminShipmentsBox extends Component {
               type="text"
               name="search"
               value={searchText}
-              placeholder="Search Shipments"
+              placeholder={t('admin:searchShipments')}
               onChange={handleSearchChange}
             />
           </div>
@@ -110,9 +107,9 @@ export class AdminShipmentsBox extends Component {
                 styles.sec_subheader
               }`}
             >
-              <p className={` ${styles.sec_subheader_text} flex-none`}>{t('shipment:noShipments')}</p>
+              <p className={` ${styles.sec_subheader_text} flex-none`}>{t('admin:waitingShipments')}</p>
             </div>
-            {AdminShipmentsBox.switchShipment(status, t)}
+            <p className="flex-none">{t('admin:shipmentsAreRequested')}</p>
           </div>
         ) : (
           <ShipmentOverviewCard
@@ -133,7 +130,7 @@ export class AdminShipmentsBox extends Component {
             onClick={parseInt(page, 10) > 1 ? prevPage : null}
           >
             <i className="fa fa-chevron-left" />
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;{t('common:basicBack')}</p>
           </div>
           {}
           <p>{page}</p>
@@ -144,7 +141,7 @@ export class AdminShipmentsBox extends Component {
                     `}
             onClick={parseInt(page, 10) < numPages ? nextPage : null}
           >
-            <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
+            <p>{t('common:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
             <i className="fa fa-chevron-right" />
           </div>
         </div>
@@ -155,6 +152,7 @@ export class AdminShipmentsBox extends Component {
   }
 }
 AdminShipmentsBox.propTypes = {
+  t: PropTypes.func.isRequired,
   shipments: PropTypes.arrayOf(PropTypes.shipment).isRequired,
   handleClick: PropTypes.func,
   dispatches: PropTypes.shape({
@@ -188,4 +186,4 @@ AdminShipmentsBox.defaultProps = {
   searchText: ''
 }
 
-export default withNamespaces('shipment')(AdminShipmentsBox)
+export default withNamespaces(['admin', 'common'])(AdminShipmentsBox)

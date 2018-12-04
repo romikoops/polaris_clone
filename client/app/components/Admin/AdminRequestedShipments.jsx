@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './AdminRequestedShipments.scss'
 
@@ -17,23 +18,23 @@ export class AdminRequestedShipments extends Component {
         <div className="layout-column flex-25 layout-wrap">
           <div className="layout-row flex-50 layout-wrap layout-align-space-around-center">
             <span className="layout-row flex-25 layout-wrap layout-align-center-center">I</span>
-            <span className="layout-row flex-75 layout-wrap layout-align-center-center">Name</span>
+            <span className="layout-row flex-75 layout-wrap layout-align-center-center">{this.props.t('admin:name')}</span>
           </div>
           <div className="layout-row flex-50 layout-wrap layout-align-space-around-center">
             <span className="layout-row flex-25 layout-wrap layout-align-center-center">I</span>
-            <span className="layout-row flex-75 layout-wrap layout-align-center-center">Comp</span>
+            <span className="layout-row flex-75 layout-wrap layout-align-center-center">{this.props.t('admin:comp')}</span>
           </div>
         </div>
         <div className="layout-row flex-25 layout-wrap layout-align-center-center">
-          <span>Icon</span>
+          <span>{this.props.t('admin:icon')}</span>
         </div>
         <div className="layout-column flex-25 layout-wrap layout-align-space-around-center">
-          <span>From</span>
-          <span>To</span>
+          <span>{this.props.t('common:from')}</span>
+          <span>{this.props.t('common:to')}</span>
         </div>
         <div className="layout-column flex-25 layout-wrap layout-align-space-around-center">
-          <span>Amount</span>
-          <span>Type</span>
+          <span>{this.props.t('admin:amount')}</span>
+          <span>{this.props.t('doc:type')}</span>
         </div>
       </div>
     ))
@@ -43,7 +44,7 @@ export class AdminRequestedShipments extends Component {
     return (
       <div className="layout-column flex-100 layout-align-space-start-center">
         <div className="layout-row flex-10 layout-wrap layout-align-space-start-start">
-          <span className={`${styles.title}`}>Pending bookings</span>
+          <span className={`${styles.title}`}>{this.props.t('admin:pendingBookings')}</span>
         </div>
         <div className="layout-column layout-align-space-start-center">
           <div className={`layout-align-start-stretch ${styles.shipments}`}>
@@ -56,6 +57,7 @@ export class AdminRequestedShipments extends Component {
 }
 
 AdminRequestedShipments.propTypes = {
+  t: PropTypes.func.isRequired,
   requested: PropTypes.node
 }
 
@@ -63,4 +65,4 @@ AdminRequestedShipments.defaultProps = {
   requested: ['']
 }
 
-export default AdminRequestedShipments
+export default withNamespaces(['admin', 'common', 'doc'])(AdminRequestedShipments)

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import Formsy from 'formsy-react'
 import MailCheck from 'react-mailcheck'
 import { bindActionCreators } from 'redux'
@@ -140,7 +141,7 @@ class AdminClients extends Component {
   render () {
     const { newClient, newClientBool, tabReset } = this.state
     const {
-      theme, clients, hubs, hubHash, client, adminDispatch
+      t, theme, clients, hubs, hubHash, client, adminDispatch
     } = this.props
     const textStyle = {
       background:
@@ -173,9 +174,9 @@ class AdminClients extends Component {
             matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
           }}
           validationErrors={{
-            isDefaultRequiredValue: 'Must not be blank',
-            minLength: 'Must be at least two characters long',
-            matchRegexp: 'Invalid email'
+            isDefaultRequiredValue: t('common:noBlank'),
+            minLength: t('errors:twoChars'),
+            matchRegexp: t('errors:invalidEmail')
           }}
           required
         />
@@ -222,7 +223,7 @@ class AdminClients extends Component {
           >
             <div className="flex-none layout-row layout-align-start-center">
               <i className="fa fa-user flex-none clip" style={textStyle} />
-              <p className="flex-none">New Client</p>
+              <p className="flex-none">{t('admin:newClient')}</p>
             </div>
             <div
               className="flex-none layout-row layout-align-start-center"
@@ -238,13 +239,13 @@ class AdminClients extends Component {
             type="text"
             value={newClient.firstName}
             name="firstName"
-            placeholder="First Name *"
+            placeholder={`${t('user:firstName')} *`}
             onChange={this.handleFormChange}
             submitAttempted={this.state.newClientAttempt}
             validations="minLength:2"
             validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long'
+              isDefaultRequiredValue: t('common:noBlank'),
+              minLength: t('errors:twoChars')
             }}
             required
           />
@@ -255,13 +256,13 @@ class AdminClients extends Component {
             type="text"
             value={newClient.lastName}
             name="lastName"
-            placeholder="Last Name *"
+            placeholder={`${t('user:lastName')} *`}
             onChange={this.handleFormChange}
             submitAttempted={this.state.newClientAttempt}
             validations="minLength:2"
             validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long'
+              isDefaultRequiredValue: t('common:noBlank'),
+              minLength: t('errors:twoChars')
             }}
             required
           />
@@ -275,13 +276,13 @@ class AdminClients extends Component {
             type="text"
             value={newClient.phone}
             name="phone"
-            placeholder="Phone *"
+            placeholder={`${t('user:phone')} *`}
             onChange={this.handleFormChange}
             submitAttempted={this.state.newClientAttempt}
             validations="minLength:2"
             validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long'
+              isDefaultRequiredValue: t('common:noBlank'),
+              minLength: t('errors:twoChars')
             }}
             required
           />
@@ -292,13 +293,13 @@ class AdminClients extends Component {
             type="text"
             value={newClient.companyName}
             name="companyName"
-            placeholder="Company Name *"
+            placeholder={`${t('user:companyName')} *`}
             onChange={this.handleFormChange}
             submitAttempted={this.state.newClientAttempt}
             validations="minLength:2"
             validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long'
+              isDefaultRequiredValue: t('common:noBlank'),
+              minLength: t('errors:twoChars')
             }}
             required
           />
@@ -309,13 +310,13 @@ class AdminClients extends Component {
             type="text"
             value={newClient.number}
             name="number"
-            placeholder="Number"
+            placeholder={t('user:country')}
             onChange={this.handleFormChange}
             submitAttempted={this.state.newClientAttempt}
             validations="minLength:1"
             validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least one character long'
+              isDefaultRequiredValue: t('common:noBlank'),
+              minLength: t('errors:oneChar')
             }}
           />
           <FormsyInput
@@ -325,13 +326,13 @@ class AdminClients extends Component {
             type="text"
             value={newClient.street}
             name="street"
-            placeholder="Street"
+            placeholder={t('user:street')}
             onChange={this.handleFormChange}
             submitAttempted={this.state.newClientAttempt}
             validations="minLength:2"
             validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long'
+              isDefaultRequiredValue: t('common:noBlank'),
+              minLength: t('errors:twoChars')
             }}
           />
           <FormsyInput
@@ -341,13 +342,13 @@ class AdminClients extends Component {
             type="text"
             value={newClient.zipCode}
             name="zipCode"
-            placeholder="Postal Code"
+            placeholder={t('user:postalCode')}
             onChange={this.handleFormChange}
             submitAttempted={this.state.newClientAttempt}
             validations="minLength:2"
             validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long'
+              isDefaultRequiredValue: t('common:noBlank'),
+              minLength: t('errors:twoChars')
             }}
           />
           <FormsyInput
@@ -357,13 +358,13 @@ class AdminClients extends Component {
             type="text"
             value={newClient.city}
             name="city"
-            placeholder="City"
+            placeholder={t('user:city')}
             onChange={this.handleFormChange}
             submitAttempted={this.state.newClientAttempt}
             validations="minLength:2"
             validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long'
+              isDefaultRequiredValue: t('common:noBlank'),
+              minLength: t('errors:twoChars')
             }}
           />
           <FormsyInput
@@ -373,13 +374,13 @@ class AdminClients extends Component {
             type="text"
             value={newClient.country}
             name="country"
-            placeholder="Country"
+            placeholder={t('user:country')}
             onChange={this.handleFormChange}
             submitAttempted={this.state.newClientAttempt}
             validations="minLength:2"
             validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long'
+              isDefaultRequiredValue: t('common:noBlank'),
+              minLength: t('errors:twoChars')
             }}
           />
 
@@ -392,13 +393,13 @@ class AdminClients extends Component {
                 type="password"
                 value={newClient.password}
                 name="password"
-                placeholder="Password *"
+                placeholder={t('admin:password')}
                 onChange={this.handleFormChange}
                 submitAttempted={this.state.newClientAttempt}
                 validations="minLength:8"
                 validationErrors={{
-                  isDefaultRequiredValue: 'Must not be blank',
-                  minLength: 'Must be at least 8 characters long'
+                  isDefaultRequiredValue: t('common:noBlank'),
+                  minLength: t('errors:eightChars')
                 }}
                 required
               />
@@ -414,7 +415,7 @@ class AdminClients extends Component {
                 type="password"
                 value={newClient.password_confirmation}
                 name="password_confirmation"
-                placeholder="Password Confirmation *"
+                placeholder={t('admin:passwordConfirmation')}
                 onChange={this.handleFormChange}
                 submitAttempted={this.state.newClientAttempt}
                 validations={{
@@ -422,8 +423,8 @@ class AdminClients extends Component {
                     (this.tmpNewClient || newClient).password === value
                 }}
                 validationErrors={{
-                  matchesPassword: 'Must match password',
-                  isDefaultRequiredValue: 'Must not be blank'
+                  matchesPassword: t('errors:mustMatchPassword'),
+                  isDefaultRequiredValue: t('common:noBlank')
                 }}
                 required
               />
@@ -435,7 +436,7 @@ class AdminClients extends Component {
               theme={theme}
               size="small"
               active
-              text="Save"
+              text={t('admin:save')}
               iconClass="fa-floppy-o"
             />
           </div>
@@ -486,6 +487,7 @@ class AdminClients extends Component {
   }
 }
 AdminClients.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hubs),
   hubHash: PropTypes.objectOf(PropTypes.hubs),
@@ -529,4 +531,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AdminClients))
+export default withNamespaces(['admin', 'user', 'common', 'errors'])(withRouter(connect(mapStateToProps, mapDispatchToProps)(AdminClients)))

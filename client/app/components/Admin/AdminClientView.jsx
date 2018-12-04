@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
-import { AdminAddressTile } from './'
+import AdminAddressTile from './AdminAddressTile'
 import styles from './Admin.scss'
 import GreyBox from '../GreyBox/GreyBox'
 import TextHeading from '../TextHeading/TextHeading'
@@ -89,7 +90,7 @@ export class AdminClientView extends Component {
   }
   render () {
     const {
-      theme, clientData, hubs, managers, adminDispatch
+      t, theme, clientData, hubs, managers, adminDispatch
     } = this.props
     if (!clientData) {
       return ''
@@ -145,8 +146,8 @@ export class AdminClientView extends Component {
     const confimPrompt = confirm ? (
       <AdminPromptConfirm
         theme={theme}
-        heading="Are you sure?"
-        text={`This will delete ${client.first_name} ${client.last_name} and all related data`}
+        heading={t('common:areYouSure')}
+        text={t('admin:deleteAllData', { firstName: client.first_name, lastName: client.last_name })}
         confirm={() => this.deleteClient(client.id)}
         deny={() => this.closeConfirm()}
       />
@@ -168,7 +169,7 @@ export class AdminClientView extends Component {
         <div className="flex-100 layout-row layout-wrap layout-align-center-center padd_20">
           <NamedSelect
             name="manager"
-            placeholder="Choose manager"
+            placeholder={t('admin:chooseManager')}
             classes={`${styles.select}`}
             value={selectedManager}
             options={managerOpts}
@@ -179,7 +180,7 @@ export class AdminClientView extends Component {
         <div className="flex-100 layout-row layout-wrap layout-align-center-center padd_20">
           <NamedSelect
             name="manager"
-            placeholder="Choose area"
+            placeholder={t('admin:chooseArea')}
             classes={`${styles.select}`}
             value={selectedRole}
             options={managerRoles}
@@ -192,7 +193,7 @@ export class AdminClientView extends Component {
             <RoundButton
               theme={theme}
               size="small"
-              text="Save"
+              text={t('admin:save')}
               handleNext={this.assignNewManager}
               iconClass="fa-floppy-o"
             />
@@ -205,7 +206,7 @@ export class AdminClientView extends Component {
         <div className="flex-100 layout-row layout-align-start-start layout-wrap">
           <div className="flex-100 layout-row layout-align-start-start ">
             <sup style={style} className="clip flex-none">
-              Company
+              {t('user:company')}
             </sup>
           </div>
           <div className="flex-100 layout-row layout-align-start-center ">
@@ -215,7 +216,7 @@ export class AdminClientView extends Component {
         <div className="flex-50 layout-row layout-align-start-start layout-wrap">
           <div className="flex-100 layout-row layout-align-start-start ">
             <sup style={style} className="clip flex-none">
-              Email
+              {t('user:email')}
             </sup>
           </div>
           <div className="flex-100 layout-row layout-align-start-center ">
@@ -225,7 +226,7 @@ export class AdminClientView extends Component {
         <div className="flex-50 layout-row layout-align-start-start layout-wrap">
           <div className="flex-100 layout-row layout-align-start-start ">
             <sup style={style} className="clip flex-none">
-              Phone
+              {t('user:phone')}
             </sup>
           </div>
           <div className="flex-100 layout-row layout-align-start-center ">
@@ -251,7 +252,7 @@ export class AdminClientView extends Component {
             <RoundButton
               theme={theme}
               size="full"
-              text="Assign Manager"
+              text={t('admin:assignManager')}
               handleNext={this.toggleNewManager}
               iconClass="fa-plus"
             />
@@ -260,7 +261,7 @@ export class AdminClientView extends Component {
             <RoundButton
               theme={theme}
               size="full"
-              text="Delete"
+              text={t('common:delete')}
               handleNext={() => this.confirmDelete()}
               iconClass="fa-trash"
             />
@@ -268,7 +269,7 @@ export class AdminClientView extends Component {
         </div>
         <div className="flex-100 layout-row layout-wrap">
           <div className="flex-100 layout-row layout-align-start-center">
-            <p className="flex-none">Account Managers</p>
+            <p className="flex-none">{t('admin:accountManagers')}</p>
           </div>
           {manArray}
         </div>
@@ -304,7 +305,7 @@ export class AdminClientView extends Component {
             />
             {relManagers.length !== 0 ? (
               <GreyBox
-                title="Account Managers"
+                title={t('admin:accountManagers')}
                 wrapperClassName="flex-30 layout-row layout-align-start-start"
                 contentClassName="layout-column flex"
                 content={(
@@ -340,7 +341,7 @@ export class AdminClientView extends Component {
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
           >
             <div className="layout-padding flex-100 layout-align-start-center greyBg">
-              <span><b>Locations</b></span>
+              <span><b>{t('common:locations')}</b></span>
             </div>
           </div>
           <div className="layout-row flex-100 layout-wrap layout-align-space-between-stretch margin_bottom">
@@ -353,6 +354,7 @@ export class AdminClientView extends Component {
   }
 }
 AdminClientView.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   adminDispatch: PropTypes.func.isRequired,
@@ -372,4 +374,4 @@ AdminClientView.defaultProps = {
   clientData: null
 }
 
-export default AdminClientView
+export default withNamespaces(['admin', 'common', 'user'])(AdminClientView)

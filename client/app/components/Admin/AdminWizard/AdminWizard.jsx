@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
@@ -32,7 +33,9 @@ class AdminWizard extends Component {
   }
 
   render () {
-    const { theme, adminDispatch, wizard } = this.props
+    const {
+      t, theme, adminDispatch, wizard
+    } = this.props
     let newHubs = []
     let newScs = []
     if (wizard) {
@@ -48,7 +51,7 @@ class AdminWizard extends Component {
           theme={innerTheme}
           size="small"
           active
-          text="Begin"
+          text={t('admin:begin')}
           handleNext={this.start}
           iconClass="fa-magic"
         />
@@ -144,6 +147,7 @@ class AdminWizard extends Component {
   }
 }
 AdminWizard.propTypes = {
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   wizard: PropTypes.shape({
@@ -182,4 +186,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminWizard)
+export default withNamespaces('admin')(connect(mapStateToProps, mapDispatchToProps)(AdminWizard))

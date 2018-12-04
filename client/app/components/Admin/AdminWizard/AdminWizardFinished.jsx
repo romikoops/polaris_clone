@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
 // import { AdminHubTile } from '../';
@@ -18,7 +19,7 @@ export class AdminWizardFinished extends Component {
   }
 
   render () {
-    const { theme } = this.props
+    const { theme, t } = this.props
     const textStyle = {
       background:
         theme && theme.colors
@@ -31,13 +32,13 @@ export class AdminWizardFinished extends Component {
         <div className="flex-100 layout-row layout-wrap layout-align-start-start">
           <div className={`flex-100 layout-row layout-align-start-center ${styles.sec_title}`}>
             <h1 className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
-              Finished!
+              {t('admin:finished')}
             </h1>
           </div>
 
           <div className={`flex-100 layout-row layout-align-start-center ${styles.sec_title}`}>
             <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
-              Browse through the links on the left to see your data!
+              {t('admin:browseLinks')}
             </p>
           </div>
         </div>
@@ -47,6 +48,7 @@ export class AdminWizardFinished extends Component {
 }
 AdminWizardFinished.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   adminTools: PropTypes.shape({
     goTo: PropTypes.func
   }).isRequired
@@ -56,4 +58,4 @@ AdminWizardFinished.defaultProps = {
   theme: null
 }
 
-export default AdminWizardFinished
+export default withNamespaces('admin')(AdminWizardFinished)
