@@ -740,10 +740,12 @@ class ShipmentLocationBox extends PureComponent {
   }
 
   handleAddressFormFocus (event) {
+    const { truckingFound } = this.state
     const target = event.target.name.split('-')[0]
     this.isOnFocus[target] = event.type === 'focus'
     const targetLocation = this.props[target]
-    if (targetLocation && event.type !== 'focus') {
+    debugger
+    if (!truckingFound[target] && targetLocation && event.type !== 'focus') {
       const newAutotext = `${targetLocation.street} ${targetLocation.number} ${targetLocation.city} ${targetLocation.zipCode} ${
         targetLocation.country
       }`
