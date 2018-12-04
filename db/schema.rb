@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_23_145726) do
+ActiveRecord::Schema.define(version: 2018_12_04_131342) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -410,6 +410,11 @@ ActiveRecord::Schema.define(version: 2018_11_23_145726) do
     t.string "country"
     t.string "admin_level"
     t.geometry "bounds", limit: {:srid=>0, :type=>"geometry"}
+    t.index "to_tsvector('english'::regconfig, (city)::text)", name: "locations_to_tsvector_idx3", using: :gin
+    t.index "to_tsvector('english'::regconfig, (country)::text)", name: "locations_to_tsvector_idx4", using: :gin
+    t.index "to_tsvector('english'::regconfig, (neighbourhood)::text)", name: "locations_to_tsvector_idx2", using: :gin
+    t.index "to_tsvector('english'::regconfig, (postal_code)::text)", name: "locations_to_tsvector_idx", using: :gin
+    t.index "to_tsvector('english'::regconfig, (suburb)::text)", name: "locations_to_tsvector_idx1", using: :gin
     t.index ["postal_code", "suburb", "neighbourhood", "city", "province", "country"], name: "uniq_index", unique: true
   end
 
@@ -670,7 +675,6 @@ ActiveRecord::Schema.define(version: 2018_11_23_145726) do
     t.datetime "planned_delivery_date"
     t.datetime "planned_destination_collection_date"
     t.datetime "desired_start_date"
-    t.integer "stage"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 
