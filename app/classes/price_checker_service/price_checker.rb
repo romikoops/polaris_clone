@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module PriceCheckerService
   class PriceChecker
     include CurrencyTools
@@ -6,8 +7,8 @@ module PriceCheckerService
 
     def initialize(itinerary, shipment_data, user)
       @itinerary     = Itinerary.find(itinerary)
-      @origin_hub    = @itinerary.first_stop.hub 
-      @destination_hub    = @itinerary.last_stop.hub 
+      @origin_hub    = @itinerary.first_stop.hub
+      @destination_hub = @itinerary.last_stop.hub
       @shipment_data = shipment_data
       @user          = user
       @trucking_data = shipment_data[:trucking] || {}
@@ -30,21 +31,21 @@ module PriceCheckerService
         calc_cargo_charges
         @grand_total_charge.update_quote_price!(@itinerary.tenant_id)
         @grand_total_charge.save
-        {quote: @grand_total_charge, service_level: @schedule.trip.tenant_vehicle}
+        { quote: @grand_total_charge, service_level: @schedule.trip.tenant_vehicle }
       end
     end
 
     private
-    
+
     def prep_faux_schedules
       if !@service_level
         tv_ids = {}
-        unique_trips = @itinerary.trips.select { |trip| 
-          if !tv_ids[trip.tenant_vehicle_id]
+        unique_trips = @itinerary.trips.select do |trip|
+          unless tv_ids[trip.tenant_vehicle_id]
             tv_ids[trip.tenant_vehicle_id] = true
             trip
           end
-        }
+        end
       else
         unique_trips = [@itinerary.trips.find_by(tenant_vehicle_id: @service_level.id)]
       end
@@ -76,15 +77,15 @@ module PriceCheckerService
           @origin_hub,
           @shipment_data[:load_type],
           cargo_units,
-          "export",
+          'export',
           @itinerary.mode_of_transport,
           @schedule.trip.tenant_vehicle_id,
           @destination_hub.id,
           @user
         )
-        
+
         unless local_charges_data.empty?
-          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code("export"))
+          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('export'))
         end
       end
 
@@ -93,7 +94,7 @@ module PriceCheckerService
           @destination_hub,
           @shipment_data[:load_type],
           cargo_units,
-          "import",
+          'import',
           @itinerary.mode_of_transport,
           @schedule.trip.tenant_vehicle_id,
           @origin_hub.id,
@@ -101,7 +102,7 @@ module PriceCheckerService
         )
 
         unless local_charges_data.empty?
-          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code("import"))
+          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('import'))
         end
       end
     end
@@ -133,24 +134,24 @@ module PriceCheckerService
         sum + cargo_unit.try(:quantity).to_i
       end
 
-      charge_category = ChargeCategory.from_code("cargo")
+      charge_category = ChargeCategory.from_code('cargo')
       parent_charge = create_parent_charge(charge_category)
       cargo_unit_array = @cargo_units
 
-      if @user.tenant.scope["consolidate_cargo"] && cargo_unit_array.first.is_a?(CargoItem)
+      if @user.tenant.scope['consolidate_cargo'] && cargo_unit_array.first.is_a?(CargoItem)
         cargo_unit_array = consolidate_cargo(cargo_unit_array, @itinerary.mode_of_transport)
       end
       cargo_unit_array.each do |cargo_unit|
         charge_result = send("determine_#{@shipment_data[:load_type]}_price",
-          cargo_unit,
-          @schedule,
-          @user,
-          total_units,
-          @schedule.etd,
-          @itinerary.mode_of_transport)
+                             cargo_unit,
+                             @schedule,
+                             @user,
+                             total_units,
+                             @schedule.etd,
+                             @itinerary.mode_of_transport)
         next if charge_result.nil?
 
-        cargo_unit_model = cargo_unit.class.to_s == "Hash" ? "CargoItem" : cargo_unit.class.to_s
+        cargo_unit_model = cargo_unit.class.to_s == 'Hash' ? 'CargoItem' : cargo_unit.class.to_s
 
         children_charge_category = ChargeCategory.find_or_create_by(
           name:          cargo_unit_model.humanize,
@@ -178,23 +179,23 @@ module PriceCheckerService
       fees_data,
       children_charge_category,
       charge_category = ChargeCategory.grand_total,
-      parent=@grand_total_charge
+      parent = @grand_total_charge
     )
       parent_charge = Charge.create(
         children_charge_category: children_charge_category,
         charge_category:          charge_category,
 
         parent:                   parent,
-        price:                    Price.create(fees_data["total"] || fees_data[:total])
+        price:                    Price.create(fees_data['total'] || fees_data[:total])
       )
 
       fees_data.each do |code, charge|
-        next if code.to_s == "total" || charge.empty?
+        next if code.to_s == 'total' || charge.empty?
 
         Charge.create(
           children_charge_category: ChargeCategory.from_code(code),
           charge_category:          children_charge_category,
-  
+
           parent:                   parent_charge,
           price:                    Price.create(charge)
         )
@@ -207,13 +208,13 @@ module PriceCheckerService
 
     def consolidate_cargo(cargo_array, mot)
       cargo = {
-        id:                "ids",
+        id:                'ids',
         dimension_x:       0,
         dimension_y:       0,
         dimension_z:       0,
         volume:            0,
         payload_in_kg:     0,
-        cargo_class:       "",
+        cargo_class:       '',
         chargeable_weight: 0,
         num_of_items:      0
       }

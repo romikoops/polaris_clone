@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Load Rails Environment
 require "#{File.dirname(__FILE__)}/config/environment"
 

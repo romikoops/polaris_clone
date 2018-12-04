@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'bigdecimal'
 class Container < ApplicationRecord
   # The following Constants are currently being stored directly
@@ -10,7 +11,7 @@ class Container < ApplicationRecord
     fcl_20:    2370,
     fcl_40:    3750,
     fcl_40_hq: 4000
-  }
+  }.freeze
   PRICING_WEIGHT_STEPS = ContainerLookups.get_pricing_weight_steps
 
   belongs_to :shipment
@@ -32,7 +33,7 @@ class Container < ApplicationRecord
 
   # Instance Methods
   def size
-    size_class.split("_")[0]
+    size_class.split('_')[0]
   end
 
   private
@@ -42,16 +43,14 @@ class Container < ApplicationRecord
   end
 
   def set_tare_weight
-    unless self.size_class.nil?
-      self.tare_weight ||= TARE_WEIGHTS[size_class.to_sym]
-    end
+    self.tare_weight ||= TARE_WEIGHTS[size_class.to_sym] unless size_class.nil?
   end
 
   def set_weight_class
     return unless weight_class.blank?
     return if size_class.nil?
 
-    size = size_class.split("_").first
+    size = size_class.split('_').first
     which_weight_step = nil
     PRICING_WEIGHT_STEPS[1..-1].each_with_index do |weight_step, i|
       which_weight_step = PRICING_WEIGHT_STEPS[i] if payload_in_kg / 1000 > weight_step

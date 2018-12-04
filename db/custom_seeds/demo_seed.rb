@@ -13,7 +13,7 @@ subdomains.each do |sub|
     user: shipper,
     key: 'data/speedtrans/pricing_expected_20181015_speedtrans.xlsx',
     load_type: 'lcl'
-    ).perform
+  ).perform
 
   # tenant.itineraries.destroy_all
   # tenant.local_charges.destroy_all

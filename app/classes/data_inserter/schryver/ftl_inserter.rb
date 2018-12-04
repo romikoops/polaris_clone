@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'bigdecimal'
 
 module DataInserter
@@ -30,7 +31,7 @@ module DataInserter
             geocoder_results = Geocoder.search(destination_key)
             coordinates = geocoder_results.first.geometry['location']
             geometry = Geometry.find_by_coordinates(coordinates['lat'], coordinates['lng'])
-          rescue
+          rescue StandardError
             geometry = nil
           end
         end
@@ -68,7 +69,7 @@ module DataInserter
         rate_keys = rate.keys
         rate_keys.each_with_index do |w_key, index|
           w_value = w_key.to_s.sub('under_', '').sub('_', '.').to_d * 1000
-          weight_keys[w_key] = w_value 
+          weight_keys[w_key] = w_value
           weight_pairs[w_key] = [(weight_keys[rate_keys[index - 1]] || 0), w_value]
         end
         weight_pairs.each do |rate_key, weights|
@@ -104,7 +105,6 @@ module DataInserter
       end
 
       def build_trucking_destination(destination)
-        
         geometry = find_geometry(destination)
         return nil unless geometry
         TruckingDestination.find_or_create_by(

@@ -37,9 +37,9 @@ subdomains.each do |sub|
   ### Insert schedules
   schedules = 'data/speedtrans/speedtrans__schedules.xlsx'
   req = { 'key' => schedules }
-  ExcelTool::ScheduleOverwriter.new(params: req, mot: "ocean", _user: shipper).perform
+  ExcelTool::ScheduleOverwriter.new(params: req, mot: 'ocean', _user: shipper).perform
 
-  ####### 
+  #######
   puts 'Hamburg Port'
   hub = tenant.hubs.find_by_name('Hamburg Port')
   trucking = 'data/speedtrans/speedtrans__trucking_ltl__hamburg_port.xlsx'

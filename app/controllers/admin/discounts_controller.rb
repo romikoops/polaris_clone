@@ -1,10 +1,10 @@
 # frozen_string_literal: true
+
 require 'bigdecimal'
 
 class Admin::DiscountsController < Admin::AdminBaseController
-
   def index
-    (@filterrific = initialize_filters("User")) || return
+    (@filterrific = initialize_filters('User')) || return
     @users = @filterrific.find.page(params[:page])
 
     respond_to do |format|
@@ -15,7 +15,7 @@ class Admin::DiscountsController < Admin::AdminBaseController
 
   def user_routes
     @user = User.find(params[:user_id])
-    (@filterrific = initialize_filters("Route")) || return
+    (@filterrific = initialize_filters('Route')) || return
     @routes = @filterrific.find.page(params[:page])
     @user_discounts = UserRouteDiscount.where(user: @user)
 

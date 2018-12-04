@@ -41,6 +41,7 @@ module CurrencyTools
 
     round_value(base_value, tenant_id)
   end
+
   def convert(value, from, to, tenant_id)
     rates = get_rates(to, tenant_id)
     base_value = 0

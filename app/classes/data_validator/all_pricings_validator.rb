@@ -9,13 +9,13 @@ module DataValidator
     include DocumentService
 
     def post_initialize(args)
-      signed_url = get_file_url(args[:key], "assets.itsmycargo.com")
+      signed_url = get_file_url(args[:key], 'assets.itsmycargo.com')
       @default_values = JSON.parse(File.open("#{Rails.root}/app/classes/data_validator/default_values.json").read).deep_symbolize_keys!
       # @default_values = JSON.parse(open(signed_url).read).deep_symbolize_keys!
       @shipment_ids_to_destroy = []
       @user = args[:user] ||= @tenant.users.shipper.first
-      @dummy_data = 
-      @validation_results = {}
+      @dummy_data =
+        @validation_results = {}
       @row_keys = {}
       @cargo_unit_keys = []
       @fee_keys = {}
@@ -26,20 +26,19 @@ module DataValidator
       @itineraries = {}
       @pricings = {}
       @args = args.deep_symbolize_keys
-      
     end
 
-    def perform()
+    def perform
       prep_itineraries(@args)
       generate_dummy_examples(@args)
       prep_local_charges(@args)
       assign_keys
-      calculate()
+      calculate
       Shipment.where(id: @shipment_ids_to_destroy).destroy_all
       print_results
     end
 
-    def calculate()
+    def calculate
       @examples.each do |example|
         @example = example.dup
         @load_type = @example[:data][:load_type]
@@ -53,18 +52,18 @@ module DataValidator
       str = "#{example[:data][:itinerary][:name]} - #{example[:data][:service_level]}"
       if str.length > 31
         name_acronym = example[:data][:itinerary][:name]
-          .split(' - ')
-          .map {|str|
-            if str.include?(' ')
-              new_str = str.split(' ').map{|str| str[0].upcase}
-              .join('')
-            else
-              new_str = str
-            end
-            new_str
-          }
-          .join(' - ')
-          
+                       .split(' - ')
+                       .map do |str|
+          new_str = if str.include?(' ')
+                      str.split(' ').map { |str| str[0].upcase }
+                         .join('')
+                    else
+                      str
+                    end
+          new_str
+        end
+                       .join(' - ')
+
         return "#{name_acronym} - #{example[:data][:service_level]}"
       else
         return str
@@ -75,64 +74,64 @@ module DataValidator
       @examples.each do |example|
         pricing = Pricing.find(example[:data][:pricing_id])
         if example[:expected][:pickup_address] || @hubs[pricing.itinerary_id][:origin].mandatory_charge.export_charges
-          @local_charges.dig(pricing.itinerary_id, example[:data][:tenant_vehicle_id])[:export]&.fees.each do |fee_key, fee|
+          @local_charges.dig(pricing.itinerary_id, example[:data][:tenant_vehicle_id])[:export]&.fees.each do |fee_key, _fee|
             example[:expected][:export] = {} unless example[:expected][:export]
             example[:expected][:export][fee_key.to_sym] = {}
           end
         end
-        if example[:expected][:delivery_address] || @hubs[pricing.itinerary_id][:destination].mandatory_charge.import_charges
-          @local_charges.dig(pricing.itinerary_id, example[:data][:tenant_vehicle_id])[:import]&.fees.each do |fee_key, fee|
-            example[:expected][:import] = {} unless example[:expected][:import]
-            example[:expected][:import][fee_key.to_sym] = {}
-          end
+        next unless example[:expected][:delivery_address] || @hubs[pricing.itinerary_id][:destination].mandatory_charge.import_charges
+        @local_charges.dig(pricing.itinerary_id, example[:data][:tenant_vehicle_id])[:import]&.fees.each do |fee_key, _fee|
+          example[:expected][:import] = {} unless example[:expected][:import]
+          example[:expected][:import][fee_key.to_sym] = {}
         end
       end
     end
 
     def prep_local_charges(args)
-      
       @pricings.each do |itinerary_id, pricings|
         itinerary = @itineraries[itinerary_id]
         start_hub = itinerary.first_stop.hub
-        end_hub =  itinerary.last_stop.hub
+        end_hub = itinerary.last_stop.hub
         @hubs[itinerary_id] = {} unless @hubs[itinerary_id]
         @hubs[itinerary_id][:origin] = start_hub
         @hubs[itinerary_id][:destination] = end_hub
         pricings.each do |pricing|
           @local_charges[itinerary_id] = {} unless @local_charges[itinerary_id]
           @local_charges[itinerary_id][pricing.tenant_vehicle_id] = {} unless @local_charges[itinerary_id][pricing.tenant_vehicle_id]
-          @local_charges[itinerary_id][pricing.tenant_vehicle_id][:export] = 
+          @local_charges[itinerary_id][pricing.tenant_vehicle_id][:export] =
             start_hub.local_charges.find_by(
               load_type: args[:load_type],
               counterpart_hub_id: end_hub.id,
               direction: 'export',
               tenant_vehicle_id: pricing.tenant_vehicle_id
             )
-          @local_charges[itinerary_id][pricing.tenant_vehicle_id][:export] ||= 
+          @local_charges[itinerary_id][pricing.tenant_vehicle_id][:export] ||=
             start_hub.local_charges.find_by(
               load_type: args[:load_type],
               direction: 'export',
-              tenant_vehicle_id: pricing.tenant_vehicle_id)
-          @local_charges[itinerary_id][pricing.tenant_vehicle_id][:import] = 
+              tenant_vehicle_id: pricing.tenant_vehicle_id
+            )
+          @local_charges[itinerary_id][pricing.tenant_vehicle_id][:import] =
             end_hub.local_charges.find_by(
               load_type: args[:load_type],
               direction: 'import',
               counterpart_hub_id: start_hub.id,
               tenant_vehicle_id: pricing.tenant_vehicle_id
             )
-          @local_charges[itinerary_id][pricing.tenant_vehicle_id][:import] ||= 
+          @local_charges[itinerary_id][pricing.tenant_vehicle_id][:import] ||=
             end_hub.local_charges.find_by(
               load_type: args[:load_type],
               direction: 'import',
-              tenant_vehicle_id: pricing.tenant_vehicle_id)
+              tenant_vehicle_id: pricing.tenant_vehicle_id
+            )
         end
       end
     end
 
     def generate_dummy_examples(args)
-      @pricings.each do |itinerary_id, pricings|
+      @pricings.each do |_itinerary_id, pricings|
         pricings.each do |pricing|
-          assign_default_values(args[:load_type].to_sym, pricing)  
+          assign_default_values(args[:load_type].to_sym, pricing)
         end
       end
     end
@@ -140,7 +139,7 @@ module DataValidator
     def assign_default_values(load_type, pricing)
       new_examples = []
       result_index = 1
-       @default_values[load_type].each do |dv|
+      @default_values[load_type].each do |dv|
         new_example = dv.deep_dup
         itinerary = @itineraries[pricing.itinerary_id]
         new_example[:data][:service_level] = pricing.tenant_vehicle.name
@@ -403,21 +402,20 @@ module DataValidator
     end
 
     def convert_value(value, from_currency, to_currency)
-      return CurrencyTools.convert(value, from_currency, to_currency, @tenant.id)
+      CurrencyTools.convert(value, from_currency, to_currency, @tenant.id)
     end
 
     def diff_result_string(result, keys, expected_result)
-      
       value = result.dig(:quote, *keys, :value)
       expected_value = expected_result.dig(*keys, :value).try(:to_d)
       result_currency = result.dig(:quote, *keys, :currency)
       expected_currency = expected_result.dig(*keys, :currency)
-      if ((!result_currency.nil? && !expected_currency.nil?) && (result_currency != expected_currency))
+      if (!result_currency.nil? && !expected_currency.nil?) && (result_currency != expected_currency)
         result_value = convert_value(value, result_currency, expected_currency)
         keys.each_with_index do |key, i|
-          if i > 0 && keys[i - 1] && result[:quote][keys[i -1]][key][:value] = result_value
-            result[:quote][keys[i -1]][key][:value] = "#{result_value.try(:round, 3)} (#{result_currency} #{value.try(:round, 3)})"
-            result[:quote][keys[i -1]][key][:currency] = expected_currency
+          if i > 0 && keys[i - 1] && result[:quote][keys[i - 1]][key][:value] = result_value
+            result[:quote][keys[i - 1]][key][:value] = "#{result_value.try(:round, 3)} (#{result_currency} #{value.try(:round, 3)})"
+            result[:quote][keys[i - 1]][key][:currency] = expected_currency
           end
         end
       else
@@ -425,7 +423,7 @@ module DataValidator
       end
 
       return nil if (result_value.blank? || result_value == 0) || (expected_value.blank? || expected_value == 0)
-      
+
       diff_val = (result_value - expected_value).try(:round, 3)
       diff_percent = ((diff_val / expected_value) * 100).try(:round, 3)
 
@@ -447,7 +445,7 @@ module DataValidator
               result_for_printing[key1][key2] = diff_result_string(result, [key1, key2], expected_result)
             end
           end
-        elsif value1 && value1.keys.length > 0
+        elsif value1 && !value1.keys.empty?
           value1.each do |key2, _value2|
             if key2.to_s != 'edited_total' || key2.to_s != 'total'
               result_for_printing[key1] = {} unless result_for_printing[key1]

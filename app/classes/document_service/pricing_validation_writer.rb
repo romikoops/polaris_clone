@@ -50,7 +50,7 @@ module DocumentService
       end
       begin
         @workbook.close
-      rescue
+      rescue StandardError
         binding.pry
       end
       write_to_aws(dir, tenant, filename, 'pricings_sheet')
@@ -62,11 +62,11 @@ module DocumentService
       col = 1
       count = 1
       odd_format = @workbook.add_format
-      odd_format.set_bg_color("#14FAFA")
-      odd_format.set_shrink()
+      odd_format.set_bg_color('#14FAFA')
+      odd_format.set_shrink
       even_format = @workbook.add_format
-      even_format.set_bg_color("#87FA14")
-      even_format.set_shrink()
+      even_format.set_bg_color('#87FA14')
+      even_format.set_shrink
       column_hash.keys.count.times do
         active_format = count.even? ? even_format : odd_format
         3.times do
@@ -75,7 +75,6 @@ module DocumentService
         end
         count += 1
       end
-
     end
 
     def write_fees(target, column_hash)

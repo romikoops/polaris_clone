@@ -9,7 +9,7 @@ module DataValidator
     include DocumentService
 
     def post_initialize(args)
-      signed_url = get_file_url(args[:key], "assets.itsmycargo.com")
+      signed_url = get_file_url(args[:key], 'assets.itsmycargo.com')
       @xlsx = open_file(signed_url)
       @shipment_ids_to_destroy = []
       @user = args[:user] ||= @tenant.users.shipper.first
@@ -37,7 +37,6 @@ module DataValidator
         rescue Exception => e # bad code.....
           raise ApplicationError::BadData
         end
-       
       end
 
       Shipment.where(id: @shipment_ids_to_destroy).destroy_all
@@ -280,21 +279,20 @@ module DataValidator
     end
 
     def convert_value(value, from_currency, to_currency)
-      return CurrencyTools.convert(value, from_currency, to_currency, @tenant.id)
+      CurrencyTools.convert(value, from_currency, to_currency, @tenant.id)
     end
 
     def diff_result_string(result, keys, expected_result)
-      
       value = result.dig(:quote, *keys, :value)
       expected_value = expected_result.dig(*keys, :value).try(:to_d)
       result_currency = result.dig(:quote, *keys, :currency)
       expected_currency = expected_result.dig(*keys, :currency)
-      if ((!result_currency.nil? && !expected_currency.nil?) && (result_currency != expected_currency))
+      if (!result_currency.nil? && !expected_currency.nil?) && (result_currency != expected_currency)
         result_value = convert_value(value, result_currency, expected_currency)
         keys.each_with_index do |key, i|
-          if i > 0 && keys[i - 1] && result[:quote][keys[i -1]][key][:value] = result_value
-            result[:quote][keys[i -1]][key][:value] = "#{result_value.try(:round, 3)} (#{result_currency} #{value.try(:round, 3)})"
-            result[:quote][keys[i -1]][key][:currency] = expected_currency
+          if i > 0 && keys[i - 1] && result[:quote][keys[i - 1]][key][:value] = result_value
+            result[:quote][keys[i - 1]][key][:value] = "#{result_value.try(:round, 3)} (#{result_currency} #{value.try(:round, 3)})"
+            result[:quote][keys[i - 1]][key][:currency] = expected_currency
           end
         end
       else
@@ -302,7 +300,7 @@ module DataValidator
       end
 
       return nil if (result_value.blank? || result_value == 0) || (expected_value.blank? || expected_value == 0)
-      
+
       diff_val = (result_value - expected_value).try(:round, 3)
       diff_percent = ((diff_val / expected_value) * 100).try(:round, 3)
 
@@ -324,7 +322,7 @@ module DataValidator
               result_for_printing[key1][key2] = diff_result_string(result, [key1, key2], expected_result)
             end
           end
-        elsif value1 && value1.keys.length > 0
+        elsif value1 && !value1.keys.empty?
           value1.each do |key2, _value2|
             if key2.to_s != 'edited_total' || key2.to_s != 'total'
               result_for_printing[key1] = {} unless result_for_printing[key1]

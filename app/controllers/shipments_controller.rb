@@ -14,22 +14,22 @@ class ShipmentsController < ApplicationController
     case params[:target]
     when 'requested'
       shipment_association = requested_shipments
-                                         .order(booking_placed_at: :desc)
+                             .order(booking_placed_at: :desc)
     when 'open'
       shipment_association = open_shipments
-                                         .order(booking_placed_at: :desc)
+                             .order(booking_placed_at: :desc)
     when 'rejected'
       shipment_association = rejected_shipments
-                                         .order(booking_placed_at: :desc)
+                             .order(booking_placed_at: :desc)
     when 'finished'
       shipment_association = finished_shipments
-                                         .order(booking_placed_at: :desc)
+                             .order(booking_placed_at: :desc)
     when 'archived'
       shipment_association = archived_shipments
-                                         .order(booking_placed_at: :desc)
+                             .order(booking_placed_at: :desc)
     when 'quoted'
       shipment_association = quoted_shipments
-                                         .order(booking_placed_at: :desc)
+                             .order(booking_placed_at: :desc)
     end
     per_page = params.fetch(:per_page, 4).to_f
     shipments = shipment_association.order(booking_placed_at: :desc).paginate(page: params[:page], per_page: per_page)

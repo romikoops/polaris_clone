@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'bigdecimal'
 
 module TruckingTools
@@ -329,7 +330,7 @@ module TruckingTools
     raw_payload = cargo.payload_in_kg * cargo.quantity
 
     trucking_chargeable_weight = [load_meter_weight, raw_payload, cbm_weight].max
-    cargo_object['non_stackable']['weight'] += trucking_chargeable_weight 
+    cargo_object['non_stackable']['weight'] += trucking_chargeable_weight
     cargo_object['non_stackable']['volume'] += cargo.volume * cargo.quantity
     cargo_object['non_stackable']['number_of_items'] += cargo.quantity
   end

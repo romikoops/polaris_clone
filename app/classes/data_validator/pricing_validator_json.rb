@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DataValidator
   class PricingValidator < DataValidator::BaseValidator
     attr_reader :path, :user, :port_object
@@ -6,7 +8,7 @@ module DataValidator
     include DocumentService
 
     def post_initialize(args)
-      signed_url = get_file_url(args[:key], "assets.itsmycargo.com")
+      signed_url = get_file_url(args[:key], 'assets.itsmycargo.com')
       @json_array = JSON.parse(open(signed_url).read).deep_symbolize_keys!
       @shipment_ids_to_destroy = []
       @user = args[:user] ||= @tenant.users.shipper.first
@@ -15,7 +17,7 @@ module DataValidator
     end
 
     def perform
-      @json_array.each do |origin, json_data|
+      @json_array.each do |_origin, json_data|
         @json_data = json_data
         @load_type = @json_data[:metadata][:load_type]
         @origin_hub = @tenant.hubs.find_by_name(@json_data[:metadata][:origin_hub])
@@ -43,9 +45,9 @@ module DataValidator
       )
       @shipment_ids_to_destroy << @shipment.id
       @shipment.cargo_units = prep_cargo_units(example_data)
-      @hubs = {origin: [@origin_hub], destination: [@destination_hub]}
-      @trucking_data_builder      = OfferCalculatorService::TruckingDataBuilder.new(@shipment)
-      @trucking_data      = @trucking_data_builder.perform(@hubs)
+      @hubs = { origin: [@origin_hub], destination: [@destination_hub] }
+      @trucking_data_builder = OfferCalculatorService::TruckingDataBuilder.new(@shipment)
+      @trucking_data = @trucking_data_builder.perform(@hubs)
       @itineraries = determine_itineraries
       @data_for_price_checker = @json_data[:metadata]
       @data_for_price_checker[:trucking] = @trucking_data
@@ -54,9 +56,9 @@ module DataValidator
     end
 
     def prep_cargo_units(example_data)
-      data_to_extract = @load_type == 'cargo_item' ? 
+      data_to_extract = @load_type == 'cargo_item' ?
         example_data[:cargo_units].map do |cu|
-          cu[:cargo_item_type_id] = CargoItemType.find_by_description("Pallet").id
+          cu[:cargo_item_type_id] = CargoItemType.find_by_description('Pallet').id
           cu
         end : example_data[:cargo_units]
       @load_type.camelize.constantize.extract(data_to_extract)
@@ -70,7 +72,7 @@ module DataValidator
     end
 
     def determine_trucking_hash(example_data)
-      trucking = { pre_carriage: {truck_type: ''}, on_carriage: {truck_type: ''}}
+      trucking = { pre_carriage: { truck_type: '' }, on_carriage: { truck_type: '' } }
       if @json_data[:metadata][:has_pre_carriage]
         trucking[:pre_carriage] = {
           truck_type: @load_type === 'cargo_item' ? 'default' : 'chassis',
@@ -88,21 +90,21 @@ module DataValidator
 
     def get_diff_value(result, key, expected_result)
       value = result.dig(:quote, key.to_sym, :total, :value)
-      return nil if (value.nil? || expected_result[key.to_sym] < 1)
-      return (value - expected_result[key.to_sym]).abs
+      return nil if value.nil? || expected_result[key.to_sym] < 1
+      (value - expected_result[key.to_sym]).abs
     end
 
     def get_diff_percentage(result, key, expected_result)
       value = result.dig(:quote, key.to_sym, :total, :value)
-      return nil if (value.nil? || expected_result[key.to_sym] < 1)
-      return ((value - expected_result[key.to_sym])/expected_result[key.to_sym]) * 100
+      return nil if value.nil? || expected_result[key.to_sym] < 1
+      ((value - expected_result[key.to_sym]) / expected_result[key.to_sym]) * 100
     end
 
     def print_results
       DocumentService::PricingValidationWriter.new(
         data: @validation_results,
         filename: "#{@tenant.subdomain}_pricing_validations",
-        tenant_id: @tenant.id,
+        tenant_id: @tenant.id
       ).perform
     end
 
