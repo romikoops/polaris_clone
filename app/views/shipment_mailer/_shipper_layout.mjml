@@ -1,14 +1,16 @@
 <% primary_color = @user.tenant.theme["colors"]["primary"] %>
-<mj-section full-width="full-width">
-      <mj-column>
-        <mj-image width="300px" src="<%= @user.tenant.theme["logoLarge"] %>" />
-      </mj-column>
-    </mj-section>
-    <mj-section full-width="full-width">
-      <mj-column>
-        <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
-      </mj-column>
-    </mj-section>
+<mj-wrapper full-width="full-width" padding="0px">
+  <mj-section full-width="full-width">
+    <mj-column>
+      <mj-image width="300px" src="<%= @user.tenant.theme["logoLarge"] %>" />
+    </mj-column>
+  </mj-section>
+  <mj-section full-width="full-width">
+    <mj-column>
+      <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
+    </mj-column>
+  </mj-section>
+</mj-wrapper>
 <mj-wrapper full-width="full-width" padding="0px">
   <mj-section full-width="full-width" padding="0px">
     <mj-column width="100%" padding="0 2.5%">
@@ -29,8 +31,10 @@
 <% if defined? closing_text %>
 <%= render "closing_lines", closing_text: closing_text, user: @user %>
 <% end %>
+<mj-wrapper full-width="full-width" padding="0px">
   <mj-section full-width="full-width">
-      <mj-column>
-        <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
-      </mj-column>
-    </mj-section>
+    <mj-column>
+      <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
+    </mj-column>
+  </mj-section>
+</mj-wrapper>

@@ -227,8 +227,10 @@
       </mj-column>
     </mj-section>
 </mj-wrapper>
-<mj-section full-width="full-width">
-      <mj-column>
-        <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
-      </mj-column>
-    </mj-section>
+<mj-wrapper full-width="full-width"  padding="0px">
+  <mj-section full-width="full-width">
+    <mj-column>
+      <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
+    </mj-column>
+  </mj-section>
+</mj-wrapper>

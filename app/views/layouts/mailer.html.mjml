@@ -1,6 +1,6 @@
 <mjml>
   <mj-body width="800px" padding-top="40px">
     <% primary_color = @user.tenant.theme["colors"]["primary"] %>
-     <%= yield %>
+    <%= yield %>
   </mj-body>
 </mjml>
