@@ -153,6 +153,7 @@ class Autocomplete extends PureComponent {
 
   shouldTriggerInputChange (event) {
     const { target } = event
+    const { scope } = this.props
 
     this.setState((prevState) => {
       const { value } = target
@@ -163,7 +164,7 @@ class Autocomplete extends PureComponent {
       if (searchTimeout.area) clearTimeout(searchTimeout.area)
       if (value) {
         newTimeout.address = setTimeout(() => this.handleInputChange(value), 750)
-        newTimeout.area = setTimeout(() => this.handleAreaInputChange(value), 750)
+        newTimeout.area = scope.require_full_address ? null : setTimeout(() => this.handleAreaInputChange(value), 750)
       }
 
       return {
@@ -225,11 +226,11 @@ class Autocomplete extends PureComponent {
   }
 
   render () {
-    const { t, hasErrors, theme } = this.props
+    const { t, hasErrors, theme, scope } = this.props
     const {
       addressResults, areaResults, input, highlightIndex, highlightSection, hideResults, queryingLocations
     } = this.state
-    const hasAddressResults = addressResults.length > 0
+    const hasAddressResults = !scope.require_full_address && addressResults.length > 0
     const hasAreaResults = areaResults.length > 0
     const hasResults = hasAddressResults || hasAreaResults
     const numResults = hasAddressResults && hasAreaResults ? 4 : 6

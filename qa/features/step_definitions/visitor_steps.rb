@@ -28,21 +28,15 @@ When('I select {string} as {string}') do |place, type|
     within(elem) do
       box = find('.ccb_carriage')
       within(box) do
-        place.split('').each do |c|
+        letters = place.split('')
+        letters.each_with_index do |c, i|
           find('input').send_keys(c)
-          sleep(1.0 / 10.0)
+          pause = (i / letter.length > 0.8) ? 1 : 0.1
+          sleep(pause)
         end
         first_result = all(:css, '.ccb_result', wait: 30).first
         if first_result
           first_result.click
-        else
-          fill_in('input', with: '')
-          place.split('').each do |c|
-            find('input').send_keys(c)
-            sleep(1.0 / 10.0)
-          end
-          first_result = all(:css, '.ccb_result', wait: 30).first
-          first_result.click if first_result
         end
       end
     end

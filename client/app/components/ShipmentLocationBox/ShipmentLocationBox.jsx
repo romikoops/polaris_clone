@@ -1218,6 +1218,7 @@ class ShipmentLocationBox extends PureComponent {
           handlePlaceSelect={place => this.handlePlaceChange(place, 'origin')}
           handleLocationSelect={place => this.handleLocationChange(place, 'origin')}
           countries={countries.origin}
+          scope={scope}
         />
       </div>
     )
@@ -1360,6 +1361,7 @@ class ShipmentLocationBox extends PureComponent {
             handlePlaceSelect={place => this.handlePlaceChange(place, 'destination')}
             handleLocationSelect={place => this.handleLocationChange(place, 'destination')}
             countries={countries.destination}
+            scope={scope}
           />
         </div>
       </div>
