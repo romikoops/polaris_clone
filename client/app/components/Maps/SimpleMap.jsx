@@ -4,7 +4,6 @@ import styles from './Maps.scss'
 import { colorSVG } from '../../helpers'
 import { mapStyling } from '../../constants/map.constants'
 
-const colourSVG = colorSVG
 const mapStyles = mapStyling
 
 export class SimpleMap extends Component {
@@ -39,7 +38,7 @@ export class SimpleMap extends Component {
     const { theme, zoom } = this.props
     const newMarkers = []
     const icon = {
-      url: colourSVG('location', theme),
+      url: colorSVG('address', theme),
       anchor: new this.props.gMaps.Point(25, 50),
       scaledSize: new this.props.gMaps.Size(36, 36)
     }

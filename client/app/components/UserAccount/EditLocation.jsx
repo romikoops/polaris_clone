@@ -7,7 +7,6 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import { colorSVG } from '../../helpers'
 import { mapStyling } from '../../constants/map.constants'
 
-const colourSVG = colorSVG
 const mapStyles = mapStyling
 const mapStyle = {
   width: '100%',
@@ -68,7 +67,7 @@ class EditLocation extends Component {
     const { theme } = this.props
     const newMarkers = []
     const icon = {
-      url: colourSVG('address', theme),
+      url: colorSVG('address', theme),
       anchor: new this.props.gMaps.Point(25, 50),
       scaledSize: new this.props.gMaps.Size(36, 36)
     }
