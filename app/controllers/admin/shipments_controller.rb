@@ -275,7 +275,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       @shipment.finish!
       response_handler(@shipment.with_address_options_json)
     when 'requested'
-      @shipment.requested!
+      @shipment.request!
       response_handler(@shipment.with_address_options_json)
     else
       raise 'Unknown action!'
