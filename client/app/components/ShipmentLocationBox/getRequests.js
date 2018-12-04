@@ -37,6 +37,8 @@ function findAvailability (lat, lng, tenantId, loadType, carriage, availableHubI
         callback(false, [], [], {})
       }
     })
+  }).catch(() => {
+    callback(false, [], [], {})
   })
 }
 

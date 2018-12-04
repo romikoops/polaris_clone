@@ -40,17 +40,18 @@ class Autocomplete extends PureComponent {
     this.showResultsTimer = this.showResultsTimer.bind(this)
 
     const { gMaps } = props
-
-    this.addressService = new gMaps.places.AutocompleteService({ types: ['address'] })
+    if (gMaps) {
+      this.addressService = new gMaps.places.AutocompleteService({ types: ['address'] })
+    }
   }
 
   componentWillReceiveProps (nextProps) {
-    if (typeof this.addressService === undefined) {
+    if (typeof this.addressService === 'undefined') {
       const props = nextProps || this.props
       this.addressService = new props.gMaps.places.AutocompleteService({ types: ['address'] })
     }
     if ((this.props.input === nextProps.input) || (this.state.input === nextProps.input)) return
-    this.setState(prevState => (nextProps.input === prevState.input ? {} : { input: nextProps.input, setFromProps: true }))
+    this.setState(() => (nextProps.input === '' ? {} : { input: nextProps.input, setFromProps: true }))
   }
 
   componentWillUnmount () {
@@ -111,7 +112,14 @@ class Autocomplete extends PureComponent {
         }
       }
 
-      return prevState
+      const newTimeout = setTimeout(() => {
+        this.setState({ hideResults: true })
+      }, 5000)
+
+      return {
+        hideResults,
+        resultsTimeout: newTimeout
+      }
     })
   }
 

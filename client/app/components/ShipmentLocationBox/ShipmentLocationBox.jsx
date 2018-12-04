@@ -902,13 +902,14 @@ class ShipmentLocationBox extends PureComponent {
         truckingHubs, oSelect, dSelect
       } = prevState
       const { filteredRouteIndexes } = this.props
+      const targetFilteredRouteIndexes = filteredRouteIndexes[target]
       const { lookupTablesForRoutes, routes } = this.props.shipmentData
       const targetLocation = target === 'origin' ? oSelect : dSelect
       const targetTrucking = truckingHubs[target]
       const counterpart = target === 'origin' ? 'destination' : 'origin'
       const counterpartLocation = target === 'origin' ? dSelect : oSelect
       const counterpartTrucking = truckingHubs[counterpart]
-      let indexes = filteredRouteIndexes.slice()
+      let indexes = targetFilteredRouteIndexes.slice()
       const unfilteredRouteIndexes = routes.map((_, i) => i)
       if (targetLocation.label) {
         indexes = routeFilters.selectFromLookupTable(
@@ -924,17 +925,21 @@ class ShipmentLocationBox extends PureComponent {
         indexes = unfilteredRouteIndexes
       }
 
-      const indexesToUse = (counterpartLocation.label || counterpartTrucking)
-        ? filteredRouteIndexes : unfilteredRouteIndexes
-
-      let newFilteredRouteIndexes = routeFilters.scopeIndexes(
-        indexesToUse,
+      let newFilteredRouteIndexes = {
+        ...filteredRouteIndexes
+      }
+      newFilteredRouteIndexes[target] = routeFilters.scopeIndexes(
+        filteredRouteIndexes.all,
         indexes
+      )
+      newFilteredRouteIndexes.selected = routeFilters.scopeIndexes(
+        newFilteredRouteIndexes.origin,
+        newFilteredRouteIndexes.destination
       )
 
       let fieldsHaveErrors = false
-      if (targetTrucking && newFilteredRouteIndexes.length === 0) {
-        newFilteredRouteIndexes = filteredRouteIndexes
+      if (targetTrucking && newFilteredRouteIndexes[target].length === 0) {
+        newFilteredRouteIndexes[target] = filteredRouteIndexes
         fieldsHaveErrors = true
         const addressFormsHaveErrors =
           fieldsHaveErrors || prevState[`${counterpart}FieldsHaveErrors`]
@@ -943,7 +948,7 @@ class ShipmentLocationBox extends PureComponent {
       const newFilteredRoutes = []
       const selectOptions = []
       const counterpartNexusIds = []
-      indexes.forEach((idx) => {
+      newFilteredRouteIndexes[target].forEach((idx) => {
         const route = routes[idx]
         newFilteredRoutes.push(route)
         if (counterpartNexusIds.includes(route[counterpart].nexusId)) return
@@ -953,13 +958,14 @@ class ShipmentLocationBox extends PureComponent {
         selectOptions.push(routeHelpers.routeOption(route[counterpart]))
       })
 
-      const truckingBoolean = newFilteredRouteIndexes.some(i => routes[i][counterpart].truckTypes.length > 0)
+      const truckingBoolean = newFilteredRouteIndexes[target].some(i => routes[i][counterpart].truckTypes.length > 0)
 
       const carriage = target === 'destination' ? this.props.has_on_carriage : this.props.has_pre_carriage
 
       if (targetTrucking && carriage) this.prepTruckTypes(newFilteredRoutes, target)
-      if (newFilteredRouteIndexes.length === 0) {
+      if (newFilteredRouteIndexes.selected.length === 0) {
         this.setRouteError(counterpartLocation.label, targetLocation.label)
+        this.props.setTargetAddress(target, {})
       }
 
       this.props.updateFilteredRouteIndexes(newFilteredRouteIndexes)
@@ -1002,16 +1008,6 @@ class ShipmentLocationBox extends PureComponent {
     }
   }
 
-  isSwitchable () {
-    const { oSelect, dSelect, autoText } = this.state
-
-    return (
-      (!!oSelect.label && autoText.destination !== '') ||
-      (!!dSelect.label && autoText.origin !== '') ||
-      (!!dSelect.label && !!oSelect.label) ||
-      (autoText.origin !== '' && autoText.destination !== '')
-    )
-  }
 
   render () {
     const {
