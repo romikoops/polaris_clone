@@ -7,7 +7,7 @@ exports[`user.role_id is 1 1`] = `
     "
 >
   <div
-    className="layout-row layout-align-start-center wrapper_btns flex-75"
+    className="layout-row layout-wrap layout-align-start-center wrapper_btns flex-75"
   >
     <Connect(Component)
       tenant={
@@ -203,7 +203,7 @@ exports[`user.role_id is 2 1`] = `
     "
 >
   <div
-    className="layout-row layout-align-start-center wrapper_btns flex-75"
+    className="layout-row layout-wrap layout-align-start-center wrapper_btns flex-75"
   >
     <Connect(Component)
       tenant={
