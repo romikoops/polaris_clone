@@ -70,13 +70,38 @@ function ShipmentOverviewShowCard ({
             <div className="flex-100 layout-row layout-align-start-center ">
               <div className="layout-row flex-100 layout-align-start-center">
                 <div className={`flex layout-row layout-wrap layout-align-start-start ${styles.carriage_row}`}>
-                  <div className="flex-100 layout-row">
-                    <div className="flex-40 layout-row">
-                      <h4 className="flex-100 layout-row">
-                        { shipment.has_pre_carriage ? t('shipment:pickUp') : t('admin:dropOff') }
-                      </h4>
-                    </div>
-                  </div>
+                  {showtruckingAvailability ? (
+                    <div className="flex-100 layout-row layout-wrap">
+                      <div className="flex-100 layout-row">
+                        <p>{t('shipment:truckingAvailable')}</p>
+                      </div>
+                      <div className="flex-40 layout-row">
+                        <i className={`flex-20 fa fa-check-square ${styles.check_square_sm}`} style={hasFTL ? selectedStyle : deselectedStyle} />
+                        <h4 className="flex-70 layout-row">
+                          {t('shipment:ftl')}
+                        </h4>
+                      </div>
+                      <div className="flex-60 layout-row">
+                        <i className={`flex-15 fa fa-check-square ${styles.check_square_sm}`} style={hasLTL ? selectedStyle : deselectedStyle} />
+                        <h4 className="flex-85 layout-row">
+                          {t('shipment:pickUp')}
+                        </h4>
+                      </div>
+                    </div>) : (
+                    <div className="flex-100 layout-row">
+                      <div className="flex-40 layout-row">
+                        <i className={`flex-20 fa fa-check-square ${styles.check_square_sm}`} style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
+                        <h4 className="flex-70 layout-row">
+                          {t('shipment:pickUp')}
+                        </h4>
+                      </div>
+                      <div className="flex-60 layout-row">
+                        <i className={`flex-15 fa fa-check-square ${styles.check_square_sm}`} style={!shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
+                        <h4 className="flex-85 layout-row">
+                          {t('admin:dropOff')}
+                        </h4>
+                      </div>
+                    </div>)}
                   <div className="layout-row flex-95 layout-align-start-center">
                     <div className="flex-60 layout-row">
                       <p>{ shipment.has_pre_carriage ? carriage : noCarriage }</p>
@@ -95,18 +120,40 @@ function ShipmentOverviewShowCard ({
             <div className="flex-100 layout-row layout-align-center-stretch">
               <div className="layout-row flex-100 layout-align-start-center">
                 <div className={`flex layout-row layout-wrap layout-align-start-start ${styles.carriage_row}`}>
-                  <div className="flex-100 layout-row">
-                    <div className="flex-40 layout-row">
-                      <h4 className="flex-80 layout-row">
-                        { shipment.has_on_carriage ? t('shipment:delivery') : t('admin:collection') }
-                      </h4>
+                  {showtruckingAvailability ? (
+                    <div className="flex-100 layout-row layout-wrap">
+                      <div className="flex-100 layout-row">
+                        <p>{t('shipment:truckingAvailable')}</p>
+                      </div>
+                      <div className="flex-40 layout-row">
+                        <i className={`flex-20 fa fa-check-square ${styles.check_square_sm}`} style={hasFTL ? selectedStyle : deselectedStyle} />
+                        <h4 className="flex-70 layout-row">
+                          {t('shipment:ftl')}
+                        </h4>
+                      </div>
+                      <div className="flex-60 layout-row">
+                        <i className={`flex-15 fa fa-check-square ${styles.check_square_sm}`} style={hasLTL ? selectedStyle : deselectedStyle} />
+                        <h4 className="flex-85 layout-row">
+                          {t('shipment:ltl')}
+                        </h4>
+                      </div>
                     </div>
-                  </div>
-                  <div className="layout-row flex-95 layout-align-start-center">
-                    <div className="flex-60 layout-row">
-                      <p>{ shipment.has_on_carriage ? carriage : noCarriage }</p>
-                    </div>
-                  </div>
+                  ) : (
+                    <div className="flex-100 layout-row">
+                      <div className="flex-40 layout-row">
+                        <i className={`flex-20 fa fa-check-square ${styles.check_square_sm}`} style={shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
+                        <h4 className="flex-80 layout-row">
+                          {t('shipment:delivery')}
+                        </h4>
+                      </div>
+                      <div className="flex-60 layout-row">
+                        <i className={`flex-15 fa fa-check-square ${styles.check_square_sm}`} style={!shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
+                        <h4 className="flex-85 layout-row">
+                          {t('admin:collection')}
+                        </h4>
+                      </div>
+                    </div>)}
+
                   {shipment.delivery_address ? (
                     <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
                       <p>{shipment.delivery_address.geocoded_address}</p>
