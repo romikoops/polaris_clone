@@ -24,9 +24,10 @@ module ExcelDataServices
 
       attr_reader :tenant, :file_name, :sheets_data, :xlsx
 
-      def initialize(tenant:, file_name:)
-        @tenant = tenant
+      def initialize(tenant_id:, file_name:)
+        @tenant = Tenant.find(tenant_id)
         @file_name = file_name.remove(/.xlsx$/) + '.xlsx'
+        @file_path = nil
         @sheets_data = nil
         @xlsx = nil
       end
@@ -47,10 +48,21 @@ module ExcelDataServices
         end
 
         @xlsx.close
+
+        Document.create!(
+          text: file_name,
+          doc_type: 'pricing',
+          tenant: tenant,
+          file: {
+            io: File.open(file_path),
+            filename: file_name,
+            content_type: 'application/vnd.ms-excel'
+          }
+        )
       end
 
       def file_path
-        Rails.root.join('tmp', @file_name) unless @file_name.nil?
+        @file_path || Rails.root.join('tmp', @file_name) unless @file_name.nil?
       end
 
       private
