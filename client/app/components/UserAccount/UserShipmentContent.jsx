@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import Select from 'react-select'
 import styled from 'styled-components'
 import { withNamespaces } from 'react-i18next'
@@ -33,8 +34,16 @@ class UserShipmentContent extends Component {
     }
 
     this.setFileType = this.setFileType.bind(this)
+    this.getRemarks = this.getRemarks.bind(this)
+  }
+  componentDidMount(){
+    this.getRemarks()
   }
 
+  getRemarks() {
+    const { remarkDispatch } = this.props
+    remarkDispatch.getRemarks()
+  }
   setFileType (ev) {
     this.setState({ fileType: ev })
   }
@@ -65,7 +74,8 @@ class UserShipmentContent extends Component {
       feeHash,
       userDispatch,
       cargoView,
-      t
+      t,
+      remark
     } = this.props
     const { fileType } = this.state
 
@@ -96,7 +106,12 @@ class UserShipmentContent extends Component {
       <p className={`flex-none letter_3 ${styles.date}`}>
         {`${formattedDate(shipment.planned_delivery_date)}`}
       </p>
-    )
+    )       
+    const remarkBody = remark.quotation ? remark.quotation.shipment.map(_remark => (
+      <li>
+        {_remark.body}
+      </li>
+    )) : ''
 
     const docChecker = {
       packing_sheet: false,
@@ -427,7 +442,21 @@ class UserShipmentContent extends Component {
                 </div>
               </div>
             </div>
+            <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}>
+              <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
+                <div className="layout-column flex-100">
+                  <h3 
+                    style={{ marginBottom: '0px' }}
+                  >
+                    {t('shipment:remarks')}:
+                  </h3>
+                  <ul>
+                    {remarkBody}
+                  </ul>
+              </div>
+            </div>
           </div>
+        </div>
 
         </Tab>
         <Tab
@@ -551,4 +580,13 @@ UserShipmentContent.defaultProps = {
   cargoView: null
 }
 
-export default withNamespaces(['common', 'shipment', 'doc', 'cargo', 'account'])(UserShipmentContent)
+function mapStateToProps (state) {
+  const {
+    remark
+  } = state
+  
+  return {
+    remark
+  }
+}
+export default connect(mapStateToProps, null)(withNamespaces(['common', 'shipment', 'doc', 'cargo', 'account'])(UserShipmentContent))

@@ -13,7 +13,7 @@ import {
 import UserProfile from '../../components/UserAccount/UserProfile'
 // eslint-disable-next-line import/no-named-as-default
 import UserShipmentsGroup from '../../components/User/Shipments/Group'
-import { userActions, authenticationActions, appActions } from '../../actions'
+import { userActions, authenticationActions, appActions, remarkActions } from '../../actions'
 import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
 import PropTypes from '../../prop-types'
 import Header from '../../components/Header/Header'
@@ -121,7 +121,8 @@ class UserAccount extends Component {
       authDispatch,
       currencies,
       appDispatch,
-      tenant
+      tenant,
+      remarkDispatch
     } = this.props
     if (!users || !user) {
       return <Loading theme={theme} text="loading..." />
@@ -301,6 +302,7 @@ class UserAccount extends Component {
                         tenant={tenant}
                         shipmentData={shipment}
                         userDispatch={userDispatch}
+                        remarkDispatch={remarkDispatch}
                       />
                     )}
                   />
@@ -436,7 +438,7 @@ UserAccount.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    authentication, shipments, users, app
+    authentication, shipments, users, app, remark
   } = state
   const { tenant, currencies } = app
   const { user, loggedIn } = authentication
@@ -447,7 +449,8 @@ function mapStateToProps (state) {
     tenant,
     loggedIn,
     shipments,
-    currencies
+    currencies,
+    remark
   }
 }
 
@@ -455,7 +458,8 @@ function mapDispatchToProps (dispatch) {
   return {
     appDispatch: bindActionCreators(appActions, dispatch),
     userDispatch: bindActionCreators(userActions, dispatch),
-    authDispatch: bindActionCreators(authenticationActions, dispatch)
+    authDispatch: bindActionCreators(authenticationActions, dispatch),
+    remarkDispatch: bindActionCreators(remarkActions, dispatch)
   }
 }
 

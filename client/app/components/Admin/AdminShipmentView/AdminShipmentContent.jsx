@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import Tabs from '../../Tabs/Tabs'
@@ -35,7 +36,14 @@ class AdminShipmentContent extends Component {
     }
     this.setFileType = this.setFileType.bind(this)
   }
+  componentDidMount(){
+    this.getRemarks()
+  }
 
+  getRemarks() {
+    const { remarkDispatch } = this.props
+    remarkDispatch.getRemarks()
+  }
   setFileType (ev) {
     this.setState({ fileType: ev })
   }
@@ -73,7 +81,8 @@ class AdminShipmentContent extends Component {
       cargoView,
       saveNewEditedPrice,
       t,
-      handlePriceChange
+      handlePriceChange,
+      remark
     } = this.props
 
     const {
@@ -95,6 +104,13 @@ class AdminShipmentContent extends Component {
     const docView = []
     const missingDocs = []
     const documentUrl = `/shipments/${shipment.id}/upload/${fileType.value}`
+    
+    const remarkBody = remark.quotation ? remark.quotation.shipment.map(_remark => (
+      <li>
+        {_remark.body}
+      </li>
+    )) : ''
+
 
     if (documents) {
       const uploadedDocs = documents.reduce((docObj, item) => {
@@ -582,13 +598,26 @@ x&nbsp;
                   <h2 className="layout-align-start-center layout-row flex">
                     {numberSpacing(totalPrice(shipment).value, 2)} 
 {' '}
-{totalPrice(shipment).currency}
+{totalPrice(shipment).currency} 
                   </h2>
                 </div>
               </div>
             </div>
+            <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}>
+              <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
+                <div className="layout-column flex-100">
+                  <h3 
+                    style={{ marginBottom: '0px' }}
+                  >
+                    {t('shipment:remarks')}:
+                  </h3>
+                  <ul>
+                    {remarkBody}
+                  </ul>
+              </div>
+            </div>
           </div>
-
+        </div>
         </Tab>
         <Tab
           tabTitle={t('account:contacts')}
@@ -734,7 +763,18 @@ AdminShipmentContent.defaultProps = {
   saveNewTime: null,
   toggleEditTime: null,
   showEditServicePrice: false,
-  newPrices: {}
+  newPrices: {},
+  remark: {}
 }
 
-export default withNamespaces(['common', 'shipment', 'doc', 'cargo', 'account'])(AdminShipmentContent)
+function mapStateToProps (state) {
+  const {
+    remark
+  } = state
+  
+  return {
+    remark
+  }
+}
+
+export default connect(mapStateToProps, null)(withNamespaces(['common', 'shipment', 'doc', 'cargo', 'account'])(AdminShipmentContent))

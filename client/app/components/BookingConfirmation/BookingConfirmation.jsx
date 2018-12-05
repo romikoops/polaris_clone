@@ -1,5 +1,7 @@
 /* eslint react/prop-types: "off" */
 import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import { pick, uniqWith } from 'lodash'
@@ -10,6 +12,7 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import defaults from '../../styles/default_classes.scss'
 import TextHeading from '../TextHeading/TextHeading'
 import { gradientTextGenerator, totalPriceString, totalPrice, numberSpacing } from '../../helpers'
+import { remarkActions } from '../../actions'
 import Checkbox from '../Checkbox/Checkbox'
 import CargoItemGroup from '../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
@@ -123,10 +126,12 @@ class BookingConfirmation extends Component {
     this.toggleAcceptTerms = this.toggleAcceptTerms.bind(this)
     this.fileFn = this.fileFn.bind(this)
     this.deleteDoc = this.deleteDoc.bind(this)
+    this.getRemarks = this.getRemarks.bind(this)
   }
   componentDidMount () {
     const { setStage } = this.props
     setStage(5)
+    this.getRemarks()
     window.scrollTo(0, 0)
   }
   handleCollapser (key) {
@@ -136,6 +141,10 @@ class BookingConfirmation extends Component {
         [key]: !this.state.collapser[key]
       }
     })
+  }
+  getRemarks() {
+    const { remarkDispatch } = this.props
+    remarkDispatch.getRemarks()
   }
   requestShipment () {
     const { shipmentData, shipmentDispatch } = this.props
@@ -162,7 +171,8 @@ class BookingConfirmation extends Component {
       shipmentData,
       shipmentDispatch,
       t,
-      tenant
+      tenant,
+      remark
     } = this.props
 
     if (!shipmentData) return <h1>{t('bookconf:loading')}</h1>
@@ -202,6 +212,13 @@ class BookingConfirmation extends Component {
     })
     const notifyeesJSX = getNotifyeesJSX({ notifyees, textStyle, t })
     const feeHash = shipment.selected_offer
+    
+    const remarkBody = remark.quotation ? remark.quotation.shipment.map(_remark => (
+      <li>
+        {_remark.body}
+      </li>
+    )) : ''
+
     const acceptedBtn = (
       <div className={BUTTON}>
         <RoundButton
@@ -264,7 +281,6 @@ class BookingConfirmation extends Component {
               {createdDate}
             </p>
           </div>
-
         </div>
       </CollapsingBar>
     )
@@ -445,6 +461,12 @@ class BookingConfirmation extends Component {
               ) : (
                 ''
               )}
+            </div>
+            <div className={`${INNER_WRAPPER_CELL} offset-5 ${ALIGN_START}`}>
+              <h4 className="flex-95">{`${t('shipment:remarks')}:`}</h4>
+              <ul>
+                {remarkBody}
+              </ul>
             </div>
           </div>
         </div>
@@ -843,4 +865,20 @@ function HeadingFactoryFn (theme) {
   )
 }
 
-export default withNamespaces(['bookconf', 'common'])(BookingConfirmation)
+function mapStateToProps (state) {
+  const {
+    remark
+  } = state
+  
+  return {
+    remark
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    remarkDispatch: bindActionCreators(remarkActions, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withNamespaces(['bookconf', 'common'])(BookingConfirmation))
