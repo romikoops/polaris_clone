@@ -120,7 +120,7 @@ class ShipmentQuotationContent extends Component {
         theme={theme}
       >
         <div className="flex-100 layout-row layout-align-start-start padding_top card_margin_right">
-          <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-column flex-60`}>
+          <div className={`${adminStyles.border_box} margin_bottom layout-column flex-60`}>
             <div className={`flex-70 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
               <div className="layout-column flex-100">
                 <h3>{t('shipment:freightDutiesAndCarriage')}</h3>

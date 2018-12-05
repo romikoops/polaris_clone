@@ -177,9 +177,7 @@ exports[`state.newClient is true 1`] = `
         />
         <MailCheck
           email=""
-        >
-          <Component />
-        </MailCheck>
+        />
         <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={
@@ -637,9 +635,7 @@ exports[`state.newClientBool is true 1`] = `
         />
         <MailCheck
           email=""
-        >
-          <Component />
-        </MailCheck>
+        />
         <Formsy(FormsyInput)
           className="input"
           errorMessageStyles={

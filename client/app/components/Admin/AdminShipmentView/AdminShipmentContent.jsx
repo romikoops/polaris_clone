@@ -18,7 +18,7 @@ import { NamedSelect } from '../../NamedSelect/NamedSelect'
 import FileUploader from '../../FileUploader/FileUploader'
 import ShipmentNotes from '../../ShipmentNotes'
 
-class AdminShipmentContent extends Component {
+export class AdminShipmentContent extends Component {
   static checkSelectedOffer (service) {
     let obj = {}
     if (service && service.total) {

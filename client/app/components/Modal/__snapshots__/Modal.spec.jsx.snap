@@ -19,10 +19,6 @@ exports[`shallow render 1`] = `
         "padding": "22px 33px",
       }
     }
-  >
-    <Component
-      updateDimensions={[Function]}
-    />
-  </div>
+  />
 </div>
 `;

@@ -508,9 +508,7 @@ exports[`feeHash.trucking_pre is falsy 1`] = `
                 </span>
                 <p
                   className="layout-align-sm-end-center layout-align-xs-end-center"
-                >
-                  <Component />
-                </p>
+                />
               </div>
             </div>
             <h2
@@ -518,6 +516,29 @@ exports[`feeHash.trucking_pre is falsy 1`] = `
             >
                
             </h2>
+          </div>
+        </div>
+      </div>
+      <div
+        className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100"
+      >
+        <div
+          className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+        >
+          <div
+            className="layout-column flex-100"
+          >
+            <h3
+              style={
+                Object {
+                  "marginBottom": "0px",
+                }
+              }
+            >
+              Remarks
+              :
+            </h3>
+            <ul />
           </div>
         </div>
       </div>
@@ -1350,9 +1371,7 @@ exports[`loadType === cargo_item && cargoCount === 1 1`] = `
                 </span>
                 <p
                   className="layout-align-sm-end-center layout-align-xs-end-center"
-                >
-                  <Component />
-                </p>
+                />
               </div>
             </div>
             <h2
@@ -1360,6 +1379,29 @@ exports[`loadType === cargo_item && cargoCount === 1 1`] = `
             >
                
             </h2>
+          </div>
+        </div>
+      </div>
+      <div
+        className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100"
+      >
+        <div
+          className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+        >
+          <div
+            className="layout-column flex-100"
+          >
+            <h3
+              style={
+                Object {
+                  "marginBottom": "0px",
+                }
+              }
+            >
+              Remarks
+              :
+            </h3>
+            <ul />
           </div>
         </div>
       </div>
@@ -2192,9 +2234,7 @@ exports[`loadType === cargo_item && cargoCount > 1 1`] = `
                 </span>
                 <p
                   className="layout-align-sm-end-center layout-align-xs-end-center"
-                >
-                  <Component />
-                </p>
+                />
               </div>
             </div>
             <h2
@@ -2202,6 +2242,29 @@ exports[`loadType === cargo_item && cargoCount > 1 1`] = `
             >
                
             </h2>
+          </div>
+        </div>
+      </div>
+      <div
+        className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100"
+      >
+        <div
+          className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+        >
+          <div
+            className="layout-column flex-100"
+          >
+            <h3
+              style={
+                Object {
+                  "marginBottom": "0px",
+                }
+              }
+            >
+              Remarks
+              :
+            </h3>
+            <ul />
           </div>
         </div>
       </div>
@@ -3034,9 +3097,7 @@ exports[`loadType === container && cargoCount === 1 1`] = `
                 </span>
                 <p
                   className="layout-align-sm-end-center layout-align-xs-end-center"
-                >
-                  <Component />
-                </p>
+                />
               </div>
             </div>
             <h2
@@ -3044,6 +3105,29 @@ exports[`loadType === container && cargoCount === 1 1`] = `
             >
                
             </h2>
+          </div>
+        </div>
+      </div>
+      <div
+        className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100"
+      >
+        <div
+          className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+        >
+          <div
+            className="layout-column flex-100"
+          >
+            <h3
+              style={
+                Object {
+                  "marginBottom": "0px",
+                }
+              }
+            >
+              Remarks
+              :
+            </h3>
+            <ul />
           </div>
         </div>
       </div>
@@ -3876,9 +3960,7 @@ exports[`loadType === container && cargoCount > 1 1`] = `
                 </span>
                 <p
                   className="layout-align-sm-end-center layout-align-xs-end-center"
-                >
-                  <Component />
-                </p>
+                />
               </div>
             </div>
             <h2
@@ -3886,6 +3968,29 @@ exports[`loadType === container && cargoCount > 1 1`] = `
             >
                
             </h2>
+          </div>
+        </div>
+      </div>
+      <div
+        className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100"
+      >
+        <div
+          className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+        >
+          <div
+            className="layout-column flex-100"
+          >
+            <h3
+              style={
+                Object {
+                  "marginBottom": "0px",
+                }
+              }
+            >
+              Remarks
+              :
+            </h3>
+            <ul />
           </div>
         </div>
       </div>
@@ -4718,9 +4823,7 @@ exports[`shallow render 1`] = `
                 </span>
                 <p
                   className="layout-align-sm-end-center layout-align-xs-end-center"
-                >
-                  <Component />
-                </p>
+                />
               </div>
             </div>
             <h2
@@ -4728,6 +4831,29 @@ exports[`shallow render 1`] = `
             >
                
             </h2>
+          </div>
+        </div>
+      </div>
+      <div
+        className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100"
+      >
+        <div
+          className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+        >
+          <div
+            className="layout-column flex-100"
+          >
+            <h3
+              style={
+                Object {
+                  "marginBottom": "0px",
+                }
+              }
+            >
+              Remarks
+              :
+            </h3>
+            <ul />
           </div>
         </div>
       </div>
@@ -5560,9 +5686,7 @@ exports[`shipment.has_on_carriage is true 1`] = `
                 </span>
                 <p
                   className="layout-align-sm-end-center layout-align-xs-end-center"
-                >
-                  <Component />
-                </p>
+                />
               </div>
             </div>
             <h2
@@ -5570,6 +5694,29 @@ exports[`shipment.has_on_carriage is true 1`] = `
             >
                
             </h2>
+          </div>
+        </div>
+      </div>
+      <div
+        className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100"
+      >
+        <div
+          className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+        >
+          <div
+            className="layout-column flex-100"
+          >
+            <h3
+              style={
+                Object {
+                  "marginBottom": "0px",
+                }
+              }
+            >
+              Remarks
+              :
+            </h3>
+            <ul />
           </div>
         </div>
       </div>
@@ -6402,9 +6549,7 @@ exports[`shipment.has_pre_carriage is true 1`] = `
                 </span>
                 <p
                   className="layout-align-sm-end-center layout-align-xs-end-center"
-                >
-                  <Component />
-                </p>
+                />
               </div>
             </div>
             <h2
@@ -6412,6 +6557,29 @@ exports[`shipment.has_pre_carriage is true 1`] = `
             >
                
             </h2>
+          </div>
+        </div>
+      </div>
+      <div
+        className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100"
+      >
+        <div
+          className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+        >
+          <div
+            className="layout-column flex-100"
+          >
+            <h3
+              style={
+                Object {
+                  "marginBottom": "0px",
+                }
+              }
+            >
+              Remarks
+              :
+            </h3>
+            <ul />
           </div>
         </div>
       </div>
@@ -7261,9 +7429,7 @@ exports[`shipment.selected_offer.trucking_pre is true 1`] = `
                 </span>
                 <p
                   className="layout-align-sm-end-center layout-align-xs-end-center"
-                >
-                  <Component />
-                </p>
+                />
               </div>
             </div>
             <h2
@@ -7271,6 +7437,29 @@ exports[`shipment.selected_offer.trucking_pre is true 1`] = `
             >
                
             </h2>
+          </div>
+        </div>
+      </div>
+      <div
+        className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100"
+      >
+        <div
+          className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+        >
+          <div
+            className="layout-column flex-100"
+          >
+            <h3
+              style={
+                Object {
+                  "marginBottom": "0px",
+                }
+              }
+            >
+              Remarks
+              :
+            </h3>
+            <ul />
           </div>
         </div>
       </div>
