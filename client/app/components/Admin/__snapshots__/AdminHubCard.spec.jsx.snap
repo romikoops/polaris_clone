@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`hubs is falsy 1`] = `
+<div
+  className="layout-column flex-100 layout-align-space-between-stretch container"
+>
+  <div
+    className="layout-padding layout-align-start-center greyBg"
+  >
+    <span>
+      <b>
+        Hubs
+      </b>
+    </span>
+  </div>
+  <div
+    className="layout-wrap layout-row flex-100 scrolling"
+  >
+    <span
+      className="hub"
+    >
+      No hubs available
+    </span>
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="layout-column flex-100 layout-align-space-between-stretch container"
+>
+  <div
+    className="layout-padding layout-align-start-center greyBg"
+  >
+    <span>
+      <b>
+        Hubs
+      </b>
+    </span>
+  </div>
+  <div
+    className="layout-wrap layout-row flex-100 scrolling"
+  >
+    <div
+      className="flex-25 flex-gt-lg-15 hub"
+      onClick={[Function]}
+    >
+      <AdminHubCardContent
+        hub={
+          Object {
+            "address": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_STREET",
+              "streetNumber": 579,
+              "street_number": 579,
+              "zipCode": "22456",
+              "zip_code": "22456",
+            },
+            "name": "FOO_HUB_NAME",
+          }
+        }
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,199 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`scope is falsy 1`] = `""`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-align-md-space-between-start layout-align-space-around-start"
+>
+  <div
+    className="flex_titles margin_box_right margin_bottom
+          flex-80 flex-sm-100 flex-xs-100 layout-row layout-wrap layout-align-start-start"
+  >
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-center-start card_padding_right titles_btn"
+    >
+      <div
+        className="flex-100 layout-row layout-align-center-start"
+        style={
+          Object {
+            "minHeight": "560px",
+          }
+        }
+      >
+        <div
+          className="layout-row flex-100 layout-align-start-center "
+        >
+          <div
+            className="layout-row flex-100 layout-align-start-center layout-wrap"
+          >
+            <h3
+              className="flex-none"
+            >
+              No routes to display
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-95 layout-row layout-align-center-center margin_bottom"
+      >
+        <div
+          className="
+                      flex-15 layout-row layout-align-center-center pointy
+                      navigation_button disabled
+                    "
+          onClick={null}
+        >
+          <i
+            className="fa fa-chevron-left"
+          />
+          <p>
+                
+            Back
+          </p>
+        </div>
+        <p>
+          1
+        </p>
+        <div
+          className="
+                      flex-15 layout-row layout-align-center-center pointy
+                      navigation_button disabled
+                    "
+          onClick={null}
+        >
+          <p>
+            Next
+                
+          </p>
+          <i
+            className="fa fa-chevron-right"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-20 layout-row layout-align-end-end"
+  >
+    <div
+      className="hide-sm hide-xs flex-100"
+    >
+      <PricingSearchBar
+        onChange={[Function]}
+        t={[Function]}
+        target="ocean"
+        value=""
+      />
+      <div>
+        foo
+      </div>
+      <div>
+        bar
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`toggleNew && scope.show_beta_features 1`] = `
+<div
+  className="flex-100 layout-row layout-align-md-space-between-start layout-align-space-around-start"
+>
+  <div
+    className="flex_titles margin_box_right margin_bottom
+          flex-80 flex-sm-100 flex-xs-100 layout-row layout-wrap layout-align-start-start"
+  >
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-center-start card_padding_right titles_btn"
+    >
+      <div
+        className="flex-100 layout-row layout-align-center-start"
+        style={
+          Object {
+            "minHeight": "560px",
+          }
+        }
+      >
+        <div
+          className="layout-row flex-100 layout-align-start-center "
+        >
+          <div
+            className="layout-row flex-100 layout-align-start-center layout-wrap"
+          >
+            <h3
+              className="flex-none"
+            >
+              No routes to display
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-95 layout-row layout-align-center-center margin_bottom"
+      >
+        <div
+          className="
+                      flex-15 layout-row layout-align-center-center pointy
+                      navigation_button disabled
+                    "
+          onClick={null}
+        >
+          <i
+            className="fa fa-chevron-left"
+          />
+          <p>
+                
+            Back
+          </p>
+        </div>
+        <p>
+          1
+        </p>
+        <div
+          className="
+                      flex-15 layout-row layout-align-center-center pointy
+                      navigation_button disabled
+                    "
+          onClick={null}
+        >
+          <p>
+            Next
+                
+          </p>
+          <i
+            className="fa fa-chevron-right"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-20 layout-row layout-align-end-end"
+  >
+    <div
+      className="hide-sm hide-xs flex-100"
+    >
+      <PricingSearchBar
+        onChange={[Function]}
+        t={[Function]}
+        target="ocean"
+        value=""
+      />
+      <div>
+        foo
+      </div>
+      <div>
+        bar
+      </div>
+      <PricingButton
+        disabled={false}
+        onClick={true}
+        onDisabledClick={[Function]}
+        text="NEW_TEXT"
+      />
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,491 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`hubs is falsy 1`] = `""`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start"
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-start"
+  >
+    <Tabs
+      defaultActiveTabIndex={0}
+      paddingFixes=""
+      wrapperTabs="layout-row flex-60"
+    >
+      <Tab
+        extraClick={[Function]}
+        icon=""
+        isActive={false}
+        isUniq={false}
+        linkClassName=""
+        mot=""
+        onClick={null}
+        tabIndex={0}
+        tabTitle="requested"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      >
+        <div
+          className="flex-100 layout-row padding_top"
+        >
+          <div
+            className="flex-15 layout-row"
+          >
+            <NamedSelect
+              autoload={false}
+              className="flex-100 selectors"
+              multi={true}
+              name="originNexus"
+              onChange={[Function]}
+              placeholder="Origin"
+            />
+          </div>
+          <div
+            className="flex-15 layout-row"
+          >
+            <NamedSelect
+              autoload={false}
+              className="flex-100 selectors"
+              multi={true}
+              name="destinationNexus"
+              onChange={[Function]}
+              placeholder="Destination"
+            />
+          </div>
+          <div
+            className="flex-15 layout-row"
+          >
+            <NamedSelect
+              autoload={false}
+              className="flex-100 selectors"
+              multi={true}
+              name="hubType"
+              onChange={[Function]}
+              placeholder="Mode of Transport"
+            />
+          </div>
+        </div>
+        <AdminShipmentsBox
+          confirmShipmentData={Object {}}
+          dispatches={Object {}}
+          handleClick={[Function]}
+          handleSearchChange={[Function]}
+          nextPage={[Function]}
+          numPages={1}
+          page={1}
+          prevPage={[Function]}
+          searchText=""
+          seeAll={null}
+          status="requested"
+          t={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          tooltip="Shipments requested from the open or client shop. Investigate the shipment data and evaluate whether to accept, edit or decline the shipment"
+          userView={true}
+        />
+      </Tab>
+      <Tab
+        extraClick={[Function]}
+        icon=""
+        isActive={false}
+        isUniq={false}
+        linkClassName=""
+        mot=""
+        onClick={null}
+        tabIndex={0}
+        tabTitle="open"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      >
+        <div
+          className="flex-100 layout-row padding_top"
+        >
+          <div
+            className="flex-15 layout-row"
+          >
+            <NamedSelect
+              autoload={false}
+              className="flex-100 selectors"
+              multi={true}
+              name="originNexus"
+              onChange={[Function]}
+              placeholder="Origin"
+            />
+          </div>
+          <div
+            className="flex-15 layout-row"
+          >
+            <NamedSelect
+              autoload={false}
+              className="flex-100 selectors"
+              multi={true}
+              name="destinationNexus"
+              onChange={[Function]}
+              placeholder="Destination"
+            />
+          </div>
+          <div
+            className="flex-15 layout-row"
+          >
+            <NamedSelect
+              autoload={false}
+              className="flex-100 selectors"
+              multi={true}
+              name="hubType"
+              onChange={[Function]}
+              placeholder="Mode of Transport"
+            />
+          </div>
+        </div>
+        <AdminShipmentsBox
+          confirmShipmentData={Object {}}
+          dispatches={Object {}}
+          handleClick={[Function]}
+          handleSearchChange={[Function]}
+          nextPage={[Function]}
+          numPages={1}
+          page={1}
+          prevPage={[Function]}
+          searchText=""
+          seeAll={null}
+          status="open"
+          t={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          tooltip="Shipments that have been accepted or edited. Shipments in this category requires transportation"
+          userView={true}
+        />
+      </Tab>
+      <Tab
+        extraClick={[Function]}
+        icon=""
+        isActive={false}
+        isUniq={false}
+        linkClassName=""
+        mot=""
+        onClick={null}
+        tabIndex={0}
+        tabTitle="finished"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      >
+        <div
+          className="flex-100 layout-row padding_top"
+        >
+          <div
+            className="flex-15 layout-row"
+          >
+            <NamedSelect
+              autoload={false}
+              className="flex-100 selectors"
+              multi={true}
+              name="originNexus"
+              onChange={[Function]}
+              placeholder="Origin"
+            />
+          </div>
+          <div
+            className="flex-15 layout-row"
+          >
+            <NamedSelect
+              autoload={false}
+              className="flex-100 selectors"
+              multi={true}
+              name="destinationNexus"
+              onChange={[Function]}
+              placeholder="Destination"
+            />
+          </div>
+          <div
+            className="flex-15 layout-row"
+          >
+            <NamedSelect
+              autoload={false}
+              className="flex-100 selectors"
+              multi={true}
+              name="hubType"
+              onChange={[Function]}
+              placeholder="Mode of Transport"
+            />
+          </div>
+        </div>
+        <AdminShipmentsBox
+          confirmShipmentData={Object {}}
+          dispatches={Object {}}
+          handleClick={[Function]}
+          handleSearchChange={[Function]}
+          nextPage={[Function]}
+          numPages={1}
+          page={1}
+          prevPage={[Function]}
+          searchText=""
+          seeAll={null}
+          status="finished"
+          t={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          tooltip="Shipments that have been processed and will be saved as history"
+          userView={true}
+        />
+      </Tab>
+      <Tab
+        extraClick={[Function]}
+        icon=""
+        isActive={false}
+        isUniq={false}
+        linkClassName=""
+        mot=""
+        onClick={null}
+        tabIndex={0}
+        tabTitle="rejected"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      >
+        <div
+          className="flex-100 layout-row padding_top"
+        >
+          <div
+            className="flex-15 layout-row"
+          >
+            <NamedSelect
+              autoload={false}
+              className="flex-100 selectors"
+              multi={true}
+              name="originNexus"
+              onChange={[Function]}
+              placeholder="Origin"
+            />
+          </div>
+          <div
+            className="flex-15 layout-row"
+          >
+            <NamedSelect
+              autoload={false}
+              className="flex-100 selectors"
+              multi={true}
+              name="destinationNexus"
+              onChange={[Function]}
+              placeholder="Destination"
+            />
+          </div>
+          <div
+            className="flex-15 layout-row"
+          >
+            <NamedSelect
+              autoload={false}
+              className="flex-100 selectors"
+              multi={true}
+              name="hubType"
+              onChange={[Function]}
+              placeholder="Mode of Transport"
+            />
+          </div>
+        </div>
+        <AdminShipmentsBox
+          confirmShipmentData={Object {}}
+          dispatches={Object {}}
+          handleClick={[Function]}
+          handleSearchChange={[Function]}
+          nextPage={[Function]}
+          numPages={1}
+          page={1}
+          prevPage={[Function]}
+          searchText=""
+          seeAll={null}
+          status="rejected"
+          t={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          userView={true}
+        />
+      </Tab>
+      <Tab
+        extraClick={[Function]}
+        icon=""
+        isActive={false}
+        isUniq={false}
+        linkClassName=""
+        mot=""
+        onClick={null}
+        tabIndex={0}
+        tabTitle="archived"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      >
+        <div
+          className="flex-100 layout-row padding_top"
+        >
+          <div
+            className="flex-15 layout-row"
+          >
+            <NamedSelect
+              autoload={false}
+              className="flex-100 selectors"
+              multi={true}
+              name="originNexus"
+              onChange={[Function]}
+              placeholder="Origin"
+            />
+          </div>
+          <div
+            className="flex-15 layout-row"
+          >
+            <NamedSelect
+              autoload={false}
+              className="flex-100 selectors"
+              multi={true}
+              name="destinationNexus"
+              onChange={[Function]}
+              placeholder="Destination"
+            />
+          </div>
+          <div
+            className="flex-15 layout-row"
+          >
+            <NamedSelect
+              autoload={false}
+              className="flex-100 selectors"
+              multi={true}
+              name="hubType"
+              onChange={[Function]}
+              placeholder="Mode of Transport"
+            />
+          </div>
+        </div>
+        <AdminShipmentsBox
+          confirmShipmentData={Object {}}
+          dispatches={Object {}}
+          handleClick={[Function]}
+          handleSearchChange={[Function]}
+          nextPage={[Function]}
+          numPages={1}
+          page={1}
+          prevPage={[Function]}
+          searchText=""
+          seeAll={null}
+          status="archived"
+          t={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          userView={true}
+        />
+      </Tab>
+    </Tabs>
+  </div>
+</div>
+`;
+
+exports[`shipments.pages is truthy 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start"
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-start"
+  >
+    <Tabs
+      defaultActiveTabIndex={0}
+      paddingFixes=""
+      wrapperTabs="layout-row flex-60"
+    >
+      <Tab
+        extraClick={[Function]}
+        icon=""
+        isActive={false}
+        isUniq={true}
+        linkClassName=""
+        mot=""
+        onClick={null}
+        tabIndex={0}
+        theme={null}
+      >
+        <AdminShipmentsBox
+          confirmShipmentData={Object {}}
+          dispatches={Object {}}
+          handleClick={[Function]}
+          handleSearchChange={[Function]}
+          nextPage={[Function]}
+          numPages={1}
+          page="QUOTED"
+          prevPage={[Function]}
+          searchText=""
+          seeAll={null}
+          shipments={Array []}
+          status="quoted"
+          t={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          userView={true}
+        />
+      </Tab>
+    </Tabs>
+  </div>
+</div>
+`;

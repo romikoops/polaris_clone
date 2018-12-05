@@ -1,0 +1,158 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`clients is truthy 1`] = `
+<div
+  className="layout-column flex-100 layout-align-start-stretch listComponent"
+>
+  <div
+    className="layout-padding layout-align-start-center greyBg"
+  >
+    <span>
+      <b>
+        Clients
+      </b>
+    </span>
+  </div>
+  <div
+    className="layout-align-start-stretch list scrolling"
+  >
+    <div
+      className="listelement"
+    >
+      <GreyBox
+        borderStyle=""
+        content={
+          <div
+            className="layout-row flex-100 layout-align-space-between-stretch client_box"
+            onClick={[Function]}
+          >
+            <div
+              className="layout-column flex-50 layout-align-center-stretch"
+            >
+              <div
+                className="layout-row flex-50 layout-align-start-center"
+              >
+                <div
+                  className="flex-20 layout-row layout-align-center-center"
+                >
+                  <i
+                    className="fa fa-user clip"
+                    style={
+                      Object {
+                        "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                      }
+                    }
+                  />
+                </div>
+                <div>
+                  <h4>
+                    Sebastian
+                     
+                    Muller
+                  </h4>
+                </div>
+              </div>
+              <div
+                className="layout-row flex-50 layout-align-start-center"
+              >
+                <span
+                  className="flex-20 layout-row layout-align-center-center"
+                >
+                  <i
+                    className="fa fa-building clip"
+                    style={
+                      Object {
+                        "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                      }
+                    }
+                  />
+                </span>
+                <span
+                  className="flex-80 layout-row layout-align-start-center grey"
+                >
+                  <p>
+                    Mehristweniger
+                  </p>
+                </span>
+              </div>
+            </div>
+            <span
+              className="layout-column layout-align-center-end flex-25 smallText"
+            >
+              <b>
+                Last active
+              </b>
+              <br />
+              <span
+                className="grey"
+              >
+                {{days}} days ago
+              </span>
+            </span>
+          </div>
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="card_margin_bottom"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="layout-column flex-100 layout-align-start-stretch listComponent"
+>
+  <div
+    className="layout-padding layout-align-start-center greyBg"
+  >
+    <span>
+      <b>
+        Clients
+      </b>
+    </span>
+  </div>
+  <div
+    className="layout-align-start-stretch list scrolling"
+  >
+    <span
+      className="listelement"
+    >
+      No shipments available
+    </span>
+  </div>
+</div>
+`;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="layout-column flex-100 layout-align-start-stretch listComponent"
+>
+  <div
+    className="layout-padding layout-align-start-center greyBg"
+  >
+    <span>
+      <b>
+        Clients
+      </b>
+    </span>
+  </div>
+  <div
+    className="layout-align-start-stretch list scrolling"
+  >
+    <span
+      className="listelement"
+    >
+      No shipments available
+    </span>
+  </div>
+</div>
+`;

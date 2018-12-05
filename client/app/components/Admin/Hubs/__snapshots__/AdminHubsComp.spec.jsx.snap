@@ -1,0 +1,1287 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`countries is truthy 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start"
+>
+  <div
+    className="flex-100 layout-row layout-align-space-between-start"
+  >
+    <div
+      className="layout-row flex-80 flex-md-75 flex-sm-100"
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center header_buffer layout-wrap"
+      >
+        <div
+          className="layout-row flex-95 layout-wrap card_margin_right"
+          style={
+            Object {
+              "minHeight": "450px",
+            }
+          }
+        >
+          <AdminHubTile
+            handleClick={[Function]}
+            hub={
+              Object {
+                "address": Object {
+                  "city": "FOO_CITY",
+                  "country": "Germany",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_STREET",
+                  "streetNumber": 579,
+                  "street_number": 579,
+                  "zipCode": "22456",
+                  "zip_code": "22456",
+                },
+                "name": "FOO_HUB_NAME",
+              }
+            }
+            key="RANDOM_KEY_3"
+            showIcon={false}
+            showTooltip={true}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            tooltip="A glance of all the Hubs that are related to the chosen Hub"
+          />
+        </div>
+        <div
+          className="flex-95 layout-row layout-align-center-center margin_bottom"
+        >
+          <div
+            className="
+                      flex-15 layout-row layout-align-center-center pointy
+                      navigation_button disabled
+                    "
+            onClick={null}
+          >
+            <i
+              className="fa fa-chevron-left"
+            />
+            <p>
+                  
+              Back
+            </p>
+          </div>
+          <p>
+            1
+          </p>
+          <div
+            className="
+                      flex-15 layout-row layout-align-center-center pointy
+                      navigation_button disabled
+                    "
+            onClick={null}
+          >
+            <p>
+              Next
+                  
+            </p>
+            <i
+              className="fa fa-chevron-right"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-20 flex-md-25 hide-sm hide-xs layout-row layout-wrap layout-align-end-end"
+    >
+      <div
+        className="position_fixed_right flex"
+      >
+        <div
+          className="filter_panel flex layout-row"
+        >
+          <SideOptionsBox
+            content={
+              <div>
+                <div
+                  className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
+                >
+                  <input
+                    className="flex-100"
+                    onChange={[Function]}
+                    placeholder="Search..."
+                    type="text"
+                  />
+                </div>
+                <div
+                  className="flex-100 layout-row layout-wrap layout-align-center-start"
+                >
+                  <CollapsingBar
+                    collapsed={true}
+                    content={
+                      Array [
+                        <div
+                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                        >
+                          <label
+                            className="pointy"
+                            htmlFor="ocean"
+                          >
+                            <p>
+                              Port
+                            </p>
+                          </label>
+                          <Checkbox
+                            checked={true}
+                            className=""
+                            disabled={false}
+                            id="ocean"
+                            onChange={[Function]}
+                            onClick={null}
+                            size={null}
+                            theme={
+                              Object {
+                                "colors": Object {
+                                  "primary": "#333",
+                                  "secondary": "#fafafa",
+                                },
+                              }
+                            }
+                          />
+                        </div>,
+                      ]
+                    }
+                    contentHeader=""
+                    faClass="fa fa-ship"
+                    handleCollapser={[Function]}
+                    headerWrapClasses=""
+                    mainWrapperStyle={Object {}}
+                    minHeight=""
+                    parentClass=""
+                    showArrow={true}
+                    startCollapsed={false}
+                    text="Hub Type"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <CollapsingBar
+                    collapsed={true}
+                    content={
+                      Array [
+                        <div
+                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                        >
+                          <label
+                            className="pointy"
+                            htmlFor="active"
+                          >
+                            <p>
+                              Active
+                            </p>
+                          </label>
+                          <Checkbox
+                            checked={true}
+                            className=""
+                            disabled={false}
+                            id="active"
+                            onChange={[Function]}
+                            onClick={null}
+                            size={null}
+                            theme={
+                              Object {
+                                "colors": Object {
+                                  "primary": "#333",
+                                  "secondary": "#fafafa",
+                                },
+                              }
+                            }
+                          />
+                        </div>,
+                        <div
+                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                        >
+                          <label
+                            className="pointy"
+                            htmlFor="inactive"
+                          >
+                            <p>
+                              Inactive
+                            </p>
+                          </label>
+                          <Checkbox
+                            checked={false}
+                            className=""
+                            disabled={false}
+                            id="inactive"
+                            onChange={[Function]}
+                            onClick={null}
+                            size={null}
+                            theme={
+                              Object {
+                                "colors": Object {
+                                  "primary": "#333",
+                                  "secondary": "#fafafa",
+                                },
+                              }
+                            }
+                          />
+                        </div>,
+                      ]
+                    }
+                    contentHeader=""
+                    faClass="fa fa-ship"
+                    handleCollapser={[Function]}
+                    headerWrapClasses=""
+                    mainWrapperStyle={Object {}}
+                    minHeight=""
+                    parentClass=""
+                    showArrow={true}
+                    startCollapsed={false}
+                    text="Status"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <CollapsingBar
+                    collapsed={true}
+                    content={
+                      <NamedSelect
+                        autoload={false}
+                        className="flex-100 selectors"
+                        multi={true}
+                        name="country_select"
+                        onChange={[Function]}
+                        options={
+                          Array [
+                            Object {
+                              "label": "Germany",
+                              "value": 0,
+                            },
+                            Object {
+                              "label": "China",
+                              "value": 3,
+                            },
+                          ]
+                        }
+                        value={Array []}
+                      />
+                    }
+                    contentHeader=""
+                    faClass="fa fa-flag"
+                    handleCollapser={[Function]}
+                    headerWrapClasses=""
+                    mainWrapperStyle={Object {}}
+                    minHeight="270px"
+                    parentClass=""
+                    showArrow={true}
+                    startCollapsed={false}
+                    text="Country"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                </div>
+              </div>
+            }
+            flexOptions="flex"
+            header="Filters"
+          />
+        </div>
+        <div
+          className="flex layout-row margin_bottom"
+        >
+          <div>
+            a
+          </div>
+          <div>
+            b
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`hubs is falsy 1`] = `""`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start"
+>
+  <div
+    className="flex-100 layout-row layout-align-space-between-start"
+  >
+    <div
+      className="layout-row flex-80 flex-md-75 flex-sm-100"
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center header_buffer layout-wrap"
+      >
+        <div
+          className="layout-row flex-95 layout-wrap card_margin_right"
+          style={
+            Object {
+              "minHeight": "450px",
+            }
+          }
+        >
+          <AdminHubTile
+            handleClick={[Function]}
+            hub={
+              Object {
+                "address": Object {
+                  "city": "FOO_CITY",
+                  "country": "Germany",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_STREET",
+                  "streetNumber": 579,
+                  "street_number": 579,
+                  "zipCode": "22456",
+                  "zip_code": "22456",
+                },
+                "name": "FOO_HUB_NAME",
+              }
+            }
+            key="RANDOM_KEY_1"
+            showIcon={false}
+            showTooltip={true}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            tooltip="A glance of all the Hubs that are related to the chosen Hub"
+          />
+        </div>
+        <div
+          className="flex-95 layout-row layout-align-center-center margin_bottom"
+        >
+          <div
+            className="
+                      flex-15 layout-row layout-align-center-center pointy
+                      navigation_button disabled
+                    "
+            onClick={null}
+          >
+            <i
+              className="fa fa-chevron-left"
+            />
+            <p>
+                  
+              Back
+            </p>
+          </div>
+          <p>
+            1
+          </p>
+          <div
+            className="
+                      flex-15 layout-row layout-align-center-center pointy
+                      navigation_button disabled
+                    "
+            onClick={null}
+          >
+            <p>
+              Next
+                  
+            </p>
+            <i
+              className="fa fa-chevron-right"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-20 flex-md-25 hide-sm hide-xs layout-row layout-wrap layout-align-end-end"
+    >
+      <div
+        className="position_fixed_right flex"
+      >
+        <div
+          className="filter_panel flex layout-row"
+        >
+          <SideOptionsBox
+            content={
+              <div>
+                <div
+                  className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
+                >
+                  <input
+                    className="flex-100"
+                    onChange={[Function]}
+                    placeholder="Search..."
+                    type="text"
+                  />
+                </div>
+                <div
+                  className="flex-100 layout-row layout-wrap layout-align-center-start"
+                >
+                  <CollapsingBar
+                    collapsed={true}
+                    content={
+                      Array [
+                        <div
+                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                        >
+                          <label
+                            className="pointy"
+                            htmlFor="ocean"
+                          >
+                            <p>
+                              Port
+                            </p>
+                          </label>
+                          <Checkbox
+                            checked={true}
+                            className=""
+                            disabled={false}
+                            id="ocean"
+                            onChange={[Function]}
+                            onClick={null}
+                            size={null}
+                            theme={
+                              Object {
+                                "colors": Object {
+                                  "primary": "#333",
+                                  "secondary": "#fafafa",
+                                },
+                              }
+                            }
+                          />
+                        </div>,
+                      ]
+                    }
+                    contentHeader=""
+                    faClass="fa fa-ship"
+                    handleCollapser={[Function]}
+                    headerWrapClasses=""
+                    mainWrapperStyle={Object {}}
+                    minHeight=""
+                    parentClass=""
+                    showArrow={true}
+                    startCollapsed={false}
+                    text="Hub Type"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <CollapsingBar
+                    collapsed={true}
+                    content={
+                      Array [
+                        <div
+                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                        >
+                          <label
+                            className="pointy"
+                            htmlFor="active"
+                          >
+                            <p>
+                              Active
+                            </p>
+                          </label>
+                          <Checkbox
+                            checked={true}
+                            className=""
+                            disabled={false}
+                            id="active"
+                            onChange={[Function]}
+                            onClick={null}
+                            size={null}
+                            theme={
+                              Object {
+                                "colors": Object {
+                                  "primary": "#333",
+                                  "secondary": "#fafafa",
+                                },
+                              }
+                            }
+                          />
+                        </div>,
+                        <div
+                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                        >
+                          <label
+                            className="pointy"
+                            htmlFor="inactive"
+                          >
+                            <p>
+                              Inactive
+                            </p>
+                          </label>
+                          <Checkbox
+                            checked={false}
+                            className=""
+                            disabled={false}
+                            id="inactive"
+                            onChange={[Function]}
+                            onClick={null}
+                            size={null}
+                            theme={
+                              Object {
+                                "colors": Object {
+                                  "primary": "#333",
+                                  "secondary": "#fafafa",
+                                },
+                              }
+                            }
+                          />
+                        </div>,
+                      ]
+                    }
+                    contentHeader=""
+                    faClass="fa fa-ship"
+                    handleCollapser={[Function]}
+                    headerWrapClasses=""
+                    mainWrapperStyle={Object {}}
+                    minHeight=""
+                    parentClass=""
+                    showArrow={true}
+                    startCollapsed={false}
+                    text="Status"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <CollapsingBar
+                    collapsed={true}
+                    content={
+                      <NamedSelect
+                        autoload={false}
+                        className="flex-100 selectors"
+                        multi={true}
+                        name="country_select"
+                        onChange={[Function]}
+                        options={Array []}
+                        value={Array []}
+                      />
+                    }
+                    contentHeader=""
+                    faClass="fa fa-flag"
+                    handleCollapser={[Function]}
+                    headerWrapClasses=""
+                    mainWrapperStyle={Object {}}
+                    minHeight="270px"
+                    parentClass=""
+                    showArrow={true}
+                    startCollapsed={false}
+                    text="Country"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                </div>
+              </div>
+            }
+            flexOptions="flex"
+            header="Filters"
+          />
+        </div>
+        <div
+          className="flex layout-row margin_bottom"
+        >
+          <div>
+            a
+          </div>
+          <div>
+            b
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`state.page > 0 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start"
+>
+  <div
+    className="flex-100 layout-row layout-align-space-between-start"
+  >
+    <div
+      className="layout-row flex-80 flex-md-75 flex-sm-100"
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center header_buffer layout-wrap"
+      >
+        <div
+          className="layout-row flex-95 layout-wrap card_margin_right"
+          style={
+            Object {
+              "minHeight": "450px",
+            }
+          }
+        >
+          <AdminHubTile
+            handleClick={[Function]}
+            hub={
+              Object {
+                "address": Object {
+                  "city": "FOO_CITY",
+                  "country": "Germany",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_STREET",
+                  "streetNumber": 579,
+                  "street_number": 579,
+                  "zipCode": "22456",
+                  "zip_code": "22456",
+                },
+                "name": "FOO_HUB_NAME",
+              }
+            }
+            key="RANDOM_KEY_9"
+            showIcon={false}
+            showTooltip={true}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            tooltip="A glance of all the Hubs that are related to the chosen Hub"
+          />
+        </div>
+        <div
+          className="flex-95 layout-row layout-align-center-center margin_bottom"
+        >
+          <div
+            className="
+                      flex-15 layout-row layout-align-center-center pointy
+                      navigation_button 
+                    "
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-chevron-left"
+            />
+            <p>
+                  
+              Back
+            </p>
+          </div>
+          <p>
+            2
+          </p>
+          <div
+            className="
+                      flex-15 layout-row layout-align-center-center pointy
+                      navigation_button disabled
+                    "
+            onClick={null}
+          >
+            <p>
+              Next
+                  
+            </p>
+            <i
+              className="fa fa-chevron-right"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-20 flex-md-25 hide-sm hide-xs layout-row layout-wrap layout-align-end-end"
+    >
+      <div
+        className="position_fixed_right flex"
+      >
+        <div
+          className="filter_panel flex layout-row"
+        >
+          <SideOptionsBox
+            content={
+              <div>
+                <div
+                  className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
+                >
+                  <input
+                    className="flex-100"
+                    onChange={[Function]}
+                    placeholder="Search..."
+                    type="text"
+                  />
+                </div>
+                <div
+                  className="flex-100 layout-row layout-wrap layout-align-center-start"
+                >
+                  <CollapsingBar
+                    collapsed={true}
+                    content={
+                      Array [
+                        <div
+                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                        >
+                          <label
+                            className="pointy"
+                            htmlFor="ocean"
+                          >
+                            <p>
+                              Port
+                            </p>
+                          </label>
+                          <Checkbox
+                            checked={true}
+                            className=""
+                            disabled={false}
+                            id="ocean"
+                            onChange={[Function]}
+                            onClick={null}
+                            size={null}
+                            theme={
+                              Object {
+                                "colors": Object {
+                                  "primary": "#333",
+                                  "secondary": "#fafafa",
+                                },
+                              }
+                            }
+                          />
+                        </div>,
+                      ]
+                    }
+                    contentHeader=""
+                    faClass="fa fa-ship"
+                    handleCollapser={[Function]}
+                    headerWrapClasses=""
+                    mainWrapperStyle={Object {}}
+                    minHeight=""
+                    parentClass=""
+                    showArrow={true}
+                    startCollapsed={false}
+                    text="Hub Type"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <CollapsingBar
+                    collapsed={true}
+                    content={
+                      Array [
+                        <div
+                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                        >
+                          <label
+                            className="pointy"
+                            htmlFor="active"
+                          >
+                            <p>
+                              Active
+                            </p>
+                          </label>
+                          <Checkbox
+                            checked={true}
+                            className=""
+                            disabled={false}
+                            id="active"
+                            onChange={[Function]}
+                            onClick={null}
+                            size={null}
+                            theme={
+                              Object {
+                                "colors": Object {
+                                  "primary": "#333",
+                                  "secondary": "#fafafa",
+                                },
+                              }
+                            }
+                          />
+                        </div>,
+                        <div
+                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                        >
+                          <label
+                            className="pointy"
+                            htmlFor="inactive"
+                          >
+                            <p>
+                              Inactive
+                            </p>
+                          </label>
+                          <Checkbox
+                            checked={false}
+                            className=""
+                            disabled={false}
+                            id="inactive"
+                            onChange={[Function]}
+                            onClick={null}
+                            size={null}
+                            theme={
+                              Object {
+                                "colors": Object {
+                                  "primary": "#333",
+                                  "secondary": "#fafafa",
+                                },
+                              }
+                            }
+                          />
+                        </div>,
+                      ]
+                    }
+                    contentHeader=""
+                    faClass="fa fa-ship"
+                    handleCollapser={[Function]}
+                    headerWrapClasses=""
+                    mainWrapperStyle={Object {}}
+                    minHeight=""
+                    parentClass=""
+                    showArrow={true}
+                    startCollapsed={false}
+                    text="Status"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <CollapsingBar
+                    collapsed={true}
+                    content={
+                      <NamedSelect
+                        autoload={false}
+                        className="flex-100 selectors"
+                        multi={true}
+                        name="country_select"
+                        onChange={[Function]}
+                        options={Array []}
+                        value={Array []}
+                      />
+                    }
+                    contentHeader=""
+                    faClass="fa fa-flag"
+                    handleCollapser={[Function]}
+                    headerWrapClasses=""
+                    mainWrapperStyle={Object {}}
+                    minHeight="270px"
+                    parentClass=""
+                    showArrow={true}
+                    startCollapsed={false}
+                    text="Country"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                </div>
+              </div>
+            }
+            flexOptions="flex"
+            header="Filters"
+          />
+        </div>
+        <div
+          className="flex layout-row margin_bottom"
+        >
+          <div>
+            a
+          </div>
+          <div>
+            b
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`state.searchFilters.hubType is truthy 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start"
+>
+  <div
+    className="flex-100 layout-row layout-align-space-between-start"
+  >
+    <div
+      className="layout-row flex-80 flex-md-75 flex-sm-100"
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center header_buffer layout-wrap"
+      >
+        <div
+          className="layout-row flex-95 layout-wrap card_margin_right"
+          style={
+            Object {
+              "minHeight": "450px",
+            }
+          }
+        >
+          <AdminHubTile
+            handleClick={[Function]}
+            hub={
+              Object {
+                "address": Object {
+                  "city": "FOO_CITY",
+                  "country": "Germany",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_STREET",
+                  "streetNumber": 579,
+                  "street_number": 579,
+                  "zipCode": "22456",
+                  "zip_code": "22456",
+                },
+                "name": "FOO_HUB_NAME",
+              }
+            }
+            key="RANDOM_KEY_6"
+            showIcon={false}
+            showTooltip={true}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            tooltip="A glance of all the Hubs that are related to the chosen Hub"
+          />
+        </div>
+        <div
+          className="flex-95 layout-row layout-align-center-center margin_bottom"
+        >
+          <div
+            className="
+                      flex-15 layout-row layout-align-center-center pointy
+                      navigation_button disabled
+                    "
+            onClick={null}
+          >
+            <i
+              className="fa fa-chevron-left"
+            />
+            <p>
+                  
+              Back
+            </p>
+          </div>
+          <p>
+            1
+          </p>
+          <div
+            className="
+                      flex-15 layout-row layout-align-center-center pointy
+                      navigation_button disabled
+                    "
+            onClick={null}
+          >
+            <p>
+              Next
+                  
+            </p>
+            <i
+              className="fa fa-chevron-right"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-20 flex-md-25 hide-sm hide-xs layout-row layout-wrap layout-align-end-end"
+    >
+      <div
+        className="position_fixed_right flex"
+      >
+        <div
+          className="filter_panel flex layout-row"
+        >
+          <SideOptionsBox
+            content={
+              <div>
+                <div
+                  className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
+                >
+                  <input
+                    className="flex-100"
+                    onChange={[Function]}
+                    placeholder="Search..."
+                    type="text"
+                  />
+                </div>
+                <div
+                  className="flex-100 layout-row layout-wrap layout-align-center-start"
+                >
+                  <CollapsingBar
+                    collapsed={true}
+                    content={
+                      Array [
+                        <div
+                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                        >
+                          <label
+                            className="pointy"
+                            htmlFor="foo"
+                          >
+                            <p />
+                          </label>
+                          <Checkbox
+                            checked={
+                              Object {
+                                "a": 1,
+                              }
+                            }
+                            className=""
+                            disabled={false}
+                            id="foo"
+                            onChange={[Function]}
+                            onClick={null}
+                            size={null}
+                            theme={
+                              Object {
+                                "colors": Object {
+                                  "primary": "#333",
+                                  "secondary": "#fafafa",
+                                },
+                              }
+                            }
+                          />
+                        </div>,
+                        <div
+                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                        >
+                          <label
+                            className="pointy"
+                            htmlFor="bar"
+                          >
+                            <p />
+                          </label>
+                          <Checkbox
+                            checked={
+                              Object {
+                                "b": 2,
+                              }
+                            }
+                            className=""
+                            disabled={false}
+                            id="bar"
+                            onChange={[Function]}
+                            onClick={null}
+                            size={null}
+                            theme={
+                              Object {
+                                "colors": Object {
+                                  "primary": "#333",
+                                  "secondary": "#fafafa",
+                                },
+                              }
+                            }
+                          />
+                        </div>,
+                      ]
+                    }
+                    contentHeader=""
+                    faClass="fa fa-ship"
+                    handleCollapser={[Function]}
+                    headerWrapClasses=""
+                    mainWrapperStyle={Object {}}
+                    minHeight=""
+                    parentClass=""
+                    showArrow={true}
+                    startCollapsed={false}
+                    text="Hub Type"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <CollapsingBar
+                    collapsed={true}
+                    content={
+                      Array [
+                        <div
+                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                        >
+                          <label
+                            className="pointy"
+                            htmlFor="active"
+                          >
+                            <p>
+                              Active
+                            </p>
+                          </label>
+                          <Checkbox
+                            checked={true}
+                            className=""
+                            disabled={false}
+                            id="active"
+                            onChange={[Function]}
+                            onClick={null}
+                            size={null}
+                            theme={
+                              Object {
+                                "colors": Object {
+                                  "primary": "#333",
+                                  "secondary": "#fafafa",
+                                },
+                              }
+                            }
+                          />
+                        </div>,
+                        <div
+                          className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                        >
+                          <label
+                            className="pointy"
+                            htmlFor="inactive"
+                          >
+                            <p>
+                              Inactive
+                            </p>
+                          </label>
+                          <Checkbox
+                            checked={false}
+                            className=""
+                            disabled={false}
+                            id="inactive"
+                            onChange={[Function]}
+                            onClick={null}
+                            size={null}
+                            theme={
+                              Object {
+                                "colors": Object {
+                                  "primary": "#333",
+                                  "secondary": "#fafafa",
+                                },
+                              }
+                            }
+                          />
+                        </div>,
+                      ]
+                    }
+                    contentHeader=""
+                    faClass="fa fa-ship"
+                    handleCollapser={[Function]}
+                    headerWrapClasses=""
+                    mainWrapperStyle={Object {}}
+                    minHeight=""
+                    parentClass=""
+                    showArrow={true}
+                    startCollapsed={false}
+                    text="Status"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <CollapsingBar
+                    collapsed={true}
+                    content={
+                      <NamedSelect
+                        autoload={false}
+                        className="flex-100 selectors"
+                        multi={true}
+                        name="country_select"
+                        onChange={[Function]}
+                        options={Array []}
+                        value={Array []}
+                      />
+                    }
+                    contentHeader=""
+                    faClass="fa fa-flag"
+                    handleCollapser={[Function]}
+                    headerWrapClasses=""
+                    mainWrapperStyle={Object {}}
+                    minHeight="270px"
+                    parentClass=""
+                    showArrow={true}
+                    startCollapsed={false}
+                    text="Country"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                </div>
+              </div>
+            }
+            flexOptions="flex"
+            header="Filters"
+          />
+        </div>
+        <div
+          className="flex layout-row margin_bottom"
+        >
+          <div>
+            a
+          </div>
+          <div>
+            b
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

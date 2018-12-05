@@ -1,0 +1,773 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`cellLowerKey is city 1`] = `
+<PanelBox
+  cellLowerKey="city"
+  cellSteps={
+    Array [
+      Object {
+        "city": "CITY",
+        "country": "COUNTRY",
+        "lower_distance": Object {
+          "table": Object {},
+        },
+      },
+    ]
+  }
+  cellUpperKey="CELL_UPPER_KEY"
+  cells={
+    Array [
+      Object {
+        "lower_distance": Object {
+          "CELL_LOWER_KEY": "LOWER_DISTANCE_CELL_LOWER_KEY",
+          "CELL_UPPER_KEY": "LOWER_DISTANCE_CELL_UPPER_KEY",
+          "table": Array [
+            Object {
+              "fees": Array [
+                "NESTED_TABLE_FEES",
+              ],
+              "value": "NESTED_TABLE_VALUE",
+            },
+          ],
+        },
+        "table": Object {
+          "0": Object {
+            "value": "CELL_TABLE_VALUE",
+          },
+        },
+        "upper_distance": Object {},
+      },
+    ]
+  }
+  handleMinimumChange={[Function]}
+  handleRateChange={[Function]}
+  lowerKey="LOWER_KEY"
+  shrinkPanel={[Function]}
+  shrinkView={Object {}}
+  stepBasis={
+    Object {
+      "label": "STEP_BASIS_LABEL",
+    }
+  }
+  t={[Function]}
+  target="lower_distance"
+  truckingBasis={
+    Object {
+      "label": "TRACKING_BASIS_LABEL",
+    }
+  }
+  upperKey="UPPER_KEY"
+>
+  <div
+    className="flex-100 layout-row layout-align-start-start layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center layout-wrap"
+      key="cell_0"
+    >
+      <div
+        className=" flex-50 layout-row layout-row layout-wrap layout-align-space-between-start"
+      >
+        <p
+          className="flex-none"
+        >
+          TRACKING_BASIS_LABEL: undefined, LOWER_DISTANCE_CELL_UPPER_KEY
+        </p>
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-close"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center layout-wrap closed"
+      >
+        <div
+          className="flex-25 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none sup"
+            >
+              Minimum charge (Flat Rate)
+            </p>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-center input_box"
+          >
+            <input
+              name="0-lower_distance-minimum"
+              onChange={[Function]}
+              type="number"
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-start"
+          key="ws_0"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none sup"
+            >
+              CITY COUNTRY STEP_BASIS_LABEL
+            </p>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center input_box layout-wrap"
+          >
+            <p
+              className="flex-100 sup"
+            />
+            <input
+              name="0-lower_distance-0-0-value"
+              onChange={[Function]}
+              type="number"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</PanelBox>
+`;
+
+exports[`cellStep.city is falsy 1`] = `
+<PanelBox
+  cellLowerKey="CELL_LOWER_KEY"
+  cellSteps={
+    Array [
+      Object {
+        "country": "COUNTRY",
+        "lower_distance": Object {
+          "table": Object {},
+        },
+      },
+    ]
+  }
+  cellUpperKey="CELL_UPPER_KEY"
+  cells={
+    Array [
+      Object {
+        "lower_distance": Object {
+          "CELL_LOWER_KEY": "LOWER_DISTANCE_CELL_LOWER_KEY",
+          "CELL_UPPER_KEY": "LOWER_DISTANCE_CELL_UPPER_KEY",
+          "table": Array [
+            Object {
+              "fees": Array [
+                "NESTED_TABLE_FEES",
+              ],
+              "value": "NESTED_TABLE_VALUE",
+            },
+          ],
+        },
+        "table": Object {
+          "0": Object {
+            "value": "CELL_TABLE_VALUE",
+          },
+        },
+        "upper_distance": Object {},
+      },
+    ]
+  }
+  handleMinimumChange={[Function]}
+  handleRateChange={[Function]}
+  lowerKey="LOWER_KEY"
+  shrinkPanel={[Function]}
+  shrinkView={Object {}}
+  stepBasis={
+    Object {
+      "label": "STEP_BASIS_LABEL",
+    }
+  }
+  t={[Function]}
+  target="lower_distance"
+  truckingBasis={
+    Object {
+      "label": "TRACKING_BASIS_LABEL",
+    }
+  }
+  upperKey="UPPER_KEY"
+>
+  <div
+    className="flex-100 layout-row layout-align-start-start layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center layout-wrap"
+      key="cell_0"
+    >
+      <div
+        className=" flex-50 layout-row layout-row layout-wrap layout-align-space-between-start"
+      >
+        <p
+          className="flex-none"
+        >
+          TRACKING_BASIS_LABEL Range LOWER_DISTANCE_CELL_LOWER_KEY - LOWER_DISTANCE_CELL_UPPER_KEY
+        </p>
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-close"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center layout-wrap closed"
+      >
+        <div
+          className="flex-25 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none sup"
+            >
+              Minimum charge (Flat Rate)
+            </p>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-center input_box"
+          >
+            <input
+              name="0-lower_distance-minimum"
+              onChange={[Function]}
+              type="number"
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-start"
+          key="ws_0"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none sup"
+            >
+              undefined - undefined STEP_BASIS_LABEL
+            </p>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center input_box layout-wrap"
+          >
+            <p
+              className="flex-100 sup"
+            />
+            <input
+              name="0-lower_distance-0-0-value"
+              onChange={[Function]}
+              type="number"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</PanelBox>
+`;
+
+exports[`fee.cbm !== undefined && fee.kg !== undefined 1`] = `
+<PanelBox
+  cellLowerKey="CELL_LOWER_KEY"
+  cellSteps={
+    Array [
+      Object {
+        "city": "CITY",
+        "country": "COUNTRY",
+        "lower_distance": Object {
+          "table": Object {},
+        },
+      },
+    ]
+  }
+  cellUpperKey="CELL_UPPER_KEY"
+  cells={
+    Array [
+      Object {
+        "lower_distance": Object {
+          "CELL_LOWER_KEY": "LOWER_DISTANCE_CELL_LOWER_KEY",
+          "CELL_UPPER_KEY": "LOWER_DISTANCE_CELL_UPPER_KEY",
+          "table": Array [
+            Object {
+              "fees": Object {
+                "foo": Object {
+                  "cbm": "FEES_CBM",
+                  "kg": "FEES_KG",
+                },
+              },
+              "value": "NESTED_TABLE_VALUE",
+            },
+          ],
+        },
+        "table": Object {
+          "0": Object {
+            "value": "CELL_TABLE_VALUE",
+          },
+        },
+        "upper_distance": Object {},
+      },
+    ]
+  }
+  handleMinimumChange={[Function]}
+  handleRateChange={[Function]}
+  lowerKey="LOWER_KEY"
+  shrinkPanel={[Function]}
+  shrinkView={Object {}}
+  stepBasis={
+    Object {
+      "label": "STEP_BASIS_LABEL",
+    }
+  }
+  t={[Function]}
+  target="lower_distance"
+  truckingBasis={
+    Object {
+      "label": "TRACKING_BASIS_LABEL",
+    }
+  }
+  upperKey="UPPER_KEY"
+>
+  <div
+    className="flex-100 layout-row layout-align-start-start layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center layout-wrap"
+      key="cell_0"
+    >
+      <div
+        className=" flex-50 layout-row layout-row layout-wrap layout-align-space-between-start"
+      >
+        <p
+          className="flex-none"
+        >
+          TRACKING_BASIS_LABEL Range LOWER_DISTANCE_CELL_LOWER_KEY - LOWER_DISTANCE_CELL_UPPER_KEY
+        </p>
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-close"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center layout-wrap closed"
+      >
+        <div
+          className="flex-25 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none sup"
+            >
+              Minimum charge (Flat Rate)
+            </p>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-center input_box"
+          >
+            <input
+              name="0-lower_distance-minimum"
+              onChange={[Function]}
+              type="number"
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-start"
+          key="ws_0"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none sup"
+            >
+              CITY COUNTRY STEP_BASIS_LABEL
+            </p>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <div
+              className="flex-25 layout-row layout-align-start-center input_box layout-wrap"
+            >
+              <p
+                className="flex-none sup"
+              />
+              <input
+                name="0-lower_distance-0-foo-value"
+                onChange={[Function]}
+                type="number"
+              />
+            </div>
+            <div
+              className="flex-25 layout-row layout-align-start-center input_box layout-wrap"
+            >
+              <p
+                className="flex-none sup"
+              >
+                CBM
+              </p>
+              <input
+                name="0-lower_distance-0-foo-cbm"
+                onChange={[Function]}
+                step="0.01"
+                type="number"
+                value="FEES_CBM"
+              />
+            </div>
+            <div
+              className="flex-25 layout-row layout-align-start-center input_box layout-wrap"
+            >
+              <p
+                className="flex-none sup"
+              >
+                KG
+              </p>
+              <input
+                name="0-lower_distance-0-foo-kg"
+                onChange={[Function]}
+                step="0.01"
+                type="number"
+                value="FEES_KG"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</PanelBox>
+`;
+
+exports[`fee.cbm !== undefined && fee.ton !== undefined 1`] = `
+<PanelBox
+  cellLowerKey="CELL_LOWER_KEY"
+  cellSteps={
+    Array [
+      Object {
+        "city": "CITY",
+        "country": "COUNTRY",
+        "lower_distance": Object {
+          "table": Object {},
+        },
+      },
+    ]
+  }
+  cellUpperKey="CELL_UPPER_KEY"
+  cells={
+    Array [
+      Object {
+        "lower_distance": Object {
+          "CELL_LOWER_KEY": "LOWER_DISTANCE_CELL_LOWER_KEY",
+          "CELL_UPPER_KEY": "LOWER_DISTANCE_CELL_UPPER_KEY",
+          "table": Array [
+            Object {
+              "fees": Object {
+                "foo": Object {
+                  "cbm": "FEES_CBM",
+                  "ton": "FEES_TON",
+                },
+              },
+              "value": "NESTED_TABLE_VALUE",
+            },
+          ],
+        },
+        "table": Object {
+          "0": Object {
+            "value": "CELL_TABLE_VALUE",
+          },
+        },
+        "upper_distance": Object {},
+      },
+    ]
+  }
+  handleMinimumChange={[Function]}
+  handleRateChange={[Function]}
+  lowerKey="LOWER_KEY"
+  shrinkPanel={[Function]}
+  shrinkView={Object {}}
+  stepBasis={
+    Object {
+      "label": "STEP_BASIS_LABEL",
+    }
+  }
+  t={[Function]}
+  target="lower_distance"
+  truckingBasis={
+    Object {
+      "label": "TRACKING_BASIS_LABEL",
+    }
+  }
+  upperKey="UPPER_KEY"
+>
+  <div
+    className="flex-100 layout-row layout-align-start-start layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center layout-wrap"
+      key="cell_0"
+    >
+      <div
+        className=" flex-50 layout-row layout-row layout-wrap layout-align-space-between-start"
+      >
+        <p
+          className="flex-none"
+        >
+          TRACKING_BASIS_LABEL Range LOWER_DISTANCE_CELL_LOWER_KEY - LOWER_DISTANCE_CELL_UPPER_KEY
+        </p>
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-close"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center layout-wrap closed"
+      >
+        <div
+          className="flex-25 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none sup"
+            >
+              Minimum charge (Flat Rate)
+            </p>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-center input_box"
+          >
+            <input
+              name="0-lower_distance-minimum"
+              onChange={[Function]}
+              type="number"
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-start"
+          key="ws_0"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none sup"
+            >
+              CITY COUNTRY STEP_BASIS_LABEL
+            </p>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <div
+              className="flex-25 layout-row layout-align-start-center input_box layout-wrap"
+            >
+              <p
+                className="flex-100 sup"
+              />
+              <input
+                name="0-lower_distance-0-foo-value"
+                onChange={[Function]}
+                type="number"
+              />
+            </div>
+            <div
+              className="flex-25 layout-row layout-align-start-center input_box layout-wrap"
+            >
+              <p
+                className="flex-100 sup"
+              >
+                CBM
+              </p>
+              <input
+                name="0-lower_distance-0-foo-cbm"
+                onChange={[Function]}
+                step="0.01"
+                type="number"
+                value="FEES_CBM"
+              />
+            </div>
+            <div
+              className="flex-25 layout-row layout-align-start-center input_box layout-wrap"
+            >
+              <p
+                className="flex-100 sup"
+              >
+                KG
+              </p>
+              <input
+                name="0-lower_distance-0-foo-ton"
+                onChange={[Function]}
+                step="0.01"
+                type="number"
+                value="FEES_TON"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</PanelBox>
+`;
+
+exports[`shallow render 1`] = `
+<PanelBox
+  cellLowerKey="CELL_LOWER_KEY"
+  cellSteps={
+    Array [
+      Object {
+        "city": "CITY",
+        "country": "COUNTRY",
+        "lower_distance": Object {
+          "table": Object {},
+        },
+      },
+    ]
+  }
+  cellUpperKey="CELL_UPPER_KEY"
+  cells={
+    Array [
+      Object {
+        "lower_distance": Object {
+          "CELL_LOWER_KEY": "LOWER_DISTANCE_CELL_LOWER_KEY",
+          "CELL_UPPER_KEY": "LOWER_DISTANCE_CELL_UPPER_KEY",
+          "table": Array [
+            Object {
+              "fees": Array [
+                "NESTED_TABLE_FEES",
+              ],
+              "value": "NESTED_TABLE_VALUE",
+            },
+          ],
+        },
+        "table": Object {
+          "0": Object {
+            "value": "CELL_TABLE_VALUE",
+          },
+        },
+        "upper_distance": Object {},
+      },
+    ]
+  }
+  handleMinimumChange={[Function]}
+  handleRateChange={[Function]}
+  lowerKey="LOWER_KEY"
+  shrinkPanel={[Function]}
+  shrinkView={Object {}}
+  stepBasis={
+    Object {
+      "label": "STEP_BASIS_LABEL",
+    }
+  }
+  t={[Function]}
+  target="lower_distance"
+  truckingBasis={
+    Object {
+      "label": "TRACKING_BASIS_LABEL",
+    }
+  }
+  upperKey="UPPER_KEY"
+>
+  <div
+    className="flex-100 layout-row layout-align-start-start layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center layout-wrap"
+      key="cell_0"
+    >
+      <div
+        className=" flex-50 layout-row layout-row layout-wrap layout-align-space-between-start"
+      >
+        <p
+          className="flex-none"
+        >
+          TRACKING_BASIS_LABEL Range LOWER_DISTANCE_CELL_LOWER_KEY - LOWER_DISTANCE_CELL_UPPER_KEY
+        </p>
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-close"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center layout-wrap closed"
+      >
+        <div
+          className="flex-25 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none sup"
+            >
+              Minimum charge (Flat Rate)
+            </p>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-center input_box"
+          >
+            <input
+              name="0-lower_distance-minimum"
+              onChange={[Function]}
+              type="number"
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-start"
+          key="ws_0"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none sup"
+            >
+              CITY COUNTRY STEP_BASIS_LABEL
+            </p>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center input_box layout-wrap"
+          >
+            <p
+              className="flex-100 sup"
+            />
+            <input
+              name="0-lower_distance-0-0-value"
+              onChange={[Function]}
+              type="number"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</PanelBox>
+`;

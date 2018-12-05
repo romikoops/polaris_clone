@@ -1,0 +1,835 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`service && service.total 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start header_buffer"
+>
+  <div
+    className="margin_box_right layout-row flex-100 layout-align-center-stretch margin_bottom"
+  >
+    <div
+      className="layout-row flex layout-align-space-between-center title_shipment_grey"
+    >
+      <p
+        className="layout-align-start-center layout-row"
+      >
+        Ref: 
+         
+        <span />
+      </p>
+      <p
+        className="layout-row layout-align-end-end"
+      >
+        <strong>
+          Placed at: 
+        </strong>
+         
+        19
+      </p>
+    </div>
+    <div
+      className="layout-row flex-15 flex-md-20 flex-sm-25 flex-xs-30 layout-align-center-center "
+    >
+      <Connect(StatusSelectButton)
+        gradient={true}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        wrapperStyles=" status_box"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-start padding_top"
+  >
+    <AdminShipmentContent
+      adminDispatch={
+        Object {
+          "getShipment": [Function],
+        }
+      }
+      background={
+        Object {
+          "bg1": Object {
+            "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg\\")",
+          },
+          "bg2": Object {
+            "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
+          },
+        }
+      }
+      cargoCount={0}
+      cargoView={Array []}
+      deliveryDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      deselectedStyle={
+        Object {
+          "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
+        }
+      }
+      destinationCollectionDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          from
+           
+          19
+        </p>
+      }
+      dnrEditKeys={
+        Array [
+          "in_process",
+          "finished",
+          "confirmed",
+        ]
+      }
+      estimatedTimes={
+        Object {
+          "etaJSX": <p
+            className="flex-none letter_3 date"
+          >
+            19
+          </p>,
+          "etdJSX": <p
+            className="flex-none letter_3 date"
+          >
+            19
+          </p>,
+        }
+      }
+      feeHash={
+        Object {
+          "cargo": Object {},
+          "export": Object {
+            "total": "EXPORT_TOTAL",
+          },
+          "total": Object {
+            "value": 77,
+          },
+        }
+      }
+      gradientBorderStyle={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      gradientStyle={
+        Object {
+          "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+        }
+      }
+      handlePriceChange={[Function]}
+      newPrices={
+        Object {
+          "cargo": Object {},
+          "customs": Object {},
+          "export": "EXPORT_TOTAL",
+          "import": Object {},
+          "insurance": Object {},
+          "trucking_on": Object {},
+          "trucking_pre": Object {},
+        }
+      }
+      originDropOffDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      pickupDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      saveNewEditedPrice={[Function]}
+      saveNewTime={[Function]}
+      selectedStyle={
+        Object {
+          "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+        }
+      }
+      shipment={Object {}}
+      shipmentData={
+        Object {
+          "addresses": Object {
+            "destination": Object {
+              "city": "BAR_CITY",
+              "country": "China",
+              "street": "BAR_STREET",
+              "street_number": 9,
+              "zip_code": 845321,
+            },
+            "endHub": "FOO_END_HUB",
+            "origin": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "street": "FOO_STREET",
+              "street_number": 7,
+              "zip_code": 21177,
+            },
+            "startHub": "FOO_START_HUB",
+          },
+          "cargoItems": Array [],
+          "contacts": Array [],
+          "containers": Array [],
+          "documents": Array [],
+          "schedules": Array [
+            Object {
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
+            },
+            Object {
+              "hub_route_key": "AIR_HUB_ROUTE_KEY",
+              "mode_of_transport": "air",
+            },
+            Object {
+              "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+              "mode_of_transport": "truck",
+            },
+            Object {
+              "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+              "mode_of_transport": "rail",
+            },
+          ],
+          "shipment": Object {
+            "cargo_count": 1,
+            "cargo_notes": "FOO_CARGO_NOTES",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "incoterm_text": "FOO_INCOTERM_TEXT",
+            "load_type": "OCEAN_LOAD_TYPE",
+            "notes": "FOO_NOTES",
+            "planned_eta": "2018-12-01T12:14:08+01:00",
+            "planned_etd": "2018-11-12T12:14:08+01:00",
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "export": Object {
+                "total": "EXPORT_TOTAL",
+              },
+              "total": Object {
+                "value": 77,
+              },
+            },
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 15,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 12,
+            },
+            "trucking": Object {
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+          },
+        }
+      }
+      showEditServicePrice={false}
+      showEditTime={false}
+      switchIcon={[Function]}
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      toggleEditServicePrice={[Function]}
+      toggleEditTime={[Function]}
+      totalPrice={[Function]}
+      uploadClientDocument={null}
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap"
+  >
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-center-center"
+      style={
+        Object {
+          "paddingTop": "30px",
+        }
+      }
+    >
+      <p
+        className="flex-100 layout-row layout-align-center-center"
+        style={
+          Object {
+            "paddingBottom": "14px",
+            "textAlign": "center",
+          }
+        }
+      >
+        Download shipment pdf
+      </p>
+      <Connect(DocumentsDownloader)
+        options={
+          Object {
+            "shipment": Object {
+              "cargo_count": 1,
+              "cargo_notes": "FOO_CARGO_NOTES",
+              "eori": 1234,
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "incoterm_text": "FOO_INCOTERM_TEXT",
+              "load_type": "OCEAN_LOAD_TYPE",
+              "notes": "FOO_NOTES",
+              "planned_eta": "2018-12-01T12:14:08+01:00",
+              "planned_etd": "2018-11-12T12:14:08+01:00",
+              "schedules_charges": Object {
+                "AIR_HUB_ROUTE_KEY": Object {
+                  "total": 200,
+                },
+                "OCEAN_HUB_ROUTE_KEY": Object {
+                  "total": 40,
+                },
+                "RAIL_HUB_ROUTE_KEY": Object {
+                  "total": 125,
+                },
+                "TRUCK_HUB_ROUTE_KEY": Object {
+                  "total": 75,
+                },
+              },
+              "selected_offer": Object {
+                "cargo": Object {},
+                "export": Object {
+                  "total": "EXPORT_TOTAL",
+                },
+                "total": Object {
+                  "value": 77,
+                },
+              },
+              "total_goods_value": Object {
+                "currency": "USD",
+                "value": 15,
+              },
+              "total_price": Object {
+                "currency": "USD",
+                "value": 12,
+              },
+              "trucking": Object {
+                "on_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+                "pre_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+              },
+            },
+          }
+        }
+        shipment={
+          Object {
+            "cargo_count": 1,
+            "cargo_notes": "FOO_CARGO_NOTES",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "incoterm_text": "FOO_INCOTERM_TEXT",
+            "load_type": "OCEAN_LOAD_TYPE",
+            "notes": "FOO_NOTES",
+            "planned_eta": "2018-12-01T12:14:08+01:00",
+            "planned_etd": "2018-11-12T12:14:08+01:00",
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "export": Object {
+                "total": "EXPORT_TOTAL",
+              },
+              "total": Object {
+                "value": 77,
+              },
+            },
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 15,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 12,
+            },
+            "trucking": Object {
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+          }
+        }
+        size="full"
+        t={[Function]}
+        target="shipment_recap"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start header_buffer"
+>
+  <div
+    className="margin_box_right layout-row flex-100 layout-align-center-stretch margin_bottom"
+  >
+    <div
+      className="layout-row flex layout-align-space-between-center title_shipment_grey"
+    >
+      <p
+        className="layout-align-start-center layout-row"
+      >
+        Ref: 
+         
+        <span />
+      </p>
+      <p
+        className="layout-row layout-align-end-end"
+      >
+        <strong>
+          Placed at: 
+        </strong>
+         
+        19
+      </p>
+    </div>
+    <div
+      className="layout-row flex-15 flex-md-20 flex-sm-25 flex-xs-30 layout-align-center-center "
+    >
+      <Connect(StatusSelectButton)
+        gradient={true}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        wrapperStyles=" status_box"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-start padding_top"
+  >
+    <AdminShipmentContent
+      adminDispatch={
+        Object {
+          "getShipment": [Function],
+        }
+      }
+      background={
+        Object {
+          "bg1": Object {
+            "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg\\")",
+          },
+          "bg2": Object {
+            "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
+          },
+        }
+      }
+      cargoCount={0}
+      cargoView={Array []}
+      deliveryDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      deselectedStyle={
+        Object {
+          "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
+        }
+      }
+      destinationCollectionDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          from
+           
+          19
+        </p>
+      }
+      dnrEditKeys={
+        Array [
+          "in_process",
+          "finished",
+          "confirmed",
+        ]
+      }
+      estimatedTimes={
+        Object {
+          "etaJSX": <p
+            className="flex-none letter_3 date"
+          >
+            19
+          </p>,
+          "etdJSX": <p
+            className="flex-none letter_3 date"
+          >
+            19
+          </p>,
+        }
+      }
+      feeHash={
+        Object {
+          "cargo": Object {},
+          "total": Object {
+            "value": 77,
+          },
+        }
+      }
+      gradientBorderStyle={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      gradientStyle={
+        Object {
+          "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+        }
+      }
+      handlePriceChange={[Function]}
+      newPrices={
+        Object {
+          "cargo": Object {},
+          "customs": Object {},
+          "export": Object {},
+          "import": Object {},
+          "insurance": Object {},
+          "trucking_on": Object {},
+          "trucking_pre": Object {},
+        }
+      }
+      originDropOffDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      pickupDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      saveNewEditedPrice={[Function]}
+      saveNewTime={[Function]}
+      selectedStyle={
+        Object {
+          "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+        }
+      }
+      shipment={Object {}}
+      shipmentData={
+        Object {
+          "addresses": Object {
+            "destination": Object {
+              "city": "BAR_CITY",
+              "country": "China",
+              "street": "BAR_STREET",
+              "street_number": 9,
+              "zip_code": 845321,
+            },
+            "endHub": "FOO_END_HUB",
+            "origin": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "street": "FOO_STREET",
+              "street_number": 7,
+              "zip_code": 21177,
+            },
+            "startHub": "FOO_START_HUB",
+          },
+          "cargoItems": Array [],
+          "contacts": Array [],
+          "containers": Array [],
+          "documents": Array [],
+          "schedules": Array [
+            Object {
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
+            },
+            Object {
+              "hub_route_key": "AIR_HUB_ROUTE_KEY",
+              "mode_of_transport": "air",
+            },
+            Object {
+              "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+              "mode_of_transport": "truck",
+            },
+            Object {
+              "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+              "mode_of_transport": "rail",
+            },
+          ],
+          "shipment": Object {
+            "cargo_count": 1,
+            "cargo_notes": "FOO_CARGO_NOTES",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "incoterm_text": "FOO_INCOTERM_TEXT",
+            "load_type": "OCEAN_LOAD_TYPE",
+            "notes": "FOO_NOTES",
+            "planned_eta": "2018-12-01T12:14:08+01:00",
+            "planned_etd": "2018-11-12T12:14:08+01:00",
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "total": Object {
+                "value": 77,
+              },
+            },
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 15,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 12,
+            },
+            "trucking": Object {
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+          },
+        }
+      }
+      showEditServicePrice={false}
+      showEditTime={false}
+      switchIcon={[Function]}
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      toggleEditServicePrice={[Function]}
+      toggleEditTime={[Function]}
+      totalPrice={[Function]}
+      uploadClientDocument={null}
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap"
+  >
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-center-center"
+      style={
+        Object {
+          "paddingTop": "30px",
+        }
+      }
+    >
+      <p
+        className="flex-100 layout-row layout-align-center-center"
+        style={
+          Object {
+            "paddingBottom": "14px",
+            "textAlign": "center",
+          }
+        }
+      >
+        Download shipment pdf
+      </p>
+      <Connect(DocumentsDownloader)
+        options={
+          Object {
+            "shipment": Object {
+              "cargo_count": 1,
+              "cargo_notes": "FOO_CARGO_NOTES",
+              "eori": 1234,
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "incoterm_text": "FOO_INCOTERM_TEXT",
+              "load_type": "OCEAN_LOAD_TYPE",
+              "notes": "FOO_NOTES",
+              "planned_eta": "2018-12-01T12:14:08+01:00",
+              "planned_etd": "2018-11-12T12:14:08+01:00",
+              "schedules_charges": Object {
+                "AIR_HUB_ROUTE_KEY": Object {
+                  "total": 200,
+                },
+                "OCEAN_HUB_ROUTE_KEY": Object {
+                  "total": 40,
+                },
+                "RAIL_HUB_ROUTE_KEY": Object {
+                  "total": 125,
+                },
+                "TRUCK_HUB_ROUTE_KEY": Object {
+                  "total": 75,
+                },
+              },
+              "selected_offer": Object {
+                "cargo": Object {},
+                "total": Object {
+                  "value": 77,
+                },
+              },
+              "total_goods_value": Object {
+                "currency": "USD",
+                "value": 15,
+              },
+              "total_price": Object {
+                "currency": "USD",
+                "value": 12,
+              },
+              "trucking": Object {
+                "on_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+                "pre_carriage": Object {
+                  "trucking_time_in_seconds": 55,
+                },
+              },
+            },
+          }
+        }
+        shipment={
+          Object {
+            "cargo_count": 1,
+            "cargo_notes": "FOO_CARGO_NOTES",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "incoterm_text": "FOO_INCOTERM_TEXT",
+            "load_type": "OCEAN_LOAD_TYPE",
+            "notes": "FOO_NOTES",
+            "planned_eta": "2018-12-01T12:14:08+01:00",
+            "planned_etd": "2018-11-12T12:14:08+01:00",
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "total": Object {
+                "value": 77,
+              },
+            },
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 15,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 12,
+            },
+            "trucking": Object {
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+          }
+        }
+        size="full"
+        t={[Function]}
+        target="shipment_recap"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;

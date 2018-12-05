@@ -1,0 +1,973 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`document.viewer is truthy 1`] = `
+<GenericError
+  t={[Function]}
+  theme={
+    Object {
+      "colors": Object {
+        "primary": "#333",
+        "secondary": "#fafafa",
+      },
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left"
+  >
+    <AdminUploadsSuccess
+      closeDialog={[Function]}
+      data={Object {}}
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+    <div
+      className="component_view flex layout-row layout-align-start-start"
+    >
+      <div
+        className="flex-100 layout-row layout-align-center-start"
+      >
+        <Tabs
+          defaultActiveTabIndex={0}
+          paddingFixes={true}
+          wrapperTabs="layout-row flex-45 flex-sm-40 flex-xs-80"
+        >
+          <Tab
+            extraClick={[Function]}
+            icon=""
+            isActive={false}
+            isUniq={false}
+            linkClassName=""
+            mot="air"
+            onClick={null}
+            tabIndex={0}
+            tabTitle="air"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          >
+            <CardRoutesIndex
+              adminDispatch={[Function]}
+              handleClick={[Function]}
+              hubs={Array []}
+              itineraries={Array []}
+              limit={9}
+              mot="air"
+              newText=""
+              scope={
+                Object {
+                  "modes_of_transport": Object {
+                    "air": "Air",
+                  },
+                }
+              }
+              sideMenuNodes={
+                Array [
+                  <SideOptionsBox
+                    content={
+                      <div
+                        className="flex-100 layout-row layout-wrap layout-align-center-start"
+                      >
+                        <CollapsingBar
+                          collapsed={true}
+                          content={
+                            <div>
+                              <div
+                                className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                              >
+                                <p
+                                  className="flex-80"
+                                >
+                                  Upload Air Schedules Sheet
+                                </p>
+                                <FileUploader
+                                  dispatchFn={[Function]}
+                                  formClasses=""
+                                  size="small"
+                                  square={false}
+                                  t={[Function]}
+                                  text="Air Schedules .xlsx"
+                                  theme={
+                                    Object {
+                                      "colors": Object {
+                                        "primary": "#333",
+                                        "secondary": "#fafafa",
+                                      },
+                                    }
+                                  }
+                                  tooltip=""
+                                  type="xlsx"
+                                  uploadFn={null}
+                                />
+                              </div>
+                              <div
+                                className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                              >
+                                <p
+                                  className="flex-80"
+                                >
+                                  Upload Train Schedules Sheet
+                                </p>
+                                <FileUploader
+                                  dispatchFn={[Function]}
+                                  formClasses=""
+                                  size="small"
+                                  square={false}
+                                  t={[Function]}
+                                  text="Train Schedules .xlsx"
+                                  theme={
+                                    Object {
+                                      "colors": Object {
+                                        "primary": "#333",
+                                        "secondary": "#fafafa",
+                                      },
+                                    }
+                                  }
+                                  tooltip=""
+                                  type="xlsx"
+                                  uploadFn={null}
+                                />
+                              </div>
+                              <div
+                                className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                              >
+                                <p
+                                  className="flex-80"
+                                >
+                                  Upload Vessel Schedules Sheet
+                                </p>
+                                <FileUploader
+                                  dispatchFn={[Function]}
+                                  formClasses=""
+                                  size="small"
+                                  square={false}
+                                  t={[Function]}
+                                  text="Vessel Schedules .xlsx"
+                                  theme={
+                                    Object {
+                                      "colors": Object {
+                                        "primary": "#333",
+                                        "secondary": "#fafafa",
+                                      },
+                                    }
+                                  }
+                                  tooltip=""
+                                  type="xlsx"
+                                  uploadFn={null}
+                                />
+                              </div>
+                              <div
+                                className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                              >
+                                <p
+                                  className="flex-80"
+                                >
+                                  Upload Trucking Schedules Sheet
+                                </p>
+                                <FileUploader
+                                  dispatchFn={[Function]}
+                                  formClasses=""
+                                  size="small"
+                                  square={false}
+                                  t={[Function]}
+                                  text="Truck Schedules .xlsx"
+                                  theme={
+                                    Object {
+                                      "colors": Object {
+                                        "primary": "#333",
+                                        "secondary": "#fafafa",
+                                      },
+                                    }
+                                  }
+                                  tooltip=""
+                                  type="xlsx"
+                                  uploadFn={null}
+                                />
+                              </div>
+                            </div>
+                          }
+                          contentHeader=""
+                          faClass="fa fa-cloud-upload"
+                          handleCollapser={[Function]}
+                          headerWrapClasses=""
+                          mainWrapperStyle={Object {}}
+                          minHeight=""
+                          parentClass=""
+                          showArrow={true}
+                          startCollapsed={false}
+                          text="Upload Data"
+                          theme={
+                            Object {
+                              "colors": Object {
+                                "primary": "#333",
+                                "secondary": "#fafafa",
+                              },
+                            }
+                          }
+                        />
+                        <CollapsingBar
+                          collapsed={true}
+                          content={
+                            <div>
+                              <div
+                                className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                              >
+                                <p
+                                  className="flex-100"
+                                >
+                                  Download Schedules Sheet
+                                </p>
+                                <DocumentsDownloader
+                                  disabled={false}
+                                  documentDispatch={null}
+                                  downloadUrls={Object {}}
+                                  loading={false}
+                                  options={Object {}}
+                                  size="small"
+                                  square={false}
+                                  t={[Function]}
+                                  target="schedules"
+                                  theme={
+                                    Object {
+                                      "colors": Object {
+                                        "primary": "#333",
+                                        "secondary": "#fafafa",
+                                      },
+                                    }
+                                  }
+                                  tooltip=""
+                                />
+                              </div>
+                            </div>
+                          }
+                          contentHeader=""
+                          faClass="fa fa-cloud-download"
+                          handleCollapser={[Function]}
+                          headerWrapClasses=""
+                          mainWrapperStyle={Object {}}
+                          minHeight=""
+                          parentClass=""
+                          showArrow={true}
+                          startCollapsed={false}
+                          text="Download Data"
+                          theme={
+                            Object {
+                              "colors": Object {
+                                "primary": "#333",
+                                "secondary": "#fafafa",
+                              },
+                            }
+                          }
+                        />
+                        
+                      </div>
+                    }
+                    flexOptions=""
+                    header="Data manager"
+                  />,
+                ]
+              }
+              t={[Function]}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              toggleNew={null}
+            />
+          </Tab>
+        </Tabs>
+      </div>
+    </div>
+  </div>
+</GenericError>
+`;
+
+exports[`scheduleData is falsy 1`] = `""`;
+
+exports[`scope.show_beta_features is truthy 1`] = `
+<GenericError
+  t={[Function]}
+  theme={
+    Object {
+      "colors": Object {
+        "primary": "#333",
+        "secondary": "#fafafa",
+      },
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left"
+  >
+    <div
+      className="component_view flex layout-row layout-align-start-start"
+    >
+      <div
+        className="flex-100 layout-row layout-align-center-start"
+      >
+        <Tabs
+          defaultActiveTabIndex={0}
+          paddingFixes={true}
+          wrapperTabs="layout-row flex-45 flex-sm-40 flex-xs-80"
+        >
+          <Tab
+            extraClick={[Function]}
+            icon=""
+            isActive={false}
+            isUniq={false}
+            linkClassName=""
+            mot="air"
+            onClick={null}
+            tabIndex={0}
+            tabTitle="air"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          >
+            <CardRoutesIndex
+              adminDispatch={[Function]}
+              handleClick={[Function]}
+              hubs={Array []}
+              itineraries={Array []}
+              limit={9}
+              mot="air"
+              newText=""
+              scope={
+                Object {
+                  "modes_of_transport": Object {
+                    "air": "Air",
+                  },
+                  "show_beta_features": true,
+                }
+              }
+              sideMenuNodes={
+                Array [
+                  <SideOptionsBox
+                    content={
+                      <div
+                        className="flex-100 layout-row layout-wrap layout-align-center-start"
+                      >
+                        <CollapsingBar
+                          collapsed={true}
+                          content={
+                            <div>
+                              <div
+                                className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                              >
+                                <p
+                                  className="flex-80"
+                                >
+                                  Upload Air Schedules Sheet
+                                </p>
+                                <FileUploader
+                                  dispatchFn={[Function]}
+                                  formClasses=""
+                                  size="small"
+                                  square={false}
+                                  t={[Function]}
+                                  text="Air Schedules .xlsx"
+                                  theme={
+                                    Object {
+                                      "colors": Object {
+                                        "primary": "#333",
+                                        "secondary": "#fafafa",
+                                      },
+                                    }
+                                  }
+                                  tooltip=""
+                                  type="xlsx"
+                                  uploadFn={null}
+                                />
+                              </div>
+                              <div
+                                className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                              >
+                                <p
+                                  className="flex-80"
+                                >
+                                  Upload Train Schedules Sheet
+                                </p>
+                                <FileUploader
+                                  dispatchFn={[Function]}
+                                  formClasses=""
+                                  size="small"
+                                  square={false}
+                                  t={[Function]}
+                                  text="Train Schedules .xlsx"
+                                  theme={
+                                    Object {
+                                      "colors": Object {
+                                        "primary": "#333",
+                                        "secondary": "#fafafa",
+                                      },
+                                    }
+                                  }
+                                  tooltip=""
+                                  type="xlsx"
+                                  uploadFn={null}
+                                />
+                              </div>
+                              <div
+                                className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                              >
+                                <p
+                                  className="flex-80"
+                                >
+                                  Upload Vessel Schedules Sheet
+                                </p>
+                                <FileUploader
+                                  dispatchFn={[Function]}
+                                  formClasses=""
+                                  size="small"
+                                  square={false}
+                                  t={[Function]}
+                                  text="Vessel Schedules .xlsx"
+                                  theme={
+                                    Object {
+                                      "colors": Object {
+                                        "primary": "#333",
+                                        "secondary": "#fafafa",
+                                      },
+                                    }
+                                  }
+                                  tooltip=""
+                                  type="xlsx"
+                                  uploadFn={null}
+                                />
+                              </div>
+                              <div
+                                className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                              >
+                                <p
+                                  className="flex-80"
+                                >
+                                  Upload Trucking Schedules Sheet
+                                </p>
+                                <FileUploader
+                                  dispatchFn={[Function]}
+                                  formClasses=""
+                                  size="small"
+                                  square={false}
+                                  t={[Function]}
+                                  text="Truck Schedules .xlsx"
+                                  theme={
+                                    Object {
+                                      "colors": Object {
+                                        "primary": "#333",
+                                        "secondary": "#fafafa",
+                                      },
+                                    }
+                                  }
+                                  tooltip=""
+                                  type="xlsx"
+                                  uploadFn={null}
+                                />
+                              </div>
+                            </div>
+                          }
+                          contentHeader=""
+                          faClass="fa fa-cloud-upload"
+                          handleCollapser={[Function]}
+                          headerWrapClasses=""
+                          mainWrapperStyle={Object {}}
+                          minHeight=""
+                          parentClass=""
+                          showArrow={true}
+                          startCollapsed={false}
+                          text="Upload Data"
+                          theme={
+                            Object {
+                              "colors": Object {
+                                "primary": "#333",
+                                "secondary": "#fafafa",
+                              },
+                            }
+                          }
+                        />
+                        <CollapsingBar
+                          collapsed={true}
+                          content={
+                            <div>
+                              <div
+                                className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                              >
+                                <p
+                                  className="flex-100"
+                                >
+                                  Download Schedules Sheet
+                                </p>
+                                <DocumentsDownloader
+                                  disabled={false}
+                                  documentDispatch={null}
+                                  downloadUrls={Object {}}
+                                  loading={false}
+                                  options={Object {}}
+                                  size="small"
+                                  square={false}
+                                  t={[Function]}
+                                  target="schedules"
+                                  theme={
+                                    Object {
+                                      "colors": Object {
+                                        "primary": "#333",
+                                        "secondary": "#fafafa",
+                                      },
+                                    }
+                                  }
+                                  tooltip=""
+                                />
+                              </div>
+                            </div>
+                          }
+                          contentHeader=""
+                          faClass="fa fa-cloud-download"
+                          handleCollapser={[Function]}
+                          headerWrapClasses=""
+                          mainWrapperStyle={Object {}}
+                          minHeight=""
+                          parentClass=""
+                          showArrow={true}
+                          startCollapsed={false}
+                          text="Download Data"
+                          theme={
+                            Object {
+                              "colors": Object {
+                                "primary": "#333",
+                                "secondary": "#fafafa",
+                              },
+                            }
+                          }
+                        />
+                        <CollapsingBar
+                          collapsed={true}
+                          content={
+                            <div
+                              className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                            >
+                              <div
+                                className="flex-none layout-row"
+                              >
+                                <RoundButton
+                                  active={true}
+                                  back={false}
+                                  classNames=""
+                                  disabled={false}
+                                  flexContainer="100"
+                                  handleDisabled={null}
+                                  handleNext={[Function]}
+                                  icon=""
+                                  iconClass="fa-plus"
+                                  inverse={false}
+                                  size="small"
+                                  text="New"
+                                  theme={
+                                    Object {
+                                      "colors": Object {
+                                        "primary": "#333",
+                                        "secondary": "#fafafa",
+                                      },
+                                    }
+                                  }
+                                />
+                              </div>
+                            </div>
+                          }
+                          contentHeader=""
+                          faClass="fa fa-plus-circle"
+                          handleCollapser={[Function]}
+                          headerWrapClasses=""
+                          mainWrapperStyle={Object {}}
+                          minHeight=""
+                          parentClass=""
+                          showArrow={true}
+                          startCollapsed={false}
+                          text="Create new schedules"
+                          theme={
+                            Object {
+                              "colors": Object {
+                                "primary": "#333",
+                                "secondary": "#fafafa",
+                              },
+                            }
+                          }
+                        />
+                      </div>
+                    }
+                    flexOptions=""
+                    header="Data manager"
+                  />,
+                ]
+              }
+              t={[Function]}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              toggleNew={null}
+            />
+          </Tab>
+        </Tabs>
+      </div>
+    </div>
+  </div>
+</GenericError>
+`;
+
+exports[`shallow render 1`] = `
+<GenericError
+  t={[Function]}
+  theme={
+    Object {
+      "colors": Object {
+        "primary": "#333",
+        "secondary": "#fafafa",
+      },
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left"
+  >
+    <div
+      className="component_view flex layout-row layout-align-start-start"
+    >
+      <div
+        className="flex-100 layout-row layout-align-center-start"
+      >
+        <Tabs
+          defaultActiveTabIndex={0}
+          paddingFixes={true}
+          wrapperTabs="layout-row flex-45 flex-sm-40 flex-xs-80"
+        >
+          <Tab
+            extraClick={[Function]}
+            icon=""
+            isActive={false}
+            isUniq={false}
+            linkClassName=""
+            mot="air"
+            onClick={null}
+            tabIndex={0}
+            tabTitle="air"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          >
+            <CardRoutesIndex
+              adminDispatch={[Function]}
+              handleClick={[Function]}
+              hubs={Array []}
+              itineraries={Array []}
+              limit={9}
+              mot="air"
+              newText=""
+              scope={
+                Object {
+                  "modes_of_transport": Object {
+                    "air": "Air",
+                  },
+                }
+              }
+              sideMenuNodes={
+                Array [
+                  <SideOptionsBox
+                    content={
+                      <div
+                        className="flex-100 layout-row layout-wrap layout-align-center-start"
+                      >
+                        <CollapsingBar
+                          collapsed={true}
+                          content={
+                            <div>
+                              <div
+                                className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                              >
+                                <p
+                                  className="flex-80"
+                                >
+                                  Upload Air Schedules Sheet
+                                </p>
+                                <FileUploader
+                                  dispatchFn={[Function]}
+                                  formClasses=""
+                                  size="small"
+                                  square={false}
+                                  t={[Function]}
+                                  text="Air Schedules .xlsx"
+                                  theme={
+                                    Object {
+                                      "colors": Object {
+                                        "primary": "#333",
+                                        "secondary": "#fafafa",
+                                      },
+                                    }
+                                  }
+                                  tooltip=""
+                                  type="xlsx"
+                                  uploadFn={null}
+                                />
+                              </div>
+                              <div
+                                className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                              >
+                                <p
+                                  className="flex-80"
+                                >
+                                  Upload Train Schedules Sheet
+                                </p>
+                                <FileUploader
+                                  dispatchFn={[Function]}
+                                  formClasses=""
+                                  size="small"
+                                  square={false}
+                                  t={[Function]}
+                                  text="Train Schedules .xlsx"
+                                  theme={
+                                    Object {
+                                      "colors": Object {
+                                        "primary": "#333",
+                                        "secondary": "#fafafa",
+                                      },
+                                    }
+                                  }
+                                  tooltip=""
+                                  type="xlsx"
+                                  uploadFn={null}
+                                />
+                              </div>
+                              <div
+                                className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                              >
+                                <p
+                                  className="flex-80"
+                                >
+                                  Upload Vessel Schedules Sheet
+                                </p>
+                                <FileUploader
+                                  dispatchFn={[Function]}
+                                  formClasses=""
+                                  size="small"
+                                  square={false}
+                                  t={[Function]}
+                                  text="Vessel Schedules .xlsx"
+                                  theme={
+                                    Object {
+                                      "colors": Object {
+                                        "primary": "#333",
+                                        "secondary": "#fafafa",
+                                      },
+                                    }
+                                  }
+                                  tooltip=""
+                                  type="xlsx"
+                                  uploadFn={null}
+                                />
+                              </div>
+                              <div
+                                className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                              >
+                                <p
+                                  className="flex-80"
+                                >
+                                  Upload Trucking Schedules Sheet
+                                </p>
+                                <FileUploader
+                                  dispatchFn={[Function]}
+                                  formClasses=""
+                                  size="small"
+                                  square={false}
+                                  t={[Function]}
+                                  text="Truck Schedules .xlsx"
+                                  theme={
+                                    Object {
+                                      "colors": Object {
+                                        "primary": "#333",
+                                        "secondary": "#fafafa",
+                                      },
+                                    }
+                                  }
+                                  tooltip=""
+                                  type="xlsx"
+                                  uploadFn={null}
+                                />
+                              </div>
+                            </div>
+                          }
+                          contentHeader=""
+                          faClass="fa fa-cloud-upload"
+                          handleCollapser={[Function]}
+                          headerWrapClasses=""
+                          mainWrapperStyle={Object {}}
+                          minHeight=""
+                          parentClass=""
+                          showArrow={true}
+                          startCollapsed={false}
+                          text="Upload Data"
+                          theme={
+                            Object {
+                              "colors": Object {
+                                "primary": "#333",
+                                "secondary": "#fafafa",
+                              },
+                            }
+                          }
+                        />
+                        <CollapsingBar
+                          collapsed={true}
+                          content={
+                            <div>
+                              <div
+                                className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                              >
+                                <p
+                                  className="flex-100"
+                                >
+                                  Download Schedules Sheet
+                                </p>
+                                <DocumentsDownloader
+                                  disabled={false}
+                                  documentDispatch={null}
+                                  downloadUrls={Object {}}
+                                  loading={false}
+                                  options={Object {}}
+                                  size="small"
+                                  square={false}
+                                  t={[Function]}
+                                  target="schedules"
+                                  theme={
+                                    Object {
+                                      "colors": Object {
+                                        "primary": "#333",
+                                        "secondary": "#fafafa",
+                                      },
+                                    }
+                                  }
+                                  tooltip=""
+                                />
+                              </div>
+                            </div>
+                          }
+                          contentHeader=""
+                          faClass="fa fa-cloud-download"
+                          handleCollapser={[Function]}
+                          headerWrapClasses=""
+                          mainWrapperStyle={Object {}}
+                          minHeight=""
+                          parentClass=""
+                          showArrow={true}
+                          startCollapsed={false}
+                          text="Download Data"
+                          theme={
+                            Object {
+                              "colors": Object {
+                                "primary": "#333",
+                                "secondary": "#fafafa",
+                              },
+                            }
+                          }
+                        />
+                        
+                      </div>
+                    }
+                    flexOptions=""
+                    header="Data manager"
+                  />,
+                ]
+              }
+              t={[Function]}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              toggleNew={null}
+            />
+          </Tab>
+        </Tabs>
+      </div>
+    </div>
+  </div>
+</GenericError>
+`;
+
+exports[`state.showList is false 1`] = `
+<GenericError
+  t={[Function]}
+  theme={
+    Object {
+      "colors": Object {
+        "primary": "#333",
+        "secondary": "#fafafa",
+      },
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left"
+  >
+    <div
+      className="component_view flex layout-row layout-align-start-start"
+    >
+      <div
+        className="layout-row flex-100 layout-wrap layout-align-start-center"
+      >
+        <AdminScheduleGenerator
+          hubs={Array []}
+          itineraries={
+            Array [
+              Object {
+                "modes_of_transport": "air",
+              },
+            ]
+          }
+          itinerary={Object {}}
+          t={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          toggleNew={[Function]}
+          vehicleTypes={Array []}
+        />
+      </div>
+    </div>
+  </div>
+</GenericError>
+`;

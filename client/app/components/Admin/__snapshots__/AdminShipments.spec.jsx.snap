@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<GenericError
+  t={[Function]}
+  theme={
+    Object {
+      "colors": Object {
+        "primary": "#333",
+        "secondary": "#fafafa",
+      },
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
+  >
+    <Switch
+      className="flex"
+    >
+      <Route
+        exact={true}
+        path="/admin/shipments"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/shipments/view/:id"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/shipments/requested"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/shipments/open"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/shipments/finished"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/shipments/rejected"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/shipments/archived"
+        render={[Function]}
+      />
+    </Switch>
+  </div>
+</GenericError>
+`;
+
+exports[`shipments is falsy 1`] = `
+<h1>
+  NO SHIPMENTS DATA (OR REFRESH PAGE)
+</h1>
+`;

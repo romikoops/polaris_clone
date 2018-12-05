@@ -1,0 +1,407 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`charges is falsy 1`] = `""`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start layout-wrap container"
+>
+  <div
+    className="flex-100 layout-row layout-align-space-between-center header_bar_grey"
+  >
+    <div
+      className="flex-30 layout-row layout-align-start-center"
+    >
+      <p
+        className="flex-none text"
+      >
+        TITLE
+      </p>
+    </div>
+    <div
+      className="flex-25 layout-row layout-align-end-center"
+    >
+      <NamedSelect
+        className="flex-100"
+        onChange={[Function]}
+        options={Array []}
+        value={false}
+      />
+    </div>
+    <div
+      className="flex-none layout-row layout-align-center-center"
+      onClick={[Function]}
+    >
+      <i
+        className="fa fa-times clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-start-start layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row cargo_class_row"
+    >
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            LCL
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 20ft
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 40ft
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 40ft HQ
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-start layout-wrap fee_row_container"
+    >
+      <PricingRangeRow
+        className="flex-100"
+        editCharge={Object {}}
+        fee={
+          Object {
+            "effective_date": undefined,
+            "expiration_date": undefined,
+            "key": "foo",
+            "name": undefined,
+            "range": true,
+          }
+        }
+        handleChange={[Function]}
+        handleDateEdit={[Function]}
+        handleRangeChange={[Function]}
+        handleSelect={[Function]}
+        initialEdit={false}
+        isEditing={[Function]}
+        loadType=""
+        saveEdit={[Function]}
+        selectOptions={Object {}}
+        t={[Function]}
+        target="charges"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+      <PricingRow
+        className="flex-100"
+        editCharge={Object {}}
+        fee={
+          Object {
+            "effective_date": undefined,
+            "expiration_date": undefined,
+            "key": "bar",
+            "name": undefined,
+          }
+        }
+        handleChange={[Function]}
+        handleDateEdit={[Function]}
+        handleSelect={[Function]}
+        initialEdit={false}
+        isEditing={[Function]}
+        loadType=""
+        saveEdit={[Function]}
+        selectOptions={Object {}}
+        t={[Function]}
+        target="charges"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`title is falsy 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start layout-wrap container"
+>
+  <div
+    className="flex-100 layout-row layout-align-space-between-center header_bar_grey"
+  >
+    <div
+      className="flex-30 layout-row layout-align-start-center"
+    >
+      <p
+        className="flex-none text"
+      >
+        Fees & Charges
+      </p>
+    </div>
+    <div
+      className="flex-25 layout-row layout-align-end-center"
+    >
+      <NamedSelect
+        className="flex-100"
+        onChange={[Function]}
+        options={Array []}
+        value={false}
+      />
+    </div>
+    <div
+      className="flex-none layout-row layout-align-center-center"
+      onClick={[Function]}
+    >
+      <i
+        className="fa fa-times clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-start-start layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row cargo_class_row"
+    >
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            LCL
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 20ft
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 40ft
+          </p>
+        </div>
+        <div
+          className="flex-none cargo_class_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-start-center cargo_class_button_inactive cargo_class_button"
+        onClick={null}
+        style={
+          Object {
+            "background": "#E0E0E0",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center  cargo_class_button_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            FCL 40ft HQ
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-start layout-wrap fee_row_container"
+    >
+      <PricingRangeRow
+        className="flex-100"
+        editCharge={Object {}}
+        fee={
+          Object {
+            "effective_date": undefined,
+            "expiration_date": undefined,
+            "key": "foo",
+            "name": undefined,
+            "range": true,
+          }
+        }
+        handleChange={[Function]}
+        handleDateEdit={[Function]}
+        handleRangeChange={[Function]}
+        handleSelect={[Function]}
+        initialEdit={false}
+        isEditing={[Function]}
+        loadType=""
+        saveEdit={[Function]}
+        selectOptions={Object {}}
+        t={[Function]}
+        target="charges"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+      <PricingRow
+        className="flex-100"
+        editCharge={Object {}}
+        fee={
+          Object {
+            "effective_date": undefined,
+            "expiration_date": undefined,
+            "key": "bar",
+            "name": undefined,
+          }
+        }
+        handleChange={[Function]}
+        handleDateEdit={[Function]}
+        handleSelect={[Function]}
+        initialEdit={false}
+        isEditing={[Function]}
+        loadType=""
+        saveEdit={[Function]}
+        selectOptions={Object {}}
+        t={[Function]}
+        target="charges"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;

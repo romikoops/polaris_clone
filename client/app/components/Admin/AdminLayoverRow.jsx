@@ -25,11 +25,13 @@ class AdminLayoverRow extends Component {
 
     return icon
   }
+
   static dashedGradient (color1, color2) {
     return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${
       color1
     }, ${color2})`
   }
+
   render () {
     const {
       t, theme, schedule, hub, itinerary
@@ -60,14 +62,19 @@ class AdminLayoverRow extends Component {
             </div>
             <div className={`flex-80 ${styles.header_hub}`}>
               <div className="flex-100 layout-row">
-                <h4 className="flex-100"> {itinerary.name} </h4>
+                <h4 className="flex-100">
+                  {' '}
+                  {itinerary.name}
+                  {' '}
+                </h4>
               </div>
               <div className="flex-100">
                 <p className="flex-100">
                   {' '}
                   {hub.hub_code
                     ? hub.hub_code
-                    : ''}{' '}
+                    : ''}
+                  {' '}
                 </p>
               </div>
             </div>
@@ -87,11 +94,13 @@ class AdminLayoverRow extends Component {
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
-                  {moment(startTime).format('YYYY-MM-DD')}{' '}
+                  {moment(startTime).format('YYYY-MM-DD')}
+                  {' '}
                 </p>
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
-                  {moment(startTime).format('HH:mm')}{' '}
+                  {moment(startTime).format('HH:mm')}
+                  {' '}
                 </p>
               </div>
             </div>
@@ -108,11 +117,13 @@ class AdminLayoverRow extends Component {
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
-                  {moment(endTime).format('YYYY-MM-DD')}{' '}
+                  {moment(endTime).format('YYYY-MM-DD')}
+                  {' '}
                 </p>
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
-                  {moment(endTime).format('HH:mm')}{' '}
+                  {moment(endTime).format('HH:mm')}
+                  {' '}
                 </p>
               </div>
             </div>
@@ -124,7 +135,7 @@ class AdminLayoverRow extends Component {
 }
 AdminLayoverRow.propTypes = {
   t: PropTypes.func.isRequired,
-  theme: PropTypes.theme.isRequired,
+  theme: PropTypes.theme,
   schedule: PropTypes.objectOf(PropTypes.object).isRequired,
   hub: PropTypes.objectOf(PropTypes.any).isRequired,
   itinerary: PropTypes.objectOf(PropTypes.any).isRequired
