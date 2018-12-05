@@ -7,13 +7,14 @@ class LocationsController < ApplicationController
   def index
     query = params[:query]
     countries = [params[:countries]].map { |code| Country.find_by_code(code.upcase)&.name }.compact
-    raw_results = Location.autocomplete(query)
-    results = if countries.empty?
-                raw_results
-              else
-                raw_results.where(country: countries)
-                # raw_results.select { |result| countries.include?(result.country) }
-              end
+    country_query = if countries.empty?
+      Location.all
+    else
+      Location.where(country: countries)
+    end
+    valid_query = country_query.where.not(city: nil, country: nil, postal_code: nil)
+    results = valid_query.autocomplete(query)
+    
     response_handler(
       results: results.map(&:as_result_json)
     )
