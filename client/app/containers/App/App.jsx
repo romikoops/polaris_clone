@@ -36,11 +36,6 @@ class App extends Component {
   }
 
   componentDidMount () {
-    const { appDispatch, tenant } = this.props
-    if (tenant) {
-      appDispatch.fetchCurrencies()
-    }
-
     this.isUserExpired()
   }
 
