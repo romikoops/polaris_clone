@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
+import { get } from 'lodash'
 import styles from './QuoteChargeBreakdown.scss'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import {
@@ -72,10 +73,11 @@ class QuoteChargeBreakdown extends Component {
   }
 
   motName (name) {
-    const {mot} = this.props
+    const { mot } = this.props
     if (name === 'Freight') {
       return `${capitalize(mot)} ${name}`
     }
+
     return name
   }
 
@@ -88,16 +90,18 @@ class QuoteChargeBreakdown extends Component {
     const currencySections = {}
     const currencyTotals = {}
     contentSections.forEach((price) => {
-      const currency = ['export', 'import'].includes(key) ? price[1].currency : price[1].total.currency
-      const value = ['export', 'import'].includes(key) ? price[1].value : price[1].total.value
-      if (!currencySections[currency]) {
-        currencySections[currency] = []
+      const currency = ['export', 'import'].includes(key) ? get(price, ['1', 'currency'], null) : get(price, ['1', 'total', 'currency'], null)
+      const value = ['export', 'import'].includes(key) ? get(price, ['1', 'value'], null) : get(price, ['1', 'total', 'value'], null)
+      if (value && currency) {
+        if (!currencySections[currency]) {
+          currencySections[currency] = []
+        }
+        if (!currencyTotals[currency]) {
+          currencyTotals[currency] = 0.0
+        }
+        currencyTotals[currency] += parseFloat(value)
+        currencySections[currency].push(price)
       }
-      if (!currencyTotals[currency]) {
-        currencyTotals[currency] = 0.0
-      }
-      currencyTotals[currency] += parseFloat(value)
-      currencySections[currency].push(price)
     })
 
     return Object.entries(currencySections).map(currencyFees => (
