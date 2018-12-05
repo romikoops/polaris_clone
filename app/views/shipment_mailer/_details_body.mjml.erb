@@ -3,10 +3,10 @@
 <mj-wrapper full-width="full-width"  padding="0px">
   <mj-section padding="0 5%">
     <mj-column width="100%"  padding="0px">
-      <mj-text width="45%">
+      <mj-text>
         <h3 style="margin: 5px 0;"><span class="bold">Shipment ID: <%= @shipment.imc_reference %></span></h3>
       </mj-text>
-      <mj-text width="45%">
+      <mj-text>
         <p style="margin: 5px 0;"><span class="bold">Booking placed at:</span> <%= @shipment.booking_placed_at.strftime('%d.%m.%Y %H:%M') %></p>
       </mj-text>
       
@@ -162,7 +162,7 @@
 
 <mj-spacer height="15px" />
 <mj-wrapper full-width="full-width" padding="0px">
-  <%= render "cargo_details" %>
+  <%= render "cargo_details.mjml" %>
 </mj-wrapper>
 
 <mj-spacer height="15px" />
