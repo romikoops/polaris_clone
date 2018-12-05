@@ -18,7 +18,7 @@
     </mj-column>
     
 </mj-section>
-<%= render "details_body" %>
+<%= render "details_body.mjml" %>
 <mj-section full-width="full-width" padding="0px">
     <mj-column width="40%">
       <mj-button href="<%= @redirects_base_url %>accept" width="90%" background-color="#04CC36">

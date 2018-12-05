@@ -1,88 +1,91 @@
 <mj-wrapper border="1px solid #f3f3f3" border-top="none" padding-top="60px">
 
-<mj-section padding="0px">
+  <mj-section padding="0px">
     <mj-column padding="0 2.5%">
-      <mj-text line-height="24px" font-size="27px;" padding-left="34px">
+      <mj-text line-height="24px" font-size="27px" padding-left="34px">
         <p>
-          Hello <%= @email %>
-        </p> 
+          Hello
+          <%= @email %>
+        </p>
       </mj-text>
     </mj-column>
     <mj-column>
-        <mj-image width="200px" src="<%= @shipment.tenant.theme["logoLarge"] %>" />
-      </mj-column>
+      <mj-image width="200px" src="<%= @shipment.tenant.theme[" logoLarge"] %>" />
+        <mj-spacer height="25px" />
+    </mj-column>
   </mj-section>
-  <mj-spacer height="25px" />
-  <%# <mj-divider border-width="1px" border-style="solid" border-color="#e10f21" width="90%" /> %>
+
   <mj-section full-width="full-width" padding="0px">
     <mj-column width="100%" padding="0 2.5%">
       <mj-text line-height="24px">
         <p>
-          <%= @user.full_name %> from <strong><%= @shipment.tenant.name %></strong> <br>
+          <%= @user.full_name %> from <strong>
+            <%= @shipment.tenant.name %></strong> <br>
           prepared for you a document with the best quotations for the itinerary:
-        </p> 
+        </p>
       </mj-text>
     </mj-column>
   </mj-section>
 
-  <mj-section width="100%" background-color="#f3f3f3" margin="40px">
+  <mj-section background-color="#f3f3f3">
     <mj-group>
       <mj-column width="130px">
         <% if @shipments.first.mode_of_transport == "ocean" %>
-          <% mot_link = "https://assets.itsmycargo.com/assets/icons/anchor-solid-1.png" %>
+        <% mot_link = "https://assets.itsmycargo.com/assets/icons/anchor-solid-1.png" %>
         <% end %>
         <% if @shipments.first.mode_of_transport == "air" %>
-          <% mot_link = "https://assets.itsmycargo.com/assets/icons/plane-solid-1.png" %>
+        <% mot_link = "https://assets.itsmycargo.com/assets/icons/plane-solid-1.png" %>
         <% end %>
         <mj-image padding-top="20px" padding-bottom="20px" padding-left="0" padding-right="0" width="30px" src="<%= mot_link %>"></mj-image>
       </mj-column>
       <mj-column>
-        <mj-text line-height="16px" padding="0" margin-left="-40px" font-size="18px">
-          <p>From: <strong><%= @shipments.first.origin_hub.name %></strong></p>
-          <p>To: <strong><%= @shipments.first.destination_hub.name %></strong> </p>
+        <mj-text line-height="16px" padding="0" font-size="18px">
+          <p>From: <strong>
+              <%= @shipments.first.origin_hub.name %></strong></p>
+          <p>To: <strong>
+              <%= @shipments.first.destination_hub.name %></strong> </p>
         </mj-text>
       </mj-column>
       <mj-column>
-        <mj-image width="30px" src=""></mj-image>        
+        <mj-image width="30px" src=""></mj-image>
       </mj-column>
-      </mj-group>
+    </mj-group>
   </mj-section>
 
   <mj-section full-width="full-width" padding="0px">
     <mj-column width="100%" padding="0 2.5%">
-        <mj-text line-height="24px">
-          <p>
-            Please check in the attachments of this email for the pdf.
-          </p>
+      <mj-text line-height="24px">
+        <p>
+          Please check in the attachments of this email for the pdf.
+        </p>
       </mj-text>
     </mj-column>
   </mj-section>
+</mj-wrapper>
 
 
 
+<mj-wrapper full-width="full-width" padding="0px">
+  <% if defined? closing_text %>
+  <mj-section full-width="full-width" padding="0px">
+    <mj-column width="100%" padding="0 2.5%">
+      <mj-text line-height="24px">
+        <p>
+          <%= closing_text %>
+        </p>
+      </mj-text>
+    </mj-column>
+  </mj-section>
+  <% end %>
+  <mj-section full-width="full-width" padding="0px">
+    <mj-column width="100%" padding="0 2.5%">
+      <mj-text>
+        <p>For further information regarding the quotations please contact XXXX,</p>
+        <p>Thank you for your interest and best regards,</p>
+        <p></p>
 
-  <mj-wrapper full-width="full-width" padding="0px">
-    <% if defined? closing_text %>
-      <mj-section full-width="full-width" padding="0px">
-        <mj-column width="100%" padding="0 2.5%">
-            <mj-text line-height="24px">
-            <p>
-              <%= closing_text %>
-            </p>
-          </mj-text>
-        </mj-column>
-      </mj-section>
-      <% end %>
-        <mj-section full-width="full-width" padding="0px">
-          <mj-column width="100%" padding="0 2.5%">
-            <mj-text>
-              <p>For further information regarding the quotations please contact XXXX,</p>
-              <p>Thank you for your interest and best regards,</p>
-              <p></p>
-              
-            </mj-text>
+      </mj-text>
 
-          </mj-column>
-        </mj-section>
-        </mj-wrapper>
-  </mj-wrapper>
+    </mj-column>
+  </mj-section>
+</mj-wrapper>
