@@ -183,11 +183,12 @@ deploy:
     - export CI_ENVIRONMENT_SLUG=$(cat ci_environment_slug.txt)
     - export TARGET_URL=https://$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
     - export REPORT_PATH=$CI_PROJECT_DIR
+    - export FIVEMAT_PROFILE=1
     - 'echo "Target: $TARGET_URL"'
     - dockerize -wait=tcp://localhost:4444 -timeout=5m
 
   script:
-    - cd /app ; bin/cucumber --tags 'not @wip' --format pretty --format junit --out $REPORT_PATH/
+    - cd /app ; bin/cucumber --tags 'not @wip' --format Fivemat --format junit --out $REPORT_PATH/
 
   dependencies:
     - deploy
@@ -220,12 +221,13 @@ deploy:
     - export CROSSBROWSER_VERSION=$2
     - export CROSSBROWSER_PLATFORM=$3
     - export CI_ENVIRONMENT_SLUG=$(cat ci_environment_slug.txt)
-    - export TARGET_URL=$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
+    - export TARGET_URL=https://$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
     - export REPORT_PATH=$CI_PROJECT_DIR
+    - export FIVEMAT_PROFILE=1
     - 'echo "Target: $TARGET_URL"'
 
   script:
-    - cd /app ; bin/cucumber --tags '@Smoke' --format pretty --format junit --out $REPORT_PATH/
+    - cd /app ; bin/cucumber --tags '@Smoke' --format Fivemat --format junit --out $REPORT_PATH/
 
   allow_failure: true
 
