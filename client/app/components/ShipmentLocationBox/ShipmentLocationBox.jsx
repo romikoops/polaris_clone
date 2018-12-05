@@ -655,7 +655,7 @@ class ShipmentLocationBox extends PureComponent {
       const loadType = shipment.load_type
 
       const prefix = target === 'origin' ? 'pre' : 'on'
-      const indexesToUse = this.state.lastTarget === target ? routes.map((_, i) => i) : filteredRouteIndexes
+      const indexesToUse = filteredRouteIndexes[target]
 
       const availableHubIds = routeFilters.getHubIds(indexesToUse, lookupTablesForRoutes, routes, target)
 
@@ -940,6 +940,7 @@ class ShipmentLocationBox extends PureComponent {
         filteredRouteIndexes.all,
         indexes
       )
+
       newFilteredRouteIndexes.selected = routeFilters.scopeIndexes(
         newFilteredRouteIndexes.origin,
         newFilteredRouteIndexes.destination
@@ -947,7 +948,7 @@ class ShipmentLocationBox extends PureComponent {
 
       let fieldsHaveErrors = false
       if (targetTrucking && newFilteredRouteIndexes[target].length === 0) {
-        newFilteredRouteIndexes[target] = filteredRouteIndexes
+        newFilteredRouteIndexes[target] = filteredRouteIndexes.all
         fieldsHaveErrors = true
         const addressFormsHaveErrors =
           fieldsHaveErrors || prevState[`${counterpart}FieldsHaveErrors`]
