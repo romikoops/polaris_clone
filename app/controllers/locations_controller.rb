@@ -11,7 +11,8 @@ class LocationsController < ApplicationController
     results = if countries.empty?
                 raw_results
               else
-                raw_results.select { |result| countries.include?(result.country) }
+                raw_results.where(country: countries)
+                # raw_results.select { |result| countries.include?(result.country) }
               end
     response_handler(
       results: results.map(&:as_result_json)
