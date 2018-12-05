@@ -11,7 +11,7 @@ import SideOptionsBox from './SideOptions/SideOptionsBox'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
-import { AdminClientTile } from './AdminClientTile'
+import AdminClientTile from './AdminClientTile'
 
 class AdminClientsIndex extends Component {
   constructor (props) {
