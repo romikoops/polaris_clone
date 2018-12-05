@@ -90,7 +90,7 @@ class AdminAddressTile extends Component {
           }
         >
           <input
-            placeholder={t('admin:street')}
+            placeholder={t('user:street')}
             type="text"
             value={editor.street}
             name="street"

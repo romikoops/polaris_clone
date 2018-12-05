@@ -233,6 +233,7 @@ export class TruckingFeeSetter extends Component {
   }
   render () {
     const { variableFees, globalFees, selectOptions } = this.state
+    console.log({ selectOptions })
     const { theme, t } = this.props
     const textStyle =
       theme && theme.colors

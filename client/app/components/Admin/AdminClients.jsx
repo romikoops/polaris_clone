@@ -310,7 +310,7 @@ class AdminClients extends Component {
             type="text"
             value={newClient.number}
             name="number"
-            placeholder={t('user:country')}
+            placeholder={t('user:number')}
             onChange={this.handleFormChange}
             submitAttempted={this.state.newClientAttempt}
             validations="minLength:1"

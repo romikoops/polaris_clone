@@ -1,0 +1,181 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`seeAll is true 1`] = `
+<div
+  className="layout-row flex-100
+         layout-wrap layout-align-start-center searchable"
+>
+  <div
+    className="flex-60 layout-row layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-100 layout-align-start-center greyBg"
+      >
+        <span>
+          <b>
+            TITLE
+          </b>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-end-center searchable_header"
+  >
+    <div
+      className="input_box flex-40 layout-row layout-align-end-center"
+    >
+      <input
+        name="search"
+        onChange={[Function]}
+        placeholder="Search shipments"
+        type="text"
+      />
+    </div>
+  </div>
+  <ShipmentOverviewCard
+    admin={true}
+    confirmShipmentData={Object {}}
+    dispatches={
+      Object {
+        "getClient": [Function],
+        "goTo": [Function],
+      }
+    }
+    hubs={Object {}}
+    noTitle={true}
+    shipments={Array []}
+    t={[Function]}
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <div
+    className="flex-100 layout-row layout-align-end-center"
+  >
+    <div
+      className="flex-none layout-row layout-align-center-center pointy"
+      onClick={[Function]}
+    >
+      <p
+        className="flex-none"
+      >
+        See all
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="layout-row flex-100
+         layout-wrap layout-align-start-center searchable"
+>
+  <div
+    className="flex-60 layout-row layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-100 layout-align-start-center greyBg"
+      >
+        <span>
+          <b>
+            TITLE
+          </b>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-end-center searchable_header"
+  >
+    <div
+      className="input_box flex-40 layout-row layout-align-end-center"
+    >
+      <input
+        name="search"
+        onChange={[Function]}
+        placeholder="Search shipments"
+        type="text"
+      />
+    </div>
+  </div>
+  <ShipmentOverviewCard
+    admin={true}
+    confirmShipmentData={Object {}}
+    dispatches={
+      Object {
+        "getClient": [Function],
+        "goTo": [Function],
+      }
+    }
+    hubs={Object {}}
+    noTitle={true}
+    shipments={Array []}
+    t={[Function]}
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+</div>
+`;
+
+exports[`title is empty string 1`] = `
+<div
+  className="layout-row flex-100
+         layout-wrap layout-align-start-center searchable"
+>
+  <div
+    className="flex-100 layout-row layout-align-end-center searchable_header"
+  >
+    <div
+      className="input_box flex-40 layout-row layout-align-end-center"
+    >
+      <input
+        name="search"
+        onChange={[Function]}
+        placeholder="Search shipments"
+        type="text"
+      />
+    </div>
+  </div>
+  <ShipmentOverviewCard
+    admin={true}
+    confirmShipmentData={Object {}}
+    dispatches={
+      Object {
+        "getClient": [Function],
+        "goTo": [Function],
+      }
+    }
+    hubs={Object {}}
+    noTitle={true}
+    shipments={Array []}
+    t={[Function]}
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+</div>
+`;

@@ -30,7 +30,7 @@ function AdminPromptConfirm ({
             <RoundButton
               theme={theme}
               size="small"
-              text={t('common:cancel')}
+              text={t('admin:cancel')}
               handleNext={e => deny(e)}
               iconClass="fa-ban"
             />

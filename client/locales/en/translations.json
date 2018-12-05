@@ -180,6 +180,8 @@
     "route_plural": "Routes"
   },
   "admin": {
+      "savePricings":"Save Pricings",
+      "editHub": "Edit Hub",
       "updateShopEmails": "Update Shop Emails",
       "updateQuotationPDFRemarks": "Update PDF Remarks",
       "addRemark": "Add Remark",
@@ -188,8 +190,8 @@
       "shipmentAccepted": "Shipment accepted!",
       "continue":"Continue",
       "uploadSuccessful":"Upload Successful!",
-      "numberCreated:":"No. created:",
-      "numberUpdated:":"No. updateed:",
+      "numberCreated":"No. created:",
+      "numberUpdated":"No. updated:",
       "noResults":"There are no results.",
       "feesAndCharges":"Fees & Charges",
       "baseCurrency":"Base Currency",
@@ -294,7 +296,7 @@
       "editPricing": "Edit Pricing",
       "newPricing":"New Pricing",
       "client":"Client: ",
-      "transportCategory: ":"Transport Category: ",
+      "transportCategory":"Transport Category: ",
       "route": "Route: ",
       "subRoute": "Sub Route: ",
       "cargoClass": "Cargo Class: ",

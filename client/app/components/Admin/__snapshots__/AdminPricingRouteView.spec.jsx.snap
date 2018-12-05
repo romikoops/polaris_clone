@@ -1,0 +1,1501 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`fauxShipment.destination_hub && fauxShipment.destination_hub.photo 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
+>
+  <div
+    className="layout-row flex-95 margin_bottom padding_top"
+  >
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg\\")",
+              }
+            }
+            editTime={false}
+            hub={Object {}}
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+    <div
+      className="layout-row flex-20 layout-align-center-center"
+    >
+      <div
+        className="layout-column flex layout-align-center-center
+              font_adjustaments"
+      >
+        <div
+          className="layout-align-center-center layout-row"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        >
+          <i
+            className="fa fa-anchor  "
+            style={Object {}}
+          />
+        </div>
+      </div>
+    </div>
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(PHOTO)",
+              }
+            }
+            editTime={false}
+            hub={
+              Object {
+                "photo": "PHOTO",
+              }
+            }
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-center-center padding_top"
+  >
+    <div
+      className="flex-95 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <AdminPricingBox
+        adminDispatch={
+          Object {
+            "getRoutePricings": [Function],
+          }
+        }
+        charges={Object {}}
+        closeView={null}
+        itinerary={Object {}}
+        serviceLevels={Object {}}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        title="Open Pricing"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`fauxShipment.origin_hub && fauxShipment.origin_hub.photo 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
+>
+  <div
+    className="layout-row flex-95 margin_bottom padding_top"
+  >
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(PHOTO)",
+              }
+            }
+            editTime={false}
+            hub={
+              Object {
+                "photo": "PHOTO",
+              }
+            }
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+    <div
+      className="layout-row flex-20 layout-align-center-center"
+    >
+      <div
+        className="layout-column flex layout-align-center-center
+              font_adjustaments"
+      >
+        <div
+          className="layout-align-center-center layout-row"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        >
+          <i
+            className="fa fa-anchor  "
+            style={Object {}}
+          />
+        </div>
+      </div>
+    </div>
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
+              }
+            }
+            editTime={false}
+            hub={Object {}}
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-center-center padding_top"
+  >
+    <div
+      className="flex-95 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <AdminPricingBox
+        adminDispatch={
+          Object {
+            "getRoutePricings": [Function],
+          }
+        }
+        charges={Object {}}
+        closeView={null}
+        itinerary={Object {}}
+        serviceLevels={Object {}}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        title="Open Pricing"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`itineraryPricings.itinerary is falsy 1`] = `""`;
+
+exports[`itineraryPricings.userPricings is truthy + !client 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
+>
+  <div
+    className="layout-row flex-95 margin_bottom padding_top"
+  >
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg\\")",
+              }
+            }
+            editTime={false}
+            hub={Object {}}
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+    <div
+      className="layout-row flex-20 layout-align-center-center"
+    >
+      <div
+        className="layout-column flex layout-align-center-center
+              font_adjustaments"
+      >
+        <div
+          className="layout-align-center-center layout-row"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        >
+          <i
+            className="fa fa-anchor  "
+            style={Object {}}
+          />
+        </div>
+      </div>
+    </div>
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
+              }
+            }
+            editTime={false}
+            hub={Object {}}
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-center-center padding_top"
+  >
+    <div
+      className="flex-95 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <AdminPricingBox
+        adminDispatch={
+          Object {
+            "getRoutePricings": [Function],
+          }
+        }
+        charges={Object {}}
+        closeView={null}
+        itinerary={Object {}}
+        serviceLevels={Object {}}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        title="Open Pricing"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`itineraryPricings.userPricings is truthy 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
+>
+  <div
+    className="layout-row flex-95 margin_bottom padding_top"
+  >
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg\\")",
+              }
+            }
+            editTime={false}
+            hub={Object {}}
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+    <div
+      className="layout-row flex-20 layout-align-center-center"
+    >
+      <div
+        className="layout-column flex layout-align-center-center
+              font_adjustaments"
+      >
+        <div
+          className="layout-align-center-center layout-row"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        >
+          <i
+            className="fa fa-anchor  "
+            style={Object {}}
+          />
+        </div>
+      </div>
+    </div>
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
+              }
+            }
+            editTime={false}
+            hub={Object {}}
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-center-center padding_top"
+  >
+    <div
+      className="flex-95 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <AdminPricingBox
+        adminDispatch={
+          Object {
+            "getRoutePricings": [Function],
+          }
+        }
+        charges={Object {}}
+        closeView={null}
+        itinerary={Object {}}
+        serviceLevels={Object {}}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        title="Open Pricing"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`pricingData is falsy 1`] = `""`;
+
+exports[`scope.show_beta_features is true 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
+>
+  <div
+    className="layout-row flex-95 margin_bottom padding_top"
+  >
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg\\")",
+              }
+            }
+            editTime={false}
+            hub={Object {}}
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+    <div
+      className="layout-row flex-20 layout-align-center-center"
+    >
+      <div
+        className="layout-column flex layout-align-center-center
+              font_adjustaments"
+      >
+        <div
+          className="layout-align-center-center layout-row"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        >
+          <i
+            className="fa fa-anchor  "
+            style={Object {}}
+          />
+        </div>
+      </div>
+    </div>
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
+              }
+            }
+            editTime={false}
+            hub={Object {}}
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-center-center padding_top"
+  >
+    <div
+      className="flex-95 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <AdminPricingBox
+        adminDispatch={
+          Object {
+            "getRoutePricings": [Function],
+          }
+        }
+        charges={Object {}}
+        closeView={null}
+        itinerary={Object {}}
+        serviceLevels={Object {}}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        title="Open Pricing"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-95 layout-row layout-wrap layout-align-center-center buffer_10"
+  >
+    <div
+      className="layout-padding flex-100 layout-align-start-center greyBg"
+    >
+      <span>
+        <b>
+          Dedicated Pricings
+        </b>
+      </span>
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-start-center"
+      style={Object {}}
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center slider_container"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-start card_margin_right slider_inner"
+        >
+          <div
+            className="flex-20 layout-row set_button_height tile_padding pointy"
+            onClick={[Function]}
+          >
+            <GreyBox
+              borderStyle=""
+              content={
+                <div>
+                  <h1>
+                    <strong>
+                      +
+                    </strong>
+                  </h1>
+                  <p>
+                    New Dedicated Pricing
+                  </p>
+                </div>
+              }
+              contentClassName="layout-column flex layout-align-center-center"
+              flex={0}
+              flexGtLg={0}
+              flexMd={0}
+              fullWidth={false}
+              isBox={false}
+              padding={false}
+              title=""
+              titleAction={false}
+              wrapperClassName="layout-row flex-100"
+            />
+          </div>
+        </div>
+      </div>
+      <CollapsingContent
+        collapsed={true}
+        content={
+          <div>
+            <AdminPricingBox
+              adminDispatch={
+                Object {
+                  "getRoutePricings": [Function],
+                }
+              }
+              charges={Array []}
+              closeView={null}
+              itinerary={Object {}}
+              serviceLevels={Object {}}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              title="Dedicated Pricing for undefined undefined"
+            />
+          </div>
+        }
+        minHeight="900px"
+        wrapperContentClasses=""
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-start-center"
+      style={
+        Object {
+          "display": "none",
+        }
+      }
+    >
+      <AdminPricingDedicated
+        adminDispatch={
+          Object {
+            "getRoutePricings": [Function],
+          }
+        }
+        backBtn={[Function]}
+        charges={Object {}}
+        clients={
+          Array [
+            Object {
+              "company_name": "Mehristweniger",
+              "email": "muller55@yahoo.de",
+              "first_name": "Sebastian",
+              "last_name": "Muller",
+              "password": "pwd",
+            },
+          ]
+        }
+        closePricingView={[Function]}
+        initialEdit={false}
+        serviceLevels={Object {}}
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
+>
+  <div
+    className="layout-row flex-95 margin_bottom padding_top"
+  >
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg\\")",
+              }
+            }
+            editTime={false}
+            hub={Object {}}
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+    <div
+      className="layout-row flex-20 layout-align-center-center"
+    >
+      <div
+        className="layout-column flex layout-align-center-center
+              font_adjustaments"
+      >
+        <div
+          className="layout-align-center-center layout-row"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        >
+          <i
+            className="fa fa-anchor  "
+            style={Object {}}
+          />
+        </div>
+      </div>
+    </div>
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
+              }
+            }
+            editTime={false}
+            hub={Object {}}
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-center-center padding_top"
+  >
+    <div
+      className="flex-95 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <AdminPricingBox
+        adminDispatch={
+          Object {
+            "getRoutePricings": [Function],
+          }
+        }
+        charges={Object {}}
+        closeView={null}
+        itinerary={Object {}}
+        serviceLevels={Object {}}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        title="Open Pricing"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`state.confirm is true 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
+>
+  <div
+    className="layout-row flex-95 margin_bottom padding_top"
+  >
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg\\")",
+              }
+            }
+            editTime={false}
+            hub={Object {}}
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+    <div
+      className="layout-row flex-20 layout-align-center-center"
+    >
+      <div
+        className="layout-column flex layout-align-center-center
+              font_adjustaments"
+      >
+        <div
+          className="layout-align-center-center layout-row"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        >
+          <i
+            className="fa fa-anchor  "
+            style={Object {}}
+          />
+        </div>
+      </div>
+    </div>
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
+              }
+            }
+            editTime={false}
+            hub={Object {}}
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-center-center padding_top"
+  >
+    <div
+      className="flex-95 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <AdminPricingBox
+        adminDispatch={
+          Object {
+            "getRoutePricings": [Function],
+          }
+        }
+        charges={Object {}}
+        closeView={null}
+        itinerary={Object {}}
+        serviceLevels={Object {}}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        title="Open Pricing"
+      />
+    </div>
+  </div>
+  <AdminPromptConfirm
+    confirm={[Function]}
+    deny={[Function]}
+    heading="Are you sure?"
+    t={[Function]}
+    text="This will delete the pricing immediately and all related data"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+</div>
+`;
+
+exports[`state.editorBool is true 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
+>
+  <div
+    className="layout-row flex-95 margin_bottom padding_top"
+  >
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg\\")",
+              }
+            }
+            editTime={false}
+            hub={Object {}}
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+    <div
+      className="layout-row flex-20 layout-align-center-center"
+    >
+      <div
+        className="layout-column flex layout-align-center-center
+              font_adjustaments"
+      >
+        <div
+          className="layout-align-center-center layout-row"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        >
+          <i
+            className="fa fa-anchor  "
+            style={Object {}}
+          />
+        </div>
+      </div>
+    </div>
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
+              }
+            }
+            editTime={false}
+            hub={Object {}}
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-center-center padding_top"
+  >
+    <div
+      className="flex-95 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <AdminPricingBox
+        adminDispatch={
+          Object {
+            "getRoutePricings": [Function],
+          }
+        }
+        charges={Object {}}
+        closeView={null}
+        itinerary={Object {}}
+        serviceLevels={Object {}}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        title="Open Pricing"
+      />
+    </div>
+  </div>
+  <AdminPriceEditor
+    adminTools={
+      Object {
+        "getRoutePricings": [Function],
+      }
+    }
+    closeEdit={[Function]}
+    isNew={false}
+    t={[Function]}
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+</div>
+`;
+
+exports[`state.showPricingAdder is true 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
+>
+  <div
+    className="layout-row flex-95 margin_bottom padding_top"
+  >
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg\\")",
+              }
+            }
+            editTime={false}
+            hub={Object {}}
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+    <div
+      className="layout-row flex-20 layout-align-center-center"
+    >
+      <div
+        className="layout-column flex layout-align-center-center
+              font_adjustaments"
+      >
+        <div
+          className="layout-align-center-center layout-row"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        >
+          <i
+            className="fa fa-anchor  "
+            style={Object {}}
+          />
+        </div>
+      </div>
+    </div>
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
+              }
+            }
+            editTime={false}
+            hub={Object {}}
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-center-center padding_top"
+  >
+    <div
+      className="flex-95 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <AdminPricingBox
+        adminDispatch={
+          Object {
+            "getRoutePricings": [Function],
+          }
+        }
+        charges={Object {}}
+        closeView={null}
+        itinerary={Object {}}
+        serviceLevels={Object {}}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        title="Open Pricing"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-95 layout-row layout-wrap layout-align-center-center buffer_10"
+  >
+    <div
+      className="layout-padding flex-100 layout-align-start-center greyBg"
+    >
+      <span>
+        <b>
+          Dedicated Pricings
+        </b>
+      </span>
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-start-center"
+      style={
+        Object {
+          "display": "none",
+        }
+      }
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center slider_container"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-start card_margin_right slider_inner"
+        >
+          <div
+            className="flex-20 layout-row set_button_height tile_padding pointy"
+            onClick={[Function]}
+          >
+            <GreyBox
+              borderStyle=""
+              content={
+                <div>
+                  <h1>
+                    <strong>
+                      +
+                    </strong>
+                  </h1>
+                  <p>
+                    New Dedicated Pricing
+                  </p>
+                </div>
+              }
+              contentClassName="layout-column flex layout-align-center-center"
+              flex={0}
+              flexGtLg={0}
+              flexMd={0}
+              fullWidth={false}
+              isBox={false}
+              padding={false}
+              title=""
+              titleAction={false}
+              wrapperClassName="layout-row flex-100"
+            />
+          </div>
+        </div>
+      </div>
+      <CollapsingContent
+        collapsed={true}
+        content={
+          <div>
+            <AdminPricingBox
+              adminDispatch={
+                Object {
+                  "getRoutePricings": [Function],
+                }
+              }
+              charges={Array []}
+              closeView={null}
+              itinerary={Object {}}
+              serviceLevels={Object {}}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              title="Dedicated Pricing for undefined undefined"
+            />
+          </div>
+        }
+        minHeight="900px"
+        wrapperContentClasses=""
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-start-center"
+      style={Object {}}
+    >
+      <AdminPricingDedicated
+        adminDispatch={
+          Object {
+            "getRoutePricings": [Function],
+          }
+        }
+        backBtn={[Function]}
+        charges={Object {}}
+        clients={
+          Array [
+            Object {
+              "company_name": "Mehristweniger",
+              "email": "muller55@yahoo.de",
+              "first_name": "Sebastian",
+              "last_name": "Muller",
+              "password": "pwd",
+            },
+          ]
+        }
+        closePricingView={[Function]}
+        initialEdit={true}
+        serviceLevels={Object {}}
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
+>
+  <div
+    className="layout-row flex-95 margin_bottom padding_top"
+  >
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg\\")",
+              }
+            }
+            editTime={false}
+            hub={Object {}}
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "background": "black",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+    <div
+      className="layout-row flex-20 layout-align-center-center"
+    >
+      <div
+        className="layout-column flex layout-align-center-center
+              font_adjustaments"
+      >
+        <div
+          className="layout-align-center-center layout-row"
+          style={
+            Object {
+              "background": "black",
+            }
+          }
+        >
+          <i
+            className="fa fa-anchor  "
+            style={Object {}}
+          />
+        </div>
+      </div>
+    </div>
+    <GradientBorder
+      className="layout-row flex"
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ShipmentOverviewShowCard
+            background={Object {}}
+            bg={
+              Object {
+                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
+              }
+            }
+            editTime={false}
+            hub={Object {}}
+            isAdmin={false}
+            shipment={Object {}}
+            t={[Function]}
+            text=""
+            theme={null}
+          />
+        </div>
+      }
+      gradient={
+        Object {
+          "background": "black",
+        }
+      }
+      wrapperClassName="layout-row flex-40 hub_box_shipment"
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-center-center padding_top"
+  >
+    <div
+      className="flex-95 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <AdminPricingBox
+        adminDispatch={
+          Object {
+            "getRoutePricings": [Function],
+          }
+        }
+        charges={Object {}}
+        closeView={null}
+        itinerary={Object {}}
+        serviceLevels={Object {}}
+        theme={null}
+        title="Open Pricing"
+      />
+    </div>
+  </div>
+</div>
+`;

@@ -35,19 +35,19 @@ export class AdminShipmentStatus extends Component {
             <span className={`${styles.amount}`}>
               {this.state.shipments.requested ? this.state.shipments.requested.length : 0}
             </span><br />
-            <span className={`${styles.amounttitle}`}>{this.props.t('account:requested')}</span>
+            <span className={`${styles.amounttitle}`}>{this.props.t('shipment:requested')}</span>
           </div>
           <div className="layout-column flex-33 layout-wrap layout-align-center-center">
             <span className={`${styles.amount}`}>
               {this.state.shipments.rejected ? this.state.shipments.rejected.length : 0}
             </span><br />
-            <span className={`${styles.amounttitle}`}>{this.props.t('account:rejected')}</span>
+            <span className={`${styles.amounttitle}`}>{this.props.t('shipment:rejected')}</span>
           </div>
           <div className="layout-column flex-33 layout-wrap layout-align-center-center">
             <span className={`${styles.amount}`}>
               {this.state.shipments.archived ? this.state.shipments.archived.length : 0}
             </span><br />
-            <span className={`${styles.amounttitle}`}>{this.props.t('account:archived')}</span>
+            <span className={`${styles.amounttitle}`}>{this.props.t('shipment:archived')}</span>
           </div>
         </div>
       </div>
@@ -70,4 +70,4 @@ AdminShipmentStatus.defaultProps = {
   shipments: {}
 }
 
-export default withNamespaces(['admin', 'account'])(AdminShipmentStatus)
+export default withNamespaces(['admin', 'account', 'shipment'])(AdminShipmentStatus)

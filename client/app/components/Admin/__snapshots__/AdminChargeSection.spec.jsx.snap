@@ -1,0 +1,186 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`editCharge is true 1`] = `
+<div
+  className="flex-100 layout-row layout-align-space-between-center charge_opt"
+>
+  <p
+    className="flex-50"
+  >
+     
+  </p>
+  <div
+    className="flex-50 layout-row layout-align-space-between-center input_box"
+  >
+    <input
+      className="flex-45"
+      name="TARGET"
+      onChange={[Function]}
+      type="number"
+      value="EDIT_VAL"
+    />
+    <Styled(Select)
+      className=" flex-45 select"
+      name="currency"
+      onChange={[Function]}
+      options={
+        Array [
+          Object {
+            "label": "EUR",
+            "value": "EUR",
+          },
+          Object {
+            "label": "AUD",
+            "value": "AUD",
+          },
+          Object {
+            "label": "BGN",
+            "value": "BGN",
+          },
+          Object {
+            "label": "BRL",
+            "value": "BRL",
+          },
+          Object {
+            "label": "CAD",
+            "value": "CAD",
+          },
+          Object {
+            "label": "CHF",
+            "value": "CHF",
+          },
+          Object {
+            "label": "CNY",
+            "value": "CNY",
+          },
+          Object {
+            "label": "CZK",
+            "value": "CZK",
+          },
+          Object {
+            "label": "DKK",
+            "value": "DKK",
+          },
+          Object {
+            "label": "GBP",
+            "value": "GBP",
+          },
+          Object {
+            "label": "HKD",
+            "value": "HKD",
+          },
+          Object {
+            "label": "HRK",
+            "value": "HRK",
+          },
+          Object {
+            "label": "HUF",
+            "value": "HUF",
+          },
+          Object {
+            "label": "IDR",
+            "value": "IDR",
+          },
+          Object {
+            "label": "ILS",
+            "value": "ILS",
+          },
+          Object {
+            "label": "INR",
+            "value": "INR",
+          },
+          Object {
+            "label": "JPY",
+            "value": "JPY",
+          },
+          Object {
+            "label": "KRW",
+            "value": "KRW",
+          },
+          Object {
+            "label": "MXN",
+            "value": "MXN",
+          },
+          Object {
+            "label": "MYR",
+            "value": "MYR",
+          },
+          Object {
+            "label": "NOK",
+            "value": "NOK",
+          },
+          Object {
+            "label": "NZD",
+            "value": "NZD",
+          },
+          Object {
+            "label": "PHP",
+            "value": "PHP",
+          },
+          Object {
+            "label": "PLN",
+            "value": "PLN",
+          },
+          Object {
+            "label": "RON",
+            "value": "RON",
+          },
+          Object {
+            "label": "RUB",
+            "value": "RUB",
+          },
+          Object {
+            "label": "SEK",
+            "value": "SEK",
+          },
+          Object {
+            "label": "SGD",
+            "value": "SGD",
+          },
+          Object {
+            "label": "THB",
+            "value": "THB",
+          },
+          Object {
+            "label": "TRY",
+            "value": "TRY",
+          },
+          Object {
+            "label": "USD",
+            "value": "USD",
+          },
+          Object {
+            "label": "ZAR",
+            "value": "ZAR",
+          },
+        ]
+      }
+      value="EDIT_CURR"
+    />
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-align-space-between-center charge_opt"
+>
+  <p
+    className="flex-50"
+  >
+     
+  </p>
+  <div
+    className="flex-50 layout-row layout-align-end-center"
+  >
+    <p
+      className="flex-none"
+    >
+       
+      VALUE
+       
+      CURRENCY
+    </p>
+  </div>
+</div>
+`;

@@ -1,0 +1,463 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`selectOptions is falsy 1`] = `""`;
+
+exports[`shallow render 1`] = `
+<div
+  className="fee_row flex-100 layout-row layout-align-center-center layout-wrap"
+>
+  <div
+    className="flex-100 layout-row layout-align-start-center"
+  >
+    <div
+      className="flex-20 layout-row layout-align-start-center"
+    >
+      <p
+        className="flex-none offset-5"
+      >
+        FEE_KEY - undefined
+      </p>
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-end-center"
+    >
+      <div
+        className="flex-25 layout-row layout-align-none-center layout-wrap price_cell"
+      >
+        <p
+          className="flex-90 price_cell_data"
+        >
+          Per Shipment
+        </p>
+        <p
+          className="flex-90 price_cell_label"
+        >
+          Rate Basis
+        </p>
+        <div
+          className="flex-none price_cell_divider"
+        />
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-none-center layout-wrap price_cell"
+      >
+        <p
+          className="flex-90 price_cell_data"
+        >
+           
+        </p>
+        <p
+          className="flex-90 price_cell_label"
+        >
+          Minimum
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex-30 layout-row "
+    >
+      <div
+        className="flex-85 layout-row"
+      >
+        <div
+          className="flex layout-row layout-align-none-center layout-wrap price_cell"
+        >
+          <p
+            className="flex-90 price_cell_label"
+          >
+            Effective Date
+          </p>
+          <p
+            className="flex-90 price_cell_data"
+          >
+            Jul 4, 2017
+          </p>
+          <div
+            className="flex-none price_cell_divider"
+          />
+        </div>
+        <div
+          className="flex layout-row layout-align-none-center layout-wrap price_cell"
+        >
+          <p
+            className="flex-90 price_cell_label"
+          >
+            Expiration Date
+          </p>
+          <p
+            className="flex-90 price_cell_data"
+          >
+            Jul 4, 2017
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-15 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-edit"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-end-center layout-wrap"
+  />
+  <div
+    className="flex-100 layout-row layout-align-end-center"
+  >
+    <div
+      className="flex-25 layout-row layout-align-none-center layout-wrap price_cell"
+    >
+      <p
+        className="flex-90 price_cell_data"
+      >
+        MIN
+         
+        kg
+      </p>
+      <p
+        className="flex-90 price_cell_label"
+      >
+        Minimum
+      </p>
+      <div
+        className="flex-none price_cell_divider"
+      />
+    </div>
+    <div
+      className="flex-25 layout-row layout-align-none-center layout-wrap price_cell"
+    >
+      <p
+        className="flex-90 price_cell_data"
+      >
+        MAX
+         
+        kg
+      </p>
+      <p
+        className="flex-90 price_cell_label"
+      >
+        Maximum
+      </p>
+      <div
+        className="flex-none price_cell_divider"
+      />
+    </div>
+    <div
+      className="flex-25 layout-row layout-align-none-center layout-wrap price_cell"
+    >
+      <p
+        className="flex-90 price_cell_data"
+      >
+        RATE
+         
+      </p>
+      <p
+        className="flex-90 price_cell_label"
+      >
+        Rate
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`state.edit is true 1`] = `
+<div
+  className="fee_row flex-100 layout-row layout-align-center-center layout-wrap"
+>
+  <div
+    className="flex-100 layout-row layout-align-start-center"
+  >
+    <div
+      className="flex-20 layout-row layout-align-start-center"
+    >
+      <p
+        className="flex-none offset-5"
+      >
+        FEE_KEY - undefined
+      </p>
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-end-center"
+    >
+      <div
+        className="flex layout-row layout-align-none-center layout-wrap price_cell"
+      >
+        <p
+          className="flex-90 price_cell_label"
+        >
+          Rate Basis
+        </p>
+        <NamedSelect
+          className="flex-100"
+          classes="select"
+          name="LOAD_TYPE-FEE_KEY-rate_basis"
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Per Item",
+                "value": "PER_ITEM",
+              },
+              Object {
+                "label": "Per W/M",
+                "value": "PER_WM",
+              },
+              Object {
+                "label": "Per Container",
+                "value": "PER_CONTAINER",
+              },
+              Object {
+                "label": "Per Shipment",
+                "value": "PER_SHIPMENT",
+              },
+              Object {
+                "label": "Per cbm/ton",
+                "value": "PER_CBM_TON",
+              },
+              Object {
+                "label": "Per cbm",
+                "value": "PER_CBM",
+              },
+              Object {
+                "label": "Per ton",
+                "value": "PER_TON",
+              },
+              Object {
+                "label": "Percentage",
+                "value": "PERCENTAGE",
+              },
+              Object {
+                "label": "Per Bill of Lading",
+                "value": "PER_BILL",
+              },
+              Object {
+                "label": "Per Kilogram Range",
+                "value": "PER_KG_RANGE",
+              },
+            ]
+          }
+          value="RATE_BASIS"
+        />
+      </div>
+      <div
+        className="flex layout-row layout-align-none-center layout-wrap price_cell"
+        key="min"
+      >
+        <p
+          className="flex-90 price_cell_label"
+        >
+          Minimum
+        </p>
+        <div
+          className="flex-95 layout-row input_box_full"
+        >
+          <input
+            name="LOAD_TYPE-FEE_KEY-min"
+            onChange={[Function]}
+            type="number"
+            value="FEE_KEY_MIN"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-30 layout-row "
+    >
+      <div
+        className="flex-85 layout-row"
+      >
+        <div
+          className="flex layout-row layout-align-none-center layout-wrap price_cell dpb"
+        >
+          <p
+            className="flex-90 price_cell_label"
+          >
+            Effective Date
+          </p>
+          <DayPickerInput
+            classNames={
+              Object {
+                "container": "DayPickerInput",
+                "overlay": "DayPickerInput-Overlay",
+                "overlayWrapper": "DayPickerInput-OverlayWrapper",
+              }
+            }
+            clickUnselectsDay={false}
+            component="input"
+            dayPickerProps={
+              Object {
+                "disabledDays": Object {
+                  "before": 2017-08-15T04:41:20.000Z,
+                },
+                "month": 2017-08-15T04:41:20.000Z,
+                "name": "dayPicker",
+              }
+            }
+            format="DD/MM/YYYY"
+            formatDate={[Function]}
+            hideOnDayClick={true}
+            inputProps={Object {}}
+            keepFocus={true}
+            name="dayPicker"
+            onDayChange={[Function]}
+            overlayComponent={[Function]}
+            parseDate={[Function]}
+            placeholder="DD/MM/YYYY"
+            showOverlay={false}
+            value="EFF_DATE"
+          />
+          <div
+            className="flex-none price_cell_divider"
+          />
+        </div>
+        <div
+          className="flex layout-row layout-align-none-center layout-wrap price_cell dpb"
+        >
+          <p
+            className="flex-90 price_cell_label"
+          >
+            Expiration Date
+          </p>
+          <DayPickerInput
+            classNames={
+              Object {
+                "container": "DayPickerInput",
+                "overlay": "DayPickerInput-Overlay",
+                "overlayWrapper": "DayPickerInput-OverlayWrapper",
+              }
+            }
+            clickUnselectsDay={false}
+            component="input"
+            dayPickerProps={
+              Object {
+                "disabledDays": Object {
+                  "before": 2017-08-15T04:41:20.000Z,
+                },
+                "month": 2017-08-15T04:41:20.000Z,
+                "name": "dayPicker",
+              }
+            }
+            format="DD/MM/YYYY"
+            formatDate={[Function]}
+            hideOnDayClick={true}
+            inputProps={Object {}}
+            keepFocus={true}
+            name="dayPicker"
+            onDayChange={[Function]}
+            overlayComponent={[Function]}
+            parseDate={[Function]}
+            placeholder="DD/MM/YYYY"
+            showOverlay={false}
+            value="EXP_DATE"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-15 layout-column layout-align-space-around-center"
+        >
+          <div
+            className="flex-50 layout-row layout-align-center-center edit_icon_wrapper save_icon"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-floppy-o"
+            />
+          </div>
+          <div
+            className="flex-50 layout-row layout-align-center-center edit_icon_wrapper close_icon"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-times"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-end-center layout-wrap"
+  />
+  <div
+    className="flex-100 layout-row layout-align-end-center"
+  >
+    <div
+      className="flex-25 layout-row layout-align-none-center layout-wrap price_cell"
+      key="min"
+    >
+      <p
+        className="flex-90 price_cell_label"
+      >
+        Minimum
+      </p>
+      <div
+        className="flex-95 layout-row input_box_full"
+      >
+        <input
+          name="LOAD_TYPE-FEE_KEY-0-min"
+          onChange={[Function]}
+          type="number"
+          value="EDIT_CHARGE_MIN"
+        />
+      </div>
+      <div
+        className="flex-none price_cell_divider"
+      />
+    </div>
+    <div
+      className="flex-25 layout-row layout-align-none-center layout-wrap price_cell"
+      key="max"
+    >
+      <p
+        className="flex-90 price_cell_label"
+      >
+        Maximum
+      </p>
+      <div
+        className="flex-95 layout-row input_box_full"
+      >
+        <input
+          name="LOAD_TYPE-FEE_KEY-0-max"
+          onChange={[Function]}
+          type="number"
+          value="EDIT_CHARGE_MAX"
+        />
+      </div>
+      <div
+        className="flex-none price_cell_divider"
+      />
+    </div>
+    <div
+      className="flex-25 layout-row layout-align-none-center layout-wrap price_cell"
+      key="rate"
+    >
+      <p
+        className="flex-90 price_cell_label"
+      >
+        Rate
+      </p>
+      <div
+        className="flex-95 layout-row input_box_full"
+      >
+        <input
+          name="LOAD_TYPE-FEE_KEY-0-rate"
+          onChange={[Function]}
+          type="number"
+          value="EDIT_CHARGE_RATE"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

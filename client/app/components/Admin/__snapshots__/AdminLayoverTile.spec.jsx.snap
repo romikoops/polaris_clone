@@ -1,0 +1,285 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`hub.photo is truthy 1`] = `
+<div
+  className="flex-none hub_card layout-row pointy"
+  onClick={[Function]}
+  style={
+    Object {
+      "backgroundImage": "url(PHOTO)",
+    }
+  }
+>
+  <div
+    className="fade"
+  />
+  <div
+    className="content layout-row layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-15 layout-column layout-align-start-center"
+      >
+        <i
+          className="flex-none fa fa-map-marker"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333, #fafafa)",
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-85 layout-row layout-wrap layout-align-start-start"
+      >
+        <h4
+          className="flex-100"
+        >
+           
+           
+        </h4>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-align-start-center layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center time_header"
+        >
+          <p
+            className="flex-none no_m"
+          >
+            Arrival;
+          </p>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-end-center time_text"
+        >
+          <p
+            className="flex-none no_m"
+          >
+            19
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center time_header"
+        >
+          <p
+            className="flex-none no_m"
+          >
+            Departure
+          </p>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-end-center time_text"
+        >
+          <p
+            className="flex-none no_m"
+          >
+            19
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`layoverData is falsy 1`] = `""`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-none hub_card layout-row pointy"
+  onClick={[Function]}
+  style={
+    Object {
+      "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/aerial_port_sm.jpg\\")",
+    }
+  }
+>
+  <div
+    className="fade"
+  />
+  <div
+    className="content layout-row layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-15 layout-column layout-align-start-center"
+      >
+        <i
+          className="flex-none fa fa-map-marker"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333, #fafafa)",
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-85 layout-row layout-wrap layout-align-start-start"
+      >
+        <h4
+          className="flex-100"
+        >
+           
+           
+        </h4>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-align-start-center layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center time_header"
+        >
+          <p
+            className="flex-none no_m"
+          >
+            Arrival;
+          </p>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-end-center time_text"
+        >
+          <p
+            className="flex-none no_m"
+          >
+            19
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center time_header"
+        >
+          <p
+            className="flex-none no_m"
+          >
+            Departure
+          </p>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-end-center time_text"
+        >
+          <p
+            className="flex-none no_m"
+          >
+            19
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="flex-none hub_card layout-row pointy"
+  onClick={[Function]}
+  style={
+    Object {
+      "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/aerial_port_sm.jpg\\")",
+    }
+  }
+>
+  <div
+    className="fade"
+  />
+  <div
+    className="content layout-row layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-15 layout-column layout-align-start-center"
+      >
+        <i
+          className="flex-none fa fa-map-marker"
+          style={
+            Object {
+              "background": "black",
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-85 layout-row layout-wrap layout-align-start-start"
+      >
+        <h4
+          className="flex-100"
+        >
+           
+           
+        </h4>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-align-start-center layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center time_header"
+        >
+          <p
+            className="flex-none no_m"
+          >
+            Arrival;
+          </p>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-end-center time_text"
+        >
+          <p
+            className="flex-none no_m"
+          >
+            19
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center time_header"
+        >
+          <p
+            className="flex-none no_m"
+          >
+            Departure
+          </p>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-end-center time_text"
+        >
+          <p
+            className="flex-none no_m"
+          >
+            19
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,6834 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className=" editor_backdrop flex-none layout-row layout-wrap layout-align-center-center"
+>
+  <div
+    className=" editor_fade flex-none layout-row layout-wrap layout-align-center-start"
+    onClick={[Function]}
+  />
+  <div
+    className=" editor_box flex-none layout-row layout-wrap layout-align-center-start"
+  >
+    <div
+      className="flex-95 layout-row layout-wrap layout-align-center-start editor_scroll"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center sec_title"
+      >
+        <p
+          className=" sec_title_text flex-none"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        >
+          New Pricing
+        </p>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center"
+      >
+        <div
+          className="flex-60 layout-row layout-align-start-center"
+        >
+          <i
+            className="fa fa-map-signs clip"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <p
+            className="flex-none offset-5"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-start"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center layout-wrap"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <h4
+                className="flex-100 letter_3"
+              >
+                Select a Cargo Type
+              </h4>
+              <div
+                className="flex-75 layout-row"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  classes="select"
+                  name="cargoClass"
+                  onChange={[Function]}
+                  options={
+                    Array [
+                      Object {
+                        "label": "LCL",
+                        "value": "lcl",
+                      },
+                      Object {
+                        "label": "FCL 20ft",
+                        "value": "fcl_20",
+                      },
+                      Object {
+                        "label": "FCL 40ft",
+                        "value": "fcl_40",
+                      },
+                      Object {
+                        "label": "FCL 40ft HQ",
+                        "value": "fcl_40hq",
+                      },
+                    ]
+                  }
+                  value={
+                    Object {
+                      "label": "LCL",
+                      "value": "lcl",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Transport Category: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Route: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Sub Route: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Client: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-align-end-center layout-row"
+        style={
+          Object {
+            "margin": "15px",
+          }
+        }
+      >
+        <RoundButton
+          active={true}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-plus"
+          inverse={false}
+          size="small"
+          text="Add Fee"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-100 layout-align-end-center layout-row"
+        style={
+          Object {
+            "margin": "15px",
+          }
+        }
+      >
+        <RoundButton
+          active={true}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-floppy-o"
+          inverse={false}
+          size="small"
+          text="Save"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center-center layout-wrap add_fee_panel fee_panel_closed"
+    >
+      <div
+        className="flex-none layout-row layout-align-center-center panel_close"
+        onClick={[Function]}
+      >
+        <i
+          className="fa fa-times clip"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-90 layout-row layout-wrap layout-align-start-start"
+      >
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="CFD"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            CFD
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="ERS"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            ERS
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="EXP"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            EXP
+             - 
+            Export Fee
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="IMP"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            IMP
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="SBF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            SBF
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="LSS"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            LSS
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="CFO"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            CFO
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="STF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            STF
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="TRF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            TRF
+             - 
+            Telex Release Fee
+             
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`state.client is true 1`] = `
+<div
+  className=" editor_backdrop flex-none layout-row layout-wrap layout-align-center-center"
+>
+  <div
+    className=" editor_fade flex-none layout-row layout-wrap layout-align-center-start"
+    onClick={[Function]}
+  />
+  <div
+    className=" editor_box flex-none layout-row layout-wrap layout-align-center-start"
+  >
+    <div
+      className="flex-95 layout-row layout-wrap layout-align-center-start editor_scroll"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center sec_title"
+      >
+        <p
+          className=" sec_title_text flex-none"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        >
+          New Pricing
+        </p>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center"
+      >
+        <div
+          className="flex-60 layout-row layout-align-start-center"
+        >
+          <i
+            className="fa fa-map-signs clip"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <p
+            className="flex-none offset-5"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-none-center layout-wrap"
+        key="BAS"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center price_subheader"
+        >
+          <p
+            className="flex-none"
+          >
+            BAS
+             - 
+            Basic Freight
+          </p>
+          <div
+            className="flex-none layout-row layout-align-center-center"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-trash clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="currency"
+          >
+            <p
+              className="flex-100"
+            >
+              Currency
+            </p>
+            <div
+              className="flex-95 layout-row"
+            >
+              <NamedSelect
+                className="flex-100"
+                classes="select"
+                name="BAS-currency"
+                onChange={[Function]}
+                options={
+                  Array [
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    },
+                    Object {
+                      "label": "AUD",
+                      "value": "AUD",
+                    },
+                    Object {
+                      "label": "BGN",
+                      "value": "BGN",
+                    },
+                    Object {
+                      "label": "BRL",
+                      "value": "BRL",
+                    },
+                    Object {
+                      "label": "CAD",
+                      "value": "CAD",
+                    },
+                    Object {
+                      "label": "CHF",
+                      "value": "CHF",
+                    },
+                    Object {
+                      "label": "CNY",
+                      "value": "CNY",
+                    },
+                    Object {
+                      "label": "CZK",
+                      "value": "CZK",
+                    },
+                    Object {
+                      "label": "DKK",
+                      "value": "DKK",
+                    },
+                    Object {
+                      "label": "GBP",
+                      "value": "GBP",
+                    },
+                    Object {
+                      "label": "HKD",
+                      "value": "HKD",
+                    },
+                    Object {
+                      "label": "HRK",
+                      "value": "HRK",
+                    },
+                    Object {
+                      "label": "HUF",
+                      "value": "HUF",
+                    },
+                    Object {
+                      "label": "IDR",
+                      "value": "IDR",
+                    },
+                    Object {
+                      "label": "ILS",
+                      "value": "ILS",
+                    },
+                    Object {
+                      "label": "INR",
+                      "value": "INR",
+                    },
+                    Object {
+                      "label": "JPY",
+                      "value": "JPY",
+                    },
+                    Object {
+                      "label": "KRW",
+                      "value": "KRW",
+                    },
+                    Object {
+                      "label": "MXN",
+                      "value": "MXN",
+                    },
+                    Object {
+                      "label": "MYR",
+                      "value": "MYR",
+                    },
+                    Object {
+                      "label": "NOK",
+                      "value": "NOK",
+                    },
+                    Object {
+                      "label": "NZD",
+                      "value": "NZD",
+                    },
+                    Object {
+                      "label": "PHP",
+                      "value": "PHP",
+                    },
+                    Object {
+                      "label": "PLN",
+                      "value": "PLN",
+                    },
+                    Object {
+                      "label": "RON",
+                      "value": "RON",
+                    },
+                    Object {
+                      "label": "RUB",
+                      "value": "RUB",
+                    },
+                    Object {
+                      "label": "SEK",
+                      "value": "SEK",
+                    },
+                    Object {
+                      "label": "SGD",
+                      "value": "SGD",
+                    },
+                    Object {
+                      "label": "THB",
+                      "value": "THB",
+                    },
+                    Object {
+                      "label": "TRY",
+                      "value": "TRY",
+                    },
+                    Object {
+                      "label": "USD",
+                      "value": "USD",
+                    },
+                    Object {
+                      "label": "ZAR",
+                      "value": "ZAR",
+                    },
+                  ]
+                }
+                value={
+                  Object {
+                    "label": "USD",
+                    "value": "USD",
+                  }
+                }
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="rate"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="BAS-rate"
+                onChange={[Function]}
+                type="number"
+                value={20}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="min"
+          >
+            <p
+              className="flex-100"
+            >
+              Minimum
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="BAS-min"
+                onChange={[Function]}
+                type="number"
+                value={1.5}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate Basis
+            </p>
+            <NamedSelect
+              className="flex-100"
+              classes="select"
+              name="BAS-rate_basis"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Per Item",
+                    "value": "PER_ITEM",
+                  },
+                  Object {
+                    "label": "Per W/M",
+                    "value": "PER_WM",
+                  },
+                  Object {
+                    "label": "Per Container",
+                    "value": "PER_CONTAINER",
+                  },
+                  Object {
+                    "label": "Per Shipment",
+                    "value": "PER_SHIPMENT",
+                  },
+                  Object {
+                    "label": "Per cbm/ton",
+                    "value": "PER_CBM_TON",
+                  },
+                  Object {
+                    "label": "Per cbm",
+                    "value": "PER_CBM",
+                  },
+                  Object {
+                    "label": "Per ton",
+                    "value": "PER_TON",
+                  },
+                  Object {
+                    "label": "Percentage",
+                    "value": "PERCENTAGE",
+                  },
+                  Object {
+                    "label": "Per Bill of Lading",
+                    "value": "PER_BILL",
+                  },
+                  Object {
+                    "label": "Per Kilogram Range",
+                    "value": "PER_KG_RANGE",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Per cbm",
+                  "value": "PER_CBM",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-none-center layout-wrap"
+        key="HAS"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center price_subheader"
+        >
+          <p
+            className="flex-none"
+          >
+            HAS
+             - 
+            Heavy Weight Freight
+          </p>
+          <div
+            className="flex-none layout-row layout-align-center-center"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-trash clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="currency"
+          >
+            <p
+              className="flex-100"
+            >
+              Currency
+            </p>
+            <div
+              className="flex-95 layout-row"
+            >
+              <NamedSelect
+                className="flex-100"
+                classes="select"
+                name="HAS-currency"
+                onChange={[Function]}
+                options={
+                  Array [
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    },
+                    Object {
+                      "label": "AUD",
+                      "value": "AUD",
+                    },
+                    Object {
+                      "label": "BGN",
+                      "value": "BGN",
+                    },
+                    Object {
+                      "label": "BRL",
+                      "value": "BRL",
+                    },
+                    Object {
+                      "label": "CAD",
+                      "value": "CAD",
+                    },
+                    Object {
+                      "label": "CHF",
+                      "value": "CHF",
+                    },
+                    Object {
+                      "label": "CNY",
+                      "value": "CNY",
+                    },
+                    Object {
+                      "label": "CZK",
+                      "value": "CZK",
+                    },
+                    Object {
+                      "label": "DKK",
+                      "value": "DKK",
+                    },
+                    Object {
+                      "label": "GBP",
+                      "value": "GBP",
+                    },
+                    Object {
+                      "label": "HKD",
+                      "value": "HKD",
+                    },
+                    Object {
+                      "label": "HRK",
+                      "value": "HRK",
+                    },
+                    Object {
+                      "label": "HUF",
+                      "value": "HUF",
+                    },
+                    Object {
+                      "label": "IDR",
+                      "value": "IDR",
+                    },
+                    Object {
+                      "label": "ILS",
+                      "value": "ILS",
+                    },
+                    Object {
+                      "label": "INR",
+                      "value": "INR",
+                    },
+                    Object {
+                      "label": "JPY",
+                      "value": "JPY",
+                    },
+                    Object {
+                      "label": "KRW",
+                      "value": "KRW",
+                    },
+                    Object {
+                      "label": "MXN",
+                      "value": "MXN",
+                    },
+                    Object {
+                      "label": "MYR",
+                      "value": "MYR",
+                    },
+                    Object {
+                      "label": "NOK",
+                      "value": "NOK",
+                    },
+                    Object {
+                      "label": "NZD",
+                      "value": "NZD",
+                    },
+                    Object {
+                      "label": "PHP",
+                      "value": "PHP",
+                    },
+                    Object {
+                      "label": "PLN",
+                      "value": "PLN",
+                    },
+                    Object {
+                      "label": "RON",
+                      "value": "RON",
+                    },
+                    Object {
+                      "label": "RUB",
+                      "value": "RUB",
+                    },
+                    Object {
+                      "label": "SEK",
+                      "value": "SEK",
+                    },
+                    Object {
+                      "label": "SGD",
+                      "value": "SGD",
+                    },
+                    Object {
+                      "label": "THB",
+                      "value": "THB",
+                    },
+                    Object {
+                      "label": "TRY",
+                      "value": "TRY",
+                    },
+                    Object {
+                      "label": "USD",
+                      "value": "USD",
+                    },
+                    Object {
+                      "label": "ZAR",
+                      "value": "ZAR",
+                    },
+                  ]
+                }
+                value={
+                  Object {
+                    "label": "USD",
+                    "value": "USD",
+                  }
+                }
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="rate"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="HAS-rate"
+                onChange={[Function]}
+                type="number"
+                value={5}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="min"
+          >
+            <p
+              className="flex-100"
+            >
+              Minimum
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="HAS-min"
+                onChange={[Function]}
+                type="number"
+                value={4}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate Basis
+            </p>
+            <NamedSelect
+              className="flex-100"
+              classes="select"
+              name="HAS-rate_basis"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Per Item",
+                    "value": "PER_ITEM",
+                  },
+                  Object {
+                    "label": "Per W/M",
+                    "value": "PER_WM",
+                  },
+                  Object {
+                    "label": "Per Container",
+                    "value": "PER_CONTAINER",
+                  },
+                  Object {
+                    "label": "Per Shipment",
+                    "value": "PER_SHIPMENT",
+                  },
+                  Object {
+                    "label": "Per cbm/ton",
+                    "value": "PER_CBM_TON",
+                  },
+                  Object {
+                    "label": "Per cbm",
+                    "value": "PER_CBM",
+                  },
+                  Object {
+                    "label": "Per ton",
+                    "value": "PER_TON",
+                  },
+                  Object {
+                    "label": "Percentage",
+                    "value": "PERCENTAGE",
+                  },
+                  Object {
+                    "label": "Per Bill of Lading",
+                    "value": "PER_BILL",
+                  },
+                  Object {
+                    "label": "Per Kilogram Range",
+                    "value": "PER_KG_RANGE",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Per cbm",
+                  "value": "PER_CBM",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-none-center layout-wrap"
+        key="OHC"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center price_subheader"
+        >
+          <p
+            className="flex-none"
+          >
+            OHC
+             - 
+            Origin Handling Costs
+          </p>
+          <div
+            className="flex-none layout-row layout-align-center-center"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-trash clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="currency"
+          >
+            <p
+              className="flex-100"
+            >
+              Currency
+            </p>
+            <div
+              className="flex-95 layout-row"
+            >
+              <NamedSelect
+                className="flex-100"
+                classes="select"
+                name="OHC-currency"
+                onChange={[Function]}
+                options={
+                  Array [
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    },
+                    Object {
+                      "label": "AUD",
+                      "value": "AUD",
+                    },
+                    Object {
+                      "label": "BGN",
+                      "value": "BGN",
+                    },
+                    Object {
+                      "label": "BRL",
+                      "value": "BRL",
+                    },
+                    Object {
+                      "label": "CAD",
+                      "value": "CAD",
+                    },
+                    Object {
+                      "label": "CHF",
+                      "value": "CHF",
+                    },
+                    Object {
+                      "label": "CNY",
+                      "value": "CNY",
+                    },
+                    Object {
+                      "label": "CZK",
+                      "value": "CZK",
+                    },
+                    Object {
+                      "label": "DKK",
+                      "value": "DKK",
+                    },
+                    Object {
+                      "label": "GBP",
+                      "value": "GBP",
+                    },
+                    Object {
+                      "label": "HKD",
+                      "value": "HKD",
+                    },
+                    Object {
+                      "label": "HRK",
+                      "value": "HRK",
+                    },
+                    Object {
+                      "label": "HUF",
+                      "value": "HUF",
+                    },
+                    Object {
+                      "label": "IDR",
+                      "value": "IDR",
+                    },
+                    Object {
+                      "label": "ILS",
+                      "value": "ILS",
+                    },
+                    Object {
+                      "label": "INR",
+                      "value": "INR",
+                    },
+                    Object {
+                      "label": "JPY",
+                      "value": "JPY",
+                    },
+                    Object {
+                      "label": "KRW",
+                      "value": "KRW",
+                    },
+                    Object {
+                      "label": "MXN",
+                      "value": "MXN",
+                    },
+                    Object {
+                      "label": "MYR",
+                      "value": "MYR",
+                    },
+                    Object {
+                      "label": "NOK",
+                      "value": "NOK",
+                    },
+                    Object {
+                      "label": "NZD",
+                      "value": "NZD",
+                    },
+                    Object {
+                      "label": "PHP",
+                      "value": "PHP",
+                    },
+                    Object {
+                      "label": "PLN",
+                      "value": "PLN",
+                    },
+                    Object {
+                      "label": "RON",
+                      "value": "RON",
+                    },
+                    Object {
+                      "label": "RUB",
+                      "value": "RUB",
+                    },
+                    Object {
+                      "label": "SEK",
+                      "value": "SEK",
+                    },
+                    Object {
+                      "label": "SGD",
+                      "value": "SGD",
+                    },
+                    Object {
+                      "label": "THB",
+                      "value": "THB",
+                    },
+                    Object {
+                      "label": "TRY",
+                      "value": "TRY",
+                    },
+                    Object {
+                      "label": "USD",
+                      "value": "USD",
+                    },
+                    Object {
+                      "label": "ZAR",
+                      "value": "ZAR",
+                    },
+                  ]
+                }
+                value={
+                  Object {
+                    "label": "USD",
+                    "value": "USD",
+                  }
+                }
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="cbm"
+          >
+            <p
+              className="flex-100"
+            >
+              CBM
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="OHC-cbm"
+                onChange={[Function]}
+                type="number"
+                value={165}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="ton"
+          >
+            <p
+              className="flex-100"
+            >
+              Ton
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="OHC-ton"
+                onChange={[Function]}
+                type="number"
+                value={395}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="min"
+          >
+            <p
+              className="flex-100"
+            >
+              Minimum
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="OHC-min"
+                onChange={[Function]}
+                type="number"
+                value={395}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate Basis
+            </p>
+            <NamedSelect
+              className="flex-100"
+              classes="select"
+              name="OHC-rate_basis"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Per Item",
+                    "value": "PER_ITEM",
+                  },
+                  Object {
+                    "label": "Per W/M",
+                    "value": "PER_WM",
+                  },
+                  Object {
+                    "label": "Per Container",
+                    "value": "PER_CONTAINER",
+                  },
+                  Object {
+                    "label": "Per Shipment",
+                    "value": "PER_SHIPMENT",
+                  },
+                  Object {
+                    "label": "Per cbm/ton",
+                    "value": "PER_CBM_TON",
+                  },
+                  Object {
+                    "label": "Per cbm",
+                    "value": "PER_CBM",
+                  },
+                  Object {
+                    "label": "Per ton",
+                    "value": "PER_TON",
+                  },
+                  Object {
+                    "label": "Percentage",
+                    "value": "PERCENTAGE",
+                  },
+                  Object {
+                    "label": "Per Bill of Lading",
+                    "value": "PER_BILL",
+                  },
+                  Object {
+                    "label": "Per Kilogram Range",
+                    "value": "PER_KG_RANGE",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Per cbm/ton",
+                  "value": "PER_CBM_TON",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-none-center layout-wrap"
+        key="DHC"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center price_subheader"
+        >
+          <p
+            className="flex-none"
+          >
+            DHC
+             - 
+            Destination Handling Costs
+          </p>
+          <div
+            className="flex-none layout-row layout-align-center-center"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-trash clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="currency"
+          >
+            <p
+              className="flex-100"
+            >
+              Currency
+            </p>
+            <div
+              className="flex-95 layout-row"
+            >
+              <NamedSelect
+                className="flex-100"
+                classes="select"
+                name="DHC-currency"
+                onChange={[Function]}
+                options={
+                  Array [
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    },
+                    Object {
+                      "label": "AUD",
+                      "value": "AUD",
+                    },
+                    Object {
+                      "label": "BGN",
+                      "value": "BGN",
+                    },
+                    Object {
+                      "label": "BRL",
+                      "value": "BRL",
+                    },
+                    Object {
+                      "label": "CAD",
+                      "value": "CAD",
+                    },
+                    Object {
+                      "label": "CHF",
+                      "value": "CHF",
+                    },
+                    Object {
+                      "label": "CNY",
+                      "value": "CNY",
+                    },
+                    Object {
+                      "label": "CZK",
+                      "value": "CZK",
+                    },
+                    Object {
+                      "label": "DKK",
+                      "value": "DKK",
+                    },
+                    Object {
+                      "label": "GBP",
+                      "value": "GBP",
+                    },
+                    Object {
+                      "label": "HKD",
+                      "value": "HKD",
+                    },
+                    Object {
+                      "label": "HRK",
+                      "value": "HRK",
+                    },
+                    Object {
+                      "label": "HUF",
+                      "value": "HUF",
+                    },
+                    Object {
+                      "label": "IDR",
+                      "value": "IDR",
+                    },
+                    Object {
+                      "label": "ILS",
+                      "value": "ILS",
+                    },
+                    Object {
+                      "label": "INR",
+                      "value": "INR",
+                    },
+                    Object {
+                      "label": "JPY",
+                      "value": "JPY",
+                    },
+                    Object {
+                      "label": "KRW",
+                      "value": "KRW",
+                    },
+                    Object {
+                      "label": "MXN",
+                      "value": "MXN",
+                    },
+                    Object {
+                      "label": "MYR",
+                      "value": "MYR",
+                    },
+                    Object {
+                      "label": "NOK",
+                      "value": "NOK",
+                    },
+                    Object {
+                      "label": "NZD",
+                      "value": "NZD",
+                    },
+                    Object {
+                      "label": "PHP",
+                      "value": "PHP",
+                    },
+                    Object {
+                      "label": "PLN",
+                      "value": "PLN",
+                    },
+                    Object {
+                      "label": "RON",
+                      "value": "RON",
+                    },
+                    Object {
+                      "label": "RUB",
+                      "value": "RUB",
+                    },
+                    Object {
+                      "label": "SEK",
+                      "value": "SEK",
+                    },
+                    Object {
+                      "label": "SGD",
+                      "value": "SGD",
+                    },
+                    Object {
+                      "label": "THB",
+                      "value": "THB",
+                    },
+                    Object {
+                      "label": "TRY",
+                      "value": "TRY",
+                    },
+                    Object {
+                      "label": "USD",
+                      "value": "USD",
+                    },
+                    Object {
+                      "label": "ZAR",
+                      "value": "ZAR",
+                    },
+                  ]
+                }
+                value={
+                  Object {
+                    "label": "USD",
+                    "value": "USD",
+                  }
+                }
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="rate"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="DHC-rate"
+                onChange={[Function]}
+                type="number"
+                value={50}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate Basis
+            </p>
+            <NamedSelect
+              className="flex-100"
+              classes="select"
+              name="DHC-rate_basis"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Per Item",
+                    "value": "PER_ITEM",
+                  },
+                  Object {
+                    "label": "Per W/M",
+                    "value": "PER_WM",
+                  },
+                  Object {
+                    "label": "Per Container",
+                    "value": "PER_CONTAINER",
+                  },
+                  Object {
+                    "label": "Per Shipment",
+                    "value": "PER_SHIPMENT",
+                  },
+                  Object {
+                    "label": "Per cbm/ton",
+                    "value": "PER_CBM_TON",
+                  },
+                  Object {
+                    "label": "Per cbm",
+                    "value": "PER_CBM",
+                  },
+                  Object {
+                    "label": "Per ton",
+                    "value": "PER_TON",
+                  },
+                  Object {
+                    "label": "Percentage",
+                    "value": "PERCENTAGE",
+                  },
+                  Object {
+                    "label": "Per Bill of Lading",
+                    "value": "PER_BILL",
+                  },
+                  Object {
+                    "label": "Per Kilogram Range",
+                    "value": "PER_KG_RANGE",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Per Item",
+                  "value": "PER_ITEM",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-none-center layout-wrap"
+        key="CUSTOMS"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center price_subheader"
+        >
+          <p
+            className="flex-none"
+          >
+            CUSTOMS
+             - 
+            Customs Fee
+          </p>
+          <div
+            className="flex-none layout-row layout-align-center-center"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-trash clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="currency"
+          >
+            <p
+              className="flex-100"
+            >
+              Currency
+            </p>
+            <div
+              className="flex-95 layout-row"
+            >
+              <NamedSelect
+                className="flex-100"
+                classes="select"
+                name="CUSTOMS-currency"
+                onChange={[Function]}
+                options={
+                  Array [
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    },
+                    Object {
+                      "label": "AUD",
+                      "value": "AUD",
+                    },
+                    Object {
+                      "label": "BGN",
+                      "value": "BGN",
+                    },
+                    Object {
+                      "label": "BRL",
+                      "value": "BRL",
+                    },
+                    Object {
+                      "label": "CAD",
+                      "value": "CAD",
+                    },
+                    Object {
+                      "label": "CHF",
+                      "value": "CHF",
+                    },
+                    Object {
+                      "label": "CNY",
+                      "value": "CNY",
+                    },
+                    Object {
+                      "label": "CZK",
+                      "value": "CZK",
+                    },
+                    Object {
+                      "label": "DKK",
+                      "value": "DKK",
+                    },
+                    Object {
+                      "label": "GBP",
+                      "value": "GBP",
+                    },
+                    Object {
+                      "label": "HKD",
+                      "value": "HKD",
+                    },
+                    Object {
+                      "label": "HRK",
+                      "value": "HRK",
+                    },
+                    Object {
+                      "label": "HUF",
+                      "value": "HUF",
+                    },
+                    Object {
+                      "label": "IDR",
+                      "value": "IDR",
+                    },
+                    Object {
+                      "label": "ILS",
+                      "value": "ILS",
+                    },
+                    Object {
+                      "label": "INR",
+                      "value": "INR",
+                    },
+                    Object {
+                      "label": "JPY",
+                      "value": "JPY",
+                    },
+                    Object {
+                      "label": "KRW",
+                      "value": "KRW",
+                    },
+                    Object {
+                      "label": "MXN",
+                      "value": "MXN",
+                    },
+                    Object {
+                      "label": "MYR",
+                      "value": "MYR",
+                    },
+                    Object {
+                      "label": "NOK",
+                      "value": "NOK",
+                    },
+                    Object {
+                      "label": "NZD",
+                      "value": "NZD",
+                    },
+                    Object {
+                      "label": "PHP",
+                      "value": "PHP",
+                    },
+                    Object {
+                      "label": "PLN",
+                      "value": "PLN",
+                    },
+                    Object {
+                      "label": "RON",
+                      "value": "RON",
+                    },
+                    Object {
+                      "label": "RUB",
+                      "value": "RUB",
+                    },
+                    Object {
+                      "label": "SEK",
+                      "value": "SEK",
+                    },
+                    Object {
+                      "label": "SGD",
+                      "value": "SGD",
+                    },
+                    Object {
+                      "label": "THB",
+                      "value": "THB",
+                    },
+                    Object {
+                      "label": "TRY",
+                      "value": "TRY",
+                    },
+                    Object {
+                      "label": "USD",
+                      "value": "USD",
+                    },
+                    Object {
+                      "label": "ZAR",
+                      "value": "ZAR",
+                    },
+                  ]
+                }
+                value={
+                  Object {
+                    "label": "USD",
+                    "value": "USD",
+                  }
+                }
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="rate"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="CUSTOMS-rate"
+                onChange={[Function]}
+                type="number"
+                value={25}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate Basis
+            </p>
+            <NamedSelect
+              className="flex-100"
+              classes="select"
+              name="CUSTOMS-rate_basis"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Per Item",
+                    "value": "PER_ITEM",
+                  },
+                  Object {
+                    "label": "Per W/M",
+                    "value": "PER_WM",
+                  },
+                  Object {
+                    "label": "Per Container",
+                    "value": "PER_CONTAINER",
+                  },
+                  Object {
+                    "label": "Per Shipment",
+                    "value": "PER_SHIPMENT",
+                  },
+                  Object {
+                    "label": "Per cbm/ton",
+                    "value": "PER_CBM_TON",
+                  },
+                  Object {
+                    "label": "Per cbm",
+                    "value": "PER_CBM",
+                  },
+                  Object {
+                    "label": "Per ton",
+                    "value": "PER_TON",
+                  },
+                  Object {
+                    "label": "Percentage",
+                    "value": "PERCENTAGE",
+                  },
+                  Object {
+                    "label": "Per Bill of Lading",
+                    "value": "PER_BILL",
+                  },
+                  Object {
+                    "label": "Per Kilogram Range",
+                    "value": "PER_KG_RANGE",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Per Shipment",
+                  "value": "PER_SHIPMENT",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-none-center layout-wrap"
+        key="CFS"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center price_subheader"
+        >
+          <p
+            className="flex-none"
+          >
+            CFS
+             - 
+            CFS Handling
+          </p>
+          <div
+            className="flex-none layout-row layout-align-center-center"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-trash clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="currency"
+          >
+            <p
+              className="flex-100"
+            >
+              Currency
+            </p>
+            <div
+              className="flex-95 layout-row"
+            >
+              <NamedSelect
+                className="flex-100"
+                classes="select"
+                name="CFS-currency"
+                onChange={[Function]}
+                options={
+                  Array [
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    },
+                    Object {
+                      "label": "AUD",
+                      "value": "AUD",
+                    },
+                    Object {
+                      "label": "BGN",
+                      "value": "BGN",
+                    },
+                    Object {
+                      "label": "BRL",
+                      "value": "BRL",
+                    },
+                    Object {
+                      "label": "CAD",
+                      "value": "CAD",
+                    },
+                    Object {
+                      "label": "CHF",
+                      "value": "CHF",
+                    },
+                    Object {
+                      "label": "CNY",
+                      "value": "CNY",
+                    },
+                    Object {
+                      "label": "CZK",
+                      "value": "CZK",
+                    },
+                    Object {
+                      "label": "DKK",
+                      "value": "DKK",
+                    },
+                    Object {
+                      "label": "GBP",
+                      "value": "GBP",
+                    },
+                    Object {
+                      "label": "HKD",
+                      "value": "HKD",
+                    },
+                    Object {
+                      "label": "HRK",
+                      "value": "HRK",
+                    },
+                    Object {
+                      "label": "HUF",
+                      "value": "HUF",
+                    },
+                    Object {
+                      "label": "IDR",
+                      "value": "IDR",
+                    },
+                    Object {
+                      "label": "ILS",
+                      "value": "ILS",
+                    },
+                    Object {
+                      "label": "INR",
+                      "value": "INR",
+                    },
+                    Object {
+                      "label": "JPY",
+                      "value": "JPY",
+                    },
+                    Object {
+                      "label": "KRW",
+                      "value": "KRW",
+                    },
+                    Object {
+                      "label": "MXN",
+                      "value": "MXN",
+                    },
+                    Object {
+                      "label": "MYR",
+                      "value": "MYR",
+                    },
+                    Object {
+                      "label": "NOK",
+                      "value": "NOK",
+                    },
+                    Object {
+                      "label": "NZD",
+                      "value": "NZD",
+                    },
+                    Object {
+                      "label": "PHP",
+                      "value": "PHP",
+                    },
+                    Object {
+                      "label": "PLN",
+                      "value": "PLN",
+                    },
+                    Object {
+                      "label": "RON",
+                      "value": "RON",
+                    },
+                    Object {
+                      "label": "RUB",
+                      "value": "RUB",
+                    },
+                    Object {
+                      "label": "SEK",
+                      "value": "SEK",
+                    },
+                    Object {
+                      "label": "SGD",
+                      "value": "SGD",
+                    },
+                    Object {
+                      "label": "THB",
+                      "value": "THB",
+                    },
+                    Object {
+                      "label": "TRY",
+                      "value": "TRY",
+                    },
+                    Object {
+                      "label": "USD",
+                      "value": "USD",
+                    },
+                    Object {
+                      "label": "ZAR",
+                      "value": "ZAR",
+                    },
+                  ]
+                }
+                value={
+                  Object {
+                    "label": "USD",
+                    "value": "USD",
+                  }
+                }
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="rate"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="CFS-rate"
+                onChange={[Function]}
+                type="number"
+                value={22}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate Basis
+            </p>
+            <NamedSelect
+              className="flex-100"
+              classes="select"
+              name="CFS-rate_basis"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Per Item",
+                    "value": "PER_ITEM",
+                  },
+                  Object {
+                    "label": "Per W/M",
+                    "value": "PER_WM",
+                  },
+                  Object {
+                    "label": "Per Container",
+                    "value": "PER_CONTAINER",
+                  },
+                  Object {
+                    "label": "Per Shipment",
+                    "value": "PER_SHIPMENT",
+                  },
+                  Object {
+                    "label": "Per cbm/ton",
+                    "value": "PER_CBM_TON",
+                  },
+                  Object {
+                    "label": "Per cbm",
+                    "value": "PER_CBM",
+                  },
+                  Object {
+                    "label": "Per ton",
+                    "value": "PER_TON",
+                  },
+                  Object {
+                    "label": "Percentage",
+                    "value": "PERCENTAGE",
+                  },
+                  Object {
+                    "label": "Per Bill of Lading",
+                    "value": "PER_BILL",
+                  },
+                  Object {
+                    "label": "Per Kilogram Range",
+                    "value": "PER_KG_RANGE",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Per cbm",
+                  "value": "PER_CBM",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-none-center layout-wrap"
+        key="LS"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center price_subheader"
+        >
+          <p
+            className="flex-none"
+          >
+            LS
+             - 
+            Liner Service Fee
+          </p>
+          <div
+            className="flex-none layout-row layout-align-center-center"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-trash clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="currency"
+          >
+            <p
+              className="flex-100"
+            >
+              Currency
+            </p>
+            <div
+              className="flex-95 layout-row"
+            >
+              <NamedSelect
+                className="flex-100"
+                classes="select"
+                name="LS-currency"
+                onChange={[Function]}
+                options={
+                  Array [
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    },
+                    Object {
+                      "label": "AUD",
+                      "value": "AUD",
+                    },
+                    Object {
+                      "label": "BGN",
+                      "value": "BGN",
+                    },
+                    Object {
+                      "label": "BRL",
+                      "value": "BRL",
+                    },
+                    Object {
+                      "label": "CAD",
+                      "value": "CAD",
+                    },
+                    Object {
+                      "label": "CHF",
+                      "value": "CHF",
+                    },
+                    Object {
+                      "label": "CNY",
+                      "value": "CNY",
+                    },
+                    Object {
+                      "label": "CZK",
+                      "value": "CZK",
+                    },
+                    Object {
+                      "label": "DKK",
+                      "value": "DKK",
+                    },
+                    Object {
+                      "label": "GBP",
+                      "value": "GBP",
+                    },
+                    Object {
+                      "label": "HKD",
+                      "value": "HKD",
+                    },
+                    Object {
+                      "label": "HRK",
+                      "value": "HRK",
+                    },
+                    Object {
+                      "label": "HUF",
+                      "value": "HUF",
+                    },
+                    Object {
+                      "label": "IDR",
+                      "value": "IDR",
+                    },
+                    Object {
+                      "label": "ILS",
+                      "value": "ILS",
+                    },
+                    Object {
+                      "label": "INR",
+                      "value": "INR",
+                    },
+                    Object {
+                      "label": "JPY",
+                      "value": "JPY",
+                    },
+                    Object {
+                      "label": "KRW",
+                      "value": "KRW",
+                    },
+                    Object {
+                      "label": "MXN",
+                      "value": "MXN",
+                    },
+                    Object {
+                      "label": "MYR",
+                      "value": "MYR",
+                    },
+                    Object {
+                      "label": "NOK",
+                      "value": "NOK",
+                    },
+                    Object {
+                      "label": "NZD",
+                      "value": "NZD",
+                    },
+                    Object {
+                      "label": "PHP",
+                      "value": "PHP",
+                    },
+                    Object {
+                      "label": "PLN",
+                      "value": "PLN",
+                    },
+                    Object {
+                      "label": "RON",
+                      "value": "RON",
+                    },
+                    Object {
+                      "label": "RUB",
+                      "value": "RUB",
+                    },
+                    Object {
+                      "label": "SEK",
+                      "value": "SEK",
+                    },
+                    Object {
+                      "label": "SGD",
+                      "value": "SGD",
+                    },
+                    Object {
+                      "label": "THB",
+                      "value": "THB",
+                    },
+                    Object {
+                      "label": "TRY",
+                      "value": "TRY",
+                    },
+                    Object {
+                      "label": "USD",
+                      "value": "USD",
+                    },
+                    Object {
+                      "label": "ZAR",
+                      "value": "ZAR",
+                    },
+                  ]
+                }
+                value={
+                  Object {
+                    "label": "USD",
+                    "value": "USD",
+                  }
+                }
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="rate"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="LS-rate"
+                onChange={[Function]}
+                type="number"
+                value={675}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate Basis
+            </p>
+            <NamedSelect
+              className="flex-100"
+              classes="select"
+              name="LS-rate_basis"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Per Item",
+                    "value": "PER_ITEM",
+                  },
+                  Object {
+                    "label": "Per W/M",
+                    "value": "PER_WM",
+                  },
+                  Object {
+                    "label": "Per Container",
+                    "value": "PER_CONTAINER",
+                  },
+                  Object {
+                    "label": "Per Shipment",
+                    "value": "PER_SHIPMENT",
+                  },
+                  Object {
+                    "label": "Per cbm/ton",
+                    "value": "PER_CBM_TON",
+                  },
+                  Object {
+                    "label": "Per cbm",
+                    "value": "PER_CBM",
+                  },
+                  Object {
+                    "label": "Per ton",
+                    "value": "PER_TON",
+                  },
+                  Object {
+                    "label": "Percentage",
+                    "value": "PERCENTAGE",
+                  },
+                  Object {
+                    "label": "Per Bill of Lading",
+                    "value": "PER_BILL",
+                  },
+                  Object {
+                    "label": "Per Kilogram Range",
+                    "value": "PER_KG_RANGE",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Per Item",
+                  "value": "PER_ITEM",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-none-center layout-wrap"
+        key="LCLS"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center price_subheader"
+        >
+          <p
+            className="flex-none"
+          >
+            LCLS
+             - 
+            LCL Handling Fee
+          </p>
+          <div
+            className="flex-none layout-row layout-align-center-center"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-trash clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="currency"
+          >
+            <p
+              className="flex-100"
+            >
+              Currency
+            </p>
+            <div
+              className="flex-95 layout-row"
+            >
+              <NamedSelect
+                className="flex-100"
+                classes="select"
+                name="LCLS-currency"
+                onChange={[Function]}
+                options={
+                  Array [
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    },
+                    Object {
+                      "label": "AUD",
+                      "value": "AUD",
+                    },
+                    Object {
+                      "label": "BGN",
+                      "value": "BGN",
+                    },
+                    Object {
+                      "label": "BRL",
+                      "value": "BRL",
+                    },
+                    Object {
+                      "label": "CAD",
+                      "value": "CAD",
+                    },
+                    Object {
+                      "label": "CHF",
+                      "value": "CHF",
+                    },
+                    Object {
+                      "label": "CNY",
+                      "value": "CNY",
+                    },
+                    Object {
+                      "label": "CZK",
+                      "value": "CZK",
+                    },
+                    Object {
+                      "label": "DKK",
+                      "value": "DKK",
+                    },
+                    Object {
+                      "label": "GBP",
+                      "value": "GBP",
+                    },
+                    Object {
+                      "label": "HKD",
+                      "value": "HKD",
+                    },
+                    Object {
+                      "label": "HRK",
+                      "value": "HRK",
+                    },
+                    Object {
+                      "label": "HUF",
+                      "value": "HUF",
+                    },
+                    Object {
+                      "label": "IDR",
+                      "value": "IDR",
+                    },
+                    Object {
+                      "label": "ILS",
+                      "value": "ILS",
+                    },
+                    Object {
+                      "label": "INR",
+                      "value": "INR",
+                    },
+                    Object {
+                      "label": "JPY",
+                      "value": "JPY",
+                    },
+                    Object {
+                      "label": "KRW",
+                      "value": "KRW",
+                    },
+                    Object {
+                      "label": "MXN",
+                      "value": "MXN",
+                    },
+                    Object {
+                      "label": "MYR",
+                      "value": "MYR",
+                    },
+                    Object {
+                      "label": "NOK",
+                      "value": "NOK",
+                    },
+                    Object {
+                      "label": "NZD",
+                      "value": "NZD",
+                    },
+                    Object {
+                      "label": "PHP",
+                      "value": "PHP",
+                    },
+                    Object {
+                      "label": "PLN",
+                      "value": "PLN",
+                    },
+                    Object {
+                      "label": "RON",
+                      "value": "RON",
+                    },
+                    Object {
+                      "label": "RUB",
+                      "value": "RUB",
+                    },
+                    Object {
+                      "label": "SEK",
+                      "value": "SEK",
+                    },
+                    Object {
+                      "label": "SGD",
+                      "value": "SGD",
+                    },
+                    Object {
+                      "label": "THB",
+                      "value": "THB",
+                    },
+                    Object {
+                      "label": "TRY",
+                      "value": "TRY",
+                    },
+                    Object {
+                      "label": "USD",
+                      "value": "USD",
+                    },
+                    Object {
+                      "label": "ZAR",
+                      "value": "ZAR",
+                    },
+                  ]
+                }
+                value={
+                  Object {
+                    "label": "USD",
+                    "value": "USD",
+                  }
+                }
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="cbm"
+          >
+            <p
+              className="flex-100"
+            >
+              CBM
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="LCLS-cbm"
+                onChange={[Function]}
+                type="number"
+                value={50}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="ton"
+          >
+            <p
+              className="flex-100"
+            >
+              Ton
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="LCLS-ton"
+                onChange={[Function]}
+                type="number"
+                value={50}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="min"
+          >
+            <p
+              className="flex-100"
+            >
+              Minimum
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="LCLS-min"
+                onChange={[Function]}
+                type="number"
+                value={50}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate Basis
+            </p>
+            <NamedSelect
+              className="flex-100"
+              classes="select"
+              name="LCLS-rate_basis"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Per Item",
+                    "value": "PER_ITEM",
+                  },
+                  Object {
+                    "label": "Per W/M",
+                    "value": "PER_WM",
+                  },
+                  Object {
+                    "label": "Per Container",
+                    "value": "PER_CONTAINER",
+                  },
+                  Object {
+                    "label": "Per Shipment",
+                    "value": "PER_SHIPMENT",
+                  },
+                  Object {
+                    "label": "Per cbm/ton",
+                    "value": "PER_CBM_TON",
+                  },
+                  Object {
+                    "label": "Per cbm",
+                    "value": "PER_CBM",
+                  },
+                  Object {
+                    "label": "Per ton",
+                    "value": "PER_TON",
+                  },
+                  Object {
+                    "label": "Percentage",
+                    "value": "PERCENTAGE",
+                  },
+                  Object {
+                    "label": "Per Bill of Lading",
+                    "value": "PER_BILL",
+                  },
+                  Object {
+                    "label": "Per Kilogram Range",
+                    "value": "PER_KG_RANGE",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Per cbm/ton",
+                  "value": "PER_CBM_TON",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-none-center layout-wrap"
+        key="ISPS"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center price_subheader"
+        >
+          <p
+            className="flex-none"
+          >
+            ISPS
+             - 
+            ISPS Fee
+          </p>
+          <div
+            className="flex-none layout-row layout-align-center-center"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-trash clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="currency"
+          >
+            <p
+              className="flex-100"
+            >
+              Currency
+            </p>
+            <div
+              className="flex-95 layout-row"
+            >
+              <NamedSelect
+                className="flex-100"
+                classes="select"
+                name="ISPS-currency"
+                onChange={[Function]}
+                options={
+                  Array [
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    },
+                    Object {
+                      "label": "AUD",
+                      "value": "AUD",
+                    },
+                    Object {
+                      "label": "BGN",
+                      "value": "BGN",
+                    },
+                    Object {
+                      "label": "BRL",
+                      "value": "BRL",
+                    },
+                    Object {
+                      "label": "CAD",
+                      "value": "CAD",
+                    },
+                    Object {
+                      "label": "CHF",
+                      "value": "CHF",
+                    },
+                    Object {
+                      "label": "CNY",
+                      "value": "CNY",
+                    },
+                    Object {
+                      "label": "CZK",
+                      "value": "CZK",
+                    },
+                    Object {
+                      "label": "DKK",
+                      "value": "DKK",
+                    },
+                    Object {
+                      "label": "GBP",
+                      "value": "GBP",
+                    },
+                    Object {
+                      "label": "HKD",
+                      "value": "HKD",
+                    },
+                    Object {
+                      "label": "HRK",
+                      "value": "HRK",
+                    },
+                    Object {
+                      "label": "HUF",
+                      "value": "HUF",
+                    },
+                    Object {
+                      "label": "IDR",
+                      "value": "IDR",
+                    },
+                    Object {
+                      "label": "ILS",
+                      "value": "ILS",
+                    },
+                    Object {
+                      "label": "INR",
+                      "value": "INR",
+                    },
+                    Object {
+                      "label": "JPY",
+                      "value": "JPY",
+                    },
+                    Object {
+                      "label": "KRW",
+                      "value": "KRW",
+                    },
+                    Object {
+                      "label": "MXN",
+                      "value": "MXN",
+                    },
+                    Object {
+                      "label": "MYR",
+                      "value": "MYR",
+                    },
+                    Object {
+                      "label": "NOK",
+                      "value": "NOK",
+                    },
+                    Object {
+                      "label": "NZD",
+                      "value": "NZD",
+                    },
+                    Object {
+                      "label": "PHP",
+                      "value": "PHP",
+                    },
+                    Object {
+                      "label": "PLN",
+                      "value": "PLN",
+                    },
+                    Object {
+                      "label": "RON",
+                      "value": "RON",
+                    },
+                    Object {
+                      "label": "RUB",
+                      "value": "RUB",
+                    },
+                    Object {
+                      "label": "SEK",
+                      "value": "SEK",
+                    },
+                    Object {
+                      "label": "SGD",
+                      "value": "SGD",
+                    },
+                    Object {
+                      "label": "THB",
+                      "value": "THB",
+                    },
+                    Object {
+                      "label": "TRY",
+                      "value": "TRY",
+                    },
+                    Object {
+                      "label": "USD",
+                      "value": "USD",
+                    },
+                    Object {
+                      "label": "ZAR",
+                      "value": "ZAR",
+                    },
+                  ]
+                }
+                value={
+                  Object {
+                    "label": "EUR",
+                    "value": "EUR",
+                  }
+                }
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="rate"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="ISPS-rate"
+                onChange={[Function]}
+                type="number"
+                value={5}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate Basis
+            </p>
+            <NamedSelect
+              className="flex-100"
+              classes="select"
+              name="ISPS-rate_basis"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Per Item",
+                    "value": "PER_ITEM",
+                  },
+                  Object {
+                    "label": "Per W/M",
+                    "value": "PER_WM",
+                  },
+                  Object {
+                    "label": "Per Container",
+                    "value": "PER_CONTAINER",
+                  },
+                  Object {
+                    "label": "Per Shipment",
+                    "value": "PER_SHIPMENT",
+                  },
+                  Object {
+                    "label": "Per cbm/ton",
+                    "value": "PER_CBM_TON",
+                  },
+                  Object {
+                    "label": "Per cbm",
+                    "value": "PER_CBM",
+                  },
+                  Object {
+                    "label": "Per ton",
+                    "value": "PER_TON",
+                  },
+                  Object {
+                    "label": "Percentage",
+                    "value": "PERCENTAGE",
+                  },
+                  Object {
+                    "label": "Per Bill of Lading",
+                    "value": "PER_BILL",
+                  },
+                  Object {
+                    "label": "Per Kilogram Range",
+                    "value": "PER_KG_RANGE",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Per Shipment",
+                  "value": "PER_SHIPMENT",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-none-center layout-wrap"
+        key="DDF"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center price_subheader"
+        >
+          <p
+            className="flex-none"
+          >
+            DDF
+             - 
+            Destination Document Fee
+          </p>
+          <div
+            className="flex-none layout-row layout-align-center-center"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-trash clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="currency"
+          >
+            <p
+              className="flex-100"
+            >
+              Currency
+            </p>
+            <div
+              className="flex-95 layout-row"
+            >
+              <NamedSelect
+                className="flex-100"
+                classes="select"
+                name="DDF-currency"
+                onChange={[Function]}
+                options={
+                  Array [
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    },
+                    Object {
+                      "label": "AUD",
+                      "value": "AUD",
+                    },
+                    Object {
+                      "label": "BGN",
+                      "value": "BGN",
+                    },
+                    Object {
+                      "label": "BRL",
+                      "value": "BRL",
+                    },
+                    Object {
+                      "label": "CAD",
+                      "value": "CAD",
+                    },
+                    Object {
+                      "label": "CHF",
+                      "value": "CHF",
+                    },
+                    Object {
+                      "label": "CNY",
+                      "value": "CNY",
+                    },
+                    Object {
+                      "label": "CZK",
+                      "value": "CZK",
+                    },
+                    Object {
+                      "label": "DKK",
+                      "value": "DKK",
+                    },
+                    Object {
+                      "label": "GBP",
+                      "value": "GBP",
+                    },
+                    Object {
+                      "label": "HKD",
+                      "value": "HKD",
+                    },
+                    Object {
+                      "label": "HRK",
+                      "value": "HRK",
+                    },
+                    Object {
+                      "label": "HUF",
+                      "value": "HUF",
+                    },
+                    Object {
+                      "label": "IDR",
+                      "value": "IDR",
+                    },
+                    Object {
+                      "label": "ILS",
+                      "value": "ILS",
+                    },
+                    Object {
+                      "label": "INR",
+                      "value": "INR",
+                    },
+                    Object {
+                      "label": "JPY",
+                      "value": "JPY",
+                    },
+                    Object {
+                      "label": "KRW",
+                      "value": "KRW",
+                    },
+                    Object {
+                      "label": "MXN",
+                      "value": "MXN",
+                    },
+                    Object {
+                      "label": "MYR",
+                      "value": "MYR",
+                    },
+                    Object {
+                      "label": "NOK",
+                      "value": "NOK",
+                    },
+                    Object {
+                      "label": "NZD",
+                      "value": "NZD",
+                    },
+                    Object {
+                      "label": "PHP",
+                      "value": "PHP",
+                    },
+                    Object {
+                      "label": "PLN",
+                      "value": "PLN",
+                    },
+                    Object {
+                      "label": "RON",
+                      "value": "RON",
+                    },
+                    Object {
+                      "label": "RUB",
+                      "value": "RUB",
+                    },
+                    Object {
+                      "label": "SEK",
+                      "value": "SEK",
+                    },
+                    Object {
+                      "label": "SGD",
+                      "value": "SGD",
+                    },
+                    Object {
+                      "label": "THB",
+                      "value": "THB",
+                    },
+                    Object {
+                      "label": "TRY",
+                      "value": "TRY",
+                    },
+                    Object {
+                      "label": "USD",
+                      "value": "USD",
+                    },
+                    Object {
+                      "label": "ZAR",
+                      "value": "ZAR",
+                    },
+                  ]
+                }
+                value={
+                  Object {
+                    "label": "USD",
+                    "value": "USD",
+                  }
+                }
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="rate"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="DDF-rate"
+                onChange={[Function]}
+                type="number"
+                value={5}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate Basis
+            </p>
+            <NamedSelect
+              className="flex-100"
+              classes="select"
+              name="DDF-rate_basis"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Per Item",
+                    "value": "PER_ITEM",
+                  },
+                  Object {
+                    "label": "Per W/M",
+                    "value": "PER_WM",
+                  },
+                  Object {
+                    "label": "Per Container",
+                    "value": "PER_CONTAINER",
+                  },
+                  Object {
+                    "label": "Per Shipment",
+                    "value": "PER_SHIPMENT",
+                  },
+                  Object {
+                    "label": "Per cbm/ton",
+                    "value": "PER_CBM_TON",
+                  },
+                  Object {
+                    "label": "Per cbm",
+                    "value": "PER_CBM",
+                  },
+                  Object {
+                    "label": "Per ton",
+                    "value": "PER_TON",
+                  },
+                  Object {
+                    "label": "Percentage",
+                    "value": "PERCENTAGE",
+                  },
+                  Object {
+                    "label": "Per Bill of Lading",
+                    "value": "PER_BILL",
+                  },
+                  Object {
+                    "label": "Per Kilogram Range",
+                    "value": "PER_KG_RANGE",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Per Shipment",
+                  "value": "PER_SHIPMENT",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-none-center layout-wrap"
+        key="ODF"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center price_subheader"
+        >
+          <p
+            className="flex-none"
+          >
+            ODF
+             - 
+            Origin Document Fee
+          </p>
+          <div
+            className="flex-none layout-row layout-align-center-center"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-trash clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="currency"
+          >
+            <p
+              className="flex-100"
+            >
+              Currency
+            </p>
+            <div
+              className="flex-95 layout-row"
+            >
+              <NamedSelect
+                className="flex-100"
+                classes="select"
+                name="ODF-currency"
+                onChange={[Function]}
+                options={
+                  Array [
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    },
+                    Object {
+                      "label": "AUD",
+                      "value": "AUD",
+                    },
+                    Object {
+                      "label": "BGN",
+                      "value": "BGN",
+                    },
+                    Object {
+                      "label": "BRL",
+                      "value": "BRL",
+                    },
+                    Object {
+                      "label": "CAD",
+                      "value": "CAD",
+                    },
+                    Object {
+                      "label": "CHF",
+                      "value": "CHF",
+                    },
+                    Object {
+                      "label": "CNY",
+                      "value": "CNY",
+                    },
+                    Object {
+                      "label": "CZK",
+                      "value": "CZK",
+                    },
+                    Object {
+                      "label": "DKK",
+                      "value": "DKK",
+                    },
+                    Object {
+                      "label": "GBP",
+                      "value": "GBP",
+                    },
+                    Object {
+                      "label": "HKD",
+                      "value": "HKD",
+                    },
+                    Object {
+                      "label": "HRK",
+                      "value": "HRK",
+                    },
+                    Object {
+                      "label": "HUF",
+                      "value": "HUF",
+                    },
+                    Object {
+                      "label": "IDR",
+                      "value": "IDR",
+                    },
+                    Object {
+                      "label": "ILS",
+                      "value": "ILS",
+                    },
+                    Object {
+                      "label": "INR",
+                      "value": "INR",
+                    },
+                    Object {
+                      "label": "JPY",
+                      "value": "JPY",
+                    },
+                    Object {
+                      "label": "KRW",
+                      "value": "KRW",
+                    },
+                    Object {
+                      "label": "MXN",
+                      "value": "MXN",
+                    },
+                    Object {
+                      "label": "MYR",
+                      "value": "MYR",
+                    },
+                    Object {
+                      "label": "NOK",
+                      "value": "NOK",
+                    },
+                    Object {
+                      "label": "NZD",
+                      "value": "NZD",
+                    },
+                    Object {
+                      "label": "PHP",
+                      "value": "PHP",
+                    },
+                    Object {
+                      "label": "PLN",
+                      "value": "PLN",
+                    },
+                    Object {
+                      "label": "RON",
+                      "value": "RON",
+                    },
+                    Object {
+                      "label": "RUB",
+                      "value": "RUB",
+                    },
+                    Object {
+                      "label": "SEK",
+                      "value": "SEK",
+                    },
+                    Object {
+                      "label": "SGD",
+                      "value": "SGD",
+                    },
+                    Object {
+                      "label": "THB",
+                      "value": "THB",
+                    },
+                    Object {
+                      "label": "TRY",
+                      "value": "TRY",
+                    },
+                    Object {
+                      "label": "USD",
+                      "value": "USD",
+                    },
+                    Object {
+                      "label": "ZAR",
+                      "value": "ZAR",
+                    },
+                  ]
+                }
+                value={
+                  Object {
+                    "label": "USD",
+                    "value": "USD",
+                  }
+                }
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="rate"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="ODF-rate"
+                onChange={[Function]}
+                type="number"
+                value={625}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate Basis
+            </p>
+            <NamedSelect
+              className="flex-100"
+              classes="select"
+              name="ODF-rate_basis"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Per Item",
+                    "value": "PER_ITEM",
+                  },
+                  Object {
+                    "label": "Per W/M",
+                    "value": "PER_WM",
+                  },
+                  Object {
+                    "label": "Per Container",
+                    "value": "PER_CONTAINER",
+                  },
+                  Object {
+                    "label": "Per Shipment",
+                    "value": "PER_SHIPMENT",
+                  },
+                  Object {
+                    "label": "Per cbm/ton",
+                    "value": "PER_CBM_TON",
+                  },
+                  Object {
+                    "label": "Per cbm",
+                    "value": "PER_CBM",
+                  },
+                  Object {
+                    "label": "Per ton",
+                    "value": "PER_TON",
+                  },
+                  Object {
+                    "label": "Percentage",
+                    "value": "PERCENTAGE",
+                  },
+                  Object {
+                    "label": "Per Bill of Lading",
+                    "value": "PER_BILL",
+                  },
+                  Object {
+                    "label": "Per Kilogram Range",
+                    "value": "PER_KG_RANGE",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Per Shipment",
+                  "value": "PER_SHIPMENT",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-none-center layout-wrap"
+        key="VGM"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center price_subheader"
+        >
+          <p
+            className="flex-none"
+          >
+            VGM
+             - 
+            Verified Gross Mass
+          </p>
+          <div
+            className="flex-none layout-row layout-align-center-center"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-trash clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="currency"
+          >
+            <p
+              className="flex-100"
+            >
+              Currency
+            </p>
+            <div
+              className="flex-95 layout-row"
+            >
+              <NamedSelect
+                className="flex-100"
+                classes="select"
+                name="VGM-currency"
+                onChange={[Function]}
+                options={
+                  Array [
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    },
+                    Object {
+                      "label": "AUD",
+                      "value": "AUD",
+                    },
+                    Object {
+                      "label": "BGN",
+                      "value": "BGN",
+                    },
+                    Object {
+                      "label": "BRL",
+                      "value": "BRL",
+                    },
+                    Object {
+                      "label": "CAD",
+                      "value": "CAD",
+                    },
+                    Object {
+                      "label": "CHF",
+                      "value": "CHF",
+                    },
+                    Object {
+                      "label": "CNY",
+                      "value": "CNY",
+                    },
+                    Object {
+                      "label": "CZK",
+                      "value": "CZK",
+                    },
+                    Object {
+                      "label": "DKK",
+                      "value": "DKK",
+                    },
+                    Object {
+                      "label": "GBP",
+                      "value": "GBP",
+                    },
+                    Object {
+                      "label": "HKD",
+                      "value": "HKD",
+                    },
+                    Object {
+                      "label": "HRK",
+                      "value": "HRK",
+                    },
+                    Object {
+                      "label": "HUF",
+                      "value": "HUF",
+                    },
+                    Object {
+                      "label": "IDR",
+                      "value": "IDR",
+                    },
+                    Object {
+                      "label": "ILS",
+                      "value": "ILS",
+                    },
+                    Object {
+                      "label": "INR",
+                      "value": "INR",
+                    },
+                    Object {
+                      "label": "JPY",
+                      "value": "JPY",
+                    },
+                    Object {
+                      "label": "KRW",
+                      "value": "KRW",
+                    },
+                    Object {
+                      "label": "MXN",
+                      "value": "MXN",
+                    },
+                    Object {
+                      "label": "MYR",
+                      "value": "MYR",
+                    },
+                    Object {
+                      "label": "NOK",
+                      "value": "NOK",
+                    },
+                    Object {
+                      "label": "NZD",
+                      "value": "NZD",
+                    },
+                    Object {
+                      "label": "PHP",
+                      "value": "PHP",
+                    },
+                    Object {
+                      "label": "PLN",
+                      "value": "PLN",
+                    },
+                    Object {
+                      "label": "RON",
+                      "value": "RON",
+                    },
+                    Object {
+                      "label": "RUB",
+                      "value": "RUB",
+                    },
+                    Object {
+                      "label": "SEK",
+                      "value": "SEK",
+                    },
+                    Object {
+                      "label": "SGD",
+                      "value": "SGD",
+                    },
+                    Object {
+                      "label": "THB",
+                      "value": "THB",
+                    },
+                    Object {
+                      "label": "TRY",
+                      "value": "TRY",
+                    },
+                    Object {
+                      "label": "USD",
+                      "value": "USD",
+                    },
+                    Object {
+                      "label": "ZAR",
+                      "value": "ZAR",
+                    },
+                  ]
+                }
+                value={
+                  Object {
+                    "label": "USD",
+                    "value": "USD",
+                  }
+                }
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="rate"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="VGM-rate"
+                onChange={[Function]}
+                type="number"
+                value={25}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate Basis
+            </p>
+            <NamedSelect
+              className="flex-100"
+              classes="select"
+              name="VGM-rate_basis"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Per Item",
+                    "value": "PER_ITEM",
+                  },
+                  Object {
+                    "label": "Per W/M",
+                    "value": "PER_WM",
+                  },
+                  Object {
+                    "label": "Per Container",
+                    "value": "PER_CONTAINER",
+                  },
+                  Object {
+                    "label": "Per Shipment",
+                    "value": "PER_SHIPMENT",
+                  },
+                  Object {
+                    "label": "Per cbm/ton",
+                    "value": "PER_CBM_TON",
+                  },
+                  Object {
+                    "label": "Per cbm",
+                    "value": "PER_CBM",
+                  },
+                  Object {
+                    "label": "Per ton",
+                    "value": "PER_TON",
+                  },
+                  Object {
+                    "label": "Percentage",
+                    "value": "PERCENTAGE",
+                  },
+                  Object {
+                    "label": "Per Bill of Lading",
+                    "value": "PER_BILL",
+                  },
+                  Object {
+                    "label": "Per Kilogram Range",
+                    "value": "PER_KG_RANGE",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Per Shipment",
+                  "value": "PER_SHIPMENT",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-none-center layout-wrap"
+        key="ENS"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center price_subheader"
+        >
+          <p
+            className="flex-none"
+          >
+            ENS
+             - 
+            Entry Summary Declaration
+          </p>
+          <div
+            className="flex-none layout-row layout-align-center-center"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-trash clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="currency"
+          >
+            <p
+              className="flex-100"
+            >
+              Currency
+            </p>
+            <div
+              className="flex-95 layout-row"
+            >
+              <NamedSelect
+                className="flex-100"
+                classes="select"
+                name="ENS-currency"
+                onChange={[Function]}
+                options={
+                  Array [
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    },
+                    Object {
+                      "label": "AUD",
+                      "value": "AUD",
+                    },
+                    Object {
+                      "label": "BGN",
+                      "value": "BGN",
+                    },
+                    Object {
+                      "label": "BRL",
+                      "value": "BRL",
+                    },
+                    Object {
+                      "label": "CAD",
+                      "value": "CAD",
+                    },
+                    Object {
+                      "label": "CHF",
+                      "value": "CHF",
+                    },
+                    Object {
+                      "label": "CNY",
+                      "value": "CNY",
+                    },
+                    Object {
+                      "label": "CZK",
+                      "value": "CZK",
+                    },
+                    Object {
+                      "label": "DKK",
+                      "value": "DKK",
+                    },
+                    Object {
+                      "label": "GBP",
+                      "value": "GBP",
+                    },
+                    Object {
+                      "label": "HKD",
+                      "value": "HKD",
+                    },
+                    Object {
+                      "label": "HRK",
+                      "value": "HRK",
+                    },
+                    Object {
+                      "label": "HUF",
+                      "value": "HUF",
+                    },
+                    Object {
+                      "label": "IDR",
+                      "value": "IDR",
+                    },
+                    Object {
+                      "label": "ILS",
+                      "value": "ILS",
+                    },
+                    Object {
+                      "label": "INR",
+                      "value": "INR",
+                    },
+                    Object {
+                      "label": "JPY",
+                      "value": "JPY",
+                    },
+                    Object {
+                      "label": "KRW",
+                      "value": "KRW",
+                    },
+                    Object {
+                      "label": "MXN",
+                      "value": "MXN",
+                    },
+                    Object {
+                      "label": "MYR",
+                      "value": "MYR",
+                    },
+                    Object {
+                      "label": "NOK",
+                      "value": "NOK",
+                    },
+                    Object {
+                      "label": "NZD",
+                      "value": "NZD",
+                    },
+                    Object {
+                      "label": "PHP",
+                      "value": "PHP",
+                    },
+                    Object {
+                      "label": "PLN",
+                      "value": "PLN",
+                    },
+                    Object {
+                      "label": "RON",
+                      "value": "RON",
+                    },
+                    Object {
+                      "label": "RUB",
+                      "value": "RUB",
+                    },
+                    Object {
+                      "label": "SEK",
+                      "value": "SEK",
+                    },
+                    Object {
+                      "label": "SGD",
+                      "value": "SGD",
+                    },
+                    Object {
+                      "label": "THB",
+                      "value": "THB",
+                    },
+                    Object {
+                      "label": "TRY",
+                      "value": "TRY",
+                    },
+                    Object {
+                      "label": "USD",
+                      "value": "USD",
+                    },
+                    Object {
+                      "label": "ZAR",
+                      "value": "ZAR",
+                    },
+                  ]
+                }
+                value={
+                  Object {
+                    "label": "USD",
+                    "value": "USD",
+                  }
+                }
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+            key="rate"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate
+            </p>
+            <div
+              className="flex-95 layout-row editor_input"
+            >
+              <input
+                name="ENS-rate"
+                onChange={[Function]}
+                type="number"
+                value={25}
+              />
+            </div>
+          </div>
+          <div
+            className="flex layout-row layout-align-none-center layout-wrap price_cell"
+          >
+            <p
+              className="flex-100"
+            >
+              Rate Basis
+            </p>
+            <NamedSelect
+              className="flex-100"
+              classes="select"
+              name="ENS-rate_basis"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Per Item",
+                    "value": "PER_ITEM",
+                  },
+                  Object {
+                    "label": "Per W/M",
+                    "value": "PER_WM",
+                  },
+                  Object {
+                    "label": "Per Container",
+                    "value": "PER_CONTAINER",
+                  },
+                  Object {
+                    "label": "Per Shipment",
+                    "value": "PER_SHIPMENT",
+                  },
+                  Object {
+                    "label": "Per cbm/ton",
+                    "value": "PER_CBM_TON",
+                  },
+                  Object {
+                    "label": "Per cbm",
+                    "value": "PER_CBM",
+                  },
+                  Object {
+                    "label": "Per ton",
+                    "value": "PER_TON",
+                  },
+                  Object {
+                    "label": "Percentage",
+                    "value": "PERCENTAGE",
+                  },
+                  Object {
+                    "label": "Per Bill of Lading",
+                    "value": "PER_BILL",
+                  },
+                  Object {
+                    "label": "Per Kilogram Range",
+                    "value": "PER_KG_RANGE",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Per Shipment",
+                  "value": "PER_SHIPMENT",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-align-end-center layout-row"
+        style={
+          Object {
+            "margin": "15px",
+          }
+        }
+      >
+        <RoundButton
+          active={true}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-plus"
+          inverse={false}
+          size="small"
+          text="Add Fee"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-100 layout-align-end-center layout-row"
+        style={
+          Object {
+            "margin": "15px",
+          }
+        }
+      >
+        <RoundButton
+          active={true}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-floppy-o"
+          inverse={false}
+          size="small"
+          text="Save"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center-center layout-wrap add_fee_panel fee_panel_closed"
+    >
+      <div
+        className="flex-none layout-row layout-align-center-center panel_close"
+        onClick={[Function]}
+      >
+        <i
+          className="fa fa-times clip"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-90 layout-row layout-wrap layout-align-start-start"
+      >
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="CFD"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            CFD
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="ERS"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            ERS
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="EXP"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            EXP
+             - 
+            Export Fee
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="IMP"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            IMP
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="SBF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            SBF
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="LSS"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            LSS
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="CFO"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            CFO
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="STF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            STF
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="TRF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            TRF
+             - 
+            Telex Release Fee
+             
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`steps.cargoClass is true 1`] = `
+<div
+  className=" editor_backdrop flex-none layout-row layout-wrap layout-align-center-center"
+>
+  <div
+    className=" editor_fade flex-none layout-row layout-wrap layout-align-center-start"
+    onClick={[Function]}
+  />
+  <div
+    className=" editor_box flex-none layout-row layout-wrap layout-align-center-start"
+  >
+    <div
+      className="flex-95 layout-row layout-wrap layout-align-center-start editor_scroll"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center sec_title"
+      >
+        <p
+          className=" sec_title_text flex-none"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        >
+          New Pricing
+        </p>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center"
+      >
+        <div
+          className="flex-60 layout-row layout-align-start-center"
+        >
+          <i
+            className="fa fa-map-signs clip"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <p
+            className="flex-none offset-5"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-start"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center layout-wrap"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Cargo Class: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            >
+              LCL
+            </h4>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <h4
+                className="flex-100 letter_3"
+              >
+                Select the type of good shipped
+              </h4>
+              <div
+                className="flex-75 layout-row"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  classes="select"
+                  name="transportCategory"
+                  onChange={[Function]}
+                  options={Array []}
+                  value={false}
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Route: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Sub Route: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Client: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-align-end-center layout-row"
+        style={
+          Object {
+            "margin": "15px",
+          }
+        }
+      >
+        <RoundButton
+          active={true}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-plus"
+          inverse={false}
+          size="small"
+          text="Add Fee"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-100 layout-align-end-center layout-row"
+        style={
+          Object {
+            "margin": "15px",
+          }
+        }
+      >
+        <RoundButton
+          active={true}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-floppy-o"
+          inverse={false}
+          size="small"
+          text="Save"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center-center layout-wrap add_fee_panel fee_panel_closed"
+    >
+      <div
+        className="flex-none layout-row layout-align-center-center panel_close"
+        onClick={[Function]}
+      >
+        <i
+          className="fa fa-times clip"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-90 layout-row layout-wrap layout-align-start-start"
+      >
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="CFD"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            CFD
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="ERS"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            ERS
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="EXP"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            EXP
+             - 
+            Export Fee
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="IMP"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            IMP
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="SBF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            SBF
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="LSS"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            LSS
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="CFO"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            CFO
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="STF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            STF
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="TRF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            TRF
+             - 
+            Telex Release Fee
+             
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`steps.hubRoute is true 1`] = `
+<div
+  className=" editor_backdrop flex-none layout-row layout-wrap layout-align-center-center"
+>
+  <div
+    className=" editor_fade flex-none layout-row layout-wrap layout-align-center-start"
+    onClick={[Function]}
+  />
+  <div
+    className=" editor_box flex-none layout-row layout-wrap layout-align-center-start"
+  >
+    <div
+      className="flex-95 layout-row layout-wrap layout-align-center-start editor_scroll"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center sec_title"
+      >
+        <p
+          className=" sec_title_text flex-none"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        >
+          New Pricing
+        </p>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center"
+      >
+        <div
+          className="flex-60 layout-row layout-align-start-center"
+        >
+          <i
+            className="fa fa-map-signs clip"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <p
+            className="flex-none offset-5"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-start"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center layout-wrap"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <h4
+                className="flex-100 letter_3"
+              >
+                Select a Cargo Type
+              </h4>
+              <div
+                className="flex-75 layout-row"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  classes="select"
+                  name="cargoClass"
+                  onChange={[Function]}
+                  options={
+                    Array [
+                      Object {
+                        "label": "LCL",
+                        "value": "lcl",
+                      },
+                      Object {
+                        "label": "FCL 20ft",
+                        "value": "fcl_20",
+                      },
+                      Object {
+                        "label": "FCL 40ft",
+                        "value": "fcl_40",
+                      },
+                      Object {
+                        "label": "FCL 40ft HQ",
+                        "value": "fcl_40hq",
+                      },
+                    ]
+                  }
+                  value={
+                    Object {
+                      "label": "LCL",
+                      "value": "lcl",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Transport Category: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Route: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Sub Route: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <h4
+                className="flex-100 letter_3"
+              >
+                Select users this pricing applies to
+              </h4>
+              <div
+                className="flex-75 layout-row"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  classes="select"
+                  name="client"
+                  onChange={[Function]}
+                  options={
+                    Array [
+                      Object {
+                        "label": "Open",
+                        "value": "OPEN",
+                      },
+                    ]
+                  }
+                  value={false}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-align-end-center layout-row"
+        style={
+          Object {
+            "margin": "15px",
+          }
+        }
+      >
+        <RoundButton
+          active={true}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-plus"
+          inverse={false}
+          size="small"
+          text="Add Fee"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-100 layout-align-end-center layout-row"
+        style={
+          Object {
+            "margin": "15px",
+          }
+        }
+      >
+        <RoundButton
+          active={true}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-floppy-o"
+          inverse={false}
+          size="small"
+          text="Save"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center-center layout-wrap add_fee_panel fee_panel_closed"
+    >
+      <div
+        className="flex-none layout-row layout-align-center-center panel_close"
+        onClick={[Function]}
+      >
+        <i
+          className="fa fa-times clip"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-90 layout-row layout-wrap layout-align-start-start"
+      >
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="CFD"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            CFD
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="ERS"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            ERS
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="EXP"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            EXP
+             - 
+            Export Fee
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="IMP"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            IMP
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="SBF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            SBF
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="LSS"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            LSS
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="CFO"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            CFO
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="STF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            STF
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="TRF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            TRF
+             - 
+            Telex Release Fee
+             
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`steps.route is true 1`] = `
+<div
+  className=" editor_backdrop flex-none layout-row layout-wrap layout-align-center-center"
+>
+  <div
+    className=" editor_fade flex-none layout-row layout-wrap layout-align-center-start"
+    onClick={[Function]}
+  />
+  <div
+    className=" editor_box flex-none layout-row layout-wrap layout-align-center-start"
+  >
+    <div
+      className="flex-95 layout-row layout-wrap layout-align-center-start editor_scroll"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center sec_title"
+      >
+        <p
+          className=" sec_title_text flex-none"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        >
+          New Pricing
+        </p>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center"
+      >
+        <div
+          className="flex-60 layout-row layout-align-start-center"
+        >
+          <i
+            className="fa fa-map-signs clip"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <p
+            className="flex-none offset-5"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-start"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center layout-wrap"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <h4
+                className="flex-100 letter_3"
+              >
+                Select a Cargo Type
+              </h4>
+              <div
+                className="flex-75 layout-row"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  classes="select"
+                  name="cargoClass"
+                  onChange={[Function]}
+                  options={
+                    Array [
+                      Object {
+                        "label": "LCL",
+                        "value": "lcl",
+                      },
+                      Object {
+                        "label": "FCL 20ft",
+                        "value": "fcl_20",
+                      },
+                      Object {
+                        "label": "FCL 40ft",
+                        "value": "fcl_40",
+                      },
+                      Object {
+                        "label": "FCL 40ft HQ",
+                        "value": "fcl_40hq",
+                      },
+                    ]
+                  }
+                  value={
+                    Object {
+                      "label": "LCL",
+                      "value": "lcl",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Transport Category: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Route: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <h4
+                className="flex-100 letter_3"
+              >
+                Select a specific combination of Hubs
+              </h4>
+              <div
+                className="flex-75 layout-row"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  classes="select"
+                  name="hubRoute"
+                  onChange={[Function]}
+                  options={Array []}
+                  value={false}
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Client: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-align-end-center layout-row"
+        style={
+          Object {
+            "margin": "15px",
+          }
+        }
+      >
+        <RoundButton
+          active={true}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-plus"
+          inverse={false}
+          size="small"
+          text="Add Fee"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-100 layout-align-end-center layout-row"
+        style={
+          Object {
+            "margin": "15px",
+          }
+        }
+      >
+        <RoundButton
+          active={true}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-floppy-o"
+          inverse={false}
+          size="small"
+          text="Save"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center-center layout-wrap add_fee_panel fee_panel_closed"
+    >
+      <div
+        className="flex-none layout-row layout-align-center-center panel_close"
+        onClick={[Function]}
+      >
+        <i
+          className="fa fa-times clip"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-90 layout-row layout-wrap layout-align-start-start"
+      >
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="CFD"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            CFD
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="ERS"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            ERS
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="EXP"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            EXP
+             - 
+            Export Fee
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="IMP"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            IMP
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="SBF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            SBF
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="LSS"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            LSS
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="CFO"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            CFO
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="STF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            STF
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="TRF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            TRF
+             - 
+            Telex Release Fee
+             
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`steps.transportCategory is true 1`] = `
+<div
+  className=" editor_backdrop flex-none layout-row layout-wrap layout-align-center-center"
+>
+  <div
+    className=" editor_fade flex-none layout-row layout-wrap layout-align-center-start"
+    onClick={[Function]}
+  />
+  <div
+    className=" editor_box flex-none layout-row layout-wrap layout-align-center-start"
+  >
+    <div
+      className="flex-95 layout-row layout-wrap layout-align-center-start editor_scroll"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center sec_title"
+      >
+        <p
+          className=" sec_title_text flex-none"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        >
+          New Pricing
+        </p>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center"
+      >
+        <div
+          className="flex-60 layout-row layout-align-start-center"
+        >
+          <i
+            className="fa fa-map-signs clip"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <p
+            className="flex-none offset-5"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-start"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center layout-wrap"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <h4
+                className="flex-100 letter_3"
+              >
+                Select a Cargo Type
+              </h4>
+              <div
+                className="flex-75 layout-row"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  classes="select"
+                  name="cargoClass"
+                  onChange={[Function]}
+                  options={
+                    Array [
+                      Object {
+                        "label": "LCL",
+                        "value": "lcl",
+                      },
+                      Object {
+                        "label": "FCL 20ft",
+                        "value": "fcl_20",
+                      },
+                      Object {
+                        "label": "FCL 40ft",
+                        "value": "fcl_40",
+                      },
+                      Object {
+                        "label": "FCL 40ft HQ",
+                        "value": "fcl_40hq",
+                      },
+                    ]
+                  }
+                  value={
+                    Object {
+                      "label": "LCL",
+                      "value": "lcl",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Transport Category: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <h4
+                className="flex-100 letter_3"
+              >
+                Select a route
+              </h4>
+              <div
+                className="flex-75 layout-row"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  classes="select"
+                  name="route"
+                  onChange={[Function]}
+                  options={Array []}
+                  value={false}
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Sub Route: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Client: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-align-end-center layout-row"
+        style={
+          Object {
+            "margin": "15px",
+          }
+        }
+      >
+        <RoundButton
+          active={true}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-plus"
+          inverse={false}
+          size="small"
+          text="Add Fee"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-100 layout-align-end-center layout-row"
+        style={
+          Object {
+            "margin": "15px",
+          }
+        }
+      >
+        <RoundButton
+          active={true}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-floppy-o"
+          inverse={false}
+          size="small"
+          text="Save"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center-center layout-wrap add_fee_panel fee_panel_closed"
+    >
+      <div
+        className="flex-none layout-row layout-align-center-center panel_close"
+        onClick={[Function]}
+      >
+        <i
+          className="fa fa-times clip"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-90 layout-row layout-wrap layout-align-start-start"
+      >
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="CFD"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            CFD
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="ERS"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            ERS
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="EXP"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            EXP
+             - 
+            Export Fee
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="IMP"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            IMP
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="SBF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            SBF
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="LSS"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            LSS
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="CFO"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            CFO
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="STF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            STF
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="TRF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            TRF
+             - 
+            Telex Release Fee
+             
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`theme is falsy 1`] = `
+<div
+  className=" editor_backdrop flex-none layout-row layout-wrap layout-align-center-center"
+>
+  <div
+    className=" editor_fade flex-none layout-row layout-wrap layout-align-center-start"
+    onClick={[Function]}
+  />
+  <div
+    className=" editor_box flex-none layout-row layout-wrap layout-align-center-start"
+  >
+    <div
+      className="flex-95 layout-row layout-wrap layout-align-center-start editor_scroll"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center sec_title"
+      >
+        <p
+          className=" sec_title_text flex-none"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        >
+          New Pricing
+        </p>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center"
+      >
+        <div
+          className="flex-60 layout-row layout-align-start-center"
+        >
+          <i
+            className="fa fa-map-signs clip"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <p
+            className="flex-none offset-5"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-start"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center layout-wrap"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-start-start"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <h4
+                className="flex-100 letter_3"
+              >
+                Select a Cargo Type
+              </h4>
+              <div
+                className="flex-75 layout-row"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  classes="select"
+                  name="cargoClass"
+                  onChange={[Function]}
+                  options={
+                    Array [
+                      Object {
+                        "label": "LCL",
+                        "value": "lcl",
+                      },
+                      Object {
+                        "label": "FCL 20ft",
+                        "value": "fcl_20",
+                      },
+                      Object {
+                        "label": "FCL 40ft",
+                        "value": "fcl_40",
+                      },
+                      Object {
+                        "label": "FCL 40ft HQ",
+                        "value": "fcl_40hq",
+                      },
+                    ]
+                  }
+                  value={
+                    Object {
+                      "label": "LCL",
+                      "value": "lcl",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Transport Category: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Route: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Sub Route: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <h4
+              className="flex-none letter_3"
+            >
+              Client: 
+            </h4>
+            <h4
+              className="flex-none letter_3"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-align-end-center layout-row"
+        style={
+          Object {
+            "margin": "15px",
+          }
+        }
+      >
+        <RoundButton
+          active={true}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-plus"
+          inverse={false}
+          size="small"
+          text="Add Fee"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-100 layout-align-end-center layout-row"
+        style={
+          Object {
+            "margin": "15px",
+          }
+        }
+      >
+        <RoundButton
+          active={true}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-floppy-o"
+          inverse={false}
+          size="small"
+          text="Save"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center-center layout-wrap add_fee_panel fee_panel_closed"
+    >
+      <div
+        className="flex-none layout-row layout-align-center-center panel_close"
+        onClick={[Function]}
+      >
+        <i
+          className="fa fa-times clip"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-90 layout-row layout-wrap layout-align-start-start"
+      >
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="CFD"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            CFD
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="ERS"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            ERS
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="EXP"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            EXP
+             - 
+            Export Fee
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="IMP"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            IMP
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="SBF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            SBF
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="LSS"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            LSS
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="CFO"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            CFO
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="STF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            STF
+             - 
+             
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+          key="TRF"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-plus clip flex-none"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+          <div
+            className="flex-5"
+          />
+          <p
+            className="flex-none"
+          >
+            TRF
+             - 
+            Telex Release Fee
+             
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

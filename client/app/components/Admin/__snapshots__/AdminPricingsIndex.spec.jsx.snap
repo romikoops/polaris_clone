@@ -1,0 +1,163 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`pricingData is falsy 1`] = `""`;
+
+exports[`scope.modes_of_transport is true 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left"
+>
+  <Tabs
+    defaultActiveTabIndex={0}
+    paddingFixes={true}
+    wrapperTabs="layout-row flex-45 flex-sm-40 flex-xs-80 margin_bottom"
+  >
+    <Tab
+      extraClick={[Function]}
+      icon=""
+      isActive={false}
+      isUniq={false}
+      linkClassName=""
+      mot="0"
+      onClick={null}
+      tabIndex={0}
+      tabTitle="0"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    >
+      <CardPricingIndex
+        adminDispatch={
+          Object {
+            "getClientPricings": [Function],
+            "getRoutePricings": [Function],
+          }
+        }
+        allNumPages={Object {}}
+        documentDispatch={
+          Object {
+            "closeViewer": [Function],
+            "uploadPricings": [Function],
+          }
+        }
+        hubs={Array []}
+        itineraries={Object {}}
+        lastUpdate="LAST_UPDATE"
+        mot="0"
+        scope={
+          Object {
+            "modes_of_transport": Array [
+              Object {
+                "foo": "FOO",
+              },
+            ],
+          }
+        }
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        toggleCreator={[Function]}
+      />
+    </Tab>
+    <Tab
+      extraClick={[Function]}
+      icon=""
+      isActive={false}
+      isUniq={false}
+      linkClassName=""
+      mot="truck"
+      onClick={null}
+      tabIndex={0}
+      tabTitle="Trucking"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    >
+      <Connect(AdminTrucking)
+        hubHash={Object {}}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </Tab>
+  </Tabs>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left"
+>
+  <Tabs
+    defaultActiveTabIndex={0}
+    paddingFixes={true}
+    wrapperTabs="layout-row flex-45 flex-sm-40 flex-xs-80 margin_bottom"
+  >
+    <Tab
+      extraClick={[Function]}
+      icon=""
+      isActive={false}
+      isUniq={false}
+      linkClassName=""
+      mot="truck"
+      onClick={null}
+      tabIndex={0}
+      tabTitle="Trucking"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    >
+      <Connect(AdminTrucking)
+        hubHash={Object {}}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </Tab>
+  </Tabs>
+</div>
+`;
+
+exports[`state.state.redirectClients is true 1`] = `
+<Redirect
+  push={true}
+  to="/admin/pricings/clients"
+/>
+`;
+
+exports[`state.state.redirectRoutes is true 1`] = `
+<Redirect
+  push={true}
+  to="/admin/pricings/routes"
+/>
+`;

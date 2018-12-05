@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`itineraries is falsy 1`] = `""`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left"
+>
+  <div
+    className="component_view flex layout-row layout-align-start-start"
+  >
+    <Tabs
+      defaultActiveTabIndex={0}
+      paddingFixes={true}
+      wrapperTabs="layout-row flex-45 flex-sm-40 flex-xs-80"
+    >
+      <Tab
+        extraClick={[Function]}
+        icon={
+          <i
+            className="fa fa-anchor clip "
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+              }
+            }
+          />
+        }
+        isActive={false}
+        isUniq={false}
+        linkClassName=""
+        mot=""
+        onClick={null}
+        tabIndex={0}
+        tabTitle="Ocean"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      >
+        <CardRoutesIndex
+          adminDispatch={
+            Object {
+              "getItineraries": [Function],
+              "getRoutes": [Function],
+            }
+          }
+          handleClick={[Function]}
+          hubs={Array []}
+          itineraries={[Function]}
+          limit={9}
+          mot="ocean"
+          newText="New Route"
+          scope={
+            Object {
+              "closed_quotation_tool": true,
+              "modes_of_transport": Object {
+                "air": Object {},
+                "ocean": Object {
+                  "OCEAN_LOAD_TYPE": true,
+                },
+                "rail": Object {},
+                "truck": Object {},
+              },
+            }
+          }
+          sideMenuNodes={null}
+          t={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          toggleNew={[Function]}
+        />
+      </Tab>
+    </Tabs>
+  </div>
+</div>
+`;

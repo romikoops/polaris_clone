@@ -1,0 +1,922 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`editTime is true 1`] = `
+<div
+  className="flex-100 layout-row"
+>
+  <div
+    className="info_hub_box flex-60 layout-column"
+  >
+    <h3>
+      HUB
+    </h3>
+    <div
+      className="layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-60 layout-align-center-start"
+      >
+        <span>
+          ETD
+        </span>
+        <div
+          className="layout-row layout-align-start-center"
+        >
+          <div>
+            estimatedTime
+          </div>
+        </div>
+      </div>
+      <div
+        className="layout-row flex-40 layout-align-center-stretch"
+      >
+        <span
+          className="flex-100 layout-align-center-stretch"
+        >
+          <div
+            className="layout-row flex-50 save layout-align-center-center"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-check"
+            />
+          </div>
+          <div
+            className="layout-row flex-50 cancel layout-align-center-center"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-times"
+            />
+          </div>
+        </span>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center "
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center"
+      >
+        <div
+          className="flex layout-row layout-wrap layout-align-start-start carriage_row"
+        >
+          <div
+            className="flex-100 layout-row"
+          >
+            <div
+              className="flex-40 layout-row"
+            >
+              <i
+                className="flex-20 fa fa-check-square clip check_square_sm"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
+                  }
+                }
+              />
+              <h4
+                className="flex-70 layout-row"
+              >
+                Pick-up
+              </h4>
+            </div>
+            <div
+              className="flex-60 layout-row"
+            >
+              <i
+                className="flex-15 fa fa-check-square clip check_square_sm"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                  }
+                }
+              />
+              <h4
+                className="flex-85 layout-row"
+              >
+                Drop-off
+              </h4>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-align-center-start"
+          >
+            <div
+              className="layout-row layout-align-start-center"
+            >
+              <div>
+                noCarriage
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="layout-column flex-40 image"
+    style={Object {}}
+  />
+</div>
+`;
+
+exports[`estimatedTime is falsy 1`] = `
+<div
+  className="flex-100 layout-row"
+>
+  <div
+    className="info_hub_box flex-60 layout-column"
+  >
+    <h3>
+      HUB
+    </h3>
+    <div
+      className="flex-100 layout-row layout-align-start-center "
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center"
+      >
+        <div
+          className="flex layout-row layout-wrap layout-align-start-start carriage_row"
+        >
+          <div
+            className="flex-100 layout-row"
+          >
+            <div
+              className="flex-40 layout-row"
+            >
+              <i
+                className="flex-20 fa fa-check-square clip check_square_sm"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
+                  }
+                }
+              />
+              <h4
+                className="flex-70 layout-row"
+              >
+                Pick-up
+              </h4>
+            </div>
+            <div
+              className="flex-60 layout-row"
+            >
+              <i
+                className="flex-15 fa fa-check-square clip check_square_sm"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                  }
+                }
+              />
+              <h4
+                className="flex-85 layout-row"
+              >
+                Drop-off
+              </h4>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-align-center-start"
+          >
+            <div
+              className="layout-row layout-align-start-center"
+            >
+              <div>
+                noCarriage
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="layout-column flex-40 image"
+    style={Object {}}
+  />
+</div>
+`;
+
+exports[`isAdmin is true 1`] = `
+<div
+  className="flex-100 layout-row"
+>
+  <div
+    className="info_hub_box flex-60 layout-column"
+  >
+    <h3>
+      HUB
+    </h3>
+    <div
+      className="layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-60 layout-align-center-start"
+      >
+        <span>
+          ETD
+        </span>
+        <div
+          className="layout-row layout-align-start-center"
+        >
+          <div>
+            estimatedTime
+          </div>
+        </div>
+      </div>
+      <div
+        className="layout-row flex-40 layout-align-center-stretch"
+      >
+        <i
+          className="fa fa-edit editIcon"
+          onClick={[Function]}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center "
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center"
+      >
+        <div
+          className="flex layout-row layout-wrap layout-align-start-start carriage_row"
+        >
+          <div
+            className="flex-100 layout-row"
+          >
+            <div
+              className="flex-40 layout-row"
+            >
+              <i
+                className="flex-20 fa fa-check-square clip check_square_sm"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
+                  }
+                }
+              />
+              <h4
+                className="flex-70 layout-row"
+              >
+                Pick-up
+              </h4>
+            </div>
+            <div
+              className="flex-60 layout-row"
+            >
+              <i
+                className="flex-15 fa fa-check-square clip check_square_sm"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                  }
+                }
+              />
+              <h4
+                className="flex-85 layout-row"
+              >
+                Drop-off
+              </h4>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-align-center-start"
+          >
+            <div
+              className="layout-row layout-align-start-center"
+            >
+              <div>
+                noCarriage
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="layout-column flex-40 image"
+    style={Object {}}
+  />
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row"
+>
+  <div
+    className="info_hub_box flex-60 layout-column"
+  >
+    <h3>
+      HUB
+    </h3>
+    <div
+      className="layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-60 layout-align-center-start"
+      >
+        <span>
+          ETD
+        </span>
+        <div
+          className="layout-row layout-align-start-center"
+        >
+          <div>
+            estimatedTime
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center "
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center"
+      >
+        <div
+          className="flex layout-row layout-wrap layout-align-start-start carriage_row"
+        >
+          <div
+            className="flex-100 layout-row"
+          >
+            <div
+              className="flex-40 layout-row"
+            >
+              <i
+                className="flex-20 fa fa-check-square clip check_square_sm"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
+                  }
+                }
+              />
+              <h4
+                className="flex-70 layout-row"
+              >
+                Pick-up
+              </h4>
+            </div>
+            <div
+              className="flex-60 layout-row"
+            >
+              <i
+                className="flex-15 fa fa-check-square clip check_square_sm"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                  }
+                }
+              />
+              <h4
+                className="flex-85 layout-row"
+              >
+                Drop-off
+              </h4>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-align-center-start"
+          >
+            <div
+              className="layout-row layout-align-start-center"
+            >
+              <div>
+                noCarriage
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="layout-column flex-40 image"
+    style={Object {}}
+  />
+</div>
+`;
+
+exports[`shipment has delivery_address 1`] = `
+<div
+  className="flex-100 layout-row"
+>
+  <div
+    className="info_hub_box flex-60 layout-column"
+  >
+    <h3>
+      HUB
+    </h3>
+    <div
+      className="layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-60 layout-align-center-start"
+      >
+        <span />
+        <div
+          className="layout-row layout-align-start-center"
+        >
+          <div>
+            estimatedTime
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center-stretch"
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center"
+      >
+        <div
+          className="flex layout-row layout-wrap layout-align-start-start carriage_row"
+        >
+          <div
+            className="flex-100 layout-row"
+          >
+            <div
+              className="flex-40 layout-row"
+            >
+              <i
+                className="flex-20 fa fa-check-square clip check_square_sm"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
+                  }
+                }
+              />
+              <h4
+                className="flex-80 layout-row"
+              >
+                Delivery
+              </h4>
+            </div>
+            <div
+              className="flex-60 layout-row"
+            >
+              <i
+                className="flex-15 fa fa-check-square clip check_square_sm"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                  }
+                }
+              />
+              <h4
+                className="flex-85 layout-row"
+              >
+                Collection
+              </h4>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-align-center-start"
+          >
+            <div
+              className="layout-row layout-align-start-center"
+            >
+              <div>
+                noCarriage
+              </div>
+            </div>
+          </div>
+          <div
+            className="layout-row flex-95 layout-align-start-center carriage_address"
+          >
+            <p>
+              DELIVERY_STREET
+               
+              DELIVERY_STREET_NUMBER
+              , 
+              <strong>
+                DELIVERY_CITY
+                , 
+                DELIVERY_COUNTRY
+                 
+              </strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="layout-column flex-40 image"
+    style={Object {}}
+  />
+</div>
+`;
+
+exports[`shipment has has_on_carriage 1`] = `
+<div
+  className="flex-100 layout-row"
+>
+  <div
+    className="info_hub_box flex-60 layout-column"
+  >
+    <h3>
+      HUB
+    </h3>
+    <div
+      className="layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-60 layout-align-center-start"
+      >
+        <span />
+        <div
+          className="layout-row layout-align-start-center"
+        >
+          <div>
+            estimatedTime
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center-stretch"
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center"
+      >
+        <div
+          className="flex layout-row layout-wrap layout-align-start-start carriage_row"
+        >
+          <div
+            className="flex-100 layout-row"
+          >
+            <div
+              className="flex-40 layout-row"
+            >
+              <i
+                className="flex-20 fa fa-check-square clip check_square_sm"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                  }
+                }
+              />
+              <h4
+                className="flex-80 layout-row"
+              >
+                Delivery
+              </h4>
+            </div>
+            <div
+              className="flex-60 layout-row"
+            >
+              <i
+                className="flex-15 fa fa-check-square clip check_square_sm"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
+                  }
+                }
+              />
+              <h4
+                className="flex-85 layout-row"
+              >
+                Collection
+              </h4>
+            </div>
+          </div>
+          <div
+            className="layout-row layout-align-start-center"
+          >
+            <div
+              className="flex-100 layout-align-center-start"
+            >
+              <div
+                className="layout-row layout-align-start-center"
+              >
+                <div>
+                  carriage
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="layout-column flex-40 image"
+    style={Object {}}
+  />
+</div>
+`;
+
+exports[`shipment has has_pre_carriage 1`] = `
+<div
+  className="flex-100 layout-row"
+>
+  <div
+    className="info_hub_box flex-60 layout-column"
+  >
+    <h3>
+      HUB
+    </h3>
+    <div
+      className="layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-60 layout-align-center-start"
+      >
+        <span>
+          ETD
+        </span>
+        <div
+          className="layout-row layout-align-start-center"
+        >
+          <div>
+            estimatedTime
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center "
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center"
+      >
+        <div
+          className="flex layout-row layout-wrap layout-align-start-start carriage_row"
+        >
+          <div
+            className="flex-100 layout-row"
+          >
+            <div
+              className="flex-40 layout-row"
+            >
+              <i
+                className="flex-20 fa fa-check-square clip check_square_sm"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                  }
+                }
+              />
+              <h4
+                className="flex-70 layout-row"
+              >
+                Pick-up
+              </h4>
+            </div>
+            <div
+              className="flex-60 layout-row"
+            >
+              <i
+                className="flex-15 fa fa-check-square clip check_square_sm"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
+                  }
+                }
+              />
+              <h4
+                className="flex-85 layout-row"
+              >
+                Drop-off
+              </h4>
+            </div>
+          </div>
+          <div
+            className="layout-row layout-align-start-center"
+          >
+            <div
+              className="flex-100 layout-align-center-start"
+            >
+              <div
+                className="layout-row layout-align-start-center"
+              >
+                <div>
+                  carriage
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="layout-column flex-40 image"
+    style={Object {}}
+  />
+</div>
+`;
+
+exports[`shipment has pickup_address 1`] = `
+<div
+  className="flex-100 layout-row"
+>
+  <div
+    className="info_hub_box flex-60 layout-column"
+  >
+    <h3>
+      HUB
+    </h3>
+    <div
+      className="layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-60 layout-align-center-start"
+      >
+        <span>
+          ETD
+        </span>
+        <div
+          className="layout-row layout-align-start-center"
+        >
+          <div>
+            estimatedTime
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center "
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center"
+      >
+        <div
+          className="flex layout-row layout-wrap layout-align-start-start carriage_row"
+        >
+          <div
+            className="flex-100 layout-row"
+          >
+            <div
+              className="flex-40 layout-row"
+            >
+              <i
+                className="flex-20 fa fa-check-square clip check_square_sm"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
+                  }
+                }
+              />
+              <h4
+                className="flex-70 layout-row"
+              >
+                Pick-up
+              </h4>
+            </div>
+            <div
+              className="flex-60 layout-row"
+            >
+              <i
+                className="flex-15 fa fa-check-square clip check_square_sm"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                  }
+                }
+              />
+              <h4
+                className="flex-85 layout-row"
+              >
+                Drop-off
+              </h4>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-align-center-start"
+          >
+            <div
+              className="layout-row layout-align-start-center"
+            >
+              <div>
+                noCarriage
+              </div>
+            </div>
+          </div>
+          <div
+            className="layout-row flex-95 layout-align-start-center carriage_address"
+          >
+            <p>
+              PICKUP_STREET
+                
+              PICKUP_STREET_NUMBER
+              , 
+              <strong>
+                PICKUP_CITY
+                , 
+                PICKUP_COUNTRY
+                 
+              </strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="layout-column flex-40 image"
+    style={Object {}}
+  />
+</div>
+`;
+
+exports[`text is not ETD 1`] = `
+<div
+  className="flex-100 layout-row"
+>
+  <div
+    className="info_hub_box flex-60 layout-column"
+  >
+    <h3>
+      HUB
+    </h3>
+    <div
+      className="layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-60 layout-align-center-start"
+      >
+        <span />
+        <div
+          className="layout-row layout-align-start-center"
+        >
+          <div>
+            estimatedTime
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center-stretch"
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center"
+      >
+        <div
+          className="flex layout-row layout-wrap layout-align-start-start carriage_row"
+        >
+          <div
+            className="flex-100 layout-row"
+          >
+            <div
+              className="flex-40 layout-row"
+            >
+              <i
+                className="flex-20 fa fa-check-square clip check_square_sm"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
+                  }
+                }
+              />
+              <h4
+                className="flex-80 layout-row"
+              >
+                Delivery
+              </h4>
+            </div>
+            <div
+              className="flex-60 layout-row"
+            >
+              <i
+                className="flex-15 fa fa-check-square clip check_square_sm"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                  }
+                }
+              />
+              <h4
+                className="flex-85 layout-row"
+              >
+                Collection
+              </h4>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-align-center-start"
+          >
+            <div
+              className="layout-row layout-align-start-center"
+            >
+              <div>
+                noCarriage
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="layout-column flex-40 image"
+    style={Object {}}
+  />
+</div>
+`;

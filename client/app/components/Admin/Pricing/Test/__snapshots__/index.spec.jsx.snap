@@ -1,0 +1,216 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="layout-row flex-100 layout-wrap"
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-center-start"
+    style={Object {}}
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-50 layout-row layout-align-space-around-center"
+      >
+        <div
+          className="flex-45 layout-row layout-align-center-center"
+          onClick={[Function]}
+          style={Object {}}
+        >
+          <p
+            className="flex-none"
+          >
+            Import
+          </p>
+        </div>
+        <div
+          className="flex-45 layout-row layout-align-center-center"
+          onClick={[Function]}
+          style={Object {}}
+        >
+          <p
+            className="flex-none"
+          >
+            Export
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-50 layout-row layout-align-space-around-center"
+      >
+        <div
+          className="flex-45 layout-row layout-align-center-center"
+          onClick={[Function]}
+          style={Object {}}
+        >
+          <p
+            className="flex-none"
+          >
+            Cargo Item
+          </p>
+        </div>
+        <div
+          className="flex-45 layout-row layout-align-center-center"
+          onClick={[Function]}
+          style={Object {}}
+        >
+          <p
+            className="flex-none"
+          >
+            Container
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-center-start"
+    style={
+      Object {
+        "display": "none",
+      }
+    }
+  >
+    <ContainerInputs
+      cargoItem={Object {}}
+      handleChange={[Function]}
+      index={0}
+    />
+    <div
+      className="flex-100 layout-row layout-align-end-center"
+    >
+      <RoundButton
+        active={true}
+        back={false}
+        classNames=""
+        disabled={false}
+        flexContainer="100"
+        handleDisabled={null}
+        handleNext={[Function]}
+        icon=""
+        iconClass=""
+        inverse={false}
+        size="small"
+        text="Add Cargo"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-end-center"
+    >
+      <RoundButton
+        active={true}
+        back={false}
+        classNames=""
+        disabled={false}
+        flexContainer="100"
+        handleDisabled={null}
+        handleNext={[Function]}
+        icon=""
+        iconClass=""
+        inverse={false}
+        size="small"
+        text="Next"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-center-start"
+    style={
+      Object {
+        "display": "none",
+      }
+    }
+  >
+    <ContainerInputs
+      cargoItem={Object {}}
+      handleChange={[Function]}
+      index={0}
+    />
+    <div
+      className="flex-100 layout-row layout-align-end-center"
+    >
+      <div
+        className="flex-50 layout-row layout-align-space-around-center"
+      >
+        <div
+          className="flex-45 layout-row layout-align-center-center"
+          onClick={[Function]}
+          style={Object {}}
+        >
+          <p
+            className="flex-none"
+          >
+            Export
+          </p>
+        </div>
+        <div
+          className="flex-45 layout-row layout-align-center-center"
+          onClick={[Function]}
+          style={Object {}}
+        >
+          <p
+            className="flex-none"
+          >
+            Import
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-end-center"
+    >
+      <RoundButton
+        active={true}
+        back={false}
+        classNames=""
+        disabled={false}
+        flexContainer="100"
+        handleDisabled={null}
+        handleNext={[Function]}
+        icon=""
+        iconClass=""
+        inverse={false}
+        size="small"
+        text="Get Prices"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-center-start"
+    style={
+      Object {
+        "display": "none",
+      }
+    }
+  />
+  <div
+    className="pusher_bottom"
+  />
+</div>
+`;

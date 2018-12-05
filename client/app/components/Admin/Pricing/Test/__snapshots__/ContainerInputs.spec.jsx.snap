@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start"
+>
+  <div
+    className="flex-25 layout-row layout-align-center-center"
+  >
+    <input
+      name="dimension_x"
+      type="number"
+      value={10}
+    />
+  </div>
+  <div
+    className="flex-25 layout-row layout-align-center-center"
+  >
+    <input
+      name="dimension_y"
+      type="number"
+      value={20}
+    />
+  </div>
+  <div
+    className="flex-25 layout-row layout-align-center-center"
+  >
+    <input
+      name="dimension_z"
+      type="number"
+      value={30}
+    />
+  </div>
+  <div
+    className="flex-25 layout-row layout-align-center-center"
+  >
+    <input
+      name="payload_in_kg"
+      type="number"
+      value={40}
+    />
+  </div>
+  <div
+    className="flex-25 layout-row layout-align-center-center"
+  >
+    <input
+      name="quantity"
+      type="number"
+      value={50}
+    />
+  </div>
+</div>
+`;

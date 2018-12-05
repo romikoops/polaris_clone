@@ -121,7 +121,7 @@ export class AdminScheduleLine extends Component {
                   className={styles.date_title}
                   style={gradientFontStyle}
                 >
-                  {t('shipment:pickUpDay')}
+                  {t('common:pickupDate')}
                 </h4>
               </div>
               <div className="flex-100 layout-row">
@@ -198,4 +198,4 @@ AdminScheduleLine.defaultProps = {
   pickupDate: null
 }
 
-export default withNamespaces(['admin', 'shipment'])(AdminScheduleLine)
+export default withNamespaces(['admin', 'shipment', 'common'])(AdminScheduleLine)

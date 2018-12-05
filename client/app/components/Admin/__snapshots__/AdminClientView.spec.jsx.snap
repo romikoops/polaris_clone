@@ -1,0 +1,1607 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`clientData is falsy 1`] = `""`;
+
+exports[`clientData.managerAssignments is falsy 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
+>
+  <div
+    className="flex-40 layout-row layout-wrap layout-align-start-center layout-padding margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-stretch username_title"
+    >
+      <span
+        className="layout-row flex-20 layout-align-center-center"
+      >
+        <i
+          className="fa fa-user clip bigProfile"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        />
+      </span>
+      <div
+        className="layout-align-start-center layout-row flex"
+      >
+        <h1
+          className="flex-none cli"
+        >
+          Sebastian
+           
+          Muller
+        </h1>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch"
+    >
+      <GreyBox
+        borderStyle=""
+        content={
+          <div
+            className="layout-row flex-100"
+          >
+            <ProfileBox
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              user={
+                Object {
+                  "company_name": "Mehristweniger",
+                  "email": "muller55@yahoo.de",
+                  "first_name": "Sebastian",
+                  "last_name": "Muller",
+                  "password": "pwd",
+                }
+              }
+            />
+          </div>
+        }
+        contentClassName="layout-row flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="flex-70 layout-row layout-align-start-center card_margin_right"
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <TextHeading
+        color=""
+        size={2}
+        text=" "
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <ShipmentOverviewCard
+      admin={true}
+      confirmShipmentData={Object {}}
+      dispatches={[Function]}
+      handleAction={[Function]}
+      handleSelect={[Function]}
+      hubs={
+        Array [
+          Object {
+            "address": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_STREET",
+              "streetNumber": 579,
+              "street_number": 579,
+              "zipCode": "22456",
+              "zip_code": "22456",
+            },
+            "name": "FOO_HUB_NAME",
+          },
+        ]
+      }
+      noTitle={false}
+      shipments={
+        Array [
+          Object {},
+        ]
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <div
+        className="layout-padding flex-100 layout-align-start-center greyBg"
+      >
+        <span>
+          <b>
+            Locations
+          </b>
+        </span>
+      </div>
+    </div>
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-space-between-stretch margin_bottom"
+    >
+      <AdminAddressTile
+        address={Object {}}
+        client={
+          Object {
+            "company_name": "Mehristweniger",
+            "email": "muller55@yahoo.de",
+            "first_name": "Sebastian",
+            "last_name": "Muller",
+            "password": "pwd",
+          }
+        }
+        key="RANDOM_KEY_1"
+        showDelete={true}
+        showTooltip={true}
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`managerAssignments is truthy 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
+>
+  <div
+    className="flex-40 layout-row layout-wrap layout-align-start-center layout-padding margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-stretch username_title"
+    >
+      <span
+        className="layout-row flex-20 layout-align-center-center"
+      >
+        <i
+          className="fa fa-user clip bigProfile"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        />
+      </span>
+      <div
+        className="layout-align-start-center layout-row flex"
+      >
+        <h1
+          className="flex-none cli"
+        >
+          Sebastian
+           
+          Muller
+        </h1>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch"
+    >
+      <GreyBox
+        borderStyle=""
+        content={
+          <div
+            className="layout-row flex-100"
+          >
+            <ProfileBox
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              user={
+                Object {
+                  "company_name": "Mehristweniger",
+                  "email": "muller55@yahoo.de",
+                  "first_name": "Sebastian",
+                  "last_name": "Muller",
+                  "password": "pwd",
+                }
+              }
+            />
+          </div>
+        }
+        contentClassName="layout-row flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="flex-70 layout-row layout-align-start-center card_margin_right"
+      />
+      <GreyBox
+        borderStyle=""
+        content={
+          <div
+            className="conditions_box"
+          >
+            <div
+              className="flex-100 layout-row layout-wrap"
+            >
+              <div
+                className="flex-100 layout-row layout-wrap layout-align-center-center"
+              >
+                <div
+                  className="flex-60 layout-row"
+                  style={
+                    Object {
+                      "margin": "10px 0",
+                    }
+                  }
+                >
+                  <RoundButton
+                    active={false}
+                    back={false}
+                    classNames=""
+                    disabled={false}
+                    flexContainer="100"
+                    handleDisabled={null}
+                    handleNext={[Function]}
+                    icon=""
+                    iconClass="fa-plus"
+                    inverse={false}
+                    size="full"
+                    text="Assign Manager"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                </div>
+                <div
+                  className="flex-60 layout-row"
+                  style={
+                    Object {
+                      "margin": "10px 0",
+                    }
+                  }
+                >
+                  <RoundButton
+                    active={false}
+                    back={false}
+                    classNames=""
+                    disabled={false}
+                    flexContainer="100"
+                    handleDisabled={null}
+                    handleNext={[Function]}
+                    icon=""
+                    iconClass="fa-trash"
+                    inverse={false}
+                    size="full"
+                    text="Delete"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                </div>
+              </div>
+              <div
+                className="flex-100 layout-row layout-wrap"
+              >
+                <div
+                  className="flex-100 layout-row layout-align-start-center"
+                >
+                  <p
+                    className="flex-none"
+                  >
+                    Account Managers
+                  </p>
+                </div>
+                <div
+                  className="flex-100 layout-row layout-align-start-center"
+                >
+                  <div
+                    className="flex-50 layout-row layout-align-start-center"
+                  >
+                    <i
+                      className="fa fa-user flex-none clip"
+                      style={
+                        Object {
+                          "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                        }
+                      }
+                    />
+                    <p
+                      className="flex-none"
+                    >
+                      MANAGER_FIRST_NAME MANAGER_LAST_NAME
+                    </p>
+                  </div>
+                  <div
+                    className="flex-50 layout-row layout-align-start-center"
+                  >
+                    <i
+                      className="fa fa-book flex-none clip"
+                      style={
+                        Object {
+                          "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                        }
+                      }
+                    />
+                    <p
+                      className="flex-none"
+                    >
+                      Section: BAZ_SECTION
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+        contentClassName="layout-column flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Account Managers"
+        titleAction={false}
+        wrapperClassName="flex-30 layout-row layout-align-start-start"
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <TextHeading
+        color=""
+        size={2}
+        text=" "
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <ShipmentOverviewCard
+      admin={true}
+      confirmShipmentData={Object {}}
+      dispatches={[Function]}
+      handleAction={[Function]}
+      handleSelect={[Function]}
+      hubs={
+        Array [
+          Object {
+            "address": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_STREET",
+              "streetNumber": 579,
+              "street_number": 579,
+              "zipCode": "22456",
+              "zip_code": "22456",
+            },
+            "name": "FOO_HUB_NAME",
+          },
+        ]
+      }
+      noTitle={false}
+      shipments={
+        Array [
+          Object {},
+        ]
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <div
+        className="layout-padding flex-100 layout-align-start-center greyBg"
+      >
+        <span>
+          <b>
+            Locations
+          </b>
+        </span>
+      </div>
+    </div>
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-space-between-stretch margin_bottom"
+    >
+      <AdminAddressTile
+        address={Object {}}
+        client={
+          Object {
+            "company_name": "Mehristweniger",
+            "email": "muller55@yahoo.de",
+            "first_name": "Sebastian",
+            "last_name": "Muller",
+            "password": "pwd",
+          }
+        }
+        key="RANDOM_KEY_4"
+        showDelete={true}
+        showTooltip={true}
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`managers is falsy 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
+>
+  <div
+    className="flex-40 layout-row layout-wrap layout-align-start-center layout-padding margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-stretch username_title"
+    >
+      <span
+        className="layout-row flex-20 layout-align-center-center"
+      >
+        <i
+          className="fa fa-user clip bigProfile"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        />
+      </span>
+      <div
+        className="layout-align-start-center layout-row flex"
+      >
+        <h1
+          className="flex-none cli"
+        >
+          Sebastian
+           
+          Muller
+        </h1>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch"
+    >
+      <GreyBox
+        borderStyle=""
+        content={
+          <div
+            className="layout-row flex-100"
+          >
+            <ProfileBox
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              user={
+                Object {
+                  "company_name": "Mehristweniger",
+                  "email": "muller55@yahoo.de",
+                  "first_name": "Sebastian",
+                  "last_name": "Muller",
+                  "password": "pwd",
+                }
+              }
+            />
+          </div>
+        }
+        contentClassName="layout-row flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="flex-70 layout-row layout-align-start-center card_margin_right"
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <TextHeading
+        color=""
+        size={2}
+        text=" "
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <ShipmentOverviewCard
+      admin={true}
+      confirmShipmentData={Object {}}
+      dispatches={[Function]}
+      handleAction={[Function]}
+      handleSelect={[Function]}
+      hubs={
+        Array [
+          Object {
+            "address": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_STREET",
+              "streetNumber": 579,
+              "street_number": 579,
+              "zipCode": "22456",
+              "zip_code": "22456",
+            },
+            "name": "FOO_HUB_NAME",
+          },
+        ]
+      }
+      noTitle={false}
+      shipments={
+        Array [
+          Object {},
+        ]
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <div
+        className="layout-padding flex-100 layout-align-start-center greyBg"
+      >
+        <span>
+          <b>
+            Locations
+          </b>
+        </span>
+      </div>
+    </div>
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-space-between-stretch margin_bottom"
+    >
+      <AdminAddressTile
+        address={Object {}}
+        client={
+          Object {
+            "company_name": "Mehristweniger",
+            "email": "muller55@yahoo.de",
+            "first_name": "Sebastian",
+            "last_name": "Muller",
+            "password": "pwd",
+          }
+        }
+        key="RANDOM_KEY_3"
+        showDelete={true}
+        showTooltip={true}
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
+>
+  <div
+    className="flex-40 layout-row layout-wrap layout-align-start-center layout-padding margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-stretch username_title"
+    >
+      <span
+        className="layout-row flex-20 layout-align-center-center"
+      >
+        <i
+          className="fa fa-user clip bigProfile"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        />
+      </span>
+      <div
+        className="layout-align-start-center layout-row flex"
+      >
+        <h1
+          className="flex-none cli"
+        >
+          Sebastian
+           
+          Muller
+        </h1>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch"
+    >
+      <GreyBox
+        borderStyle=""
+        content={
+          <div
+            className="layout-row flex-100"
+          >
+            <ProfileBox
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              user={
+                Object {
+                  "company_name": "Mehristweniger",
+                  "email": "muller55@yahoo.de",
+                  "first_name": "Sebastian",
+                  "last_name": "Muller",
+                  "password": "pwd",
+                }
+              }
+            />
+          </div>
+        }
+        contentClassName="layout-row flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="flex-70 layout-row layout-align-start-center card_margin_right"
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <TextHeading
+        color=""
+        size={2}
+        text=" "
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <ShipmentOverviewCard
+      admin={true}
+      confirmShipmentData={Object {}}
+      dispatches={[Function]}
+      handleAction={[Function]}
+      handleSelect={[Function]}
+      hubs={
+        Array [
+          Object {
+            "address": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_STREET",
+              "streetNumber": 579,
+              "street_number": 579,
+              "zipCode": "22456",
+              "zip_code": "22456",
+            },
+            "name": "FOO_HUB_NAME",
+          },
+        ]
+      }
+      noTitle={false}
+      shipments={
+        Array [
+          Object {},
+        ]
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <div
+        className="layout-padding flex-100 layout-align-start-center greyBg"
+      >
+        <span>
+          <b>
+            Locations
+          </b>
+        </span>
+      </div>
+    </div>
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-space-between-stretch margin_bottom"
+    >
+      <AdminAddressTile
+        address={Object {}}
+        client={
+          Object {
+            "company_name": "Mehristweniger",
+            "email": "muller55@yahoo.de",
+            "first_name": "Sebastian",
+            "last_name": "Muller",
+            "password": "pwd",
+          }
+        }
+        key="RANDOM_KEY_0"
+        showDelete={true}
+        showTooltip={true}
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`state.confirm is true 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
+>
+  <div
+    className="flex-40 layout-row layout-wrap layout-align-start-center layout-padding margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-stretch username_title"
+    >
+      <span
+        className="layout-row flex-20 layout-align-center-center"
+      >
+        <i
+          className="fa fa-user clip bigProfile"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        />
+      </span>
+      <div
+        className="layout-align-start-center layout-row flex"
+      >
+        <h1
+          className="flex-none cli"
+        >
+          Sebastian
+           
+          Muller
+        </h1>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch"
+    >
+      <GreyBox
+        borderStyle=""
+        content={
+          <div
+            className="layout-row flex-100"
+          >
+            <ProfileBox
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              user={
+                Object {
+                  "company_name": "Mehristweniger",
+                  "email": "muller55@yahoo.de",
+                  "first_name": "Sebastian",
+                  "last_name": "Muller",
+                  "password": "pwd",
+                }
+              }
+            />
+          </div>
+        }
+        contentClassName="layout-row flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="flex-70 layout-row layout-align-start-center card_margin_right"
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <TextHeading
+        color=""
+        size={2}
+        text=" "
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <ShipmentOverviewCard
+      admin={true}
+      confirmShipmentData={Object {}}
+      dispatches={[Function]}
+      handleAction={[Function]}
+      handleSelect={[Function]}
+      hubs={
+        Array [
+          Object {
+            "address": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_STREET",
+              "streetNumber": 579,
+              "street_number": 579,
+              "zipCode": "22456",
+              "zip_code": "22456",
+            },
+            "name": "FOO_HUB_NAME",
+          },
+        ]
+      }
+      noTitle={false}
+      shipments={
+        Array [
+          Object {},
+        ]
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <div
+        className="layout-padding flex-100 layout-align-start-center greyBg"
+      >
+        <span>
+          <b>
+            Locations
+          </b>
+        </span>
+      </div>
+    </div>
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-space-between-stretch margin_bottom"
+    >
+      <AdminAddressTile
+        address={Object {}}
+        client={
+          Object {
+            "company_name": "Mehristweniger",
+            "email": "muller55@yahoo.de",
+            "first_name": "Sebastian",
+            "last_name": "Muller",
+            "password": "pwd",
+          }
+        }
+        key="RANDOM_KEY_8"
+        showDelete={true}
+        showTooltip={true}
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+  <AdminPromptConfirm
+    confirm={[Function]}
+    deny={[Function]}
+    heading="Are you sure?"
+    t={[Function]}
+    text="This will delete {{firstName} {{lastName}} and all related data"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+</div>
+`;
+
+exports[`state.showAddManager is true 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
+>
+  <div
+    className="flex-40 layout-row layout-wrap layout-align-start-center layout-padding margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-stretch username_title"
+    >
+      <span
+        className="layout-row flex-20 layout-align-center-center"
+      >
+        <i
+          className="fa fa-user clip bigProfile"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        />
+      </span>
+      <div
+        className="layout-align-start-center layout-row flex"
+      >
+        <h1
+          className="flex-none cli"
+        >
+          Sebastian
+           
+          Muller
+        </h1>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch"
+    >
+      <GreyBox
+        borderStyle=""
+        content={
+          <div
+            className="layout-row flex-100"
+          >
+            <ProfileBox
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              user={
+                Object {
+                  "company_name": "Mehristweniger",
+                  "email": "muller55@yahoo.de",
+                  "first_name": "Sebastian",
+                  "last_name": "Muller",
+                  "password": "pwd",
+                }
+              }
+            />
+          </div>
+        }
+        contentClassName="layout-row flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="flex-70 layout-row layout-align-start-center card_margin_right"
+      />
+      <GreyBox
+        borderStyle=""
+        content={
+          <div
+            className="conditions_box"
+          >
+            <div
+              className="flex-100 layout-row layout-wrap"
+            >
+              <div
+                className="flex-100 layout-row layout-wrap layout-align-center-center padd_20"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  classes="select"
+                  name="manager"
+                  onChange={[Function]}
+                  options={
+                    Array [
+                      Object {
+                        "label": "MANAGER_FIRST_NAME MANAGER_LAST_NAME",
+                        "value": 7,
+                      },
+                    ]
+                  }
+                  placeholder="Choose manager"
+                  value={Object {}}
+                />
+              </div>
+              <div
+                className="flex-100 layout-row layout-wrap layout-align-center-center padd_20"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  classes="select"
+                  name="manager"
+                  onChange={[Function]}
+                  options={
+                    Array [
+                      Object {
+                        "label": "LCL",
+                        "value": "lcl",
+                      },
+                      Object {
+                        "label": "FCL",
+                        "value": "fcl",
+                      },
+                      Object {
+                        "label": "Air",
+                        "value": "air",
+                      },
+                      Object {
+                        "label": "Rail",
+                        "value": "rail",
+                      },
+                    ]
+                  }
+                  placeholder="Choose area"
+                  value={Object {}}
+                />
+              </div>
+              <div
+                className="flex-100 layout-row layout-wrap layout-align-center-center padd_20"
+              >
+                <div
+                  className="flex-none layout-row"
+                >
+                  <RoundButton
+                    active={false}
+                    back={false}
+                    classNames=""
+                    disabled={false}
+                    flexContainer="100"
+                    handleDisabled={null}
+                    handleNext={[Function]}
+                    icon=""
+                    iconClass="fa-floppy-o"
+                    inverse={false}
+                    size="small"
+                    text="Save"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+        contentClassName="layout-column flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Account Managers"
+        titleAction={false}
+        wrapperClassName="flex-30 layout-row layout-align-start-start"
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <TextHeading
+        color=""
+        size={2}
+        text=" "
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <ShipmentOverviewCard
+      admin={true}
+      confirmShipmentData={Object {}}
+      dispatches={[Function]}
+      handleAction={[Function]}
+      handleSelect={[Function]}
+      hubs={
+        Array [
+          Object {
+            "address": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_STREET",
+              "streetNumber": 579,
+              "street_number": 579,
+              "zipCode": "22456",
+              "zip_code": "22456",
+            },
+            "name": "FOO_HUB_NAME",
+          },
+        ]
+      }
+      noTitle={false}
+      shipments={
+        Array [
+          Object {},
+        ]
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <div
+        className="layout-padding flex-100 layout-align-start-center greyBg"
+      >
+        <span>
+          <b>
+            Locations
+          </b>
+        </span>
+      </div>
+    </div>
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-space-between-stretch margin_bottom"
+    >
+      <AdminAddressTile
+        address={Object {}}
+        client={
+          Object {
+            "company_name": "Mehristweniger",
+            "email": "muller55@yahoo.de",
+            "first_name": "Sebastian",
+            "last_name": "Muller",
+            "password": "pwd",
+          }
+        }
+        key="RANDOM_KEY_6"
+        showDelete={true}
+        showTooltip={true}
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
+>
+  <div
+    className="flex-40 layout-row layout-wrap layout-align-start-center layout-padding margin_bottom"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-stretch username_title"
+    >
+      <span
+        className="layout-row flex-20 layout-align-center-center"
+      >
+        <i
+          className="fa fa-user clip bigProfile"
+          style={
+            Object {
+              "color": "black",
+            }
+          }
+        />
+      </span>
+      <div
+        className="layout-align-start-center layout-row flex"
+      >
+        <h1
+          className="flex-none cli"
+        >
+          Sebastian
+           
+          Muller
+        </h1>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch"
+    >
+      <GreyBox
+        borderStyle=""
+        content={
+          <div
+            className="layout-row flex-100"
+          >
+            <ProfileBox
+              style={
+                Object {
+                  "color": "black",
+                }
+              }
+              theme={null}
+              user={
+                Object {
+                  "company_name": "Mehristweniger",
+                  "email": "muller55@yahoo.de",
+                  "first_name": "Sebastian",
+                  "last_name": "Muller",
+                  "password": "pwd",
+                }
+              }
+            />
+          </div>
+        }
+        contentClassName="layout-row flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="flex-70 layout-row layout-align-start-center card_margin_right"
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <TextHeading
+        color=""
+        size={2}
+        text=" "
+        theme={null}
+      />
+    </div>
+    <ShipmentOverviewCard
+      admin={true}
+      confirmShipmentData={Object {}}
+      dispatches={[Function]}
+      handleAction={[Function]}
+      handleSelect={[Function]}
+      hubs={
+        Array [
+          Object {
+            "address": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_STREET",
+              "streetNumber": 579,
+              "street_number": 579,
+              "zipCode": "22456",
+              "zip_code": "22456",
+            },
+            "name": "FOO_HUB_NAME",
+          },
+        ]
+      }
+      noTitle={false}
+      shipments={
+        Array [
+          Object {},
+        ]
+      }
+      t={[Function]}
+      theme={null}
+    />
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <div
+        className="layout-padding flex-100 layout-align-start-center greyBg"
+      >
+        <span>
+          <b>
+            Locations
+          </b>
+        </span>
+      </div>
+    </div>
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-space-between-stretch margin_bottom"
+    >
+      <AdminAddressTile
+        address={Object {}}
+        client={
+          Object {
+            "company_name": "Mehristweniger",
+            "email": "muller55@yahoo.de",
+            "first_name": "Sebastian",
+            "last_name": "Muller",
+            "password": "pwd",
+          }
+        }
+        key="RANDOM_KEY_2"
+        showDelete={true}
+        showTooltip={true}
+        t={[Function]}
+        theme={null}
+      />
+    </div>
+  </div>
+</div>
+`;

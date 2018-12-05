@@ -1,0 +1,2526 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`hubData.hub is falsy 1`] = `""`;
+
+exports[`hubData.hub.hub_status is inactive 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
+>
+  <div
+    className="component_view flex-95 layout-row layout-wrap layout-align-start-start"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_title buffer_10"
+    >
+      <div
+        className="flex layout-row layout-align-start-center header_bar_grey"
+      >
+        <p
+          className="flex-none header_bar_grey_text"
+        >
+          Hub
+        </p>
+      </div>
+      <div
+        className="flex-none layout-row pointy layout-align-center-center header_bar_inactive_button"
+        onClick={[Function]}
+        style={
+          Object {
+            "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center inactive_inner"
+        >
+          <p
+            className="flex-none"
+          >
+            Inactive
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-none layout-row layout-align-center-center header_bar_action_buttons"
+      >
+        <div
+          className="flex-none layout-row pointy layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="flex-none fa fa-pencil edit_icon"
+          />
+        </div>
+        <div
+          className="flex-none layout-row pointy layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="flex-none fa fa-times delete_icon"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch buffer_10"
+    >
+      <GradientBorder
+        className="flex-100 layout-row"
+        content={
+          <div
+            className="flex-none layout-row layout-align-space-between-center hub_title_content"
+          >
+            <div
+              className="flex-70 layout-row layout-align-start-center"
+            >
+              <h3
+                className="flex-none"
+              >
+                 
+                HUB_NEXUS_NAME
+              </h3>
+            </div>
+            <div
+              className="flex-30 layout-row layout-align-end-center"
+            >
+              <div
+                className="flex-none layout-row layout-align-center-center"
+              >
+                <h4
+                  className="flex-none"
+                >
+                   
+                  
+                </h4>
+              </div>
+              <div
+                className="flex-none layout-row layout-align-center-center"
+                style={
+                  Object {
+                    "color": "#333",
+                  }
+                }
+              >
+                <i
+                  className="fa fa-anchor  "
+                  style={Object {}}
+                />
+              </div>
+            </div>
+          </div>
+        }
+        gradient={
+          Object {
+            "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+          }
+        }
+        wrapperClassName="flex flex-xs-100 flex-sm-100 layout-row layout-align-space-between-stretch"
+      />
+      <div
+        className="flex layout-row flex-xs-100 flex-sm-100 address_data_box"
+      >
+        <div
+          className="flex-55 layout-row address_box"
+        >
+          <div
+            className="flex-none layout-column layout-align-center-center address_icon"
+          >
+            <i
+              className="flex-none fa fa-map-marker clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex layout-align-space-around-start"
+          >
+            <div
+              className="flex-none layout-row layout-wrap "
+            >
+              <p
+                className="flex-100  address_part_1"
+              >
+                579 FOO_STREET, 22456
+                <br />
+                <strong>
+                  FOO_CITY 
+                </strong>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-45 layout-row lat_lng_box"
+        >
+          <div
+            className="flex-50 layout-column layout-align-center-center"
+          >
+            <p
+              className=" lat_lng"
+            />
+            <p
+              className=" lat_lng"
+            >
+              Latitude
+            </p>
+          </div>
+          <div
+            className="flex-none lat_lng_divider"
+          />
+          <div
+            className="flex-50 layout-column layout-align-center-center"
+          >
+            <p
+              className=" lat_lng"
+            />
+            <p
+              className=" lat_lng"
+            >
+              Longitude
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center buffer_10"
+    >
+      <div
+        className="flex-25 layout-row layout-align-center-center hub_photo"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-space-between-center hub_photo_content"
+        >
+          <img
+            alt=""
+            src="https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg"
+          />
+        </div>
+      </div>
+      <div
+        className="flex layout-row map_box"
+      >
+        <GmapsWrapper
+          address={
+            Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_STREET",
+              "streetNumber": 579,
+              "street_number": 579,
+              "zipCode": "22456",
+              "zip_code": "22456",
+            }
+          }
+          component={[Function]}
+          height="170px"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          zoom={12}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-start layout-wrap section_padding"
+    >
+      <AdminHubFees
+        adminDispatch={
+          Object {
+            "activateHub": [Function],
+            "getHub": [Function],
+          }
+        }
+        charges={Array []}
+        counterpartHubs={Array []}
+        customs={Array []}
+        loadType="lcl"
+        serviceLevels={Array []}
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch layout-wrap"
+    >
+      <div
+        className="flex-100 flex-gt-sm-33 layout-row layout-align-start-stretch"
+      >
+        <GreyBox
+          borderStyle=""
+          content={
+            <MandatoryChargeBox
+              mandatoryCharge={Object {}}
+              saveChanges={[Function]}
+              t={[Function]}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          }
+          contentClassName="layout-row flex-100 layout-wrap"
+          flex={0}
+          flexGtLg={0}
+          flexMd={0}
+          fullWidth={false}
+          isBox={false}
+          padding={false}
+          title="Mandatory Charges"
+          titleAction={false}
+          wrapperClassName="layout-row flex-100 layout-align-start-start"
+        />
+      </div>
+      <div
+        className="flex-100 flex-gt-sm-60 layout-row layout-align-start-stretch"
+      >
+        <GreyBox
+          borderStyle=""
+          content={
+            <div
+              className="flex-100 layout-row layout-align-center-center layout-wrap"
+            >
+              No itineraries yet
+            </div>
+          }
+          contentClassName="layout-row flex-100 layout-wrap"
+          flex={0}
+          flexGtLg={0}
+          flexMd={0}
+          fullWidth={false}
+          isBox={false}
+          padding={false}
+          title="Itineraries"
+          titleAction={false}
+          wrapperClassName="layout-row flex-100 layout-align-center-stretch"
+        />
+      </div>
+    </div>
+  </div>
+  <style>
+    
+    .react-toggle--checked .react-toggle-track {
+      background: linear-gradient(
+        90deg,
+        undefined 0%,
+        #333 100%
+      ) !important;
+      border: 0.5px solid rgba(0, 0, 0, 0);
+    }
+    .react-toggle-track {
+      background: linear-gradient(
+        90deg,
+        undefined 0%,
+        #fafafa 100%
+      ) !important;
+      border: 0.5px solid rgba(0, 0, 0, 0);
+    }
+    .react-toggle:hover .react-toggle-track{
+      background: rgba(0, 0, 0, 0.5) !important;
+    }
+  
+  </style>
+</div>
+`;
+
+exports[`hubData.relatedHubs is truthy 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
+>
+  <div
+    className="component_view flex-95 layout-row layout-wrap layout-align-start-start"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_title buffer_10"
+    >
+      <div
+        className="flex layout-row layout-align-start-center header_bar_grey"
+      >
+        <p
+          className="flex-none header_bar_grey_text"
+        >
+          Hub
+        </p>
+      </div>
+      <div
+        className="flex-none layout-row pointy layout-align-center-center header_bar_active_button"
+        onClick={[Function]}
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      >
+        <p
+          className="flex-none"
+        >
+          Active
+        </p>
+      </div>
+      <div
+        className="flex-none layout-row layout-align-center-center header_bar_action_buttons"
+      >
+        <div
+          className="flex-none layout-row pointy layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="flex-none fa fa-pencil edit_icon"
+          />
+        </div>
+        <div
+          className="flex-none layout-row pointy layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="flex-none fa fa-times delete_icon"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch buffer_10"
+    >
+      <GradientBorder
+        className="flex-100 layout-row"
+        content={
+          <div
+            className="flex-none layout-row layout-align-space-between-center hub_title_content"
+          >
+            <div
+              className="flex-70 layout-row layout-align-start-center"
+            >
+              <h3
+                className="flex-none"
+              >
+                 
+                HUB_NEXUS_NAME
+              </h3>
+            </div>
+            <div
+              className="flex-30 layout-row layout-align-end-center"
+            >
+              <div
+                className="flex-none layout-row layout-align-center-center"
+              >
+                <h4
+                  className="flex-none"
+                >
+                   
+                  
+                </h4>
+              </div>
+              <div
+                className="flex-none layout-row layout-align-center-center"
+                style={
+                  Object {
+                    "color": "#333",
+                  }
+                }
+              >
+                <i
+                  className="fa fa-anchor  "
+                  style={Object {}}
+                />
+              </div>
+            </div>
+          </div>
+        }
+        gradient={
+          Object {
+            "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+          }
+        }
+        wrapperClassName="flex flex-xs-100 flex-sm-100 layout-row layout-align-space-between-stretch"
+      />
+      <div
+        className="flex layout-row flex-xs-100 flex-sm-100 address_data_box"
+      >
+        <div
+          className="flex-55 layout-row address_box"
+        >
+          <div
+            className="flex-none layout-column layout-align-center-center address_icon"
+          >
+            <i
+              className="flex-none fa fa-map-marker clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex layout-align-space-around-start"
+          >
+            <div
+              className="flex-none layout-row layout-wrap "
+            >
+              <p
+                className="flex-100  address_part_1"
+              >
+                579 FOO_STREET, 22456
+                <br />
+                <strong>
+                  FOO_CITY 
+                </strong>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-45 layout-row lat_lng_box"
+        >
+          <div
+            className="flex-50 layout-column layout-align-center-center"
+          >
+            <p
+              className=" lat_lng"
+            />
+            <p
+              className=" lat_lng"
+            >
+              Latitude
+            </p>
+          </div>
+          <div
+            className="flex-none lat_lng_divider"
+          />
+          <div
+            className="flex-50 layout-column layout-align-center-center"
+          >
+            <p
+              className=" lat_lng"
+            />
+            <p
+              className=" lat_lng"
+            >
+              Longitude
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center buffer_10"
+    >
+      <div
+        className="flex-25 layout-row layout-align-center-center hub_photo"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-space-between-center hub_photo_content"
+        >
+          <img
+            alt=""
+            src="https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg"
+          />
+        </div>
+      </div>
+      <div
+        className="flex layout-row map_box"
+      >
+        <GmapsWrapper
+          address={
+            Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_STREET",
+              "streetNumber": 579,
+              "street_number": 579,
+              "zipCode": "22456",
+              "zip_code": "22456",
+            }
+          }
+          component={[Function]}
+          height="170px"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          zoom={12}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-start layout-wrap section_padding"
+    >
+      <AdminHubFees
+        adminDispatch={
+          Object {
+            "activateHub": [Function],
+            "getHub": [Function],
+          }
+        }
+        charges={Array []}
+        counterpartHubs={Array []}
+        customs={Array []}
+        loadType="lcl"
+        serviceLevels={Array []}
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch layout-wrap"
+    >
+      <div
+        className="flex-100 flex-gt-sm-33 layout-row layout-align-start-stretch"
+      >
+        <GreyBox
+          borderStyle=""
+          content={
+            <MandatoryChargeBox
+              mandatoryCharge={Object {}}
+              saveChanges={[Function]}
+              t={[Function]}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          }
+          contentClassName="layout-row flex-100 layout-wrap"
+          flex={0}
+          flexGtLg={0}
+          flexMd={0}
+          fullWidth={false}
+          isBox={false}
+          padding={false}
+          title="Mandatory Charges"
+          titleAction={false}
+          wrapperClassName="layout-row flex-100 layout-align-start-start"
+        />
+      </div>
+      <div
+        className="flex-100 flex-gt-sm-60 layout-row layout-align-start-stretch"
+      >
+        <GreyBox
+          borderStyle=""
+          content={
+            <div
+              className="flex-100 layout-row layout-align-center-center layout-wrap"
+            >
+              No itineraries yet
+            </div>
+          }
+          contentClassName="layout-row flex-100 layout-wrap"
+          flex={0}
+          flexGtLg={0}
+          flexMd={0}
+          fullWidth={false}
+          isBox={false}
+          padding={false}
+          title="Itineraries"
+          titleAction={false}
+          wrapperClassName="layout-row flex-100 layout-align-center-stretch"
+        />
+      </div>
+    </div>
+  </div>
+  <style>
+    
+    .react-toggle--checked .react-toggle-track {
+      background: linear-gradient(
+        90deg,
+        undefined 0%,
+        #333 100%
+      ) !important;
+      border: 0.5px solid rgba(0, 0, 0, 0);
+    }
+    .react-toggle-track {
+      background: linear-gradient(
+        90deg,
+        undefined 0%,
+        #fafafa 100%
+      ) !important;
+      border: 0.5px solid rgba(0, 0, 0, 0);
+    }
+    .react-toggle:hover .react-toggle-track{
+      background: rgba(0, 0, 0, 0.5) !important;
+    }
+  
+  </style>
+</div>
+`;
+
+exports[`hubData.routes is truthy 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
+>
+  <div
+    className="component_view flex-95 layout-row layout-wrap layout-align-start-start"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_title buffer_10"
+    >
+      <div
+        className="flex layout-row layout-align-start-center header_bar_grey"
+      >
+        <p
+          className="flex-none header_bar_grey_text"
+        >
+          Hub
+        </p>
+      </div>
+      <div
+        className="flex-none layout-row pointy layout-align-center-center header_bar_active_button"
+        onClick={[Function]}
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      >
+        <p
+          className="flex-none"
+        >
+          Active
+        </p>
+      </div>
+      <div
+        className="flex-none layout-row layout-align-center-center header_bar_action_buttons"
+      >
+        <div
+          className="flex-none layout-row pointy layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="flex-none fa fa-pencil edit_icon"
+          />
+        </div>
+        <div
+          className="flex-none layout-row pointy layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="flex-none fa fa-times delete_icon"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch buffer_10"
+    >
+      <GradientBorder
+        className="flex-100 layout-row"
+        content={
+          <div
+            className="flex-none layout-row layout-align-space-between-center hub_title_content"
+          >
+            <div
+              className="flex-70 layout-row layout-align-start-center"
+            >
+              <h3
+                className="flex-none"
+              >
+                 
+                HUB_NEXUS_NAME
+              </h3>
+            </div>
+            <div
+              className="flex-30 layout-row layout-align-end-center"
+            >
+              <div
+                className="flex-none layout-row layout-align-center-center"
+              >
+                <h4
+                  className="flex-none"
+                >
+                   
+                  
+                </h4>
+              </div>
+              <div
+                className="flex-none layout-row layout-align-center-center"
+                style={
+                  Object {
+                    "color": "#333",
+                  }
+                }
+              >
+                <i
+                  className="fa fa-anchor  "
+                  style={Object {}}
+                />
+              </div>
+            </div>
+          </div>
+        }
+        gradient={
+          Object {
+            "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+          }
+        }
+        wrapperClassName="flex flex-xs-100 flex-sm-100 layout-row layout-align-space-between-stretch"
+      />
+      <div
+        className="flex layout-row flex-xs-100 flex-sm-100 address_data_box"
+      >
+        <div
+          className="flex-55 layout-row address_box"
+        >
+          <div
+            className="flex-none layout-column layout-align-center-center address_icon"
+          >
+            <i
+              className="flex-none fa fa-map-marker clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex layout-align-space-around-start"
+          >
+            <div
+              className="flex-none layout-row layout-wrap "
+            >
+              <p
+                className="flex-100  address_part_1"
+              >
+                579 FOO_STREET, 22456
+                <br />
+                <strong>
+                  FOO_CITY 
+                </strong>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-45 layout-row lat_lng_box"
+        >
+          <div
+            className="flex-50 layout-column layout-align-center-center"
+          >
+            <p
+              className=" lat_lng"
+            />
+            <p
+              className=" lat_lng"
+            >
+              Latitude
+            </p>
+          </div>
+          <div
+            className="flex-none lat_lng_divider"
+          />
+          <div
+            className="flex-50 layout-column layout-align-center-center"
+          >
+            <p
+              className=" lat_lng"
+            />
+            <p
+              className=" lat_lng"
+            >
+              Longitude
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center buffer_10"
+    >
+      <div
+        className="flex-25 layout-row layout-align-center-center hub_photo"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-space-between-center hub_photo_content"
+        >
+          <img
+            alt=""
+            src="https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg"
+          />
+        </div>
+      </div>
+      <div
+        className="flex layout-row map_box"
+      >
+        <GmapsWrapper
+          address={
+            Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_STREET",
+              "streetNumber": 579,
+              "street_number": 579,
+              "zipCode": "22456",
+              "zip_code": "22456",
+            }
+          }
+          component={[Function]}
+          height="170px"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          zoom={12}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-start layout-wrap section_padding"
+    >
+      <AdminHubFees
+        adminDispatch={
+          Object {
+            "activateHub": [Function],
+            "getHub": [Function],
+          }
+        }
+        charges={Array []}
+        counterpartHubs={Array []}
+        customs={Array []}
+        loadType="lcl"
+        serviceLevels={Array []}
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch layout-wrap"
+    >
+      <div
+        className="flex-100 flex-gt-sm-33 layout-row layout-align-start-stretch"
+      >
+        <GreyBox
+          borderStyle=""
+          content={
+            <MandatoryChargeBox
+              mandatoryCharge={Object {}}
+              saveChanges={[Function]}
+              t={[Function]}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          }
+          contentClassName="layout-row flex-100 layout-wrap"
+          flex={0}
+          flexGtLg={0}
+          flexMd={0}
+          fullWidth={false}
+          isBox={false}
+          padding={false}
+          title="Mandatory Charges"
+          titleAction={false}
+          wrapperClassName="layout-row flex-100 layout-align-start-start"
+        />
+      </div>
+      <div
+        className="flex-100 flex-gt-sm-60 layout-row layout-align-start-stretch"
+      >
+        <GreyBox
+          borderStyle=""
+          content={
+            <div
+              className="flex-100 layout-row layout-wrap"
+            >
+              <ItineraryRow
+                adminDispatch={
+                  Object {
+                    "activateHub": [Function],
+                    "getHub": [Function],
+                  }
+                }
+                itinerary={Object {}}
+                t={[Function]}
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+              <div
+                className="flex-100 layout-row layout-align-center-center margin_bottom"
+              >
+                <div
+                  className="
+                flex-15 layout-row layout-align-center-center pointy
+                navigation_button disabled
+              "
+                  onClick={null}
+                >
+                  <i
+                    className="fa fa-chevron-left"
+                  />
+                  <p>
+                        
+                    Back
+                  </p>
+                </div>
+                <p>
+                  1
+                </p>
+                <div
+                  className="
+                flex-15 layout-row layout-align-center-center pointy
+                navigation_button disabled
+              "
+                  onClick={null}
+                >
+                  <p>
+                    Next
+                        
+                  </p>
+                  <i
+                    className="fa fa-chevron-right"
+                  />
+                </div>
+              </div>
+            </div>
+          }
+          contentClassName="layout-row flex-100 layout-wrap"
+          flex={0}
+          flexGtLg={0}
+          flexMd={0}
+          fullWidth={false}
+          isBox={false}
+          padding={false}
+          title="Itineraries"
+          titleAction={false}
+          wrapperClassName="layout-row flex-100 layout-align-center-stretch"
+        />
+      </div>
+    </div>
+  </div>
+  <style>
+    
+    .react-toggle--checked .react-toggle-track {
+      background: linear-gradient(
+        90deg,
+        undefined 0%,
+        #333 100%
+      ) !important;
+      border: 0.5px solid rgba(0, 0, 0, 0);
+    }
+    .react-toggle-track {
+      background: linear-gradient(
+        90deg,
+        undefined 0%,
+        #fafafa 100%
+      ) !important;
+      border: 0.5px solid rgba(0, 0, 0, 0);
+    }
+    .react-toggle:hover .react-toggle-track{
+      background: rgba(0, 0, 0, 0.5) !important;
+    }
+  
+  </style>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
+>
+  <div
+    className="component_view flex-95 layout-row layout-wrap layout-align-start-start"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_title buffer_10"
+    >
+      <div
+        className="flex layout-row layout-align-start-center header_bar_grey"
+      >
+        <p
+          className="flex-none header_bar_grey_text"
+        >
+          Hub
+        </p>
+      </div>
+      <div
+        className="flex-none layout-row pointy layout-align-center-center header_bar_active_button"
+        onClick={[Function]}
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      >
+        <p
+          className="flex-none"
+        >
+          Active
+        </p>
+      </div>
+      <div
+        className="flex-none layout-row layout-align-center-center header_bar_action_buttons"
+      >
+        <div
+          className="flex-none layout-row pointy layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="flex-none fa fa-pencil edit_icon"
+          />
+        </div>
+        <div
+          className="flex-none layout-row pointy layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="flex-none fa fa-times delete_icon"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch buffer_10"
+    >
+      <GradientBorder
+        className="flex-100 layout-row"
+        content={
+          <div
+            className="flex-none layout-row layout-align-space-between-center hub_title_content"
+          >
+            <div
+              className="flex-70 layout-row layout-align-start-center"
+            >
+              <h3
+                className="flex-none"
+              >
+                 
+                HUB_NEXUS_NAME
+              </h3>
+            </div>
+            <div
+              className="flex-30 layout-row layout-align-end-center"
+            >
+              <div
+                className="flex-none layout-row layout-align-center-center"
+              >
+                <h4
+                  className="flex-none"
+                >
+                   
+                  
+                </h4>
+              </div>
+              <div
+                className="flex-none layout-row layout-align-center-center"
+                style={
+                  Object {
+                    "color": "#333",
+                  }
+                }
+              >
+                <i
+                  className="fa fa-anchor  "
+                  style={Object {}}
+                />
+              </div>
+            </div>
+          </div>
+        }
+        gradient={
+          Object {
+            "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+          }
+        }
+        wrapperClassName="flex flex-xs-100 flex-sm-100 layout-row layout-align-space-between-stretch"
+      />
+      <div
+        className="flex layout-row flex-xs-100 flex-sm-100 address_data_box"
+      >
+        <div
+          className="flex-55 layout-row address_box"
+        >
+          <div
+            className="flex-none layout-column layout-align-center-center address_icon"
+          >
+            <i
+              className="flex-none fa fa-map-marker clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex layout-align-space-around-start"
+          >
+            <div
+              className="flex-none layout-row layout-wrap "
+            >
+              <p
+                className="flex-100  address_part_1"
+              >
+                579 FOO_STREET, 22456
+                <br />
+                <strong>
+                  FOO_CITY 
+                </strong>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-45 layout-row lat_lng_box"
+        >
+          <div
+            className="flex-50 layout-column layout-align-center-center"
+          >
+            <p
+              className=" lat_lng"
+            />
+            <p
+              className=" lat_lng"
+            >
+              Latitude
+            </p>
+          </div>
+          <div
+            className="flex-none lat_lng_divider"
+          />
+          <div
+            className="flex-50 layout-column layout-align-center-center"
+          >
+            <p
+              className=" lat_lng"
+            />
+            <p
+              className=" lat_lng"
+            >
+              Longitude
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center buffer_10"
+    >
+      <div
+        className="flex-25 layout-row layout-align-center-center hub_photo"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-space-between-center hub_photo_content"
+        >
+          <img
+            alt=""
+            src="https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg"
+          />
+        </div>
+      </div>
+      <div
+        className="flex layout-row map_box"
+      >
+        <GmapsWrapper
+          address={
+            Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_STREET",
+              "streetNumber": 579,
+              "street_number": 579,
+              "zipCode": "22456",
+              "zip_code": "22456",
+            }
+          }
+          component={[Function]}
+          height="170px"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          zoom={12}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-start layout-wrap section_padding"
+    >
+      <AdminHubFees
+        adminDispatch={
+          Object {
+            "activateHub": [Function],
+            "getHub": [Function],
+          }
+        }
+        charges={Array []}
+        counterpartHubs={Array []}
+        customs={Array []}
+        loadType="lcl"
+        serviceLevels={Array []}
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch layout-wrap"
+    >
+      <div
+        className="flex-100 flex-gt-sm-33 layout-row layout-align-start-stretch"
+      >
+        <GreyBox
+          borderStyle=""
+          content={
+            <MandatoryChargeBox
+              mandatoryCharge={Object {}}
+              saveChanges={[Function]}
+              t={[Function]}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          }
+          contentClassName="layout-row flex-100 layout-wrap"
+          flex={0}
+          flexGtLg={0}
+          flexMd={0}
+          fullWidth={false}
+          isBox={false}
+          padding={false}
+          title="Mandatory Charges"
+          titleAction={false}
+          wrapperClassName="layout-row flex-100 layout-align-start-start"
+        />
+      </div>
+      <div
+        className="flex-100 flex-gt-sm-60 layout-row layout-align-start-stretch"
+      >
+        <GreyBox
+          borderStyle=""
+          content={
+            <div
+              className="flex-100 layout-row layout-align-center-center layout-wrap"
+            >
+              No itineraries yet
+            </div>
+          }
+          contentClassName="layout-row flex-100 layout-wrap"
+          flex={0}
+          flexGtLg={0}
+          flexMd={0}
+          fullWidth={false}
+          isBox={false}
+          padding={false}
+          title="Itineraries"
+          titleAction={false}
+          wrapperClassName="layout-row flex-100 layout-align-center-stretch"
+        />
+      </div>
+    </div>
+  </div>
+  <style>
+    
+    .react-toggle--checked .react-toggle-track {
+      background: linear-gradient(
+        90deg,
+        undefined 0%,
+        #333 100%
+      ) !important;
+      border: 0.5px solid rgba(0, 0, 0, 0);
+    }
+    .react-toggle-track {
+      background: linear-gradient(
+        90deg,
+        undefined 0%,
+        #fafafa 100%
+      ) !important;
+      border: 0.5px solid rgba(0, 0, 0, 0);
+    }
+    .react-toggle:hover .react-toggle-track{
+      background: rgba(0, 0, 0, 0.5) !important;
+    }
+  
+  </style>
+</div>
+`;
+
+exports[`state.confirm is truthy 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
+>
+  <div
+    className="component_view flex-95 layout-row layout-wrap layout-align-start-start"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_title buffer_10"
+    >
+      <div
+        className="flex layout-row layout-align-start-center header_bar_grey"
+      >
+        <p
+          className="flex-none header_bar_grey_text"
+        >
+          Hub
+        </p>
+      </div>
+      <div
+        className="flex-none layout-row pointy layout-align-center-center header_bar_active_button"
+        onClick={[Function]}
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      >
+        <p
+          className="flex-none"
+        >
+          Active
+        </p>
+      </div>
+      <div
+        className="flex-none layout-row layout-align-center-center header_bar_action_buttons"
+      >
+        <div
+          className="flex-none layout-row pointy layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="flex-none fa fa-pencil edit_icon"
+          />
+        </div>
+        <div
+          className="flex-none layout-row pointy layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="flex-none fa fa-times delete_icon"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch buffer_10"
+    >
+      <GradientBorder
+        className="flex-100 layout-row"
+        content={
+          <div
+            className="flex-none layout-row layout-align-space-between-center hub_title_content"
+          >
+            <div
+              className="flex-70 layout-row layout-align-start-center"
+            >
+              <h3
+                className="flex-none"
+              >
+                 
+                HUB_NEXUS_NAME
+              </h3>
+            </div>
+            <div
+              className="flex-30 layout-row layout-align-end-center"
+            >
+              <div
+                className="flex-none layout-row layout-align-center-center"
+              >
+                <h4
+                  className="flex-none"
+                >
+                   
+                  
+                </h4>
+              </div>
+              <div
+                className="flex-none layout-row layout-align-center-center"
+                style={
+                  Object {
+                    "color": "#333",
+                  }
+                }
+              >
+                <i
+                  className="fa fa-anchor  "
+                  style={Object {}}
+                />
+              </div>
+            </div>
+          </div>
+        }
+        gradient={
+          Object {
+            "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+          }
+        }
+        wrapperClassName="flex flex-xs-100 flex-sm-100 layout-row layout-align-space-between-stretch"
+      />
+      <div
+        className="flex layout-row flex-xs-100 flex-sm-100 address_data_box"
+      >
+        <div
+          className="flex-55 layout-row address_box"
+        >
+          <div
+            className="flex-none layout-column layout-align-center-center address_icon"
+          >
+            <i
+              className="flex-none fa fa-map-marker clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex layout-align-space-around-start"
+          >
+            <div
+              className="flex-none layout-row layout-wrap "
+            >
+              <p
+                className="flex-100  address_part_1"
+              >
+                579 FOO_STREET, 22456
+                <br />
+                <strong>
+                  FOO_CITY 
+                </strong>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-45 layout-row lat_lng_box"
+        >
+          <div
+            className="flex-50 layout-column layout-align-center-center"
+          >
+            <p
+              className=" lat_lng"
+            />
+            <p
+              className=" lat_lng"
+            >
+              Latitude
+            </p>
+          </div>
+          <div
+            className="flex-none lat_lng_divider"
+          />
+          <div
+            className="flex-50 layout-column layout-align-center-center"
+          >
+            <p
+              className=" lat_lng"
+            />
+            <p
+              className=" lat_lng"
+            >
+              Longitude
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center buffer_10"
+    >
+      <div
+        className="flex-25 layout-row layout-align-center-center hub_photo"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-space-between-center hub_photo_content"
+        >
+          <img
+            alt=""
+            src="https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg"
+          />
+        </div>
+      </div>
+      <div
+        className="flex layout-row map_box"
+      >
+        <GmapsWrapper
+          address={
+            Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_STREET",
+              "streetNumber": 579,
+              "street_number": 579,
+              "zipCode": "22456",
+              "zip_code": "22456",
+            }
+          }
+          component={[Function]}
+          height="170px"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          zoom={12}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-start layout-wrap section_padding"
+    >
+      <AdminHubFees
+        adminDispatch={
+          Object {
+            "activateHub": [Function],
+            "getHub": [Function],
+          }
+        }
+        charges={Array []}
+        counterpartHubs={Array []}
+        customs={Array []}
+        loadType="lcl"
+        serviceLevels={Array []}
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch layout-wrap"
+    >
+      <div
+        className="flex-100 flex-gt-sm-33 layout-row layout-align-start-stretch"
+      >
+        <GreyBox
+          borderStyle=""
+          content={
+            <MandatoryChargeBox
+              mandatoryCharge={Object {}}
+              saveChanges={[Function]}
+              t={[Function]}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          }
+          contentClassName="layout-row flex-100 layout-wrap"
+          flex={0}
+          flexGtLg={0}
+          flexMd={0}
+          fullWidth={false}
+          isBox={false}
+          padding={false}
+          title="Mandatory Charges"
+          titleAction={false}
+          wrapperClassName="layout-row flex-100 layout-align-start-start"
+        />
+      </div>
+      <div
+        className="flex-100 flex-gt-sm-60 layout-row layout-align-start-stretch"
+      >
+        <GreyBox
+          borderStyle=""
+          content={
+            <div
+              className="flex-100 layout-row layout-align-center-center layout-wrap"
+            >
+              No itineraries yet
+            </div>
+          }
+          contentClassName="layout-row flex-100 layout-wrap"
+          flex={0}
+          flexGtLg={0}
+          flexMd={0}
+          fullWidth={false}
+          isBox={false}
+          padding={false}
+          title="Itineraries"
+          titleAction={false}
+          wrapperClassName="layout-row flex-100 layout-align-center-stretch"
+        />
+      </div>
+    </div>
+    <AdminPromptConfirm
+      confirm={[Function]}
+      deny={[Function]}
+      heading="Are you sure?"
+      t={[Function]}
+      text="This will delete the hub {{name}} and all related data"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+  <style>
+    
+    .react-toggle--checked .react-toggle-track {
+      background: linear-gradient(
+        90deg,
+        undefined 0%,
+        #333 100%
+      ) !important;
+      border: 0.5px solid rgba(0, 0, 0, 0);
+    }
+    .react-toggle-track {
+      background: linear-gradient(
+        90deg,
+        undefined 0%,
+        #fafafa 100%
+      ) !important;
+      border: 0.5px solid rgba(0, 0, 0, 0);
+    }
+    .react-toggle:hover .react-toggle-track{
+      background: rgba(0, 0, 0, 0.5) !important;
+    }
+  
+  </style>
+</div>
+`;
+
+exports[`state.editView is truthy 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
+>
+  <AdminHubEdit
+    adminDispatch={
+      Object {
+        "activateHub": [Function],
+        "getHub": [Function],
+      }
+    }
+    close={[Function]}
+    hub={
+      Object {
+        "address": Object {
+          "city": "FOO_CITY",
+          "country": "Germany",
+          "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+          "id": 246,
+          "primary": true,
+          "street": "FOO_STREET",
+          "streetNumber": 579,
+          "street_number": 579,
+          "zipCode": "22456",
+          "zip_code": "22456",
+        },
+        "hub_status": "active",
+        "hub_type": "HUB_TYPE",
+        "name": "FOO_HUB_NAME",
+        "nexus": Object {
+          "name": "HUB_NEXUS_NAME",
+        },
+      }
+    }
+    t={[Function]}
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <div
+    className="component_view flex-95 layout-row layout-wrap layout-align-start-start"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_title buffer_10"
+    >
+      <div
+        className="flex layout-row layout-align-start-center header_bar_grey"
+      >
+        <p
+          className="flex-none header_bar_grey_text"
+        >
+          Hub
+        </p>
+      </div>
+      <div
+        className="flex-none layout-row pointy layout-align-center-center header_bar_active_button"
+        onClick={[Function]}
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      >
+        <p
+          className="flex-none"
+        >
+          Active
+        </p>
+      </div>
+      <div
+        className="flex-none layout-row layout-align-center-center header_bar_action_buttons"
+      >
+        <div
+          className="flex-none layout-row pointy layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="flex-none fa fa-pencil edit_icon"
+          />
+        </div>
+        <div
+          className="flex-none layout-row pointy layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="flex-none fa fa-times delete_icon"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch buffer_10"
+    >
+      <GradientBorder
+        className="flex-100 layout-row"
+        content={
+          <div
+            className="flex-none layout-row layout-align-space-between-center hub_title_content"
+          >
+            <div
+              className="flex-70 layout-row layout-align-start-center"
+            >
+              <h3
+                className="flex-none"
+              >
+                 
+                HUB_NEXUS_NAME
+              </h3>
+            </div>
+            <div
+              className="flex-30 layout-row layout-align-end-center"
+            >
+              <div
+                className="flex-none layout-row layout-align-center-center"
+              >
+                <h4
+                  className="flex-none"
+                >
+                   
+                  
+                </h4>
+              </div>
+              <div
+                className="flex-none layout-row layout-align-center-center"
+                style={
+                  Object {
+                    "color": "#333",
+                  }
+                }
+              >
+                <i
+                  className="fa fa-anchor  "
+                  style={Object {}}
+                />
+              </div>
+            </div>
+          </div>
+        }
+        gradient={
+          Object {
+            "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+          }
+        }
+        wrapperClassName="flex flex-xs-100 flex-sm-100 layout-row layout-align-space-between-stretch"
+      />
+      <div
+        className="flex layout-row flex-xs-100 flex-sm-100 address_data_box"
+      >
+        <div
+          className="flex-55 layout-row address_box"
+        >
+          <div
+            className="flex-none layout-column layout-align-center-center address_icon"
+          >
+            <i
+              className="flex-none fa fa-map-marker clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex layout-align-space-around-start"
+          >
+            <div
+              className="flex-none layout-row layout-wrap "
+            >
+              <p
+                className="flex-100  address_part_1"
+              >
+                579 FOO_STREET, 22456
+                <br />
+                <strong>
+                  FOO_CITY 
+                </strong>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-45 layout-row lat_lng_box"
+        >
+          <div
+            className="flex-50 layout-column layout-align-center-center"
+          >
+            <p
+              className=" lat_lng"
+            />
+            <p
+              className=" lat_lng"
+            >
+              Latitude
+            </p>
+          </div>
+          <div
+            className="flex-none lat_lng_divider"
+          />
+          <div
+            className="flex-50 layout-column layout-align-center-center"
+          >
+            <p
+              className=" lat_lng"
+            />
+            <p
+              className=" lat_lng"
+            >
+              Longitude
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center buffer_10"
+    >
+      <div
+        className="flex-25 layout-row layout-align-center-center hub_photo"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-space-between-center hub_photo_content"
+        >
+          <img
+            alt=""
+            src="https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg"
+          />
+        </div>
+      </div>
+      <div
+        className="flex layout-row map_box"
+      >
+        <GmapsWrapper
+          address={
+            Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_STREET",
+              "streetNumber": 579,
+              "street_number": 579,
+              "zipCode": "22456",
+              "zip_code": "22456",
+            }
+          }
+          component={[Function]}
+          height="170px"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          zoom={12}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-start layout-wrap section_padding"
+    >
+      <AdminHubFees
+        adminDispatch={
+          Object {
+            "activateHub": [Function],
+            "getHub": [Function],
+          }
+        }
+        charges={Array []}
+        counterpartHubs={Array []}
+        customs={Array []}
+        loadType="lcl"
+        serviceLevels={Array []}
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch layout-wrap"
+    >
+      <div
+        className="flex-100 flex-gt-sm-33 layout-row layout-align-start-stretch"
+      >
+        <GreyBox
+          borderStyle=""
+          content={
+            <MandatoryChargeBox
+              mandatoryCharge={Object {}}
+              saveChanges={[Function]}
+              t={[Function]}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          }
+          contentClassName="layout-row flex-100 layout-wrap"
+          flex={0}
+          flexGtLg={0}
+          flexMd={0}
+          fullWidth={false}
+          isBox={false}
+          padding={false}
+          title="Mandatory Charges"
+          titleAction={false}
+          wrapperClassName="layout-row flex-100 layout-align-start-start"
+        />
+      </div>
+      <div
+        className="flex-100 flex-gt-sm-60 layout-row layout-align-start-stretch"
+      >
+        <GreyBox
+          borderStyle=""
+          content={
+            <div
+              className="flex-100 layout-row layout-align-center-center layout-wrap"
+            >
+              No itineraries yet
+            </div>
+          }
+          contentClassName="layout-row flex-100 layout-wrap"
+          flex={0}
+          flexGtLg={0}
+          flexMd={0}
+          fullWidth={false}
+          isBox={false}
+          padding={false}
+          title="Itineraries"
+          titleAction={false}
+          wrapperClassName="layout-row flex-100 layout-align-center-stretch"
+        />
+      </div>
+    </div>
+  </div>
+  <style>
+    
+    .react-toggle--checked .react-toggle-track {
+      background: linear-gradient(
+        90deg,
+        undefined 0%,
+        #333 100%
+      ) !important;
+      border: 0.5px solid rgba(0, 0, 0, 0);
+    }
+    .react-toggle-track {
+      background: linear-gradient(
+        90deg,
+        undefined 0%,
+        #fafafa 100%
+      ) !important;
+      border: 0.5px solid rgba(0, 0, 0, 0);
+    }
+    .react-toggle:hover .react-toggle-track{
+      background: rgba(0, 0, 0, 0.5) !important;
+    }
+  
+  </style>
+</div>
+`;
+
+exports[`state.page > 1 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
+>
+  <div
+    className="component_view flex-95 layout-row layout-wrap layout-align-start-start"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_title buffer_10"
+    >
+      <div
+        className="flex layout-row layout-align-start-center header_bar_grey"
+      >
+        <p
+          className="flex-none header_bar_grey_text"
+        >
+          Hub
+        </p>
+      </div>
+      <div
+        className="flex-none layout-row pointy layout-align-center-center header_bar_active_button"
+        onClick={[Function]}
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      >
+        <p
+          className="flex-none"
+        >
+          Active
+        </p>
+      </div>
+      <div
+        className="flex-none layout-row layout-align-center-center header_bar_action_buttons"
+      >
+        <div
+          className="flex-none layout-row pointy layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="flex-none fa fa-pencil edit_icon"
+          />
+        </div>
+        <div
+          className="flex-none layout-row pointy layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="flex-none fa fa-times delete_icon"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch buffer_10"
+    >
+      <GradientBorder
+        className="flex-100 layout-row"
+        content={
+          <div
+            className="flex-none layout-row layout-align-space-between-center hub_title_content"
+          >
+            <div
+              className="flex-70 layout-row layout-align-start-center"
+            >
+              <h3
+                className="flex-none"
+              >
+                 
+                HUB_NEXUS_NAME
+              </h3>
+            </div>
+            <div
+              className="flex-30 layout-row layout-align-end-center"
+            >
+              <div
+                className="flex-none layout-row layout-align-center-center"
+              >
+                <h4
+                  className="flex-none"
+                >
+                   
+                  
+                </h4>
+              </div>
+              <div
+                className="flex-none layout-row layout-align-center-center"
+                style={
+                  Object {
+                    "color": "#333",
+                  }
+                }
+              >
+                <i
+                  className="fa fa-anchor  "
+                  style={Object {}}
+                />
+              </div>
+            </div>
+          </div>
+        }
+        gradient={
+          Object {
+            "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+          }
+        }
+        wrapperClassName="flex flex-xs-100 flex-sm-100 layout-row layout-align-space-between-stretch"
+      />
+      <div
+        className="flex layout-row flex-xs-100 flex-sm-100 address_data_box"
+      >
+        <div
+          className="flex-55 layout-row address_box"
+        >
+          <div
+            className="flex-none layout-column layout-align-center-center address_icon"
+          >
+            <i
+              className="flex-none fa fa-map-marker clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex layout-align-space-around-start"
+          >
+            <div
+              className="flex-none layout-row layout-wrap "
+            >
+              <p
+                className="flex-100  address_part_1"
+              >
+                579 FOO_STREET, 22456
+                <br />
+                <strong>
+                  FOO_CITY 
+                </strong>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-45 layout-row lat_lng_box"
+        >
+          <div
+            className="flex-50 layout-column layout-align-center-center"
+          >
+            <p
+              className=" lat_lng"
+            />
+            <p
+              className=" lat_lng"
+            >
+              Latitude
+            </p>
+          </div>
+          <div
+            className="flex-none lat_lng_divider"
+          />
+          <div
+            className="flex-50 layout-column layout-align-center-center"
+          >
+            <p
+              className=" lat_lng"
+            />
+            <p
+              className=" lat_lng"
+            >
+              Longitude
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center buffer_10"
+    >
+      <div
+        className="flex-25 layout-row layout-align-center-center hub_photo"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-row layout-align-space-between-center hub_photo_content"
+        >
+          <img
+            alt=""
+            src="https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg"
+          />
+        </div>
+      </div>
+      <div
+        className="flex layout-row map_box"
+      >
+        <GmapsWrapper
+          address={
+            Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_STREET",
+              "streetNumber": 579,
+              "street_number": 579,
+              "zipCode": "22456",
+              "zip_code": "22456",
+            }
+          }
+          component={[Function]}
+          height="170px"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          zoom={12}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-start layout-wrap section_padding"
+    >
+      <AdminHubFees
+        adminDispatch={
+          Object {
+            "activateHub": [Function],
+            "getHub": [Function],
+          }
+        }
+        charges={Array []}
+        counterpartHubs={Array []}
+        customs={Array []}
+        loadType="lcl"
+        serviceLevels={Array []}
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch layout-wrap"
+    >
+      <div
+        className="flex-100 flex-gt-sm-33 layout-row layout-align-start-stretch"
+      >
+        <GreyBox
+          borderStyle=""
+          content={
+            <MandatoryChargeBox
+              mandatoryCharge={Object {}}
+              saveChanges={[Function]}
+              t={[Function]}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          }
+          contentClassName="layout-row flex-100 layout-wrap"
+          flex={0}
+          flexGtLg={0}
+          flexMd={0}
+          fullWidth={false}
+          isBox={false}
+          padding={false}
+          title="Mandatory Charges"
+          titleAction={false}
+          wrapperClassName="layout-row flex-100 layout-align-start-start"
+        />
+      </div>
+      <div
+        className="flex-100 flex-gt-sm-60 layout-row layout-align-start-stretch"
+      >
+        <GreyBox
+          borderStyle=""
+          content={
+            <div
+              className="flex-100 layout-row layout-align-center-center layout-wrap"
+            >
+              No itineraries yet
+            </div>
+          }
+          contentClassName="layout-row flex-100 layout-wrap"
+          flex={0}
+          flexGtLg={0}
+          flexMd={0}
+          fullWidth={false}
+          isBox={false}
+          padding={false}
+          title="Itineraries"
+          titleAction={false}
+          wrapperClassName="layout-row flex-100 layout-align-center-stretch"
+        />
+      </div>
+    </div>
+  </div>
+  <style>
+    
+    .react-toggle--checked .react-toggle-track {
+      background: linear-gradient(
+        90deg,
+        undefined 0%,
+        #333 100%
+      ) !important;
+      border: 0.5px solid rgba(0, 0, 0, 0);
+    }
+    .react-toggle-track {
+      background: linear-gradient(
+        90deg,
+        undefined 0%,
+        #fafafa 100%
+      ) !important;
+      border: 0.5px solid rgba(0, 0, 0, 0);
+    }
+    .react-toggle:hover .react-toggle-track{
+      background: rgba(0, 0, 0, 0.5) !important;
+    }
+  
+  </style>
+</div>
+`;
+
+exports[`theme is falsy 1`] = `""`;
