@@ -11,8 +11,8 @@ backend:
     pullPolicy: Always
   resources:
     requests:
-      memory: 256Mi
-      cpu: 100m
+      memory: 512Mi
+      cpu: 250m
 
 frontend:
   image:
@@ -75,8 +75,8 @@ postgresql:
 
   resources:
     requests:
-      memory: 256Mi
-      cpu: 100m
+      memory: 512Mi
+      cpu: 250m
 
   nodeSelector: {}
   tolerations: []
