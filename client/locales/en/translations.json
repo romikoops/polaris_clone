@@ -561,7 +561,7 @@
     "customsHandling": "Customs Handling",
     "customsValue": "Customs Value Declaration",
     "customsValueShort": "Customs Val. Decl.",
-    "descriptionGoods": "Description of goods",
+    "descriptionGoods": "Description of Goods (HS Codes if available)",
     "effectiveInsurance": "Insurance is a cost effective and simple way to cover for physical loss or damage to goods in transit.",
     "euRules": "When you ship goods from outside the European Union (EU), you may be charged customs duty and/or VAT according to local regulations.",
     "grossWeight": "Gross Weight",
