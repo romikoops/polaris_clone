@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<GenericError
+  t={[Function]}
+  theme={null}
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-start"
+  >
+    <Switch
+      className="flex"
+    >
+      <Route
+        exact={true}
+        path="/admin/pricings"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/pricings/trucking/:id"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/trucking/new/creator"
+        render={[Function]}
+      />
+    </Switch>
+  </div>
+</GenericError>
+`;
+
+exports[`trucking is falsy 1`] = `""`;

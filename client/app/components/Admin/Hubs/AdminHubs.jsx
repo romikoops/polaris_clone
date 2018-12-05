@@ -4,10 +4,9 @@ import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
 import PropTypes from '../../../prop-types'
 import { AdminHubsIndex, AdminHubView, AdminHubForm } from '../'
-import { AdminUploadsSuccess } from '../Uploads/Success'
+import AdminUploadsSuccess from '../Uploads/Success'
 import { adminActions, documentActions, appActions } from '../../../actions'
 import { Modal } from '../../Modal/Modal'
-// import styles from '../Admin.scss'
 import GenericError from '../../../components/ErrorHandling/Generic'
 
 class AdminHubs extends Component {

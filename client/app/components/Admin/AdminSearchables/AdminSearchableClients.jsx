@@ -170,7 +170,7 @@ export class AdminSearchableClients extends Component {
             `}
             onClick={parseInt(page, 10) < pages ? this.nextPage : null}
           >
-            <p>{t('admin:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
+            <p>{t('common:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
             <i className="fa fa-chevron-right" />
           </div>
         </div>

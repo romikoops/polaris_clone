@@ -92,7 +92,7 @@ export class AdminRouteView extends Component {
     const confimPrompt = confirm ? (
       <AdminPromptConfirm
         theme={theme}
-        heading={t('common: areYouSure')}
+        heading={t('common:areYouSure')}
         text={t('admin:confirmDeleteRoute')}
         confirm={() => this.deleteItinerary(itinerary.id)}
         deny={() => this.closeConfirm()}

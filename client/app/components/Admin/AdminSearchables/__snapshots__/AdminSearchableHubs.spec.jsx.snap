@@ -1,0 +1,144 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`hubs is truthy 1`] = `
+<div
+  className="layout-row flex-100 layout-align-start-center layout-wrap searchable"
+>
+  <div
+    className="layout-row flex-95 layout-wrap card_margin_right"
+  >
+    <AdminHubTile
+      handleClick={[Function]}
+      hub={
+        Object {
+          "address": Object {
+            "city": "FOO_CITY",
+            "country": "Germany",
+            "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+            "id": 246,
+            "primary": true,
+            "street": "FOO_STREET",
+            "streetNumber": 579,
+            "street_number": 579,
+            "zipCode": "22456",
+            "zip_code": "22456",
+          },
+          "name": "FOO_HUB_NAME",
+        }
+      }
+      key="RANDOM_KEY_0"
+      showIcon={false}
+      showTooltip={true}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      tooltip="A glance of all the Hubs that are related to the chosen Hub"
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-end-center"
+  >
+    <div
+      className="flex-none layout-row layout-align-center-center pointy"
+      onClick={[Function]}
+    >
+      <p
+        className="flex-none"
+      >
+        See all
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`limit is 1 1`] = `
+<div
+  className="layout-row flex-100 layout-align-start-center layout-wrap searchable"
+>
+  <div
+    className="layout-row flex-95 layout-wrap card_margin_right"
+  />
+  <div
+    className="flex-100 layout-row layout-align-end-center"
+  >
+    <div
+      className="flex-none layout-row layout-align-center-center pointy"
+      onClick={[Function]}
+    >
+      <p
+        className="flex-none"
+      >
+        See all
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="layout-row flex-100 layout-align-start-center layout-wrap searchable"
+>
+  <div
+    className="layout-row flex-95 layout-wrap card_margin_right"
+  />
+  <div
+    className="flex-100 layout-row layout-align-end-center"
+  >
+    <div
+      className="flex-none layout-row layout-align-center-center pointy"
+      onClick={[Function]}
+    >
+      <p
+        className="flex-none"
+      >
+        See all
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`when seeAll is falsy 1`] = `
+<div
+  className="layout-row flex-100 layout-align-start-center layout-wrap searchable"
+>
+  <div
+    className="layout-row flex-95 layout-wrap card_margin_right"
+  />
+</div>
+`;
+
+exports[`when sideScroll is true 1`] = `
+<div
+  className="layout-row flex-100 layout-align-start-center layout-wrap searchable"
+>
+  <div
+    className="layout-row flex-100 layout-align-start-center slider_container"
+  >
+    <div
+      className="layout-row flex-none layout-align-space-around-center card_margin_right slider_inner"
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-end-center"
+  >
+    <div
+      className="flex-none layout-row layout-align-center-center pointy"
+      onClick={[Function]}
+    >
+      <p
+        className="flex-none"
+      >
+        See all
+      </p>
+    </div>
+  </div>
+</div>
+`;

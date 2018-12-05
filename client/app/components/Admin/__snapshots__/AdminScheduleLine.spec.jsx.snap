@@ -1,0 +1,633 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`!hubs[hubKeys[0]] 1`] = `""`;
+
+exports[`destHub.hub_code is falsy 1`] = `
+<div
+  className="flex-100 layout-row route_result"
+  key="555777"
+>
+  <div
+    className="flex-100 layout-row layout-wrap"
+  >
+    <div
+      className="flex-40 layout-row layout-align-start-center top_row"
+    >
+      <div
+        className="header_hub"
+      >
+        <i
+          className="fa fa-map-marker map_marker"
+        />
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="flex-100"
+          >
+             
+            FOO_NAME
+             
+          </h4>
+        </div>
+        <div
+          className="flex-100"
+        >
+          <p
+            className="flex-100"
+          >
+             
+            FOO_HUB_CODE
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className="connection_graphics"
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <i
+            className="fa fa-ship"
+          />
+        </div>
+        <div
+          style={
+            Object {
+              "background": "linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa)",
+              "backgroundSize": "16px 2px, 100% 2px",
+              "height": "2px",
+              "marginTop": "6px",
+              "width": "100%",
+            }
+          }
+        />
+      </div>
+      <div
+        className="header_hub"
+      >
+        <i
+          className="fa fa-flag-o flag"
+        />
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="flex-100"
+          >
+             
+            BAR_NAME
+             
+          </h4>
+        </div>
+        <div
+          className="flex-100"
+        >
+          <p
+            className="flex-100"
+          >
+             
+             
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-60 layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-33 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="date_title"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, undefined, undefined)",
+              }
+            }
+          >
+            Pick-up Date
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row"
+        >
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-33 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="date_title"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, undefined, undefined)",
+              }
+            }
+          >
+             
+            Date of Departure
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row"
+        >
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-33 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="date_title"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, undefined, undefined)",
+              }
+            }
+          >
+             
+            ETA terminal
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row"
+        >
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`originHub.hub_code is falsy 1`] = `
+<div
+  className="flex-100 layout-row route_result"
+  key="555777"
+>
+  <div
+    className="flex-100 layout-row layout-wrap"
+  >
+    <div
+      className="flex-40 layout-row layout-align-start-center top_row"
+    >
+      <div
+        className="header_hub"
+      >
+        <i
+          className="fa fa-map-marker map_marker"
+        />
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="flex-100"
+          >
+             
+            FOO_NAME
+             
+          </h4>
+        </div>
+        <div
+          className="flex-100"
+        >
+          <p
+            className="flex-100"
+          >
+             
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className="connection_graphics"
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <i
+            className="fa fa-ship"
+          />
+        </div>
+        <div
+          style={
+            Object {
+              "background": "linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa)",
+              "backgroundSize": "16px 2px, 100% 2px",
+              "height": "2px",
+              "marginTop": "6px",
+              "width": "100%",
+            }
+          }
+        />
+      </div>
+      <div
+        className="header_hub"
+      >
+        <i
+          className="fa fa-flag-o flag"
+        />
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="flex-100"
+          >
+             
+            BAR_NAME
+             
+          </h4>
+        </div>
+        <div
+          className="flex-100"
+        >
+          <p
+            className="flex-100"
+          >
+             
+            BAR_HUB_CODE
+             
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-60 layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-33 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="date_title"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, undefined, undefined)",
+              }
+            }
+          >
+            Pick-up Date
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row"
+        >
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-33 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="date_title"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, undefined, undefined)",
+              }
+            }
+          >
+             
+            Date of Departure
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row"
+        >
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-33 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="date_title"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, undefined, undefined)",
+              }
+            }
+          >
+             
+            ETA terminal
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row"
+        >
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`schedule is falsy 1`] = `""`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row route_result"
+  key="555777"
+>
+  <div
+    className="flex-100 layout-row layout-wrap"
+  >
+    <div
+      className="flex-40 layout-row layout-align-start-center top_row"
+    >
+      <div
+        className="header_hub"
+      >
+        <i
+          className="fa fa-map-marker map_marker"
+        />
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="flex-100"
+          >
+             
+            FOO_NAME
+             
+          </h4>
+        </div>
+        <div
+          className="flex-100"
+        >
+          <p
+            className="flex-100"
+          >
+             
+            FOO_HUB_CODE
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className="connection_graphics"
+      >
+        <div
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <i
+            className="fa fa-ship"
+          />
+        </div>
+        <div
+          style={
+            Object {
+              "background": "linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa)",
+              "backgroundSize": "16px 2px, 100% 2px",
+              "height": "2px",
+              "marginTop": "6px",
+              "width": "100%",
+            }
+          }
+        />
+      </div>
+      <div
+        className="header_hub"
+      >
+        <i
+          className="fa fa-flag-o flag"
+        />
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="flex-100"
+          >
+             
+            BAR_NAME
+             
+          </h4>
+        </div>
+        <div
+          className="flex-100"
+        >
+          <p
+            className="flex-100"
+          >
+             
+            BAR_HUB_CODE
+             
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-60 layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-33 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="date_title"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, undefined, undefined)",
+              }
+            }
+          >
+            Pick-up Date
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row"
+        >
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-33 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="date_title"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, undefined, undefined)",
+              }
+            }
+          >
+             
+            Date of Departure
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row"
+        >
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-33 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="date_title"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, undefined, undefined)",
+              }
+            }
+          >
+             
+            ETA terminal
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row"
+        >
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

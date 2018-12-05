@@ -341,7 +341,7 @@ export class AdminClientView extends Component {
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
           >
             <div className="layout-padding flex-100 layout-align-start-center greyBg">
-              <span><b>{t('common:locations')}</b></span>
+              <span><b>{t('shipment:locations')}</b></span>
             </div>
           </div>
           <div className="layout-row flex-100 layout-wrap layout-align-space-between-stretch margin_bottom">
@@ -374,4 +374,4 @@ AdminClientView.defaultProps = {
   clientData: null
 }
 
-export default withNamespaces(['admin', 'common', 'user'])(AdminClientView)
+export default withNamespaces(['admin', 'common', 'user', 'shipment'])(AdminClientView)

@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<GenericError
+  t={[Function]}
+  theme={
+    Object {
+      "colors": Object {
+        "primary": "#333",
+        "secondary": "#fafafa",
+      },
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-start"
+  >
+    <Switch
+      className="flex"
+    >
+      <Route
+        exact={true}
+        path="/admin/hubs"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/hubs/:id"
+        render={[Function]}
+      />
+    </Switch>
+  </div>
+</GenericError>
+`;
+
+exports[`tenant is falsy 1`] = `
+<GenericError
+  t={[Function]}
+  theme={
+    Object {
+      "colors": Object {
+        "primary": "#333",
+        "secondary": "#fafafa",
+      },
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-start"
+  >
+    <Switch
+      className="flex"
+    >
+      <Route
+        exact={true}
+        path="/admin/hubs"
+        render={[Function]}
+      />
+      <Route
+        exact={true}
+        path="/admin/hubs/:id"
+        render={[Function]}
+      />
+    </Switch>
+  </div>
+</GenericError>
+`;

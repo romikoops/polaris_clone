@@ -550,7 +550,7 @@ export class AdminPricingDedicated extends Component {
             <input
               type="text"
               name="search"
-              placeholder={t('admin:searchClients"')}
+              placeholder={t('admin:searchClients')}
               onChange={this.handleSearchChange}
             />
           </div>

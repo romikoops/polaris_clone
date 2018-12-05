@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-center"
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-start"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center sec_title"
+    >
+      <h1
+        className=" sec_title_text flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      >
+        Finished!
+      </h1>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center sec_title"
+    >
+      <p
+        className=" sec_title_text flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      >
+        Browse through the links on the left to see your data!
+      </p>
+    </div>
+  </div>
+</div>
+`;

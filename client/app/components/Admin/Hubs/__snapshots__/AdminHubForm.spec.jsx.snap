@@ -1,0 +1,483 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="hub_form layout-row flex-none layout-wrap layout-align-center"
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-5"
+    />
+    <h2
+      className="flex-none clip letter_3 margin_5"
+      style={
+        Object {
+          "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+        }
+      }
+    >
+      Add a New Hub
+    </h2>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-start-center layout-wrap map_padding"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center margin_5"
+    >
+      <p
+        className="flex-none offset-5"
+      >
+        1: Find the Hub (or nearest location) on the map
+      </p>
+    </div>
+    <GmapsWrapper
+      component={[Function]}
+      handlePlaceChange={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center form_padding"
+  >
+    <div
+      className="flex-50 layout-row layout-wrap layout-align-start-start height_100"
+    >
+      <p
+        className="flex-100"
+      >
+        2: Ensure the name and hub type is correct
+      </p>
+      <div
+        className="flex-80 layout-row layout-align-center-center input_box_full"
+      >
+        <input
+          className="flex-none input"
+          name="hub-name"
+          onChange={[Function]}
+          placeholder="Name"
+          type="string"
+          value=""
+        />
+      </div>
+      <div
+        className="flex-80 layout-row layout-align-center-center"
+      >
+        <Styled(Select)
+          className="select"
+          name="hub-type"
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Port",
+                "value": "ocean",
+              },
+              Object {
+                "label": "Airport",
+                "value": "air",
+              },
+              Object {
+                "label": "Railyard",
+                "value": "rail",
+              },
+              Object {
+                "label": "Trucking Depot",
+                "value": "trucking",
+              },
+            ]
+          }
+          placeholder="Hub Type"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-wrap layout-align-end-space-around"
+    >
+      <p
+        className="flex-100"
+      >
+        3: Complete the address fields as needed
+      </p>
+      <div
+        className="flex-100 layout-row layout-align-space-around-center"
+      >
+        <div
+          className="flex-20 layout-row layout-align-center-center input_box_full"
+        >
+          <input
+            className="flex-none input"
+            id="not-auto"
+            name="address-street_number"
+            onChange={[Function]}
+            placeholder="Number"
+            type="string"
+          />
+        </div>
+        <div
+          className="flex-75 layout-row layout-align-center-center input_box_full"
+        >
+          <input
+            className="flex-none input"
+            name="address-street"
+            onChange={[Function]}
+            placeholder="Street"
+            type="string"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-space-around-center"
+      >
+        <div
+          className="flex-30 layout-row layout-align-center-center input_box_full"
+        >
+          <input
+            className="flex-none input"
+            name="address-zipCode"
+            onChange={[Function]}
+            placeholder="Zip Code"
+            type="string"
+          />
+        </div>
+        <div
+          className="flex-65 layout-row layout-align-center-center input_box_full"
+        >
+          <input
+            className="flex-none input"
+            name="address-city"
+            onChange={[Function]}
+            placeholder="City"
+            type="string"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-space-around-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center-center input_box_full"
+        >
+          <input
+            className="flex-none input"
+            name="address-country"
+            onChange={[Function]}
+            placeholder="Country"
+            type="string"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-space-around-center"
+  >
+    <div
+      className="flex-none layout-row"
+    >
+      <RoundButton
+        active={false}
+        back={false}
+        classNames=""
+        disabled={false}
+        flexContainer="100"
+        handleDisabled={null}
+        handleNext={[Function]}
+        icon=""
+        iconClass="fa-times"
+        inverse={false}
+        size="small"
+        text="Clear"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-none layout-row"
+    >
+      <RoundButton
+        active={true}
+        back={false}
+        classNames=""
+        disabled={false}
+        flexContainer="100"
+        handleDisabled={null}
+        handleNext={[Function]}
+        icon=""
+        iconClass="fa-floppy"
+        inverse={false}
+        size="small"
+        text="Save Hub"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-5"
+    />
+  </div>
+</div>
+`;
+
+exports[`state.location is truthy 1`] = `
+<div
+  className="hub_form layout-row flex-none layout-wrap layout-align-center"
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-5"
+    />
+    <h2
+      className="flex-none clip letter_3 margin_5"
+      style={
+        Object {
+          "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+        }
+      }
+    >
+      Add a New Hub
+    </h2>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-start-center layout-wrap map_padding"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center margin_5"
+    >
+      <p
+        className="flex-none offset-5"
+      >
+        1: Find the Hub (or nearest location) on the map
+      </p>
+    </div>
+    <GmapsWrapper
+      component={[Function]}
+      handlePlaceChange={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center form_padding"
+  >
+    <div
+      className="flex-50 layout-row layout-wrap layout-align-start-start height_100"
+    >
+      <p
+        className="flex-100"
+      >
+        2: Ensure the name and hub type is correct
+      </p>
+      <div
+        className="flex-80 layout-row layout-align-center-center input_box_full"
+      >
+        <input
+          className="flex-none input"
+          name="hub-name"
+          onChange={[Function]}
+          placeholder="Name"
+          type="string"
+          value=""
+        />
+      </div>
+      <div
+        className="flex-80 layout-row layout-align-center-center"
+      >
+        <Styled(Select)
+          className="select"
+          name="hub-type"
+          onChange={[Function]}
+          options={
+            Array [
+              Object {
+                "label": "Port",
+                "value": "ocean",
+              },
+              Object {
+                "label": "Airport",
+                "value": "air",
+              },
+              Object {
+                "label": "Railyard",
+                "value": "rail",
+              },
+              Object {
+                "label": "Trucking Depot",
+                "value": "trucking",
+              },
+            ]
+          }
+          placeholder="Hub Type"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-wrap layout-align-end-space-around"
+    >
+      <p
+        className="flex-100"
+      >
+        3: Complete the address fields as needed
+      </p>
+      <div
+        className="flex-100 layout-row layout-align-space-around-center"
+      >
+        <div
+          className="flex-20 layout-row layout-align-center-center input_box_full"
+        >
+          <input
+            className="flex-none input"
+            id="not-auto"
+            name="address-street_number"
+            onChange={[Function]}
+            placeholder="Number"
+            type="string"
+          />
+        </div>
+        <div
+          className="flex-75 layout-row layout-align-center-center input_box_full"
+        >
+          <input
+            className="flex-none input"
+            name="address-street"
+            onChange={[Function]}
+            placeholder="Street"
+            type="string"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-space-around-center"
+      >
+        <div
+          className="flex-30 layout-row layout-align-center-center input_box_full"
+        >
+          <input
+            className="flex-none input"
+            name="address-zipCode"
+            onChange={[Function]}
+            placeholder="Zip Code"
+            type="string"
+          />
+        </div>
+        <div
+          className="flex-65 layout-row layout-align-center-center input_box_full"
+        >
+          <input
+            className="flex-none input"
+            name="address-city"
+            onChange={[Function]}
+            placeholder="City"
+            type="string"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-space-around-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center-center input_box_full"
+        >
+          <input
+            className="flex-none input"
+            name="address-country"
+            onChange={[Function]}
+            placeholder="Country"
+            type="string"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-space-around-center"
+  >
+    <div
+      className="flex-none layout-row"
+    >
+      <RoundButton
+        active={false}
+        back={false}
+        classNames=""
+        disabled={false}
+        flexContainer="100"
+        handleDisabled={null}
+        handleNext={[Function]}
+        icon=""
+        iconClass="fa-times"
+        inverse={false}
+        size="small"
+        text="Clear"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-none layout-row"
+    >
+      <RoundButton
+        active={true}
+        back={false}
+        classNames=""
+        disabled={false}
+        flexContainer="100"
+        handleDisabled={null}
+        handleNext={[Function]}
+        icon=""
+        iconClass="fa-floppy"
+        inverse={false}
+        size="small"
+        text="Save Hub"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-5"
+    />
+  </div>
+</div>
+`;

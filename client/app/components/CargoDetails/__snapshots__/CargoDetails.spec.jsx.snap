@@ -301,7 +301,7 @@ exports[`customs.import.unknown && customs.export.unknown 1`] = `
                 <TextHeading
                   color=""
                   size={3}
-                  text="Description of goods"
+                  text="Description of Goods (HS Codes if available)"
                   theme={
                     Object {
                       "colors": Object {
@@ -841,7 +841,7 @@ exports[`customsData[target].unknown 1`] = `
                 <TextHeading
                   color=""
                   size={3}
-                  text="Description of goods"
+                  text="Description of Goods (HS Codes if available)"
                   theme={
                     Object {
                       "colors": Object {
@@ -1381,7 +1381,7 @@ exports[`fee && !fee.unknown && fee.total.value 1`] = `
                 <TextHeading
                   color=""
                   size={3}
-                  text="Description of goods"
+                  text="Description of Goods (HS Codes if available)"
                   theme={
                     Object {
                       "colors": Object {
@@ -1946,7 +1946,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                 <TextHeading
                   color=""
                   size={3}
-                  text="Description of goods"
+                  text="Description of Goods (HS Codes if available)"
                   theme={
                     Object {
                       "colors": Object {
@@ -3002,7 +3002,7 @@ exports[`shallow render 1`] = `
                 <TextHeading
                   color=""
                   size={3}
-                  text="Description of goods"
+                  text="Description of Goods (HS Codes if available)"
                   theme={
                     Object {
                       "colors": Object {
@@ -3542,7 +3542,7 @@ exports[`shipment.has_pre_carriage ? 1`] = `
                 <TextHeading
                   color=""
                   size={3}
-                  text="Description of goods"
+                  text="Description of Goods (HS Codes if available)"
                   theme={
                     Object {
                       "colors": Object {
@@ -4082,7 +4082,7 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
                 <TextHeading
                   color=""
                   size={3}
-                  text="Description of goods"
+                  text="Description of Goods (HS Codes if available)"
                   theme={
                     Object {
                       "colors": Object {
@@ -4652,7 +4652,7 @@ exports[`tenant.scope.has_insurance is true 1`] = `
                 <TextHeading
                   color=""
                   size={3}
-                  text="Description of goods"
+                  text="Description of Goods (HS Codes if available)"
                   theme={
                     Object {
                       "colors": Object {
@@ -5359,7 +5359,7 @@ exports[`this.props.insurance.bool ? 1`] = `
                 <TextHeading
                   color=""
                   size={3}
-                  text="Description of goods"
+                  text="Description of Goods (HS Codes if available)"
                   theme={
                     Object {
                       "colors": Object {
@@ -5899,7 +5899,7 @@ exports[`totalGoodsValue.value > 20000 1`] = `
                 <TextHeading
                   color=""
                   size={3}
-                  text="Description of goods"
+                  text="Description of Goods (HS Codes if available)"
                   theme={
                     Object {
                       "colors": Object {

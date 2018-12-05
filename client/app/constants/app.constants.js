@@ -103,8 +103,8 @@ export const tooltips = {
     pre_carriage: 'Pick-up',
     on_carriage: 'Delivery',
     documentation: {
-      origin: 'Origin Documentation',
-      destination: 'Destination Documentation'
+      origin: 'Origin Local Charges',
+      destination: 'Destination Local Charges'
     },
     freight: 'Freight'
   }

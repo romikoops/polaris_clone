@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render) 1`] = `
+<div
+  className="confirm_backdrop flex-none layout-row layout-align-center-center"
+>
+  <div
+    className="confirm_fade flex-none layout-row layout-align-center-center"
+    onClick={[Function]}
+  />
+  <div
+    className="confirm_box flex-none layout-row layout-wrap layout-align-center-space-around"
+  >
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-center-center"
+    >
+      <TextHeading
+        color=""
+        size={3}
+        text="HEADING"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-center-center"
+    >
+      <p
+        className="flex-none"
+      >
+        TEXT
+      </p>
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-center-center"
+    >
+      <div
+        className="flex-50 layout-row layout-align-center-center"
+      >
+        <RoundButton
+          active={false}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-ban"
+          inverse={false}
+          size="small"
+          text="Cancel"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-50 layout-row layout-align-center-center"
+      >
+        <RoundButton
+          active={true}
+          back={false}
+          classNames=""
+          disabled={false}
+          flexContainer="100"
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-check"
+          inverse={false}
+          size="small"
+          text="Yes, I'm sure"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

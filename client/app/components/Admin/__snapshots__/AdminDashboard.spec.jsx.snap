@@ -1,0 +1,1066 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dashData is falsy 1`] = `""`;
+
+exports[`isQuote(tenant) is true 1`] = `
+<GenericError
+  t={[Function]}
+  theme={
+    Object {
+      "colors": Object {
+        "primary": "#333",
+        "secondary": "#fafafa",
+      },
+    }
+  }
+>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center extra_padding container"
+  >
+    <div
+      className="layout-row flex-100 layout-align-space-between-start header"
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center headerElement"
+      >
+        <span
+          className="layout-row flex-10 layout-align-center-center"
+        >
+          <i
+            className="fa fa-user clip bigProfile"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+              }
+            }
+          />
+        </span>
+        <span
+          className="welcome flex-90 layout-row"
+        >
+          Welcome back,
+          , 
+           
+          <b>
+            John
+          </b>
+        </span>
+      </div>
+    </div>
+    <div
+      className="layout-padding flex-100 layout-align-start-center greyBg"
+    >
+      <span>
+        <b>
+          Quoted Shipments
+        </b>
+      </span>
+    </div>
+    <ShipmentOverviewCard
+      admin={true}
+      confirmShipmentData={Object {}}
+      dispatches={
+        Object {
+          "confirmShipment": [Function],
+          "getDashboard": [Function],
+          "getHub": [Function],
+          "getShipment": [Function],
+        }
+      }
+      handleAction={[Function]}
+      handleSelect={[Function]}
+      hubs={Object {}}
+      noTitle={true}
+      shipments={Array []}
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+    <div
+      className="layout-row flex-100 layout-align-center-center space"
+    >
+      <span
+        className="flex-15"
+        onClick={[Function]}
+      >
+        <u>
+          <b>
+            See more shipments
+          </b>
+        </u>
+      </span>
+      <div
+        className="flex-85 separator"
+      />
+    </div>
+    <div
+      className="margin_bottom flex-100"
+    >
+      <GreyBox
+        borderStyle=""
+        content={
+          <div
+            className="layout-row flex-100 layout-align-space-between-stretch layout-wrap"
+          >
+            <div
+              className="flex-gt-md-50 layout-padding flex-100"
+            >
+              <AdminRouteList
+                listStyle={Object {}}
+                onClickRoute={[Function]}
+                onMouseEnterRoute={[Function]}
+                onMouseLeaveRoute={[Function]}
+                t={[Function]}
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+            <div
+              className="flex-gt-md-50 layout-padding layout-row layout-align-center-center flex-100 hide_overflow"
+            >
+              <WorldMap
+                hoverId={false}
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+          </div>
+        }
+        contentClassName=""
+        flex={100}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName=""
+      />
+    </div>
+    <div
+      className="layout-row layout-wrap flex-100 layout-align-space-between-stretch"
+    >
+      <div
+        className="flex-gt-md-60 flex-100"
+      >
+        <AdminHubCard
+          adminDispatch={
+            Object {
+              "confirmShipment": [Function],
+              "getDashboard": [Function],
+              "getHub": [Function],
+              "getShipment": [Function],
+            }
+          }
+          hubs={Object {}}
+          t={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="layout-row flex-100 layout-align-center-center space"
+        >
+          <span
+            className="flex-15"
+            onClick={[Function]}
+          >
+            <u>
+              <b>
+                See more
+              </b>
+            </u>
+          </span>
+          <div
+            className="flex-85 separator"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-gt-md-35 flex-100"
+      >
+        <AdminClientCardIndex
+          clients={
+            Array [
+              Object {
+                "company_name": "Mehristweniger",
+                "email": "muller55@yahoo.de",
+                "first_name": "Sebastian",
+                "last_name": "Muller",
+                "password": "pwd",
+              },
+            ]
+          }
+          t={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          viewClient={[Function]}
+        />
+        <div
+          className="layout-row flex-100 layout-align-center-center space"
+        >
+          <span
+            className="flex-20"
+            onClick={[Function]}
+          >
+            <u>
+              <b>
+                See more
+              </b>
+            </u>
+          </span>
+          <div
+            className="flex-80 separator"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</GenericError>
+`;
+
+exports[`shallow render 1`] = `
+<GenericError
+  t={[Function]}
+  theme={
+    Object {
+      "colors": Object {
+        "primary": "#333",
+        "secondary": "#fafafa",
+      },
+    }
+  }
+>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center extra_padding container"
+  >
+    <div
+      className="layout-row flex-100 layout-align-space-between-start header"
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center headerElement"
+      >
+        <span
+          className="layout-row flex-10 layout-align-center-center"
+        >
+          <i
+            className="fa fa-user clip bigProfile"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+              }
+            }
+          />
+        </span>
+        <span
+          className="welcome flex-90 layout-row"
+        >
+          Welcome back,
+          , 
+           
+          <b>
+            John
+          </b>
+        </span>
+      </div>
+    </div>
+    <div
+      className="layout-padding flex-100 layout-align-start-center greyBg"
+    >
+      <span>
+        <b>
+          Requested Shipments
+        </b>
+      </span>
+    </div>
+    <ShipmentOverviewCard
+      admin={true}
+      confirmShipmentData={Object {}}
+      dispatches={
+        Object {
+          "confirmShipment": [Function],
+          "getDashboard": [Function],
+          "getHub": [Function],
+          "getShipment": [Function],
+        }
+      }
+      handleAction={[Function]}
+      handleSelect={[Function]}
+      hubs={Object {}}
+      noTitle={true}
+      shipments={
+        Array [
+          Object {
+            "cargo_count": 2,
+            "cargo_units": Array [
+              Object {
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
+              },
+            ],
+            "clientName": "Sebastian Muller",
+            "companyName": "Mehristweniger",
+            "destination_hub": Object {
+              "name": "FOO_DESTINATION_HUB",
+            },
+            "id": 654,
+            "imc_reference": "FOO_IMC_REFERENCE",
+            "origin_hub": Object {
+              "name": "FOO_ORIGIN_HUB",
+            },
+            "planned_eta": "2018-12-01T12:14:08+01:00",
+            "planned_etd": "2018-11-12T12:14:08+01:00",
+            "schedule_set": Array [],
+            "selected_offer": Object {
+              "cargo": Object {},
+              "total": Object {
+                "value": 77,
+              },
+            },
+            "service_level": "standard",
+            "status": "FOO_STATUS",
+            "total_price": Object {
+              "currency": "USD",
+              "value": "200.99",
+            },
+          },
+        ]
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+    <div
+      className="layout-row flex-100 layout-align-center-center space"
+    >
+      <span
+        className="flex-15"
+        onClick={[Function]}
+      >
+        <u>
+          <b>
+            See more shipments
+          </b>
+        </u>
+      </span>
+      <div
+        className="flex-85 separator"
+      />
+    </div>
+    <div
+      className="margin_bottom flex-100"
+    >
+      <GreyBox
+        borderStyle=""
+        content={
+          <div
+            className="layout-row flex-100 layout-align-space-between-stretch layout-wrap"
+          >
+            <div
+              className="flex-gt-md-50 layout-padding flex-100"
+            >
+              <AdminRouteList
+                listStyle={Object {}}
+                onClickRoute={[Function]}
+                onMouseEnterRoute={[Function]}
+                onMouseLeaveRoute={[Function]}
+                t={[Function]}
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+            <div
+              className="flex-gt-md-50 layout-padding layout-row layout-align-center-center flex-100 hide_overflow"
+            >
+              <WorldMap
+                hoverId={false}
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+          </div>
+        }
+        contentClassName=""
+        flex={100}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName=""
+      />
+    </div>
+    <div
+      className="layout-row layout-wrap flex-100 layout-align-space-between-stretch"
+    >
+      <div
+        className="flex-gt-md-60 flex-100"
+      >
+        <AdminHubCard
+          adminDispatch={
+            Object {
+              "confirmShipment": [Function],
+              "getDashboard": [Function],
+              "getHub": [Function],
+              "getShipment": [Function],
+            }
+          }
+          hubs={Object {}}
+          t={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="layout-row flex-100 layout-align-center-center space"
+        >
+          <span
+            className="flex-15"
+            onClick={[Function]}
+          >
+            <u>
+              <b>
+                See more
+              </b>
+            </u>
+          </span>
+          <div
+            className="flex-85 separator"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-gt-md-35 flex-100"
+      >
+        <AdminClientCardIndex
+          clients={
+            Array [
+              Object {
+                "company_name": "Mehristweniger",
+                "email": "muller55@yahoo.de",
+                "first_name": "Sebastian",
+                "last_name": "Muller",
+                "password": "pwd",
+              },
+            ]
+          }
+          t={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          viewClient={[Function]}
+        />
+        <div
+          className="layout-row flex-100 layout-align-center-center space"
+        >
+          <span
+            className="flex-20"
+            onClick={[Function]}
+          >
+            <u>
+              <b>
+                See more
+              </b>
+            </u>
+          </span>
+          <div
+            className="flex-80 separator"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</GenericError>
+`;
+
+exports[`tenant is falsy 1`] = `
+<GenericError
+  t={[Function]}
+  theme={
+    Object {
+      "colors": Object {
+        "primary": "#333",
+        "secondary": "#fafafa",
+      },
+    }
+  }
+>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center extra_padding container"
+  >
+    <div
+      className="layout-row flex-100 layout-align-space-between-start header"
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center headerElement"
+      >
+        <span
+          className="layout-row flex-10 layout-align-center-center"
+        >
+          <i
+            className="fa fa-user clip bigProfile"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+              }
+            }
+          />
+        </span>
+        <span
+          className="welcome flex-90 layout-row"
+        >
+          Welcome back,
+          , 
+           
+          <b>
+            John
+          </b>
+        </span>
+      </div>
+    </div>
+    <div
+      className="layout-padding flex-100 layout-align-start-center greyBg"
+    >
+      <span>
+        <b>
+          Requested Shipments
+        </b>
+      </span>
+    </div>
+    <ShipmentOverviewCard
+      admin={true}
+      confirmShipmentData={Object {}}
+      dispatches={
+        Object {
+          "confirmShipment": [Function],
+          "getDashboard": [Function],
+          "getHub": [Function],
+          "getShipment": [Function],
+        }
+      }
+      handleAction={[Function]}
+      handleSelect={[Function]}
+      hubs={Object {}}
+      noTitle={true}
+      shipments={
+        Array [
+          Object {
+            "cargo_count": 2,
+            "cargo_units": Array [
+              Object {
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
+              },
+            ],
+            "clientName": "Sebastian Muller",
+            "companyName": "Mehristweniger",
+            "destination_hub": Object {
+              "name": "FOO_DESTINATION_HUB",
+            },
+            "id": 654,
+            "imc_reference": "FOO_IMC_REFERENCE",
+            "origin_hub": Object {
+              "name": "FOO_ORIGIN_HUB",
+            },
+            "planned_eta": "2018-12-01T12:14:08+01:00",
+            "planned_etd": "2018-11-12T12:14:08+01:00",
+            "schedule_set": Array [],
+            "selected_offer": Object {
+              "cargo": Object {},
+              "total": Object {
+                "value": 77,
+              },
+            },
+            "service_level": "standard",
+            "status": "FOO_STATUS",
+            "total_price": Object {
+              "currency": "USD",
+              "value": "200.99",
+            },
+          },
+        ]
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+    <div
+      className="layout-row flex-100 layout-align-center-center space"
+    >
+      <span
+        className="flex-15"
+        onClick={[Function]}
+      >
+        <u>
+          <b>
+            See more shipments
+          </b>
+        </u>
+      </span>
+      <div
+        className="flex-85 separator"
+      />
+    </div>
+    <div
+      className="margin_bottom flex-100"
+    >
+      <GreyBox
+        borderStyle=""
+        content={
+          <div
+            className="layout-row flex-100 layout-align-space-between-stretch layout-wrap"
+          >
+            <div
+              className="flex-gt-md-50 layout-padding flex-100"
+            >
+              <AdminRouteList
+                listStyle={Object {}}
+                onClickRoute={[Function]}
+                onMouseEnterRoute={[Function]}
+                onMouseLeaveRoute={[Function]}
+                t={[Function]}
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+            <div
+              className="flex-gt-md-50 layout-padding layout-row layout-align-center-center flex-100 hide_overflow"
+            >
+              <WorldMap
+                hoverId={false}
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+          </div>
+        }
+        contentClassName=""
+        flex={100}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName=""
+      />
+    </div>
+    <div
+      className="layout-row layout-wrap flex-100 layout-align-space-between-stretch"
+    >
+      <div
+        className="flex-gt-md-60 flex-100"
+      >
+        <AdminHubCard
+          adminDispatch={
+            Object {
+              "confirmShipment": [Function],
+              "getDashboard": [Function],
+              "getHub": [Function],
+              "getShipment": [Function],
+            }
+          }
+          hubs={Object {}}
+          t={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="layout-row flex-100 layout-align-center-center space"
+        >
+          <span
+            className="flex-15"
+            onClick={[Function]}
+          >
+            <u>
+              <b>
+                See more
+              </b>
+            </u>
+          </span>
+          <div
+            className="flex-85 separator"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-gt-md-35 flex-100"
+      >
+        <AdminClientCardIndex
+          clients={
+            Array [
+              Object {
+                "company_name": "Mehristweniger",
+                "email": "muller55@yahoo.de",
+                "first_name": "Sebastian",
+                "last_name": "Muller",
+                "password": "pwd",
+              },
+            ]
+          }
+          t={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          viewClient={[Function]}
+        />
+        <div
+          className="layout-row flex-100 layout-align-center-center space"
+        >
+          <span
+            className="flex-20"
+            onClick={[Function]}
+          >
+            <u>
+              <b>
+                See more
+              </b>
+            </u>
+          </span>
+          <div
+            className="flex-80 separator"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</GenericError>
+`;
+
+exports[`theme is falsy 1`] = `
+<GenericError
+  t={[Function]}
+  theme={null}
+>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center extra_padding container"
+  >
+    <div
+      className="layout-row flex-100 layout-align-space-between-start header"
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center headerElement"
+      >
+        <span
+          className="layout-row flex-10 layout-align-center-center"
+        >
+          <i
+            className="fa fa-user clip bigProfile"
+            style={
+              Object {
+                "color": "black",
+              }
+            }
+          />
+        </span>
+        <span
+          className="welcome flex-90 layout-row"
+        >
+          Welcome back,
+          , 
+           
+          <b>
+            John
+          </b>
+        </span>
+      </div>
+    </div>
+    <div
+      className="layout-padding flex-100 layout-align-start-center greyBg"
+    >
+      <span>
+        <b>
+          Requested Shipments
+        </b>
+      </span>
+    </div>
+    <ShipmentOverviewCard
+      admin={true}
+      confirmShipmentData={Object {}}
+      dispatches={
+        Object {
+          "confirmShipment": [Function],
+          "getDashboard": [Function],
+          "getHub": [Function],
+          "getShipment": [Function],
+        }
+      }
+      handleAction={[Function]}
+      handleSelect={[Function]}
+      hubs={Object {}}
+      noTitle={true}
+      shipments={
+        Array [
+          Object {
+            "cargo_count": 2,
+            "cargo_units": Array [
+              Object {
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
+              },
+            ],
+            "clientName": "Sebastian Muller",
+            "companyName": "Mehristweniger",
+            "destination_hub": Object {
+              "name": "FOO_DESTINATION_HUB",
+            },
+            "id": 654,
+            "imc_reference": "FOO_IMC_REFERENCE",
+            "origin_hub": Object {
+              "name": "FOO_ORIGIN_HUB",
+            },
+            "planned_eta": "2018-12-01T12:14:08+01:00",
+            "planned_etd": "2018-11-12T12:14:08+01:00",
+            "schedule_set": Array [],
+            "selected_offer": Object {
+              "cargo": Object {},
+              "total": Object {
+                "value": 77,
+              },
+            },
+            "service_level": "standard",
+            "status": "FOO_STATUS",
+            "total_price": Object {
+              "currency": "USD",
+              "value": "200.99",
+            },
+          },
+        ]
+      }
+      t={[Function]}
+      theme={null}
+    />
+    <div
+      className="layout-row flex-100 layout-align-center-center space"
+    >
+      <span
+        className="flex-15"
+        onClick={[Function]}
+      >
+        <u>
+          <b>
+            See more shipments
+          </b>
+        </u>
+      </span>
+      <div
+        className="flex-85 separator"
+      />
+    </div>
+    <div
+      className="margin_bottom flex-100"
+    >
+      <GreyBox
+        borderStyle=""
+        content={
+          <div
+            className="layout-row flex-100 layout-align-space-between-stretch layout-wrap"
+          >
+            <div
+              className="flex-gt-md-50 layout-padding flex-100"
+            >
+              <AdminRouteList
+                listStyle={Object {}}
+                onClickRoute={[Function]}
+                onMouseEnterRoute={[Function]}
+                onMouseLeaveRoute={[Function]}
+                t={[Function]}
+                theme={null}
+              />
+            </div>
+            <div
+              className="flex-gt-md-50 layout-padding layout-row layout-align-center-center flex-100 hide_overflow"
+            >
+              <WorldMap
+                hoverId={false}
+                theme={null}
+              />
+            </div>
+          </div>
+        }
+        contentClassName=""
+        flex={100}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName=""
+      />
+    </div>
+    <div
+      className="layout-row layout-wrap flex-100 layout-align-space-between-stretch"
+    >
+      <div
+        className="flex-gt-md-60 flex-100"
+      >
+        <AdminHubCard
+          adminDispatch={
+            Object {
+              "confirmShipment": [Function],
+              "getDashboard": [Function],
+              "getHub": [Function],
+              "getShipment": [Function],
+            }
+          }
+          hubs={Object {}}
+          t={[Function]}
+          theme={null}
+        />
+        <div
+          className="layout-row flex-100 layout-align-center-center space"
+        >
+          <span
+            className="flex-15"
+            onClick={[Function]}
+          >
+            <u>
+              <b>
+                See more
+              </b>
+            </u>
+          </span>
+          <div
+            className="flex-85 separator"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-gt-md-35 flex-100"
+      >
+        <AdminClientCardIndex
+          clients={
+            Array [
+              Object {
+                "company_name": "Mehristweniger",
+                "email": "muller55@yahoo.de",
+                "first_name": "Sebastian",
+                "last_name": "Muller",
+                "password": "pwd",
+              },
+            ]
+          }
+          t={[Function]}
+          theme={null}
+          viewClient={[Function]}
+        />
+        <div
+          className="layout-row flex-100 layout-align-center-center space"
+        >
+          <span
+            className="flex-20"
+            onClick={[Function]}
+          >
+            <u>
+              <b>
+                See more
+              </b>
+            </u>
+          </span>
+          <div
+            className="flex-80 separator"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</GenericError>
+`;

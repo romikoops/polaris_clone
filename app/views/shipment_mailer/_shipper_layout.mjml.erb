@@ -27,9 +27,9 @@
     </mj-column>
   </mj-section>
 </mj-wrapper>
-<%= render "details_body" %>
+<%= render "details_body.mjml" %>
 <% if defined? closing_text %>
-<%= render "closing_lines", closing_text: closing_text, user: @user %>
+<%= render "closing_lines.mjml", closing_text: closing_text, user: @user %>
 <% end %>
 <mj-wrapper full-width="full-width" padding="0px">
   <mj-section full-width="full-width">

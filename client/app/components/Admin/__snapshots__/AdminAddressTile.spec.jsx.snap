@@ -1,0 +1,485 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`address is falsy 1`] = `""`;
+
+exports[`shallow render 1`] = `
+<div
+  className="tile_padding  margin_bottom flex-20 layout-row layout-wrap layout-align-start-stretch"
+>
+  <div
+    className="location-box flex layout-row layout-wrap layout-align-start-stretch"
+  >
+    <div
+      className=" flex-100 layout-row layout-align-space-between-center  sec_subheader"
+    >
+      <div
+        className="flex-100 layout-row layout-align-end-center height_100"
+      >
+        <div
+          className="flex-33 layout-row layout-align-center-center pointy"
+          onClick={[Function]}
+          style={
+            Object {
+              "height": "50px",
+            }
+          }
+        >
+          <i
+            className="flex-none fa fa-pencil clip"
+            style={
+              Object {
+                "background": "#BDBDBD",
+                "paddingRight": "1.7vw",
+              }
+            }
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      className="layout-row flex-100 location_address"
+    >
+      <i
+        className="fa fa-map-marker clip"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      />
+      <div
+        className="layout-column layout-align-start-start"
+      >
+        <p
+          className="flex-none"
+        >
+          579
+           
+          FOO_STREET
+           
+        </p>
+        <p
+          className="flex-none"
+        >
+          <strong>
+            FOO_CITY
+          </strong>
+        </p>
+        <p
+          className="flex-none"
+        >
+          22456
+           
+        </p>
+        <p
+          className="flex-none"
+        >
+          Germany
+           
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`showDelete is false 1`] = `
+<div
+  className="tile_padding  margin_bottom flex-20 layout-row layout-wrap layout-align-start-stretch"
+>
+  <div
+    className="location-box flex layout-row layout-wrap layout-align-start-stretch"
+  >
+    <div
+      className=" flex-100 layout-row layout-align-space-between-center  sec_subheader"
+    >
+      <div
+        className="flex-100 layout-row layout-align-end-center height_100"
+      >
+        <div
+          className="flex-33 layout-row layout-align-center-center pointy"
+          onClick={[Function]}
+          style={
+            Object {
+              "height": "50px",
+            }
+          }
+        >
+          <i
+            className="flex-none fa fa-pencil clip"
+            style={
+              Object {
+                "background": "#BDBDBD",
+                "paddingRight": "1.7vw",
+              }
+            }
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      className="layout-row flex-100 location_address"
+    >
+      <i
+        className="fa fa-map-marker clip"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      />
+      <div
+        className="layout-column layout-align-start-start"
+      >
+        <p
+          className="flex-none"
+        >
+          579
+           
+          FOO_STREET
+           
+        </p>
+        <p
+          className="flex-none"
+        >
+          <strong>
+            FOO_CITY
+          </strong>
+        </p>
+        <p
+          className="flex-none"
+        >
+          22456
+           
+        </p>
+        <p
+          className="flex-none"
+        >
+          Germany
+           
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`state.editor is truthy 1`] = `
+<div
+  className="tile_padding  margin_bottom flex-20 layout-row layout-wrap layout-align-start-stretch"
+>
+  <div
+    className="location-box flex layout-row layout-wrap layout-align-start-stretch"
+  >
+    <div
+      className=" flex-100 layout-row layout-align-space-between-center  sec_subheader"
+    >
+      <div
+        className="flex-100 layout-row layout-align-end-center height_100"
+      >
+        <div
+          className="layout-row flex-100 layout-align-end-center icons_location"
+        >
+          <div
+            className="flex-33 layout-row layout-align-center-center"
+            onClick={[Function]}
+            style={
+              Object {
+                "height": "50px",
+              }
+            }
+          >
+            <i
+              className="fa fa-check pointy"
+            />
+          </div>
+          <div
+            className="flex-33 layout-row layout-align-center-center"
+          >
+            <i
+              className="fa fa-trash pointy trashy"
+              onClick={[Function]}
+            />
+          </div>
+          <div
+            className="flex-33 layout-row layout-align-center-center"
+            onClick={[Function]}
+            style={
+              Object {
+                "height": "50px",
+              }
+            }
+          >
+            <i
+              className="flex-none fa fa-times clip extra_padding_right"
+              style={
+                Object {
+                  "background": "#BDBDBD",
+                  "cursor": "pointer",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-start-center location_address"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-space-between-center input_box_full"
+      >
+        <input
+          name="street_number"
+          onChange={[Function]}
+          placeholder="Street Number"
+          type="text"
+          value={579}
+        />
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-space-between-center input_box_full"
+      >
+        <input
+          name="street"
+          onChange={[Function]}
+          placeholder="Street"
+          type="text"
+          value="FOO_STREET"
+        />
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-space-between-center input_box_full"
+      >
+        <input
+          name="city"
+          onChange={[Function]}
+          placeholder="City"
+          type="text"
+          value="FOO_CITY"
+        />
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-space-between-center input_box_full"
+      >
+        <input
+          name="zip_code"
+          onChange={[Function]}
+          placeholder="ZIP Code"
+          type="text"
+          value="22456"
+        />
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-space-between-center input_box_full"
+      >
+        <input
+          name="country"
+          onChange={[Function]}
+          placeholder="Country"
+          type="text"
+          value="Germany"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`state.showEdit is true 1`] = `
+<div
+  className="tile_padding  margin_bottom flex-20 layout-row layout-wrap layout-align-start-stretch"
+>
+  <div
+    className="location-box flex layout-row layout-wrap layout-align-start-stretch"
+  >
+    <div
+      className=" flex-100 layout-row layout-align-space-between-center  sec_subheader"
+    >
+      <div
+        className="flex-100 layout-row layout-align-end-center height_100"
+      >
+        <div
+          className="layout-row flex-100 layout-align-end-center icons_location"
+        >
+          <div
+            className="flex-33 layout-row layout-align-center-center"
+            onClick={[Function]}
+            style={
+              Object {
+                "height": "50px",
+              }
+            }
+          >
+            <i
+              className="fa fa-check pointy"
+            />
+          </div>
+          <div
+            className="flex-33 layout-row layout-align-center-center"
+          >
+            <i
+              className="fa fa-trash pointy trashy"
+              onClick={[Function]}
+            />
+          </div>
+          <div
+            className="flex-33 layout-row layout-align-center-center"
+            onClick={[Function]}
+            style={
+              Object {
+                "height": "50px",
+              }
+            }
+          >
+            <i
+              className="flex-none fa fa-times clip extra_padding_right"
+              style={
+                Object {
+                  "background": "#BDBDBD",
+                  "cursor": "pointer",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-start-center location_address"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-space-between-center input_box_full"
+      >
+        <input
+          name="street_number"
+          onChange={[Function]}
+          placeholder="Street Number"
+          type="text"
+        />
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-space-between-center input_box_full"
+      >
+        <input
+          name="street"
+          onChange={[Function]}
+          placeholder="Street"
+          type="text"
+        />
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-space-between-center input_box_full"
+      >
+        <input
+          name="city"
+          onChange={[Function]}
+          placeholder="City"
+          type="text"
+        />
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-space-between-center input_box_full"
+      >
+        <input
+          name="zip_code"
+          onChange={[Function]}
+          placeholder="ZIP Code"
+          type="text"
+        />
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-space-between-center input_box_full"
+      >
+        <input
+          name="country"
+          onChange={[Function]}
+          placeholder="Country"
+          type="text"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="tile_padding  margin_bottom flex-20 layout-row layout-wrap layout-align-start-stretch"
+>
+  <div
+    className="location-box flex layout-row layout-wrap layout-align-start-stretch"
+  >
+    <div
+      className=" flex-100 layout-row layout-align-space-between-center  sec_subheader"
+    >
+      <div
+        className="flex-100 layout-row layout-align-end-center height_100"
+      >
+        <div
+          className="flex-33 layout-row layout-align-center-center pointy"
+          onClick={[Function]}
+          style={
+            Object {
+              "height": "50px",
+            }
+          }
+        >
+          <i
+            className="flex-none fa fa-pencil clip"
+            style={
+              Object {
+                "background": "#BDBDBD",
+                "paddingRight": "1.7vw",
+              }
+            }
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      className="layout-row flex-100 location_address"
+    >
+      <i
+        className="fa fa-map-marker clip"
+        style={
+          Object {
+            "background": "black",
+          }
+        }
+      />
+      <div
+        className="layout-column layout-align-start-start"
+      >
+        <p
+          className="flex-none"
+        >
+          579
+           
+          FOO_STREET
+           
+        </p>
+        <p
+          className="flex-none"
+        >
+          <strong>
+            FOO_CITY
+          </strong>
+        </p>
+        <p
+          className="flex-none"
+        >
+          22456
+           
+        </p>
+        <p
+          className="flex-none"
+        >
+          Germany
+           
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;

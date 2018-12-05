@@ -1,0 +1,310 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`hubs is falsy 1`] = `
+<GenericError
+  t={[Function]}
+  theme={
+    Object {
+      "colors": Object {
+        "primary": "#333",
+        "secondary": "#fafafa",
+      },
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-start"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center sec_title"
+    >
+      <p
+        className=" sec_title_text flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      >
+        service charges
+      </p>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_upload"
+    >
+      <p
+        className="flex-none"
+      >
+        Upload Service Charges Sheet
+      </p>
+      <[object Object]
+        text="Service Charges .xlsx"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        type="xlsx"
+        url="/admin/service_charges/process_csv"
+      />
+    </div>
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-start-center"
+    />
+  </div>
+</GenericError>
+`;
+
+exports[`shallow render 1`] = `
+<GenericError
+  t={[Function]}
+  theme={
+    Object {
+      "colors": Object {
+        "primary": "#333",
+        "secondary": "#fafafa",
+      },
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-start"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center sec_title"
+    >
+      <p
+        className=" sec_title_text flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      >
+        service charges
+      </p>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_upload"
+    >
+      <p
+        className="flex-none"
+      >
+        Upload Service Charges Sheet
+      </p>
+      <[object Object]
+        text="Service Charges .xlsx"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        type="xlsx"
+        url="/admin/service_charges/process_csv"
+      />
+    </div>
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-start-center"
+    >
+      <AdminHubTile
+        handleClick={[Function]}
+        hub={
+          Object {
+            "data": Object {
+              "hub_code": "FOO_HUB_CODE",
+              "name": "FOO_NAME",
+            },
+            "name": "FOO_HUB_NAME",
+          }
+        }
+        key="RANDOM_KEY_0"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+      <AdminHubTile
+        handleClick={[Function]}
+        hub={
+          Object {
+            "data": Object {
+              "hub_code": "BAR_HUB_CODE",
+              "name": "BAR_NAME",
+            },
+            "name": "BAR_HUB_NAME",
+          }
+        }
+        key="RANDOM_KEY_1"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</GenericError>
+`;
+
+exports[`state.selectedHub is true 1`] = `
+<GenericError
+  t={[Function]}
+  theme={
+    Object {
+      "colors": Object {
+        "primary": "#333",
+        "secondary": "#fafafa",
+      },
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-start"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center sec_title"
+    >
+      <p
+        className=" sec_title_text flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      >
+        service charges
+      </p>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_upload"
+    >
+      <p
+        className="flex-none"
+      >
+        Upload Service Charges Sheet
+      </p>
+      <[object Object]
+        text="Service Charges .xlsx"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        type="xlsx"
+        url="/admin/service_charges/process_csv"
+      />
+    </div>
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-start-center"
+    >
+      <[object Object]
+        adminTools={
+          Object {
+            "updateServiceCharge": [Function],
+          }
+        }
+        backFn={[Function]}
+        charge={Object {}}
+        hub={true}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</GenericError>
+`;
+
+exports[`theme is falsy 1`] = `
+<GenericError
+  t={[Function]}
+  theme={null}
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-start"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center sec_title"
+    >
+      <p
+        className=" sec_title_text flex-none"
+        style={
+          Object {
+            "background": "black",
+          }
+        }
+      >
+        service charges
+      </p>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_upload"
+    >
+      <p
+        className="flex-none"
+      >
+        Upload Service Charges Sheet
+      </p>
+      <[object Object]
+        text="Service Charges .xlsx"
+        theme={null}
+        type="xlsx"
+        url="/admin/service_charges/process_csv"
+      />
+    </div>
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-start-center"
+    >
+      <AdminHubTile
+        handleClick={[Function]}
+        hub={
+          Object {
+            "data": Object {
+              "hub_code": "FOO_HUB_CODE",
+              "name": "FOO_NAME",
+            },
+            "name": "FOO_HUB_NAME",
+          }
+        }
+        key="RANDOM_KEY_6"
+        theme={null}
+      />
+      <AdminHubTile
+        handleClick={[Function]}
+        hub={
+          Object {
+            "data": Object {
+              "hub_code": "BAR_HUB_CODE",
+              "name": "BAR_NAME",
+            },
+            "name": "BAR_HUB_NAME",
+          }
+        }
+        key="RANDOM_KEY_7"
+        theme={null}
+      />
+    </div>
+  </div>
+</GenericError>
+`;

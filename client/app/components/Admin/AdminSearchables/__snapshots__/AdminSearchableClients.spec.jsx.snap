@@ -1,0 +1,285 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`placeholder is falsy 1`] = `
+<div
+  className="layout-row flex-100 layout-wrap layout-align-start-start searchable"
+>
+  <div
+    className="flex-100 layout-row layout-align-space-between-center"
+  >
+    <div
+      className="flex-100 layout-align-start-center greyBg"
+    >
+      <span>
+        <b>
+          TITLE
+        </b>
+      </span>
+    </div>
+  </div>
+  <div
+    className="searchables flex-100 layout-row layout-align-end-center searchable_header"
+  >
+    <div
+      className="input_box_full flex-40 layout-row layout-align-end-center"
+    >
+      <input
+        name="search"
+        onChange={[Function]}
+        placeholder="Search clients"
+        type="text"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-wrap layout-row layout-align-start-start searchable_section"
+  />
+  <div
+    className="flex-95 layout-row layout-align-center-center pagination_buttons"
+  >
+    <div
+      className="
+              flex-15 layout-row layout-align-center-center pointy
+              navigation_button disabled
+            "
+      onClick={null}
+    >
+      <i
+        className="fa fa-chevron-left"
+      />
+      <p>
+            
+        Back
+      </p>
+    </div>
+    <p>
+      1
+       / 
+      0
+       
+    </p>
+    <div
+      className="
+              flex-15 layout-row layout-align-center-center pointy
+              navigation_button disabled
+            "
+      onClick={null}
+    >
+      <p>
+        Next
+            
+      </p>
+      <i
+        className="fa fa-chevron-right"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="layout-row flex-100 layout-wrap layout-align-start-start searchable"
+>
+  <div
+    className="flex-100 layout-row layout-align-space-between-center"
+  >
+    <div
+      className="flex-100 layout-align-start-center greyBg"
+    >
+      <span>
+        <b>
+          TITLE
+        </b>
+      </span>
+    </div>
+  </div>
+  <div
+    className="searchables flex-100 layout-row layout-align-end-center searchable_header"
+  >
+    <div
+      className="input_box_full flex-40 layout-row layout-align-end-center"
+    >
+      <input
+        name="search"
+        onChange={[Function]}
+        placeholder="PLACEHOLDER"
+        type="text"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-wrap layout-row layout-align-start-start searchable_section"
+  />
+  <div
+    className="flex-95 layout-row layout-align-center-center pagination_buttons"
+  >
+    <div
+      className="
+              flex-15 layout-row layout-align-center-center pointy
+              navigation_button disabled
+            "
+      onClick={null}
+    >
+      <i
+        className="fa fa-chevron-left"
+      />
+      <p>
+            
+        Back
+      </p>
+    </div>
+    <p>
+      1
+       / 
+      0
+       
+    </p>
+    <div
+      className="
+              flex-15 layout-row layout-align-center-center pointy
+              navigation_button disabled
+            "
+      onClick={null}
+    >
+      <p>
+        Next
+            
+      </p>
+      <i
+        className="fa fa-chevron-right"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`showTooltip and hideFilters are true 1`] = `
+<div
+  className="layout-row flex-100 layout-wrap layout-align-start-start searchable"
+>
+  <div
+    className="flex-100 layout-row layout-align-space-between-center"
+  >
+    <div
+      className="flex-100 layout-align-start-center greyBg"
+    >
+      <span>
+        <b>
+          TITLE
+        </b>
+      </span>
+    </div>
+  </div>
+  <div
+    className="searchables flex-100 layout-row layout-align-end-center searchable_header"
+  />
+  <div
+    className="flex-100 layout-wrap layout-row layout-align-start-start searchable_section"
+  />
+  <div
+    className="flex-95 layout-row layout-align-center-center pagination_buttons"
+  >
+    <div
+      className="
+              flex-15 layout-row layout-align-center-center pointy
+              navigation_button disabled
+            "
+      onClick={null}
+    >
+      <i
+        className="fa fa-chevron-left"
+      />
+      <p>
+            
+        Back
+      </p>
+    </div>
+    <p>
+      1
+       / 
+      0
+       
+    </p>
+    <div
+      className="
+              flex-15 layout-row layout-align-center-center pointy
+              navigation_button disabled
+            "
+      onClick={null}
+    >
+      <p>
+        Next
+            
+      </p>
+      <i
+        className="fa fa-chevron-right"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`title is falsy 1`] = `
+<div
+  className="layout-row flex-100 layout-wrap layout-align-start-start searchable"
+>
+  <div
+    className="searchables flex-100 layout-row layout-align-end-center searchable_header"
+  >
+    <div
+      className="input_box_full flex-40 layout-row layout-align-end-center"
+    >
+      <input
+        name="search"
+        onChange={[Function]}
+        placeholder="PLACEHOLDER"
+        type="text"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-wrap layout-row layout-align-start-start searchable_section"
+  />
+  <div
+    className="flex-95 layout-row layout-align-center-center pagination_buttons"
+  >
+    <div
+      className="
+              flex-15 layout-row layout-align-center-center pointy
+              navigation_button disabled
+            "
+      onClick={null}
+    >
+      <i
+        className="fa fa-chevron-left"
+      />
+      <p>
+            
+        Back
+      </p>
+    </div>
+    <p>
+      1
+       / 
+      0
+       
+    </p>
+    <div
+      className="
+              flex-15 layout-row layout-align-center-center pointy
+              navigation_button disabled
+            "
+      onClick={null}
+    >
+      <p>
+        Next
+            
+      </p>
+      <i
+        className="fa fa-chevron-right"
+      />
+    </div>
+  </div>
+</div>
+`;
