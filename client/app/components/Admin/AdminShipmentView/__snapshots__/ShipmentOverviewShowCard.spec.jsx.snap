@@ -67,8 +67,33 @@ exports[`editTime is true 1`] = `
             <div
               className="flex-40 layout-row"
             >
+              <i
+                className="flex-20 fa fa-check-square check_square_sm"
+                style={
+                  Object {
+                    "color": "#DCDBDC",
+                  }
+                }
+              />
               <h4
-                className="flex-100 layout-row"
+                className="flex-70 layout-row"
+              >
+                Pick-up
+              </h4>
+            </div>
+            <div
+              className="flex-60 layout-row"
+            >
+              <i
+                className="flex-15 fa fa-check-square check_square_sm"
+                style={
+                  Object {
+                    "color": "#333",
+                  }
+                }
+              />
+              <h4
+                className="flex-85 layout-row"
               >
                 Drop-off
               </h4>
@@ -123,6 +148,31 @@ exports[`estimatedTime is falsy 1`] = `
             <div
               className="flex-40 layout-row"
             >
+              <i
+                className="flex-20 fa fa-check-square check_square_sm"
+                style={
+                  Object {
+                    "color": "#DCDBDC",
+                  }
+                }
+              />
+              <h4
+                className="flex-70 layout-row"
+              >
+                Pick-up
+              </h4>
+            </div>
+            <div
+              className="flex-60 layout-row"
+            >
+              <i
+                className="flex-15 fa fa-check-square check_square_sm"
+                style={
+                  Object {
+                    "color": "#333",
+                  }
+                }
+              />
               <h4
                 className="flex-100 layout-row"
               >
@@ -205,6 +255,31 @@ exports[`isAdmin is true 1`] = `
             <div
               className="flex-40 layout-row"
             >
+              <i
+                className="flex-20 fa fa-check-square check_square_sm"
+                style={
+                  Object {
+                    "color": "#DCDBDC",
+                  }
+                }
+              />
+              <h4
+                className="flex-70 layout-row"
+              >
+                Pick-up
+              </h4>
+            </div>
+            <div
+              className="flex-60 layout-row"
+            >
+              <i
+                className="flex-15 fa fa-check-square check_square_sm"
+                style={
+                  Object {
+                    "color": "#333",
+                  }
+                }
+              />
               <h4
                 className="flex-100 layout-row"
               >
@@ -279,6 +354,31 @@ exports[`shallow render 1`] = `
             <div
               className="flex-40 layout-row"
             >
+              <i
+                className="flex-20 fa fa-check-square check_square_sm"
+                style={
+                  Object {
+                    "color": "#DCDBDC",
+                  }
+                }
+              />
+              <h4
+                className="flex-70 layout-row"
+              >
+                Pick-up
+              </h4>
+            </div>
+            <div
+              className="flex-60 layout-row"
+            >
+              <i
+                className="flex-15 fa fa-check-square check_square_sm"
+                style={
+                  Object {
+                    "color": "#333",
+                  }
+                }
+              />
               <h4
                 className="flex-100 layout-row"
               >
@@ -351,8 +451,33 @@ exports[`shipment has delivery_address 1`] = `
             <div
               className="flex-40 layout-row"
             >
+              <i
+                className="flex-20 fa fa-check-square check_square_sm"
+                style={
+                  Object {
+                    "color": "#DCDBDC",
+                  }
+                }
+              />
               <h4
                 className="flex-80 layout-row"
+              >
+                Estimated Delivery
+              </h4>
+            </div>
+            <div
+              className="flex-60 layout-row"
+            >
+              <i
+                className="flex-15 fa fa-check-square check_square_sm"
+                style={
+                  Object {
+                    "color": "#333",
+                  }
+                }
+              />
+              <h4
+                className="flex-85 layout-row"
               >
                 Collection
               </h4>
@@ -428,10 +553,35 @@ exports[`shipment has has_on_carriage 1`] = `
             <div
               className="flex-40 layout-row"
             >
+              <i
+                className="flex-20 fa fa-check-square check_square_sm"
+                style={
+                  Object {
+                    "color": "#333",
+                  }
+                }
+              />
               <h4
                 className="flex-80 layout-row"
               >
-                Delivery
+                Estimated Delivery
+              </h4>
+            </div>
+            <div
+              className="flex-60 layout-row"
+            >
+              <i
+                className="flex-15 fa fa-check-square check_square_sm"
+                style={
+                  Object {
+                    "color": "#DCDBDC",
+                  }
+                }
+              />
+              <h4
+                className="flex-85 layout-row"
+              >
+                Collection
               </h4>
             </div>
           </div>
@@ -502,10 +652,35 @@ exports[`shipment has has_pre_carriage 1`] = `
             <div
               className="flex-40 layout-row"
             >
+              <i
+                className="flex-20 fa fa-check-square check_square_sm"
+                style={
+                  Object {
+                    "color": "#333",
+                  }
+                }
+              />
               <h4
                 className="flex-100 layout-row"
               >
                 Pick-up
+              </h4>
+            </div>
+            <div
+              className="flex-60 layout-row"
+            >
+              <i
+                className="flex-15 fa fa-check-square check_square_sm"
+                style={
+                  Object {
+                    "color": "#DCDBDC",
+                  }
+                }
+              />
+              <h4
+                className="flex-85 layout-row"
+              >
+                Drop-off
               </h4>
             </div>
           </div>
@@ -576,6 +751,31 @@ exports[`shipment has pickup_address 1`] = `
             <div
               className="flex-40 layout-row"
             >
+              <i
+                className="flex-20 fa fa-check-square check_square_sm"
+                style={
+                  Object {
+                    "color": "#DCDBDC",
+                  }
+                }
+              />
+              <h4
+                className="flex-70 layout-row"
+              >
+                Pick-up
+              </h4>
+            </div>
+            <div
+              className="flex-60 layout-row"
+            >
+              <i
+                className="flex-15 fa fa-check-square check_square_sm"
+                style={
+                  Object {
+                    "color": "#333",
+                  }
+                }
+              />
               <h4
                 className="flex-100 layout-row"
               >
@@ -599,7 +799,19 @@ exports[`shipment has pickup_address 1`] = `
           <div
             className="layout-row flex-95 layout-align-start-center carriage_address"
           >
-            <p />
+            <p>
+              PICKUP_STREET
+               
+               
+              PICKUP_STREET_NUMBER
+              , 
+              <strong>
+                PICKUP_CITY
+                , 
+                PICKUP_COUNTRY
+                 
+              </strong>
+            </p>
           </div>
         </div>
       </div>
@@ -653,8 +865,33 @@ exports[`text is not ETD 1`] = `
             <div
               className="flex-40 layout-row"
             >
+              <i
+                className="flex-20 fa fa-check-square check_square_sm"
+                style={
+                  Object {
+                    "color": "#DCDBDC",
+                  }
+                }
+              />
               <h4
                 className="flex-80 layout-row"
+              >
+                Estimated Delivery
+              </h4>
+            </div>
+            <div
+              className="flex-60 layout-row"
+            >
+              <i
+                className="flex-15 fa fa-check-square check_square_sm"
+                style={
+                  Object {
+                    "color": "#333",
+                  }
+                }
+              />
+              <h4
+                className="flex-85 layout-row"
               >
                 Collection
               </h4>
