@@ -7,7 +7,7 @@ subdomains = %w(normanglobal)
 subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
-  shipper = tenant.users.shipper.first
+  shipper = tenant.users.shipper.where(currency: 'GBP').first
   DataValidator::PricingValidator.new(
     tenant: tenant.id,
     user: shipper,

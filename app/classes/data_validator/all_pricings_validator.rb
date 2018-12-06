@@ -180,7 +180,6 @@ module DataValidator
     end
 
     def create_sheet_rows
-      # binding.pry
       start = @sheet.first_row
       @sheet_rows = []
       while start <= @sheet.last_row
@@ -344,7 +343,6 @@ module DataValidator
       begin
         example[:data][:load_type].camelize.constantize.extract(data_to_extract)
       rescue Exception => e # bad code.....
-        binding.pry
       end
     end
 
@@ -455,7 +453,6 @@ module DataValidator
         end
       end
     rescue Exception => e
-      binding.pry
     end
       final_result = {
         result: result,

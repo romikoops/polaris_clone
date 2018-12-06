@@ -52,7 +52,7 @@ module TruckingTools
 
   def fare_calculator(key, fee, cargo, km, scope)
     fee.symbolize_keys!
-
+    
     fare = case fee[:rate_basis]
            when 'PER_KG'
 
@@ -97,6 +97,7 @@ module TruckingTools
              [cbm_value, min].max
 
            when 'PER_WM'
+
              value = (cargo['weight'] / 1000) * fee[:value]
              min = fee[:min_value] || 0
              [value, min].max

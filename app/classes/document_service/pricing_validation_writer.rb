@@ -51,7 +51,6 @@ module DocumentService
       begin
         @workbook.close
       rescue StandardError
-        binding.pry
       end
       write_to_aws(dir, tenant, filename, 'pricings_sheet')
     end
@@ -123,7 +122,6 @@ module DocumentService
       begin
         example_unit = cargo_units.values.first.first
       rescue StandardError
-        binding.pry
       end
       current_unit = 1
       while current_unit <= max_unit_count

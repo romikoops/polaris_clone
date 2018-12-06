@@ -29,7 +29,6 @@ module PriceCheckerService
         calc_local_charges
         create_trucking_charges
         calc_cargo_charges
-        
         @grand_total_charge.update_quote_price!(@itinerary.tenant_id)
         @grand_total_charge.save
         { quote: @grand_total_charge, service_level: @schedule.trip.tenant_vehicle }
@@ -110,7 +109,7 @@ module PriceCheckerService
 
     def create_trucking_charges
       @trucking_data.each do |carriage, data|
-        charge_category = ChargeCategory.from_code(
+        charge_category = ChargeCategory.find_or_create_by(
           name: "Trucking #{carriage.capitalize}-Carriage", code: "trucking_#{carriage}"
         )
 
