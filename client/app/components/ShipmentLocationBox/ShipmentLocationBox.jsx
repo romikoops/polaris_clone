@@ -687,8 +687,8 @@ class ShipmentLocationBox extends PureComponent {
           } else {
             this.setMarker(
               {
-                lat: place.geometry.location.lat(),
-                lng: place.geometry.location.lng()
+                lat,
+                lng
               },
               place.name,
               target
