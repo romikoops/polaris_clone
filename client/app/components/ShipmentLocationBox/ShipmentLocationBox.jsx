@@ -316,10 +316,9 @@ class ShipmentLocationBox extends PureComponent {
 
   setLocationMap (location, target) {
     const {
-      map, locationData, directionsDisplay, directionsService, markers
+      map, locationData
     } = this.state
 
-    const counterpart = target === 'origin' ? 'destination' : 'origin'
     if (locationData[target].title !== undefined) {
       map.data.remove(locationData[target][0])
     }
@@ -337,25 +336,9 @@ class ShipmentLocationBox extends PureComponent {
       })
     })
     const latLng = routeHelpers.centerFromGeoJson(lats, lngs)
-    this.setMarker(latLng, location.city, target)
 
     this.setState({ locationData })
-    map.fitBounds(bounds)
-
-    if (this.state.speciality === 'truck' && markers[counterpart].title && latLng) {
-      directionsDisplay.setMap(map)
-      const request = {
-        [target]: latLng,
-        [counterpart]: markers[counterpart].getPosition(),
-        travelMode: 'DRIVING'
-      }
-      directionsService.route(request, (result, status) => {
-        if (status === 'OK') {
-          directionsDisplay.setDirections(result)
-        }
-      })
-    }
-
+    
     return latLng
   }
 
@@ -533,15 +516,6 @@ class ShipmentLocationBox extends PureComponent {
       return
     }
 
-    this.setMarker(
-      {
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng()
-      },
-      place.name,
-      target
-    )
-
     this.selectLocation(place, target)
   }
 
@@ -702,6 +676,14 @@ class ShipmentLocationBox extends PureComponent {
               this.props.handleSelectLocation(target, fieldsHaveErrors)
             })
           } else {
+            this.setMarker(
+              {
+                lat: place.geometry.location.lat(),
+                lng: place.geometry.location.lng()
+              },
+              place.name,
+              target
+            )
             this.props.handleSelectLocation(target, this.state[`${target}FieldsHaveErrors`])
             this.props.setNotesIds(nexusIds, target)
             if (isLocationObj) {
@@ -711,26 +693,27 @@ class ShipmentLocationBox extends PureComponent {
                 this.props.setTargetAddress(target, { ...address, nexusIds })
               })
             }
+            this.showCompletionTick(target)
+            this.setState(prevState => ({
+              fetchingtruckingAvailability: false,
+              truckingOptions: {
+                ...prevState.truckingOptions,
+                [`${prefix}Carriage`]: truckingAvailable
+              },
+              [`${target}FieldsHaveErrors`]: false,
+              truckingHubs: {
+                ...this.state.truckingHubs,
+                [target]: hubIds
+              },
+              lastTarget: target
+            }), () => {
+              this.prepForSelect(target)
+              setTimeout(() => {
+                if (!this.isOnFocus[target]) this.changeAddressFormVisibility(target, false)
+              }, 5000)
+            })
           }
-          this.showCompletionTick(target)
-          this.setState(prevState => ({
-            fetchingtruckingAvailability: false,
-            truckingOptions: {
-              ...prevState.truckingOptions,
-              [`${prefix}Carriage`]: truckingAvailable
-            },
-            [`${target}FieldsHaveErrors`]: false,
-            truckingHubs: {
-              ...this.state.truckingHubs,
-              [target]: hubIds
-            },
-            lastTarget: target
-          }), () => {
-            this.prepForSelect(target)
-            setTimeout(() => {
-              if (!this.isOnFocus[target]) this.changeAddressFormVisibility(target, false)
-            }, 5000)
-          })
+          
         }
       )
 
