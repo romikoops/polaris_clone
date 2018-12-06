@@ -13,6 +13,7 @@ class Pricing < ApplicationRecord
 
   delegate :load_type, to: :transport_category
   delegate :cargo_class, to: :transport_category
+  scope :for_mode_of_transport, ->(mot) { joins(:itinerary).where('itineraries.mode_of_transport': mot) }
   scope :for_load_type, ->(load_type) { joins(:transport_category).where('transport_categories.load_type': load_type) }
   scope :for_cargo_class, ->(cargo_class) { joins(:transport_category).where('transport_categories.cargo_class': cargo_class) }
   scope :for_dates, ->(start_date, end_date) { 
@@ -22,7 +23,6 @@ class Pricing < ApplicationRecord
     Arel::Nodes::SqlLiteral.new("(DATE '#{start_date}', DATE '#{end_date}')")
   ))}
   scope :all_fcl, -> { joins(:transport_category).where('transport_categories.cargo_class LIKE ?', 'fcl%') }
-  scope :all_air, -> { joins(:itinerary).where('itineraries.mode_of_transport': 'air') }
 
   validates :transport_category, uniqueness: {
     scope: %i(itinerary_id tenant_id user_id tenant_vehicle_id effective_date expiration_date)

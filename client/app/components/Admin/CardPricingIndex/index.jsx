@@ -180,7 +180,7 @@ class CardPricingIndex extends Component {
               <p className="flex-100">{downloadPricingText}</p>
               <DocumentsDownloader
                 theme={theme}
-                target="pricing"
+                target={`pricing_${snakeCase(loadType)}`}
                 options={options}
                 size="full"
               />

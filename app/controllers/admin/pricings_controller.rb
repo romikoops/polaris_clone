@@ -156,6 +156,8 @@ class Admin::PricingsController < Admin::AdminBaseController
   def download_pricings
     received_options = params[:options].as_json.deep_symbolize_keys!
 
+    key = "pricing_#{received_options[:load_type]}"
+
     mot = received_options[:mot]
     load_type = case received_options[:load_type]
                 when 'cargo_item' then 'LCL'
@@ -167,9 +169,10 @@ class Admin::PricingsController < Admin::AdminBaseController
 
     klass = ExcelDataServices::FileWriter.const_get("#{mot.capitalize}#{load_type.capitalize}")
     options = { tenant_id: current_user.tenant.id, file_name: file_name }
+
     document = klass.new(options).perform
 
-    response_handler(key: 'pricing', url: rails_blob_url(document.file, disposition: 'attachment'))
+    response_handler(key: key, url: rails_blob_url(document.file, disposition: 'attachment'))
   end
 
   def overwrite_main_lcl_carriage

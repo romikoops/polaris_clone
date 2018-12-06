@@ -115,15 +115,15 @@ module ExcelDataServices
       def sort!(data)
         data.sort_by! do |h|
           [
-            h[:destination_country_name],
-            h[:destination_hub_name],
-            h[:origin_country_name],
-            h[:origin_hub_name],
-            h[:carrier_name],
-            h[:service_level],
-            h[:load_type],
-            h[:rate_basis],
-            h[:shipping_type]
+            h[:destination_country_name] || '',
+            h[:destination_hub_name] || '',
+            h[:origin_country_name] || '',
+            h[:origin_hub_name] || '',
+            h[:carrier_name] || '',
+            h[:service_level] || '',
+            h[:load_type] || '',
+            h[:rate_basis] || '',
+            h[:shipping_type] || ''
           ]
         end
       end

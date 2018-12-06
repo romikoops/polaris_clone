@@ -22,32 +22,35 @@ module ExcelDataServices
       #   ]
       # }
 
-      attr_reader :tenant, :file_name, :sheets_data, :xlsx
+      attr_reader :tenant, :file_name, :xlsx
 
       def initialize(tenant_id:, file_name:)
         @tenant = Tenant.find(tenant_id)
         @file_name = file_name.remove(/.xlsx$/) + '.xlsx'
         @file_path = nil
-        @sheets_data = nil
         @xlsx = nil
       end
 
       def perform
-        @sheets_data = load_and_prepare_data
-        @xlsx = WriteXLSX.new(file_path, tempdir: Rails.root.join('tmp', 'write_xlsx/').to_s)
+        sheets_data = load_and_prepare_data
+        begin
+          @xlsx = WriteXLSX.new(file_path, tempdir: Rails.root.join('tmp', 'write_xlsx/').to_s)
 
-        @sheets_data.each do |sheet_name, rows_data|
-          worksheet = @xlsx.add_worksheet(sheet_name)
-          next if rows_data.blank?
+          sheets_data.each do |sheet_name, rows_data|
+            worksheet = xlsx.add_worksheet(sheet_name)
+            next if rows_data.blank?
 
-          raw_headers = extract_raw_headers(rows_data)
-          headers = transform_headers(raw_headers)
-          setup_worksheet(worksheet, headers.length)
-          write_headers(worksheet, headers)
-          write_rows_data(worksheet, raw_headers, rows_data)
+            raw_headers = extract_raw_headers(rows_data)
+            headers = transform_headers(raw_headers)
+            setup_worksheet(worksheet, headers.length)
+            write_headers(worksheet, headers)
+            write_rows_data(worksheet, raw_headers, rows_data)
+          end
+        rescue StandardError => error
+          puts error
+        ensure
+          xlsx.close
         end
-
-        @xlsx.close
 
         Document.create!(
           text: file_name,
@@ -81,7 +84,7 @@ module ExcelDataServices
 
       def header_format
         return @header_format if @header_format
-        @header_format = @xlsx.add_format
+        @header_format = xlsx.add_format
         @header_format.set_bold
         @header_format
       end
@@ -97,7 +100,7 @@ module ExcelDataServices
 
       def date_dd_mm_yyyy_format
         return @date_dd_mm_yyyy_format if @date_dd_mm_yyyy_format
-        @date_dd_mm_yyyy_format = @xlsx.add_format
+        @date_dd_mm_yyyy_format = xlsx.add_format
         @date_dd_mm_yyyy_format.set_num_format('dd.mm.yyyy')
         @date_dd_mm_yyyy_format
       end
