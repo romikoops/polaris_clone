@@ -16,7 +16,7 @@ class UserLocations extends Component {
     }
     this.saveLocation = this.saveLocation.bind(this)
     this.toggleActiveView = this.toggleActiveView.bind(this)
-    this.destroyLocation = this.destroyLocation.bind(this)
+    this.destroyAddress = this.destroyAddress.bind(this)
     this.makePrimary = this.makePrimary.bind(this)
     this.editLocation = this.editLocation.bind(this)
     this.saveLocationEdit = this.saveLocationEdit.bind(this)
@@ -27,14 +27,14 @@ class UserLocations extends Component {
     window.scrollTo(0, 0)
   }
 
-  destroyLocation (addressId) {
+  destroyAddress (addressId) {
     const { userDispatch, user } = this.props
-    userDispatch.destroyLocation(user.id, addressId, false)
+    userDispatch.destroyAddress(user.id, addressId, false)
   }
 
   saveLocationEdit (address) {
     const { userDispatch, user } = this.props
-    userDispatch.editUserLocation(user.id, address)
+    userDispatch.editUserAddress(user.id, address)
     this.toggleActiveView()
   }
 
@@ -52,7 +52,7 @@ class UserLocations extends Component {
   }
   saveLocation (data) {
     const { userDispatch, user } = this.props
-    userDispatch.newUserLocation(user.id, data)
+    userDispatch.newUserAddress(user.id, data)
     this.toggleActiveView()
   }
 
@@ -77,7 +77,7 @@ class UserLocations extends Component {
             addresses={locInfo}
             makePrimary={this.makePrimary}
             toggleActiveView={this.toggleActiveView}
-            destroyLocation={this.destroyLocation}
+            destroyAddress={this.destroyAddress}
             editLocation={this.editLocation}
             gradient={gradientFontStyle}
             cols={cols}
@@ -117,7 +117,7 @@ class UserLocations extends Component {
             addresses={locInfo}
             makePrimary={this.makePrimary}
             toggleActiveView={this.toggleActiveView}
-            destroyLocation={this.destroyLocation}
+            destroyAddress={this.destroyAddress}
             editLocation={this.editLocation}
             gradient={gradientFontStyle}
             cols={cols}
@@ -139,8 +139,8 @@ UserLocations.propTypes = {
   theme: PropTypes.theme,
   userDispatch: PropTypes.shape({
     makePrimary: PropTypes.func,
-    newUserLocation: PropTypes.func,
-    destroyLocation: PropTypes.func
+    newUserAddress: PropTypes.func,
+    destroyAddress: PropTypes.func
   }).isRequired,
   cols: PropTypes.number,
   addresses: PropTypes.arrayOf(PropTypes.address)

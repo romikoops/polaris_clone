@@ -38,7 +38,7 @@ class Location < ApplicationRecord
   end
 
   def description
-    names.reject{|str| str.blank?}.compact.join(', ')
+    [postal_code, city, country].reject(&:blank?).compact.join(', ')
   end
 
   def geojson

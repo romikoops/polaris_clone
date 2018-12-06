@@ -344,6 +344,7 @@ exports[`containers.dangerous_goods is true 1`] = `
             >
               <input
                 className="flex-80"
+                data-hj-whitelist={true}
                 type="number"
               />
               <div
@@ -848,6 +849,7 @@ exports[`nextStageAttempt is true 1`] = `
             >
               <input
                 className="flex-80"
+                data-hj-whitelist={true}
                 type="number"
               />
               <div
@@ -1352,6 +1354,7 @@ exports[`scope.dangerous_goods is true 1`] = `
             >
               <input
                 className="flex-80"
+                data-hj-whitelist={true}
                 type="number"
               />
               <div
@@ -1856,6 +1859,7 @@ exports[`shallow rendering 1`] = `
             >
               <input
                 className="flex-80"
+                data-hj-whitelist={true}
                 type="number"
               />
               <div

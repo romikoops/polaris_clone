@@ -44,6 +44,7 @@ class ValidatedInputFormsy extends Component {
     // for Formsy to work.
     this.props.setValue(event.currentTarget.value)
   }
+
   render () {
     // An error message is returned only if the component is invalid
     const errorMessage = this.props.getErrorMessage()
@@ -61,6 +62,7 @@ class ValidatedInputFormsy extends Component {
     // const value = (this.props.getValue() !== undefined &&
     // !Number.isNaN(this.props.getValue())) ? this.props.getValue() : ''
     const value = this.props.getValue()
+
     return (
       <div className={styles.wrapper_input}>
         <input
@@ -75,6 +77,7 @@ class ValidatedInputFormsy extends Component {
           className={this.props.className}
           onKeyDown={this.props.onKeyDown}
           min={this.props.min}
+          data-hj-whitelist
         />
         <span
           className={errorStyles.error_message}

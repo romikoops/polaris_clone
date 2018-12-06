@@ -91,13 +91,13 @@ exports[`props.viewHSCodes is true 1`] = `
       onClick={[Function]}
     >
       <i
-        className=" fa fa-chevron-down clip pointy"
+        className="collapsed fa fa-chevron-down clip pointy"
         style="#333"
       />
     </div>
   </div>
   <div
-    className="unit_viewer closed_panel"
+    className="unit_viewer "
   >
     <div
       className="flex-100 layout-row layout-align-none-start layout-wrap"
@@ -340,13 +340,13 @@ exports[`shallow render 1`] = `
       onClick={[Function]}
     >
       <i
-        className=" fa fa-chevron-down clip pointy"
+        className="collapsed fa fa-chevron-down clip pointy"
         style="#333"
       />
     </div>
   </div>
   <div
-    className="unit_viewer closed_panel"
+    className="unit_viewer "
   >
     <div
       className="flex-100 layout-row layout-align-none-start layout-wrap"
@@ -589,13 +589,13 @@ exports[`state.unitView is true 1`] = `
       onClick={[Function]}
     >
       <i
-        className=" fa fa-chevron-down clip pointy"
+        className="collapsed fa fa-chevron-down clip pointy"
         style="#333"
       />
     </div>
   </div>
   <div
-    className="unit_viewer closed_panel"
+    className="unit_viewer "
   >
     <div
       className="flex-100 layout-row layout-align-none-start layout-wrap"
@@ -838,13 +838,13 @@ exports[`state.viewer is true 1`] = `
       onClick={[Function]}
     >
       <i
-        className=" fa fa-chevron-down clip pointy"
+        className="collapsed fa fa-chevron-down clip pointy"
         style="#333"
       />
     </div>
   </div>
   <div
-    className="unit_viewer closed_panel"
+    className="unit_viewer "
   >
     <div
       className="flex-100 layout-row layout-align-none-start layout-wrap"

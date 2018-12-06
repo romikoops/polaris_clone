@@ -136,24 +136,25 @@ module TruckingTools
   end
 
   def filter_trucking_pricings(trucking_pricing, cargo_values, _direction)
-    return {} if cargo_values['weight'] == 0
+    return {} if cargo_values['weight'].to_i == 0
     case trucking_pricing.modifier
     when 'kg'
 
       trucking_pricing['rates']['kg'].each do |rate|
-        if cargo_values['weight'] <= rate['max_kg'].to_d && cargo_values['weight'] >= rate['min_kg'].to_d
+    
+        if cargo_values['weight'].to_i <= rate['max_kg'].to_i && cargo_values['weight'].to_i >= rate['min_kg'].to_i
           rate['rate']['min_value'] = rate['min_value']
           return { rate: rate['rate'], fees: trucking_pricing['fees'] }
         end
       end
-      if cargo_values['weight'] > trucking_pricing['rates']['kg'].last['max_kg'].to_d
+      if cargo_values['weight'].to_i > trucking_pricing['rates']['kg'].last['max_kg'].to_i
         rate = trucking_pricing['rates']['kg'].last
         rate['rate']['min_value'] = rate['min_value']
         return { rate: rate['rate'], fees: trucking_pricing['fees'] }
       end
     when 'cbm'
       trucking_pricing['rates']['cbm'].each do |rate|
-        next unless cargo_values['volume'] <= rate['max_cbm'].to_d && cargo_values['volume'] >= rate['min_cbm'].to_d
+        next unless cargo_values['volume'] <= rate['max_cbm'].to_i && cargo_values['volume'] >= rate['min_cbm'].to_i
 
         rate['rate']['min_value'] = rate['min_value']
         return { rate: rate['rate'], fees: trucking_pricing['fees'] }
@@ -166,22 +167,22 @@ module TruckingTools
     when 'cbm_kg'
       result = { rate_basis: 'PER_CBM_KG' }
       trucking_pricing['rates']['kg'].each do |rate|
-        next unless cargo_values['weight'] <= rate['max_kg'].to_d && cargo_values['weight'] >= rate['min_kg'].to_d
+        next unless cargo_values['weight'].to_i <= rate['max_kg'].to_i && cargo_values['weight'].to_i >= rate['min_kg'].to_i
         result['kg'] = rate['rate']['value']
         result['min_value'] = rate['min_value']
         result['currency'] = rate['rate']['currency']
       end
       trucking_pricing['rates']['cbm'].each do |rate|
-        next unless cargo_values['volume'] <= rate['max_cbm'].to_d && cargo_values['volume'] >= rate['min_cbm'].to_d
+        next unless cargo_values['volume'] <= rate['max_cbm'].to_i && cargo_values['volume'] >= rate['min_cbm'].to_i
         result['cbm'] = rate['rate']['value']
         result['min_value'] = rate['min_value']
         result['currency'] = rate['rate']['currency']
       end
-      if cargo_values['volume'] < trucking_pricing['rates']['cbm'].first['min_cbm'].to_d
+      if cargo_values['volume'] < trucking_pricing['rates']['cbm'].first['min_cbm'].to_i
         result['cbm'] = trucking_pricing['rates']['cbm'].first['rate']['value']
         result['min_value'] = trucking_pricing['rates']['cbm'].first['min_value']
         result['currency'] = trucking_pricing['rates']['cbm'].first['rate']['currency']
-      elsif cargo_values['volume'] > trucking_pricing['rates']['cbm'].last['max_cbm'].to_d
+      elsif cargo_values['volume'] > trucking_pricing['rates']['cbm'].last['max_cbm'].to_i
         result['cbm'] = trucking_pricing['rates']['cbm'].last['rate']['value']
         result['min_value'] = trucking_pricing['rates']['cbm'].last['min_value']
         result['currency'] = trucking_pricing['rates']['cbm'].last['rate']['currency']
@@ -197,7 +198,6 @@ module TruckingTools
       result[:currency] = trucking_pricing['rates']['unit'][0]['rate']['currency']
       return { rate: result, fees: trucking_pricing['fees'] }
     end
-    # end
     {}
   end
 
@@ -228,6 +228,7 @@ module TruckingTools
     total_area = cargos.sum { |cargo| cargo.dimension_x * cargo.dimension_y * cargo.quantity }
     non_stackable = cargos.select(&:stackable).empty?
     load_area_limit = trucking_pricing.load_meterage['area_limit']
+
     if total_area >= load_area_limit || non_stackable
       cargos.each do |cargo|
         calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)

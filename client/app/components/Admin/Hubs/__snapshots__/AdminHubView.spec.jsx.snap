@@ -160,7 +160,9 @@ exports[`hubData.hub.hub_status is inactive 1`] = `
           >
             <p
               className=" lat_lng"
-            />
+            >
+              ADDRESS_LATITUDE
+            </p>
             <p
               className=" lat_lng"
             >
@@ -175,7 +177,9 @@ exports[`hubData.hub.hub_status is inactive 1`] = `
           >
             <p
               className=" lat_lng"
-            />
+            >
+              ADDRESS_LONGITUDE
+            </p>
             <p
               className=" lat_lng"
             >
@@ -240,18 +244,8 @@ exports[`hubData.hub.hub_status is inactive 1`] = `
     <div
       className="flex-100 layout-row layout-align-start-start layout-wrap section_padding"
     >
-      <AdminHubFees
-        adminDispatch={
-          Object {
-            "activateHub": [Function],
-            "getHub": [Function],
-          }
-        }
-        charges={Array []}
-        counterpartHubs={Array []}
-        customs={Array []}
+      <Connect(AdminHubFees)
         loadType="lcl"
-        serviceLevels={Array []}
         t={[Function]}
         theme={
           Object {
@@ -504,7 +498,9 @@ exports[`hubData.relatedHubs is truthy 1`] = `
           >
             <p
               className=" lat_lng"
-            />
+            >
+              ADDRESS_LATITUDE
+            </p>
             <p
               className=" lat_lng"
             >
@@ -519,7 +515,9 @@ exports[`hubData.relatedHubs is truthy 1`] = `
           >
             <p
               className=" lat_lng"
-            />
+            >
+              ADDRESS_LONGITUDE
+            </p>
             <p
               className=" lat_lng"
             >
@@ -584,18 +582,8 @@ exports[`hubData.relatedHubs is truthy 1`] = `
     <div
       className="flex-100 layout-row layout-align-start-start layout-wrap section_padding"
     >
-      <AdminHubFees
-        adminDispatch={
-          Object {
-            "activateHub": [Function],
-            "getHub": [Function],
-          }
-        }
-        charges={Array []}
-        counterpartHubs={Array []}
-        customs={Array []}
+      <Connect(AdminHubFees)
         loadType="lcl"
-        serviceLevels={Array []}
         t={[Function]}
         theme={
           Object {
@@ -848,7 +836,9 @@ exports[`hubData.routes is truthy 1`] = `
           >
             <p
               className=" lat_lng"
-            />
+            >
+              ADDRESS_LATITUDE
+            </p>
             <p
               className=" lat_lng"
             >
@@ -863,7 +853,9 @@ exports[`hubData.routes is truthy 1`] = `
           >
             <p
               className=" lat_lng"
-            />
+            >
+              ADDRESS_LONGITUDE
+            </p>
             <p
               className=" lat_lng"
             >
@@ -928,18 +920,8 @@ exports[`hubData.routes is truthy 1`] = `
     <div
       className="flex-100 layout-row layout-align-start-start layout-wrap section_padding"
     >
-      <AdminHubFees
-        adminDispatch={
-          Object {
-            "activateHub": [Function],
-            "getHub": [Function],
-          }
-        }
-        charges={Array []}
-        counterpartHubs={Array []}
-        customs={Array []}
+      <Connect(AdminHubFees)
         loadType="lcl"
-        serviceLevels={Array []}
         t={[Function]}
         theme={
           Object {
@@ -1246,7 +1228,9 @@ exports[`shallow render 1`] = `
           >
             <p
               className=" lat_lng"
-            />
+            >
+              ADDRESS_LATITUDE
+            </p>
             <p
               className=" lat_lng"
             >
@@ -1261,7 +1245,9 @@ exports[`shallow render 1`] = `
           >
             <p
               className=" lat_lng"
-            />
+            >
+              ADDRESS_LONGITUDE
+            </p>
             <p
               className=" lat_lng"
             >
@@ -1326,18 +1312,8 @@ exports[`shallow render 1`] = `
     <div
       className="flex-100 layout-row layout-align-start-start layout-wrap section_padding"
     >
-      <AdminHubFees
-        adminDispatch={
-          Object {
-            "activateHub": [Function],
-            "getHub": [Function],
-          }
-        }
-        charges={Array []}
-        counterpartHubs={Array []}
-        customs={Array []}
+      <Connect(AdminHubFees)
         loadType="lcl"
-        serviceLevels={Array []}
         t={[Function]}
         theme={
           Object {
@@ -1590,7 +1566,9 @@ exports[`state.confirm is truthy 1`] = `
           >
             <p
               className=" lat_lng"
-            />
+            >
+              ADDRESS_LATITUDE
+            </p>
             <p
               className=" lat_lng"
             >
@@ -1605,7 +1583,9 @@ exports[`state.confirm is truthy 1`] = `
           >
             <p
               className=" lat_lng"
-            />
+            >
+              ADDRESS_LONGITUDE
+            </p>
             <p
               className=" lat_lng"
             >
@@ -1670,18 +1650,8 @@ exports[`state.confirm is truthy 1`] = `
     <div
       className="flex-100 layout-row layout-align-start-start layout-wrap section_padding"
     >
-      <AdminHubFees
-        adminDispatch={
-          Object {
-            "activateHub": [Function],
-            "getHub": [Function],
-          }
-        }
-        charges={Array []}
-        counterpartHubs={Array []}
-        customs={Array []}
+      <Connect(AdminHubFees)
         loadType="lcl"
-        serviceLevels={Array []}
         t={[Function]}
         theme={
           Object {
@@ -1989,7 +1959,9 @@ exports[`state.editView is truthy 1`] = `
           >
             <p
               className=" lat_lng"
-            />
+            >
+              ADDRESS_LATITUDE
+            </p>
             <p
               className=" lat_lng"
             >
@@ -2004,7 +1976,9 @@ exports[`state.editView is truthy 1`] = `
           >
             <p
               className=" lat_lng"
-            />
+            >
+              ADDRESS_LONGITUDE
+            </p>
             <p
               className=" lat_lng"
             >
@@ -2069,18 +2043,8 @@ exports[`state.editView is truthy 1`] = `
     <div
       className="flex-100 layout-row layout-align-start-start layout-wrap section_padding"
     >
-      <AdminHubFees
-        adminDispatch={
-          Object {
-            "activateHub": [Function],
-            "getHub": [Function],
-          }
-        }
-        charges={Array []}
-        counterpartHubs={Array []}
-        customs={Array []}
+      <Connect(AdminHubFees)
         loadType="lcl"
-        serviceLevels={Array []}
         t={[Function]}
         theme={
           Object {
@@ -2333,7 +2297,9 @@ exports[`state.page > 1 1`] = `
           >
             <p
               className=" lat_lng"
-            />
+            >
+              ADDRESS_LATITUDE
+            </p>
             <p
               className=" lat_lng"
             >
@@ -2348,7 +2314,9 @@ exports[`state.page > 1 1`] = `
           >
             <p
               className=" lat_lng"
-            />
+            >
+              ADDRESS_LONGITUDE
+            </p>
             <p
               className=" lat_lng"
             >
@@ -2413,18 +2381,8 @@ exports[`state.page > 1 1`] = `
     <div
       className="flex-100 layout-row layout-align-start-start layout-wrap section_padding"
     >
-      <AdminHubFees
-        adminDispatch={
-          Object {
-            "activateHub": [Function],
-            "getHub": [Function],
-          }
-        }
-        charges={Array []}
-        counterpartHubs={Array []}
-        customs={Array []}
+      <Connect(AdminHubFees)
         loadType="lcl"
-        serviceLevels={Array []}
         t={[Function]}
         theme={
           Object {

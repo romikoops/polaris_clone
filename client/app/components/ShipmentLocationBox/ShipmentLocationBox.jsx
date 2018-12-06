@@ -23,7 +23,7 @@ import Autocomplete from './Autocomplete'
 import removeTabIndex from './removeTabIndex'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 import CircleCompletion from '../CircleCompletion/CircleCompletion'
-import { get } from 'lodash'
+import { has, get } from 'lodash'
 
 const mapStyles = mapStyling
 
@@ -111,6 +111,10 @@ class ShipmentLocationBox extends PureComponent {
         destination: false
       },
       showTick: {
+        origin: false,
+        destination: false
+      },
+      fetchingtruckingAvailability: {
         origin: false,
         destination: false
       }
@@ -205,15 +209,24 @@ class ShipmentLocationBox extends PureComponent {
       this.setState({ dSelect }, () => this.prepForSelect('destination'))
       this.props.handleSelectLocation('destination', false)
     } else {
+      this.state.markers.destination.setMap(null)
       this.setState({
         truckingOptions: {
           ...this.state.truckingOptions,
           preCarriage: true
         },
-        dSelect: ''
-      }, () => this.prepForSelect('destination'))
+        dSelect: '',
+        markers: {
+          ...this.state.markers,
+          destination: null
+        }
+      }, () => {
+        this.prepForSelect('destination')
+        this.adjustMapBounds()
+      })
       this.props.setNotesIds(null, 'destination')
-      this.state.markers.destination.setMap(null)
+      
+
       if (this.props.destination !== {}) {
         this.props.setTargetAddress('destination', {})
       }
@@ -299,15 +312,23 @@ class ShipmentLocationBox extends PureComponent {
       this.props.setNotesIds([event.value.id], 'origin')
       this.props.handleSelectLocation('origin', false)
     } else {
+      this.state.markers.origin.setMap(null)
       this.setState({
         truckingOptions: {
           ...this.state.truckingOptions,
           preCarriage: true
         },
-        oSelect: ''
-      }, () => this.prepForSelect('origin'))
+        oSelect: '',
+        markers: {
+          ...this.state.markers,
+          origin: null
+        }
+      }, () => {
+        this.prepForSelect('destination')
+        this.adjustMapBounds()
+      })
       this.props.setNotesIds(false, 'origin')
-      this.state.markers.origin.setMap(null)
+      
       if (this.props.origin !== {}) {
         this.props.setTargetAddress('origin', {})
       }
@@ -316,14 +337,13 @@ class ShipmentLocationBox extends PureComponent {
 
   setLocationMap (location, target) {
     const {
-      map, locationData, directionsDisplay, directionsService, markers
+      map, locationData
     } = this.state
 
-    const counterpart = target === 'origin' ? 'destination' : 'origin'
     if (locationData[target].title !== undefined) {
       map.data.remove(locationData[target][0])
     }
-
+    
     const targetKml = map.data.addGeoJson(location.geojson)
     locationData[target] = targetKml
     const bounds = new this.props.gMaps.LatLngBounds()
@@ -337,25 +357,9 @@ class ShipmentLocationBox extends PureComponent {
       })
     })
     const latLng = routeHelpers.centerFromGeoJson(lats, lngs)
-    this.setMarker(latLng, location.city, target)
 
     this.setState({ locationData })
-    map.fitBounds(bounds)
-
-    if (this.state.speciality === 'truck' && markers[counterpart].title && latLng) {
-      directionsDisplay.setMap(map)
-      const request = {
-        [target]: latLng,
-        [counterpart]: markers[counterpart].getPosition(),
-        travelMode: 'DRIVING'
-      }
-      directionsService.route(request, (result, status) => {
-        if (status === 'OK') {
-          directionsDisplay.setDirections(result)
-        }
-      })
-    }
-
+    
     return latLng
   }
 
@@ -363,9 +367,9 @@ class ShipmentLocationBox extends PureComponent {
     const {
       markers, map, directionsDisplay, directionsService
     } = this.state
+    
     const { theme } = this.props
-    const newMarkers = []
-    if (markers[target].title !== undefined) {
+    if (has(markers, [target, 'title'])) {
       markers[target].setMap(null)
     }
     let icon
@@ -391,28 +395,10 @@ class ShipmentLocationBox extends PureComponent {
       keyboard: false
     })
     markers[target] = marker
-    if (markers.origin.title !== undefined) {
-      newMarkers.push(markers.origin)
-    }
-    if (markers.destination.title !== undefined) {
-      newMarkers.push(markers.destination)
-    }
-    this.setState({ markers })
-    const bounds = new this.props.gMaps.LatLngBounds()
-    for (let i = 0; i < newMarkers.length; i++) {
-      bounds.extend(newMarkers[i].getPosition())
-    }
-    if (!markers.origin.title && !markers.destination.title) {
-      map.fitBounds(bounds)
-    } else if (
-      (markers.origin.title && !markers.destination.title) ||
-      (!markers.origin.title && markers.destination.title)
-    ) {
-      map.setCenter(bounds.getCenter())
-    } else {
-      map.fitBounds(bounds, { top: 100, bottom: 20 })
-    }
-    if (this.state.speciality === 'truck' && markers.origin.title && markers.destination.title) {
+   
+    this.setState({ markers }, () => this.adjustMapBounds())
+    
+    if (this.state.speciality === 'truck' && originMarkerExists && destMarkerExists) {
       directionsDisplay.setMap(map)
       const request = {
         origin: markers.origin.getPosition(),
@@ -424,6 +410,39 @@ class ShipmentLocationBox extends PureComponent {
           directionsDisplay.setDirections(result)
         }
       })
+    }
+  }
+
+  adjustMapBounds () {
+    const { markers, map } = this.state
+    const newMarkers = []
+    const originMarkerExists = has(markers, ['origin', 'title'])
+    const destMarkerExists = has(markers, ['destination', 'title'])
+    if (originMarkerExists) {
+      newMarkers.push(markers.origin)
+    }
+    if (destMarkerExists) {
+      newMarkers.push(markers.destination)
+    }
+    const bounds = new this.props.gMaps.LatLngBounds()
+    
+    for (let i = 0; i < newMarkers.length; i++) {
+      bounds.extend(newMarkers[i].getPosition())
+    }
+
+    if (!originMarkerExists && !destMarkerExists) {
+      map.setCenter({
+        lat: 55.675647,
+        lng: 12.567848
+      })
+      map.setZoom(5)
+    } else if (
+      (originMarkerExists && !destMarkerExists) ||
+      (!originMarkerExists && destMarkerExists)
+    ) {
+      map.setCenter(bounds.getCenter())
+    } else {
+      map.fitBounds(bounds, { top: 100, bottom: 20 })
     }
   }
 
@@ -533,15 +552,6 @@ class ShipmentLocationBox extends PureComponent {
       return
     }
 
-    this.setMarker(
-      {
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng()
-      },
-      place.name,
-      target
-    )
-
     this.selectLocation(place, target)
   }
 
@@ -644,7 +654,12 @@ class ShipmentLocationBox extends PureComponent {
   }
 
   selectLocation (place, target) {
-    this.setState({ fetchingtruckingAvailability: true }, () => {
+    this.setState(prevState => ({
+      fetchingtruckingAvailability: {
+        ...prevState.fetchingtruckingAvailability,
+        [target]: true
+      }
+    }), () => {
       const counterpart = target === 'origin' ? 'destination' : 'origin'
       const isLocationObj = (place.latitude && place.longitude)
 
@@ -654,6 +669,7 @@ class ShipmentLocationBox extends PureComponent {
       const lat = isLocationObj ? place.latitude : place.geometry.location.lat()
       const lng = isLocationObj ? place.longitude : place.geometry.location.lng()
       const fullAddress = isLocationObj ? place.fullAddress : place.formatted_address
+      const markerName  = isLocationObj ? place.city : place.name
       const tenantId = shipment.tenant_id
       const loadType = shipment.load_type
 
@@ -702,6 +718,15 @@ class ShipmentLocationBox extends PureComponent {
               this.props.handleSelectLocation(target, fieldsHaveErrors)
             })
           } else {
+            
+            this.setMarker(
+              {
+                lat,
+                lng
+              },
+              markerName,
+              target
+            )
             this.props.handleSelectLocation(target, this.state[`${target}FieldsHaveErrors`])
             this.props.setNotesIds(nexusIds, target)
             if (isLocationObj) {
@@ -711,26 +736,27 @@ class ShipmentLocationBox extends PureComponent {
                 this.props.setTargetAddress(target, { ...address, nexusIds })
               })
             }
+            this.showCompletionTick(target)
+            this.setState(prevState => ({
+              fetchingtruckingAvailability: false,
+              truckingOptions: {
+                ...prevState.truckingOptions,
+                [`${prefix}Carriage`]: truckingAvailable
+              },
+              [`${target}FieldsHaveErrors`]: false,
+              truckingHubs: {
+                ...this.state.truckingHubs,
+                [target]: hubIds
+              },
+              lastTarget: target
+            }), () => {
+              this.prepForSelect(target)
+              setTimeout(() => {
+                if (!this.isOnFocus[target]) this.changeAddressFormVisibility(target, false)
+              }, 5000)
+            })
           }
-          this.showCompletionTick(target)
-          this.setState(prevState => ({
-            fetchingtruckingAvailability: false,
-            truckingOptions: {
-              ...prevState.truckingOptions,
-              [`${prefix}Carriage`]: truckingAvailable
-            },
-            [`${target}FieldsHaveErrors`]: false,
-            truckingHubs: {
-              ...this.state.truckingHubs,
-              [target]: hubIds
-            },
-            lastTarget: target
-          }), () => {
-            this.prepForSelect(target)
-            setTimeout(() => {
-              if (!this.isOnFocus[target]) this.changeAddressFormVisibility(target, false)
-            }, 5000)
-          })
+          
         }
       )
 
@@ -757,15 +783,19 @@ class ShipmentLocationBox extends PureComponent {
   }
 
   handleAddressFormFocus (event) {
+    const { truckingFound } = this.state
     const target = event.target.name.split('-')[0]
     this.isOnFocus[target] = event.type === 'focus'
     const targetLocation = this.props[target]
-    if (targetLocation && event.type !== 'focus') {
+    if (!truckingFound[target] && targetLocation && event.type !== 'focus') {
       const newAutotext = `${targetLocation.street} ${targetLocation.number} ${targetLocation.city} ${targetLocation.zipCode} ${
         targetLocation.country
       }`
       this.triggerPlaceChanged(newAutotext, target)
     }
+    setTimeout(() => {
+      if (!this.isOnFocus[target]) this.changeAddressFormVisibility(target, false)
+    }, 5000)
   }
 
   toggleModal () {
@@ -1058,7 +1088,7 @@ class ShipmentLocationBox extends PureComponent {
           value={this.state.oSelect}
           placeholder={t('shipment:origin')}
           options={originOptions.sort((a, b) => a.label - b.label)}
-          disabled={fetchingtruckingAvailability}
+          disabled={fetchingtruckingAvailability.origin}
           onChange={this.setOriginNexus}
           nextStageAttempt={nextStageAttempts > 0}
         />
@@ -1075,7 +1105,7 @@ class ShipmentLocationBox extends PureComponent {
           name="destination-hub"
           className={styles.select}
           value={this.state.dSelect}
-          disabled={fetchingtruckingAvailability}
+          disabled={fetchingtruckingAvailability.destination}
           placeholder={t('shipment:destination')}
           options={destinationOptions.sort((a, b) => a.label - b.label)}
           onChange={this.setDestNexus}
@@ -1106,7 +1136,7 @@ class ShipmentLocationBox extends PureComponent {
         <div
           className={`${styles.address_form} flex-100 layout-row layout-wrap layout-align-center ccb_pre_address_form`}
         >
-          { fetchingtruckingAvailability ? <LoadingSpinner size="medium" /> : '' }
+          { fetchingtruckingAvailability.origin ? <LoadingSpinner size="medium" /> : '' }
           { showTick.origin ? (
             <CircleCompletion
               icon="fa fa-check"
@@ -1116,7 +1146,7 @@ class ShipmentLocationBox extends PureComponent {
               opacity={showTick.origin ? '1' : '0'}
             />
           ) : '' }
-          { (!fetchingtruckingAvailability && !showTick.origin) ? (
+          { (!fetchingtruckingAvailability.origin && !showTick.origin) ? (
             <div
               className="flex-100 layout-row layout-wrap layout-align-center"
             >
@@ -1140,6 +1170,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:street')}
                 disabled={!this.state.showOriginFields}
+                data-hj-whitelist
               />
               <input
                 id="not-auto"
@@ -1156,6 +1187,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:number')}
                 disabled={!this.state.showOriginFields}
+                data-hj-whitelist
               />
               <input
                 name="origin-zipCode"
@@ -1171,6 +1203,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:postalCode')}
                 disabled={!this.state.showOriginFields}
+                data-hj-whitelist
               />
               <input
                 name="origin-city"
@@ -1186,6 +1219,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:city')}
                 disabled={!this.state.showOriginFields}
+                data-hj-whitelist
               />
               <input
                 name="origin-country"
@@ -1201,6 +1235,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:country')}
                 disabled={!this.state.showOriginFields}
+                data-hj-whitelist
               />
               <div className="flex-100 layout-row layout-align-start-center">
                 <div
@@ -1253,7 +1288,7 @@ class ShipmentLocationBox extends PureComponent {
           <i className={`${styles.up} flex-none fa fa-angle-double-up ccb_destination_expand`} />
         </div>
         <div className={`${styles.address_form} ${toggleLogic} flex-100 layout-row layout-wrap layout-align-center ccb_on_address_form`}>
-          { fetchingtruckingAvailability ? <LoadingSpinner size="medium" /> : '' }
+          { fetchingtruckingAvailability.destination ? <LoadingSpinner size="medium" /> : '' }
           { showTick.destination ? (
             <CircleCompletion
               icon="fa fa-check"
@@ -1263,7 +1298,7 @@ class ShipmentLocationBox extends PureComponent {
               opacity={showTick.destination ? '1' : '0'}
             />
           ) : '' }
-          { (!fetchingtruckingAvailability && !showTick.destination) ? (
+          { (!fetchingtruckingAvailability.destination && !showTick.destination) ? (
             <div
               className="flex-100 layout-row layout-wrap layout-align-center"
             >
@@ -1286,6 +1321,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:street')}
                 disabled={!this.state.showDestinationFields}
+                data-hj-whitelist
               />
               <input
                 name="destination-number"
@@ -1301,6 +1337,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:number')}
                 disabled={!this.state.showDestinationFields}
+                data-hj-whitelist
               />
               <input
                 name="destination-zipCode"
@@ -1315,6 +1352,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:postalCode')}
                 disabled={!this.state.showDestinationFields}
+                data-hj-whitelist
               />
               <input
                 name="destination-city"
@@ -1329,6 +1367,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:city')}
                 disabled={!this.state.showDestinationFields}
+                data-hj-whitelist
               />
               <input
                 name="destination-country"
@@ -1343,6 +1382,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:country')}
                 disabled={!this.state.showDestinationFields}
+                data-hj-whitelist
               />
               <div className="flex-100 layout-row layout-align-start-center">
                 <div

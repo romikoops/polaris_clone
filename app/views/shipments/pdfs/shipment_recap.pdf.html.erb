@@ -5,6 +5,8 @@
 <% neutral_color = '#C4C4C4' %>
 <% precarriage_color = shipment.has_pre_carriage ? primary_color : neutral_color %>
 <% oncarriage_color = shipment.has_on_carriage ? primary_color : neutral_color %>
+<% origin_fee_color = shipment.selected_offer["export"] ? primary_color : neutral_color %>
+<% destination_fee_color = shipment.selected_offer["import"] ? primary_color : neutral_color %>
 <div class="wrapper-quotations">
   <div class="main-title-shipment">
     <div class="title-shipments" style="text-align: left;">
@@ -18,20 +20,40 @@
   <hr class="hr-shipment" style="border-color: <%= primary_color %>">
   <p class="ref">Placed on&nbsp;<span><%= shipment.updated_at.strftime("%d/%m/%Y") %></span></p>
   <div class="overview">
-    <div class="info overview-child border-none">
-      <% if shipment.itinerary.mode_of_transport == "ocean" %>
-        <% mot = "anchor" %>
-      <% elsif shipment.itinerary.mode_of_transport == "air" %>
-        <% mot = "plane" %>
-      <% else %>
-        <% mot = "truck" %>
-      <% end %>
-      <i class="fa fa-<%= mot %> mot-icon" style="color: <%= primary_color %>"></i>
-      <div class="shipment-info">
-        <p>From:&nbsp;<span><%= shipment.origin_hub.name %></span></p>
-        <p>To:&nbsp;<span><%= shipment.destination_hub.name %></span></p>
-      </div>
-    </div>
+      <div class="info overview-child border-none">
+          <% if shipment.mode_of_transport == "ocean" %>
+            <% mot = "anchor" %>
+          <% elsif shipment.mode_of_transport == "air" %>
+            <% mot = "plane" %>
+          <% else %>
+            <% mot = "truck" %>
+          <% end %>
+          <i class="fa fa-<%= mot %> mot-icon" style="color: <%= primary_color %>"></i>
+          <div class="shipment-info">
+            <p>From:&nbsp;<span><%= shipment.origin_hub.name %></span></p>
+            <p>To:&nbsp;<span><%= shipment.destination_hub.name %></span></p>
+          </div>
+          <div class="text-right cargo-info">
+            <div class="charge-icons">
+              <i class="fa fa-truck" style="color: <%= precarriage_color %>"></i>
+              <i class="fa fa-file-o" style="color: <%= origin_fee_color %>"></i>
+              <i class="fa fa-anchor" style="color: <%= primary_color %>"></i>
+              <i class="fa fa-file" style="color: <%= destination_fee_color %>"></i>
+              <i class="fa fa-truck flip" style="color: <%= oncarriage_color %>"></i>
+            </div>
+            <p>
+              <strong>Weight:</strong>
+              <%= '%.2f' % cargo_data[:kg][shipment.id] %>&nbsp;kg
+            </p>
+            <% if shipment.load_type != 'container'%>
+              <p>
+                <strong>Volume:</strong>
+                <%= '%.2f' %  cargo_data[:vol][shipment.id] %>&nbsp;m<sup>3</sup>
+              </p>
+            <% end %>
+          </div>
+        </div>
+    
   </div>
 
   <% if shipment.has_on_carriage || shipment.has_pre_carriage && (shipment.pickup_address || shipment.delivery_address) %>

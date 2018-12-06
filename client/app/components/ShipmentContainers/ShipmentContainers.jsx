@@ -178,7 +178,7 @@ class ShipmentContainers extends Component {
                   required={!!container}
                 />
               ) : (
-                <input className="flex-80" type="number" />
+                <input className="flex-80" type="number" data-hj-whitelist />
               )}
               <div className="flex layout-row layout-align-center-center">{t('acronym:kg')}</div>
             </div>

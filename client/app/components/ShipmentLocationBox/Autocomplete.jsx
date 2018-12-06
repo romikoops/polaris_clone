@@ -104,7 +104,7 @@ class Autocomplete extends PureComponent {
       if (hideResults) {
         const newTimeout = setTimeout(() => {
           this.setState({ hideResults: true })
-        }, 5000)
+        }, 10000)
 
         return {
           hideResults: false,
@@ -114,7 +114,7 @@ class Autocomplete extends PureComponent {
 
       const newTimeout = setTimeout(() => {
         this.setState({ hideResults: true })
-      }, 5000)
+      }, 10000)
 
       return {
         hideResults,
@@ -154,7 +154,7 @@ class Autocomplete extends PureComponent {
   shouldTriggerInputChange (event) {
     const { target } = event
     const { scope } = this.props
-    
+
     this.setState((prevState) => {
       const { value } = target
       const { searchTimeout, input } = prevState
@@ -180,7 +180,7 @@ class Autocomplete extends PureComponent {
     if (countries.length > 0) {
       options.componentRestrictions = { country: countries }
     }
-    
+
     this.addressService.getPlacePredictions(options, (results) => {
       if (results && results.length > 0) {
         const filteredResults = Autocomplete.filterResults(results, {})
@@ -296,10 +296,11 @@ class Autocomplete extends PureComponent {
             value={input}
             onChange={this.shouldTriggerInputChange}
             onBlur={this.shouldTriggerInputChange}
+            data-hj-whitelist
           />
         </div>
         <div className={`
-          flex-100 layout-row layout-wrap results 
+          flex-100 layout-row layout-wrap results
           ${hasResults && !hideResults ? styles.show_results : styles.hide_results}
         `}
         >

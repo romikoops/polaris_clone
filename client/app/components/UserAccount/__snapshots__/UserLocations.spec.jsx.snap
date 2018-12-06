@@ -64,7 +64,7 @@ exports[`shallow render 1`] = `
       ]
     }
     cols={3}
-    destroyLocation={[Function]}
+    destroyAddress={[Function]}
     editLocation={[Function]}
     gradient={
       Object {

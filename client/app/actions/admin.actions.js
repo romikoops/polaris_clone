@@ -135,6 +135,33 @@ function getHub (id, redirect) {
     )
   }
 }
+
+function getLocalCharges (id) {
+  function request (localChargeData) {
+    return { type: adminConstants.GET_LOCAL_CHARGES_REQUEST, payload: localChargeData }
+  }
+  function success (localChargeData) {
+    return { type: adminConstants.GET_LOCAL_CHARGES_SUCCESS, payload: localChargeData }
+  }
+  function failure (error) {
+    return { type: adminConstants.GET_LOCAL_CHARGES_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.getLocalCharges(id).then(
+      (response) => {
+        dispatch(success(response.data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function editHub (id, object) {
   function request (hubData) {
     return { type: adminConstants.EDIT_HUB_REQUEST, payload: hubData }
@@ -1792,7 +1819,8 @@ export const adminActions = {
   searchShipments,
   deltaShipmentsPage,
   deleteDocument,
-  searchPricings
+  searchPricings,
+  getLocalCharges
 }
 
 export default adminActions
