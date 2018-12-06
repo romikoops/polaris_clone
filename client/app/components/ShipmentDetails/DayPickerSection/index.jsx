@@ -10,11 +10,17 @@ import errorStyles from '../../../styles/errors.scss'
 
 function DayPickerSection ({
   theme, nextStageAttempts, selectedDay, incoterm, hasPreCarriage, hasOnCarriage,
-  hide, scope, direction, lastAvailableDate, setIncoterm, onDayChange, t
+  hide, scope, direction, lastAvailableDate, setIncoterm, onDayChange, t, destination, origin
 }) {
   if (hide) return ''
 
   const disabled = lastAvailableDate == null
+  let freshDayPicker = false
+
+  if (origin || destination === {}) {
+    freshDayPicker = true
+  }
+
   const showDayPickerError = nextStageAttempts > 0 && !selectedDay
   const showIncotermError = nextStageAttempts > 0 && !incoterm
 
@@ -44,7 +50,7 @@ function DayPickerSection ({
           </div>
           <div
             name="dayPicker"
-            className={`flex-none layout-row ${styles.dpb} ${showDayPickerError || disabled ? styles.with_errors : ''}`}
+            className={`flex-none layout-row ${styles.dpb} ${(showDayPickerError || disabled) && !freshDayPicker ? styles.with_errors : ''}`}
           >
             <div className={`flex-none layout-row layout-align-center-center ${styles.dpb_icon}`}>
               <i className="flex-none fa fa-calendar" />
@@ -60,7 +66,7 @@ function DayPickerSection ({
             />
             <span className={errorStyles.error_message}>
               {showDayPickerError ? t('errors:notBlank') : ''}
-              {disabled ? t('errors:noSchedulesForRoute') : ''}
+              {disabled && !freshDayPicker ? t('errors:noSchedulesForRoute') : ''}
             </span>
           </div>
         </div>
