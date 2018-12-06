@@ -16,7 +16,7 @@ class RouteHubBox extends Component {
   static faIcon (mot) {
     if (mot) {
       const faKeywords = {
-        ocean: 'ship',
+        ocean: 'anchor',
         air: 'plane',
         train: 'train'
       }
