@@ -6,6 +6,7 @@ exports[`props.nextStageAttempt is true 1`] = `
 >
   <input
     className="FOO_CLASSNAME"
+    data-hj-whitelist={true}
     disabled={false}
     min="FOO_MIN"
     name="FOO_NAME"
@@ -37,6 +38,7 @@ exports[`shallow render 1`] = `
 >
   <input
     className="FOO_CLASSNAME"
+    data-hj-whitelist={true}
     disabled={false}
     min="FOO_MIN"
     name="FOO_NAME"
