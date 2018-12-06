@@ -28,10 +28,15 @@ module DataValidator
         begin
           @examples = []
           create_sheet_rows
+          
           create_cargo_key_hash
+          
           create_fees_key_hash('import')
+          
           create_fees_key_hash('export')
+          
           create_fees_key_hash('freight')
+         
           create_example_results
           calculate(sheet_name)
         rescue Exception => e # bad code.....
@@ -137,6 +142,7 @@ module DataValidator
             },
             result_index: column_index
           }
+         
           @fee_keys.deep_symbolize_keys!
           @fee_keys.each do |direction, fees|
             target_key = direction == :freight ? :cargo : direction
@@ -237,13 +243,13 @@ module DataValidator
       if example[:data][:pickup_address]
         trucking[:pre_carriage] = {
           truck_type: example[:data][:origin_truck_type] || 'default',
-          location_id: Location.geocoded_location(example[:data][:pickup_address]).id
+          address_id: Address.geocoded_address(example[:data][:pickup_address]).id
         }
       end
       if example[:data][:delivery_address]
         trucking[:on_carriage] = {
           truck_type: example[:data][:destination_truck_type] || 'default',
-          location_id: Location.geocoded_location(example[:data][:delivery_address]).id
+          address_id: Address.geocoded_address(example[:data][:delivery_address]).id
         }
       end
       trucking
@@ -332,7 +338,7 @@ module DataValidator
         end
       end
     rescue Exception => e
-      binding.pry
+     
     end
       final_result = {
         result: result,

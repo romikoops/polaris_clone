@@ -3,7 +3,7 @@
 include ExcelTools
 include ShippingTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
-subdomains = %w(speedtrans)
+subdomains = %w(normanglobal)
 subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
@@ -11,7 +11,7 @@ subdomains.each do |sub|
   DataValidator::PricingValidator.new(
     tenant: tenant.id,
     user: shipper,
-    key: 'data/speedtrans/pricing_expected_20181015_speedtrans.xlsx',
+    key: 'data/normanglobal/pricing_expected_20181206_normanglobal.xlsx',
     load_type: 'lcl'
   ).perform
 
