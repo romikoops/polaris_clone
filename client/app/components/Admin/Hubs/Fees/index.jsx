@@ -469,6 +469,7 @@ export class AdminHubFees extends Component {
     const {
       t, theme, localCharges, hubId
     } = this.props
+    if (!localCharges) return ''
     const { serviceLevels, counterpartHubs } = localCharges[hubId]
     const {
       selectOptions,
