@@ -79,6 +79,8 @@ spec:
           value: {{ $databaseUrl | quote }}
         - name: K8S_NAMESPACE
           value: {{ .Release.Namespace | quote }}
+        - name: DEFAULT_TENANT
+          value: demo
         - name: API_HOST
           value: "api-{{ include "hostname" .Values.service.url }}"
         - name: REVIEW_URL

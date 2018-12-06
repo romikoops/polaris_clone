@@ -36,8 +36,11 @@ class App extends Component {
   }
 
   componentDidMount () {
-    const { appDispatch } = this.props
-    appDispatch.fetchCurrencies()
+    const { appDispatch, tenant } = this.props
+    if (tenant) {
+      appDispatch.fetchCurrencies()
+    }
+
     this.isUserExpired()
   }
 
@@ -80,7 +83,7 @@ class App extends Component {
       <div className="layout-fill layout-row layout-wrap layout-align-start hundred text-break">
         {
           tenants && tenants.length > 0 ? (
-            <TenantMenu tenants={tenants} appDispatch={appDispatch} />
+            <TenantMenu tenant={tenant} tenants={tenants} appDispatch={appDispatch} />
           ) : ''
         }
         <CookieConsentBar

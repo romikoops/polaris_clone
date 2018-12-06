@@ -1,9 +1,6 @@
-import fetch from 'isomorphic-fetch'
-import * as Sentry from '@sentry/browser'
 import { tenantConstants } from '../constants'
 import { tenantService } from '../services/tenant.service'
-import { alertActions } from './'
-import { getTenantApiUrl } from '../constants/api.constants'
+import { alertActions } from '.'
 
 function requestTenant (subdomain) {
   return {
