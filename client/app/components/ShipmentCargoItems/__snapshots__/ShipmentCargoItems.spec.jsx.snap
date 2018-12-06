@@ -581,7 +581,7 @@ exports[`shallow rendering 1`] = `
     </div>
   </div>
   <style>
-                
+    
             .colli_type .Select-control {
               display: flex;
               position: relative;
@@ -606,7 +606,7 @@ exports[`shallow rendering 1`] = `
             .colli_type .Select-clear-zone {
               position: absolute;
               right: 25px;
-              top: 6px;           
+              top: 6px;
             }
             .colli_type .Select-arrow-zone {
               position: absolute;

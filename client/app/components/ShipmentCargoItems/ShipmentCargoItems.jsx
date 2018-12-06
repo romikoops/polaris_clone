@@ -29,6 +29,7 @@ class ShipmentCargoItems extends Component {
     const cargoItemInfoExpanded = cargoItems.map(() => true)
     this.setState({ cargoItemTypes, cargoItemInfoExpanded })
   }
+
   setFirstRenderInputs (bool) {
     this.setState({ firstRenderInputs: bool })
   }
@@ -61,17 +62,20 @@ class ShipmentCargoItems extends Component {
     this.props.handleDelta(modifiedEventDimentionX)
     this.props.handleDelta(modifiedEventDimentionY)
   }
+
   toggleCheckbox (value, e) {
     const artificialEvent = {
       target: { name: e.target.name, value }
     }
     this.props.handleDelta(artificialEvent)
   }
+
   toggleCargoItemInfoExpanded (i) {
     const { cargoItemInfoExpanded } = this.state
     cargoItemInfoExpanded[i] = !cargoItemInfoExpanded[i]
     this.setState({ cargoItemInfoExpanded })
   }
+
   deleteCargo (index) {
     const { cargoItemTypes } = this.state
     cargoItemTypes.splice(index, 1)
@@ -79,6 +83,7 @@ class ShipmentCargoItems extends Component {
 
     this.props.deleteItem('cargoItems', index)
   }
+
   render () {
     const {
       cargoItems,
@@ -235,7 +240,7 @@ class ShipmentCargoItems extends Component {
           </div>
         </div>
         <style>
-          {`            
+          {`
             .colli_type .Select-control {
               display: flex;
               position: relative;
@@ -260,7 +265,7 @@ class ShipmentCargoItems extends Component {
             .colli_type .Select-clear-zone {
               position: absolute;
               right: 25px;
-              top: 6px;           
+              top: 6px;
             }
             .colli_type .Select-arrow-zone {
               position: absolute;

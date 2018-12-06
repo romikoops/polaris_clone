@@ -1136,6 +1136,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:street')}
                 disabled={!this.state.showOriginFields}
+                data-hj-whitelist
               />
               <input
                 id="not-auto"
@@ -1152,6 +1153,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:number')}
                 disabled={!this.state.showOriginFields}
+                data-hj-whitelist
               />
               <input
                 name="origin-zipCode"
@@ -1167,6 +1169,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:postalCode')}
                 disabled={!this.state.showOriginFields}
+                data-hj-whitelist
               />
               <input
                 name="origin-city"
@@ -1182,6 +1185,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:city')}
                 disabled={!this.state.showOriginFields}
+                data-hj-whitelist
               />
               <input
                 name="origin-country"
@@ -1197,6 +1201,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:country')}
                 disabled={!this.state.showOriginFields}
+                data-hj-whitelist
               />
               <div className="flex-100 layout-row layout-align-start-center">
                 <div
@@ -1282,6 +1287,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:street')}
                 disabled={!this.state.showDestinationFields}
+                data-hj-whitelist
               />
               <input
                 name="destination-number"
@@ -1297,6 +1303,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:number')}
                 disabled={!this.state.showDestinationFields}
+                data-hj-whitelist
               />
               <input
                 name="destination-zipCode"
@@ -1311,6 +1318,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:postalCode')}
                 disabled={!this.state.showDestinationFields}
+                data-hj-whitelist
               />
               <input
                 name="destination-city"
@@ -1325,6 +1333,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:city')}
                 disabled={!this.state.showDestinationFields}
+                data-hj-whitelist
               />
               <input
                 name="destination-country"
@@ -1339,6 +1348,7 @@ class ShipmentLocationBox extends PureComponent {
                 autoComplete="off"
                 placeholder={t('user:country')}
                 disabled={!this.state.showDestinationFields}
+                data-hj-whitelist
               />
               <div className="flex-100 layout-row layout-align-start-center">
                 <div
