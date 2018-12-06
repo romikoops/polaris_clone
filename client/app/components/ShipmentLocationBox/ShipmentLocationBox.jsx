@@ -952,6 +952,7 @@ class ShipmentLocationBox extends PureComponent {
       const counterpartTrucking = truckingHubs[counterpart]
       let indexes = targetFilteredRouteIndexes.slice()
       const unfilteredRouteIndexes = routes.map((_, i) => i)
+      
       if (targetLocation.label) {
         indexes = routeFilters.selectFromLookupTable(
           lookupTablesForRoutes,
@@ -970,10 +971,7 @@ class ShipmentLocationBox extends PureComponent {
         ...filteredRouteIndexes
       }
 
-      newFilteredRouteIndexes[target] = routeFilters.scopeIndexes(
-        filteredRouteIndexes.all,
-        indexes
-      )
+      newFilteredRouteIndexes[target] = indexes
 
       newFilteredRouteIndexes.selected = routeFilters.scopeIndexes(
         newFilteredRouteIndexes.origin,
