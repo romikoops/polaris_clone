@@ -505,7 +505,7 @@ class ShipmentLocationBox extends PureComponent {
       mapTypeId: this.props.gMaps.MapTypeId.ROADMAP,
       disableDefaultUI: true,
       styles: mapStyles,
-      keyboard: false
+      keyboard: false,
       gestureHandling: 'none',
       zoomControl: false
     }
