@@ -104,7 +104,7 @@ class Autocomplete extends PureComponent {
       if (hideResults) {
         const newTimeout = setTimeout(() => {
           this.setState({ hideResults: true })
-        }, 5000)
+        }, 10000)
 
         return {
           hideResults: false,
@@ -114,7 +114,7 @@ class Autocomplete extends PureComponent {
 
       const newTimeout = setTimeout(() => {
         this.setState({ hideResults: true })
-      }, 5000)
+      }, 10000)
 
       return {
         hideResults,
