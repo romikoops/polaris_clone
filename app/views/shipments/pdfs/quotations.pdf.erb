@@ -1,3 +1,4 @@
+<meta name="breezy-pdf-footerTemplate" content="<div class='footer'><table><tr><td class='date'></td><td><span class='pageNumber'></span>/<span class='totalPages'></span></td></tr></table></div>">
 <div class="wrapper-quotations">
   <% primary_color = tenant.theme["colors"]["primary"] %>
   <% neutral_color = '#C4C4C4' %>
@@ -60,20 +61,20 @@
             </div>
             <p>
               <strong>Weight:</strong>
-              <%= cargo_data[:kg][s.id] %>&nbsp;kg
+              <%= '%.2f' % cargo_data[:kg][s.id] %>&nbsp;kg
             </p>
             <% if s.load_type != 'container'%>
               <p>
                 <strong>Volume:</strong>
-                <%= cargo_data[:vol][s.id] %>&nbsp;m<sup>3</sup>
+                <%= '%.2f' %  cargo_data[:vol][s.id] %>&nbsp;m<sup>3</sup>
               </p>
             <% end %>
           </div>
         </div>
         <div class="delivery-info">
           <div class="cargo-info">
-            <p> <b> Pickup</b>: <%= s.has_pre_carriage ? s.pickup_address.geocoded_address : 'N/A' %></p>
-            <p> <b> Delivery</b>: <%= s.has_on_carriage ? s.delivery_address.geocoded_address : 'N/A' %></p>
+            <p> <b> Pickup</b>: <%= s.has_pre_carriage ? s.pickup_address.full_address : 'N/A' %></p>
+            <p> <b> Delivery</b>: <%= s.has_on_carriage ? s.delivery_address.full_address : 'N/A' %></p>
           </div>
         </div>
       </div>
