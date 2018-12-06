@@ -49,7 +49,7 @@ module Itineraries
     end
 
     def country_code
-      @country_code ||= country.code.downcase.to_sym
+      @country_code ||= country&.code.downcase.to_sym
     end
 
     def country

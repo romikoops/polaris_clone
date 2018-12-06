@@ -454,7 +454,7 @@ exports[`shipment has delivery_address 1`] = `
               <h4
                 className="flex-80 layout-row"
               >
-                Estimated Delivery
+                Delivery
               </h4>
             </div>
             <div
@@ -565,7 +565,7 @@ exports[`shipment has has_on_carriage 1`] = `
               <h4
                 className="flex-80 layout-row"
               >
-                Estimated Delivery
+                Delivery
               </h4>
             </div>
             <div
@@ -878,7 +878,7 @@ exports[`text is not ETD 1`] = `
               <h4
                 className="flex-80 layout-row"
               >
-                Estimated Delivery
+                Delivery
               </h4>
             </div>
             <div

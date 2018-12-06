@@ -84,7 +84,8 @@ module ShippingTools
       lookup_tables_for_routes: routes_data[:look_ups],
       cargo_item_types: tenant.cargo_item_types,
       max_dimensions: tenant.max_dimensions,
-      max_aggregate_dimensions: tenant.max_aggregate_dimensions
+      max_aggregate_dimensions: tenant.max_aggregate_dimensions,
+      last_available_date: Date.today - 1.day
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
