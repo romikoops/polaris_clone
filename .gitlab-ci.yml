@@ -1,6 +1,7 @@
 variables:
   BUNDLE_GITLAB__COM: "gitlab-ci-token:${CI_JOB_TOKEN}"
   AUTO_DEVOPS_DOMAIN: itsmycargo.tech
+  REVIEW_NAMESPACE: review
 
 .dedicated-runner: &dedicated-runner
   tags:
@@ -325,8 +326,6 @@ stop_review:
     if [[ -n "$(helm ls --all --short "^$CI_ENVIRONMENT_SLUG$")" ]]; then
       helm delete --purge "$CI_ENVIRONMENT_SLUG"
     fi
-
-    kubectl delete namespace ${CI_ENVIRONMENT_SLUG} || true
   }
 
   function _helm_deploy() {
@@ -340,7 +339,7 @@ stop_review:
       --set-file credentials=/etc/secrets/service-account/services.json \
       --set-file postgresql.seed.credentials=/etc/secrets/service-account/services.json \
       --set-file masterKey=/etc/secrets/service-account/review-master-key \
-      --namespace=${CI_ENVIRONMENT_SLUG} \
+      --namespace=${REVIEW_NAMESPACE} \
       --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
       "$CI_ENVIRONMENT_SLUG" \
       $DEVOPS_CHART
