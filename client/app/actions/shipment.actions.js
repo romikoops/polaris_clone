@@ -488,6 +488,37 @@ function getNotes (noteIds) {
     )
   }
 }
+function getLastAvailableDate (params) {
+  function request (payload) {
+    return { type: shipmentConstants.SHIPMENT_GET_LAST_AVAILABLE_DATE_REQUEST, payload }
+  }
+  function success (payload) {
+    return { type: shipmentConstants.SHIPMENT_GET_LAST_AVAILABLE_DATE_SUCCESS, payload }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.SHIPMENT_GET_LAST_AVAILABLE_DATE_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    shipmentService.getLastAvailableDate(params).then(
+      (response) => {
+        dispatch(success(response.data.lastAvailableDate))
+        if (response.data.lastAvailableDate == null) {
+          dispatch(failure({
+            type: 'error',
+            text: 'There are no schedules available for this route.'
+          }))
+        }
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 function updateCurrency (currency, req) {
   return (dispatch) => {
     dispatch(appActions.setCurrency(currency, req))
@@ -602,7 +633,8 @@ export const shipmentActions = {
   updateContact,
   delete: _delete,
   setError,
-  getSchedulesForResult
+  getSchedulesForResult,
+  getLastAvailableDate
 }
 
 export default shipmentActions

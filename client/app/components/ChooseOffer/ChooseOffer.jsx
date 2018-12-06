@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { v4 } from 'uuid'
 import { withNamespaces } from 'react-i18next'
+import { get } from 'lodash'
 import PropTypes from '../../prop-types'
 import RouteFilterBox from '../RouteFilterBox/RouteFilterBox'
 import { moment } from '../../constants'
@@ -185,14 +187,14 @@ class ChooseOffer extends Component {
 
   render () {
     const {
-      shipmentData, user, shipmentDispatch, theme, tenant, originalSelectedDay, t
+      shipmentData, user, shipmentDispatch, theme, tenant, originalSelectedDay, lastAvailableDate, t
     } = this.props
     if (!shipmentData) return ''
     const { scope } = tenant
 
     const { isChecked } = this.state
     const {
-      shipment, results, lastTripDate, aggregatedCargo
+      shipment, results, aggregatedCargo
     } = shipmentData
     if (!shipment || !results) return ''
 
@@ -287,7 +289,7 @@ class ChooseOffer extends Component {
               departureDate={depDay}
               shipment={shipment}
               availableMotKeys={availableMoTKeys}
-              lastTripDate={lastTripDate}
+              lastAvailableDate={lastAvailableDate}
               setDepartureDate={this.setDepartureDate}
             />
           </div> : ''}
@@ -369,4 +371,13 @@ ChooseOffer.defaultProps = {
   originalSelectedDay: false
 }
 
-export default withNamespaces(['account', 'landing', 'common'])(ChooseOffer)
+function mapStateToProps (state) {
+  const lastAvailableDate = get(state, 'bookingData.response.stage1.lastAvailableDate')
+
+  return { lastAvailableDate }
+}
+
+// Unconnected export for specs
+export const unconnectedChooseOffer = withNamespaces(['account', 'landing', 'common'])(ChooseOffer)
+
+export default withNamespaces(['account', 'landing', 'common'])(connect(mapStateToProps)(ChooseOffer))

@@ -1,3 +1,4 @@
+import i18next from 'i18next'
 import { shipmentConstants } from '../constants'
 
 export default function shipment (state = {}, action) {
@@ -424,6 +425,38 @@ export default function shipment (state = {}, action) {
         error: {
           ...state.error,
           stage1: [action.error]
+        }
+      }
+
+    case shipmentConstants.SHIPMENT_GET_LAST_AVAILABLE_DATE_REQUEST:
+      return state
+    case shipmentConstants.SHIPMENT_GET_LAST_AVAILABLE_DATE_SUCCESS: {
+      const error = { ...state.error }
+      if (action.payload == null) {
+        error.stage2 = [{
+          type: 'error',
+          text: i18next.t('errors:noSchedulesForRoute')
+        }]
+      }
+
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          stage1: {
+            ...state.response.stage1,
+            lastAvailableDate: action.payload
+          }
+        },
+        error
+      }
+    }
+    case shipmentConstants.SHIPMENT_GET_LAST_AVAILABLE_DATE_FAILURE:
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          stage2: [action.error]
         }
       }
 
