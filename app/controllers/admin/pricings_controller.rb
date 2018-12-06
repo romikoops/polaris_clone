@@ -159,12 +159,12 @@ class Admin::PricingsController < Admin::AdminBaseController
     key = "pricing_#{load_type}"
 
     load_type_renamed = case load_type
-                when 'cargo_item' then 'LCL'
-                when 'container' then 'FCL'
-                else
-                  raise StandardError, 'Unknown load type! Expected item of [cargo_item, container].'
-                end
-    file_name = "#{current_user.tenant.name}__pricing_#{mot.downcase}_#{load_type_renamed.downcase}"
+                        when 'cargo_item' then 'LCL'
+                        when 'container' then 'FCL'
+                        else
+                          raise StandardError, 'Unknown load type! Expected item of [cargo_item, container].'
+                        end
+    file_name = "#{current_user.tenant.name.downcase}__pricing_#{mot.downcase}_#{load_type_renamed.downcase}"
 
     klass = ExcelDataServices::FileWriter.const_get("#{mot.capitalize}#{load_type_renamed.capitalize}")
     options = { tenant_id: current_user.tenant.id, file_name: file_name }

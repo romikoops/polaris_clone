@@ -13,7 +13,7 @@ function handleResponse (response) {
   return response.json()
 }
 
-function uploadPricings (file, loadType, open) {
+function uploadPricings (file, mot, loadType, open) {
   const formData = new FormData()
   formData.append('file', file)
   const requestOptions = {
@@ -22,8 +22,8 @@ function uploadPricings (file, loadType, open) {
     body: formData
   }
   const url = open
-    ? `/admin/open_pricings/ocean_${loadType}_pricings/process_csv`
-    : `/admin/pricings/ocean_${loadType}_pricings/process_csv`
+    ? `/admin/open_pricings/ocean_${loadType}_pricings/process_csv` // deprecated?
+    : `/admin/pricings/${mot}_${loadType}/upload`
 
   return fetch(`${getTenantApiUrl()}${url}`, requestOptions).then(handleResponse)
 }

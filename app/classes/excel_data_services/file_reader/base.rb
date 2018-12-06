@@ -33,28 +33,6 @@ module ExcelDataServices
 
       private
 
-      ONE_COL_FEE_AND_RANGES_HEADERS = %i(
-        effective_date
-        expiration_date
-        customer_email
-        origin
-        country_origin
-        destination
-        country_destination
-        mot
-        carrier
-        service_level
-        load_type
-        rate_basis
-        range_min
-        range_max
-        fee_code
-        fee_name
-        currency
-        fee_min
-        fee
-      ).freeze
-
       def open_spreadsheet_file(path)
         path = path.to_s
         Roo::Spreadsheet.open(path)

@@ -75,9 +75,9 @@ class CardPricingIndex extends Component {
     return itinerariesArr
   }
 
-  lclUpload (file) {
+  pricingUpload (file, mot, loadType) {
     const { documentDispatch } = this.props
-    documentDispatch.uploadPricings(file, 'lcl', false)
+    documentDispatch.uploadPricings(file, mot, loadType, false)
   }
 
   updateSearch (array) {
@@ -157,6 +157,40 @@ class CardPricingIndex extends Component {
           return {}
       }
     })()
+
+    const uploadButtons = (
+      <div
+        className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
+      >
+        {Object.keys(loadTypeOptions).map((loadType) => {
+          const downloadPricingText = (loadType
+            ? t('admin:downloadPricingWithLoadType', { mot: capitalize(mot), loadType: loadTypeOptions[loadType].toUpperCase() })
+            : t('admin:downloadPricing', { mot: capitalize(mot) })
+          )
+
+          const options = { mot }
+          if (loadType) options[snakeCase('loadType')] = snakeCase(loadType)
+
+          return (
+            <div
+              className={`${
+                adminStyles.action_section
+              } flex-100 layout-row layout-wrap layout-align-center-center`}
+            >
+              <p className="flex-100">{t('admin:uploadPricing')}</p>
+              <FileUploader
+                theme={theme}
+                dispatchFn={file => this.pricingUpload(file, mot, snakeCase(loadType))}
+                tooltip={priceTip.upload_lcl}
+                type="xlsx"
+                size="full"
+                text={t('admin:dedicatedPricing')}
+              />
+            </div>
+          )
+        })}
+      </div>
+    )
 
     const downloadButtons = (
       <div
@@ -251,40 +285,16 @@ class CardPricingIndex extends Component {
               flexOptions="flex-100"
               content={(
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                  { scope.show_beta_features ? (
-                    <CollapsingBar
-                      showArrow
-                      collapsed={!expander.upload}
-                      theme={theme}
-                      styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                      handleCollapser={() => this.toggleExpander('upload')}
-                      text={t('admin:uploadData')}
-                      faClass="fa fa-cloud-upload"
-                      content={(
-                        <div
-                          className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
-                        >
-                          <div
-                            className={`${
-                              adminStyles.action_section
-                            } flex-100 layout-row layout-wrap layout-align-center-center`}
-                          >
-                            <p className="flex-100">{t('admin:uploadPricing')}</p>
-                            <FileUploader
-                              theme={theme}
-                              dispatchFn={e => this.lclUpload(e)}
-                              tooltip={priceTip.upload_lcl}
-                              type="xlsx"
-                              size="full"
-                              text={t('admin:dedicatedPricing')}
-                            />
-
-                          </div>
-
-                        </div>
-                      )}
-                    />
-                  ) : '' }
+                  <CollapsingBar
+                    showArrow
+                    collapsed={!expander.upload}
+                    theme={theme}
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                    handleCollapser={() => this.toggleExpander('upload')}
+                    text={t('admin:uploadData')}
+                    faClass="fa fa-cloud-upload"
+                    content={uploadButtons}
+                  />
                   <CollapsingBar
                     showArrow
                     collapsed={!expander.download}

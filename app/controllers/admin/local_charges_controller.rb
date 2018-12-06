@@ -45,7 +45,7 @@ class Admin::LocalChargesController < ApplicationController
 
   def download_local_charges
     mot = download_params[:mot]
-    file_name = "#{current_user.tenant.name}__local_charges_#{mot.downcase}"
+    file_name = "#{current_user.tenant.name.downcase}__local_charges_#{mot.downcase}"
 
     options = { tenant_id: current_user.tenant.id, file_name: file_name, mode_of_transport: mot }
     document = ExcelDataServices::FileWriter::LocalCharges.new(options).perform

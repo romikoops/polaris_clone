@@ -4,6 +4,38 @@ module ExcelDataServices
   module LocalChargesTool
     private
 
+    VALID_STATIC_HEADERS = %i(
+      hub
+      country
+      effective_date
+      expiration_date
+      counterpart_hub
+      counterpart_country
+      service_level
+      carrier
+      fee_code
+      fee
+      mot
+      load_type
+      direction
+      currency
+      rate_basis
+      minimum
+      maximum
+      base
+      ton
+      cbm
+      kg
+      item
+      shipment
+      bill
+      container
+      wm
+      range_min
+      range_max
+      dangerous
+    ).freeze
+
     def specific_charge_params_for_reading(rate_basis, data)
       rate_basis.upcase!
       case rate_basis

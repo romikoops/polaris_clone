@@ -3,39 +3,9 @@
 module ExcelDataServices
   module FileReader
     class LocalCharges < Base
-      private
+      include ExcelDataServices::LocalChargesTool
 
-      VALID_STATIC_HEADERS = %i(
-        hub
-        country
-        effective_date
-        expiration_date
-        counterpart_hub
-        counterpart_country
-        service_level
-        carrier
-        fee_code
-        fee
-        mot
-        load_type
-        direction
-        currency
-        rate_basis
-        minimum
-        maximum
-        base
-        ton
-        cbm
-        kg
-        item
-        shipment
-        bill
-        container
-        wm
-        range_min
-        range_max
-        dangerous
-      ).freeze
+      private
 
       def build_valid_headers(_data_extraction_method)
         VALID_STATIC_HEADERS

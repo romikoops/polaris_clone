@@ -3,6 +3,8 @@
 module ExcelDataServices
   module FileReader
     class OceanLcl < Base
+      include ExcelDataServices::PricingTool
+
       private
 
       def build_valid_headers(_data_extraction_method)

@@ -3,13 +3,10 @@
 module ExcelDataServices
   module FileWriter
     class OceanFcl < Base
+      include ExcelDataServices::PricingTool
       include PricingRowDataBuilder
 
       private
-
-      DYNAMIC_FEE_COLS_NO_RANGES_ATTRIBUTES_LOOKUP = STATIC_HEADERS_ATTRIBUTES_LOOKUP.merge(
-        transit_time: :transit_time
-      ).freeze
 
       def load_and_prepare_data
         pricings = tenant.pricings.for_mode_of_transport('ocean').all_fcl
@@ -21,8 +18,8 @@ module ExcelDataServices
         rows_data_with_dynamic_headers = build_rows_data_with_dynamic_headers(data_with_dynamic_headers, dynamic_headers)
         rows_data_static_fee_col = build_rows_data_with_static_fee_col(data_static_fee_col)
 
-        { 'No Ranges': rows_data_with_dynamic_headers,
-          'With Ranges': rows_data_static_fee_col }
+        { 'No Ranges' => rows_data_with_dynamic_headers,
+          'With Ranges' => rows_data_static_fee_col }
       end
 
       def build_rows_data_with_dynamic_headers(data_with_dynamic_headers, dynamic_headers)
@@ -46,6 +43,17 @@ module ExcelDataServices
           row_data[header] = attributes[:rate]
 
           row_data
+        end
+      end
+
+      def build_raw_headers(sheet_name, rows_data)
+        case sheet_name.to_s
+        when 'No Ranges'
+          rows_data.flat_map(&:keys).compact.uniq
+        when 'With Ranges'
+          ONE_COL_FEE_AND_RANGES_HEADERS
+        else
+          raise StandardError, "Unknown sheet name \"#{sheet_name}\"!"
         end
       end
     end

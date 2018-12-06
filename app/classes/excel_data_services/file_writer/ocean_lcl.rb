@@ -3,6 +3,7 @@
 module ExcelDataServices
   module FileWriter
     class OceanLcl < Base
+      include ExcelDataServices::PricingTool
       include PricingRowDataBuilder
 
       private
@@ -13,7 +14,11 @@ module ExcelDataServices
 
         rows_data_static_fee_col = build_rows_data_with_static_fee_col(raw_pricing_rows)
 
-        { 'Sheet1': rows_data_static_fee_col }
+        { 'Sheet1' => rows_data_static_fee_col }
+      end
+
+      def build_raw_headers(_sheet_name, _rows_data)
+        ONE_COL_FEE_AND_RANGES_HEADERS
       end
     end
   end

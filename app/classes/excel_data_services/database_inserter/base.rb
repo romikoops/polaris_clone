@@ -13,8 +13,8 @@ module ExcelDataServices
 
       attr_reader :tenant, :data
 
-      def initialize(tenant:, data:, options: {})
-        @tenant = tenant
+      def initialize(tenant_id:, data:, options: {})
+        @tenant = Tenant.find(tenant_id)
         @data = data
         @options = options
       end

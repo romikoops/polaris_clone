@@ -3,24 +3,9 @@
 module ExcelDataServices
   module FileReader
     class OceanFcl < Base
-      private
+      include ExcelDataServices::PricingTool
 
-      DYNAMIC_FEE_COLS_NO_RANGES_HEADERS = %i(
-        effective_date
-        expiration_date
-        customer_email
-        origin
-        country_origin
-        destination
-        country_destination
-        mot
-        carrier
-        service_level
-        load_type
-        rate_basis
-        transit_time
-        currency
-      ).freeze
+      private
 
       def determine_data_extraction_method(headers)
         if headers.include?(:fee_code)

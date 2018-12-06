@@ -24,7 +24,7 @@ module ExcelDataServices
 
         sort!(rows_data)
 
-        { 'Sheet1': rows_data }
+        { 'Sheet1' => rows_data }
       end
 
       def build_row_data(local_charge, fee)
@@ -92,6 +92,10 @@ module ExcelDataServices
             h[:dangerous] ? 1 : -1
           ]
         end
+      end
+
+      def build_raw_headers(_sheet_name, _rows_data)
+        VALID_STATIC_HEADERS
       end
     end
   end

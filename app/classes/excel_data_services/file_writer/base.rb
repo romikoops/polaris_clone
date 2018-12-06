@@ -33,6 +33,7 @@ module ExcelDataServices
 
       def perform
         sheets_data = load_and_prepare_data
+
         begin
           @xlsx = WriteXLSX.new(file_path, tempdir: Rails.root.join('tmp', 'write_xlsx/').to_s)
 
@@ -40,7 +41,7 @@ module ExcelDataServices
             worksheet = xlsx.add_worksheet(sheet_name)
             next if rows_data.blank?
 
-            raw_headers = extract_raw_headers(rows_data)
+            raw_headers = build_raw_headers(sheet_name, rows_data)
             headers = transform_headers(raw_headers)
             setup_worksheet(worksheet, headers.length)
             write_headers(worksheet, headers)
@@ -65,7 +66,7 @@ module ExcelDataServices
       end
 
       def file_path
-        @file_path || Rails.root.join('tmp', @file_name) unless @file_name.nil?
+        @file_path || Rails.root.join('tmp', file_name) unless file_name.nil?
       end
 
       private
@@ -78,8 +79,8 @@ module ExcelDataServices
         raw_headers.map(&:upcase)
       end
 
-      def extract_raw_headers(rows_data)
-        rows_data.flat_map(&:keys).compact.uniq
+      def build_raw_headers(_sheet_name, _rows_data)
+        raise NotImplementedError, "This method must be implemented in #{self.class.name}."
       end
 
       def header_format

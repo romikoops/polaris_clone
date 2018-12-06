@@ -48,7 +48,8 @@ module ExcelDataServices
             max: row[:maximum],
             rate_basis: row[:rate_basis] }
 
-        errors = specific_charge_params_for_reading(rate_basis, row).values.reduce([]) do |memo, value|
+        specific_charge_params = specific_charge_params_for_reading(rate_basis, row)
+        errors = specific_charge_params.values.reduce([]) do |memo, value|
           memo << { row_nr: row[:row_nr], rate_basis_name: rate_basis.upcase } if value.nil?
         end
 
