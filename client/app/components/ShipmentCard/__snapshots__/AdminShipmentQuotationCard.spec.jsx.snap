@@ -235,7 +235,7 @@ exports[`shallow rendering 1`] = `
           }
         />
         <p>
-          Delivery
+          Estimated Delivery
         </p>
       </span>
     </div>
