@@ -83,6 +83,7 @@ Rails.application.routes.draw do
       resources :local_charges, only: %i(index update)
       post 'local_charges/process_csv',
            to: 'local_charges#overwrite', as: :local_charges_overwrite
+      get 'local_charges/:id/hub', to: 'local_charges#hub_charges'
       post 'local_charges/:id/edit', to: 'local_charges#edit'
       post 'customs_fees/:id/edit', to: 'local_charges#edit_customs'
       post 'local_charges/download', to: 'local_charges#download_local_charges'
