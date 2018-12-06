@@ -23,7 +23,7 @@ import Autocomplete from './Autocomplete'
 import removeTabIndex from './removeTabIndex'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 import CircleCompletion from '../CircleCompletion/CircleCompletion'
-import { get } from 'lodash'
+import { has, get } from 'lodash'
 
 const mapStyles = mapStyling
 
@@ -209,15 +209,24 @@ class ShipmentLocationBox extends PureComponent {
       this.setState({ dSelect }, () => this.prepForSelect('destination'))
       this.props.handleSelectLocation('destination', false)
     } else {
+      this.state.markers.destination.setMap(null)
       this.setState({
         truckingOptions: {
           ...this.state.truckingOptions,
           preCarriage: true
         },
-        dSelect: ''
-      }, () => this.prepForSelect('destination'))
+        dSelect: '',
+        markers: {
+          ...this.state.markers,
+          destination: null
+        }
+      }, () => {
+        this.prepForSelect('destination')
+        this.adjustMapBounds()
+      })
       this.props.setNotesIds(null, 'destination')
-      this.state.markers.destination.setMap(null)
+      
+
       if (this.props.destination !== {}) {
         this.props.setTargetAddress('destination', {})
       }
@@ -303,15 +312,23 @@ class ShipmentLocationBox extends PureComponent {
       this.props.setNotesIds([event.value.id], 'origin')
       this.props.handleSelectLocation('origin', false)
     } else {
+      this.state.markers.origin.setMap(null)
       this.setState({
         truckingOptions: {
           ...this.state.truckingOptions,
           preCarriage: true
         },
-        oSelect: ''
-      }, () => this.prepForSelect('origin'))
+        oSelect: '',
+        markers: {
+          ...this.state.markers,
+          origin: null
+        }
+      }, () => {
+        this.prepForSelect('destination')
+        this.adjustMapBounds()
+      })
       this.props.setNotesIds(false, 'origin')
-      this.state.markers.origin.setMap(null)
+      
       if (this.props.origin !== {}) {
         this.props.setTargetAddress('origin', {})
       }
@@ -326,7 +343,7 @@ class ShipmentLocationBox extends PureComponent {
     if (locationData[target].title !== undefined) {
       map.data.remove(locationData[target][0])
     }
-
+    
     const targetKml = map.data.addGeoJson(location.geojson)
     locationData[target] = targetKml
     const bounds = new this.props.gMaps.LatLngBounds()
@@ -350,9 +367,9 @@ class ShipmentLocationBox extends PureComponent {
     const {
       markers, map, directionsDisplay, directionsService
     } = this.state
+    
     const { theme } = this.props
-    const newMarkers = []
-    if (markers[target].title !== undefined) {
+    if (has(markers, [target, 'title'])) {
       markers[target].setMap(null)
     }
     let icon
@@ -378,28 +395,10 @@ class ShipmentLocationBox extends PureComponent {
       keyboard: false
     })
     markers[target] = marker
-    if (markers.origin.title !== undefined) {
-      newMarkers.push(markers.origin)
-    }
-    if (markers.destination.title !== undefined) {
-      newMarkers.push(markers.destination)
-    }
-    this.setState({ markers })
-    const bounds = new this.props.gMaps.LatLngBounds()
-    for (let i = 0; i < newMarkers.length; i++) {
-      bounds.extend(newMarkers[i].getPosition())
-    }
-    if (!markers.origin.title && !markers.destination.title) {
-      map.fitBounds(bounds)
-    } else if (
-      (markers.origin.title && !markers.destination.title) ||
-      (!markers.origin.title && markers.destination.title)
-    ) {
-      map.setCenter(bounds.getCenter())
-    } else {
-      map.fitBounds(bounds, { top: 100, bottom: 20 })
-    }
-    if (this.state.speciality === 'truck' && markers.origin.title && markers.destination.title) {
+   
+    this.setState({ markers }, () => this.adjustMapBounds())
+    
+    if (this.state.speciality === 'truck' && originMarkerExists && destMarkerExists) {
       directionsDisplay.setMap(map)
       const request = {
         origin: markers.origin.getPosition(),
@@ -411,6 +410,39 @@ class ShipmentLocationBox extends PureComponent {
           directionsDisplay.setDirections(result)
         }
       })
+    }
+  }
+
+  adjustMapBounds () {
+    const { markers, map } = this.state
+    const newMarkers = []
+    const originMarkerExists = has(markers, ['origin', 'title'])
+    const destMarkerExists = has(markers, ['destination', 'title'])
+    if (originMarkerExists) {
+      newMarkers.push(markers.origin)
+    }
+    if (destMarkerExists) {
+      newMarkers.push(markers.destination)
+    }
+    const bounds = new this.props.gMaps.LatLngBounds()
+    
+    for (let i = 0; i < newMarkers.length; i++) {
+      bounds.extend(newMarkers[i].getPosition())
+    }
+
+    if (!originMarkerExists && !destMarkerExists) {
+      map.setCenter({
+        lat: 55.675647,
+        lng: 12.567848
+      })
+      map.setZoom(5)
+    } else if (
+      (originMarkerExists && !destMarkerExists) ||
+      (!originMarkerExists && destMarkerExists)
+    ) {
+      map.setCenter(bounds.getCenter())
+    } else {
+      map.fitBounds(bounds, { top: 100, bottom: 20 })
     }
   }
 
@@ -637,6 +669,7 @@ class ShipmentLocationBox extends PureComponent {
       const lat = isLocationObj ? place.latitude : place.geometry.location.lat()
       const lng = isLocationObj ? place.longitude : place.geometry.location.lng()
       const fullAddress = isLocationObj ? place.fullAddress : place.formatted_address
+      const markerName  = isLocationObj ? place.city : place.name
       const tenantId = shipment.tenant_id
       const loadType = shipment.load_type
 
@@ -685,12 +718,13 @@ class ShipmentLocationBox extends PureComponent {
               this.props.handleSelectLocation(target, fieldsHaveErrors)
             })
           } else {
+            
             this.setMarker(
               {
-                lat: place.geometry.location.lat(),
-                lng: place.geometry.location.lng()
+                lat,
+                lng
               },
-              place.name,
+              markerName,
               target
             )
             this.props.handleSelectLocation(target, this.state[`${target}FieldsHaveErrors`])

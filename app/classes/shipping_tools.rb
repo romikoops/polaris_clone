@@ -123,6 +123,7 @@ module ShippingTools
       template: 'shipments/pdfs/shipment_recap.pdf.html.erb',
       margin: { top: 10, bottom: 5, left: 8, right: 8 },
       shipment: shipment,
+      shipments: [shipment],
       load_type: load_type,
       name: 'shipment_recap',
       remarks: Remark.where(tenant_id: shipment.tenant_id)
