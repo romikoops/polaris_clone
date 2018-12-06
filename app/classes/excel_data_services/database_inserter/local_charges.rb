@@ -3,6 +3,8 @@
 module ExcelDataServices
   module DatabaseInserter
     class LocalCharges < Base
+      include ExcelDataServices::LocalChargesTool
+
       def perform
         restructured_data = restructure_data(data)
         restructured_data = expand_fcl_to_all_sizes(restructured_data)
@@ -36,35 +38,17 @@ module ExcelDataServices
 
       def build_charge_params_with_error_data(row)
         rate_basis = RateBasis.get_internal_key(row[:rate_basis].upcase)
-        standard_charge_params = { currency: row[:currency],
-                                   expiration_date: row[:expiration_date],
-                                   effective_date: row[:effective_date],
-                                   name: row[:fee],
-                                   key: row[:fee_code],
-                                   min: row[:min],
-                                   max: row[:maximum],
-                                   rate_basis: row[:rate_basis] }
+        standard_charge_params =
+          { currency: row[:currency],
+            expiration_date: row[:expiration_date],
+            effective_date: row[:effective_date],
+            name: row[:fee],
+            key: row[:fee_code],
+            min: row[:min],
+            max: row[:maximum],
+            rate_basis: row[:rate_basis] }
 
-        specific_charge_params = case rate_basis
-                                 when 'PER_SHIPMENT' then { value: row[:shipment] }
-                                 when 'PER_CONTAINER' then { value: row[:container] }
-                                 when 'PER_BILL' then { value: row[:bill] }
-                                 when 'PER_CBM' then { value: row[:cbm] }
-                                 when 'PER_KG' then { value: row[:kg] }
-                                 when 'PER_TON' then { ton: row[:ton] }
-                                 when 'PER_WM' then { value: row[:wm] }
-                                 when 'PER_ITEM' then { value: row[:item] }
-                                 when 'PER_CBM_TON' then { ton: row[:ton], cbm: row[:cbm] }
-                                 when 'PER_SHIPMENT_CONTAINER' then { shipment: row[:shipment], container: row[:container] }
-                                 when 'PER_BILL_CONTAINER' then { container: row[:container], bill: row[:bill] }
-                                 when 'PER_CBM_KG' then { kg: row[:kg], cbm: row[:cbm] }
-                                 when 'PER_KG_RANGE' then { range_min: row[:range_min], range_max: row[:range_max], kg: row[:kg] }
-                                 when 'PER_X_KG_FLAT' then { value: row[:kg], base: row[:base] }
-                                 else
-                                   raise StandardError, "RATE_BASIS \"#{row[:rate_basis].upcase}\" not found!"
-                                 end
-
-        errors = specific_charge_params.values.reduce([]) do |memo, value|
+        errors = specific_charge_params_for_reading(rate_basis, row).values.reduce([]) do |memo, value|
           memo << { row_nr: row[:row_nr], rate_basis_name: rate_basis.upcase } if value.nil?
         end
 
@@ -118,8 +102,8 @@ module ExcelDataServices
         plain_fcl_local_charges_params = data.select { |params| params[:load_type] == 'fcl' }
         expanded_local_charges_params = %w(fcl_20 fcl_40 fcl_40_hq).reduce([]) do |memo, fcl_size|
           memo + plain_fcl_local_charges_params.map do |params|
-            params.dup.tap do |p|
-              p[:load_type] = fcl_size
+            params.dup.tap do |param|
+              param[:load_type] = fcl_size
             end
           end
         end
@@ -140,14 +124,17 @@ module ExcelDataServices
 
           params[:hub_id] = hub_id
           if params[:counterpart_hub]
-            counterpart_hub_id = if params[:counterpart_hub] == 'all'
-                                   nil
-                                 else
-                                   counterpart_hub_name = append_hub_suffix(params[:counterpart_hub], mot)
-                                   counterpart_hub = @tenant.hubs.find_by(name: counterpart_hub_name, hub_type: mot)
-                                   raise StandardError, "Counterpart Hub with name \"#{counterpart_hub_name}\" not found!" unless counterpart_hub
-                                   counterpart_hub.id
-                                 end
+            counterpart_hub_id =
+              if params[:counterpart_hub] == 'all'
+                nil
+              else
+                counterpart_hub_name = append_hub_suffix(params[:counterpart_hub], mot)
+                counterpart_hub = @tenant.hubs.find_by(name: counterpart_hub_name, hub_type: mot)
+                unless counterpart_hub
+                  raise StandardError, "Counterpart Hub with name \"#{counterpart_hub_name}\" not found!"
+                end
+                counterpart_hub.id
+              end
           end
 
           params[:counterpart_hub_id] = counterpart_hub_id
