@@ -19,6 +19,7 @@ class DocumentsDownloader extends React.Component {
 
     return response.json()
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -71,6 +72,7 @@ class DocumentsDownloader extends React.Component {
     }
     this.setState({ requested: false })
   }
+
   render () {
     const {
       theme, loading, tooltip, square, size, t, disabled

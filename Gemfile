@@ -129,6 +129,9 @@ gem 'pry-rails'
 # Add comments to ActiveRecord queries
 gem 'marginalia', '~> 1.5'
 
+# Determines holidays by region
+gem 'holidays'
+
 group :development, :test do
   # set environment variables - enforce loading environment right away
   gem 'dotenv-rails', require: 'dotenv/rails-now'

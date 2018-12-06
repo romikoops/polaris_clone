@@ -1,5 +1,5 @@
 import { Promise } from 'es6-promise-promise'
-import { getApiHost, getTenantApiUrl, getTenantIndex } from '../constants/api.constants'
+import { getApiHost, getTenantApiUrl } from '../constants/api.constants'
 import { authHeader } from '../helpers'
 
 const { fetch } = window
@@ -14,13 +14,13 @@ function handleResponse (response) {
   return respJSON
 }
 
-function setTenant () {
+function getTenant (tenantId) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/tenants/${tenantId}`, requestOptions).then(handleResponse)
 }
 
 function getTenantId () {
@@ -29,7 +29,7 @@ function getTenantId () {
     headers: authHeader()
   }
 
-  return fetch(`${getApiHost()}/current`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/tenants/current`, requestOptions).then(handleResponse)
 }
 
 function setTenants () {
@@ -38,16 +38,7 @@ function setTenants () {
     headers: authHeader()
   }
 
-  return fetch(`${getTenantIndex()}/`, requestOptions).then(handleResponse)
-}
-
-function overrideTenant (tenantId) {
-  const requestOptions = {
-    method: 'GET',
-    headers: authHeader()
-  }
-
-  return fetch(`${getTenantIndex()}/${tenantId}`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/tenants`, requestOptions).then(handleResponse)
 }
 
 function fetchCurrencies () {
@@ -85,10 +76,10 @@ function setCurrency (currency) {
     body: JSON.stringify({ currency })
   }
   const url = `${getTenantApiUrl()}/currencies/set`
-  // FIXME: console.log(url)
 
   return fetch(url, requestOptions).then(handleResponse)
 }
+
 function fetchCountries () {
   const requestOptions = {
     method: 'GET',
@@ -97,16 +88,17 @@ function fetchCountries () {
 
   return fetch(`${getTenantApiUrl()}/countries`, requestOptions).then(handleResponse)
 }
+
 function toggleTenantCurrencyMode () {
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
   const url = `${getTenantApiUrl()}/admin/currencies/toggle_mode`
-  // FIXME: console.log(url)
 
   return fetch(url, requestOptions).then(handleResponse)
 }
+
 function setTenantCurrencyRates (base, rates) {
   const requestOptions = {
     method: 'POST',
@@ -114,23 +106,21 @@ function setTenantCurrencyRates (base, rates) {
     body: JSON.stringify({ base, rates })
   }
   const url = `${getTenantApiUrl()}/admin/currencies/set_rates`
-  // FIXME: console.log(url)
 
   return fetch(url, requestOptions).then(handleResponse)
 }
 
 const appService = {
-  fetchCurrencies,
-  setCurrency,
   fetchCountries,
+  fetchCurrencies,
   fetchCurrenciesForBase,
-  refreshRates,
-  setTenant,
+  getTenant,
   getTenantId,
+  refreshRates,
+  setCurrency,
+  setTenantCurrencyRates,
   setTenants,
-  overrideTenant,
-  toggleTenantCurrencyMode,
-  setTenantCurrencyRates
+  toggleTenantCurrencyMode
 }
 
 export default appService

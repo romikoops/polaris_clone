@@ -13,13 +13,11 @@ Rails.application.routes.draw do
     passwords: 'users_devise_token_auth/passwords'
   }, skip: [:omniauth_callbacks]
 
-  resource :tenant, only: [:show] do
-    member do
-      get 'current'
-    end
-  end
-
   resources :tenants, only: %i(index show) do
+    collection do
+      get :current
+    end
+
     namespace :admin do
       resources :shipments do
         collection do
@@ -127,6 +125,11 @@ Rails.application.routes.draw do
       get 'gdpr/download', to: 'users#download_gdpr'
       post 'opt_out/:target', to: 'users#opt_out'
     end
+
+    namespace :itineraries do
+      resource :last_available_date, only: :show
+    end
+
     get 'pricings', to: 'pricings#index'
     get 'pricings/:id', to: 'pricings#show'
     post 'pricings/:id/request', to: 'pricings#request_dedicated_pricing'

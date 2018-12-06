@@ -38,6 +38,7 @@ class QuoteCard extends PureComponent {
 
     return hubType
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -50,6 +51,7 @@ class QuoteCard extends PureComponent {
     }
     this.handleClickChecked = this.handleClickChecked.bind(this)
   }
+
   componentDidMount () {
     const { tenant } = this.props
     if (isQuote(tenant)) {
@@ -58,12 +60,14 @@ class QuoteCard extends PureComponent {
       })
     }
   }
+
   handleClickChecked () {
     const { onClickAdd } = this.props
     this.setState(prevState => ({
       isChecked: !prevState.isChecked
     }), () => onClickAdd(this.state.isChecked))
   }
+
   toggleExpander (key) {
     this.setState({
       expander: {
@@ -72,6 +76,7 @@ class QuoteCard extends PureComponent {
       }
     })
   }
+
   toggleShowSchedules (key) {
     this.setState(prevState => ({
       showSchedules: !prevState.showSchedules
@@ -117,17 +122,21 @@ class QuoteCard extends PureComponent {
       </div>
     )
 
-    if (scope.detailed_billing && result.schedules.length > 1) {
+    if (scope.detailed_billing && result.schedules.length > 0 && result.schedules[0].eta !== null) {
       return (
         <div className="flex-40 layout-row layout-align-start-center" style={{ textAlign: 'left' }}>
           {showSchedules ? showPriceBreakdownBtn : showSchedulesBtn}
         </div>
       )
-    } else if (!scope.detailed_billing && result.schedules.length > 1) {
+    }
+
+    if (!scope.detailed_billing && result.schedules.length > 1) {
       return (
         <div className="flex-40 layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
       )
-    } else if (!scope.detailed_billing && (!result.schedules || result.schedules.length < 1)) {
+    }
+
+    if (!scope.detailed_billing && (!result.schedules || result.schedules.length < 1)) {
       return (
         <div className="flex-40 layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
       )
@@ -162,52 +171,57 @@ class QuoteCard extends PureComponent {
       ? aggregatedCargo.weight
       : cargo.reduce((sum, cargoUnit) => (sum + +cargoUnit.payload_in_kg * +cargoUnit.quantity), 0)
 
-    const schedulesArr = schedules.map(schedule => (<div className={`flex-100 layout-row layout-align-start-center ${styles.dates_container}`}>
-      <div className={`flex-75 layout-row ${styles.dates_row}`}>
-        <div className="flex-25 layout-wrap layout-row layout-align-center-center">
-          <div className="flex-100 layout-row">
-            <p className={`flex-none ${styles.sched_elem}`}>
-              {' '}
-              {moment(schedule.closing_date).format('DD-MM-YYYY')}{' '}
-            </p>
+    const schedulesArr = schedules.map(schedule => (
+      <div className={`flex-100 layout-row layout-align-start-center ${styles.dates_container}`}>
+        <div className={`flex-75 layout-row ${styles.dates_row}`}>
+          <div className="flex-25 layout-wrap layout-row layout-align-center-center">
+            <div className="flex-100 layout-row">
+              <p className={`flex-none ${styles.sched_elem}`}>
+                {' '}
+                {moment(schedule.closing_date).format('DD-MM-YYYY')}
+                {' '}
+              </p>
+            </div>
+          </div>
+          <div className="flex-25 layout-wrap layout-row layout-align-center-center">
+            <div className="flex-100 layout-row">
+              <p className={`flex-none ${styles.sched_elem}`}>
+                {' '}
+                {moment(schedule.etd).format('DD-MM-YYYY')}
+                {' '}
+              </p>
+            </div>
+          </div>
+          <div className="flex-25 layout-wrap layout-row layout-align-center-center">
+            <div className="flex-100 layout-row">
+              <p className={`flex-none ${styles.sched_elem}`}>
+                {' '}
+                {moment(schedule.eta).format('DD-MM-YYYY')}
+                {' '}
+              </p>
+            </div>
+          </div>
+          <div className="flex-25 layout-wrap layout-row layout-align-center-center">
+            <div className="flex-100 layout-row">
+              <p className={`flex-none ${styles.sched_elem}`}>
+                {' '}
+                {moment(schedule.eta).diff(schedule.etd, t('common:days'))}
+                {t('common:capitalDays')}
+              </p>
+            </div>
           </div>
         </div>
-        <div className="flex-25 layout-wrap layout-row layout-align-center-center">
-          <div className="flex-100 layout-row">
-            <p className={`flex-none ${styles.sched_elem}`}>
-              {' '}
-              {moment(schedule.etd).format('DD-MM-YYYY')}{' '}
-            </p>
-          </div>
-        </div>
-        <div className="flex-25 layout-wrap layout-row layout-align-center-center">
-          <div className="flex-100 layout-row">
-            <p className={`flex-none ${styles.sched_elem}`}>
-              {' '}
-              {moment(schedule.eta).format('DD-MM-YYYY')}{' '}
-            </p>
-          </div>
-        </div>
-        <div className="flex-25 layout-wrap layout-row layout-align-center-center">
-          <div className="flex-100 layout-row">
-            <p className={`flex-none ${styles.sched_elem}`}>
-              {' '}
-              {moment(schedule.eta).diff(schedule.etd, t('common:days'))}
-              {t('common:capitalDays')}
-            </p>
-          </div>
+        <div className="flex-25 layout-row layout-wrap" style={{ textAlign: 'right' }}>
+          <RoundButton
+            classNames="quote_card_select"
+            size="small"
+            handleNext={() => this.selectSchedule(schedule)}
+            theme={theme}
+            text={t('common:select')}
+          />
         </div>
       </div>
-      <div className="flex-25 layout-row layout-wrap" style={{ textAlign: 'right' }}>
-        <RoundButton
-          classNames="quote_card_select"
-          size="small"
-          handleNext={() => this.selectSchedule(schedule)}
-          theme={theme}
-          text={t('common:select')}
-        />
-      </div>
-    </div>))
+    ))
     const firstSchedule = schedules[0]
     const lastSchedule = schedules[result.schedules.length - 1]
     const earlierDate = schedules[0] ? firstSchedule.closing_date : false
@@ -218,10 +232,10 @@ class QuoteCard extends PureComponent {
     return (
       <div className={`
         flex-100 layout-row layout-wrap offer_result ${responsiveFlex}
-        ${styles.wrapper} ${this.state.isChecked ? styles.wrapper_selected : ''}
+        ${styles.wrapper} ${isQuote(tenant) && this.state.isChecked ? styles.wrapper_selected : ''}
       `}
       >
-        {this.state.isChecked ? (
+        {isQuote(tenant) && this.state.isChecked ? (
           <div className={`${styles.wrapper_gradient}`}>
             <div className={`${styles.gradient}`} style={gradientStyle} />
           </div>
@@ -232,8 +246,18 @@ class QuoteCard extends PureComponent {
           </div>
           <div className={`flex-60 layout-row layout-align-start-center ${styles.origin_destination}`}>
             <div className="layout-column layout-align-center-start">
-              <p>{t('common:from')}: <span>{originHub.name}</span></p>
-              <p>{t('common:to')}: <span>{destinationHub.name}</span></p>
+              <p>
+                {t('common:from')}
+:
+                {' '}
+                <span>{originHub.name}</span>
+              </p>
+              <p>
+                {t('common:to')}
+:
+                {' '}
+                <span>{destinationHub.name}</span>
+              </p>
             </div>
           </div>
           <div className="flex layout-row layout-wrap layout-align-end-center">
@@ -250,9 +274,12 @@ class QuoteCard extends PureComponent {
             </div>
             <div className={`flex-100 layout-row layout-wrap layout-align-end-center ${styles.unit_info}`}>
               <p className="flex-100 layout-row layout-align-end-center">
-                {capitalize(t('acronym:kg'))}:&nbsp;
+                {capitalize(t('acronym:kg'))}
+:&nbsp;
                 <span>
-                  { numberSpacing(calcPayload, 1) } kg
+                  { numberSpacing(calcPayload, 1) }
+                  {' '}
+kg
                 </span>
               </p>
             </div>
@@ -260,10 +287,12 @@ class QuoteCard extends PureComponent {
         </div>
         <div className="flex-100 layout-row layout-align-start-center" style={{ paddingBottom: '18px' }}>
 
-          { result.meta.carrier_name ? <div className="flex-50 layout-row layout-align-center-center">
-            {switchIcon(result.meta.mode_of_transport)}
-            <p className="layout-row layout-align-end-center margin_5">{t('quote:carrier', { carrierName: result.meta.carrier_name })}</p>
-          </div> : '' }
+          { result.meta.carrier_name ? (
+            <div className="flex-50 layout-row layout-align-center-center">
+              {switchIcon(result.meta.mode_of_transport)}
+              <p className="layout-row layout-align-end-center margin_5">{t('quote:carrier', { carrierName: result.meta.carrier_name })}</p>
+            </div>
+          ) : '' }
           {
             result.meta.service_level_count > 1
               ? (
@@ -359,7 +388,7 @@ class QuoteCard extends PureComponent {
                   <RoundButton
                     active={!this.state.isChecked}
                     flexContainer="100"
-                    classNames={`pointy layout-row layout-align-center-center ${styles.add_button} ${!this.state.isChecked ? styles.shorter : styles.longer}`}
+                    classNames={`ccb_select_quote pointy layout-row layout-align-center-center ${styles.add_button} ${!this.state.isChecked ? styles.shorter : styles.longer}`}
                     size="small"
                     handleNext={() => this.handleClickChecked()}
                     theme={theme}
@@ -373,8 +402,7 @@ class QuoteCard extends PureComponent {
               {this.buttonToDisplay()}
               <div className="flex-60 layout-row layout-align-end-center layout-wrap">
                 { scope.offer_disclaimers && scope.offer_disclaimers.length
-                  ? scope.offer_disclaimers.map(disclaimer =>
-                    <p className={`flex-100 ${styles.disclaimers}`}>{t(`disclaimers:${disclaimer}`, { carrier: result.meta.carrier_name })}</p>)
+                  ? scope.offer_disclaimers.map(disclaimer => <p className={`flex-100 ${styles.disclaimers}`}>{t(`disclaimers:${disclaimer}`, { carrier: result.meta.carrier_name })}</p>)
                   : ''
                 }
               </div>

@@ -3,22 +3,17 @@ import { withNamespaces } from 'react-i18next'
 import * as Scroll from 'react-scroll'
 import Toggle from 'react-toggle'
 import ReactTooltip from 'react-tooltip'
-import DayPickerInput from 'react-day-picker/DayPickerInput'
 import PropTypes from '../../prop-types'
 import GmapsLoader from '../../hocs/GmapsLoader'
 import styles from './ShipmentDetails.scss'
-import errorStyles from '../../styles/errors.scss'
 import defaults from '../../styles/default_classes.scss'
 import { moment } from '../../constants'
 import '../../styles/day-picker-custom.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { Tooltip } from '../Tooltip/Tooltip'
 import ShipmentLocationBox from '../ShipmentLocationBox/ShipmentLocationBox'
 import ShipmentContainers from '../ShipmentContainers/ShipmentContainers'
 import ShipmentCargoItems from '../ShipmentCargoItems/ShipmentCargoItems'
 import ShipmentAggregatedCargo from '../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
-import TextHeading from '../TextHeading/TextHeading'
-import IncotermBox from '../Incoterm/Box'
 import {
   camelize, isEmpty, chargeableWeight, isQuote
 } from '../../helpers'
@@ -37,6 +32,7 @@ import calcAvailableMotsForRoute,
 { shouldUpdateAvailableMotsForRoute } from './calcAvailableMotsForRoute'
 import getRequests from '../ShipmentLocationBox/getRequests'
 import reuseShipments from '../../helpers/reuseShipment'
+import DayPickerSection from './DayPickerSection'
 
 export class ShipmentDetails extends Component {
   static scrollTo (target) {
@@ -143,11 +139,12 @@ export class ShipmentDetails extends Component {
       cargo_item: ['default']
     }
 
-    if (this.props.shipmentData && this.props.shipmentData.shipment) {
+    const { shipmentData } = props
+    if (shipmentData && shipmentData.shipment) {
       /* eslint-disable camelcase */
       const {
         desired_start_date, has_on_carriage, has_pre_carriage
-      } = this.props.shipmentData.shipment
+      } = shipmentData.shipment
       this.state.selectedDay = desired_start_date
       this.state = {
         ...this.state,
@@ -168,7 +165,7 @@ export class ShipmentDetails extends Component {
     this.handleContainerChange = this.handleContainerChange.bind(this)
     this.handleTruckingDetailsChange = this.handleTruckingDetailsChange.bind(this)
     this.deleteCargo = this.deleteCargo.bind(this)
-    this.setIncoTerm = this.setIncoTerm.bind(this)
+    this.setIncoterm = this.setIncoterm.bind(this)
     this.handleSelectLocation = this.handleSelectLocation.bind(this)
     this.loadPrevReq = this.loadPrevReq.bind(this)
     this.updateFilteredRouteIndexes = this.updateFilteredRouteIndexes.bind(this)
@@ -209,6 +206,7 @@ export class ShipmentDetails extends Component {
 
       this.setState({ modals })
     }
+
     if (
       shouldUpdateAvailableMotsForRoute(
         this.state.filteredRouteIndexes,
@@ -216,6 +214,16 @@ export class ShipmentDetails extends Component {
       )
     ) {
       this.updateAvailableMotsForRoute()
+
+      const {
+        shipmentDispatch, shipmentData
+      } = this.props
+
+      const { routes } = shipmentData
+      const itineraryIds = nextState.filteredRouteIndexes.selected.map(i => routes[i].itineraryId).join(',')
+      const country = nextState.has_pre_carriage ? nextState.origin.country : routes[nextState.filteredRouteIndexes.selected[0]].origin.country
+
+      shipmentDispatch.getLastAvailableDate({ itinerary_ids: itineraryIds, country })
 
       return false
     }
@@ -242,7 +250,7 @@ export class ShipmentDetails extends Component {
     }
   }
 
-  componentDidUpdate () {
+  componentDidUpdate (prevProps, prevState) {
     const {
       shipment,
       cargoItems,
@@ -253,7 +261,10 @@ export class ShipmentDetails extends Component {
       destination,
       aggregated
     } = this.state
-    this.props.bookingSummaryDispatch.update({
+
+    const { bookingSummaryDispatch } = this.props
+
+    bookingSummaryDispatch.update({
       shipment,
       cargoItems,
       aggregatedCargo,
@@ -265,7 +276,7 @@ export class ShipmentDetails extends Component {
     })
   }
 
-  setIncoTerm (opt) {
+  setIncoterm (opt) {
     this.setState({
       incoterm: opt.value.id
     })
@@ -320,10 +331,8 @@ export class ShipmentDetails extends Component {
         filteredRouteIndexes
       } = prevState
       const { routes } = this.props.shipmentData
-      if (!routes) {
-        return { filteredRouteIndexes }
-      }
-      if (filteredRouteIndexes.all.length === 0) {
+
+      if (routes && filteredRouteIndexes && filteredRouteIndexes.all.length === 0) {
         const indexes = routes.map((_, i) => i)
 
         return {
@@ -336,7 +345,7 @@ export class ShipmentDetails extends Component {
         }
       }
 
-      return { filteredRouteIndexes }
+      return {}
     })
   }
 
@@ -365,7 +374,6 @@ export class ShipmentDetails extends Component {
       payload_in_kg: false
     }))
 
-    this.getInitalFilteredRouteIndexes()
     this.setState(prevState => ({
       cargoItems: obj.cargo_items_attributes,
       containers: obj.containers_attributes,
@@ -662,7 +670,7 @@ export class ShipmentDetails extends Component {
       origin, destination, selectedDay, incoterm
     } = this.state
     const { tenant } = this.props
-    const { scope } = this.props.tenant
+    const { scope } = tenant
     const requiresFullAddress = scope.require_full_address
 
     if (
@@ -762,7 +770,7 @@ export class ShipmentDetails extends Component {
 
   handleIncotermResults (results) {
     if (results.length === 1) {
-      this.setIncoTerm(results[0])
+      this.setIncoterm(results[0])
     }
     this.setState({ incotermsArray: results })
   }
@@ -826,7 +834,9 @@ export class ShipmentDetails extends Component {
       t
     } = this.props
 
-    const { modals, filteredRouteIndexes } = this.state
+    const {
+      modals, filteredRouteIndexes, nextStageAttempts, selectedDay, incoterm
+    } = this.state
 
     if (!filteredRouteIndexes.all.length) return ''
 
@@ -840,7 +850,7 @@ export class ShipmentDetails extends Component {
         <ShipmentAggregatedCargo
           aggregatedCargo={this.state.aggregatedCargo}
           handleDelta={(event, hasError) => this.handleAggregatedCargoChange(event, hasError)}
-          nextStageAttempt={this.state.nextStageAttempts > 0}
+          nextStageAttempt={nextStageAttempts > 0}
           theme={theme}
           scope={scope}
           stackableGoodsConfirmed={this.state.stackableGoodsConfirmed}
@@ -855,7 +865,7 @@ export class ShipmentDetails extends Component {
           addContainer={this.addNewContainer}
           handleDelta={this.handleContainerChange}
           deleteItem={this.deleteCargo}
-          nextStageAttempt={this.state.nextStageAttempts > 0}
+          nextStageAttempt={nextStageAttempts > 0}
           theme={theme}
           scope={scope}
           toggleModal={name => this.toggleModal(name)}
@@ -868,7 +878,7 @@ export class ShipmentDetails extends Component {
           addCargoItem={this.addNewCargoItem}
           handleDelta={this.handleCargoItemChange}
           deleteItem={this.deleteCargo}
-          nextStageAttempt={this.state.nextStageAttempts > 0}
+          nextStageAttempt={nextStageAttempts > 0}
           theme={theme}
           scope={scope}
           availableCargoItemTypes={formatCargoItemTypes(shipmentData.cargoItemTypes)}
@@ -880,87 +890,6 @@ export class ShipmentDetails extends Component {
     }
 
     const routeIds = shipmentData.itineraries ? shipmentData.itineraries.map(route => route.id) : []
-    const formattedSelectedDay = this.state.selectedDay
-      ? moment(this.state.selectedDay).format('DD/MM/YYYY')
-      : ''
-
-    const dayPickerProps = {
-      disabledDays: {
-        before: new Date(moment()
-          .add(7, 'days')
-          .format()),
-        after: new Date(moment(shipmentData.lastTripDate))
-      },
-      month: new Date(
-        moment()
-          .add(7, 'days')
-          .format('YYYY'),
-        moment()
-          .add(7, 'days')
-          .format('M') - 1
-      ),
-      name: 'dayPicker'
-    }
-    const dayPickerToolip = this.state.has_pre_carriage
-      ? 'planned_pickup_date'
-      : 'planned_dropoff_date'
-    const dayPickerText = this.state.has_pre_carriage
-      ? t('cargo:cargoReadyDate')
-      : t('cargo:availableAtTerm')
-
-    const nextStageAttempt = this.state.nextStageAttempts > 0
-    const showDayPickerError = nextStageAttempt && !this.state.selectedDay
-    const showIncotermError = nextStageAttempt && !this.state.incoterm
-
-    const dayPickerSection = (
-      <div className={`${defaults.content_width} layout-row flex-none layout-align-start-center`}>
-        <div className="layout-row flex-70 layout-align-start-center layout-wrap">
-          <div className="flex-none layout-row layout-align-start-center" style={{ paddingRight: '15px' }}>
-            <div className="flex-none layout-align-space-between-end">
-              <TextHeading theme={theme} text={`${dayPickerText}:`} size={3} />
-            </div>
-            <Tooltip theme={theme} text={dayPickerToolip} icon="fa-info-circle" />
-          </div>
-          <div
-            name="dayPicker"
-            className={
-              `flex-none layout-row ${styles.dpb} ` +
-              `${showDayPickerError ? styles.with_errors : ''}`
-            }
-          >
-            <div className={`flex-none layout-row layout-align-center-center ${styles.dpb_icon}`}>
-              <i className="flex-none fa fa-calendar" />
-            </div>
-            <DayPickerInput
-              name="dayPicker"
-              placeholder="DD/MM/YYYY"
-              format="DD/MM/YYYY"
-              value={formattedSelectedDay}
-              onDayChange={this.handleDayChange}
-              dayPickerProps={dayPickerProps}
-            />
-            <span className={errorStyles.error_message}>
-              {showDayPickerError ? t('errors:notBlank') : ''}
-            </span>
-          </div>
-        </div>
-        <div className="flex-50 layout-row layout-wrap layout-align-end-center">
-          <IncotermBox
-            theme={theme}
-            preCarriage={this.state.has_pre_carriage}
-            onCarriage={this.state.has_on_carriage}
-            tenantScope={scope}
-            incoterm={this.state.incoterm}
-            setIncoTerm={this.setIncoTerm}
-            errorStyles={errorStyles}
-            direction={shipmentData.shipment.direction}
-            showIncotermError={showIncotermError}
-            nextStageAttempt={this.state.nextStageAttempts > 0}
-            firstStep
-          />
-        </div>
-      </div>
-    )
     const { notes } = shipmentData
     const noteStyle = notes && notes.length > 0 ? styles.open_notes : styles.closed_notes
 
@@ -986,7 +915,7 @@ export class ShipmentDetails extends Component {
             has_pre_carriage={this.state.has_pre_carriage}
             origin={this.state.origin}
             destination={this.state.destination}
-            nextStageAttempts={this.state.nextStageAttempts}
+            nextStageAttempts={nextStageAttempts}
             handleAddressChange={this.handleAddressChange}
             shipmentData={shipmentData}
             routeIds={routeIds}
@@ -1012,15 +941,20 @@ export class ShipmentDetails extends Component {
             <NotesRow notes={notes} theme={theme} />
           </div>
         </div>
-        {isQuote(tenant) ? '' : (
-          <div
-            className={`${
-              styles.date_sec
-            } layout-row flex-100 layout-wrap layout-align-center-center`}
-          >
-            {dayPickerSection}
-          </div>
-        ) }
+        <DayPickerSection
+          theme={theme}
+          nextStageAttempts={nextStageAttempts}
+          selectedDay={selectedDay}
+          incoterm={incoterm}
+          hasPreCarriage={this.state.has_pre_carriage}
+          hasOnCarriage={this.state.has_on_carriage}
+          hide={isQuote(tenant)}
+          scope={scope}
+          direction={shipmentData.shipment.direction}
+          lastAvailableDate={shipmentData.lastAvailableDate}
+          setIncoterm={this.setIncoterm}
+          onDayChange={this.handleDayChange}
+        />
         <div className={`layout-row flex-100 layout-wrap layout-align-center ${styles.cargo_sec}`}>
           {shipmentData.shipment.load_type === 'cargo_item' && (
             <div className="content_width_booking layout-row layout-wrap layout-align-center">

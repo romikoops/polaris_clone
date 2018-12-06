@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import {
- Switch, Route, Redirect, withRouter
+  Switch, Route, Redirect, withRouter
 } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import UserAccount from '../UserAccount/UserAccount'
@@ -36,8 +36,6 @@ class App extends Component {
   }
 
   componentDidMount () {
-    const { appDispatch } = this.props
-    appDispatch.fetchCurrencies()
     this.isUserExpired()
   }
 
@@ -80,7 +78,7 @@ class App extends Component {
       <div className="layout-fill layout-row layout-wrap layout-align-start hundred text-break">
         {
           tenants && tenants.length > 0 ? (
-            <TenantMenu tenants={tenants} appDispatch={appDispatch} />
+            <TenantMenu tenant={tenant} tenants={tenants} appDispatch={appDispatch} />
           ) : ''
         }
         <CookieConsentBar

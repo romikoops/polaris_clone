@@ -30,14 +30,16 @@ exports[`detailed billing working properly 1`] = `
       >
         <p>
           From
-          : 
+          :
+           
           <span>
             Gothenburg
           </span>
         </p>
         <p>
           To
-          : 
+          :
+           
           <span>
             Shanghai
           </span>
@@ -100,7 +102,8 @@ exports[`detailed billing working properly 1`] = `
           : 
           <span>
             0.0
-             kg
+             
+            kg
           </span>
         </p>
       </div>
@@ -396,7 +399,7 @@ exports[`detailed billing working properly 1`] = `
           <RoundButton
             active={true}
             back={false}
-            classNames="pointy layout-row layout-align-center-center add_button shorter"
+            classNames="ccb_select_quote pointy layout-row layout-align-center-center add_button shorter"
             disabled={false}
             flexContainer="100"
             handleDisabled={null}
@@ -420,6 +423,25 @@ exports[`detailed billing working properly 1`] = `
       <div
         className="flex-100 layout-row layout-align-end-center"
       >
+        <div
+          className="flex-40 layout-row layout-align-start-center"
+          style={
+            Object {
+              "textAlign": "left",
+            }
+          }
+        >
+          <div
+            className="flex layout-row layout-align-start-center pointy view_switch"
+            onClick={[Function]}
+          >
+            <p
+              className="flex-none"
+            >
+              View Schedules
+            </p>
+          </div>
+        </div>
         <div
           className="flex-60 layout-row layout-align-end-center layout-wrap"
         />
@@ -459,14 +481,16 @@ exports[`shallow rendering 1`] = `
       >
         <p>
           From
-          : 
+          :
+           
           <span>
             Gothenburg
           </span>
         </p>
         <p>
           To
-          : 
+          :
+           
           <span>
             Shanghai
           </span>
@@ -528,7 +552,8 @@ exports[`shallow rendering 1`] = `
           : 
           <span>
             0.0
-             kg
+             
+            kg
           </span>
         </p>
       </div>
@@ -823,7 +848,7 @@ exports[`shallow rendering 1`] = `
           <RoundButton
             active={true}
             back={false}
-            classNames="pointy layout-row layout-align-center-center add_button shorter"
+            classNames="ccb_select_quote pointy layout-row layout-align-center-center add_button shorter"
             disabled={false}
             flexContainer="100"
             handleDisabled={null}
@@ -886,14 +911,16 @@ exports[`show schedule options working 1`] = `
       >
         <p>
           From
-          : 
+          :
+           
           <span>
             Gothenburg
           </span>
         </p>
         <p>
           To
-          : 
+          :
+           
           <span>
             Shanghai
           </span>
@@ -956,7 +983,8 @@ exports[`show schedule options working 1`] = `
           : 
           <span>
             0.0
-             kg
+             
+            kg
           </span>
         </p>
       </div>
@@ -1252,7 +1280,7 @@ exports[`show schedule options working 1`] = `
           <RoundButton
             active={true}
             back={false}
-            classNames="pointy layout-row layout-align-center-center add_button shorter"
+            classNames="ccb_select_quote pointy layout-row layout-align-center-center add_button shorter"
             disabled={false}
             flexContainer="100"
             handleDisabled={null}
@@ -1276,6 +1304,25 @@ exports[`show schedule options working 1`] = `
       <div
         className="flex-100 layout-row layout-align-end-center"
       >
+        <div
+          className="flex-40 layout-row layout-align-start-center"
+          style={
+            Object {
+              "textAlign": "left",
+            }
+          }
+        >
+          <div
+            className="flex layout-row layout-align-start-center pointy view_switch"
+            onClick={[Function]}
+          >
+            <p
+              className="flex-none"
+            >
+              View Price Breakdown
+            </p>
+          </div>
+        </div>
         <div
           className="flex-60 layout-row layout-align-end-center layout-wrap"
         />
@@ -1315,14 +1362,16 @@ exports[`show schedules set to true 1`] = `
       >
         <p>
           From
-          : 
+          :
+           
           <span>
             Gothenburg
           </span>
         </p>
         <p>
           To
-          : 
+          :
+           
           <span>
             Shanghai
           </span>
@@ -1384,7 +1433,8 @@ exports[`show schedules set to true 1`] = `
           : 
           <span>
             0.0
-             kg
+             
+            kg
           </span>
         </p>
       </div>
@@ -1679,7 +1729,7 @@ exports[`show schedules set to true 1`] = `
           <RoundButton
             active={true}
             back={false}
-            classNames="pointy layout-row layout-align-center-center add_button shorter"
+            classNames="ccb_select_quote pointy layout-row layout-align-center-center add_button shorter"
             disabled={false}
             flexContainer="100"
             handleDisabled={null}
@@ -1742,14 +1792,16 @@ exports[`single result rendering removes the "add" button 1`] = `
       >
         <p>
           From
-          : 
+          :
+           
           <span>
             Gothenburg
           </span>
         </p>
         <p>
           To
-          : 
+          :
+           
           <span>
             Shanghai
           </span>
@@ -1811,7 +1863,8 @@ exports[`single result rendering removes the "add" button 1`] = `
           : 
           <span>
             0.0
-             kg
+             
+            kg
           </span>
         </p>
       </div>

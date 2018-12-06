@@ -8,19 +8,16 @@ And('I am logged out') do
   visit '/signout'
 end
 
-When('I click the link to log in') do
-  find('a', text: 'Log In / Register').click
+When('I have accepted cookies') do
+  find('#ccb_accept_cookies').click if page.has_css?('#ccb_accept_cookies', wait: 20)
 end
-When('I accept the cookies if the bar is there') do
-  # button = find('button', class: 'S2dJZ4GCoTCWo4F7HGPQK')
-  if page.has_css?('#ccb_accept_cookies', wait: 20)
-    find('#ccb_accept_cookies', visible: false).click()
-  end
-  
+
+When('I click the link to log in') do
+  find('.ccb_login').click
 end
 
 Then('I expect to see the log in modal') do
-  expect(page).to have_button('Sign In')
+  expect(page).to have_css('.ccb_login_modal')
 end
 
 When('I enter the correct credentials') do
@@ -29,7 +26,7 @@ When('I enter the correct credentials') do
 end
 
 And('I click the sign in button') do
-  click_button('Sign In')
+  find('.ccb_signin').click
 end
 
 Then('I expect to be redirected to the account page') do

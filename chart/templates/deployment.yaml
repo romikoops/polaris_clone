@@ -51,7 +51,7 @@ spec:
         - name: K8S_NAMESPACE
           value: {{ .Release.Namespace | quote }}
         - name: API_HOST
-          value: "api.{{ include "hostname" .Values.service.url }}"
+          value: "api-{{ include "hostname" .Values.service.url }}"
         - name: REVIEW_URL
           value: {{ include "hostname" .Values.service.url }}
         - name: RAILS_MASTER_KEY
@@ -79,12 +79,14 @@ spec:
           value: {{ $databaseUrl | quote }}
         - name: K8S_NAMESPACE
           value: {{ .Release.Namespace | quote }}
+        - name: DEFAULT_TENANT
+          value: demo
         - name: API_HOST
-          value: "api.{{ include "hostname" .Values.service.url }}"
+          value: "api-{{ include "hostname" .Values.service.url }}"
         - name: REVIEW_URL
           value: {{ include "hostname" .Values.service.url }}
         - name: CORS_ORIGINS
-          value: "https:\\/\\/.*\\.{{ include "hostname" .Values.service.url | replace "." "\\\\." }}"
+          value: "https:\\/\\/{{ include "hostname" .Values.service.url | replace "." "\\\\." }}"
         - name: RAILS_MASTER_KEY
           valueFrom:
             secretKeyRef:
@@ -97,14 +99,14 @@ spec:
           httpGet:
             path: /up
             port: http-backend
-          initialDelaySeconds: 60
-          periodSeconds: 30
+          initialDelaySeconds: 30
+          periodSeconds: 10
         readinessProbe:
           httpGet:
             path: /up
             port: http-backend
-          initialDelaySeconds: 60
-          periodSeconds: 30
+          initialDelaySeconds: 30
+          periodSeconds: 10
         resources:
 {{ toYaml .Values.backend.resources | indent 10 }}
       - name: frontend
@@ -112,13 +114,15 @@ spec:
         imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
         env:
         - name: API_HOST
-          value: "api.{{ include "hostname" .Values.service.url }}"
+          value: "api-{{ include "hostname" .Values.service.url }}"
         - name: API_URL
-          value: "https://api.{{ include "hostname" .Values.service.url }}"
+          value: "https://api-{{ include "hostname" .Values.service.url }}"
         - name: K8S_NAMESPACE
           value: {{ .Release.Namespace | quote }}
         - name: REVIEW_URL
           value: {{ include "hostname" .Values.service.url }}
+        - name: GTM_ID
+          value: GTM-P29HCHV
         ports:
         - name: http-frontend
           containerPort: 80
@@ -126,14 +130,14 @@ spec:
           httpGet:
             path: /
             port: http-frontend
-          initialDelaySeconds: 60
-          periodSeconds: 30
+          initialDelaySeconds: 5
+          periodSeconds: 10
         readinessProbe:
           httpGet:
             path: /
             port: http-frontend
-          initialDelaySeconds: 60
-          periodSeconds: 30
+          initialDelaySeconds: 5
+          periodSeconds: 10
         resources:
 {{ toYaml .Values.frontend.resources | indent 10 }}
       volumes:

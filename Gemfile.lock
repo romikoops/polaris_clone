@@ -777,6 +777,7 @@ GEM
       signet (~> 0.7)
     hashdiff (0.3.7)
     hashie (3.5.7)
+    holidays (6.6.1)
     htmlentities (4.3.4)
     http (3.3.0)
       addressable (~> 2.3)
@@ -1066,6 +1067,7 @@ DEPENDENCIES
   google-cloud-storage
   google-cloud-translate
   googleauth
+  holidays
   http
   inky-rb
   letter_opener (~> 1.6)

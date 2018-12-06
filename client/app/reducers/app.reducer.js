@@ -19,19 +19,17 @@ export default function app (state = {}, action) {
 
       return err
     }
+
     case appConstants.OVERRIDE_TENANT_REQUEST: {
       return state
     }
-    case appConstants.OVERRIDE_TENANT_SUCCESS: {
-      const { tenants } = state
-      const newTenant = tenants.filter(t => t.value.id === parseInt(action.payload, 10))[0]
-      const ret = {
-          ...state,
-          tenant: newTenant.value
-        }
 
-      return ret
+    case appConstants.OVERRIDE_TENANT_SUCCESS: {
+      return {
+        tenants: state.tenants
+      }
     }
+
     case appConstants.OVERRIDE_TENANT_ERROR: {
       const err = merge({}, state, {
         error: action.payload

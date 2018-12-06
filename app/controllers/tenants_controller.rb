@@ -6,8 +6,12 @@ class TenantsController < ApplicationController
   skip_before_action :require_authentication!
   skip_before_action :require_non_guest_authentication!
   def index
-    tenants = []
-    tenants = Tenant.all.map { |t| { label: t.name, value: t } } unless Rails.env.production?
+    tenants = if Rails.env.production?
+                []
+              else
+                Tenant.order(:subdomain).map { |t| { label: t.name, value: t } }
+              end
+
     response_handler(tenants)
   end
 
@@ -21,22 +25,25 @@ class TenantsController < ApplicationController
   end
 
   def show
+    tenant = Tenant.find_by(id: Rails.env.production? ? tenant_id : params[:id])
+
     response_handler(tenant: tenant)
   end
 
   def current
-    response_handler(tenant_id: tenant.id)
+    response_handler(tenant_id: tenant_id)
   end
 
   private
 
-  def tenant
+  def tenant_id
     subdomain = [
       URI(request.referrer).host.split('.').first,
-      ENV['DEV_SUBDOMAIN']
+      ENV.fetch('DEFAULT_TENANT', 'demo')
     ].find do |subdom|
       Tenant.exists?(subdomain: subdom)
     end
-    tenant = Tenant.find_by(subdomain: subdomain)
+
+    Tenant.find_by(subdomain: subdomain)&.id
   end
 end

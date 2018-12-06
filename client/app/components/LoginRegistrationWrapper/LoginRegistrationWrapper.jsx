@@ -31,6 +31,7 @@ class LoginRegistrationWrapper extends PureComponent {
       compName: nextCompName
     })
   }
+  
   render () {
     const compName = this.state.compName ? this.state.compName : this.props.initialCompName
     const Comp = this.components[compName]

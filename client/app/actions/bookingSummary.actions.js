@@ -30,15 +30,15 @@ function update (data) {
       dispatch({ type: bookingSummaryConstants.UPDATE, payload: { modeOfTransport } })
     }
   }
-
-  if (get(data, ['shipment', 'load_type'], null) === 'container' && data.containers) {
+  const loadType = get(data, ['shipment', 'load_type'], null)
+  if (loadType === 'container' && data.containers) {
     data.containers.forEach((container) => {
       payload.totalWeight += container.quantity * container.payload_in_kg
     })
   } else if (data.aggregated) {
     payload.totalVolume = data.aggregatedCargo.volume
     payload.totalWeight = data.aggregatedCargo.weight
-  } else if (data.cargo_items) {
+  } else if (loadType === 'cargo_item' && data.cargoItems) {
     data.cargoItems.forEach((cargoItem) => {
       payload.totalVolume += cargoItem.quantity * ['x', 'y', 'z'].reduce((product, coordinate) => (
         product * cargoItem[`dimension_${coordinate}`]

@@ -31,6 +31,7 @@ export class Modal extends Component {
   componentWillUnmount () {
     window.removeEventListener('resize', () => this.updateDimensions(this.animationTime))
   }
+
   triggerUpdateDimensions (animationTime) {
     this.updatedDimensions = false
     this.animationTime = animationTime
@@ -84,7 +85,7 @@ export class Modal extends Component {
     component.props.updateDimensions = this.triggerUpdateDimensions
 
     return (
-      <div className={`${styles.full_size} flex-none layout-row layout-align-center-center`}>
+      <div className={`${styles.full_size} flex-none layout-row layout-align-center-center ${this.props.classNames}`}>
         <div className={`${styles.modal_background} ${styles.full_size}`} onClick={this.hide} />
 
         <div
@@ -114,6 +115,7 @@ Modal.propTypes = {
 }
 
 Modal.defaultProps = {
+  classNames: '',
   minHeight: '',
   flexOptions: '',
   showExit: false,

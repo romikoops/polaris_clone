@@ -93,17 +93,6 @@ const ButtonSection = ({
   )
 }
 
-ButtonSection.propTypes = {
-  theme: PropTypes.theme,
-  goTo: PropTypes.func.isRequired,
-  toAdmin: PropTypes.func.isRequired,
-  user: PropTypes.user,
-  tenant: PropTypes.tenant,
-  t: PropTypes.func.isRequired,
-  bookNow: PropTypes.func,
-  className: PropTypes.string
-}
-
 ButtonSection.defaultProps = {
   theme: null,
   user: null,

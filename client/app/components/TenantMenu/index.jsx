@@ -1,7 +1,6 @@
 import React from 'react'
-import PropTypes from '../../prop-types'
 import styles from './index.scss'
-import CollapsingContent from '../CollapsingBar/Content';
+import CollapsingContent from '../CollapsingBar/Content'
 
 class TenantMenu extends React.PureComponent {
   constructor (props) {
@@ -11,6 +10,7 @@ class TenantMenu extends React.PureComponent {
     }
     this.toggleExpander = this.toggleExpander.bind(this)
   }
+
   toggleExpander (key) {
     this.setState({
       expander: {
@@ -19,13 +19,15 @@ class TenantMenu extends React.PureComponent {
       }
     })
   }
+
   switchTenant (tenant) {
     const { appDispatch } = this.props
     appDispatch.overrideTenant(tenant.value.id)
     this.toggleExpander('tenant')
   }
+
   render () {
-    const { tenants } = this.props
+    const { tenant, tenants } = this.props
 
     return (
       <div>
@@ -35,10 +37,15 @@ class TenantMenu extends React.PureComponent {
           onClick={() => this.toggleExpander('tenant')}
         >
           <div
-            className={`${styles.tenant_menu} pointy`}
+            className={`${styles.tenant_menu} pointy ccb_change_tenant`}
             style={{ boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.15)' }}
           >
-            <p>Change Tenant</p>
+            <p>
+              {tenant.name}
+              (
+              {tenant.subdomain}
+              ) | Change Tenant
+            </p>
           </div>
           <div
             className={`flex-10 layout-row layout-align-center-center ${styles.arrow_index}`}
@@ -56,11 +63,12 @@ class TenantMenu extends React.PureComponent {
             >
               {tenants.map(t => (
                 <div
+                  key={t.value.subdomain}
                   className="pointy emulate_link layout-row flex-33"
                   style={{ paddingRight: '25px', paddingBottom: '7px' }}
                   onClick={() => this.switchTenant(t)}
                 >
-                  <p>{t.label}</p>
+                  <p>{t.label} ({t.value.subdomain})</p>
                 </div>
               ))}
             </div>
@@ -71,14 +79,8 @@ class TenantMenu extends React.PureComponent {
   }
 }
 
-TenantMenu.propTypes = {
-  appDispatch: PropTypes.shape({
-    overrideTenant: PropTypes.func
-  }).isRequired,
-  tenants: PropTypes.arrayOf(PropTypes.object)
-}
-
 TenantMenu.defaultProps = {
+  tenant: {},
   tenants: []
 }
 

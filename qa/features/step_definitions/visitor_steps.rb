@@ -52,9 +52,9 @@ When('I select {string} as {string}') do |place, type|
 
     expect(page).to have_no_css('#floatingCirclesG', wait: 60)
     expect(page).to have_css(".ccb_#{type.downcase}_found", wait: 60, visible: false)
-    
-  
-   
+
+
+
   else
     elem = find('div', class: 'Select-placeholder', text: type, wait: 60)
     elem.sibling('.Select-input').find('input').send_keys(place)

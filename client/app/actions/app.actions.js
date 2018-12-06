@@ -41,70 +41,50 @@ function setTenants () {
 }
 
 function overrideTenant (tenantId) {
-  function request () {
-    return { type: appConstants.OVERRIDE_TENANT_REQUEST }
-  }
-  function success (payload) {
-    const { localStorage } = window
-    localStorage.setItem('overriddenTenantId', payload)
+  const { localStorage } = window
 
+  function success (payload) {
     return { type: appConstants.OVERRIDE_TENANT_SUCCESS, payload }
-  }
-  function failure (error) {
-    return { type: appConstants.OVERRIDE_TENANT_ERROR, error }
   }
 
   return (dispatch) => {
-    dispatch(request)
-    appService.overrideTenant(tenantId).then(
-      (resp) => {
-        dispatch(success(tenantId))
-      },
-      (error) => {
-        error.then((data) => {
-          dispatch(failure({ type: 'error', text: data.message }))
-        })
-      }
-    )
+    localStorage.setItem('tenantId', tenantId)
+    dispatch(success(tenantId))
+
+    dispatch(getTenant())
   }
 }
 
 function getTenantId () {
   const { localStorage } = window
-  const overriddenTenantId = localStorage.getItem('overriddenTenantId')
-  function request () {
-    return { type: appConstants.SET_TENANT_REQUEST }
-  }
-  function success (payload) {
-    localStorage.setItem('tenantId', payload.tenant.id)
 
-    return { type: appConstants.SET_TENANT_SUCCESS, payload }
+  function request () {
+    return { type: appConstants.SET_TENANT_ID_REQUEST }
   }
-  function newIdSuccess (payload) {
-    return { type: appConstants.OVERRIDE_TENANT_SUCCESS, payload }
+
+  function success (payload) {
+    return { type: appConstants.SET_TENANT_ID_SUCCESS, payload }
   }
+
   function failure (error) {
-    return { type: appConstants.SET_TENANT_ERROR, error }
+    return { type: appConstants.SET_TENANT_ID_ERROR, error }
   }
 
   return (dispatch) => {
     dispatch(request)
-    if (overriddenTenantId) {
+
+    const tenantId = localStorage.getItem('tenantId')
+
+    if (tenantId) {
+      dispatch(success(tenantId))
+      dispatch(getTenant())
+    } else {
       appService.getTenantId().then(
         (resp) => {
-          dispatch(newIdSuccess(overriddenTenantId))
-        },
-        (error) => {
-          error.then((data) => {
-            dispatch(failure({ type: 'error', text: data.message }))
-          })
-        }
-      )
-    } else {
-      dispatch(request)
-      appService.setTenant().then(
-        (resp) => {
-          dispatch(success(resp.data))
+          localStorage.setItem('tenantId', resp.data.tenant_id)
+
+          dispatch(success(resp.data.tenant_id))
+          dispatch(getTenant())
         },
         (error) => {
           error.then((data) => {
@@ -113,6 +93,40 @@ function getTenantId () {
         }
       )
     }
+  }
+}
+
+function getTenant () {
+  const { localStorage } = window
+
+  function request () {
+    return { type: appConstants.SET_TENANT_REQUEST }
+  }
+
+  function success (payload) {
+    return { type: appConstants.SET_TENANT_SUCCESS, payload }
+  }
+
+  function failure (error) {
+    return { type: appConstants.SET_TENANT_ERROR, error }
+  }
+
+  return (dispatch) => {
+    const tenantId = localStorage.getItem('tenantId')
+
+    dispatch(request)
+
+    appService.getTenant(tenantId).then(
+      (resp) => {
+        dispatch(success(resp.data))
+        dispatch(fetchCurrencies())
+      },
+      (error) => {
+        error.then((data) => {
+          dispatch(failure({ type: 'error', text: data.message }))
+        })
+      }
+    )
   }
 }
 
@@ -348,21 +362,22 @@ function goTo (path) {
 }
 
 export const appActions = {
-  fetchCurrencies,
-  fetchCountries,
-  invalidateSubdomain,
-  setCurrency,
   clearLoading,
-  overrideTenant,
-  setTenants,
+  fetchCountries,
+  fetchCurrencies,
+  fetchCurrenciesForBase,
+  fetchTenants,
+  getTenant,
   getTenantId,
   goTo,
-  fetchTenants,
-  setTheme,
-  fetchCurrenciesForBase,
+  invalidateSubdomain,
+  overrideTenant,
   refreshRates,
-  toggleTenantCurrencyMode,
-  setTenantCurrencyRates
+  setCurrency,
+  setTenantCurrencyRates,
+  setTenants,
+  setTheme,
+  toggleTenantCurrencyMode
 }
 
 export default appActions

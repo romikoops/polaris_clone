@@ -2,6 +2,7 @@
 
 exports[`shallow render 1`] = `
 <Modal
+  classNames=""
   component={
     <div
       className="body_wrapper flex-100 layout-row layout-align-center-center layout-wrap"

@@ -15,7 +15,7 @@ function IncotermBox ({
   preCarriage,
   tenantScope,
   incoterm,
-  setIncoTerm,
+  setIncoterm,
   errorStyles,
   showIncotermError,
   nextStageAttempt,
@@ -152,7 +152,7 @@ function IncotermBox ({
           className={styles.select}
           value={incoterm}
           options={incoterms}
-          onChange={setIncoTerm}
+          onChange={setIncoterm}
         />
         <span className={errorStyles.error_message}>
           {showIncotermError ? t('common:noBlank') : ''}
@@ -174,7 +174,7 @@ function IncotermBox ({
           className={styles.select}
           value={incoterm}
           options={filteredOptions}
-          onChange={setIncoTerm}
+          onChange={setIncoterm}
         />
         <span className={errorStyles.error_message}>
           {showIncotermError ? t('common:noBlank') : ''}
@@ -213,7 +213,7 @@ IncotermBox.propTypes = {
   preCarriage: PropTypes.bool,
   tenantScope: PropTypes.objectOf(PropTypes.any),
   incoterm: PropTypes.string,
-  setIncoTerm: PropTypes.func,
+  setIncoterm: PropTypes.func,
   errorStyles: PropTypes.objectOf(PropTypes.any),
   showIncotermError: PropTypes.bool,
   nextStageAttempt: PropTypes.bool,
@@ -227,7 +227,7 @@ IncotermBox.defaultProps = {
   preCarriage: false,
   tenantScope: {},
   incoterm: '',
-  setIncoTerm: null,
+  setIncoterm: null,
   errorStyles: {},
   showIncotermError: false,
   nextStageAttempt: false,

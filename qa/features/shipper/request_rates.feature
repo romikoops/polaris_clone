@@ -6,6 +6,9 @@ Feature: Request Dedicated Pricing
   So that I know how much shipping my cargo would cost.
   I also would like to request a dedicated rate for a route
 
+  Background:
+    Given I have accepted cookies
+
   Scenario: Requesting New Rate
     Given I am logged in as a shipper successfully
       And I select "Pricings"

@@ -11,8 +11,8 @@ backend:
     pullPolicy: Always
   resources:
     requests:
-      memory: 256Mi
-      cpu: 100m
+      memory: 512Mi
+      cpu: 250m
 
 frontend:
   image:
@@ -21,12 +21,13 @@ frontend:
     pullPolicy: Always
   resources:
     requests:
-      memory: 10Mi
-      cpu: 10m
+      memory: 24Mi
+      cpu: 100m
 
 service:
   enabled: true
   url:
+  domain:
 
 ingress:
   enabled: true
@@ -35,7 +36,13 @@ masterKey: ""
 
 nodeSelector: {}
 tolerations: []
-affinity: {}
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: cloud.google.com/gke-preemptible
+          operator: Exists
 
 postgresql:
   enabled: true
@@ -75,15 +82,15 @@ postgresql:
 
   resources:
     requests:
-      memory: 256Mi
-      cpu: 100m
+      memory: 512Mi
+      cpu: 250m
 
   nodeSelector: {}
   tolerations: []
-  affinity: {}
-    # nodeAffinity:
-    #   requiredDuringSchedulingIgnoredDuringExecution:
-    #     nodeSelectorTerms:
-    #     - matchExpressions:
-    #       - key: cloud.google.com/gke-preemptible
-    #         operator: Exists
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: cloud.google.com/gke-preemptible
+            operator: Exists

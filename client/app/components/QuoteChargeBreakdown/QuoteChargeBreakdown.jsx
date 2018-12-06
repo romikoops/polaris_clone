@@ -81,6 +81,53 @@ class QuoteChargeBreakdown extends Component {
     return name
   }
 
+  dynamicValueExtractor (key, price) {
+    const { scope } = this.props
+    if (scope.freight_in_original_currency && key === 'cargo') {
+      const feeKeys = Object.keys(price[1]).filter(key => !this.unbreakableKeys.includes(key))
+      const currency = price[1][feeKeys[0]].currency
+      let value = 0.0
+      feeKeys.forEach((fKey) => {
+        value += parseFloat(price[1][fKey].value)
+      })
+      const overridePrice = [price[0], {
+        ...price[1],
+        total: {
+          value,
+          currency
+        }
+      }]
+
+      return { currency, value, overridePrice }
+    }
+    const currency = ['export', 'import'].includes(key) ? get(price, ['1', 'currency'], null) : get(price, ['1', 'total', 'currency'], null)
+    const value = ['export', 'import'].includes(key) ? get(price, ['1', 'value'], null) : get(price, ['1', 'total', 'value'], null)
+
+    return { currency, value, overridePrice: price }
+  }
+
+  dynamicSectionTotal (key) {
+    const { scope, quote } = this.props
+    if (scope.freight_in_original_currency && key === 'cargo') {
+      const pricesArray = Object.entries(quote[key]).filter(array => !this.unbreakableKeys.includes(array[0]))
+      const feeKeys = Object.keys(pricesArray[0][1]).filter(pKey => !this.unbreakableKeys.includes(pKey))
+      const { currency } = pricesArray[0][1][feeKeys[0]]
+      let value = 0.0
+      pricesArray.forEach((price) => {
+        feeKeys.forEach((fKey) => {
+          value += parseFloat(price[1][fKey].value)
+        })
+      })
+
+      return `${formattedPriceValue(value)} ${currency}`
+    }
+    if (scope.hide_sub_totals || (scope.cargo_price_notes && scope.cargo_price_notes[key])) {
+      return ''
+    }
+
+    return `${formattedPriceValue(quote[key].total.value)} ${quote[key].total.currency}`
+  }
+
   generateContent (key) {
     const { quote, t, scope } = this.props
 
@@ -90,8 +137,8 @@ class QuoteChargeBreakdown extends Component {
     const currencySections = {}
     const currencyTotals = {}
     contentSections.forEach((price) => {
-      const currency = ['export', 'import'].includes(key) ? get(price, ['1', 'currency'], null) : get(price, ['1', 'total', 'currency'], null)
-      const value = ['export', 'import'].includes(key) ? get(price, ['1', 'value'], null) : get(price, ['1', 'total', 'value'], null)
+      const { currency, value, overridePrice } = this.dynamicValueExtractor(key, price)
+
       if (value && currency) {
         if (!currencySections[currency]) {
           currencySections[currency] = []
@@ -100,7 +147,7 @@ class QuoteChargeBreakdown extends Component {
           currencyTotals[currency] = 0.0
         }
         currencyTotals[currency] += parseFloat(value)
-        currencySections[currency].push(price)
+        currencySections[currency].push(overridePrice)
       }
     })
 
@@ -291,9 +338,7 @@ class QuoteChargeBreakdown extends Component {
               <div className="flex-50 layout-row layout-align-end-center">
                 <p>
                   {
-                    scope.hide_sub_totals || (scope.cargo_price_notes && scope.cargo_price_notes[key])
-                      ? ''
-                      : `${formattedPriceValue(quote[key].total.value)} ${quote[key].total.currency}`
+                    this.dynamicSectionTotal(key)
                   }
                 </p>
               </div>

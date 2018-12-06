@@ -2,7 +2,7 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="full_size flex-none layout-row layout-align-center-center"
+  className="full_size flex-none layout-row layout-align-center-center "
 >
   <div
     className="modal_background full_size"

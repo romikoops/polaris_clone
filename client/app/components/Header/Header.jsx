@@ -196,6 +196,7 @@ class Header extends Component {
 
     const loginModal = (
       <Modal
+        classNames="ccb_login_modal"
         component={loginComponent}
         verticalPadding="30px"
         horizontalPadding="40px"
