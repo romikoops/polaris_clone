@@ -88,6 +88,7 @@ export default function SquareButton ({
       style={borderGradient}
     >
       <button
+        type="button"
         className={`${styles.square_btn} ${bStyle} ${sizeClass} ${!disabled && styles.clickable} ${classNames}`}
         onClick={disabled ? handleDisabled : handleNext}
         style={btnStyle}

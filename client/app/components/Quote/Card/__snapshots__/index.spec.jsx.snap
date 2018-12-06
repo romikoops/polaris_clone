@@ -399,7 +399,7 @@ exports[`detailed billing working properly 1`] = `
           <RoundButton
             active={true}
             back={false}
-            classNames="pointy layout-row layout-align-center-center add_button shorter"
+            classNames="ccb_select_quote pointy layout-row layout-align-center-center add_button shorter"
             disabled={false}
             flexContainer="100"
             handleDisabled={null}
@@ -848,7 +848,7 @@ exports[`shallow rendering 1`] = `
           <RoundButton
             active={true}
             back={false}
-            classNames="pointy layout-row layout-align-center-center add_button shorter"
+            classNames="ccb_select_quote pointy layout-row layout-align-center-center add_button shorter"
             disabled={false}
             flexContainer="100"
             handleDisabled={null}
@@ -1280,7 +1280,7 @@ exports[`show schedule options working 1`] = `
           <RoundButton
             active={true}
             back={false}
-            classNames="pointy layout-row layout-align-center-center add_button shorter"
+            classNames="ccb_select_quote pointy layout-row layout-align-center-center add_button shorter"
             disabled={false}
             flexContainer="100"
             handleDisabled={null}
@@ -1729,7 +1729,7 @@ exports[`show schedules set to true 1`] = `
           <RoundButton
             active={true}
             back={false}
-            classNames="pointy layout-row layout-align-center-center add_button shorter"
+            classNames="ccb_select_quote pointy layout-row layout-align-center-center add_button shorter"
             disabled={false}
             flexContainer="100"
             handleDisabled={null}

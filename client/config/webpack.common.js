@@ -130,6 +130,8 @@ module.exports = {
       }
     ),
 
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+
     new CopyWebpackPlugin([
       { from: 'app/config.201811291749.js' }
     ]),

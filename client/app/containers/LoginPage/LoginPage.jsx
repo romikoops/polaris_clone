@@ -63,7 +63,7 @@ class LoginPage extends React.Component {
     if (this.state.forgotPassword) {
       return <ForgotPassword focusStyles={focusStyles} theme={theme} />
     }
-    
+
     const ie11Positioning =
       navigator.userAgent.includes('MSIE') || document.documentMode ? styles.login_ie_11 : ''
 
@@ -106,7 +106,7 @@ class LoginPage extends React.Component {
           </a>
         </div>
         <div className={`form-group ${styles.form_group_submit_btn}`}>
-          <RoundButton text="Sign In" theme={theme} active />
+          <RoundButton classNames="ccb_signin" text="Sign In" theme={theme} active />
           <div className={styles.spinner}>{loggingIn && <LoadingSpinner />}</div>
         </div>
       </Formsy>

@@ -20,14 +20,14 @@ metadata:
       more_set_headers "X-Robots-Tag: none";
 spec:
   rules:
-  - host: "api.{{ include "hostname" .Values.service.url }}"
+  - host: "api-{{ include "hostname" .Values.service.url }}"
     http:
       paths:
         - path: /
           backend:
             serviceName: {{ $serviceName }}
             servicePort: http-backend
-  - host: "*.{{ include "hostname" .Values.service.url }}"
+  - host: "{{ include "hostname" .Values.service.url }}"
     http:
       paths:
       - path: /
@@ -35,7 +35,7 @@ spec:
           serviceName: {{ $serviceName }}
           servicePort: http-frontend
   tls:
-  - secretName: {{ $serviceName }}-tls
+  - secretName: {{ .Values.service.domain }}-tls
     hosts:
-    - "*.{{ include "hostname" .Values.service.url }}"
+    - "*.{{ .Values.service.domain }}"
 {{- end }}

@@ -44,6 +44,9 @@ Capybara.register_driver :crossbrowser do |app|
     build: ENV['CI_COMMIT_SHA'],
     max_duration: ENV.fetch('CROSSBROWSER_MAX_DURATION', 1800), # 30min
 
+    record_video: true,
+    record_network: true,
+
     nativeEvents: true
   )
 

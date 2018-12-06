@@ -13,5 +13,5 @@ google:
 smtp:
   host: smtp.mailgun.org
   domain: itsmycargo.tech
-  username: review@mg.itsmycargo.tech
+  username: review@itsmycargo.tech
   password: <%= Rails.application.credentials.dig(:review, :smtp, :password) %>

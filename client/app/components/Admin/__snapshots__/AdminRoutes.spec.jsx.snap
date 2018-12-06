@@ -49,6 +49,7 @@ exports[`state.newRoute is true 1`] = `
     className="flex-100 layout-row layout-wrap layout-align-start-start"
   >
     <Modal
+      classNames=""
       component={
         <AdminRouteForm
           adminDispatch={
