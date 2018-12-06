@@ -154,20 +154,19 @@ class Admin::PricingsController < Admin::AdminBaseController
   end
 
   def download_pricings
-    received_options = params[:options].as_json.deep_symbolize_keys!
+    mot = download_params[:mot]
+    load_type = download_params[:load_type]
+    key = "pricing_#{load_type}"
 
-    key = "pricing_#{received_options[:load_type]}"
-
-    mot = received_options[:mot]
-    load_type = case received_options[:load_type]
+    load_type_renamed = case load_type
                 when 'cargo_item' then 'LCL'
                 when 'container' then 'FCL'
                 else
                   raise StandardError, 'Unknown load type! Expected item of [cargo_item, container].'
                 end
-    file_name = "#{current_user.tenant.name}__pricing_#{mot.downcase}_#{load_type.downcase}"
+    file_name = "#{current_user.tenant.name}__pricing_#{mot.downcase}_#{load_type_renamed.downcase}"
 
-    klass = ExcelDataServices::FileWriter.const_get("#{mot.capitalize}#{load_type.capitalize}")
+    klass = ExcelDataServices::FileWriter.const_get("#{mot.capitalize}#{load_type_renamed.capitalize}")
     options = { tenant_id: current_user.tenant.id, file_name: file_name }
 
     document = klass.new(options).perform
@@ -298,6 +297,10 @@ class Admin::PricingsController < Admin::AdminBaseController
     params.require(:update).permit(
       :wm, :heavy_wm, :heavy_kg
     )
+  end
+
+  def download_params
+    params.require(:options).permit(:mot, :load_type)
   end
 
   def itinerary_pricing_exists?(args)

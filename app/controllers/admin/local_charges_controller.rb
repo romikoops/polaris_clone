@@ -27,37 +27,46 @@ class Admin::LocalChargesController < ApplicationController
 
   def edit
     data = params[:data].as_json
-    id = data["id"]
-    data.delete("id")
+    id = data['id']
+    data.delete('id')
     local_charge = LocalCharge.find(id)
-    local_charge.update_attributes(fees: data["fees"])
+    local_charge.update_attributes(fees: data['fees'])
     response_handler(local_charge)
   end
 
   def edit_customs
     data = params[:data].as_json
-    id = data["id"]
-    data.delete("id")
+    id = data['id']
+    data.delete('id')
     customs_fee = CustomsFee.find(id)
-    customs_fee.update_attributes(fees: data["fees"])
+    customs_fee.update_attributes(fees: data['fees'])
     response_handler(customs_fee)
   end
 
   def download_local_charges
-    options = params[:options].as_json.deep_symbolize_keys!
-    options[:tenant_id] = current_user.tenant_id
-    url = DocumentService::LocalChargesWriter.new(options).perform
-    response_handler(url: url, key: "local_charges")
+    mot = download_params[:mot]
+    file_name = "#{current_user.tenant.name}__local_charges_#{mot.downcase}"
+
+    options = { tenant_id: current_user.tenant.id, file_name: file_name, mode_of_transport: mot }
+    document = ExcelDataServices::FileWriter::LocalCharges.new(options).perform
+
+    response_handler(key: 'local_charges', url: rails_blob_url(document.file, disposition: 'attachment'))
   end
 
   def overwrite
     if params[:file]
-      req = { "xlsx" => params[:file] }
+      req = { 'xlsx' => params[:file] }
       resp = ExcelTool::OverwriteLocalCharges.new(params: req, user: current_user).perform
 
       response_handler(resp)
     else
       response_handler(false)
     end
+  end
+
+  private
+
+  def download_params
+    params.require(:options).permit(:mot)
   end
 end
