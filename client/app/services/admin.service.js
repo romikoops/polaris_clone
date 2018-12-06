@@ -132,6 +132,14 @@ function getHub (id) {
 
   return fetch(`${getTenantApiUrl()}/admin/hubs/${id}`, requestOptions).then(handleResponse)
 }
+function getLocalCharges (id) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch(`${getTenantApiUrl()}/admin/local_charges/${id}/hub`, requestOptions).then(handleResponse)
+}
 
 function wizardHubs (file) {
   const formData = new FormData()
@@ -753,7 +761,8 @@ export const adminService = {
   deltaShipmentsPage,
   searchPricings,
   uploadDocument,
-  updateEmails
+  updateEmails,
+  getLocalCharges
 }
 
 export default adminService

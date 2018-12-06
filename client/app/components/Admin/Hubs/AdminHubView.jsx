@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
-import { AdminHubTile } from '../'
+import { AdminHubTile } from '..'
 import styles from '../Admin.scss'
 import { adminClicked as clickTool } from '../../../constants'
 import AdminHubFees from './Fees'
@@ -39,10 +39,12 @@ export class AdminHubView extends Component {
     this.toggleHubActive = this.toggleHubActive.bind(this)
     this.getItineraryFromLayover = this.getItineraryFromLayover.bind(this)
   }
+
   componentDidMount () {
     this.checkAndSetCharges(this.props)
     this.prepPages()
   }
+
   componentWillReceiveProps (nextProps) {
     if (!this.state.mapWidth) {
       const mapWidth = this.mapElement ? this.mapElement.clientWidth : '1000'
@@ -74,6 +76,7 @@ export class AdminHubView extends Component {
 
     return routes.filter(x => x.id === id)[0]
   }
+
   deltaPage (val) {
     this.setState((prevState) => {
       const newPageVal = prevState.page + val
@@ -82,17 +85,20 @@ export class AdminHubView extends Component {
       return { page }
     })
   }
+
   prepPages () {
     const { hubData } = this.props
     const { routes } = hubData
     const numPages = Math.ceil(routes.length / 12)
     this.setState({ numPages })
   }
+
   toggleHubActive () {
     const { hubData, adminActions } = this.props
     const { hub } = hubData
     adminActions.activateHub(hub.id)
   }
+
   checkAndSetCharges (props) {
     const {
       hubData, loading, adminActions, match
@@ -107,6 +113,7 @@ export class AdminHubView extends Component {
       this.filterChargesByLoadType({ value: 'lcl', label: 'Lcl' }, 'customs')
     }
   }
+
   filterChargesByLoadType (e, target) {
     if (target === 'customs') {
       const filteredCustoms = this.props.hubData.customs.filter(x => x.load_type === e.value)[0]
@@ -121,20 +128,24 @@ export class AdminHubView extends Component {
       })
     }
   }
+
   deleteHub (id) {
     const { hubData, adminActions } = this.props
     const { hub } = hubData
     adminActions.deleteHub(hub.id, true)
     this.closeConfirm()
   }
+
   confirmDelete () {
     this.setState({
       confirm: true
     })
   }
+
   closeConfirm () {
     this.setState({ confirm: false })
   }
+
   saveMandatoryChargeEdit (newMandatoryCharge) {
     const { adminActions, hubData } = this.props
     adminActions.updateHubMandatoryCharges(hubData.hub.id, newMandatoryCharge)
@@ -189,7 +200,7 @@ export class AdminHubView extends Component {
     }
 
     const {
-      hub, relatedHubs, routes, address, charges, customs, serviceLevels, counterpartHubs
+      hub, relatedHubs, routes, address
     } = hubData
     if (!hub) {
       return ''
@@ -199,7 +210,6 @@ export class AdminHubView extends Component {
     const borderStyle = gradientBorderGenerator(primary, secondary)
     const gradientBackground = gradientGenerator(primary, secondary)
     const gradientIcon = gradientTextGenerator(primary, secondary)
-    // const hubPhoto = { background: hub.photo }
     const relHubs = []
     relatedHubs.forEach((hubObj) => {
       if (hubObj.id !== hub.id) {
@@ -249,13 +259,15 @@ export class AdminHubView extends Component {
       </div>
     )
 
-    const editorModal = (<AdminHubEdit
-      hub={hub}
-      theme={theme}
-      saveHub={this.saveHub}
-      adminDispatch={adminActions}
-      close={() => this.toggleEdit()}
-    />)
+    const editorModal = (
+      <AdminHubEdit
+  hub={hub}
+        theme={theme}
+  saveHub={this.saveHub}
+        adminDispatch={adminActions}
+        close={() => this.toggleEdit()}
+/>
+    )
     const toggleCSS = `
     .react-toggle--checked .react-toggle-track {
       background: linear-gradient(
@@ -280,11 +292,13 @@ export class AdminHubView extends Component {
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
     const addressString1 = `${hub.address.street_number || ''} ${hub.address.street || ''}, ${hub.address.zip_code || ''}`
     const addressString2 = `${hub.address.city || ''} ${hub.address.country.name || ''}`
-    const mandatoryChargeBox = (<MandatoryChargeBox
-      mandatoryCharge={mandatoryCharge}
-      theme={theme}
-      saveChanges={e => this.saveMandatoryChargeEdit(e)}
-    />)
+    const mandatoryChargeBox = (
+      <MandatoryChargeBox
+        mandatoryCharge={mandatoryCharge}
+  theme={theme}
+  saveChanges={e => this.saveMandatoryChargeEdit(e)}
+/>
+    )
     const gradientBorderStyle =
     theme && theme.colors
       ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
@@ -292,41 +306,50 @@ export class AdminHubView extends Component {
     const sliceStartIndex = (page - 1) * numPerPage
     const sliceEndIndex = (page * numPerPage)
     const itinerariesBox =
-    (<div className="flex-100 layout-row layout-wrap">
-      {routes
-        .slice(sliceStartIndex, sliceEndIndex)
-        .map(r =>
-          (<ItineraryRow
+    (
+      <div className="flex-100 layout-row layout-wrap">
+        {routes
+          .slice(sliceStartIndex, sliceEndIndex)
+          .map(r => (
+<ItineraryRow
             itinerary={r}
             theme={theme}
             adminDispatch={adminActions}
-          />))}
-      <div className="flex-100 layout-row layout-align-center-center margin_bottom">
-        <div
-          className={`
+          />
+))}
+        <div className="flex-100 layout-row layout-align-center-center margin_bottom">
+          <div
+            className={`
                 flex-15 layout-row layout-align-center-center pointy
                 ${styles.navigation_button} ${page === 1 ? styles.disabled : ''}
               `}
-          onClick={page > 1 ? () => this.deltaPage(-1) : null}
-        >
-          {/* style={page === 1 ? { display: 'none' } : {}} */}
-          <i className="fa fa-chevron-left" />
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;{t('common:basicBack')}</p>
-        </div>
-        {}
-        <p>{page}</p>
-        <div
-          className={`
+            onClick={page > 1 ? () => this.deltaPage(-1) : null}
+          >
+            {/* style={page === 1 ? { display: 'none' } : {}} */}
+            <i className="fa fa-chevron-left" />
+            <p>
+&nbsp;&nbsp;&nbsp;&nbsp;
+{t('common:basicBack')}
+</p>
+          </div>
+          {}
+          <p>{page}</p>
+          <div
+            className={`
                 flex-15 layout-row layout-align-center-center pointy
                 ${styles.navigation_button} ${page < numPages ? '' : styles.disabled}
               `}
-          onClick={page < numPages ? () => this.deltaPage(1) : null}
-        >
-          <p>{t('common:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
-          <i className="fa fa-chevron-right" />
+            onClick={page < numPages ? () => this.deltaPage(1) : null}
+          >
+            <p>
+{t('common:next')}
+&nbsp;&nbsp;&nbsp;&nbsp;
+</p>
+            <i className="fa fa-chevron-right" />
+          </div>
         </div>
       </div>
-    </div>)
+    )
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding">
@@ -347,7 +370,7 @@ export class AdminHubView extends Component {
             {hub.hub_status === 'active' ? deactivate : activate}
 
             <div className={`flex-none layout-row layout-align-center-center ${hubStyles.header_bar_action_buttons}`}>
-              <div className="flex-none layout-row pointy layout-align-center-center" onClick={() => this.toggleEdit()} >
+              <div className="flex-none layout-row pointy layout-align-center-center" onClick={() => this.toggleEdit()}>
                 <i className={`flex-none fa fa-pencil ${hubStyles.edit_icon}`} />
               </div>
               <div className="flex-none layout-row pointy layout-align-center-center" onClick={() => this.confirmDelete()}>
@@ -364,13 +387,19 @@ export class AdminHubView extends Component {
               content={(
                 <div className={`flex-none layout-row layout-align-space-between-center ${hubStyles.hub_title_content}`}>
                   <div className="flex-70 layout-row layout-align-start-center">
-                    <h3 className="flex-none"> {hub.nexus.name}</h3>
+                    <h3 className="flex-none">
+                      {' '}
+                      {hub.nexus.name}
+                    </h3>
                   </div>
                   <div className="flex-30 layout-row layout-align-end-center">
                     <div className="flex-none layout-row layout-align-center-center">
-                      <h4 className="flex-none" > {renderHubType(hub.hub_type)}</h4>
+                      <h4 className="flex-none">
+                        {' '}
+                        {renderHubType(hub.hub_type)}
+                      </h4>
                     </div>
-                    <div className="flex-none layout-row layout-align-center-center" style={{ color: primary }} >
+                    <div className="flex-none layout-row layout-align-center-center" style={{ color: primary }}>
                       {switchIcon(hub.hub_type)}
                     </div>
                   </div>
@@ -384,7 +413,9 @@ export class AdminHubView extends Component {
                 </div>
                 <div className="flex layout-align-space-around-start">
                   <div className="flex-none layout-row layout-wrap ">
-                    <p className={`flex-100  ${hubStyles.address_part_1}`}>{addressString1}<br />
+                    <p className={`flex-100  ${hubStyles.address_part_1}`}>
+                      {addressString1}
+                      <br />
                       <strong>{addressString2}</strong>
                     </p>
                   </div>
@@ -392,12 +423,12 @@ export class AdminHubView extends Component {
               </div>
               <div className={`flex-45 layout-row ${hubStyles.lat_lng_box}`}>
                 <div className="flex-50 layout-column layout-align-center-center">
-                  <p className={` ${hubStyles.lat_lng}`}>{location.latitude}</p>
+                  <p className={` ${hubStyles.lat_lng}`}>{address.latitude}</p>
                   <p className={` ${hubStyles.lat_lng}`}>{t('admin:latitude')}</p>
                 </div>
                 <div className={`flex-none ${hubStyles.lat_lng_divider}`} />
                 <div className="flex-50 layout-column layout-align-center-center">
-                  <p className={` ${hubStyles.lat_lng}`}>{location.longitude}</p>
+                  <p className={` ${hubStyles.lat_lng}`}>{address.longitude}</p>
                   <p className={` ${hubStyles.lat_lng}`}>{t('admin:longitude')}</p>
                 </div>
               </div>
@@ -405,12 +436,12 @@ export class AdminHubView extends Component {
           </div>
 
           <div className="flex-100 layout-row layout-align-space-between-center buffer_10">
-            <div className={`flex-25 layout-row layout-align-center-center ${hubStyles.hub_photo}`} style={gradientBackground} >
-              <div className={`flex-none layout-row layout-align-space-between-center ${hubStyles.hub_photo_content}`} >
+            <div className={`flex-25 layout-row layout-align-center-center ${hubStyles.hub_photo}`} style={gradientBackground}>
+              <div className={`flex-none layout-row layout-align-space-between-center ${hubStyles.hub_photo_content}`}>
                 <img src={hub.photo || 'https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg'} alt="" />
               </div>
             </div>
-            <div className={`flex layout-row ${hubStyles.map_box}`} ref={(mapElement) => { this.mapElement = mapElement }} >
+            <div className={`flex layout-row ${hubStyles.map_box}`} ref={(mapElement) => { this.mapElement = mapElement }}>
               <GmapsWrapper
                 theme={theme}
                 component={Map}
@@ -423,11 +454,7 @@ export class AdminHubView extends Component {
           <div className="flex-100 layout-row layout-align-start-start layout-wrap section_padding">
             <AdminHubFees
               theme={theme}
-              charges={charges}
-              customs={customs}
-              serviceLevels={serviceLevels}
-              counterpartHubs={counterpartHubs}
-              adminDispatch={adminActions}
+              hubId={hub.id}
               loadType={currentFeeLoadType.value}
             />
           </div>
@@ -447,9 +474,11 @@ export class AdminHubView extends Component {
                 contentClassName="layout-row flex-100 layout-wrap"
                 title={t('admin:itineraries')}
                 content={routes.length === 0
-                  ? (<div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                    {t('admin:noItineraries')}
-                  </div>)
+                  ? (
+                    <div className="flex-100 layout-row layout-align-center-center layout-wrap">
+                      {t('admin:noItineraries')}
+                    </div>
+                  )
                   : itinerariesBox}
               />
             </div>

@@ -207,6 +207,29 @@ export default function admin (state = {}, action) {
 
       return errHub
     }
+    case adminConstants.GET_LOCAL_CHARGES_REQUEST: {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+    case adminConstants.GET_LOCAL_CHARGES_SUCCESS:
+      return {
+        ...state,
+        localCharges: {
+          ...state.localCharges,
+          [action.payload.hub_id]: action.payload
+        },
+        loading: false
+      }
+    case adminConstants.GET_LOCAL_CHARGES_FAILURE: {
+
+      return {
+        ...state,
+        error: { localCharges: action.error },
+        loading: false
+      }
+    }
     case adminConstants.DELETE_HUB_REQUEST: {
       const reqHub = merge({}, state, {
         loading: true

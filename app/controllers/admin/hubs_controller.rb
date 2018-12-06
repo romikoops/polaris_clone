@@ -63,12 +63,8 @@ class Admin::HubsController < Admin::AdminBaseController
       routes:           hub_route_map(hub),
       relatedHubs:      hub.nexus.hubs,
       schedules:        hub.layovers.limit(20),
-      charges:          hub.local_charges,
-      customs:          hub.customs_fees,
       address:         hub.address,
-      mandatoryCharges: hub.mandatory_charge,
-      serviceLevels: service_levels,
-      counterpartHubs: counter_part_hubs
+      mandatoryCharges: hub.mandatory_charge
     }
     response_handler(resp)
   end
