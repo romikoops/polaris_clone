@@ -45,38 +45,6 @@ class PdfHandler
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
   end
 
-  def itinerary_notes(shipment)
-    shipment.itinerary&.notes || []
-  end
-
-  def origin_hub_notes(shipment)
-    shipment.origin_hub&.notes || []
-  end
-
-  def destination_hub_notes(shipment)
-    shipment.destination_hub&.notes || []
-  end
-
-  def hub_notes(shipment)
-    [origin_hub_notes(shipment), destination_hub_notes(shipment)].flatten
-  end
-
-  def on_carriage_notes(shipment)
-    Note.where(trucking_pricing_id: shipment.trucking.dig('on_carriage', 'address_id'))
-  end
-
-  def pre_carriage_notes(shipment)
-    Note.where(trucking_pricing_id: shipment.trucking.dig('pre_carriage', 'address_id'))
-  end
-
-  def trucking_notes(shipment)
-    [on_carriage_notes(shipment), pre_carriage_notes(shipment)].flatten
-  end
-
-  def notes(shipment)
-    [itinerary_notes(shipment), hub_notes(shipment), trucking_notes(shipment)].flatten.uniq
-  end
-
   def generate
     doc_erb = ErbTemplate.new(
       layout: @layout,
@@ -90,7 +58,7 @@ class PdfHandler
         remarks: @remarks,
         tenant: @shipment.tenant,
         cargo_data: @cargo_data,
-        notes: notes(@shipment)
+        notes: @shipment.route_notes
       }
     )
     response = BreezyPDFLite::RenderRequest.new(

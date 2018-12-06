@@ -665,11 +665,9 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
               </div>
             </div>
             <div
-              className="flex-100 layout-row layout-wrap layout-align-space-between-start offset-5 layout-align-start-start"
+              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
             >
-              <h4
-                className="flex-95"
-              >
+              <h4>
                 Remarks:
               </h4>
               <ul>
@@ -1583,11 +1581,9 @@ exports[`props.shipmentData.documents is truthy 1`] = `
               </div>
             </div>
             <div
-              className="flex-100 layout-row layout-wrap layout-align-space-between-start offset-5 layout-align-start-start"
+              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
             >
-              <h4
-                className="flex-95"
-              >
+              <h4>
                 Remarks:
               </h4>
               <ul>
@@ -2666,11 +2662,9 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
               </div>
             </div>
             <div
-              className="flex-100 layout-row layout-wrap layout-align-space-between-start offset-5 layout-align-start-start"
+              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
             >
-              <h4
-                className="flex-95"
-              >
+              <h4>
                 Remarks:
               </h4>
               <ul>
@@ -3578,11 +3572,9 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
               </div>
             </div>
             <div
-              className="flex-100 layout-row layout-wrap layout-align-space-between-start offset-5 layout-align-start-start"
+              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
             >
-              <h4
-                className="flex-95"
-              >
+              <h4>
                 Remarks:
               </h4>
               <ul>
@@ -4490,11 +4482,9 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
               </div>
             </div>
             <div
-              className="flex-100 layout-row layout-wrap layout-align-space-between-start offset-5 layout-align-start-start"
+              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
             >
-              <h4
-                className="flex-95"
-              >
+              <h4>
                 Remarks:
               </h4>
               <ul>
@@ -5402,11 +5392,9 @@ exports[`shallow render 1`] = `
               </div>
             </div>
             <div
-              className="flex-100 layout-row layout-wrap layout-align-space-between-start offset-5 layout-align-start-start"
+              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
             >
-              <h4
-                className="flex-95"
-              >
+              <h4>
                 Remarks:
               </h4>
               <ul>
@@ -6641,11 +6629,9 @@ exports[`with cargo items 1`] = `
               </div>
             </div>
             <div
-              className="flex-100 layout-row layout-wrap layout-align-space-between-start offset-5 layout-align-start-start"
+              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
             >
-              <h4
-                className="flex-95"
-              >
+              <h4>
                 Remarks:
               </h4>
               <ul>
@@ -7838,11 +7824,9 @@ exports[`with containers 1`] = `
               </div>
             </div>
             <div
-              className="flex-100 layout-row layout-wrap layout-align-space-between-start offset-5 layout-align-start-start"
+              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
             >
-              <h4
-                className="flex-95"
-              >
+              <h4>
                 Remarks:
               </h4>
               <ul>

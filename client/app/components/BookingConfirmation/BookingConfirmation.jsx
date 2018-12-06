@@ -441,12 +441,13 @@ export class BookingConfirmation extends Component {
               ) : (
                 ''
               )}
-              {shipment.notes ? (
+              {shipment.route_notes || shipment.notes ? (
                 <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
                   <p className="flex-100">
                     <b>{`${t('common:notes')}:`}</b>
                   </p>
-                  <p className="flex-100 no_m">{shipment.notes}</p>
+                  {shipment.route_notes ? <p className="flex-100 no_m">{shipment.route_notes}</p> : ''}
+                  {shipment.notes ? <p className="flex-100 no_m">{shipment.notes}</p> : ''}
                 </div>
               ) : (
                 ''
@@ -462,8 +463,8 @@ export class BookingConfirmation extends Component {
                 ''
               )}
             </div>
-            <div className={`${INNER_WRAPPER_CELL} offset-5 ${ALIGN_START}`}>
-              <h4 className="flex-95">{`${t('shipment:remarks')}:`}</h4>
+            <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
+              <h4>{`${t('shipment:remarks')}:`}</h4>
               <ul>
                 {remarkBody}
               </ul>

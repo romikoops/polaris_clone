@@ -433,17 +433,17 @@
               <%= shipment.cargo_notes %>
             </p>
           </div>
-  
-          <div class="display-flex">
-            <span>Notes: </span>
-            <p>
-              <% if shipment.notes %>
-                <%= shipment.notes %>
-              <% else %>
-                -
+          
+          <% if notes.exists? %>
+           <div class="remarks">
+            <h4>Notes: </h4>
+            <ul> <% notes.each do |note| %>
+              <li class="note-header"> <%= note.header %></li>
+              <li> <%= note.body  %></li>
               <% end %>
-            </p>
+            </ul>
           </div>
+          <% end %>
           
           <% if remarks.exists? %>
             <div class="remarks">

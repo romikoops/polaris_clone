@@ -25,7 +25,6 @@ import FileUploader from '../FileUploader/FileUploader'
 import ShipmentNotes from '../ShipmentNotes'
 
 class UserShipmentContent extends Component {
-
   constructor (props) {
     super(props)
 
@@ -36,21 +35,25 @@ class UserShipmentContent extends Component {
     this.setFileType = this.setFileType.bind(this)
     this.getRemarks = this.getRemarks.bind(this)
   }
-  componentDidMount(){
+
+  componentDidMount () {
     this.getRemarks()
   }
 
-  getRemarks() {
+  getRemarks () {
     const { remarkDispatch } = this.props
     remarkDispatch.getRemarks()
   }
+
   setFileType (ev) {
     this.setState({ fileType: ev })
   }
+
   deleteDoc (doc) {
     const { userDispatch } = this.props
     userDispatch.deleteDocument(doc.id)
   }
+
   fileFn (file) {
     const { shipmentData, userDispatch } = this.props
     const { shipment } = shipmentData
@@ -106,12 +109,27 @@ class UserShipmentContent extends Component {
       <p className={`flex-none letter_3 ${styles.date}`}>
         {`${formattedDate(shipment.planned_delivery_date)}`}
       </p>
-    )       
-    const remarkBody = remark.quotation ? remark.quotation.shipment.map(_remark => (
-      <li>
-        {_remark.body}
-      </li>
-    )) : ''
+    )
+    const remarkBody = remark.quotation ? (<div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}>
+      <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
+        <div className="layout-column flex-100">
+          <h3
+            style={{ marginBottom: '0px' }}
+          >
+            {t('shipment:remarks')}
+:
+          </h3>
+          <ul>
+            {remark.quotation.shipment.map(_remark => (
+              <li>
+                {_remark.body}
+              </li>
+            )) }
+          </ul>
+        </div>
+      </div>
+    </div>
+    ) : ''
 
     const docChecker = {
       packing_sheet: false,
@@ -130,7 +148,7 @@ class UserShipmentContent extends Component {
 
       Object.keys(uploadedDocs).forEach((key) => {
         docChecker[key] = true
-        
+
         if (key !== 'shipment_recap') {
           docView.push(<div className={`flex-35 layout-row layout-align-start-start layout-padding ${adminStyles.uploaded_doc}`}>
             <i className="fa fa-check flex-none" style={{ color: 'rgb(13, 177, 75)' }} />
@@ -226,7 +244,11 @@ class UserShipmentContent extends Component {
                     {switchIcon(shipment)}
                   </div>
                   <p>{t('shipment:estimatedTimeDelivery')}</p>
-                  <h5>{moment(shipment.planned_eta).diff(moment(shipment.planned_etd), `${t('common:days')}`)} {t('common:days')}</h5>
+                  <h5>
+                    {moment(shipment.planned_eta).diff(moment(shipment.planned_etd), `${t('common:days')}`)}
+                    {' '}
+                    {t('common:days')}
+                  </h5>
                 </div>
               </div>
 
@@ -268,15 +290,17 @@ class UserShipmentContent extends Component {
                           <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
                           <p>{t('shipment:pickUp')}</p>
                         </div>
-                        {scope.detailed_billing && feeHash.trucking_pre ? <div className="flex layout-row layout-align-end-center">
-                          <p>
-                            {feeHash.trucking_pre ? feeHash.trucking_pre.total.currency : ''}
-                            { ' ' }
-                            {feeHash.trucking_pre.edited_total
-                              ? parseFloat(feeHash.trucking_pre.edited_total.value).toFixed(2)
-                              : parseFloat(feeHash.trucking_pre.total.value).toFixed(2)}
-                          </p>
-                        </div>
+                        {scope.detailed_billing && feeHash.trucking_pre ? (
+                          <div className="flex layout-row layout-align-end-center">
+                            <p>
+                              {feeHash.trucking_pre ? feeHash.trucking_pre.total.currency : ''}
+                              { ' ' }
+                              {feeHash.trucking_pre.edited_total
+                                ? parseFloat(feeHash.trucking_pre.edited_total.value).toFixed(2)
+                                : parseFloat(feeHash.trucking_pre.total.value).toFixed(2)}
+                            </p>
+                          </div>
+                        )
                           : '' }
                       </div>
                     </div>
@@ -289,15 +313,17 @@ class UserShipmentContent extends Component {
                           />
                           <p>{t('shipment:delivery')}</p>
                         </div>
-                        {scope.detailed_billing && feeHash.trucking_on ? <div className="flex layout-row layout-align-end-center">
-                          <p>
-                            {feeHash.trucking_on ? feeHash.trucking_on.total.currency : ''}
-                            { ' ' }
-                            {feeHash.trucking_on.edited_total
-                              ? parseFloat(feeHash.trucking_on.edited_total.value).toFixed(2)
-                              : parseFloat(feeHash.trucking_on.total.value).toFixed(2)}
-                          </p>
-                        </div>
+                        {scope.detailed_billing && feeHash.trucking_on ? (
+                          <div className="flex layout-row layout-align-end-center">
+                            <p>
+                              {feeHash.trucking_on ? feeHash.trucking_on.total.currency : ''}
+                              { ' ' }
+                              {feeHash.trucking_on.edited_total
+                                ? parseFloat(feeHash.trucking_on.edited_total.value).toFixed(2)
+                                : parseFloat(feeHash.trucking_on.total.value).toFixed(2)}
+                            </p>
+                          </div>
+                        )
                           : ''}
 
                       </div>
@@ -313,15 +339,17 @@ class UserShipmentContent extends Component {
                             {t('shipment:originLocalCharges')}
                           </p>
                         </div>
-                        {scope.detailed_billing && feeHash.export ? <div className="flex layout-row layout-align-end-center">
-                          <p>
-                            {feeHash.export ? feeHash.export.total.currency : ''}
-                            { ' ' }
-                            {feeHash.export.edited_total
-                              ? parseFloat(feeHash.export.edited_total.value).toFixed(2)
-                              : parseFloat(feeHash.export.total.value).toFixed(2)}
-                          </p>
-                        </div>
+                        {scope.detailed_billing && feeHash.export ? (
+                          <div className="flex layout-row layout-align-end-center">
+                            <p>
+                              {feeHash.export ? feeHash.export.total.currency : ''}
+                              { ' ' }
+                              {feeHash.export.edited_total
+                                ? parseFloat(feeHash.export.edited_total.value).toFixed(2)
+                                : parseFloat(feeHash.export.total.value).toFixed(2)}
+                            </p>
+                          </div>
+                        )
                           : ''}
                       </div>
                     </div>
@@ -338,15 +366,17 @@ class UserShipmentContent extends Component {
                             {t('shipment:destinationLocalCharges')}
                           </p>
                         </div>
-                        {scope.detailed_billing && feeHash.import ? <div className="flex layout-row layout-align-end-center">
-                          <p>
-                            {feeHash.import ? feeHash.import.total.currency : ''}
-                            { ' ' }
-                            {feeHash.import.edited_total
-                              ? parseFloat(feeHash.import.edited_total.value).toFixed(2)
-                              : parseFloat(feeHash.import.total.value).toFixed(2)}
-                          </p>
-                        </div>
+                        {scope.detailed_billing && feeHash.import ? (
+                          <div className="flex layout-row layout-align-end-center">
+                            <p>
+                              {feeHash.import ? feeHash.import.total.currency : ''}
+                              { ' ' }
+                              {feeHash.import.edited_total
+                                ? parseFloat(feeHash.import.edited_total.value).toFixed(2)
+                                : parseFloat(feeHash.import.total.value).toFixed(2)}
+                            </p>
+                          </div>
+                        )
                           : ''}
                       </div>
                     </div>
@@ -357,18 +387,20 @@ class UserShipmentContent extends Component {
                             className="fa fa-ship clip flex-none layout-align-center-center"
                             style={selectedStyle}
                           />
-                          <p>{t('shipment:motCargo', { mot: capitalize(shipment.mode_of_transport)})}</p>
+                          <p>{t('shipment:motCargo', { mot: capitalize(shipment.mode_of_transport) })}</p>
                         </div>
                         {scope.detailed_billing && feeHash.cargo
-                          ? <div className="flex layout-row layout-align-end-center">
-                            <p>
-                              {feeHash.cargo ? feeHash.cargo.total.currency : ''}
-                              { ' ' }
-                              {feeHash.cargo.edited_total
-                                ? parseFloat(feeHash.cargo.edited_total.value).toFixed(2)
-                                : parseFloat(feeHash.cargo.total.value).toFixed(2)}
-                            </p>
-                          </div>
+                          ? (
+                            <div className="flex layout-row layout-align-end-center">
+                              <p>
+                                {feeHash.cargo ? feeHash.cargo.total.currency : ''}
+                                { ' ' }
+                                {feeHash.cargo.edited_total
+                                  ? parseFloat(feeHash.cargo.edited_total.value).toFixed(2)
+                                  : parseFloat(feeHash.cargo.total.value).toFixed(2)}
+                              </p>
+                            </div>
+                          )
                           : ''}
                       </div>
 
@@ -387,15 +419,17 @@ class UserShipmentContent extends Component {
                           <p>{t('shipment:customs')}</p>
                         </div>
                         {scope.detailed_billing && feeHash.customs
-                          ? <div className="flex layout-row layout-align-end-center">
-                            <p>
-                              {feeHash.customs ? feeHash.customs.total.currency : ''}
-                              { ' ' }
-                              {feeHash.customs.edited_total
-                                ? parseFloat(feeHash.customs.edited_total.value).toFixed(2)
-                                : parseFloat(feeHash.customs.total.value).toFixed(2)}
-                            </p>
-                          </div>
+                          ? (
+                            <div className="flex layout-row layout-align-end-center">
+                              <p>
+                                {feeHash.customs ? feeHash.customs.total.currency : ''}
+                                { ' ' }
+                                {feeHash.customs.edited_total
+                                  ? parseFloat(feeHash.customs.edited_total.value).toFixed(2)
+                                  : parseFloat(feeHash.customs.total.value).toFixed(2)}
+                              </p>
+                            </div>
+                          )
                           : '' }
                       </div>
                     </div>
@@ -406,23 +440,27 @@ class UserShipmentContent extends Component {
                           <p>{t('shipment:insurance')}</p>
                         </div>
                         {scope.detailed_billing && feeHash.insurance && (feeHash.insurance.value || feeHash.insurance.edited_total)
-                          ? <div className="flex layout-row layout-align-end-center">
-                            <p>
-                              {feeHash.insurance ? feeHash.insurance.currency : ''}
-                              { ' ' }
-                              {feeHash.insurance.edited_total
-                                ? parseFloat(feeHash.insurance.edited_total.value).toFixed(2)
-                                : ''}
-                              {feeHash.insurance.value
-                                ? parseFloat(feeHash.insurance.value).toFixed(2)
-                                : ''}
-                            </p>
-                          </div>
+                          ? (
+                            <div className="flex layout-row layout-align-end-center">
+                              <p>
+                                {feeHash.insurance ? feeHash.insurance.currency : ''}
+                                { ' ' }
+                                {feeHash.insurance.edited_total
+                                  ? parseFloat(feeHash.insurance.edited_total.value).toFixed(2)
+                                  : ''}
+                                {feeHash.insurance.value
+                                  ? parseFloat(feeHash.insurance.value).toFixed(2)
+                                  : ''}
+                              </p>
+                            </div>
+                          )
                           : '' }
                         {scope.detailed_billing && feeHash.insurance && !feeHash.insurance.value && !feeHash.insurance.edited_total
-                          ? <div className="flex layout-row layout-align-end-center">
-                            <p>{t('shipment:requested')}</p>
-                          </div> : ''}
+                          ? (
+                            <div className="flex layout-row layout-align-end-center">
+                              <p>{t('shipment:requested')}</p>
+                            </div>
+                          ) : ''}
                       </div>
                     </div>
                   </div>
@@ -432,31 +470,23 @@ class UserShipmentContent extends Component {
                 <div className="flex-100 layout-row layout-wrap">
                   <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
                     <div className="layout-align-start-center layout-row flex">
-                      <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>x&nbsp;{shipment.cargo_count}</span>
+                      <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>
+x&nbsp;
+                        {shipment.cargo_count}
+                      </span>
                       <p className="layout-align-sm-end-center layout-align-xs-end-center">{cargoPlurals(shipment, t)}</p>
                     </div>
                   </div>
                   <h2 className="layout-align-start-center layout-row flex-100">
-                    {numberSpacing(totalPrice(shipment).value, 2)} {totalPrice(shipment).currency}
+                    {numberSpacing(totalPrice(shipment).value, 2)}
+                    {' '}
+                    {totalPrice(shipment).currency}
                   </h2>
                 </div>
               </div>
             </div>
-            <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}>
-              <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
-                <div className="layout-column flex-100">
-                  <h3 
-                    style={{ marginBottom: '0px' }}
-                  >
-                    {t('shipment:remarks')}:
-                  </h3>
-                  <ul>
-                    {remarkBody}
-                  </ul>
-              </div>
-            </div>
+            {remarkBody}
           </div>
-        </div>
 
         </Tab>
         <Tab
@@ -475,7 +505,7 @@ class UserShipmentContent extends Component {
         <Tab
           tabTitle={t('cargo:cargoDetails')}
           theme={theme}
-        >
+        > 
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
             <GreyBox
               wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_bottom}`}
@@ -584,7 +614,7 @@ function mapStateToProps (state) {
   const {
     remark
   } = state
-  
+
   return {
     remark
   }

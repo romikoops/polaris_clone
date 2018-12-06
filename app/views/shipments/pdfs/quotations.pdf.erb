@@ -248,15 +248,17 @@
         </div>
     </div>
   <% end %>
-
-  <div class="remarks">
-    <h4>Remarks:</h4>
-    <ul>
-      <% remarks.each do  |remark|%>
-        <li><%= remark.body %></li>
-      <% end %>
-    </ul>
-  </div>
+  <% if remarks.exists? %>
+    <div class="remarks">
+      <h4>Remarks:</h4>
+      <ul>
+        <% remarks.each do  |remark|%>
+          <li><%= remark.body %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% if notes.exists? %>
   <div class="remarks">
     <h4>Notes: </h4>
     <ul> <% notes.each do |note| %>
@@ -265,4 +267,5 @@
       <% end %>
     </ul>
   </div>
+  <% end %>
 </div>

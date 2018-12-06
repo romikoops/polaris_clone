@@ -508,7 +508,9 @@ exports[`feeHash.trucking_pre is falsy 1`] = `
                 </span>
                 <p
                   className="layout-align-sm-end-center layout-align-xs-end-center"
-                />
+                >
+                  <Component />
+                </p>
               </div>
             </div>
             <h2
@@ -1371,7 +1373,9 @@ exports[`loadType === cargo_item && cargoCount === 1 1`] = `
                 </span>
                 <p
                   className="layout-align-sm-end-center layout-align-xs-end-center"
-                />
+                >
+                  <Component />
+                </p>
               </div>
             </div>
             <h2
@@ -2234,7 +2238,9 @@ exports[`loadType === cargo_item && cargoCount > 1 1`] = `
                 </span>
                 <p
                   className="layout-align-sm-end-center layout-align-xs-end-center"
-                />
+                >
+                  <Component />
+                </p>
               </div>
             </div>
             <h2
@@ -3097,7 +3103,9 @@ exports[`loadType === container && cargoCount === 1 1`] = `
                 </span>
                 <p
                   className="layout-align-sm-end-center layout-align-xs-end-center"
-                />
+                >
+                  <Component />
+                </p>
               </div>
             </div>
             <h2
@@ -3960,7 +3968,9 @@ exports[`loadType === container && cargoCount > 1 1`] = `
                 </span>
                 <p
                   className="layout-align-sm-end-center layout-align-xs-end-center"
-                />
+                >
+                  <Component />
+                </p>
               </div>
             </div>
             <h2
@@ -4823,7 +4833,9 @@ exports[`shallow render 1`] = `
                 </span>
                 <p
                   className="layout-align-sm-end-center layout-align-xs-end-center"
-                />
+                >
+                  <Component />
+                </p>
               </div>
             </div>
             <h2
@@ -5686,7 +5698,9 @@ exports[`shipment.has_on_carriage is true 1`] = `
                 </span>
                 <p
                   className="layout-align-sm-end-center layout-align-xs-end-center"
-                />
+                >
+                  <Component />
+                </p>
               </div>
             </div>
             <h2
@@ -6549,7 +6563,9 @@ exports[`shipment.has_pre_carriage is true 1`] = `
                 </span>
                 <p
                   className="layout-align-sm-end-center layout-align-xs-end-center"
-                />
+                >
+                  <Component />
+                </p>
               </div>
             </div>
             <h2
@@ -7429,7 +7445,9 @@ exports[`shipment.selected_offer.trucking_pre is true 1`] = `
                 </span>
                 <p
                   className="layout-align-sm-end-center layout-align-xs-end-center"
-                />
+                >
+                  <Component />
+                </p>
               </div>
             </div>
             <h2
