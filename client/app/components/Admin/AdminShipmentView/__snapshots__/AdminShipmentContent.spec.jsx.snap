@@ -291,7 +291,7 @@ exports[`feeHash.trucking_pre is falsy 1`] = `
                         style={Object {}}
                       />
                       <p>
-                        Estimated Delivery
+                        Delivery
                       </p>
                     </div>
                     <div
@@ -1133,7 +1133,7 @@ exports[`loadType === cargo_item && cargoCount === 1 1`] = `
                         style={Object {}}
                       />
                       <p>
-                        Estimated Delivery
+                        Delivery
                       </p>
                     </div>
                     <div
@@ -1975,7 +1975,7 @@ exports[`loadType === cargo_item && cargoCount > 1 1`] = `
                         style={Object {}}
                       />
                       <p>
-                        Estimated Delivery
+                        Delivery
                       </p>
                     </div>
                     <div
@@ -2817,7 +2817,7 @@ exports[`loadType === container && cargoCount === 1 1`] = `
                         style={Object {}}
                       />
                       <p>
-                        Estimated Delivery
+                        Delivery
                       </p>
                     </div>
                     <div
@@ -3659,7 +3659,7 @@ exports[`loadType === container && cargoCount > 1 1`] = `
                         style={Object {}}
                       />
                       <p>
-                        Estimated Delivery
+                        Delivery
                       </p>
                     </div>
                     <div
@@ -4501,7 +4501,7 @@ exports[`shallow render 1`] = `
                         style={Object {}}
                       />
                       <p>
-                        Estimated Delivery
+                        Delivery
                       </p>
                     </div>
                     <div
@@ -5343,7 +5343,7 @@ exports[`shipment.has_on_carriage is true 1`] = `
                         style={Object {}}
                       />
                       <p>
-                        Estimated Delivery
+                        Delivery
                       </p>
                     </div>
                     <div
@@ -6185,7 +6185,7 @@ exports[`shipment.has_pre_carriage is true 1`] = `
                         style={Object {}}
                       />
                       <p>
-                        Estimated Delivery
+                        Delivery
                       </p>
                     </div>
                     <div
@@ -7044,7 +7044,7 @@ exports[`shipment.selected_offer.trucking_pre is true 1`] = `
                         style={Object {}}
                       />
                       <p>
-                        Estimated Delivery
+                        Delivery
                       </p>
                     </div>
                     <div

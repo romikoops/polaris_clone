@@ -93,7 +93,7 @@ exports[`loadType is cargo_item 1`] = `
           className="trucking_elem flex-none"
         >
           with 
-                estimated delivery
+                delivery
         </p>
       </div>
     </div>
@@ -221,7 +221,7 @@ exports[`modeOfTransport is falsy 1`] = `
           className="trucking_elem flex-none"
         >
           with 
-                estimated delivery
+                delivery
         </p>
       </div>
     </div>
@@ -337,7 +337,7 @@ exports[`shallow render 1`] = `
           className="trucking_elem flex-none"
         >
           with 
-                estimated delivery
+                delivery
         </p>
       </div>
     </div>
@@ -453,7 +453,7 @@ exports[`theme is falsy 1`] = `
           className="trucking_elem flex-none"
         >
           with 
-                estimated delivery
+                delivery
         </p>
       </div>
     </div>
@@ -569,7 +569,7 @@ exports[`trucking.on_carriage is empty object 1`] = `
           className="trucking_elem flex-none"
         >
           without 
-                estimated delivery
+                delivery
         </p>
       </div>
     </div>
@@ -685,7 +685,7 @@ exports[`trucking.pre_carriage is empty object 1`] = `
           className="trucking_elem flex-none"
         >
           with 
-                estimated delivery
+                delivery
         </p>
       </div>
     </div>

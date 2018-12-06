@@ -683,6 +683,7 @@
   "shipment": {
     "reuseShipment": "Reuse Shipment",
     "estimatedTimeDelivery": "Estimated Time Delivery",
+    "estimatedDelivery": "Estimated Delivery",
     "freightDutiesAndCarriage": "Freight, Duties & Carriage:",
     "pickUp": "Pick-up",
     "delivery": "Delivery",
