@@ -8,8 +8,12 @@ Before do |scenario|
   # Connect to correct subdomain
   tags = scenario.tags.map(&:name)
   subdomain = Helpers.subdomain_for_features(tags: tags)
-  Capybara.app_host = Helpers.app_host(subdomain: subdomain || 'demo')
-  Capybara.asset_host = Capybara.app_host
+
+  # Select correct tenant
+  visit '/'
+  find('.ccb_change_tenant').click
+  find('p', text: "(#{subdomain})").click
+  expect(find('.ccb_change_tenant')).to have_content(/(#{subdomain})/i)
 end
 
 Around do |_scenario, block|

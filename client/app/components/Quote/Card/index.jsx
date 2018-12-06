@@ -135,7 +135,7 @@ class QuoteCard extends PureComponent {
         <div className="flex-40 layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
       )
     }
-    
+
     if (!scope.detailed_billing && (!result.schedules || result.schedules.length < 1)) {
       return (
         <div className="flex-40 layout-row layout-align-start-center" style={{ textAlign: 'left' }} />
@@ -388,7 +388,7 @@ kg
                   <RoundButton
                     active={!this.state.isChecked}
                     flexContainer="100"
-                    classNames={`pointy layout-row layout-align-center-center ${styles.add_button} ${!this.state.isChecked ? styles.shorter : styles.longer}`}
+                    classNames={`ccb_select_quote pointy layout-row layout-align-center-center ${styles.add_button} ${!this.state.isChecked ? styles.shorter : styles.longer}`}
                     size="small"
                     handleNext={() => this.handleClickChecked()}
                     theme={theme}

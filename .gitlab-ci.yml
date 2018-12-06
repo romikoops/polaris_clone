@@ -181,7 +181,7 @@ deploy:
   before_script:
     - export BROWSERNAME=$CI_JOB_NAME
     - export CI_ENVIRONMENT_SLUG=$(cat ci_environment_slug.txt)
-    - export TARGET_URL=$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
+    - export TARGET_URL=https://$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
     - export REPORT_PATH=$CI_PROJECT_DIR
     - 'echo "Target: $TARGET_URL"'
     - dockerize -wait=tcp://localhost:4444 -timeout=5m

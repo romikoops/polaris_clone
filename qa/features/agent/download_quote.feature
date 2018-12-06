@@ -1,4 +1,4 @@
-@FeatureQuoteTool
+@Feature-QuoteTool
 Feature: Find Quotes
 
   As an agent,
@@ -8,25 +8,22 @@ Feature: Find Quotes
   Background:
     Given I am at the homepage
       And I am logged out
+      And I have accepted cookies
 
-  @wip
-  Scenario: Requesting LCL Quote
+  Scenario: Requesting FCL Quote
     Given I am logged in as an agent
-      And I click "Find Rates" button
+     When I click the find rates button
      Then I expect to see title "Choose shipment"
 
-    When I select "I am Selling (Export)"
-     And I select "Ocean LCL"
-     And I click "Next Step" button
-    Then I expect to see title "Shipment Details"
+     When I select "I am Selling (Export)"
+      And I click "Next Step" button
+     Then I expect to see title "Shipment Details"
 
-     And I select "Dalian" as "Destination"
-    When I set trucking from "Brooktorkai 7, Hamburg" to "Origin"
-
-     And I select "1 week from now" as Available Date
-     And I have LCL shipment of 1 units 120 x 80 x 120 with weight of 1500kg
-     And I confirm cargo does not contain dangerous good
-     And I click "Get Offers" button
+     When I select "Hamburg" as "Origin"
+      And I select "Kuantan" as "Destination"
+      And I have shipment of 2 "40‘ Dry Container" with weight of 14000kg
+      And I confirm cargo does not contain dangerous good
+      And I click "Get Quotes" button
 
     Then I expect to see title "View Quotes"
      And I expect to see offers

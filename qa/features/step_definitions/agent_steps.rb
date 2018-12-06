@@ -17,19 +17,19 @@ And('I enter the correct agent password') do
 end
 
 And('I select the first quote') do
-  all('.offer_result').first.find('input', class: 'pointy').click
+  all('.ccb_select_quote').first.click
 end
 
 And('I download the PDF') do
-  pending
   quote_bar = find('.quote_options')
   request_doc_box = quote_bar.find('div', class: 'document_downloader')
   request_doc_box.find('div', class: 'request').find('button').click
-  request_doc_box.find('div', class: 'ready').find('button').click
+  expect(page).to have_css('#floatingCirclesG')
+  expect(page).to have_no_css('#floatingCirclesG', wait: 60)
 end
 
 And('I have not selected and offer, the button is disabled') do
   quote_bar = find('.quote_options')
   request_doc_box = quote_bar.find('div', class: 'document_downloader')
-  request_doc_box.find('div', class: 'request').find('button').has_css?('false')
+  expect(request_doc_box.find('div', class: 'request').find('button')).to have_no_css('false')
 end

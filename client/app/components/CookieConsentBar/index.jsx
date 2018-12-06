@@ -70,27 +70,6 @@ function getToggleStyle (flag) {
 }
 
 function handleAccept (user, tenant, loggedIn, authDispatch) {
-  if (loggedIn) {
-    authDispatch.updateUser(user, { cookies: true })
-  } else {
-    const unixTimeStamp = moment()
-      .unix()
-      .toString()
-    const randNum = Math.floor(Math.random() * 100).toString()
-    const randSuffix = unixTimeStamp + randNum
-    const email = `guest${randSuffix}@${tenant.subdomain}.itsmycargo.com`
-
-    authDispatch.register({
-      email,
-      password: 'guestpassword',
-      password_confirmation: 'guestpassword',
-      first_name: 'Guest',
-      last_name: '',
-      tenant_id: tenant.id,
-      guest: true,
-      cookies: true
-    })
-  }
 }
 
 class PureCookieConsentBar extends React.PureComponent {

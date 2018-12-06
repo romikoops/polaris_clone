@@ -5,7 +5,7 @@ exports[`shallow rendering 1`] = `
   className="dropdown"
 >
   <div
-    className="pointy layout-row layout-align-center-center dropbtn"
+    className="pointy layout-row layout-align-center-center dropbtn ccb_login"
   >
     <a
       onClick={null}
@@ -28,7 +28,7 @@ exports[`when linkOptions doesn't provide url 1`] = `
   className="dropdown"
 >
   <div
-    className="pointy layout-row layout-align-center-center dropbtn"
+    className="pointy layout-row layout-align-center-center dropbtn ccb_login"
   >
     <a
       onClick={null}
