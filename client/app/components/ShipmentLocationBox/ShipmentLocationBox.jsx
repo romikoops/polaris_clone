@@ -113,6 +113,10 @@ class ShipmentLocationBox extends PureComponent {
       showTick: {
         origin: false,
         destination: false
+      },
+      fetchingtruckingAvailability: {
+        origin: false,
+        destination: false
       }
     }
 
@@ -618,7 +622,12 @@ class ShipmentLocationBox extends PureComponent {
   }
 
   selectLocation (place, target) {
-    this.setState({ fetchingtruckingAvailability: true }, () => {
+    this.setState(prevState => ({
+      fetchingtruckingAvailability: {
+        ...prevState.fetchingtruckingAvailability,
+        [target]: true
+      }
+    }), () => {
       const counterpart = target === 'origin' ? 'destination' : 'origin'
       const isLocationObj = (place.latitude && place.longitude)
 
@@ -740,15 +749,19 @@ class ShipmentLocationBox extends PureComponent {
   }
 
   handleAddressFormFocus (event) {
+    const { truckingFound } = this.state
     const target = event.target.name.split('-')[0]
     this.isOnFocus[target] = event.type === 'focus'
     const targetLocation = this.props[target]
-    if (targetLocation && event.type !== 'focus') {
+    if (!truckingFound[target] && targetLocation && event.type !== 'focus') {
       const newAutotext = `${targetLocation.street} ${targetLocation.number} ${targetLocation.city} ${targetLocation.zipCode} ${
         targetLocation.country
       }`
       this.triggerPlaceChanged(newAutotext, target)
     }
+    setTimeout(() => {
+      if (!this.isOnFocus[target]) this.changeAddressFormVisibility(target, false)
+    }, 5000)
   }
 
   toggleModal () {
@@ -1041,7 +1054,7 @@ class ShipmentLocationBox extends PureComponent {
           value={this.state.oSelect}
           placeholder={t('shipment:origin')}
           options={originOptions.sort((a, b) => a.label - b.label)}
-          disabled={fetchingtruckingAvailability}
+          disabled={fetchingtruckingAvailability.origin}
           onChange={this.setOriginNexus}
           nextStageAttempt={nextStageAttempts > 0}
         />
@@ -1058,7 +1071,7 @@ class ShipmentLocationBox extends PureComponent {
           name="destination-hub"
           className={styles.select}
           value={this.state.dSelect}
-          disabled={fetchingtruckingAvailability}
+          disabled={fetchingtruckingAvailability.destination}
           placeholder={t('shipment:destination')}
           options={destinationOptions.sort((a, b) => a.label - b.label)}
           onChange={this.setDestNexus}
@@ -1089,7 +1102,7 @@ class ShipmentLocationBox extends PureComponent {
         <div
           className={`${styles.address_form} flex-100 layout-row layout-wrap layout-align-center ccb_pre_address_form`}
         >
-          { fetchingtruckingAvailability ? <LoadingSpinner size="medium" /> : '' }
+          { fetchingtruckingAvailability.origin ? <LoadingSpinner size="medium" /> : '' }
           { showTick.origin ? (
             <CircleCompletion
               icon="fa fa-check"
@@ -1099,7 +1112,7 @@ class ShipmentLocationBox extends PureComponent {
               opacity={showTick.origin ? '1' : '0'}
             />
           ) : '' }
-          { (!fetchingtruckingAvailability && !showTick.origin) ? (
+          { (!fetchingtruckingAvailability.origin && !showTick.origin) ? (
             <div
               className="flex-100 layout-row layout-wrap layout-align-center"
             >
@@ -1236,7 +1249,7 @@ class ShipmentLocationBox extends PureComponent {
           <i className={`${styles.up} flex-none fa fa-angle-double-up ccb_destination_expand`} />
         </div>
         <div className={`${styles.address_form} ${toggleLogic} flex-100 layout-row layout-wrap layout-align-center ccb_on_address_form`}>
-          { fetchingtruckingAvailability ? <LoadingSpinner size="medium" /> : '' }
+          { fetchingtruckingAvailability.destination ? <LoadingSpinner size="medium" /> : '' }
           { showTick.destination ? (
             <CircleCompletion
               icon="fa fa-check"
@@ -1246,7 +1259,7 @@ class ShipmentLocationBox extends PureComponent {
               opacity={showTick.destination ? '1' : '0'}
             />
           ) : '' }
-          { (!fetchingtruckingAvailability && !showTick.destination) ? (
+          { (!fetchingtruckingAvailability.destination && !showTick.destination) ? (
             <div
               className="flex-100 layout-row layout-wrap layout-align-center"
             >
