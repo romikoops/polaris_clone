@@ -25,7 +25,7 @@ function getLocations (userId) {
   return fetch(`${getTenantApiUrl()}/users/${userId}/addresses`, requestOptions).then(handleResponse)
 }
 
-function destroyLocation (userId, addressId) {
+function destroyAddress (userId, addressId) {
   const requestOptions = {
     method: 'DELETE',
     headers: authHeader()
@@ -103,7 +103,7 @@ function getById (id) {
   return fetch(`${getTenantApiUrl()}/users/${id}`, requestOptions).then(handleResponse)
 }
 
-function editUserLocation (userId, data) {
+function editUserAddress (userId, data) {
   const formData = new FormData()
   formData.append('edit_address', JSON.stringify(data))
   const requestOptions = {
@@ -208,7 +208,7 @@ function updateContact (data) {
   return fetch(`${getTenantApiUrl()}/contacts/${data.id}`, requestOptions).then(handleResponse)
 }
 
-function newUserLocation (userId, data) {
+function newUserAddress (userId, data) {
   const formData = new FormData()
   formData.append('new_address', JSON.stringify(data))
   const requestOptions = {
@@ -348,8 +348,8 @@ function requestPricing (req) {
 
 export const userService = {
   getLocations,
-  destroyLocation,
-  newUserLocation,
+  destroyAddress,
+  newUserAddress,
   getDashboard,
   makePrimary,
   getShipment,
@@ -368,7 +368,7 @@ export const userService = {
   deleteAlias,
   saveAddressEdit,
   deleteContactAddress,
-  editUserLocation,
+  editUserAddress,
   delete: _delete,
   optOut,
   reuseShipment,

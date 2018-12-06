@@ -47,8 +47,8 @@ const propsBase = {
   setNav: identity,
   userDispatch: {
     makePrimary: identity,
-    newUserLocation: identity,
-    destroyLocation: identity
+    newUserAddress: identity,
+    destroyAddress: identity
   },
   addresses: [editedLocation, editedLocationPrimary]
 }

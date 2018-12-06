@@ -86,7 +86,7 @@ class UserLocationsBox extends PureComponent {
       makePrimary,
       cols,
       t,
-      destroyLocation,
+      destroyAddress,
       editLocation
     } = this.props
 
@@ -154,7 +154,7 @@ class UserLocationsBox extends PureComponent {
               <span
                 className={`${defaults.emulate_link}`}
                 onClick={() =>
-                  destroyLocation(op.address.id)
+                  destroyAddress(op.address.id)
                 }
               >
                 <i className={`fa fa-trash ${styles.icon_trash}`} />
@@ -241,7 +241,7 @@ UserLocationsBox.propTypes = {
   addresses: PropTypes.arrayOf(PropTypes.object),
   makePrimary: PropTypes.func,
   toggleActiveView: PropTypes.func,
-  destroyLocation: PropTypes.func,
+  destroyAddress: PropTypes.func,
   editLocation: PropTypes.func,
   gradient: PropTypes.objectOf(PropTypes.string),
   cols: PropTypes.number,
@@ -252,7 +252,7 @@ UserLocationsBox.defaultProps = {
   addresses: [],
   makePrimary: null,
   toggleActiveView: null,
-  destroyLocation: null,
+  destroyAddress: null,
   editLocation: null,
   gradient: {},
   cols: 3

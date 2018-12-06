@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UserAddresssController < ApplicationController
+class UserAddressesController < ApplicationController
   skip_before_action :require_authentication!
   skip_before_action :require_non_guest_authentication!
 

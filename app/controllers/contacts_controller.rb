@@ -24,7 +24,7 @@ class ContactsController < ApplicationController
       shipments.push(tmp_shipment.with_address_index_json)
     end
     address = contact.address
-    response_handler(contact: contact, shipments: shipments, address: address)
+    response_handler(contact: contact, shipments: shipments, address: address.to_custom_hash)
   end
 
   def update
@@ -80,10 +80,11 @@ class ContactsController < ApplicationController
   def update_contact_address
     data = JSON.parse(params[:address])
     loc = Address.find(data['id'])
+    data['country'] = Country.geo_find_by_name(data['country'])
     data.delete('id')
     loc.update_attributes(data)
     loc.save!
-    response_handler(loc)
+    response_handler(loc.to_custom_hash)
   end
 
   def delete_contact_address
