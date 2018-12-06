@@ -18,7 +18,7 @@ class CargoItemGroup extends Component {
     this.state = {
       viewer: false,
       unitView: false,
-      collapsed: false
+      collapsed: true
     }
     this.handleCollapser = this.handleCollapser.bind(this)
     this.viewHsCodes = this.viewHsCodes.bind(this)
