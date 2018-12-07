@@ -209,6 +209,12 @@ class Address < ApplicationRecord
     end
   end
 
+  def furthest_hubs(hubs)
+    hubs.sort_by do |hub|
+      hub.distance_to(self)
+    end
+  end
+
 
   def closest_hubs
     hubs = Nexus.all
