@@ -868,6 +868,7 @@ ActiveRecord::Schema.define(version: 2018_12_19_093407) do
     t.integer "optin_status_id"
     t.string "external_id"
     t.integer "agency_id"
+    t.boolean "internal", default: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
