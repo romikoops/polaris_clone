@@ -845,9 +845,9 @@
     "contactExists": "Contact already exists.",
     "didYouMean": "Did you mean",
     "invalidRequest": "Your request was not valid. Check inputs and try again.",
-    "notFound": "The place you serached for could not be found.",
+    "notFound": "The place you searched for could not be found.",
     "zeroResults": "No results were found for your search",
-    "unknownError": "An unknown error has occurred. Please try  again in a few minutes."
+    "unknownError": "An unknown error has occurred. Please try again in a few minutes."
   },
   "trucking": {
     "isNotAvailableLocal": " is not available in ",

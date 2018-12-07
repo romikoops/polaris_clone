@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import { withNamespaces } from 'react-i18next'
+import { camelCase } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 import styles from './ShipmentLocationBox.scss'
 import listenerTools from '../../helpers/listeners'
@@ -7,7 +8,6 @@ import errorStyles from '../../styles/errors.scss'
 import getRequests from './getRequests'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 import { moment } from '../../constants'
-import { camelizeSnakeCase } from '../../helpers'
 
 class Autocomplete extends PureComponent {
   static filterResults (results, options) {
@@ -210,17 +210,20 @@ class Autocomplete extends PureComponent {
       options.componentRestrictions = { country: countries }
     }
 
-    this.setState({ queryingLocations: true }, () =>  {this.addressService.getPlacePredictions(options, (results, status) => {
-      if (status === 'OK') {
-        const filteredResults = Autocomplete.filterResults(results, {})
-        this.setState({ hasGoogleErrors: false, addressResults: filteredResults, hideResults: false, queryingLocations: false }, () => {
-          this.initKeyboardListener()
-          this.showResultsTimer()
-        })
-      } else {
-        this.autocompleteErrors(status)
-      }
-    })
+    this.setState({ queryingLocations: true }, () => {
+      this.addressService.getPlacePredictions(options, (results, status) => {
+        if (status === 'OK') {
+          const filteredResults = Autocomplete.filterResults(results, {})
+          this.setState({
+            hasGoogleErrors: false, addressResults: filteredResults, hideResults: false, queryingLocations: false
+          }, () => {
+            this.initKeyboardListener()
+            this.showResultsTimer()
+          })
+        } else {
+          this.autocompleteErrors(status)
+        }
+      })
     })
   }
 
@@ -263,13 +266,15 @@ class Autocomplete extends PureComponent {
     if (['REQUEST_DENIED', 'OVER_QUERY_LIMIT'].includes(status)) {
       errorKey = 'errors:unknownError'
     } else {
-      errorKey = `errors:${camelizeSnakeCase(status.toLowerCase())}`
+      errorKey = `errors:${camelCase(status)}`
     }
-    this.setState({hasGoogleErrors: true, errorKey}, () => this.showErrorsTimer())
+    this.setState({ hasGoogleErrors: true, errorKey }, () => this.showErrorsTimer())
   }
 
   render () {
-    const { t, hasErrors, theme, scope } = this.props
+    const {
+      t, hasErrors, theme, scope
+    } = this.props
     const {
       addressResults, areaResults, input, highlightIndex, highlightSection, hideResults, queryingLocations, errorKey, hasGoogleErrors
     } = this.state
@@ -339,9 +344,9 @@ class Autocomplete extends PureComponent {
             onChange={this.shouldTriggerInputChange}
             onBlur={this.shouldTriggerInputChange}
             data-hj-whitelist
-            autocomplete="off"
+            autoComplete="off"
           />
-          
+
         </div>
         <div className={`
           flex-100 layout-row layout-wrap results
@@ -374,8 +379,8 @@ class Autocomplete extends PureComponent {
           </div>
         </div>
         <span className={hasErrors || hasGoogleErrors ? styles.errors : styles.no_errors} style={{ color: 'white' }}>
-            {hasErrors ? t('errors:noRoutes') : ''}
-            {hasGoogleErrors ? t(errorKey) : ''}
+          {hasErrors ? t('errors:noRoutes') : ''}
+          {hasGoogleErrors ? t(errorKey) : ''}
         </span>
       </div>
     )
