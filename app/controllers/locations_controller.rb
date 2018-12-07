@@ -6,7 +6,7 @@ class LocationsController < ApplicationController
 
   def index
     input = params[:query]
-    countries = params[:countries].plit(',').map { |code| Country.find_by_code(code.upcase)&.name }.compact
+    countries = params[:countries].split(',').map { |code| Country.find_by_code(code.upcase)&.name }.compact
     query =  Location.all 
     query = query.where(country: countries) if countries.present?
     query = query.where.not(city: nil, country: nil, postal_code: nil)
