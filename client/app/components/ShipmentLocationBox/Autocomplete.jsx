@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import { withNamespaces } from 'react-i18next'
+import { camelCase } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 import styles from './ShipmentLocationBox.scss'
 import listenerTools from '../../helpers/listeners'
@@ -123,6 +124,34 @@ class Autocomplete extends PureComponent {
     })
   }
 
+  showErrorsTimer () {
+    this.setState((prevState) => {
+      const { errorTimeout, hasGoogleErrors } = prevState
+      if (errorTimeout) {
+        clearTimeout(errorTimeout)
+      }
+      if (!hasGoogleErrors) {
+        const newTimeout = setTimeout(() => {
+          this.setState({ hasGoogleErrors: false })
+        }, 10000)
+
+        return {
+          hasGoogleErrors: true,
+          errorTimeout: newTimeout
+        }
+      }
+
+      const newTimeout = setTimeout(() => {
+        this.setState({ hasGoogleErrors: false })
+      }, 10000)
+
+      return {
+        hasGoogleErrors,
+        errorTimeout: newTimeout
+      }
+    })
+  }
+
   handleSelectFromIndex () {
     const { highlightSection, highlightIndex } = this.state
     const results = this.state[`${highlightSection}Results`]
@@ -181,14 +210,20 @@ class Autocomplete extends PureComponent {
       options.componentRestrictions = { country: countries }
     }
 
-    this.addressService.getPlacePredictions(options, (results) => {
-      if (results && results.length > 0) {
-        const filteredResults = Autocomplete.filterResults(results, {})
-        this.setState({ addressResults: filteredResults, hideResults: false }, () => {
-          this.initKeyboardListener()
-          this.showResultsTimer()
-        })
-      }
+    this.setState({ queryingLocations: true }, () => {
+      this.addressService.getPlacePredictions(options, (results, status) => {
+        if (status === 'OK') {
+          const filteredResults = Autocomplete.filterResults(results, {})
+          this.setState({
+            hasGoogleErrors: false, addressResults: filteredResults, hideResults: false, queryingLocations: false
+          }, () => {
+            this.initKeyboardListener()
+            this.showResultsTimer()
+          })
+        } else {
+          this.autocompleteErrors(status)
+        }
+      })
     })
   }
 
@@ -226,10 +261,22 @@ class Autocomplete extends PureComponent {
     this.setState({ hideResults: false })
   }
 
+  autocompleteErrors (status) {
+    let errorKey = ''
+    if (['REQUEST_DENIED', 'OVER_QUERY_LIMIT'].includes(status)) {
+      errorKey = 'errors:unknownError'
+    } else {
+      errorKey = `errors:${camelCase(status)}`
+    }
+    this.setState({ hasGoogleErrors: true, errorKey }, () => this.showErrorsTimer())
+  }
+
   render () {
-    const { t, hasErrors, theme, scope } = this.props
     const {
-      addressResults, areaResults, input, highlightIndex, highlightSection, hideResults, queryingLocations
+      t, hasErrors, theme, scope
+    } = this.props
+    const {
+      addressResults, areaResults, input, highlightIndex, highlightSection, hideResults, queryingLocations, errorKey, hasGoogleErrors
     } = this.state
     const hasAddressResults = addressResults.length > 0
     const hasAreaResults = !scope.require_full_address && areaResults.length > 0
@@ -275,10 +322,10 @@ class Autocomplete extends PureComponent {
             </div>)
         })
       : []
-    const inputErrorStyle = hasErrors ? styles.with_errors : ''
+    const inputErrorStyle = hasErrors || hasGoogleErrors ? styles.with_errors : ''
 
     return (
-      <div className={`auto_origin ccb_carriage flex-100 layout-row layout-align-center-center ${styles.autocomplete_container}`}>
+      <div className={`auto_origin ccb_carriage flex-100 layout-row layout-wrap layout-align-center-center ${styles.autocomplete_container}`}>
         <div
           className={`flex-none ccb_backdrop ${!hideResults && hasResults ? styles.exit_click : styles.hidden}`}
           onClick={() => {
@@ -297,7 +344,9 @@ class Autocomplete extends PureComponent {
             onChange={this.shouldTriggerInputChange}
             onBlur={this.shouldTriggerInputChange}
             data-hj-whitelist
+            autoComplete="off"
           />
+
         </div>
         <div className={`
           flex-100 layout-row layout-wrap results
@@ -324,13 +373,14 @@ class Autocomplete extends PureComponent {
                   {t('common:addresses')}
                 </p>
               </div>
-              {addressResultCards}
+              {queryingLocations ? <LoadingSpinner size="small" /> : addressResultCards}
             </div>
 
           </div>
         </div>
-        <span className={errorStyles.error_message} style={{ color: 'white' }}>
+        <span className={hasErrors || hasGoogleErrors ? styles.errors : styles.no_errors} style={{ color: 'white' }}>
           {hasErrors ? t('errors:noRoutes') : ''}
+          {hasGoogleErrors ? t(errorKey) : ''}
         </span>
       </div>
     )

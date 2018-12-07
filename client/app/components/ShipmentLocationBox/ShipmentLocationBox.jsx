@@ -195,7 +195,8 @@ class ShipmentLocationBox extends PureComponent {
         nexus_id: event.value.id,
         nexus_name: event.value.name,
         latitutde: event.value.latitude,
-        longitude: event.value.longitude
+        longitude: event.value.longitude,
+        country: event.value.country
       }
       const lat = event.value.latitude
       const lng = event.value.longitude
@@ -299,7 +300,8 @@ class ShipmentLocationBox extends PureComponent {
         nexus_id: event.value.id,
         nexus_name: event.value.name,
         latitude: event.value.latitude,
-        longitude: event.value.longitude
+        longitude: event.value.longitude,
+        country: event.value.country
       }
       const lat = event.value.latitude
       const lng = event.value.longitude

@@ -13,7 +13,7 @@
     "eslint": "eslint .",
     "eslint:watch": "esw -w --report-unused-disable-directives --cache --ext .js --ext .jsx --ext .json",
     "eslint-file": "eslint",
-    "deploy": "npm run build && s3cmd sync dist/* s3://multi.itsmycargo.com -M -P && echo '🚀  Deployed!'",
+    "deploy": "npm run build && s3cmd sync dist/* --exclude=dist/*.map* s3://multi.itsmycargo.com -M -P && echo '🚀  Deployed!'",
     "deploy-dev": "npm run build && s3cmd sync dist/* s3://imc-react-dev -M -P && echo '🚀  Deployed!'"
   },
   "browserslist": [

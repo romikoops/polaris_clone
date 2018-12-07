@@ -342,7 +342,7 @@ class UserShipmentView extends Component {
                 <DocumentsDownloader
                   theme={theme}
                   target="shipment_recap"
-                  options={{ shipmentData }}
+                  options={{ shipment }}
                   size="full"
                 />
               </div>

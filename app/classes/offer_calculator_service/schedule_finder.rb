@@ -17,15 +17,22 @@ module OfferCalculatorService
 
     def longest_trucking_time(hubs)
       return 0 unless @shipment.has_pre_carriage?
-      google_directions = GoogleDirections.new(
-        @shipment.pickup_address.lat_lng_string,
-        @shipment.pickup_address.furthest_hub(hubs[:origin]).lat_lng_string,
-        @shipment.desired_start_date.to_i
-      )
 
-      driving_time = google_directions.driving_time_in_seconds
-      google_directions.driving_time_in_seconds_for_trucks(driving_time)
-    rescue StandardError
+      hubs_by_distance = @shipment.pickup_address.furthest_hubs(hubs[:origin])
+
+      hubs_by_distance.each do |hub|
+        google_directions = GoogleDirections.new(
+          @shipment.pickup_address.lat_lng_string,
+          hub.lat_lng_string,
+          @shipment.desired_start_date.to_i
+        )
+
+        driving_time = google_directions.driving_time_in_seconds
+        if driving_time
+          return google_directions.driving_time_in_seconds_for_trucks(driving_time)
+        end
+      end
+    rescue GoogleDirections::NoDrivingTime
       raise ApplicationError::NoTruckingTime
     end
 

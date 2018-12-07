@@ -49,7 +49,7 @@ module Itineraries
     end
 
     def country_code
-      @country_code ||= country&.code.downcase.to_sym
+      @country_code ||= country&.code&.downcase.to_sym
     end
 
     def country
@@ -61,8 +61,8 @@ module Itineraries
     end
 
     def buffer
-      # TODO: Implement a buffer calculation
-      5
+      # One business day buffer
+      1
     end
   end
 end

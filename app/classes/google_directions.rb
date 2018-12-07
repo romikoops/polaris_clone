@@ -8,6 +8,9 @@ require "openssl"
 require "base64"
 
 class GoogleDirections
+
+  NoDrivingTime = Class.new(StandardError)
+
   # API Doc: https://developers.google.com/maps/documentation/directions/intro
   BASE_URL  = "https://maps.googleapis.com"
   BASE_PATH = "/maps/api/directions/xml"
@@ -99,6 +102,7 @@ class GoogleDirections
   def driving_time_in_seconds_for_trucks(seconds)
     # Trucks are slower than normal cars.
     # Trucks have to comply with provisions about resting periods.
+    raise GoogleDirections::NoDrivingTime if seconds.nil?
 
     slowness_factor = 1.6
     seconds = (seconds * slowness_factor).round.to_i

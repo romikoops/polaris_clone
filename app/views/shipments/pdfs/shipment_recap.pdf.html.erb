@@ -86,7 +86,7 @@
           <div class="display-flex">
             <i class=" fa fa-check check-square" style="color: <%= oncarriage_color %>"></i>
             <h4>
-              Delivery on <%= shipment.planned_delivery_date.try(:strftime, "%d/%m/%Y") %>
+              Delivery estimated at <%= shipment.planned_delivery_date.try(:strftime, "%d/%m/%Y") %>
             </h4>
           </div>
           <div>
