@@ -5,7 +5,8 @@ function routeOption (route) {
       id: route.nexusId,
       latitude: route.latitude,
       longitude: route.longitude,
-      name: route.nexusName
+      name: route.nexusName,
+      country: route.country
     }
   }
 }

@@ -85,7 +85,7 @@ module ShippingTools
       cargo_item_types: tenant.cargo_item_types,
       max_dimensions: tenant.max_dimensions,
       max_aggregate_dimensions: tenant.max_aggregate_dimensions,
-      last_available_date: Date.today - 1.day
+      last_available_date: Date.today
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
