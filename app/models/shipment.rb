@@ -143,6 +143,8 @@ class Shipment < ApplicationRecord
     end
   }
 
+  scope :external_user, -> { joins(:user).where(users: { internal: false }) }
+
   # Class methods
 
   # Instance methods

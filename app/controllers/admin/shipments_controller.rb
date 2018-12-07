@@ -456,6 +456,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def tenant_shipments
     @tenant_shipments ||= Shipment.where(tenant_id: current_user.tenant_id)
+
+    current_user.internal ? @tenant_shipments : @tenant_shipments.external_user
   end
 
   def filtered_tenant_shipments
