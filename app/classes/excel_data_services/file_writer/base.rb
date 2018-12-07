@@ -27,46 +27,40 @@ module ExcelDataServices
       def initialize(tenant_id:, file_name:)
         @tenant = Tenant.find(tenant_id)
         @file_name = file_name.remove(/.xlsx$/) + '.xlsx'
-        @file_path = nil
         @xlsx = nil
       end
 
       def perform
         sheets_data = load_and_prepare_data
 
-        begin
-          @xlsx = WriteXLSX.new(file_path, tempdir: Rails.root.join('tmp', 'write_xlsx/').to_s)
+        tempfile = Tempfile.new('excel')
+        @xlsx = WriteXLSX.new(tempfile, tempdir: Rails.root.join('tmp', 'write_xlsx/').to_s)
 
-          sheets_data.each do |sheet_name, rows_data|
-            worksheet = xlsx.add_worksheet(sheet_name)
-            next if rows_data.blank?
+        sheets_data.each do |sheet_name, rows_data|
+          worksheet = xlsx.add_worksheet(sheet_name)
+          next if rows_data.blank?
 
-            raw_headers = build_raw_headers(sheet_name, rows_data)
-            headers = transform_headers(raw_headers)
-            setup_worksheet(worksheet, headers.length)
-            write_headers(worksheet, headers)
-            write_rows_data(worksheet, raw_headers, rows_data)
-          end
-        rescue StandardError => error
-          puts error
-        ensure
-          xlsx.close
+          raw_headers = build_raw_headers(sheet_name, rows_data)
+          headers = transform_headers(raw_headers)
+          setup_worksheet(worksheet, headers.length)
+          write_headers(worksheet, headers)
+          write_rows_data(worksheet, raw_headers, rows_data)
         end
+
+        xlsx.close
 
         Document.create!(
           text: file_name,
           doc_type: 'pricing',
           tenant: tenant,
           file: {
-            io: File.open(file_path),
+            io: File.open(tempfile.path),
             filename: file_name,
             content_type: 'application/vnd.ms-excel'
           }
         )
-      end
-
-      def file_path
-        @file_path || Rails.root.join('tmp', file_name) unless file_name.nil?
+      ensure
+        tempfile.unlink
       end
 
       private
