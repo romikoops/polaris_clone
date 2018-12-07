@@ -25,7 +25,7 @@ And('I download the PDF') do
   request_doc_box = quote_bar.find('div', class: 'document_downloader')
   request_doc_box.find('div', class: 'request').find('button').click
   expect(page).to have_css('#floatingCirclesG')
-  expect(page).to have_no_css('#floatingCirclesG', wait: 60)
+  expect(page).to have_no_css('#floatingCirclesG', wait: 90)
 end
 
 And('I have not selected and offer, the button is disabled') do
