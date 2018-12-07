@@ -61,8 +61,8 @@ module Itineraries
     end
 
     def buffer
-      # TODO: Implement a buffer calculation
-      3
+      # One business day buffer
+      1
     end
   end
 end
