@@ -12,13 +12,6 @@ import { LoadingSpinner } from '../../LoadingSpinner/LoadingSpinner'
 import styles from './index.scss'
 
 class DocumentsDownloader extends React.Component {
-  static handleResponse (response) {
-    if (!response.ok) {
-      return Promise.reject(response.statusText)
-    }
-
-    return response.json()
-  }
 
   constructor (props) {
     super(props)
