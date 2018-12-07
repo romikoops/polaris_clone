@@ -69,6 +69,21 @@
       opacity: 0.85;
     }
   }
+  .errors {
+    text-align: center;
+    background: transparent;
+    font-size: 12px;
+		left: 0;
+		bottom: -25px;
+		color: rgba(black, 0.5);
+		width: max-content;
+		white-space: nowrap;
+  }
+  .no_errors {
+    visibility: hidden;
+    height: 0;
+    width: 0;
+  }
   .toggle_box_overlay {
     background: black;
     opacity: 0;
@@ -214,7 +229,7 @@
   }
   .autocomplete_container {
     position: relative;
-    background: #FFFFFF;
+    // background: #FFFFFF;
     z-index: 21;
 
   }
@@ -260,6 +275,7 @@
       &::placeholder {
         color: rgb(211, 104, 80);
       }}
+      top: -5px;
   }
   .exit_click {
     position: fixed;

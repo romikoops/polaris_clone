@@ -843,7 +843,11 @@
     "somethingWrong": "Something has gone wrong! A message has been sent to the support team and will be addressed shortly!",
     "pleaseRetry": "Please retry and if this error keeps happening please contact your store representative.",
     "contactExists": "Contact already exists.",
-    "didYouMean": "Did you mean"
+    "didYouMean": "Did you mean",
+    "invalidRequest": "Your request was not valid. Check inputs and try again.",
+    "notFound": "The place you serached for could not be found.",
+    "zeroResults": "No results were found for your search",
+    "unknownError": "An unknown error has occurred. Please try  again in a few minutes."
   },
   "trucking": {
     "isNotAvailableLocal": " is not available in ",
