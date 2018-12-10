@@ -16,6 +16,8 @@ function handleResponse (response) {
 function uploadPricings (file, mot, loadType, open) {
   const formData = new FormData()
   formData.append('file', file)
+  formData.append('mot', mot)
+  formData.append('load_type', loadType)
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader() },
@@ -23,7 +25,7 @@ function uploadPricings (file, mot, loadType, open) {
   }
   const url = open
     ? `/admin/open_pricings/ocean_${loadType}_pricings/process_csv` // deprecated?
-    : `/admin/pricings/${mot}_${loadType}/upload`
+    : `/admin/pricings/upload`
 
   return fetch(`${getTenantApiUrl()}${url}`, requestOptions).then(handleResponse)
 }

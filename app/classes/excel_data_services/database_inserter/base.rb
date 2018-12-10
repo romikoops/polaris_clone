@@ -39,6 +39,8 @@ module ExcelDataServices
             puts "Status: Sheet \"#{k_sheet_name}\" (##{sheet_i + 1}) | Row ##{row_i + 1}"
           end
         end
+
+        true
       end
 
       private

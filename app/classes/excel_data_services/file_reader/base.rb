@@ -5,8 +5,8 @@ module ExcelDataServices
     class Base
       attr_reader :xlsx, :sheets_data
 
-      def initialize(path:)
-        @xlsx = open_spreadsheet_file(path)
+      def initialize(file_or_path:)
+        @xlsx = open_spreadsheet_file(file_or_path)
         @sheets_data = {}
       end
 
@@ -33,9 +33,9 @@ module ExcelDataServices
 
       private
 
-      def open_spreadsheet_file(path)
-        path = path.to_s
-        Roo::Spreadsheet.open(path)
+      def open_spreadsheet_file(file_or_path)
+        file_or_path = Pathname(file_or_path).to_s
+        Roo::Spreadsheet.open(file_or_path)
       end
 
       def determine_data_extraction_method(_headers)

@@ -163,9 +163,9 @@ class CardPricingIndex extends Component {
         className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
       >
         {Object.keys(loadTypeOptions).map((loadType) => {
-          const downloadPricingText = (loadType
-            ? t('admin:downloadPricingWithLoadType', { mot: capitalize(mot), loadType: loadTypeOptions[loadType].toUpperCase() })
-            : t('admin:downloadPricing', { mot: capitalize(mot) })
+          const uploadPricingText = (loadType
+            ? t('admin:uploadPricingWithLoadType', { mot: capitalize(mot), loadType: loadTypeOptions[loadType].toUpperCase() })
+            : t('admin:uploadPricing', { mot: capitalize(mot) })
           )
 
           const options = { mot }
@@ -177,7 +177,7 @@ class CardPricingIndex extends Component {
                 adminStyles.action_section
               } flex-100 layout-row layout-wrap layout-align-center-center`}
             >
-              <p className="flex-100">{t('admin:uploadPricing')}</p>
+              <p className="flex-100">{uploadPricingText}</p>
               <FileUploader
                 theme={theme}
                 dispatchFn={file => this.pricingUpload(file, mot, snakeCase(loadType))}
