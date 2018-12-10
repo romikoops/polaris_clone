@@ -1,6 +1,7 @@
 <% shipper = shipment.shipper %>
 <% consignee = shipment.consignee %>
 <% notifyees = shipment.notifyees %>
+<% scope = tenant.scope %>
 <% primary_color = tenant.theme["colors"]["primary"] %>
 <% neutral_color = '#C4C4C4' %>
 <% precarriage_color = shipment.has_pre_carriage ? primary_color : neutral_color %>
@@ -255,22 +256,25 @@
           </div>
         </div>
       </div>
-      <div class="additional-services">
+      <% if scope['has_customs'] || scope['has_insurance']%>
+      
+        <div class="additional-services">
 
-        <h3>Additional <br/> Services</h3>
-        <div>
+          <h3>Additional <br/> Services</h3>
+          <div>
 
-          <div class="display-flex margin-bottom">
-            <i class="fa fa-user" style="color: <%= shipment.selected_offer["customs"] ? primary_color : '#E0E0E0' %>"></i>
-            <p>Customs</p>
-          </div>
+            <div class="display-flex margin-bottom">
+              <i class="fa fa-user" style="color: <%= shipment.selected_offer["customs"] ? primary_color : '#E0E0E0' %>"></i>
+              <p>Customs</p>
+            </div>
 
-          <div class="display-flex margin-bottom">
-            <i class="fa fa-umbrella" style="color: <%= shipment.selected_offer["insurance"] ? primary_color : '#E0E0E0' %>"></i>
-            <p>Insurance</p>
+            <div class="display-flex margin-bottom">
+              <i class="fa fa-umbrella" style="color: <%= shipment.selected_offer["insurance"] ? primary_color : '#E0E0E0' %>"></i>
+              <p>Insurance</p>
+            </div>
           </div>
         </div>
-      </div>
+      <% end %>
       <div class="total-section">      
         <p><span>x<%= shipment.aggregated_cargo ? '1' : shipment.cargo_units.pluck(:quantity).sum %>&nbsp;</span><%= load_type %></p>
         <h2>
