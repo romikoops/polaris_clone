@@ -132,6 +132,9 @@ gem 'marginalia', '~> 1.5'
 # Determines holidays by region
 gem 'holidays'
 
+# Translated customer content
+gem 'mobility', '~> 0.8.6'
+
 group :development, :test do
   # set environment variables - enforce loading environment right away
   gem 'dotenv-rails', require: 'dotenv/rails-now'

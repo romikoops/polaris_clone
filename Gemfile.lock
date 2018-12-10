@@ -832,6 +832,9 @@ GEM
     mini_portile2 (2.3.0)
     minitest (5.11.3)
     mjml-rails (4.2.4)
+    mobility (0.8.7)
+      i18n (>= 0.6.10, < 2)
+      request_store (~> 1.0)
     mongo (2.6.1)
       bson (>= 4.3.0, < 5.0.0)
     msgpack (1.2.4)
@@ -1076,6 +1079,7 @@ DEPENDENCIES
   marginalia (~> 1.5)
   mini_magick
   mjml-rails (~> 4.1)
+  mobility (~> 0.8.6)
   mongo (~> 2.4)
   nokogiri
   omniauth
