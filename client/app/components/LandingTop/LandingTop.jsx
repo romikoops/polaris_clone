@@ -118,6 +118,6 @@ LandingTop.defaultProps = {
   tenant: null,
   bookNow: null
 }
-const translatedLandingTop = withNamespaces(['common', 'landing'])(LandingTop)
+export const translatedLandingTop = withNamespaces(['common', 'landing'])(LandingTop)
 const contentLandingTop = withContent(translatedLandingTop, 'LandingTop')
 export default contentLandingTop

@@ -4,7 +4,7 @@ import { theme, user, identity, tenant } from '../../mocks'
 
 jest.mock('../Header/Header', () => ({ children }) => <header>{children}</header>)
 
-import LandingTop from './LandingTop'
+import { translatedLandingTop as LandingTop } from './LandingTop'
 
 const editedTenant = {
   data: {
