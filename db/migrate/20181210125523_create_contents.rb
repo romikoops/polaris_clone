@@ -5,7 +5,7 @@ class CreateContents < ActiveRecord::Migration[5.2]
       t.string :component
       t.string :section
       t.integer :index
-
+      t.integer :tenant_id
       t.timestamps
     end
   end

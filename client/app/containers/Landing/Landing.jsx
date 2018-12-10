@@ -9,7 +9,8 @@ import styles from './Landing.scss'
 import { RoundButton } from '../../components/RoundButton/RoundButton'
 import Loading from '../../components/Loading/Loading'
 import { userActions, authenticationActions } from '../../actions'
-import { gradientTextGenerator, isQuote } from '../../helpers'
+import { gradientTextGenerator, isQuote, contentToHtml } from '../../helpers'
+import withContent from '../../hocs/withContent'
 import Footer from '../../components/Footer/Footer'
 
 class Landing extends Component {
@@ -51,7 +52,7 @@ class Landing extends Component {
 
   render () {
     const {
-      theme, user, tenant
+      theme, user, tenant, content
     } = this.props
     const textStyle1 =
       theme && theme.colors
@@ -59,9 +60,32 @@ class Landing extends Component {
         : { color: 'black' }
 
     const loadingScreen = this.props.loading ? <Loading theme={theme} /> : ''
+    const defaultBulletContent = [
+      (<div className="flex layout-row layout-align-start-center">
+        <i className="fa fa-check" />
+        <p> Place bookings from wherever, whenever </p>
+      </div>),
+      (<div className="flex layout-row layout-align-start-center">
+        <i className="fa fa-check" />
+        <p> Get an instant overview of available offers </p>
+      </div>),
+      (<div className="flex layout-row layout-align-start-center">
+        <i className="fa fa-check" />
+        <p> Reuse old shipments and store addresses </p>
+      </div>),
+      (<div className="flex layout-row layout-align-start-center">
+        <i className="fa fa-check" />
+        <p> View or download documents when you need them </p>
+      </div>),
+      ( <div className="flex layout-row layout-align-start-center">
+        <i className="fa fa-check" />
+        <p> Pull statistics and reports on your logistics </p>
+      </div>)
+    ]
 
     const innerWrapperStyle = { position: 'relative', paddingBottom: isQuote(tenant) ? '60px' : '125px' }
-
+    const serviceContentToRender = content && content.services ? contentToHtml(content.services) : ['', '', '']
+    const bulletContentToRender = content && content.bullets ? contentToHtml(content.bullets) : defaultBulletContent
     return (
       <div className={`${styles.wrapper_landing} layout-row flex-100 layout-wrap`}>
         <div className=" layout-row flex-100 layout-wrap" style={innerWrapperStyle}>
@@ -86,29 +110,39 @@ class Landing extends Component {
                   <div
                     className="layout-row flex-100 flex-gt-sm-80 card layout-align-space-between-center"
                   >
-                    <div
-                      className={`flex-none layout-column layout-align-center-center ${styles.service}`}
-                    >
-                      <i className="fa fa-bolt" aria-hidden="true" style={textStyle1} />
-                      <h3> Instant Booking </h3>
-                    </div>
+                   
                     <div
                       className={`flex-none layout-column layout-align-center-center ${styles.service}`}
                     >
                       <i className="fa fa-edit" aria-hidden="true" style={textStyle1} />
                       <h3> Real Time Quotes </h3>
+                      <div
+                        className={`flex-none layout-column layout-align-center-center ${styles.service_text}`}
+                      >  
+                        {serviceContentToRender[0]}
+                      </div>
                     </div>
                     <div
                       className={`flex-none layout-column layout-align-center-center ${styles.service}`}
                     >
                       <i className="fa fa-binoculars" aria-hidden="true" style={textStyle1} />
                       <h3> Full Transparency </h3>
+                      <div
+                        className={`flex-none layout-column layout-align-center-center ${styles.service_text}`}
+                      >  
+                        {serviceContentToRender[1]}
+                      </div>
                     </div>
                     <div
                       className={`flex-none layout-column layout-align-center-center ${styles.service}`}
                     >
-                      <i className="fa fa-clock-o" aria-hidden="true" style={textStyle1} />
-                      <h3>Updates in Real Time </h3>
+                      <i className="fa fa-bolt" aria-hidden="true" style={textStyle1} />
+                      <h3> Instant Booking </h3>
+                      <div
+                        className={`flex-none layout-column layout-align-center-center ${styles.service_text}`}
+                      >  
+                        {serviceContentToRender[2]}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -120,27 +154,8 @@ class Landing extends Component {
                     <div className="flex-20 layout-column layout-align-center-start">
                       <h2> There are tons of benefits of managing your logistics online: </h2>
                     </div>
-                    <div className="flex-65 layout-column layout-align-start-start">
-                      <div className="flex layout-row layout-align-start-center">
-                        <i className="fa fa-check" />
-                        <p> Place bookings from wherever, whenever </p>
-                      </div>
-                      <div className="flex layout-row layout-align-start-center">
-                        <i className="fa fa-check" />
-                        <p> Get an instant overview of available offers </p>
-                      </div>
-                      <div className="flex layout-row layout-align-start-center">
-                        <i className="fa fa-check" />
-                        <p> Reuse old shipments and store addresses </p>
-                      </div>
-                      <div className="flex layout-row layout-align-start-center">
-                        <i className="fa fa-check" />
-                        <p> View or download documents when you need them </p>
-                      </div>
-                      <div className="flex layout-row layout-align-start-center">
-                        <i className="fa fa-check" />
-                        <p> Pull statistics and reports on your logistics </p>
-                      </div>
+                    <div className={`flex-65 layout-column layout-align-start-start ${styles.promo_bullets}`}>
+                      {bulletContentToRender}
                     </div>
                     <div className={
                       `${styles.btm_promo_btn_wrapper} flex-15 ` +
@@ -217,4 +232,4 @@ function mapStateToProps (state) {
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Landing))
+export default withContent(withRouter(connect(mapStateToProps, mapDispatchToProps)(Landing)), 'Landing')

@@ -5,7 +5,8 @@ import PropTypes from '../../prop-types'
 import styles from './LandingTop.scss'
 import Header from '../Header/Header'
 import ButtonSection from './ButtonSection'
-import isQuote from '../../helpers/tenant'
+import { isQuote, contentToHtml } from '../../helpers'
+import withContent from '../../hocs/withContent'
 
 const footerHeight = '60px'
 const StyledTop = styled.div`
@@ -21,7 +22,7 @@ const StyledTop = styled.div`
 `
 
 function LandingTop ({
-  theme, user, tenant, bookNow, t
+  theme, user, tenant, bookNow, t, content
 }) {
   const backgroundImage =
     theme && theme.background
@@ -46,6 +47,35 @@ function LandingTop ({
   const buttonSectionProps = {
     theme, user, tenant, bookNow
   }
+  const defaultContent = [
+    (<h2 className="flex-none">
+      <b>{t('landing:welcomeTextHead')}</b> <br />
+      <i> {tenant.name} </i> <b> <br />
+        {welcomeTextTail}</b>
+    </h2>),
+    (<div className={styles.wrapper_hr}>
+      <hr />
+    </div>),
+    (<div className={styles.wrapper_h3}>
+      {isQuote(tenant) ? (
+        <h3 className="flex-none">
+          {t('landing:descriptionQuoteHead')}
+          <b>{t('landing:descriptionQuoteMiddle')}</b>
+          {t('landing:descriptionQuoteTail')}
+        </h3>
+      ) : (
+        <h3 className="flex-none">
+          {t('landing:descriptionShopHead')}
+          <b>{t('landing:descriptionShopMiddle')}</b>
+          {t('landing:descriptionShopTail')}
+        </h3>
+      )
+      }
+    </div>)
+  ]
+
+  const contentToRender = content && content.welcome ? contentToHtml(content.welcome) : defaultContent
+
 
   return (
     <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage} tenant={tenant}>
@@ -61,30 +91,7 @@ function LandingTop ({
                 alt=""
                 className={`flex-none ${styles.tenant_logo_landing}`}
               />
-              <h2 className="flex-none">
-                <b>{t('landing:welcomeTextHead')}</b> <br />
-                <i> {tenant.name} </i> <b> <br />
-                  {welcomeTextTail}</b>
-              </h2>
-              <div className={styles.wrapper_hr}>
-                <hr />
-              </div>
-              <div className={styles.wrapper_h3}>
-                {isQuote(tenant) ? (
-                  <h3 className="flex-none">
-                    {t('landing:descriptionQuoteHead')}
-                    <b>{t('landing:descriptionQuoteMiddle')}</b>
-                    {t('landing:descriptionQuoteTail')}
-                  </h3>
-                ) : (
-                  <h3 className="flex-none">
-                    {t('landing:descriptionShopHead')}
-                    <b>{t('landing:descriptionShopMiddle')}</b>
-                    {t('landing:descriptionShopTail')}
-                  </h3>
-                )
-                }
-              </div>
+              { contentToRender }
             </div>
             <ButtonSection {...buttonSectionProps} className="hide_h_xxs" />
           </div>
@@ -111,5 +118,6 @@ LandingTop.defaultProps = {
   tenant: null,
   bookNow: null
 }
-
-export default withNamespaces(['common', 'landing'])(LandingTop)
+const translatedLandingTop = withNamespaces(['common', 'landing'])(LandingTop)
+const contentLandingTop = withContent(translatedLandingTop, 'LandingTop')
+export default contentLandingTop

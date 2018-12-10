@@ -203,6 +203,7 @@ ActiveRecord::Schema.define(version: 2018_12_10_125523) do
     t.string "component"
     t.string "section"
     t.integer "index"
+    t.integer "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -15,6 +15,7 @@ import bookingSummary from './bookingSummary.reducer'
 import { tenant, selectedSubdomain } from './tenant.reducer'
 import cookie from './cookie.reducer'
 import remark from './remark.reducer'
+import content from './content.reducer'
 
 const filter = (state = '', action) => {
   switch (action.type) {
@@ -41,7 +42,8 @@ const rootReducer = combineReducers({
   messaging,
   bookingSummary,
   document,
-  cookie
+  cookie,
+  content
 })
 
 export default rootReducer
