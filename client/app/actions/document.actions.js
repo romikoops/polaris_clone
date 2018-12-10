@@ -307,7 +307,7 @@ function uploadItinerarySchedules (file, target) {
     )
   }
 }
-function uploadLocalCharges (file) {
+function uploadLocalCharges (file, mot) {
   function request (uploadData) {
     return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
   }
@@ -321,7 +321,7 @@ function uploadLocalCharges (file) {
   return (dispatch) => {
     dispatch(request())
 
-    documentService.uploadLocalCharges(file).then(
+    documentService.uploadLocalCharges(file, mot).then(
       (data) => {
         dispatch(success(data))
       },

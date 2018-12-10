@@ -3,13 +3,14 @@ import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
 import FileUploader from '../../FileUploader/FileUploader'
-
 import { RoundButton } from '../../RoundButton/RoundButton'
 import DocumentsDownloader from '../../Documents/Downloader'
-
 import SideOptionsBox from '../SideOptions/SideOptionsBox'
 import CollapsingBar from '../../CollapsingBar/CollapsingBar'
 import AdminHubsComp from './AdminHubsComp' // eslint-disable-line
+import {
+  capitalize
+} from '../../../helpers'
 
 export class AdminHubsIndex extends Component {
   constructor (props) {
@@ -33,6 +34,7 @@ export class AdminHubsIndex extends Component {
     const {
       t, theme, viewHub, toggleNewHub, documentDispatch, scope
     } = this.props
+
     const hubUrl = '/admin/hubs/process_csv'
     const scUrl = '/admin/service_charges/process_csv'
     const newButton = (
@@ -47,58 +49,86 @@ export class AdminHubsIndex extends Component {
         />
       </div>
     )
+
     if (!this.props.hubs) {
       return ''
     }
+
+    const modeOfTransports = ['ocean', 'air']
+
+    const motBasedUploadButtons = (
+      <div>
+        {modeOfTransports.map(mot => (
+          <div
+            className={`${
+              styles.action_section
+            } flex-100 layout-row layout-align-center-center layout-wrap`}
+          >
+            <p className="flex-100 center">{t('admin:uploadLocalCharges', { mot: capitalize(mot) })}</p>
+            <FileUploader
+              theme={theme}
+              url={scUrl}
+              type="xlsx"
+              text={t('admin:hubExcel')}
+              dispatchFn={file => documentDispatch.uploadLocalCharges(file, mot)}
+            />
+          </div>
+        ))}
+      </div>
+    )
+
+    const motBasedDownloadButtons = (
+      <div>
+        {modeOfTransports.map(mot => (
+          <div
+            className={`${
+              styles.action_section
+            } flex-100 layout-row layout-wrap layout-align-center-center`}
+          >
+            <p className="flex-100 center">{t('admin:downloadLocalCharges', { mot: capitalize(mot) })}</p>
+            <DocumentsDownloader
+              theme={theme}
+              target="local_charges"
+              options={{ mot }}
+            />
+          </div>
+        ))}
+      </div>
+    )
 
     const actionNodes = [<SideOptionsBox
       header={t('admin:dataManager')}
       flexOptions="flex"
       content={(
         <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-          { scope.show_beta_features ? (
-            <CollapsingBar
-              showArrow
-              collapsed={!expander.upload}
-              theme={theme}
-              styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-              handleCollapser={() => this.toggleExpander('upload')}
-              text={t('admin:uploadData')}
-              faClass="fa fa-cloud-upload"
-              content={(
-                <div>
-                  <div
-                    className={`${
-                      styles.action_section
-                    } flex-100 layout-row layout-align-center-center layout-wrap`}
-                  >
-                    <p className="flex-100 center">{t('admin:uploadHubs')}</p>
-                    <FileUploader
-                      theme={theme}
-                      url={hubUrl}
-                      type="xlsx"
-                      text={t('admin:hubExcel')}
-                      dispatchFn={documentDispatch.uploadHubs}
-                    />
-                  </div>
-                  <div
-                    className={`${
-                      styles.action_section
-                    } flex-100 layout-row layout-align-center-center layout-wrap`}
-                  >
-                    <p className="flex-100 center">{t('admin:uploadLocalCharges')}</p>
-                    <FileUploader
-                      theme={theme}
-                      url={scUrl}
-                      type="xlsx"
-                      text={t('admin:hubExcel')}
-                      dispatchFn={documentDispatch.uploadLocalCharges}
-                    />
-                  </div>
+          <CollapsingBar
+            showArrow
+            collapsed={!expander.upload}
+            theme={theme}
+            styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+            handleCollapser={() => this.toggleExpander('upload')}
+            text={t('admin:uploadData')}
+            faClass="fa fa-cloud-upload"
+            content={(
+              <div>
+                <div
+                  className={`${
+                    styles.action_section
+                  } flex-100 layout-row layout-align-center-center layout-wrap`}
+                >
+                  <p className="flex-100 center">{t('admin:uploadHubs')}</p>
+                  <FileUploader
+                    theme={theme}
+                    url={hubUrl}
+                    type="xlsx"
+                    text={t('admin:hubExcel')}
+                    dispatchFn={documentDispatch.uploadHubs}
+                  />
                 </div>
-              )}
-            />
-          ) : '' }
+                {motBasedUploadButtons}
+              </div>
+            )}
+          />
           <CollapsingBar
             showArrow
             collapsed={!expander.download}
@@ -117,30 +147,7 @@ export class AdminHubsIndex extends Component {
                   <p className="flex-100 center">{t('admin:downloadHubs')}</p>
                   <DocumentsDownloader theme={theme} target="hubs" />
                 </div>
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-wrap layout-align-center-center`}
-                >
-                  <p className="flex-100 center">{t('admin:downloadOceanLocalCharges')}</p>
-                  <DocumentsDownloader
-                    theme={theme}
-                    target="local_charges"
-                    options={{ mot: 'ocean' }}
-                  />
-                </div>
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-wrap layout-align-center-center`}
-                >
-                  <p className="flex-100 center">{t('admin:downloadLocalCharges')}</p>
-                  <DocumentsDownloader
-                    theme={theme}
-                    target="local_charges"
-                    options={{ mot: 'air' }}
-                  />
-                </div>
+                {motBasedDownloadButtons}
               </div>
             )}
           />

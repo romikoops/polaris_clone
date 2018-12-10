@@ -21,7 +21,7 @@ module ExcelDataServices
           # Parse all but first row
           rows_data = []
           ((sheet_data.first_row + 1)..sheet_data.last_row).each do |row_nr|
-            row = stripped_whitespaces(sheet_data.row(row_nr))
+            row = strip_whitespaces(sheet_data.row(row_nr))
             rows_data << build_row_obj(headers, row).merge(row_nr: row_nr)
           end
 
@@ -73,7 +73,7 @@ module ExcelDataServices
         raise NotImplementedError, "This method must be implemented in #{self.class.name}."
       end
 
-      def stripped_whitespaces(row_data)
+      def strip_whitespaces(row_data)
         row_data.map! { |el| el.is_a?(String) ? el.strip : el }
       end
 

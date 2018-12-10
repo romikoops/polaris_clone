@@ -76,16 +76,17 @@ function uploadItinerarySchedules (file, target) {
   return fetch(`${getTenantApiUrl()}/admin/schedules/overwrite/${target}`, requestOptions).then(handleResponse)
 }
 
-function uploadLocalCharges (file) {
+function uploadLocalCharges (file, mot) {
   const formData = new FormData()
   formData.append('file', file)
+  formData.append('mot', mot)
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader() },
     body: formData
   }
 
-  return fetch(`${getTenantApiUrl()}/admin/local_charges/process_csv`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/admin/local_charges/upload`, requestOptions).then(handleResponse)
 }
 
 function downloadLocalCharges (options) {

@@ -5,7 +5,7 @@ module ExcelDataServices
     class LocalCharges < Base
       include ExcelDataServices::LocalChargesTool
 
-      def initialize(tenant_id:, file_name:, mode_of_transport:)
+      def initialize(tenant_id:, file_name:, mode_of_transport: nil)
         super(tenant_id: tenant_id, file_name: file_name)
         @mode_of_transport = mode_of_transport
       end

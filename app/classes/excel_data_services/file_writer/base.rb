@@ -59,7 +59,10 @@ module ExcelDataServices
             content_type: 'application/vnd.ms-excel'
           }
         )
+      rescue => e
+        binding.pry
       ensure
+        binding.pry
         tempfile.unlink
       end
 

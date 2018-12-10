@@ -11,6 +11,7 @@ export class AdminUploadsSuccess extends Component {
   static goBack () {
     history.goBack()
   }
+
   static prepShipment (baseShipment, clients, hubsObj) {
     const shipment = Object.assign({}, baseShipment)
     shipment.clientName = clients[shipment.user_id]

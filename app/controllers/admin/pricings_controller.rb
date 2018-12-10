@@ -154,12 +154,33 @@ class Admin::PricingsController < Admin::AdminBaseController
   end
 
   def load_type_renamed(load_type)
-    load_type_renamed = case load_type
-                        when 'cargo_item' then 'LCL'
-                        when 'container' then 'FCL'
-                        else
-                          raise StandardError, 'Unknown load type! Expected item of [cargo_item, container].'
+    case load_type
+    when 'cargo_item' then 'LCL'
+    when 'container' then 'FCL'
+    else
+      raise StandardError, 'Unknown load type! Expected item of [cargo_item, container].'
     end
+  end
+
+  def upload_pricings
+    file = upload_params[:file].tempfile
+    mot = upload_params[:mot]
+    load_type = upload_params[:load_type]
+    new_load_type = load_type_renamed(load_type)
+
+    klass_identifier = "#{mot.capitalize}#{new_load_type.capitalize}"
+
+    klass = ExcelDataServices::FileReader.const_get(klass_identifier)
+    options = { file_or_path: file }
+    result = klass.new(options).perform
+
+    klass = ExcelDataServices::DatabaseInserter.const_get(klass_identifier)
+    options = { tenant_id: current_tenant.id,
+                data: result,
+                options: { should_generate_trips: false } }
+    result = klass.new(options).perform
+
+    response_handler(result)
   end
 
   def download_pricings
@@ -182,42 +203,6 @@ class Admin::PricingsController < Admin::AdminBaseController
     puts '------------------------------------------------------------'
 
     response_handler(key: key, url: rails_blob_url(document.file, disposition: 'attachment'))
-  end
-
-  def upload_pricings
-    file = upload_params[:file].tempfile
-    mot = upload_params[:mot]
-    load_type = upload_params[:load_type]
-    new_load_type = load_type_renamed(load_type)
-
-    klass_identifier = "#{mot.capitalize}#{new_load_type.capitalize}"
-
-    klass = ExcelDataServices::FileReader.const_get(klass_identifier)
-    options = { file_or_path: file }
-    sheets_data = klass.new(options).perform
-
-    klass = ExcelDataServices::DatabaseInserter.const_get(klass_identifier)
-    options = { tenant_id: current_tenant.id,
-                data: sheets_data,
-                options: { should_generate_trips: false } }
-
-    result = klass.new(options).perform
-
-    binding.pry
-
-    response_handler(result)
-  end
-
-  def eliminate_user_pricings(prices, itineraries)
-    results = []
-    itineraries.each do |itin|
-      if !prices || prices&.empty?
-        results.push(itin)
-      else
-        results + itineraries_array(prices, itin)
-      end
-    end
-    results
   end
 
   def test

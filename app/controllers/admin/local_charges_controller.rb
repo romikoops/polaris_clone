@@ -12,9 +12,11 @@ class Admin::LocalChargesController < ApplicationController
       tenant_vehicle['name']
       { label: carrier_name.capitalize.to_s, value: tenant_vehicle['id'] }
     end
+
     counter_part_hubs = charges.map(&:counterpart_hub).uniq.compact.map do |hub|
       { label: hub.name, value: hub }
     end
+    
     resp = {
       hub_id:           params[:id],
       charges:          hub.local_charges,
@@ -43,6 +45,18 @@ class Admin::LocalChargesController < ApplicationController
     response_handler(customs_fee)
   end
 
+  def upload_local_charges
+    file = upload_params[:file].tempfile
+
+    options = { file_or_path: file }
+    sheets_data = ExcelDataServices::FileReader::LocalCharges.new(options).perform
+
+    options = { tenant_id: current_tenant.id, data: sheets_data }
+    result = ExcelDataServices::DatabaseInserter::LocalCharges.new(options).perform
+
+    response_handler(result)
+  end
+
   def download_local_charges
     mot = download_params[:mot]
     file_name = "#{current_user.tenant.name.downcase}__local_charges_#{mot.downcase}"
@@ -50,21 +64,19 @@ class Admin::LocalChargesController < ApplicationController
     options = { tenant_id: current_user.tenant.id, file_name: file_name, mode_of_transport: mot }
     document = ExcelDataServices::FileWriter::LocalCharges.new(options).perform
 
+    # Local file path (for debugging)
+    puts '------------------------------------------------------------'
+    puts ActiveStorage::Blob.service.send(:path_for, document.file.key)
+    puts '------------------------------------------------------------'
+
     response_handler(key: 'local_charges', url: rails_blob_url(document.file, disposition: 'attachment'))
   end
 
-  def overwrite
-    if params[:file]
-      req = { 'xlsx' => params[:file] }
-      resp = ExcelTool::OverwriteLocalCharges.new(params: req, user: current_user).perform
-
-      response_handler(resp)
-    else
-      response_handler(false)
-    end
-  end
-
   private
+
+  def upload_params
+    params.permit(:file)
+  end
 
   def download_params
     params.require(:options).permit(:mot)
