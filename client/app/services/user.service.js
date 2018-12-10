@@ -346,6 +346,10 @@ function requestPricing (req) {
   return fetch(`${getTenantApiUrl()}/pricings/${req.pricing_id}/request`, requestOptions).then(handleResponse)
 }
 
+function confirmAccount (token) {
+  return fetch(`${getTenantApiUrl()}/auth/confirmation?confirmation_token=${token}`).then(handleResponse)
+}
+
 export const userService = {
   getLocations,
   destroyAddress,
@@ -377,6 +381,7 @@ export const userService = {
   searchContacts,
   getPricings,
   getPricingsForItinerary,
-  requestPricing
+  requestPricing,
+  confirmAccount
 }
 export default userService

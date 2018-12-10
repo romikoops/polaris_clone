@@ -107,4 +107,8 @@ en:
       http_code: 401
       code: 1051
       message: "Invalid email or password."
+    incorrect_token: 
+      http_code: 401
+      code: 1052
+      message: "Wrong confirmation token provided, please retry"
 

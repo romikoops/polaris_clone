@@ -13,8 +13,8 @@ class AccountMailer < Devise::Mailer
     attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
 
     opts[:subject] = 'ItsMyCargo Account Email Confirmation'
-    redirect_url = base_url(tenant) + 'account'
-    @confirmation_url = "#{base_server_url}tenants/#{tenant.id}/auth/confirmation?confirmation_token=#{token}&redirect_url=#{redirect_url}"
+    @confirmation_url = "#{base_url(tenant)}account/confirmation/#{token}"
+
 
     @links = tenant.email_links ? tenant.email_links['confirmation_instructions'] : []
     WelcomeMailer.welcome_email(record).deliver_later
