@@ -48,6 +48,11 @@
     width: 150px;
     background-color: transparent;
     margin: 75px;
+    
+  }
+  .service_text{
+    max-width: 250px;
+    p { margin: 10px; text-align: center;}
   }
   .service i {
      // background: -webkit-linear-gradient(#00E503, #00ACE5);
@@ -59,6 +64,7 @@
     // }
 
     font-size: 40px !important;
+    
   }
   .mc {
     height: max-content;
@@ -95,6 +101,17 @@
     i {
       color: $green;
       margin-right: 10px;
+    }
+  }
+  .btm_promo > i {
+    color: $green;
+    margin-right: 10px;
+  }
+  .promo_bullets {
+    div {
+      width: 100%;
+      margin: 5px;
+      p {max-width: 90%;}
     }
   }
 }

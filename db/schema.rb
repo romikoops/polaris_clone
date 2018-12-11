@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_04_131342) do
+ActiveRecord::Schema.define(version: 2018_12_10_125523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -196,6 +196,16 @@ ActiveRecord::Schema.define(version: 2018_12_04_131342) do
     t.string "customs_text"
     t.integer "quantity"
     t.jsonb "unit_price"
+  end
+
+  create_table "contents", force: :cascade do |t|
+    t.jsonb "text", default: {}
+    t.string "component"
+    t.string "section"
+    t.integer "index"
+    t.integer "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "conversations", force: :cascade do |t|
