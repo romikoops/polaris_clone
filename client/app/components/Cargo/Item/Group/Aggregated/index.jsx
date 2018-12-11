@@ -18,7 +18,7 @@ function CargoItemGroupAggregated ({ group, t }) {
       >
         <div className="flex-33 layout-row layout-align-space-around">
           <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center"><span className={styles.cargo_type}>{group.payload_in_kg || group.weight}</span> &nbsp;kg </p>
+            <p className="flex-none layout-row layout-align-center-center"><span className={styles.cargo_type}>{numberSpacing(group.payload_in_kg || group.weight, 2)}</span> &nbsp;kg </p>
             <p className="flex-none layout-row layout-align-center-center">{t('common:grossWeight')}</p>
           </div>
         </div>

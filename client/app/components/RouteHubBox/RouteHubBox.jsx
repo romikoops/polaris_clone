@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
+import { get } from 'lodash'
 import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
 import styles from './RouteHubBox.scss'
@@ -41,8 +42,28 @@ class RouteHubBox extends Component {
       </div>
     ]
   }
+
   static dashedGradient (color1, color2) {
     return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`
+  }
+
+  static formatAddress (address) {
+    const keys = [['street_number',
+      'street'],
+    ['city',
+      'zip_code'],
+    ['country.name']]
+
+    const addressComponents = []
+    keys.forEach((keyArray) => {
+      const section = keyArray.map(k => get(address, k, false)).filter(x => x).join(', ')
+      if (section.length > 0) {
+        addressComponents.push(section)
+        addressComponents.push(<br />)
+      }
+    })
+
+    return addressComponents
   }
 
   render () {
@@ -85,14 +106,15 @@ class RouteHubBox extends Component {
       shipment.pickup_address ? (
         <div className={`flex-100 layout-row layout-align-center-start ${styles.address_padding}`}>
           <div className="flex-50 layout-row layout-align-start-center">
-            <p className="flex-none"><b>{t('common:withPickupFrom')}:</b></p>
+            <p className="flex-none">
+              <b>
+                {`${t('common:withPickupFrom')}:`}
+              </b>
+            </p>
           </div>
           <div className="flex-50 layout-row layout-align-end-center">
             <p className={` ${styles.itinerary_address} flex-none`}>
-              {`${shipment.pickup_address.street_number || ''} ${shipment.pickup_address.street || ''}`}, <br />
-              {`${shipment.pickup_address.city || ''}, ${' '} `}
-              {`${shipment.pickup_address.zip_code || ''}, `}
-              {`${shipment.pickup_address.country.name || ''}`} <br />
+              {RouteHubBox.formatAddress(shipment.pickup_address)}
             </p>
           </div>
 
@@ -104,14 +126,16 @@ class RouteHubBox extends Component {
       shipment.delivery_address ? (
         <div className={`flex-100 layout-row layout-align-center-start layout-wrap ${styles.address_padding}`}>
           <div className="flex-50 layout-row layout-align-start-center">
-            <p className="flex-none"><b>{t('common:withDeliveryTo')}:</b></p>
+            <p className="flex-none">
+              <b>
+                {`${t('common:withDeliveryTo')}:`}
+              </b>
+            </p>
           </div>
           <div className="flex-50 layout-row layout-align-end-center">
             <p className={` ${styles.itinerary_address} flex-none`}>
-              {`${shipment.delivery_address.street_number || ''} ${shipment.delivery_address.street || ''}`}, <br />
-              {`${shipment.delivery_address.city || ''}, ${' '} `}
-              {`${shipment.delivery_address.zip_code || ''}, `}
-              {`${shipment.delivery_address.country.name || ''}`} <br />
+              {RouteHubBox.formatAddress(shipment.delivery_address)}
+
             </p>
           </div>
 
@@ -123,7 +147,12 @@ class RouteHubBox extends Component {
 
       <div className={`flex-100 layout-row layout-align-center-start layout-wrap ${styles.address_padding}`}>
         <div className="flex-50 layout-row layout-align-start-center">
-          <p className="flex-none"><b>{t('bookconf:expectedArrival')}:</b></p>
+          <p className="flex-none">
+            <b>
+              {t('bookconf:expectedArrival')}
+:
+            </b>
+          </p>
         </div>
         <div className="flex-50 layout-row layout-align-end-center">
           <p className="flex-none">{formatDate(shipment.planned_eta)}</p>
@@ -135,7 +164,12 @@ class RouteHubBox extends Component {
 
       <div className={`flex-100 layout-row layout-align-center-start layout-wrap ${styles.address_padding}`}>
         <div className="flex-50 layout-row layout-align-start-center">
-          <p className="flex-none"><b>{t('bookconf:expectedDeparture')}:</b></p>
+          <p className="flex-none">
+            <b>
+              {t('bookconf:expectedDeparture')}
+:
+            </b>
+          </p>
         </div>
         <div className="flex-50 layout-row layout-align-end-center">
           <p className="flex-none">{formatDate(shipment.planned_etd)}</p>
@@ -150,11 +184,17 @@ class RouteHubBox extends Component {
         >
           <p className="no_m center flex-none">
             {' '}
-            <b>{t('shipment:estimatedTransitTime')}:</b>
+            <b>
+              {t('shipment:estimatedTransitTime')}
+:
+            </b>
           </p>
           <p className="flex-none no_m center">
             {' '}
-            {moment(shipment.planned_eta).diff(moment(shipment.planned_etd), t('common:days'))} days{' '}
+            {moment(shipment.planned_eta).diff(moment(shipment.planned_etd), t('common:days'))}
+            {' '}
+days
+            {' '}
           </p>
         </div>
       ) : (
@@ -173,7 +213,11 @@ class RouteHubBox extends Component {
                   <i className="fa fa-map-marker" />
                 </div>
                 <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                  <h6 className="flex-100"> {startHub.name} </h6>
+                  <h6 className="flex-100">
+                    {' '}
+                    {startHub.name}
+                    {' '}
+                  </h6>
                 </div>
               </div>
             </div>
@@ -198,24 +242,45 @@ class RouteHubBox extends Component {
             </div>
             <div className="flex-85 layout-row layout-wrap">
               <div className="flex-100 layout-row layout-align-space-between-stretch">
-                <p className="flex-none"><b>{t('shipment:serviceLevel')}:</b></p>
+                <p className="flex-none">
+                  <b>
+                    {t('shipment:serviceLevel')}
+:
+                  </b>
+                </p>
                 <p className="flex-none">{` ${capitalize(shipment.service_level)}`}</p>
               </div>
               {shipment.carrier
-                ? (<div className="flex-100 layout-row layout-align-space-between-stretch">
+                ? (
+                  <div className="flex-100 layout-row layout-align-space-between-stretch">
 
-                  <p className="flex-none"><b>{t('shipment:carrier')}:</b> </p>
-                  <p className="flex-none">{capitalize(shipment.carrier)}</p>
+                    <p className="flex-none">
+                      <b>
+                        {t('shipment:carrier')}
+:
+                      </b>
+                      {' '}
+                    </p>
+                    <p className="flex-none">{capitalize(shipment.carrier)}</p>
 
-                </div>)
+                  </div>
+                )
                 : '' }
               {shipment.vessel_name
-                ? (<div className="flex-100 layout-row layout-align-space-between-stretch">
+                ? (
+                  <div className="flex-100 layout-row layout-align-space-between-stretch">
 
-                  <p className="flex-none"><b>{t('shipment:vesselName')}:</b> </p>
-                  <p className="flex-none">{capitalize(shipment.vessel_name)}</p>
+                    <p className="flex-none">
+                      <b>
+                        {t('shipment:vesselName')}
+:
+                      </b>
+                      {' '}
+                    </p>
+                    <p className="flex-none">{capitalize(shipment.vessel_name)}</p>
 
-                </div>)
+                  </div>
+                )
                 : '' }
             </div>
           </div>
@@ -229,7 +294,11 @@ class RouteHubBox extends Component {
                   <i className="fa fa-flag" />
                 </div>
                 <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                  <h6 className="flex-100"> {endHub.name} </h6>
+                  <h6 className="flex-100">
+                    {' '}
+                    {endHub.name}
+                    {' '}
+                  </h6>
                 </div>
               </div>
             </div>
