@@ -189,5 +189,6 @@ Rails.application.routes.draw do
     post 'messaging/shipments' => 'notifications#shipments_data'
     post 'messaging/mark' => 'notifications#mark_as_read'
     post 'clear_shoryuken' => 'application#clear_shoryuken'
+    get 'content/component/:component' => 'contents#component'
   end
 end

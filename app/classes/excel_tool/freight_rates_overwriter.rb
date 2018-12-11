@@ -145,7 +145,7 @@ module ExcelTool
     def set_pricing_key(row)
       @pricing_key = "#{row[:origin].gsub(/\s+/, '').gsub(/,+/, '')}\
       _#{row[:destination].gsub(/\s+/, '').gsub(/,+/, '')}\
-      _#{row[:mot]}_#{row[:vehicle]}_#{row[:carrier]}_#{row[:customer_id]}"
+      _#{row[:mot]}_#{row[:vehicle]}_#{row[:carrier]}_#{row[:customer_id]}_#{row[:effective_date]}"
     end
 
     def set_cargo_type(row)
@@ -358,12 +358,15 @@ module ExcelTool
           transport_category = aux_data[it_key][:tenant_vehicle].vehicle.transport_categories.find_by(name: "any", cargo_class: cargo_key)
           itinerary = aux_data[it_key][:itinerary]
           user = aux_data[it_key][:customer]
+
           next unless itinerary.id
           pricing = itinerary.pricings.find_or_create_by!(
             transport_category: transport_category,
             tenant: tenant,
             user: user,
-            tenant_vehicle_id: aux_data[it_key][:tenant_vehicle].id
+            tenant_vehicle_id: aux_data[it_key][:tenant_vehicle].id,
+            effective_date: pricing_data[:effective_date],
+            expiration_date: pricing_data[:expiration_date]
           )
           pricing_details = new_pricing_data.delete(:data)
           pricing_exceptions = new_pricing_data.delete(:exceptions)

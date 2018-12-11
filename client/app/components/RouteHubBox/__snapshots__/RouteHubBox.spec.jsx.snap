@@ -58,7 +58,7 @@ exports[`shallow rendering 1`] = `
             className="flex-none"
           >
             <b>
-              Expected Time of Departure
+              Expected Time of Departure from Terminal
               :
             </b>
           </p>
@@ -84,7 +84,7 @@ exports[`shallow rendering 1`] = `
           className="flex-85 height_100 layout-row layout-wrap layout-align-end-center"
           style={
             Object {
-              "marginTop": "100px",
+              "marginTop": "75px",
             }
           }
         >
@@ -143,17 +143,18 @@ exports[`shallow rendering 1`] = `
             >
                
               19
-               days
+               
+              days
                
             </p>
           </div>
         </div>
       </div>
       <div
-        className="flex-85 layout-row layout-wrap"
+        className="flex-85 layout-row layout-wrap "
       >
         <div
-          className="flex-100 layout-row layout-align-space-between-stretch"
+          className=" flex-100 layout-row layout-align-space-between-stretch time_diff"
         >
           <p
             className="flex-none"
@@ -222,7 +223,7 @@ exports[`shallow rendering 1`] = `
             className="flex-none"
           >
             <b>
-              Expected Time of Arrival
+              Expected Time of Arrival at Terminal
               :
             </b>
           </p>

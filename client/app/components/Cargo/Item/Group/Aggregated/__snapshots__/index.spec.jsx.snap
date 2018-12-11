@@ -19,7 +19,7 @@ exports[`shallow render 1`] = `
           <span
             className="cargo_type"
           >
-            4
+            4.00
           </span>
             kg 
         </p>
@@ -102,7 +102,7 @@ exports[`size_class is truthy 1`] = `
           <span
             className="cargo_type"
           >
-            4
+            4.00
           </span>
             kg 
         </p>

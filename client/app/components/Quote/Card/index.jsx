@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react'
 import { withNamespaces } from 'react-i18next'
 import styles from './index.scss'
-import PropTypes from '../../../prop-types'
 import { moment } from '../../../constants'
 import {
   switchIcon,
@@ -15,30 +14,9 @@ import { ChargeIcons } from './ChargeIcons'
 import QuoteChargeBreakdown from '../../QuoteChargeBreakdown/QuoteChargeBreakdown'
 import { RoundButton } from '../../RoundButton/RoundButton'
 import CollapsingContent from '../../CollapsingBar/Content'
+import QuoteCardScheduleList from './ScheduleList'
 
 class QuoteCard extends PureComponent {
-  static returnHubType (hub) {
-    let hubType = ''
-    switch (hub.hub_type) {
-      case 'ocean':
-        hubType = 'Port'
-        break
-      case 'air':
-        hubType = 'Airport'
-        break
-      case 'rail':
-        hubType = 'Railyard'
-        break
-      case 'truck':
-        hubType = 'Depot'
-        break
-      default:
-        break
-    }
-
-    return hubType
-  }
-
   constructor (props) {
     super(props)
     this.state = {
@@ -50,6 +28,7 @@ class QuoteCard extends PureComponent {
       expander: {}
     }
     this.handleClickChecked = this.handleClickChecked.bind(this)
+    this.handleSelectSchedule = this.handleSelectSchedule.bind(this)
   }
 
   componentDidMount () {
@@ -84,7 +63,7 @@ class QuoteCard extends PureComponent {
     ), () => this.toggleExpander(key))
   }
 
-  selectSchedule (schedule) {
+  handleSelectSchedule (schedule) {
     const { result, selectResult } = this.props
     const ammendedSchedule = {
       ...schedule,
@@ -171,62 +150,6 @@ class QuoteCard extends PureComponent {
       ? aggregatedCargo.weight
       : cargo.reduce((sum, cargoUnit) => (sum + +cargoUnit.payload_in_kg * +cargoUnit.quantity), 0)
 
-    const schedulesArr = schedules.map(schedule => (
-      <div className={`flex-100 layout-row layout-align-start-center ${styles.dates_container}`}>
-        <div className={`flex-75 layout-row ${styles.dates_row}`}>
-          <div className="flex-25 layout-wrap layout-row layout-align-center-center">
-            <div className="flex-100 layout-row">
-              <p className={`flex-none ${styles.sched_elem}`}>
-                {' '}
-                {moment(schedule.closing_date).format('DD-MM-YYYY')}
-                {' '}
-              </p>
-            </div>
-          </div>
-          <div className="flex-25 layout-wrap layout-row layout-align-center-center">
-            <div className="flex-100 layout-row">
-              <p className={`flex-none ${styles.sched_elem}`}>
-                {' '}
-                {moment(schedule.etd).format('DD-MM-YYYY')}
-                {' '}
-              </p>
-            </div>
-          </div>
-          <div className="flex-25 layout-wrap layout-row layout-align-center-center">
-            <div className="flex-100 layout-row">
-              <p className={`flex-none ${styles.sched_elem}`}>
-                {' '}
-                {moment(schedule.eta).format('DD-MM-YYYY')}
-                {' '}
-              </p>
-            </div>
-          </div>
-          <div className="flex-25 layout-wrap layout-row layout-align-center-center">
-            <div className="flex-100 layout-row">
-              <p className={`flex-none ${styles.sched_elem}`}>
-                {' '}
-                {moment(schedule.eta).diff(schedule.etd, t('common:days'))}
-                {t('common:capitalDays')}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="flex-25 layout-row layout-wrap" style={{ textAlign: 'right' }}>
-          <RoundButton
-            classNames="quote_card_select"
-            size="small"
-            handleNext={() => this.selectSchedule(schedule)}
-            theme={theme}
-            text={t('common:select')}
-          />
-        </div>
-      </div>
-    ))
-    const firstSchedule = schedules[0]
-    const lastSchedule = schedules[result.schedules.length - 1]
-    const earlierDate = schedules[0] ? firstSchedule.closing_date : false
-    const showEarlierBtn = earlierDate && moment(earlierDate).diff(moment(), t('common:days')) > 5
-
     const responsiveFlex = isQuote(tenant) ? 'flex-lg-80 offset-lg-20' : ''
 
     return (
@@ -248,13 +171,13 @@ class QuoteCard extends PureComponent {
             <div className="layout-column layout-align-center-start">
               <p>
                 {t('common:from')}
-:
+                :
                 {' '}
                 <span>{originHub.name}</span>
               </p>
               <p>
                 {t('common:to')}
-:
+                :
                 {' '}
                 <span>{destinationHub.name}</span>
               </p>
@@ -275,11 +198,11 @@ class QuoteCard extends PureComponent {
             <div className={`flex-100 layout-row layout-wrap layout-align-end-center ${styles.unit_info}`}>
               <p className="flex-100 layout-row layout-align-end-center">
                 {capitalize(t('acronym:kg'))}
-:&nbsp;
+                :&nbsp;
                 <span>
                   { numberSpacing(calcPayload, 1) }
                   {' '}
-kg
+                  kg
                 </span>
               </p>
             </div>
@@ -311,62 +234,16 @@ kg
               : ''
           }
         </div>
-
-        <CollapsingContent
-          collapsed={!showSchedules}
-          content={(
-            <div className="flex-100 layout-wrap layout-row">
-              <div className={`flex-100 layout-row ${styles.dates_row} ${styles.dates_container} ${styles.dates_header}`}>
-                <div className="flex-75 layout-row">
-                  <div className="flex-25 layout-row">
-                    <h4 className={styles.date_title}>{t('common:closingDate')}</h4>
-                  </div>
-                  <div className="flex-25 layout-row">
-                    <h4 className={styles.date_title}>{`${t('common:etd')} ${QuoteCard.returnHubType(originHub)}`}</h4>
-                  </div>
-                  <div className="flex-25 layout-row">
-                    <h4 className={styles.date_title}>{`${t('common:eta')} ${QuoteCard.returnHubType(destinationHub)} `}</h4>
-                  </div>
-                  <div className="flex-25 layout-row">
-                    <h4 className={styles.date_title}>{t('quote:estimatedTT')}</h4>
-                  </div>
-                </div>
-                <div className="flex-25 layout-row" />
-              </div>
-
-              {schedulesArr}
-              <div className={`flex-100 layout-row layout-align-space-around-center ${styles.date_btns}`}>
-                <div
-                  className={`flex-30 layout-row layout-align-center-center
-                   ${showEarlierBtn ? '' : styles.disabled} ${styles.date_btn}`}
-                  onClick={showEarlierBtn ? () => this.handleSchedulesRequest(-1) : null}
-                >
-                  <div className="flex-none layout-row layout-align-space-around-center">
-                    <i className="flex-none fa fa-chevron-left" />
-                    <p className="flex-none">{t('common:earlierDeparturesBase')}</p>
-                  </div>
-                </div>
-                <div className="flex-40 layout-row layout-align-center">
-                  <p className="flex-100 center">
-                    {`${moment(firstSchedule.closing_date).format('ll')} -
-                      ${moment(lastSchedule.closing_date).format('ll')}
-                    `}
-                  </p>
-                </div>
-                <div
-                  className={`flex-30 layout-row layout-align-center-center
-                  ${!finalResults ? '' : styles.disabled} ${styles.date_btn} ${styles.date_btn}`}
-                  onClick={!finalResults ? () => this.handleSchedulesRequest(1) : null}
-                >
-                  <div className="flex-none layout-row layout-align-space-around-center">
-                    <p className="flex-none">{t('common:laterDeparturesBase')}</p>
-                    <i className="flex-none fa fa-chevron-right" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        />
+        <CollapsingContent collapsed={!showSchedules}>
+          <QuoteCardScheduleList
+            schedules={schedules}
+            theme={theme}
+            finalResults={finalResults}
+            originHub={originHub}
+            destinationHub={destinationHub}
+            onSelectSchedule={this.handleSelectSchedule}
+          />
+        </CollapsingContent>
         <CollapsingContent collapsed={showSchedules}>
           <QuoteChargeBreakdown
             theme={theme}

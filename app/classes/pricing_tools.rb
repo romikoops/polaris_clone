@@ -3,17 +3,9 @@
 module PricingTools
   include CurrencyTools
   DEFAULT_MAX = Float::INFINITY
-  def get_user_price(schedule, transport_category_id, user, shipment_date)
-    pricing = Pricing.find_by(
-      itinerary_id: schedule.trip.itinerary.id,
-      user_id: user.id, transport_category_id: transport_category_id,
-      tenant_vehicle_id: schedule.trip.tenant_vehicle_id
-    )
-    pricing ||= Pricing.find_by(
-      itinerary_id: schedule.trip.itinerary.id,
-      transport_category_id: transport_category_id,
-      tenant_vehicle_id: schedule.trip.tenant_vehicle_id
-    )
+  def get_user_price(pricing_id, shipment_date)
+
+    pricing = Pricing.find(pricing_id)
 
     return if pricing.nil?
 
@@ -129,11 +121,9 @@ module PricingTools
     totals
   end
 
-  def determine_cargo_item_price(cargo, schedule, user, _quantity, shipment_date, mot)
-    transport_category = transport_category(cargo, schedule)
-    return nil if transport_category.nil?
-    transport_category_id = transport_category.id
-    pricing = get_user_price(schedule, transport_category_id, user, shipment_date)
+  def determine_cargo_item_price(cargo, pricing_id, user, _quantity, shipment_date, mot)
+    return nil if pricing_id.nil?
+    pricing = get_user_price(pricing_id, shipment_date)
 
     return nil if pricing.nil?
     totals = { 'total' => {} }
@@ -159,10 +149,11 @@ module PricingTools
     totals
   end
 
-  def determine_container_price(container, schedule, user, _quantity, shipment_date, mot)
-    transport_category_id = transport_category(container, schedule).id
-    pricing = get_user_price(schedule, transport_category_id, user, shipment_date)
-    return if pricing.nil?
+  def determine_container_price(container, pricing_id, user, _quantity, shipment_date, mot)
+    return nil if pricing_id.nil?
+    pricing = get_user_price(pricing_id, shipment_date)
+
+    return nil if pricing.nil?
     totals = { 'total' => {} }
 
     pricing.each do |k, fee|
@@ -323,7 +314,7 @@ module PricingTools
              when 'PER_X_KG_FLAT'
                max = fee['max'] || DEFAULT_MAX
                base = fee['base'].to_d
-               val = fee['value'] * (cargo_hash[:weight] / base).round(2) * base
+               val = fee['value'] * (cargo_hash[:weight].round(2) / base).ceil() * base
                min = fee['min'] || 0
                res = [val, min].max
                [res, max].min

@@ -631,6 +631,13 @@ module ShippingTools
   def self.shipper_notification_email(user, shipment)
     ShipmentMailer.shipper_notification(user, shipment).deliver_later
   end
+  
+  def self.shipper_welcome_email(user, shipment)
+    no_welcome_content = Content.where(tenant_id: user.tenant_id, component: 'WelcomeMail').empty?
+    unless no_welcome_content
+      WelcomeMailer.welcome_email(user, shipment).deliver_later
+    end
+  end
 
   def self.shipper_confirmation_email(user, shipment)
     ShipmentMailer.shipper_confirmation(

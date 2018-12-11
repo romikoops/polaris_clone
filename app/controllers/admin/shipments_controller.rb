@@ -258,6 +258,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     when 'accept'
       @shipment.confirm!
       ShippingTools.shipper_confirmation_email(@shipment.user, @shipment)
+      ShippingTools.shipper_welcome_email(@shipment.user)
       add_message_to_convo(@shipment.user, booking_accepted_message, true)
       response_handler(@shipment.with_address_options_json)
     when 'decline'
