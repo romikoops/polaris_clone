@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from '../../prop-types'
 import PageNavigation from './PageNavigation'
 import { responsive } from '../../helpers'
 
@@ -79,32 +78,26 @@ class Pagination extends React.PureComponent {
 
   render () {
     const { page } = this.state
+    const numPages = this.getNumPages()
     const childProps = {
       page,
-      numPages: this.getNumPages(),
-      nextPage: this.nextPage,
-      prevPage: this.prevPage
+      numPages,
+      nextPage: +page < numPages ? this.nextPage : null,
+      prevPage: +page > 1 ? this.prevPage : null
     }
 
-    return [
-      this.props.children({ ...childProps, items: this.getPaginatedItems() }),
-      <PageNavigation {...childProps} />
-    ]
-  }
-}
+    const children = this.props.children({ ...childProps, items: this.getPaginatedItems() })
 
-Pagination.propTypes = {
-  perPage: PropTypes.oneOf(PropTypes.number, PropTypes.objectOf(PropTypes.number)),
-  paginationDispatch: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired,
-  metaData: PropTypes.objectOf(PropTypes.any).isRequired,
-  children: PropTypes.node.isRequired,
-  items: PropTypes.arrayOf(PropTypes.any)
+    if (!this.props.pageNavigation) return children
+
+    return [children, <PageNavigation {...childProps} />]
+  }
 }
 
 Pagination.defaultProps = {
   perPage: 6,
-  items: []
+  items: [],
+  pageNavigation: true
 }
 
 export default Pagination
