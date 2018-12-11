@@ -9,10 +9,8 @@ class WelcomeMailer < ApplicationMailer
     tenant = @user.tenant
     @theme = tenant.theme
     @content = Content.get_component('WelcomeMail', tenant.id)
-    # binding.pry
     mail(
-      to: 'warwick@itsmycargo.com',
-      # to: @user.email,
+      to: @user.email,
       subject: @content['subject'][0]&.text
     ) do |format|
       format.html
