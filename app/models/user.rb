@@ -193,6 +193,10 @@ class User < ApplicationRecord
     !pricings.empty?
   end
 
+  def agency_pricing_id
+    agency&.agency_manager_id
+  end
+
   def for_admin_json(options = {})
     new_options = options.reverse_merge(
       except: %i(tokens encrypted_password created_at updated_at optin_status_id role_id),
