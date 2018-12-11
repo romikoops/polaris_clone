@@ -98,7 +98,7 @@ module OfferCalculatorService
         # Find the group with the most pricings and create the object to be passed on
         most_diverse_set = pricings_by_cargo_class.values.sort_by{|pricing_group| pricing_group.length}.last
         other_pricings = pricings_by_cargo_class.values.reject{|pricing_group| pricing_group == most_diverse_set}.flatten
-        raise ApplicationError::NoValidPricings if most_diverse_set.empty?
+        raise ApplicationError::NoValidPricings if most_diverse_set.nil?
         most_diverse_set.each do |pricing|
           obj = {
             pricing_ids: {
