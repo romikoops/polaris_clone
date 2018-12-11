@@ -51,7 +51,8 @@ FactoryBot.define do
           }
         },
         open_quotation_tool: true,
-        closed_quotation_tool: true
+        closed_quotation_tool: true,
+        total_dimensions: true
       }
     end
 

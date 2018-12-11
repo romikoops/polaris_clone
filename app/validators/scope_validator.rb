@@ -6,6 +6,7 @@ class ScopeValidator < ActiveModel::EachValidator
     fixed_currency has_customs has_insurance incoterm_info_level modes_of_transport terms
     carriage_options closed_quotation_tool open_quotation_tool require_full_address
     fixed_exchange_rates closed_shop closed_registration continuous_rounding fee_detail
+    total_dimensions
   ].freeze
   LOAD_TYPES         = %w[cargo_item container].freeze
   DIRECTIONS         = %w[import export].freeze
