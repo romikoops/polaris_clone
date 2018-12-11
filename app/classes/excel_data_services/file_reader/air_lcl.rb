@@ -4,6 +4,7 @@ module ExcelDataServices
   module FileReader
     class AirLcl < Base
       include ExcelDataServices::PricingTool
+      include DataRestructurer::Pricing
 
       private
 

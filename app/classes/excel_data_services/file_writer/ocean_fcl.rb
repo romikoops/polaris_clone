@@ -53,7 +53,7 @@ module ExcelDataServices
         when 'With Ranges'
           ONE_COL_FEE_AND_RANGES_HEADERS
         else
-          raise StandardError, "Unknown sheet name \"#{sheet_name}\"!"
+          raise UnknownSheetNameError, "Unknown sheet name \"#{sheet_name}\"!"
         end
       end
     end

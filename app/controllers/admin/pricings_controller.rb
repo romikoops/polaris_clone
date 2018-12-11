@@ -163,6 +163,7 @@ class Admin::PricingsController < Admin::AdminBaseController
   end
 
   def upload_pricings
+    tenant_id = current_tenant.id
     file = upload_params[:file].tempfile
     mot = upload_params[:mot]
     load_type = upload_params[:load_type]
@@ -171,11 +172,11 @@ class Admin::PricingsController < Admin::AdminBaseController
     klass_identifier = "#{mot.capitalize}#{new_load_type.capitalize}"
 
     klass = ExcelDataServices::FileReader.const_get(klass_identifier)
-    options = { file_or_path: file }
+    options = { tenant_id: tenant_id, file_or_path: file }
     result = klass.new(options).perform
 
     klass = ExcelDataServices::DatabaseInserter.const_get(klass_identifier)
-    options = { tenant_id: current_tenant.id,
+    options = { tenant_id: tenant_id,
                 data: result,
                 options: { should_generate_trips: false } }
     result = klass.new(options).perform

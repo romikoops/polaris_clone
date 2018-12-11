@@ -3,9 +3,15 @@
 module ExcelDataServices
   module FileReader
     class Base
-      attr_reader :xlsx, :sheets_data
+      ParsingError = Class.new(StandardError)
+      HubNotFoundError = Class.new(StandardError)
+      InvalidHeadersError = Class.new(ParsingError)
+      UnknownSheetNameError = Class.new(ParsingError)
 
-      def initialize(file_or_path:)
+      attr_reader :tenant, :xlsx, :sheets_data
+
+      def initialize(tenant_id:, file_or_path:)
+        @tenant = Tenant.find(tenant_id)
         @xlsx = open_spreadsheet_file(file_or_path)
         @sheets_data = {}
       end
@@ -28,6 +34,7 @@ module ExcelDataServices
           @sheets_data[sheet_name][:rows_data] = sanitize_rows_data(rows_data)
         end
 
+        @sheets_data = restructure_data(@sheets_data)
         @sheets_data
       end
 
@@ -56,14 +63,16 @@ module ExcelDataServices
       def validate_headers(headers, sheet_name, data_extraction_method)
         valid_headers = build_valid_headers(data_extraction_method)
         passing_headers = valid_headers.select.with_index { |el, i| el == headers[i] }
-        failing_headers_indices = valid_headers.each_with_object([]).with_index { |(el, indices), i| indices << i if el != headers[i] }
+        failing_headers_indices = valid_headers.each_with_object([]).with_index do |(el, indices), i|
+          indices << i if el != headers[i]
+        end
         failing_headers = headers.values_at(*failing_headers_indices)
         failing_headers_sould_be = valid_headers - passing_headers
 
         unless failing_headers.blank?
-          raise StandardError, "The following headers of sheet \"#{sheet_name}\" are not valid:\n" \
-                               "IS       : \"#{failing_headers.join(', ')}\",\n" \
-                               "SHOULD BE: \"#{failing_headers_sould_be.join(', ')}\""
+          raise InvalidHeadersError, "The following headers of sheet \"#{sheet_name}\" are not valid:\n" \
+                                     "IS       : \"#{failing_headers.join(', ')}\",\n" \
+                                     "SHOULD BE: \"#{failing_headers_sould_be.join(', ')}\""
         end
 
         true
@@ -83,6 +92,19 @@ module ExcelDataServices
 
       def sanitize_rows_data(_rows_data)
         raise NotImplementedError, "This method must be implemented in #{self.class.name}."
+      end
+
+      def restructure_data(_data)
+        raise NotImplementedError, "This method must be implemented in #{self.class.name}."
+      end
+
+      def append_hub_suffix(name, mot)
+        name + ' ' + case mot
+                     when 'ocean' then 'Port'
+                     when 'air'   then 'Airport'
+                     when 'rail'  then 'Railyard'
+                     when 'truck' then 'Depot'
+                     end
       end
     end
   end

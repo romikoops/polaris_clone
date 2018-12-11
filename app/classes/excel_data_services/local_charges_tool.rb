@@ -2,6 +2,9 @@
 
 module ExcelDataServices
   module LocalChargesTool
+    UnknownRateBasisReadingError = Class.new(parent::FileReader::Base::ParsingError)
+    UnknownRateBasisWritingError = Class.new(parent::FileWriter::Base::WritingError)
+
     private
 
     VALID_STATIC_HEADERS = %i(
@@ -54,7 +57,7 @@ module ExcelDataServices
       when 'PER_KG_RANGE' then { range_min: data[:range_min], range_max: data[:range_max], kg: data[:kg] }
       when 'PER_X_KG_FLAT' then { value: data[:kg], base: data[:base] }
       else
-        raise StandardError, "RATE_BASIS \"#{rate_basis}\" not found!"
+        raise UnknownRateBasisReadingError, "RATE_BASIS \"#{rate_basis}\" not found!"
       end
     end
 
@@ -76,7 +79,7 @@ module ExcelDataServices
       when 'PER_KG_RANGE' then { range_min: data[:range_min], range_max: data[:range_max], kg: data[:kg] }
       when 'PER_X_KG_FLAT' then { kg: data[:value], base: data[:base] }
       else
-        raise StandardError, "RATE_BASIS \"#{rate_basis}\" not found!"
+        raise UnknownRateBasisError, "RATE_BASIS \"#{rate_basis}\" not found!"
       end
     end
   end

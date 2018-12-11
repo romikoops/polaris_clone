@@ -4,6 +4,7 @@ module ExcelDataServices
   module FileReader
     class OceanFcl < Base
       include ExcelDataServices::PricingTool
+      include DataRestructurer::Pricing
 
       private
 
@@ -22,7 +23,7 @@ module ExcelDataServices
         when 'one_col_fee_and_ranges'
           ONE_COL_FEE_AND_RANGES_HEADERS
         else
-          raise StandardError, 'Unknown data extraction method!'
+          raise InvalidDataExtractionMethodError, 'Unknown data extraction method!'
         end
       end
 

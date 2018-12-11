@@ -46,12 +46,13 @@ class Admin::LocalChargesController < ApplicationController
   end
 
   def upload_local_charges
+    tenant_id = current_tenant.id
     file = upload_params[:file].tempfile
 
-    options = { file_or_path: file }
+    options = { tenant_id: tenant_id, file_or_path: file }
     sheets_data = ExcelDataServices::FileReader::LocalCharges.new(options).perform
 
-    options = { tenant_id: current_tenant.id, data: sheets_data }
+    options = { tenant_id: tenant_id, data: sheets_data }
     result = ExcelDataServices::DatabaseInserter::LocalCharges.new(options).perform
 
     response_handler(result)

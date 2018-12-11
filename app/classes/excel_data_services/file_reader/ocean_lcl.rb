@@ -4,6 +4,7 @@ module ExcelDataServices
   module FileReader
     class OceanLcl < Base
       include ExcelDataServices::PricingTool
+      include DataRestructurer::Pricing
 
       private
 

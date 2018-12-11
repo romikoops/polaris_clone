@@ -23,7 +23,7 @@ module ExcelDataServices
                                     when 'one_col_fee_and_ranges'
                                       pricing_details_with_one_col_fee_and_ranges(row)
                                     else
-                                      raise StandardError, 'Data extraction method incorrect!'
+                                      raise InvalidDataExtractionMethodError, 'FCL data extraction method incorrect!'
                                     end
 
         pricing_detail_params_arr.each do |pricing_detail_params|

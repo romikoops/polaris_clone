@@ -3,6 +3,8 @@
 module ExcelDataServices
   module FileWriter
     class Base
+      WritingError = Class.new(StandardError)
+
       # Expected data structure:
       # {
       #   Sheet1: [
@@ -59,11 +61,10 @@ module ExcelDataServices
             content_type: 'application/vnd.ms-excel'
           }
         )
-      rescue => e
-        binding.pry
+      rescue StandardError
+        raise
       ensure
-        binding.pry
-        tempfile.unlink
+        tempfile&.unlink
       end
 
       private

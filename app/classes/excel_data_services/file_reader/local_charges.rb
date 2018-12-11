@@ -4,6 +4,7 @@ module ExcelDataServices
   module FileReader
     class LocalCharges < Base
       include ExcelDataServices::LocalChargesTool
+      include DataRestructurer::LocalCharges
 
       private
 

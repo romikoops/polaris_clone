@@ -3,7 +3,9 @@
 module ExcelDataServices
   module DatabaseInserter
     class Base
-      include DataRestructurer
+      InsertionError = Class.new(StandardError)
+      HubNotFoundError = Class.new(InsertionError)
+      InvalidDataExtractionMethodError = Class.new(InsertionError)
 
       private
 
@@ -20,11 +22,7 @@ module ExcelDataServices
       end
 
       def perform
-        raise StandardError, "The data doesn't contain the correct format!" unless data_valid?(@data)
-
-        restructured_data = restructure_data(@data)
-
-        restructured_data.each_with_index do |(k_sheet_name, values), sheet_i|
+        data.each_with_index do |(k_sheet_name, values), sheet_i|
           data_extraction_method = values[:data_extraction_method]
           values[:rows_data].each_with_index do |row, row_i|
             itinerary = find_or_initialize_itinerary(row)
@@ -44,10 +42,6 @@ module ExcelDataServices
       end
 
       private
-
-      def data_valid?(_data)
-        true
-      end
 
       def itinerary_name(row)
         [row[:origin], row[:destination]].join(' - ')
@@ -80,7 +74,7 @@ module ExcelDataServices
         stops_as_hubs_names = stop_names.map { |stop_name| append_hub_suffix(stop_name, mot) }
         stops_as_hubs_names.map.with_index do |hub_name, i|
           hub = @tenant.hubs.find_by(name: hub_name)
-          raise StandardError, "Stop (Hub) with name \"#{hub_name}\" not found!" unless hub
+          raise HubNotFoundError, "Stop (Hub) with name \"#{hub_name}\" not found!" unless hub
 
           stop = itinerary.stops.find_by(hub_id: hub.id, index: i)
           stop || Stop.new(hub_id: hub.id, index: i)
