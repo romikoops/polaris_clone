@@ -534,7 +534,9 @@ class BookingConfirmation extends Component {
 }
 
 function prepContainerGroups (cargos, props) {
-  const { hsCodes, shipment } = props.shipmentData
+  const { tenant, shipmentData } = props
+  const { hsCodes, shipment } = shipmentData
+  const { scope } = tenant
   const uniqCargos = uniqWith(cargos, (x, y) => x.id === y.id)
 
   return uniqCargos.map((singleCargo, i) => {
@@ -572,13 +574,16 @@ function prepContainerGroups (cargos, props) {
         theme={props.theme}
         hsCodes={hsCodes}
         shipment={shipment}
+        hideUnits={scope.cargo_overview_only}
       />
     )
   })
 }
 
 function prepCargoItemGroups (cargos, props) {
-  const { cargoItemTypes, hsCodes, shipment } = props.shipmentData
+  const { tenant, shipmentData } = props
+  const { cargoItemTypes, hsCodes, shipment } = shipmentData
+  const { scope } = tenant
   const uniqCargos = uniqWith(cargos, (x, y) => x.id === y.id)
 
   return uniqCargos.map((singleCargo, i) => {
@@ -622,6 +627,7 @@ function prepCargoItemGroups (cargos, props) {
         theme={props.theme}
         hsCodes={hsCodes}
         shipment={shipment}
+        hideUnits={scope.cargo_overview_only}
       />
     )
   })

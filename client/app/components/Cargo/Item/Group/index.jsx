@@ -23,22 +23,26 @@ class CargoItemGroup extends Component {
     this.handleCollapser = this.handleCollapser.bind(this)
     this.viewHsCodes = this.viewHsCodes.bind(this)
   }
+
   viewHsCodes () {
     this.setState({
       viewer: !this.state.viewer
     })
   }
+
   handleCollapser () {
     this.setState({
       collapsed: !this.state.collapsed
     })
   }
+
   handleViewToggle (value) {
     this.setState({ unitView: !this.state.unitView })
   }
+
   render () {
     const {
-      group, shipment, theme, t
+      group, shipment, theme, t, hideUnits
     } = this.props
     const gradientTextStyle =
       theme && theme.colors
@@ -65,7 +69,11 @@ class CargoItemGroup extends Component {
               ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
               : ''
           }
-          <p className="flex-none"><span>{group.items[0] ? group.items[0].dimension_x : ''}</span> cm</p>
+          <p className="flex-none">
+            <span>{group.items[0] ? group.items[0].dimension_x : ''}</span>
+            {' '}
+cm
+          </p>
         </div>
 
         <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
@@ -75,7 +83,11 @@ class CargoItemGroup extends Component {
               ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
               : ''
           }
-          <p className="flex-none"><span>{group.items[0] ? group.items[0].dimension_z : ''}</span> cm</p>
+          <p className="flex-none">
+            <span>{group.items[0] ? group.items[0].dimension_z : ''}</span>
+            {' '}
+cm
+          </p>
         </div>
 
         <div className={`${styles.unit_data_cell} ${styles.side_border} flex-15 layout-row layout-align-center-center`}>
@@ -85,13 +97,19 @@ class CargoItemGroup extends Component {
               ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
               : ''
           }
-          <p className="flex-none"><span>{group.items[0] ? group.items[0].dimension_y : ''}</span> cm</p>
+          <p className="flex-none">
+            <span>{group.items[0] ? group.items[0].dimension_y : ''}</span>
+            {' '}
+cm
+          </p>
         </div>
 
         <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
           <div className="">
             <p className="flex-none layout-row layout-align-center-center">
-              <span>{numberSpacing(group.items[0].payload_in_kg, 1)}</span>&nbsp;kg</p>
+              <span>{numberSpacing(group.items[0].payload_in_kg, 1)}</span>
+&nbsp;kg
+            </p>
             <p className="flex-none layout-row layout-align-center-center">{t('cargo:grossWeight')}</p>
           </div>
         </div>
@@ -103,17 +121,26 @@ class CargoItemGroup extends Component {
                 {numberSpacing((group.items[0].dimension_y *
                 group.items[0].dimension_x *
                 group.items[0].dimension_z / 1000000), 2)}
-              </span> &nbsp;m<sup>3</sup>
+              </span>
+              {' '}
+&nbsp;m
+              <sup>3</sup>
             </p>
             <p className="flex-none layout-row layout-align-center-center">{t('common:volume')}</p>
           </div>
         </div>
-        { !group.size_class ? <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
-          <div className="">
-            <p className="flex-none layout-row layout-align-center-center"><span>{numberSpacing((group.items[0].chargeable_weight), 2)}</span> &nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">{t('common:chargeableWeight')}</p>
+        { !group.size_class ? (
+          <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
+            <div className="">
+              <p className="flex-none layout-row layout-align-center-center">
+                <span>{numberSpacing((group.items[0].chargeable_weight), 2)}</span>
+                {' '}
+&nbsp;kg
+              </p>
+              <p className="flex-none layout-row layout-align-center-center">{t('common:chargeableWeight')}</p>
+            </div>
           </div>
-        </div> : '' }
+        ) : '' }
       </div>
     )
     const aggStyle = unitView ? styles.closed_panel : styles.open_panel
@@ -151,22 +178,26 @@ class CargoItemGroup extends Component {
             </div>
           </div>
           <div className="flex-55 layout-row">
-            {aggViewer}
+            { aggViewer}
           </div>
-          <div
-            className="flex-5 layout-row layout-align-center-center"
-            onClick={this.handleCollapser}
-            onChange={e => this.handleViewToggle(e)}
-          >
-            <i className={`${collapsed ? styles.collapsed : ''} fa fa-chevron-down clip pointy`} style={gradientTextStyle} />
-          </div>
+          { hideUnits ? '' : (
+            <div
+              className="flex-5 layout-row layout-align-center-center"
+              onClick={this.handleCollapser}
+              onChange={e => this.handleViewToggle(e)}
+            >
+              <i className={`${collapsed ? styles.collapsed : ''} fa fa-chevron-down clip pointy`} style={gradientTextStyle} />
+            </div>
+          ) }
         </div>
-
-        <div className={`${styles.unit_viewer} ${collapsed ? '' : styles.closed_panel}`}>
-          <div className="flex-100 layout-row layout-align-none-start layout-wrap">
-            {unitArr}
-          </div>
-        </div>
+        { hideUnits ? ''
+          : (
+            <div className={`${styles.unit_viewer} ${collapsed ? '' : styles.closed_panel}`}>
+              <div className="flex-100 layout-row layout-align-none-start layout-wrap">
+                {unitArr}
+              </div>
+            </div>
+          ) }
       </div>
     )
   }

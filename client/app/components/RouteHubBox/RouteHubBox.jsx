@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
+import { get } from 'lodash'
 import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
 import styles from './RouteHubBox.scss'
@@ -46,6 +47,25 @@ class RouteHubBox extends Component {
     return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`
   }
 
+  static formatAddress (address) {
+    const keys = [['street_number',
+      'street'],
+    ['city',
+      'zip_code'],
+    ['country.name']]
+
+    const addressComponents = []
+    keys.forEach((keyArray) => {
+      const section = keyArray.map(k => get(address, k, false)).filter(x => x).join(', ')
+      if (section.length > 0) {
+        addressComponents.push(section)
+        addressComponents.push(<br />)
+      }
+    })
+
+    return addressComponents
+  }
+
   render () {
     const {
       theme, shipment, t
@@ -88,22 +108,13 @@ class RouteHubBox extends Component {
           <div className="flex-50 layout-row layout-align-start-center">
             <p className="flex-none">
               <b>
-                {t('common:withPickupFrom')}
-:
+                {`${t('common:withPickupFrom')}:`}
               </b>
             </p>
           </div>
           <div className="flex-50 layout-row layout-align-end-center">
             <p className={` ${styles.itinerary_address} flex-none`}>
-              {`${shipment.pickup_address.street_number || ''} ${shipment.pickup_address.street || ''}`}
-,
-              {' '}
-              <br />
-              {`${shipment.pickup_address.city || ''}, ${' '} `}
-              {`${shipment.pickup_address.zip_code || ''}, `}
-              {`${shipment.pickup_address.country.name || ''}`}
-              {' '}
-              <br />
+              {RouteHubBox.formatAddress(shipment.pickup_address)}
             </p>
           </div>
 
@@ -117,22 +128,14 @@ class RouteHubBox extends Component {
           <div className="flex-50 layout-row layout-align-start-center">
             <p className="flex-none">
               <b>
-                {t('common:withDeliveryTo')}
-:
+                {`${t('common:withDeliveryTo')}:`}
               </b>
             </p>
           </div>
           <div className="flex-50 layout-row layout-align-end-center">
             <p className={` ${styles.itinerary_address} flex-none`}>
-              {`${shipment.delivery_address.street_number || ''} ${shipment.delivery_address.street || ''}`}
-,
-              {' '}
-              <br />
-              {`${shipment.delivery_address.city || ''}, ${' '} `}
-              {`${shipment.delivery_address.zip_code || ''}, `}
-              {`${shipment.delivery_address.country.name || ''}`}
-              {' '}
-              <br />
+              {RouteHubBox.formatAddress(shipment.delivery_address)}
+
             </p>
           </div>
 

@@ -323,7 +323,7 @@ module PricingTools
              when 'PER_X_KG_FLAT'
                max = fee['max'] || DEFAULT_MAX
                base = fee['base'].to_d
-               val = fee['value'] * (cargo_hash[:weight] / base).round(2) * base
+               val = fee['value'] * (cargo_hash[:weight].round(2) / base).ceil() * base
                min = fee['min'] || 0
                res = [val, min].max
                [res, max].min
