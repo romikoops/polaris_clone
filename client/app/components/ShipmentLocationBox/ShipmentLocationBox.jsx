@@ -210,7 +210,9 @@ class ShipmentLocationBox extends PureComponent {
       this.setState({ dSelect }, () => this.prepForSelect('destination'))
       this.props.handleSelectLocation('destination', false)
     } else {
-      this.state.markers.destination.setMap(null)
+      if (has(this.state.markers, ['destination', 'title'])) {
+        this.state.markers.destination.setMap(null)
+      }
       this.setState({
         truckingOptions: {
           ...this.state.truckingOptions,
@@ -226,7 +228,7 @@ class ShipmentLocationBox extends PureComponent {
         this.adjustMapBounds()
       })
       this.props.setNotesIds(null, 'destination')
-      
+
 
       if (this.props.destination !== {}) {
         this.props.setTargetAddress('destination', {})
@@ -314,7 +316,9 @@ class ShipmentLocationBox extends PureComponent {
       this.props.setNotesIds([event.value.id], 'origin')
       this.props.handleSelectLocation('origin', false)
     } else {
-      this.state.markers.origin.setMap(null)
+      if (has(this.state.markers, ['origin', 'title'])) {
+        this.state.markers.origin.setMap(null)
+      }
       this.setState({
         truckingOptions: {
           ...this.state.truckingOptions,
@@ -330,7 +334,7 @@ class ShipmentLocationBox extends PureComponent {
         this.adjustMapBounds()
       })
       this.props.setNotesIds(false, 'origin')
-      
+
       if (this.props.origin !== {}) {
         this.props.setTargetAddress('origin', {})
       }
@@ -345,7 +349,7 @@ class ShipmentLocationBox extends PureComponent {
     if (locationData[target].title !== undefined) {
       map.data.remove(locationData[target][0])
     }
-    
+
     const targetKml = map.data.addGeoJson(location.geojson)
     locationData[target] = targetKml
     const bounds = new this.props.gMaps.LatLngBounds()
@@ -361,7 +365,7 @@ class ShipmentLocationBox extends PureComponent {
     const latLng = routeHelpers.centerFromGeoJson(lats, lngs)
 
     this.setState({ locationData })
-    
+
     return latLng
   }
 
@@ -369,7 +373,7 @@ class ShipmentLocationBox extends PureComponent {
     const {
       markers, map, directionsDisplay, directionsService
     } = this.state
-    
+
     const { theme } = this.props
     if (has(markers, [target, 'title'])) {
       markers[target].setMap(null)
@@ -397,9 +401,9 @@ class ShipmentLocationBox extends PureComponent {
       keyboard: false
     })
     markers[target] = marker
-   
+
     this.setState({ markers }, () => this.adjustMapBounds())
-    
+
     if (this.state.speciality === 'truck' && originMarkerExists && destMarkerExists) {
       directionsDisplay.setMap(map)
       const request = {
@@ -427,7 +431,7 @@ class ShipmentLocationBox extends PureComponent {
       newMarkers.push(markers.destination)
     }
     const bounds = new this.props.gMaps.LatLngBounds()
-    
+
     for (let i = 0; i < newMarkers.length; i++) {
       bounds.extend(newMarkers[i].getPosition())
     }
@@ -671,7 +675,7 @@ class ShipmentLocationBox extends PureComponent {
       const lat = isLocationObj ? place.latitude : place.geometry.location.lat()
       const lng = isLocationObj ? place.longitude : place.geometry.location.lng()
       const fullAddress = isLocationObj ? place.fullAddress : place.formatted_address
-      const markerName  = isLocationObj ? place.city : place.name
+      const markerName = isLocationObj ? place.city : place.name
       const tenantId = shipment.tenant_id
       const loadType = shipment.load_type
 
@@ -720,7 +724,6 @@ class ShipmentLocationBox extends PureComponent {
               this.props.handleSelectLocation(target, fieldsHaveErrors)
             })
           } else {
-            
             this.setMarker(
               {
                 lat,
@@ -758,7 +761,6 @@ class ShipmentLocationBox extends PureComponent {
               }, 5000)
             })
           }
-          
         }
       )
 
@@ -954,7 +956,7 @@ class ShipmentLocationBox extends PureComponent {
       const counterpartTrucking = truckingHubs[counterpart]
       let indexes = targetFilteredRouteIndexes.slice()
       const unfilteredRouteIndexes = routes.map((_, i) => i)
-      
+
       if (targetLocation.label) {
         indexes = routeFilters.selectFromLookupTable(
           lookupTablesForRoutes,
@@ -969,7 +971,7 @@ class ShipmentLocationBox extends PureComponent {
         indexes = unfilteredRouteIndexes
       }
 
-      let newFilteredRouteIndexes = {
+      const newFilteredRouteIndexes = {
         ...filteredRouteIndexes
       }
 
@@ -1050,7 +1052,6 @@ class ShipmentLocationBox extends PureComponent {
       this.props.handleTruckingDetailsChange(syntheticEvent)
     }
   }
-
 
   render () {
     const {

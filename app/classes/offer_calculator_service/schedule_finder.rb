@@ -32,8 +32,7 @@ module OfferCalculatorService
           return google_directions.driving_time_in_seconds_for_trucks(driving_time)
         end
       end
-    # rescue GoogleDirections::NoDrivingTime
-    rescue StandardError => e
+    rescue GoogleDirections::NoDrivingTime => e
       Raven.capture_exception(e)
       raise ApplicationError::NoTruckingTime
     end

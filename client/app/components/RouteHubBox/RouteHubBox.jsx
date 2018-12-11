@@ -149,7 +149,7 @@ class RouteHubBox extends Component {
         <div className="flex-50 layout-row layout-align-start-center">
           <p className="flex-none">
             <b>
-              {t('bookconf:expectedArrival')}
+              {t('bookconf:expectedArrivalTerminal')}
 :
             </b>
           </p>
@@ -166,7 +166,7 @@ class RouteHubBox extends Component {
         <div className="flex-50 layout-row layout-align-start-center">
           <p className="flex-none">
             <b>
-              {t('bookconf:expectedDeparture')}
+              {t('bookconf:expectedDepartureTerminal')}
 :
             </b>
           </p>
@@ -193,7 +193,7 @@ class RouteHubBox extends Component {
             {' '}
             {moment(shipment.planned_eta).diff(moment(shipment.planned_etd), t('common:days'))}
             {' '}
-days
+              days
             {' '}
           </p>
         </div>
@@ -230,7 +230,7 @@ days
             <div className="flex-100 layout-row layout-align-center-center">
               <div
                 className="flex-85 height_100 layout-row layout-wrap layout-align-end-center"
-                style={{ marginTop: '100px' }}
+                style={{ marginTop: '75px' }}
               >
                 <div className="flex-100 width_100 layout-row layout-align-center-center">
                   {RouteHubBox.faIcon(shipment.mode_of_transport)}
@@ -240,8 +240,8 @@ days
                 {timeDiff}
               </div>
             </div>
-            <div className="flex-85 layout-row layout-wrap">
-              <div className="flex-100 layout-row layout-align-space-between-stretch">
+            <div className="flex-85 layout-row layout-wrap ">
+              <div className={` flex-100 layout-row layout-align-space-between-stretch ${styles.time_diff}`}>
                 <p className="flex-none">
                   <b>
                     {t('shipment:serviceLevel')}
@@ -252,11 +252,11 @@ days
               </div>
               {shipment.carrier
                 ? (
-                  <div className="flex-100 layout-row layout-align-space-between-stretch">
+                  <div className={`flex-100 layout-row layout-align-space-between-stretch  ${styles.time_diff}`}>
 
                     <p className="flex-none">
                       <b>
-                        {t('shipment:carrier')}
+                        {capitalize(t('shipment:carrier'))}
 :
                       </b>
                       {' '}
@@ -268,7 +268,7 @@ days
                 : '' }
               {shipment.vessel_name
                 ? (
-                  <div className="flex-100 layout-row layout-align-space-between-stretch">
+                  <div className={`flex-100 layout-row layout-align-space-between-stretch  ${styles.time_diff}`}>
 
                     <p className="flex-none">
                       <b>
