@@ -43,7 +43,7 @@ module OfferCalculatorService
     end
 
     def default_delay_in_days
-      20
+      60
     end
   end
 end
