@@ -89,9 +89,62 @@ custom_content = {
       "component": "Landing",
       "section": "bullets",
       "index": 6
+    },
+    {
+      "text": '<p class="flex">Thanks for registering an account with <b>Norman Global Online</b>. We are really thrilled to have you on board and trust you will enjoy our seamless Online quote and booking system. </p>',
+      "component": "WelcomeMail",
+      "section": "body",
+      "index": 0
+    },
+    {
+      "text": '<p class="flex">We look forward to supporting you and your business. </p>',
+      "component": "WelcomeMail",
+      "section": "body",
+      "index": 1,
+      "image": 'images/demo_images/cropped_banner_2.jpg'
+    },
+    {
+      "text": '<p class="flex">Thanks for Trusting us to deliver. <br/><br/>Best Regards <br/>Norman Global Logistics <br/><br/><br/>You are receiving this email because you opted in and requested a user account.</p>',
+      "component": "WelcomeMail",
+      "section": "body",
+      "index": 2
+    },
+    {
+      "text": '<mj-social font-size="15px" icon-size="30px" mode="horizontal">
+          <mj-social-element name="linkedin-noshare" href="https://www.linkedin.com/company/norman-global-logistics-hong-kong-limited/">
+            LinkedIn
+          </mj-social-element>
+          <mj-social-element  name="twitter-noshare" href="https://twitter.com/normanglobal">
+            Twitter
+          </mj-social-element>
+        </mj-social>',
+      "component": "WelcomeMail",
+      "section": "social",
+      "index": 0
+    },
+    {
+      "text": '<p class="flex">Norman Global Logistics Hong Kong Limited | Tower 1, 8/F, Unit 811 | Cheung Sha Wan Plaza | 833 Cheung Sha Wan Rd | Kowloon | Hong Kong S.A.R | <br/>
+      LONDON | SHANGHAI | HONG KONG | QINGDAO | NINGBO | FELIXSTOWE | LIVERPOOL | MANCHESTER | NORTHAMPTON | HO CHI MINH <br/><br/>
+      All transactions are subject to the Companys Standard Trading Conditions (copy is available upon request), which in certain circumstances limit or exempt the Companys liability. Whilst this message has been checked for virus the recipient should verify this email and any attachments for the presence of viruses as the company accepts no liability for any damage caused by any virus transmitted by this email. <br/>
+      本公司所有業務均根據本公司之標準營運條款進行。在某些情況下，該條款將免除或限制本公司之責任。條款之副本可從本公司索取。  
+      </p>',
+      "component": "WelcomeMail",
+      "section": "footer",
+      "index": 0
+    },
+    {
+      "text": 'Welcome to Norman Global Logistics!',
+      "component": "WelcomeMail",
+      "section": "subject",
+      "index": 0
     }
   ]
 }
+s3 = Aws::S3::Client.new(
+  # access_key_id: Settings.aws.access_key_id,
+  # secret_access_key: Settings.aws.secret_access_key,
+  # region: Settings.aws.region
+)
 custom_content.each do |subdomain, content_array|
   tenant = Tenant.find_by_subdomain(subdomain)
   content_array.each do |content_hash|
@@ -102,6 +155,11 @@ custom_content.each do |subdomain, content_array|
       index: content_hash[:index]
     )
     content.text = content_hash[:text]
+    if content_hash[:image]
+      file = s3.get_object(bucket: 'assets.itsmycargo.com', key: content_hash[:image]).body
+      file_name = content_hash[:image].split('/').last
+      content.image.attach(io: file, filename: file_name)
+    end
     content.save!
   end
 end
