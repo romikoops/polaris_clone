@@ -5,12 +5,12 @@ require_relative 'charge_calculator'
 module OfferCalculatorService
   class DetailedSchedulesBuilder < Base
     def perform(schedules, trucking_data, user)
-      detailed_schedules = grouped_schedules(schedules: schedules).map do |_key, result_schedules|
+      detailed_schedules = grouped_schedules(schedules: schedules, shipment: @shipment, user: user).map do |grouped_result|
         grand_total_charge = ChargeCalculator.new(
-          schedule:      result_schedules.first,
           trucking_data: trucking_data,
           shipment:      @shipment,
-          user:          user
+          user:          user,
+          data: grouped_result
         ).perform
         next if grand_total_charge.nil?
 
@@ -19,8 +19,8 @@ module OfferCalculatorService
 
         {
           quote: grand_total_charge.deconstruct_tree_into_schedule_charge.deep_symbolize_keys,
-          schedules: result_schedules.map(&:to_detailed_hash),
-          meta: meta(schedule: result_schedules.first)
+          schedules: grouped_result[:schedules].map(&:to_detailed_hash),
+          meta: meta(schedule: grouped_result[:schedules].first)
         }
       end
 
@@ -70,10 +70,42 @@ module OfferCalculatorService
       }
     end
 
-    def grouped_schedules(schedules:)
-      schedules.group_by do |schedule|
+    def grouped_schedules(schedules:, shipment:, user:)
+      result_to_return = []
+      cargo_classes = shipment.aggregated_cargo ? ['lcl'] : shipment.cargo_units.pluck(:cargo_class)
+      schedule_groupings = schedules.group_by do |schedule|
         "#{schedule.mode_of_transport}_#{schedule.vehicle_name}_#{schedule.carrier_name}"
       end
+      schedule_groupings.each do |_key, schedules_array|
+        schedules_array.sort_by!{|sched| sched.eta }
+
+        # Find the pricings for the cargo classes and effective date ranges then group by cargo_class
+        pricings_by_cargo_class = schedules_array.first.trip.itinerary.pricings
+          .for_cargo_class(cargo_classes)
+          .for_dates(schedules_array.first.etd, schedules_array.last.eta)
+          .select{|pricing| (pricing.user_id == user.id) || pricing.user_id.nil?}
+          .group_by { |pricing| "#{pricing.transport_category_id}"}
+
+        # Find the group with the most pricings and create the object to be passed on
+        most_diverse_set = pricings_by_cargo_class.values.sort_by{|pricing_group| pricing_group.length}.last
+        other_pricings = pricings_by_cargo_class.values.reject{|pricing_group| pricing_group == most_diverse_set}.flatten
+        most_diverse_set.each do |pricing|
+          obj = {
+            pricing_ids: {
+              "#{pricing.transport_category.cargo_class}" => pricing.id
+            },
+            schedules: schedules_array.select{|sched| sched.etd < pricing.expiration_date && sched.etd > pricing.effective_date}.sort_by!{|sched| sched.eta }
+          }
+          other_pricings.each do |other_pricing|
+            if other_pricing.effective_date < obj[:schedules].first.etd && other_pricing.expiration_date > obj[:schedules].last.eta
+              obj[:pricing_ids][other_pricing.transport_category.cargo_class] = other_pricing.id
+            end
+          end
+          result_to_return << obj
+        end
+      end
+
+      result_to_return
     end
 
     def invalid_quote?(quote:)
