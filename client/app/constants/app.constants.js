@@ -125,7 +125,7 @@ export const adminMenutooltip = {
   schedules: 'Administrate sailing schedules by a simple upload',
   trucking:
     'Update prices, fees, charges for trucking. Here zip code & city sheets can be uploaded',
-  client: 'Manage negotiated routes, prices and fees for your existing clients',
+  clients: 'Manage negotiated routes, prices and fees for your existing clients',
   routes: 'Configure all the routes displayed in the shop',
   setup:
     'This option is only for the very first configuration of the shop or if you want to reset the shop system with new data. IMPORTANT: this will overwrite all existing data',
