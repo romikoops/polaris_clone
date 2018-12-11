@@ -24,7 +24,7 @@
           <%== section.text%>
         </mj-text>
         <% if section.image.attached?%>
-          <mj-image width="300px" src="<%= Rails.application.routes.url_helpers.rails_blob_url(section.image, disposition: 'attachment') %>" />
+          <mj-image  src="<%= Rails.application.routes.url_helpers.rails_blob_url(section.image, disposition: 'attachment') %>" />
         <% end %>
         <mj-divider border-width="1px" border-style="dashed" border-color="lightgrey" />
       <% end %>
@@ -48,7 +48,7 @@
           <%== section.text%>
         </mj-text>
         <% if section.image.attached?%>
-          <mj-image width="300px" src="<%= Rails.application.routes.url_helpers.rails_blob_url(section.image, disposition: 'attachment') %>" />
+          <mj-image src="<%= Rails.application.routes.url_helpers.rails_blob_url(section.image, disposition: 'attachment') %>" />
         <% end %>
       <% end %>
     </mj-column>
