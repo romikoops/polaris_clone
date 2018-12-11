@@ -87,6 +87,10 @@ en:
       http_code: 400
       code: 1011
       message: "Unable to update tenant"
+    no_valid_pricings:
+      http_code: 400
+      code: 1012
+      message: "There are no pricings valid for this timeframe."
     
 
     # Authentication Errors
