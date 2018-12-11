@@ -6,13 +6,6 @@
     .container {
       padding: 20px 25px;
     }
-    .dates_container {
-      padding: 8px 25px;
-      border-bottom: 1px solid #EEEEEE;
-    }
-  }
-  .dates_header {
-    background: #F8F8F8;
   }
   .wrapper_gradient {
     position: relative;
@@ -29,15 +22,6 @@
     right: 0;
     background: white;
     z-index: 0;
-  }
-  .dates_row {
-    h4 {
-      font-size: 13px;
-      margin: 5px 0;
-    }
-    p {
-      font-size: 14px;
-    }
   }
   .add_button {
     margin: 0 10px;
@@ -165,13 +149,6 @@
   .disabled {
     opacity: 0.4;
   }
-  .date_btn {
-    cursor: pointer;
-    padding: 10px;
-    i {
-      padding: 0 5px;
-    }
-  }
   .origin_destination {
     hyphens: auto;
     font-size: 17px;
@@ -195,9 +172,6 @@
   }
   .deselected_text {
     opacity: 0.25;
-  }
-  .date_btns {
-    padding: 10px 5px;
   }
   .view_switch {
     opacity: 1;
