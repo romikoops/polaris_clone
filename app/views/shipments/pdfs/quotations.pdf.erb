@@ -72,8 +72,8 @@
         </div>
         <div class="delivery-info">
           <div class="cargo-info">
-            <% if s.has_pre_carriage %> <p> <b> Pickup from</b>: <%= s.pickup_address.full_address %> </p> <% end %>
-            <% if s.has_on_carriage %> <p> <b> Delivery to</b>: <%= s.delivery_address.full_address %></p>  <% end %>
+            <% if s.has_pre_carriage %> <p> <b> Pickup from</b>: <%=  s.pickup_address.full_address %> </p> <% end %>
+            <% if s.has_on_carriage %> <p> <b> Delivery to</b>: <%=  s.delivery_address.full_address  %></p>  <% end %>
           </div>
         </div>
       </div>
