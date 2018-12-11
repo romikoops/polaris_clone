@@ -146,6 +146,45 @@ export default function getModals (props, toggleFunc, t) {
       maxWidth: '600px',
       show: false
     },
+    maxDimensions: {
+      message: (
+        <p style={{ textAlign: 'justify', lineHeight: '1.5' }}>
+          <span>
+            {t('common:hi')}
+            {' '}
+            {user.first_name}
+            {' '}
+            {user.last_name}
+            {','}
+            <br />
+            {t('cargo:maxDimensionsAlertFirst')}
+            {' '}
+            {t('cargo:pleaseContact')}
+            <br />
+          </span>
+          <br />
+
+          <span style={{ marginRight: '10px' }}>
+            {' '}
+            {t('dangerousGoods:contactPhone')}
+            {':'}
+          </span>
+          <span>{tenant.phones.support}</span>
+          <br />
+          {supportEmailObjs ? (
+            <span style={{ marginRight: '20px' }}>
+              {' '}
+              {t('dangerousGoods:contactEmail')}
+              {':'}
+            </span>
+          ) : ''}
+          <br />
+          {supportEmailTexts}
+        </p>
+      ),
+      maxWidth: '600px',
+      show: false
+    },
     dangerousGoodsInfo: {
       message: (
         <div>

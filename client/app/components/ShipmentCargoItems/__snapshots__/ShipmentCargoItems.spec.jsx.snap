@@ -100,8 +100,10 @@ exports[`shallow rendering 1`] = `
                     <ValidatedInput
                       errorStyles={
                         Object {
-                          "bottom": "-14px",
                           "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
                         }
                       }
                       min="0"
@@ -116,7 +118,16 @@ exports[`shallow rendering 1`] = `
                       validationErrors={
                         Object {
                           "isDefaultRequiredValue": "Must be greater than 0",
-                          "maxDimension": "Maximum length is undefined",
+                          "maxDimension": <p>
+                            Maximum length is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
                           "nonNegative": "Must be greater than 0",
                         }
                       }
@@ -159,8 +170,10 @@ exports[`shallow rendering 1`] = `
                     <ValidatedInput
                       errorStyles={
                         Object {
-                          "bottom": "-14px",
                           "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
                         }
                       }
                       min="0"
@@ -175,7 +188,16 @@ exports[`shallow rendering 1`] = `
                       validationErrors={
                         Object {
                           "isDefaultRequiredValue": "Must be greater than 0",
-                          "maxDimension": "Maximum width is undefined",
+                          "maxDimension": <p>
+                            Maximum width is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
                           "nonNegative": "Must be greater than 0",
                         }
                       }
@@ -218,8 +240,10 @@ exports[`shallow rendering 1`] = `
                     <ValidatedInput
                       errorStyles={
                         Object {
-                          "bottom": "-14px",
                           "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
                         }
                       }
                       min="0"
@@ -234,7 +258,16 @@ exports[`shallow rendering 1`] = `
                       validationErrors={
                         Object {
                           "isDefaultRequiredValue": "Must be greater than 0",
-                          "maxDimension": "Maximum height is undefined",
+                          "maxDimension": <p>
+                            Maximum height is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
                           "nonNegative": "Must be greater than 0",
                         }
                       }
@@ -282,8 +315,10 @@ exports[`shallow rendering 1`] = `
                     <ValidatedInput
                       errorStyles={
                         Object {
-                          "bottom": "-14px",
                           "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
                         }
                       }
                       name="0-payload_in_kg"
@@ -296,7 +331,16 @@ exports[`shallow rendering 1`] = `
                       validationErrors={
                         Object {
                           "isDefaultRequiredValue": "Must be greater than 0",
-                          "maxDimension": "Maximum weight is undefined",
+                          "maxDimension": <p>
+                            Maximum weight is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
                           "nonNegative": "Must be greater than 0",
                         }
                       }
@@ -319,11 +363,6 @@ exports[`shallow rendering 1`] = `
               </div>
               <div
                 className="flex-100 layout-row"
-                style={
-                  Object {
-                    "borderBottom": "1px solid rgb(236, 236, 236)",
-                  }
-                }
               />
               <div
                 className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"

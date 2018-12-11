@@ -126,6 +126,20 @@ export const tenant = {
     closed_quotation_tool: true
   },
   theme,
+  emails: {
+    sales: {
+      general: 'sales@demo.com',
+      air: 'sales@demo.com',
+      ocean: 'sales@demo.com',
+      rail: 'sales@demo.com'
+    },
+    support: {
+      general: 'support@demo.com',
+      air: 'imc.air@demo.com',
+      ocean: 'imc.sea@demo.com',
+      rail: 'imc.rail@demo.com'
+    }
+  },
   subdomain: 'foosubdomain'
 }
 

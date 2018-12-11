@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
-import PropTypes from '../../prop-types'
 import styles from './ShipmentCargoItems.scss'
 import defs from '../../styles/default_classes.scss'
 import QuantityInput from '../QuantityInput/QuantityInput'
@@ -166,7 +165,7 @@ class ShipmentCargoItems extends Component {
                   <div className="flex-5" />
                   {scope.consolidate_cargo ? inputs.collectiveWeight : inputs.grossWeight}
                 </div>
-                <div className="flex-100 layout-row" style={{ borderBottom: '1px solid rgb(236, 236, 236)' }} />
+                <div className="flex-100 layout-row" />
                 <div
                   className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.padding_section}`}
                   style={{ margin: '20px 0' }}
@@ -277,36 +276,6 @@ class ShipmentCargoItems extends Component {
       </div>
     )
   }
-}
-
-ShipmentCargoItems.propTypes = {
-  theme: PropTypes.theme,
-  t: PropTypes.func.isRequired,
-  deleteItem: PropTypes.func.isRequired,
-  cargoItems: PropTypes.arrayOf(PropTypes.shape({
-    description: PropTypes.text,
-    key: PropTypes.number,
-    dimension_x: PropTypes.number,
-    dimension_y: PropTypes.number,
-    dangerous_goods: PropTypes.bool,
-    stackable: PropTypes.bool
-  })),
-  availableCargoItemTypes: PropTypes.arrayOf(PropTypes.shape({
-    description: PropTypes.text,
-    key: PropTypes.number,
-    dimension_x: PropTypes.number,
-    dimension_y: PropTypes.number
-  })),
-  addCargoItem: PropTypes.func.isRequired,
-  handleDelta: PropTypes.func.isRequired,
-  toggleModal: PropTypes.func,
-  nextStageAttempt: PropTypes.bool,
-  scope: PropTypes.shape({
-    dangerous_goods: PropTypes.bool,
-    non_stackable_goods: PropTypes.bool
-  }).isRequired,
-  maxDimensions: PropTypes.objectOf(PropTypes.objectOf(PropTypes.number)).isRequired,
-  availableMotsForRoute: PropTypes.arrayOf(PropTypes.string)
 }
 
 ShipmentCargoItems.defaultProps = {

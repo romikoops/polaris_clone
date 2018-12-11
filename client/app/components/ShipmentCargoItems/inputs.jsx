@@ -39,6 +39,7 @@ import styles from './ShipmentCargoItems.scss'
  * @param { bool } nextStageAttempt
  * @param { object } scope
  * @param { object } maxDimensions
+ * @param { array } availableMotsForRoute
  *
  * @returns { object } JSX for each input
  */
@@ -70,6 +71,13 @@ export default function getInputs (
     (!cargoItemTypes[i] || !cargoItemTypes[i].label)
 
   const maxDimensionsToApply = calcMaxDimensionsToApply(availableMotsForRoute, maxDimensions)
+
+  const errorStyles = {
+    whiteSpace: 'normal',
+    maxWidth: '200px',
+    fontSize: '10px',
+    top: '32px'
+  }
 
   inputs.colliType = (
     <div className="layout-row flex-40 layout-wrap layout-align-start-center colli_type">
@@ -106,10 +114,7 @@ export default function getInputs (
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
               nextStageAttempt={nextStageAttempt}
-              errorStyles={{
-                fontSize: '10px',
-                bottom: '-14px'
-              }}
+              errorStyles={errorStyles}
               validations={{
                 nonNegative: (values, value) => value > 0,
                 maxDimension: (values, value) => value <= +maxDimensionsToApply.payloadInKg
@@ -117,7 +122,15 @@ export default function getInputs (
               validationErrors={{
                 isDefaultRequiredValue: t('common:greaterZero'),
                 nonNegative: t('common:greaterZero'),
-                maxDimension: `${t('errors:maxWeight')} ${maxDimensionsToApply.payloadInKg}`
+                maxDimension: (
+                  <p>
+                    {`${t('errors:maxWeight')} ${maxDimensionsToApply.payloadInKg}`}
+                    <br />
+                    <span className="emulate_link blue_link" onClick={() => toggleModal('maxDimensions')}>
+                      {t('cargo:excessDimensionsRequest')}
+                    </span>
+                  </p>
+                )
               }}
               required
             />
@@ -150,10 +163,7 @@ export default function getInputs (
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
               nextStageAttempt={nextStageAttempt}
-              errorStyles={{
-                fontSize: '10px',
-                bottom: '-14px'
-              }}
+              errorStyles={errorStyles}
               validations={{
                 nonNegative: (values, value) => value > 0,
                 maxDimension: (values, value) => value <= +maxDimensionsToApply.payloadInKg
@@ -161,7 +171,15 @@ export default function getInputs (
               validationErrors={{
                 isDefaultRequiredValue: t('common:greaterZero'),
                 nonNegative: t('common:greaterZero'),
-                maxDimension: `${t('errors:maxWeight')} ${maxDimensionsToApply.payloadInKg}`
+                maxDimension: (
+                  <p>
+                    {`${t('errors:maxWeight')} ${maxDimensionsToApply.payloadInKg}`}
+                    <br />
+                    <span className="emulate_link blue_link" onClick={() => toggleModal('maxDimensions')}>
+                      {t('cargo:excessDimensionsRequest')}
+                    </span>
+                  </p>
+                )
               }}
               required
             />
@@ -332,10 +350,7 @@ export default function getInputs (
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
               nextStageAttempt={nextStageAttempt}
-              errorStyles={{
-                fontSize: '10px',
-                bottom: '-14px'
-              }}
+              errorStyles={errorStyles}
               validations={{
                 nonNegative: (values, value) => value > 0,
                 maxDimension: (values, value) => value <= +maxDimensionsToApply.dimensionZ
@@ -343,7 +358,15 @@ export default function getInputs (
               validationErrors={{
                 isDefaultRequiredValue: t('common:greaterZero'),
                 nonNegative: t('common:greaterZero'),
-                maxDimension: `${t('errors:maxHeight')} ${maxDimensionsToApply.dimensionZ}`
+                maxDimension: (
+                  <p>
+                    {`${t('errors:maxHeight')} ${maxDimensionsToApply.dimensionZ}`}
+                    <br />
+                    <span className="emulate_link blue_link" onClick={() => toggleModal('maxDimensions')}>
+                      {t('cargo:excessDimensionsRequest')}
+                    </span>
+                  </p>
+                )
               }}
               required
             />
@@ -400,10 +423,7 @@ export default function getInputs (
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
               nextStageAttempt={nextStageAttempt}
-              errorStyles={{
-                fontSize: '10px',
-                bottom: '-14px'
-              }}
+              errorStyles={errorStyles}
               validations={{
                 nonNegative: (values, value) => value > 0,
                 maxDimension: (values, value) => value <= +maxDimensionsToApply.dimensionX
@@ -411,7 +431,15 @@ export default function getInputs (
               validationErrors={{
                 isDefaultRequiredValue: t('common:greaterZero'),
                 nonNegative: t('common:greaterZero'),
-                maxDimension: `${t('errors:maxLength')} ${maxDimensionsToApply.dimensionX}`
+                maxDimension: (
+                  <p>
+                    {`${t('errors:maxLength')} ${maxDimensionsToApply.dimensionX}`}
+                    <br />
+                    <span className="emulate_link blue_link" onClick={() => toggleModal('maxDimensions')}>
+                      {t('cargo:excessDimensionsRequest')}
+                    </span>
+                  </p>
+                )
               }}
               required
               disabled={cargoItemTypes[i] && !!cargoItemTypes[i].dimension_x}
@@ -469,10 +497,7 @@ export default function getInputs (
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
               nextStageAttempt={nextStageAttempt}
-              errorStyles={{
-                fontSize: '10px',
-                bottom: '-14px'
-              }}
+              errorStyles={errorStyles}
               validations={{
                 nonNegative: (values, value) => value > 0,
                 maxDimension: (values, value) => value <= +maxDimensionsToApply.dimensionY
@@ -480,7 +505,15 @@ export default function getInputs (
               validationErrors={{
                 isDefaultRequiredValue: t('common:greaterZero'),
                 nonNegative: t('common:greaterZero'),
-                maxDimension: `${t('errors:maxWidth')} ${maxDimensionsToApply.dimensionY}`
+                maxDimension: (
+                  <p>
+                    {`${t('errors:maxWidth')} ${maxDimensionsToApply.dimensionY}`}
+                    <br />
+                    <span className="emulate_link blue_link" onClick={() => toggleModal('maxDimensions')}>
+                      {t('cargo:excessDimensionsRequest')}
+                    </span>
+                  </p>
+                )
               }}
               disabled={cargoItemTypes[i] && !!cargoItemTypes[i].dimension_y}
               required
