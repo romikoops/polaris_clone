@@ -143,7 +143,8 @@ exports[`props.viewHSCodes is true 1`] = `
             <span>
               90
             </span>
-             cm
+             
+            cm
           </p>
         </div>
         <div
@@ -169,7 +170,8 @@ exports[`props.viewHSCodes is true 1`] = `
             <span>
               120
             </span>
-             cm
+             
+            cm
           </p>
         </div>
         <div
@@ -195,7 +197,8 @@ exports[`props.viewHSCodes is true 1`] = `
             <span>
               100
             </span>
-             cm
+             
+            cm
           </p>
         </div>
         <div
@@ -231,7 +234,8 @@ exports[`props.viewHSCodes is true 1`] = `
               <span>
                 1.08
               </span>
-                m
+               
+               m
               <sup>
                 3
               </sup>
@@ -392,7 +396,8 @@ exports[`shallow render 1`] = `
             <span>
               90
             </span>
-             cm
+             
+            cm
           </p>
         </div>
         <div
@@ -418,7 +423,8 @@ exports[`shallow render 1`] = `
             <span>
               120
             </span>
-             cm
+             
+            cm
           </p>
         </div>
         <div
@@ -444,7 +450,8 @@ exports[`shallow render 1`] = `
             <span>
               100
             </span>
-             cm
+             
+            cm
           </p>
         </div>
         <div
@@ -480,7 +487,8 @@ exports[`shallow render 1`] = `
               <span>
                 1.08
               </span>
-                m
+               
+               m
               <sup>
                 3
               </sup>
@@ -641,7 +649,8 @@ exports[`state.unitView is true 1`] = `
             <span>
               90
             </span>
-             cm
+             
+            cm
           </p>
         </div>
         <div
@@ -667,7 +676,8 @@ exports[`state.unitView is true 1`] = `
             <span>
               120
             </span>
-             cm
+             
+            cm
           </p>
         </div>
         <div
@@ -693,7 +703,8 @@ exports[`state.unitView is true 1`] = `
             <span>
               100
             </span>
-             cm
+             
+            cm
           </p>
         </div>
         <div
@@ -729,7 +740,8 @@ exports[`state.unitView is true 1`] = `
               <span>
                 1.08
               </span>
-                m
+               
+               m
               <sup>
                 3
               </sup>
@@ -890,7 +902,8 @@ exports[`state.viewer is true 1`] = `
             <span>
               90
             </span>
-             cm
+             
+            cm
           </p>
         </div>
         <div
@@ -916,7 +929,8 @@ exports[`state.viewer is true 1`] = `
             <span>
               120
             </span>
-             cm
+             
+            cm
           </p>
         </div>
         <div
@@ -942,7 +956,8 @@ exports[`state.viewer is true 1`] = `
             <span>
               100
             </span>
-             cm
+             
+            cm
           </p>
         </div>
         <div
@@ -978,7 +993,8 @@ exports[`state.viewer is true 1`] = `
               <span>
                 1.08
               </span>
-                m
+               
+               m
               <sup>
                 3
               </sup>
