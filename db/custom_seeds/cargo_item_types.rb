@@ -45,6 +45,7 @@ cargo_item_types_data = [
   { category: 'Bottle' },
   { category: 'Stack' },
   { category: 'Drum' },
+  { category: 'Package' },
   { category: 'Skid' },
   { category: 'Barrel' },
   { category: 'Carton (only palletized)' },

@@ -11,6 +11,7 @@ class ShipmentMailer < ApplicationMailer
     @user = user
     tenant = user.tenant
     @shipment = shipment
+    @scope = tenant.scope
     base_url =
       case Rails.env
       when 'production'  then "https://#{@shipment.tenant.subdomain}.itsmycargo.com/"
@@ -37,6 +38,7 @@ class ShipmentMailer < ApplicationMailer
     @user = user
     tenant = user.tenant
     @shipment = shipment
+    @scope = tenant.scope
 
     create_pdf_attachment(@shipment)
     attachments.inline['logo.png']       = URI.open(tenant.theme['logoLarge']).read
@@ -55,7 +57,7 @@ class ShipmentMailer < ApplicationMailer
     @user = user
     tenant = user.tenant
     @shipment = shipment
-
+    @scope = tenant.scope
     create_pdf_attachment(@shipment)
     attachments.inline['logo.png']       = URI.open(tenant.theme['logoLarge']).read
     attachments.inline['logo_small.png'] = try(:open, tenant.theme['logoSmall']).try(:read)
