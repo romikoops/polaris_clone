@@ -279,10 +279,10 @@
         <p><span>x<%= shipment.aggregated_cargo ? '1' : shipment.cargo_units.pluck(:quantity).sum %>&nbsp;</span><%= load_type %></p>
         <h2>
           <% if shipment.selected_offer["edited_total"] %>
-            <%= (shipment.selected_offer["edited_total"]["value"] * 100).floor / 100.0 %>
+            <%= '%.2f' % shipment.selected_offer["edited_total"]["value"] %>
             <%= shipment.selected_offer["edited_total"]["currency"] %>
           <% else %>
-            <%= (shipment.selected_offer["total"]["value"] * 100).floor / 100.0 %>
+            <%= '%.2f' % shipment.selected_offer["total"]["value"] %>
             <%= shipment.selected_offer["total"]["currency"] %>
           <% end %>
         </h2>
@@ -310,14 +310,14 @@
             <p class="cargo-subtitle">Cargo type</p>
           </div>
           <div class="cargo-section">
-            <p class="cargo-value"><span class="cargo-type"><%= cargo.payload_in_kg || cargo.weight %></span> &nbsp;kg </p>
+            <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % (cargo.payload_in_kg || cargo.weight) %></span> &nbsp;kg </p>
             <p class="cargo-subtitle">Gross Weight</p>
           </div>
 
           <div class="cargo-section">
             <p class="cargo-value">
               <span class="cargo-type">
-                <%= cargo.volume %>
+                <%= '%.2f' % cargo.volume %>
               </span> &nbsp;m<sup>3</sup>
             </p>
             <p class="cargo-subtitle">Volume</p>
@@ -325,7 +325,7 @@
           <div class="cargo-section cargo-section-last">
             <p class="cargo-value">
               <span class="cargo-type">
-                <%= cargo.chargeable_weight %>
+                <%= '%.2f' % cargo.chargeable_weight %>
               </span>
               &nbsp;kg
             </p>
@@ -348,7 +348,7 @@
             <p class="cargo-subtitle">Cargo type</p>
           </div>
           <div class="cargo-section">
-            <p class="cargo-value"><span class="cargo-type"><%= container.gross_weight %></span> &nbsp;kg </p>
+            <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % container.gross_weight %></span> &nbsp;kg </p>
             <p class="cargo-subtitle">Gross Weight</p>
           </div>         
         </div>     
@@ -364,14 +364,14 @@
             <p class="cargo-subtitle"><strong>Aggregated Cargo</strong></p>
           </div>
           <div class="cargo-section">
-            <p class="cargo-value"><span class="cargo-type"><%= shipment.aggregated_cargo.weight %></span> &nbsp;kg </p>
+            <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % shipment.aggregated_cargo.weight %></span> &nbsp;kg </p>
             <p class="cargo-subtitle">Gross Weight</p>
           </div>
 
           <div class="cargo-section">
             <p class="cargo-value">
               <span class="cargo-type">
-                <%= shipment.aggregated_cargo.volume %>
+                <%= '%.2f' % shipment.aggregated_cargo.volume %>
               </span> &nbsp;m<sup>3</sup>
             </p>
             <p class="cargo-subtitle">Volume</p>
@@ -379,7 +379,7 @@
           <div class="cargo-section cargo-section-last">
             <p class="cargo-value">
               <span class="cargo-type">
-                <%= shipment.aggregated_cargo.chargeable_weight %>
+                <%= '%.2f' % shipment.aggregated_cargo.chargeable_weight %>
               </span>
               &nbsp;kg
             </p>
@@ -395,10 +395,10 @@
             <span>Total Value of Goods:</span>
             <p class="info-values">
                 <% if shipment.total_goods_value.is_a? Integer %>
-                  <%= shipment.total_goods_value %>
+                  <%= '%.2f' % shipment.total_goods_value %>
                   <%= shipment.selected_offer["total"]["currency"] %>
                 <% else %>
-                  <%= shipment.total_goods_value["value"] %>
+                  <%= '%.2f' % shipment.total_goods_value["value"] %>
                   <%= shipment.total_goods_value["currency"] %>
                 <% end %>
             </p>
