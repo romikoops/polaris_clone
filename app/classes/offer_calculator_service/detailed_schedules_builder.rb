@@ -78,14 +78,14 @@ module OfferCalculatorService
       end
       schedule_groupings.each do |_key, schedules_array|
         schedules_array.sort_by!{|sched| sched.eta }
-        if schedules_array.length < 2 && schedules_array&.any?{|s| s.etd.nil? || s.eta.nil? } 
+        if schedules_array&.any?{|s| s.etd.nil? || s.eta.nil? } 
           isQuote = true
           start_date = Date.today
           end_date = start_date + 1.month
         else
           start_date = schedules_array.first.etd
           end_date = schedules_array.last.eta
-          isQoute = false
+          isQuote = false
         end
         user_pricing_id = user.role.name == 'agent' ? user.agency_pricing_id : user.id
         # Find the pricings for the cargo classes and effective date ranges then group by cargo_class
