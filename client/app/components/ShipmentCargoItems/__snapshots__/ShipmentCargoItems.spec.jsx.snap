@@ -500,8 +500,7 @@ exports[`shallow rendering 1`] = `
                       <p
                         className="subchargeable flex-none"
                       >
-                        Chargeable
-                        : 
+                        Chargeable:
                       </p>
                     </div>
                     <div
@@ -535,16 +534,11 @@ exports[`shallow rendering 1`] = `
                   >
                     <div
                       className="layout-row flex-none layout-wrap layout-align-end-center"
-                    >
-                      <p
-                        className="subchargeable flex-none"
-                      >
-                        Chargeable
-                        : 
-                      </p>
-                    </div>
-                    <div
-                      className="chargeable_weight_values flex layout-row layout-align-start-center"
+                      style={
+                        Object {
+                          "height": "18px",
+                        }
+                      }
                     />
                   </div>
                 </div>
