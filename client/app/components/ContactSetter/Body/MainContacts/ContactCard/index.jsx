@@ -9,12 +9,12 @@ function commaSeparatedWhenBothExist (str1, str2) {
 }
 function addressForDisplay (address) {
   const {
-    street, streetNumber, city, country, zipCode
+    street, streetNumber, city, country
   } = address
   const cityCountry = commaSeparatedWhenBothExist(city, country)
 
   const streetWithNumber = (street || '') + (streetNumber ? ` ${streetNumber}` : '')
-  const addressDetails = commaSeparatedWhenBothExist(streetWithNumber, zipCode)
+  const addressDetails = streetWithNumber
 
   return { cityCountry, addressDetails }
 }
@@ -65,7 +65,7 @@ export default function ShipmentContactsBoxMainContactsContactCard ({
         </div>
         <div className="flex-100 layout-row layout-align-end-center">
           <p className={`${styles.secondary_info_city} flex-90 offset-10`}>
-            <b> { address.city } </b>
+            <b> { address.city } </b>, {address.zipCode}
           </p>
         </div>
         <div className="flex-100 layout-row layout-align-end-center">
@@ -76,16 +76,16 @@ export default function ShipmentContactsBoxMainContactsContactCard ({
       </div>
       <div className={
         `${styles.contact_data_sec} flex-100 ` +
-        'layout-row layout-wrap layout-align-center-center'
+        'layout-row layout-wrap layout-align-space-between-center'
       }
       >
-        <div className="flex-none layout-row layout-align-start-center">
+        <div className="flex-50 layout-row layout-align-start-center">
           <i className="fa fa-envelope flex-none" style={iconStyle} />
-          <p className={styles.contact_data}> {contact.email} </p>
+          <p className={`${styles.contact_data} flex`}><Truncate lines={1}> {contact.email} </Truncate></p>
         </div>
-        <div className="offset-5 flex-none layout-row layout-align-start-center">
+        <div className="flex-45 layout-row layout-align-end-center">
           <i className="fa fa-phone flex-none" style={iconStyle} />
-          <p className={styles.contact_data}> {contact.phone} </p>
+          <p className={`${styles.contact_data} flex`}><Truncate lines={1}> {contact.phone} </Truncate></p>
         </div>
       </div>
     </div>

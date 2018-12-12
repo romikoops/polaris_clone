@@ -61,11 +61,7 @@ exports[`shallow render 1`] = `
         </p>
         <address
           className=" address flex-100 center"
-        >
-           
-          <br />
-          <br />
-        </address>
+        />
       </div>
     </div>
   </div>
