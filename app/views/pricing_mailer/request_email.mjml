@@ -3,7 +3,7 @@
 
 <mj-section padding="0px">
     <mj-column padding="0 2.5%">
-      <mj-text line-height="24px" font-size="27px;" padding-left="34px">
+      <mj-text line-height="24px" font-size="27px" padding-left="34px">
         <p>
           Hello!
         </p> 
@@ -11,12 +11,12 @@
     </mj-column>
     <mj-column>
         <mj-image width="200px" src="<%= @theme["logoLarge"] %>" />
-      </mj-column>
+        <mj-spacer height="25px" />
+    </mj-column>
   </mj-section>
-  <mj-spacer height="25px" />
-  <%# <mj-divider border-width="1px" border-style="solid" border-color="#e10f21" width="90%" /> %>
   <mj-section full-width="full-width" padding="0px">
     <mj-column width="100%" padding="0 2.5%">
+      
       <mj-text line-height="24px">
         <p>
           <%= @user.full_name %> from <strong><%= @user.company_name %></strong> <br>
@@ -26,7 +26,7 @@
     </mj-column>
   </mj-section>
 
-  <mj-section width="100%" background-color="#f3f3f3" margin="40px">
+  <mj-section full-width="full-width" background-color="#f3f3f3" >
     <mj-group>
       <mj-column width="130px">
         <% if @itinerary.mode_of_transport == "ocean" %>
@@ -38,7 +38,7 @@
         <mj-image padding-top="20px" padding-bottom="20px" padding-left="0" padding-right="0" width="30px" src="<%= mot_link %>"></mj-image>
       </mj-column>
       <mj-column>
-        <mj-text line-height="16px" padding="0" margin-left="-40px" font-size="18px">
+        <mj-text line-height="16px" padding="0"  font-size="18px">
           <p>Route: <strong><%= @itinerary.name %></strong></p>
           <p>Mode of Transport: <strong><%= @itinerary.mode_of_transport.capitalize %></strong></p>
           <p>Service Level: <strong><%= @pricing.tenant_vehicle.name.capitalize %></strong> </p>

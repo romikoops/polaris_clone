@@ -11,7 +11,7 @@
     </mj-column>
     <mj-column>
       <mj-image width="200px" src="<%= @shipment.tenant.theme[" logoLarge"] %>" />
-        <mj-spacer height="25px" />
+      <mj-spacer height="25px" />
     </mj-column>
   </mj-section>
 
@@ -27,7 +27,7 @@
     </mj-column>
   </mj-section>
 
-  <mj-section background-color="#f3f3f3">
+  <mj-section full-width="full-width" background-color="#f3f3f3">
     <mj-group>
       <mj-column width="130px">
         <% if @shipments.first.mode_of_transport == "ocean" %>
