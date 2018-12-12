@@ -78,7 +78,7 @@ module OfferCalculatorService
       end
       schedule_groupings.each do |_key, schedules_array|
         schedules_array.sort_by!{|sched| sched.eta }
-        if schedules_array.length < 2 && schedules_array&.any{|s| s.eta.nil? } 
+        if schedules_array.length < 2 && schedules_array&.any?{|s| s.etd.nil? || s.eta.nil? } 
           isQuote = true
           start_date = Date.today
           end_date = start_date + 1.month
