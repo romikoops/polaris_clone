@@ -24,11 +24,14 @@ class PdfHandler
       vol: {},
       kg: {}
     }
+    if @shipments.empty?
+      @shipments << @shipment
+    end
     @shipments.each do |s|
       @cargo_data[:kg][s.id] =  if s.aggregated_cargo
                                   s.aggregated_cargo.weight.to_f
                                 else
-                                  s.cargo_units.inject(0) { |sum, hash| sum + hash[:payload_in_kg].to_f }
+                                  s.cargo_units.inject(0) { |sum, hash| sum + hash[:quantity].to_f * hash[:payload_in_kg].to_f }
                                 end
       @cargo_data[:vol][s.id] = if s.aggregated_cargo
                                   s.aggregated_cargo.volume.to_f
