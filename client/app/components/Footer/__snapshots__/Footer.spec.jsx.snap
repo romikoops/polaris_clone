@@ -2,134 +2,153 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-100 layout-row 
-        layout-wrap footer_wrapper layout-align-start"
-  style={Object {}}
+  className="flex-100 layout-row layout-wrap layout-align-center-start footer"
 >
   <div
-    className="contact_bar flex-100 layout-row layout-align-center-center"
+    className="flex-20 flex-gt-sm-20 layout-row layout-wrap layout-align-center-center banner_text"
   >
-    <div
-      className="flex-none content_width layout-row"
+    <a
+      href="https://www.itsmycargo.com/en/"
+      target="_blank"
     >
-      <div
-        className="flex-50 layout-row layout-align-start-center"
+      <img
+        className="logo"
+        src=""
+      />
+    </a>
+    <div
+      className="flex-100 flex-gt-sm-100 layout-align-center-center layout-row"
+    >
+      <h4
+        className="flex-none"
+      >
+        Powered by
+      </h4>
+      <a
+        className="layout-row flex-none layout-align-start-center"
+        href="https://www.itsmycargo.com/"
+        target="_blank"
       >
         <img
-          src=""
+          alt=""
+          className="flex-none pointy powered_by_logo"
+          src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
         />
-      </div>
-      <div
-        className="flex-50 layout-row layout-align-end-center"
-      >
-        <a
-          className="flex-none layout-row layout-align-center-center pointy contact_elem"
-          href="mailto:support@demo.com"
-        >
-          <i
-            aria-hidden="true"
-            className="fa fa-envelope"
-            style={
-              Object {
-                "color": "#333",
-              }
-            }
-          />
-          support@demo.com
-        </a>
-        <div
-          className="flex-none layout-row layout-align-center-end contact_elem"
-        >
-          <i
-            aria-hidden="true"
-            className="fa fa-phone"
-            style={
-              Object {
-                "color": "#333",
-              }
-            }
-          />
-        </div>
-      </div>
+      </a>
     </div>
   </div>
   <div
-    className="footer_shop layout-row flex-100 layout-wrap"
+    className="flex-25 flex-gt-sm-25 layout-row layout-wrap layout-align-start-start"
   >
     <div
-      className="flex-100 layout-align-center"
+      className="flex-25 flex-gt-sm-25 layout-row"
     >
-      <div
-        className="flex-100 buttons upper_footer layout-row layout-align-space-around-center"
+      <h4
+        className="title"
       >
-        <div
-          className="flex-35 layout-row layout-align-center-center"
-        >
-          <div
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <h4
-              className="flex-none powered_by_padding"
-            >
-              Powered by
-            </h4>
-                            
-            <div
-              className="flex-5"
-            />
-            <a
-              href="https://www.itsmycargo.com/"
-              target="_blank"
-            >
-              <img
-                alt=""
-                className="flex-none pointy powered_by_logo"
-                src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-              />
-            </a>
-          </div>
-        </div>
-        <div
-          className="flex-15 layout-row layout-align-center-center"
-        >
-          <a
-            href="https://www.itsmycargo.com/en/ourstory"
-            target="_blank"
-          >
-            About Us
-          </a>
-        </div>
-        <div
-          className="flex-15 layout-row layout-align-center-center"
-        >
-          <a
-            href="https://itsmycargo.com/en/privacy"
-            target="_blank"
-          >
-            Privacy Policy
-          </a>
-        </div>
-        <div
-          className="flex-15 layout-row layout-align-center-center"
-        >
-          <a
-            href="https://foosubdomain.itsmycargo.com/terms_and_conditions"
-            target="_blank"
-          >
-            Terms and Conditions
-          </a>
-        </div>
-        <div
-          className="flex-15 layout-row layout-align-center-center"
-        >
-          <a
-            href="https://www.itsmycargo.com/en/contact"
-            target="_blank"
-          >
-            Legal
-          </a>
-        </div>
+        Contact
+      </h4>
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap contacts"
+    >
+      <a
+        className="pointy flex-100 layout-row layout-align-start-center"
+        href="mailto:support@demo.com"
+      >
+        <i
+          aria-hidden="true"
+          className="fa fa-envelope"
+        />
+        support@demo.com
+      </a>
+      <div
+        className="flex-100 layout-row layout-align-start-center"
+      >
+        <i
+          aria-hidden="true"
+          className="fa fa-phone"
+        />
       </div>
+      <div
+        className="flex-100 layout-row social_links"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-20 flex-gt-sm-20 layout-row layout-wrap layout-align-start-start"
+  >
+    <div
+      className="flex-100 flex-gt-sm-100 layout-row"
+    >
+      <h4
+        className="title"
+      >
+        Company
+      </h4>
+    </div>
+    <ul>
+      <li>
+        <a
+          href="https://www.itsmycargo.com/en/"
+          target="_blank"
+        >
+          About Us
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://www.itsmycargo.com/en/contact"
+          target="_blank"
+        >
+          Imprint
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://foosubdomain.itsmycargo.com/terms_and_conditions"
+          target="_blank"
+        >
+          Terms and Conditions
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://itsmycargo.com/en/privacy"
+          target="_blank"
+        >
+          Privacy Policy
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div
+    className=" flex-50 flex-gt-sm-20 flex-order--4 flex-order-gt-sm-4 layout-row layout-wrap layout-align-start-start "
+  >
+    <div
+      className="flex-100 layout-row layout-align-start"
+    >
+      <SquareButton
+        active={true}
+        back={false}
+        border={false}
+        classNames=""
+        disabled={false}
+        handleDisabled={null}
+        handleNext={null}
+        icon=""
+        iconClass=""
+        size="small"
+        text="Find Rates"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
     </div>
   </div>
 </div>
@@ -137,134 +156,146 @@ exports[`shallow render 1`] = `
 
 exports[`theme is falsy 1`] = `
 <div
-  className="flex-100 layout-row 
-        layout-wrap footer_wrapper layout-align-start"
-  style={Object {}}
+  className="flex-100 layout-row layout-wrap layout-align-center-start footer"
 >
   <div
-    className="contact_bar flex-100 layout-row layout-align-center-center"
+    className="flex-20 flex-gt-sm-20 layout-row layout-wrap layout-align-center-center banner_text"
   >
-    <div
-      className="flex-none content_width layout-row"
+    <a
+      href="https://www.itsmycargo.com/en/"
+      target="_blank"
     >
-      <div
-        className="flex-50 layout-row layout-align-start-center"
+      <img
+        className="logo"
+        src=""
+      />
+    </a>
+    <div
+      className="flex-100 flex-gt-sm-100 layout-align-center-center layout-row"
+    >
+      <h4
+        className="flex-none"
+      >
+        Powered by
+      </h4>
+      <a
+        className="layout-row flex-none layout-align-start-center"
+        href="https://www.itsmycargo.com/"
+        target="_blank"
       >
         <img
-          src=""
+          alt=""
+          className="flex-none pointy powered_by_logo"
+          src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
         />
-      </div>
-      <div
-        className="flex-50 layout-row layout-align-end-center"
-      >
-        <a
-          className="flex-none layout-row layout-align-center-center pointy contact_elem"
-          href="mailto:support@demo.com"
-        >
-          <i
-            aria-hidden="true"
-            className="fa fa-envelope"
-            style={
-              Object {
-                "color": "black",
-              }
-            }
-          />
-          support@demo.com
-        </a>
-        <div
-          className="flex-none layout-row layout-align-center-end contact_elem"
-        >
-          <i
-            aria-hidden="true"
-            className="fa fa-phone"
-            style={
-              Object {
-                "color": "black",
-              }
-            }
-          />
-        </div>
-      </div>
+      </a>
     </div>
   </div>
   <div
-    className="footer_shop layout-row flex-100 layout-wrap"
+    className="flex-25 flex-gt-sm-25 layout-row layout-wrap layout-align-start-start"
   >
     <div
-      className="flex-100 layout-align-center"
+      className="flex-25 flex-gt-sm-25 layout-row"
     >
-      <div
-        className="flex-100 buttons upper_footer layout-row layout-align-space-around-center"
+      <h4
+        className="title"
       >
-        <div
-          className="flex-35 layout-row layout-align-center-center"
-        >
-          <div
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <h4
-              className="flex-none powered_by_padding"
-            >
-              Powered by
-            </h4>
-                            
-            <div
-              className="flex-5"
-            />
-            <a
-              href="https://www.itsmycargo.com/"
-              target="_blank"
-            >
-              <img
-                alt=""
-                className="flex-none pointy powered_by_logo"
-                src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-              />
-            </a>
-          </div>
-        </div>
-        <div
-          className="flex-15 layout-row layout-align-center-center"
-        >
-          <a
-            href="https://www.itsmycargo.com/en/ourstory"
-            target="_blank"
-          >
-            About Us
-          </a>
-        </div>
-        <div
-          className="flex-15 layout-row layout-align-center-center"
-        >
-          <a
-            href="https://itsmycargo.com/en/privacy"
-            target="_blank"
-          >
-            Privacy Policy
-          </a>
-        </div>
-        <div
-          className="flex-15 layout-row layout-align-center-center"
-        >
-          <a
-            href="https://foosubdomain.itsmycargo.com/terms_and_conditions"
-            target="_blank"
-          >
-            Terms and Conditions
-          </a>
-        </div>
-        <div
-          className="flex-15 layout-row layout-align-center-center"
-        >
-          <a
-            href="https://www.itsmycargo.com/en/contact"
-            target="_blank"
-          >
-            Legal
-          </a>
-        </div>
+        Contact
+      </h4>
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap contacts"
+    >
+      <a
+        className="pointy flex-100 layout-row layout-align-start-center"
+        href="mailto:support@demo.com"
+      >
+        <i
+          aria-hidden="true"
+          className="fa fa-envelope"
+        />
+        support@demo.com
+      </a>
+      <div
+        className="flex-100 layout-row layout-align-start-center"
+      >
+        <i
+          aria-hidden="true"
+          className="fa fa-phone"
+        />
       </div>
+      <div
+        className="flex-100 layout-row social_links"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-20 flex-gt-sm-20 layout-row layout-wrap layout-align-start-start"
+  >
+    <div
+      className="flex-100 flex-gt-sm-100 layout-row"
+    >
+      <h4
+        className="title"
+      >
+        Company
+      </h4>
+    </div>
+    <ul>
+      <li>
+        <a
+          href="https://www.itsmycargo.com/en/"
+          target="_blank"
+        >
+          About Us
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://www.itsmycargo.com/en/contact"
+          target="_blank"
+        >
+          Imprint
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://foosubdomain.itsmycargo.com/terms_and_conditions"
+          target="_blank"
+        >
+          Terms and Conditions
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://itsmycargo.com/en/privacy"
+          target="_blank"
+        >
+          Privacy Policy
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div
+    className=" flex-50 flex-gt-sm-20 flex-order--4 flex-order-gt-sm-4 layout-row layout-wrap layout-align-start-start "
+  >
+    <div
+      className="flex-100 layout-row layout-align-start"
+    >
+      <SquareButton
+        active={true}
+        back={false}
+        border={false}
+        classNames=""
+        disabled={false}
+        handleDisabled={null}
+        handleNext={null}
+        icon=""
+        iconClass=""
+        size="small"
+        text="Find Rates"
+        theme={null}
+      />
     </div>
   </div>
 </div>

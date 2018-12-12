@@ -4,6 +4,7 @@ import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { cookieActions } from '../../actions'
 import styles from './Footer.scss'
+import { socialIcons } from '../../helpers'
 import SquareButton from '../SquareButton'
 
 class Footer extends React.PureComponent {
@@ -13,49 +14,59 @@ class Footer extends React.PureComponent {
 
   render () {
     const {
-      theme, tenant, width, t, cookieDispatch, bookNow
+      theme, tenant, t, cookieDispatch, bookNow
     } = this.props
 
     if (!tenant) {
       return ''
     }
-    const primaryColor = {
-      color: theme && theme.colors ? theme.colors.primary : 'black'
-    }
-    let logo = theme && theme.logoLarge ? theme.logoLarge : ''
+    const checkTenantScope = tenant && tenant.scope
+    let logo = theme && theme.logoWhite ? theme.logoWhite : ''
     if (!logo && theme && theme.logoSmall) logo = theme.logoSmall
     const supportNumber = tenant && tenant.phones ? tenant.phones.support : ''
     const supportEmail = tenant && tenant.emails ? tenant.emails.support.general : ''
-    const links = tenant && tenant.scope ? tenant.scope.links : {}
+    const links = checkTenantScope ? tenant.scope.links : {}
+    const socialLinks = checkTenantScope ? tenant.scope.social_links : {}
     const defaultLinks = {
       privacy: 'https://itsmycargo.com/en/privacy',
       about: 'https://www.itsmycargo.com/en/ourstory',
+      home: 'https://www.itsmycargo.com/en/',
       legal: 'https://www.itsmycargo.com/en/contact'
     }
+    const home = links && links.home ? links.home : defaultLinks.home
     let termsLink = ''
     tenant.subdomain ? termsLink = `https://${tenant.subdomain}.itsmycargo.com/terms_and_conditions` : termsLink = ''
 
-    // TODO: implement Social Links
-    const socialLinks = null
+    const filteredSocialLinks = socialLinks ? Object.entries(socialLinks).filter(array => array[1] !== '') : []
+    const oo = filteredSocialLinks.map((value) => {
+      const social = value[0]
+      const link = value[1]
+
+      return socialIcons(social, link)
+    })
 
     return (
       <div
-        className={`flex-100 layout-row layout-wrap ${styles.footer}`}
+        className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.footer}`}
         ref={(div) => {
           if (!div) return
           cookieDispatch.updateCookieHeight({ height: div.offsetHeight })
         }}
       >
-        <div className="flex-50 flex-gt-sm-40 flex-order--2 layout-row layout-wrap layout-align-start-start">
-          <div className="flex-100 layout-row layout-align-start-start">
+        <div className={`flex-20 flex-gt-sm-20 layout-row layout-wrap layout-align-center-center ${styles.banner_text}`}>
+          <a
+            href={home}
+            target="_blank"
+          >
             <img className={styles.logo} src={logo} />
-          </div>
-          <div className="flex-100 layout-row layout-align-start-center">
-            <h4 className={`flex-none ${styles.powered_by_padding}`}>
-              {t('footer:poweredBy')}
-            </h4>
-            <div className="flex-5" />
-            <a href="https://www.itsmycargo.com/" target="_blank">
+          </a>
+          <div className="flex-100 flex-gt-sm-100 layout-align-center-center layout-row">
+            <h4 className="flex-none">{t('footer:poweredBy')}</h4>
+            <a
+              className="layout-row flex-none layout-align-start-center"
+              href="https://www.itsmycargo.com/"
+              target="_blank"
+            >
               <img
                 src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
                 alt=""
@@ -63,34 +74,43 @@ class Footer extends React.PureComponent {
               />
             </a>
           </div>
-          <div className={`flex-100 ${styles.contacts}`}>
+        </div>
+        <div className="flex-25 flex-gt-sm-25 layout-row layout-wrap layout-align-start-start">
+          <div className="flex-25 flex-gt-sm-25 layout-row">
+            <h4 className={styles.title}>
+              {t('footer:contact')}
+            </h4>
+          </div>
+
+          <div className={`flex-100 layout-row layout-wrap ${styles.contacts}`}>
             <a
-              className="pointy"
+              className="pointy flex-100 layout-row layout-align-start-center"
               href={`mailto:${supportEmail}`}
             >
-              <i className="fa fa-envelope" aria-hidden="true" style={primaryColor} />
+              <i className="fa fa-envelope" aria-hidden="true" />
               {supportEmail}
             </a>
-            <div>
-              <i className="fa fa-phone" aria-hidden="true" style={primaryColor} />
+            <div className="flex-100 layout-row layout-align-start-center">
+              <i className="fa fa-phone" aria-hidden="true" />
               {supportNumber}
+            </div>
+            <div className={`flex-100 layout-row ${styles.social_links}`}>
+              {oo}
             </div>
           </div>
         </div>
-        <div className="flex-50 flex-gt-sm-20 layout-row layout-wrap layout-align-start-start">
-          <div className="flex-100">
-            <a className={styles.title} target="_blank" href={links && links.about ? links.about : defaultLinks.about}>
-              {t('footer:about')}
-            </a>
-          </div>
-        </div>
-        <div className="flex-50 flex-gt-sm-20 layout-row layout-wrap layout-align-start-start">
-          <div className="flex-100">
+        <div className="flex-20 flex-gt-sm-20 layout-row layout-wrap layout-align-start-start">
+          <div className="flex-100 flex-gt-sm-100 layout-row">
             <h4 className={styles.title}>
-              {t('footer:legal')}
+              {t('footer:company')}
             </h4>
           </div>
           <ul>
+            <li>
+              <a target="_blank" href={links && links.about ? links.about : defaultLinks.home}>
+                {t('footer:about')}
+              </a>
+            </li>
             <li>
               <a target="_blank" href={links && links.legal ? links.legal : defaultLinks.legal}>
                 {t('footer:imprint')}
@@ -110,30 +130,21 @@ class Footer extends React.PureComponent {
         </div>
         <div
           className="
-            flex-50 flex-gt-sm-20 flex-order--1 flex-order-gt-sm-4
+            flex-50 flex-gt-sm-20 flex-order--4 flex-order-gt-sm-4
             layout-row layout-wrap layout-align-start-start
           "
         >
           <div className="flex-100 layout-row layout-align-start">
-            {
-              socialLinks
-                ? (
-                  <h4 className={styles.title}>
-                    {t('footer:social')}
-                  </h4>
-                )
-                : (
-                  <SquareButton
-                    text={t('landing:callToAction')}
-                    theme={theme}
-                    active
-                    handleNext={bookNow}
-                    size="small"
-                  />
-                )
-            }
+            <SquareButton
+              text={t('landing:callToAction')}
+              theme={theme}
+              active
+              handleNext={bookNow}
+              size="small"
+            />
           </div>
         </div>
+
       </div>
     )
   }

@@ -120,6 +120,7 @@ class Header extends Component {
     const { isTop } = this.state
     const scope = tenant && tenant.id ? tenant.scope : {}
     const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
+    debugger
     const accountLinks = user && user.role && user.role.name.includes('admin')
       ? [
         {
