@@ -85,7 +85,7 @@ class RouteFilterBox extends Component {
     return (
       <div className={styles.filterbox}>
         <div className={styles.pickup_date}>
-          <div>
+          <div classNmae="flex-100 layout-row">
             <TextHeading theme={theme} size={4} text={pickup ? t('cargo:cargoReadyDate') : t('cargo:availableAtTerm')} />
           </div>
           <div className={`flex-none layout-row ${styles.dpb}`}>
