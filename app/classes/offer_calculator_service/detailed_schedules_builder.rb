@@ -89,9 +89,13 @@ module OfferCalculatorService
         end
         user_pricing_id = user.role.name == 'agent' ? user.agency_pricing_id : user.id
         # Find the pricings for the cargo classes and effective date ranges then group by cargo_class
+
         pricings_by_cargo_class = schedules_array.first.trip.itinerary.pricings
           .for_cargo_class(cargo_classes)
-          .for_dates(start_date, end_date)
+        if start_date && end_date
+          pricings_by_cargo_class = pricings_by_cargo_class.for_dates(start_date, end_date)
+        end
+        pricings_by_cargo_class = pricings_by_cargo_class
           .select{|pricing| (pricing.user_id == user_pricing_id) || pricing.user_id.nil?}
           .group_by { |pricing| "#{pricing.transport_category_id}"}
 
