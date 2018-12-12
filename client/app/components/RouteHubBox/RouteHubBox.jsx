@@ -5,7 +5,7 @@ import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
 import styles from './RouteHubBox.scss'
 import { moment } from '../../constants'
-import { capitalize } from '../../helpers'
+import { capitalize, formatAddress } from '../../helpers'
 
 function formatDate (date) {
   const format = 'DD/MM/YYYY'
@@ -45,25 +45,6 @@ class RouteHubBox extends Component {
 
   static dashedGradient (color1, color2) {
     return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`
-  }
-
-  static formatAddress (address) {
-    const keys = [['street_number',
-      'street'],
-    ['city',
-      'zip_code'],
-    ['country.name']]
-
-    const addressComponents = []
-    keys.forEach((keyArray) => {
-      const section = keyArray.map(k => get(address, k, false)).filter(x => x).join(', ')
-      if (section.length > 0) {
-        addressComponents.push(section)
-        addressComponents.push(<br />)
-      }
-    })
-
-    return addressComponents
   }
 
   render () {
@@ -114,7 +95,7 @@ class RouteHubBox extends Component {
           </div>
           <div className="flex-50 layout-row layout-align-end-center">
             <p className={` ${styles.itinerary_address} flex-none`}>
-              {RouteHubBox.formatAddress(shipment.pickup_address)}
+              {formatAddress(shipment.pickup_address)}
             </p>
           </div>
 
@@ -134,7 +115,7 @@ class RouteHubBox extends Component {
           </div>
           <div className="flex-50 layout-row layout-align-end-center">
             <p className={` ${styles.itinerary_address} flex-none`}>
-              {RouteHubBox.formatAddress(shipment.delivery_address)}
+              {formatAddress(shipment.delivery_address)}
 
             </p>
           </div>

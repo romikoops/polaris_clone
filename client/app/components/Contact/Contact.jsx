@@ -2,7 +2,7 @@ import React from 'react'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './Contact.scss'
-import { nameToDisplay } from '../../helpers'
+import { nameToDisplay, formatAddress } from '../../helpers'
 
 function Contact (props) {
   const {
@@ -31,13 +31,14 @@ function Contact (props) {
             </p>
 
             <address className={` ${styles.address} flex-100 center`}>
-              {contact.address
+              { contact.address ? formatAddress(contact.address) : '' }
+              {/* {contact.address
                 ? `${contact.address.street || ''} ${contact.address.street_number || ''}`
                 : ''}{' '}
               <br />
               {contact.address ? `${contact.address.zip_code} ${contact.address.city}` : ''}
               <br />
-              {contact.address ? `${contact.address.country}` : ''}
+              {contact.address ? `${contact.address.country}` : ''} */}
             </address>
           </div>
         </div>
