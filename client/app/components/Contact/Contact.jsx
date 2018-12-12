@@ -32,13 +32,6 @@ function Contact (props) {
 
             <address className={` ${styles.address} flex-100 center`}>
               { contact.address ? formatAddress(contact.address) : '' }
-              {/* {contact.address
-                ? `${contact.address.street || ''} ${contact.address.street_number || ''}`
-                : ''}{' '}
-              <br />
-              {contact.address ? `${contact.address.zip_code} ${contact.address.city}` : ''}
-              <br />
-              {contact.address ? `${contact.address.country}` : ''} */}
             </address>
           </div>
         </div>
