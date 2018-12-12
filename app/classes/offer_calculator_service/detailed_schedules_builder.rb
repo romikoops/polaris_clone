@@ -80,20 +80,24 @@ module OfferCalculatorService
       end
       schedule_groupings.each do |_key, schedules_array|
         schedules_array.sort_by!{|sched| sched.eta }
-        if schedules_array.length < 2 && schedules_array&.first&.eta.nil?
+        if schedules_array&.any?{|s| s.etd.nil? || s.eta.nil? } 
           isQuote = true
           start_date = Date.today
           end_date = start_date + 1.month
         else
           start_date = schedules_array.first.etd
           end_date = schedules_array.last.eta
-          isQoute = false
+          isQuote = false
         end
         user_pricing_id = user.role.name == 'agent' ? user.agency_pricing_id : user.id
         # Find the pricings for the cargo classes and effective date ranges then group by cargo_class
+
         pricings_by_cargo_class = schedules_array.first.trip.itinerary.pricings
           .for_cargo_class(cargo_classes)
-          .for_dates(start_date, end_date)
+        if start_date && end_date
+          pricings_by_cargo_class = pricings_by_cargo_class.for_dates(start_date, end_date)
+        end
+        pricings_by_cargo_class = pricings_by_cargo_class
           .select{|pricing| (pricing.user_id == user_pricing_id) || pricing.user_id.nil?}
           .group_by { |pricing| "#{pricing.transport_category_id}"}
         # Find the group with the most pricings and create the object to be passed on
