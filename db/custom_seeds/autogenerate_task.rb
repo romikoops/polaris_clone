@@ -47,7 +47,7 @@ genObj.each do |subdomain, array|
         [genData[:transit_time]],
         DateTime.now,
         finish_date,
-        [ordinalLookup[genData[:departure]]],
+        [ordinalLookup[genData[:departure].to_sym]],
         tv_id,
         4
       )
