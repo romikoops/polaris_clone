@@ -232,8 +232,13 @@ export class ShipmentDetails extends Component {
       this.getInitalFilteredRouteIndexes()
     }
 
+    if (!isEmpty(nextProps.prevRequest) && !nextState.prevRequestLoaded) {
+      this.loadPrevReq(nextProps.prevRequest)
+
+      return false
+    }
+
     return !!(
-      (isEmpty(nextProps.prevRequest) || nextState.prevRequestLoaded) &&
       nextProps.shipmentData &&
       nextState.shipment &&
       nextState.modals &&
@@ -747,7 +752,6 @@ export class ShipmentDetails extends Component {
     const carriageOptionScope = scope.carriage_options[carriage][this.state.shipment.direction]
     const changeShouldApply = carriageOptionScope === 'optional' || (options && options.force)
     if (!changeShouldApply) return
-    
 
     this.setState({ [target]: value }, () => this.updateIncoterms())
 
