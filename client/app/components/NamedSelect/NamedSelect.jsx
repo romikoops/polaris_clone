@@ -12,7 +12,7 @@ const StyledSelect = styled(Select)`
     border: 1px solid #F2F2F2 !important;
   }
   .Select-placeholder {
-    background: ${props => (props.showErrors ? props.errorStyles.background : '#F9F9F9')};
+    background: ${props => (props.showErrors ? props.errorStyles.background : 'unset')};
     ${props => (props.showErrors ? `color: ${props.errorStyles.color};` : '')}
   }
   .Select-menu-outer {
