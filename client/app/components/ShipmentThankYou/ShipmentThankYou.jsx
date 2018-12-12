@@ -42,18 +42,6 @@ class ShipmentThankYou extends Component {
                   <br />
                   {t('bookconf:requestEmailThird')}
                   <br />
-                  {
-                    shipment.status === 'requested_by_unconfirmed_account' && (
-                      <span>
-                        <br />
-                        {t('bookconf:emailPlease')}<b> {t('bookconf:confirmEmail')} </b> {t('bookconf:completeRequest')} <br />
-                        { `${tenant.name}` } {t('bookconf:tenantWillNot')}
-                        {t('bookconf:emailAssociated')} <br />
-                        {t('bookconf:followLink')} <br />
-                        <br />
-                      </span>
-                    )
-                  }
                   {t('bookconf:contactUs')}
                 </p>
               </div>
