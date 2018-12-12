@@ -224,7 +224,7 @@ class UserProfile extends Component {
     const toggleEditCurrency = !tenant.scope.fixed_currency ? (
       <div className={`flex-40 layout-row layout-align-center-center layout-wrap ${styles.currency_box}`}>
         <div className="flex-75 layout-row layout-align-end-center layout-wrap">
-          <div className="flex-100 layout-row layout-align-center-center ">
+          <div className="flex-100 layout-row layout-wrap layout-align-center-center">
             <p className="flex-none">{t('common:currency')}:</p>
             <NamedSelect
               className="flex-100"
