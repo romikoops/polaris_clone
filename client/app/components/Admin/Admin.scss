@@ -364,18 +364,31 @@
   }
   .navigation_button {
     background: white;
-    color: #BDBDBD;
+    color: #4F4F4F;
     i {
+      height: 26px;
+      width: 26px;
       font-size: 25px;
+      transition: all 0.3s ease;
     }
+    transition: all 0.3s ease;
+    opacity: 0.9;
+    
     &:hover {
-      color: #4F4F4F;
+      opacity: 1;
+      i {
+        font-size: 27px;
+      }
     }
-  }
-  .disabled {
-    color: #E0E0E0 !important;
-    &:hover {
-      color: #E0E0E0 !important;
+    &.disabled {
+      cursor: default;
+      color: #E0E0E0;
+      &:hover {
+        i {
+          font-size: 25px;
+        }
+        color: #E0E0E0;
+      }
     }
   }
   .price_subheader {
