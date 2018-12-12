@@ -17,7 +17,7 @@ class AccountMailer < Devise::Mailer
     @confirmation_url = "#{base_server_url}tenants/#{tenant.id}/auth/confirmation?confirmation_token=#{token}&redirect_url=#{redirect_url}"
 
     @links = tenant.email_links ? tenant.email_links['confirmation_instructions'] : []
-
+    WelcomeMailer.welcome_email(record).deliver_later
     super
   end
 
