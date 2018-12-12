@@ -98,7 +98,7 @@ exports[`detailed billing working properly 1`] = `
         <p
           className="flex-100 layout-row layout-align-end-center"
         >
-          Kg
+          Total Weight
           : 
           <span>
             0.0
@@ -378,7 +378,7 @@ exports[`shallow rendering 1`] = `
         <p
           className="flex-100 layout-row layout-align-end-center"
         >
-          Kg
+          Total Weight
           : 
           <span>
             0.0
@@ -639,7 +639,7 @@ exports[`show schedule options working 1`] = `
         <p
           className="flex-100 layout-row layout-align-end-center"
         >
-          Kg
+          Total Weight
           : 
           <span>
             0.0
@@ -919,7 +919,7 @@ exports[`show schedules set to true 1`] = `
         <p
           className="flex-100 layout-row layout-align-end-center"
         >
-          Kg
+          Total Weight
           : 
           <span>
             0.0
@@ -1179,7 +1179,7 @@ exports[`single result rendering removes the "add" button 1`] = `
         <p
           className="flex-100 layout-row layout-align-end-center"
         >
-          Kg
+          Total Weight
           : 
           <span>
             0.0

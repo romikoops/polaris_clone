@@ -192,7 +192,7 @@ module ExcelTool
         Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id, row[:carrier])
       end
 
-      aux_data[pricing_key][:customer] = User.find_by(email: row[:customer_id]) if row[:customer_id]
+      aux_data[pricing_key][:customer] = User.find_by(email: row[:customer_id], tenant_id: user.tenant_id) if row[:customer_id]
       aux_data[pricing_key][:transit_time] ||= row[:transit_time]
       aux_data[pricing_key][:origin] ||= find_nexus(row[:origin], user.tenant_id)
       aux_data[pricing_key][:destination] ||= find_nexus(row[:destination], user.tenant_id)

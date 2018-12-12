@@ -837,7 +837,7 @@ exports[`shallow render 1`] = `
                     autosize={true}
                     backspaceRemoves={true}
                     backspaceToRemoveMessage="Press backspace to remove {label}"
-                    className="flex-100 sc-bdVaJa djGvLJ"
+                    className="flex-100 sc-bdVaJa kuuNwx"
                     classes="select"
                     clearAllText="Clear all"
                     clearRenderer={[Function]}
@@ -1027,7 +1027,7 @@ exports[`shallow render 1`] = `
                     valueKey="value"
                   >
                     <div
-                      className="Select flex-100 sc-bdVaJa djGvLJ has-value is-clearable is-searchable Select--single"
+                      className="Select flex-100 sc-bdVaJa kuuNwx has-value is-clearable is-searchable Select--single"
                     >
                       <input
                         disabled={false}
@@ -1327,7 +1327,7 @@ exports[`shallow render 1`] = `
                   autosize={true}
                   backspaceRemoves={true}
                   backspaceToRemoveMessage="Press backspace to remove {label}"
-                  className="flex-100 sc-bdVaJa djGvLJ"
+                  className="flex-100 sc-bdVaJa kuuNwx"
                   classes="select"
                   clearAllText="Clear all"
                   clearRenderer={[Function]}
@@ -1444,7 +1444,7 @@ exports[`shallow render 1`] = `
                   valueKey="value"
                 >
                   <div
-                    className="Select flex-100 sc-bdVaJa djGvLJ has-value is-clearable is-searchable Select--single"
+                    className="Select flex-100 sc-bdVaJa kuuNwx has-value is-clearable is-searchable Select--single"
                   >
                     <input
                       disabled={false}
@@ -2340,7 +2340,7 @@ exports[`state.globalFees is truthy 1`] = `
                   autosize={true}
                   backspaceRemoves={true}
                   backspaceToRemoveMessage="Press backspace to remove {label}"
-                  className="flex-100 sc-bdVaJa djGvLJ"
+                  className="flex-100 sc-bdVaJa kuuNwx"
                   classes="select"
                   clearAllText="Clear all"
                   clearRenderer={[Function]}
@@ -2457,7 +2457,7 @@ exports[`state.globalFees is truthy 1`] = `
                   valueKey="value"
                 >
                   <div
-                    className="Select flex-100 sc-bdVaJa djGvLJ has-value is-clearable is-searchable Select--single"
+                    className="Select flex-100 sc-bdVaJa kuuNwx has-value is-clearable is-searchable Select--single"
                   >
                     <input
                       disabled={false}
@@ -2907,7 +2907,7 @@ exports[`state.globalFees is truthy 1`] = `
                     autosize={true}
                     backspaceRemoves={true}
                     backspaceToRemoveMessage="Press backspace to remove {label}"
-                    className="flex-100 sc-bdVaJa djGvLJ"
+                    className="flex-100 sc-bdVaJa kuuNwx"
                     classes="select"
                     clearAllText="Clear all"
                     clearRenderer={[Function]}
@@ -3097,7 +3097,7 @@ exports[`state.globalFees is truthy 1`] = `
                     valueKey="value"
                   >
                     <div
-                      className="Select flex-100 sc-bdVaJa djGvLJ has-value is-clearable is-searchable Select--single"
+                      className="Select flex-100 sc-bdVaJa kuuNwx has-value is-clearable is-searchable Select--single"
                     >
                       <input
                         disabled={false}
@@ -3591,7 +3591,7 @@ exports[`state.globalFees is truthy 1`] = `
                     autosize={true}
                     backspaceRemoves={true}
                     backspaceToRemoveMessage="Press backspace to remove {label}"
-                    className="flex-100 sc-bdVaJa djGvLJ"
+                    className="flex-100 sc-bdVaJa kuuNwx"
                     classes="select"
                     clearAllText="Clear all"
                     clearRenderer={[Function]}
@@ -3781,7 +3781,7 @@ exports[`state.globalFees is truthy 1`] = `
                     valueKey="value"
                   >
                     <div
-                      className="Select flex-100 sc-bdVaJa djGvLJ has-value is-clearable is-searchable Select--single"
+                      className="Select flex-100 sc-bdVaJa kuuNwx has-value is-clearable is-searchable Select--single"
                     >
                       <input
                         disabled={false}
@@ -4081,7 +4081,7 @@ exports[`state.globalFees is truthy 1`] = `
                   autosize={true}
                   backspaceRemoves={true}
                   backspaceToRemoveMessage="Press backspace to remove {label}"
-                  className="flex-100 sc-bdVaJa djGvLJ"
+                  className="flex-100 sc-bdVaJa kuuNwx"
                   classes="select"
                   clearAllText="Clear all"
                   clearRenderer={[Function]}
@@ -4198,7 +4198,7 @@ exports[`state.globalFees is truthy 1`] = `
                   valueKey="value"
                 >
                   <div
-                    className="Select flex-100 sc-bdVaJa djGvLJ has-value is-clearable is-searchable Select--single"
+                    className="Select flex-100 sc-bdVaJa kuuNwx has-value is-clearable is-searchable Select--single"
                   >
                     <input
                       disabled={false}
@@ -5247,7 +5247,7 @@ exports[`state.selectOptions is falsy 1`] = `
                     autosize={true}
                     backspaceRemoves={true}
                     backspaceToRemoveMessage="Press backspace to remove {label}"
-                    className="flex-100 sc-bdVaJa djGvLJ"
+                    className="flex-100 sc-bdVaJa kuuNwx"
                     classes="select"
                     clearAllText="Clear all"
                     clearRenderer={[Function]}
@@ -5432,7 +5432,7 @@ exports[`state.selectOptions is falsy 1`] = `
                     valueKey="value"
                   >
                     <div
-                      className="Select flex-100 sc-bdVaJa djGvLJ is-clearable is-searchable Select--single"
+                      className="Select flex-100 sc-bdVaJa kuuNwx is-clearable is-searchable Select--single"
                     >
                       <div
                         className="Select-control"
@@ -5674,7 +5674,7 @@ exports[`state.selectOptions is falsy 1`] = `
                   autosize={true}
                   backspaceRemoves={true}
                   backspaceToRemoveMessage="Press backspace to remove {label}"
-                  className="flex-100 sc-bdVaJa djGvLJ"
+                  className="flex-100 sc-bdVaJa kuuNwx"
                   classes="select"
                   clearAllText="Clear all"
                   clearRenderer={[Function]}
@@ -5785,7 +5785,7 @@ exports[`state.selectOptions is falsy 1`] = `
                   valueKey="value"
                 >
                   <div
-                    className="Select flex-100 sc-bdVaJa djGvLJ is-clearable is-searchable Select--single"
+                    className="Select flex-100 sc-bdVaJa kuuNwx is-clearable is-searchable Select--single"
                   >
                     <div
                       className="Select-control"

@@ -68,7 +68,7 @@ class TenantMenu extends React.PureComponent {
                   style={{ paddingRight: '25px', paddingBottom: '7px' }}
                   onClick={() => this.switchTenant(t)}
                 >
-                  <p>{t.label} ({t.value.subdomain})</p>
+                  <p>{t.value.subdomain}</p>
                 </div>
               ))}
             </div>

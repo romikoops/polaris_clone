@@ -14,8 +14,8 @@ const MyAccount = connect(null, dispatch => (
   user, tenant, theme, toAccount, t
 }) => (
   user && user.role && ['shipper', 'agent', 'agency_manager'].includes(user.role.name) &&
-  !user.guest &&
-  !(tenant && tenant.scope && tenant.scope.closed_quotation_tool) && (
+    !user.guest &&
+    !(tenant && tenant.scope && tenant.scope.closed_quotation_tool) && (
     <div className="layout-row flex-100 flex-gt-sm-50 margin_bottom">
       <SquareButton
         text={t('common:accountTitle')}
@@ -57,7 +57,7 @@ const FindRates = withNamespaces(['landing'])(({
 ))
 
 const ButtonSection = ({
-  user, tenant, theme, bookNow, className, t
+  user, tenant, theme, bookNow, className, t, showLogo
 }) => {
   const buttonProps = { user, tenant, theme }
 
@@ -72,22 +72,24 @@ const ButtonSection = ({
         <FindRates {...buttonProps} bookNow={bookNow} />
       </div>
       <div className={`flex-75 ${styles.banner_text}`}>
-        <div className={`flex layout-row flex-100 ${styles.banner_text}`}>
-          <div className="flex-none layout-row layout-align-start-center">
-            <h4 className="flex-none">{t('landing:poweredBy')}</h4>
-            <a
-              className="layout-row flex-offset-10 layout-align-center-center"
-              href="https://www.itsmycargo.com/"
-              target="_blank"
-            >
-              <img
-                src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                alt=""
-                className={`flex-none pointy ${styles.powered_by_logo}`}
-              />
-            </a>
+        {showLogo ? (
+          <div className={`flex layout-row flex-100 ${styles.banner_text}`}>
+            <div className="flex-none layout-row layout-align-start-center">
+              <h4 className="flex-none">{t('landing:poweredBy')}</h4>
+              <a
+                className="layout-row flex-offset-10 layout-align-center-center"
+                href="https://www.itsmycargo.com/"
+                target="_blank"
+              >
+                <img
+                  src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+                  alt=""
+                  className={`flex-none pointy ${styles.powered_by_logo}`}
+                />
+              </a>
+            </div>
           </div>
-        </div>
+        ) : ''}
       </div>
     </div>
   )
@@ -98,7 +100,8 @@ ButtonSection.defaultProps = {
   user: null,
   tenant: null,
   bookNow: null,
-  className: ''
+  className: '',
+  showLogo: true
 }
 
 export default withNamespaces(['landing'])(ButtonSection)

@@ -232,8 +232,13 @@ export class ShipmentDetails extends Component {
       this.getInitalFilteredRouteIndexes()
     }
 
+    if (!isEmpty(nextProps.prevRequest) && !nextState.prevRequestLoaded) {
+      this.loadPrevReq(nextProps.prevRequest)
+
+      return false
+    }
+
     return !!(
-      (isEmpty(nextProps.prevRequest) || nextState.prevRequestLoaded) &&
       nextProps.shipmentData &&
       nextState.shipment &&
       nextState.modals &&
@@ -747,7 +752,6 @@ export class ShipmentDetails extends Component {
     const carriageOptionScope = scope.carriage_options[carriage][this.state.shipment.direction]
     const changeShouldApply = carriageOptionScope === 'optional' || (options && options.force)
     if (!changeShouldApply) return
-    
 
     this.setState({ [target]: value }, () => this.updateIncoterms())
 
@@ -956,7 +960,7 @@ export class ShipmentDetails extends Component {
           onDayChange={this.handleDayChange}
         />
         <div className={`layout-row flex-100 layout-wrap layout-align-center ${styles.cargo_sec}`}>
-          {shipmentData.shipment.load_type === 'cargo_item' && (
+          {shipmentData.shipment.load_type === 'cargo_item' && scope.total_dimensions && (
             <div className="content_width_booking layout-row layout-wrap layout-align-center">
               <div
                 className={

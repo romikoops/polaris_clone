@@ -12,9 +12,13 @@ function QuoteCardScheduleList ({
 }) {
   const perPage = 5
 
+  const sortedSchedules = schedules.sort((scheduleA, scheduleB) => (
+    moment(scheduleA.closing_date).diff(scheduleB.closing_date)
+  ))
+
   return (
     <div className="flex-100 layout-wrap layout-row">
-      <Pagination items={schedules} pageNavigation={false} perPage={perPage}>
+      <Pagination items={sortedSchedules} pageNavigation={false} perPage={perPage}>
         {
           ({
             items, nextPage, prevPage, page, numPages

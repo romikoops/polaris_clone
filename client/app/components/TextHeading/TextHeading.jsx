@@ -22,28 +22,28 @@ class TextHeading extends Component {
         case 1:
           returnVal = (
 
-            <h1 className={`${styles.text_style} flex-none`} style={styling}>
+            <h1 className={`${styles.text_style} flex`} style={styling}>
               {text}{' '}{Comp}
             </h1>
           )
           break
         case 2:
           returnVal = (
-            <h2 className={`${styles.text_style} flex-none`} style={styling}>
+            <h2 className={`${styles.text_style} flex`} style={styling}>
               {text}{' '}{Comp}
             </h2>
           )
           break
         case 3:
           returnVal = (
-            <h3 className={`${styles.text_style} flex-none`} style={styling}>
+            <h3 className={`${styles.text_style} flex`} style={styling}>
               {text}{' '}{Comp}
             </h3>
           )
           break
         case 4:
           returnVal = (
-            <h4 className={`${styles.text_style} flex-none`} style={styling}>
+            <h4 className={`${styles.text_style} flex`} style={styling}>
               {text}{' '}{Comp}
             </h4>
           )

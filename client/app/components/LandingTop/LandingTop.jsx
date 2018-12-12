@@ -48,6 +48,11 @@ function LandingTop ({
     theme, user, tenant, bookNow
   }
   const defaultContent = [
+    (<img
+      src={whiteLogo}
+      alt=""
+      className={`flex-none ${styles.tenant_logo_landing}`}
+    />),
     (<h2 className="flex-none">
       <b>{t('landing:welcomeTextHead')}</b> <br />
       <i> {tenant.name} </i> <b> <br />
@@ -86,11 +91,6 @@ function LandingTop ({
         <div className="flex-50 layout-row layout-align-center layout-wrap">
           <div className={`${styles.content_wrapper} flex-100 layout-row layout-wrap layout-align-center-center`}>
             <div className={`flex-75 ${styles.banner_text}`}>
-              <img
-                src={whiteLogo}
-                alt=""
-                className={`flex-none ${styles.tenant_logo_landing}`}
-              />
               { contentToRender }
             </div>
             <ButtonSection {...buttonSectionProps} className="hide_h_xxs" />

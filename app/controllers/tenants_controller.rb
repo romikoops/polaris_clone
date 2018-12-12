@@ -9,7 +9,7 @@ class TenantsController < ApplicationController
     tenants = if Rails.env.production?
                 []
               else
-                Tenant.order(:subdomain).map { |t| { label: t.name, value: t } }
+                Tenant.where("subdomain NOT LIKE '%-sandbox'").order(:subdomain).map { |t| { label: t.name, value: t } }
               end
 
     response_handler(tenants)
