@@ -960,7 +960,7 @@ export class ShipmentDetails extends Component {
           onDayChange={this.handleDayChange}
         />
         <div className={`layout-row flex-100 layout-wrap layout-align-center ${styles.cargo_sec}`}>
-          {shipmentData.shipment.load_type === 'cargo_item' && (
+          {shipmentData.shipment.load_type === 'cargo_item' && scope.total_dimensions && (
             <div className="content_width_booking layout-row layout-wrap layout-align-center">
               <div
                 className={

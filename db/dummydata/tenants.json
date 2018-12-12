@@ -50,6 +50,7 @@
   "name": "Greencarrier",
   "currency": "USD",
   "scope": {
+    "total_dimensions": true,
     "modes_of_transport": {
       "truck": {
         "container": false,
@@ -156,6 +157,7 @@
   "subdomain": "demo",
   "name": "Demo",
   "scope": {
+    "total_dimensions": true,
     "modes_of_transport": {
       "truck": {
         "container": false,
@@ -246,6 +248,7 @@
   "subdomain": "easyshipping",
   "name": "Easyshipping",
   "scope": {
+    "total_dimensions": true,
     "modes_of_transport": {
       "truck": {
         "container": false,
@@ -334,6 +337,7 @@
   "name": "SACO Shipping GmbH",
   "currency": "USD",
   "scope": {
+    "total_dimensions": true,
     "modes_of_transport": {
       "truck": {
         "container": false,
@@ -439,6 +443,7 @@
   "name": "Küster Speedtrans Übersee Spedition GmbH",
   "currency": "USD",
   "scope": {
+    "total_dimensions": true,
     "modes_of_transport": {
       "truck": {
         "container": false,
@@ -545,6 +550,7 @@
   "subdomain": "trucking",
   "name": "Trucking",
   "scope": {
+    "total_dimensions": true,
     "modes_of_transport": {
       "truck": {
         "container": true,
@@ -632,6 +638,7 @@
   "name": "Gateway Cargo Systems GmbH",
   "currency": "EUR",
   "scope": {
+    "total_dimensions": false,
     "default_direction": "export",
     "modes_of_transport": {
       "ocean": {
@@ -730,6 +737,7 @@
   "name": "Schryver International Freight Forwarders GmbH",
   "currency": "EUR",
   "scope": {
+    "total_dimensions": true,
     "modes_of_transport": {
       "ocean": {
         "container": true,
@@ -816,6 +824,7 @@
   "name": "Norman Global Logistics",
   "currency": "EUR",
   "scope": {
+    "total_dimensions": true,
     "modes_of_transport": {
       "ocean": {
         "container": true,
@@ -900,6 +909,7 @@
   "name": "Fivestar Services GmbH",
   "currency": "EUR",
   "scope": {
+    "total_dimensions": true,
     "default_direction": "export",
     "modes_of_transport": {
       "ocean": {
@@ -1035,6 +1045,7 @@
   "name": "ItsMyCargo Quotes",
   "currency": "EUR",
   "scope": {
+    "total_dimensions": true,
     "modes_of_transport": {
       "ocean": {
         "container": false,
