@@ -85,6 +85,12 @@ class Landing extends Component {
 
     const innerWrapperStyle = { position: 'relative', paddingBottom: isQuote(tenant) ? '60px' : '125px' }
     const serviceContentToRender = content && content.services ? contentToHtml(content.services) : ['', '', '']
+    const serviceTitlesToRender = content && content.serviceTitles ? contentToHtml(content.serviceTitles) : ([<h2 className="flex-none">
+    Introducing Online Freight Booking Services
+  </h2>])
+    const bulletTitlesToRender = content && content.bulletTitles ? contentToHtml(content.bulletTitles) : ([<h2 className="flex-none">
+    There are tons of benefits of managing your logistics online:
+  </h2>])
     const bulletContentToRender = content && content.bullets ? contentToHtml(content.bullets) : defaultBulletContent
     return (
       <div className={`${styles.wrapper_landing} layout-row flex-100 layout-wrap`}>
@@ -100,11 +106,8 @@ class Landing extends Component {
           {!isQuote(tenant) ? (
             <div className="layout-row flex-100 layout-wrap">
               <div className={`${styles.service_box} layout-row flex-100 layout-wrap`}>
-                <div className={`${styles.service_label} layout-row layout-align-center-center flex-100`}>
-                  <h2 className="flex-none">
-                    {' '}
-                    Introducing Online Freight Booking Services {this.props.loggedIn}
-                  </h2>
+                <div className={`${styles.service_label} layout-row layout-align-center-center flex-100 layout-wrap`}>
+                  {serviceTitlesToRender}
                 </div>
                 <div className={`${styles.services_row} flex-100 layout-row layout-align-center`}>
                   <div
@@ -148,11 +151,11 @@ class Landing extends Component {
                 </div>
               </div>
               <div className={`${styles.btm_promo} flex-100 layout-row`}>
-                <div className={`flex-50 ${styles.btm_promo_img}`} />
-                <div className={`${styles.btm_promo_text} flex-50 layout-row layout-align-start-start`}>
+                <div className={`flex-45 ${styles.btm_promo_img}`} />
+                <div className={`${styles.btm_promo_text} flex-55 layout-row layout-align-start-start`}>
                   <div className="flex-90 layout-column layout-align-start-start height_100">
                     <div className="flex-20 layout-column layout-align-center-start">
-                      <h2> There are tons of benefits of managing your logistics online: </h2>
+                      {bulletTitlesToRender}
                     </div>
                     <div className={`flex-65 layout-column layout-align-start-start ${styles.promo_bullets}`}>
                       {bulletContentToRender}

@@ -508,4 +508,23 @@
   .lighter {
     font-weight:  lighter;
   }
+  .landing_logo_large {
+    width: 300px;
+    margin-top: 130px;
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+      margin-top: 100px;
+    }
+    @media (max-width: 1024px), (max-height: 850px)  {
+      margin-top: 100px;
+      width: 250px;
+    }
+    @media (max-width: 960px), (max-height: 600px) {
+      margin-top: 60px;
+      width: 200px;
+    }
+    @media (max-width: 600px), (max-height: 400px) {
+      margin-top: 40px;
+      width: 175px;
+    }
+  }
 }

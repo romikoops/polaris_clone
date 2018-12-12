@@ -7,7 +7,7 @@ default_content = {
 custom_content = {
   "normanglobal": [
     {
-      "text": '<h2 ><b>Norman Global Online</b></h2>',
+      "text": '<img src="https://assets.itsmycargo.com/assets/tenants/normanglobal/normanglobal_logo_white.png" alt="" class="flex-none landing_logo_large"/>',
       "component": "LandingTop",
       "section": "welcome",
       "index": 0
@@ -31,6 +31,18 @@ custom_content = {
       "index": 3
     },
     {
+      "text": '<h2 class="flex-none">Get real-time quotes and create automatic bookings, with our new easy to quote & booking system. </h2>',
+      "component": "Landing",
+      "section": "serviceTitles",
+      "index": 0
+    },
+    {
+      "text": '<h4 class="flex-none">Why use Norman Global Online?</h4>',
+      "component": "Landing",
+      "section": "serviceTitles",
+      "index": 1
+    },
+    {
       "text": '<p >Enter your shipping requirements and let us compute your real-time quote!</p>',
       "component": "Landing",
       "section": "services",
@@ -47,6 +59,12 @@ custom_content = {
       "component": "Landing",
       "section": "services",
       "index": 2
+    },
+    {
+      "text": '<h2 class="flex-none">The core benefits of managing your logistics online with Norman Global Online</h2>',
+      "component": "Landing",
+      "section": "bulletTitles",
+      "index": 0
     },
     {
       "text": '<div class="flex layout-row layout-align-start-center"><i class="flex-none fa fa-check"></i><p class="flex">Place bookings from China to UK without hassle </p></div>',
@@ -147,6 +165,7 @@ s3 = Aws::S3::Client.new(
 )
 custom_content.each do |subdomain, content_array|
   tenant = Tenant.find_by_subdomain(subdomain)
+  Content.where(tenant_id: tenant.id).destroy_all
   content_array.each do |content_hash|
     content = Content.find_or_create_by!(
       tenant_id: tenant.id, 
