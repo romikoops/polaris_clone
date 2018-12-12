@@ -28,7 +28,6 @@ export class AdminHubsComp extends Component {
         countries: []
       },
       page: 1,
-      expander: {}
     }
     this.nextPage = this.nextPage.bind(this)
     this.handleFilters = this.handleFilters.bind(this)
@@ -81,15 +80,6 @@ export class AdminHubsComp extends Component {
     appDispatch.fetchCountries()
   }
 
-  toggleExpander (key) {
-    this.setState({
-      expander: {
-        ...this.state.expander,
-        [key]: !this.state.expander[key]
-      }
-    })
-  }
-
   toggleFilterValue (target, key) {
     this.setState({
       searchFilters: {
@@ -101,16 +91,16 @@ export class AdminHubsComp extends Component {
       }
     }, () => this.handleFilters())
   }
-  handleInput (selection) {
-    const selectValues = selection
-    delete selectValues.name
 
-    this.setState({
+  handleInput (selection) {
+    const { name, ...others } = selection
+
+    this.setState(prevState => ({
       searchFilters: {
-        ...this.state.searchFilters,
-        countries: Object.values(selectValues)
+        ...prevState.searchFilters,
+        [name]: Object.values(others)
       }
-    }, () => this.handleFilters())
+    }), () => this.handleFilters())
   }
 
   handlePage (direction, hubType, country, status) {
@@ -168,7 +158,7 @@ export class AdminHubsComp extends Component {
   }
 
   render () {
-    const { searchFilters, expander } = this.state
+    const { searchFilters } = this.state
     const {
       t,
       theme,
@@ -221,15 +211,16 @@ export class AdminHubsComp extends Component {
     })) : []
 
     const namedCountries = (
-      <NamedSelect
-        className="flex-100 selectors"
-        multi
-        name="country_select"
-        value={searchFilters.countries}
-        autoload={false}
-        options={loadCountries}
-        onChange={e => this.handleInput(e)}
-      />
+      <div style={{ height: '200px' }}>
+        <NamedSelect
+          multi
+          name="countries"
+          value={searchFilters.countries}
+          autoload={false}
+          options={loadCountries}
+          onChange={e => this.handleInput(e)}
+        />
+      </div>
     )
 
     const hubsArr = hubs.map(hub => (
@@ -301,28 +292,24 @@ export class AdminHubsComp extends Component {
                       </div>
                       <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                         <CollapsingBar
-                          collapsed={!expander.hubType}
+                          startCollapsed
                           theme={theme}
-                          handleCollapser={() => this.toggleExpander('hubType')}
                           text={t('admin:hubType')}
                           faClass="fa fa-ship"
                           showArrow
                           content={typeFilters}
                         />
                         <CollapsingBar
-                          collapsed={!expander.status}
+                          startCollapsed
                           theme={theme}
-                          handleCollapser={() => this.toggleExpander('status')}
                           text={t('common:status')}
                           faClass="fa fa-ship"
                           showArrow
                           content={statusFilters}
                         />
                         <CollapsingBar
-                          collapsed={!expander.countries}
+                          startCollapsed
                           theme={theme}
-                          minHeight="270px"
-                          handleCollapser={() => this.toggleExpander('countries')}
                           text={t('user:country')}
                           faClass="fa fa-flag"
                           showArrow
