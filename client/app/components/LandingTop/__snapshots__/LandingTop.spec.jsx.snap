@@ -126,6 +126,7 @@ exports[`theme has truthy properties 1`] = `
         <ButtonSection
           bookNow={[Function]}
           className="hide_h_xxs"
+          showLogo={true}
           t={[Function]}
           tenant={
             Object {
@@ -189,6 +190,7 @@ exports[`theme has truthy properties 1`] = `
       <ButtonSection
         bookNow={[Function]}
         className="hide_h_gt_xxs"
+        showLogo={true}
         t={[Function]}
         tenant={
           Object {
@@ -371,6 +373,7 @@ exports[`user.role_id is 1 1`] = `
         <ButtonSection
           bookNow={[Function]}
           className="hide_h_xxs"
+          showLogo={true}
           t={[Function]}
           tenant={
             Object {
@@ -430,6 +433,7 @@ exports[`user.role_id is 1 1`] = `
       <ButtonSection
         bookNow={[Function]}
         className="hide_h_gt_xxs"
+        showLogo={true}
         t={[Function]}
         tenant={
           Object {
@@ -608,6 +612,7 @@ exports[`user.role_id is 2 1`] = `
         <ButtonSection
           bookNow={[Function]}
           className="hide_h_xxs"
+          showLogo={true}
           t={[Function]}
           tenant={
             Object {
@@ -667,6 +672,7 @@ exports[`user.role_id is 2 1`] = `
       <ButtonSection
         bookNow={[Function]}
         className="hide_h_gt_xxs"
+        showLogo={true}
         t={[Function]}
         tenant={
           Object {
