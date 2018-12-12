@@ -1,61 +1,117 @@
- :local {
-    .buttons div a,
-    .buttons div h4 {
-      text-decoration: none;
-      margin: 0;
-      font-weight: normal;
-      color: white;
-      font-size: 16px;
-    }
-    .buttons p{
-      color: white;
-    }
-    .copyright {
-      height: 34px;
-      color: white;
-      border-top: 1px solid #979797;
-      font-size: 14px;
-    }
-    .contact_bar {
-      border-top: rgb(206, 203, 203) 1px solid;
-      background-color: lightgrey;
-      height: 65px;
+:local {
+  .footer {
+    background: #5E5E5E;
+    color: white;
+    padding: 30px;
+    > * {
       padding: 10px 0;
+
+      @media (min-width: 600px) {
+        padding: 15px 12px;
+      }
+
+      @media (min-width: 960px) {
+        padding: 8px 18px;
+      }
+
+      @media (min-width: 1280px) {
+        padding: 10px 40px;
+      }
+    }
+    a {
+      color: white;
+    }
+    h4 {
+      margin: 10px 0;
+    }
+    .title {
+      margin: 0 0 20px 0;
+      font-weight: bold;
+      font-size: 22px;
+    }
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+      li {
+        margin-bottom: 3px;
+      }
+    }
+    .logo {
+      height: 75px;
+      margin-bottom: 8px;
+    }
+    .contacts {
+      > * {
+        margin-top: 10px;
+      }
       i {
         margin-right: 15px;
+        width: 17px;
       }
-      img {
-        height: 52px;
-      }
-    }
-    .contact_elem {
-      margin-left: 50px;
-    }
-    a.contact_elem:-webkit-any-link {
-      color: black !important;
-      text-decoration: none !important;
     }
     .powered_by_logo {
       width: 120px;
       height: auto;
     }
-    .footer_wrapper {
-      position: absolute;
-      bottom: 0px;
-      left: 0px;
-      width: 100%;
-    }
-    .footer_shop {
-      background: #5E5E5E;
-    }
-    .copyright_shop {
-      color: white;
-    }
-    .upper_footer {
-      background: #5E5E5E;
-      height: 60px;
-    }
-    .powered_by_padding {
-      padding-right: 20px;
-    }
+  }
+
+
+
+
+    // .buttons div a,
+    // .buttons div h4 {
+    //   text-decoration: none;
+    //   margin: 0;
+    //   font-weight: normal;
+    //   color: rgb(128, 46, 46);
+    //   font-size: 16px;
+    // }
+    // .buttons p{
+    //   color: white;
+    // }
+    // .copyright {
+    //   height: 34px;
+    //   color: white;
+    //   border-top: 1px solid #979797;
+    //   font-size: 14px;
+    // }
+    // .contact_bar {
+    //   border-top: rgb(206, 203, 203) 1px solid;
+    //   background-color: lightgrey;
+    //   height: 65px;
+    //   padding: 10px 0;
+    //   i {
+    //     margin-right: 15px;
+    //   }
+    //   img {
+    //     height: 52px;
+    //   }
+    // }
+    // .contact_elem {
+    //   margin-left: 50px;
+    // }
+    // a.contact_elem:-webkit-any-link {
+    //   color: black !important;
+    //   text-decoration: none !important;
+    // }
+    // .footer_wrapper {
+    //   position: absolute;
+    //   bottom: 0px;
+    //   left: 0px;
+    //   width: 100%;
+    // }
+    // .footer_shop {
+    //   background: #5E5E5E;
+    // }
+    // .copyright_shop {
+    //   color: white;
+    // }
+    // .upper_footer {
+    //   background: #5E5E5E;
+    //   height: 60px;
+    // }
+    // .powered_by_padding {
+    //   padding-right: 20px;
+    // }
   }

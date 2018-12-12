@@ -480,7 +480,9 @@
     "privacy": "Privacy Policy",
     "terms": "Terms and Conditions",
     "poweredBy": "Powered by",
-    "copyright": "Copyright"
+    "copyright": "Copyright",
+    "social": "Social",
+    "imprint": "Imprint"
   },
   "doc": {
     "reject": "Reject document",
