@@ -5,13 +5,12 @@ import Formsy from 'formsy-react'
 import PropTypes from '../../prop-types'
 import { authenticationActions } from '../../actions'
 import { RoundButton } from '../../components/RoundButton/RoundButton'
-import Alert from '../../components/Alert/Alert'
 import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner'
 import RegistrationFormGroup from './components/RegistrationFormGroup'
 import TermsAndConditionsSummary from './components/TermsAndConditionsSummary'
 import styles from './RegistrationPage.scss'
 
-class RegistrationPage extends React.Component {
+class RegistrationPage extends React.PureComponent {
   static mapInputs (inputs) {
     const addressInputs = ['street', 'number', 'zip_code', 'city', 'country']
     const model = { address: {} }
@@ -26,11 +25,11 @@ class RegistrationPage extends React.Component {
     })
     return model
   }
+
   constructor (props) {
     super(props)
     this.state = {
       focus: {},
-      alertVisible: false,
       termsAndConditionsAccepted: {
         imc: false,
         tenant: false
@@ -39,25 +38,8 @@ class RegistrationPage extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
-    this.hideAlert = this.hideAlert.bind(this)
     this.allAccepted = this.allAccepted.bind(this)
     this.shakeInvalidCheckboxes = this.shakeInvalidCheckboxes.bind(this)
-  }
-
-  componentWillMount () {
-    if (this.props.registrationAttempt && !this.state.alertVisible) {
-      this.setState({ alertVisible: true })
-    }
-  }
-
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.registrationAttempt && !this.state.alertVisible) {
-      this.setState({ alertVisible: true })
-    }
-  }
-
-  hideAlert () {
-    this.setState({ alertVisible: false })
   }
 
   handleFocus (e) {
@@ -129,15 +111,7 @@ class RegistrationPage extends React.Component {
     const {
       registering, theme, tenant, authenticationDispatch
     } = this.props
-    const alert = this.state.alertVisible ? (
-      <Alert
-        message={{ type: 'error', text: 'Email has already been taken' }}
-        onClose={this.hideAlert}
-        timeout={10000}
-      />
-    ) : (
-      ''
-    )
+
     const sharedProps = {
       handleFocus: e => this.handleFocus(e),
       focus: this.state.focus,
@@ -153,7 +127,6 @@ class RegistrationPage extends React.Component {
         onInvalidSubmit={this.handleInvalidSubmit}
         mapping={RegistrationPage.mapInputs}
       >
-        {alert}
         <div className="flex-100 layout-row layout-wrap">
           <div className="flex-45 layout-row layout-wrap">
             <div className="flex-100">

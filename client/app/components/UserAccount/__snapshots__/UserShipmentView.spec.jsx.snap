@@ -45,7 +45,7 @@ exports[`loading is true 1`] = `
   <div
     className="flex-100 layout-row layout-wrap layout-align-start-start padding_top"
   >
-    <UserShipmentContent
+    <Connect(UserShipmentContent)
       background={
         Object {
           "bg1": Object {
@@ -203,7 +203,6 @@ exports[`loading is true 1`] = `
           },
         }
       }
-      t={[Function]}
       theme={
         Object {
           "colors": Object {
@@ -368,7 +367,7 @@ exports[`shallow render 1`] = `
   <div
     className="flex-100 layout-row layout-wrap layout-align-start-start padding_top"
   >
-    <UserShipmentContent
+    <Connect(UserShipmentContent)
       background={
         Object {
           "bg1": Object {
@@ -526,7 +525,6 @@ exports[`shallow render 1`] = `
           },
         }
       }
-      t={[Function]}
       theme={
         Object {
           "colors": Object {
@@ -691,7 +689,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
   <div
     className="flex-100 layout-row layout-wrap layout-align-start-start padding_top"
   >
-    <UserShipmentContent
+    <Connect(UserShipmentContent)
       background={
         Object {
           "bg1": Object {
@@ -923,7 +921,6 @@ exports[`shipmentData.cargoItems is present 1`] = `
           },
         }
       }
-      t={[Function]}
       theme={
         Object {
           "colors": Object {
@@ -1088,7 +1085,7 @@ exports[`shipmentData.contacts is present 1`] = `
   <div
     className="flex-100 layout-row layout-wrap layout-align-start-start padding_top"
   >
-    <UserShipmentContent
+    <Connect(UserShipmentContent)
       background={
         Object {
           "bg1": Object {
@@ -1292,7 +1289,6 @@ exports[`shipmentData.contacts is present 1`] = `
           },
         }
       }
-      t={[Function]}
       theme={
         Object {
           "colors": Object {
@@ -1457,7 +1453,7 @@ exports[`shipmentData.documents is present 1`] = `
   <div
     className="flex-100 layout-row layout-wrap layout-align-start-start padding_top"
   >
-    <UserShipmentContent
+    <Connect(UserShipmentContent)
       background={
         Object {
           "bg1": Object {
@@ -1624,7 +1620,6 @@ exports[`shipmentData.documents is present 1`] = `
           },
         }
       }
-      t={[Function]}
       theme={
         Object {
           "colors": Object {

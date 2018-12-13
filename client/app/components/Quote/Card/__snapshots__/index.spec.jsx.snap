@@ -341,6 +341,20 @@ exports[`shallow rendering 1`] = `
           preCarriage={false}
           tenant={
             Object {
+              "emails": Object {
+                "sales": Object {
+                  "air": "sales@demo.com",
+                  "general": "sales@demo.com",
+                  "ocean": "sales@demo.com",
+                  "rail": "sales@demo.com",
+                },
+                "support": Object {
+                  "air": "imc.air@demo.com",
+                  "general": "support@demo.com",
+                  "ocean": "imc.sea@demo.com",
+                  "rail": "imc.rail@demo.com",
+                },
+              },
               "id": 123,
               "scope": Object {
                 "closed_quotation_tool": true,
@@ -882,6 +896,20 @@ exports[`show schedules set to true 1`] = `
           preCarriage={false}
           tenant={
             Object {
+              "emails": Object {
+                "sales": Object {
+                  "air": "sales@demo.com",
+                  "general": "sales@demo.com",
+                  "ocean": "sales@demo.com",
+                  "rail": "sales@demo.com",
+                },
+                "support": Object {
+                  "air": "imc.air@demo.com",
+                  "general": "support@demo.com",
+                  "ocean": "imc.sea@demo.com",
+                  "rail": "imc.rail@demo.com",
+                },
+              },
               "id": 123,
               "scope": Object {
                 "closed_quotation_tool": true,
@@ -1142,6 +1170,20 @@ exports[`single result rendering removes the "add" button 1`] = `
           preCarriage={false}
           tenant={
             Object {
+              "emails": Object {
+                "sales": Object {
+                  "air": "sales@demo.com",
+                  "general": "sales@demo.com",
+                  "ocean": "sales@demo.com",
+                  "rail": "sales@demo.com",
+                },
+                "support": Object {
+                  "air": "imc.air@demo.com",
+                  "general": "support@demo.com",
+                  "ocean": "imc.sea@demo.com",
+                  "rail": "imc.rail@demo.com",
+                },
+              },
               "id": 123,
               "scope": Object {
                 "closed_quotation_tool": true,

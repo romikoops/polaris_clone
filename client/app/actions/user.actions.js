@@ -147,42 +147,6 @@ function getAddresss (user, redirect) {
   }
 }
 
-function optOut (userId, target) {
-  function request () {
-    return { type: userConstants.OPT_OUT_REQUEST }
-  }
-
-  function success (response) {
-    const payload = response.data
-
-    return { type: userConstants.OPT_OUT_SUCCESS, payload }
-  }
-
-  function failure (error) {
-    return { type: userConstants.OPT_OUT_FAILURE, error }
-  }
-
-  return (dispatch) => {
-    dispatch(request())
-
-    userService.optOut(userId, target).then(
-      (response) => {
-        dispatch(success(response))
-        dispatch(authenticationActions.setUser(response.data))
-        if (target === 'cookies') {
-          optOutCookies()
-        }
-      },
-      error => dispatch(failure(error))
-    )
-  }
-}
-function optOutCookies () {
-  return (dispatch) => {
-    dispatch(authenticationActions.logOut(true))
-  }
-}
-
 function destroyAddress (userId, addressId, redirect) {
   function request () {
     return { type: userConstants.DESTROYADDRESS_REQUEST }
@@ -828,6 +792,34 @@ function requestPricing (req) {
   }
 }
 
+function confirmAccount (token) {
+  function request (userData) {
+    return { type: userConstants.CONFIRM_ACCOUNT_REQUEST, payload: userData }
+  }
+
+  function success (userData) {
+    return { type: userConstants.CONFIRM_ACCOUNT_SUCCESS, payload: userData }
+  }
+
+  function failure (error) {
+    return { type: userConstants.CONFIRM_ACCOUNT_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    userService.confirmAccount(token).then(
+      (data) => {
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function clearLoading () {
   return { type: userConstants.CLEAR_LOADING, payload: null }
 }
@@ -872,15 +864,14 @@ export const userActions = {
   delete: _delete,
   logOut,
   editUserAddress,
-  optOut,
   reuseShipment,
   searchShipments,
   searchContacts,
   deltaShipmentsPage,
   getPricings,
   getPricingsForItinerary,
-  requestPricing
-
+  requestPricing,
+  confirmAccount
 }
 
 export default userActions

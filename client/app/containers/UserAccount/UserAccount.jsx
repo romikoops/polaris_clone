@@ -13,7 +13,7 @@ import {
 import UserProfile from '../../components/UserAccount/UserProfile'
 // eslint-disable-next-line import/no-named-as-default
 import UserShipmentsGroup from '../../components/User/Shipments/Group'
-import { userActions, authenticationActions, appActions } from '../../actions'
+import { userActions, authenticationActions, appActions, remarkActions } from '../../actions'
 import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
 import PropTypes from '../../prop-types'
 import Header from '../../components/Header/Header'
@@ -25,6 +25,7 @@ import styles from './UserAccount.scss'
 import NavBar from '../Nav'
 import GenericError from '../../components/ErrorHandling/Generic'
 import UserPricings from '../../components/UserAccount/UserPricings'
+import UserConfirmation from '../../components/UserAccount/UserConfirmation'
 
 class UserAccount extends Component {
   constructor (props) {
@@ -38,6 +39,7 @@ class UserAccount extends Component {
     this.setCurrentUrl = this.setCurrentUrl.bind(this)
     this.setNavLink = this.setNavLink.bind(this)
   }
+
   componentDidMount () {
     const {
       userDispatch,
@@ -68,6 +70,7 @@ class UserAccount extends Component {
     const { userDispatch, user } = this.props
     userDispatch.getLocations(user.id)
   }
+
   setCurrentUrl (url) {
     this.setState({ currentUrl: url })
   }
@@ -103,6 +106,7 @@ class UserAccount extends Component {
         break
     }
   }
+
   destroyAddress (addressId) {
     const { userDispatch, user } = this.props
     userDispatch.destroyAddress(user.id, addressId)
@@ -112,6 +116,7 @@ class UserAccount extends Component {
     const { userDispatch, user } = this.props
     userDispatch.makePrimary(user.id, addressId)
   }
+
   render () {
     const {
       user,
@@ -121,7 +126,8 @@ class UserAccount extends Component {
       authDispatch,
       currencies,
       appDispatch,
-      tenant
+      tenant,
+      remarkDispatch
     } = this.props
     if (!users || !user) {
       return <Loading theme={theme} text="loading..." />
@@ -150,17 +156,17 @@ class UserAccount extends Component {
         {loadingScreen}
         <GenericError theme={theme}>
           {menu}
-        </GenericError >
+        </GenericError>
         <GenericError theme={theme}>
           <Header theme={theme} shipments={users.dashboard.shipments} scrollable />
-        </GenericError >
+        </GenericError>
         <div
           className="layout-row flex layout-wrap layout-align-center-start"
           style={footerStyle}
         >
           <GenericError theme={theme}>
             <NavBar className={`${styles.top_margin}`} />
-          </GenericError >
+          </GenericError>
           <div
             className={`flex-100 ${defs.spacing_md_bottom} ${
               styles.top_margin
@@ -301,6 +307,7 @@ class UserAccount extends Component {
                         tenant={tenant}
                         shipmentData={shipment}
                         userDispatch={userDispatch}
+                        remarkDispatch={remarkDispatch}
                       />
                     )}
                   />
@@ -389,8 +396,21 @@ class UserAccount extends Component {
                       />
                     )}
                   />
+                  <GenericError theme={theme}>
+                    <Route
+                      path="/account/confirmation/:confirmation_token"
+                      render={props => (
+                        <UserConfirmation
+                          user={user}
+                          theme={theme}
+                          {...props}
+                        />
+                      )
+                      }
+                    />
+                  </GenericError>
                 </Switch>
-              </GenericError >
+              </GenericError>
             </div>
           </div>
           <Footer tenant={tenant} />
@@ -436,7 +456,7 @@ UserAccount.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    authentication, shipments, users, app
+    authentication, shipments, users, app, remark
   } = state
   const { tenant, currencies } = app
   const { user, loggedIn } = authentication
@@ -447,7 +467,8 @@ function mapStateToProps (state) {
     tenant,
     loggedIn,
     shipments,
-    currencies
+    currencies,
+    remark
   }
 }
 
@@ -455,7 +476,8 @@ function mapDispatchToProps (dispatch) {
   return {
     appDispatch: bindActionCreators(appActions, dispatch),
     userDispatch: bindActionCreators(userActions, dispatch),
-    authDispatch: bindActionCreators(authenticationActions, dispatch)
+    authDispatch: bindActionCreators(authenticationActions, dispatch),
+    remarkDispatch: bindActionCreators(remarkActions, dispatch)
   }
 }
 

@@ -3,11 +3,18 @@ import { withNamespaces } from 'react-i18next'
 import styles from './index.scss'
 import PropTypes from '../../prop-types'
 import GreyBox from '../GreyBox/GreyBox'
+import NotesCard from '../Notes/Card'
 
 function ShipmentNotes ({
   shipment,
   t
 }) {
+  const route_notes = shipment.route_notes ? shipment.route_notes.map(note => {
+      return (<NotesCard
+        note={note}
+        itinerary={shipment.itinerary}
+      />)
+    }) : ''
   return (
     <GreyBox
       wrapperClassName={`layout-row layout-wrap layout-sm-column layout-xs-column flex-100
@@ -68,13 +75,14 @@ function ShipmentNotes ({
                   </div>
                 </div>
               ) : ''}
-              {shipment.notes ? (
+              {shipment.route_notes || shipment.notes ? (
                 <div className="flex-100 flex-sm-100 padding_top_sm padding_bottom_sm flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap">
                   <div className="flex-100 layout-row layout-align-start-center">
                     <span className="flex-10 layout-row">{t('common:notes')}:</span>
-                    <p className="flex-80 layout-padding layout-row">
-                      {shipment.notes}
-                    </p>
+                    {route_notes}
+                    {shipment.notes ? 
+                    <p> {shipment.notes} </p>
+                     : ''}
                   </div>
                 </div>
               ) : ''}

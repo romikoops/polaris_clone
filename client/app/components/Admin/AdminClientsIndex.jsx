@@ -151,7 +151,6 @@ class AdminClientsIndex extends Component {
         theme={theme}
         handleClick={() => adminDispatch.getClient(u.id, true)}
         tooltip={clientTip}
-        showTooltip
         flexClasses="flex-30 flex-xs-100 flex-sm-50 flex-md-45 flex-gt-lg-15"
       />))
     const openTiles = results
@@ -162,7 +161,6 @@ class AdminClientsIndex extends Component {
         theme={theme}
         handleClick={() => adminDispatch.getClient(u.id, true)}
         tooltip={clientTip}
-        showTooltip
         flexClasses="flex-30 flex-xs-100 flex-sm-50 flex-md-45 flex-gt-lg-15"
       />))
     const paginationRow = (

@@ -125,7 +125,7 @@ exports[`shallow render 1`] = `
         },
       }
     }
-    tooltip=""
+    tooltip="Manage negotiated routes, prices and fees for your existing clients"
     url="/admin/clients"
   />
   <AdminNavItem
@@ -290,7 +290,7 @@ exports[`user.role && user.role.name === super_admin 1`] = `
         },
       }
     }
-    tooltip=""
+    tooltip="Manage negotiated routes, prices and fees for your existing clients"
     url="/admin/clients"
   />
   <AdminNavItem

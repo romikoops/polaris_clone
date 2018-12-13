@@ -47,7 +47,7 @@ exports[`service && service.total 1`] = `
   <div
     className="flex-100 layout-row layout-wrap layout-align-start-start padding_top"
   >
-    <AdminShipmentContent
+    <Connect(AdminShipmentContent)
       adminDispatch={
         Object {
           "getShipment": [Function],
@@ -63,7 +63,6 @@ exports[`service && service.total 1`] = `
           },
         }
       }
-      cargoCount={0}
       cargoView={Array []}
       deliveryDate={
         <p
@@ -161,7 +160,6 @@ exports[`service && service.total 1`] = `
           "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
         }
       }
-      shipment={Object {}}
       shipmentData={
         Object {
           "addresses": Object {
@@ -260,7 +258,6 @@ exports[`service && service.total 1`] = `
       showEditServicePrice={false}
       showEditTime={false}
       switchIcon={[Function]}
-      t={[Function]}
       theme={
         Object {
           "colors": Object {
@@ -272,7 +269,6 @@ exports[`service && service.total 1`] = `
       toggleEditServicePrice={[Function]}
       toggleEditTime={[Function]}
       totalPrice={[Function]}
-      uploadClientDocument={null}
     />
   </div>
   <div
@@ -470,7 +466,7 @@ exports[`shallow render 1`] = `
   <div
     className="flex-100 layout-row layout-wrap layout-align-start-start padding_top"
   >
-    <AdminShipmentContent
+    <Connect(AdminShipmentContent)
       adminDispatch={
         Object {
           "getShipment": [Function],
@@ -486,7 +482,6 @@ exports[`shallow render 1`] = `
           },
         }
       }
-      cargoCount={0}
       cargoView={Array []}
       deliveryDate={
         <p
@@ -581,7 +576,6 @@ exports[`shallow render 1`] = `
           "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
         }
       }
-      shipment={Object {}}
       shipmentData={
         Object {
           "addresses": Object {
@@ -677,7 +671,6 @@ exports[`shallow render 1`] = `
       showEditServicePrice={false}
       showEditTime={false}
       switchIcon={[Function]}
-      t={[Function]}
       theme={
         Object {
           "colors": Object {
@@ -689,7 +682,6 @@ exports[`shallow render 1`] = `
       toggleEditServicePrice={[Function]}
       toggleEditTime={[Function]}
       totalPrice={[Function]}
-      uploadClientDocument={null}
     />
   </div>
   <div

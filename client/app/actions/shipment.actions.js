@@ -2,7 +2,7 @@ import { Promise } from 'es6-promise-promise'
 import { push } from 'react-router-redux'
 import { shipmentConstants } from '../constants'
 import { shipmentService } from '../services'
-import { alertActions, userActions, appActions } from './'
+import { alertActions, userActions, appActions, errorActions } from './'
 
 function newShipment (type, redirect, reused) {
   function request (shipmentData, isReused) {
@@ -62,6 +62,7 @@ function getOffers (data, redirect) {
     }
   }
   function failure (error) {
+    window.scrollTo(0, 0)
     return { type: shipmentConstants.GET_OFFERS_FAILURE, error }
   }
 
@@ -77,10 +78,17 @@ function getOffers (data, redirect) {
       },
       (error) => {
         error.then((newData) => {
+          // debugger
           dispatch(failure({
             type: 'error',
             text: newData.message || newData.error
           }))
+          const errorToRender = {
+            ...newData,
+            componentName: "ShipmentLocationBox",
+            side: 'center'
+          }
+          dispatch(errorActions.setError(errorToRender))
           if (newData.error) console.error(newData.exception)
         })
       }

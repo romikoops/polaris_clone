@@ -8,7 +8,8 @@ function CircleCompletion ({
   iconColor,
   optionalText,
   opacity,
-  size
+  size,
+  margin
 }) {
   const animatedStyle = { border: `${iconColor} solid 2px`, color: iconColor }
   const sanitizedSize = dimensionToPx({ value: size })
@@ -16,6 +17,7 @@ function CircleCompletion ({
   const style = {
     height: sanitizedSize,
     width: sanitizedSize,
+    margin,
     ...(animated ? animatedStyle : {})
   }
 
@@ -39,7 +41,8 @@ CircleCompletion.defaultProps = {
   optionalText: '',
   animated: false,
   size: '100px',
-  opacity: 1
+  opacity: 1,
+  fadeIn: false
 }
 
 export default CircleCompletion

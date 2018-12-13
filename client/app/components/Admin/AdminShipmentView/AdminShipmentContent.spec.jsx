@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import {
   theme, identity, shipmentData, shipment, change
 } from '../../../mocks'
-import AdminShipmentContent from './AdminShipmentContent'
+import { AdminShipmentContent } from './AdminShipmentContent'
 
 jest.mock('../../../helpers', () => ({
   numberSpacing: x => x,
@@ -43,6 +43,9 @@ const propsBase = {
   toggleEditServicePrice: identity,
   uploadClientDocument: identity,
   saveNewEditedPrice: identity,
+  remarkDispatch: {
+    getRemarks: jest.fn()
+  },
   shipment,
   background: {},
   selectedStyle: {},

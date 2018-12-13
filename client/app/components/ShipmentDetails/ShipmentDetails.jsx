@@ -2,7 +2,10 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import * as Scroll from 'react-scroll'
 import Toggle from 'react-toggle'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import ReactTooltip from 'react-tooltip'
+import { errorActions } from '../../actions'
 import PropTypes from '../../prop-types'
 import GmapsLoader from '../../hocs/GmapsLoader'
 import styles from './ShipmentDetails.scss'
@@ -33,6 +36,7 @@ import calcAvailableMotsForRoute,
 import getRequests from '../ShipmentLocationBox/getRequests'
 import reuseShipments from '../../helpers/reuseShipment'
 import DayPickerSection from './DayPickerSection'
+import NoPricings from '../ErrorHandling/NoPricings'
 
 export class ShipmentDetails extends Component {
   static scrollTo (target) {
@@ -205,6 +209,21 @@ export class ShipmentDetails extends Component {
       )
 
       this.setState({ modals })
+    } else {
+      const { shipmentData } = nextProps
+      const { shipment } = shipmentData
+      const loadType = camelize(shipment.load_type)
+      const errorIdx = ShipmentDetails.errorsAt(nextState[`${loadType}sErrors`])
+
+      const modals = { ...nextState.modals }
+      const { nextStageAttempts } = nextState
+
+      if (nextStageAttempts > 0 && errorIdx > -1 && !modals.maxDimensions.show) {
+        modals.maxDimensions.show = true
+        this.setState({ ...nextState, modals })
+
+        return false
+      }
     }
 
     if (
@@ -214,18 +233,21 @@ export class ShipmentDetails extends Component {
       )
     ) {
       this.updateAvailableMotsForRoute()
-
       const {
-        shipmentDispatch, shipmentData
+        shipmentDispatch, shipmentData, tenant
       } = this.props
 
-      const { routes } = shipmentData
-      const itineraryIds = nextState.filteredRouteIndexes.selected.map(i => routes[i].itineraryId).join(',')
-      const country = nextState.has_pre_carriage ? routes[nextState.filteredRouteIndexes.selected[0]].origin.country : nextState.origin.country
-      
-      shipmentDispatch.getLastAvailableDate({ itinerary_ids: itineraryIds, country })
+      if (!isQuote(tenant)) {
+        const { routes } = shipmentData
+        const itineraryIds = nextState.filteredRouteIndexes.selected.map(i => routes[i].itineraryId).join(',')
+        const country = nextState.has_pre_carriage
+          ? routes[nextState.filteredRouteIndexes.selected[0]].origin.country
+          : nextState.origin.country
 
-      return false
+        shipmentDispatch.getLastAvailableDate({ itinerary_ids: itineraryIds, country })
+
+        return false
+      }
     }
     if (nextProps.shipmentData.routes && nextProps.shipmentData.routes.length > 0 &&
     nextState.filteredRouteIndexes.all.length === 0) {
@@ -396,7 +418,6 @@ export class ShipmentDetails extends Component {
       prevRequestLoaded: true
     }))
   }
-
   loadReusedShipment (obj) {
     const newCargoItemsErrors = obj.cargoItems.map(cia => ({
       payload_in_kg: false,
@@ -543,7 +564,7 @@ export class ShipmentDetails extends Component {
   }
 
   updatedExcessWeightText (cargoItems, state) {
-    const { t, shipmentData } = this.props
+    const { t, shipmentData, tenant } = this.props
     const { maxAggregateDimensions } = shipmentData
 
     if (!maxAggregateDimensions.truckCarriage) return ''
@@ -555,11 +576,22 @@ export class ShipmentDetails extends Component {
 
     let excessWeightText = ''
     if (totalWeight > +maxAggregateDimensions.truckCarriage.payloadInKg) {
-      excessWeightText = `
-        ${t('cargo:excessWeight')}
-        (${totalWeight.toFixed(1)} ${t('acronym:kg')}) ${t('cargo:exceedsMaximum')}
-        (${maxAggregateDimensions.truckCarriage.payloadInKg} ${t('acronym:kg')}).
-      `
+      excessWeightText = (
+        <div>
+          {
+            `
+              ${t('cargo:excessWeight')}
+              (${totalWeight.toFixed(1)} ${t('acronym:kg')}) ${t('cargo:exceedsMaximum')}
+              (${maxAggregateDimensions.truckCarriage.payloadInKg} ${t('acronym:kg')}).
+            `
+          }
+          {t('cargo:pleaseContact')}
+          {' '}
+          <a href={`mailto:${tenant.emails.support.general}?subject=Excess Dimensions Request`}>
+            {tenant.emails.support.general}
+          </a>
+        </div>
+      )
     } else {
       excessWeightText = ''
     }
@@ -835,16 +867,27 @@ export class ShipmentDetails extends Component {
       shipmentData,
       shipmentDispatch,
       showRegistration,
-      t
+      t,
+      errorDispatch
     } = this.props
+
+    const { theme, scope } = tenant
 
     const {
       modals, filteredRouteIndexes, nextStageAttempts, selectedDay, incoterm
     } = this.state
+  
+    const noPricings = (
+      <NoPricings
+        theme={theme}
+        pageMargin="60px 0 0 0"
+        user={user}
+        shipmentDispatch={shipmentDispatch}
+      />
+    )
 
-    if (!filteredRouteIndexes.all.length) return ''
+    if (!filteredRouteIndexes.all.length) return noPricings
 
-    const { theme, scope } = tenant
     let cargoDetails
     if (showRegistration) this.props.hideRegistration()
     if (!shipmentData.shipment || !shipmentData.cargoItemTypes) return ''
@@ -934,6 +977,8 @@ export class ShipmentDetails extends Component {
             updateFilteredRouteIndexes={this.updateFilteredRouteIndexes}
             reusedShipment={this.props.reusedShipment}
             hideMap={this.props.hideMap}
+            availableMots={this.state.availableMotsForRoute}
+            errorDispatch={errorDispatch}
           />
         </div>
         <div
@@ -1171,4 +1216,19 @@ ShipmentDetails.defaultProps = {
   hideMap: false
 }
 
-export default withNamespaces(['errors', 'cargo', 'common', 'dangerousGoods'])(ShipmentDetails)
+function mapStateToProps (state) {
+  const {
+    error
+  } = state
+
+  return {
+    error
+  }
+}
+function mapDispatchToProps (dispatch) {
+  return {
+    errorDispatch: bindActionCreators(errorActions, dispatch)
+  }
+}
+
+export default withNamespaces(['errors', 'cargo', 'common', 'dangerousGoods'])(connect(mapStateToProps, mapDispatchToProps)(ShipmentDetails))

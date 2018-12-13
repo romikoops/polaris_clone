@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import Tabs from '../../Tabs/Tabs'
@@ -8,7 +9,7 @@ import adminStyles from '../Admin.scss'
 import GradientBorder from '../../GradientBorder'
 import { moment, docOptions, documentTypes } from '../../../constants'
 import {
- numberSpacing, totalPrice, cargoPlurals, capitalize 
+  numberSpacing, totalPrice, cargoPlurals, capitalize
 } from '../../../helpers'
 import ShipmentOverviewShowCard from './ShipmentOverviewShowCard'
 import ContactDetailsRow from './ContactDetailsRow'
@@ -17,7 +18,7 @@ import { NamedSelect } from '../../NamedSelect/NamedSelect'
 import FileUploader from '../../FileUploader/FileUploader'
 import ShipmentNotes from '../../ShipmentNotes'
 
-class AdminShipmentContent extends Component {
+export class AdminShipmentContent extends Component {
   static checkSelectedOffer (service) {
     let obj = {}
     if (service && service.total) {
@@ -34,6 +35,15 @@ class AdminShipmentContent extends Component {
       fileType: { label: `${this.props.t('common:packingSheet')}`, value: 'packing_sheet' }
     }
     this.setFileType = this.setFileType.bind(this)
+  }
+
+  componentDidMount () {
+    this.getRemarks()
+  }
+
+  getRemarks () {
+    const { remarkDispatch } = this.props
+    remarkDispatch.getRemarks()
   }
 
   setFileType (ev) {
@@ -73,7 +83,8 @@ class AdminShipmentContent extends Component {
       cargoView,
       saveNewEditedPrice,
       t,
-      handlePriceChange
+      handlePriceChange,
+      remark
     } = this.props
 
     const {
@@ -95,6 +106,12 @@ class AdminShipmentContent extends Component {
     const docView = []
     const missingDocs = []
     const documentUrl = `/shipments/${shipment.id}/upload/${fileType.value}`
+
+    const remarkBody = remark.quotation ? remark.quotation.shipment.map(_remark => (
+      <li>
+        {_remark.body}
+      </li>
+    )) : ''
 
     if (documents) {
       const uploadedDocs = documents.reduce((docObj, item) => {
@@ -188,10 +205,10 @@ class AdminShipmentContent extends Component {
                   </div>
                   <p>{t('shipment:estimatedTimeDelivery')}</p>
                   <h5>
-{moment(shipment.planned_eta).diff(moment(shipment.planned_etd), `${t('common:days')}`)} 
-{' '}
-{t('common:days')}
-</h5>
+                    {moment(shipment.planned_eta).diff(moment(shipment.planned_etd), `${t('common:days')}`)}
+                    {' '}
+                    {t('common:days')}
+                  </h5>
                 </div>
               </div>
 
@@ -239,16 +256,16 @@ class AdminShipmentContent extends Component {
                             <p>{t('shipment:pickUp')}</p>
                           </div>
                           {feeHash.trucking_pre ? (
-<div className="flex-100 layout-row layout-align-end-center">
-                            <p>
-                              {feeHash.trucking_pre ? feeHash.trucking_pre.total.currency : ''}
-                              { ' ' }
-                              {feeHash.trucking_pre.edited_total
-                                ? parseFloat(feeHash.trucking_pre.edited_total.value).toFixed(2)
-                                : parseFloat(feeHash.trucking_pre.total.value).toFixed(2)}
-                            </p>
-                          </div>
-)
+                            <div className="flex-100 layout-row layout-align-end-center">
+                              <p>
+                                {feeHash.trucking_pre ? feeHash.trucking_pre.total.currency : ''}
+                                { ' ' }
+                                {feeHash.trucking_pre.edited_total
+                                  ? parseFloat(feeHash.trucking_pre.edited_total.value).toFixed(2)
+                                  : parseFloat(feeHash.trucking_pre.total.value).toFixed(2)}
+                              </p>
+                            </div>
+                          )
                             : '' }
                           {showEditServicePrice && shipment.selected_offer.trucking_pre ? (
                             <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
@@ -285,16 +302,16 @@ class AdminShipmentContent extends Component {
                             <p>{t('shipment:delivery')}</p>
                           </div>
                           {feeHash.trucking_on ? (
-<div className="flex-100 layout-row layout-align-end-center">
-                            <p>
-                              {feeHash.trucking_on ? feeHash.trucking_on.total.currency : ''}
-                              { ' ' }
-                              {feeHash.trucking_on.edited_total
-                                ? parseFloat(feeHash.trucking_on.edited_total.value).toFixed(2)
-                                : parseFloat(feeHash.trucking_on.total.value).toFixed(2)}
-                            </p>
-                          </div>
-)
+                            <div className="flex-100 layout-row layout-align-end-center">
+                              <p>
+                                {feeHash.trucking_on ? feeHash.trucking_on.total.currency : ''}
+                                { ' ' }
+                                {feeHash.trucking_on.edited_total
+                                  ? parseFloat(feeHash.trucking_on.edited_total.value).toFixed(2)
+                                  : parseFloat(feeHash.trucking_on.total.value).toFixed(2)}
+                              </p>
+                            </div>
+                          )
                             : ''}
                           {showEditServicePrice && shipment.selected_offer.trucking_on ? (
                             <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
@@ -334,16 +351,16 @@ class AdminShipmentContent extends Component {
                             </p>
                           </div>
                           {feeHash.export ? (
-<div className="flex-100 layout-row layout-align-end-center">
-                            <p>
-                              {feeHash.export ? feeHash.export.total.currency : ''}
-                              { ' ' }
-                              {feeHash.export.edited_total
-                                ? parseFloat(feeHash.export.edited_total.value).toFixed(2)
-                                : parseFloat(feeHash.export.total.value).toFixed(2)}
-                            </p>
-                          </div>
-)
+                            <div className="flex-100 layout-row layout-align-end-center">
+                              <p>
+                                {feeHash.export ? feeHash.export.total.currency : ''}
+                                { ' ' }
+                                {feeHash.export.edited_total
+                                  ? parseFloat(feeHash.export.edited_total.value).toFixed(2)
+                                  : parseFloat(feeHash.export.total.value).toFixed(2)}
+                              </p>
+                            </div>
+                          )
                             : ''}
                           {showEditServicePrice && shipment.selected_offer.export ? (
                             <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
@@ -383,16 +400,16 @@ class AdminShipmentContent extends Component {
                             </p>
                           </div>
                           {feeHash.import ? (
-<div className="flex-100 layout-row layout-align-end-center">
-                            <p>
-                              {feeHash.import ? feeHash.import.total.currency : ''}
-                              { ' ' }
-                              {feeHash.import.edited_total
-                                ? parseFloat(feeHash.import.edited_total.value).toFixed(2)
-                                : parseFloat(feeHash.import.total.value).toFixed(2)}
-                            </p>
-                          </div>
-)
+                            <div className="flex-100 layout-row layout-align-end-center">
+                              <p>
+                                {feeHash.import ? feeHash.import.total.currency : ''}
+                                { ' ' }
+                                {feeHash.import.edited_total
+                                  ? parseFloat(feeHash.import.edited_total.value).toFixed(2)
+                                  : parseFloat(feeHash.import.total.value).toFixed(2)}
+                              </p>
+                            </div>
+                          )
                             : ''}
                           {showEditServicePrice && shipment.selected_offer.import ? (
                             <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
@@ -429,16 +446,16 @@ class AdminShipmentContent extends Component {
                           </div>
                           {feeHash.cargo
                             ? (
-<div className="flex-100 layout-row layout-align-end-center">
-                              <p>
-                                {feeHash.cargo ? feeHash.cargo.total.currency : ''}
-                                { ' ' }
-                                {feeHash.cargo.edited_total
-                                  ? parseFloat(feeHash.cargo.edited_total.value).toFixed(2)
-                                  : parseFloat(feeHash.cargo.total.value).toFixed(2)}
-                              </p>
-                            </div>
-)
+                              <div className="flex-100 layout-row layout-align-end-center">
+                                <p>
+                                  {feeHash.cargo ? feeHash.cargo.total.currency : ''}
+                                  { ' ' }
+                                  {feeHash.cargo.edited_total
+                                    ? parseFloat(feeHash.cargo.edited_total.value).toFixed(2)
+                                    : parseFloat(feeHash.cargo.total.value).toFixed(2)}
+                                </p>
+                              </div>
+                            )
                             : ''}
                           {showEditServicePrice && shipment.selected_offer.cargo ? (
                             <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
@@ -481,16 +498,16 @@ class AdminShipmentContent extends Component {
                           </div>
                           {feeHash.customs
                             ? (
-<div className="flex-100 layout-row layout-align-end-center">
-                              <p>
-                                {feeHash.customs ? feeHash.customs.total.currency : ''}
-                                { ' ' }
-                                {feeHash.customs.edited_total
-                                  ? parseFloat(feeHash.customs.edited_total.value).toFixed(2)
-                                  : parseFloat(feeHash.customs.total.value).toFixed(2)}
-                              </p>
-                            </div>
-)
+                              <div className="flex-100 layout-row layout-align-end-center">
+                                <p>
+                                  {feeHash.customs ? feeHash.customs.total.currency : ''}
+                                  { ' ' }
+                                  {feeHash.customs.edited_total
+                                    ? parseFloat(feeHash.customs.edited_total.value).toFixed(2)
+                                    : parseFloat(feeHash.customs.total.value).toFixed(2)}
+                                </p>
+                              </div>
+                            )
                             : '' }
                         </div>
 
@@ -506,26 +523,26 @@ class AdminShipmentContent extends Component {
                           </div>
                           {feeHash.insurance && (feeHash.insurance.value || feeHash.insurance.edited_total)
                             ? (
-<div className="flex-100 layout-row layout-align-end-center">
-                              <p>
-                                {feeHash.insurance ? feeHash.insurance.currency : ''}
-                                { ' ' }
-                                {feeHash.insurance.edited_total
-                                  ? parseFloat(feeHash.insurance.edited_total.value).toFixed(2)
-                                  : ''}
-                                {feeHash.insurance.value
-                                  ? parseFloat(feeHash.insurance.value).toFixed(2)
-                                  : ''}
-                              </p>
-                            </div>
-)
+                              <div className="flex-100 layout-row layout-align-end-center">
+                                <p>
+                                  {feeHash.insurance ? feeHash.insurance.currency : ''}
+                                  { ' ' }
+                                  {feeHash.insurance.edited_total
+                                    ? parseFloat(feeHash.insurance.edited_total.value).toFixed(2)
+                                    : ''}
+                                  {feeHash.insurance.value
+                                    ? parseFloat(feeHash.insurance.value).toFixed(2)
+                                    : ''}
+                                </p>
+                              </div>
+                            )
                             : '' }
                           {feeHash.insurance && !feeHash.insurance.value && !feeHash.insurance.edited_total
                             ? (
-<div className="flex-100 layout-row layout-align-end-center">
-                              <p>{t('shipment:requested')}</p>
-                            </div>
-) : ''}
+                              <div className="flex-100 layout-row layout-align-end-center">
+                                <p>{t('shipment:requested')}</p>
+                              </div>
+                            ) : ''}
                           {showEditServicePrice && shipment.selected_offer.insurance ? (
                             <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
                               <span
@@ -574,21 +591,35 @@ class AdminShipmentContent extends Component {
                     <div className="layout-align-start-center layout-row flex">
                       <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>
 x&nbsp;
-{shipment.cargo_count}
-</span>
+                        {shipment.cargo_count}
+                      </span>
                       <p className="layout-align-sm-end-center layout-align-xs-end-center">{cargoPlurals(shipment, t)}</p>
                     </div>
                   </div>
                   <h2 className="layout-align-start-center layout-row flex">
-                    {numberSpacing(totalPrice(shipment).value, 2)} 
-{' '}
-{totalPrice(shipment).currency}
+                    {numberSpacing(totalPrice(shipment).value, 2)}
+                    {' '}
+                    {totalPrice(shipment).currency}
                   </h2>
                 </div>
               </div>
             </div>
+            <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}>
+              <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
+                <div className="layout-column flex-100">
+                  <h3
+                    style={{ marginBottom: '0px' }}
+                  >
+                    {t('shipment:remarks')}
+:
+                  </h3>
+                  <ul>
+                    {remarkBody}
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
-
         </Tab>
         <Tab
           tabTitle={t('account:contacts')}
@@ -734,7 +765,18 @@ AdminShipmentContent.defaultProps = {
   saveNewTime: null,
   toggleEditTime: null,
   showEditServicePrice: false,
-  newPrices: {}
+  newPrices: {},
+  remark: {}
 }
 
-export default withNamespaces(['common', 'shipment', 'doc', 'cargo', 'account'])(AdminShipmentContent)
+function mapStateToProps (state) {
+  const {
+    remark
+  } = state
+
+  return {
+    remark
+  }
+}
+
+export default connect(mapStateToProps, null)(withNamespaces(['common', 'shipment', 'doc', 'cargo', 'account'])(AdminShipmentContent))

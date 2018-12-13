@@ -30,6 +30,8 @@ export default function (state = initialState, action) {
     case authenticationConstants.CLOSE_LOGIN:
       return {
         ...state,
+        loginAttempt: false,
+        registrationAttempt: false,
         showModal: false
       }
     case authenticationConstants.LOGIN_REQUEST:
@@ -44,7 +46,9 @@ export default function (state = initialState, action) {
         user: action.user,
         loggedIn: true,
         showModal: false,
-        logginIn: false
+        logginIn: false,
+        registrationAttempt: false,
+        loginAttempt: false
       }
     case authenticationConstants.LOGIN_FAILURE:
       return {
@@ -57,8 +61,7 @@ export default function (state = initialState, action) {
     case authenticationConstants.UPDATE_USER_REQUEST: {
       return {
         ...state,
-        registering: action.payload,
-        loggedIn: true
+        registering: action.payload
       }
     }
     case authenticationConstants.UPDATE_USER_SUCCESS:
@@ -68,14 +71,23 @@ export default function (state = initialState, action) {
         registering: false,
         loggedIn: true,
         registered: true,
-        user: action.user
+        user: action.user,
+        registrationAttempt: false,
+        loginAttempt: false
       }
-    case authenticationConstants.UPDATE_USER_FAILURE:
-      return {
+    case authenticationConstants.UPDATE_USER_FAILURE: {
+      const newState = {
         ...state,
         registering: false,
         registrationAttempt: true
       }
+
+      if (action.payload) {
+        newState.error = { message: i18next.t('errors:emailTaken') }
+      }
+
+      return newState
+    }
     case authenticationConstants.REGISTRATION_REQUEST:
       return {
         ...state,
@@ -89,10 +101,16 @@ export default function (state = initialState, action) {
         showModal: false,
         loggedIn: true,
         registered: true,
-        user: action.user
+        user: action.user,
+        registrationAttempt: false,
+        loginAttempt: false
       }
     case authenticationConstants.REGISTRATION_FAILURE:
       return {
+        ...state,
+        error: { message: i18next.t('errors:emailTaken') },
+        loading: false,
+        registering: false,
         registrationAttempt: true
       }
     case authenticationConstants.LOGOUT:

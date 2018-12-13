@@ -68,7 +68,7 @@ exports[`shallow rendering 1`] = `
     className="layout-row flex-100 layout-align-space-between-stretch middle_top_box"
   >
     <div
-      className="layout-row flex-35 layout-align-center-center"
+      className="layout-row flex-50 flex-sm-40 flex-md-40 flex-xl-40 layout-align-center-center"
     >
       <div
         className="flex-100"
@@ -89,13 +89,13 @@ exports[`shallow rendering 1`] = `
     </div>
     <hr />
     <div
-      className="layout-row flex-60 layout-align-center-center"
+      className="layout-row flex-50 flex-sm-60 flex-md-60 flex-xl-60 layout-align-center-center"
     >
       <div
-        className=" flex-100"
+        className="flex-100"
       >
         <div
-          className="layout-row flex-50 layout-align-start-center"
+          className="layout-row flex-100 layout-align-start-center"
         >
           <div
             className="flex-10 layout-row layout-align-center-center"
@@ -118,7 +118,7 @@ exports[`shallow rendering 1`] = `
           </div>
         </div>
         <div
-          className="layout-row flex-50 layout-align-start-center"
+          className="layout-row flex-100 layout-align-start-center"
         >
           <span
             className="flex-10 layout-row layout-align-center-center"

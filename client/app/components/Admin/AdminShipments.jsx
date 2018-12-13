@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import PropTypes from '../../prop-types'
 import { AdminShipmentsIndex } from './'
 import AdminShipmentView from './AdminShipmentView/AdminShipmentView'
-import { adminActions } from '../../actions'
+import { adminActions, remarkActions } from '../../actions'
 import AdminShipmentsGroup from './Shipments/Group'
 import GenericError from '../../components/ErrorHandling/Generic'
 
@@ -56,7 +56,8 @@ class AdminShipments extends Component {
       adminDispatch,
       hubHash,
       tenant,
-      user
+      user,
+      remarkDispatch
     } = this.props
     // ;
     if (!shipments || !hubs || !clients) {
@@ -100,6 +101,7 @@ class AdminShipments extends Component {
                   clients={clients}
                   user={user}
                   tenant={tenant}
+                  remarkDispatch={remarkDispatch}
                   {...props}
                 />
               )}
@@ -262,7 +264,8 @@ function mapStateToProps (state) {
 }
 function mapDispatchToProps (dispatch) {
   return {
-    adminDispatch: bindActionCreators(adminActions, dispatch)
+    adminDispatch: bindActionCreators(adminActions, dispatch),
+    remarkDispatch: bindActionCreators(remarkActions, dispatch)
   }
 }
 

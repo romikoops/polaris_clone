@@ -70,15 +70,6 @@ function makePrimary (userId, addressId) {
   return fetch(`${getTenantApiUrl()}/users/${userId}/addresses/${addressId}`, requestOptions).then(handleResponse)
 }
 
-function optOut (userId, target) {
-  const requestOptions = {
-    method: 'POST',
-    headers: authHeader()
-  }
-
-  return fetch(`${getTenantApiUrl()}/users/${userId}/opt_out/${target}`, requestOptions).then(handleResponse)
-}
-
 function getStoredUser () {
   const sortedUser = JSON.parse(window.localStorage.getItem(cookieKey))
 
@@ -346,6 +337,10 @@ function requestPricing (req) {
   return fetch(`${getTenantApiUrl()}/pricings/${req.pricing_id}/request`, requestOptions).then(handleResponse)
 }
 
+function confirmAccount (token) {
+  return fetch(`${getTenantApiUrl()}/auth/confirmation?confirmation_token=${token}`).then(handleResponse)
+}
+
 export const userService = {
   getLocations,
   destroyAddress,
@@ -370,13 +365,13 @@ export const userService = {
   deleteContactAddress,
   editUserAddress,
   delete: _delete,
-  optOut,
   reuseShipment,
   searchShipments,
   deltaShipmentsPage,
   searchContacts,
   getPricings,
   getPricingsForItinerary,
-  requestPricing
+  requestPricing,
+  confirmAccount
 }
 export default userService

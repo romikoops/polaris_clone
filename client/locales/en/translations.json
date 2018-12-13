@@ -16,6 +16,7 @@
     "acceptAll": "accept all",
     "marketing": "Marketing",
     "tracking": "Tracking",
+    "analytics": "Analytics",
     "deny": "Deny",
     "viewDetails": "View Details",
     "modify": "Modify",
@@ -545,7 +546,14 @@
     "dedicatedPricingCount": "No. Dedicated Pricings",
     "openPricingCount": "No. Open Pricings",
     "settings": "Settings",
-    "accountSettings": "Account Settings"
+    "accountSettings": "Account Settings",
+    "noPricingsOne": "Sorry no pricings available.",
+    "noPricingsTwo": "Please contact your rate coordinator to set up dedicated pricing.",
+    "pricingsTab": "Please proceed to the pricing tab in the account dashboard:",
+    "deleteAccountRequest": "Request to delete account",
+    "deleteAccountRequestParagraph": "Please refer to the following contacts if you wish to proceed with the request to delete your account",
+    "contactPhone": "Contact via phone",
+    "contactEmail": "Contact via email"
   },
   "cargo": {
     "cargoDetails": "Cargo Details",
@@ -600,6 +608,7 @@
     "excessChargeableWeight": "Please note that the total chargeable weight for Air Freight shipments",
     "excessWeight": "The total weight of the specified cargo",
     "exceedsMaximum": "exceeds the maximum",
+    "excessDimensionsRequest": "Request excess dimensions",
     "heightDataTip": "Please note that the maximum height for items in Air Freight shipments is",
     "widthDataTip": "Please note that the maximum width for items in Air Freight shipments is",
     "widthDataTipTwo": "Width is automatically set by 'Collie Type'",
@@ -616,6 +625,9 @@
     "fillFormCargoDetails": "(Fill the form with your cargo details)",
     "nonStackableFirst": "We currently do not offer freight rates for non-stackable cargo in our Web Shop.",
     "nonStackableSecond": "Please contact our customer service department to place an order for your non-stackable cargo:",
+    "maxDimensionsAlertFirst": "The specified weight / dimensions of your cargo are not standard.",
+    "pleaseContact": "Please contact our customer service department to place an order for your cargo:",
+    "pleaseContactShort": "Please contact:",
     "feesIn": "Sub Total in {{currency}}",
     "exportCustomsPaper": "Export Customs Paper (MRN)",
     "perUnitWeight": "Per Unit Weight"
@@ -776,7 +788,8 @@
     "ocean": "Ocean",
     "truck": "Truck",
     "vesselName": "Vessel Name",
-    "pickupTakesTwoDays": "Pick-Up of Cargo will usually occur within the first 48 hours of this date."
+    "pickupTakesTwoDays": "Pick-Up of Cargo will usually occur within the first 48 hours of this date.",
+    "remarks": "Remarks"
   },
   "user": {
     "newAlias": "New Alias",
@@ -805,7 +818,9 @@
     "checkForPassword": "Please check your email for a link to change your password.",
     "yourData": "Your Data",
     "companyDetails": "Company Details",
-    "userBilling": "User Billing"
+    "userBilling": "User Billing",
+    "accountConfirmation": "Hello, {{firstName}}, your account is now confirmed.",
+    "confirmationIssue": "There was an issue confirming your account."
   },
   "imc": {
     "imcTerms": "ItsMyCargo GMBH Terms and Conditions",
@@ -838,6 +853,7 @@
     "invalidResetPasswordTwo": "If you wish to reset your password, ",
     "invalidResetPasswordThree": "please follow a valid link sent to your email.",
     "invalidCredentials": "Wrong email or password",
+    "emailTaken": "Email has already been taken",
     "adminCreateShipmentAttempt": "Support for booking a shipment with an admin account is currently in development. Please login with a client or agent account.",
     "mustMatchPassword": "Must match password",
     "errorOccured": "An Error Occured",
@@ -849,7 +865,13 @@
     "invalidRequest": "Your request was not valid. Check inputs and try again.",
     "notFound": "The place you searched for could not be found.",
     "zeroResults": "No results were found for your search",
-    "unknownError": "An unknown error has occurred. Please try again in a few minutes."
+    "unknownError": "An unknown error has occurred. Please try again in a few minutes.",
+    "offerErrorTitle": "Oh no!",
+    "offerErrorTrucking": "We are having trouble calculating trucking {{prep}}:",
+    "offerErrorContact": "Don't worry we are here to help make your booking happen. Just reach out through any of the contacts below to complete your booking.",
+    "offerErrorCode": "Error Code: {{code}}",
+    "salesTeamMot": "Contact the {{mot}} team by {{medium}} at",
+    "salesTeamGeneral": "Contact the sales team by {{medium}} at"
   },
   "trucking": {
     "isNotAvailableLocal": " is not available in ",

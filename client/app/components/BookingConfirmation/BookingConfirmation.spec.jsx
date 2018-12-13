@@ -59,7 +59,7 @@ jest.mock('../../constants', () => {
   return { moment, shipmentStatii, documentTypes }
 })
 // eslint-disable-next-line
-import BookingConfirmation from './BookingConfirmation'
+import { BookingConfirmation }   from './BookingConfirmation'
 
 const cargoItemTypes = { foo: 'FOO_TYPE', bar: 'BAR_TYPE' }
 
@@ -144,6 +144,17 @@ const propsBase = {
   tenant: editedTenant,
   shipmentDispatch: {
     toDashboard: identity
+  },
+  remarkDispatch: {
+    getRemarks: jest.fn()
+  },
+  remark: {
+    quotation: {
+      shipment: [
+        'Some remarks',
+        'yea'
+      ]
+    }
   }
 }
 

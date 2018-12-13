@@ -33,6 +33,7 @@ class QuoteMailer < ApplicationMailer
     attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
     attachments.inline[pdf_name] = quotation
     mail(
+      from: tenant.emails.dig('support','general'),
       to: email,
       subject: "Quotation for #{@shipment.imc_reference}"
     ) do |format|

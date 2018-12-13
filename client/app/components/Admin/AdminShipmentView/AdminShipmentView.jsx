@@ -378,7 +378,7 @@ class AdminShipmentView extends Component {
 
   render () {
     const {
-      theme, hubs, shipmentData, clients, t, adminDispatch, scope
+      theme, hubs, shipmentData, clients, t, adminDispatch, scope, remarkDispatch
     } = this.props
 
     if (!shipmentData || !hubs || !clients) {
@@ -801,6 +801,7 @@ Ref:&nbsp;
               handlePriceChange={this.handlePriceChange}
               saveNewEditedPrice={this.saveNewEditedPrice}
               adminDispatch={adminDispatch}
+              remarkDispatch={remarkDispatch}
             />
           ) : (
             <ShipmentQuotationContent
@@ -814,6 +815,7 @@ Ref:&nbsp;
               deselectedStyle={deselectedStyle}
               feeHash={feeHash}
               cargoView={cargoView}
+              remarkDispatch={remarkDispatch}
             />
           )}
 

@@ -169,7 +169,7 @@ class UserShipmentView extends Component {
 
   render () {
     const {
-      theme, hubs, shipmentData, user, userDispatch, tenant, t
+      theme, hubs, shipmentData, user, userDispatch, tenant, t, remarkDispatch
     } = this.props
 
     if (!shipmentData || !hubs || !user) {
@@ -315,6 +315,7 @@ class UserShipmentView extends Component {
               shipmentData={shipmentData}
               user={user}
               userDispatch={userDispatch}
+              remarkDispatch={remarkDispatch}
             />) : (
             <ShipmentQuotationContent
               theme={theme}
@@ -328,6 +329,7 @@ class UserShipmentView extends Component {
               scope={scope}
               feeHash={feeHash}
               cargoView={cargoView}
+              remarkDispatch={remarkDispatch}
             />
           )}
           {shipment.status !== 'quoted' ? (
