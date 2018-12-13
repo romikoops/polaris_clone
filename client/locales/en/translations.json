@@ -549,7 +549,11 @@
     "accountSettings": "Account Settings",
     "noPricingsOne": "Sorry no pricings available.",
     "noPricingsTwo": "Please contact your rate coordinator to set up dedicated pricing.",
-    "pricingsTab": "Please proceed to the pricing tab in the account dashboard:"
+    "pricingsTab": "Please proceed to the pricing tab in the account dashboard:",
+    "deleteAccountRequest": "Request to delete account",
+    "deleteAccountRequestParagraph": "Please refer to the following contacts if you wish to proceed with the request to delete your account",
+    "contactPhone": "Contact via phone",
+    "contactEmail": "Contact via email"
   },
   "cargo": {
     "cargoDetails": "Cargo Details",

@@ -231,12 +231,15 @@
     box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.5);
   }
   .conditions_box {
+    > * {
+      margin-bottom: 15px;
+    }
     padding: 10px 20px;
     p {
-      font-size: 12px !important;
+      font-size: 12px;
     }
     button {
-      width: 90px !important;
+      width: 90px;
     }
   }
   .text_right {

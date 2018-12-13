@@ -38,6 +38,7 @@ class UserAccount extends Component {
     this.setCurrentUrl = this.setCurrentUrl.bind(this)
     this.setNavLink = this.setNavLink.bind(this)
   }
+
   componentDidMount () {
     const {
       userDispatch,
@@ -68,6 +69,7 @@ class UserAccount extends Component {
     const { userDispatch, user } = this.props
     userDispatch.getLocations(user.id)
   }
+
   setCurrentUrl (url) {
     this.setState({ currentUrl: url })
   }
@@ -103,6 +105,7 @@ class UserAccount extends Component {
         break
     }
   }
+
   destroyAddress (addressId) {
     const { userDispatch, user } = this.props
     userDispatch.destroyAddress(user.id, addressId)
@@ -112,6 +115,7 @@ class UserAccount extends Component {
     const { userDispatch, user } = this.props
     userDispatch.makePrimary(user.id, addressId)
   }
+
   render () {
     const {
       user,
@@ -150,17 +154,17 @@ class UserAccount extends Component {
         {loadingScreen}
         <GenericError theme={theme}>
           {menu}
-        </GenericError >
+        </GenericError>
         <GenericError theme={theme}>
           <Header theme={theme} shipments={users.dashboard.shipments} scrollable />
-        </GenericError >
+        </GenericError>
         <div
           className="layout-row flex layout-wrap layout-align-center-start"
           style={footerStyle}
         >
           <GenericError theme={theme}>
             <NavBar className={`${styles.top_margin}`} />
-          </GenericError >
+          </GenericError>
           <div
             className={`flex-100 ${defs.spacing_md_bottom} ${
               styles.top_margin
@@ -390,7 +394,7 @@ class UserAccount extends Component {
                     )}
                   />
                 </Switch>
-              </GenericError >
+              </GenericError>
             </div>
           </div>
           <Footer tenant={tenant} />
