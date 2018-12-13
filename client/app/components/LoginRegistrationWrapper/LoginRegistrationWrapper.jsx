@@ -42,20 +42,16 @@ class LoginRegistrationWrapper extends PureComponent {
       togglePromptClasses += ` ${styles.ie_11}`
     }
 
-    return (
-      <div>
-        <div>
-          <Comp {...compProps} />
-        </div>
-        <hr className={styles.toggle_prompt_separator} />
-        <div className={togglePromptClasses}>
-          <div>{this.togglePrompt[compName].promptText}</div>
-          <div className="emulate_link" onClick={() => this.toggleComp(compName)}>
-            {this.togglePrompt[compName].linkText}
-          </div>
+    return [
+      <Comp {...compProps} />,
+      <hr className={styles.toggle_prompt_separator} />,
+      <div className={togglePromptClasses}>
+        <div>{this.togglePrompt[compName].promptText}</div>
+        <div className="emulate_link" onClick={() => this.toggleComp(compName)}>
+          {this.togglePrompt[compName].linkText}
         </div>
       </div>
-    )
+    ]
   }
 }
 
