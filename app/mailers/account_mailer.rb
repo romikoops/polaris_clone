@@ -27,7 +27,7 @@ class AccountMailer < Devise::Mailer
     @primary_color = tenant.theme.dig('colors', 'primary')
 
     attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
-
+    opts[:from] = tenant.emails.dig('support', 'general')
     opts[:subject] = 'ItsMyCargo Account Password Reset'
     redirect_url = base_url(tenant) + 'password_reset'
     @reset_url = "#{base_server_url}tenants/#{tenant.id}/auth/password/edit?redirect_url=#{redirect_url}&reset_password_token=#{token}"
