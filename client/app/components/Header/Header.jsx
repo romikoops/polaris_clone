@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { get } from 'lodash'
 import NavDropdown from '../NavDropdown/NavDropdown'
 import LoginRegistrationWrapper from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
 import styles from './Header.scss'
@@ -37,7 +38,7 @@ class Header extends Component {
     if (this.props.loginAttempt && !this.state.showLogin) {
       this.setState({ showLogin: true })
     }
-    if (this.props.loginAttempt && !this.state.alertVisible) {
+    if ((this.props.loginAttempt || this.props.registrationAttempt) && !this.state.alertVisible) {
       this.setState({ alertVisible: true })
     }
   }
@@ -57,7 +58,12 @@ class Header extends Component {
         showLogin: false
       })
     }
-    if (nextProps.loginAttempt && !this.state.alertVisible) {
+
+    if (!nextProps.showModal && this.state.alertVisible) {
+      this.setState({ alertVisible: false })
+    }
+
+    if ((nextProps.loginAttempt || nextProps.registrationAttempt) && !this.state.alertVisible) {
       this.setState({ alertVisible: true })
     }
   }
@@ -85,6 +91,7 @@ class Header extends Component {
     const { showModal, authenticationDispatch, noRedirect } = this.props
     if (showModal) {
       authenticationDispatch.closeLogin()
+      this.setState({ alertVisible: false })
     } else {
       authenticationDispatch.showLogin({ noRedirect })
     }
@@ -204,16 +211,15 @@ class Header extends Component {
       />
     )
 
-    const alert = this.state.alertVisible ? (
-      <Alert
-        message={{ type: 'error', text: authentication.error.message }}
-        onClose={this.hideAlert}
-        timeout={50000}
-        isLogin
-      />
-    ) : (
-      ''
-    )
+    const alert = this.state.alertVisible
+      ? (
+        <Alert
+          message={{ type: 'error', text: get(authentication, 'error.message') }}
+          onClose={this.hideAlert}
+          timeout={50000}
+        />
+      )
+      : ''
 
     const headerClass =
       `${styles.header} layout-row flex-100 layout-wrap layout-align-center ` +
@@ -276,7 +282,7 @@ function mapStateToProps (state) {
     authentication, shipment, app, messaging, bookingData
   } = state
   const {
-    user, loggedIn, loggingIn, registering, loginAttempt, showModal
+    user, loggedIn, loggingIn, registering, loginAttempt, showModal, registrationAttempt
   } = authentication
   const { unread, messages } = messaging
   const { currencies, tenant, tenants } = app
@@ -289,6 +295,7 @@ function mapStateToProps (state) {
     loggingIn,
     registering,
     loginAttempt,
+    registrationAttempt,
     shipment,
     currencies,
     tenants,

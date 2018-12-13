@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
-import { StickyContainer, Sticky } from 'react-sticky'
 import PropTypes from '../../prop-types'
 import styles from './Alert.scss'
 
@@ -49,21 +48,11 @@ class Alert extends Component {
     const alertClassName = `alert ${Alert.alertClass(message.type)} fade in`
 
     return (
-      <StickyContainer>
-        <Sticky>
-          {
-            ({
-              style
-            }) => (
-              <div className={alertClassName} style={style}>
-                <div className={styles.alert_inner_wrapper} />
-                { this.getText() }
-                <i className="fa fa-times close" onClick={this.close} />
-              </div>
-            )
-          }
-        </Sticky>
-      </StickyContainer>
+      <div className={alertClassName}>
+        <div className={styles.alert_inner_wrapper} />
+        { this.getText() }
+        <i className="fa fa-times close" onClick={this.close} />
+      </div>
     )
   }
 }
