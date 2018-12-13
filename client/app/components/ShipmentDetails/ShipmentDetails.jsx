@@ -230,18 +230,21 @@ export class ShipmentDetails extends Component {
       )
     ) {
       this.updateAvailableMotsForRoute()
-
       const {
-        shipmentDispatch, shipmentData
+        shipmentDispatch, shipmentData, tenant
       } = this.props
 
-      const { routes } = shipmentData
-      const itineraryIds = nextState.filteredRouteIndexes.selected.map(i => routes[i].itineraryId).join(',')
-      const country = nextState.has_pre_carriage ? routes[nextState.filteredRouteIndexes.selected[0]].origin.country : nextState.origin.country
+      if (!isQuote(tenant)) {
+        const { routes } = shipmentData
+        const itineraryIds = nextState.filteredRouteIndexes.selected.map(i => routes[i].itineraryId).join(',')
+        const country = nextState.has_pre_carriage
+          ? routes[nextState.filteredRouteIndexes.selected[0]].origin.country
+          : nextState.origin.country
 
-      shipmentDispatch.getLastAvailableDate({ itinerary_ids: itineraryIds, country })
+        shipmentDispatch.getLastAvailableDate({ itinerary_ids: itineraryIds, country })
 
-      return false
+        return false
+      }
     }
     if (nextProps.shipmentData.routes && nextProps.shipmentData.routes.length > 0 &&
     nextState.filteredRouteIndexes.all.length === 0) {
