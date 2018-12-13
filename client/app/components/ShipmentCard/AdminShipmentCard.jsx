@@ -210,7 +210,7 @@ class AdminShipmentCard extends Component {
         <div
           className={`layout-row flex-100 layout-align-space-between-stretch ${styles.middle_top_box}`}
         >
-          <div className="layout-row flex-35 layout-align-center-center">
+          <div className="layout-row flex-50 flex-sm-40 flex-md-40 flex-xl-40 layout-align-center-center">
             <div className="flex-100">
               <b className={styles.ref_row_card}>{t('common:ref')}:&nbsp;{shipment.imc_reference}</b>
               <p>{t('shipment:placedAt')}&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY | HH:mm')}</p>
@@ -219,7 +219,7 @@ class AdminShipmentCard extends Component {
 
           <hr />
 
-          <div className="layout-row flex-60 layout-align-center-center">
+          <div className="layout-row flex-50 flex-sm-60 flex-md-60 flex-xl-60 layout-align-center-center">
             <div className="flex-100">
               <div className="layout-row flex-100 layout-align-start-center">
                 <div className="flex-10 layout-row layout-align-center-center">
