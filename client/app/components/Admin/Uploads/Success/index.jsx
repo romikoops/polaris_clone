@@ -28,7 +28,9 @@ export class AdminUploadsSuccess extends Component {
   }
 
   render () {
-    const { t, theme, data } = this.props
+    const {
+      t, theme, data, closeDialog
+    } = this.props
     const { stats, results } = data
     const statView = Object.keys(stats)
       .filter(key => key !== 'type' && key !== 'userAffected')
@@ -58,7 +60,7 @@ export class AdminUploadsSuccess extends Component {
           className={`flex-none layout-row layout-wrap layout-align-start-start ${
             styles.results_fade
           }`}
-          onClick={this.props.closeDialog}
+          onClick={closeDialog}
         />
         <div
           className={`flex-none layout-row layout-wrap layout-align-start-start ${
@@ -76,7 +78,7 @@ export class AdminUploadsSuccess extends Component {
               text={t('admin:continue')}
               theme={theme}
               size="small"
-              handleNext={this.props.closeDialog}
+              handleNext={closeDialog}
               iconClass="fa-chevron-right"
               active
             />

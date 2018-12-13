@@ -26,10 +26,6 @@ module ExcelDataServices
           raise InvalidDataExtractionMethodError, 'Unknown data extraction method!'
         end
       end
-
-      def sanitize_rows_data(rows_data)
-        rows_data
-      end
     end
   end
 end

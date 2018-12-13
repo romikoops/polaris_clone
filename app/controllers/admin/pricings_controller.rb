@@ -181,6 +181,8 @@ class Admin::PricingsController < Admin::AdminBaseController
                 options: { should_generate_trips: false } }
     result = klass.new(options).perform
 
+    binding.pry
+
     response_handler(result)
   end
 

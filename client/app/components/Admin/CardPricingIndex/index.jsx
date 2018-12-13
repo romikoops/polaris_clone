@@ -75,9 +75,9 @@ class CardPricingIndex extends Component {
     return itinerariesArr
   }
 
-  pricingUpload (file, mot, loadType) {
+  pricingUpload (file, mot, loadType, isOpen) {
     const { documentDispatch } = this.props
-    documentDispatch.uploadPricings(file, mot, loadType, false)
+    documentDispatch.uploadPricings(file, mot, loadType, isOpen)
   }
 
   updateSearch (array) {
@@ -180,7 +180,7 @@ class CardPricingIndex extends Component {
               <p className="flex-100">{uploadPricingText}</p>
               <FileUploader
                 theme={theme}
-                dispatchFn={file => this.pricingUpload(file, mot, snakeCase(loadType))}
+                dispatchFn={file => this.pricingUpload(file, mot, snakeCase(loadType), false)}
                 tooltip={priceTip.upload_lcl}
                 type="xlsx"
                 size="full"

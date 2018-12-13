@@ -12,14 +12,14 @@ module ExcelDataServices
         VALID_STATIC_HEADERS
       end
 
-      def correct_capitalization(row)
+      def correct_capitalization(row_data)
         col_names_to_capitalize = %i(hub
                                      country
                                      counterpart_hub
                                      counterpart_country)
 
         col_names_to_capitalize.each do |col_name|
-          row[col_name] = row[col_name].titleize
+          row_data[col_name] = row_data[col_name].titleize
         end
 
         col_names_containing_all = %i(counterpart_hub
@@ -28,7 +28,7 @@ module ExcelDataServices
                                       carrier)
 
         col_names_containing_all.each do |col_name|
-          row[col_name].downcase! if row[col_name].casecmp('all').zero?
+          row_data[col_name].downcase! if row_data[col_name].casecmp('all').zero?
         end
 
         col_names_to_downcase = %i(load_type
@@ -36,22 +36,20 @@ module ExcelDataServices
                                    direction)
 
         col_names_to_downcase.each do |col_name|
-          row[col_name].downcase!
+          row_data[col_name].downcase!
         end
       end
 
-      def replace_nil_equivalents_with_nil(row)
-        row.each do |k, v|
-          row[k] = nil if v.is_a?(String) && ['n/a', '-', ''].include?(v.downcase)
+      def replace_nil_equivalents_with_nil(row_data)
+        row_data.each do |k, v|
+          row_data[k] = nil if v.is_a?(String) && ['n/a', '-', ''].include?(v.downcase)
         end
       end
 
-      def sanitize_rows_data(rows_data)
-        rows_data.each do |row|
-          # 'roo' strips cells automatically...
-          replace_nil_equivalents_with_nil(row)
-          correct_capitalization(row)
-        end
+      def sanitize_row_data(row_data)
+        # 'roo' strips cells automatically...
+        replace_nil_equivalents_with_nil(row_data)
+        correct_capitalization(row_data)
       end
     end
   end

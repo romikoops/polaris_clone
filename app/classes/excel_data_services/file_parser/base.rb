@@ -26,12 +26,13 @@ module ExcelDataServices
 
           # Parse all but first row
           rows_data = []
-          ((sheet_data.first_row + 1)..sheet_data.last_row).each do |row_nr|
-            row = strip_whitespaces(sheet_data.row(row_nr))
-            rows_data << build_row_obj(headers, row).merge(row_nr: row_nr)
+          raw_rows_without_headers(sheet_data).each do |row_nr|
+            row_data = strip_whitespaces(sheet_data.row(row_nr))
+            row_data = sanitize_row_data(row_data)
+            rows_data << build_row_obj(headers, row_data).merge(row_nr: row_nr)
           end
 
-          @sheets_data[sheet_name][:rows_data] = sanitize_rows_data(rows_data)
+          @sheets_data[sheet_name][:rows_data] = rows_data
         end
 
         @sheets_data = restructure_data(@sheets_data)
@@ -78,8 +79,8 @@ module ExcelDataServices
         true
       end
 
-      def headers_valid?(_headers)
-        raise NotImplementedError, "This method must be implemented in #{self.class.name}."
+      def raw_rows_without_headers(sheet_data)
+        ((sheet_data.first_row + 1)..sheet_data.last_row)
       end
 
       def strip_whitespaces(row_data)
@@ -90,8 +91,8 @@ module ExcelDataServices
         headers.zip(row).to_h
       end
 
-      def sanitize_rows_data(_rows_data)
-        raise NotImplementedError, "This method must be implemented in #{self.class.name}."
+      def sanitize_row_data(row_data)
+        row_data
       end
 
       def restructure_data(_data)

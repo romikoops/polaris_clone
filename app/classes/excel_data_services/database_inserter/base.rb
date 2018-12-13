@@ -92,9 +92,16 @@ module ExcelDataServices
       def find_or_create_tenant_vehicle(row)
         service_level = service_level(row)
         carrier = find_or_create_carrier(row)
-        tenant_vehicle = TenantVehicle.find_by(name: service_level, mode_of_transport: row[:mot], tenant_id: @tenant.id, carrier: carrier)
+        tenant_vehicle = TenantVehicle.find_by(name: service_level,
+                                               mode_of_transport: row[:mot],
+                                               tenant_id: @tenant.id,
+                                               carrier: carrier)
+
         # TODO: fix!! `Vehicle` shouldn't be creating a `TenantVehicle`!:
-        tenant_vehicle || Vehicle.create_from_name(service_level, row[:mot], @tenant.id, carrier.name) # returns a `TenantVehicle`!
+        tenant_vehicle || Vehicle.create_from_name(service_level,
+                                                   row[:mot],
+                                                   @tenant.id,
+                                                   carrier.name) # returns a `TenantVehicle`!
       end
 
       def should_generate_trips?
@@ -116,7 +123,9 @@ module ExcelDataServices
 
       def pricing_details_with_one_col_fee_and_ranges(row)
         fee_code = row[:fee_code].upcase
-        ChargeCategory.find_or_create_by!(code: fee_code, name: row[:fee_name], tenant_id: tenant.id)
+        ChargeCategory.find_or_create_by!(code: fee_code,
+                                          name: row[:fee_name],
+                                          tenant_id: tenant.id)
 
         pricing_detail_params = { rate_basis: row[:rate_basis],
                                   shipping_type: fee_code,
@@ -145,7 +154,8 @@ module ExcelDataServices
 
       def find_transport_category(tenant_vehicle, cargo_class)
         # TODO: what is called 'load_type' in the excel file is actually a cargo_class!
-        @transport_category = tenant_vehicle.vehicle.transport_categories.find_by(name: 'any', cargo_class: cargo_class.downcase)
+        @transport_category = tenant_vehicle.vehicle.transport_categories.find_by(name: 'any',
+                                                                                  cargo_class: cargo_class.downcase)
       end
 
       def create_pricing_with_pricing_details(row, tenant_vehicle, itinerary, data_extraction_method = nil)
