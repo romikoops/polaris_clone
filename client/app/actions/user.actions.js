@@ -828,6 +828,34 @@ function requestPricing (req) {
   }
 }
 
+function confirmAccount (token) {
+  function request (userData) {
+    return { type: userConstants.CONFIRM_ACCOUNT_REQUEST, payload: userData }
+  }
+
+  function success (userData) {
+    return { type: userConstants.CONFIRM_ACCOUNT_SUCCESS, payload: userData }
+  }
+
+  function failure (error) {
+    return { type: userConstants.CONFIRM_ACCOUNT_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    userService.confirmAccount(token).then(
+      (data) => {
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function clearLoading () {
   return { type: userConstants.CLEAR_LOADING, payload: null }
 }
@@ -879,8 +907,8 @@ export const userActions = {
   deltaShipmentsPage,
   getPricings,
   getPricingsForItinerary,
-  requestPricing
-
+  requestPricing,
+  confirmAccount
 }
 
 export default userActions

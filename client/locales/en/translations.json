@@ -813,7 +813,9 @@
     "checkForPassword": "Please check your email for a link to change your password.",
     "yourData": "Your Data",
     "companyDetails": "Company Details",
-    "userBilling": "User Billing"
+    "userBilling": "User Billing",
+    "accountConfirmation": "Hello, {{firstName}}, your account is now confirmed.",
+    "confirmationIssue": "There was an issue confirming your account."
   },
   "imc": {
     "imcTerms": "ItsMyCargo GMBH Terms and Conditions",

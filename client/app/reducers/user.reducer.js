@@ -581,6 +581,21 @@ export default function users (state = initialState, action) {
         ...state,
         loading: false
       }
+    case userConstants.CONFIRM_ACCOUNT_REQUEST:
+      return {
+        ...state,
+        confirmed: false
+      }
+    case userConstants.CONFIRM_ACCOUNT_SUCCESS:
+      return {
+        ...state,
+        confirmed: true
+      }
+    case userConstants.CONFIRM_ACCOUNT_FAILURE:
+      return {
+        ...state,
+        confirmed: false
+      }
     case userConstants.USER_LOG_OUT:
       return {}
 
