@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ExcelDataServices
-  module FileReader
+  module FileParser
     module DataRestructurer
       module Pricing
         private

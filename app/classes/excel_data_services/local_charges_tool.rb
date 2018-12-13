@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module LocalChargesTool
-    UnknownRateBasisReadingError = Class.new(parent::FileReader::Base::ParsingError)
+    UnknownRateBasisReadingError = Class.new(parent::FileParser::Base::ParsingError)
     UnknownRateBasisWritingError = Class.new(parent::FileWriter::Base::WritingError)
 
     private

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ExcelDataServices
-  module FileReader
+  module FileParser
     class LocalCharges < Base
       include ExcelDataServices::LocalChargesTool
       include DataRestructurer::LocalCharges

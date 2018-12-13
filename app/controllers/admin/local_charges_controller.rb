@@ -16,7 +16,7 @@ class Admin::LocalChargesController < ApplicationController
     counter_part_hubs = charges.map(&:counterpart_hub).uniq.compact.map do |hub|
       { label: hub.name, value: hub }
     end
-    
+
     resp = {
       hub_id:           params[:id],
       charges:          hub.local_charges,
@@ -50,7 +50,7 @@ class Admin::LocalChargesController < ApplicationController
     file = upload_params[:file].tempfile
 
     options = { tenant_id: tenant_id, file_or_path: file }
-    sheets_data = ExcelDataServices::FileReader::LocalCharges.new(options).perform
+    sheets_data = ExcelDataServices::FileParser::LocalCharges.new(options).perform
 
     options = { tenant_id: tenant_id, data: sheets_data }
     result = ExcelDataServices::DatabaseInserter::LocalCharges.new(options).perform

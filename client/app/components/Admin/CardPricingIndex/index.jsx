@@ -169,7 +169,7 @@ class CardPricingIndex extends Component {
           )
 
           const options = { mot }
-          if (loadType) options[snakeCase('loadType')] = snakeCase(loadType)
+          if (loadType) options.load_type = snakeCase(loadType)
 
           return (
             <div
@@ -203,7 +203,7 @@ class CardPricingIndex extends Component {
           )
 
           const options = { mot }
-          if (loadType) options[snakeCase('loadType')] = snakeCase(loadType)
+          if (loadType) options.load_type = snakeCase(loadType)
 
           return (
             <div

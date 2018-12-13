@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module ExcelDataServices
-  module FileReader
+  module FileParser
     module DataRestructurer
       module LocalCharges
-        MissingValuesForRateBasisError = Class.new(ExcelDataServices::FileReader::Base::ParsingError)
+        MissingValuesForRateBasisError = Class.new(ExcelDataServices::FileParser::Base::ParsingError)
 
         private
 

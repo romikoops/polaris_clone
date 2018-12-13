@@ -28,11 +28,8 @@ export class AdminUploadsSuccess extends Component {
   }
 
   render () {
-    console.log(this.props)
-    // const {selectedShipment} = this.state;
     const { t, theme, data } = this.props
     const { stats, results } = data
-    console.log(results)
     const statView = Object.keys(stats)
       .filter(key => key !== 'type' && key !== 'userAffected')
       .map(k => (

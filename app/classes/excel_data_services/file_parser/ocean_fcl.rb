@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ExcelDataServices
-  module FileReader
+  module FileParser
     class OceanFcl < Base
       include ExcelDataServices::PricingTool
       include DataRestructurer::Pricing

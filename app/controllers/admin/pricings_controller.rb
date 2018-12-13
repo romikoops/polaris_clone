@@ -171,7 +171,7 @@ class Admin::PricingsController < Admin::AdminBaseController
 
     klass_identifier = "#{mot.capitalize}#{new_load_type.capitalize}"
 
-    klass = ExcelDataServices::FileReader.const_get(klass_identifier)
+    klass = ExcelDataServices::FileParser.const_get(klass_identifier)
     options = { tenant_id: tenant_id, file_or_path: file }
     result = klass.new(options).perform
 
