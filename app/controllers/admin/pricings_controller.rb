@@ -198,11 +198,6 @@ class Admin::PricingsController < Admin::AdminBaseController
 
     document = klass.new(options).perform
 
-    # Local file path (for debugging)
-    puts '------------------------------------------------------------'
-    puts ActiveStorage::Blob.service.send(:path_for, document.file.key)
-    puts '------------------------------------------------------------'
-
     response_handler(key: key, url: rails_blob_url(document.file, disposition: 'attachment'))
   end
 

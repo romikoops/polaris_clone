@@ -65,11 +65,6 @@ class Admin::LocalChargesController < ApplicationController
     options = { tenant_id: current_user.tenant.id, file_name: file_name, mode_of_transport: mot }
     document = ExcelDataServices::FileWriter::LocalCharges.new(options).perform
 
-    # Local file path (for debugging)
-    puts '------------------------------------------------------------'
-    puts ActiveStorage::Blob.service.send(:path_for, document.file.key)
-    puts '------------------------------------------------------------'
-
     response_handler(key: 'local_charges', url: rails_blob_url(document.file, disposition: 'attachment'))
   end
 
