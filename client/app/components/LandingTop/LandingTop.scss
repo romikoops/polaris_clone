@@ -34,7 +34,7 @@
 
     h2 {
       @include responsive-font(3vw, 25px, 5vh, 20px);
-
+     
       @media (max-width: 1024px), (max-height: 850px)  {
         margin: 28px 0;
       }

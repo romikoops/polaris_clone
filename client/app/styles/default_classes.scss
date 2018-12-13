@@ -1,5 +1,5 @@
 @import './defaults';
-
+@import './mixins';
 :local {
   .content_width {
     width: 1000px;
@@ -526,5 +526,23 @@
       margin-top: 40px;
       width: 175px;
     }
+  }
+  .ngl_title {
+    @include responsive-font(2vw, 20px, 4vh, 15px);
+    color: white;
+    text-align: start;
+    margin-top: 15px;
+
+      @media (max-width: 1024px), (max-height: 850px)  {
+        margin: 28px 0;
+      }
+      @media (max-width: 960px), (max-height: 600px) {
+        margin: 20px 0;
+      }
+      @media (max-width: 600px), (max-height: 400px) {
+        margin: 15px 0;
+      }
+  
+      font-weight: normal;
   }
 }
