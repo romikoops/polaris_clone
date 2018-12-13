@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
-import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
 import UserLocations from './UserLocations'
 import ProfileBox from './ProfileBox'
@@ -15,12 +14,9 @@ import {
 import { getTenantApiUrl } from '../../constants/api.constants'
 import { currencyOptions } from '../../constants'
 import DocumentsDownloader from '../Documents/Downloader'
-import { Modal } from '../Modal/Modal'
 import GreyBox from '../GreyBox/GreyBox'
-import OptOutCookies from '../OptOut/Cookies'
-import OptOutTenant from '../OptOut/Tenant'
-import OptOutItsMyCargo from '../OptOut/ItsMyCargo'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
+import DeleteAccountModal from './DeleteAccountModal'
 
 const { fetch } = window
 
@@ -52,7 +48,10 @@ class UserProfile extends Component {
     this.setCurrency = this.setCurrency.bind(this)
     this.saveCurrency = this.saveCurrency.bind(this)
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
+    this.closeDeleteAccountModal = this.closeDeleteAccountModal.bind(this)
+    this.showDeleteAccountModal = this.showDeleteAccountModal.bind(this)
   }
+
   componentDidMount () {
     this.props.setNav('profile')
     window.scrollTo(0, 0)
@@ -61,6 +60,7 @@ class UserProfile extends Component {
   setCurrency (event) {
     this.setState({ currencySelect: event })
   }
+
   saveCurrency () {
     const { appDispatch } = this.props
     appDispatch.setCurrency(this.state.currencySelect.value)
@@ -77,6 +77,7 @@ class UserProfile extends Component {
     const { userDispatch, user } = this.props
     userDispatch.makePrimary(user.id, addressId)
   }
+
   editProfile () {
     const { user } = this.props
     this.setState({
@@ -84,11 +85,13 @@ class UserProfile extends Component {
       editObj: user
     })
   }
+
   closeEdit () {
     this.setState({
       editBool: false
     })
   }
+
   handleChange (ev) {
     const { name, value } = ev.target
     this.setState({
@@ -98,14 +101,15 @@ class UserProfile extends Component {
       }
     })
   }
-  optOut (target) {
-    this.setState({
-      optOut: target
-    })
+
+  closeDeleteAccountModal () {
+    this.setState({ showDeleteAccountModal: false })
   }
-  closeOptOutModal () {
-    this.setState({ optOut: false })
+
+  showDeleteAccountModal () {
+    this.setState({ showDeleteAccountModal: true })
   }
+
   handlePasswordChange () {
     const payload = {
       email: this.props.user.email,
@@ -124,54 +128,17 @@ class UserProfile extends Component {
     })
     this.setState({ passwordResetRequested: true })
   }
-  generateModal (target) {
-    const {
-      user, theme, userDispatch, tenant
-    } = this.props
-    switch (target) {
-      case 'cookies': {
-        const comp = (<OptOutCookies
-          user={user}
-          userDispatch={userDispatch}
-          theme={theme}
-          tenant={tenant}
-        />)
-
-        return <Modal component={comp} theme={theme} parentToggle={() => this.closeOptOutModal()} />
-      }
-      case 'tenant': {
-        const comp = (<OptOutTenant
-          user={user}
-          userDispatch={userDispatch}
-          theme={theme}
-          tenant={tenant}
-        />)
-
-        return <Modal component={comp} theme={theme} parentToggle={() => this.closeOptOutModal()} />
-      }
-      case 'itsmycargo': {
-        const comp = (<OptOutItsMyCargo
-          user={user}
-          userDispatch={userDispatch}
-          theme={theme}
-          tenant={tenant}
-        />)
-
-        return <Modal component={comp} theme={theme} parentToggle={() => this.closeOptOutModal()} />
-      }
-      default:
-        return ''
-    }
-  }
 
   saveEdit () {
     const { authDispatch, user } = this.props
     authDispatch.updateUser(user, this.state.editObj)
     this.closeEdit()
   }
+
   toggleNewAlias () {
     this.setState({ newAliasBool: !this.state.newAliasBool })
   }
+
   handleFormChange (event) {
     const { name, value } = event.target
     this.setState({
@@ -181,16 +148,19 @@ class UserProfile extends Component {
       }
     })
   }
+
   deleteAlias (alias) {
     const { userDispatch } = this.props
     userDispatch.deleteAlias(alias.id)
   }
+
   saveNewAlias () {
     const { newAlias } = this.state
     const { userDispatch } = this.props
     userDispatch.newAlias(newAlias)
     this.toggleNewAlias()
   }
+
   render () {
     const {
       user, aliases, addresses, theme, userDispatch, tenant, t
@@ -199,9 +169,8 @@ class UserProfile extends Component {
       return ''
     }
     const {
-      editBool, editObj, newAliasBool, newAlias, optOut, passwordResetSent, passwordResetRequested
+      editBool, editObj, newAliasBool, newAlias, passwordResetSent, passwordResetRequested, showDeleteAccountModal
     } = this.state
-    const optOutModal = optOut ? this.generateModal(optOut) : ''
     const contactArr = aliases.map(cont => (
       <AdminClientTile client={cont} theme={theme} deleteable deleteFn={this.deleteAlias} flexClasses="flex-45" />
     ))
@@ -209,11 +178,18 @@ class UserProfile extends Component {
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }
 
+    const deleteAccountModal = showDeleteAccountModal
+      ? <DeleteAccountModal closeModal={this.closeDeleteAccountModal} tenant={tenant} user={user} theme={theme} />
+      : ''
+
     const currencySection = (
       <div className={`flex-40 layout-row layout-align-center-center layout-wrap ${styles.currency_box}`}>
         <div className="flex-75 layout-row layout-align-end-center layout-wrap">
           <div className={`flex-100 layout-row layout-align-center-center layout-wrap ${styles.currency_grey}`}>
-            <p className="flex-none">{t('common:currency')}:</p>
+            <p className="flex-none">
+              {t('common:currency')}
+              :
+            </p>
             <span><strong>{user.currency}</strong></span>
           </div>
         </div>
@@ -225,7 +201,10 @@ class UserProfile extends Component {
       <div className={`flex-40 layout-row layout-align-center-center layout-wrap ${styles.currency_box}`}>
         <div className="flex-75 layout-row layout-align-end-center layout-wrap">
           <div className="flex-100 layout-row layout-wrap layout-align-center-center">
-            <p className="flex-none">{t('common:currency')}:</p>
+            <p className="flex-none">
+              {t('common:currency')}
+              :
+            </p>
             <NamedSelect
               className="flex-100"
               options={currencyOptions}
@@ -420,6 +399,7 @@ class UserProfile extends Component {
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-center extra_padding">
         {newAliasBool ? newAliasBox : ''}
+        {deleteAccountModal}
         <div className="flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding">
           {editBool ? (
             <EditNameBox
@@ -435,10 +415,13 @@ class UserProfile extends Component {
               </div>
               <div className="layout-align-start-center layout-row flex">
                 <p>
-                  {t('common:greeting')}&nbsp;
+                  {t('common:greeting')}
+                    &nbsp;
                 </p>
                 <h1 className="flex-none cli">
-                  {user.first_name} {user.last_name}
+                  {user.first_name}
+                  {' '}
+                  {user.last_name}
                 </h1>
               </div>
             </div>
@@ -481,7 +464,8 @@ class UserProfile extends Component {
                       className="emulate_link blue_link"
                       onClick={() => window.open('https://gdpr-info.eu/', '_blank')}
                     >
-                      {t('common:moreInfo')}</p>
+                      {t('common:moreInfo')}
+                    </p>
                   </div>
                   <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
                     <div className="flex-66 layout-row layout-align-start-center">
@@ -489,7 +473,7 @@ class UserProfile extends Component {
                         {t('common:downloadAllData')}
                       </p>
                     </div>
-                    <div className="flex-33 layout-row layout-align-center-center ">
+                    <div className="flex-33 layout-row layout-align-start">
                       <DocumentsDownloader
                         theme={theme}
                         target="gdpr"
@@ -501,62 +485,15 @@ class UserProfile extends Component {
                   <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
                     <div className="flex-66 layout-row layout-align-start-center">
                       <p className="flex-none">
-                        { tenant && tenant && tenant.name }
-                        {' '}
-                        <span
-                          onClick={() => window.open('/terms_and_conditions', '_blank')}
-                          className="emulate_link blue_link"
-                        >
-                          { t('footer:terms') }
-                        </span>
+                        {t('account:deleteAccountRequest')}
                       </p>
                     </div>
-                    <div className="flex-33 layout-row layout-align-center-center ">
+                    <div className="flex-33 layout-row layout-align-start">
                       <RoundButton
                         theme={theme}
                         size="full"
-                        active
-                        text={t('common:optOut')}
-                        handleNext={() => this.optOut('tenant')}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
-                    <div className="flex-66 layout-row layout-align-start-center">
-                      <p className="flex-none">
-                        {t('imc:imc')}
-                        {' '}
-                        <span
-                          onClick={() => window.open('https://www.itsmycargo.com/en/terms', '_blank')}
-                          className="emulate_link blue_link"
-                        >
-                          { t('footer:terms') }
-                        </span>
-                      </p>
-                    </div>
-                    <div className="flex-33 layout-row layout-align-center-center ">
-                      <RoundButton
-                        theme={theme}
-                        size="full"
-                        active
-                        text={t('common:optOut')}
-                        handleNext={() => this.optOut('itsmycargo')}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
-                    <div className="flex-66 layout-row layout-align-start-center">
-                      <p className="flex-none">
-                        {t('imc:imcCookies')}
-                      </p>
-                    </div>
-                    <div className="flex-33 layout-row layout-align-center-center ">
-                      <RoundButton
-                        theme={theme}
-                        size="full"
-                        active
-                        text={t('common:optOut')}
-                        handleNext={() => this.optOut('cookies')}
+                        text={t('account:request')}
+                        handleNext={this.showDeleteAccountModal}
                       />
                     </div>
                   </div>
@@ -623,31 +560,9 @@ class UserProfile extends Component {
             />
           </div>
         </div>
-        {optOutModal}
       </div>
     )
   }
-}
-
-UserProfile.propTypes = {
-  user: PropTypes.user.isRequired,
-  t: PropTypes.func.isRequired,
-  setNav: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  appDispatch: PropTypes.shape({
-    setCurrency: PropTypes.func
-  }).isRequired,
-  aliases: PropTypes.arrayOf(PropTypes.object),
-  addresses: PropTypes.arrayOf(PropTypes.object),
-  authDispatch: PropTypes.shape({
-    updateUser: PropTypes.func
-  }).isRequired,
-  userDispatch: PropTypes.shape({
-    makePrimary: PropTypes.func,
-    newAlias: PropTypes.func,
-    deleteAlias: PropTypes.func
-  }).isRequired,
-  tenant: PropTypes.tenant
 }
 
 UserProfile.defaultProps = {
