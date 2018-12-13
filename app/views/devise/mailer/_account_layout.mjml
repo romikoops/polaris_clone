@@ -1,13 +1,26 @@
+<% primary_color = tenant.theme["colors"]["primary"] %>
+
+<mj-section full-width="full-width">
+  <mj-column>
+    <mj-image width="300px" src="<%= tenant.theme["logoLarge"] %>" />
+  </mj-column>
+</mj-section>
+<mj-section full-width="full-width">
+  <mj-column>
+    <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
+  </mj-column>
+</mj-section>
+
 <mj-section full-width="full-width" padding="0px">
   <mj-column width="100%" padding="0 2.5%">
-    <mj-text>
+    <mj-text line-height="24px">
        <p>Dear <span><%= @user.full_name %>,</span></p>
     </mj-text>
   </mj-column>
   <mj-column width="100%" padding="0 2.5%">
     <mj-text line-height="24px">
       <p>
-        <%= greeting_text %>
+        Thank you for registering a new account in the  <b> <%=tenant.name%> </b> (powered by ItsMyCargo). 
       </p>
     </mj-text>
   </mj-column>
@@ -17,24 +30,25 @@
 
 <mj-section full-width="full-width" padding="0px">
   <mj-column width="100%" padding="0 2.5%">
-    <mj-text>
-        <p>If you have questions about the ItsMyCargo Shop System or are experiencing problems with this mail or shipment – do not hesitate to ask us:</p>
+    <mj-text line-height="24px">
+        <p>If you have questions about the <b> <%= tenant.name %> </b> Online Shop or are experiencing problems with this mail or shipment – do not hesitate to ask us:</p>
     </mj-text>
     
   </mj-column>
   <mj-column width="100%" padding="0 2.5%">
     <mj-text line-height="24px">
       <p>
-        Support: <%= mail_to("support@itsmycargo.com") %> | +49 151 59085855
+        Support: <%= mail_to(tenant.emails.dig('support', 'general') || 'support@itsmycargo.com') %> | <%= tenant.phones.dig('support') || '+49 151 59085855' %>
       </p>
     </mj-text>
     
   </mj-column>
   <mj-column width="100%" padding="0 2.5%">
-    <mj-text>
+    <mj-text line-height="24px">
       <p class="bold text-center" style="font-size: 12px;">
         This is an auto-generated mail. Please respond to our support mail with any inquiries.<br>
-        ItsMyCargo GmbH – Brooktorkai 7, 20457 Hamburg, GERMANY.
+        <br>
+        <%= tenant.addresses.dig('main') %>
       </p>
     </mj-text>
   </mj-column>

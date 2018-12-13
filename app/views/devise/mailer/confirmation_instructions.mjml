@@ -1,5 +1,5 @@
 <%= render "account_layout",
-    greeting_text: "Thank you for registering a new account in the #{@resource.tenant.name} Online Shop (powered by ItsMyCargo). " do %>
+    tenant: @resource.tenant  do %>
 
 
 <mj-section full-width="full-width" padding="0px">
