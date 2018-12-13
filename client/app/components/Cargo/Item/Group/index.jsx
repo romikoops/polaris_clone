@@ -152,7 +152,7 @@ cm
           styles.panel
         } flex-100 layout-row layout-wrap layout-align-none-center layout-wrap`}
       >
-        <CargoItemGroupAggregated group={group} />
+        <CargoItemGroupAggregated group={group} hideUnits={hideUnits}/>
       </div>
     )
     const cargoCategory = group.cargoType ? group.cargoType.category : cargoGlossary[group.size_class]
