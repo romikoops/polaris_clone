@@ -135,8 +135,8 @@ function updateUser (user, req, shipmentReq) {
   function success (response) {
     return { type: authenticationConstants.UPDATE_USER_SUCCESS, user: response.data.user }
   }
-  function failure (error) {
-    return { type: authenticationConstants.UPDATE_USER_FAILURE, error }
+  function failure (payload) {
+    return { type: authenticationConstants.UPDATE_USER_FAILURE, payload }
   }
 
   return (dispatch) => {
@@ -150,7 +150,7 @@ function updateUser (user, req, shipmentReq) {
         }
       },
       (error) => {
-        dispatch(failure(error))
+        dispatch(failure(!!shipmentReq))
         dispatch(alertActions.error(error))
       }
     )

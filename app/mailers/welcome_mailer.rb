@@ -13,6 +13,7 @@ class WelcomeMailer < ApplicationMailer
     @content = Content.get_component('WelcomeMail', @tenant.id)
     
     mail(
+      from: tenant.emails.dig('support', 'general'),
       to: @user.email,
       subject: @content['subject'][0]&.text
     ) do |format|

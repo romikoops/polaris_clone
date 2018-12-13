@@ -1,13 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`shallow render 1`] = `
-<div>
-  <div>
-    <LoginPage />
-  </div>
+Array [
+  <LoginPage />,
   <hr
     className="toggle_prompt_separator"
-  />
+  />,
   <div
     className="toggle_prompt layout-row layout-align-space-between"
   >
@@ -20,8 +18,8 @@ exports[`shallow render 1`] = `
     >
       Register
     </div>
-  </div>
-</div>
+  </div>,
+]
 `;
 
 exports[`translation working on togglePrompt 1`] = `"Register"`;
