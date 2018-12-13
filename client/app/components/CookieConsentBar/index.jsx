@@ -1,12 +1,9 @@
 import React from 'react'
 import { withNamespaces } from 'react-i18next'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { withGTM } from 'react-tag-manager'
-import { authenticationActions } from '../../actions'
 import PropTypes from '../../prop-types'
 import styles from './CookieConsentBar.scss'
-import { moment } from '../../constants'
 import { ROW, trim, COLUMN } from '../../classNames'
 import setCookie from './_modules/setCookie'
 import getCookie from './_modules/getCookie'
@@ -50,11 +47,7 @@ const MODAL_SECTION_TITLE = `${COLUMN(10)} ${
 const MODAL_SECTION_BUTTON = `${ROW(35)} ${
   styles.modal_section_button
 }`
-const SHOW_DETAILS_BOX = `${ROW(35)} ${styles.show_details}`
 const LEARN_MORE = `${ROW(20)} ${styles.show_details}`
-const BOX_LEFT = `${ROW(65)} ${styles.box_left}`
-const BOX_RIGHT = `${ROW(35)} layout-row`
-const BOX_RIGHT_INNER = `${ROW(100)} layout-align-center ${styles.padding_top}`
 const TOGGLE = `${styles.mandatory} fa fa-3x fa-toggle-on`
 
 function getToggleStyle (flag) {
@@ -69,28 +62,7 @@ function getToggleStyle (flag) {
   return `${base} ${active} ${on}`
 }
 
-function handleAccept (user, tenant, loggedIn, authDispatch) {
-}
-
 class PureCookieConsentBar extends React.PureComponent {
-  static getDerivedStateFromProps (props, state) {
-    if (props.height === state.lastHeight) {
-      return null
-    }
-
-    return { bottom: PureCookieConsentBar.updatedBottom(props), lastHeight: props.height }
-  }
-
-  static updatedBottom (props) {
-    const scrollLimit = document.documentElement.scrollHeight - document.documentElement.clientHeight
-
-    if (window.scrollY < scrollLimit - props.height) {
-      return 0
-    }
-
-    return Math.max(0, props.height - (scrollLimit - window.scrollY))
-  }
-
   constructor (props) {
     super(props)
     const consent = JSON.parse(getCookie('consent') || '{}')
@@ -99,37 +71,12 @@ class PureCookieConsentBar extends React.PureComponent {
     this.state = {
       accepted,
       consent,
-      bottom: PureCookieConsentBar.updatedBottom(props),
-      showModal: false,
       analyticsSelected: true,
       marketingSelected: true
     }
-    this.toggleModal = this.toggleModal.bind(this)
     this.toggleMarketing = this.toggleMarketing.bind(this)
     this.toggleAnalytics = this.toggleAnalytics.bind(this)
-    this.cookieBarLimit = this.cookieBarLimit.bind(this)
     this.accept = this.accept.bind(this)
-  }
-
-  componentDidMount () {
-    window.addEventListener('scroll', () => { this.setState({ bottom: PureCookieConsentBar.updatedBottom(this.props) }) })
-    this.pushEvents()
-  }
-
-  cookieBarLimit () {
-    const scrollLimit =
-      document.documentElement.scrollHeight -
-      document.documentElement.clientHeight
-
-    if (window.scrollY < scrollLimit - this.props.height) {
-      this.setState({ bottom: 0 })
-    } else {
-      this.setState({ bottom: Math.max(0, this.props.height - (scrollLimit - window.scrollY)) })
-    }
-  }
-
-  toggleModal () {
-    this.setState(prevState => ({ showModal: !prevState.showModal }))
   }
 
   toggleAnalytics () {
@@ -161,46 +108,29 @@ class PureCookieConsentBar extends React.PureComponent {
   pushEvents () {
     const { GTM } = this.props
 
-    if (this.state.consent.mandatory) { GTM.api.trigger({ event: 'consent_mandatory', consent_mandatory: "1" }) }
-    if (this.state.consent.analytics) { GTM.api.trigger({ event: 'consent_analytics', consent_analytics: "1" }) }
-    if (this.state.consent.marketing) { GTM.api.trigger({ event: 'consent_marketing', consent_marketing: "1" }) }
+    if (this.state.consent.mandatory) { GTM.api.trigger({ event: 'consent_mandatory', consent_mandatory: '1' }) }
+    if (this.state.consent.analytics) { GTM.api.trigger({ event: 'consent_analytics', consent_analytics: '1' }) }
+    if (this.state.consent.marketing) { GTM.api.trigger({ event: 'consent_marketing', consent_marketing: '1' }) }
   }
 
   render () {
     const {
       t,
-      user,
-      fixedHeight,
-      tenant,
-      loggedIn,
-      authDispatch
+      tenant
     } = this.props
 
     const {
-      bottom,
       accepted,
-      showModal,
       analyticsSelected,
       marketingSelected
     } = this.state
 
     if (accepted || !tenant) return ''
-    const containerStyle = {
-      background: 'white',
-      bottom: (fixedHeight || 0) + bottom
-    }
-    const clickAccept = () => {
-      this.accept()
 
-      return handleAccept(user, tenant, loggedIn, authDispatch)
-    }
-
-    const modal = (
+    return (
       <React.Fragment>
-        <div
-          onClick={this.toggleModal}
-          className={styles.modal_background}
-        />
+        <div className={styles.modal_background} />
+
         <div className={MODAL}>
           <div className={COLUMN(20)}>
             <div className={COLUMN(100)}>
@@ -244,7 +174,7 @@ class PureCookieConsentBar extends React.PureComponent {
             </div>
           </div>
 
-          <div className={MODAL_SECTION_TITLE}>{t('common:tracking')}</div>
+          <div className={MODAL_SECTION_TITLE}>{t('common:analytics')}</div>
           <div className={COLUMN(20)}>
             <div className={ROW(100)}>
               <div className={MODAL_SECTION_TEXT}>
@@ -276,7 +206,7 @@ class PureCookieConsentBar extends React.PureComponent {
                 <button
                   className={styles.accept_all}
                   type="button"
-                  onClick={clickAccept}
+                  onClick={this.accept}
                 >
                   <i className="fa fa-check" />
                   {t('common:accept')}
@@ -287,86 +217,24 @@ class PureCookieConsentBar extends React.PureComponent {
         </div>
       </React.Fragment>
     )
-    const showDetails = (
-      <div className={SHOW_DETAILS_BOX}>
-        <a href="#" onClick={this.toggleModal}>
-          {t('bookconf:showDetails')}
-        </a>
-      </div>
-    )
-    const acceptAll = (
-      <div className={ROW(60)}>
-        <button
-          className={` ${styles.accept_all}`}
-          type="button"
-          id="ccb_accept_cookies"
-          onClick={clickAccept}
-        >
-          <i className="fa fa-check" />
-          {t('common:acceptAll')}
-        </button>
-      </div>
-    )
-
-    return (
-      <React.Fragment>
-        {showModal && modal}
-        <div className={styles.cookie_flex} style={containerStyle}>
-          <div className={BOX_LEFT}>
-            <div>
-              <div className={styles.title}>
-                {sampleData.title}
-              </div>
-              <div className={styles.description}>
-                {sampleData.description}
-              </div>
-            </div>
-          </div>
-          <div className={BOX_RIGHT}>
-            <div className={BOX_RIGHT_INNER}>
-              {showDetails}
-              {acceptAll}
-            </div>
-          </div>
-        </div>
-      </React.Fragment>
-    )
   }
 }
 
 PureCookieConsentBar.propTypes = {
-  user: PropTypes.user,
   t: PropTypes.func.isRequired,
-  loggedIn: PropTypes.bool,
-  authDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   tenant: PropTypes.tenant
 }
 
 PureCookieConsentBar.defaultProps = {
-  tenant: null,
-  user: null,
-  loggedIn: false
+  tenant: null
 }
 
 function mapStateToProps (state) {
-  return {
-    height: 0,
-    fixedHeight: 0,
-    ...state.cookie
-  }
-}
-
-function mapDispatchToProps (dispatch) {
-  return {
-    authDispatch: bindActionCreators(
-      authenticationActions,
-      dispatch
-    )
-  }
+  return state.cookie
 }
 
 @withGTM
-@connect(mapStateToProps, mapDispatchToProps)
+@connect(mapStateToProps)
 class CookieConsentBar extends PureCookieConsentBar {}
 
 export const TPureCookieConsentBar = withNamespaces()(PureCookieConsentBar)
