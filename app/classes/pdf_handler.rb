@@ -57,7 +57,8 @@ class PdfHandler
         load_type: @load_type,
         remarks: @remarks,
         tenant: @shipment.tenant,
-        cargo_data: @cargo_data
+        cargo_data: @cargo_data,
+        notes: @shipment.route_notes
       }
     )
     response = BreezyPDFLite::RenderRequest.new(

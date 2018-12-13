@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import Tabs from '../Tabs/Tabs'
@@ -17,20 +18,41 @@ import GreyBox from '../GreyBox/GreyBox'
 import ShipmentNotes from '../ShipmentNotes'
 import QuoteChargeBreakdown from '../QuoteChargeBreakdown/QuoteChargeBreakdown'
 
-function ShipmentQuotationContent ({
-  theme,
-  gradientBorderStyle,
-  gradientStyle,
-  estimatedTimes,
-  shipment,
-  background,
-  selectedStyle,
-  deselectedStyle,
-  scope,
-  feeHash,
-  t,
-  cargoView
-}) {
+class ShipmentQuotationContent extends Component {
+  constructor(props) {
+    super(props)
+  }
+  componentDidMount(){
+    this.getRemarks()
+  }
+
+  getRemarks() {
+    const { remarkDispatch } = this.props
+    remarkDispatch.getRemarks()
+  }
+
+  render() {
+    const { theme,
+      gradientBorderStyle,
+      gradientStyle,
+      estimatedTimes,
+      shipment,
+      background,
+      selectedStyle,
+      deselectedStyle,
+      scope,
+      feeHash,
+      t,
+      cargoView,
+      remark
+    } = this.props
+    
+    const remarkBody = remark.quotation ? remark.quotation.shipment.map(_remark => (
+      <li>
+        {_remark.body}
+      </li>
+    )) : ''
+
   return (
     <Tabs
       wrapperTabs="layout-row flex-100 margin_bottom"
@@ -98,7 +120,7 @@ function ShipmentQuotationContent ({
         theme={theme}
       >
         <div className="flex-100 layout-row layout-align-start-start padding_top card_margin_right">
-          <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-60`}>
+          <div className={`${adminStyles.border_box} margin_bottom layout-column flex-60`}>
             <div className={`flex-70 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
               <div className="layout-column flex-100">
                 <h3>{t('shipment:freightDutiesAndCarriage')}</h3>
@@ -192,6 +214,20 @@ function ShipmentQuotationContent ({
                 </div>
               </div>
             </div>
+            <div>
+              <div className={`flex-100 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
+                  <div className="layout-column flex-100">
+                    <h3 
+                      style={{ marginBottom: '0px' }}
+                    >
+                      {t('shipment:remarks')}:
+                    </h3>
+                    <ul>
+                      {remarkBody}
+                    </ul>
+                  </div>
+              </div>
+            </div>
           </div>
           <div className="flex-40 layout-row">
             <div
@@ -216,7 +252,6 @@ function ShipmentQuotationContent ({
             </div>
           </div>
         </div>
-
       </Tab>
       <Tab
         tabTitle={t('cargo:cargoDetails')}
@@ -233,6 +268,7 @@ function ShipmentQuotationContent ({
       </Tab>
     </Tabs>
   )
+                      }
 }
 
 ShipmentQuotationContent.propTypes = {
@@ -264,4 +300,14 @@ ShipmentQuotationContent.defaultProps = {
   cargoView: null
 }
 
-export default withNamespaces(['common', 'shipment', 'cargo'])(ShipmentQuotationContent)
+function mapStateToProps (state) {
+  const {
+    remark
+  } = state
+  
+  return {
+    remark
+  }
+}
+
+export default connect(mapStateToProps, null)(withNamespaces(['common', 'shipment', 'cargo'])(ShipmentQuotationContent))

@@ -788,7 +788,8 @@
     "ocean": "Ocean",
     "truck": "Truck",
     "vesselName": "Vessel Name",
-    "pickupTakesTwoDays": "Pick-Up of Cargo will usually occur within the first 48 hours of this date."
+    "pickupTakesTwoDays": "Pick-Up of Cargo will usually occur within the first 48 hours of this date.",
+    "remarks": "Remarks"
   },
   "user": {
     "newAlias": "New Alias",

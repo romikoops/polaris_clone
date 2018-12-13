@@ -664,6 +664,17 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 </p>
               </div>
             </div>
+            <div
+              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+            >
+              <h4>
+                Remarks:
+              </h4>
+              <ul>
+                <li />
+                <li />
+              </ul>
+            </div>
           </div>
         </div>
       </CollapsingBar>
@@ -1568,6 +1579,17 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                   FOO_INCOTERM_TEXT
                 </p>
               </div>
+            </div>
+            <div
+              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+            >
+              <h4>
+                Remarks:
+              </h4>
+              <ul>
+                <li />
+                <li />
+              </ul>
             </div>
           </div>
         </div>
@@ -2639,6 +2661,17 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 </p>
               </div>
             </div>
+            <div
+              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+            >
+              <h4>
+                Remarks:
+              </h4>
+              <ul>
+                <li />
+                <li />
+              </ul>
+            </div>
           </div>
         </div>
       </CollapsingBar>
@@ -3537,6 +3570,17 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                   FOO_INCOTERM_TEXT
                 </p>
               </div>
+            </div>
+            <div
+              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+            >
+              <h4>
+                Remarks:
+              </h4>
+              <ul>
+                <li />
+                <li />
+              </ul>
             </div>
           </div>
         </div>
@@ -4437,6 +4481,17 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 </p>
               </div>
             </div>
+            <div
+              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+            >
+              <h4>
+                Remarks:
+              </h4>
+              <ul>
+                <li />
+                <li />
+              </ul>
+            </div>
           </div>
         </div>
       </CollapsingBar>
@@ -5335,6 +5390,17 @@ exports[`shallow render 1`] = `
                   FOO_INCOTERM_TEXT
                 </p>
               </div>
+            </div>
+            <div
+              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+            >
+              <h4>
+                Remarks:
+              </h4>
+              <ul>
+                <li />
+                <li />
+              </ul>
             </div>
           </div>
         </div>
@@ -6562,6 +6628,17 @@ exports[`with cargo items 1`] = `
                 </p>
               </div>
             </div>
+            <div
+              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+            >
+              <h4>
+                Remarks:
+              </h4>
+              <ul>
+                <li />
+                <li />
+              </ul>
+            </div>
           </div>
         </div>
       </CollapsingBar>
@@ -7745,6 +7822,17 @@ exports[`with containers 1`] = `
                   FOO_INCOTERM_TEXT
                 </p>
               </div>
+            </div>
+            <div
+              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+            >
+              <h4>
+                Remarks:
+              </h4>
+              <ul>
+                <li />
+                <li />
+              </ul>
             </div>
           </div>
         </div>

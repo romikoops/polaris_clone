@@ -379,6 +379,14 @@ class Shipment < ApplicationRecord
     as_json(new_options)
   end
 
+  def route_notes
+    [itinerary&.notes,
+     origin_hub&.notes,
+     destination_hub&.notes,
+     Note.where(trucking_pricing_id: trucking.dig('on_carriage', 'address_id')),
+     Note.where(trucking_pricing_id: trucking.dig('pre_carriage', 'address_id'))].flatten.uniq.compact
+  end
+
   def as_index_json(options = {})
     new_options = options.reverse_merge(
       methods: %i(total_price mode_of_transport cargo_units cargo_count edited_total),
