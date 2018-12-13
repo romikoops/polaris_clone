@@ -205,6 +205,21 @@ export class ShipmentDetails extends Component {
       )
 
       this.setState({ modals })
+    } else {
+      const { shipmentData } = nextProps
+      const { shipment } = shipmentData
+      const loadType = camelize(shipment.load_type)
+      const errorIdx = ShipmentDetails.errorsAt(nextState[`${loadType}sErrors`])
+
+      const modals = { ...nextState.modals }
+      const { nextStageAttempts } = nextState
+
+      if (nextStageAttempts > 0 && errorIdx > -1 && !modals.maxDimensions.show) {
+        modals.maxDimensions.show = true
+        this.setState({ ...nextState, modals })
+
+        return false
+      }
     }
 
     if (
@@ -222,7 +237,7 @@ export class ShipmentDetails extends Component {
       const { routes } = shipmentData
       const itineraryIds = nextState.filteredRouteIndexes.selected.map(i => routes[i].itineraryId).join(',')
       const country = nextState.has_pre_carriage ? routes[nextState.filteredRouteIndexes.selected[0]].origin.country : nextState.origin.country
-      
+
       shipmentDispatch.getLastAvailableDate({ itinerary_ids: itineraryIds, country })
 
       return false
@@ -543,7 +558,7 @@ export class ShipmentDetails extends Component {
   }
 
   updatedExcessWeightText (cargoItems, state) {
-    const { t, shipmentData } = this.props
+    const { t, shipmentData, tenant } = this.props
     const { maxAggregateDimensions } = shipmentData
 
     if (!maxAggregateDimensions.truckCarriage) return ''
@@ -555,11 +570,22 @@ export class ShipmentDetails extends Component {
 
     let excessWeightText = ''
     if (totalWeight > +maxAggregateDimensions.truckCarriage.payloadInKg) {
-      excessWeightText = `
-        ${t('cargo:excessWeight')}
-        (${totalWeight.toFixed(1)} ${t('acronym:kg')}) ${t('cargo:exceedsMaximum')}
-        (${maxAggregateDimensions.truckCarriage.payloadInKg} ${t('acronym:kg')}).
-      `
+      excessWeightText = (
+        <div>
+          {
+            `
+              ${t('cargo:excessWeight')}
+              (${totalWeight.toFixed(1)} ${t('acronym:kg')}) ${t('cargo:exceedsMaximum')}
+              (${maxAggregateDimensions.truckCarriage.payloadInKg} ${t('acronym:kg')}).
+            `
+          }
+          {t('cargo:pleaseContact')}
+          {' '}
+          <a href={`mailto:${tenant.emails.support.general}?subject=Excess Dimensions Request`}>
+            {tenant.emails.support.general}
+          </a>
+        </div>
+      )
     } else {
       excessWeightText = ''
     }

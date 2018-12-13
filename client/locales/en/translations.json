@@ -600,6 +600,7 @@
     "excessChargeableWeight": "Please note that the total chargeable weight for Air Freight shipments",
     "excessWeight": "The total weight of the specified cargo",
     "exceedsMaximum": "exceeds the maximum",
+    "excessDimensionsRequest": "Request excess dimensions",
     "heightDataTip": "Please note that the maximum height for items in Air Freight shipments is",
     "widthDataTip": "Please note that the maximum width for items in Air Freight shipments is",
     "widthDataTipTwo": "Width is automatically set by 'Collie Type'",
@@ -616,6 +617,9 @@
     "fillFormCargoDetails": "(Fill the form with your cargo details)",
     "nonStackableFirst": "We currently do not offer freight rates for non-stackable cargo in our Web Shop.",
     "nonStackableSecond": "Please contact our customer service department to place an order for your non-stackable cargo:",
+    "maxDimensionsAlertFirst": "The specified weight / dimensions of your cargo are not standard.",
+    "pleaseContact": "Please contact our customer service department to place an order for your cargo:",
+    "pleaseContactShort": "Please contact:",
     "feesIn": "Sub Total in {{currency}}",
     "exportCustomsPaper": "Export Customs Paper (MRN)",
     "perUnitWeight": "Per Unit Weight"
