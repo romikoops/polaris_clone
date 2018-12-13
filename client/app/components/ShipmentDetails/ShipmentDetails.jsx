@@ -33,6 +33,7 @@ import calcAvailableMotsForRoute,
 import getRequests from '../ShipmentLocationBox/getRequests'
 import reuseShipments from '../../helpers/reuseShipment'
 import DayPickerSection from './DayPickerSection'
+import NoPricings from '../ErrorHandling/NoPricings'
 
 export class ShipmentDetails extends Component {
   static scrollTo (target) {
@@ -411,7 +412,6 @@ export class ShipmentDetails extends Component {
       prevRequestLoaded: true
     }))
   }
-
   loadReusedShipment (obj) {
     const newCargoItemsErrors = obj.cargoItems.map(cia => ({
       payload_in_kg: false,
@@ -864,13 +864,23 @@ export class ShipmentDetails extends Component {
       t
     } = this.props
 
+    const { theme, scope } = tenant
+
     const {
       modals, filteredRouteIndexes, nextStageAttempts, selectedDay, incoterm
     } = this.state
+  
+    const noPricings = (
+      <NoPricings
+        theme={theme}
+        pageMargin="60px 0 0 0"
+        user={user}
+        shipmentDispatch={shipmentDispatch}
+      />
+    )
 
-    if (!filteredRouteIndexes.all.length) return ''
+    if (!filteredRouteIndexes.all.length) return noPricings
 
-    const { theme, scope } = tenant
     let cargoDetails
     if (showRegistration) this.props.hideRegistration()
     if (!shipmentData.shipment || !shipmentData.cargoItemTypes) return ''

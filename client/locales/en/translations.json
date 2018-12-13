@@ -545,7 +545,10 @@
     "dedicatedPricingCount": "No. Dedicated Pricings",
     "openPricingCount": "No. Open Pricings",
     "settings": "Settings",
-    "accountSettings": "Account Settings"
+    "accountSettings": "Account Settings",
+    "noPricingsOne": "Sorry no pricings available.",
+    "noPricingsTwo": "Please contact your rate coordinator to set up dedicated pricing.",
+    "pricingsTab": "Please proceed to the pricing tab in the account dashboard:"
   },
   "cargo": {
     "cargoDetails": "Cargo Details",

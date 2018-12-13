@@ -217,6 +217,7 @@ class Shop extends Component {
                 {...props}
                 theme={theme}
                 scope={scope}
+                user={user}
                 selectLoadType={this.selectLoadType}
                 setStage={this.selectShipmentStage}
                 messages={error ? error.stage1 : []}
