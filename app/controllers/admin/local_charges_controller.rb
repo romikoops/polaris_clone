@@ -53,9 +53,9 @@ class Admin::LocalChargesController < ApplicationController
     sheets_data = ExcelDataServices::FileParser::LocalCharges.new(options).perform
 
     options = { tenant_id: tenant_id, data: sheets_data }
-    result = ExcelDataServices::DatabaseInserter::LocalCharges.new(options).perform
+    insertion_stats = ExcelDataServices::DatabaseInserter::LocalCharges.new(options).perform
 
-    response_handler(result)
+    response_handler(insertion_stats)
   end
 
   def download_local_charges

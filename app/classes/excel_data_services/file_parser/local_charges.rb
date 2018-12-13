@@ -38,17 +38,21 @@ module ExcelDataServices
         col_names_to_downcase.each do |col_name|
           row_data[col_name].downcase!
         end
+
+        row_data
       end
 
       def replace_nil_equivalents_with_nil(row_data)
         row_data.each do |k, v|
           row_data[k] = nil if v.is_a?(String) && ['n/a', '-', ''].include?(v.downcase)
         end
+
+        row_data
       end
 
       def sanitize_row_data(row_data)
-        # 'roo' strips cells automatically...
-        replace_nil_equivalents_with_nil(row_data)
+        row_data = strip_whitespaces(row_data)
+        row_data = replace_nil_equivalents_with_nil(row_data)
         correct_capitalization(row_data)
       end
     end

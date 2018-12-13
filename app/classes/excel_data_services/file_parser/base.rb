@@ -27,9 +27,8 @@ module ExcelDataServices
           # Parse all but first row
           rows_data = []
           raw_rows_without_headers(sheet_data).each do |row_nr|
-            row_data = strip_whitespaces(sheet_data.row(row_nr))
-            row_data = sanitize_row_data(row_data)
-            rows_data << build_row_obj(headers, row_data).merge(row_nr: row_nr)
+            row_data = build_row_obj(headers, sheet_data.row(row_nr))
+            rows_data << row_data.merge(row_nr: row_nr)
           end
 
           @sheets_data[sheet_name][:rows_data] = rows_data
@@ -84,15 +83,18 @@ module ExcelDataServices
       end
 
       def strip_whitespaces(row_data)
-        row_data.map! { |el| el.is_a?(String) ? el.strip : el }
-      end
-
-      def build_row_obj(headers, row)
-        headers.zip(row).to_h
+        row_data.each_with_object({}) do |(k, v), hsh|
+          hsh[k] = v.is_a?(String) ? v.strip : v
+        end
       end
 
       def sanitize_row_data(row_data)
-        row_data
+        strip_whitespaces(row_data)
+      end
+
+      def build_row_obj(headers, row)
+        row_data = headers.zip(row).to_h
+        sanitize_row_data(row_data)
       end
 
       def restructure_data(_data)

@@ -19,10 +19,6 @@ module ExcelDataServices
         @tenant = Tenant.find(tenant_id)
         @data = data
         @options = options
-        stat_descriptors = %i(itineraries
-                              stops
-                              pricings
-                              pricing_details)
         @stats = stat_descriptors.each_with_object({}) do |descriptor, hsh|
           hsh[descriptor] = {
             number_updated: 0,
@@ -50,6 +46,13 @@ module ExcelDataServices
       end
 
       private
+
+      def stat_descriptors
+        %i(itineraries
+           stops
+           pricings
+           pricing_details)
+      end
 
       def add_stats(descriptor, data_record)
         if data_record.new_record?

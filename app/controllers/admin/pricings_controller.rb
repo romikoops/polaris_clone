@@ -173,11 +173,11 @@ class Admin::PricingsController < Admin::AdminBaseController
 
     klass = ExcelDataServices::FileParser.const_get(klass_identifier)
     options = { tenant_id: tenant_id, file_or_path: file }
-    parsed_data = klass.new(options).perform
+    sheets_data = klass.new(options).perform
 
     klass = ExcelDataServices::DatabaseInserter.const_get(klass_identifier)
     options = { tenant_id: tenant_id,
-                data: parsed_data,
+                data: sheets_data,
                 options: { should_generate_trips: false } }
     insertion_stats = klass.new(options).perform
 

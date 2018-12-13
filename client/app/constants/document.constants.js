@@ -22,6 +22,7 @@ export const documentGlossary = {
   stops: 'Stops',
   pricings: 'Pricings',
   pricing_details: 'Pricing Details',
+  local_charges: 'Local Charges',
   number_updated: 'Number Updated',
   number_created: 'Number Created',
   itineraryPricings: 'Itinerary Pricings',
@@ -32,7 +33,6 @@ export const documentGlossary = {
   trucking_queries: 'Trucking Queries',
   trucking_pricings: 'Trucking Pricings',
   trucking_hubs: 'Trucking Hubs',
-  localCharges: 'Local Charges',
   customs: 'Customs Fees'
 }
 
