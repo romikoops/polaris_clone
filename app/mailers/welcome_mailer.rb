@@ -8,9 +8,9 @@ class WelcomeMailer < ApplicationMailer
     return unless  Content.exists?(tenant_id: user.tenant_id, component: 'WelcomeMail')
 
     @user = user
-    tenant = @user.tenant
-    @theme = tenant.theme
-    @content = Content.get_component('WelcomeMail', tenant.id)
+    @tenant = @user.tenant
+    @theme = @tenant.theme
+    @content = Content.get_component('WelcomeMail', @tenant.id)
     
     mail(
       to: @user.email,
