@@ -7,5 +7,5 @@ class LocalCharge < ApplicationRecord
   belongs_to :tenant_vehicle, optional: true
   belongs_to :counterpart_hub, class_name: 'Hub', optional: true
 
-  scope :for_mode_of_transport, ->(mot = nil) { where(mode_of_transport: mot) if mot }
+  scope :for_mode_of_transport, ->(mot) { where(mode_of_transport: mot) }
 end

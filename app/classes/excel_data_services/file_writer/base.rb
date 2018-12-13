@@ -26,8 +26,8 @@ module ExcelDataServices
 
       attr_reader :tenant, :file_name, :xlsx
 
-      def initialize(tenant_id:, file_name:)
-        @tenant = Tenant.find(tenant_id)
+      def initialize(tenant:, file_name:)
+        @tenant = tenant
         @file_name = file_name.remove(/.xlsx$/) + '.xlsx'
         @xlsx = nil
       end

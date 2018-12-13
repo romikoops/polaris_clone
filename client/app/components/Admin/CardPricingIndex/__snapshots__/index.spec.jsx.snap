@@ -95,7 +95,35 @@ exports[`scope has show_beta_features 1`] = `
                     <p
                       className="flex-100"
                     >
-                      Upload FCL/LCL Pricings Sheet
+                      Upload {{mot}} {{loadType}} Pricings Sheet
+                    </p>
+                    <FileUploader
+                      dispatchFn={[Function]}
+                      formClasses=""
+                      size="full"
+                      square={false}
+                      t={[Function]}
+                      text="Dedicated Pricings .xlsx"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                      tooltip="By using the Excel template you can update all your LCL rates with one upload"
+                      type="xlsx"
+                      uploadFn={null}
+                    />
+                  </div>
+                  <div
+                    className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                  >
+                    <p
+                      className="flex-100"
+                    >
+                      Upload {{mot}} {{loadType}} Pricings Sheet
                     </p>
                     <FileUploader
                       dispatchFn={[Function]}
@@ -156,17 +184,46 @@ exports[`scope has show_beta_features 1`] = `
                     <p
                       className="flex-100"
                     >
-                      Download {{mot}} Pricings Sheet
+                      Download {{mot}} {{loadType}} Pricings Sheet
                     </p>
                     <Connect(DocumentsDownloader)
                       options={
                         Object {
+                          "load_type": "cargo_item",
                           "mot": "ocean",
                         }
                       }
                       size="full"
                       t={[Function]}
-                      target="pricing"
+                      target="pricing_cargo_item"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                  >
+                    <p
+                      className="flex-100"
+                    >
+                      Download {{mot}} {{loadType}} Pricings Sheet
+                    </p>
+                    <Connect(DocumentsDownloader)
+                      options={
+                        Object {
+                          "load_type": "container",
+                          "mot": "ocean",
+                        }
+                      }
+                      size="full"
+                      t={[Function]}
+                      target="pricing_container"
                       theme={
                         Object {
                           "colors": Object {
@@ -371,17 +428,46 @@ exports[`shallow render 1`] = `
                     <p
                       className="flex-100"
                     >
-                      Download {{mot}} Pricings Sheet
+                      Download {{mot}} {{loadType}} Pricings Sheet
                     </p>
                     <Connect(DocumentsDownloader)
                       options={
                         Object {
+                          "load_type": "cargo_item",
                           "mot": "ocean",
                         }
                       }
                       size="full"
                       t={[Function]}
-                      target="pricing"
+                      target="pricing_cargo_item"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                  >
+                    <p
+                      className="flex-100"
+                    >
+                      Download {{mot}} {{loadType}} Pricings Sheet
+                    </p>
+                    <Connect(DocumentsDownloader)
+                      options={
+                        Object {
+                          "load_type": "container",
+                          "mot": "ocean",
+                        }
+                      }
+                      size="full"
+                      t={[Function]}
+                      target="pricing_container"
                       theme={
                         Object {
                           "colors": Object {
@@ -513,7 +599,9 @@ exports[`state.page > 1 1`] = `
           <div
             className="flex-100 layout-row layout-wrap layout-align-center-start"
           >
+<<<<<<< HEAD
             
+=======
             <CollapsingBar
               collapsed={true}
               content={
@@ -526,17 +614,136 @@ exports[`state.page > 1 1`] = `
                     <p
                       className="flex-100"
                     >
-                      Download {{mot}} Pricings Sheet
+                      Upload {{mot}} {{loadType}} Pricings Sheet
+                    </p>
+                    <FileUploader
+                      dispatchFn={[Function]}
+                      formClasses=""
+                      size="full"
+                      square={false}
+                      t={[Function]}
+                      text="Dedicated Pricings .xlsx"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                      tooltip="By using the Excel template you can update all your LCL rates with one upload"
+                      type="xlsx"
+                      uploadFn={null}
+                    />
+                  </div>
+                  <div
+                    className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                  >
+                    <p
+                      className="flex-100"
+                    >
+                      Upload {{mot}} {{loadType}} Pricings Sheet
+                    </p>
+                    <FileUploader
+                      dispatchFn={[Function]}
+                      formClasses=""
+                      size="full"
+                      square={false}
+                      t={[Function]}
+                      text="Dedicated Pricings .xlsx"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                      tooltip="By using the Excel template you can update all your LCL rates with one upload"
+                      type="xlsx"
+                      uploadFn={null}
+                    />
+                  </div>
+                </div>
+              }
+              contentHeader=""
+              faClass="fa fa-cloud-upload"
+              handleCollapser={[Function]}
+              headerWrapClasses=""
+              mainWrapperStyle={Object {}}
+              minHeight=""
+              parentClass=""
+              showArrow={true}
+              startCollapsed={false}
+              styleHeader={
+                Object {
+                  "background": "#E0E0E0",
+                  "color": "#4F4F4F",
+                }
+              }
+              text="Upload Data"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+>>>>>>> a2008aa5b... IMC-621 update snapshots........
+            <CollapsingBar
+              collapsed={true}
+              content={
+                <div
+                  className="open_filter flex-100 layout-row layout-wrap layout-align-center-start"
+                >
+                  <div
+                    className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                  >
+                    <p
+                      className="flex-100"
+                    >
+                      Download {{mot}} {{loadType}} Pricings Sheet
                     </p>
                     <Connect(DocumentsDownloader)
                       options={
                         Object {
+                          "load_type": "cargo_item",
                           "mot": "ocean",
                         }
                       }
                       size="full"
                       t={[Function]}
-                      target="pricing"
+                      target="pricing_cargo_item"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                  >
+                    <p
+                      className="flex-100"
+                    >
+                      Download {{mot}} {{loadType}} Pricings Sheet
+                    </p>
+                    <Connect(DocumentsDownloader)
+                      options={
+                        Object {
+                          "load_type": "container",
+                          "mot": "ocean",
+                        }
+                      }
+                      size="full"
+                      t={[Function]}
+                      target="pricing_container"
                       theme={
                         Object {
                           "colors": Object {

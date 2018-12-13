@@ -47,34 +47,65 @@ exports[`scope.show_beta_features is truthy 1`] = `
                         url="/admin/hubs/process_csv"
                       />
                     </div>
-                    <div
-                      className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
-                    >
-                      <p
-                        className="flex-100 center"
+                    <div>
+                      <div
+                        className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
                       >
-                        Upload Local Charges Sheet
-                      </p>
-                      <FileUploader
-                        dispatchFn={null}
-                        formClasses=""
-                        size="small"
-                        square={false}
-                        t={[Function]}
-                        text="Hub .xlsx"
-                        theme={
-                          Object {
-                            "colors": Object {
-                              "primary": "#333",
-                              "secondary": "#fafafa",
-                            },
+                        <p
+                          className="flex-100 center"
+                        >
+                          Upload {{mot}} Local Charges Sheet
+                        </p>
+                        <FileUploader
+                          dispatchFn={[Function]}
+                          formClasses=""
+                          size="small"
+                          square={false}
+                          t={[Function]}
+                          text="Hub .xlsx"
+                          theme={
+                            Object {
+                              "colors": Object {
+                                "primary": "#333",
+                                "secondary": "#fafafa",
+                              },
+                            }
                           }
-                        }
-                        tooltip=""
-                        type="xlsx"
-                        uploadFn={null}
-                        url="/admin/service_charges/process_csv"
-                      />
+                          tooltip=""
+                          type="xlsx"
+                          uploadFn={null}
+                          url="/admin/service_charges/process_csv"
+                        />
+                      </div>
+                      <div
+                        className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                      >
+                        <p
+                          className="flex-100 center"
+                        >
+                          Upload {{mot}} Local Charges Sheet
+                        </p>
+                        <FileUploader
+                          dispatchFn={[Function]}
+                          formClasses=""
+                          size="small"
+                          square={false}
+                          t={[Function]}
+                          text="Hub .xlsx"
+                          theme={
+                            Object {
+                              "colors": Object {
+                                "primary": "#333",
+                                "secondary": "#fafafa",
+                              },
+                            }
+                          }
+                          tooltip=""
+                          type="xlsx"
+                          uploadFn={null}
+                          url="/admin/service_charges/process_csv"
+                        />
+                      </div>
                     </div>
                   </div>
                 }
@@ -128,57 +159,59 @@ exports[`scope.show_beta_features is truthy 1`] = `
                         }
                       />
                     </div>
-                    <div
-                      className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
-                    >
-                      <p
-                        className="flex-100 center"
+                    <div>
+                      <div
+                        className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
                       >
-                        Download Ocean Local Charges Sheet
-                      </p>
-                      <Connect(DocumentsDownloader)
-                        options={
-                          Object {
-                            "mot": "ocean",
+                        <p
+                          className="flex-100 center"
+                        >
+                          Download {{mot}} Local Charges Sheet
+                        </p>
+                        <Connect(DocumentsDownloader)
+                          options={
+                            Object {
+                              "mot": "ocean",
+                            }
                           }
-                        }
-                        t={[Function]}
-                        target="local_charges"
-                        theme={
-                          Object {
-                            "colors": Object {
-                              "primary": "#333",
-                              "secondary": "#fafafa",
-                            },
+                          t={[Function]}
+                          target="local_charges"
+                          theme={
+                            Object {
+                              "colors": Object {
+                                "primary": "#333",
+                                "secondary": "#fafafa",
+                              },
+                            }
                           }
-                        }
-                      />
-                    </div>
-                    <div
-                      className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
-                    >
-                      <p
-                        className="flex-100 center"
+                        />
+                      </div>
+                      <div
+                        className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
                       >
-                        Download Air Local Charges Sheet
-                      </p>
-                      <Connect(DocumentsDownloader)
-                        options={
-                          Object {
-                            "mot": "air",
+                        <p
+                          className="flex-100 center"
+                        >
+                          Download {{mot}} Local Charges Sheet
+                        </p>
+                        <Connect(DocumentsDownloader)
+                          options={
+                            Object {
+                              "mot": "air",
+                            }
                           }
-                        }
-                        t={[Function]}
-                        target="local_charges"
-                        theme={
-                          Object {
-                            "colors": Object {
-                              "primary": "#333",
-                              "secondary": "#fafafa",
-                            },
+                          t={[Function]}
+                          target="local_charges"
+                          theme={
+                            Object {
+                              "colors": Object {
+                                "primary": "#333",
+                                "secondary": "#fafafa",
+                              },
+                            }
                           }
-                        }
-                      />
+                        />
+                      </div>
                     </div>
                   </div>
                 }
@@ -317,57 +350,59 @@ exports[`shallow render 1`] = `
                         }
                       />
                     </div>
-                    <div
-                      className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
-                    >
-                      <p
-                        className="flex-100 center"
+                    <div>
+                      <div
+                        className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
                       >
-                        Download Ocean Local Charges Sheet
-                      </p>
-                      <Connect(DocumentsDownloader)
-                        options={
-                          Object {
-                            "mot": "ocean",
+                        <p
+                          className="flex-100 center"
+                        >
+                          Download {{mot}} Local Charges Sheet
+                        </p>
+                        <Connect(DocumentsDownloader)
+                          options={
+                            Object {
+                              "mot": "ocean",
+                            }
                           }
-                        }
-                        t={[Function]}
-                        target="local_charges"
-                        theme={
-                          Object {
-                            "colors": Object {
-                              "primary": "#333",
-                              "secondary": "#fafafa",
-                            },
+                          t={[Function]}
+                          target="local_charges"
+                          theme={
+                            Object {
+                              "colors": Object {
+                                "primary": "#333",
+                                "secondary": "#fafafa",
+                              },
+                            }
                           }
-                        }
-                      />
-                    </div>
-                    <div
-                      className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
-                    >
-                      <p
-                        className="flex-100 center"
+                        />
+                      </div>
+                      <div
+                        className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
                       >
-                        Download Air Local Charges Sheet
-                      </p>
-                      <Connect(DocumentsDownloader)
-                        options={
-                          Object {
-                            "mot": "air",
+                        <p
+                          className="flex-100 center"
+                        >
+                          Download {{mot}} Local Charges Sheet
+                        </p>
+                        <Connect(DocumentsDownloader)
+                          options={
+                            Object {
+                              "mot": "air",
+                            }
                           }
-                        }
-                        t={[Function]}
-                        target="local_charges"
-                        theme={
-                          Object {
-                            "colors": Object {
-                              "primary": "#333",
-                              "secondary": "#fafafa",
-                            },
+                          t={[Function]}
+                          target="local_charges"
+                          theme={
+                            Object {
+                              "colors": Object {
+                                "primary": "#333",
+                                "secondary": "#fafafa",
+                              },
+                            }
                           }
-                        }
-                      />
+                        />
+                      </div>
                     </div>
                   </div>
                 }

@@ -10,8 +10,8 @@ module ExcelDataServices
 
       attr_reader :tenant, :xlsx, :sheets_data
 
-      def initialize(tenant_id:, file_or_path:)
-        @tenant = Tenant.find(tenant_id)
+      def initialize(tenant:, file_or_path:)
+        @tenant = tenant
         @xlsx = open_spreadsheet_file(file_or_path)
         @sheets_data = {}
       end

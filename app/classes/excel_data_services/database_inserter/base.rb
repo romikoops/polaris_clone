@@ -7,16 +7,8 @@ module ExcelDataServices
       HubNotFoundError = Class.new(InsertionError)
       InvalidDataExtractionMethodError = Class.new(InsertionError)
 
-      private
-
-      attr_reader :options, :stats
-
-      public
-
-      attr_reader :tenant, :data
-
-      def initialize(tenant_id:, data:, options: {})
-        @tenant = Tenant.find(tenant_id)
+      def initialize(tenant:, data:, options: {})
+        @tenant = tenant
         @data = data
         @options = options
         @stats = stat_descriptors.each_with_object({}) do |descriptor, hsh|
@@ -31,7 +23,7 @@ module ExcelDataServices
         data.each_with_index do |(_k_sheet_name, values), _sheet_i|
           data_extraction_method = values[:data_extraction_method]
           values[:rows_data].each_with_index do |row, _row_i|
-            itinerary = find_or_initialize_itinerary(row)
+            itinerary = find_or_initialize_itinerary(itinerary_name(row), row[:mot])
             stops = find_or_initialize_stops(row, itinerary)
             itinerary.stops << stops
             itinerary.save!
@@ -46,6 +38,8 @@ module ExcelDataServices
       end
 
       private
+
+      attr_reader :tenant, :data, :options, :stats
 
       def stat_descriptors
         %i(itineraries
@@ -66,11 +60,11 @@ module ExcelDataServices
         [row[:origin], row[:destination]].join(' - ')
       end
 
-      def find_or_initialize_itinerary(row)
+      def find_or_initialize_itinerary(name, mot)
         itinerary = Itinerary.find_or_initialize_by(
-          name: itinerary_name(row),
-          mode_of_transport: row[:mot],
-          tenant: @tenant
+          name: name,
+          mode_of_transport: mot,
+          tenant: tenant
         )
         add_stats(:itineraries, itinerary)
 

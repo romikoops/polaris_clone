@@ -5,8 +5,8 @@ module ExcelDataServices
     class LocalCharges < Base
       include ExcelDataServices::LocalChargesTool
 
-      def initialize(tenant_id:, file_name:, mode_of_transport: nil)
-        super(tenant_id: tenant_id, file_name: file_name)
+      def initialize(tenant:, file_name:, mode_of_transport: nil)
+        super(tenant: tenant, file_name: file_name)
         @mode_of_transport = mode_of_transport
       end
 
@@ -16,7 +16,8 @@ module ExcelDataServices
 
       def load_and_prepare_data
         rows_data = []
-        tenant.local_charges.for_mode_of_transport(mode_of_transport)&.each do |local_charge|
+        local_charges = mode_of_transport ? tenant.local_charges.for_mode_of_transport(mode_of_transport) : tenant.local_charges
+        local_charges&.each do |local_charge|
           local_charge[:fees].values.each do |fee_values_h|
             rows_data << build_row_data(local_charge, fee_values_h)
           end

@@ -40,9 +40,7 @@ exports[`shallow render 1`] = `
           <p
             className="flex-none"
           >
-            <strong>
-              Pricings
-            </strong>
+            <strong />
           </p>
         </div>
         <div
@@ -51,7 +49,7 @@ exports[`shallow render 1`] = `
           <p
             className="flex-none"
           >
-            No. created: NUMBER_CREATED
+            No. created: undefined
           </p>
         </div>
         <div
@@ -60,7 +58,38 @@ exports[`shallow render 1`] = `
           <p
             className="flex-none"
           >
-            No. updated: NUMBER_UPDATED
+            No. updated: undefined
+          </p>
+        </div>
+      </div>
+      <div
+        className="stat_row flex-100 layout-row layout-align-space-between-center"
+      >
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+        >
+          <p
+            className="flex-none"
+          >
+            <strong />
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+        >
+          <p
+            className="flex-none"
+          >
+            No. created: undefined
+          </p>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-start-center"
+        >
+          <p
+            className="flex-none"
+          >
+            No. updated: undefined
           </p>
         </div>
       </div>

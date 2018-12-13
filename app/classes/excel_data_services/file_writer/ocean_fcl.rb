@@ -9,7 +9,7 @@ module ExcelDataServices
       private
 
       def load_and_prepare_data
-        pricings = tenant.pricings.for_mode_of_transport('ocean').all_fcl
+        pricings = tenant.pricings.for_mode_of_transport('ocean').for_load_type('container')
         raw_pricing_rows = build_raw_pricing_rows(pricings)
 
         dynamic_headers = raw_pricing_rows.map { |x| x[:shipping_type]&.downcase&.to_sym }.uniq.compact.sort

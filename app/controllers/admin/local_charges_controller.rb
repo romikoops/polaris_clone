@@ -29,10 +29,9 @@ class Admin::LocalChargesController < ApplicationController
 
   def edit
     data = params[:data].as_json
-    id = data['id']
-    data.delete('id')
+    id = data.delete('id')
     local_charge = LocalCharge.find(id)
-    local_charge.update_attributes(fees: data['fees'])
+    local_charge.update(fees: data['fees'])
     response_handler(local_charge)
   end
 
@@ -41,24 +40,23 @@ class Admin::LocalChargesController < ApplicationController
     id = data['id']
     data.delete('id')
     customs_fee = CustomsFee.find(id)
-    customs_fee.update_attributes(fees: data['fees'])
+    customs_fee.update(fees: data['fees'])
     response_handler(customs_fee)
   end
 
-  def upload_local_charges
-    tenant_id = current_tenant.id
+  def upload
     file = upload_params[:file].tempfile
 
-    options = { tenant_id: tenant_id, file_or_path: file }
+    options = { tenant: current_tenant, file_or_path: file }
     sheets_data = ExcelDataServices::FileParser::LocalCharges.new(options).perform
 
-    options = { tenant_id: tenant_id, data: sheets_data }
+    options = { tenant: current_tenant, data: sheets_data }
     insertion_stats = ExcelDataServices::DatabaseInserter::LocalCharges.new(options).perform
 
     response_handler(insertion_stats)
   end
 
-  def download_local_charges
+  def download
     mot = download_params[:mot].downcase
     file_name = "#{current_tenant.name.downcase}__local_charges_#{mot}"
 
