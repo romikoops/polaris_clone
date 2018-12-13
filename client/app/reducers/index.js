@@ -7,6 +7,7 @@ import users from './user.reducer'
 import registration from './registration.reducer'
 import shipment from './shipment.reducer'
 import alert from './alert.reducer'
+import error from './error.reducer'
 import admin from './admin.reducer'
 import app from './app.reducer'
 import document from './document.reducer'
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
   registration,
   users,
   alert,
+  error,
   filter,
   bookingData: shipment,
   selectedSubdomain,

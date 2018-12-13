@@ -23,6 +23,7 @@ import Autocomplete from './Autocomplete'
 import removeTabIndex from './removeTabIndex'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 import CircleCompletion from '../CircleCompletion/CircleCompletion'
+import OfferError from '../ErrorHandling/OfferError'
 import { has, get } from 'lodash'
 
 const mapStyles = mapStyling
@@ -228,7 +229,6 @@ class ShipmentLocationBox extends PureComponent {
         this.adjustMapBounds()
       })
       this.props.setNotesIds(null, 'destination')
-
 
       if (this.props.destination !== {}) {
         this.props.setTargetAddress('destination', {})
@@ -659,6 +659,14 @@ class ShipmentLocationBox extends PureComponent {
     }, 1500)
   }
 
+  showErrorDrawer (error) {
+    const { errorDispatch } = this.props
+    errorDispatch.setError(error)
+    setTimeout(() => {
+      errorDispatch.clearError(error)
+    }, 10000)
+  }
+
   selectLocation (place, target) {
     this.setState(prevState => ({
       fetchingtruckingAvailability: {
@@ -714,15 +722,33 @@ class ShipmentLocationBox extends PureComponent {
                   autoText: {
                     ...prevState.autoText,
                     [target]: ''
-                  }
+                  },
+                  showTick: false
                 }))
               }
               target === 'origin' ? this.setOriginNexus(nexusOption) : this.setDestNexus(nexusOption)
 
               const fieldsHaveErrors = !nexusOption
-              this.setState({ [`${target}FieldsHaveErrors`]: fieldsHaveErrors, lastTarget: target })
+              this.setState(prevState => ({
+                [`${target}FieldsHaveErrors`]: fieldsHaveErrors,
+                lastTarget: target,
+                showTick: false,
+                fetchingTruckingAvailbility: {
+                  ...prevState.fetchingTruckingAvailability,
+                  [target]: false
+                },
+                showOriginFields: false
+              }))
               this.props.handleSelectLocation(target, fieldsHaveErrors)
             })
+            const error = {
+              componentName: 'ShipmentLocationBox',
+              code: '1101',
+              target,
+              side: target === 'origin' ? 'left' : 'right',
+              targetAddress: fullAddress
+            }
+            this.showErrorDrawer(error)
           } else {
             this.setMarker(
               {
@@ -743,7 +769,10 @@ class ShipmentLocationBox extends PureComponent {
             }
             this.showCompletionTick(target)
             this.setState(prevState => ({
-              fetchingtruckingAvailability: false,
+              fetchingtruckingAvailability: {
+                ...prevState.fetchingtruckingAvailability,
+                [target]: false
+              },
               truckingOptions: {
                 ...prevState.truckingOptions,
                 [`${prefix}Carriage`]: truckingAvailable
@@ -1055,7 +1084,7 @@ class ShipmentLocationBox extends PureComponent {
 
   render () {
     const {
-      scope, shipmentData, nextStageAttempts, origin, destination, selectedTrucking, t
+      scope, shipmentData, nextStageAttempts, origin, destination, selectedTrucking, t, availableMots, errorDispatch
     } = this.props
 
     let originOptions = []
@@ -1269,6 +1298,8 @@ class ShipmentLocationBox extends PureComponent {
           handleLocationSelect={place => this.handleLocationChange(place, 'origin')}
           countries={countries.origin}
           scope={scope}
+          errorDispatch={errorDispatch}
+          target="origin"
         />
       </div>
     )
@@ -1417,6 +1448,8 @@ class ShipmentLocationBox extends PureComponent {
             handleLocationSelect={place => this.handleLocationChange(place, 'destination')}
             countries={countries.destination}
             scope={scope}
+            errorDispatch={errorDispatch}
+            target="destination"
           />
         </div>
       </div>
@@ -1503,7 +1536,7 @@ class ShipmentLocationBox extends PureComponent {
             <div
               className={`flex-100 layout-row layout-wrap layout-align-center-start ${
                 styles.input_box
-              } ${truckTypesStyle} ${errorClass}`}
+              } ${truckTypesStyle}`}
             >
               <div className="flex-45 layout-row layout-wrap layout-align-start-start mc">
                 {speciality !== 'truck'
@@ -1612,7 +1645,8 @@ class ShipmentLocationBox extends PureComponent {
                 </div>
               </div>
             </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start relative">
+              <OfferError availableMots={availableMots} componentName="ShipmentLocationBox" />
               <div id="map" style={mapStyle} />
             </div>
           </div>

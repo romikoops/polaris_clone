@@ -864,7 +864,13 @@
     "invalidRequest": "Your request was not valid. Check inputs and try again.",
     "notFound": "The place you searched for could not be found.",
     "zeroResults": "No results were found for your search",
-    "unknownError": "An unknown error has occurred. Please try again in a few minutes."
+    "unknownError": "An unknown error has occurred. Please try again in a few minutes.",
+    "offerErrorTitle": "Oh no!",
+    "offerErrorTrucking": "We are having trouble calculating trucking {{prep}}:",
+    "offerErrorContact": "Don't worry we are here to help make your booking happen. Just reach out through any of the contacts below to complete your booking.",
+    "offerErrorCode": "Error Code: {{code}}",
+    "salesTeamMot": "Contact the {{mot}} team by {{medium}} at",
+    "salesTeamGeneral": "Contact the sales team by {{medium}} at"
   },
   "trucking": {
     "isNotAvailableLocal": " is not available in ",

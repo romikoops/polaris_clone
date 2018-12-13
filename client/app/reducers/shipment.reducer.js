@@ -103,10 +103,10 @@ export default function shipment (state = {}, action) {
     case shipmentConstants.GET_OFFERS_FAILURE:
       return {
         ...state,
-        error: {
-          ...state.error,
-          stage2: [action.error]
-        },
+        // error: {
+        //   ...state.error,
+        //   stage2: [action.error]
+        // },
         loading: false
       }
     case shipmentConstants.SHIPMENT_GET_SCHEDULES_REQUEST: {
