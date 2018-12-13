@@ -49,7 +49,8 @@ module ExcelDataServices
       def build_raw_headers(sheet_name, rows_data)
         case sheet_name.to_s
         when 'No Ranges'
-          rows_data.flat_map(&:keys).compact.uniq
+          dynamic_headers = rows_data.flat_map(&:keys).compact.uniq - DYNAMIC_FEE_COLS_NO_RANGES_HEADERS
+          DYNAMIC_FEE_COLS_NO_RANGES_HEADERS + dynamic_headers
         when 'With Ranges'
           ONE_COL_FEE_AND_RANGES_HEADERS
         else

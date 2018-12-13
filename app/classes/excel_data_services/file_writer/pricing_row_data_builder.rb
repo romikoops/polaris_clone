@@ -47,6 +47,7 @@ module ExcelDataServices
         load_type = pricing.cargo_class.upcase # TODO: load_type is called cargo_class...
         trip = itinerary.trips.first if itinerary.trips
         transit_time = ((trip.end_date - trip.start_date).seconds / 1.day).round(0) if trip
+        transit_time = nil if transit_time.zero?
 
         pricing_attributes.merge(
           customer_email: customer_email,
@@ -63,7 +64,8 @@ module ExcelDataServices
       end
 
       def build_pricing_detail_only_row_data(pricing_detail)
-        fee_name = ChargeCategory.from_code(pricing_detail.shipping_type, tenant.id).name
+        charge_category = ChargeCategory.from_code(pricing_detail.shipping_type, tenant.id)
+        fee_name = charge_category.name
         pricing_detail.attributes.with_indifferent_access.except(
           :id,
           :created_at,

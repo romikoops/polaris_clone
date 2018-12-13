@@ -179,7 +179,7 @@ class Admin::PricingsController < Admin::AdminBaseController
     load_type = download_params[:load_type]
     key = "pricing_#{load_type}"
     new_load_type = load_type_renamed(load_type)
-    file_name = "#{current_tenant.name.downcase}__pricing_#{mot.downcase}_#{new_load_type.downcase}"
+    file_name = "#{current_tenant.subdomain.downcase}__pricing_#{mot.downcase}_#{new_load_type.downcase}"
 
     klass_identifier = "#{mot.capitalize}#{new_load_type.capitalize}"
 

@@ -143,11 +143,11 @@ module ExcelDataServices
       def pricing_detail_params_by_one_col_fee_and_ranges(row)
         fee_code = row[:fee_code].upcase
         ChargeCategory.find_or_create_by!(code: fee_code,
-                                          name: row[:fee_name],
+                                          name: row[:fee_name] || fee_code,
                                           tenant_id: tenant.id)
 
         pricing_detail_params = { rate_basis: row[:rate_basis],
-                                  shipping_type: fee_code,
+                                  shipping_type: row[:fee_code].upcase,
                                   currency_name: row[:currency].upcase,
                                   tenant_id: @tenant.id }
         if row.has_key?(:range)

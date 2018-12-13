@@ -9,6 +9,12 @@ module ExcelDataServices
         available_carriers = all_carriers_of_tenant
 
         data.each do |params|
+          params[:fees].each do |fee_code, values|
+            ChargeCategory.find_or_create_by!(code: fee_code,
+                                              name: values[:name],
+                                              tenant_id: tenant.id)
+          end
+
           if params[:carrier] == 'all'
             available_carriers.each do |carrier|
               tenant_vehicles = find_or_create_tenant_vehicles(params, carrier)
@@ -69,6 +75,7 @@ module ExcelDataServices
                                             :counterpart_country,
                                             :carrier,
                                             :service_level)
+
         local_charge = @tenant.local_charges.find_or_initialize_by(local_charge_params)
         add_stats(:local_charges, local_charge)
         local_charge.tap(&:save!)

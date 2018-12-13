@@ -19,7 +19,7 @@ module ExcelDataServices
                                      counterpart_country)
 
         col_names_to_capitalize.each do |col_name|
-          row_data[col_name] = row_data[col_name].titleize
+          row_data[col_name] = row_data[col_name]&.titleize
         end
 
         col_names_containing_all = %i(counterpart_hub
@@ -28,7 +28,7 @@ module ExcelDataServices
                                       carrier)
 
         col_names_containing_all.each do |col_name|
-          row_data[col_name].downcase! if row_data[col_name].casecmp('all').zero?
+          row_data[col_name].downcase! if row_data[col_name]&.casecmp('all')&.zero?
         end
 
         col_names_to_downcase = %i(load_type
@@ -36,7 +36,7 @@ module ExcelDataServices
                                    direction)
 
         col_names_to_downcase.each do |col_name|
-          row_data[col_name].downcase!
+          row_data[col_name]&.downcase!
         end
 
         row_data

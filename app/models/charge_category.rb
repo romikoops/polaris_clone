@@ -39,14 +39,15 @@ class ChargeCategory < ApplicationRecord
     end
   end
 
-  def self.from_code(code, tenant_id=nil)
+  def self.from_code(code, tenant_id = nil)
+    code = code.to_s.upcase
     tenant_charge_category = find_by(code: code, tenant_id: tenant_id)
     return tenant_charge_category unless tenant_charge_category.nil?
-    find_by_code(code) ||
-      find_or_create_by(
-        code: code,
-        name: code.to_s.humanize.split(' ').map(&:capitalize).join(' ')
-      )
+    find_or_create_by(
+      code: code,
+      name: code.to_s.humanize.split(' ').map(&:capitalize).join(' '),
+      tenant_id: tenant_id
+    )
   end
 
   def self.from_fee(fee)

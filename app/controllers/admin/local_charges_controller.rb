@@ -58,9 +58,9 @@ class Admin::LocalChargesController < ApplicationController
 
   def download
     mot = download_params[:mot].downcase
-    file_name = "#{current_tenant.name.downcase}__local_charges_#{mot}"
+    file_name = "#{current_tenant.subdomain.downcase}__local_charges_#{mot}"
 
-    options = { tenant_id: current_tenant.id, file_name: file_name, mode_of_transport: mot }
+    options = { tenant: current_tenant, file_name: file_name, mode_of_transport: mot }
     document = ExcelDataServices::FileWriter::LocalCharges.new(options).perform
 
     response_handler(key: 'local_charges', url: rails_blob_url(document.file, disposition: 'attachment'))

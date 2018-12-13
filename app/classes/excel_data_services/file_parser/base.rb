@@ -18,7 +18,10 @@ module ExcelDataServices
 
       def perform
         @xlsx.each_with_pagename do |sheet_name, sheet_data|
-          headers = parse_headers(sheet_data.first)
+          first_row_index = sheet_data.first_row
+          next unless first_row_index
+
+          headers = parse_headers(sheet_data.row(first_row_index))
           data_extraction_method = determine_data_extraction_method(headers)
           @sheets_data[sheet_name] = { data_extraction_method: data_extraction_method }
 

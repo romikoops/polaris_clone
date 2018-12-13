@@ -53,7 +53,7 @@ module ExcelDataServices
         end
 
         def build_charge_params_from_row_with_error_data(row)
-          rate_basis = RateBasis.get_internal_key(row[:rate_basis].upcase)
+          rate_basis = row[:rate_basis].upcase
           standard_charge_params =
             { currency: row[:currency],
               expiration_date: row[:expiration_date],
@@ -62,11 +62,11 @@ module ExcelDataServices
               key: row[:fee_code],
               min: row[:min],
               max: row[:maximum],
-              rate_basis: row[:rate_basis] }
+              rate_basis: rate_basis }
 
           specific_charge_params = specific_charge_params_for_reading(rate_basis, row)
           error_data = specific_charge_params.values.reduce([]) do |error_info, value|
-            error_info << { row_nr: row[:row_nr], rate_basis_name: rate_basis.upcase } if value.nil?
+            error_info << { row_nr: row[:row_nr], rate_basis_name: rate_basis } if value.nil?
           end
 
           ChargeCategory.find_or_create_by!(code: row[:fee_code], name: row[:fee], tenant_id: tenant.id)

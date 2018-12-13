@@ -41,8 +41,7 @@ module ExcelDataServices
         tenant_vehicle = local_charge.tenant_vehicle
         service_level = tenant_vehicle.name
         carrier = tenant_vehicle.carrier&.name
-        rate_basis = fee[:rate_basis]
-
+        rate_basis = fee[:rate_basis].upcase
         charge_params = specific_charge_params_for_writing(rate_basis, fee)
 
         {
@@ -78,8 +77,8 @@ module ExcelDataServices
             h[:counterpart_country] || '',
             h[:counterpart_hub_name] || '',
             h[:load_type] || '',
-            h[:effective_date] || '',
-            h[:expiration_date] || '',
+            h[:effective_date].to_s || '',
+            h[:expiration_date].to_s || '',
             h[:carrier] || '',
             h[:service_level] || '',
             h[:rate_basis] || '',
