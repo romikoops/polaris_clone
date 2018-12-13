@@ -31,24 +31,23 @@ export class AdminUploadsSuccess extends Component {
     const {
       t, theme, data, closeDialog
     } = this.props
-    const { stats, results } = data
-    const statView = Object.keys(stats)
-      .filter(key => key !== 'type' && key !== 'userAffected')
-      .map(k => (
+    const stats = data
+    const statView = stats ? Object.keys(stats)
+      .map(statKey => (
         <div className={`${styles.stat_row} flex-100 layout-row layout-align-space-between-center`}>
           <div className="flex-33 layout-row layout-align-start-center">
             <p className="flex-none">
-              <strong>{documentGlossary[k]}</strong>
+              <strong>{documentGlossary[statKey]}</strong>
             </p>
           </div>
           <div className="flex-33 layout-row layout-align-start-center">
-            <p className="flex-none">{`${t('admin:numberCreated')} ${stats[k].number_created}`}</p>
+            <p className="flex-none">{`${t('admin:numberCreated')} ${stats[statKey].number_created}`}</p>
           </div>
           <div className="flex-33 layout-row layout-align-start-center">
-            <p className="flex-none">{`${t('admin:numberUpdated')} ${stats[k].number_updated}`}</p>
+            <p className="flex-none">{`${t('admin:numberUpdated')} ${stats[statKey].number_updated}`}</p>
           </div>
         </div>
-      ))
+      )) : ''
 
     return (
       <div

@@ -9,7 +9,7 @@ module ExcelDataServices
 
       private
 
-      attr_reader :options
+      attr_reader :options, :stats
 
       public
 
@@ -19,12 +19,22 @@ module ExcelDataServices
         @tenant = Tenant.find(tenant_id)
         @data = data
         @options = options
+        stat_descriptors = %i(itineraries
+                              stops
+                              pricings
+                              pricing_details)
+        @stats = stat_descriptors.each_with_object({}) do |descriptor, hsh|
+          hsh[descriptor] = {
+            number_updated: 0,
+            number_created: 0
+          }
+        end
       end
 
       def perform
-        data.each_with_index do |(k_sheet_name, values), sheet_i|
+        data.each_with_index do |(_k_sheet_name, values), _sheet_i|
           data_extraction_method = values[:data_extraction_method]
-          values[:rows_data].each_with_index do |row, row_i|
+          values[:rows_data].each_with_index do |row, _row_i|
             itinerary = find_or_initialize_itinerary(row)
             stops = find_or_initialize_stops(row, itinerary)
             itinerary.stops << stops
@@ -33,26 +43,35 @@ module ExcelDataServices
             tenant_vehicle = find_or_create_tenant_vehicle(row)
             generate_trips(itinerary, row, tenant_vehicle) if should_generate_trips?
             create_pricing_with_pricing_details(row, tenant_vehicle, itinerary, data_extraction_method)
-
-            puts "Status: Sheet \"#{k_sheet_name}\" (##{sheet_i + 1}) | Row ##{row_i + 1}"
           end
         end
 
-        true
+        stats
       end
 
       private
+
+      def add_stats(descriptor, data_record)
+        if data_record.new_record?
+          @stats[descriptor][:number_created] += 1
+        else
+          @stats[descriptor][:number_updated] += 1
+        end
+      end
 
       def itinerary_name(row)
         [row[:origin], row[:destination]].join(' - ')
       end
 
       def find_or_initialize_itinerary(row)
-        Itinerary.find_or_initialize_by(
+        itinerary = Itinerary.find_or_initialize_by(
           name: itinerary_name(row),
           mode_of_transport: row[:mot],
           tenant: @tenant
         )
+        add_stats(:itineraries, itinerary)
+
+        itinerary
       end
 
       def append_hub_suffix(name, mot)
@@ -77,7 +96,10 @@ module ExcelDataServices
           raise HubNotFoundError, "Stop (Hub) with name \"#{hub_name}\" not found!" unless hub
 
           stop = itinerary.stops.find_by(hub_id: hub.id, index: i)
-          stop || Stop.new(hub_id: hub.id, index: i)
+          stop ||= Stop.new(hub_id: hub.id, index: i)
+          add_stats(:stops, stop)
+
+          stop
         end
       end
 
@@ -121,7 +143,7 @@ module ExcelDataServices
         )
       end
 
-      def pricing_details_with_one_col_fee_and_ranges(row)
+      def pricing_detail_params_by_one_col_fee_and_ranges(row)
         fee_code = row[:fee_code].upcase
         ChargeCategory.find_or_create_by!(code: fee_code,
                                           name: row[:fee_name],
@@ -144,12 +166,9 @@ module ExcelDataServices
         [pricing_detail_params]
       end
 
-      def find_or_create_pricing_details_for_pricing(pricing, row, _data_extraction_method)
-        pricing_detail_params_arr = pricing_details_with_one_col_fee_and_ranges(row)
-
-        pricing_detail_params_arr.each do |pricing_detail_params|
-          pricing.pricing_details.find_or_create_by(pricing_detail_params)
-        end
+      def build_pricing_detail_params_for_pricing(row, _data_extraction_method)
+        # Method shall be overwritten by classes that behave differently based on `data_extraction_method`
+        pricing_detail_params_by_one_col_fee_and_ranges(row)
       end
 
       def find_transport_category(tenant_vehicle, cargo_class)
@@ -170,8 +189,16 @@ module ExcelDataServices
           expiration_date: Date.parse(row[:expiration_date].to_s)
         }
 
-        pricing_to_update = itinerary.pricings.find_or_create_by!(pricing_params)
-        find_or_create_pricing_details_for_pricing(pricing_to_update, row, data_extraction_method)
+        pricing_to_update = itinerary.pricings.find_or_initialize_by(pricing_params)
+        add_stats(:pricings, pricing_to_update)
+        pricing_to_update.save!
+
+        pricing_detail_params_arr = build_pricing_detail_params_for_pricing(row, data_extraction_method)
+        pricing_detail_params_arr.each do |pricing_detail_params|
+          pricing_detail = pricing_to_update.pricing_details.find_or_initialize_by(pricing_detail_params)
+          add_stats(:pricing_details, pricing_detail)
+          pricing_detail.save!
+        end
       end
     end
   end

@@ -16,14 +16,15 @@ export const documentConstants = {
 }
 
 export const documentGlossary = {
+  itineraries: 'Itineraries',
+  layovers: 'Layovers',
+  trips: 'Trips',
+  stops: 'Stops',
   pricings: 'Pricings',
+  pricing_details: 'Pricing Details',
   number_updated: 'Number Updated',
   number_created: 'Number Created',
   itineraryPricings: 'Itinerary Pricings',
-  itineraries: 'Itineraries',
-  stops: 'Stops',
-  layovers: 'Layovers',
-  trips: 'Trips',
   userPricings: 'User Pricings',
   userAffected: 'Users Affected',
   hubs: 'Hubs',
