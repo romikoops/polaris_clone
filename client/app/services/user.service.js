@@ -70,15 +70,6 @@ function makePrimary (userId, addressId) {
   return fetch(`${getTenantApiUrl()}/users/${userId}/addresses/${addressId}`, requestOptions).then(handleResponse)
 }
 
-function optOut (userId, target) {
-  const requestOptions = {
-    method: 'POST',
-    headers: authHeader()
-  }
-
-  return fetch(`${getTenantApiUrl()}/users/${userId}/opt_out/${target}`, requestOptions).then(handleResponse)
-}
-
 function getStoredUser () {
   const sortedUser = JSON.parse(window.localStorage.getItem(cookieKey))
 
@@ -370,7 +361,6 @@ export const userService = {
   deleteContactAddress,
   editUserAddress,
   delete: _delete,
-  optOut,
   reuseShipment,
   searchShipments,
   deltaShipmentsPage,
