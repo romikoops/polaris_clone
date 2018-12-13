@@ -11,12 +11,13 @@ class AccountMailer < Devise::Mailer
     @primary_color = tenant.theme.dig('colors', 'primary')
 
     attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
-
-    opts[:subject] = 'ItsMyCargo Account Email Confirmation'
+    opts[:from] = tenant.emails.dig('support', 'general')
+    opts[:subject] = "#{tenant.name} Account Confirmation Email"
     redirect_url = base_url(tenant) + 'account'
     @confirmation_url = "#{base_server_url}tenants/#{tenant.id}/auth/confirmation?confirmation_token=#{token}&redirect_url=#{redirect_url}"
 
     @links = tenant.email_links ? tenant.email_links['confirmation_instructions'] : []
+
     WelcomeMailer.welcome_email(record).deliver_later
     super
   end
@@ -26,7 +27,7 @@ class AccountMailer < Devise::Mailer
     @primary_color = tenant.theme.dig('colors', 'primary')
 
     attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
-
+    opts[:from] = tenant.emails.dig('support', 'general')
     opts[:subject] = 'ItsMyCargo Account Password Reset'
     redirect_url = base_url(tenant) + 'password_reset'
     @reset_url = "#{base_server_url}tenants/#{tenant.id}/auth/password/edit?redirect_url=#{redirect_url}&reset_password_token=#{token}"
