@@ -1,4 +1,5 @@
 <% primary_color = @user.tenant.theme["colors"]["primary"] %>
+<% secondary_color = @user.tenant.theme["colors"]["secondary"] %>
 <mj-wrapper full-width="full-width" padding="0px">
   <mj-section full-width="full-width">
     <mj-column>
@@ -28,6 +29,11 @@
         <% end %>
         <mj-divider border-width="1px" border-style="dashed" border-color="lightgrey" />
       <% end %>
+      <% if @tenant.scope.dig('links', 'shop') %>
+        <mj-button font-family="Helvetica" background-color="<%= secondary_color%>" color="white" href="<%=@tenant.scope.dig('links','shop')%>">
+            Visit the <%= @tenant.name %> Online Shop
+        </mj-button>
+      <% end %>
     </mj-column>
   </mj-section>
 </mj-wrapper>
@@ -40,11 +46,22 @@
     </mj-column>
   </mj-section>
 </mj-wrapper>
+<% if @tenant.scope.dig('links', 'home') %>
+  <mj-wrapper full-width="full-width" padding="0px">
+    <mj-section full-width="full-width">
+      <mj-column width="100%" padding="0 2.5%">
+         <mj-button font-family="Helvetica" background-color="<%= primary_color%>" color="white" href="<%=@tenant.scope.dig('links','home')%>">
+          Visit the <%= @tenant.name %> homepage
+         </mj-button>
+      </mj-column>
+    </mj-section>
+  </mj-wrapper>
+<% end %>
 <mj-wrapper full-width="full-width" padding="0px">
   <mj-section full-width="full-width">
     <mj-column width="100%" padding="0 2.5%">
       <% @content['footer'].each do |section|%>
-        <mj-text line-height="24px">
+        <mj-text line-height="24px" >
           <%== section.text%>
         </mj-text>
         <% if section.image.attached?%>
