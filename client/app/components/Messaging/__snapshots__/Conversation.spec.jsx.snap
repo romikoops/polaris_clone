@@ -64,6 +64,20 @@ exports[`shallow render 1`] = `
             t={[Function]}
             tenant={
               Object {
+                "emails": Object {
+                  "sales": Object {
+                    "air": "sales@demo.com",
+                    "general": "sales@demo.com",
+                    "ocean": "sales@demo.com",
+                    "rail": "sales@demo.com",
+                  },
+                  "support": Object {
+                    "air": "imc.air@demo.com",
+                    "general": "support@demo.com",
+                    "ocean": "imc.sea@demo.com",
+                    "rail": "imc.rail@demo.com",
+                  },
+                },
                 "id": 123,
                 "scope": Object {
                   "closed_quotation_tool": true,
@@ -116,6 +130,20 @@ exports[`shallow render 1`] = `
             t={[Function]}
             tenant={
               Object {
+                "emails": Object {
+                  "sales": Object {
+                    "air": "sales@demo.com",
+                    "general": "sales@demo.com",
+                    "ocean": "sales@demo.com",
+                    "rail": "sales@demo.com",
+                  },
+                  "support": Object {
+                    "air": "imc.air@demo.com",
+                    "general": "support@demo.com",
+                    "ocean": "imc.sea@demo.com",
+                    "rail": "imc.rail@demo.com",
+                  },
+                },
                 "id": 123,
                 "scope": Object {
                   "closed_quotation_tool": true,
@@ -404,6 +432,20 @@ exports[`theme is falsy 1`] = `
             t={[Function]}
             tenant={
               Object {
+                "emails": Object {
+                  "sales": Object {
+                    "air": "sales@demo.com",
+                    "general": "sales@demo.com",
+                    "ocean": "sales@demo.com",
+                    "rail": "sales@demo.com",
+                  },
+                  "support": Object {
+                    "air": "imc.air@demo.com",
+                    "general": "support@demo.com",
+                    "ocean": "imc.sea@demo.com",
+                    "rail": "imc.rail@demo.com",
+                  },
+                },
                 "id": 123,
                 "scope": Object {
                   "closed_quotation_tool": true,
@@ -449,6 +491,20 @@ exports[`theme is falsy 1`] = `
             t={[Function]}
             tenant={
               Object {
+                "emails": Object {
+                  "sales": Object {
+                    "air": "sales@demo.com",
+                    "general": "sales@demo.com",
+                    "ocean": "sales@demo.com",
+                    "rail": "sales@demo.com",
+                  },
+                  "support": Object {
+                    "air": "imc.air@demo.com",
+                    "general": "support@demo.com",
+                    "ocean": "imc.sea@demo.com",
+                    "rail": "imc.rail@demo.com",
+                  },
+                },
                 "id": 123,
                 "scope": Object {
                   "closed_quotation_tool": true,
@@ -614,6 +670,20 @@ exports[`with admin user 1`] = `
             t={[Function]}
             tenant={
               Object {
+                "emails": Object {
+                  "sales": Object {
+                    "air": "sales@demo.com",
+                    "general": "sales@demo.com",
+                    "ocean": "sales@demo.com",
+                    "rail": "sales@demo.com",
+                  },
+                  "support": Object {
+                    "air": "imc.air@demo.com",
+                    "general": "support@demo.com",
+                    "ocean": "imc.sea@demo.com",
+                    "rail": "imc.rail@demo.com",
+                  },
+                },
                 "id": 123,
                 "scope": Object {
                   "closed_quotation_tool": true,
@@ -666,6 +736,20 @@ exports[`with admin user 1`] = `
             t={[Function]}
             tenant={
               Object {
+                "emails": Object {
+                  "sales": Object {
+                    "air": "sales@demo.com",
+                    "general": "sales@demo.com",
+                    "ocean": "sales@demo.com",
+                    "rail": "sales@demo.com",
+                  },
+                  "support": Object {
+                    "air": "imc.air@demo.com",
+                    "general": "support@demo.com",
+                    "ocean": "imc.sea@demo.com",
+                    "rail": "imc.rail@demo.com",
+                  },
+                },
                 "id": 123,
                 "scope": Object {
                   "closed_quotation_tool": true,

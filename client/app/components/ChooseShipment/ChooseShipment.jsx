@@ -8,11 +8,14 @@ import { LOAD_TYPES } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { capitalize, gradientTextGenerator, hexToRGB, humanizedMotAndLoadType } from '../../helpers'
 import TextHeading from '../TextHeading/TextHeading'
+import NoPricings from '../ErrorHandling/NoPricings'
 
 class ChooseShipment extends Component {
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      pricingAvailable: true
+    }
     this.cards = LOAD_TYPES.map(loadType => ({
       name: humanizedMotAndLoadType(props.scope, loadType.code),
       img: loadType.img,
@@ -39,7 +42,7 @@ class ChooseShipment extends Component {
 
   determineAvailableOptions () {
     if (this.props && this.props.scope) {
-      const { scope } = this.props
+      const { scope, user } = this.props
       const allowedCargoTypeCount = { cargo_item: 0, container: 0 }
       const allowedCargoTypes = { cargo_item: false, container: false }
 
@@ -52,6 +55,11 @@ class ChooseShipment extends Component {
       }
       if (allowedCargoTypeCount.cargo_item > 0) {
         allowedCargoTypes.cargo_item = true
+      }
+      if (scope.closed_shop && !user.agency_id) {
+        this.setState({
+          pricingAvailable: false
+        })
       }
       const showCargoTypes = allowedCargoTypes.cargo_item && allowedCargoTypes.container
       const showDirections = !scope.default_direction
@@ -80,19 +88,21 @@ class ChooseShipment extends Component {
     this.props.selectLoadType({ loadType, direction })
   }
   render () {
-    const { theme, t } = this.props
+    const { theme, t, scope, user } = this.props
 
     const {
       loadType,
       direction,
       allowedCargoTypes,
       showDirections,
-      showCargoTypes
+      showCargoTypes,
+      pricingAvailable
     } = this.state
     const gradientStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
+
     const directionButtons = ['export', 'import'].map((dir) => {
       const buttonStyle = direction === dir ? styles.selected : styles.unselected
       const commercialAction = { import: 'Buying', export: 'Selling' }
@@ -137,8 +147,14 @@ class ChooseShipment extends Component {
         iconClass="fa-chevron-right"
       />
     )
+    const noPricings = (
+      <NoPricings
+        theme={theme}
+        user={user}
+      />
+    )
 
-    return (
+    return pricingAvailable ? ( 
       <div className={`${styles.card_link_row} layout-row flex-100 layout-align-center-center`}>
         <div
           className={
@@ -198,12 +214,13 @@ class ChooseShipment extends Component {
           </div>
         </div>
       </div>
-    )
+    ) : noPricings
   }
 }
 
 ChooseShipment.propTypes = {
   theme: PropTypes.theme,
+  user: PropTypes.user.isRequired,
   t: PropTypes.func.isRequired,
   selectLoadType: PropTypes.func.isRequired,
   scope: PropTypes.objectOf(PropTypes.any).isRequired

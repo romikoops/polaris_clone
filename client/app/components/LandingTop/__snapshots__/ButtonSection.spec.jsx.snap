@@ -13,6 +13,20 @@ exports[`user.role_id is 1 1`] = `
       tenant={
         Object {
           "data": Object {
+            "emails": Object {
+              "sales": Object {
+                "air": "sales@demo.com",
+                "general": "sales@demo.com",
+                "ocean": "sales@demo.com",
+                "rail": "sales@demo.com",
+              },
+              "support": Object {
+                "air": "imc.air@demo.com",
+                "general": "support@demo.com",
+                "ocean": "imc.sea@demo.com",
+                "rail": "imc.rail@demo.com",
+              },
+            },
             "id": 123,
             "name": "FOO_NAME",
             "scope": Object {
@@ -64,6 +78,20 @@ exports[`user.role_id is 1 1`] = `
       tenant={
         Object {
           "data": Object {
+            "emails": Object {
+              "sales": Object {
+                "air": "sales@demo.com",
+                "general": "sales@demo.com",
+                "ocean": "sales@demo.com",
+                "rail": "sales@demo.com",
+              },
+              "support": Object {
+                "air": "imc.air@demo.com",
+                "general": "support@demo.com",
+                "ocean": "imc.sea@demo.com",
+                "rail": "imc.rail@demo.com",
+              },
+            },
             "id": 123,
             "name": "FOO_NAME",
             "scope": Object {
@@ -117,6 +145,20 @@ exports[`user.role_id is 1 1`] = `
       tenant={
         Object {
           "data": Object {
+            "emails": Object {
+              "sales": Object {
+                "air": "sales@demo.com",
+                "general": "sales@demo.com",
+                "ocean": "sales@demo.com",
+                "rail": "sales@demo.com",
+              },
+              "support": Object {
+                "air": "imc.air@demo.com",
+                "general": "support@demo.com",
+                "ocean": "imc.sea@demo.com",
+                "rail": "imc.rail@demo.com",
+              },
+            },
             "id": 123,
             "name": "FOO_NAME",
             "scope": Object {
@@ -209,6 +251,20 @@ exports[`user.role_id is 2 1`] = `
       tenant={
         Object {
           "data": Object {
+            "emails": Object {
+              "sales": Object {
+                "air": "sales@demo.com",
+                "general": "sales@demo.com",
+                "ocean": "sales@demo.com",
+                "rail": "sales@demo.com",
+              },
+              "support": Object {
+                "air": "imc.air@demo.com",
+                "general": "support@demo.com",
+                "ocean": "imc.sea@demo.com",
+                "rail": "imc.rail@demo.com",
+              },
+            },
             "id": 123,
             "name": "FOO_NAME",
             "scope": Object {
@@ -260,6 +316,20 @@ exports[`user.role_id is 2 1`] = `
       tenant={
         Object {
           "data": Object {
+            "emails": Object {
+              "sales": Object {
+                "air": "sales@demo.com",
+                "general": "sales@demo.com",
+                "ocean": "sales@demo.com",
+                "rail": "sales@demo.com",
+              },
+              "support": Object {
+                "air": "imc.air@demo.com",
+                "general": "support@demo.com",
+                "ocean": "imc.sea@demo.com",
+                "rail": "imc.rail@demo.com",
+              },
+            },
             "id": 123,
             "name": "FOO_NAME",
             "scope": Object {
@@ -313,6 +383,20 @@ exports[`user.role_id is 2 1`] = `
       tenant={
         Object {
           "data": Object {
+            "emails": Object {
+              "sales": Object {
+                "air": "sales@demo.com",
+                "general": "sales@demo.com",
+                "ocean": "sales@demo.com",
+                "rail": "sales@demo.com",
+              },
+              "support": Object {
+                "air": "imc.air@demo.com",
+                "general": "support@demo.com",
+                "ocean": "imc.sea@demo.com",
+                "rail": "imc.rail@demo.com",
+              },
+            },
             "id": 123,
             "name": "FOO_NAME",
             "scope": Object {

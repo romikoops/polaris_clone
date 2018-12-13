@@ -91,6 +91,10 @@ en:
       http_code: 400
       code: 1012
       message: "There are no pricings valid for this timeframe."
+    non_agent_user:
+      http_code: 400
+      code: 1012
+      message: "Current user is not an agent"
     
 
     # Authentication Errors

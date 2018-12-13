@@ -13,22 +13,28 @@ custom_content = {
       "index": 0
     },
     {
-      "text": '<h2 ><i>Quote. Book. Confirm.</i></h2>',
+      "text": '<h1 class="ngl_title">Norman Global Logistics Online</h1>',
       "component": "LandingTop",
       "section": "welcome",
       "index": 1
     },
     {
-      "text": '<h3 >Get real-time quotes and create automatic bookings, with our easy to quote & booking system.</h3>',
+      "text": '<h2 ><i>Quote. Book. Confirm.</i></h2>',
       "component": "LandingTop",
       "section": "welcome",
       "index": 2
     },
     {
-      "text": '<h3 ><i> -Trust us to deliver for you every time.</i></h3>',
+      "text": '<h3 >Get real-time quotes and create automatic bookings, with our easy to quote & booking system.</h3>',
       "component": "LandingTop",
       "section": "welcome",
       "index": 3
+    },
+    {
+      "text": '<h3 ><i> -Trust us to deliver for you every time.</i></h3>',
+      "component": "LandingTop",
+      "section": "welcome",
+      "index": 4
     },
     {
       "text": '<h2 class="flex-none">Get real-time quotes and create automatic bookings, with our new easy to quote & booking system. </h2>',

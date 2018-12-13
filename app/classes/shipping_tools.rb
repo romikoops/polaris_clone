@@ -63,6 +63,8 @@ module ShippingTools
     shipment.save!
 
     if tenant.scope['closed_quotation_tool']
+      raise ApplicationError::NonAgentUser if current_user.agency.nil?
+
       user_pricing_id = current_user.agency.agency_manager_id
       itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
         Pricing.where(itinerary_id: id, user_id: user_pricing_id).for_load_type(load_type).empty?

@@ -25,8 +25,8 @@ class ShipmentMailer < ApplicationMailer
     create_pdf_attachment(@shipment)
     attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
     mail_options = {
+      from: tenant.emails.dig('support','general'),
       to: tenant.email_for(:sales, shipment.mode_of_transport),
-      # to: TESTING_EMAIL,
       bcc: 'warwick@itsmycargo.com',
       subject: 'Your booking through ItsMyCargo'
     }
@@ -44,8 +44,8 @@ class ShipmentMailer < ApplicationMailer
     attachments.inline['logo.png']       = URI.open(tenant.theme['logoLarge']).read
     attachments.inline['logo_small.png'] = URI.try(:open, tenant.theme['logoSmall']).try(:read)
     mail_options = {
+      from: tenant.emails.dig('support','general'),
       to: user.email.blank? ? 'itsmycargodev@gmail.com' : user.email,
-      # to: TESTING_EMAIL,
       bcc: ['bookingemails@itsmycargo.com', 'warwick@itsmycargo.com'],
       subject: 'Your booking through ItsMyCargo'
     }
@@ -62,8 +62,8 @@ class ShipmentMailer < ApplicationMailer
     attachments.inline['logo.png']       = URI.open(tenant.theme['logoLarge']).read
     attachments.inline['logo_small.png'] = try(:open, tenant.theme['logoSmall']).try(:read)
     mail_options = {
+      from: tenant.emails.dig('support','general'),
       to: user.email.blank? ? 'itsmycargodev@gmail.com' : user.email,
-      # to: TESTING_EMAIL,
       bcc: ['bookingemails@itsmycargo.com', 'warwick@itsmycargo.com'],
       subject: 'Your booking through ItsMyCargo'
     }

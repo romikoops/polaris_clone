@@ -8,11 +8,12 @@ class WelcomeMailer < ApplicationMailer
     return unless  Content.exists?(tenant_id: user.tenant_id, component: 'WelcomeMail')
 
     @user = user
-    tenant = @user.tenant
-    @theme = tenant.theme
-    @content = Content.get_component('WelcomeMail', tenant.id)
+    @tenant = @user.tenant
+    @theme = @tenant.theme
+    @content = Content.get_component('WelcomeMail', @tenant.id)
     
     mail(
+      from: tenant.emails.dig('support', 'general'),
       to: @user.email,
       subject: @content['subject'][0]&.text
     ) do |format|

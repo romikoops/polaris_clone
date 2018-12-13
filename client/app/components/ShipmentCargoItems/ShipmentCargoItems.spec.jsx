@@ -53,6 +53,20 @@ const propsBase = {
   handleDelta: identity,
   toggleModal: identity,
   nextStageAttempt: false,
+  emails: {
+    sales: {
+      general: 'sales@demo.com',
+      air: 'sales@demo.com',
+      ocean: 'sales@demo.com',
+      rail: 'sales@demo.com'
+    },
+    support: {
+      general: 'support@demo.com',
+      air: 'imc.air@demo.com',
+      ocean: 'imc.sea@demo.com',
+      rail: 'imc.rail@demo.com'
+    }
+  },
   scope: {
     modes_of_transport: {},
     dangerous_goods: false

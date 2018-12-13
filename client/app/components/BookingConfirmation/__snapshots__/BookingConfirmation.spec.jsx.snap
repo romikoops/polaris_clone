@@ -244,6 +244,20 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
+                    "emails": Object {
+                      "sales": Object {
+                        "air": "sales@demo.com",
+                        "general": "sales@demo.com",
+                        "ocean": "sales@demo.com",
+                        "rail": "sales@demo.com",
+                      },
+                      "support": Object {
+                        "air": "imc.air@demo.com",
+                        "general": "support@demo.com",
+                        "ocean": "imc.sea@demo.com",
+                        "rail": "imc.rail@demo.com",
+                      },
+                    },
                     "id": 123,
                     "scope": Object {
                       "terms": Array [
@@ -379,6 +393,20 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
+                    "emails": Object {
+                      "sales": Object {
+                        "air": "sales@demo.com",
+                        "general": "sales@demo.com",
+                        "ocean": "sales@demo.com",
+                        "rail": "sales@demo.com",
+                      },
+                      "support": Object {
+                        "air": "imc.air@demo.com",
+                        "general": "support@demo.com",
+                        "ocean": "imc.sea@demo.com",
+                        "rail": "imc.rail@demo.com",
+                      },
+                    },
                     "id": 123,
                     "scope": Object {
                       "terms": Array [
@@ -1130,6 +1158,20 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
+                    "emails": Object {
+                      "sales": Object {
+                        "air": "sales@demo.com",
+                        "general": "sales@demo.com",
+                        "ocean": "sales@demo.com",
+                        "rail": "sales@demo.com",
+                      },
+                      "support": Object {
+                        "air": "imc.air@demo.com",
+                        "general": "support@demo.com",
+                        "ocean": "imc.sea@demo.com",
+                        "rail": "imc.rail@demo.com",
+                      },
+                    },
                     "id": 123,
                     "scope": Object {
                       "terms": Array [
@@ -1265,6 +1307,20 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
+                    "emails": Object {
+                      "sales": Object {
+                        "air": "sales@demo.com",
+                        "general": "sales@demo.com",
+                        "ocean": "sales@demo.com",
+                        "rail": "sales@demo.com",
+                      },
+                      "support": Object {
+                        "air": "imc.air@demo.com",
+                        "general": "support@demo.com",
+                        "ocean": "imc.sea@demo.com",
+                        "rail": "imc.rail@demo.com",
+                      },
+                    },
                     "id": 123,
                     "scope": Object {
                       "terms": Array [
@@ -2046,6 +2102,20 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
+                    "emails": Object {
+                      "sales": Object {
+                        "air": "sales@demo.com",
+                        "general": "sales@demo.com",
+                        "ocean": "sales@demo.com",
+                        "rail": "sales@demo.com",
+                      },
+                      "support": Object {
+                        "air": "imc.air@demo.com",
+                        "general": "support@demo.com",
+                        "ocean": "imc.sea@demo.com",
+                        "rail": "imc.rail@demo.com",
+                      },
+                    },
                     "id": 123,
                     "scope": Object {
                       "terms": Array [
@@ -2181,6 +2251,20 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
+                    "emails": Object {
+                      "sales": Object {
+                        "air": "sales@demo.com",
+                        "general": "sales@demo.com",
+                        "ocean": "sales@demo.com",
+                        "rail": "sales@demo.com",
+                      },
+                      "support": Object {
+                        "air": "imc.air@demo.com",
+                        "general": "support@demo.com",
+                        "ocean": "imc.sea@demo.com",
+                        "rail": "imc.rail@demo.com",
+                      },
+                    },
                     "id": 123,
                     "scope": Object {
                       "terms": Array [
@@ -3043,6 +3127,20 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
+                    "emails": Object {
+                      "sales": Object {
+                        "air": "sales@demo.com",
+                        "general": "sales@demo.com",
+                        "ocean": "sales@demo.com",
+                        "rail": "sales@demo.com",
+                      },
+                      "support": Object {
+                        "air": "imc.air@demo.com",
+                        "general": "support@demo.com",
+                        "ocean": "imc.sea@demo.com",
+                        "rail": "imc.rail@demo.com",
+                      },
+                    },
                     "id": 123,
                     "scope": Object {
                       "terms": Array [
@@ -3178,6 +3276,20 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
+                    "emails": Object {
+                      "sales": Object {
+                        "air": "sales@demo.com",
+                        "general": "sales@demo.com",
+                        "ocean": "sales@demo.com",
+                        "rail": "sales@demo.com",
+                      },
+                      "support": Object {
+                        "air": "imc.air@demo.com",
+                        "general": "support@demo.com",
+                        "ocean": "imc.sea@demo.com",
+                        "rail": "imc.rail@demo.com",
+                      },
+                    },
                     "id": 123,
                     "scope": Object {
                       "terms": Array [
@@ -3914,6 +4026,20 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
+                    "emails": Object {
+                      "sales": Object {
+                        "air": "sales@demo.com",
+                        "general": "sales@demo.com",
+                        "ocean": "sales@demo.com",
+                        "rail": "sales@demo.com",
+                      },
+                      "support": Object {
+                        "air": "imc.air@demo.com",
+                        "general": "support@demo.com",
+                        "ocean": "imc.sea@demo.com",
+                        "rail": "imc.rail@demo.com",
+                      },
+                    },
                     "id": 123,
                     "scope": Object {
                       "terms": Array [
@@ -4049,6 +4175,20 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
+                    "emails": Object {
+                      "sales": Object {
+                        "air": "sales@demo.com",
+                        "general": "sales@demo.com",
+                        "ocean": "sales@demo.com",
+                        "rail": "sales@demo.com",
+                      },
+                      "support": Object {
+                        "air": "imc.air@demo.com",
+                        "general": "support@demo.com",
+                        "ocean": "imc.sea@demo.com",
+                        "rail": "imc.rail@demo.com",
+                      },
+                    },
                     "id": 123,
                     "scope": Object {
                       "terms": Array [
@@ -4785,6 +4925,20 @@ exports[`shallow render 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
+                    "emails": Object {
+                      "sales": Object {
+                        "air": "sales@demo.com",
+                        "general": "sales@demo.com",
+                        "ocean": "sales@demo.com",
+                        "rail": "sales@demo.com",
+                      },
+                      "support": Object {
+                        "air": "imc.air@demo.com",
+                        "general": "support@demo.com",
+                        "ocean": "imc.sea@demo.com",
+                        "rail": "imc.rail@demo.com",
+                      },
+                    },
                     "id": 123,
                     "scope": Object {
                       "terms": Array [
@@ -4920,6 +5074,20 @@ exports[`shallow render 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
+                    "emails": Object {
+                      "sales": Object {
+                        "air": "sales@demo.com",
+                        "general": "sales@demo.com",
+                        "ocean": "sales@demo.com",
+                        "rail": "sales@demo.com",
+                      },
+                      "support": Object {
+                        "air": "imc.air@demo.com",
+                        "general": "support@demo.com",
+                        "ocean": "imc.sea@demo.com",
+                        "rail": "imc.rail@demo.com",
+                      },
+                    },
                     "id": 123,
                     "scope": Object {
                       "terms": Array [
@@ -5656,6 +5824,20 @@ exports[`with cargo items 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
+                    "emails": Object {
+                      "sales": Object {
+                        "air": "sales@demo.com",
+                        "general": "sales@demo.com",
+                        "ocean": "sales@demo.com",
+                        "rail": "sales@demo.com",
+                      },
+                      "support": Object {
+                        "air": "imc.air@demo.com",
+                        "general": "support@demo.com",
+                        "ocean": "imc.sea@demo.com",
+                        "rail": "imc.rail@demo.com",
+                      },
+                    },
                     "id": 123,
                     "scope": Object {
                       "terms": Array [
@@ -5791,6 +5973,20 @@ exports[`with cargo items 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
+                    "emails": Object {
+                      "sales": Object {
+                        "air": "sales@demo.com",
+                        "general": "sales@demo.com",
+                        "ocean": "sales@demo.com",
+                        "rail": "sales@demo.com",
+                      },
+                      "support": Object {
+                        "air": "imc.air@demo.com",
+                        "general": "support@demo.com",
+                        "ocean": "imc.sea@demo.com",
+                        "rail": "imc.rail@demo.com",
+                      },
+                    },
                     "id": 123,
                     "scope": Object {
                       "terms": Array [
@@ -6854,6 +7050,20 @@ exports[`with containers 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
+                    "emails": Object {
+                      "sales": Object {
+                        "air": "sales@demo.com",
+                        "general": "sales@demo.com",
+                        "ocean": "sales@demo.com",
+                        "rail": "sales@demo.com",
+                      },
+                      "support": Object {
+                        "air": "imc.air@demo.com",
+                        "general": "support@demo.com",
+                        "ocean": "imc.sea@demo.com",
+                        "rail": "imc.rail@demo.com",
+                      },
+                    },
                     "id": 123,
                     "scope": Object {
                       "terms": Array [
@@ -6989,6 +7199,20 @@ exports[`with containers 1`] = `
                 t={[Function]}
                 tenant={
                   Object {
+                    "emails": Object {
+                      "sales": Object {
+                        "air": "sales@demo.com",
+                        "general": "sales@demo.com",
+                        "ocean": "sales@demo.com",
+                        "rail": "sales@demo.com",
+                      },
+                      "support": Object {
+                        "air": "imc.air@demo.com",
+                        "general": "support@demo.com",
+                        "ocean": "imc.sea@demo.com",
+                        "rail": "imc.rail@demo.com",
+                      },
+                    },
                     "id": 123,
                     "scope": Object {
                       "terms": Array [
