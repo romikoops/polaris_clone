@@ -416,8 +416,7 @@ export default function shipment (state = {}, action) {
             ...state.response.stage1,
             notes: action.payload
           }
-        },
-        loading: false
+        }
       }
     case shipmentConstants.SHIPMENT_GET_NOTES_FAILURE:
       return {
