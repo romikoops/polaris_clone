@@ -27,7 +27,7 @@ module OfferCalculatorService
       end
 
       compacted_detailed_schedules = detailed_schedules.compact
-      raise ApplicationError::NoSchedulesCharges if compacted_detailed_schedules.empty?
+      raise ApplicationError::NoSchedulesCharges  if compacted_detailed_schedules.empty?
 
       detailed_schedules_with_service_level_count(detailed_schedules: compacted_detailed_schedules)
     end

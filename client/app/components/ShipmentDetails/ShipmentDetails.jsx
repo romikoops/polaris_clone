@@ -2,7 +2,10 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import * as Scroll from 'react-scroll'
 import Toggle from 'react-toggle'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import ReactTooltip from 'react-tooltip'
+import { errorActions } from '../../actions'
 import PropTypes from '../../prop-types'
 import GmapsLoader from '../../hocs/GmapsLoader'
 import styles from './ShipmentDetails.scss'
@@ -835,7 +838,8 @@ export class ShipmentDetails extends Component {
       shipmentData,
       shipmentDispatch,
       showRegistration,
-      t
+      t,
+      errorDispatch
     } = this.props
 
     const {
@@ -934,6 +938,8 @@ export class ShipmentDetails extends Component {
             updateFilteredRouteIndexes={this.updateFilteredRouteIndexes}
             reusedShipment={this.props.reusedShipment}
             hideMap={this.props.hideMap}
+            availableMots={this.state.availableMotsForRoute}
+            errorDispatch={errorDispatch}
           />
         </div>
         <div
@@ -1171,4 +1177,19 @@ ShipmentDetails.defaultProps = {
   hideMap: false
 }
 
-export default withNamespaces(['errors', 'cargo', 'common', 'dangerousGoods'])(ShipmentDetails)
+function mapStateToProps (state) {
+  const {
+    error
+  } = state
+
+  return {
+    error
+  }
+}
+function mapDispatchToProps (dispatch) {
+  return {
+    errorDispatch: bindActionCreators(errorActions, dispatch)
+  }
+}
+
+export default withNamespaces(['errors', 'cargo', 'common', 'dangerousGoods'])(connect(mapStateToProps, mapDispatchToProps)(ShipmentDetails))

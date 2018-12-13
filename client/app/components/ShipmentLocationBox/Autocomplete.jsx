@@ -262,13 +262,22 @@ class Autocomplete extends PureComponent {
   }
 
   autocompleteErrors (status) {
+    const {errorDispatch, target } = this.props
+    const { input } = this.state
     let errorKey = ''
     if (['REQUEST_DENIED', 'OVER_QUERY_LIMIT'].includes(status)) {
       errorKey = 'errors:unknownError'
     } else {
       errorKey = `errors:${camelCase(status)}`
     }
-    this.setState({ hasGoogleErrors: true, errorKey }, () => this.showErrorsTimer())
+    const error = {
+      component: 'ShipmentLocationBox',
+      code: '1101',
+      target,
+      side: target === 'origin' ? 'left' : 'right',
+      targetAddress: input
+    }
+    errorDispatch.setError(error)
   }
 
   render () {
@@ -322,7 +331,7 @@ class Autocomplete extends PureComponent {
             </div>)
         })
       : []
-    const inputErrorStyle = hasErrors || hasGoogleErrors ? styles.with_errors : ''
+
 
     return (
       <div className={`auto_origin ccb_carriage flex-100 layout-row layout-wrap layout-align-center-center ${styles.autocomplete_container}`}>
@@ -334,7 +343,7 @@ class Autocomplete extends PureComponent {
           }}
         />
         <div
-          className={`flex-100 layout-row input_box_full ${styles.autocomplete_input} ${inputErrorStyle}`}
+          className={`flex-100 layout-row input_box_full ${styles.autocomplete_input}`}
           onClick={() => this.shouldExpandResults()}
         >
           <input
@@ -378,10 +387,10 @@ class Autocomplete extends PureComponent {
 
           </div>
         </div>
-        <span className={hasErrors || hasGoogleErrors ? styles.errors : styles.no_errors} style={{ color: 'white' }}>
+        {/* <span className={hasErrors || hasGoogleErrors ? styles.errors : styles.no_errors} style={{ color: 'white' }}>
           {hasErrors ? t('errors:noRoutes') : ''}
           {hasGoogleErrors ? t(errorKey) : ''}
-        </span>
+        </span> */}
       </div>
     )
   }
