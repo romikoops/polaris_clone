@@ -105,7 +105,7 @@ class Itinerary < ApplicationRecord
     stop_data = []
     steps_in_order = steps_in_order.map(&:to_i)
     while tmp_date < end_date_parsed
-      if ordinal_array.include?(tmp_date.strftime('%u').to_i)
+      if ordinal_array.include?(tmp_date.wday)
         journey_start = tmp_date.midday
         closing_date = journey_start - closing_date_buffer.days
         journey_end = journey_start + steps_in_order.sum.days

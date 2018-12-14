@@ -36,7 +36,6 @@ import calcAvailableMotsForRoute,
 import getRequests from '../ShipmentLocationBox/getRequests'
 import reuseShipments from '../../helpers/reuseShipment'
 import DayPickerSection from './DayPickerSection'
-import NoPricings from '../ErrorHandling/NoPricings'
 
 export class ShipmentDetails extends Component {
   static scrollTo (target) {
@@ -877,17 +876,6 @@ export class ShipmentDetails extends Component {
       modals, filteredRouteIndexes, nextStageAttempts, selectedDay, incoterm
     } = this.state
   
-    const noPricings = (
-      <NoPricings
-        theme={theme}
-        pageMargin="60px 0 0 0"
-        user={user}
-        shipmentDispatch={shipmentDispatch}
-      />
-    )
-
-    if (!filteredRouteIndexes.all.length) return noPricings
-
     let cargoDetails
     if (showRegistration) this.props.hideRegistration()
     if (!shipmentData.shipment || !shipmentData.cargoItemTypes) return ''

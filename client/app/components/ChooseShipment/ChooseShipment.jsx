@@ -56,7 +56,7 @@ class ChooseShipment extends Component {
       if (allowedCargoTypeCount.cargo_item > 0) {
         allowedCargoTypes.cargo_item = true
       }
-      if (scope.closed_shop && !user.agency_id) {
+      if ((scope.closed_quotation_tool || scope.open_quotation_tool) && !user.agency_id) {
         this.setState({
           pricingAvailable: false
         })
