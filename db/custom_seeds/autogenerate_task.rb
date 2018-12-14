@@ -57,7 +57,7 @@ genObj.each do |subdomain, cargo_class_routes|
   cargo_class_routes.each do |cargo_class, routes|
     tenant = Tenant.find_by_subdomain(subdomain)
     routes.each do |genData|
-      itinerary = Itinerary.find_by(tenant_id: tenant.id, name: "#{genData[:origin].capitalize} - #{genData[:destination].capitalize}")
+      itinerary = Itinerary.find_by(tenant_id: tenant.id, name: "#{genData[:origin].titleize} - #{genData[:destination].titleize}")
       next if !itinerary
       tenant_vehicle_ids = itinerary.pricings.for_load_type(cargo_class.to_s).pluck(:tenant_vehicle_id).uniq
       stops_in_order = itinerary.stops.order(:index)
