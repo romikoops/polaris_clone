@@ -56,11 +56,7 @@ class ChooseShipment extends Component {
       if (allowedCargoTypeCount.cargo_item > 0) {
         allowedCargoTypes.cargo_item = true
       }
-      if ((scope.closed_quotation_tool || scope.open_quotation_tool) && !user.agency_id) {
-        this.setState({
-          pricingAvailable: false
-        })
-      }
+
       const showCargoTypes = allowedCargoTypes.cargo_item && allowedCargoTypes.container
       const showDirections = !scope.default_direction
       if (!showCargoTypes && showDirections) {
@@ -154,7 +150,7 @@ class ChooseShipment extends Component {
       />
     )
 
-    return pricingAvailable ? ( 
+    return pricingAvailable ? (
       <div className={`${styles.card_link_row} layout-row flex-100 layout-align-center-center`}>
         <div
           className={
