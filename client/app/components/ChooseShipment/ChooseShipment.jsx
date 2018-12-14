@@ -8,14 +8,11 @@ import { LOAD_TYPES } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { capitalize, gradientTextGenerator, hexToRGB, humanizedMotAndLoadType } from '../../helpers'
 import TextHeading from '../TextHeading/TextHeading'
-import NoPricings from '../ErrorHandling/NoPricings'
 
 class ChooseShipment extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-      pricingAvailable: true
-    }
+    this.state = {}
     this.cards = LOAD_TYPES.map(loadType => ({
       name: humanizedMotAndLoadType(props.scope, loadType.code),
       img: loadType.img,
@@ -27,6 +24,7 @@ class ChooseShipment extends Component {
     this.setDirection = this.setDirection.bind(this)
     this.nextStep = this.nextStep.bind(this)
   }
+
   componentDidMount () {
     window.scrollTo(0, 0)
     this.determineAvailableOptions()
@@ -83,6 +81,7 @@ class ChooseShipment extends Component {
     const { loadType, direction } = this.state
     this.props.selectLoadType({ loadType, direction })
   }
+
   render () {
     const { theme, t, scope, user } = this.props
 
@@ -91,8 +90,7 @@ class ChooseShipment extends Component {
       direction,
       allowedCargoTypes,
       showDirections,
-      showCargoTypes,
-      pricingAvailable
+      showCargoTypes
     } = this.state
     const gradientStyle =
       theme && theme.colors
@@ -143,14 +141,8 @@ class ChooseShipment extends Component {
         iconClass="fa-chevron-right"
       />
     )
-    const noPricings = (
-      <NoPricings
-        theme={theme}
-        user={user}
-      />
-    )
 
-    return pricingAvailable ? (
+    return (
       <div className={`${styles.card_link_row} layout-row flex-100 layout-align-center-center`}>
         <div
           className={
@@ -210,7 +202,7 @@ class ChooseShipment extends Component {
           </div>
         </div>
       </div>
-    ) : noPricings
+    )
   }
 }
 
