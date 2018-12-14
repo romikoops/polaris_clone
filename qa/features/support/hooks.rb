@@ -9,11 +9,16 @@ Before do |scenario|
   tags = scenario.tags.map(&:name)
   subdomain = Helpers.subdomain_for_features(tags: tags)
 
-  # Select correct tenant
-  visit '/'
-  find('.ccb_change_tenant').click
-  find('p', text: "(#{subdomain})").click
-  expect(find('.ccb_change_tenant')).to have_content(/(#{subdomain})/i)
+  if %w(1 true).include?(ENV['SINGLE_TENANT'])
+    # TODO: Implement dynamic skip scenario if features not available for tenant
+    # skip_this_scenario
+  else
+    # Select correct tenant
+    visit '/'
+    find('.ccb_change_tenant').click
+    find('p', text: subdomain).click
+    expect(find('.ccb_change_tenant')).to have_content(/(#{subdomain})/i)
+  end
 end
 
 Around do |_scenario, block|
