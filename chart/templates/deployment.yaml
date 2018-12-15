@@ -50,6 +50,8 @@ spec:
           value: {{ $databaseUrl | quote }}
         - name: K8S_NAMESPACE
           value: {{ .Release.Namespace | quote }}
+        - name: REVIEW_NAME
+          value: {{ .Release.Name | quote }}
         - name: API_HOST
           value: "api-{{ include "hostname" .Values.service.url }}"
         - name: REVIEW_URL
@@ -79,6 +81,8 @@ spec:
           value: {{ $databaseUrl | quote }}
         - name: K8S_NAMESPACE
           value: {{ .Release.Namespace | quote }}
+        - name: REVIEW_NAME
+          value: {{ .Release.Name }}
         - name: DEFAULT_TENANT
           value: demo
         - name: API_HOST
@@ -119,6 +123,8 @@ spec:
           value: "https://api-{{ include "hostname" .Values.service.url }}"
         - name: K8S_NAMESPACE
           value: {{ .Release.Namespace | quote }}
+        - name: REVIEW_NAME
+          value: {{ .Release.Name }}
         - name: REVIEW_URL
           value: {{ include "hostname" .Values.service.url }}
         - name: GTM_ID

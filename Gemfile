@@ -17,6 +17,9 @@ gem 'strong_migrations'
 # Easy Monitoring
 gem 'easymon'
 
+# Skylight APM
+gem 'skylight'
+
 # Nicer logs
 gem 'lograge'
 
