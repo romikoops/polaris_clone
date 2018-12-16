@@ -127,7 +127,7 @@ class OfferError extends PureComponent {
           <div className={`flex-100 layout-row layout-align-end ${styles.close_row}`}>
             <div
               className={`flex-none layout-row layout-align-center-center ${styles.close_drawer}`}
-              onCLick={() => this.closeDrawer()}
+              onClick={() => this.closeDrawer()}
             >
               <i className="fa fa-times flex-none" />
             </div>

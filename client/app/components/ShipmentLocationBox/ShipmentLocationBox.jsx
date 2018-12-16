@@ -190,6 +190,10 @@ class ShipmentLocationBox extends PureComponent {
     }
   }
 
+  componentWillUnmount () {
+    this.props.errorDispatch.clearError({ componentName: 'ShipmentLocationBox' })
+  }
+
   setDestNexus (event) {
     if (event) {
       const destination = {
@@ -662,9 +666,6 @@ class ShipmentLocationBox extends PureComponent {
   showErrorDrawer (error) {
     const { errorDispatch } = this.props
     errorDispatch.setError(error)
-    setTimeout(() => {
-      errorDispatch.clearError(error)
-    }, 10000)
   }
 
   selectLocation (place, target) {
