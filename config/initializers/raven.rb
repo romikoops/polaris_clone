@@ -9,4 +9,8 @@ Raven.configure do |config|
   config.tags = {
     namespace: ENV['REVIEW_NAME']
   }
+
+  if File.exist?('/opt/elasticbeanstalk/deploy/appsource/source_bundle')
+    config.release = `unzip -z /opt/elasticbeanstalk/deploy/appsource/source_bundle`.split("\n").last
+  end
 end

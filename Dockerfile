@@ -30,6 +30,8 @@ RUN bundle config --global frozen 1 \
     && find /usr/local/bundle/gems/ -name "*.o" -delete
 
 COPY . ./
+ARG RELEASE=""
+RUN echo "$RELEASE" > ./REVISION
 
 RUN RAILS_ENV=production bin/rails assets:precompile
 
