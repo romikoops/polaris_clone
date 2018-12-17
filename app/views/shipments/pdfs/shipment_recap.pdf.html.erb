@@ -52,6 +52,12 @@
                 <%= '%.2f' %  cargo_data[:vol][shipment.id] %>&nbsp;m<sup>3</sup>
               </p>
             <% end %>
+            <% if shipment.vessel_name %>
+              <p>
+                <strong>Vessel:</strong>
+                <%= shipment.vessel_name %>
+              </p>
+            <% end %>
           </div>
         </div>
 
