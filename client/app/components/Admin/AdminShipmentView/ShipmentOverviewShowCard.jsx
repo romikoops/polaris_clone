@@ -95,11 +95,7 @@ function ShipmentOverviewShowCard ({
                   </div>) }
                   {shipment.pickup_address ? (
                     <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
-                      <p>{shipment.pickup_address.street} &nbsp;
-                        {shipment.pickup_address.street_number},&nbsp;
-                        <strong>{shipment.pickup_address.city},&nbsp;
-                          {shipment.pickup_address.country.name} </strong>
-                      </p>
+                      <p>{shipment.pickup_address.geocoded_address}</p>
                     </div>
                   ) : ''}
                 </div>
@@ -137,12 +133,7 @@ function ShipmentOverviewShowCard ({
                   </div>) }
                   {shipment.delivery_address ? (
                     <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
-                      <p>{shipment.delivery_address.street}&nbsp;
-                        {shipment.delivery_address.street_number},&nbsp;
-                        <strong>{shipment.delivery_address.city},&nbsp;
-                          {shipment.delivery_address.country.name} </strong>
-
-                      </p>
+                      <p>{shipment.delivery_address.geocoded_address}</p>
                     </div>
                   ) : ''}
                 </div>

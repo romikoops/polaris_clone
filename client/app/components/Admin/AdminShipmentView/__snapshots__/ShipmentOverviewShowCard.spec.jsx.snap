@@ -489,18 +489,7 @@ exports[`shipment has delivery_address 1`] = `
           <div
             className="layout-row flex-95 layout-align-start-center carriage_address"
           >
-            <p>
-              DELIVERY_STREET
-               
-              DELIVERY_STREET_NUMBER
-              , 
-              <strong>
-                DELIVERY_CITY
-                , 
-                DELIVERY_COUNTRY
-                 
-              </strong>
-            </p>
+            <p />
           </div>
         </div>
       </div>
@@ -802,18 +791,7 @@ exports[`shipment has pickup_address 1`] = `
           <div
             className="layout-row flex-95 layout-align-start-center carriage_address"
           >
-            <p>
-              PICKUP_STREET
-                
-              PICKUP_STREET_NUMBER
-              , 
-              <strong>
-                PICKUP_CITY
-                , 
-                PICKUP_COUNTRY
-                 
-              </strong>
-            </p>
+            <p />
           </div>
         </div>
       </div>
