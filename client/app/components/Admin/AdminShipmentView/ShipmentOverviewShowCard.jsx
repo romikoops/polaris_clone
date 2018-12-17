@@ -70,29 +70,16 @@ function ShipmentOverviewShowCard ({
                 <div className={`flex layout-row layout-wrap layout-align-start-start ${styles.carriage_row}`}>
                   <div className="flex-100 layout-row">
                     <div className="flex-40 layout-row">
-                      <i className={`flex-20 fa fa-check-square clip ${styles.check_square_sm}`} style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
-                      <h4 className="flex-70 layout-row">
-                        {t('shipment:pickUp')}
-                      </h4>
-                    </div>
-                    <div className="flex-60 layout-row">
-                      <i className={`flex-15 fa fa-check-square clip ${styles.check_square_sm}`} style={!shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
-                      <h4 className="flex-85 layout-row">
-                        {t('admin:dropOff')}
+                      <h4 className="flex-100 layout-row">
+                        { shipment.has_pre_carriage ? t('shipment:pickUp') : t('admin:dropOff') }
                       </h4>
                     </div>
                   </div>
-                  {shipment.has_pre_carriage ? (<div className="layout-row layout-align-start-center">
-                    <div className="flex-100 layout-align-center-start">
-                      <div className="layout-row layout-align-start-center">
-                        {carriage}
-                      </div>
+                  <div className="layout-row flex-95 layout-align-start-center">
+                    <div className="flex-60 layout-row">
+                      <p>{ shipment.has_pre_carriage ? carriage : noCarriage }</p>
                     </div>
-                  </div>) : (<div className="flex-100 layout-align-center-start">
-                    <div className="layout-row layout-align-start-center">
-                      {noCarriage}
-                    </div>
-                  </div>) }
+                  </div>
                   {shipment.pickup_address ? (
                     <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
                       <p>{shipment.pickup_address.geocoded_address}</p>
@@ -108,29 +95,16 @@ function ShipmentOverviewShowCard ({
                 <div className={`flex layout-row layout-wrap layout-align-start-start ${styles.carriage_row}`}>
                   <div className="flex-100 layout-row">
                     <div className="flex-40 layout-row">
-                      <i className={`flex-20 fa fa-check-square clip ${styles.check_square_sm}`} style={shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
                       <h4 className="flex-80 layout-row">
-                        {t('shipment:delivery')}
-                      </h4>
-                    </div>
-                    <div className="flex-60 layout-row">
-                      <i className={`flex-15 fa fa-check-square clip ${styles.check_square_sm}`} style={!shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
-                      <h4 className="flex-85 layout-row">
-                        {t('admin:collection')}
+                        { shipment.has_on_carriage ? t('shipment:delivery') : t('admin:collection') }
                       </h4>
                     </div>
                   </div>
-                  {shipment.has_on_carriage ? (<div className="layout-row layout-align-start-center">
-                    <div className="flex-100 layout-align-center-start">
-                      <div className="layout-row layout-align-start-center">
-                        {carriage}
-                      </div>
+                  <div className="layout-row flex-95 layout-align-start-center">
+                    <div className="flex-60 layout-row">
+                      <p>{ shipment.has_on_carriage ? carriage : noCarriage }</p>
                     </div>
-                  </div>) : (<div className="flex-100 layout-align-center-start">
-                    <div className="layout-row layout-align-start-center">
-                      {noCarriage}
-                    </div>
-                  </div>) }
+                  </div>
                   {shipment.delivery_address ? (
                     <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
                       <p>{shipment.delivery_address.geocoded_address}</p>
