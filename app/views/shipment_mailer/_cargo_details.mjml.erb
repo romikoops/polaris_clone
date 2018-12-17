@@ -34,7 +34,13 @@
                 <td style="padding: 0 15px;">
                   <%= "#{cargo_item.dimension_x} cm x #{cargo_item.dimension_y} cm x #{cargo_item.dimension_z} cm" %>
                 </td>
-                <td style="padding: 0 0 0 15px;"><%= "#{cargo_item.payload_in_kg} kg" %></td>
+                <td style="padding: 0 0 0 15px;">
+                  <% if @scope['consolidate_cargo'] %>
+                    <%= "#{(cargo_item.payload_in_kg*cargo_item.quantity).round(2)} kg" %>
+                  <% else %>
+                    <%= "#{cargo_item.payload_in_kg} kg" %>
+                  <% end %>
+                </td>
             </tr>
           </mj-table>
           <% end %>
