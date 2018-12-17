@@ -604,21 +604,23 @@ x&nbsp;
                 </div>
               </div>
             </div>
-            <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}>
-              <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
-                <div className="layout-column flex-100">
-                  <h3
-                    style={{ marginBottom: '0px' }}
-                  >
-                    {t('shipment:remarks')}
-:
-                  </h3>
-                  <ul>
-                    {remarkBody}
-                  </ul>
+            {remarkBody ? (
+              <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}>
+                <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
+                  <div className="layout-column flex-100">
+                    <h3
+                      style={{ marginBottom: '0px' }}
+                    >
+                      {t('shipment:remarks')}
+  :
+                    </h3>
+                    <ul>
+                      {remarkBody}
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : ''}
           </div>
         </Tab>
         <Tab

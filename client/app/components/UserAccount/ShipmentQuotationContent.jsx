@@ -46,7 +46,7 @@ class ShipmentQuotationContent extends Component {
       cargoView,
       remark
     } = this.props
-    
+
     const remarkBody = remark.quotation ? remark.quotation.shipment.map(_remark => (
       <li>
         {_remark.body}
@@ -214,20 +214,22 @@ class ShipmentQuotationContent extends Component {
                 </div>
               </div>
             </div>
-            <div>
-              <div className={`flex-100 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
-                  <div className="layout-column flex-100">
-                    <h3 
-                      style={{ marginBottom: '0px' }}
-                    >
-                      {t('shipment:remarks')}:
-                    </h3>
-                    <ul>
-                      {remarkBody}
-                    </ul>
-                  </div>
+            {remarkBody ? (
+              <div>
+                <div className={`flex-100 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
+                    <div className="layout-column flex-100">
+                      <h3
+                        style={{ marginBottom: '0px' }}
+                      >
+                        {t('shipment:remarks')}:
+                      </h3>
+                      <ul>
+                        {remarkBody}
+                      </ul>
+                    </div>
+                </div>
               </div>
-            </div>
+            ) : ''}
           </div>
           <div className="flex-40 layout-row">
             <div
@@ -304,7 +306,7 @@ function mapStateToProps (state) {
   const {
     remark
   } = state
-  
+
   return {
     remark
   }
