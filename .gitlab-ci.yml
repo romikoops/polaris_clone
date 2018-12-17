@@ -340,7 +340,6 @@ stop_review:
       --set-file postgresql.seed.credentials=/etc/secrets/service-account/services.json \
       --set-file masterKey=/etc/secrets/service-account/review-master-key \
       --namespace=${REVIEW_NAMESPACE} \
-      --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
       "$CI_ENVIRONMENT_SLUG" \
       $DEVOPS_CHART
   }

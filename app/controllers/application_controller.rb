@@ -51,7 +51,7 @@ class ApplicationController < ActionController::API
     )
     Raven.tags_context(
       agency: current_user&.agency_id&.present?,
-      namespace: ENV['K8S_NAMESPACE'],
+      namespace: ENV['REVIEW_NAME'],
       tenant: current_tenant&.subdomain
     )
     Raven.extra_context(

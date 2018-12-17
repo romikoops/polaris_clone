@@ -25,7 +25,18 @@ namespace :db do
 
         bucket = storage.bucket('itsmycargo-main-engineering-resources')
         file = bucket.file('db/full_anon.sql.gz')
+
+        # Warn if seed file is out-of-date
+        puts ''
         puts "  Created: #{file.created_at}"
+        if file.created_at < 1.day.ago
+          puts '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+          puts '!!!!!                          !!!!!'
+          puts '!!!!! STALE DATABASE SEED FILE !!!!!'
+          puts '!!!!!                          !!!!!'
+          puts '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+        end
+
         file.download(SEED_FILE.to_s)
         puts '  Done.'
       rescue Google::Cloud::PermissionDeniedError
