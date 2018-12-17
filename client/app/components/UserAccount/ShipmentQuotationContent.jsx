@@ -19,20 +19,18 @@ import ShipmentNotes from '../ShipmentNotes'
 import QuoteChargeBreakdown from '../QuoteChargeBreakdown/QuoteChargeBreakdown'
 
 class ShipmentQuotationContent extends Component {
-  constructor(props) {
-    super(props)
-  }
-  componentDidMount(){
+  componentDidMount () {
     this.getRemarks()
   }
 
-  getRemarks() {
+  getRemarks () {
     const { remarkDispatch } = this.props
     remarkDispatch.getRemarks()
   }
 
-  render() {
-    const { theme,
+  render () {
+    const {
+      theme,
       gradientBorderStyle,
       gradientStyle,
       estimatedTimes,

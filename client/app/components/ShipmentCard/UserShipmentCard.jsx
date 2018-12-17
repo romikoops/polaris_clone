@@ -24,6 +24,7 @@ class UserShipmentCard extends Component {
     const { shipment, dispatches } = this.props
     dispatches.getShipment(shipment.id, true)
   }
+
   render () {
     const {
       shipment,
