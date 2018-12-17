@@ -119,7 +119,7 @@
     <div>
       <h4 class="date-title"> Estimated T/T <sup>*</sup></h4>
       <p class="sched-elem">
-        <%= ((shipment.eta - shipment.etd) / 100000).ceil %>
+        <%= ((shipment.eta - shipment.etd) / 1.day).ceil %>
         Days
       </p>
     </div>
