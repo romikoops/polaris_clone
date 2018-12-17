@@ -485,7 +485,7 @@ x&nbsp;
                 </div>
               </div>
             </div>
-            {remarkBody}
+            {remarkBody ? remarkBody : ''}
           </div>
 
         </Tab>
@@ -505,7 +505,7 @@ x&nbsp;
         <Tab
           tabTitle={t('cargo:cargoDetails')}
           theme={theme}
-        > 
+        >
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
             <GreyBox
               wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_bottom}`}

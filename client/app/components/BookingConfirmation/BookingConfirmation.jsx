@@ -212,7 +212,7 @@ export class BookingConfirmation extends Component {
     })
     const notifyeesJSX = getNotifyeesJSX({ notifyees, textStyle, t })
     const feeHash = shipment.selected_offer
-    
+
     const remarkBody = remark.quotation ? remark.quotation.shipment.map(_remark => (
       <li>
         {_remark.body}
@@ -463,12 +463,14 @@ export class BookingConfirmation extends Component {
                 ''
               )}
             </div>
-            <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
-              <h4>{`${t('shipment:remarks')}:`}</h4>
-              <ul>
-                {remarkBody}
-              </ul>
-            </div>
+            {remarkBody ? (
+              <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
+                <h4>{`${t('shipment:remarks')}:`}</h4>
+                <ul>
+                  {remarkBody}
+                </ul>
+              </div>
+            ) : ''}
           </div>
         </div>
       </CollapsingBar>
@@ -870,7 +872,7 @@ function mapStateToProps (state) {
   const {
     remark
   } = state
-  
+
   return {
     remark
   }
