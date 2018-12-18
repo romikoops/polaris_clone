@@ -129,7 +129,7 @@ module ShippingTools
       shipments: [shipment],
       load_type: load_type,
       name: 'shipment_recap',
-      remarks: Remark.where(tenant_id: shipment.tenant_id)
+      remarks: Remark.where(tenant_id: shipment.tenant_id).order(created_at: :desc)
     )
 
     shipment_recap.generate
@@ -616,7 +616,7 @@ module ShippingTools
       logo: logo,
       quotation: main_quote,
       name: 'quotation',
-      remarks: Remark.where(tenant_id: tenant.id)
+      remarks: Remark.where(tenant_id: tenant.id).order(created_at: :desc)
     )
     quotation.generate
   end
