@@ -320,7 +320,11 @@
           <div class="cargo-section">
             <p class="cargo-value">
               <span class="cargo-type">
-                <%= '%.2f' % cargo.volume %>
+                <% if tenant.scope['consolidate_cargo'] %>
+                  <%= format('%.2f', cargo.volume * cargo.quantity) %>
+                <% else %>
+                  <%= format('%.2f', cargo.volume) %>
+                <% end %>
               </span> &nbsp;m<sup>3</sup>
             </p>
             <p class="cargo-subtitle">Volume</p>
@@ -335,10 +339,9 @@
             <p class="cargo-subtitle">Chargeable Weight</p>
           </div>
         </div>
-
       <% end %>
-      <% shipment.containers.each_with_index do |container, i| %>
 
+      <% shipment.containers.each_with_index do |container, i| %>
         <div class="first-cargo-row display-flex-center text-center border-bottom">
           <div class="cargo-index cargo-section">
             <p class="cargo-value"><%= i + 1 %></p>
@@ -355,10 +358,9 @@
             <p class="cargo-subtitle">Gross Weight</p>
           </div>
         </div>
-
       <% end %>
-      <% if  shipment.aggregated_cargo %>
 
+      <% if  shipment.aggregated_cargo %>
         <div class="first-cargo-row display-flex-center text-center border-bottom">
           <div class="cargo-index cargo-section">
             <p class="cargo-value">1</p>
