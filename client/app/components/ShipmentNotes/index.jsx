@@ -9,12 +9,11 @@ function ShipmentNotes ({
   shipment,
   t
 }) {
-  const route_notes = shipment.route_notes ? shipment.route_notes.map(note => {
-      return (<NotesCard
+  const route_notes = shipment.route_notes ? shipment.route_notes.map((note) => (<NotesCard
         note={note}
         itinerary={shipment.itinerary}
-      />)
-    }) : ''
+      />)) : ''
+
   return (
     <GreyBox
       wrapperClassName={`layout-row layout-wrap layout-sm-column layout-xs-column flex-100
@@ -26,24 +25,34 @@ function ShipmentNotes ({
             <div className={`flex-30 layout-row offset-5 layout-align-start-center layout-wrap ${styles.border_right}`}>
               {shipment.total_goods_value ? (
                 <div className="flex-100 layout-xs-column layout-row layout-align-start-center">
-                  <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">{t('cargo:totalValue')}:</span>
+                  <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">
+                    {t('cargo:totalValue')}
+                    :
+                  </span>
                   <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
-                    {shipment.total_goods_value.value}&nbsp;
+                    {shipment.total_goods_value.value}
+                    &nbsp;
                     {shipment.total_goods_value.currency}
                   </p>
                 </div>
               ) : (
                 <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
-                  <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">{t('cargo:totalValue')}:</span>
+                  <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">
+                    {t('cargo:totalValue')}
+                    :
+                  </span>
                   <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
-                        -
+                    -
                   </p>
                 </div>
               )}
             </div>
             <div className="flex layout-row offset-5 layout-align-start-center layout-wrap">
               <div className="flex-100 layout-row layout-align-start-center">
-                <span className="flex-20 layout-row">{t('common:descriptionGoods')}:</span>
+                <span className="flex-20 layout-row">
+                  {t('common:descriptionGoods')}
+                  :
+                </span>
                 <p className="flex-80 layout-padding layout-row">
                   {shipment.cargo_notes || '-'}
                 </p>
@@ -58,7 +67,10 @@ function ShipmentNotes ({
                 flex-100 padding_top_sm padding_bottom_sm layout-row offset-5 layout-align-start-start`}
                 >
                   <div className="flex-100 layout-xs-column layout-row layout-align-start-center">
-                    <span className="flex-10 layout-row">{t('bookconf:eori')}:</span>
+                    <span className="flex-10 layout-row">
+                      {t('bookconf:eori')}
+                      :
+                    </span>
                     <p className={`flex-80 layout-padding layout-row ${styles.info_values}`}>
                       {shipment.eori}
                     </p>
@@ -68,7 +80,10 @@ function ShipmentNotes ({
               {shipment.incoterm_text ? (
                 <div className={`${shipment.notes ? styles.border_bottom : ''} flex-100 padding_top_sm padding_bottom_sm layout-row offset-5 layout-align-start-start`}>
                   <div className="flex-100 layout-xs-column layout-row layout-align-start-center">
-                    <span className="flex-10 layout-row">{t('common:incoterm')}:</span>
+                    <span className="flex-10 layout-row">
+                      {t('common:incoterm')}
+                      :
+                    </span>
                     <p className="flex-80 layout-padding layout-row">
                       {shipment.incoterm_text}
                     </p>
@@ -78,11 +93,18 @@ function ShipmentNotes ({
               {shipment.route_notes || shipment.notes ? (
                 <div className="flex-100 flex-sm-100 padding_top_sm padding_bottom_sm flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap">
                   <div className="flex-100 layout-row layout-align-start-center">
-                    <span className="flex-10 layout-row">{t('common:notes')}:</span>
+                    <span className="flex-10 layout-row">
+                      {t('common:notes')}
+                      :
+                    </span>
                     {route_notes}
-                    {shipment.notes ? 
-                    <p> {shipment.notes} </p>
-                     : ''}
+                    {shipment.notes ? (
+                      <p>
+                        {' '}
+                        {shipment.notes}
+                        {' '}
+                       </p>
+                    ) : ''}
                   </div>
                 </div>
               ) : ''}

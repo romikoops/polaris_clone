@@ -65,12 +65,14 @@ class UserShipmentView extends Component {
       }
     })
   }
+
   back () {
     const { userDispatch } = this.props
     userDispatch.goBack()
   }
+
   prepCargoItemGroups (cargos) {
-    const { theme, shipmentData } = this.props
+    const { tenant, theme, shipmentData } = this.props
     const { cargoItemTypes, hsCodes } = shipmentData
     const cargoGroups = {}
     let groupCount = 1
@@ -104,11 +106,17 @@ class UserShipmentView extends Component {
       }
     })
     Object.keys(cargoGroups).forEach((k) => {
-      resultArray.push(<CargoItemGroup group={cargoGroups[k]} theme={theme} hsCodes={hsCodes} />)
+      resultArray.push(<CargoItemGroup
+        group={cargoGroups[k]}
+        theme={theme}
+        hsCodes={hsCodes}
+        hideUnits={tenant.scope.cargo_overview_only}
+      />)
     })
 
     return resultArray
   }
+
   prepContainerGroups (cargos) {
     const { theme, shipmentData } = this.props
     const { hsCodes, shipment } = shipmentData
