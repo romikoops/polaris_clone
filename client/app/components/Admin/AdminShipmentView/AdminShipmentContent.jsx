@@ -652,6 +652,7 @@ x&nbsp;
             />
             <ShipmentNotes
               shipment={shipment}
+              scope={scope}
             />
           </div>
         </Tab>

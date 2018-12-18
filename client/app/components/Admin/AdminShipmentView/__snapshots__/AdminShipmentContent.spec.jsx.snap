@@ -591,6 +591,20 @@ exports[`feeHash.trucking_pre is falsy 1`] = `
         wrapperClassName="layout-row flex-100 no_margin_bottom"
       />
       <ShipmentNotes
+        scope={
+          Object {
+            "closed_quotation_tool": true,
+            "customs_export_paper": false,
+            "modes_of_transport": Object {
+              "air": Object {},
+              "ocean": Object {
+                "OCEAN_LOAD_TYPE": true,
+              },
+              "rail": Object {},
+              "truck": Object {},
+            },
+          }
+        }
         shipment={
           Object {
             "cargo_count": 1,
@@ -1433,6 +1447,20 @@ exports[`loadType === cargo_item && cargoCount === 1 1`] = `
         wrapperClassName="layout-row flex-100 no_margin_bottom"
       />
       <ShipmentNotes
+        scope={
+          Object {
+            "closed_quotation_tool": true,
+            "customs_export_paper": false,
+            "modes_of_transport": Object {
+              "air": Object {},
+              "ocean": Object {
+                "OCEAN_LOAD_TYPE": true,
+              },
+              "rail": Object {},
+              "truck": Object {},
+            },
+          }
+        }
         shipment={
           Object {
             "cargo_count": 1,
@@ -2275,6 +2303,20 @@ exports[`loadType === cargo_item && cargoCount > 1 1`] = `
         wrapperClassName="layout-row flex-100 no_margin_bottom"
       />
       <ShipmentNotes
+        scope={
+          Object {
+            "closed_quotation_tool": true,
+            "customs_export_paper": false,
+            "modes_of_transport": Object {
+              "air": Object {},
+              "ocean": Object {
+                "OCEAN_LOAD_TYPE": true,
+              },
+              "rail": Object {},
+              "truck": Object {},
+            },
+          }
+        }
         shipment={
           Object {
             "cargo_count": 1,
@@ -3117,6 +3159,20 @@ exports[`loadType === container && cargoCount === 1 1`] = `
         wrapperClassName="layout-row flex-100 no_margin_bottom"
       />
       <ShipmentNotes
+        scope={
+          Object {
+            "closed_quotation_tool": true,
+            "customs_export_paper": false,
+            "modes_of_transport": Object {
+              "air": Object {},
+              "ocean": Object {
+                "OCEAN_LOAD_TYPE": true,
+              },
+              "rail": Object {},
+              "truck": Object {},
+            },
+          }
+        }
         shipment={
           Object {
             "cargo_count": 1,
@@ -3959,6 +4015,20 @@ exports[`loadType === container && cargoCount > 1 1`] = `
         wrapperClassName="layout-row flex-100 no_margin_bottom"
       />
       <ShipmentNotes
+        scope={
+          Object {
+            "closed_quotation_tool": true,
+            "customs_export_paper": false,
+            "modes_of_transport": Object {
+              "air": Object {},
+              "ocean": Object {
+                "OCEAN_LOAD_TYPE": true,
+              },
+              "rail": Object {},
+              "truck": Object {},
+            },
+          }
+        }
         shipment={
           Object {
             "cargo_count": 1,
@@ -4801,6 +4871,20 @@ exports[`shallow render 1`] = `
         wrapperClassName="layout-row flex-100 no_margin_bottom"
       />
       <ShipmentNotes
+        scope={
+          Object {
+            "closed_quotation_tool": true,
+            "customs_export_paper": false,
+            "modes_of_transport": Object {
+              "air": Object {},
+              "ocean": Object {
+                "OCEAN_LOAD_TYPE": true,
+              },
+              "rail": Object {},
+              "truck": Object {},
+            },
+          }
+        }
         shipment={
           Object {
             "cargo_count": 1,
@@ -5643,6 +5727,20 @@ exports[`shipment.has_on_carriage is true 1`] = `
         wrapperClassName="layout-row flex-100 no_margin_bottom"
       />
       <ShipmentNotes
+        scope={
+          Object {
+            "closed_quotation_tool": true,
+            "customs_export_paper": false,
+            "modes_of_transport": Object {
+              "air": Object {},
+              "ocean": Object {
+                "OCEAN_LOAD_TYPE": true,
+              },
+              "rail": Object {},
+              "truck": Object {},
+            },
+          }
+        }
         shipment={
           Object {
             "cargo_count": 1,
@@ -6485,6 +6583,20 @@ exports[`shipment.has_pre_carriage is true 1`] = `
         wrapperClassName="layout-row flex-100 no_margin_bottom"
       />
       <ShipmentNotes
+        scope={
+          Object {
+            "closed_quotation_tool": true,
+            "customs_export_paper": false,
+            "modes_of_transport": Object {
+              "air": Object {},
+              "ocean": Object {
+                "OCEAN_LOAD_TYPE": true,
+              },
+              "rail": Object {},
+              "truck": Object {},
+            },
+          }
+        }
         shipment={
           Object {
             "cargo_count": 1,
@@ -7344,6 +7456,20 @@ exports[`shipment.selected_offer.trucking_pre is true 1`] = `
         wrapperClassName="layout-row flex-100 no_margin_bottom"
       />
       <ShipmentNotes
+        scope={
+          Object {
+            "closed_quotation_tool": true,
+            "customs_export_paper": false,
+            "modes_of_transport": Object {
+              "air": Object {},
+              "ocean": Object {
+                "OCEAN_LOAD_TYPE": true,
+              },
+              "rail": Object {},
+              "truck": Object {},
+            },
+          }
+        }
         shipment={
           Object {
             "cargo_count": 1,
