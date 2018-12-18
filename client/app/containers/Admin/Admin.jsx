@@ -34,14 +34,17 @@ class Admin extends Component {
     this.state = { currentUrl: '/admin' }
     this.setCurrentUrl = this.setCurrentUrl.bind(this)
   }
+
   componentDidMount () {
     const { adminDispatch } = this.props
     adminDispatch.getClients(false)
     adminDispatch.getHubs(false)
   }
+
   setCurrentUrl (url) {
     this.setState({ currentUrl: url })
   }
+
   render () {
     const {
       theme, adminData, adminDispatch, tenantDispatch, remarkDispatch, user, documentLoading, tenant
@@ -68,7 +71,7 @@ class Admin extends Component {
       })
     }
     const loadingScreen = loading || documentLoading ? <Loading theme={theme} /> : ''
-    const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} currentUrl={this.state.currentUrl} />
+    const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} currentUrl={this.state.currentUrl} tenant={tenant} />
     const minHeightForFooter = window.innerHeight - 350
     const footerStyle = {
       minHeight: `${minHeightForFooter}px`,
@@ -158,16 +161,18 @@ class Admin extends Component {
                 />
                 <Route
                   path="/admin/settings"
-                  render={props => (<AdminSettings
-                    theme={theme}
-                    setCurrentUrl={this.setCurrentUrl}
-                    {...props}
-                    clients={clients}
-                    tenant={tenant}
-                    loading={loading}
-                    tenantDispatch={tenantDispatch}
-                    remarkDispatch={remarkDispatch}
-                  />)}
+                  render={props => (
+                    <AdminSettings
+                      theme={theme}
+                      setCurrentUrl={this.setCurrentUrl}
+                      {...props}
+                      clients={clients}
+                      tenant={tenant}
+                      loading={loading}
+                      tenantDispatch={tenantDispatch}
+                      remarkDispatch={remarkDispatch}
+                    />
+                  )}
                 />
 
                 <SuperAdminPrivateRoute
@@ -240,14 +245,16 @@ class Admin extends Component {
 
                 <Route
                   path="/admin/clients"
-                  render={props => (<AdminClients
-                    theme={theme}
-                    setCurrentUrl={this.setCurrentUrl}
-                    clients={clients}
-                    {...props}
-                    hubs={hubs}
-                    hubHash={hubHash}
-                  />)}
+                  render={props => (
+                    <AdminClients
+                      theme={theme}
+                      setCurrentUrl={this.setCurrentUrl}
+                      clients={clients}
+                      {...props}
+                      hubs={hubs}
+                      hubHash={hubHash}
+                    />
+                  )}
                 />
 
                 <Route
@@ -267,31 +274,37 @@ class Admin extends Component {
 
                 <Route
                   path="/admin/wizard"
-                  render={props => (<AdminWizard
-                    theme={theme}
-                    setCurrentUrl={this.setCurrentUrl}
-                    {...props}
-                    hubHash={hubHash}
-                  />)}
+                  render={props => (
+                    <AdminWizard
+                      theme={theme}
+                      setCurrentUrl={this.setCurrentUrl}
+                      {...props}
+                      hubHash={hubHash}
+                    />
+                  )}
                 />
 
                 <Route
                   path="/admin/trucking"
-                  render={props => (<AdminTrucking
-                    theme={theme}
-                    setCurrentUrl={this.setCurrentUrl}
-                    {...props}
-                    hubHash={hubHash}
-                  />)}
+                  render={props => (
+                    <AdminTrucking
+                      theme={theme}
+                      setCurrentUrl={this.setCurrentUrl}
+                      {...props}
+                      hubHash={hubHash}
+                    />
+                  )}
                 />
                 <GenericError theme={theme}>
                   <Route
                     path="/admin/super_admin/upload"
-                    render={props => (<SuperAdmin
-                      theme={theme}
-                      setCurrentUrl={this.setCurrentUrl}
-                      {...props}
-                    />)}
+                    render={props => (
+                      <SuperAdmin
+                        theme={theme}
+                        setCurrentUrl={this.setCurrentUrl}
+                        {...props}
+                      />
+                    )}
                   />
                 </GenericError>
               </Switch>
