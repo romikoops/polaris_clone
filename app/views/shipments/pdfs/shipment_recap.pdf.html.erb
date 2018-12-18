@@ -321,22 +321,24 @@
             <p class="cargo-value">
               <span class="cargo-type">
                 <% if tenant.scope['consolidate_cargo'] %>
-                  <%= format('%.2f', cargo.volume * cargo.quantity) %>
+                  <%= format('%.3f', cargo.volume * cargo.quantity) %>
                 <% else %>
-                  <%= format('%.2f', cargo.volume) %>
+                  <%= format('%.3f', cargo.volume) %>
                 <% end %>
               </span> &nbsp;m<sup>3</sup>
             </p>
             <p class="cargo-subtitle">Volume</p>
           </div>
           <div class="cargo-section cargo-section-last">
-            <p class="cargo-value">
-              <span class="cargo-type">
-                <%= '%.2f' % cargo.chargeable_weight %>
-              </span>
-              &nbsp;kg
-            </p>
-            <p class="cargo-subtitle">Chargeable Weight</p>
+            <% unless tenant.scope['consolidate_cargo'] %>
+              <p class="cargo-value">
+                <span class="cargo-type">
+                  <%= '%.2f' % cargo.chargeable_weight %>
+                </span>
+                &nbsp;kg
+              </p>
+              <p class="cargo-subtitle">Chargeable Weight</p>
+            <% end %>
           </div>
         </div>
       <% end %>
