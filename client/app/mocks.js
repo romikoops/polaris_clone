@@ -123,7 +123,8 @@ export const tenant = {
       truck: {},
       rail: {}
     },
-    closed_quotation_tool: true
+    closed_quotation_tool: true,
+    customs_export_paper: false
   },
   theme,
   emails: {

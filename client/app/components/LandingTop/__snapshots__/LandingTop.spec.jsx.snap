@@ -25,6 +25,7 @@ exports[`theme has truthy properties 1`] = `
         "name": "FOO_NAME",
         "scope": Object {
           "closed_quotation_tool": true,
+          "customs_export_paper": false,
           "modes_of_transport": Object {
             "air": Object {},
             "ocean": Object {
@@ -163,6 +164,7 @@ exports[`theme has truthy properties 1`] = `
                 "name": "FOO_NAME",
                 "scope": Object {
                   "closed_quotation_tool": true,
+                  "customs_export_paper": false,
                   "modes_of_transport": Object {
                     "air": Object {},
                     "ocean": Object {
@@ -241,6 +243,7 @@ exports[`theme has truthy properties 1`] = `
               "name": "FOO_NAME",
               "scope": Object {
                 "closed_quotation_tool": true,
+                "customs_export_paper": false,
                 "modes_of_transport": Object {
                   "air": Object {},
                   "ocean": Object {
@@ -318,6 +321,7 @@ exports[`user.role_id is 1 1`] = `
         "name": "FOO_NAME",
         "scope": Object {
           "closed_quotation_tool": true,
+          "customs_export_paper": false,
           "modes_of_transport": Object {
             "air": Object {},
             "ocean": Object {
@@ -452,6 +456,7 @@ exports[`user.role_id is 1 1`] = `
                 "name": "FOO_NAME",
                 "scope": Object {
                   "closed_quotation_tool": true,
+                  "customs_export_paper": false,
                   "modes_of_transport": Object {
                     "air": Object {},
                     "ocean": Object {
@@ -526,6 +531,7 @@ exports[`user.role_id is 1 1`] = `
               "name": "FOO_NAME",
               "scope": Object {
                 "closed_quotation_tool": true,
+                "customs_export_paper": false,
                 "modes_of_transport": Object {
                   "air": Object {},
                   "ocean": Object {
@@ -599,6 +605,7 @@ exports[`user.role_id is 2 1`] = `
         "name": "FOO_NAME",
         "scope": Object {
           "closed_quotation_tool": true,
+          "customs_export_paper": false,
           "modes_of_transport": Object {
             "air": Object {},
             "ocean": Object {
@@ -733,6 +740,7 @@ exports[`user.role_id is 2 1`] = `
                 "name": "FOO_NAME",
                 "scope": Object {
                   "closed_quotation_tool": true,
+                  "customs_export_paper": false,
                   "modes_of_transport": Object {
                     "air": Object {},
                     "ocean": Object {
@@ -807,6 +815,7 @@ exports[`user.role_id is 2 1`] = `
               "name": "FOO_NAME",
               "scope": Object {
                 "closed_quotation_tool": true,
+                "customs_export_paper": false,
                 "modes_of_transport": Object {
                   "air": Object {},
                   "ocean": Object {

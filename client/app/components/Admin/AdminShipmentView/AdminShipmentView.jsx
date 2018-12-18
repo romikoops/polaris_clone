@@ -802,6 +802,7 @@ Ref:&nbsp;
               saveNewEditedPrice={this.saveNewEditedPrice}
               adminDispatch={adminDispatch}
               remarkDispatch={remarkDispatch}
+              scope={scope}
             />
           ) : (
             <ShipmentQuotationContent

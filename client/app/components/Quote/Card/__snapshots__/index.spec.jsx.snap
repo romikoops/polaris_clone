@@ -358,6 +358,7 @@ exports[`shallow rendering 1`] = `
               "id": 123,
               "scope": Object {
                 "closed_quotation_tool": true,
+                "customs_export_paper": false,
                 "modes_of_transport": Object {
                   "air": Object {},
                   "ocean": Object {
@@ -468,6 +469,7 @@ exports[`shallow rendering 1`] = `
       scope={
         Object {
           "closed_quotation_tool": true,
+          "customs_export_paper": false,
           "modes_of_transport": Object {
             "air": Object {},
             "ocean": Object {
@@ -913,6 +915,7 @@ exports[`show schedules set to true 1`] = `
               "id": 123,
               "scope": Object {
                 "closed_quotation_tool": true,
+                "customs_export_paper": false,
                 "modes_of_transport": Object {
                   "air": Object {},
                   "ocean": Object {
@@ -1023,6 +1026,7 @@ exports[`show schedules set to true 1`] = `
       scope={
         Object {
           "closed_quotation_tool": true,
+          "customs_export_paper": false,
           "modes_of_transport": Object {
             "air": Object {},
             "ocean": Object {
@@ -1187,6 +1191,7 @@ exports[`single result rendering removes the "add" button 1`] = `
               "id": 123,
               "scope": Object {
                 "closed_quotation_tool": true,
+                "customs_export_paper": false,
                 "modes_of_transport": Object {
                   "air": Object {},
                   "ocean": Object {
@@ -1297,6 +1302,7 @@ exports[`single result rendering removes the "add" button 1`] = `
       scope={
         Object {
           "closed_quotation_tool": true,
+          "customs_export_paper": false,
           "modes_of_transport": Object {
             "air": Object {},
             "ocean": Object {
