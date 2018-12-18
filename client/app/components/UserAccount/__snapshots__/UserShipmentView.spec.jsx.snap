@@ -100,6 +100,7 @@ exports[`loading is true 1`] = `
       scope={
         Object {
           "closed_quotation_tool": true,
+          "customs_export_paper": false,
           "modes_of_transport": Object {
             "air": Object {},
             "ocean": Object {
@@ -422,6 +423,7 @@ exports[`shallow render 1`] = `
       scope={
         Object {
           "closed_quotation_tool": true,
+          "customs_export_paper": false,
           "modes_of_transport": Object {
             "air": Object {},
             "ocean": Object {
@@ -805,6 +807,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
       scope={
         Object {
           "closed_quotation_tool": true,
+          "customs_export_paper": false,
           "modes_of_transport": Object {
             "air": Object {},
             "ocean": Object {
@@ -1140,6 +1143,7 @@ exports[`shipmentData.contacts is present 1`] = `
       scope={
         Object {
           "closed_quotation_tool": true,
+          "customs_export_paper": false,
           "modes_of_transport": Object {
             "air": Object {},
             "ocean": Object {
@@ -1508,6 +1512,7 @@ exports[`shipmentData.documents is present 1`] = `
       scope={
         Object {
           "closed_quotation_tool": true,
+          "customs_export_paper": false,
           "modes_of_transport": Object {
             "air": Object {},
             "ocean": Object {

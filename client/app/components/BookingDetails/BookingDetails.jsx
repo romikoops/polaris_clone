@@ -91,8 +91,11 @@ export class BookingDetails extends Component {
     this.toggleCustomAddon = this.toggleCustomAddon.bind(this)
     this.toggleCustomsCredit = this.toggleCustomsCredit.bind(this)
   }
+
   componentDidMount () {
-    const { prevRequest, setStage, hideRegistration, reusedShipment } = this.props
+    const {
+      prevRequest, setStage, hideRegistration, reusedShipment
+    } = this.props
     if (reusedShipment && reusedShipment.shipment && !this.state.prevRequestLoaded) {
       this.loadReusedShipment(reusedShipment)
     } else if (prevRequest && prevRequest.shipment) {
@@ -104,15 +107,15 @@ export class BookingDetails extends Component {
   }
 
   loadReusedShipment (obj) {
-    obj.contacts.forEach ((_contact, index) =>  {
-        const contactData = {
-          address: camelizeKeys(_contact.address),
-          contact: camelizeKeys(_contact.contact)
-        }
-        if (_contact.type === "notifyee") {
-        }
-        this.setContact(contactData, _contact.type, index)
-      })
+    obj.contacts.forEach((_contact, index) => {
+      const contactData = {
+        address: camelizeKeys(_contact.address),
+        contact: camelizeKeys(_contact.contact)
+      }
+      if (_contact.type === 'notifyee') {
+      }
+      this.setContact(contactData, _contact.type, index)
+    })
     this.setState(prevState => ({
       cargoNotes: obj.shipment.cargo_notes,
       incotermText: obj.shipment.incoterm_text,
@@ -135,6 +138,7 @@ export class BookingDetails extends Component {
       }
     })
   }
+
   setContact (contactData, type, index) {
     if (type === 'notifyee') {
       const { notifyees } = this.state
@@ -144,6 +148,7 @@ export class BookingDetails extends Component {
     }
     this.setState({ [type]: contactData })
   }
+
   setCustomsFee (target, fee) {
     const { customs } = this.state
     const customsData = this.props.shipmentData.customs[target]
@@ -157,6 +162,7 @@ export class BookingDetails extends Component {
     }
     this.setState({ customs })
   }
+
   handleHsTextChange (event) {
     const { name, value } = event.target
     this.setState({
@@ -166,6 +172,7 @@ export class BookingDetails extends Component {
       }
     })
   }
+
   loadPrevReq (obj) {
     this.setState({
       cargoNotes: obj.cargoNotes,
@@ -180,9 +187,11 @@ export class BookingDetails extends Component {
       totalGoodsValue: obj.totalGoodsValue
     })
   }
+
   toggleAcceptTerms () {
     this.setState({ acceptTerms: !this.state.acceptTerms })
   }
+
   deleteCode (cargoId, code) {
     const codes = this.state.hsCodes[cargoId]
     const newCodes = codes.filter(x => x !== code)
@@ -193,9 +202,11 @@ export class BookingDetails extends Component {
       }
     })
   }
+
   toggleCustomsCredit () {
     this.setState({ customsCredit: !this.state.customsCredit })
   }
+
   toggleCustomAddon (target) {
     const { addons } = this.props.shipmentData
     const charge = addons[target].fees.total
@@ -211,12 +222,14 @@ export class BookingDetails extends Component {
       })
     })
   }
+
   handleInsurance (bool) {
     if (bool) {
       return this.calcInsurance(false, true)
     }
     this.setState({ insurance: { bool: false, val: 0 } })
   }
+
   calcInsurance (val, bool) {
     const gVal = val || parseInt(this.state.totalGoodsValue.value, 10)
     const { shipmentData } = this.props
@@ -227,11 +240,13 @@ export class BookingDetails extends Component {
     }
     this.setState({ insurance: { ...this.state.insurance, val: iVal } })
   }
+
   removeNotifyee (i) {
     const { notifyees } = this.state
     notifyees.splice(i, 1)
     this.setState({ notifyees })
   }
+
   handleTotalGoodsCurrency (selection) {
     this.setState({
       totalGoodsValue: {
@@ -240,6 +255,7 @@ export class BookingDetails extends Component {
       }
     })
   }
+
   handleCargoInput (event) {
     const { name, value } = event.target
     if (name === 'totalGoodsValue') {
@@ -255,6 +271,7 @@ export class BookingDetails extends Component {
     }
     this.setState({ [name]: value })
   }
+
   orderTotal () {
     const { shipmentData } = this.props
     const { customs, insurance } = this.state
@@ -262,6 +279,7 @@ export class BookingDetails extends Component {
 
     return parsed + customs.val + insurance.val
   }
+
   toNextStage () {
     const mandatoryFormFields = this.props.tenant.scope.mandatory_form_fields || {}
     const {
@@ -315,6 +333,7 @@ export class BookingDetails extends Component {
 
     this.props.nextStage(data)
   }
+
   handleInvalidSubmit () {
     this.setState({ finishBookingAttempted: true })
 
@@ -324,13 +343,15 @@ export class BookingDetails extends Component {
 
       return
     }
-    
+
     scrollTo('totalGoodsValue', -150)
   }
+
   backToDashboard (e) {
     e.preventDefault()
     this.props.shipmentDispatch.toDashboard()
   }
+
   render () {
     const {
       theme,

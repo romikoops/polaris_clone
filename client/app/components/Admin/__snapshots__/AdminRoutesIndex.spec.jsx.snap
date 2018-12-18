@@ -58,6 +58,7 @@ exports[`shallow render 1`] = `
           scope={
             Object {
               "closed_quotation_tool": true,
+              "customs_export_paper": false,
               "modes_of_transport": Object {
                 "air": Object {},
                 "ocean": Object {
