@@ -155,6 +155,7 @@ exports[`service && service.total 1`] = `
       }
       saveNewEditedPrice={[Function]}
       saveNewTime={[Function]}
+      scope={Object {}}
       selectedStyle={
         Object {
           "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
@@ -571,6 +572,7 @@ exports[`shallow render 1`] = `
       }
       saveNewEditedPrice={[Function]}
       saveNewTime={[Function]}
+      scope={Object {}}
       selectedStyle={
         Object {
           "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",

@@ -69,7 +69,7 @@ class AdminShipmentView extends Component {
 
   constructor (props) {
     super(props)
-   
+
     const { shipment } = this.props.shipmentData
     this.state = {
       showEditPrice: false,
@@ -107,7 +107,7 @@ class AdminShipmentView extends Component {
         export: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.export)
       }
     }
-   
+
     this.toggleEditPrice = this.toggleEditPrice.bind(this)
     this.toggleEditServicePrice = this.toggleEditServicePrice.bind(this)
     this.toggleEditTime = this.toggleEditTime.bind(this)
@@ -173,8 +173,6 @@ class AdminShipmentView extends Component {
     }))
   }
 
-
-
   toggleEditPrice () {
     this.setState({ showEditPrice: !this.state.showEditPrice })
   }
@@ -193,7 +191,7 @@ class AdminShipmentView extends Component {
   }
 
   prepCargoItemGroups (cargos) {
-    const { theme, shipmentData } = this.props
+    const { scope, theme, shipmentData } = this.props
     const { cargoItemTypes, hsCodes } = shipmentData
     const cargoGroups = {}
     let groupCount = 1
@@ -215,7 +213,7 @@ class AdminShipmentView extends Component {
           volume:
             parseFloat(c.dimension_y) *
             parseFloat(c.dimension_x) *
-            parseFloat(c.dimension_y) /
+            parseFloat(c.dimension_z) /
             1000000 *
             parseInt(c.quantity, 10),
           items: []
@@ -226,12 +224,14 @@ class AdminShipmentView extends Component {
         groupCount += 1
       }
     })
+    
     Object.keys(cargoGroups).forEach((k) => {
       resultArray.push(<CargoItemGroup
         shipment={shipmentData.shipment}
         group={cargoGroups[k]}
         theme={theme}
         hsCodes={hsCodes}
+        hideUnits={scope.cargo_overview_only}
       />)
     })
 
@@ -514,7 +514,7 @@ class AdminShipmentView extends Component {
       <div className="layout-row flex-15 flex-md-20 flex-sm-25 flex-xs-30 layout-align-center-center ">
         <StatusSelectButton
           options={this.statusOptions}
-          
+
           gradient
           theme={theme}
           wrapperStyles={` ${styles.status_box}`}
@@ -802,6 +802,7 @@ Ref:&nbsp;
               saveNewEditedPrice={this.saveNewEditedPrice}
               adminDispatch={adminDispatch}
               remarkDispatch={remarkDispatch}
+              scope={scope}
             />
           ) : (
             <ShipmentQuotationContent

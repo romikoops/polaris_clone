@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
-  theme, identity, shipmentData, shipment, change
+  theme, identity, shipmentData, shipment, change, tenant
 } from '../../../mocks'
 import { AdminShipmentContent } from './AdminShipmentContent'
 
@@ -46,6 +46,7 @@ const propsBase = {
   remarkDispatch: {
     getRemarks: jest.fn()
   },
+  scope: tenant.scope,
   shipment,
   background: {},
   selectedStyle: {},

@@ -5,15 +5,15 @@ class WelcomeMailer < ApplicationMailer
   add_template_helper(ApplicationHelper)
 
   def welcome_email(user)
-    return unless  Content.exists?(tenant_id: user.tenant_id, component: 'WelcomeMail')
+    return unless Content.exists?(tenant_id: user.tenant_id, component: 'WelcomeMail')
 
     @user = user
     @tenant = @user.tenant
     @theme = @tenant.theme
     @content = Content.get_component('WelcomeMail', @tenant.id)
-    
+
     mail(
-      from: tenant.emails.dig('support', 'general'),
+      from: @tenant.emails.dig('support', 'general'),
       to: @user.email,
       subject: @content['subject'][0]&.text
     ) do |format|
@@ -21,7 +21,4 @@ class WelcomeMailer < ApplicationMailer
       format.mjml
     end
   end
-
-  private
-
 end

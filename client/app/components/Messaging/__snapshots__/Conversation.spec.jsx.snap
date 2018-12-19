@@ -81,6 +81,7 @@ exports[`shallow render 1`] = `
                 "id": 123,
                 "scope": Object {
                   "closed_quotation_tool": true,
+                  "customs_export_paper": false,
                   "modes_of_transport": Object {
                     "air": Object {},
                     "ocean": Object {
@@ -147,6 +148,7 @@ exports[`shallow render 1`] = `
                 "id": 123,
                 "scope": Object {
                   "closed_quotation_tool": true,
+                  "customs_export_paper": false,
                   "modes_of_transport": Object {
                     "air": Object {},
                     "ocean": Object {
@@ -449,6 +451,7 @@ exports[`theme is falsy 1`] = `
                 "id": 123,
                 "scope": Object {
                   "closed_quotation_tool": true,
+                  "customs_export_paper": false,
                   "modes_of_transport": Object {
                     "air": Object {},
                     "ocean": Object {
@@ -508,6 +511,7 @@ exports[`theme is falsy 1`] = `
                 "id": 123,
                 "scope": Object {
                   "closed_quotation_tool": true,
+                  "customs_export_paper": false,
                   "modes_of_transport": Object {
                     "air": Object {},
                     "ocean": Object {
@@ -687,6 +691,7 @@ exports[`with admin user 1`] = `
                 "id": 123,
                 "scope": Object {
                   "closed_quotation_tool": true,
+                  "customs_export_paper": false,
                   "modes_of_transport": Object {
                     "air": Object {},
                     "ocean": Object {
@@ -753,6 +758,7 @@ exports[`with admin user 1`] = `
                 "id": 123,
                 "scope": Object {
                   "closed_quotation_tool": true,
+                  "customs_export_paper": false,
                   "modes_of_transport": Object {
                     "air": Object {},
                     "ocean": Object {

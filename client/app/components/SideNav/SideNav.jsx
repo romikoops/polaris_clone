@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import ReactTooltip from 'react-tooltip'
+import { get } from 'lodash'
 import { v4 } from 'uuid'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
@@ -9,7 +10,7 @@ import { bindActionCreators } from 'redux'
 import { adminActions, userActions } from '../../actions'
 import { adminMenutooltip as menuTip } from '../../constants'
 import styles from './SideNav.scss'
-import { gradientTextGenerator } from '../../helpers'
+import { gradientTextGenerator, isQuote } from '../../helpers'
 
 class SideNav extends Component {
   constructor (props) {
@@ -55,6 +56,22 @@ class SideNav extends Component {
         text: t('account:contacts'),
         url: '/account/contacts',
         target: 'contacts'
+      }
+    ]
+    this.agentLinks = [
+      {
+        key: v4(),
+        icon: 'fa-tachometer',
+        url: '/account',
+        text: t('account:dashboard'),
+        target: 'dashboard'
+      },
+      {
+        key: v4(),
+        icon: 'fa-ship',
+        text: t('account:quotes'),
+        url: '/account/shipments',
+        target: 'shipments'
       }
     ]
     this.adminLinks = [
@@ -136,7 +153,16 @@ class SideNav extends Component {
     const isAdmin = (user.role && user.role.name === 'admin') ||
       (user.role && user.role.name === 'super_admin') ||
       (user.role && user.role.name === 'sub_admin')
-    const links = isAdmin ? this.adminLinks : this.userLinks
+    let links
+    if (isAdmin) {
+      links = this.adminLinks
+    } else if (get(user, ['role','name'], '') === 'agent') {
+      links = this.agentLinks
+    } else {
+      links = this.userLinks
+    }
+    
+
     const superAdminLink = {
       key: 'super-admin',
       icon: 'fa-star',
@@ -147,6 +173,7 @@ class SideNav extends Component {
     if (user.role && user.role.name === 'super_admin' && links.indexOf(superAdminLink) < 0) {
       links.push(superAdminLink)
     }
+    this.links = links
     links.forEach((link, i) => {
       this.state.linkVisibility[i] = false
     })
@@ -156,6 +183,7 @@ class SideNav extends Component {
     this.handleClickAction = this.handleClickAction.bind(this)
     this.toggleActiveIndex = this.toggleActiveIndex.bind(this)
   }
+
   componentWillReceiveProps (nextProps) {
     if (nextProps.expand) {
       this.setState({ linkTextClass: '' })
@@ -229,6 +257,7 @@ class SideNav extends Component {
         break
     }
   }
+
   setUserUrl (target) {
     const { userDispatch, user, tenant } = this.props
     const { scope } = tenant
@@ -257,6 +286,7 @@ class SideNav extends Component {
         break
     }
   }
+
   setLinkVisibility (bool, i) {
     this.setState((prevState) => {
       const { linkVisibility } = prevState
@@ -265,9 +295,11 @@ class SideNav extends Component {
       return { linkVisibility }
     })
   }
+
   toggleActiveIndex (index) {
     this.setState({ activeIndex: index })
   }
+
   updateActiveIndex (currentUrl) {
     const { user } = this.props
     const isAdmin = user && user.role && user.role.name.includes('admin')
@@ -279,26 +311,29 @@ class SideNav extends Component {
       : this.userLinks.indexOf(newActiveLink)
     this.toggleActiveIndex(newActiveIndex)
   }
+
   handleClickAction (li, i, isAdmin) {
     if (!this.state.linkVisibility[i] && !this.props.expand) return
 
     this.toggleActiveIndex(i)
     isAdmin ? this.setAdminUrl(li.target) : this.setUserUrl(li.target)
   }
+
   render () {
-    const { theme, user, expand } = this.props
+    const {
+      theme, user, expand
+    } = this.props
 
     const isAdmin = (user.role && user.role.name === 'admin') ||
     (user.role && user.role.name === 'super_admin') ||
     (user.role && user.role.name === 'sub_admin')
-    const links = isAdmin ? this.adminLinks : this.userLinks
 
     const textStyle =
         theme && theme.colors
           ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
           : { background: 'black' }
 
-    const navLinks = links.map((li, i) => {
+    const navLinks = this.links.map((li, i) => {
       const toolId = v4()
 
       return (

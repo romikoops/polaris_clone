@@ -19,20 +19,18 @@ import ShipmentNotes from '../ShipmentNotes'
 import QuoteChargeBreakdown from '../QuoteChargeBreakdown/QuoteChargeBreakdown'
 
 class ShipmentQuotationContent extends Component {
-  constructor(props) {
-    super(props)
-  }
-  componentDidMount(){
+  componentDidMount () {
     this.getRemarks()
   }
 
-  getRemarks() {
+  getRemarks () {
     const { remarkDispatch } = this.props
     remarkDispatch.getRemarks()
   }
 
-  render() {
-    const { theme,
+  render () {
+    const {
+      theme,
       gradientBorderStyle,
       gradientStyle,
       estimatedTimes,
@@ -46,7 +44,7 @@ class ShipmentQuotationContent extends Component {
       cargoView,
       remark
     } = this.props
-    
+
     const remarkBody = remark.quotation ? remark.quotation.shipment.map(_remark => (
       <li>
         {_remark.body}
@@ -214,20 +212,22 @@ class ShipmentQuotationContent extends Component {
                 </div>
               </div>
             </div>
-            <div>
-              <div className={`flex-100 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
-                  <div className="layout-column flex-100">
-                    <h3 
-                      style={{ marginBottom: '0px' }}
-                    >
-                      {t('shipment:remarks')}:
-                    </h3>
-                    <ul>
-                      {remarkBody}
-                    </ul>
-                  </div>
+            {remarkBody ? (
+              <div>
+                <div className={`flex-100 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
+                    <div className="layout-column flex-100">
+                      <h3
+                        style={{ marginBottom: '0px' }}
+                      >
+                        {t('shipment:remarks')}:
+                      </h3>
+                      <ul>
+                        {remarkBody}
+                      </ul>
+                    </div>
+                </div>
               </div>
-            </div>
+            ) : ''}
           </div>
           <div className="flex-40 layout-row">
             <div
@@ -304,7 +304,7 @@ function mapStateToProps (state) {
   const {
     remark
   } = state
-  
+
   return {
     remark
   }

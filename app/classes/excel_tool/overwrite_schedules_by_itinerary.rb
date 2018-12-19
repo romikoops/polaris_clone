@@ -28,12 +28,12 @@ module ExcelTool
 
     def _stats
       {
-        type:     'schedules',
+        type: 'schedules',
         layovers: {
           number_updated: 0,
           number_created: 0
         },
-        trips:    {
+        trips: {
           number_updated: 0,
           number_created: 0
         }
@@ -43,21 +43,22 @@ module ExcelTool
     def _results
       {
         layovers: [],
-        trips:    []
+        trips: []
       }
     end
 
     def _schedules
       first_sheet.parse(
-        vessel:        'VESSEL',
-        voyage_code:   'VOYAGE_CODE',
-        from:          'FROM',
-        to:            'TO',
-        closing_date:  'CLOSING_DATE',
-        eta:           'ETA',
-        etd:           'ETD',
+        vessel: 'VESSEL',
+        voyage_code: 'VOYAGE_CODE',
+        from: 'FROM',
+        to: 'TO',
+        closing_date: 'CLOSING_DATE',
+        eta: 'ETA',
+        etd: 'ETD',
         service_level: 'SERVICE_LEVEL',
-        carrier:       'CARRIER'
+        carrier: 'CARRIER',
+        load_type: 'LOAD_TYPE'
       )
     end
 
@@ -70,7 +71,7 @@ module ExcelTool
       if itinerary
         generator_results = itinerary.generate_schedules_from_sheet(
           stops, startDate, endDate, tenant_vehicle.vehicle_id,
-          row[:closing_date], row[:vessel], row[:voyage_code]
+          row[:closing_date], row[:vessel], row[:voyage_code], row[:load_type]
         )
         push_results(generator_results)
         push_stats(generator_results)

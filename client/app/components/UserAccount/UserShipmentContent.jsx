@@ -226,7 +226,7 @@ class UserShipmentContent extends Component {
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
-                      estimatedTime={formattedDate(estimatedTimes.etdJSX)}
+                      estimatedTime={estimatedTimes.etdJSX}
                       text={t('common:etd')}
                       theme={theme}
                       carriage={pickupDate}
@@ -259,7 +259,7 @@ class UserShipmentContent extends Component {
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
-                      estimatedTime={formattedDate(estimatedTimes.etaJSX)}
+                      estimatedTime={estimatedTimes.etaJSX}
                       carriage={deliveryDate}
                       shipment={shipment}
                       text={t('common:eta')}
@@ -471,7 +471,7 @@ class UserShipmentContent extends Component {
                   <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
                     <div className="layout-align-start-center layout-row flex">
                       <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>
-x&nbsp;
+                        x&nbsp;
                         {shipment.cargo_count}
                       </span>
                       <p className="layout-align-sm-end-center layout-align-xs-end-center">{cargoPlurals(shipment, t)}</p>
@@ -485,7 +485,7 @@ x&nbsp;
                 </div>
               </div>
             </div>
-            {remarkBody}
+            {remarkBody ? remarkBody : ''}
           </div>
 
         </Tab>
@@ -505,7 +505,7 @@ x&nbsp;
         <Tab
           tabTitle={t('cargo:cargoDetails')}
           theme={theme}
-        > 
+        >
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
             <GreyBox
               wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_bottom}`}

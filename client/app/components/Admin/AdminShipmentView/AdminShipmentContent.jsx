@@ -84,7 +84,8 @@ export class AdminShipmentContent extends Component {
       saveNewEditedPrice,
       t,
       handlePriceChange,
-      remark
+      remark,
+      scope
     } = this.props
 
     const {
@@ -485,112 +486,114 @@ export class AdminShipmentContent extends Component {
                   </div>
                 </div>
               </div>
-              <div className={`flex-25 layout-row flex-sm-100 flex-xs-100 ${styles.additional_services} ${styles.services_box} ${styles.border_right}`}>
-                <div className="layout-column flex-80">
-                  <h3>{t('shipment:additionalServices')}</h3>
-                  <div className="">
-                    <div className="flex-100 margin_bottom">
-                      <div className="layout-row flex-100">
-                        <div className="layout-row flex-100 layout-wrap">
-                          <div className="flex-100 layout-row">
-                            <i className="fa fa-id-card clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
-                            <p>{t('shipment:customs')}</p>
-                          </div>
-                          {feeHash.customs
-                            ? (
-                              <div className="flex-100 layout-row layout-align-end-center">
-                                <p>
-                                  {feeHash.customs ? feeHash.customs.total.currency : ''}
-                                  { ' ' }
-                                  {feeHash.customs.edited_total
-                                    ? parseFloat(feeHash.customs.edited_total.value).toFixed(2)
-                                    : parseFloat(feeHash.customs.total.value).toFixed(2)}
-                                </p>
-                              </div>
-                            )
-                            : '' }
-                        </div>
-
-                      </div>
-
-                    </div>
-                    <div className="flex-100 margin_bottom">
-                      <div className="layout-row flex-100">
-                        <div className="layout-row flex-100 layout-wrap">
-                          <div className="flex-100 layout-row">
-                            <i className="fa fa-umbrella clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
-                            <p>{t('shipment:insurance')}</p>
-                          </div>
-                          {feeHash.insurance && (feeHash.insurance.value || feeHash.insurance.edited_total)
-                            ? (
-                              <div className="flex-100 layout-row layout-align-end-center">
-                                <p>
-                                  {feeHash.insurance ? feeHash.insurance.currency : ''}
-                                  { ' ' }
-                                  {feeHash.insurance.edited_total
-                                    ? parseFloat(feeHash.insurance.edited_total.value).toFixed(2)
-                                    : ''}
-                                  {feeHash.insurance.value
-                                    ? parseFloat(feeHash.insurance.value).toFixed(2)
-                                    : ''}
-                                </p>
-                              </div>
-                            )
-                            : '' }
-                          {feeHash.insurance && !feeHash.insurance.value && !feeHash.insurance.edited_total
-                            ? (
-                              <div className="flex-100 layout-row layout-align-end-center">
-                                <p>{t('shipment:requested')}</p>
-                              </div>
-                            ) : ''}
-                          {showEditServicePrice && shipment.selected_offer.insurance ? (
-                            <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
-                              <span
-                                className={
-                                  `layout-row flex-100 layout-padding
-                            layout-align-center-center ${styles.greybg}`
-                                }
-                              >
-                                {newPrices.insurance.currency}
-                              </span>
-                              <input
-                                type="number"
-                                onChange={e => handlePriceChange('insurance', e.target.value)}
-                                value={newPrices.insurance.value}
-                                className="layout-padding layout-row flex-70 flex-initial"
-                              />
+              { scope.customs_export_paper ? '' : (
+                <div className={`flex-25 layout-row flex-sm-100 flex-xs-100 ${styles.additional_services} ${styles.services_box} ${styles.border_right}`}>
+                  <div className="layout-column flex-80">
+                    <h3>{t('shipment:additionalServices')}</h3>
+                    <div className="">
+                      <div className="flex-100 margin_bottom">
+                        <div className="layout-row flex-100">
+                          <div className="layout-row flex-100 layout-wrap">
+                            <div className="flex-100 layout-row">
+                              <i className="fa fa-id-card clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
+                              <p>{t('shipment:customs')}</p>
                             </div>
-                          ) : (
-                            ''
-                          )}
+                            {feeHash.customs
+                              ? (
+                                <div className="flex-100 layout-row layout-align-end-center">
+                                  <p>
+                                    {feeHash.customs ? feeHash.customs.total.currency : ''}
+                                    { ' ' }
+                                    {feeHash.customs.edited_total
+                                      ? parseFloat(feeHash.customs.edited_total.value).toFixed(2)
+                                      : parseFloat(feeHash.customs.total.value).toFixed(2)}
+                                  </p>
+                                </div>
+                              )
+                              : '' }
+                          </div>
+
                         </div>
 
                       </div>
+                      <div className="flex-100 margin_bottom">
+                        <div className="layout-row flex-100">
+                          <div className="layout-row flex-100 layout-wrap">
+                            <div className="flex-100 layout-row">
+                              <i className="fa fa-umbrella clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
+                              <p>{t('shipment:insurance')}</p>
+                            </div>
+                            {feeHash.insurance && (feeHash.insurance.value || feeHash.insurance.edited_total)
+                              ? (
+                                <div className="flex-100 layout-row layout-align-end-center">
+                                  <p>
+                                    {feeHash.insurance ? feeHash.insurance.currency : ''}
+                                    { ' ' }
+                                    {feeHash.insurance.edited_total
+                                      ? parseFloat(feeHash.insurance.edited_total.value).toFixed(2)
+                                      : ''}
+                                    {feeHash.insurance.value
+                                      ? parseFloat(feeHash.insurance.value).toFixed(2)
+                                      : ''}
+                                  </p>
+                                </div>
+                              )
+                              : '' }
+                            {feeHash.insurance && !feeHash.insurance.value && !feeHash.insurance.edited_total
+                              ? (
+                                <div className="flex-100 layout-row layout-align-end-center">
+                                  <p>{t('shipment:requested')}</p>
+                                </div>
+                              ) : ''}
+                            {showEditServicePrice && shipment.selected_offer.insurance ? (
+                              <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
+                                <span
+                                  className={
+                                    `layout-row flex-100 layout-padding
+                            layout-align-center-center ${styles.greybg}`
+                                  }
+                                >
+                                  {newPrices.insurance.currency}
+                                </span>
+                                <input
+                                  type="number"
+                                  onChange={e => handlePriceChange('insurance', e.target.value)}
+                                  value={newPrices.insurance.value}
+                                  className="layout-padding layout-row flex-70 flex-initial"
+                                />
+                              </div>
+                            ) : (
+                              ''
+                            )}
+                          </div>
 
+                        </div>
+
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="layout-row layout-padding flex-20 layout-align-center-start">
-                  {showEditServicePrice ? (
-                    <div className="layout-column layout-align-center-center">
-                      <div className={`layout-row layout-align-center-center ${styles.save}`}>
-                        <i onClick={saveNewEditedPrice} className="fa fa-check" />
+                  <div className="layout-row layout-padding flex-20 layout-align-center-start">
+                    {showEditServicePrice ? (
+                      <div className="layout-column layout-align-center-center">
+                        <div className={`layout-row layout-align-center-center ${styles.save}`}>
+                          <i onClick={saveNewEditedPrice} className="fa fa-check" />
+                        </div>
+                        <div className={`layout-row layout-align-center-center ${styles.cancel}`}>
+                          <i onClick={toggleEditServicePrice} className="fa fa-trash" />
+                        </div>
                       </div>
-                      <div className={`layout-row layout-align-center-center ${styles.cancel}`}>
-                        <i onClick={toggleEditServicePrice} className="fa fa-trash" />
-                      </div>
-                    </div>
-                  ) : (
-                    <i onClick={toggleEditServicePrice} className={`fa fa-edit ${styles.editIcon}`} />
-                  )}
+                    ) : (
+                      <i onClick={toggleEditServicePrice} className={`fa fa-edit ${styles.editIcon}`} />
+                    )}
+                  </div>
                 </div>
-              </div>
+              ) }
               <div className={`flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding ${styles.services_box}`}>
                 <div className="layout-column flex-100">
                   <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
                     <div className="layout-align-start-center layout-row flex">
                       <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>
-x&nbsp;
+                        x&nbsp;
                         {shipment.cargo_count}
                       </span>
                       <p className="layout-align-sm-end-center layout-align-xs-end-center">{cargoPlurals(shipment, t)}</p>
@@ -604,21 +607,22 @@ x&nbsp;
                 </div>
               </div>
             </div>
-            <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}>
-              <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
-                <div className="layout-column flex-100">
-                  <h3
-                    style={{ marginBottom: '0px' }}
-                  >
-                    {t('shipment:remarks')}
-:
-                  </h3>
-                  <ul>
-                    {remarkBody}
-                  </ul>
+            {remarkBody ? (
+              <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}>
+                <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
+                  <div className="layout-column flex-100">
+                    <h3
+                      style={{ marginBottom: '0px' }}
+                    >
+                      {`${t('shipment:remarks')}:`}
+                    </h3>
+                    <ul>
+                      {remarkBody}
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : ''}
           </div>
         </Tab>
         <Tab
@@ -647,6 +651,7 @@ x&nbsp;
             />
             <ShipmentNotes
               shipment={shipment}
+              scope={scope}
             />
           </div>
         </Tab>
