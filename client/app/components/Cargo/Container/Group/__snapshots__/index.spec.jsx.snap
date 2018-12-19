@@ -167,7 +167,8 @@ exports[`props.viewHSCodes is true 1`] = `
               <span>
                 76
               </span>
-                kg
+               
+               kg
             </p>
             <p
               className="flex-none layout-row layout-align-center-center"
@@ -188,7 +189,8 @@ exports[`props.viewHSCodes is true 1`] = `
               <span>
                 20
               </span>
-                kg
+               
+               kg
             </p>
             <p
               className="flex-none layout-row layout-align-center-center"
@@ -370,7 +372,8 @@ exports[`shallow render 1`] = `
               <span>
                 76
               </span>
-                kg
+               
+               kg
             </p>
             <p
               className="flex-none layout-row layout-align-center-center"
@@ -391,7 +394,8 @@ exports[`shallow render 1`] = `
               <span>
                 20
               </span>
-                kg
+               
+               kg
             </p>
             <p
               className="flex-none layout-row layout-align-center-center"
@@ -573,7 +577,8 @@ exports[`state.unitView is true 1`] = `
               <span>
                 76
               </span>
-                kg
+               
+               kg
             </p>
             <p
               className="flex-none layout-row layout-align-center-center"
@@ -594,7 +599,8 @@ exports[`state.unitView is true 1`] = `
               <span>
                 20
               </span>
-                kg
+               
+               kg
             </p>
             <p
               className="flex-none layout-row layout-align-center-center"
@@ -776,7 +782,8 @@ exports[`state.viewer is true 1`] = `
               <span>
                 76
               </span>
-                kg
+               
+               kg
             </p>
             <p
               className="flex-none layout-row layout-align-center-center"
@@ -797,7 +804,8 @@ exports[`state.viewer is true 1`] = `
               <span>
                 20
               </span>
-                kg
+               
+               kg
             </p>
             <p
               className="flex-none layout-row layout-align-center-center"

@@ -26,7 +26,7 @@ exports[`props.viewHSCodes is true 1`] = `
         className="icon_cargo_item"
         style={
           Object {
-            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/container.svg)",
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
@@ -279,7 +279,7 @@ exports[`shallow render 1`] = `
         className="icon_cargo_item"
         style={
           Object {
-            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/container.svg)",
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
@@ -532,7 +532,7 @@ exports[`state.unitView is true 1`] = `
         className="icon_cargo_item"
         style={
           Object {
-            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/container.svg)",
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
@@ -785,7 +785,7 @@ exports[`state.viewer is true 1`] = `
         className="icon_cargo_item"
         style={
           Object {
-            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/container.svg)",
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
