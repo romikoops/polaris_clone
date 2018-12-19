@@ -145,7 +145,6 @@ cm
     )
     const aggStyle = unitView ? styles.closed_panel : styles.open_panel
     const imgLCL = { backgroundImage: `url(${LOAD_TYPES[0].img})` }
-    const imgFCL = { backgroundImage: `url(${LOAD_TYPES[1].img})` }
     const aggViewer = (
       <div
         className={`${aggStyle} ${
@@ -165,11 +164,7 @@ cm
           </div>
           <div className={`flex-20 layout-row layout-align-center-center ${styles.side_border}`}>
             <p className="flex-none layout-row layout-align-center-center">{`x ${group.items.length}`}</p>
-            {shipment.load_type === 'cargo_item' ? (
-              <div className={styles.icon_cargo_item} style={imgLCL} />
-            ) : (
-              <div className={styles.icon_cargo_item} style={imgFCL} />
-            )}
+            <div className={styles.icon_cargo_item} style={imgLCL} />
           </div>
           <div className={`flex-20 layout-row layout-align-center-center ${styles.side_border}`}>
             <div className="">

@@ -19,19 +19,23 @@ class CargoContainerGroup extends Component {
     this.handleCollapser = this.handleCollapser.bind(this)
     this.viewHsCodes = this.viewHsCodes.bind(this)
   }
+
   viewHsCodes () {
     this.setState({
       viewer: !this.state.viewer
     })
   }
+
   handleCollapser () {
     this.setState({
       collapsed: !this.state.collapsed
     })
   }
+
   handleViewToggle (value) {
     this.setState({ unitView: !this.state.unitView })
   }
+
   render () {
     const {
       group, shipment, theme, t
@@ -55,14 +59,17 @@ class CargoContainerGroup extends Component {
         <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center">
-              <span>{group.items[0].weight_class}</span></p>
+              <span>{group.items[0].weight_class}</span>
+            </p>
             <p className="flex-none layout-row layout-align-center-center">{t('cargo:weightClass')}</p>
           </div>
         </div>
         <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center">
-              <span>{group.items[0].payload_in_kg}</span>&nbsp;kg</p>
+              <span>{group.items[0].payload_in_kg}</span>
+&nbsp;kg
+            </p>
             <p className="flex-none layout-row layout-align-center-center">{t('cargo:cargoGrossWeight')}</p>
           </div>
         </div>
@@ -72,20 +79,27 @@ class CargoContainerGroup extends Component {
             <p className="flex-none layout-row layout-align-center-center">
               <span>
                 {(group.items[0].gross_weight)}
-              </span> &nbsp;kg</p>
+              </span>
+              {' '}
+&nbsp;kg
+            </p>
             <p className="flex-none layout-row layout-align-center-center">{t('cargo:grossWeight')}</p>
           </div>
         </div>
         <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
           <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center"><span>{parseFloat(group.items[0].tare_weight)}</span> &nbsp;kg</p>
+            <p className="flex-none layout-row layout-align-center-center">
+              <span>{parseFloat(group.items[0].tare_weight)}</span>
+              {' '}
+&nbsp;kg
+            </p>
             <p className="flex-none layout-row layout-align-center-center">{t('cargo:tareWeight')}</p>
           </div>
         </div>
       </div>
     )
     const aggStyle = unitView ? styles.closed_panel : styles.open_panel
-    const imgLCL = { backgroundImage: `url(${LOAD_TYPES[0].img})` }
+
     const imgFCL = { backgroundImage: `url(${LOAD_TYPES[1].img})` }
     const aggViewer = (
       <div
@@ -107,11 +121,7 @@ class CargoContainerGroup extends Component {
           </div>
           <div className={`flex-20 layout-row layout-align-center-center ${styles.side_border}`}>
             <p className="flex-none layout-row layout-align-center-center">{`x ${group.items.length}`}</p>
-            {shipment.load_type === 'cargo_item' ? (
-              <div className={styles.icon_cargo_item} style={imgLCL} />
-            ) : (
-              <div className={styles.icon_cargo_item} style={imgFCL} />
-            )}
+            <div className={styles.icon_cargo_item} style={imgFCL} />
           </div>
           <div className={`flex-20 layout-row layout-align-center-center ${styles.side_border}`}>
             <div className="layout-column">

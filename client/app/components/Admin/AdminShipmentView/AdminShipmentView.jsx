@@ -213,7 +213,7 @@ class AdminShipmentView extends Component {
           volume:
             parseFloat(c.dimension_y) *
             parseFloat(c.dimension_x) *
-            parseFloat(c.dimension_y) /
+            parseFloat(c.dimension_z) /
             1000000 *
             parseInt(c.quantity, 10),
           items: []
@@ -224,6 +224,7 @@ class AdminShipmentView extends Component {
         groupCount += 1
       }
     })
+    
     Object.keys(cargoGroups).forEach((k) => {
       resultArray.push(<CargoItemGroup
         shipment={shipmentData.shipment}
