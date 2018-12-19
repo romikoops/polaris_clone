@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_10_125523) do
+ActiveRecord::Schema.define(version: 2018_12_19_093407) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -767,6 +767,7 @@ ActiveRecord::Schema.define(version: 2018_12_10_125523) do
     t.string "vessel"
     t.integer "tenant_vehicle_id"
     t.datetime "closing_date"
+    t.string "load_type"
   end
 
   create_table "truck_type_availabilities", force: :cascade do |t|

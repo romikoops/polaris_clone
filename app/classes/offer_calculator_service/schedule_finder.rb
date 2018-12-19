@@ -4,7 +4,7 @@ module OfferCalculatorService
   class ScheduleFinder < Base
     def perform(routes, raw_delay_in_days, hubs)
       delay_in_days = sanitized_delay_in_days(raw_delay_in_days)
-      Schedule.from_routes(routes, current_etd_in_search(hubs), delay_in_days)
+      Schedule.from_routes(routes, current_etd_in_search(hubs), delay_in_days, @shipment.load_type)
     end
 
     private
@@ -28,9 +28,7 @@ module OfferCalculatorService
         )
 
         driving_time = google_directions.driving_time_in_seconds
-        if driving_time
-          return google_directions.driving_time_in_seconds_for_trucks(driving_time)
-        end
+        return google_directions.driving_time_in_seconds_for_trucks(driving_time) if driving_time
       end
     rescue GoogleDirections::NoDrivingTime => e
       Raven.capture_exception(e)
