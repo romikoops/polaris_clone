@@ -471,7 +471,7 @@ class UserShipmentContent extends Component {
                   <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
                     <div className="layout-align-start-center layout-row flex">
                       <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>
-x&nbsp;
+                        x&nbsp;
                         {shipment.cargo_count}
                       </span>
                       <p className="layout-align-sm-end-center layout-align-xs-end-center">{cargoPlurals(shipment, t)}</p>
