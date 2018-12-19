@@ -73,7 +73,8 @@ export const documentTypes = {
   dangerous_goods: 'Dangerous Goods',
   bill_of_lading: 'Bill of Lading',
   invoice: 'Invoice',
-  miscellaneous: 'Miscellaneous'
+  miscellaneous: 'Miscellaneous',
+  export_customs_paper: 'Export Customs Paper'
 }
 export const shipmentStatii = {
   booking_process_started: 'Booking Process Started',
