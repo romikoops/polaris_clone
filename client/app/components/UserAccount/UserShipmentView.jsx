@@ -94,7 +94,7 @@ class UserShipmentView extends Component {
           volume:
             parseFloat(c.dimension_y) *
             parseFloat(c.dimension_x) *
-            parseFloat(c.dimension_y) /
+            parseFloat(c.dimension_z) /
             1000000 *
             parseInt(c.quantity, 10),
           items: []
