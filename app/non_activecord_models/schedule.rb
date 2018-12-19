@@ -6,7 +6,7 @@ class Schedule
   attr_accessor :id, :origin_hub_id, :destination_hub_id,
                 :origin_hub_name, :destination_hub_name, :mode_of_transport,
                 :total_price, :eta, :etd, :closing_date, :vehicle_name, :trip_id,
-                :quote, :carrier_name
+                :quote, :carrier_name, :load_type
 
   def origin_hub
     Hub.find origin_hub_id
@@ -43,7 +43,7 @@ class Schedule
     }
   end
 
-  def self.from_routes(routes, current_etd_in_search, delay_in_days)
+  def self.from_routes(routes, current_etd_in_search, delay_in_days, load_type)
     grouped_data_from_routes = Route.group_data_by_attribute(routes)
 
     raw_query = "
@@ -76,6 +76,7 @@ class Schedule
       AND   origin_layovers.trip_id = destination_layovers.trip_id
       AND   origin_layovers.closing_date < ?
       AND   origin_layovers.closing_date > ?
+      AND   trips.load_type = ?
       ORDER BY origin_layovers.etd
     "
     sanitized_query = ApplicationRecord.public_sanitize_sql(
@@ -85,7 +86,8 @@ class Schedule
         grouped_data_from_routes[:origin_stop_ids],
         grouped_data_from_routes[:destination_stop_ids],
         current_etd_in_search + delay_in_days.days,
-        current_etd_in_search
+        current_etd_in_search,
+        load_type
       ]
     )
     ActiveRecord::Base.connection.exec_query(sanitized_query).map do |attributes|
@@ -106,7 +108,8 @@ class Schedule
       destination_hub_name: trip.itinerary.last_stop.hub.name,
       vehicle_name:         trip.tenant_vehicle.name,
       carrier_name:         trip.tenant_vehicle&.carrier&.name,
-      trip_id:              trip.id
+      trip_id:              trip.id,
+      load_type:            trip.load_type
     )
   end
 

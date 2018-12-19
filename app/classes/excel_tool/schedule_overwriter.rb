@@ -68,7 +68,8 @@ module ExcelTool
         eta:           'ETA',
         etd:           'ETD',
         service_level: 'SERVICE_LEVEL',
-        carrier:       'CARRIER'
+        carrier:       'CARRIER',
+        load_type:      'LOAD_TYPE'
       )
     end
 
@@ -106,7 +107,7 @@ module ExcelTool
 
       tenant_vehicle_id = find_or_create_tenant_vehicle(row, itinerary).id
       generator_results = itinerary.generate_schedules_from_sheet(stops, start_date,
-                                                                  end_date, tenant_vehicle_id, row[:closing_date], row[:vessel], row[:voyage_code])
+                                                                  end_date, tenant_vehicle_id, row[:closing_date], row[:vessel], row[:voyage_code], row[:load_type])
       results[:trips] = generator_results[:trips]
       results[:layovers] = generator_results[:layovers]
       stats[:trips][:number_created] = generator_results[:trips].count

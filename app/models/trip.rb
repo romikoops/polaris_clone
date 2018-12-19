@@ -6,7 +6,7 @@ class Trip < ApplicationRecord
   belongs_to :tenant_vehicle
   belongs_to :itinerary
   validates :itinerary_id, uniqueness: {
-    scope:   %i(start_date end_date closing_date tenant_vehicle_id),
+    scope:   %i(start_date end_date closing_date tenant_vehicle_id load_type),
     message: 'Trip must be unique to add.'
   }
 

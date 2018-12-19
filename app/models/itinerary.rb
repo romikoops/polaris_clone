@@ -21,19 +21,20 @@ class Itinerary < ApplicationRecord
 
   validate :must_have_stops
   self.per_page = 12
-  def generate_schedules_from_sheet(stops, start_date, end_date, tenant_vehicle_id, closing_date, vessel, voyage_code)
+  def generate_schedules_from_sheet(stops, start_date, end_date, tenant_vehicle_id, closing_date, vessel, voyage_code, load_type)
     results = {
       layovers: [],
       trips:    []
     }
-
+    parsed_load_type = parse_load_type(load_type)
     trip = trips.new(
       start_date: start_date,
       end_date: end_date,
       tenant_vehicle_id: tenant_vehicle_id,
       vessel: vessel,
       voyage_code: voyage_code,
-      closing_date: closing_date
+      closing_date: closing_date,
+      load_type: parsed_load_type
     )
     return results unless trip.save
 
@@ -64,12 +65,21 @@ class Itinerary < ApplicationRecord
     results
   end
 
+  def parse_load_type(raw_load_type)
+    if %w(cargo_item lcl).include?(raw_load_type.downcase.strip)
+      return 'cargo_item'
+    else
+      return 'container'
+    end
+  end
+
   def default_generate_schedules(end_date)
     finish_date = end_date || DateTime.now + 21.days
     tenant_vehicle_ids = pricings.pluck(:tenant_vehicle_id).uniq
     stops_in_order = stops.order(:index)
     tenant_vehicle_ids.each do |tv_id|
-      existing_trip = trips.where(tenant_vehicle_id: tv_id).first
+      %w(container cargo_item).each do |load_type|
+      existing_trip = trips.where(tenant_vehicle_id: tv_id, load_type: load_type).first
       steps_in_order = existing_trip ?
         (existing_trip.end_date - existing_trip.start_date) / 86_400 : rand(20..50)
       generate_weekly_schedules(
@@ -79,12 +89,14 @@ class Itinerary < ApplicationRecord
         finish_date,
         [1, 5],
         tv_id,
-        4
+        4,
+        load_type
       )
+      end
     end
   end
 
-  def generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinal_array, tenant_vehicle_id, closing_date_buffer = 4)
+  def generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinal_array, tenant_vehicle_id, closing_date_buffer = 4, load_type)
     results = {
       layovers: [],
       trips:    []
@@ -101,7 +113,7 @@ class Itinerary < ApplicationRecord
     }
     tmp_date = start_date.is_a?(Date)      ? start_date : DateTime.parse(start_date)
     end_date_parsed = end_date.is_a?(Date) ? end_date   : DateTime.parse(end_date)
-
+    parsed_load_type = parse_load_type(load_type)
     stop_data = []
     steps_in_order = steps_in_order.map(&:to_i)
     while tmp_date < end_date_parsed
@@ -114,7 +126,8 @@ class Itinerary < ApplicationRecord
           start_date:        journey_start,
           end_date:          journey_end,
           tenant_vehicle_id: tenant_vehicle_id,
-          closing_date:      closing_date
+          closing_date:      closing_date,
+          load_type:         parsed_load_type
         )
         unless trip.save
           tmp_date += 1.day

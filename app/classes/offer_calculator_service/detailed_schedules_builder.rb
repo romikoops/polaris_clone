@@ -76,7 +76,7 @@ module OfferCalculatorService
       result_to_return = []
       cargo_classes = shipment.aggregated_cargo ? ['lcl'] : shipment.cargo_units.pluck(:cargo_class)
       schedule_groupings = schedules.group_by do |schedule|
-        "#{schedule.mode_of_transport}_#{schedule.vehicle_name}_#{schedule.carrier_name}"
+        "#{schedule.mode_of_transport}_#{schedule.vehicle_name}_#{schedule.carrier_name}_#{schedule.load_type}"
       end
       schedule_groupings.each do |_key, schedules_array|
         schedules_array.sort_by!{|sched| sched.eta }
@@ -91,8 +91,9 @@ module OfferCalculatorService
         end
         user_pricing_id = user.role.name == 'agent' ? user.agency_pricing_id : user.id
         # Find the pricings for the cargo classes and effective date ranges then group by cargo_class
-
+        tenant_vehicle_id = schedules_array.first.trip.tenant_vehicle_id
         pricings_by_cargo_class = schedules_array.first.trip.itinerary.pricings
+          .where(tenant_vehicle_id: tenant_vehicle_id)
           .for_cargo_class(cargo_classes)
         if start_date && end_date
           pricings_by_cargo_class = pricings_by_cargo_class.for_dates(start_date, end_date)

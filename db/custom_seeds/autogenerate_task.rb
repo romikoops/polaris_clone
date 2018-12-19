@@ -72,7 +72,8 @@ genObj.each do |subdomain, cargo_class_routes|
           finish_date,
           [ordinalLookup[genData[:departure].to_sym]],
           tv_id,
-          4
+          4,
+          cargo_class.to_s
         )
       end
     end
