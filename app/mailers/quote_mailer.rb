@@ -15,6 +15,14 @@ class QuoteMailer < ApplicationMailer
     @email = email[/[^@]+/]
     @content = Content.get_component('QuotePdf', @user.tenant.id)
 
+    @mot =
+      case @shipments.first.mode_of_transport
+      when 'ocean' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-01.png'
+      when 'air' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-02.png'
+      when 'truck' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-03.png'
+      when 'rail' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-04.png'
+      end
+
     quotation = generate_and_upload_quotation(@quotes)
     @document = Document.create!(
       shipment: shipment,
@@ -29,7 +37,8 @@ class QuoteMailer < ApplicationMailer
       }
     )
     pdf_name = "quotation_#{@shipment.imc_reference}.pdf"
-    attachments.inline['logo.png'] = URI.open(@theme['logoLarge']).read
+    attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
+    attachments.inline['icon.png'] = URI.open(@mot).read
     attachments.inline[pdf_name] = quotation
 
     mail(

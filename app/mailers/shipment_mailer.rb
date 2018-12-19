@@ -20,8 +20,17 @@ class ShipmentMailer < ApplicationMailer
 
     @redirects_base_url = base_url + "redirects/shipments/#{@shipment.id}?action="
 
+    @mot =
+      case @shipment.mode_of_transport
+      when 'ocean' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-01.png'
+      when 'air' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-02.png'
+      when 'truck' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-03.png'
+      when 'rail' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-04.png'
+      end
+    
     create_pdf_attachment(@shipment)
     attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
+    attachments.inline['icon.png'] = URI.open(@mot).read
     mail_options = {
       from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
                          .tap { |a| a.display_name = 'ItsMyCargo Bookings' }.format,
@@ -38,9 +47,18 @@ class ShipmentMailer < ApplicationMailer
     @shipment = shipment
     @scope = @user.tenant.scope
 
+    @mot =
+      case @shipment.mode_of_transport
+      when 'ocean' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-01.png'
+      when 'air' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-02.png'
+      when 'truck' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-03.png'
+      when 'rail' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-04.png'
+      end
+
     create_pdf_attachment(@shipment)
-    attachments.inline['logo.png']       = URI.open(@user.tenant.theme['logoLarge']).read
-    attachments.inline['logo_small.png'] = URI.try(:open, @user.tenant.theme['logoSmall']).try(:read)
+    attachments.inline['logo.png']       = URI.open(tenant.theme['logoLarge']).read
+    attachments.inline['logo_small.png'] = URI.try(:open, tenant.theme['logoSmall']).try(:read)
+    attachments.inline['icon.png'] = URI.open(@mot).read
     mail_options = {
       from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
                          .tap { |a| a.display_name = @user.tenant.name }.format,
@@ -56,10 +74,20 @@ class ShipmentMailer < ApplicationMailer
   def shipper_confirmation(user, shipment) # rubocop:disable Metrics/AbcSize
     @user = user
     @shipment = shipment
-    @scope = @user.tenant.scope
+    @scope = tenant.scope
+
+    @mot =
+      case @shipment.mode_of_transport
+      when 'ocean' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-01.png'
+      when 'air' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-02.png'
+      when 'truck' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-03.png'
+      when 'rail' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-04.png'
+      end
+
     create_pdf_attachment(@shipment)
-    attachments.inline['logo.png']       = URI.open(@user.tenant.theme['logoLarge']).read
-    attachments.inline['logo_small.png'] = try(:open, @user.tenant.theme['logoSmall']).try(:read)
+    attachments.inline['logo.png']       = URI.open(tenant.theme['logoLarge']).read
+    attachments.inline['logo_small.png'] = try(:open, tenant.theme['logoSmall']).try(:read)
+    attachments.inline['icon.png'] = URI.open(@mot).read
     mail_options = {
       from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
                          .tap { |a| a.display_name = @user.tenant.name }.format,
