@@ -231,6 +231,8 @@ class Itinerary < ApplicationRecord
 
   def origin_stops
     stops.where.not(id: last_stop.id).order(index: :asc)
+  rescue StandardError
+    binding.pry
   end
 
   def destination_stops

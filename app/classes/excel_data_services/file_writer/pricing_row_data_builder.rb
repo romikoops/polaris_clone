@@ -46,8 +46,8 @@ module ExcelDataServices
         service_level = pricing.tenant_vehicle.name
         load_type = pricing.cargo_class.upcase # TODO: load_type is called cargo_class...
         trip = itinerary.trips.first if itinerary.trips
-        transit_time = ((trip.end_date - trip.start_date).seconds / 1.day).round(0) if trip
-        transit_time = nil if transit_time.zero?
+        transit_time = ((trip.end_date - trip.start_date).seconds / 1.day).round(0) if trip&.end_date && trip&.start_date
+        transit_time = nil if transit_time&.zero?
 
         pricing_attributes.merge(
           customer_email: customer_email,
