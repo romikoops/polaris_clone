@@ -1,160 +1,165 @@
 <% primary_color = @shipment.tenant.theme["colors"]["primary"] %>
 
-<mj-wrapper full-width="full-width"  padding="0px">
-  <mj-section padding="0 5%">
-    <mj-column width="100%"  padding="0px">
+<mj-wrapper border="1px solid #f3f3f3" full-width="full-width" padding="0px">
+  <mj-section padding-bottom="10px">
+    <mj-column width="100%" padding="0 5%">
       <mj-text>
-        <h3 style="margin: 5px 0;"><span class="bold">Shipment ID: <%= @shipment.imc_reference %></span></h3>
-      </mj-text>
-      <mj-text>
-        <p style="margin: 5px 0;"><span class="bold">Booking placed at:</span> <%= @shipment.booking_placed_at.strftime('%d.%m.%Y %H:%M') %></p>
-      </mj-text>
-      
-    </mj-column>
-    <mj-column width="100%"  padding="0px">
-      <mj-text>
-        <h3 style="margin: 0;"><span class="bold">Route Details:</span></h3>
-      </mj-text>
-    </mj-column>
-    <mj-column width="50%" padding="0px">
-      
-      <mj-text line-height="24px">
-        <h6 style="margin: 0;"><span class="bold">From:</span class="bold"></span></h6>
-        <p>
-          <% if @shipment.has_pre_carriage? %>
-            <% @shipment.pickup_address.geocoded_address.split(", ").each do |address_elem| %>
-              <% if address_elem %>
-                <span><%= address_elem %></span><br/>
-              <% end %>  
-            <% end %>  
-          <% else %>
-            <span><%= @shipment.origin_hub.name %></span>
-          <% end %>
+        <h3 style="margin: 0;">
+          <span class="bold">
+              Shipment ID: <%= @shipment.imc_reference %>
+          </span>
+        </h3>
+        <p style="margin: 5px 0;">
+          <span class="bold">
+            Booking placed at:
+          </span>
+          <%= @shipment.booking_placed_at.strftime('%d.%m.%Y %H:%M') %>
         </p>
       </mj-text>
     </mj-column>
-    <mj-column width="50%" padding="0px">
-        <mj-text line-height="24px">
-          <h6 style="margin: 0;"><span class="bold">To:</span class="bold"></span></h6>
+  </mj-section>
+  
+  <mj-section padding-top="0">
+    <mj-column width="100%" padding="0 5%" padding-top="0"> 
+      <mj-divider border-width="1px" padding-top="0" border-color="#E0E0E0"></mj-divider>
+    </mj-column>
+  </mj-section>
+  <mj-section padding="0px">
+    <mj-group vertical-align="middle">
+      <mj-column padding="0 5% 0 70%" width="17%">
+        <mj-image padding="20px 0" width="30px" src="https://img.icons8.com/cotton/2x/anchor.png"></mj-image>
+      </mj-column>
+      <mj-column padding-left="5%" width="83%">
+        <mj-text line-height="16px" padding="0" font-size="18px">
           <p>
-            <% if @shipment.has_on_carriage? %>
-              <% @shipment.delivery_address.geocoded_address.split(", ").each do |address_elem| %>
+            <% if @shipment.has_pre_carriage? %>
+              <strong>From: </strong>
+              <% @shipment.pickup_address.geocoded_address.split(", ").each do |address_elem| %>
                 <% if address_elem %>
-                  <span><%= address_elem %></span><br/>
+                  <span><%= address_elem %></span>
                 <% end %>  
               <% end %>  
             <% else %>
-              <span><%= @shipment.destination_hub.name %></span>
+              From: <strong><%= @shipment.origin_hub.name %></strong>
+            <% end %>
+          </p>
+          <p>
+            <% if @shipment.has_pre_carriage? %>
+              <strong>To: </strong>
+              <% @shipment.delivery_address.geocoded_address.split(", ").each do |address_elem| %>
+                <% if address_elem %>
+                  <span><%= address_elem %></span>
+                <% end %>  
+              <% end %>  
+            <% else %>
+              To: <strong><%= @shipment.destination_hub.name %></strong>
             <% end %>
           </p>
         </mj-text>
+      </mj-column>
+    </mj-group>
+  </mj-section>
+  <mj-section padding-bottom="0">
+    <mj-column width="100%" padding="0 5%"> 
+      <mj-divider padding-bottom="0" border-width="1px" border-color="#E0E0E0"></mj-divider>
     </mj-column>
+  </mj-section>
 
-    <mj-column width="50%" padding="0px">
-      <mj-text>
-        <h6 style="margin: 0;" class="text-center">
-          <span class="bold">
+  <mj-section>
+    <mj-column width="100%" padding="0 5%">
+      <mj-text font-size="12px">
+        <p style="margin: 0 0 8px 0;">
+          <strong>
             <%= @shipment.has_pre_carriage? ? 'Pickup Date:' : 'Latest Port Delivery Date:' %>
-          </span> 
-        </h6>
-      </mj-text>
-      <mj-text>
-        <p style="margin: 0;" class="text-center">
-          <span><%= formatted_datetime(@shipment.planned_pickup_date) %></span>
+          </strong> 
+          <span>
+            <%= formatted_datetime(@shipment.planned_pickup_date) %>
+          </span>
         </p>
-      </mj-text>
-      
-    </mj-column>
-    <mj-column width="50%" padding="0px">
-      <mj-text>
-        <h6 style="margin: 0;" class="text-center">
-          <span class="bold">
+        <p style="margin: 0;">
+          <strong>
             <% arrival_place = @shipment.has_on_carriage? ? 'Delivery Address' : 'Port' %>
             <%= "ETA at #{arrival_place}:" %>
+          </strong>
+          <span>
+            <%= formatted_datetime(@shipment.eta) %>
           </span>
-        </h6>
-      </mj-text>
-      <mj-text>
-        <p style="margin: 0;" class="text-center">
-          <span><%= formatted_datetime(@shipment.eta) %></span>
         </p>
       </mj-text>
-      <mj-spacer height="15px" />
-    </mj-column>  
+    </mj-column>
   </mj-section>
-</mj-wrapper>
-
-<mj-wrapper full-width="full-width"  padding="0px">
+  
   <mj-section padding="0px">
-    <mj-column width="100%"  padding="0 5%" >
+    <mj-column width="100%" padding="0 5%">
       <mj-text>
         <h3 style="margin: 0;"><span class="bold">Shipment Details:</span></h3>
       </mj-text>
       <mj-table>
         <tr>
-          <th style="padding: 0 15px 0 0;"></th>
-          <th style="padding: 0 15px;"> </th> 
+          <th style="padding-left: 14px"></th>
+          <th style="padding: 6px 5px;"> </th> 
         </tr>
         <tr>
-        <tr>
+        <tr style="border-bottom:1px solid #ecedee; background-color: #F5F5F5">
           <% load_type = @shipment.load_type == 'cargo_item' ? 'LCL' : 'FCL'%>
-          <td style="padding: 0 15px 0 0;">Transport Category:</td>
-          <td style="padding: 0 15px;">
+          <td style="padding-left: 14px">Transport Category</td>
+          <td style="padding: 6px 5px;">
             <%= load_type %>
           </td>
         </tr>
+        <tr style="border-bottom:1px solid #ecedee; background-color: #F5F5F5">
         <% cargo_type = @shipment.load_type == 'cargo_item' ? 'Cargo Items' : 'Containers'%>
-          <td style="padding: 0 15px 0 0;"> <%= cargo_type %>:</td>
-          <td style="padding: 0 15px;">
+          <td style="padding-left: 14px"> <%= cargo_type %></td>
+          <td style="padding: 6px 5px;">
             <%= @shipment.cargo_units.count %> 
           </td>
         </tr>
-        <tr>
-          <td style="padding: 0 15px 0 0;">Mode Of Transport:</td>
-          <td style="padding: 0 15px;">
+        <tr style="border-bottom:1px solid #ecedee; background-color: #F5F5F5">
+          <td style="padding-left: 14px">Mode Of Transport</td>
+          <td style="padding: 6px 5px;">
             <%= @shipment.mode_of_transport.capitalize %> 
           </td>
         </tr>
-        <tr>
-          <td style="padding: 0 15px 0 0;">Pickup:</td>
-          <td style="padding: 0 15px;">
+        <tr style="border-bottom:1px solid #ecedee; background-color: #F5F5F5">
+          <td style="padding-left: 14px">Pickup</td>
+          <td style="padding: 6px 5px;">
           <%= @shipment.has_pre_carriage? ? 'Yes' : 'None' %>
           </td>
         </tr>
-        <tr>
-          <td style="padding: 0 15px 0 0;">Delivery:</td>
-          <td style="padding: 0 15px;">
+        <tr style="border-bottom:1px solid #ecedee; background-color: #F5F5F5">
+          <td style="padding-left: 14px">Delivery</td>
+          <td style="padding: 6px 5px;">
             <%= @shipment.has_on_carriage? ? 'Yes' : 'None' %>
           </td>
         </tr>
         
           
-        <tr>
-          <td style="padding: 0 15px 0 0;">Hazardous Goods:</td>
-          <td style="padding: 0 15px;">
+        <tr style="border-bottom:1px solid #ecedee; background-color: #F5F5F5">
+          <td style="padding-left: 14px">Hazardous Goods</td>
+          <td style="padding: 6px 5px;">
             <%= @shipment.has_dangerous_goods? ? 'Yes' : 'None' %>
           </td>
         </tr>
         <% if @scope['has_customs'] %>
-          <tr>
-            <td style="padding: 0 15px 0 0;">Customs Clearance:</td>
-            <td style="padding: 0 15px;">
+          <tr style="border-bottom:1px solid #ecedee; background-color: #F5F5F5">
+            <td style="padding-left: 14px">Customs Clearance:</td>
+            <td style="padding: 6px 5px;">
               <%= @shipment.has_customs? ? format_to_price(@shipment.selected_offer.dig("customs","total")) : 'Handled by Shipper' %>
             </td>
           </tr>
         <% end %>
         <% if @scope['has_insurance'] %>
-          <tr>
-            <td style="padding: 0 15px 0 0;">Insurance:</td>
-            <td style="padding: 0 15px;">
+          <tr style="border-bottom:1px solid #ecedee; background-color: #F5F5F5">
+            <td style="padding-left: 14px">Insurance</td>
+            <td style="padding: 6px 5px;">
               <%= @shipment.has_insurance? ? format_to_price(@shipment.selected_offer.dig("insurance","total")) : 'None' %>
             </td>
           </tr>
         <% end %>
         <% if @shipment.load_type == 'cargo_item' %>
-          <tr>
-            <td style="padding: 0 15px 0 0;">Non-Stackable:</td>
-            <td style="padding: 0 15px;">
+          <tr style="border-bottom:1px solid #ecedee; background-color: #F5F5F5">
+            <td style="padding-left: 14px">Non-Stackable</td>
+            <td style="padding: 6px 5px;">
               <%= @shipment.has_non_stackable_cargo? ? 'Yes' : 'No' %>
             </td>
           </tr>    
@@ -164,18 +169,11 @@
       <mj-spacer height="15px" />
     </mj-column>
   </mj-section>
-</mj-wrapper>
 
-
-<mj-wrapper full-width="full-width" padding="0px">
   <%= render "cargo_details.mjml" %>
-</mj-wrapper>
-
-
-
-<mj-wrapper full-width="full-width" padding="0px">
   <mj-section padding="0px">
     <mj-column width="100%" padding="0 5%">
+    <mj-divider border-width="1px" border-color="#E0E0E0"></mj-divider>
       <mj-spacer height="15px" />
       <mj-text>
         <h3 style="margin: 0;"><span class="bold">Customer Details:</span></h3>
@@ -211,34 +209,19 @@
         </tr>
       </mj-table>
       <mj-spacer height="15px" />
+    <mj-divider border-width="1px" border-color="#E0E0E0"></mj-divider>
+
     </mj-column>
   </mj-section>
-</mj-wrapper>
-
-
-
-<mj-wrapper full-width="full-width"  padding="0px">
-  <mj-section padding="0px">
-      <mj-column width="40%">
-        <mj-text align="center">
-          <h2 style="margin: 0;"><span class="bold">Total cost:</span></h2>
-        </mj-text>
-      </mj-column>
-      <mj-column width="40%">
-        <mj-text align="center">
-          <h2 style="margin: 0;">
-            <span>
+  <mj-section padding-top="18px">
+      <mj-column width="100%" padding="0 5%">
+        <mj-text font-size="21px" font-weight="300" align="right">
+          <p style="margin: 0;"><span class="bold">Total cost:</span>
+            <strong>
               <%= format_to_price(@shipment.total_price[:value], @shipment.total_price[:currency]) %>
-            </span>
-          </h2>
+            </strong>
+          </p>
         </mj-text>
       </mj-column>
     </mj-section>
-</mj-wrapper>
-<mj-wrapper full-width="full-width"  padding="0px">
-  <mj-section full-width="full-width">
-    <mj-column>
-      <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
-    </mj-column>
-  </mj-section>
 </mj-wrapper>

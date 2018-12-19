@@ -2,7 +2,7 @@
 
 class ShipmentMailerPreview < ActionMailer::Preview
   def tenant_notification
-    @shipment = Shipment.where(status: 'requested').last
+    @shipment = Shipment.where(status: 'requested', tenant_id: 43).last
     ShipmentMailer.tenant_notification(@shipment.user, @shipment)
   end
 

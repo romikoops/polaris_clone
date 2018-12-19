@@ -1,31 +1,35 @@
 <% primary_color = @user.tenant.theme["colors"]["primary"] %>
-<mj-section full-width="full-width">
-      <mj-column>
-        <mj-image width="300px" src="<%= @user.tenant.theme["logoLarge"] %>" />
-      </mj-column>
-    </mj-section>
-    <mj-section full-width="full-width">
-      <mj-column>
-        <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
-      </mj-column>
-    </mj-section>
+
+<mj-section padding="20px 5%" background-color="<%= primary_color %>">
+  <mj-column>
+    <mj-image align="left" src="<%= @user.tenant.theme["logoWhite"] %>" />
+  </mj-column>
+  <mj-column>
+    <mj-navbar base-url="" hamburger="hamburger" ico-color="black">
+      <mj-navbar-link href="#" color="white">about us</mj-navbar-link>
+      <mj-navbar-link href="#" color="white">Help</mj-navbar-link>
+    </mj-navbar>
+  </mj-column>
+</mj-section>
 
  <mj-section full-width="full-width" padding="0px">
     <mj-column width="100%">
         <mj-text line-height="24px">
-          <p>A new booking was received from <span class="bold"><%= @user.company_name %></span> on <span class="bold"><%= formatted_datetime(@shipment.updated_at) %></span>.</p>
+          <p>Dear <%= @user.first_name %> <%= @user.last_name %>,</p>
+          <p>A new booking was received from <span class="bold"><%= @user.company_name %></span> on the <span class="bold"><%= formatted_datetime(@shipment.updated_at) %></span>.</p>
         </mj-text>
     </mj-column>
+  </mj-section>
     
 </mj-section>
 <%= render "details_body.mjml" %>
 <mj-section full-width="full-width" padding="0px">
-    <mj-column width="40%">
+    <mj-column width="40%" padding-top="30px">
       <mj-button href="<%= @redirects_base_url %>accept" width="90%" background-color="#04CC36">
         Accept
       </mj-button>
     </mj-column>
-    <mj-column width="40%">
+    <mj-column width="40%" padding-top="30px">
       <mj-button href="<%= @redirects_base_url %>edit" width="90%" background-color="#FACA0A">
         Edit
       </mj-button>
