@@ -24,9 +24,8 @@ class Itinerary < ApplicationRecord
   def generate_schedules_from_sheet(stops, start_date, end_date, tenant_vehicle_id, closing_date, vessel, voyage_code, load_type)
     results = {
       layovers: [],
-      trips:    []
+      trips: []
     }
-    parsed_load_type = parse_load_type(load_type)
     trip = trips.new(
       start_date: start_date,
       end_date: end_date,
@@ -34,7 +33,7 @@ class Itinerary < ApplicationRecord
       vessel: vessel,
       voyage_code: voyage_code,
       closing_date: closing_date,
-      load_type: parsed_load_type
+      load_type: parse_load_type(load_type)
     )
     return results unless trip.save
 
@@ -44,19 +43,19 @@ class Itinerary < ApplicationRecord
         if stop.index.zero?
           {
             closing_date: closing_date,
-            eta:          nil,
-            etd:          start_date,
-            stop_index:   stop.index,
+            eta: nil,
+            etd: start_date,
+            stop_index: stop.index,
             itinerary_id: stop.itinerary_id,
-            stop_id:      stop.id
+            stop_id: stop.id
           }
         else
           {
-            eta:          end_date,
-            etd:          nil,
-            stop_index:   stop.index,
+            eta: end_date,
+            etd: nil,
+            stop_index: stop.index,
             itinerary_id: stop.itinerary_id,
-            stop_id:      stop.id
+            stop_id: stop.id
           }
         end
       layover = trip.layovers.find_or_create_by!(data)
@@ -67,9 +66,9 @@ class Itinerary < ApplicationRecord
 
   def parse_load_type(raw_load_type)
     if %w(cargo_item lcl).include?(raw_load_type.downcase.strip)
-      return 'cargo_item'
+      'cargo_item'
     else
-      return 'container'
+      'container'
     end
   end
 
@@ -79,19 +78,19 @@ class Itinerary < ApplicationRecord
     stops_in_order = stops.order(:index)
     tenant_vehicle_ids.each do |tv_id|
       %w(container cargo_item).each do |load_type|
-      existing_trip = trips.where(tenant_vehicle_id: tv_id, load_type: load_type).first
-      steps_in_order = existing_trip ?
-        (existing_trip.end_date - existing_trip.start_date) / 86_400 : rand(20..50)
-      generate_weekly_schedules(
-        stops_in_order,
-        [steps_in_order],
-        DateTime.now,
-        finish_date,
-        [1, 5],
-        tv_id,
-        4,
-        load_type
-      )
+        existing_trip = trips.where(tenant_vehicle_id: tv_id, load_type: load_type).first
+        steps_in_order = existing_trip ?
+          (existing_trip.end_date - existing_trip.start_date) / 86_400 : rand(20..50)
+        generate_weekly_schedules(
+          stops_in_order,
+          [steps_in_order],
+          DateTime.now,
+          finish_date,
+          [1, 5],
+          tv_id,
+          4,
+          load_type
+        )
       end
     end
   end
@@ -99,21 +98,21 @@ class Itinerary < ApplicationRecord
   def generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinal_array, tenant_vehicle_id, closing_date_buffer = 4, load_type)
     results = {
       layovers: [],
-      trips:    []
+      trips: []
     }
     stats = {
       layovers: {
         number_created: 0,
         number_updated: 0
       },
-      trips:    {
+      trips: {
         number_created: 0,
         number_updated: 0
       }
     }
     tmp_date = start_date.is_a?(Date)      ? start_date : DateTime.parse(start_date)
     end_date_parsed = end_date.is_a?(Date) ? end_date   : DateTime.parse(end_date)
-    parsed_load_type = parse_load_type(load_type)
+
     stop_data = []
     steps_in_order = steps_in_order.map(&:to_i)
     while tmp_date < end_date_parsed
@@ -123,11 +122,11 @@ class Itinerary < ApplicationRecord
         journey_end = journey_start + steps_in_order.sum.days
 
         trip = trips.new(
-          start_date:        journey_start,
-          end_date:          journey_end,
+          start_date: journey_start,
+          end_date: journey_end,
           tenant_vehicle_id: tenant_vehicle_id,
-          closing_date:      closing_date,
-          load_type:         parsed_load_type
+          closing_date: closing_date,
+          load_type: parse_load_type(load_type)
         )
         unless trip.save
           tmp_date += 1.day
@@ -138,23 +137,23 @@ class Itinerary < ApplicationRecord
         stops_in_order.each do |stop|
           if stop.index.zero?
             stop_data << {
-              eta:          nil,
-              etd:          journey_start,
-              stop_index:   stop.index,
+              eta: nil,
+              etd: journey_start,
+              stop_index: stop.index,
               itinerary_id: stop.itinerary_id,
-              stop_id:      stop.id,
+              stop_id: stop.id,
               closing_date: closing_date,
-              trip_id:      trip.id
+              trip_id: trip.id
             }
           else
             journey_start += steps_in_order[stop.index - 1].days
             stop_data << {
-              eta:          journey_start,
-              etd:          journey_start + 1.day,
-              stop_index:   stop.index,
+              eta: journey_start,
+              etd: journey_start + 1.day,
+              stop_index: stop.index,
               itinerary_id: stop.itinerary_id,
-              stop_id:      stop.id,
-              trip_id:      trip.id
+              stop_id: stop.id,
+              trip_id: trip.id
             }
           end
           stats[:layovers][:number_created] += 1
@@ -174,22 +173,23 @@ class Itinerary < ApplicationRecord
     trip_layovers = trip_layovers[0...limit] if limit
     trip_layovers.each do |l_arr|
       next unless l_arr.length > 1
+
       layovers_combinations = []
       l_arr.each_with_index do |l, i|
         layovers_combinations << [l, l_arr[i + 1]] if l_arr[i + 1]
       end
       layovers_combinations.each do |lc|
         schedules.push(
-          itinerary_id:           id,
-          eta:                    lc[1].eta,
-          etd:                    lc[0].etd,
-          mode_of_transport:      lc[0].itinerary.mode_of_transport,
-          hub_route_key:          "#{lc[0].stop.hub_id}-#{lc[1].stop.hub_id}",
-          tenant_id:              tenant_id,
-          trip_id:                lc[0].trip_id,
-          origin_layover_id:      lc[0].id,
+          itinerary_id: id,
+          eta: lc[1].eta,
+          etd: lc[0].etd,
+          mode_of_transport: lc[0].itinerary.mode_of_transport,
+          hub_route_key: "#{lc[0].stop.hub_id}-#{lc[1].stop.hub_id}",
+          tenant_id: tenant_id,
+          trip_id: lc[0].trip_id,
+          origin_layover_id: lc[0].id,
           destination_layover_id: lc[1].id,
-          closing_date:           lc[0].closing_date
+          closing_date: lc[0].closing_date
         )
       end
     end
@@ -210,8 +210,8 @@ class Itinerary < ApplicationRecord
     exists = ->(mot) { !Itinerary.where(mode_of_transport: mot).limit(1).empty? }
     {
       ocean: exists.call('ocean'),
-      air:   exists.call('air'),
-      rail:  exists.call('rail'),
+      air: exists.call('air'),
+      rail: exists.call('rail'),
       truck: exists.call('truck')
     }
   end
@@ -290,7 +290,7 @@ class Itinerary < ApplicationRecord
     open_pricings_count = pricings.where(user_id: nil).count
     {
       dedicated_pricings_count: dedicated_pricings_count,
-      open_pricings_count:    (dedicated_pricings_count - open_pricings_count).abs
+      open_pricings_count: (dedicated_pricings_count - open_pricings_count).abs
     }
   end
 
@@ -301,11 +301,11 @@ class Itinerary < ApplicationRecord
         return
       end
       {
-        origin:      stop_array[0].hub.lng_lat_array,
+        origin: stop_array[0].hub.lng_lat_array,
         destination: stop_array[1].hub.lng_lat_array,
-        line:        {
-          type:        'LineString',
-          id:          "#{id}-#{stop_array[0].index}",
+        line: {
+          type: 'LineString',
+          id: "#{id}-#{stop_array[0].index}",
           coordinates: [stop_array[0].hub.lng_lat_array, stop_array[1].hub.lng_lat_array]
         }
       }
@@ -436,16 +436,16 @@ class Itinerary < ApplicationRecord
           include: {
             hub: {
               include: {
-                nexus:    { only: %i(id name) },
+                nexus: { only: %i(id name) },
                 address: { only: %i(longitude latitude geocoded_address) }
               },
-              only:    %i(id name)
+              only: %i(id name)
             }
           },
-          only:    %i(id index)
+          only: %i(id index)
         }
       },
-      only:    %i(id name mode_of_transport)
+      only: %i(id name mode_of_transport)
     )
     as_json(new_options)
   end
@@ -453,7 +453,7 @@ class Itinerary < ApplicationRecord
   def as_pricing_json(_options = {})
     new_options = {
       users_with_pricing: users_with_pricing,
-      pricing_count:      pricing_count
+      pricing_count: pricing_count
     }.merge(attributes)
   end
 

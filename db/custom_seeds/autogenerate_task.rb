@@ -1,44 +1,46 @@
+# frozen_string_literal: true
+
 genObj = {
   normanglobal: {
     container: [
-      {origin: 'DALIAN', destination:	'FELIXSTOWE', departure:	'THURSDAY', transit_time:	38},
-      {origin: 'DALIAN', destination:	'SOUTHAMPTON', departure:	'WEDNESDAY', transit_time:	34},
-      {origin: 'XINGANG', destination:	'FELIXSTOWE', departure:	'SATURDAY', transit_time:	40},
-      {origin: 'XINGANG', destination:	'SOUTHAMPTON', departure:	'SATURDAY', transit_time:	36},
-      {origin: 'TIANJIN', destination:	'FELIXSTOWE', departure:	'SATURDAY', transit_time:	40},
-      {origin: 'TIANJIN', destination:	'SOUTHAMPTON', departure:	'SATURDAY', transit_time:	36},
-      {origin: 'QINGDAO', destination:	'FELIXSTOWE', departure:	'THURSDAY', transit_time:	34},
-      {origin: 'QINGDAO', destination:	'SOUTHAMPTON', departure:	'MONDAY', transit_time:	34},
-      {origin: 'SHANGHAI', destination:	'FELIXSTOWE', departure:	'MONDAY', transit_time:	30},
-      {origin: 'SHANGHAI', destination:	'SOUTHAMPTON', departure:	'SUNDAY', transit_time:	28},
-      {origin: 'SHANGHAI', destination:	'FELIXSTOWE', departure:	'THURSDAY', transit_time:	31},
-      {origin: 'NINGBO', destination:	'FELIXSTOWE', departure:	'WEDNESDAY', transit_time:	29},
-      {origin: 'NINGBO', destination:	'SOUTHAMPTON', departure:	'FRIDAY', transit_time:	30},
-      {origin: 'XIAMEN', destination:	'FELIXSTOWE', departure:	'FRIDAY', transit_time:	26},
-      {origin: 'XIAMEN', destination:	'SOUTHAMPTON', departure:	'FRIDAY', transit_time:	30},
-      {origin: 'HONG KONG', destination:	'FELIXSTOWE', departure:	'SUNDAY', transit_time:	27},
-      {origin: 'HONG KONG', destination:	'SOUTHAMPTON', departure:	'MONDAY', transit_time:	27},
-      {origin: 'SHENZHEN', destination:	'FELIXSTOWE', departure:	'FRIDAY', transit_time:	27},
-      {origin: 'SHENZHEN', destination:	'SOUTHAMPTON', departure:	'MONDAY', transit_time:	27}
+      { origin: 'DALIAN', destination:	'FELIXSTOWE', departure:	'THURSDAY', transit_time:	38 },
+      { origin: 'DALIAN', destination:	'SOUTHAMPTON', departure:	'WEDNESDAY', transit_time:	34 },
+      { origin: 'XINGANG', destination:	'FELIXSTOWE', departure:	'SATURDAY', transit_time:	40 },
+      { origin: 'XINGANG', destination:	'SOUTHAMPTON', departure:	'SATURDAY', transit_time:	36 },
+      { origin: 'TIANJIN', destination:	'FELIXSTOWE', departure:	'SATURDAY', transit_time:	40 },
+      { origin: 'TIANJIN', destination:	'SOUTHAMPTON', departure:	'SATURDAY', transit_time:	36 },
+      { origin: 'QINGDAO', destination:	'FELIXSTOWE', departure:	'THURSDAY', transit_time:	34 },
+      { origin: 'QINGDAO', destination:	'SOUTHAMPTON', departure:	'MONDAY', transit_time:	34 },
+      { origin: 'SHANGHAI', destination:	'FELIXSTOWE', departure:	'MONDAY', transit_time:	30 },
+      { origin: 'SHANGHAI', destination:	'SOUTHAMPTON', departure:	'SUNDAY', transit_time:	28 },
+      { origin: 'SHANGHAI', destination:	'FELIXSTOWE', departure:	'THURSDAY', transit_time:	31 },
+      { origin: 'NINGBO', destination:	'FELIXSTOWE', departure:	'WEDNESDAY', transit_time:	29 },
+      { origin: 'NINGBO', destination:	'SOUTHAMPTON', departure:	'FRIDAY', transit_time:	30 },
+      { origin: 'XIAMEN', destination:	'FELIXSTOWE', departure:	'FRIDAY', transit_time:	26 },
+      { origin: 'XIAMEN', destination:	'SOUTHAMPTON', departure:	'FRIDAY', transit_time:	30 },
+      { origin: 'HONG KONG', destination:	'FELIXSTOWE', departure:	'SUNDAY', transit_time:	27 },
+      { origin: 'HONG KONG', destination:	'SOUTHAMPTON', departure:	'MONDAY', transit_time:	27 },
+      { origin: 'SHENZHEN', destination:	'FELIXSTOWE', departure:	'FRIDAY', transit_time:	27 },
+      { origin: 'SHENZHEN', destination:	'SOUTHAMPTON', departure:	'MONDAY', transit_time:	27 }
     ],
     cargo_item: [
-      {origin: 'DALIAN', destination: 'SOUTHAMPTON'	, departure:'THURSDAY',	transit_time: 35},
-      {origin: 'XINGANG', destination: 'FELIXSTOWE'	, departure:'MONDAY',	transit_time: 40},
-      {origin: 'XINGANG', destination: 'SOUTHAMPTON'	, departure:'FRIDAY',	transit_time: 40},
-      {origin: 'TIANJIN', destination: 'FELIXSTOWE'	, departure:'MONDAY',	transit_time: 40},
-      {origin: 'TIANJIN', destination: 'SOUTHAMPTON'	, departure:'FRIDAY',	transit_time: 40},
-      {origin: 'QINGDAO', destination: 'FELIXSTOWE'	, departure:'SATURDAY',	transit_time: 38},
-      {origin: 'QINGDAO', destination: 'SOUTHAMPTON'	, departure:'SATURDAY',	transit_time: 38},
-      {origin: 'SHANGHAI', destination: 'FELIXSTOWE'	, departure:'SUNDAY',	transit_time: 30},
-      {origin: 'SHANGHAI', destination: 'SOUTHAMPTON'	, departure:'SUNDAY',	transit_time: 30},
-      {origin: 'NINGBO', destination: 'FELIXSTOWE'	, departure:'WEDNESDAY',	transit_time: 27},
-      {origin: 'NINGBO', destination: 'SOUTHAMPTON'	, departure:'FRIDAY',	transit_time: 27},
-      {origin: 'XIAMEN', destination: 'FELIXSTOWE'	, departure:'SATURDAY',	transit_time: 25},
-      {origin: 'XIAMEN', destination: 'SOUTHAMPTON'	, departure:'SATURDAY',	transit_time: 23},
-      {origin: 'HONG KONG', destination: 'FELIXSTOWE'	, departure:'SUNDAY',	transit_time: 27},
-      {origin: 'HONG KONG', destination: 'SOUTHAMPTON'	, departure:'FRIDAY',	transit_time: 27},
-      {origin: 'SHENZHEN', destination: 'FELIXSTOWE'	, departure:'MONDAY',	transit_time: 24},
-      {origin: 'SHENZHEN', destination: 'SOUTHAMPTON'	, departure:'WEDNESDAY',	transit_time: 24}
+      { origin: 'DALIAN', destination: 'SOUTHAMPTON', departure: 'THURSDAY',	transit_time: 35 },
+      { origin: 'XINGANG', destination: 'FELIXSTOWE', departure: 'MONDAY',	transit_time: 40 },
+      { origin: 'XINGANG', destination: 'SOUTHAMPTON', departure: 'FRIDAY',	transit_time: 40 },
+      { origin: 'TIANJIN', destination: 'FELIXSTOWE', departure: 'MONDAY',	transit_time: 40 },
+      { origin: 'TIANJIN', destination: 'SOUTHAMPTON', departure: 'FRIDAY',	transit_time: 40 },
+      { origin: 'QINGDAO', destination: 'FELIXSTOWE', departure: 'SATURDAY',	transit_time: 38 },
+      { origin: 'QINGDAO', destination: 'SOUTHAMPTON', departure: 'SATURDAY',	transit_time: 38 },
+      { origin: 'SHANGHAI', destination: 'FELIXSTOWE', departure: 'SUNDAY',	transit_time: 30 },
+      { origin: 'SHANGHAI', destination: 'SOUTHAMPTON', departure: 'SUNDAY',	transit_time: 30 },
+      { origin: 'NINGBO', destination: 'FELIXSTOWE', departure: 'WEDNESDAY',	transit_time: 27 },
+      { origin: 'NINGBO', destination: 'SOUTHAMPTON', departure: 'FRIDAY',	transit_time: 27 },
+      { origin: 'XIAMEN', destination: 'FELIXSTOWE', departure: 'SATURDAY',	transit_time: 25 },
+      { origin: 'XIAMEN', destination: 'SOUTHAMPTON', departure: 'SATURDAY',	transit_time: 23 },
+      { origin: 'HONG KONG', destination: 'FELIXSTOWE', departure: 'SUNDAY',	transit_time: 27 },
+      { origin: 'HONG KONG', destination: 'SOUTHAMPTON', departure: 'FRIDAY',	transit_time: 27 },
+      { origin: 'SHENZHEN', destination: 'FELIXSTOWE', departure: 'MONDAY',	transit_time: 24 },
+      { origin: 'SHENZHEN', destination: 'SOUTHAMPTON', departure: 'WEDNESDAY',	transit_time: 24 }
     ]
   }
 }
@@ -58,7 +60,8 @@ genObj.each do |subdomain, cargo_class_routes|
     tenant = Tenant.find_by_subdomain(subdomain)
     routes.each do |genData|
       itinerary = Itinerary.find_by(tenant_id: tenant.id, name: "#{genData[:origin].titleize} - #{genData[:destination].titleize}")
-      next if !itinerary
+      next unless itinerary
+
       tenant_vehicle_ids = itinerary.pricings.for_load_type(cargo_class.to_s).pluck(:tenant_vehicle_id).uniq
       stops_in_order = itinerary.stops.order(:index)
       today = Date.today

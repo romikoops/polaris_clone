@@ -21,6 +21,7 @@ module ExcelTool
         itinerary = find_itinerary(row)
 
         next unless itinerary
+
         if itinerary
           update_results_and_stats_hashes(row, itinerary)
         else
@@ -39,12 +40,12 @@ module ExcelTool
 
     def _stats
       {
-        type:     'schedules',
+        type: 'schedules',
         layovers: {
           number_updated: 0,
           number_created: 0
         },
-        trips:    {
+        trips: {
           number_updated: 0,
           number_created: 0
         }
@@ -54,22 +55,22 @@ module ExcelTool
     def _results
       {
         layovers: [],
-        trips:    []
+        trips: []
       }
     end
 
     def schedules
       first_sheet.parse(
-        vessel:        'VESSEL',
-        voyage_code:   'VOYAGE_CODE',
-        from:          'FROM',
-        to:            'TO',
-        closing_date:  'CLOSING_DATE',
-        eta:           'ETA',
-        etd:           'ETD',
+        vessel: 'VESSEL',
+        voyage_code: 'VOYAGE_CODE',
+        from: 'FROM',
+        to: 'TO',
+        closing_date: 'CLOSING_DATE',
+        eta: 'ETA',
+        etd: 'ETD',
         service_level: 'SERVICE_LEVEL',
-        carrier:       'CARRIER',
-        load_type:      'LOAD_TYPE'
+        carrier: 'CARRIER',
+        load_type: 'LOAD_TYPE'
       )
     end
 
@@ -85,15 +86,15 @@ module ExcelTool
     def find_tenant_vehicle(row, itinerary)
       service_level = row[:service_level] || 'standard'
       tv = TenantVehicle.find_by(
-        tenant_id:         @user.tenant_id,
+        tenant_id: @user.tenant_id,
         mode_of_transport: itinerary.mode_of_transport,
-        name:              row[:service_level],
-        carrier:          Carrier.find_by(name: row[:carrier])
+        name: row[:service_level],
+        carrier: Carrier.find_by(name: row[:carrier])
       )
       tv ||= TenantVehicle.find_by(
-        tenant_id:         @user.tenant_id,
+        tenant_id: @user.tenant_id,
         mode_of_transport: itinerary.mode_of_transport,
-        name:              row[:service_level]
+        name: row[:service_level]
       )
       tv ||= Vehicle.create_from_name(service_level, itinerary.mode_of_transport, @user.tenant_id, row[:carrier])
 

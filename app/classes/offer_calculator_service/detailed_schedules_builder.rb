@@ -7,11 +7,12 @@ module OfferCalculatorService
     def perform(schedules, trucking_data, user)
       schedules_by_pricings = grouped_schedules(schedules: schedules, shipment: @shipment, user: user).compact
       raise ApplicationError::NoValidPricings if schedules_by_pricings.empty?
+
       detailed_schedules = schedules_by_pricings.map do |grouped_result|
         grand_total_charge = ChargeCalculator.new(
           trucking_data: trucking_data,
-          shipment:      @shipment,
-          user:          user,
+          shipment: @shipment,
+          user: user,
           data: grouped_result
         ).perform
         next if grand_total_charge.nil?
@@ -27,7 +28,7 @@ module OfferCalculatorService
       end
 
       compacted_detailed_schedules = detailed_schedules.compact
-      raise ApplicationError::NoSchedulesCharges  if compacted_detailed_schedules.empty?
+      raise ApplicationError::NoSchedulesCharges if compacted_detailed_schedules.empty?
 
       detailed_schedules_with_service_level_count(detailed_schedules: compacted_detailed_schedules)
     end
@@ -79,8 +80,8 @@ module OfferCalculatorService
         "#{schedule.mode_of_transport}_#{schedule.vehicle_name}_#{schedule.carrier_name}_#{schedule.load_type}"
       end
       schedule_groupings.each do |_key, schedules_array|
-        schedules_array.sort_by!{|sched| sched.eta }
-        if schedules_array&.any?{|s| s.etd.nil? || s.eta.nil? } 
+        schedules_array.sort_by!(&:eta)
+        if schedules_array&.any? { |s| s.etd.nil? || s.eta.nil? }
           isQuote = true
           start_date = Date.today
           end_date = start_date + 1.month
@@ -93,26 +94,24 @@ module OfferCalculatorService
         # Find the pricings for the cargo classes and effective date ranges then group by cargo_class
         tenant_vehicle_id = schedules_array.first.trip.tenant_vehicle_id
         pricings_by_cargo_class = schedules_array.first.trip.itinerary.pricings
-          .where(tenant_vehicle_id: tenant_vehicle_id)
-          .for_cargo_class(cargo_classes)
-        if start_date && end_date
-          pricings_by_cargo_class = pricings_by_cargo_class.for_dates(start_date, end_date)
-        end
+                                                 .where(tenant_vehicle_id: tenant_vehicle_id)
+                                                 .for_cargo_class(cargo_classes)
+        pricings_by_cargo_class = pricings_by_cargo_class.for_dates(start_date, end_date) if start_date && end_date
         pricings_by_cargo_class = pricings_by_cargo_class
-          .select{|pricing| (pricing.user_id == user_pricing_id) || pricing.user_id.nil?}
-          .group_by { |pricing| "#{pricing.transport_category_id}"}
+                                  .select { |pricing| (pricing.user_id == user_pricing_id) || pricing.user_id.nil? }
+                                  .group_by { |pricing| pricing.transport_category_id.to_s }
         # Find the group with the most pricings and create the object to be passed on
-        most_diverse_set = pricings_by_cargo_class.values.sort_by{|pricing_group| pricing_group.length}.last
-        other_pricings = pricings_by_cargo_class.values.reject{|pricing_group| pricing_group == most_diverse_set}.flatten
+        most_diverse_set = pricings_by_cargo_class.values.max_by(&:length)
+        other_pricings = pricings_by_cargo_class.values.reject { |pricing_group| pricing_group == most_diverse_set }.flatten
         if most_diverse_set.nil?
           result_to_return << nil
         else
           most_diverse_set.each do |pricing|
             obj = {
               pricing_ids: {
-                "#{pricing.transport_category.cargo_class}" => pricing.id
+                pricing.transport_category.cargo_class.to_s => pricing.id
               },
-              schedules: isQuote ? schedules_array : schedules_array.select{|sched| sched.etd < pricing.expiration_date && sched.etd > pricing.effective_date}.sort_by!{|sched| sched.eta }
+              schedules: isQuote ? schedules_array : schedules_array.select { |sched| sched.etd < pricing.expiration_date && sched.etd > pricing.effective_date }.sort_by!(&:eta)
             }
             other_pricings.each do |other_pricing|
               if other_pricing.effective_date < obj[:schedules].first.etd && other_pricing.expiration_date > obj[:schedules].last.eta
