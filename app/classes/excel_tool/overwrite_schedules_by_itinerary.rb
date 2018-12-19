@@ -57,7 +57,7 @@ module ExcelTool
         eta:           'ETA',
         etd:           'ETD',
         service_level: 'SERVICE_LEVEL',
-        carrier:       'CARRIER'.
+        carrier:       'CARRIER',
         load_type:      'LOAD_TYPE'
       )
     end
