@@ -8,18 +8,19 @@
       </mj-text>
     </mj-column>
 
-    <mj-column width="100%" padding="0 2.5%">
-      <mj-text line-height="24px">
-        <p>
-          You can confirm your account email by clicking the button below:
-        </p>
-      </mj-text>
-    </mj-column>
-    <mj-column width="100%" padding="0 2.5%">
-      <mj-button background-color="<%=@primary_color%>" color="white" href="<%= @confirmation_url %>">
-        Activate My Account
-      </mj-button>
-    </mj-column>
+<mj-section full-width="full-width" padding="0px">
+  <mj-column width="100%" padding="0 2.5%">
+    <mj-text line-height="24px">
+      <p style="margin-top: 0">
+        You can confirm your account email by clicking the button below:
+      </p>
+    </mj-text>
+  </mj-column>
+  <mj-column width="100%" padding="0 2.5%">
+    <mj-button background-color="<%=@primary_color%>" color="white" href="<%= @confirmation_url %>">
+      Activate My Account
+    </mj-button>
+  </mj-column>
 
     <mj-column width="100%" padding="0 2.5%">
       <mj-text>
