@@ -139,11 +139,9 @@ exports[`feeHash.trucking_pre is falsy 1`] = `
             >
               <ShipmentOverviewShowCard
                 background={Object {}}
-                carriage="DELIVERY_DATE"
                 editTime={[Function]}
                 handleSaveTime={[Function]}
                 isAdmin={true}
-                noCarriage="destinationCollectionDate"
                 shipment={
                   Object {
                     "cargo_count": 1,
@@ -986,11 +984,9 @@ exports[`loadType === cargo_item && cargoCount === 1 1`] = `
             >
               <ShipmentOverviewShowCard
                 background={Object {}}
-                carriage="DELIVERY_DATE"
                 editTime={[Function]}
                 handleSaveTime={[Function]}
                 isAdmin={true}
-                noCarriage="destinationCollectionDate"
                 shipment={
                   Object {
                     "cargo_count": 1,
@@ -1842,11 +1838,9 @@ exports[`loadType === cargo_item && cargoCount > 1 1`] = `
             >
               <ShipmentOverviewShowCard
                 background={Object {}}
-                carriage="DELIVERY_DATE"
                 editTime={[Function]}
                 handleSaveTime={[Function]}
                 isAdmin={true}
-                noCarriage="destinationCollectionDate"
                 shipment={
                   Object {
                     "cargo_count": 1,
@@ -2698,11 +2692,9 @@ exports[`loadType === container && cargoCount === 1 1`] = `
             >
               <ShipmentOverviewShowCard
                 background={Object {}}
-                carriage="DELIVERY_DATE"
                 editTime={[Function]}
                 handleSaveTime={[Function]}
                 isAdmin={true}
-                noCarriage="destinationCollectionDate"
                 shipment={
                   Object {
                     "cargo_count": 1,
@@ -3554,11 +3546,9 @@ exports[`loadType === container && cargoCount > 1 1`] = `
             >
               <ShipmentOverviewShowCard
                 background={Object {}}
-                carriage="DELIVERY_DATE"
                 editTime={[Function]}
                 handleSaveTime={[Function]}
                 isAdmin={true}
-                noCarriage="destinationCollectionDate"
                 shipment={
                   Object {
                     "cargo_count": 1,
@@ -4410,11 +4400,9 @@ exports[`shallow render 1`] = `
             >
               <ShipmentOverviewShowCard
                 background={Object {}}
-                carriage="DELIVERY_DATE"
                 editTime={[Function]}
                 handleSaveTime={[Function]}
                 isAdmin={true}
-                noCarriage="destinationCollectionDate"
                 shipment={
                   Object {
                     "cargo_count": 1,
@@ -5266,11 +5254,9 @@ exports[`shipment.has_on_carriage is true 1`] = `
             >
               <ShipmentOverviewShowCard
                 background={Object {}}
-                carriage="DELIVERY_DATE"
                 editTime={[Function]}
                 handleSaveTime={[Function]}
                 isAdmin={true}
-                noCarriage="destinationCollectionDate"
                 shipment={
                   Object {
                     "cargo_count": 1,
@@ -6122,11 +6108,9 @@ exports[`shipment.has_pre_carriage is true 1`] = `
             >
               <ShipmentOverviewShowCard
                 background={Object {}}
-                carriage="DELIVERY_DATE"
                 editTime={[Function]}
                 handleSaveTime={[Function]}
                 isAdmin={true}
-                noCarriage="destinationCollectionDate"
                 shipment={
                   Object {
                     "cargo_count": 1,
@@ -6979,11 +6963,9 @@ exports[`shipment.selected_offer.trucking_pre is true 1`] = `
             >
               <ShipmentOverviewShowCard
                 background={Object {}}
-                carriage="DELIVERY_DATE"
                 editTime={[Function]}
                 handleSaveTime={[Function]}
                 isAdmin={true}
-                noCarriage="destinationCollectionDate"
                 shipment={
                   Object {
                     "cargo_count": 1,

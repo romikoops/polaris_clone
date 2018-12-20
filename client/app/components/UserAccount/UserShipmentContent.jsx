@@ -264,7 +264,6 @@ class UserShipmentContent extends Component {
                       shipment={shipment}
                       text={t('common:eta')}
                       theme={theme}
-                      noCarriage={destinationCollectionDate}
                       hub={shipment.destination_hub}
                       background={background.bg2}
                     />
