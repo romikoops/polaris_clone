@@ -218,7 +218,11 @@ class Admin::PricingsController < Admin::AdminBaseController
   end
 
   def ordinary_pricings(itinerary)
-    itinerary.pricings.where(user_id: nil).map(&:as_json)
+    if current_tenant.quotation_tool?
+      itinerary.pricings.map(&:as_json)
+    else
+      itinerary.pricings.where(user_id: nil).map(&:as_json)
+    end
   end
 
   def user_pricing(itinerary)

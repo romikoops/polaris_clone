@@ -5,30 +5,31 @@ import { has, get } from 'lodash'
 import 'react-table/react-table.css'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import PropTypes from '../../../prop-types'
 import styles from './index.scss'
 import { adminActions, appActions } from '../../../actions'
 import AdminFeeTable from './FeeTable'
 import AdminRangeFeeTable from './RangeTable'
 import { moment } from '../../../constants'
 import { determineSortingCaret } from '../../../helpers/sortingCaret'
-import { RoundButton } from '../../RoundButton/RoundButton'
 
 class AdminPricesTable extends PureComponent {
   static determineFeeTable (row) {
-
     if (
       Object.values(row.original.data)
         .some(val => val.range && val.range.length > 0)
     ) {
-      return (<div className={styles.nested_table}>
-        <AdminRangeFeeTable row={row} className={styles.nested_table} />
-      </div>)
+      return (
+        <div className={styles.nested_table}>
+          <AdminRangeFeeTable row={row} className={styles.nested_table} />
+        </div>
+      )
     }
 
-    return (<div className={styles.nested_table}>
-      <AdminFeeTable row={row} className={styles.nested_table} />
-    </div>)
+    return (
+      <div className={styles.nested_table}>
+        <AdminFeeTable row={row} className={styles.nested_table} />
+      </div>
+    )
   }
 
   constructor (props) {
@@ -61,7 +62,7 @@ class AdminPricesTable extends PureComponent {
       t, pricings, theme, itineraryId, classNames
     } = this.props
     const { sorted } = this.state
-    
+
     const data = get(pricings, ['show', itineraryId], false)
     if (!data) return ''
     const columns = [
@@ -72,9 +73,14 @@ class AdminPricesTable extends PureComponent {
         </div>),
         id: 'effectiveDate',
         accessor: d => moment(d.effective_date).format('ll'),
-        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
-          <p className="flex-none"> {rowData.row.effectiveDate}</p>
-        </div>)
+        Cell: rowData => (
+          <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+            <p className="flex-none">
+              {' '}
+              {rowData.row.effectiveDate}
+            </p>
+          </div>
+        )
       },
       {
         Header: (<div className="flex layout-row layout-center-center">
@@ -83,9 +89,14 @@ class AdminPricesTable extends PureComponent {
         </div>),
         id: 'expirationDate',
         accessor: d => moment(d.expiration_date).format('ll'),
-        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
-          <p className="flex-none"> {rowData.row.expirationDate}</p>
-        </div>)
+        Cell: rowData => (
+          <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+            <p className="flex-none">
+              {' '}
+              {rowData.row.expirationDate}
+            </p>
+          </div>
+        )
       },
       {
         Header: (<div className="flex layout-row layout-center-center">
@@ -94,9 +105,14 @@ class AdminPricesTable extends PureComponent {
         </div>),
         id: 'carrier',
         accessor: d => d.carrier,
-        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
-          <p className="flex-none"> {rowData.row.carrier}</p>
-        </div>)
+        Cell: rowData => (
+          <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+            <p className="flex-none">
+              {' '}
+              {rowData.row.carrier}
+            </p>
+          </div>
+        )
       },
       {
         Header: (<div className="flex layout-row layout-center-center">
@@ -105,9 +121,14 @@ class AdminPricesTable extends PureComponent {
         </div>),
         id: 'service_level',
         accessor: d => d.service_level,
-        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
-          <p className="flex-none"> {rowData.row.service_level}</p>
-        </div>)
+        Cell: rowData => (
+          <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+            <p className="flex-none">
+              {' '}
+              {rowData.row.service_level}
+            </p>
+          </div>
+        )
       },
       {
         Header: (<div className="flex layout-row layout-center-center">
@@ -115,9 +136,14 @@ class AdminPricesTable extends PureComponent {
           <p className="flex-none">{t('account:loadType')}</p>
         </div>),
         accessor: 'cargo_class',
-        Cell: rowData => (<div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
-          <p className="flex-none"> {t(`common:${rowData.row.cargo_class}`)}</p>
-        </div>)
+        Cell: rowData => (
+          <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+            <p className="flex-none">
+              {' '}
+              {t(`common:${rowData.row.cargo_class}`)}
+            </p>
+          </div>
+        )
       }
     ]
 
@@ -143,7 +169,6 @@ class AdminPricesTable extends PureComponent {
     )
   }
 }
-
 
 function mapStateToProps (state) {
   const {

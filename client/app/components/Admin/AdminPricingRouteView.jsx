@@ -129,7 +129,7 @@ export class AdminPricingRouteView extends Component {
 
     const fauxShipment = {
     }
-    if (!pricings) return ''
+    if (!pricings || !pricings[itineraryId]) return ''
     const {
       itinerary,
       itineraryPricingData,
