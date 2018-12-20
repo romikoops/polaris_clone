@@ -2,6 +2,8 @@
 
 module OfferCalculatorService
   class TruckingDataBuilder < Base
+    MissingTruckingData = Class.new(StandardError)
+
     def perform(hubs)
       { origin: 'pre', destination: 'on' }
         .select { |_, carriage| @shipment.has_carriage?(carriage) }
@@ -48,6 +50,8 @@ module OfferCalculatorService
 
         trucking_charge_data[key] = trucking_charges
       end
+    rescue TruckingDataBuilder::MissingTruckingData
+      raise ApplicationError::MissingTruckingData
     end
 
     def calc_trucking_charges(distance, trucking_pricing)
@@ -62,6 +66,8 @@ module OfferCalculatorService
         distance,
         trucking_pricing.carriage
       )
+    rescue StandardError
+      raise TruckingDataBuilder::MissingTruckingData
     end
   end
 end
