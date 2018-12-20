@@ -191,7 +191,7 @@ module ExcelTool
         aux_data[pricing_key][:tenant_vehicle] = vehicle.presence ||
         Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id, row[:carrier])
       end
-
+      aux_data[pricing_key][:load_type] = row[:cargo_type] == 'lcl' ? 'cargo_item' : 'container'
       aux_data[pricing_key][:customer] = User.find_by(email: row[:customer_id], tenant_id: user.tenant_id) if row[:customer_id]
       aux_data[pricing_key][:transit_time] ||= row[:transit_time]
       aux_data[pricing_key][:origin] ||= find_nexus(row[:origin], user.tenant_id)
@@ -248,7 +248,8 @@ module ExcelTool
           start_date,
           end_date,
           [1, 5],
-          aux_data[pricing_key][:tenant_vehicle].id
+          aux_data[pricing_key][:tenant_vehicle].id,
+          aux_data[pricing_key][:load_type]
         )
         results[:layovers] = generator_results[:results][:layovers]
         results[:trips] = generator_results[:results][:trips]
