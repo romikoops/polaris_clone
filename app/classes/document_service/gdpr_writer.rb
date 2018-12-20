@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'bigdecimal'
+
 module DocumentService
   class GdprWriter
     include AwsConfig

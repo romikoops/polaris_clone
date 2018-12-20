@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'bigdecimal'
+
 module ExcelTool
   class OverrideTruckingRateByHub < ExcelTool::BaseTool
     attr_reader :defaults, :trucking_pricing_by_zone, :sheets, :zone_sheet,

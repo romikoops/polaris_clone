@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'bigdecimal'
+
 module TruckingTools
   module_function
 
@@ -50,7 +52,7 @@ module TruckingTools
 
   def fare_calculator(key, fee, cargo, km, scope)
     fee.symbolize_keys!
-
+    
     fare = case fee[:rate_basis]
            when 'PER_KG'
 
@@ -95,6 +97,7 @@ module TruckingTools
              [cbm_value, min].max
 
            when 'PER_WM'
+
              value = (cargo['weight'] / 1000) * fee[:value]
              min = fee[:min_value] || 0
              [value, min].max
@@ -328,7 +331,7 @@ module TruckingTools
     raw_payload = cargo.payload_in_kg * cargo.quantity
 
     trucking_chargeable_weight = [load_meter_weight, raw_payload, cbm_weight].max
-    cargo_object['non_stackable']['weight'] += trucking_chargeable_weight 
+    cargo_object['non_stackable']['weight'] += trucking_chargeable_weight
     cargo_object['non_stackable']['volume'] += cargo.volume * cargo.quantity
     cargo_object['non_stackable']['number_of_items'] += cargo.quantity
   end

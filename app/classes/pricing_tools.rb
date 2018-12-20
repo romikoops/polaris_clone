@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'bigdecimal'
+
 module PricingTools
   include CurrencyTools
   DEFAULT_MAX = Float::INFINITY
@@ -251,9 +253,8 @@ module PricingTools
       res = [value, min].max
 
     end
-    
-    return [res, max].min
 
+    [res, max].min
   end
 
   def round_fee(result, should_round)
@@ -295,7 +296,7 @@ module PricingTools
 
     result = case rate_basis
              when 'PER_SHIPMENT', 'PER_BILL'
-              (fee['value'] || fee['rate']).to_d
+               (fee['value'] || fee['rate']).to_d
              when 'PER_ITEM', 'PER_CONTAINER'
                (fee['value'] || fee['rate']).to_d * cargo_hash[:quantity]
              when 'PER_CBM'

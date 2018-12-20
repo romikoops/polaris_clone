@@ -12,6 +12,14 @@
       "program": "${workspaceRoot}/main.rb"
     },
     {
+      "name": "Debug TEMP**********",
+      "type": "Ruby",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "outFiles": ["${workspaceRoot}/**/*.rb"],
+      "program": "${workspaceRoot}/debug_runner.rb"
+    },
+    {
       "name": "Listen for rdebug-ide",
       "type": "Ruby",
       "request": "attach",
