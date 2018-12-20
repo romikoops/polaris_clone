@@ -354,12 +354,17 @@ export default function shipment (state = {}, action) {
     case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_REQUEST:
       return state
     case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_SUCCESS: {
-      const docObj = {}
-      Object.keys(state.response.stage3.documents).forEach((key) => {
-        docObj[key] = state.response.stage3.documents[key].filter(d => d.id !== action.payload)
+      
+      const stage4Docs = get(state, ['response', 'stage4', 'documents'], {})
+      const stage3Docs = get(state, ['response', 'stage3', 'documents'], {})
+      const docArray = [stage3Docs, stage4Docs]
+      const newDocArray = docArray.map((documents) => {
+        const newDocuments = {}
+        Object.keys(documents).forEach((key) => {
+          newDocuments[key] = documents[key].filter(d => d.id !== action.payload)
+        })
+        return newDocuments
       })
-      const stage4 = state.response.stage4
-        ? state.response.stage4.documents.filter(d => d.id !== action.payload) : []
 
       return {
         ...state,
@@ -367,11 +372,11 @@ export default function shipment (state = {}, action) {
           ...state.response,
           stage3: {
             ...state.response.stage3,
-            documents: docObj
+            documents: newDocArray[0]
           },
           stage4: {
             ...state.response.stage4,
-            documents: stage4
+            documents: newDocArray[1]
           }
         },
         loading: false

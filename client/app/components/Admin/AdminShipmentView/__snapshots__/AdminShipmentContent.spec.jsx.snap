@@ -766,7 +766,7 @@ exports[`feeHash.trucking_pre is falsy 1`] = `
                       tooltip=""
                       type="packing_sheet"
                       uploadFn={null}
-                      url="/shipments/undefined/upload/packing_sheet"
+                      url="/admin/shipments/undefined/upload/packing_sheet"
                     />
                   </div>
                 </div>
@@ -1622,7 +1622,7 @@ exports[`loadType === cargo_item && cargoCount === 1 1`] = `
                       tooltip=""
                       type="packing_sheet"
                       uploadFn={null}
-                      url="/shipments/undefined/upload/packing_sheet"
+                      url="/admin/shipments/undefined/upload/packing_sheet"
                     />
                   </div>
                 </div>
@@ -2478,7 +2478,7 @@ exports[`loadType === cargo_item && cargoCount > 1 1`] = `
                       tooltip=""
                       type="packing_sheet"
                       uploadFn={null}
-                      url="/shipments/undefined/upload/packing_sheet"
+                      url="/admin/shipments/undefined/upload/packing_sheet"
                     />
                   </div>
                 </div>
@@ -3334,7 +3334,7 @@ exports[`loadType === container && cargoCount === 1 1`] = `
                       tooltip=""
                       type="packing_sheet"
                       uploadFn={null}
-                      url="/shipments/undefined/upload/packing_sheet"
+                      url="/admin/shipments/undefined/upload/packing_sheet"
                     />
                   </div>
                 </div>
@@ -4190,7 +4190,7 @@ exports[`loadType === container && cargoCount > 1 1`] = `
                       tooltip=""
                       type="packing_sheet"
                       uploadFn={null}
-                      url="/shipments/undefined/upload/packing_sheet"
+                      url="/admin/shipments/undefined/upload/packing_sheet"
                     />
                   </div>
                 </div>
@@ -5046,7 +5046,7 @@ exports[`shallow render 1`] = `
                       tooltip=""
                       type="packing_sheet"
                       uploadFn={null}
-                      url="/shipments/undefined/upload/packing_sheet"
+                      url="/admin/shipments/undefined/upload/packing_sheet"
                     />
                   </div>
                 </div>
@@ -5902,7 +5902,7 @@ exports[`shipment.has_on_carriage is true 1`] = `
                       tooltip=""
                       type="packing_sheet"
                       uploadFn={null}
-                      url="/shipments/undefined/upload/packing_sheet"
+                      url="/admin/shipments/undefined/upload/packing_sheet"
                     />
                   </div>
                 </div>
@@ -6758,7 +6758,7 @@ exports[`shipment.has_pre_carriage is true 1`] = `
                       tooltip=""
                       type="packing_sheet"
                       uploadFn={null}
-                      url="/shipments/undefined/upload/packing_sheet"
+                      url="/admin/shipments/undefined/upload/packing_sheet"
                     />
                   </div>
                 </div>
@@ -7632,7 +7632,7 @@ exports[`shipment.selected_offer.trucking_pre is true 1`] = `
                       tooltip=""
                       type="packing_sheet"
                       uploadFn={null}
-                      url="/shipments/undefined/upload/packing_sheet"
+                      url="/admin/shipments/undefined/upload/packing_sheet"
                     />
                   </div>
                 </div>
