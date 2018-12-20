@@ -87,8 +87,8 @@ class ShipmentLocationBox extends PureComponent {
         destination: {}
       },
       locationData: {
-        origin: {},
-        destination: {}
+        origin: [],
+        destination: []
       },
       showModal: false,
       addressFromModal: false,
@@ -218,17 +218,17 @@ class ShipmentLocationBox extends PureComponent {
       if (has(this.state.markers, ['destination', 'title'])) {
         this.state.markers.destination.setMap(null)
       }
-      this.setState({
+      this.setState(prevState => ({
         truckingOptions: {
-          ...this.state.truckingOptions,
+          ...prevState.truckingOptions,
           preCarriage: true
         },
         dSelect: '',
         markers: {
-          ...this.state.markers,
+          ...prevState.markers,
           destination: null
         }
-      }, () => {
+      }), () => {
         this.prepForSelect('destination')
         this.adjustMapBounds()
       })
@@ -323,17 +323,17 @@ class ShipmentLocationBox extends PureComponent {
       if (has(this.state.markers, ['origin', 'title'])) {
         this.state.markers.origin.setMap(null)
       }
-      this.setState({
+      this.setState(prevState => ({
         truckingOptions: {
-          ...this.state.truckingOptions,
+          ...prevState.truckingOptions,
           preCarriage: true
         },
         oSelect: '',
         markers: {
-          ...this.state.markers,
+          ...prevState.markers,
           origin: null
         }
-      }, () => {
+      }), () => {
         this.prepForSelect('destination')
         this.adjustMapBounds()
       })
@@ -350,7 +350,7 @@ class ShipmentLocationBox extends PureComponent {
       map, locationData
     } = this.state
 
-    if (locationData[target].title !== undefined) {
+    if (locationData[target].length > 0) {
       map.data.remove(locationData[target][0])
     }
 
@@ -451,6 +451,7 @@ class ShipmentLocationBox extends PureComponent {
       (!originMarkerExists && destMarkerExists)
     ) {
       map.setCenter(bounds.getCenter())
+      map.setZoom(13)
     } else {
       map.fitBounds(bounds, { top: 100, bottom: 20 })
     }
