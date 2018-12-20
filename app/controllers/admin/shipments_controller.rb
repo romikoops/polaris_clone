@@ -120,6 +120,26 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     @all_hubs = Address.all_hubs_prepared
   end
 
+  def upload_client_document
+    @shipment = Shipment.find(params[:shipment_id])
+    if params[:file]
+      @doc = Document.create!(
+        shipment: @shipment,
+        text: params[:file].original_filename.gsub(/[^0-9A-Za-z.\-]/, '_'),
+        doc_type: params[:type],
+        user: @shipment.user,
+        tenant: current_user.tenant,
+        file: params[:file]
+      )
+
+      @doc.as_json.merge(
+        signed_url: rails_blob_url(@doc.file, disposition: 'attachment')
+      )
+    end
+
+    response_handler(@doc)
+  end
+
   def update
     @shipment = Shipment.find(params[:id])
     shipment_action if params[:shipment_action]

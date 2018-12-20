@@ -106,7 +106,7 @@ export class AdminShipmentContent extends Component {
 
     const docView = []
     const missingDocs = []
-    const documentUrl = `/shipments/${shipment.id}/upload/${fileType.value}`
+    const documentUrl = `/admin/shipments/${shipment.id}/upload/${fileType.value}`
 
     const remarkBody = remark.quotation ? remark.quotation.shipment.map(_remark => (
       <li>
@@ -686,7 +686,7 @@ export class AdminShipmentContent extends Component {
                             url={documentUrl}
                             type={fileType.value}
                             text={fileType.label}
-                            uploadFn={adminDispatch.uploadClientDocument}
+                            uploadFn={adminDispatch.uploadDocument}
                           />
                         </div>
                       </div>

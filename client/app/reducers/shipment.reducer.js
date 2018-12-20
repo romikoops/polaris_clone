@@ -1,4 +1,5 @@
 import i18next from 'i18next'
+import { get } from 'lodash'
 import { shipmentConstants } from '../constants'
 
 export default function shipment (state = {}, action) {
@@ -313,14 +314,17 @@ export default function shipment (state = {}, action) {
     case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_REQUEST:
       return state
     case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_SUCCESS: {
-      const { documents } = state.response.stage3
+      const stage3Documents = get(state, ['response', 'stage3', 'documents'], {})
+      const stage4Documents = get(state, ['response', 'stage4', 'documents'], {})
       const docType = action.payload.doc_type
-
-      if (documents[docType]) {
-        documents[docType].push(action.payload)
-      } else {
-        documents[docType] = [action.payload]
-      }
+      const docArray = [stage3Documents, stage4Documents]
+      docArray.forEach((documents) => {
+        if (documents[docType]) {
+          documents[docType].push(action.payload)
+        } else {
+          documents[docType] = [action.payload]
+        }
+      })
 
       return {
         ...state,
@@ -328,7 +332,11 @@ export default function shipment (state = {}, action) {
           ...state.response,
           stage3: {
             ...state.response.stage3,
-            documents
+            documents: stage3Documents
+          },
+          stage4: {
+            ...state.response.stage4,
+            documents: stage4Documents
           }
         },
         loading: false
