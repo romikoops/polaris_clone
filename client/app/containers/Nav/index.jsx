@@ -13,13 +13,16 @@ class NavBar extends Component {
   static goBack () {
     history.goBack()
   }
+
   static goForward () {
     history.go(1)
   }
+
   constructor (props) {
     super(props)
     this.state = {}
   }
+
   finalCell (crumbs) {
     switch (crumbs[0]) {
       case 'admin':
@@ -31,6 +34,7 @@ class NavBar extends Component {
         return ''
     }
   }
+
   cellSwitchAdmin (categories) {
     const { admin } = this.props
     switch (categories[1]) {
@@ -126,7 +130,8 @@ class NavBar extends Component {
               {`${routeName}`}
             </div>
           )
-        } else if (categories[2] === 'trucking') {
+        }
+        if (categories[2] === 'trucking') {
           return (
             <div
               className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
@@ -153,6 +158,7 @@ class NavBar extends Component {
         return ''
     }
   }
+
   cellSwitchUser (categories) {
     const { users } = this.props
     switch (categories[1]) {
@@ -225,20 +231,24 @@ class NavBar extends Component {
         return ''
     }
   }
+
   navLink (crumbs, index) {
     const { appDispatch } = this.props
     let url = ''
     crumbs.forEach((c, i) => {
-      if (i <= index) {
+      if (i <= index && c !== 'trucking') {
         url += `/${c}`
       }
     })
     appDispatch.goTo(url)
   }
+
   goToDashboard (pathPieces) {
     const { appDispatch } = this.props
     if (pathPieces[0] === 'admin') {
       appDispatch.goTo('/admin/dashboard')
+    } else if (pathPieces[2] === 'trucking') {
+      appDispatch.goTo('/admin/pricings')
     } else {
       appDispatch.goTo('/account')
     }
@@ -260,13 +270,15 @@ class NavBar extends Component {
       onClick={() => this.goToDashboard(pathPieces)}
     >
       {' '}
-      <i className="fa fa-home clip" style={iconStyle} />{' '}
+      <i className="fa fa-home clip" style={iconStyle} />
+      {' '}
     </div>)
     pathPieces.forEach((br, i) => {
       if (br !== 'view' && i > 0) {
         breadcrumbs.push(<div className="flex-none layout-row layout-align-center-center pointy">
           {' '}
-          <i className="fa fa-angle-double-right clip" style={iconStyle} />{' '}
+          <i className="fa fa-angle-double-right clip" style={iconStyle} />
+          {' '}
         </div>)
         if (i < lastIndex) {
           breadcrumbs.push(<div
@@ -336,7 +348,7 @@ function mapStateToProps (state) {
   const { users, admin, app } = state
   const { tenant } = app
   const { theme } = tenant
-  
+
   return {
     users,
     tenant,
