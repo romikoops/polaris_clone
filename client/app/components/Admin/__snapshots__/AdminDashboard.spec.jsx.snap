@@ -71,6 +71,7 @@ exports[`isQuote(tenant) is true 1`] = `
       handleSelect={[Function]}
       hubs={Object {}}
       noTitle={true}
+      paginate={false}
       shipments={Array []}
       t={[Function]}
       theme={
@@ -318,6 +319,7 @@ exports[`shallow render 1`] = `
       handleSelect={[Function]}
       hubs={Object {}}
       noTitle={true}
+      paginate={false}
       shipments={
         Array [
           Object {
@@ -604,6 +606,7 @@ exports[`tenant is falsy 1`] = `
       handleSelect={[Function]}
       hubs={Object {}}
       noTitle={true}
+      paginate={false}
       shipments={
         Array [
           Object {
@@ -883,6 +886,7 @@ exports[`theme is falsy 1`] = `
       handleSelect={[Function]}
       hubs={Object {}}
       noTitle={true}
+      paginate={false}
       shipments={
         Array [
           Object {

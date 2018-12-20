@@ -47,6 +47,7 @@ exports[`seeAll is true 1`] = `
     }
     hubs={Object {}}
     noTitle={true}
+    paginate={false}
     shipments={Array []}
     t={[Function]}
     theme={
@@ -122,6 +123,7 @@ exports[`shallow render 1`] = `
     }
     hubs={Object {}}
     noTitle={true}
+    paginate={false}
     shipments={Array []}
     t={[Function]}
     theme={
@@ -166,6 +168,7 @@ exports[`title is empty string 1`] = `
     }
     hubs={Object {}}
     noTitle={true}
+    paginate={false}
     shipments={Array []}
     t={[Function]}
     theme={

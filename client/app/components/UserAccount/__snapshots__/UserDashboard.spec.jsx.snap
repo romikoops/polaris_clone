@@ -82,6 +82,7 @@ exports[`shallow render 1`] = `
       }
       hubs={Object {}}
       noTitle={true}
+      paginate={false}
       shipments={Array []}
       t={[Function]}
       theme={

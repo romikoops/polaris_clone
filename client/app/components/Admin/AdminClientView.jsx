@@ -334,6 +334,7 @@ export class AdminClientView extends Component {
             theme={theme}
             handleSelect={this.handleClick}
             handleAction={this.handleShipmentAction}
+            paginate
           />
         </div>
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">

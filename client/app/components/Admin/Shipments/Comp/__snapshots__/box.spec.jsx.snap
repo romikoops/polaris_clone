@@ -181,6 +181,7 @@ exports[`shipments is truthy 1`] = `
     confirmShipmentData={Object {}}
     hubs={Object {}}
     noTitle={true}
+    paginate={false}
     shipments={
       Array [
         Object {},
