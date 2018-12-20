@@ -33,7 +33,6 @@ module DataValidator
           {
             size_class: 'fcl_20',
             payload_in_kg: 10000,
-            dimension_z: 120,
             payload_in_kg: 1000
           }
         ],

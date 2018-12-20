@@ -3,6 +3,7 @@ import speedtrans from './speedtrans'
 import demo from './demo'
 import normanglobal from './normanglobal'
 import schryver from './schryver'
+import gateway from './gateway'
 import def from './def'
 
 const termsAndConditions = {
@@ -11,6 +12,7 @@ const termsAndConditions = {
   demo,
   normanglobal,
   schryver,
+  gateway,
   def
 }
 

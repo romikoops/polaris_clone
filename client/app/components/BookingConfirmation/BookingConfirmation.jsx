@@ -625,7 +625,7 @@ function prepCargoItemGroups (cargos, props) {
     const payload = parsedPayload * parsedQuantity
     const chargable = parsedChargable * parsedQuantity
 
-    const volume = (parsedY * parsedX * parsedZ / 1000000 * parsedQuantity).toFixed(2)
+    const volume = (parsedY * parsedX * parsedZ / 1000000 * parsedQuantity)
     const cargoType = cargoItemTypes[singleCargo.cargo_item_type_id]
     const items = Array(parsedQuantity).fill(singleCargo)
 

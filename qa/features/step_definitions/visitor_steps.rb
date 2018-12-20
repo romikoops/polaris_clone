@@ -50,8 +50,8 @@ When('I select {string} as {string}') do |place, type|
 
     # wait for trucking pricing to return
 
-    expect(page).to have_no_css('#floatingCirclesG', wait: 90)
-    expect(page).to have_css(".ccb_#{type.downcase}_found", wait: 60, visible: false)
+    expect(page).to have_no_css('#floatingCirclesG', wait: 300)
+    expect(page).to have_css(".ccb_#{type.downcase}_found", wait: 240, visible: false)
 
 
 

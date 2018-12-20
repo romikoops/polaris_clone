@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'bigdecimal'
+
 class Charge < ApplicationRecord
   include CurrencyTools
   has_paper_trail

@@ -221,8 +221,6 @@ export class AdminShipmentContent extends Component {
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
                       estimatedTime={estimatedTimes.etaJSX}
-                      carriage={deliveryDate}
-                      noCarriage={destinationCollectionDate}
                       text={t('common:eta')}
                       theme={theme}
                       hub={shipment.destination_hub}
