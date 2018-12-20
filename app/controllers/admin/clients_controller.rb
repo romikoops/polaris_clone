@@ -17,7 +17,7 @@ class Admin::ClientsController < Admin::AdminBaseController
   def show
     client = User.find(params[:id])
     addresses = client.addresses
-    shipments = client.shipments.where(status: %w(requested open in_progress finished)).map(&:with_address_options_json)
+    shipments = client.shipments.where(status: %w(requested requested_by_unconfirmed_account)).map(&:with_address_options_json)
     manager_assignments = UserManager.where(user_id: client)
     resp = { client: client, addresses: addresses, shipments: shipments, managerAssignments: manager_assignments }
     response_handler(resp)

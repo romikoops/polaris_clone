@@ -134,6 +134,7 @@ exports[`clientData.managerAssignments is falsy 1`] = `
         ]
       }
       noTitle={false}
+      paginate={true}
       shipments={
         Array [
           Object {},
@@ -470,6 +471,7 @@ exports[`managerAssignments is truthy 1`] = `
         ]
       }
       noTitle={false}
+      paginate={true}
       shipments={
         Array [
           Object {},
@@ -666,6 +668,7 @@ exports[`managers is falsy 1`] = `
         ]
       }
       noTitle={false}
+      paginate={true}
       shipments={
         Array [
           Object {},
@@ -862,6 +865,7 @@ exports[`shallow render 1`] = `
         ]
       }
       noTitle={false}
+      paginate={true}
       shipments={
         Array [
           Object {},
@@ -1058,6 +1062,7 @@ exports[`state.confirm is true 1`] = `
         ]
       }
       noTitle={false}
+      paginate={true}
       shipments={
         Array [
           Object {},
@@ -1374,6 +1379,7 @@ exports[`state.showAddManager is true 1`] = `
         ]
       }
       noTitle={false}
+      paginate={true}
       shipments={
         Array [
           Object {},
@@ -1556,6 +1562,7 @@ exports[`theme is falsy 1`] = `
         ]
       }
       noTitle={false}
+      paginate={true}
       shipments={
         Array [
           Object {},
