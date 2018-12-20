@@ -174,7 +174,7 @@ exports[`estimatedTime is falsy 1`] = `
                 }
               />
               <h4
-                className="flex-100 layout-row"
+                className="flex-85 layout-row"
               >
                 Drop-off
               </h4>
@@ -281,7 +281,7 @@ exports[`isAdmin is true 1`] = `
                 }
               />
               <h4
-                className="flex-100 layout-row"
+                className="flex-85 layout-row"
               >
                 Drop-off
               </h4>
@@ -380,7 +380,7 @@ exports[`shallow render 1`] = `
                 }
               />
               <h4
-                className="flex-100 layout-row"
+                className="flex-85 layout-row"
               >
                 Drop-off
               </h4>
@@ -462,7 +462,7 @@ exports[`shipment has delivery_address 1`] = `
               <h4
                 className="flex-80 layout-row"
               >
-                Estimated Delivery
+                Delivery
               </h4>
             </div>
             <div
@@ -481,19 +481,6 @@ exports[`shipment has delivery_address 1`] = `
               >
                 Collection
               </h4>
-            </div>
-          </div>
-          <div
-            className="layout-row flex-95 layout-align-start-center"
-          >
-            <div
-              className="flex-60 layout-row"
-            >
-              <p>
-                <div>
-                  noCarriage
-                </div>
-              </p>
             </div>
           </div>
           <div
@@ -564,7 +551,7 @@ exports[`shipment has has_on_carriage 1`] = `
               <h4
                 className="flex-80 layout-row"
               >
-                Estimated Delivery
+                Delivery
               </h4>
             </div>
             <div
@@ -583,19 +570,6 @@ exports[`shipment has has_on_carriage 1`] = `
               >
                 Collection
               </h4>
-            </div>
-          </div>
-          <div
-            className="layout-row flex-95 layout-align-start-center"
-          >
-            <div
-              className="flex-60 layout-row"
-            >
-              <p>
-                <div>
-                  carriage
-                </div>
-              </p>
             </div>
           </div>
         </div>
@@ -661,7 +635,7 @@ exports[`shipment has has_pre_carriage 1`] = `
                 }
               />
               <h4
-                className="flex-100 layout-row"
+                className="flex-70 layout-row"
               >
                 Pick-up
               </h4>
@@ -777,7 +751,7 @@ exports[`shipment has pickup_address 1`] = `
                 }
               />
               <h4
-                className="flex-100 layout-row"
+                className="flex-85 layout-row"
               >
                 Drop-off
               </h4>
@@ -799,19 +773,7 @@ exports[`shipment has pickup_address 1`] = `
           <div
             className="layout-row flex-95 layout-align-start-center carriage_address"
           >
-            <p>
-              PICKUP_STREET
-               
-               
-              PICKUP_STREET_NUMBER
-              , 
-              <strong>
-                PICKUP_CITY
-                , 
-                PICKUP_COUNTRY
-                 
-              </strong>
-            </p>
+            <p />
           </div>
         </div>
       </div>
@@ -876,7 +838,7 @@ exports[`text is not ETD 1`] = `
               <h4
                 className="flex-80 layout-row"
               >
-                Estimated Delivery
+                Delivery
               </h4>
             </div>
             <div
@@ -895,19 +857,6 @@ exports[`text is not ETD 1`] = `
               >
                 Collection
               </h4>
-            </div>
-          </div>
-          <div
-            className="layout-row flex-95 layout-align-start-center"
-          >
-            <div
-              className="flex-60 layout-row"
-            >
-              <p>
-                <div>
-                  noCarriage
-                </div>
-              </p>
             </div>
           </div>
         </div>
