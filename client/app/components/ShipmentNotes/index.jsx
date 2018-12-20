@@ -13,7 +13,7 @@ function ShipmentNotes ({
         note={note}
         itinerary={shipment.itinerary}
       />)) : ''
-
+    
   return (
     <GreyBox
       wrapperClassName={`layout-row layout-wrap layout-sm-column layout-xs-column flex-100
@@ -53,7 +53,7 @@ function ShipmentNotes ({
                   {t('common:descriptionGoods')}
                   :
                 </span>
-                <p className="flex-80 layout-padding layout-row">
+                <p className="flex-80 layout-padding">
                   {shipment.cargo_notes || '-'}
                 </p>
               </div>
@@ -64,7 +64,7 @@ function ShipmentNotes ({
 
               {shipment.eori ? (
                 <div className={`${shipment.incoterm_text || shipment.notes ? styles.border_bottom : ''}
-                flex-100 padding_top_sm padding_bottom_sm layout-row offset-5 layout-align-start-start`}
+                flex-95 padding_top_sm padding_bottom_sm layout-row offset-5 layout-align-start-start`}
                 >
                   <div className="flex-100 layout-xs-column layout-row layout-align-start-center">
                     <span className="flex-10 layout-row">
@@ -78,7 +78,7 @@ function ShipmentNotes ({
                 </div>
               ) : ''}
               {shipment.incoterm_text ? (
-                <div className={`${shipment.notes ? styles.border_bottom : ''} flex-100 padding_top_sm padding_bottom_sm layout-row offset-5 layout-align-start-start`}>
+                <div className={`${shipment.notes ? styles.border_bottom : ''} flex-95 padding_top_sm padding_bottom_sm layout-row offset-5 layout-align-start-start`}>
                   <div className="flex-100 layout-xs-column layout-row layout-align-start-center">
                     <span className="flex-10 layout-row">
                       {t('common:incoterm')}
@@ -91,20 +91,20 @@ function ShipmentNotes ({
                 </div>
               ) : ''}
               {shipment.route_notes || shipment.notes ? (
-                <div className="flex-100 flex-sm-100 padding_top_sm padding_bottom_sm flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap">
+                <div className="flex-95 padding_top_sm padding_bottom_sm layout-row offset-5 layout-align-start-start layout-wrap">
                   <div className="flex-100 layout-row layout-align-start-center">
                     <span className="flex-10 layout-row">
                       {t('common:notes')}
                       :
                     </span>
-                    {route_notes}
-                    {shipment.notes ? (
-                      <p>
-                        {' '}
-                        {shipment.notes}
-                        {' '}
-                       </p>
-                    ) : ''}
+                    <div className="flex layout-row layout-align-start-start">
+                      {route_notes}
+                      {shipment.notes ? (
+                        <p className="flex-100">
+                          {shipment.notes}
+                        </p>
+                      ) : ''}
+                    </div>
                   </div>
                 </div>
               ) : ''}
