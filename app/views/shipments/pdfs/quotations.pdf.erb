@@ -187,7 +187,31 @@
         </div>
       </div>
       <% ['trucking_pre', 'export', 'cargo', 'import', 'trucking_on' ].each do |charge_key| %>
-        <% charge = s.selected_offer[charge_key]%>
+        <% if scope['freight_in_original_currency']  && charge_key == 'cargo'
+            original_charge = s.selected_offer[charge_key]
+            charge = {
+              "total" => {
+                "value" => 0.0,
+                "currency" => ""
+              }
+            }
+            original_charge.keys
+              .reject {|k| ['name', 'total', 'edited_total'].include?(k)}
+              .each do |k|
+                charge[k] = original_charge[k]
+                charge[k]['total']['value'] = 0.0
+                original_charge[k].keys
+                  .reject {|fk| ['name', 'total', 'edited_total'].include?(fk)}
+                  .each do |fk|
+                    charge['total']['value'] += original_charge[k][fk]['value']
+                    charge['total']['currency'] = original_charge[k][fk]['currency']
+                    charge[k]['total']['value'] += original_charge[k][fk]['value']
+                    charge[k]['total']['currency'] = original_charge[k][fk]['currency']
+                  end
+              end
+          else
+            charge = s.selected_offer[charge_key]
+          end %>
         <% next if !charge%>
         <div class="sub-prices">
           <div class="total-price-single">
