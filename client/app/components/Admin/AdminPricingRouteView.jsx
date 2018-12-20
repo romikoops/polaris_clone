@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
+import { has } from 'lodash'
 import { AdminClientTile, AdminPriceEditor } from '.'
 import styles from './Admin.scss'
 import shipmentStyles from './AdminShipments.scss'
@@ -42,7 +43,7 @@ export class AdminPricingRouteView extends Component {
     const {
       pricings, loading, adminActions, match
     } = this.props
-    if (!pricings[match.params.id] && !loading) {
+    if (!has(pricings, [match.params.id]) && !loading) {
       adminActions.getItineraryPricings(parseInt(match.params.id, 10), false)
     }
     window.scrollTo(0, 0)
