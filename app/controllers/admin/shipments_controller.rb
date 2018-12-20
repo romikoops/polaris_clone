@@ -228,6 +228,16 @@ class Admin::ShipmentsController < Admin::AdminBaseController
         pages: {
           quoted: params[:quoted_page]
         },
+        nexuses: {
+          quoted: {
+            origin_nexuses: Nexus.where(id: tenant_shipments.quoted.distinct.pluck(:origin_nexus_id)),
+            destination_nexuses: Nexus.where(id: tenant_shipments.quoted.distinct.pluck(:destination_nexus_id))
+          },
+          archived: {
+            origin_nexuses: Nexus.where(id: tenant_shipments.archived.distinct.pluck(:origin_nexus_id)),
+            destination_nexuses: Nexus.where(id: tenant_shipments.archived.distinct.pluck(:destination_nexus_id))
+          }
+        },
         num_shipment_pages: num_pages
       }
     end
