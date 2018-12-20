@@ -109,15 +109,17 @@ module OfferCalculatorService
 
       charge_category = ChargeCategory.from_code('cargo', @user.tenant_id)
       parent_charge = create_parent_charge(charge_category)
-      cargo_unit_array = @shipment.aggregated_cargo ? [@shipment.aggregated_cargo] : @shipment.cargo_units
+      isAggCargo = !@shipment.aggregated_cargo.nil?
+      cargo_unit_array = isAggCargo ? [@shipment.aggregated_cargo] : @shipment.cargo_units
 
       if @user.tenant.scope['consolidate_cargo'] && cargo_unit_array.first.is_a?(CargoItem)
         cargo_unit_array = consolidate_cargo(cargo_unit_array, @schedule.mode_of_transport)
       end
       cargo_unit_array.each do |cargo_unit|
+        cargo_class = isAggCargo ? 'lcl' : cargo_unit[:cargo_class]
         charge_result = send("determine_#{@shipment.load_type}_price",
                              cargo_unit,
-                             @data[:pricing_ids][cargo_unit[:cargo_class]],
+                             @data[:pricing_ids][cargo_class],
                              @user,
                              total_units,
                              @shipment.planned_pickup_date,
@@ -125,7 +127,7 @@ module OfferCalculatorService
 
         next if charge_result.nil?
 
-        cargo_unit_model = cargo_unit.class.to_s == 'Hash' ? 'CargoItem' : cargo_unit.class.to_s
+        cargo_unit_model = cargo_unit.class.to_s == 'Hash' || isAggCargo ? 'CargoItem' : cargo_unit.class.to_s
 
         children_charge_category = ChargeCategory.find_or_create_by(
           name:          cargo_unit_model.humanize,
