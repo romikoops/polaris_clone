@@ -140,7 +140,10 @@ class UserDashboard extends Component {
                   />
                 </div>
                 <div className={`${ustyles.welcome} flex layout-row ccb_dashboard`}>
-                  {t('common:welcomeBack')}&nbsp; <b>{user.first_name}</b>
+                  {t('common:welcomeBack')}
+&nbsp;
+                  {' '}
+                  <b>{user.first_name}</b>
                 </div>
               </div>
               <div className="flex-40 layout-row layout-align-end-center">
@@ -174,47 +177,22 @@ class UserDashboard extends Component {
             <div className={`flex-85 ${ustyles.separator}`} />
           </div>
         </div>
-        { isQuote(tenant) ? '' : <div
-          className="layout-row flex-100 layout-wrap layout-align-center-center"
-        >
-          <div className="flex-100 layout-row layout-wrap layout-align-center-stretch">
-            <AdminSearchableClients
-              theme={theme}
-              clients={contacts}
-              placeholder={t('account:searchContacts')}
-              title={t('account:mostUsedContacts')}
-              handleClick={this.viewClient}
-              seeAll={() => userDispatch.getContacts({ page: 1 }, true)}
-            />
-          </div>
-        </div> }
-        { isQuote(tenant) ? '' : <div
-          className={`layout-row flex-100 layout-wrap layout-align-center-center ${
-            defaults.border_divider
-          }`}
-        >
-          <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-            <div className="flex-100 layout-row layout-align-space-between-center">
-              <div
-                className="flex-100 layout-align-start-center greyBg"
-              >
-                <span><b>{t('shipment:myShipmentAddresses')}</b></span>
-              </div>
-            </div>
-            {addresses.length === 0 ? (
-              t('shipment:noAddresses')
-            ) : (
-              <UserLocations
-                setNav={() => {}}
-                userDispatch={userDispatch}
-                addresses={addresses}
-                makePrimary={this.makePrimary}
+        { isQuote(tenant) ? '' : (
+          <div
+            className="layout-row flex-100 layout-wrap layout-align-center-center"
+          >
+            <div className="flex-100 layout-row layout-wrap layout-align-center-stretch">
+              <AdminSearchableClients
                 theme={theme}
-                user={user}
+                clients={contacts}
+                placeholder={t('account:searchContacts')}
+                title={t('account:mostUsedContacts')}
+                handleClick={this.viewClient}
+                seeAll={() => userDispatch.getContacts({ page: 1 }, true)}
               />
-            )}
+            </div>
           </div>
-        </div> }
+        ) }
       </div>
     )
   }

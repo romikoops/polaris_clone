@@ -70,7 +70,7 @@ exports[`shallow render 1`] = `
           <p
             className="flex-90 price_cell_data"
           >
-            Jul 4, 2017
+            Jul 3, 2017
           </p>
           <div
             className="flex-none price_cell_divider"
@@ -87,7 +87,7 @@ exports[`shallow render 1`] = `
           <p
             className="flex-90 price_cell_data"
           >
-            Jul 4, 2017
+            Jul 3, 2017
           </p>
         </div>
       </div>

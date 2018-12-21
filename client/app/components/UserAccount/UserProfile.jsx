@@ -538,27 +538,6 @@ class UserProfile extends Component {
               {contactArr}
             </div>
           </div>
-
-          <div
-            className={`flex-gt-sm-50 flex-100 layout-row layout-wrap layout-align-start-center section_padding ${
-              styles.section
-            } `}
-          >
-            <div
-              className="flex-100 layout-align-start-center greyBg"
-            >
-              <span><b>{t('user:savedLocations')}</b></span>
-            </div>
-            <UserLocations
-              setNav={() => {}}
-              addresses={addresses}
-              makePrimary={this.makePrimary}
-              userDispatch={userDispatch}
-              theme={theme}
-              cols={2}
-              user={user}
-            />
-          </div>
         </div>
       </div>
     )
