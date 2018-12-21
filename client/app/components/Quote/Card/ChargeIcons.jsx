@@ -73,7 +73,7 @@ export function ChargeIcons ({
     <div className={`${styles.fee_tile} flex-none layout-column layout-align-none-center`}>
       <div className="flex layout-row layout-align-center-start width_100">
         <i
-          className="fa fa-file-text-o clip flex-none"
+          className="fa fa-file-text clip flex-none"
           style={destinationDocumentStyle}
           data-tip={tooltips.charge_icons.documentation.destination}
           data-for={tooltipId}

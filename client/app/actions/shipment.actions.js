@@ -78,7 +78,6 @@ function getOffers (data, redirect) {
       },
       (error) => {
         error.then((newData) => {
-          // debugger
           dispatch(failure({
             type: 'error',
             text: newData.message || newData.error
