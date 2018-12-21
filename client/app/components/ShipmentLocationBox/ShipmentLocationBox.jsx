@@ -238,6 +238,7 @@ class ShipmentLocationBox extends PureComponent {
         this.props.setTargetAddress('destination', {})
       }
     }
+    this.clearErrorDrawer()
   }
 
   setNexusesFromRoute (route) {
@@ -343,6 +344,7 @@ class ShipmentLocationBox extends PureComponent {
         this.props.setTargetAddress('origin', {})
       }
     }
+    this.clearErrorDrawer()
   }
 
   setLocationMap (location, target) {
@@ -669,6 +671,11 @@ class ShipmentLocationBox extends PureComponent {
     errorDispatch.setError(error)
   }
 
+  clearErrorDrawer () {
+    const { errorDispatch } = this.props
+    errorDispatch.clearError({componentName: 'ShipmentLocationBox'})
+  }
+
   selectLocation (place, target) {
     this.setState(prevState => ({
       fetchingtruckingAvailability: {
@@ -727,9 +734,9 @@ class ShipmentLocationBox extends PureComponent {
                   },
                   showTick: false
                 }))
+                target === 'origin' ? this.setOriginNexus(nexusOption) : this.setDestNexus(nexusOption)
               }
-              target === 'origin' ? this.setOriginNexus(nexusOption) : this.setDestNexus(nexusOption)
-
+              
               const fieldsHaveErrors = !nexusOption
               this.setState(prevState => ({
                 [`${target}FieldsHaveErrors`]: fieldsHaveErrors,
@@ -791,6 +798,7 @@ class ShipmentLocationBox extends PureComponent {
                 if (!this.isOnFocus[target]) this.changeAddressFormVisibility(target, false)
               }, 5000)
             })
+            this.clearErrorDrawer()
           }
         }
       )
@@ -1120,7 +1128,7 @@ class ShipmentLocationBox extends PureComponent {
           value={this.state.oSelect}
           placeholder={t('shipment:origin')}
           options={originOptions.sort((a, b) => a.label - b.label)}
-          disabled={fetchingtruckingAvailability.origin}
+          disabled={fetchingtruckingAvailability.destination}
           onChange={this.setOriginNexus}
           nextStageAttempt={nextStageAttempts > 0}
         />
@@ -1137,7 +1145,7 @@ class ShipmentLocationBox extends PureComponent {
           name="destination-hub"
           className={styles.select}
           value={this.state.dSelect}
-          disabled={fetchingtruckingAvailability.destination}
+          disabled={fetchingtruckingAvailability.origin}
           placeholder={t('shipment:destination')}
           options={destinationOptions.sort((a, b) => a.label - b.label)}
           onChange={this.setDestNexus}
