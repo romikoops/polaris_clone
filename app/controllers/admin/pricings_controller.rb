@@ -64,9 +64,9 @@ class Admin::PricingsController < Admin::AdminBaseController
 
   def route
     itinerary = Itinerary.find(params[:id])
-    pricings = itinerary.pricings.map(&:for_table_json)
+    pricings = itinerary.pricings.reject{|pricing| pricing&.user.internal?}
     response_handler(
-      pricings:             pricings,
+      pricings:             pricings.map(&:for_table_json),
       itinerary:            itinerary,
       stops:                itinerary.stops.map(&:as_options_json)
     )

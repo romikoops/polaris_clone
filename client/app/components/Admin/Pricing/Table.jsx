@@ -72,12 +72,11 @@ class AdminPricesTable extends PureComponent {
           <p className="flex-none">{t('account:userEmail')}</p>
         </div>),
         id: 'userEmail',
-        accessor: d => d.user_email || '-',
+        accessor: d => d.user_email,
         Cell: rowData => (
-          <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
-            <p className="flex-100">
-              {' '}
-              {rowData.row.userEmail}
+          <div className={`${styles.pricing_cell} flex-100 layout-row layout-align-start-center`}>
+            <p className="">
+              {rowData.row.userEmail || '-'}
             </p>
           </div>
         )
@@ -125,7 +124,7 @@ class AdminPricesTable extends PureComponent {
           <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
             <p className="flex-none">
               {' '}
-              {rowData.row.carrier}
+              {rowData.row.carrier || '-'}
             </p>
           </div>
         )
