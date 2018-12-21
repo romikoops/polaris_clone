@@ -4,7 +4,7 @@ import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { cookieActions } from '../../actions'
 import styles from './Footer.scss'
-import { socialIcons } from '../../helpers'
+import { socialIcons, isQuote } from '../../helpers'
 import SquareButton from '../SquareButton'
 
 class Footer extends React.PureComponent {
@@ -27,6 +27,7 @@ class Footer extends React.PureComponent {
     const supportEmail = tenant && tenant.emails ? tenant.emails.support.general : ''
     const links = checkTenantScope ? tenant.scope.links : {}
     const socialLinks = checkTenantScope ? tenant.scope.social_links : {}
+    const isQuotationShop = isQuote(tenant)
     const defaultLinks = {
       privacy: 'https://itsmycargo.com/en/privacy',
       about: 'https://www.itsmycargo.com/en/ourstory',
@@ -54,12 +55,14 @@ class Footer extends React.PureComponent {
         }}
       >
         <div className={`flex-20 flex-gt-sm-20 layout-row layout-wrap layout-align-center-center ${styles.banner_text}`}>
-          <a
-            href={home}
-            target="_blank"
-          >
-            <img className={styles.logo} src={logo} />
-          </a>
+          {isQuotationShop ? '' : (
+            <a
+              href={home}
+              target="_blank"
+            >
+              <img className={styles.logo} src={logo} />
+            </a>
+          ) }
           <div className="flex-100 flex-gt-sm-100 layout-align-center-center layout-row">
             <h4 className="flex-none">{t('footer:poweredBy')}</h4>
             <a
