@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { withNamespaces } from 'react-i18next'
 import ReactTable from 'react-table'
+import matchSorter from 'match-sorter'
 import { has, get } from 'lodash'
 import 'react-table/react-table.css'
 import { bindActionCreators } from 'redux'
@@ -73,9 +74,11 @@ class AdminPricesTable extends PureComponent {
         </div>),
         id: 'userEmail',
         accessor: d => d.user_email,
+        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ["userEmail"] }),
+        filterAll: true,
         Cell: rowData => (
           <div className={`${styles.pricing_cell} flex-100 layout-row layout-align-start-center`}>
-            <p className="">
+            <p className="flex-100">
               {rowData.row.userEmail || '-'}
             </p>
           </div>
@@ -87,6 +90,8 @@ class AdminPricesTable extends PureComponent {
           <p className="flex-none">{t('account:effectiveDate')}</p>
         </div>),
         id: 'effectiveDate',
+        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ["effectiveDate"] }),
+        filterAll: true,
         accessor: d => moment(d.effective_date).format('ll'),
         Cell: rowData => (
           <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
@@ -103,6 +108,8 @@ class AdminPricesTable extends PureComponent {
           <p className="flex-none">{t('account:expirationDate')}</p>
         </div>),
         id: 'expirationDate',
+        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ["expirationDate"] }),
+        filterAll: true,
         accessor: d => moment(d.expiration_date).format('ll'),
         Cell: rowData => (
           <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
@@ -119,6 +126,8 @@ class AdminPricesTable extends PureComponent {
           <p className="flex-none">{t('account:carrier')}</p>
         </div>),
         id: 'carrier',
+        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ["carrier"] }),
+        filterAll: true,
         accessor: d => d.carrier,
         Cell: rowData => (
           <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
@@ -135,6 +144,8 @@ class AdminPricesTable extends PureComponent {
           <p className="flex-none">{t('shipment:serviceLevel')}</p>
         </div>),
         id: 'service_level',
+        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ["service_level"] }),
+        filterAll: true,
         accessor: d => d.service_level,
         Cell: rowData => (
           <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
@@ -150,6 +161,8 @@ class AdminPricesTable extends PureComponent {
           {determineSortingCaret('cargo_class', sorted)}
           <p className="flex-none">{t('account:loadType')}</p>
         </div>),
+        filterMethod: (filter, rows) => matchSorter(rows, filter.value, { keys: ["cargo_class"] }),
+        filterAll: true,
         accessor: 'cargo_class',
         Cell: rowData => (
           <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
@@ -166,6 +179,8 @@ class AdminPricesTable extends PureComponent {
       <ReactTable
         className={`${styles.no_footer} ${classNames}`}
         data={data.pricings}
+        filterable
+        defaultFilterMethod={(filter, row) => String(row[filter.id]) === filter.value}
         columns={columns}
         defaultSorted={[
           {
