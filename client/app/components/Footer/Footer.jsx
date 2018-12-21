@@ -164,5 +164,6 @@ function mapDispatchToProps (dispatch) {
     cookieDispatch: bindActionCreators(cookieActions, dispatch)
   }
 }
+export const translatedFooter = withNamespaces(['footer'])(Footer)
 
-export default connect(null, mapDispatchToProps)(withNamespaces('footer')(Footer))
+export default connect(null, mapDispatchToProps)(translatedFooter)

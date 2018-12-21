@@ -5,6 +5,15 @@ default_content = {
   "index": 0
 }
 custom_content = {
+  "fivestar": [
+    {
+      "text": '',
+      "component": "Footer",
+      "section": "terms_and_conditions",
+      "index": 0,
+      "image": 'data/fivestar/terms_and_conditions.pdf'
+    }
+  ],
   "normanglobal": [
     {
       "text": '<img src="https://assets.itsmycargo.com/assets/tenants/normanglobal/normanglobal_logo_white.png" alt="" class="flex-none landing_logo_large"/>',
