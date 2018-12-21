@@ -6,9 +6,14 @@ class Admin::ClientsController < Admin::AdminBaseController
   def index
     shipper_role = Role.find_by_name('shipper')
     manager_role = Role.find_by_name('sub_admin')
-    clients = User.where(tenant_id: current_user.tenant_id, role_id: shipper_role.id, guest: false).map(&:for_admin_json)
 
+    clients = User.where(tenant_id: current_user.tenant_id, role_id: shipper_role.id, guest: false).map(&:for_admin_json)
     managers = User.where(tenant_id: current_user.tenant_id, role_id: manager_role.id)
+
+    unless current_user.internal
+      clients = clients.reject { |client| client['internal'] }
+      managers = managers.reject { |manager| manager['internal'] }
+    end
     response_handler(clients: clients, managers: managers)
   end
 
