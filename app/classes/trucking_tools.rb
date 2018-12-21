@@ -231,7 +231,6 @@ module TruckingTools
     total_area = cargos.sum { |cargo| cargo.dimension_x * cargo.dimension_y * cargo.quantity }
     non_stackable = cargos.select(&:stackable).empty?
     load_area_limit = trucking_pricing.load_meterage['area_limit']
-
     if total_area >= load_area_limit || non_stackable
       cargos.each do |cargo|
         calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
@@ -315,6 +314,7 @@ module TruckingTools
     cargo_object
   end
 
+
   def calc_aggregated_cargo_load_meterage(trucking_pricing, cargo_object, cargo)
     load_meterage = (cargo.volume / 1.3) / 2.4
     load_meter_weight = load_meterage * trucking_pricing.load_meterage['ratio']
@@ -341,7 +341,8 @@ module TruckingTools
     load_meter_weight = load_meter_var * trucking_pricing.load_meterage['ratio']
     cbm_var = (cargo.dimension_x * cargo.dimension_y * cargo.dimension_z * cargo.quantity) / CBM_VOLUME_DIVISOR
     cbm_weight = cbm_var * (trucking_pricing.cbm_ratio || 0)
-    trucking_chargeable_weight = [load_meter_weight, cargo.payload_in_kg, cbm_weight].max
+    raw_payload = cargo.payload_in_kg * cargo.quantity
+    trucking_chargeable_weight = [load_meter_weight, raw_payload, cbm_weight].max
     cargo_object['non_stackable']['weight'] += trucking_chargeable_weight
     cargo_object['non_stackable']['volume'] += cargo.volume * cargo.quantity
     cargo_object['non_stackable']['number_of_items'] += cargo.quantity
@@ -351,7 +352,8 @@ module TruckingTools
     cbm_ratio = trucking_pricing['cbm_ratio'] || 0
     cbm_weight = cargo.volume * cbm_ratio
     quantity = cargo.try(:quantity) || 1
-    trucking_chargeable_weight = [cbm_weight, cargo.try(:payload_in_kg) || cargo.weight].max
+    raw_payload = (cargo.try(:payload_in_kg) || cargo.weight) * quantity
+    trucking_chargeable_weight = [cbm_weight, raw_payload].max
     cargo_object['stackable']['weight'] += trucking_chargeable_weight * quantity
     cargo_object['stackable']['volume'] += cargo.volume * quantity
     cargo_object['stackable']['number_of_items'] += quantity
