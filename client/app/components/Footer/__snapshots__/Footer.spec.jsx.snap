@@ -7,15 +7,6 @@ exports[`shallow render 1`] = `
   <div
     className="flex-20 flex-gt-sm-20 layout-row layout-wrap layout-align-center-center banner_text"
   >
-    <a
-      href="https://www.itsmycargo.com/en/"
-      target="_blank"
-    >
-      <img
-        className="logo"
-        src=""
-      />
-    </a>
     <div
       className="flex-100 flex-gt-sm-100 layout-align-center-center layout-row"
     >
@@ -161,15 +152,6 @@ exports[`theme is falsy 1`] = `
   <div
     className="flex-20 flex-gt-sm-20 layout-row layout-wrap layout-align-center-center banner_text"
   >
-    <a
-      href="https://www.itsmycargo.com/en/"
-      target="_blank"
-    >
-      <img
-        className="logo"
-        src=""
-      />
-    </a>
     <div
       className="flex-100 flex-gt-sm-100 layout-align-center-center layout-row"
     >
