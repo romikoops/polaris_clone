@@ -35,12 +35,28 @@ class Pricing < ApplicationRecord
     super(new_options)
   end
 
+  def for_table_json(options = {})
+
+    new_options = options.reverse_merge(
+      methods: %i(data exceptions load_type cargo_class carrier service_level user_email),
+      only:    %i(
+        effective_date expiration_date wm_rate itinerary_id
+        tenant_id transport_category_id id currency_name tenant_vehicle_id user_id
+      )
+    )
+    as_json(new_options)
+  end
+
   def data
     pricing_details.map(&:as_json).reduce({}) { |hash, merged_hash| merged_hash.deep_merge(hash) }
   end
 
   def exceptions
     pricing_exceptions.map(&:as_json)
+  end
+
+  def user_email
+    user&.email
   end
 
   def carrier

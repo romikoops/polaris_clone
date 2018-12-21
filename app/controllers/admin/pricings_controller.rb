@@ -64,12 +64,10 @@ class Admin::PricingsController < Admin::AdminBaseController
 
   def route
     itinerary = Itinerary.find(params[:id])
-    pricings = ordinary_pricings(itinerary)
-    user_pricings = user_pricing(itinerary)
+    pricings = itinerary.pricings.map(&:for_table_json)
     response_handler(
       pricings:             pricings,
       itinerary:            itinerary,
-      userPricings:         user_pricings,
       stops:                itinerary.stops.map(&:as_options_json)
     )
   end

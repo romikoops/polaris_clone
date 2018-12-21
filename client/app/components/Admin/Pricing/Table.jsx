@@ -68,6 +68,22 @@ class AdminPricesTable extends PureComponent {
     const columns = [
       {
         Header: (<div className="flex layout-row layout-center-center">
+          {determineSortingCaret('userEmail', sorted)}
+          <p className="flex-none">{t('account:userEmail')}</p>
+        </div>),
+        id: 'userEmail',
+        accessor: d => d.user_email || '-',
+        Cell: rowData => (
+          <div className={`${styles.pricing_cell} flex layout-row layout-align-start-center`}>
+            <p className="flex-100">
+              {' '}
+              {rowData.row.userEmail}
+            </p>
+          </div>
+        )
+      },
+      {
+        Header: (<div className="flex layout-row layout-center-center">
           {determineSortingCaret('effectiveDate', sorted)}
           <p className="flex-none">{t('account:effectiveDate')}</p>
         </div>),
