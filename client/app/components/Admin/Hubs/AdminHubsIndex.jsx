@@ -54,7 +54,7 @@ export class AdminHubsIndex extends Component {
       return ''
     }
 
-    const modeOfTransports = ['ocean', 'air']
+    const modeOfTransports = ['all']
 
     const motBasedUploadButtons = (
       <div>

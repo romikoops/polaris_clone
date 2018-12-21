@@ -16,7 +16,11 @@ module ExcelDataServices
 
       def load_and_prepare_data
         rows_data = []
-        local_charges = mode_of_transport ? tenant.local_charges.for_mode_of_transport(mode_of_transport) : tenant.local_charges
+        local_charges = if mode_of_transport.nil? || mode_of_transport == 'all'
+                          tenant.local_charges
+                        else
+                          tenant.local_charges.for_mode_of_transport(mode_of_transport)
+                        end
         local_charges&.each do |local_charge|
           local_charge[:fees].values.each do |fee_values_h|
             rows_data << build_row_data(local_charge, fee_values_h)
@@ -40,7 +44,7 @@ module ExcelDataServices
         counterpart_country_name = counterpart_hub.address.country.name if counterpart_hub
         tenant_vehicle = local_charge.tenant_vehicle
         service_level = tenant_vehicle.name
-        carrier = tenant_vehicle.carrier&.name
+        carrier = tenant_vehicle&.carrier&.name
         rate_basis = fee[:rate_basis].upcase
         charge_params = specific_charge_params_for_writing(rate_basis, fee)
 

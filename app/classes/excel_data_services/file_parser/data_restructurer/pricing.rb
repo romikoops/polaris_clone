@@ -55,7 +55,7 @@ module ExcelDataServices
               row_data.delete(:range_min) # already inside range hash
               row_data.delete(:range_max) # already inside range hash
               row_data.delete(:fee) # already inside range hash, called 'rate'. Yes, it's ridiculous.
-              row_data.merge(range: ranges_values)
+              row_data.merge(range: ranges_values.blank? ? nil : ranges_values)
             else # no ranges
               row_data.delete(:range_min)
               row_data.delete(:range_max)
