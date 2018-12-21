@@ -106,16 +106,10 @@ exports[`theme has truthy properties 1`] = `
             <b>
               Welcome to the
             </b>
-             
             <br />
-            <i>
-               
-               
-            </i>
-             
+            <i />
+            <br />
             <b>
-               
-              <br />
               FOO_WELCOME_TEXT
             </b>
           </h2>
@@ -398,16 +392,10 @@ exports[`user.role_id is 1 1`] = `
             <b>
               Welcome to the
             </b>
-             
             <br />
-            <i>
-               
-               
-            </i>
-             
+            <i />
+            <br />
             <b>
-               
-              <br />
               shop for online freight
             </b>
           </h2>
@@ -682,16 +670,10 @@ exports[`user.role_id is 2 1`] = `
             <b>
               Welcome to the
             </b>
-             
             <br />
-            <i>
-               
-               
-            </i>
-             
+            <i />
+            <br />
             <b>
-               
-              <br />
               shop for online freight
             </b>
           </h2>

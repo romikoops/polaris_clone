@@ -455,6 +455,8 @@
       },
       "footer": {
         "about": "About Us",
+        "company": "Company",
+        "contact": "Contact",
         "legal": "Legal",
         "privacy": "Privacy Policy",
         "terms": "Terms and Conditions",

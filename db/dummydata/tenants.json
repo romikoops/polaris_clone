@@ -70,8 +70,17 @@
       }
     },
     "links": {
+      "home": "https://freightservices.greencarrier.com/",
       "about": "https://freightservices.greencarrier.com/about-us/",
       "legal": "https://freightservices.greencarrier.com/contact/"
+    },
+    "social_links": {
+      "facebook": "https://www.facebook.com/greencarriergroup",
+      "twitter": "https://twitter.com/greencarriergro",
+      "linkedin": "https://www.linkedin.com/company/greencarrier",
+      "youtube": "https://www.youtube.com/channel/UC4uOLvu9LFh0BLCOO04U9gA",
+      "instagram": "https://instagram.com/greencarrier_group",
+      "google_plus": ""
     },
     "continuous_rounding": false,
     "closed_shop": false,
@@ -177,8 +186,17 @@
       }
     },
     "links": {
-      "about": "",
+      "home": "https://www.itsmycargo.com/",
+      "about": "https://www.itsmycargo.com/",
       "legal": ""
+    },
+    "social_links": {
+      "facebook": "https://www.facebook.com/ItsMyCargo/",
+      "twitter": "https://twitter.com/ItsMyCargo?lang=en",
+      "linkedin": "https://www.linkedin.com/company/itsmycargo/",
+      "youtube": "https://www.youtube.com/channel/UCPoI2Fzb2HBPzYC3S-kirxw",
+      "instagram": "",
+      "google_plus": ""
     },
     "continuous_rounding": false,
     "closed_shop": false,
@@ -287,8 +305,18 @@
     "has_customs": false,
     "terms": [],
     "links": {
+      "home": "http://easyshipping.dk/",
+      "contact": "http://easyshipping.dk/kontakt.html",
       "about": "http://easyshipping.dk/",
       "legal": "http://easyshipping.dk/kontakt.html"
+    },
+    "social_links": {
+      "facebook": "",
+      "twitter": "",
+      "linkedin": "",
+      "youtube": "",
+      "instagram": "",
+      "google_plus": ""
     },
     "carriage_options": {
       "on_carriage": {
@@ -357,8 +385,18 @@
       }
     },
     "links": {
-      "about": "",
+      "home": "https://secure.saco.de/en/home/",
+      "contact": "https://secure.saco.de/en/contact/",
+      "about": "https://secure.saco.de/en/home/",
       "legal": ""
+    },
+    "social_links": {
+      "facebook": "",
+      "twitter": "",
+      "linkedin": "",
+      "youtube": "",
+      "instagram": "",
+      "google_plus": ""
     },
     "continuous_rounding": false,
     "closed_shop": false,
@@ -463,8 +501,18 @@
       }
     },
     "links": {
+      "home": "http://www.speedtrans.com/",
+      "contact": "http://www.speedtrans.com/kontakt.php",
       "about": "http://www.speedtrans.com/ueberuns.php",
       "legal": "http://www.speedtrans.com/impressum.php"
+    },
+    "social_links": {
+      "facebook": "",
+      "twitter": "",
+      "linkedin": "",
+      "youtube": "",
+      "instagram": "",
+      "google_plus": ""
     },
     "continuous_rounding": true,
     "closed_shop": false,
@@ -588,8 +636,18 @@
     "has_insurance": true,
     "has_customs": true,
     "links": {
-      "about": "",
+      "home": "https://www.itsmycargo.com/",
+      "contact": "https://www.itsmycargo.com/",
+      "about": "https://www.itsmycargo.com/",
       "legal": ""
+    },
+    "social_links": {
+      "facebook": "https://www.facebook.com/ItsMyCargo/",
+      "twitter": "https://twitter.com/ItsMyCargo?lang=en",
+      "linkedin": "https://www.linkedin.com/company/itsmycargo/",
+      "youtube": "https://www.youtube.com/channel/UCPoI2Fzb2HBPzYC3S-kirxw",
+      "instagram": "",
+      "google_plus": ""
     },
     "terms": ["You verify that all the information provided above is true", "You agree to the presented terms and conditions.", "Trucking is to discuss the validity of the presented prices with the product owners."],
     "carriage_options": {
@@ -657,8 +715,18 @@
     "dangerous_goods": false,
     "non_stackable_goods": false,
     "links": {
+      "home": "https://www.gatewaycargo.de/",
+      "contact": "https://www.gatewaycargo.de/contact.html",
       "about": "https://www.gatewaycargo.de/offices_us.html",
       "legal": "https://www.gatewaycargo.de/contact_us.html#imprint"
+    },
+    "social_links": {
+      "facebook": "",
+      "twitter": "",
+      "linkedin": "",
+      "youtube": "",
+      "instagram": "",
+      "google_plus": ""
     },
     "quote_notes": "1) Prices subject to change\n        2) All fees are converted at the time of quotation\n        using that day's European Central bank exchange rates and are an approximation\n        of the final amount ot be paid. The amount paid at the time of settlement\n        will reflect the exchange rates of the day.",
     "fee_detail": "key_and_name",
@@ -753,8 +821,18 @@
       }
     },
     "links": {
+      "home": "https://www.schryver.com/",
+      "contact": "https://www.schryver.com/contact-us/",
       "about": "https://www.schryver.com/about-us/",
       "legal": "https://www.schryver.com/imprint-2/"
+    },
+    "social_links": {
+      "facebook": "",
+      "twitter": "",
+      "linkedin": "",
+      "youtube": "",
+      "instagram": "",
+      "google_plus": ""
     },
     "dangerous_goods": false,
     "non_stackable_goods": true,
@@ -840,8 +918,18 @@
       }
     },
     "links": {
+      "home": "http://www.normanglobal.com/",
+      "contact": "http://www.normanglobal.com/contact/",
       "about": "http://www.normanglobal.com/services/",
       "legal": "http://www.normanglobal.com/about-us/privacy-policy/"
+    },
+    "social_links": {
+      "facebook": "",
+      "twitter": "http://www.twitter.com/@normanglobal",
+      "linkedin": "http://www.linkedin.com//company/norman-global-logistics-hong-kong-limited",
+      "youtube": "",
+      "instagram": "",
+      "google_plus": "http://plus.google.com/102262317980983975744"
     },
     "dangerous_goods": false,
     "non_stackable_goods": true,
@@ -928,8 +1016,18 @@
     "dangerous_goods": false,
     "non_stackable_goods": false,
     "links": {
+      "home": "https://www.fivestar-services.de/",
+      "contact": "https://www.fivestar-services.de/contact.html",
       "about": "https://www.fivestar-services.de/company_us.html",
       "legal": "https://www.fivestar-services.de/contact_us.html#impressum"
+    },
+    "social_links": {
+      "facebook": "",
+      "twitter": "",
+      "linkedin": "",
+      "youtube": "",
+      "instagram": "",
+      "google_plus": ""
     },
     "quote_notes": "1) Prices subject to change\n        2) All fees are converted at the time of quotation\n        using that day's European Central bank exchange rates and are an approximation\n        of the final amount ot be paid. The amount paid at the time of settlement\n        will reflect the exchange rates of the day.",
     "fee_detail": "key_and_name",
@@ -1063,8 +1161,18 @@
     "dangerous_goods": true,
     "non_stackable_goods": true,
     "links": {
-      "about": "",
+      "home": "https://www.itsmycargo.com/",
+      "contact": "https://www.itsmycargo.com/",
+      "about": "https://www.itsmycargo.com/",
       "legal": ""
+    },
+    "social_links": {
+      "facebook": "https://www.facebook.com/ItsMyCargo/",
+      "twitter": "https://twitter.com/ItsMyCargo?lang=en",
+      "linkedin": "https://www.linkedin.com/company/itsmycargo/",
+      "youtube": "https://www.youtube.com/channel/UCPoI2Fzb2HBPzYC3S-kirxw",
+      "instagram": "",
+      "google_plus": ""
     },
     "quote_notes": "1) Prices subject to change\n        2) All fees are converted at the time of quotation\n        using that day's European Central bank exchange rates and are an approximation\n        of the final amount ot be paid. The amount paid at the time of settlement\n        will reflect the exchange rates of the day.",
     "fee_detail": "key_and_name",

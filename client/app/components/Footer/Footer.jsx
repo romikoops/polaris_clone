@@ -4,9 +4,8 @@ import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { cookieActions } from '../../actions'
 import styles from './Footer.scss'
-import defs from '../../styles/default_classes.scss'
-import PropTypes from '../../prop-types'
-import isQuote from '../../helpers/tenant'
+import { socialIcons, isQuote } from '../../helpers'
+import SquareButton from '../SquareButton'
 
 class Footer extends React.PureComponent {
   componentWillUnmount () {
@@ -15,133 +14,143 @@ class Footer extends React.PureComponent {
 
   render () {
     const {
-      theme, tenant, width, t, cookieDispatch
+      theme, tenant, t, cookieDispatch, bookNow
     } = this.props
 
     if (!tenant) {
       return ''
     }
-    const primaryColor = {
-      color: theme && theme.colors ? theme.colors.primary : 'black'
-    }
-    let logo = theme && theme.logoLarge ? theme.logoLarge : ''
+    const checkTenantScope = tenant && tenant.scope
+    let logo = theme && theme.logoWhite ? theme.logoWhite : ''
     if (!logo && theme && theme.logoSmall) logo = theme.logoSmall
     const supportNumber = tenant && tenant.phones ? tenant.phones.support : ''
     const supportEmail = tenant && tenant.emails ? tenant.emails.support.general : ''
-    const links = tenant && tenant.scope ? tenant.scope.links : {}
+    const links = checkTenantScope ? tenant.scope.links : {}
+    const socialLinks = checkTenantScope ? tenant.scope.social_links : {}
+    const isQuotationShop = isQuote(tenant)
     const defaultLinks = {
       privacy: 'https://itsmycargo.com/en/privacy',
       about: 'https://www.itsmycargo.com/en/ourstory',
+      home: 'https://www.itsmycargo.com/en/',
       legal: 'https://www.itsmycargo.com/en/contact'
     }
+    const home = links && links.home ? links.home : defaultLinks.home
     let termsLink = ''
     tenant.subdomain ? termsLink = `https://${tenant.subdomain}.itsmycargo.com/terms_and_conditions` : termsLink = ''
 
-    const widthStyle = width ? { width } : {}
+    const filteredSocialLinks = socialLinks ? Object.entries(socialLinks).filter(array => array[1] !== '') : []
+    const oo = filteredSocialLinks.map((value) => {
+      const social = value[0]
+      const link = value[1]
+
+      return socialIcons(social, link)
+    })
 
     return (
       <div
-        className={`flex-100 layout-row 
-        layout-wrap ${styles.footer_wrapper} layout-align-start`}
-        style={widthStyle}
+        className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.footer}`}
         ref={(div) => {
           if (!div) return
           cookieDispatch.updateCookieHeight({ height: div.offsetHeight })
         }}
       >
-        {
-          isQuote(tenant)
-            ? (
-              <div className={`${styles.contact_bar} flex-100 layout-row layout-align-center-center`}>
-                <div className={`flex-none ${defs.content_width} layout-row`}>
-                  <div className="flex-50 layout-row layout-align-start-center">
-                    <img src={logo} />
-                  </div>
-                  <div className="flex-50 layout-row layout-align-end-center">
-                    <a
-                      className={`flex-none layout-row layout-align-center-center pointy ${
-                        styles.contact_elem
-                      }`}
-                      href={`mailto:${supportEmail}`}
-                    >
-                      <i className="fa fa-envelope" aria-hidden="true" style={primaryColor} />
-                      {supportEmail}
-                    </a>
-                    <div className={`flex-none layout-row layout-align-center-end ${styles.contact_elem}`}>
-                      <i className="fa fa-phone" aria-hidden="true" style={primaryColor} />
-                      {supportNumber}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )
-            : <div />
-        }
-        <div className={`${styles.footer_shop} layout-row flex-100 layout-wrap`}>
-          <div className="flex-100 layout-align-center">
-            <div className={`flex-100 ${styles.buttons} ${styles.upper_footer} layout-row layout-align-space-around-center`}>
-              <div className="flex-35 layout-row layout-align-center-center">
-                <div className="flex-none layout-row layout-align-center-center">
-                  <h4 className={`flex-none ${styles.powered_by_padding}`}>
-                    {t('footer:poweredBy')}
-                  </h4>                <div className="flex-5" />
-                  <a href="https://www.itsmycargo.com/" target="_blank">
-                    <img
-                      src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                      alt=""
-                      className={`flex-none pointy ${styles.powered_by_logo}`}
-                    />
-                  </a>
-                </div>
-              </div>
-              <div className="flex-15 layout-row layout-align-center-center">
-                <a
-                  target="_blank"
-                  href={links && links.about ? links.about : defaultLinks.about}
-                >
-                  {t('footer:about')}
-                </a>
-              </div>
-              <div className="flex-15 layout-row layout-align-center-center">
-                <a
-                  target="_blank"
-                  href={links && links.privacy ? links.privacy : defaultLinks.privacy}
-                >
-                  {t('footer:privacy')}
-                </a>
-              </div>
-              <div className="flex-15 layout-row layout-align-center-center">
-                <a
-                  target="_blank"
-                  href={termsLink}
-                >
-                  {t('footer:terms')}
-                </a>
-              </div>
-              <div className="flex-15 layout-row layout-align-center-center">
-                <a
-                  target="_blank"
-                  href={links && links.legal ? links.legal : defaultLinks.legal}
-                >
-                  {t('footer:legal')}
-                </a>
-              </div>
+        <div className={`flex-20 flex-gt-sm-20 layout-row layout-wrap layout-align-center-center ${styles.banner_text}`}>
+          {isQuotationShop ? '' : (
+            <a
+              href={home}
+              target="_blank"
+            >
+              <img className={styles.logo} src={logo} />
+            </a>
+          ) }
+          <div className="flex-100 flex-gt-sm-100 layout-align-center-center layout-row">
+            <h4 className="flex-none">{t('footer:poweredBy')}</h4>
+            <a
+              className="layout-row flex-none layout-align-start-center"
+              href="https://www.itsmycargo.com/"
+              target="_blank"
+            >
+              <img
+                src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+                alt=""
+                className={`flex-none pointy ${styles.powered_by_logo}`}
+              />
+            </a>
+          </div>
+        </div>
+        <div className="flex-25 flex-gt-sm-25 layout-row layout-wrap layout-align-start-start">
+          <div className="flex-25 flex-gt-sm-25 layout-row">
+            <h4 className={styles.title}>
+              {t('footer:contact')}
+            </h4>
+          </div>
+
+          <div className={`flex-100 layout-row layout-wrap ${styles.contacts}`}>
+            <a
+              className="pointy flex-100 layout-row layout-align-start-center"
+              href={`mailto:${supportEmail}`}
+            >
+              <i className="fa fa-envelope" aria-hidden="true" />
+              {supportEmail}
+            </a>
+            <div className="flex-100 layout-row layout-align-start-center">
+              <i className="fa fa-phone" aria-hidden="true" />
+              {supportNumber}
+            </div>
+            <div className={`flex-100 layout-row ${styles.social_links}`}>
+              {oo}
             </div>
           </div>
         </div>
+        <div className="flex-20 flex-gt-sm-20 layout-row layout-wrap layout-align-start-start">
+          <div className="flex-100 flex-gt-sm-100 layout-row">
+            <h4 className={styles.title}>
+              {t('footer:company')}
+            </h4>
+          </div>
+          <ul>
+            <li>
+              <a target="_blank" href={links && links.about ? links.about : defaultLinks.home}>
+                {t('footer:about')}
+              </a>
+            </li>
+            <li>
+              <a target="_blank" href={links && links.legal ? links.legal : defaultLinks.legal}>
+                {t('footer:imprint')}
+              </a>
+            </li>
+            <li>
+              <a target="_blank" href={termsLink}>
+                {t('footer:terms')}
+              </a>
+            </li>
+            <li>
+              <a target="_blank" href={links && links.privacy ? links.privacy : defaultLinks.privacy}>
+                {t('footer:privacy')}
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div
+          className="
+            flex-50 flex-gt-sm-20 flex-order--4 flex-order-gt-sm-4
+            layout-row layout-wrap layout-align-start-start
+          "
+        >
+          <div className="flex-100 layout-row layout-align-start">
+            <SquareButton
+              text={t('landing:callToAction')}
+              theme={theme}
+              active
+              handleNext={bookNow}
+              size="small"
+            />
+          </div>
+        </div>
+
       </div>
     )
   }
-}
-
-Footer.propTypes = {
-  theme: PropTypes.theme,
-  t: PropTypes.func.isRequired,
-  tenant: PropTypes.tenant,
-  width: PropTypes.number,
-  cookieDispatch: PropTypes.shape({
-    updateCookieHeight: PropTypes.func
-  }).isRequired
 }
 
 Footer.defaultProps = {
