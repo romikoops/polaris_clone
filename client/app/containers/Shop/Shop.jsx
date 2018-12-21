@@ -236,7 +236,7 @@ class Shop extends Component {
                 tenant={tenant}
                 user={user}
                 shipmentData={shipmentData}
-                prevRequest={get(request, ['stage2'], null)}
+                prevRequest={get(request, ['stage2'], {})}
                 req={get(request, ['stage1'], {})}
                 getOffers={data => shipmentDispatch.getOffers(data, true)}
                 setStage={this.selectShipmentStage}
