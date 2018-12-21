@@ -79,7 +79,7 @@ Rails.application.routes.draw do
       post 'open_pricings/ocean_lcl_pricings/process_csv', to: 'open_pricings#overwrite_main_lcl_carriage', as: :open_main_lcl_carriage_pricings_overwrite
       # post "open_pricings/train_and_ocean_pricings/process_csv",
       # to: "open_pricings#overwrite_main_carriage", as: :open_main_carriage_pricings_overwrite
-
+      post 'shipments/:shipment_id/upload/:type', to: 'shipments#upload_client_document'
       resources :local_charges, only: %i(index update)
       post 'local_charges/process_csv',
            to: 'local_charges#overwrite', as: :local_charges_overwrite
