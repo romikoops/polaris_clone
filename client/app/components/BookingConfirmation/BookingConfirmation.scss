@@ -120,6 +120,7 @@
   .main_panel {
     .inner_wrapper {
       padding: 15px;
+      overflow-y: scroll;
     }
     transition: max-height 1s linear;
     max-height: 400px;
