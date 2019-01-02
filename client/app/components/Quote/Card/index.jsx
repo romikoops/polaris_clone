@@ -195,16 +195,15 @@ class QuoteCard extends PureComponent {
                 destinationFees={quote.import}
               />
             </div>
-            <div className={`flex-100 layout-row layout-wrap layout-align-end-center ${styles.unit_info}`}>
-              <p className="flex-100 layout-row layout-align-end-center">
-                {capitalize(t('cargo:totalWeight'))}
-                :&nbsp;
-                <span>
-                  { numberSpacing(calcPayload, 1) }
-                  {' '}
-                  kg
-                </span>
+            <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.unit_info}`}>
+              <p className="flex-60 layout-row layout-align-start-center">
+                {capitalize(t('cargo:totalWeight'))}:
               </p>
+              <span className="flex layout-row layout-align-start-center">
+                { numberSpacing(calcPayload, 1) }
+                {' '}
+                kg
+              </span>
             </div>
           </div>
         </div>
