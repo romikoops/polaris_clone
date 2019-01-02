@@ -44,11 +44,11 @@
             <% end %>
           </p>
           <p>
-            <% if @shipment.has_pre_carriage? %>
+            <% if @shipment.has_on_carriage? %>
               <strong>To: </strong>
               <% @shipment.delivery_address.geocoded_address.split(", ").each do |address_elem| %>
                 <% if address_elem %>
-                  <span><%= address_elem %></span>
+                  <span><%= address_elem %></span><br/>
                 <% end %>  
               <% end %>  
             <% else %>

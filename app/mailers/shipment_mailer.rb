@@ -27,7 +27,7 @@ class ShipmentMailer < ApplicationMailer
       when 'truck' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-03.png'
       when 'rail' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-04.png'
       end
-    
+
     create_pdf_attachment(@shipment)
     attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
     attachments.inline['icon.png'] = URI.open(@mot).read

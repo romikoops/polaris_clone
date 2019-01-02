@@ -1,0 +1,348 @@
+variables:
+  BUNDLE_GITLAB__COM: "gitlab-ci-token:${CI_JOB_TOKEN}"
+  AUTO_DEVOPS_DOMAIN: itsmycargo.shop
+  REVIEW_NAMESPACE: review
+
+.dedicated-runner: &dedicated-runner
+  tags:
+    - itsmycargo
+
+.merge-request-only: &merge-request-only
+  only:
+    - branches
+  except:
+    - master
+    - dev
+
+stages:
+  - test
+  - build
+  - review
+  - cleanup
+  - QA
+  - acceptance
+
+image: alpine:3.8
+
+before_script:
+  - date
+
+after_script:
+  - date
+
+code_quality:
+  <<: *dedicated-runner
+  stage: test
+  image: eu.gcr.io/itsmycargo-main/pronto:stable
+  retry: 1
+  cache:
+    paths:
+      - client/node_modules
+
+  script:
+    - timeout --preserve-status 5m scripts/pronto
+
+  except:
+    refs:
+      - master
+      - dev
+
+danger-review:
+  <<: *dedicated-runner
+  stage: test
+  image: eu.gcr.io/itsmycargo-main/danger:latest
+  retry: 1
+  allow_failure: true
+  cache: {}
+  dependencies: []
+  before_script: []
+
+  script:
+    - timeout -t 300 danger --fail-on-errors=true
+
+  only:
+    variables:
+      - $DANGER_GITLAB_API_TOKEN
+  except:
+    refs:
+      - master
+      - dev
+
+api:
+  <<: *dedicated-runner
+  stage: test
+  image: eu.gcr.io/itsmycargo-main/base:stable
+  retry: 1
+  cache:
+    paths:
+      - vendor/ruby
+  variables:
+    POSTGRES_DB: imcr_test
+    DATABASE_URL: postgis://postgres:@localhost/imcr_test
+  services:
+    - mdillon/postgis
+
+  script:
+    - timeout --preserve-status 10m scripts/test
+
+  coverage: '/\(\d+.\d+\%\) covered/'
+  artifacts:
+    paths:
+      - coverage/
+    when: always
+    expire_in: 1 week
+    reports:
+      junit:
+        - engines/*/rspec.xml
+        - lib/*/rspec.xml
+        - rspec.xml
+
+client:
+  <<: *dedicated-runner
+  stage: test
+  image: node:10-alpine
+  retry: 1
+
+  cache:
+    paths:
+    - client/node_modules/
+
+  before_script:
+    - apk add --no-cache --update autoconf automake bash build-base gifsicle lcms2-dev libjpeg-turbo-utils libpng-dev libwebp-tools optipng pngquant
+
+  script:
+    - cd client
+    - date
+    - timeout -t 600 sh -c 'npm install && npm run test:ci'
+    - date
+
+  coverage: '/^Statements\s*:\s*([^%]+)/'
+  artifacts:
+    paths:
+      - client/coverage/lcov-report
+    when: always
+    expire_in: 1 week
+    reports:
+      junit:
+        - client/junit.xml
+
+docker:
+  <<: *dedicated-runner
+  stage: build
+  image: docker:stable
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_HOST: tcp://localhost:2375/
+    DOCKER_REGISTRY: eu.gcr.io/itsmycargo-main
+    SENTRY_AUTH_TOKEN: 099b9abd2844497db3dace7307576c12fadc7d47bd68416584cdb4b90709de95
+  services:
+    - docker:dind
+
+  script:
+    - registry_login
+    - apk add --update --no-cache rsync
+    - scripts/prepare-docker.sh
+    - scripts/build.sh
+
+  dependencies: []
+
+deploy:
+  <<: *dedicated-runner
+  <<: *merge-request-only
+  stage: review
+  image: eu.gcr.io/itsmycargo-main/deploy:latest
+  retry: 1
+
+  script:
+    - deploy
+    - echo -e -n "$CI_ENVIRONMENT_SLUG" > ci_environment_slug.txt
+
+  dependencies: []
+
+  artifacts:
+    paths:
+    - ci_environment_slug.txt
+
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    url: https://$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
+    on_stop: stop_review
+
+.cucumber-metadata: &cucumber-metadata
+  <<: *dedicated-runner
+  <<: *merge-request-only
+  stage: QA
+  image: eu.gcr.io/itsmycargo-main/ci/imc-qa:${CI_COMMIT_SHA}
+  retry: 1
+  variables:
+    GIT_STRATEGY: none
+    DRIVER: remote
+    SELENIUM_URL: http://localhost:4444/wd/hub
+
+  before_script:
+    - export BROWSERNAME=$CI_JOB_NAME
+    - export CI_ENVIRONMENT_SLUG=$(cat ci_environment_slug.txt)
+    - export TARGET_URL=https://$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
+    - export REPORT_PATH=$CI_PROJECT_DIR
+    - export FIVEMAT_PROFILE=1
+    - 'echo "Target: $TARGET_URL"'
+    - dockerize -wait=tcp://localhost:4444 -timeout=5m
+
+  script:
+    - cd /app ; bin/cucumber --tags 'not @wip' --format Fivemat --format junit --out $REPORT_PATH/
+
+  dependencies:
+    - deploy
+
+  artifacts:
+    paths:
+      - '**/*.png'
+      - '**/*.html'
+    when: always
+    expire_in: 31 days
+    reports:
+      junit:
+        - '*.xml'
+
+.cucumber-crossbrowser: &cucumber-crossbrowser
+  <<: *cucumber-metadata
+  stage: acceptance
+  retry: 0
+
+  variables:
+    GIT_STRATEGY: none
+    DRIVER: crossbrowser
+    CROSSBROWSER_USERNAME: dev-services%40itsmycargo.com
+    CROSSBROWSER_AUTHKEY: uee1969b55dec975
+
+  before_script:
+    - date
+    - set -- $CI_JOB_NAME
+    - export CROSSBROWSER_BROWSERNAME=$1
+    - export CROSSBROWSER_VERSION=$2
+    - export CROSSBROWSER_PLATFORM=$3
+    - export CI_ENVIRONMENT_SLUG=$(cat ci_environment_slug.txt)
+    - export TARGET_URL=https://$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
+    - export REPORT_PATH=$CI_PROJECT_DIR
+    - export FIVEMAT_PROFILE=1
+    - 'echo "Target: $TARGET_URL"'
+
+  script:
+    - cd /app ; bin/cucumber --tags '@Smoke' --format Fivemat --format junit --out $REPORT_PATH/
+
+  allow_failure: true
+
+chrome:
+  <<: *cucumber-metadata
+  services:
+    - selenium/standalone-chrome:3
+
+# Disabling Firefox tests as logging is impossible at the moment
+
+# firefox:
+#   <<: *cucumber-metadata
+#   services:
+#     - selenium/standalone-firefox:3
+
+# Cross Browser Testing
+# Disable most of browsers as we only have 1 parallel test (and 1 queued)
+# Ensure IE11@Win8 works always
+
+# Windows 10
+# chrome latest win10: *cucumber-crossbrowser
+# firefox latest win10: *cucumber-crossbrowser
+# internet_explorer 11 win10: *cucumber-crossbrowser
+# microsoft_edge 17 win10: *cucumber-crossbrowser
+# Windows 8.1
+internet_explorer 11 win8.1: *cucumber-crossbrowser
+# MacOS
+# chrome latest macos: *cucumber-crossbrowser
+# firefox latest macos: *cucumber-crossbrowser
+# safari 11 macos: *cucumber-crossbrowser
+
+reset_database:
+  <<: *dedicated-runner
+  <<: *merge-request-only
+  stage: cleanup
+  image: eu.gcr.io/itsmycargo-main/deploy:latest
+  variables:
+    GIT_STRATEGY: none
+
+  script:
+    - export CI_ENVIRONMENT_SLUG=$(cat ci_environment_slug.txt)
+    - kubectl -n $CI_ENVIRONMENT_SLUG exec $(kubectl -n $CI_ENVIRONMENT_SLUG get pods -l app=postgresql,release=${CI_ENVIRONMENT_SLUG} -o jsonpath='{.items[].metadata.name}') /usr/local/bin/reset.sh full_anon
+    - kubectl -n $CI_ENVIRONMENT_SLUG delete pods -l app=imc-app,release=${CI_ENVIRONMENT_SLUG}
+
+  when: manual
+  allow_failure: true
+  dependencies:
+    - deploy
+
+stop_review:
+  <<: *dedicated-runner
+  <<: *merge-request-only
+  stage: cleanup
+  image: eu.gcr.io/itsmycargo-main/deploy:latest
+  variables:
+    GIT_STRATEGY: none
+
+  script:
+    - delete
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    action: stop
+  when: manual
+
+.auto_devops: &auto_devops |
+  # Auto DevOps variables and functions
+  export GCP_REGISTRY=eu.gcr.io/itsmycargo-main
+  export DEVOPS_CHART=chart/
+  [[ "$TRACE" ]] && set -x
+  set -e
+
+  function install_dependencies() {
+    apk add --no-cache --update git
+    wget -q -O /usr/bin/habitus 'https://github.com/cloud66-oss/habitus/releases/download/1.0.3/habitus_linux_amd64'
+    chmod +x /usr/bin/habitus
+  }
+
+  function registry_login() {
+    if [[ -n "$GCP_REGISTRY" ]]; then
+      echo "Logging to Google Container Registry..."
+      docker login -u _json_key --password-stdin eu.gcr.io/itsmycargo-main <${GOOGLE_APPLICATION_CREDENTIALS}
+      echo ""
+    fi
+  }
+
+  function deploy() {
+    # Delete failed deployment
+    if [[ -n "$(helm ls --failed -q "^$CI_ENVIRONMENT_SLUG$")" ]]; then
+      delete || true
+    fi
+    _helm_deploy
+  }
+
+  function delete() {
+    if [[ -n "$(helm ls --all --short "^$CI_ENVIRONMENT_SLUG$")" ]]; then
+      helm delete --purge "$CI_ENVIRONMENT_SLUG"
+    fi
+  }
+
+  function _helm_deploy() {
+    helm upgrade --install \
+      --wait \
+      --timeout 600 \
+      --set backend.image.tag="$CI_COMMIT_SHA" \
+      --set frontend.image.tag="$CI_COMMIT_SHA" \
+      --set service.domain="$AUTO_DEVOPS_DOMAIN" \
+      --set service.url="https://$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN" \
+      --set-file credentials=/etc/secrets/service-account/services.json \
+      --set-file postgresql.seed.credentials=/etc/secrets/service-account/services.json \
+      --set-file masterKey=/etc/secrets/service-account/review-master-key \
+      --namespace=${REVIEW_NAMESPACE} \
+      "$CI_ENVIRONMENT_SLUG" \
+      $DEVOPS_CHART
+  }
+
+before_script:
+  - *auto_devops
