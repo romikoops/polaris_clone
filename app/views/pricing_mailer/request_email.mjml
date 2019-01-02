@@ -1,5 +1,10 @@
 <% primary_color = @user.tenant.theme["colors"]["primary"] %>
-
+<mj-text>
+  <p style="display: none;max-height: 0px;overflow: hidden;">
+    Hello! <%= @user.full_name %> from <%= @user.company_name %>
+          has requested a dedicated rate for the following route 
+  </p>
+</mj-text>
 <mj-section padding="20px 5%" background-color="<%= primary_color %>">
   <mj-column>
     <mj-image width="150px" align="left" src="<%= @user.tenant.theme["logoWhite"] %>" />

@@ -1,4 +1,9 @@
 <% primary_color = @user.tenant.theme["colors"]["primary"] %>
+<mj-text>
+  <p style="display: none;max-height: 0px;overflow: hidden;">
+    <%= greeting_text %>
+  </p>
+</mj-text>
 
 <mj-section padding="20px 5%" background-color="<%= primary_color %>">
   <mj-column>

@@ -1,4 +1,9 @@
 <% primary_color = tenant.theme["colors"]["primary"] %>
+<mj-text>
+  <p style="display: none;max-height: 0px;overflow: hidden;">
+    Dear <%= @user.full_name %>, thank you for registering a new account in the <%=tenant.name%> (powered by ItsMyCargo).
+  </p>
+</mj-text>
 
 <mj-section padding="20px 5%" background-color="<%= primary_color %>">
   <mj-column>
