@@ -1,22 +1,23 @@
 <% primary_color = @user.tenant.theme["colors"]["primary"] %>
 <% secondary_color = @user.tenant.theme["colors"]["secondary"] %>
+
+<mj-section padding="20px 5%" background-color="<%= primary_color %>">
+  <mj-column>
+    <mj-image width="150px" align="left" src="<%= @user.tenant.theme["logoWhite"] %>" />
+  </mj-column>
+  <mj-column>
+    <mj-navbar base-url="" hamburger="hamburger" ico-color="black">
+      <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
+      <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'contact')%>" color="white">help</mj-navbar-link>
+    </mj-navbar>
+  </mj-column>
+</mj-section>
+
 <mj-wrapper full-width="full-width" padding="0px">
-  <mj-section full-width="full-width">
-    <mj-column>
-      <mj-image width="300px" src="<%= @user.tenant.theme["logoLarge"] %>" />
-    </mj-column>
-  </mj-section>
-  <mj-section full-width="full-width">
-    <mj-column>
-      <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
-    </mj-column>
-  </mj-section>
-</mj-wrapper>
-<mj-wrapper full-width="full-width" padding="0px">
-  <mj-section full-width="full-width" padding="0px">
+  <mj-section full-width="full-width" padding="0px" padding-top="20px">
     <mj-column width="100%" padding="0 2.5%">
       <mj-text>
-        <p>Dear <span><%= @user.full_name %>,</span></p>
+        <p>Hello <span><%= @user.full_name %>,</span></p>
       </mj-text>
     </mj-column>
     <mj-column width="100%" padding="0 2.5%">

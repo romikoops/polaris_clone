@@ -12,10 +12,10 @@
   </mj-column>
 </mj-section>
 
- <mj-section full-width="full-width" padding="0px">
+ <mj-section full-width="full-width" padding="0px" padding-top="20px">
     <mj-column width="100%">
         <mj-text line-height="24px">
-          <p>Dear <%= @user.first_name %> <%= @user.last_name %>,</p>
+          <p>Hello <%= @user.first_name %> <%= @user.last_name %>,</p>
           <p>A new booking was received from <span class="bold"><%= @user.company_name %></span>.</p>
         </mj-text>
     </mj-column>
