@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
-import FileUploader from '../../../components/FileUploader/FileUploader'
+import FileUploader from '../../FileUploader/FileUploader'
 
 import { RoundButton } from '../../RoundButton/RoundButton'
-import DocumentsDownloader from '../../../components/Documents/Downloader'
+import DocumentsDownloader from '../../Documents/Downloader'
 
 import SideOptionsBox from '../SideOptions/SideOptionsBox'
 import CollapsingBar from '../../CollapsingBar/CollapsingBar'
@@ -17,8 +17,8 @@ export class AdminHubsIndex extends Component {
     this.state = {
       expander: {}
     }
-    // this.toggleExpander = this.toggleExpander.bind(this)
   }
+
   toggleExpander (key) {
     this.setState({
       expander: {
@@ -56,47 +56,49 @@ export class AdminHubsIndex extends Component {
       flexOptions="flex"
       content={(
         <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-          <CollapsingBar
-            showArrow
-            collapsed={!expander.upload}
-            theme={theme}
-            styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-            handleCollapser={() => this.toggleExpander('upload')}
-            text={t('admin:uploadData')}
-            faClass="fa fa-cloud-upload"
-            content={(
-              <div>
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-align-center-center layout-wrap`}
-                >
-                  <p className="flex-100 center">{t('admin:uploadHubs')}</p>
-                  <FileUploader
-                    theme={theme}
-                    url={hubUrl}
-                    type="xlsx"
-                    text={t('admin:hubExcel')}
-                    dispatchFn={documentDispatch.uploadHubs}
-                  />
+          { scope.show_beta_features ? (
+            <CollapsingBar
+              showArrow
+              collapsed={!expander.upload}
+              theme={theme}
+              styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+              handleCollapser={() => this.toggleExpander('upload')}
+              text={t('admin:uploadData')}
+              faClass="fa fa-cloud-upload"
+              content={(
+                <div>
+                  <div
+                    className={`${
+                      styles.action_section
+                    } flex-100 layout-row layout-align-center-center layout-wrap`}
+                  >
+                    <p className="flex-100 center">{t('admin:uploadHubs')}</p>
+                    <FileUploader
+                      theme={theme}
+                      url={hubUrl}
+                      type="xlsx"
+                      text={t('admin:hubExcel')}
+                      dispatchFn={documentDispatch.uploadHubs}
+                    />
+                  </div>
+                  <div
+                    className={`${
+                      styles.action_section
+                    } flex-100 layout-row layout-align-center-center layout-wrap`}
+                  >
+                    <p className="flex-100 center">{t('admin:uploadLocalCharges')}</p>
+                    <FileUploader
+                      theme={theme}
+                      url={scUrl}
+                      type="xlsx"
+                      text={t('admin:hubExcel')}
+                      dispatchFn={documentDispatch.uploadLocalCharges}
+                    />
+                  </div>
                 </div>
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-align-center-center layout-wrap`}
-                >
-                  <p className="flex-100 center">{t('admin:uploadLocalCharges')}</p>
-                  <FileUploader
-                    theme={theme}
-                    url={scUrl}
-                    type="xlsx"
-                    text={t('admin:hubExcel')}
-                    dispatchFn={documentDispatch.uploadLocalCharges}
-                  />
-                </div>
-              </div>
-            )}
-          />
+              )}
+            />
+          ) : '' }
           <CollapsingBar
             showArrow
             collapsed={!expander.download}
@@ -142,24 +144,26 @@ export class AdminHubsIndex extends Component {
               </div>
             )}
           />
-          { scope.show_beta_features ? <CollapsingBar
-            showArrow
-            collapsed={!expander.new}
-            theme={theme}
-            styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-            handleCollapser={() => this.toggleExpander('new')}
-            text={t('admin:createNewHub')}
-            faClass="fa fa-plus-circle"
-            content={(
-              <div
-                className={`${
-                  styles.action_section
-                } flex-100 layout-row layout-wrap layout-align-center-center`}
-              >
-                {newButton}
-              </div>
-            )}
-          /> : '' }
+          { scope.show_beta_features ? (
+            <CollapsingBar
+              showArrow
+              collapsed={!expander.new}
+              theme={theme}
+              styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+              handleCollapser={() => this.toggleExpander('new')}
+              text={t('admin:createNewHub')}
+              faClass="fa fa-plus-circle"
+              content={(
+                <div
+                  className={`${
+                    styles.action_section
+                  } flex-100 layout-row layout-wrap layout-align-center-center`}
+                >
+                  {newButton}
+                </div>
+              )}
+            />
+          ) : '' }
         </div>
       )}
     />]
