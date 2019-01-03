@@ -47,6 +47,7 @@ class CardPricingIndex extends Component {
       </div>
     )
   }
+
   toggleExpander (key) {
     this.setState({
       expander: {
@@ -55,6 +56,7 @@ class CardPricingIndex extends Component {
       }
     })
   }
+
   generateCardPricings (mot) {
     const { hubs, theme, itineraries } = this.props
     let itinerariesArr = []
@@ -71,15 +73,18 @@ class CardPricingIndex extends Component {
 
     return itinerariesArr
   }
+
   lclUpload (file) {
     const { documentDispatch } = this.props
     documentDispatch.uploadPricings(file, 'lcl', false)
   }
+
   updateSearch (array) {
     const { searchText } = this.state
 
     return filters.handleSearchChange(searchText, ['name'], array)
   }
+
   handlePricingSearch (event) {
     const { searchTimeout } = this.state
     if (searchTimeout) {
@@ -162,7 +167,10 @@ class CardPricingIndex extends Component {
                 onClick={page > 1 ? () => this.deltaPage(-1) : null}
               >
                 <i className="fa fa-chevron-left" />
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;{t('common:basicBack')}</p>
+                <p>
+&nbsp;&nbsp;&nbsp;&nbsp;
+                  {t('common:basicBack')}
+                </p>
               </div>
               {}
               <p>{page}</p>
@@ -173,7 +181,10 @@ class CardPricingIndex extends Component {
                     `}
                 onClick={page < numPages ? () => this.deltaPage(1) : null}
               >
-                <p>{t('common:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                <p>
+                  {t('common:next')}
+&nbsp;&nbsp;&nbsp;&nbsp;
+                </p>
                 <i className="fa fa-chevron-right" />
               </div>
             </div>
@@ -191,40 +202,42 @@ class CardPricingIndex extends Component {
             <SideOptionsBox
               header={t('admin:dataManager')}
               flexOptions="flex-100"
-              content={
+              content={(
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                  <CollapsingBar
-                    showArrow
-                    collapsed={!expander.upload}
-                    theme={theme}
-                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                    handleCollapser={() => this.toggleExpander('upload')}
-                    text={t('admin:uploadData')}
-                    faClass="fa fa-cloud-upload"
-                    content={(
-                      <div
-                        className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
-                      >
+                  { scope.show_beta_features ? (
+                    <CollapsingBar
+                      showArrow
+                      collapsed={!expander.upload}
+                      theme={theme}
+                      styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                      handleCollapser={() => this.toggleExpander('upload')}
+                      text={t('admin:uploadData')}
+                      faClass="fa fa-cloud-upload"
+                      content={(
                         <div
-                          className={`${
-                            adminStyles.action_section
-                          } flex-100 layout-row layout-wrap layout-align-center-center`}
+                          className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
                         >
-                          <p className="flex-100">{t('admin:uploadPricing')}</p>
-                          <FileUploader
-                            theme={theme}
-                            dispatchFn={e => this.lclUpload(e)}
-                            tooltip={priceTip.upload_lcl}
-                            type="xlsx"
-                            size="full"
-                            text={t('admin:dedicatedPricing')}
-                          />
+                          <div
+                            className={`${
+                              adminStyles.action_section
+                            } flex-100 layout-row layout-wrap layout-align-center-center`}
+                          >
+                            <p className="flex-100">{t('admin:uploadPricing')}</p>
+                            <FileUploader
+                              theme={theme}
+                              dispatchFn={e => this.lclUpload(e)}
+                              tooltip={priceTip.upload_lcl}
+                              type="xlsx"
+                              size="full"
+                              text={t('admin:dedicatedPricing')}
+                            />
+
+                          </div>
 
                         </div>
-
-                      </div>
-                    )}
-                  />
+                      )}
+                    />
+                  ) : '' }
                   <CollapsingBar
                     showArrow
                     collapsed={!expander.download}
@@ -253,26 +266,28 @@ class CardPricingIndex extends Component {
                       </div>
                     )}
                   />
-                  { scope.show_beta_features ? <CollapsingBar
-                    showArrow
-                    collapsed={!expander.new}
-                    theme={theme}
-                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                    handleCollapser={() => this.toggleExpander('new')}
-                    text={t('admin:createNewPricing')}
-                    faClass="fa fa-plus-circle"
-                    content={(
-                      <div
-                        className={`${
-                          styles.action_section
-                        } flex-100 layout-row layout-align-center-center layout-wrap`}
-                      >
-                        {newButton}
-                      </div>
-                    )}
-                  /> : '' }
+                  { scope.show_beta_features ? (
+                    <CollapsingBar
+                      showArrow
+                      collapsed={!expander.new}
+                      theme={theme}
+                      styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                      handleCollapser={() => this.toggleExpander('new')}
+                      text={t('admin:createNewPricing')}
+                      faClass="fa fa-plus-circle"
+                      content={(
+                        <div
+                          className={`${
+                            styles.action_section
+                          } flex-100 layout-row layout-align-center-center layout-wrap`}
+                        >
+                          {newButton}
+                        </div>
+                      )}
+                    />
+                  ) : '' }
                 </div>
-              }
+              )}
             />
           </div>
         </div>

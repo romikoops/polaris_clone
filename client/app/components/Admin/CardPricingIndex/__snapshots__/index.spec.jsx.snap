@@ -358,67 +358,7 @@ exports[`shallow render 1`] = `
           <div
             className="flex-100 layout-row layout-wrap layout-align-center-start"
           >
-            <CollapsingBar
-              collapsed={true}
-              content={
-                <div
-                  className="open_filter flex-100 layout-row layout-wrap layout-align-center-start"
-                >
-                  <div
-                    className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
-                  >
-                    <p
-                      className="flex-100"
-                    >
-                      Upload FCL/LCL Pricings Sheet
-                    </p>
-                    <FileUploader
-                      dispatchFn={[Function]}
-                      formClasses=""
-                      size="full"
-                      square={false}
-                      t={[Function]}
-                      text="Dedicated Pricings .xlsx"
-                      theme={
-                        Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        }
-                      }
-                      tooltip="By using the Excel template you can update all your LCL rates with one upload"
-                      type="xlsx"
-                      uploadFn={null}
-                    />
-                  </div>
-                </div>
-              }
-              contentHeader=""
-              faClass="fa fa-cloud-upload"
-              handleCollapser={[Function]}
-              headerWrapClasses=""
-              mainWrapperStyle={Object {}}
-              minHeight=""
-              parentClass=""
-              showArrow={true}
-              startCollapsed={false}
-              styleHeader={
-                Object {
-                  "background": "#E0E0E0",
-                  "color": "#4F4F4F",
-                }
-              }
-              text="Upload Data"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
+            
             <CollapsingBar
               collapsed={true}
               content={
@@ -573,67 +513,7 @@ exports[`state.page > 1 1`] = `
           <div
             className="flex-100 layout-row layout-wrap layout-align-center-start"
           >
-            <CollapsingBar
-              collapsed={true}
-              content={
-                <div
-                  className="open_filter flex-100 layout-row layout-wrap layout-align-center-start"
-                >
-                  <div
-                    className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
-                  >
-                    <p
-                      className="flex-100"
-                    >
-                      Upload FCL/LCL Pricings Sheet
-                    </p>
-                    <FileUploader
-                      dispatchFn={[Function]}
-                      formClasses=""
-                      size="full"
-                      square={false}
-                      t={[Function]}
-                      text="Dedicated Pricings .xlsx"
-                      theme={
-                        Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        }
-                      }
-                      tooltip="By using the Excel template you can update all your LCL rates with one upload"
-                      type="xlsx"
-                      uploadFn={null}
-                    />
-                  </div>
-                </div>
-              }
-              contentHeader=""
-              faClass="fa fa-cloud-upload"
-              handleCollapser={[Function]}
-              headerWrapClasses=""
-              mainWrapperStyle={Object {}}
-              minHeight=""
-              parentClass=""
-              showArrow={true}
-              startCollapsed={false}
-              styleHeader={
-                Object {
-                  "background": "#E0E0E0",
-                  "color": "#4F4F4F",
-                }
-              }
-              text="Upload Data"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
+            
             <CollapsingBar
               collapsed={true}
               content={
