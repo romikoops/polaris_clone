@@ -1,18 +1,16 @@
 import React from 'react'
 import { withNamespaces } from 'react-i18next'
 import styled from 'styled-components'
-import PropTypes from '../../prop-types'
 import styles from './LandingTop.scss'
 import Header from '../Header/Header'
 import ButtonSection from './ButtonSection'
 import { isQuote, contentToHtml } from '../../helpers'
 import withContent from '../../hocs/withContent'
 
-const footerHeight = '60px'
 const StyledTop = styled.div`
   background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
     url(${props => props.bg});
-  height: ${props => (isQuote(props.tenant) ? `calc(100vh - ${footerHeight})` : '100vh')};
+  height: 100vh;
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
@@ -35,7 +33,9 @@ function LandingTop ({
   function determineWelcomeTail () {
     if (theme && theme.welcome_text) {
       return theme.welcome_text
-    } else if (isQuote(tenant)) {
+    }
+
+    if (isQuote(tenant)) {
       return t('landing:welcomeTextQuoteTail')
     }
 
@@ -54,9 +54,15 @@ function LandingTop ({
       className={`flex-none ${styles.tenant_logo_landing}`}
     />),
     (<h2 className="flex-none">
-      <b>{t('landing:welcomeTextHead')}</b> <br />
-      <i> {tenant.name} </i> <b> <br />
-        {welcomeTextTail}</b>
+      <b>{t('landing:welcomeTextHead')}</b>
+      <br />
+      <i>
+        {tenant.name}
+      </i>
+      <br />
+      <b>
+        {welcomeTextTail}
+      </b>
     </h2>),
     (<div className={styles.wrapper_hr}>
       <hr />
@@ -81,7 +87,6 @@ function LandingTop ({
 
   const contentToRender = content && content.welcome ? contentToHtml(content.welcome) : defaultContent
 
-
   return (
     <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage} tenant={tenant}>
       <div className="layout-row flex-100 layout-wrap">
@@ -102,14 +107,6 @@ function LandingTop ({
       </div>
     </StyledTop>
   )
-}
-
-LandingTop.propTypes = {
-  theme: PropTypes.theme,
-  user: PropTypes.user,
-  tenant: PropTypes.tenant,
-  t: PropTypes.func.isRequired,
-  bookNow: PropTypes.func
 }
 
 LandingTop.defaultProps = {

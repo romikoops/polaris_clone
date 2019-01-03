@@ -138,6 +138,7 @@ module DataValidator
               mode_of_transport: column[@row_keys['MOT']],
               service_level: column[@row_keys['SERVICE_LEVEL']],
               carrier: column[@row_keys['CARRIER']],
+              date: column[@row_keys['DATE']],
               itinerary: @tenant.itineraries.find_by(name: column[@row_keys['ITINERARY']], mode_of_transport: column[@row_keys['MOT']])
             },
             result_index: column_index
@@ -195,7 +196,7 @@ module DataValidator
         user: @user,
         tenant: @tenant,
         load_type: example[:data][:load_type],
-        planned_pickup_date: DateTime.now + 2.weeks,
+        planned_pickup_date: example[:data][:date],
         origin_hub: @origin_hub,
         destination_hub: @destination_hub,
         trucking: determine_trucking_hash(example)
@@ -207,6 +208,7 @@ module DataValidator
       @trucking_data = @trucking_data_builder.perform(@hubs)
       @data_for_price_checker = @example[:data]
       @data_for_price_checker[:trucking] = @trucking_data
+      @data_for_price_checker[:shipment] = @shipment
       @data_for_price_checker[:has_on_carriage] = example[:data][:delivery_address]
       @data_for_price_checker[:has_pre_carriage] = example[:data][:pickup_address]
       @data_for_price_checker[:service_level] = @tenant.tenant_vehicles.find_by(
@@ -215,7 +217,45 @@ module DataValidator
         mode_of_transport: @example[:data][:mode_of_transport]
       )
       @data_for_price_checker[:cargo_units] = example[:data][:cargo_units]
+      @data_for_price_checker[:pricing] = determine_pricing(@example)
       validate_prices(sheet_name, example[:data][:itinerary], @data_for_price_checker, example[:expected], example[:result_index], example[:data])
+    end
+
+    def determine_pricing(example)
+      start_date = example[:data][:date]
+      end_date = start_date + 7.days
+      result_to_return = {}
+      cargo_classes = @shipment.aggregated_cargo ? ['lcl'] : @shipment.cargo_units.pluck(:cargo_class)
+      user_pricing_id = @user.role.name == 'agent' ? @user.agency_pricing_id : @user.id
+      # Find the pricings for the cargo classes and effective date ranges then group by cargo_class
+      tenant_vehicle_id = @data_for_price_checker[:service_level].id
+      pricings_by_cargo_class = example[:data][:itinerary].pricings
+                                                .where(tenant_vehicle_id: tenant_vehicle_id)
+                                                .for_cargo_class(cargo_classes)
+      pricings_by_cargo_class = pricings_by_cargo_class.for_dates(start_date, end_date) if start_date && end_date
+      pricings_by_cargo_class = pricings_by_cargo_class
+                                .select { |pricing| (pricing.user_id == user_pricing_id) || pricing.user_id.nil? }
+                                .group_by { |pricing| pricing.transport_category_id.to_s }
+      # Find the group with the most pricings and create the object to be passed on
+      most_diverse_set = pricings_by_cargo_class.values.max_by(&:length)
+      other_pricings = pricings_by_cargo_class.values.reject { |pricing_group| pricing_group == most_diverse_set }.flatten
+      if most_diverse_set.nil?
+        result_to_return << nil
+      else
+        most_diverse_set.each do |pricing|
+          obj = {
+            pricing_ids: {
+              pricing.transport_category.cargo_class.to_s => pricing.id
+            }  }
+          other_pricings.each do |other_pricing|
+            if other_pricing.effective_date < obj[:schedules].first.etd && other_pricing.expiration_date > obj[:schedules].last.eta
+              obj[:pricing_ids][other_pricing.transport_category.cargo_class] = other_pricing.id
+            end
+          end
+          result_to_return = obj
+        end
+      end
+      result_to_return
     end
 
     def prep_cargo_units(example)

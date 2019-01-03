@@ -1,20 +1,13 @@
 # frozen_string_literal: true
 
-NO_SPECS_LABELS = %w(backstage Documentation QA).freeze
 NO_NEW_SPEC_MESSAGE = <<~MSG
   You've made some app changes, but didn't add any tests.
-  That's OK as long as you're refactoring existing code,
-  but please consider adding any of the %<labels>s labels.
+  Please add tests covering added or changed logic.
 MSG
-
-def presented_no_changelog_labels
-  NO_SPECS_LABELS.map { |label| "~#{label}" }.join(', ')
-end
 
 has_app_changes = !git.modified_files.grep(%r{\A(app|lib|db/migrate)/}).empty?
 has_spec_changes = !git.modified_files.grep(%r{\Aspec/}).empty?
-new_specs_needed = (gitlab.mr_labels & NO_SPECS_LABELS).empty?
 
-if has_app_changes && !has_spec_changes && new_specs_needed
-  warn format(NO_NEW_SPEC_MESSAGE, labels: presented_no_changelog_labels), sticky: false
+if has_app_changes && !has_spec_changes
+  failure format(NO_NEW_SPEC_MESSAGE), sticky: false
 end

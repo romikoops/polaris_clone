@@ -9,6 +9,9 @@ jira_issues = []
 # Search Commits
 jira_issues << git.commits.map { |commit| commit.message.scan(jira_keys_regexp) }.compact
 
+# MR Tickets
+mr_title_issues = gitlab.mr_title.scan(jira_keys_regexp)
+
 message = ''
 if jira_issues.flatten.uniq.empty?
   message += <<~MESSAGE
@@ -19,13 +22,20 @@ if jira_issues.flatten.uniq.empty?
   MESSAGE
 end
 
-if gitlab.mr_title.scan(jira_keys_regexp).empty?
+if mr_title_issues.empty?
   message += <<~MESSAGE
     This Merge Request does not mention JIRA Ticket in its title.
 
     Please consider to editing Merge Request and adding JIRA Ticket to its title
     as this makes it easy to track open merge requests and keep JIRA Board in sync,
     as well to make sure we always deploy most important code to production at right time.
+  MESSAGE
+end
+
+if (mr_title_issues - jira_issues).empty?
+  message += <<-MESSAGE
+    This Merge Request mentions different JIRA tickets in commit messages and title.
+    Please make sure that correct ticket numbers are mentioned in commits and title.
   MESSAGE
 end
 

@@ -226,9 +226,15 @@
             <% if charge != "Grand Total" && !scope.dig('cargo_price_notes', charge_key) %>
               <%
                 sorted_charges = if ['export', 'import'].include?(charge_key)
-                  charge.except("total", "edited_total", "name").values.group_by{|c| c['currency']}
+                  charge
+                    .except("total", "edited_total", "name")
+                    .keys.map{|k| obj = charge[k]; obj['key'] = k; obj}
+                    .group_by{|c| c['currency']}
                   else
-                  charge.except("total", "edited_total", "name").values.group_by{|c| c['total']['currency']}
+                  charge
+                    .except("total", "edited_total", "name")
+                    .keys.map{|k| obj = charge[k]; obj['key'] = k; obj}
+                    .group_by{|c| c['total']['currency']}
                   end
                 %>
               <% sorted_charges.each do |currency_key, sub_charges| %>
@@ -246,9 +252,28 @@
                       %>
                   </h3>
                 </div>
-                <% sub_charges.each do |sub_charge| %>
+                <% sub_charges.each_with_index do |sub_charge, i| 
+                %>
                   <div class="subtotal-price-single">
-                    <h4><%= sub_charge["name"] %></h4>
+                    <%
+                      sub_charge_name = case scope['fee_detail']
+                        when 'key'
+                          sub_charge['key']
+                        when 'key_and_name'
+                          "#{sub_charge['key']} - #{sub_charge['name']}"
+                        when 'name'
+                          sub_charge['name']
+                        end
+                      if 'cargo' == charge_key
+                        sub_charge_name = "Freight Rate #{i + 1}"
+                      elsif 'cargo' == charge_key && scope['consolidated_cargo']
+                        sub_charge_name = "Consolidated Freight Rate"
+                      elsif ['trucking_on', 'trucking_pre'].include?(charge_key)
+                        sub_charge_name = 'Trucking Rate'
+                      end
+
+                    %>
+                    <h4><%= sub_charge_name %></h4>
                     <% if sub_charge["value"] && !scope['hide_sub_totals'] %>
                       <h3> <%= '%.2f' % sub_charge["value"].to_f %>&nbsp;<%= sub_charge["currency"] %></h3>
                     <% elsif scope['hide_sub_totals'] && scope['cargo_price_notes'] && scope['cargo_price_notes'][charge_key] %>
@@ -283,7 +308,11 @@
       <h4>Remarks:</h4>
       <ul>
         <% remarks.each do  |remark|%>
-          <li><%= remark.body %></li>
+          <li>
+            <p class="hyphens">
+              <%= remark.body %>
+            </p>
+          </li>
         <% end %>
       </ul>
     </div>
@@ -293,7 +322,11 @@
       <h4>Notes: </h4>
       <ul> <% notes.each do |note| %>
         <li class="note-header"> <%= note.header %></li>
-        <li> <%= note.body  %></li>
+        <li>
+          <p class="hyphens">
+            <%= note.body  %>
+          </p>
+        </li>
         <% end %>
       </ul>
     </div>

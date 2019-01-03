@@ -483,25 +483,24 @@ function getClientPricings (id, redirect) {
 
 function getItineraryPricings (id, redirect) {
   function request (prData) {
-    return { type: adminConstants.GET_ROUTE_PRICINGS_REQUEST, payload: prData }
+    return { type: adminConstants.GET_ADMIN_ITINERARY_PRICINGS_REQUEST, payload: prData }
   }
   function success (prData) {
-    // ;
-    return { type: adminConstants.GET_ROUTE_PRICINGS_SUCCESS, payload: prData }
+    return { type: adminConstants.GET_ADMIN_ITINERARY_PRICINGS_SUCCESS, payload: prData }
   }
   function failure (error) {
-    return { type: adminConstants.GET_ROUTE_PRICINGS_FAILURE, error }
+    return { type: adminConstants.GET_ADMIN_ITINERARY_PRICINGS_FAILURE, error }
   }
 
   return (dispatch) => {
     dispatch(request())
     dispatch(getTrucking())
     adminService.getItineraryPricings(id).then(
-      (data) => {
+      (response) => {
         if (redirect) {
           dispatch(push(`/admin/pricings/routes/${id}`))
         }
-        dispatch(success(data))
+        dispatch(success(response.data))
       },
       (error) => {
         dispatch(failure(error))

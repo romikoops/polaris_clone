@@ -424,7 +424,7 @@
 
           <div class="display-flex">
             <span>Incoterm:</span>
-            <p>
+            <p class="hyphens">
               <% if shipment.incoterm_text %>
                 <%= shipment.incoterm_text %>
               <% else %>
@@ -436,7 +436,7 @@
         <div class="column-info notes-lower">
           <div class="border-bottom display-flex">
             <span>Description of Goods: </span>
-            <p>
+            <p class="hyphens">
               <%= shipment.cargo_notes %>
             </p>
           </div>
@@ -446,7 +446,11 @@
             <h4>Notes: </h4>
             <ul> <% notes.each do |note| %>
               <li class="note-header"> <%= note.header %></li>
-              <li> <%= note.body  %></li>
+              <li> 
+                <p class="hyphens">
+                  <%= note.body %>
+                </p>  
+              </li>
               <% end %>
             </ul>
           </div>
@@ -458,7 +462,11 @@
               <ul>
                 <% remarks.each do |remark|%>
                     <% unless remark.body.empty? %>
-                    <li><%= remark.body %></li>
+                    <li>
+                      <p class="hyphens">
+                        <%= remark.body %>
+                      </p>
+                    </li>
                     <% end %>
                 <% end %>
               </ul>
@@ -467,9 +475,5 @@
         </div>
       </div>
     </div>
-
-
-
   </div>
-
 </div>

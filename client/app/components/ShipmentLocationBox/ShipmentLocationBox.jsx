@@ -770,10 +770,10 @@ class ShipmentLocationBox extends PureComponent {
             this.props.handleSelectLocation(target, this.state[`${target}FieldsHaveErrors`])
             this.props.setNotesIds(nexusIds, target)
             if (isLocationObj) {
-              this.props.setTargetAddress(target, { ...place, nexusIds })
+              this.props.setTargetAddress(target, { ...place, nexusIds, hubIds })
             } else {
               addressFromPlace(place, this.props.gMaps, this.state.map, (address) => {
-                this.props.setTargetAddress(target, { ...address, nexusIds })
+                this.props.setTargetAddress(target, { ...address, nexusIds, hubIds })
               })
             }
             this.showCompletionTick(target)
@@ -856,7 +856,12 @@ class ShipmentLocationBox extends PureComponent {
     }
 
     const { shipment } = prevRequest
-    const newState = {}
+    const newState = {
+      truckingHubs: {
+        origin: [],
+        destination: []
+      }
+    }
     if (!props.has_pre_carriage) {
       const newStateOrigin = routes.find(o => (
         o.origin.nexusId === shipment.origin.nexus_id
@@ -877,6 +882,13 @@ class ShipmentLocationBox extends PureComponent {
     newState.autoText = {
       origin: shipment.origin.fullAddress || '',
       destination: shipment.destination.fullAddress || ''
+    }
+
+    if (has(shipment, ['origin', 'hubIds'])) {
+      newState.truckingHubs.origin = shipment.origin.hubIds
+    }
+    if (has(shipment, ['destination', 'hubIds'])) {
+      newState.truckingHubs.destination = shipment.destination.hubIds
     }
     if (newState.oSelect && newState.oSelect.label && shipment.origin.nexus_id) {
       this.state.map

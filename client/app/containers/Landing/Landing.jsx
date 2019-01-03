@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
-import PropTypes from '../../prop-types'
 import { moment } from '../../constants'
 import LandingTop from '../../components/LandingTop/LandingTop'
 import styles from './Landing.scss'
@@ -14,6 +13,12 @@ import withContent from '../../hocs/withContent'
 import Footer from '../../components/Footer/Footer'
 
 class Landing extends Component {
+  constructor (props) {
+    super(props)
+
+    this.bookNow = this.bookNow.bind(this)
+  }
+
   shouldComponentUpdate (nextProps) {
     const { loggingIn, registering, loading } = nextProps
 
@@ -83,7 +88,7 @@ class Landing extends Component {
       </div>)
     ]
 
-    const innerWrapperStyle = { position: 'relative', paddingBottom: isQuote(tenant) ? '60px' : '125px' }
+    const innerWrapperStyle = { position: 'relative' }
     const serviceContentToRender = content && content.services ? contentToHtml(content.services) : ['', '', '']
     const serviceTitlesToRender = content && content.serviceTitles ? contentToHtml(content.serviceTitles) : ([<h2 className="flex-none">
     Introducing Online Freight Booking Services
@@ -101,7 +106,7 @@ class Landing extends Component {
             user={user}
             theme={theme}
             tenant={tenant}
-            bookNow={() => this.bookNow()}
+            bookNow={this.bookNow}
           />
           {!isQuote(tenant) ? (
             <div className="layout-row flex-100 layout-wrap">
@@ -169,7 +174,7 @@ class Landing extends Component {
                         text="Book Now"
                         theme={theme}
                         active
-                        handleNext={() => this.bookNow()}
+                        handleNext={this.bookNow}
                       />
                     </div>
                   </div>
@@ -178,24 +183,10 @@ class Landing extends Component {
             </div>
           ) : ''}
         </div>
-        <Footer theme={theme} tenant={tenant} />
+        <Footer theme={theme} tenant={tenant} bookNow={this.bookNow} />
       </div>
     )
   }
-}
-
-Landing.propTypes = {
-  tenant: PropTypes.tenant,
-  theme: PropTypes.theme,
-  user: PropTypes.user,
-  loggedIn: PropTypes.bool,
-  loading: PropTypes.bool,
-  userDispatch: PropTypes.shape({
-    goTo: PropTypes.func
-  }).isRequired,
-  loggingIn: PropTypes.bool,
-  // eslint-disable-next-line react/forbid-prop-types
-  authDispatch: PropTypes.any.isRequired
 }
 
 Landing.defaultProps = {

@@ -848,6 +848,29 @@ export default function admin (state = {}, action) {
 
       return errVehicleTypes
     }
+    case adminConstants.GET_ADMIN_ITINERARY_PRICINGS_REQUEST: {
+      const pricings = state.pricings || {}
+      return { ...state, loading: true, pricings }
+    }
+    case adminConstants.GET_ADMIN_ITINERARY_PRICINGS_SUCCESS: {
+      return {
+        ...state,
+        pricings: {
+          ...state.pricings,
+          show: {
+            ...state.pricings.show,
+            [action.payload.itinerary.id]: action.payload
+          }
+        },
+        loading: false
+      }
+    }
+    case adminConstants.GET_ADMIN_ITINERARY_PRICINGS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: { pricings: action.error }
+      }
 
     case adminConstants.GET_PRICINGS_REQUEST: {
       return {
@@ -1025,29 +1048,6 @@ export default function admin (state = {}, action) {
 
       return errClientPric
     }
-
-    case adminConstants.GET_ROUTE_PRICINGS_REQUEST: {
-      const reqRoutePric = merge({}, state, {
-        loading: true
-      })
-
-      return reqRoutePric
-    }
-    case adminConstants.GET_ROUTE_PRICINGS_SUCCESS:
-      return {
-        ...state,
-        itineraryPricings: action.payload.data,
-        loading: false
-      }
-    case adminConstants.GET_ROUTE_PRICINGS_FAILURE: {
-      const errRoutePric = merge({}, state, {
-        error: { pricings: action.error },
-        loading: false
-      })
-
-      return errRoutePric
-    }
-
     case adminConstants.GET_CLIENTS_REQUEST:
       return {
         ...state,

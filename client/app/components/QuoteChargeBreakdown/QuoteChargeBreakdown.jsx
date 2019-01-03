@@ -128,6 +128,19 @@ class QuoteChargeBreakdown extends Component {
     return `${formattedPriceValue(quote[key].total.value)} ${quote[key].total.currency}`
   }
 
+  dynamicSubKey (key, price, i) {
+    const { t, scope } = this.props
+
+    if (scope.consolidate_cargo && key === 'cargo') {
+      return t('cargo:consolidatedCargoRate')
+    }
+    if (!scope.consolidate_cargo && key === 'cargo') {
+      return t('cargo:unitFreightRate', { unitNo: i + 1 })
+    }
+
+    return this.determineSubKey(price)
+  }
+
   generateContent (key) {
     const { quote, t, scope } = this.props
 
@@ -159,7 +172,7 @@ class QuoteChargeBreakdown extends Component {
             <div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
               <div className="flex-45 layout-row layout-align-start-center">
                 <span>
-                  {key === 'cargo' ? t('cargo:unitFreightRate', { unitNo: i + 1 }) : this.determineSubKey(price)}
+                  {this.dynamicSubKey(key, price, i)}
                 </span>
               </div>
               <div className="flex-50 layout-row layout-align-end-center">

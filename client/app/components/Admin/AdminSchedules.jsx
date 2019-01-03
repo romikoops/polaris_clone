@@ -17,7 +17,7 @@ import CardRoutesIndex from './CardRouteIndex'
 import Tab from '../Tabs/Tab'
 import Tabs from '../Tabs/Tabs'
 import { RoundButton } from '../RoundButton/RoundButton'
-import GenericError from '../../components/ErrorHandling/Generic'
+import GenericError from '../ErrorHandling/Generic'
 
 class AdminSchedules extends Component {
   static dynamicSort (property) {
@@ -37,6 +37,7 @@ class AdminSchedules extends Component {
       return result2 * sortOrder
     }
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -58,6 +59,7 @@ class AdminSchedules extends Component {
   getItinerary (sched) {
     return this.props.scheduleData.itineraries.filter(x => x.id === sched.itinerary_id)[0]
   }
+
   getItinerariesForHub (hub) {
     const filteredItineraries = this.props.scheduleData.detailedItineraries.filter((itinerary) => {
       if (!itinerary) {
@@ -69,9 +71,11 @@ class AdminSchedules extends Component {
 
     return filteredItineraries.map(x => x.id)
   }
+
   toggleView () {
     this.setState({ showList: !this.state.showList })
   }
+
   toggleShowPanel (id) {
     if (!this.state.panelViewer[id]) {
       this.props.adminDispatch.getLayovers(id)
@@ -83,14 +87,17 @@ class AdminSchedules extends Component {
       }
     })
   }
+
   closeSuccessDialog () {
     const { documentDispatch } = this.props
     documentDispatch.closeViewer()
   }
+
   viewSchedules (itinerary) {
     const { adminDispatch } = this.props
     adminDispatch.loadItinerarySchedules(itinerary.id, true)
   }
+
   toggleExpander (key) {
     this.setState({
       expander: {
@@ -111,6 +118,7 @@ class AdminSchedules extends Component {
       }
     })
   }
+
   handleSearchQuery (e) {
     const { value } = e.target
     this.setState({
@@ -120,6 +128,7 @@ class AdminSchedules extends Component {
       }
     })
   }
+
   applyFilters (array) {
     const { searchFilters } = this.state
     const motKeys = Object.keys(searchFilters.mot).filter(key => searchFilters.mot[key])
@@ -137,6 +146,7 @@ class AdminSchedules extends Component {
 
     return filter2
   }
+
   render () {
     const {
       t,
@@ -189,78 +199,79 @@ class AdminSchedules extends Component {
     )
 
     const modesOfTransport = scope.modes_of_transport
-    const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName =>
-      Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool))
+    const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName => Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool))
 
     const sideMenuNodes = [
       (<SideOptionsBox
         header={t('admin:dataManager')}
         content={(
           <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-            <CollapsingBar
-              showArrow
-              collapsed={!expander.upload}
-              theme={theme}
-              handleCollapser={() => this.toggleExpander('upload')}
-              text={t('admin:uploadData')}
-              faClass="fa fa-cloud-upload"
-              content={(
-                <div>
-                  <div
-                    className={`${
-                      styles.action_section
-                    } flex-100 layout-row layout-align-center-center layout-wrap`}
-                  >
-                    <p className="flex-80">{t('admin:uploadAirSchedules')}</p>
-                    <FileUploader
-                      theme={theme}
-                      dispatchFn={file => documentDispatch.uploadSchedules(file, 'air')}
-                      type="xlsx"
-                      text={t('admin:airSchedulesExcel')}
-                    />
+            { scope.show_beta_features ? (
+              <CollapsingBar
+                showArrow
+                collapsed={!expander.upload}
+                theme={theme}
+                handleCollapser={() => this.toggleExpander('upload')}
+                text={t('admin:uploadData')}
+                faClass="fa fa-cloud-upload"
+                content={(
+                  <div>
+                    <div
+                      className={`${
+                        styles.action_section
+                      } flex-100 layout-row layout-align-center-center layout-wrap`}
+                    >
+                      <p className="flex-80">{t('admin:uploadAirSchedules')}</p>
+                      <FileUploader
+                        theme={theme}
+                        dispatchFn={file => documentDispatch.uploadSchedules(file, 'air')}
+                        type="xlsx"
+                        text={t('admin:airSchedulesExcel')}
+                      />
+                    </div>
+                    <div
+                      className={`${
+                        styles.action_section
+                      } flex-100 layout-row layout-align-center-center layout-wrap`}
+                    >
+                      <p className="flex-80">{t('admin:uploadTrainSchedules')}</p>
+                      <FileUploader
+                        theme={theme}
+                        dispatchFn={file => documentDispatch.uploadSchedules(file, 'train')}
+                        type="xlsx"
+                        text={t('admin:trainSchedulesExcel')}
+                      />
+                    </div>
+                    <div
+                      className={`${
+                        styles.action_section
+                      } flex-100 layout-row layout-align-center-center layout-wrap`}
+                    >
+                      <p className="flex-80">{t('admin:uploadVesselSchedules')}</p>
+                      <FileUploader
+                        theme={theme}
+                        dispatchFn={file => documentDispatch.uploadSchedules(file, 'vessel')}
+                        type="xlsx"
+                        text={t('admin:vesselSchedulesExcel')}
+                      />
+                    </div>
+                    <div
+                      className={`${
+                        styles.action_section
+                      } flex-100 layout-row layout-align-center-center layout-wrap`}
+                    >
+                      <p className="flex-80">{t('admin:uploadTruckingSchedules')}</p>
+                      <FileUploader
+                        theme={theme}
+                        dispatchFn={file => documentDispatch.uploadSchedules(file, 'truck')}
+                        type="xlsx"
+                        text={t('admin:truckSchedulesExcel')}
+                      />
+                    </div>
                   </div>
-                  <div
-                    className={`${
-                      styles.action_section
-                    } flex-100 layout-row layout-align-center-center layout-wrap`}
-                  >
-                    <p className="flex-80">{t('admin:uploadTrainSchedules')}</p>
-                    <FileUploader
-                      theme={theme}
-                      dispatchFn={file => documentDispatch.uploadSchedules(file, 'train')}
-                      type="xlsx"
-                      text={t('admin:trainSchedulesExcel')}
-                    />
-                  </div>
-                  <div
-                    className={`${
-                      styles.action_section
-                    } flex-100 layout-row layout-align-center-center layout-wrap`}
-                  >
-                    <p className="flex-80">{t('admin:uploadVesselSchedules')}</p>
-                    <FileUploader
-                      theme={theme}
-                      dispatchFn={file => documentDispatch.uploadSchedules(file, 'vessel')}
-                      type="xlsx"
-                      text={t('admin:vesselSchedulesExcel')}
-                    />
-                  </div>
-                  <div
-                    className={`${
-                      styles.action_section
-                    } flex-100 layout-row layout-align-center-center layout-wrap`}
-                  >
-                    <p className="flex-80">{t('admin:uploadTruckingSchedules')}</p>
-                    <FileUploader
-                      theme={theme}
-                      dispatchFn={file => documentDispatch.uploadSchedules(file, 'truck')}
-                      type="xlsx"
-                      text={t('admin:truckSchedulesExcel')}
-                    />
-                  </div>
-                </div>
-              )}
-            />
+                )}
+              />
+            ) : '' }
             <CollapsingBar
               showArrow
               collapsed={!expander.download}
@@ -281,42 +292,46 @@ class AdminSchedules extends Component {
                 </div>
               )}
             />
-            { scope.show_beta_features ? <CollapsingBar
-              showArrow
-              collapsed={!expander.new}
-              theme={theme}
-              handleCollapser={() => this.toggleExpander('new')}
-              text={t('admin:createNewSchedules')}
-              faClass="fa fa-plus-circle"
-              content={(
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-align-center-center layout-wrap`}
-                >
-                  {newButton}
-                </div>
-              )}
-            /> : '' }
+            { scope.show_beta_features ? (
+              <CollapsingBar
+                showArrow
+                collapsed={!expander.new}
+                theme={theme}
+                handleCollapser={() => this.toggleExpander('new')}
+                text={t('admin:createNewSchedules')}
+                faClass="fa fa-plus-circle"
+                content={(
+                  <div
+                    className={`${
+                      styles.action_section
+                    } flex-100 layout-row layout-align-center-center layout-wrap`}
+                  >
+                    {newButton}
+                  </div>
+                )}
+              />
+            ) : '' }
           </div>
         )}
       />)
     ]
-    const motTabs = modeOfTransportNames.sort().map(mot => (<Tab
-      tabTitle={capitalize(mot)}
-      theme={theme}
-      mot={mot}
-    >
-      <CardRoutesIndex
-        itineraries={itineraries.filter(itin => itin.mode_of_transport === mot)}
+    const motTabs = modeOfTransportNames.sort().map(mot => (
+      <Tab
+        tabTitle={capitalize(mot)}
         theme={theme}
-        scope={scope}
         mot={mot}
-        adminDispatch={adminDispatch}
-        sideMenuNodes={sideMenuNodes}
-        handleClick={id => adminDispatch.loadItinerarySchedules(id, true)}
-      />
-    </Tab>))
+      >
+        <CardRoutesIndex
+          itineraries={itineraries.filter(itin => itin.mode_of_transport === mot)}
+          theme={theme}
+          scope={scope}
+          mot={mot}
+          adminDispatch={adminDispatch}
+          sideMenuNodes={sideMenuNodes}
+          handleClick={id => adminDispatch.loadItinerarySchedules(id, true)}
+        />
+      </Tab>
+    ))
     const listView = (
       <div className="flex-100 layout-row layout-align-center-start">
         <Tabs

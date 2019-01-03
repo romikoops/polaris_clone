@@ -94,6 +94,10 @@ class Hub < ApplicationRecord
     end
   end
 
+  def available_trucking
+    truck_type_availabilities.pluck(:load_type).uniq
+  end
+
   def generate_hub_code!(tenant_id)
     existing_hubs = nexus.hubs.where(hub_type: hub_type, tenant_id: tenant_id)
     num = existing_hubs.length

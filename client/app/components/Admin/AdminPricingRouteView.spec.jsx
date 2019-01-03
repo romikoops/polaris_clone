@@ -30,6 +30,9 @@ const propsBase = {
     hubRoutes: [],
     transportCategories: []
   },
+  pricings: {
+    ['1']: []
+  },
   clients: [client],
   loading: false,
   match: {},
@@ -42,6 +45,11 @@ const propsBase = {
     stops: [{ hub: {} }, { hub: {} }],
     userPricings: [],
     serviceLevels: {}
+  },
+  match: {
+    params: {
+      id: '1'
+    }
   }
 }
 

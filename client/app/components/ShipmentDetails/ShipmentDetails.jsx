@@ -4,6 +4,7 @@ import * as Scroll from 'react-scroll'
 import Toggle from 'react-toggle'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { get } from 'lodash'
 import ReactTooltip from 'react-tooltip'
 import { errorActions } from '../../actions'
 import PropTypes from '../../prop-types'
@@ -177,8 +178,10 @@ export class ShipmentDetails extends Component {
   componentWillMount () {
     const { prevRequest, setStage, reusedShipment } = this.props
     if (reusedShipment && reusedShipment.shipment && !this.state.prevRequestLoaded) {
+      this.getInitalFilteredRouteIndexes()
       this.loadReusedShipment(reusedShipment)
     } else if (prevRequest && prevRequest.shipment && !this.state.prevRequestLoaded) {
+      this.getInitalFilteredRouteIndexes()
       this.loadPrevReq(prevRequest)
     }
     if (this.state.shipment && !this.state.mandatoryCarriageIsPreset) {
@@ -277,29 +280,7 @@ export class ShipmentDetails extends Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    const {
-      shipment,
-      cargoItems,
-      containers,
-      aggregatedCargo,
-      selectedDay,
-      origin,
-      destination,
-      aggregated
-    } = this.state
-
-    const { bookingSummaryDispatch } = this.props
-
-    bookingSummaryDispatch.update({
-      shipment,
-      cargoItems,
-      aggregatedCargo,
-      containers,
-      selectedDay,
-      origin,
-      destination,
-      aggregated
-    })
+    this.updateBookingSummary()
   }
 
   setIncoterm (opt) {
@@ -375,6 +356,32 @@ export class ShipmentDetails extends Component {
     })
   }
 
+  updateBookingSummary () {
+    const {
+      shipment,
+      cargoItems,
+      containers,
+      aggregatedCargo,
+      selectedDay,
+      origin,
+      destination,
+      aggregated
+    } = this.state
+
+    const { bookingSummaryDispatch } = this.props
+
+    bookingSummaryDispatch.update({
+      shipment,
+      cargoItems,
+      aggregatedCargo,
+      containers,
+      selectedDay,
+      origin,
+      destination,
+      aggregated
+    })
+  }
+
   presetMandatoryCarriage () {
     const { scope } = this.props.tenant
     Object.keys(scope.carriage_options).forEach((carriage) => {
@@ -415,8 +422,11 @@ export class ShipmentDetails extends Component {
       routeSet: true,
       prevRequest: req,
       prevRequestLoaded: true
-    }))
+    }), () => {
+      this.updateBookingSummary()
+    })
   }
+
   loadReusedShipment (obj) {
     const newCargoItemsErrors = obj.cargoItems.map(cia => ({
       payload_in_kg: false,
@@ -703,7 +713,7 @@ export class ShipmentDetails extends Component {
 
   handleNextStage () {
     const {
-      origin, destination, selectedDay, incoterm
+      origin, destination, selectedDay, incoterm, addressFormsHaveErrors
     } = this.state
     const { tenant } = this.props
     const { scope } = tenant
@@ -714,8 +724,8 @@ export class ShipmentDetails extends Component {
       (!destination.nexus_id && !this.state.has_on_carriage) ||
       (!addressFieldsAreValid(origin, requiresFullAddress) && this.state.has_pre_carriage) ||
       (!addressFieldsAreValid(destination, requiresFullAddress) && this.state.has_on_carriage) ||
-      (this.state.addressFormsHaveErrors.origin && this.state.has_pre_carriage) ||
-      (this.state.addressFormsHaveErrors.destination && this.state.has_on_carriage)
+      (get(addressFormsHaveErrors, ['origin'], false) && this.state.has_pre_carriage) ||
+      (get(addressFormsHaveErrors, ['destination'], false) && this.state.has_on_carriage)
     ) {
       this.incrementNextStageAttemps()
       ShipmentDetails.scrollTo('map')
@@ -875,7 +885,7 @@ export class ShipmentDetails extends Component {
     const {
       modals, filteredRouteIndexes, nextStageAttempts, selectedDay, incoterm
     } = this.state
-  
+
     let cargoDetails
     if (showRegistration) this.props.hideRegistration()
     if (!shipmentData.shipment || !shipmentData.cargoItemTypes) return ''
