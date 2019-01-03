@@ -19,7 +19,11 @@ FactoryBot.define do
       }
     end
 
-    before(:create) do |shipment|
+    transient do
+      with_breakdown false
+    end
+
+    before(:create) do |shipment, evaluator|
       if shipment.itinerary.nil?
         shipment.itinerary_id = shipment.trip.itinerary_id
       end
@@ -30,7 +34,9 @@ FactoryBot.define do
       shipment.shipment_contacts << build(:shipment_contact, shipment: shipment, contact_type: :shipper)
       shipment.shipment_contacts << build(:shipment_contact, shipment: shipment, contact_type: :consignee)
 
-      shipment.charge_breakdowns << create(:charge_breakdown, trip: shipment.trip, shipment: shipment)
+      if evaluator.with_breakdown
+        shipment.charge_breakdowns << create(:charge_breakdown, trip: shipment.trip, shipment: shipment)
+      end
     end
   end
 end
