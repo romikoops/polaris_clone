@@ -8,6 +8,7 @@ FactoryBot.define do
     association :transport_category
     association :tenant
     association :itinerary
+    association :tenant_vehicle
 
     after :create do |pricing|
       create_list :pricing_detail, 1, priceable: pricing, tenant: pricing.tenant
