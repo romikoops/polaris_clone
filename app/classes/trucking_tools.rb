@@ -7,6 +7,7 @@ module TruckingTools
 
   LOAD_METERAGE_AREA_DIVISOR = 24_000
   CBM_VOLUME_DIVISOR = 1_000_000
+  DEFAULT_MAX = 1_000_000
   def calculate_trucking_price(pricing, cargo, _direction, km, scope)
     fees = {}
     result = {}
@@ -230,7 +231,7 @@ module TruckingTools
   def consolidated_load_meterage(trucking_pricing, cargo_object, cargos)
     total_area = cargos.sum { |cargo| cargo.dimension_x * cargo.dimension_y * cargo.quantity }
     non_stackable = cargos.select(&:stackable).empty?
-    load_area_limit = trucking_pricing.load_meterage['area_limit']
+    load_area_limit = trucking_pricing.load_meterage['area_limit'] || DEFAULT_MAX
     if total_area >= load_area_limit || non_stackable
       cargos.each do |cargo|
         calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
