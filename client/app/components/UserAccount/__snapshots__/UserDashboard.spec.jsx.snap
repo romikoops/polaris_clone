@@ -29,7 +29,8 @@ exports[`shallow render 1`] = `
             className="welcome flex layout-row ccb_dashboard"
           >
             Welcome back,
-              
+             
+             
             <b>
               John
             </b>
@@ -132,77 +133,6 @@ exports[`shallow render 1`] = `
           }
         }
         title="Most used Contacts"
-      />
-    </div>
-  </div>
-  <div
-    className="layout-row flex-100 layout-wrap layout-align-center-center border_divider"
-  >
-    <div
-      className="flex-100 layout-row layout-wrap layout-align-start-center"
-    >
-      <div
-        className="flex-100 layout-row layout-align-space-between-center"
-      >
-        <div
-          className="flex-100 layout-align-start-center greyBg"
-        >
-          <span>
-            <b>
-              My Shipment Addresses
-            </b>
-          </span>
-        </div>
-      </div>
-      <UserLocations
-        addresses={
-          Array [
-            Object {
-              "city": "FOO_CITY",
-              "country": "Germany",
-              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
-              "id": 246,
-              "primary": true,
-              "street": "FOO_STREET",
-              "streetNumber": 579,
-              "street_number": 579,
-              "zipCode": "22456",
-              "zip_code": "22456",
-            },
-          ]
-        }
-        cols={3}
-        makePrimary={[Function]}
-        setNav={[Function]}
-        t={[Function]}
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-        user={
-          Object {
-            "company_name": "FOO_COMPANY",
-            "currency": "EUR",
-            "email": "foo@bar.baz",
-            "first_name": "John",
-            "guest": false,
-            "last_name": "Doe",
-            "phone": "6345789",
-            "role": Object {
-              "name": "shipper",
-            },
-          }
-        }
-        userDispatch={
-          Object {
-            "getShipment": [Function],
-            "goTo": [Function],
-          }
-        }
       />
     </div>
   </div>
