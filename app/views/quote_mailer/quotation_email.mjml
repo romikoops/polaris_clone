@@ -5,14 +5,19 @@
           prepared for you a document with the best quotations for the itinerary: 
   </p>
 </mj-text>
+<mj-text>
+  <p style="display: none;max-height: 0px;overflow: hidden;">
+    &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+  </p>
+</mj-text>
 <mj-section padding="20px 5%" background-color="<%= primary_color %>">
   <mj-column>
     <mj-image width="150px" align="left" src="<%= @user.tenant.theme["logoWhite"] %>" />
   </mj-column>
   <mj-column>
     <mj-navbar base-url="" hamburger="hamburger" ico-color="black">
-      <mj-navbar-link href="#" color="white">about us</mj-navbar-link>
-      <mj-navbar-link href="#" color="white">Help</mj-navbar-link>
+      <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
+      <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'contact')%>" color="white">help</mj-navbar-link>
     </mj-navbar>
   </mj-column>
 </mj-section>
@@ -76,32 +81,9 @@
 </mj-wrapper>
 
 
-
+<%= render "closing_lines", user: @user %>
 <mj-wrapper full-width="full-width" padding="0px">
-  <% if defined? closing_text %>
-  <mj-section full-width="full-width" padding="0px">
-    <mj-column width="100%" padding="0 2.5%">
-      <mj-text line-height="24px">
-        <p>
-          <%= closing_text %>
-        </p>
-      </mj-text>
-    </mj-column>
-  </mj-section>
-  <% end %>
-  <mj-section full-width="full-width" padding="0px">
-    <mj-column width="100%" padding="0 2.5%">
-      <mj-text>
-        <% if @user.tenant.emails.dig('support', 'general') %>
-          <p>For further information regarding the quotations please contact <%= @user.tenant.emails.dig('support', 'general')%>,</p>
-        <% end %>
-        <p>Thank you for your interest and best regards,</p>
-        <p></p>
-
-      </mj-text>
-
-    </mj-column>
-  </mj-section>
+ 
   <mj-section full-width="full-width" padding="0px">
     <mj-column width="100%">
       <mj-text font-size="8px">
@@ -114,3 +96,4 @@
     </mj-column>
   </mj-section>
 </mj-wrapper>
+

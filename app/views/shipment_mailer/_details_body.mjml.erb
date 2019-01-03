@@ -1,35 +1,32 @@
 <% primary_color = @shipment.tenant.theme["colors"]["primary"] %>
+<mj-section padding="10px 0">
+  <mj-column width="100%" padding-top="0"> 
+    <mj-divider border-width="1px" padding="0" padding-bottom="14px" border-color="#E0E0E0"></mj-divider>
+  </mj-column>
+</mj-section>
 
-<mj-wrapper border="1px solid #f3f3f3" full-width="full-width" padding="0px">
-  <mj-section padding-bottom="10px">
-    <mj-column width="100%" padding="0 5%">
-      <mj-text>
+  <mj-section padding="10px 0">
+    <mj-column padding="0 5%">
+      <mj-text padding="0">
         <h3 style="margin: 0;">
-          <span class="bold">
-              Shipment ID: <%= @shipment.imc_reference %>
-          </span>
+          Shipment ID: <%= @shipment.imc_reference %>
         </h3>
-        <p style="margin: 5px 0;">
-          <span class="bold">
-            Booking placed at:
-          </span>
+      </mj-text>
+      <mj-text padding-left="0">
+        <p style="margin: 0;"> 
+          Booking placed at:
           <%= @shipment.booking_placed_at.strftime('%d.%m.%Y %H:%M') %>
         </p>
       </mj-text>
     </mj-column>
   </mj-section>
   
-  <mj-section padding-top="0">
-    <mj-column width="100%" padding="0 5%" padding-top="0"> 
-      <mj-divider border-width="1px" padding-top="0" border-color="#E0E0E0"></mj-divider>
-    </mj-column>
-  </mj-section>
-  <mj-section padding="0px">
+  <mj-section background-color="#f3f3f3">
     <mj-group vertical-align="middle">
-      <mj-column padding="0 5% 0 70%" width="17%">
+      <mj-column padding="0 5% 0 42%" width="14%">
         <mj-image padding="20px 0" width="30px" src="<%= @mot %>"></mj-image>
       </mj-column>
-      <mj-column padding-left="5%" width="83%">
+      <mj-column padding-left="5%" width="76%">
         <mj-text line-height="16px" padding="0" font-size="18px">
           <p>
             <% if @shipment.has_pre_carriage? %>
@@ -57,10 +54,10 @@
           </p>
         </mj-text>
       </mj-column>
+      <mj-column width="10%">
+        <mj-text padding="28px 0">
+          <a href="<%= @shipment_page %>" target="_blank">View</a>
+        </mj-text>
+      </mj-column>
     </mj-group>
   </mj-section>
-  <mj-section padding-bottom="0">
-    <mj-column width="100%" padding="0 5%"> 
-      <mj-divider padding-bottom="0" border-width="1px" border-color="#E0E0E0"></mj-divider>
-    </mj-column>
-  </mj-section

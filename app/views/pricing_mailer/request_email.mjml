@@ -5,14 +5,20 @@
           has requested a dedicated rate for the following route 
   </p>
 </mj-text>
+<mj-text>
+  <p style="display: none;max-height: 0px;overflow: hidden;">
+    &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+  </p>
+</mj-text>
+
 <mj-section padding="20px 5%" background-color="<%= primary_color %>">
   <mj-column>
     <mj-image width="150px" align="left" src="<%= @user.tenant.theme["logoWhite"] %>" />
   </mj-column>
   <mj-column>
     <mj-navbar base-url="" hamburger="hamburger" ico-color="black">
-      <mj-navbar-link href="#" color="white">about us</mj-navbar-link>
-      <mj-navbar-link href="#" color="white">Help</mj-navbar-link>
+      <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
+      <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'contact')%>" color="white">help</mj-navbar-link>
     </mj-navbar>
   </mj-column>
 </mj-section>
@@ -40,10 +46,10 @@
 
   <mj-section full-width="full-width" background-color="#f3f3f3" >
     <mj-group>
-      <mj-column width="130px">
+      <mj-column width="17%">
         <mj-image padding-top="20px" padding-bottom="20px" padding-left="0" padding-right="0" width="30px" src="<%= @mot %>"></mj-image>
       </mj-column>
-      <mj-column>
+      <mj-column width="83%">
         <mj-text line-height="16px" padding="0"  font-size="18px">
           <p>Route: <strong><%= @itinerary.name %></strong></p>
           <p>Mode of Transport: <strong><%= @itinerary.mode_of_transport.capitalize %></strong></p>

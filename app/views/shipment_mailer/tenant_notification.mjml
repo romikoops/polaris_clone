@@ -6,8 +6,8 @@
   </mj-column>
   <mj-column>
     <mj-navbar base-url="" hamburger="hamburger" ico-color="black">
-      <mj-navbar-link href="#" color="white">about us</mj-navbar-link>
-      <mj-navbar-link href="#" color="white">Help</mj-navbar-link>
+      <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
+      <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'contact')%>" color="white">help</mj-navbar-link>
     </mj-navbar>
   </mj-column>
 </mj-section>
@@ -16,25 +16,13 @@
     <mj-column width="100%">
         <mj-text line-height="24px">
           <p>Dear <%= @user.first_name %> <%= @user.last_name %>,</p>
-          <p>A new booking was received from <span class="bold"><%= @user.company_name %></span> on the <span class="bold"><%= formatted_datetime(@shipment.updated_at) %></span>.</p>
+          <p>A new booking was received from <span class="bold"><%= @user.company_name %></span>.</p>
         </mj-text>
     </mj-column>
   </mj-section>
     
 </mj-section>
 <%= render "details_body.mjml" %>
-<mj-section full-width="full-width" padding="0px">
-    <mj-column width="40%" padding-top="30px">
-      <mj-button href="<%= @redirects_base_url %>accept" width="90%" background-color="#04CC36">
-        Accept
-      </mj-button>
-    </mj-column>
-    <mj-column width="40%" padding-top="30px">
-      <mj-button href="<%= @redirects_base_url %>edit" width="90%" background-color="#FACA0A">
-        Edit
-      </mj-button>
-    </mj-column>
-</mj-section>
 
 <mj-section full-width="full-width" padding="0px">
   <mj-column width="100%">
@@ -59,7 +47,9 @@
 <mj-section full-width="full-width" padding="0px">
   <mj-column width="100%">
     <mj-text>
-      <p class="bold text-center" style="font-size: 12px;">This is an auto-generated mail. Please respond to our support mail with any inquiries.<br>ItsMyCargo ApS – Brooktorkai 7, 20457 Hamburg, GERMANY.</p>
+      <p style="font-size: 12px;text-align: center;font-weight: bolder;font-size: 10px;color: #BDBDBD;letter-spacing: 0.2px;line-height: 17px">
+      This is an auto-generated mail. Please respond to our support mail with any inquiries.<br>
+      ItsMyCargo ApS – Brooktorkai 7, 20457 Hamburg, GERMANY.</p>
    </mj-text>
   </mj-column>
 </mj-section>

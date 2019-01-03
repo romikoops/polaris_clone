@@ -20,6 +20,8 @@ class ShipmentMailer < ApplicationMailer
 
     @redirects_base_url = base_url + "redirects/shipments/#{@shipment.id}?action="
 
+    @shipment_page = "https://#{tenant.subdomain}.itsmycargo.com/account/shipments/view/#{shipment.id}"
+
     @mot =
       case @shipment.mode_of_transport
       when 'ocean' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-01.png'
@@ -46,6 +48,8 @@ class ShipmentMailer < ApplicationMailer
     @user = user
     @shipment = shipment
     @scope = @user.tenant.scope
+
+    @shipment_page = "https://#{tenant.subdomain}.itsmycargo.com/account/shipments/view/#{shipment.id}"
 
     @mot =
       case @shipment.mode_of_transport
@@ -75,6 +79,8 @@ class ShipmentMailer < ApplicationMailer
     @user = user
     @shipment = shipment
     @scope = tenant.scope
+
+    @shipment_page = "https://#{tenant.subdomain}.itsmycargo.com/account/shipments/view/#{shipment.id}"
 
     @mot =
       case @shipment.mode_of_transport

@@ -27,10 +27,7 @@
                 <span class="bold"><%=@user.tenant.name %></span><br>
                 <% @user.tenant.addresses["components"].each do |address_line| %>
                   <%= address_line %> <br>
-                    <% end %>
-                      Phone:
-                      <%= @user.tenant.phones["main"] %>
-                        <p>
+                <% end %>
             </mj-text>
 
           </mj-column>
@@ -38,7 +35,8 @@
         <mj-section full-width="full-width" padding="0px">
           <mj-column width="100%" padding="0 2.5%">
             <mj-text>
-              <p class="bold text-center" style="font-size: 12px;">This is an auto-generated mail. Please respond to our support mail with any inquiries. <br>Find your dedicated contact on
+              <p style="font-size: 12px;text-align: center;font-weight: bolder;font-size: 10px;color: #BDBDBD;letter-spacing: 0.2px;line-height: 17px">
+                This is an auto-generated mail. Please respond to our support mail with any inquiries. <br>Find your dedicated contact on
                 <a href="<%= @user.tenant.scope.dig('links', 'legal')%>">
                   <%= @user.tenant.scope.dig('links', 'legal')%>
                 </a>.

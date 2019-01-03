@@ -4,6 +4,11 @@
     Dear <%= @user.full_name %>, thank you for registering a new account in the <%=tenant.name%> (powered by ItsMyCargo).
   </p>
 </mj-text>
+<mj-text>
+  <p style="display: none;max-height: 0px;overflow: hidden;">
+    &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+  </p>
+</mj-text>
 
 <mj-section padding="20px 5%" background-color="<%= primary_color %>">
   <mj-column>
@@ -11,8 +16,8 @@
   </mj-column>
   <mj-column>
     <mj-navbar base-url="" hamburger="hamburger" ico-color="black">
-      <mj-navbar-link href="#" color="white">about us</mj-navbar-link>
-      <mj-navbar-link href="#" color="white">Help</mj-navbar-link>
+      <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
+      <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'contact')%>" color="white">help</mj-navbar-link>
     </mj-navbar>
   </mj-column>
 </mj-section>
@@ -44,7 +49,7 @@
   </mj-column>
   <mj-column width="100%" padding="0 2.5%">
     <mj-text line-height="24px">
-      <p class="bold text-center" style="font-size: 12px;">
+      <p style="font-size: 12px;text-align: center;font-weight: bolder; font-size: 10px;color: #BDBDBD;letter-spacing: 0.2px">
         This is an auto-generated mail. Please respond to our support mail with any inquiries.<br>
         <br>
         <%= tenant.addresses.dig('main') %>

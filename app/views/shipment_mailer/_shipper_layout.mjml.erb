@@ -4,6 +4,11 @@
     <%= greeting_text %>
   </p>
 </mj-text>
+<mj-text>
+  <p style="display: none;max-height: 0px;overflow: hidden;">
+    &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+  </p>
+</mj-text>
 
 <mj-section padding="20px 5%" background-color="<%= primary_color %>">
   <mj-column>
@@ -11,8 +16,8 @@
   </mj-column>
   <mj-column>
     <mj-navbar base-url="" hamburger="hamburger" ico-color="black">
-      <mj-navbar-link href="#" color="white">about us</mj-navbar-link>
-      <mj-navbar-link href="#" color="white">Help</mj-navbar-link>
+      <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
+      <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'contact')%>" color="white">help</mj-navbar-link>
     </mj-navbar>
   </mj-column>
 </mj-section>
