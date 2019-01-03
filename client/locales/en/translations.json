@@ -557,6 +557,7 @@
     "contactEmail": "Contact via email"
   },
   "cargo": {
+    "consolidatedCargoRate": "Consolidated Freight Rate",
     "cargoDetails": "Cargo Details",
     "cargoGrossWeight": "Cargo Gross Weight",
     "cargoInsurance": "Cargo Insurance provides cover on all risk terms for physical loss or damage to cargo during transport by land, sea or air.",
