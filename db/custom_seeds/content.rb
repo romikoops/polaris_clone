@@ -5,15 +5,6 @@ default_content = {
   "index": 0
 }
 custom_content = {
-  "fivestar": [
-    {
-      "text": '',
-      "component": "Footer",
-      "section": "terms_and_conditions",
-      "index": 0,
-      "image": 'data/fivestar/terms_and_conditions.pdf'
-    }
-  ],
   "normanglobal": [
     {
       "text": '<img src="https://assets.itsmycargo.com/assets/tenants/normanglobal/normanglobal_logo_white.png" alt="" class="flex-none landing_logo_large"/>',
@@ -173,11 +164,8 @@ custom_content = {
     }
   ]
 }
-s3 = Aws::S3::Client.new(
-  # access_key_id: Settings.aws.access_key_id,
-  # secret_access_key: Settings.aws.secret_access_key,
-  # region: Settings.aws.region
-)
+s3 = Aws::S3::Client.new()
+
 custom_content.each do |subdomain, content_array|
   tenant = Tenant.find_by_subdomain(subdomain)
   Content.where(tenant_id: tenant.id).destroy_all
