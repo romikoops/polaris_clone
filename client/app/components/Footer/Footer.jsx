@@ -37,7 +37,7 @@ class Footer extends React.PureComponent {
     }
     const home = links && links.home ? links.home : defaultLinks.home
     let termsLink = ''
-    tenant.subdomain ? termsLink = `https://${tenant.subdomain}.itsmycargo.com/terms_and_conditions` : termsLink = ''
+    tenant.subdomain ? termsLink = `/terms_and_conditions` : termsLink = ''
     if (has(tenant, ['scope', 'links', 'terms'])) {
       termsLink = tenant.scope.links.terms
     }
