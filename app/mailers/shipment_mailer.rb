@@ -27,7 +27,6 @@ class ShipmentMailer < ApplicationMailer
     mail_options = {
       from: tenant.emails.dig('support','general'),
       to: tenant.email_for(:sales, shipment.mode_of_transport),
-      bcc: 'warwick@itsmycargo.com',
       subject: 'Your booking through ItsMyCargo'
     }
 
@@ -46,7 +45,7 @@ class ShipmentMailer < ApplicationMailer
     mail_options = {
       from: tenant.emails.dig('support','general'),
       to: user.email.blank? ? 'itsmycargodev@gmail.com' : user.email,
-      bcc: ['bookingemails@itsmycargo.com', 'warwick@itsmycargo.com'],
+      bcc: ['bookingemails@itsmycargo.com'],
       subject: 'Your booking through ItsMyCargo'
     }
 
@@ -64,7 +63,7 @@ class ShipmentMailer < ApplicationMailer
     mail_options = {
       from: tenant.emails.dig('support','general'),
       to: user.email.blank? ? 'itsmycargodev@gmail.com' : user.email,
-      bcc: ['bookingemails@itsmycargo.com', 'warwick@itsmycargo.com'],
+      bcc: ['bookingemails@itsmycargo.com'],
       subject: 'Your booking through ItsMyCargo'
     }
 
