@@ -304,7 +304,11 @@
       <h4>Remarks:</h4>
       <ul>
         <% remarks.each do  |remark|%>
-          <li><%= remark.body %></li>
+          <li>
+            <p class="hyphens">
+              <%= remark.body %>
+            </p>
+          </li>
         <% end %>
       </ul>
     </div>
@@ -314,7 +318,11 @@
       <h4>Notes: </h4>
       <ul> <% notes.each do |note| %>
         <li class="note-header"> <%= note.header %></li>
-        <li> <%= note.body  %></li>
+        <li>
+          <p class="hyphens">
+            <%= note.body  %>
+          </p>
+        </li>
         <% end %>
       </ul>
     </div>
