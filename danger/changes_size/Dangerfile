@@ -1,9 +1,0 @@
-# frozen_string_literal: true
-
-if git.lines_of_code > 2_000
-  warn "This merge request is definitely too big (more than #{git.lines_of_code} lines changed)," \
-       'please split it into multiple merge requests.'
-elsif git.lines_of_code > 500
-  warn "This merge request is quite big  (more than #{git.lines_of_code} lines changed)," \
-       'please consider splitting it into multiple merge requests.'
-end
