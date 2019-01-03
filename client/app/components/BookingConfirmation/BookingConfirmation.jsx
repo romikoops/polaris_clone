@@ -11,7 +11,9 @@ import RouteHubBox from '../RouteHubBox/RouteHubBox'
 import { RoundButton } from '../RoundButton/RoundButton'
 import defaults from '../../styles/default_classes.scss'
 import TextHeading from '../TextHeading/TextHeading'
-import { gradientTextGenerator, totalPriceString, totalPrice, numberSpacing } from '../../helpers'
+import {
+  gradientTextGenerator, totalPriceString, totalPrice, numberSpacing
+} from '../../helpers'
 import { remarkActions } from '../../actions'
 import Checkbox from '../Checkbox/Checkbox'
 import CargoItemGroup from '../Cargo/Item/Group'
@@ -31,6 +33,7 @@ import {
   ALIGN_END,
   ALIGN_START,
   ALIGN_START_CENTER,
+  ALIGN_START_START,
   COLUMN,
   ROW,
   WRAP_ROW
@@ -128,12 +131,14 @@ export class BookingConfirmation extends Component {
     this.deleteDoc = this.deleteDoc.bind(this)
     this.getRemarks = this.getRemarks.bind(this)
   }
+
   componentDidMount () {
     const { setStage } = this.props
     setStage(5)
     this.getRemarks()
     window.scrollTo(0, 0)
   }
+
   handleCollapser (key) {
     this.setState({
       collapser: {
@@ -142,15 +147,18 @@ export class BookingConfirmation extends Component {
       }
     })
   }
-  getRemarks() {
+
+  getRemarks () {
     const { remarkDispatch } = this.props
     remarkDispatch.getRemarks()
   }
+
   requestShipment () {
     const { shipmentData, shipmentDispatch } = this.props
     const { shipment } = shipmentData
     shipmentDispatch.requestShipment(shipment.id)
   }
+
   fileFn (file) {
     const { shipmentData, shipmentDispatch } = this.props
     const { shipment } = shipmentData
@@ -158,13 +166,16 @@ export class BookingConfirmation extends Component {
     const url = `/shipments/${shipment.id}/upload/${type}`
     shipmentDispatch.uploadDocument(file, type, url)
   }
+
   deleteDoc (doc) {
     const { shipmentDispatch } = this.props
     shipmentDispatch.deleteDocument(doc.id)
   }
+
   toggleAcceptTerms () {
     this.setState({ acceptTerms: !this.state.acceptTerms })
   }
+
   render () {
     const {
       theme,
@@ -344,9 +355,11 @@ export class BookingConfirmation extends Component {
                 />
               </div>
               <div className={`${WRAP_ROW(30)} ${ALIGN_END_CENTER}`}>
-                <h5 className="flex-none letter_3">{`${
-                  totalPrice(shipment).currency
-                } ${calcExtraTotals(feeHash)} `}</h5>
+                <h5 className="flex-none letter_3">
+                  {`${
+                    totalPrice(shipment).currency
+                  } ${calcExtraTotals(feeHash)} `}
+                </h5>
                 { feeHash.customs && feeHash.customs.hasUnknown && (
                   <div className={`${ROW(100)} ${ALIGN_END_CENTER}`}>
                     <p className="flex-none center no_m" style={{ fontSize: '10px' }}>
@@ -397,7 +410,8 @@ export class BookingConfirmation extends Component {
           </div>
           <div className={`${WRAP_ROW(100)} ${ALIGN_AROUND_CENTER}`}>
             {' '}
-            {notifyeesJSX}{' '}
+            {notifyeesJSX}
+            {' '}
           </div>
         </div>
       </CollapsingBar>
@@ -427,7 +441,7 @@ export class BookingConfirmation extends Component {
       >
         <div className={INNER_WRAPPER}>
           <div className={LAYOUT_WRAP}>
-            <div className={`${ROW(100)} ${ALIGN_START_CENTER}`}>
+            <div className={`${ROW(100)} ${ALIGN_START_START}`}>
               {TotalGoodsValue(shipment, t)}
               {Eori(shipment, t)}
 
@@ -535,9 +549,11 @@ export class BookingConfirmation extends Component {
     return (
       <div className={CONTAINER}>
         <div className={AFTER_CONTAINER}>
-          {compArray.map(comp => (<div className="flex-100 layout-row layout-align-center-center padding_top">
-            {comp}
-          </div>))}
+          {compArray.map(comp => (
+            <div className="flex-100 layout-row layout-align-center-center padding_top">
+              {comp}
+            </div>
+          ))}
 
           <hr className={`${styles.sec_break} flex-100`} />
 
@@ -761,7 +777,9 @@ function getNotifyeesJSX ({ notifyees, textStyle, t }) {
           <h3 style={{ fontWeight: 'normal' }}>{t('common:notifyee')}</h3>
         </div>
         <p style={{ marginTop: 0 }}>
-          {notifyee.first_name} {notifyee.last_name}
+          {notifyee.first_name}
+          {' '}
+          {notifyee.last_name}
         </p>
       </div>
     </div>
@@ -798,7 +816,12 @@ function getShipperAndConsignee ({
 }
 
 function getTerms ({ theme, terms, t }) {
-  const termBullets = terms.map(term => <li key={v4()}> {term}</li>)
+  const termBullets = terms.map(term => (
+<li key={v4()}> 
+{' '}
+{term}
+</li>
+))
 
   return (
     <div className={`layout-row ${ALIGN_START_CENTER}`}>
@@ -835,9 +858,11 @@ function TotalGoodsValue (shipment, t) {
       <p className="flex-100">
         <b>{`${t('bookconf:totalValue')}:`}</b>
       </p>
-      <p className="flex-100 no_m">{`${
-        shipment.total_goods_value.currency
-      } ${numberSpacing(shipment.total_goods_value.value, 2)}`}</p>
+      <p className="flex-100 no_m">
+        {`${
+          shipment.total_goods_value.currency
+        } ${numberSpacing(shipment.total_goods_value.value, 2)}`}
+      </p>
     </div>
   ) : (
     ''
