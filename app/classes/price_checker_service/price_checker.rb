@@ -11,6 +11,7 @@ module PriceCheckerService
       @destination_hub = @itinerary.last_stop.hub
       @shipment_data = shipment_data
       @user          = user
+      @shipment = @shipment_data[:shipment]
       @trucking_data = shipment_data[:trucking] || {}
       @service_level = shipment_data[:service_level]
       @cargo_units = cargo_unit_const.extract(@shipment_data[:cargo_units])
@@ -136,19 +137,23 @@ module PriceCheckerService
 
       charge_category = ChargeCategory.from_code('cargo')
       parent_charge = create_parent_charge(charge_category)
-      cargo_unit_array = @cargo_units
+
+      isAggCargo = !@shipment.aggregated_cargo.nil?
+      cargo_unit_array = isAggCargo ? [@shipment.aggregated_cargo] : @shipment.cargo_units
 
       if @user.tenant.scope['consolidate_cargo'] && cargo_unit_array.first.is_a?(CargoItem)
         cargo_unit_array = consolidate_cargo(cargo_unit_array, @itinerary.mode_of_transport)
       end
       cargo_unit_array.each do |cargo_unit|
-        charge_result = send("determine_#{@shipment_data[:load_type]}_price",
+        cargo_class = isAggCargo ? 'lcl' : cargo_unit[:cargo_class]
+        charge_result = send("determine_#{@shipment.load_type}_price",
                              cargo_unit,
-                             @schedule,
+                             @shipment_data[:pricing][:pricing_ids][cargo_class],
                              @user,
                              total_units,
-                             @schedule.etd,
-                             @itinerary.mode_of_transport)
+                             @shipment.planned_pickup_date,
+                             @schedule.mode_of_transport)
+
         next if charge_result.nil?
 
         cargo_unit_model = cargo_unit.class.to_s == 'Hash' ? 'CargoItem' : cargo_unit.class.to_s
