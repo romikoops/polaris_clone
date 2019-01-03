@@ -1,5 +1,5 @@
 import { bookingSummaryConstants } from '../constants'
-import { get } from 'lodash'
+import { get, has } from 'lodash'
 
 function update (data) {
   const payload = {
@@ -54,8 +54,12 @@ function update (data) {
 
   payload.selectedDay = data.selectedDay
   payload.cities = {}
-  if (data.origin)  payload.cities.origin = data.origin.city
-  if (data.destination)  payload.cities.destination = data.destination.city
+  if (has(data, ['origin', 'city']))  {
+    payload.cities.origin = data.origin.city
+  }
+  if (has(data, ['destination', 'city'])) {
+    payload.cities.destination = data.destination.city
+  }
   payload.nexuses = {}
   if (data.origin)  payload.nexuses.origin = data.origin.nexus_name
   if (data.destination)  payload.nexuses.destination = data.destination.nexus_name

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Route } from 'react-router'
 import { withRouter } from 'react-router-dom'
 import React, { Component } from 'react'
+import { get } from 'lodash'
 import PropTypes from '../../prop-types'
 import ChooseShipment from '../../components/ChooseShipment/ChooseShipment'
 import Header from '../../components/Header/Header'
@@ -235,8 +236,8 @@ class Shop extends Component {
                 tenant={tenant}
                 user={user}
                 shipmentData={shipmentData}
-                prevRequest={request && request.stage2 ? request.stage2 : {}}
-                req={request && request.stage1 ? request.stage1 : {}}
+                prevRequest={get(request, ['stage2'], {})}
+                req={get(request, ['stage1'], {})}
                 getOffers={data => shipmentDispatch.getOffers(data, true)}
                 setStage={this.selectShipmentStage}
                 messages={error ? error.stage2 : []}
