@@ -252,7 +252,7 @@
                       %>
                   </h3>
                 </div>
-                <% sub_charges.each do |sub_charge| 
+                <% sub_charges.each_with_index do |sub_charge, i| 
                 %>
                   <div class="subtotal-price-single">
                     <%
@@ -264,8 +264,12 @@
                         when 'name'
                           sub_charge['name']
                         end
-                      if ['cargo', 'trucking_on', 'trucking_pre'].include?(charge_key)
-                        sub_charge_name = sub_charge['name']
+                      if 'cargo' == charge_key
+                        sub_charge_name = "Freight Rate #{i + 1}"
+                      elsif 'cargo' == charge_key && scope['consolidated_cargo']
+                        sub_charge_name = "Consolidated Freight Rate"
+                      elsif ['trucking_on', 'trucking_pre'].include?(charge_key)
+                        sub_charge_name = 'Trucking Rate'
                       end
 
                     %>
