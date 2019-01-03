@@ -14,6 +14,9 @@ class AccountMailer < Devise::Mailer
     opts[:from] = Mail::Address.new("no-reply@#{tenant.subdomain}.#{Settings.emails.domain}")
                                .tap { |a| a.display_name = tenant.name }.format
     opts[:reply_to] = tenant.emails.dig('support', 'general')
+    attachments.inline['logo.png'] = 
+      File.read("#{Rails.root}/client/app/assets/images/logos/emails/#{tenant.subdomain}_white.png")
+
     opts[:subject] = "#{tenant.name} Account Confirmation Email"
 
     @confirmation_url = "#{base_url(tenant)}account/confirmation/#{token}"
@@ -32,6 +35,9 @@ class AccountMailer < Devise::Mailer
     opts[:from] = Mail::Address.new("no-reply@#{tenant.subdomain}.#{Settings.emails.domain}")
                                .tap { |a| a.display_name = tenant.name }.format
     opts[:reply_to] = tenant.emails.dig('support', 'general')
+    attachments.inline['logo.png'] = 
+      File.read("#{Rails.root}/client/app/assets/images/logos/emails/#{tenant.subdomain}_white.png")
+
     opts[:subject] = "#{tenant.name} Account Password Reset"
     redirect_url = base_url(tenant) + 'password_reset'
     @reset_url = "#{base_server_url}tenants/#{tenant.id}/auth/password/edit?redirect_url=#{redirect_url}&reset_password_token=#{token}"

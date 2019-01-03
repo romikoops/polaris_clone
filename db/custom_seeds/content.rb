@@ -121,7 +121,7 @@ custom_content = {
       "component": 'WelcomeMail',
       "section": 'body',
       "index": 1,
-      "image": 'https://assets.itsmycargo.com/assets/logos/normanglobal/ngl_welcome_image.jpg'
+      "image": "#{Rails.root}/client/app/assets/images/emails/ngl_welcome_image.jpg"
     },
     {
       "text": '<p class="flex">Thanks for Trusting us to deliver. <br/><br/>Best Regards <br/>Norman Global Logistics <br/><br/><br/>You are receiving this email because you opted in and requested a user account.</p>',

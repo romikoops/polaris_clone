@@ -5,6 +5,8 @@ class ShipmentMailer < ApplicationMailer
   layout 'mailer'
   add_template_helper(ApplicationHelper)
 
+  TESTING_EMAIL = 'angelica@itsmycargo.com'
+
   def tenant_notification(user, shipment) # rubocop:disable Metrics/AbcSize
     @user = user
     tenant = user.tenant
@@ -21,18 +23,11 @@ class ShipmentMailer < ApplicationMailer
     @redirects_base_url = base_url + "redirects/shipments/#{@shipment.id}?action="
 
     @shipment_page = "https://#{tenant.subdomain}.itsmycargo.com/account/shipments/view/#{shipment.id}"
-
-    @mot =
-      case @shipment.mode_of_transport
-      when 'ocean' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-01.png'
-      when 'air' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-02.png'
-      when 'truck' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-03.png'
-      when 'rail' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-04.png'
-      end
-
+    @mot_icon = File.read("#{Rails.root}/client/app/assets/images/icons/mail/mail_#{@shipment.mode_of_transport}.png")
+    
     create_pdf_attachment(@shipment)
-    attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
-    attachments.inline['icon.png'] = URI.open(@mot).read
+    attachments.inline['logo.png'] = File.read("#{Rails.root}/client/app/assets/images/logos/emails/#{tenant.subdomain}_white.png")
+    attachments.inline['icon.png'] = @mot_icon
     mail_options = {
       from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
                          .tap { |a| a.display_name = 'ItsMyCargo Bookings' }.format,
@@ -50,19 +45,12 @@ class ShipmentMailer < ApplicationMailer
     @scope = @user.tenant.scope
 
     @shipment_page = "https://#{tenant.subdomain}.itsmycargo.com/account/shipments/view/#{shipment.id}"
-
-    @mot =
-      case @shipment.mode_of_transport
-      when 'ocean' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-01.png'
-      when 'air' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-02.png'
-      when 'truck' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-03.png'
-      when 'rail' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-04.png'
-      end
+    @mot_icon = File.read("#{Rails.root}/client/app/assets/images/icons/mail/mail_#{@shipment.mode_of_transport}.png")
 
     create_pdf_attachment(@shipment)
-    attachments.inline['logo.png']       = URI.open(tenant.theme['logoLarge']).read
+    attachments.inline['logo.png']       = File.read("#{Rails.root}/client/app/assets/images/logos/emails/#{tenant.subdomain}_white.png")
     attachments.inline['logo_small.png'] = URI.try(:open, tenant.theme['logoSmall']).try(:read)
-    attachments.inline['icon.png'] = URI.open(@mot).read
+    attachments.inline['icon.png'] = @mot_icon
     mail_options = {
       from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
                          .tap { |a| a.display_name = @user.tenant.name }.format,
@@ -81,19 +69,12 @@ class ShipmentMailer < ApplicationMailer
     @scope = tenant.scope
 
     @shipment_page = "https://#{tenant.subdomain}.itsmycargo.com/account/shipments/view/#{shipment.id}"
-
-    @mot =
-      case @shipment.mode_of_transport
-      when 'ocean' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-01.png'
-      when 'air' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-02.png'
-      when 'truck' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-03.png'
-      when 'rail' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-04.png'
-      end
+    @mot_icon = File.read("#{Rails.root}/client/app/assets/images/icons/mail/mail_#{@shipment.mode_of_transport}.png")
 
     create_pdf_attachment(@shipment)
-    attachments.inline['logo.png']       = URI.open(tenant.theme['logoLarge']).read
+    attachments.inline['logo.png']       = File.read("#{Rails.root}/client/app/assets/images/logos/emails/#{tenant.subdomain}_white.png")
     attachments.inline['logo_small.png'] = try(:open, tenant.theme['logoSmall']).try(:read)
-    attachments.inline['icon.png'] = URI.open(@mot).read
+    attachments.inline['icon.png'] = @mot_icon
     mail_options = {
       from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
                          .tap { |a| a.display_name = @user.tenant.name }.format,
@@ -102,7 +83,7 @@ class ShipmentMailer < ApplicationMailer
       bcc: [Settings.emails.booking],
       subject: "Your booking through #{@user.tenant.name}"
     }
-
+    
     mail(mail_options, &:html)
   end
 

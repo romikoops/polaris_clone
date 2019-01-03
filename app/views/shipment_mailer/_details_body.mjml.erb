@@ -24,12 +24,14 @@
   <mj-section background-color="#f3f3f3">
     <mj-group vertical-align="middle">
       <mj-column padding="0 5% 0 42%" width="14%">
-        <mj-image padding="20px 0" width="30px" src="<%= @mot %>"></mj-image>
+        <mj-text padding="20px 0">
+          <%= image_tag attachments['icon.png'].url, alt: "#{@shipment.mode_of_transport}", style: "width: 30px" %>
+        </mj-text>
       </mj-column>
-      <mj-column padding-left="5%" width="76%">
-        <mj-text line-height="16px" padding="0" font-size="18px">
+      <mj-column padding-left="0" width="76%">
+        <mj-text line-height="16px" padding="0" font-size="17px">
           <p>
-            <% if @shipment.has_pre_carriage? %>
+            <% if @shipment.has_pre_carriage? && @shipment.pickup_address %>
               <strong>From: </strong>
               <% @shipment.pickup_address.geocoded_address.split(", ").each do |address_elem| %>
                 <% if address_elem %>
@@ -41,7 +43,7 @@
             <% end %>
           </p>
           <p>
-            <% if @shipment.has_on_carriage? %>
+            <% if @shipment.has_on_carriage? && @shipment.delivery_address %>
               <strong>To: </strong>
               <% @shipment.delivery_address.geocoded_address.split(", ").each do |address_elem| %>
                 <% if address_elem %>

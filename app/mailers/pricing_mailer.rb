@@ -12,16 +12,10 @@ class PricingMailer < ApplicationMailer
     @tenant = Tenant.find(tenant_id)
     @theme = @tenant.theme
 
-    @mot =
-      case @itinerary.mode_of_transport
-      when 'ocean' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-01.png'
-      when 'air' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-02.png'
-      when 'truck' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-03.png'
-      when 'rail' then 'https://assets.itsmycargo.com/assets/icons/mots/mot-04.png'
-      end
+    @mot_icon = File.read("#{Rails.root}/client/app/assets/images/icons/mail/mail_#{@itinerary.mode_of_transport}.png")
 
-    attachments.inline['logo.png'] = URI.open(@theme['logoLarge']).read
-    attachments.inline['icon.png'] = URI.open(@mot).read
+    attachments.inline['logo.png'] = File.read("#{Rails.root}/client/app/assets/images/logos/emails/#{@tenant.subdomain}_white.png")
+    attachments.inline['icon.png'] = @mot_icon
     email = @tenant.emails.dig('sales', 'general')
 
     return if email.nil?

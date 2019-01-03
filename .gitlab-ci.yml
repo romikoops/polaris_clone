@@ -1,6 +1,6 @@
 variables:
   BUNDLE_GITLAB__COM: "gitlab-ci-token:${CI_JOB_TOKEN}"
-  AUTO_DEVOPS_DOMAIN: itsmycargo.shop
+  AUTO_DEVOPS_DOMAIN: itsmycargo.tech
   REVIEW_NAMESPACE: review
 
 .dedicated-runner: &dedicated-runner

@@ -1,7 +1,7 @@
 <% primary_color = tenant.theme["colors"]["primary"] %>
 <mj-text>
   <p style="display: none;max-height: 0px;overflow: hidden;">
-    Hello <%= @user.full_name %>, thank you for registering a new account in the <%=tenant.name%> (powered by ItsMyCargo).
+    Hello <%= @user.full_name %>, thank you for registering a new account in the <%=tenant.name%> Shop (powered by ItsMyCargo).
   </p>
 </mj-text>
 <mj-text>
@@ -10,12 +10,14 @@
   </p>
 </mj-text>
 
-<mj-section padding="20px 5%" background-color="<%= primary_color %>">
+<mj-section padding="20px 5%" background-color="#BDBDBD">
   <mj-column>
-    <mj-image width="150px" align="left" src="<%= tenant.theme["logoWhite"] %>" />
+    <mj-text>
+      <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.subdomain}", style: "width: 150px" %>
+    </mj-text>
   </mj-column>
   <mj-column>
-    <mj-navbar base-url="" hamburger="hamburger" ico-color="black">
+    <mj-navbar base-url="" hamburger="hamburger" ico-color="white">
       <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
       <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'contact')%>" color="white">help</mj-navbar-link>
     </mj-navbar>
@@ -36,20 +38,20 @@
   <mj-column width="100%" padding="0 2.5%">
     <mj-text line-height="24px">
       <p>If you have questions about the <b> <%= tenant.name %> </b> Online Shop or are experiencing problems with this mail or shipment – do not hesitate to ask us:</p>
-    </mj-text>
-    
+    </mj-text>   
   </mj-column>
+
   <mj-column width="100%" padding="0 2.5%">
     <mj-text line-height="24px">
       <p>
         Support: <%= mail_to(tenant.emails.dig('support', 'general') || 'support@itsmycargo.com') %> | <%= tenant.phones.dig('support') || '+49 151 59085855' %>
       </p>
-    </mj-text>
-    
+    </mj-text>    
   </mj-column>
+
   <mj-column width="100%" padding="0 2.5%">
     <mj-text line-height="24px">
-      <p style="font-size: 12px;text-align: center;font-weight: bolder; font-size: 10px;color: #BDBDBD;letter-spacing: 0.2px">
+      <p style="font-size: 12px;text-align: center;font-weight: bolder; font-size: 10px;color: #BDBDBD;letter-spacing: 0.2px;line-height:4px;">
         This is an auto-generated mail. Please respond to our support mail with any inquiries.<br>
         <br>
         <%= tenant.addresses.dig('main') %>

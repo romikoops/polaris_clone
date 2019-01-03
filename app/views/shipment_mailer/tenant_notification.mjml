@@ -1,11 +1,13 @@
 <% primary_color = @user.tenant.theme["colors"]["primary"] %>
 
-<mj-section padding="20px 5%" background-color="<%= primary_color %>">
+<mj-section padding="20px 5%" background-color="#BDBDBD">
   <mj-column>
-    <mj-image width="150px" align="left" src="<%= @user.tenant.theme["logoWhite"] %>" />
+    <mj-text>
+      <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.subdomain}", style: "width: 150px" %>
+    </mj-text>
   </mj-column>
   <mj-column>
-    <mj-navbar base-url="" hamburger="hamburger" ico-color="black">
+    <mj-navbar base-url="" hamburger="hamburger" ico-color="white">
       <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
       <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'contact')%>" color="white">help</mj-navbar-link>
     </mj-navbar>
@@ -29,8 +31,8 @@
     <mj-text>
       <p>If you have questions about the ItsMyCargo Shop System or are experiencing problems with this mail or shipment – do not hesitate to ask us:</p>
       <p><span class="bold text-center">Support:</span></p>
-      <p><span class="bold text-center">By email: <%= mail_to("support@itsmycargo.com") %></span></p>
-      <p><span class="bold text-center">By phone: +49 151 59085855</span></p>
+      <p><span class="bold text-center">By email: <%= mail_to("#{@user.tenant.emails['support']['general']}") %></span></p>
+      <p><span class="bold text-center">By phone: <%= @user.tenant.phones['support'] %></span></p>
    </mj-text>
   </mj-column>
 </mj-section>

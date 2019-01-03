@@ -1,12 +1,14 @@
 <% primary_color = @user.tenant.theme["colors"]["primary"] %>
 <% secondary_color = @user.tenant.theme["colors"]["secondary"] %>
 
-<mj-section padding="20px 5%" background-color="<%= primary_color %>">
+<mj-section padding="20px 5%" background-color="#BDBDBD">
   <mj-column>
-    <mj-image width="150px" align="left" src="<%= @user.tenant.theme["logoWhite"] %>" />
+    <mj-text>
+      <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.subdomain}", style: "width: 150px" %>
+    </mj-text>
   </mj-column>
   <mj-column>
-    <mj-navbar base-url="" hamburger="hamburger" ico-color="black">
+    <mj-navbar base-url="" hamburger="hamburger" ico-color="white">
       <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
       <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'contact')%>" color="white">help</mj-navbar-link>
     </mj-navbar>
@@ -26,7 +28,9 @@
           <%== section['text'] %>
         </mj-text>
         <% if section['image_url'] %>
-          <mj-image  src="<%= section['image_url'] %>" />
+          <mj-text line-height="24px">
+            <%= image_tag attachments['ngl_welcome_image.jpg'].url, alt: 'Welcome', style: "width: 100%" %>
+          </mj-text>
         <% end %>
         <mj-divider border-width="1px" border-style="dashed" border-color="lightgrey" />
       <% end %>
@@ -41,7 +45,7 @@
 <mj-wrapper full-width="full-width" padding="0px">
   <mj-section full-width="full-width">
     <mj-column width="100%" padding="0 2.5%">
-      <% @content['social'].each do |section| %>
+      <% @content['social'].each do |section|%>
           <%== section['text'] %>
       <% end %>
     </mj-column>
@@ -65,8 +69,8 @@
         <mj-text line-height="24px" >
           <%== section['text'] %>
         </mj-text>
-        <% if section['image_url']%>
-          <mj-image src="<%= section['image_url'] %>" />
+        <% if section['image_url'] %>
+          <%= image_tag attachments['ngl_welcome_image.jpg'].url, alt: 'Welcome', style: "width: 100%" %>
         <% end %>
       <% end %>
     </mj-column>

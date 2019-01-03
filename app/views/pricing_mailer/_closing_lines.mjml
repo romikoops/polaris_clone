@@ -3,7 +3,7 @@
       <mj-column width="100%" padding="0 2.5%">
         <mj-text>
           <p>
-            <p>Thank you for your using ItsMyCargo and best regards,</p>
+            <p>Thank you for your using <%= user.tenant.name %> and best regards,</p>
           </p>
         </mj-text>
 
@@ -13,8 +13,8 @@
       <mj-column width="100%" padding="0 2.5%">
         <mj-text line-height="24px">
           <p>
-            <span class="bold"><%=@user.tenant.name %></span><br>
-            <% @user.tenant.addresses["components"].each do |address_line| %>
+            <span class="bold"><%= user.tenant.name %></span><br>
+            <% user.tenant.addresses["components"].each do |address_line| %>
               <%= address_line %> <br>
                 <% end %>
         </mj-text>
@@ -26,9 +26,9 @@
         <mj-text>
           <p style="font-size: 12px;text-align: center;font-weight: bolder; font-size: 10px;color: #BDBDBD;letter-spacing: 0.2px;line-height: 17px">
             This is an auto-generated mail. Please respond to our support mail with any inquiries. <br>
-            Find your dedicated contact on
-            <a href="<%= @user.tenant.scope.dig('links', 'legal')%>">
-              <%= @user.tenant.scope.dig('links', 'legal')%>
+            Find your dedicated contact
+            <a href="<%= user.tenant.scope.dig('links', 'contact')%>">
+              here
             </a>.
             <p>
         </mj-text>

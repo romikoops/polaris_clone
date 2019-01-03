@@ -10,12 +10,12 @@
   </p>
 </mj-text>
 
-<mj-section padding="20px 5%" background-color="<%= primary_color %>">
+<mj-section padding="20px 5%" background-color="#BDBDBD">
   <mj-column>
     <mj-image width="150px" align="left" src="<%= @user.tenant.theme["logoWhite"] %>" />
   </mj-column>
   <mj-column>
-    <mj-navbar base-url="" hamburger="hamburger" ico-color="black">
+    <mj-navbar base-url="" hamburger="hamburger" ico-color="white">
       <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
       <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'contact')%>" color="white">help</mj-navbar-link>
     </mj-navbar>
