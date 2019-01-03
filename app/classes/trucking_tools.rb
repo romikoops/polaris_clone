@@ -286,6 +286,7 @@ module TruckingTools
   end
 
   def determine_load_meterage(trucking_pricing, cargo_object, cargo)
+    
     if trucking_pricing.load_meterage && trucking_pricing.load_meterage['ratio']
       if cargo.is_a? AggregatedCargo
         calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
@@ -350,11 +351,12 @@ module TruckingTools
 
   def calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
     cbm_ratio = trucking_pricing['cbm_ratio'] || 0
-    cbm_weight = cargo.volume * cbm_ratio
     quantity = cargo.try(:quantity) || 1
+    cbm_weight = cargo.volume * cbm_ratio * quantity
     raw_payload = (cargo.try(:payload_in_kg) || cargo.weight) * quantity
     trucking_chargeable_weight = [cbm_weight, raw_payload].max
-    cargo_object['stackable']['weight'] += trucking_chargeable_weight * quantity
+
+    cargo_object['stackable']['weight'] += trucking_chargeable_weight
     cargo_object['stackable']['volume'] += cargo.volume * quantity
     cargo_object['stackable']['number_of_items'] += quantity
   end
