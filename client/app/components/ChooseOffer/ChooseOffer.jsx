@@ -64,7 +64,6 @@ class ChooseOffer extends Component {
   }
   componentDidMount () {
     const { prevRequest, setStage } = this.props
-
     window.scrollTo(0, 0)
     setStage(3)
   }

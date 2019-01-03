@@ -558,7 +558,8 @@
     "deleteAccountRequest": "Request to delete account",
     "deleteAccountRequestParagraph": "Please refer to the following contacts if you wish to proceed with the request to delete your account",
     "contactPhone": "Contact via phone",
-    "contactEmail": "Contact via email"
+    "contactEmail": "Contact via email",
+    "userEmail": "User Email"
   },
   "cargo": {
     "cargoDetails": "Cargo Details",
@@ -793,8 +794,11 @@
     "ocean": "Ocean",
     "truck": "Truck",
     "vesselName": "Vessel Name",
-    "pickupTakesTwoDays": "Pick-Up of Cargo will usually occur within the first 48 hours of this date.",
-    "remarks": "Remarks"
+    "remarks": "Remarks",
+    "ftl": "FTL",
+    "ltl": "LTL",
+    "truckingAvailable": "Trucking Available",
+    "pickupTakesTwoDays": "Pick-Up of Cargo will usually occur within the first 48 hours of this date."
   },
   "user": {
     "newAlias": "New Alias",
