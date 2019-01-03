@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
 import FormsyInput from '../FormsyInput/FormsyInput'
 import PropTypes from '../../prop-types'
-import { UserContactsIndex, UserContactsView } from './'
+import { UserContactsIndex, UserContactsView } from '.'
 import styles from './UserAccount.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { userActions } from '../../actions'
@@ -54,10 +54,12 @@ class UserContacts extends Component {
     const { dispatch, history } = this.props
     dispatch(history.push('/admin/contacts'))
   }
+
   handleClientAction (id, action) {
     const { userDispatch } = this.props
     userDispatch.confirmShipment(id, action)
   }
+
   toggleNewContact () {
     this.setState({ newContactBool: !this.state.newContactBool, submitAttempted: false })
   }
@@ -120,19 +122,21 @@ class UserContacts extends Component {
           }}
           required
         />
-        {suggestion &&
-            <div style={errorStyle}>
-              {t('errors:didYouMean')}&nbsp;
-              <span
-                className="emulate_link blue_link"
-                onClick={(e) => {
-                  this.setState({ email: suggestion.full })
-                }}
-              >
-                {suggestion.full}
-              </span>?
-            </div>
-        }
+        {suggestion && (
+          <div style={errorStyle}>
+            {t('errors:didYouMean')}
+&nbsp;
+            <span
+              className="emulate_link blue_link"
+              onClick={(e) => {
+                this.setState({ email: suggestion.full })
+              }}
+            >
+              {suggestion.full}
+            </span>
+?
+          </div>
+        )}
       </div>
     )
 
@@ -140,6 +144,197 @@ class UserContacts extends Component {
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
+
+    const cancelForm = (e) => {
+      e.preventDefault()
+      this.toggleNewContact()
+    }
+    const newContactBox = (
+      newContactBool && (
+        <div
+          className={`flex-none layout-row layout-wrap layout-align-center-center ${
+            styles.new_contact
+          }`}
+        >
+          <div
+            className={`flex-none layout-row layout-wrap layout-align-center-center ${
+              styles.new_contact_backdrop
+            }`}
+          />
+          <Formsy
+            className={`flex-none layout-row layout-wrap layout-align-start-start ccb_contact_form ${
+              styles.new_contact_content
+            }`}
+            onValidSubmit={this.handleValidSubmit}
+            onInvalidSubmit={this.handleInvalidSubmit}
+            ref={(form) => { this.contactsForm = form }}
+          >
+            <div
+              className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}
+            >
+              <i className="fa fa-user flex-none" style={textStyle} />
+              <p className="flex-none">{t('common:newContact')}</p>
+            </div>
+            <FormsyInput
+              wrapperClassName={styles.input_50}
+              className={styles.input}
+              errorMessageStyles={errorStyle}
+              submitAttempted={submitAttempted}
+              type="text"
+              value={newContact.firstName}
+              name="firstName"
+              placeholder={t('user:firstName')}
+              validations="minLength:2"
+              validationErrors={{
+                isDefaultRequiredValue: t('errors:notBlank'),
+                minLength: t('errors:twoChars')
+              }}
+              required
+            />
+            <FormsyInput
+              wrapperClassName={styles.input_50}
+              className={styles.input}
+              errorMessageStyles={errorStyle}
+              submitAttempted={submitAttempted}
+              type="text"
+              value={newContact.lastName}
+              name="lastName"
+              placeholder={t('user:lastName')}
+              validations="minLength:2"
+              validationErrors={{
+                isDefaultRequiredValue: t('errors:notBlank'),
+                minLength: t('errors:twoChars')
+              }}
+              required
+            />
+            <FormsyInput
+              wrapperClassName={styles.input_60}
+              className={styles.input}
+              errorMessageStyles={errorStyle}
+              submitAttempted={submitAttempted}
+              type="text"
+              value={newContact.companyName}
+              name="companyName"
+              placeholder={t('user:companyName')}
+              validations="minLength:2"
+              validationErrors={{
+                isDefaultRequiredValue: t('errors:notBlank'),
+                minLength: t('errors:twoChars')
+              }}
+            />
+            <FormsyInput
+              wrapperClassName={styles.input_33}
+              className={styles.input}
+              errorMessageStyles={errorStyle}
+              submitAttempted={submitAttempted}
+              type="text"
+              value={newContact.phone}
+              name="phone"
+              placeholder={t('user:phone')}
+              validations="minLength:2"
+              validationErrors={{
+                isDefaultRequiredValue: t('errors:notBlank'),
+                minLength: t('errors:twoChars')
+              }}
+              required
+            />
+            <MailCheck email={this.state.email}>
+              {mailCheckCallback}
+            </MailCheck>
+            <FormsyInput
+              wrapperClassName={styles.input_50}
+              className={styles.input}
+              errorMessageStyles={errorStyle}
+              submitAttempted={submitAttempted}
+              type="text"
+              value={newContact.street}
+              name="street"
+              placeholder={t('user:street')}
+              validations="minLength:2"
+              validationErrors={{
+                isDefaultRequiredValue: t('errors:notBlank'),
+                minLength: t('errors:twoChars')
+              }}
+            />
+            <FormsyInput
+              wrapperClassName={styles.input_50}
+              className={styles.input}
+              errorMessageStyles={errorStyle}
+              submitAttempted={submitAttempted}
+              type="text"
+              value={newContact.number}
+              name="number"
+              placeholder={t('user:streetNumber')}
+              validations="minLength:1"
+              validationErrors={{
+                isDefaultRequiredValue: t('errors:notBlank'),
+                minLength: t('errors:oneChar')
+              }}
+            />
+            <FormsyInput
+              wrapperClassName={styles.input_33}
+              className={styles.input}
+              errorMessageStyles={errorStyle}
+              submitAttempted={submitAttempted}
+              type="text"
+              value={newContact.zipCode}
+              name="zipCode"
+              placeholder={t('user:postalCode')}
+              validations="minLength:2"
+              validationErrors={{
+                isDefaultRequiredValue: t('errors:notBlank'),
+                minLength: t('errors:twoChars')
+              }}
+            />
+            <FormsyInput
+              wrapperClassName={styles.input_33}
+              className={styles.input}
+              errorMessageStyles={errorStyle}
+              submitAttempted={submitAttempted}
+              type="text"
+              value={newContact.city}
+              name="city"
+              placeholder={t('user:city')}
+              validations="minLength:2"
+              validationErrors={{
+                isDefaultRequiredValue: t('errors:notBlank'),
+                minLength: t('errors:twoChars')
+              }}
+            />
+            <FormsyInput
+              wrapperClassName={styles.input_33}
+              className={styles.input}
+              errorMessageStyles={errorStyle}
+              submitAttempted={submitAttempted}
+              type="text"
+              value={newContact.country}
+              name="country"
+              placeholder={t('user:country')}
+              validations="minLength:4"
+              validationErrors={{
+                isDefaultRequiredValue: t('errors:notBlank'),
+                minLength: t('errors:fourChars')
+              }}
+            />
+            <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row}`}>
+              <RoundButton
+                theme={theme}
+                size="small"
+                active
+                text={t('common:save')}
+                iconClass="fa-floppy-o"
+              />
+              <RoundButton
+                theme={theme}
+                handleNext={cancelForm}
+                size="small"
+                text={t('admin:cancel')}
+              />
+            </div>
+          </Formsy>
+        </div>
+      )
+    )
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">
@@ -151,185 +346,7 @@ class UserContacts extends Component {
               <UserContactsIndex
                 theme={theme}
                 toggleNewContact={this.toggleNewContact}
-                newContactBox={newContactBool && (
-                  <div
-                    className={`flex-none layout-row layout-wrap layout-align-center-center ${
-                      styles.new_contact
-                    }`}
-                  >
-                    <div
-                      className={`flex-none layout-row layout-wrap layout-align-center-center ${
-                        styles.new_contact_backdrop
-                      }`}
-                      onClick={this.toggleNewContact}
-                    />
-                    <Formsy
-                      className={`flex-none layout-row layout-wrap layout-align-start-start ccb_contact_form ${
-                        styles.new_contact_content
-                      }`}
-                      onValidSubmit={this.handleValidSubmit}
-                      onInvalidSubmit={this.handleInvalidSubmit}
-                      ref={(form) => { this.contactsForm = form }}
-                    >
-                      <div
-                        className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}
-                      >
-                        <i className="fa fa-user flex-none" style={textStyle} />
-                        <p className="flex-none">{t('common:newContact')}</p>
-                      </div>
-                      <FormsyInput
-                        wrapperClassName={styles.input_50}
-                        className={styles.input}
-                        errorMessageStyles={errorStyle}
-                        submitAttempted={submitAttempted}
-                        type="text"
-                        value={newContact.firstName}
-                        name="firstName"
-                        placeholder={t('user:firstName')}
-                        validations="minLength:2"
-                        validationErrors={{
-                          isDefaultRequiredValue: t('errors:notBlank'),
-                          minLength: t('errors:twoChars')
-                        }}
-                        required
-                      />
-                      <FormsyInput
-                        wrapperClassName={styles.input_50}
-                        className={styles.input}
-                        errorMessageStyles={errorStyle}
-                        submitAttempted={submitAttempted}
-                        type="text"
-                        value={newContact.lastName}
-                        name="lastName"
-                        placeholder={t('user:lastName')}
-                        validations="minLength:2"
-                        validationErrors={{
-                          isDefaultRequiredValue: t('errors:notBlank'),
-                          minLength: t('errors:twoChars')
-                        }}
-                        required
-                      />
-                      <FormsyInput
-                        wrapperClassName={styles.input_60}
-                        className={styles.input}
-                        errorMessageStyles={errorStyle}
-                        submitAttempted={submitAttempted}
-                        type="text"
-                        value={newContact.companyName}
-                        name="companyName"
-                        placeholder={t('user:companyName')}
-                        validations="minLength:2"
-                        validationErrors={{
-                          isDefaultRequiredValue: t('errors:notBlank'),
-                          minLength: t('errors:twoChars')
-                        }}
-                      />
-                      <FormsyInput
-                        wrapperClassName={styles.input_33}
-                        className={styles.input}
-                        errorMessageStyles={errorStyle}
-                        submitAttempted={submitAttempted}
-                        type="text"
-                        value={newContact.phone}
-                        name="phone"
-                        placeholder={t('user:phone')}
-                        validations="minLength:2"
-                        validationErrors={{
-                          isDefaultRequiredValue: t('errors:notBlank'),
-                          minLength: t('errors:twoChars')
-                        }}
-                        required
-                      />
-                      <MailCheck email={this.state.email}>
-                        {mailCheckCallback}
-                      </MailCheck>
-                      <FormsyInput
-                        wrapperClassName={styles.input_50}
-                        className={styles.input}
-                        errorMessageStyles={errorStyle}
-                        submitAttempted={submitAttempted}
-                        type="text"
-                        value={newContact.street}
-                        name="street"
-                        placeholder={t('user:street')}
-                        validations="minLength:2"
-                        validationErrors={{
-                          isDefaultRequiredValue: t('errors:notBlank'),
-                          minLength: t('errors:twoChars')
-                        }}
-                      />
-                      <FormsyInput
-                        wrapperClassName={styles.input_50}
-                        className={styles.input}
-                        errorMessageStyles={errorStyle}
-                        submitAttempted={submitAttempted}
-                        type="text"
-                        value={newContact.number}
-                        name="number"
-                        placeholder={t('user:streetNumber')}
-                        validations="minLength:1"
-                        validationErrors={{
-                          isDefaultRequiredValue: t('errors:notBlank'),
-                          minLength: t('errors:oneChar')
-                        }}
-                      />
-                      <FormsyInput
-                        wrapperClassName={styles.input_33}
-                        className={styles.input}
-                        errorMessageStyles={errorStyle}
-                        submitAttempted={submitAttempted}
-                        type="text"
-                        value={newContact.zipCode}
-                        name="zipCode"
-                        placeholder={t('user:postalCode')}
-                        validations="minLength:2"
-                        validationErrors={{
-                          isDefaultRequiredValue: t('errors:notBlank'),
-                          minLength: t('errors:twoChars')
-                        }}
-                      />
-                      <FormsyInput
-                        wrapperClassName={styles.input_33}
-                        className={styles.input}
-                        errorMessageStyles={errorStyle}
-                        submitAttempted={submitAttempted}
-                        type="text"
-                        value={newContact.city}
-                        name="city"
-                        placeholder={t('user:city')}
-                        validations="minLength:2"
-                        validationErrors={{
-                          isDefaultRequiredValue: t('errors:notBlank'),
-                          minLength: t('errors:twoChars')
-                        }}
-                      />
-                      <FormsyInput
-                        wrapperClassName={styles.input_33}
-                        className={styles.input}
-                        errorMessageStyles={errorStyle}
-                        submitAttempted={submitAttempted}
-                        type="text"
-                        value={newContact.country}
-                        name="country"
-                        placeholder={t('user:country')}
-                        validations="minLength:4"
-                        validationErrors={{
-                          isDefaultRequiredValue: t('errors:notBlank'),
-                          minLength: t('errors:fourChars')
-                        }}
-                      />
-                      <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row}`}>
-                        <RoundButton
-                          theme={theme}
-                          size="small"
-                          active
-                          text={t('common:save')}
-                          iconClass="fa-floppy-o"
-                        />
-                      </div>
-                    </Formsy>
-                  </div>
-                )}
+                newContactBox={newContactBox}
               />
             )}
           />
@@ -409,4 +426,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default withNamespaces(['user', 'errors'])(connect(mapStateToProps, mapDispatchToProps)(UserContacts))
+export default withNamespaces(['user', 'errors', 'admin'])(connect(mapStateToProps, mapDispatchToProps)(UserContacts))
