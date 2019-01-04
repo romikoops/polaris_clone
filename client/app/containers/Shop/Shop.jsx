@@ -49,6 +49,7 @@ class Shop extends Component {
     this.selectShipmentStageAndGo = this.selectShipmentStageAndGo.bind(this)
     this.toggleShowRegistration = this.toggleShowRegistration.bind(this)
     this.hideRegistration = this.hideRegistration.bind(this)
+    this.bookingHasCompleted = this.bookingHasCompleted.bind(this)
 
     props.bookingSummaryDispatch.update()
   }
@@ -65,6 +66,7 @@ class Shop extends Component {
     return loading || !(loggingIn || registering)
   }
 
+
   getShipment (loadType) {
     const { shipmentDispatch } = this.props
     shipmentDispatch.newShipment(loadType, true)
@@ -73,6 +75,14 @@ class Shop extends Component {
   setShipmentContacts (data) {
     const { shipmentDispatch } = this.props
     shipmentDispatch.setShipmentContacts(data)
+  }
+
+  bookingHasCompleted (id) {
+    const { bookingData, userDispatch } = this.props
+    const existingShipment = get(bookingData, ['response', 'stage5', 'shipment'], false)
+    if (existingShipment && existingShipment.booking_placed_at && String(existingShipment.id) === id) {
+      userDispatch.getDashboard(existingShipment.user_id, true)
+    }
   }
 
   selectLoadType (loadType) {
@@ -245,6 +255,7 @@ class Shop extends Component {
                 bookingSummaryDispatch={bookingSummaryDispatch}
                 reusedShipment={reusedShipment}
                 showRegistration={showRegistration}
+                bookingHasCompleted={this.bookingHasCompleted}
                 hideRegistration={() => this.hideRegistration()}
               />
             )}
@@ -267,6 +278,7 @@ class Shop extends Component {
                 setStage={this.selectShipmentStage}
                 messages={error ? error.stage3 : []}
                 shipmentDispatch={shipmentDispatch}
+                bookingHasCompleted={this.bookingHasCompleted}
                 reusedShipment={reusedShipment}
                 originalSelectedDay={originalSelectedDay}
               />
@@ -294,6 +306,7 @@ class Shop extends Component {
                   shipmentDispatch={shipmentDispatch}
                   hideRegistration={this.hideRegistration}
                   reusedShipment={reusedShipment}
+                  bookingHasCompleted={this.bookingHasCompleted}
                 />
               )}
             />
@@ -315,6 +328,7 @@ class Shop extends Component {
                 setStage={this.selectShipmentStage}
                 shipmentDispatch={shipmentDispatch}
                 reusedShipment={reusedShipment}
+                bookingHasCompleted={this.bookingHasCompleted}
               />
             )}
           />

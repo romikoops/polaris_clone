@@ -7,9 +7,10 @@ import {
   shipmentData,
   identity,
   tenant,
-  user
+  user,
+  match
 } from '../../mocks'
-// eslint-disable-next-line
+
 import BookingDetails from './BookingDetails'
 
 const editedShipmentData = {
@@ -34,7 +35,9 @@ const propsBase = {
     key: 'USD',
     rate: 1.05
   }],
-  user
+  user,
+  match,
+  bookingHasCompleted: () => false
 }
 
 test('shallow render', () => {

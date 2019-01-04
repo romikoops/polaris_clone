@@ -7,13 +7,16 @@ import styles from './ShopStageView.scss'
 import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
 import { SHIPMENT_STAGES, QUOTE_STAGES } from '../../constants'
-import { gradientTextGenerator, gradientGenerator, history, isQuote } from '../../helpers'
+import {
+  gradientTextGenerator, gradientGenerator, history, isQuote
+} from '../../helpers'
 import HelpContact from '../Help/Contact'
 
 class ShopStageView extends Component {
   static goBack () {
     history.goBack()
   }
+
   constructor (props) {
     super(props)
     this.state = {}
@@ -22,6 +25,7 @@ class ShopStageView extends Component {
         this.props.tenant.scope.open_quotation_tool
         ? QUOTE_STAGES : SHIPMENT_STAGES
   }
+
   componentWillReceiveProps (nextProps) {
     this.setStageHeader(nextProps.currentStage)
   }
@@ -34,14 +38,17 @@ class ShopStageView extends Component {
     const { header } = this.applicableStages.find(stage => stage.step === currentStage) || {}
     this.setState({ stageHeader: header })
   }
+
   handleClickStage (stage) {
     if (this.props.disabledClick) return
 
     this.props.setStage(stage)
   }
+
   showContactHelp () {
     this.setState({ showHelp: !this.state.showHelp })
   }
+
   stageBoxCircle (stage) {
     const { theme } = this.props
     const gradientStyle =
@@ -79,7 +86,8 @@ class ShopStageView extends Component {
           >
             <h3 className="flex-none" style={gradientStyle}>
               {' '}
-              {stage.step}{' '}
+              {stage.step}
+              {' '}
             </h3>
           </div>
           <div style={gradientCircle} className={styles.shop_stage_current_border} />
@@ -89,7 +97,11 @@ class ShopStageView extends Component {
 
     return (
       <div className={`${styles.shop_stage_yet} layout-column layout-align-center-center`}>
-        <h3 className="flex-none"> {stage.step} </h3>
+        <h3 className="flex-none">
+          {' '}
+          {stage.step}
+          {' '}
+        </h3>
       </div>
     )
   }
@@ -105,6 +117,7 @@ class ShopStageView extends Component {
       </div>
     )
   }
+
   render () {
     const {
       theme,
@@ -112,7 +125,8 @@ class ShopStageView extends Component {
       tenant,
       t
     } = this.props
-
+    
+    const stepBarShowStyle = hasNextStage ? '' : styles.hide_nav_options
     const { bookingProcessImage } = theme
     const bookingProcessImageWrapped = bookingProcessImage
       ? `url(${bookingProcessImage})`
@@ -131,8 +145,8 @@ class ShopStageView extends Component {
         : theme.colors.primary
     const backBtn = (
       <div
-        className={`${styles.stage_box} flex-none layout-column layout-align-start-center`}
-        onClick={() => ShopStageView.goBack()}
+        className={`${styles.stage_box} flex-none layout-column layout-align-start-center ${stepBarShowStyle}`}
+        onClick={hasNextStage ? () => ShopStageView.goBack() : null}
       >
         <div className={styles.wrapper_shop_stage_current}>
           <div
@@ -200,7 +214,11 @@ class ShopStageView extends Component {
               { isQuote(tenant) ? t('common:quotation') : t('common:booking') }
             </h3>
             <i className="fa fa-chevron-right fade" />
-            <p className="flex-none fade"> {this.state.stageHeader} </p>
+            <p className="flex-none fade">
+              {' '}
+              {this.state.stageHeader}
+              {' '}
+            </p>
           </div>
         </div>
         <div
@@ -213,7 +231,7 @@ class ShopStageView extends Component {
           {backBtn}
           <div>
             <div
-              className={`${styles.line_box} layout-row layout-align-center flex-none`}
+              className={`${styles.line_box} layout-row layout-align-center flex-none ${stepBarShowStyle}`}
             >
               <div className={`${isQuote(tenant) ? styles.quote_line : styles.line} flex-none`} />
               {stageBoxes}
