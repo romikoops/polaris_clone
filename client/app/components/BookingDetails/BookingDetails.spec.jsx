@@ -10,7 +10,7 @@ import {
   user,
   match
 } from '../../mocks'
-// eslint-disable-next-line
+
 import BookingDetails from './BookingDetails'
 
 const editedShipmentData = {
