@@ -1,23 +1,29 @@
-<%= render "account_layout",
-    tenant: @resource.tenant  do %>
+<%= render "account_layout", tenant: @resource.tenant do %>
+  <mj-section full-width="full-width" padding="0px">
+    <mj-column width="100%" padding="0 2.5%">
+      <mj-text line-height="24px">
+        <p>
+          Thank you for registering a new account in the  <b> <%= @resource.tenant.name%> </b> (powered by ItsMyCargo). 
+        </p>
+      </mj-text>
+    </mj-column>
 
-<mj-section full-width="full-width" padding="0px">
-  <mj-column width="100%" padding="0 2.5%">
-    <mj-text line-height="24px">
-      <p>
-        You can confirm your account email by clicking the button below:
-      </p>
-    </mj-text>
-  </mj-column>
-  <mj-column width="100%" padding="0 2.5%">
-    <mj-button background-color="<%=@primary_color%>" color="white" href="<%= @confirmation_url %>">
-      Activate My Account
-    </mj-button>
-  </mj-column>
+    <mj-column width="100%" padding="0 2.5%">
+      <mj-text line-height="24px">
+        <p>
+          You can confirm your account email by clicking the button below:
+        </p>
+      </mj-text>
+    </mj-column>
+    <mj-column width="100%" padding="0 2.5%">
+      <mj-button background-color="<%=@primary_color%>" color="white" href="<%= @confirmation_url %>">
+        Activate My Account
+      </mj-button>
+    </mj-column>
 
-  <mj-column width="100%" padding="0 2.5%">
-    <mj-text>
-      <% @links.each do |link_data| %>
+    <mj-column width="100%" padding="0 2.5%">
+      <mj-text>
+        <% @links.each do |link_data| %>
           <p>
             <% text_chunks = link_data['text'].split(link_data['link_text']) %>
             <% text_chunks.each do |text_chunk| %>
@@ -25,9 +31,8 @@
               <%= link_to link_data['link_text'], link_data['href'] unless text_chunk == text_chunks.last %>
             <% end %>
           </p>
-      <% end %>
-    </mj-text>
-  </mj-column>
-</mj-section>
-
+        <% end %>
+      </mj-text>
+    </mj-column>
+  </mj-section>
 <% end %>

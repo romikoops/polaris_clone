@@ -17,13 +17,6 @@
        <p>Dear <span><%= @user.full_name %>,</span></p>
     </mj-text>
   </mj-column>
-  <mj-column width="100%" padding="0 2.5%">
-    <mj-text line-height="24px">
-      <p>
-        Thank you for registering a new account in the  <b> <%=tenant.name%> </b> (powered by ItsMyCargo). 
-      </p>
-    </mj-text>
-  </mj-column>
 </mj-section>
 
 <%= yield %>
@@ -31,7 +24,7 @@
 <mj-section full-width="full-width" padding="0px">
   <mj-column width="100%" padding="0 2.5%">
     <mj-text line-height="24px">
-        <p>If you have questions about the <b> <%= tenant.name %> </b> Online Shop or are experiencing problems with this mail or shipment – do not hesitate to ask us:</p>
+      <p>If you have questions about the <b> <%= tenant.name %> </b> Online Shop or are experiencing problems with this mail or shipment – do not hesitate to ask us:</p>
     </mj-text>
     
   </mj-column>

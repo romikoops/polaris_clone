@@ -1,7 +1,0 @@
-<%= render "account_layout", greeting_text: "Your account has been locked due to an excessive number of unsuccessful sign in attempts. Click the link below to unlock your account:" do %>
-  <mj-section full-width="full-width" padding="0px">
-      <mj-column width="100%" padding="0 2.5%">
-        <p><%= link_to 'Unlock my account', unlock_url(@resource, unlock_token: @token) %></p>
-      </mj-column>
-  </mj-section>
-<% end %>
