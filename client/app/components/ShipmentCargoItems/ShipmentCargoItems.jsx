@@ -163,7 +163,7 @@ class ShipmentCargoItems extends Component {
                   {inputs.width}
                   {inputs.height}
                   <div className="flex-5" />
-                  {scope.consolidate_cargo ? inputs.collectiveWeight : inputs.grossWeight}
+                  {scope.frontend_consolidation ? inputs.collectiveWeight : inputs.grossWeight}
                 </div>
                 <div className="flex-100 layout-row" />
                 <div
