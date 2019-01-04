@@ -64,6 +64,7 @@ module ExcelDataServices
       range_max: :range_max,
       fee_code: :shipping_type,
       fee_name: :fee_name,
+      fee_min: :min,
       fee: :rate
     ).freeze
 
