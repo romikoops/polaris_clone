@@ -2,10 +2,6 @@
 
 class ApplicationMailer < ActionMailer::Base
 
-  after_action { 
-    message.headers["X-INTERNAL"] = true 
-  }
-
   default from: "itsmycargodev@gmail.com"
   layout "mailer"
 
