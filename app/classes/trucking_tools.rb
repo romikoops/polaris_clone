@@ -53,7 +53,7 @@ module TruckingTools
 
   def fare_calculator(key, fee, cargo, km, scope)
     fee.symbolize_keys!
-    
+
     fare = case fee[:rate_basis]
            when 'PER_KG'
 
@@ -98,7 +98,6 @@ module TruckingTools
              [cbm_value, min].max
 
            when 'PER_WM'
-
              value = (cargo['weight'] / 1000) * fee[:value]
              min = fee[:min_value] || 0
              [value, min].max
@@ -145,7 +144,6 @@ module TruckingTools
     when 'kg'
 
       trucking_pricing['rates']['kg'].each do |rate|
-    
         if cargo_values['weight'].to_i <= rate['max_kg'].to_i && cargo_values['weight'].to_i >= rate['min_kg'].to_i
           rate['rate']['min_value'] = rate['min_value']
           return { rate: rate['rate'], fees: trucking_pricing['fees'] }
@@ -287,7 +285,6 @@ module TruckingTools
   end
 
   def determine_load_meterage(trucking_pricing, cargo_object, cargo)
-    
     if trucking_pricing.load_meterage && trucking_pricing.load_meterage['ratio']
       if cargo.is_a? AggregatedCargo
         calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
@@ -306,8 +303,7 @@ module TruckingTools
       end
     else
       if cargo.is_a? AggregatedCargo
-        cargo_object['non_stackable']['weight'] += cargo.weight
-        cargo_object['non_stackable']['volume'] += cargo.volume
+        calc_aggregated_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
       else
         calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
       end
@@ -315,7 +311,6 @@ module TruckingTools
 
     cargo_object
   end
-
 
   def calc_aggregated_cargo_load_meterage(trucking_pricing, cargo_object, cargo)
     load_meterage = (cargo.volume / 1.3) / 2.4
@@ -360,6 +355,17 @@ module TruckingTools
     cargo_object['stackable']['weight'] += trucking_chargeable_weight
     cargo_object['stackable']['volume'] += cargo.volume * quantity
     cargo_object['stackable']['number_of_items'] += quantity
+  end
+
+  def calc_aggregated_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
+    cbm_ratio = trucking_pricing['cbm_ratio'] || 0
+    cbm_weight = cargo.volume * cbm_ratio
+    raw_payload = cargo.weight
+    trucking_chargeable_weight = [cbm_weight, raw_payload].max
+
+    cargo_object['stackable']['weight'] += trucking_chargeable_weight
+    cargo_object['stackable']['volume'] += cargo.volume
+    cargo_object['stackable']['number_of_items'] = 1
   end
 
   def round_fare(result, rounding_scope)
