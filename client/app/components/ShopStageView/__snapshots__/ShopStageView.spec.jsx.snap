@@ -38,8 +38,8 @@ exports[`shallow rendering 1`] = `
     className="stage_row layout-row flex-100 layout-align-center"
   >
     <div
-      className="stage_box flex-none layout-column layout-align-start-center"
-      onClick={[Function]}
+      className="stage_box flex-none layout-column layout-align-start-center hide_nav_options"
+      onClick={null}
     >
       <div
         className="wrapper_shop_stage_current"
@@ -73,7 +73,7 @@ exports[`shallow rendering 1`] = `
     </div>
     <div>
       <div
-        className="line_box layout-row layout-align-center flex-none"
+        className="line_box layout-row layout-align-center flex-none hide_nav_options"
       >
         <div
           className="quote_line flex-none"
