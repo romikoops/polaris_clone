@@ -19,6 +19,7 @@ class FileUploader extends React.Component {
 
     return response.json()
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -29,15 +30,18 @@ class FileUploader extends React.Component {
     this.onChange = this.onChange.bind(this)
     this.fileUpload = this.fileUpload.bind(this)
   }
+
   onFormSubmit (e) {
     e.preventDefault()
     if (this.state.file) {
       this.fileUpload(this.state.file)
     }
   }
+
   onChange (e) {
     this.fileUpload(e.target.files[0])
   }
+
   fileUpload (baseFile) {
     const file = baseFile
     const {
@@ -76,14 +80,17 @@ class FileUploader extends React.Component {
 
     return null
   }
+
   showFileTypeError () {
     this.setState({ error: true })
     this.alertTimeout = setTimeout(() => this.setState({ error: false }), 5000)
   }
+
   clickUploaderInput (e) {
     e.preventDefault()
     this.uploaderInput.click()
   }
+
   render () {
     const {
       theme, type, tooltip, square, size, t, formClasses

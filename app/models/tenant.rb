@@ -37,6 +37,7 @@ class Tenant < ApplicationRecord
   has_many :map_data, dependent: :destroy
   has_many :agencies, dependent: :destroy
   has_many :pricing_requests, dependent: :destroy
+  has_many :charge_categories
 
   validates :scope, presence: true, scope: true
   validates :emails, presence: true, emails: true

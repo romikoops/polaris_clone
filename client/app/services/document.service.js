@@ -13,17 +13,19 @@ function handleResponse (response) {
   return response.json()
 }
 
-function uploadPricings (file, loadType, open) {
+function uploadPricings (file, mot, loadType, open) {
   const formData = new FormData()
   formData.append('file', file)
+  formData.append('mot', mot)
+  formData.append('load_type', loadType)
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader() },
     body: formData
   }
   const url = open
-    ? `/admin/open_pricings/ocean_${loadType}_pricings/process_csv`
-    : `/admin/pricings/ocean_${loadType}_pricings/process_csv`
+    ? `/admin/open_pricings/ocean_${loadType}_pricings/process_csv` // deprecated?
+    : `/admin/pricings/upload`
 
   return fetch(`${getTenantApiUrl()}${url}`, requestOptions).then(handleResponse)
 }
@@ -74,16 +76,17 @@ function uploadItinerarySchedules (file, target) {
   return fetch(`${getTenantApiUrl()}/admin/schedules/overwrite/${target}`, requestOptions).then(handleResponse)
 }
 
-function uploadLocalCharges (file) {
+function uploadLocalCharges (file, mot) {
   const formData = new FormData()
   formData.append('file', file)
+  formData.append('mot', mot)
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader() },
     body: formData
   }
 
-  return fetch(`${getTenantApiUrl()}/admin/local_charges/process_csv`, requestOptions).then(handleResponse)
+  return fetch(`${getTenantApiUrl()}/admin/local_charges/upload`, requestOptions).then(handleResponse)
 }
 
 function downloadLocalCharges (options) {

@@ -4,7 +4,7 @@ import { documentService } from '../services/document.service'
 import { alertActions, adminActions } from './'
 // import { Promise } from 'es6-promise-promise';
 
-function uploadPricings (file, loadType, open) {
+function uploadPricings (file, mot, loadType, open) {
   function request (uploadData) {
     return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
   }
@@ -18,7 +18,7 @@ function uploadPricings (file, loadType, open) {
   return (dispatch) => {
     dispatch(request())
 
-    documentService.uploadPricings(file, loadType, open).then(
+    documentService.uploadPricings(file, mot, loadType, open).then(
       (data) => {
         dispatch(success(data))
         dispatch(adminActions.getPricings(false))
@@ -307,7 +307,7 @@ function uploadItinerarySchedules (file, target) {
     )
   }
 }
-function uploadLocalCharges (file) {
+function uploadLocalCharges (file, mot) {
   function request (uploadData) {
     return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
   }
@@ -321,7 +321,7 @@ function uploadLocalCharges (file) {
   return (dispatch) => {
     dispatch(request())
 
-    documentService.uploadLocalCharges(file).then(
+    documentService.uploadLocalCharges(file, mot).then(
       (data) => {
         dispatch(success(data))
       },

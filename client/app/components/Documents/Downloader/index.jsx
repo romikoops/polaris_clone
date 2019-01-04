@@ -24,7 +24,10 @@ class DocumentsDownloader extends React.Component {
     const { target, documentDispatch, options } = this.props
 
     switch (target) {
-      case 'pricing':
+      case 'pricing_cargo_item':
+        documentDispatch.downloadPricings(options)
+        break
+      case 'pricing_container':
         documentDispatch.downloadPricings(options)
         break
       case 'hubs':
@@ -51,7 +54,6 @@ class DocumentsDownloader extends React.Component {
       case 'quotations':
         documentDispatch.downloadQuotations(options)
         break
-
       default:
         break
     }

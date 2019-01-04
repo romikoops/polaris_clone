@@ -110,11 +110,13 @@ class Itinerary < ApplicationRecord
         number_updated: 0
       }
     }
+
     tmp_date = start_date.is_a?(Date)      ? start_date : DateTime.parse(start_date)
     end_date_parsed = end_date.is_a?(Date) ? end_date   : DateTime.parse(end_date)
 
     stop_data = []
     steps_in_order = steps_in_order.map(&:to_i)
+
     while tmp_date < end_date_parsed
       if ordinal_array.include?(tmp_date.wday)
         journey_start = tmp_date.midday
@@ -128,12 +130,15 @@ class Itinerary < ApplicationRecord
           closing_date: closing_date,
           load_type: parse_load_type(load_type)
         )
+
         unless trip.save
           tmp_date += 1.day
           next
         end
+
         results[:trips] << trip
         stats[:trips][:number_created] += 1
+
         stops_in_order.each do |stop|
           if stop.index.zero?
             stop_data << {

@@ -11,7 +11,7 @@ subdomains.each do |sub|
   DataValidator::PricingValidator.new(
     tenant: tenant.id,
     user: shipper,
-    key: 'data/normanglobal/pricing_expected_20190103_normanglobal.xlsx',
+    key: 'data/normanglobal/pricing_expected_20190103_normanglobal_without_FCL.xlsx',
     load_type: 'lcl'
   ).perform
 

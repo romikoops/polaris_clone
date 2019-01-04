@@ -3,12 +3,12 @@ import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
-import GenericError from "../ErrorHandling/Generic"
+import GenericError from '../ErrorHandling/Generic'
 import {
   AdminPricingsIndex,
   AdminPricingClientView,
   AdminPricingRouteView
-} from "."
+} from '.'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions, documentActions } from '../../actions'
 import AdminUploadsSuccess from './Uploads/Success'

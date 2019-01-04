@@ -6,25 +6,26 @@ class Vehicle < ApplicationRecord
   has_many :tenant_vehicles
 
   validates :name,
-    presence:   true,
-    uniqueness: {
-      scope:   :mode_of_transport,
-      message: ->(obj, _) { "'#{obj.name}' taken for mode of transport '#{obj.mode_of_transport}'" }
-    }
+            presence:   true,
+            uniqueness: {
+              scope:   :mode_of_transport,
+              message: ->(obj, _) { "'#{obj.name}' taken for mode of transport '#{obj.mode_of_transport}'" }
+            }
 
-  VEHICLE_NAMES = %w[ocean_default rail_default air_default truck_default].freeze
-  TRANSPORT_CATEGORY_NAMES = %w[dry_goods liquid_bulk gas_bulk any].freeze
-  CARGO_CLASSES = %w[fcl_20 fcl_40 fcl_40_hq lcl].freeze
+  VEHICLE_NAMES = %w(ocean_default rail_default air_default truck_default).freeze
+  TRANSPORT_CATEGORY_NAMES = %w(dry_goods liquid_bulk gas_bulk any).freeze
+  CARGO_CLASSES = %w(fcl_20 fcl_40 fcl_40_hq lcl).freeze
 
   def self.create_from_name(name, mot, tenant_id, carrier_name)
-    
     vehicle = Vehicle.find_or_create_by!(name: name, mode_of_transport: mot)
+
     if carrier_name
       carrier = Carrier.find_or_create_by!(name: carrier_name)
       tv = carrier.tenant_vehicles.find_or_create_by(name: name, mode_of_transport: mot, vehicle_id: vehicle.id, tenant_id: tenant_id)
     else
       tv = TenantVehicle.find_or_create_by(name: name, mode_of_transport: mot, vehicle_id: vehicle.id, tenant_id: tenant_id)
     end
+
     if vehicle.transport_categories.none?
       CARGO_CLASSES.each do |cargo_class|
         this_class = cargo_class.clone
@@ -39,6 +40,7 @@ class Vehicle < ApplicationRecord
         end
       end
     end
+
     tv
   end
 

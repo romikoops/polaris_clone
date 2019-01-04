@@ -54,14 +54,20 @@ Rails.application.routes.draw do
       end
       post 'itineraries/:id/edit_notes', to: 'itineraries#edit_notes'
 
-      resources :pricings, only: %i(index destroy)
+      resources :pricings, only: %i(index destroy) do
+        collection do
+          post :upload
+          post :download
+        end
+      end
       get  'client_pricings/:id', to: 'pricings#client'
       get  'route_pricings/:id',  to: 'pricings#route'
-      post 'pricings/download', to: 'pricings#download_pricings'
       post 'pricings/update/:id', to: 'pricings#update_price'
       post 'pricings/test/:id', to: 'pricings#test'
       post 'pricings/train_and_ocean_pricings/process_csv',
            to: 'pricings#overwrite_main_carriage', as: :main_carriage_pricings_overwrite
+      post 'pricings/update/:id', to: 'pricings#update_price'
+      post 'pricings/assign_dedicated', to: 'pricings#assign_dedicated'
 
       post 'itineraries/process_csv', to: 'itineraries#overwrite', as: :itineraries_overwrite
       get 'itineraries/:id/layovers', to: 'schedules#layovers'
@@ -69,24 +75,23 @@ Rails.application.routes.draw do
       resources :vehicle_types, only: [:index]
       resources :clients, only: %i(index show create destroy)
 
-      resources :pricings, only: [:index]
-      post 'pricings/ocean_lcl_pricings/process_csv', to: 'pricings#overwrite_main_lcl_carriage', as: :main_lcl_carriage_pricings_overwrite
-      post 'pricings/ocean_fcl_pricings/process_csv', to: 'pricings#overwrite_main_fcl_carriage', as: :main_fcl_carriage_pricings_overwrite
-      post 'pricings/update/:id', to: 'pricings#update_price'
-      post 'pricings/assign_dedicated', to: 'pricings#assign_dedicated'
-
       resources :open_pricings, only: [:index]
       post 'open_pricings/ocean_lcl_pricings/process_csv', to: 'open_pricings#overwrite_main_lcl_carriage', as: :open_main_lcl_carriage_pricings_overwrite
       # post "open_pricings/train_and_ocean_pricings/process_csv",
       # to: "open_pricings#overwrite_main_carriage", as: :open_main_carriage_pricings_overwrite
       post 'shipments/:shipment_id/upload/:type', to: 'shipments#upload_client_document'
       resources :local_charges, only: %i(index update)
-      post 'local_charges/process_csv',
-           to: 'local_charges#overwrite', as: :local_charges_overwrite
+      post 'local_charges/upload', to: 'local_charges#upload_local_charges'
+
+      resources :local_charges, only: %i(index update) do
+        collection do
+          post :upload
+          post :download
+        end
+      end
       get 'local_charges/:id/hub', to: 'local_charges#hub_charges'
       post 'local_charges/:id/edit', to: 'local_charges#edit'
       post 'customs_fees/:id/edit', to: 'local_charges#edit_customs'
-      post 'local_charges/download', to: 'local_charges#download_local_charges'
       resources :discounts, only: [:index]
       get  'discounts/users/:user_id', to: 'discounts#user_itineraries', as: :discounts_user_itineraries
       post 'discounts/users/:user_id', to: 'discounts#create_multiple', as: :discounts_create_multiple

@@ -153,51 +153,43 @@ class Admin::PricingsController < Admin::AdminBaseController
     response_handler({})
   end
 
-  def download_pricings
-    options = params[:options].as_json.deep_symbolize_keys!
-    options[:tenant_id] = current_user.tenant_id
-    url = DocumentService::PricingWriter.new(options).perform
-    response_handler(url: url, key: 'pricing')
+  def upload
+    file = upload_params[:file].tempfile
+    mot = upload_params[:mot]
+    load_type = upload_params[:load_type]
+    new_load_type = load_type_renamed(load_type)
+
+    klass_identifier = "#{mot.capitalize}#{new_load_type.capitalize}"
+
+    klass = ExcelDataServices::FileParser.const_get(klass_identifier)
+    options = { tenant: current_tenant, file_or_path: file }
+    sheets_data = klass.new(options).perform
+
+    klass = ExcelDataServices::DatabaseInserter.const_get(klass_identifier)
+    options = { tenant: current_tenant,
+                data: sheets_data,
+                options: { should_generate_trips: false } }
+    insertion_stats = klass.new(options).perform
+
+    response_handler(insertion_stats)
   end
 
-  def overwrite_main_lcl_carriage
-    if params[:file] && params[:file] != 'null'
-      req = { 'xlsx' => params[:file] }
-      results = ExcelTool::FreightRatesOverwriter.new(
-        params:   req,
-        _user:    current_user,
-        generate: false
-      ).perform
-      response_handler(results)
-    else
-      response_handler(false)
-    end
-  end
+  def download
+    mot = download_params[:mot]
+    load_type = download_params[:load_type]
+    key = "pricing_#{load_type}"
+    new_load_type = load_type_renamed(load_type)
+    file_name = "#{current_tenant.subdomain.downcase}__pricing_#{mot.downcase}_#{new_load_type.downcase}"
 
-  def overwrite_main_fcl_carriage
-    if params[:file] && params[:file] != 'null'
-      req = { 'xlsx' => params[:file] }
-      results = ExcelTool::FreightRatesOverwriter.new(
-        params:   req,
-        _user:    current_user,
-        generate: false
-      ).perform
-      response_handler(results)
-    else
-      response_handler(false)
-    end
-  end
+    klass_identifier = "#{mot.capitalize}#{new_load_type.capitalize}"
 
-  def eliminate_user_pricings(prices, itineraries)
-    results = []
-    itineraries.each do |itin|
-      if !prices || prices&.empty?
-        results.push(itin)
-      else
-        results + itineraries_array(prices, itin)
-      end
-    end
-    results
+    klass = ExcelDataServices::FileWriter.const_get(klass_identifier)
+    options = { tenant: current_tenant, file_name: file_name }
+
+    document = klass.new(options).perform
+
+    # TODO: When timing out, file will not be downloaded!!!
+    response_handler(key: key, url: rails_blob_url(document.file, disposition: 'attachment'))
   end
 
   def test
@@ -206,6 +198,15 @@ class Admin::PricingsController < Admin::AdminBaseController
   end
 
   private
+
+  def load_type_renamed(load_type)
+    case load_type
+    when 'cargo_item' then 'LCL'
+    when 'container' then 'FCL'
+    else
+      raise StandardError, 'Unknown load type! Expected item of [cargo_item, container].'
+    end
+  end
 
   def itineraries_array(prices, itin)
     results = []
@@ -283,6 +284,14 @@ class Admin::PricingsController < Admin::AdminBaseController
     params.require(:update).permit(
       :wm, :heavy_wm, :heavy_kg
     )
+  end
+
+  def upload_params
+    params.permit(:file, :mot, :load_type)
+  end
+
+  def download_params
+    params.require(:options).permit(:mot, :load_type)
   end
 
   def itinerary_pricing_exists?(args)
