@@ -13,6 +13,7 @@ class AccountMailer < Devise::Mailer
     attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
     opts[:from] = tenant.emails.dig('support', 'general')
     opts[:subject] = "#{tenant.name} Account Confirmation Email"
+
     @confirmation_url = "#{base_url(tenant)}account/confirmation/#{token}"
 
     @links = tenant.email_links ? tenant.email_links['confirmation_instructions'] : []
