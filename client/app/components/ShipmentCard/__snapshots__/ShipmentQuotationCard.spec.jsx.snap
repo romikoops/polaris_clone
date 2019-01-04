@@ -118,7 +118,7 @@ exports[`has oncarriage 1`] = `
         className="fa fa-check-square clip"
         style={
           Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
           }
         }
       />
@@ -267,7 +267,7 @@ exports[`has precarriage 1`] = `
         className="fa fa-check-square clip"
         style={
           Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            "background": "-webkit-linear-gradient(-90deg, #DCDBDC,#DCDBDC)",
           }
         }
       />

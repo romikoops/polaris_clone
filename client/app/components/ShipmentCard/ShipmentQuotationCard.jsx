@@ -90,14 +90,14 @@ class ShipmentQuotationCard extends Component {
           <span className="flex-25 layout-align-center-center layout-row">
             <i
               className="fa fa-check-square clip"
-              style={shipment.trucking.has_pre_carriage ? gradientFontStyle : deselectedStyle}
+              style={shipment.has_pre_carriage ? gradientFontStyle : deselectedStyle}
             />
             <p>{t('shipment:preCarriage')}</p>
           </span>
           <span className="flex-25 layout-align-center-center layout-row">
             <i
               className="fa fa-check-square clip"
-              style={shipment.trucking.has_on_carriage ? gradientFontStyle : deselectedStyle}
+              style={shipment.has_on_carriage ? gradientFontStyle : deselectedStyle}
             />
             <p>{t('shipment:onCarriage')}</p>
           </span>
