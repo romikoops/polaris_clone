@@ -618,7 +618,7 @@ export class ShipmentDetails extends Component {
       if (!cargoItems[index] || !cargoItemsErrors[index]) return {}
       if (typeof value === 'boolean') {
         cargoItems[index][suffixName] = value
-      } else if (scope.consolidate_cargo && ['collectiveWeight', 'quantity'].includes(suffixName)) {
+      } else if (scope.frontend_consolidation && ['collectiveWeight', 'quantity'].includes(suffixName)) {
         cargoItems[index] = ShipmentDetails.handleCollectiveWeightChange(cargoItems[index], suffixName, value)
       } else {
         cargoItems[index][suffixName] = value ? +value : 0
