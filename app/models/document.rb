@@ -11,10 +11,6 @@ class Document < ApplicationRecord
     upload(options)
   end
 
-  def get_signed_url
-    @url = get_file_url(url)
-  end
-
   def self.obj_key(shipment, type, file_name)
     'documents/' + shipment.tenant.subdomain + '/shipments/' + shipment['uuid'] + '/' + type + '/' + Time.now.to_i.to_s + '-' + file_name
   end
@@ -40,5 +36,13 @@ class Document < ApplicationRecord
       end
     end
     results
+  end
+
+  def get_signed_url
+    @url = get_file_url(url)
+  end
+
+  def local_file_path
+    ActiveStorage::Blob.service.send(:path_for, file.key)
   end
 end

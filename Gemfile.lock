@@ -1021,6 +1021,8 @@ GEM
     thread_safe (0.3.6)
     tilt (2.0.8)
     timecop (0.9.1)
+    traceroute (0.8.0)
+      rails (>= 3.0.0)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
     uber (0.1.0)
@@ -1118,6 +1120,7 @@ DEPENDENCIES
   strong_migrations
   table_print
   timecop
+  traceroute
   tzinfo-data
   vcr (~> 2.8.0)
   webmock

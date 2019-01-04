@@ -35,6 +35,7 @@ export class AdminHubsComp extends Component {
     this.prevPage = this.prevPage.bind(this)
     this.handleInput = this.handleInput.bind(this)
   }
+
   componentDidMount () {
     const {
       hubs, adminDispatch, loading, countries, appDispatch, tenant
@@ -54,6 +55,7 @@ export class AdminHubsComp extends Component {
     const { adminDispatch } = this.props
     adminDispatch.getHubs(false, page, hubType, country, status)
   }
+
   setHubTypes () {
     const { tenant } = this.props
     const { scope } = tenant
@@ -71,10 +73,12 @@ export class AdminHubsComp extends Component {
       }
     }))
   }
+
   searchHubsFromPage (text, page, hubType, country, status) {
     const { adminDispatch } = this.props
     adminDispatch.searchHubs(text, page, hubType, country, status)
   }
+
   fetchCountries () {
     const { appDispatch } = this.props
     appDispatch.fetchCountries()
@@ -115,6 +119,7 @@ export class AdminHubsComp extends Component {
       this.handleFilters()
     }
   }
+
   handleFilters () {
     const { searchFilters } = this.state
 
@@ -130,12 +135,15 @@ export class AdminHubsComp extends Component {
       return { page: prevState.page }
     })
   }
+
   nextPage () {
     this.handlePage(1)
   }
+
   prevPage () {
     this.handlePage(-1)
   }
+
   doNothing () {
     console.log(this.state.page)
   }
@@ -252,7 +260,10 @@ export class AdminHubsComp extends Component {
                   onClick={this.state.page > 1 ? this.prevPage : null}
                 >
                   <i className="fa fa-chevron-left" />
-                  <p>&nbsp;&nbsp;&nbsp;&nbsp;{t('common:basicBack')}</p>
+                  <p>
+                    {'\u00A0\u00A0\u00A0\u00A0'}
+                    {t('common:basicBack')}
+                  </p>
                 </div>
                 {}
                 <p>{this.state.page}</p>
@@ -263,7 +274,10 @@ export class AdminHubsComp extends Component {
                     `}
                   onClick={this.state.page < numHubPages ? this.nextPage : null}
                 >
-                  <p>{t('common:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                  <p>
+                    {t('common:next')}
+                    {'\u00A0\u00A0\u00A0\u00A0'}
+                  </p>
                   <i className="fa fa-chevron-right" />
                 </div>
               </div>

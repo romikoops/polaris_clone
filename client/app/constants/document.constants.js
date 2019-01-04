@@ -16,14 +16,16 @@ export const documentConstants = {
 }
 
 export const documentGlossary = {
+  itineraries: 'Itineraries',
+  layovers: 'Layovers',
+  trips: 'Trips',
+  stops: 'Stops',
   pricings: 'Pricings',
+  pricing_details: 'Pricing Details',
+  local_charges: 'Local Charges',
   number_updated: 'Number Updated',
   number_created: 'Number Created',
   itineraryPricings: 'Itinerary Pricings',
-  itineraries: 'Itineraries',
-  stops: 'Stops',
-  layovers: 'Layovers',
-  trips: 'Trips',
   userPricings: 'User Pricings',
   userAffected: 'Users Affected',
   hubs: 'Hubs',
@@ -31,7 +33,6 @@ export const documentGlossary = {
   trucking_queries: 'Trucking Queries',
   trucking_pricings: 'Trucking Pricings',
   trucking_hubs: 'Trucking Hubs',
-  localCharges: 'Local Charges',
   customs: 'Customs Fees'
 }
 

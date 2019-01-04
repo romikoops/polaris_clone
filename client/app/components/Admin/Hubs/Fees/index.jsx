@@ -453,9 +453,9 @@ export class AdminHubFees extends Component {
       return (
         <div
           className={`flex-25 layout-row layout-align-start-center pointy ${inactiveStyle} ${styles2.cargo_class_button}`}
-  style={buttonStyle}
+          style={buttonStyle}
           onClick={hasCargoClass && !isEditing ? () => this.setCargoClass(cargoClass.value) : null}
->
+        >
           <div className={`flex-none layout-row layout-align-center-center ${innerStyle} ${styles2.cargo_class_button_inner}`}>
             <p className="flex-none">{cargoClass.label}</p>
           </div>
@@ -500,32 +500,32 @@ export class AdminHubFees extends Component {
           className={`flex-100 ${styles2.fee_row_padding}`}
           theme={theme}
           fee={fee}
-  selectOptions={selectOptions.charges[currentCharge.load_type]}
-  direction={direction}
-  editCharge={editCharge}
-  handleDateEdit={this.handleDayChange}
+          selectOptions={selectOptions.charges[currentCharge.load_type]}
+          direction={direction}
+          editCharge={editCharge}
+          handleDateEdit={this.handleDayChange}
           handleSelect={this.handleSelect}
           handleChange={this.handleChange}
           handleRangeChange={this.handleRangeChange}
-  isEditing={() => this.isEditing()}
-  saveEdit={e => this.saveEdit(e)}
+          isEditing={() => this.isEditing()}
+          saveEdit={e => this.saveEdit(e)}
           target="charges"
-/>
+        />
       ) : (
         <FeeRow
           className={`flex-100 ${styles2.fee_row_padding}`}
           theme={theme}
           fee={fee}
-  selectOptions={selectOptions.charges[currentCharge.load_type]}
-  direction={direction}
+          selectOptions={selectOptions.charges[currentCharge.load_type]}
+          direction={direction}
           editCharge={editCharge}
           handleDateEdit={this.handleDayChange}
           handleSelect={this.handleSelect}
-  handleChange={this.handleChange}
-  isEditing={() => this.isEditing()}
+          handleChange={this.handleChange}
+          isEditing={() => this.isEditing()}
           saveEdit={e => this.saveEdit(e)}
           target="charges"
-/>
+        />
       )
     }) : (
       <div className="flex-100">
@@ -550,7 +550,7 @@ export class AdminHubFees extends Component {
           handleChange={this.handleChange}
           saveEdit={e => this.saveEdit(e)}
           target="customs"
-/>
+        />
       )
     }) : ''
 

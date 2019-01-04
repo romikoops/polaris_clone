@@ -8,16 +8,20 @@ export default class CollapsingContent extends React.PureComponent {
     this.state = { firstRender: true }
     this.setFirstRenderTo = this.setFirstRenderTo.bind(this)
   }
+
   componentDidMount () {
     this.setFirstRenderTo(false)
     this.updateHeight()
   }
+
   componentDidUpdate () {
     this.updateHeight()
   }
+
   setFirstRenderTo (bool) {
     this.setState({ firstRender: bool })
   }
+
   updateHeight () {
     const panelHeight = this.panel.clientHeight
 
@@ -25,6 +29,7 @@ export default class CollapsingContent extends React.PureComponent {
       panelHeight > prevState.panelHeight || !prevState.panelHeight ? { panelHeight } : {}
     ))
   }
+
   render () {
     const {
       collapsed, content, children, minHeight, wrapperContentClasses

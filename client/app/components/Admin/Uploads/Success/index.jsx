@@ -11,6 +11,7 @@ export class AdminUploadsSuccess extends Component {
   static goBack () {
     history.goBack()
   }
+
   static prepShipment (baseShipment, clients, hubsObj) {
     const shipment = Object.assign({}, baseShipment)
     shipment.clientName = clients[shipment.user_id]
@@ -27,28 +28,26 @@ export class AdminUploadsSuccess extends Component {
   }
 
   render () {
-    console.log(this.props)
-    // const {selectedShipment} = this.state;
-    const { t, theme, data } = this.props
-    const { stats, results } = data
-    console.log(results)
-    const statView = Object.keys(stats)
-      .filter(key => key !== 'type' && key !== 'userAffected')
-      .map(k => (
+    const {
+      t, theme, data, closeDialog
+    } = this.props
+    const stats = data
+    const statView = stats ? Object.keys(stats)
+      .map(statKey => (
         <div className={`${styles.stat_row} flex-100 layout-row layout-align-space-between-center`}>
           <div className="flex-33 layout-row layout-align-start-center">
             <p className="flex-none">
-              <strong>{documentGlossary[k]}</strong>
+              <strong>{documentGlossary[statKey]}</strong>
             </p>
           </div>
           <div className="flex-33 layout-row layout-align-start-center">
-            <p className="flex-none">{`${t('admin:numberCreated')} ${stats[k].number_created}`}</p>
+            <p className="flex-none">{`${t('admin:numberCreated')} ${stats[statKey].number_created}`}</p>
           </div>
           <div className="flex-33 layout-row layout-align-start-center">
-            <p className="flex-none">{`${t('admin:numberUpdated')} ${stats[k].number_updated}`}</p>
+            <p className="flex-none">{`${t('admin:numberUpdated')} ${stats[statKey].number_updated}`}</p>
           </div>
         </div>
-      ))
+      )) : ''
 
     return (
       <div
@@ -60,7 +59,7 @@ export class AdminUploadsSuccess extends Component {
           className={`flex-none layout-row layout-wrap layout-align-start-start ${
             styles.results_fade
           }`}
-          onClick={this.props.closeDialog}
+          onClick={closeDialog}
         />
         <div
           className={`flex-none layout-row layout-wrap layout-align-start-start ${
@@ -78,7 +77,7 @@ export class AdminUploadsSuccess extends Component {
               text={t('admin:continue')}
               theme={theme}
               size="small"
-              handleNext={this.props.closeDialog}
+              handleNext={closeDialog}
               iconClass="fa-chevron-right"
               active
             />

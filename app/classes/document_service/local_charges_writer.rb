@@ -88,7 +88,8 @@ module DocumentService
       hubs.each do |hub|
         results_by_hub[hub.name] = []
         results_by_hub[hub.name] += hub.local_charges.map(&:as_json)
-        results_by_hub[hub.name] += hub.customs_fees.map(&:as_json)
+        # The `customs_fees` model is a special thing made for Greencarrier, and should be removed asap.
+        # results_by_hub[hub.name] += hub.customs_fees.map(&:as_json)
       end
       results_by_hub
     end

@@ -12,9 +12,11 @@ class Admin::LocalChargesController < ApplicationController
       tenant_vehicle['name']
       { label: carrier_name.capitalize.to_s, value: tenant_vehicle['id'] }
     end
+
     counter_part_hubs = charges.map(&:counterpart_hub).uniq.compact.map do |hub|
       { label: hub.name, value: hub }
     end
+
     resp = {
       hub_id:           params[:id],
       charges:          hub.local_charges,
@@ -27,37 +29,50 @@ class Admin::LocalChargesController < ApplicationController
 
   def edit
     data = params[:data].as_json
-    id = data["id"]
-    data.delete("id")
+    id = data.delete('id')
     local_charge = LocalCharge.find(id)
-    local_charge.update_attributes(fees: data["fees"])
+    local_charge.update(fees: data['fees'])
     response_handler(local_charge)
   end
 
   def edit_customs
     data = params[:data].as_json
-    id = data["id"]
-    data.delete("id")
+    id = data['id']
+    data.delete('id')
     customs_fee = CustomsFee.find(id)
-    customs_fee.update_attributes(fees: data["fees"])
+    customs_fee.update(fees: data['fees'])
     response_handler(customs_fee)
   end
 
-  def download_local_charges
-    options = params[:options].as_json.deep_symbolize_keys!
-    options[:tenant_id] = current_user.tenant_id
-    url = DocumentService::LocalChargesWriter.new(options).perform
-    response_handler(url: url, key: "local_charges")
+  def upload
+    file = upload_params[:file].tempfile
+
+    options = { tenant: current_tenant, file_or_path: file }
+    sheets_data = ExcelDataServices::FileParser::LocalCharges.new(options).perform
+
+    options = { tenant: current_tenant, data: sheets_data }
+    insertion_stats = ExcelDataServices::DatabaseInserter::LocalCharges.new(options).perform
+
+    response_handler(insertion_stats)
   end
 
-  def overwrite
-    if params[:file]
-      req = { "xlsx" => params[:file] }
-      resp = ExcelTool::OverwriteLocalCharges.new(params: req, user: current_user).perform
+  def download
+    mot = download_params[:mot].downcase
+    file_name = "#{current_tenant.subdomain.downcase}__local_charges_#{mot}"
 
-      response_handler(resp)
-    else
-      response_handler(false)
-    end
+    options = { tenant: current_tenant, file_name: file_name, mode_of_transport: mot }
+    document = ExcelDataServices::FileWriter::LocalCharges.new(options).perform
+
+    response_handler(key: 'local_charges', url: rails_blob_url(document.file, disposition: 'attachment'))
+  end
+
+  private
+
+  def upload_params
+    params.permit(:file)
+  end
+
+  def download_params
+    params.require(:options).permit(:mot)
   end
 end

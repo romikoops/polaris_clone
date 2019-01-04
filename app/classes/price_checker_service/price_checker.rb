@@ -48,7 +48,7 @@ module PriceCheckerService
           end
         end
       else
-        unique_trips = [@itinerary.trips.find_by(tenant_vehicle_id: @service_level.id)]
+        unique_trips = [@itinerary.trips.find_by(tenant_vehicle_id: @service_level.id)].compact
       end
       @schedules = unique_trips.map do |trip|
         attributes = {

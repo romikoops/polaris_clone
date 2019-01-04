@@ -240,7 +240,7 @@ module DataValidator
       most_diverse_set = pricings_by_cargo_class.values.max_by(&:length)
       other_pricings = pricings_by_cargo_class.values.reject { |pricing_group| pricing_group == most_diverse_set }.flatten
       if most_diverse_set.nil?
-        result_to_return << nil
+        result_to_return = nil
       else
         most_diverse_set.each do |pricing|
           obj = {

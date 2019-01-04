@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
+import { snakeCase } from 'lodash'
 import PropTypes from '../../../prop-types'
 import styles from './Card.scss'
 import adminStyles from '../Admin.scss'
@@ -74,9 +75,9 @@ class CardPricingIndex extends Component {
     return itinerariesArr
   }
 
-  lclUpload (file) {
+  pricingUpload (file, mot, loadType, isOpen) {
     const { documentDispatch } = this.props
-    documentDispatch.uploadPricings(file, 'lcl', false)
+    documentDispatch.uploadPricings(file, mot, loadType, isOpen)
   }
 
   updateSearch (array) {
@@ -142,6 +143,87 @@ class CardPricingIndex extends Component {
     if (!scope) return ''
     const numPages = allNumPages[mot] || 1
 
+    const loadTypeOptions = (() => {
+      switch (mot) {
+        case 'air':
+          return { cargoItem: 'LCL' }
+        case 'ocean':
+          return { cargoItem: 'LCL', container: 'FCL' }
+        case 'rail':
+          return { cargoItem: 'LCL', container: 'FCL' }
+        case 'trucking':
+          return { cargoItem: 'LTL', container: 'FTL' }
+        default:
+          return {}
+      }
+    })()
+
+    const uploadButtons = (
+      <div
+        className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
+      >
+        {Object.keys(loadTypeOptions).map((loadType) => {
+          const uploadPricingText = (loadType
+            ? t('admin:uploadPricingWithLoadType', { mot: capitalize(mot), loadType: loadTypeOptions[loadType].toUpperCase() })
+            : t('admin:uploadPricing', { mot: capitalize(mot) })
+          )
+
+          const options = { mot }
+          if (loadType) options.load_type = snakeCase(loadType)
+
+          return (
+            <div
+              className={`${
+                adminStyles.action_section
+              } flex-100 layout-row layout-wrap layout-align-center-center`}
+            >
+              <p className="flex-100">{uploadPricingText}</p>
+              <FileUploader
+                theme={theme}
+                dispatchFn={file => this.pricingUpload(file, mot, snakeCase(loadType), false)}
+                tooltip={priceTip.upload_lcl}
+                type="xlsx"
+                size="full"
+                text={t('admin:dedicatedPricing')}
+              />
+            </div>
+          )
+        })}
+      </div>
+    )
+
+    const downloadButtons = (
+      <div
+        className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
+      >
+        {Object.keys(loadTypeOptions).map((loadType) => {
+          const downloadPricingText = (loadType
+            ? t('admin:downloadPricingWithLoadType', { mot: capitalize(mot), loadType: loadTypeOptions[loadType].toUpperCase() })
+            : t('admin:downloadPricing', { mot: capitalize(mot) })
+          )
+
+          const options = { mot }
+          if (loadType) options.load_type = snakeCase(loadType)
+
+          return (
+            <div
+              className={`${
+                adminStyles.action_section
+              } flex-100 layout-row layout-wrap layout-align-center-center`}
+            >
+              <p className="flex-100">{downloadPricingText}</p>
+              <DocumentsDownloader
+                theme={theme}
+                target={`pricing_${snakeCase(loadType)}`}
+                options={options}
+                size="full"
+              />
+            </div>
+          )
+        })}
+      </div>
+    )
+
     return (
       <div className="flex-100 layout-row layout-align-md-space-between-start layout-align-space-around-start">
 
@@ -168,11 +250,10 @@ class CardPricingIndex extends Component {
               >
                 <i className="fa fa-chevron-left" />
                 <p>
-&nbsp;&nbsp;&nbsp;&nbsp;
+                  {'\u00A0\u00A0\u00A0\u00A0'}
                   {t('common:basicBack')}
                 </p>
               </div>
-              {}
               <p>{page}</p>
               <div
                 className={`
@@ -183,7 +264,7 @@ class CardPricingIndex extends Component {
               >
                 <p>
                   {t('common:next')}
-&nbsp;&nbsp;&nbsp;&nbsp;
+                  {'\u00A0\u00A0\u00A0\u00A0'}
                 </p>
                 <i className="fa fa-chevron-right" />
               </div>
@@ -213,29 +294,7 @@ class CardPricingIndex extends Component {
                       handleCollapser={() => this.toggleExpander('upload')}
                       text={t('admin:uploadData')}
                       faClass="fa fa-cloud-upload"
-                      content={(
-                        <div
-                          className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
-                        >
-                          <div
-                            className={`${
-                              adminStyles.action_section
-                            } flex-100 layout-row layout-wrap layout-align-center-center`}
-                          >
-                            <p className="flex-100">{t('admin:uploadPricing')}</p>
-                            <FileUploader
-                              theme={theme}
-                              dispatchFn={e => this.lclUpload(e)}
-                              tooltip={priceTip.upload_lcl}
-                              type="xlsx"
-                              size="full"
-                              text={t('admin:dedicatedPricing')}
-                            />
-
-                          </div>
-
-                        </div>
-                      )}
+                      content={uploadButtons}
                     />
                   ) : '' }
                   <CollapsingBar
@@ -246,25 +305,7 @@ class CardPricingIndex extends Component {
                     handleCollapser={() => this.toggleExpander('download')}
                     text={t('admin:downloadData')}
                     faClass="fa fa-cloud-download"
-                    content={(
-                      <div
-                        className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
-                      >
-                        <div
-                          className={`${
-                            adminStyles.action_section
-                          } flex-100 layout-row layout-wrap layout-align-center-center`}
-                        >
-                          <p className="flex-100">{t('admin:downloadPricing', { mot: capitalize(mot) })}</p>
-                          <DocumentsDownloader
-                            theme={theme}
-                            target="pricing"
-                            options={{ mot }}
-                            size="full"
-                          />
-                        </div>
-                      </div>
-                    )}
+                    content={downloadButtons}
                   />
                   { scope.show_beta_features ? (
                     <CollapsingBar
