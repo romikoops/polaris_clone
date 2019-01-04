@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
+import { has } from 'lodash'
 import { cookieActions } from '../../actions'
 import styles from './Footer.scss'
 import { socialIcons, isQuote } from '../../helpers'
@@ -14,7 +15,7 @@ class Footer extends React.PureComponent {
 
   render () {
     const {
-      theme, tenant, t, cookieDispatch, bookNow
+      theme, tenant, t, bookNow
     } = this.props
 
     if (!tenant) {
@@ -36,8 +37,10 @@ class Footer extends React.PureComponent {
     }
     const home = links && links.home ? links.home : defaultLinks.home
     let termsLink = ''
-    tenant.subdomain ? termsLink = `https://${tenant.subdomain}.itsmycargo.com/terms_and_conditions` : termsLink = ''
-
+    tenant.subdomain ? termsLink = `/terms_and_conditions` : termsLink = ''
+    if (has(tenant, ['scope', 'links', 'terms'])) {
+      termsLink = tenant.scope.links.terms
+    }
     const filteredSocialLinks = socialLinks ? Object.entries(socialLinks).filter(array => array[1] !== '') : []
     const oo = filteredSocialLinks.map((value) => {
       const social = value[0]
@@ -49,10 +52,6 @@ class Footer extends React.PureComponent {
     return (
       <div
         className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.footer}`}
-        ref={(div) => {
-          if (!div) return
-          cookieDispatch.updateCookieHeight({ height: div.offsetHeight })
-        }}
       >
         <div className={`flex-20 flex-gt-sm-20 layout-row layout-wrap layout-align-center-center ${styles.banner_text}`}>
           {isQuotationShop ? '' : (
@@ -164,5 +163,5 @@ function mapDispatchToProps (dispatch) {
     cookieDispatch: bindActionCreators(cookieActions, dispatch)
   }
 }
-
-export default connect(null, mapDispatchToProps)(withNamespaces('footer')(Footer))
+export const translatedFooter = withNamespaces(['footer'])(Footer)
+export default connect(null, mapDispatchToProps)(translatedFooter)
