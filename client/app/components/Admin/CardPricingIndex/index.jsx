@@ -285,16 +285,18 @@ class CardPricingIndex extends Component {
               flexOptions="flex-100"
               content={(
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                  <CollapsingBar
-                    showArrow
-                    collapsed={!expander.upload}
-                    theme={theme}
-                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                    handleCollapser={() => this.toggleExpander('upload')}
-                    text={t('admin:uploadData')}
-                    faClass="fa fa-cloud-upload"
-                    content={uploadButtons}
-                  />
+                  { scope.show_beta_features ? (
+                    <CollapsingBar
+                      showArrow
+                      collapsed={!expander.upload}
+                      theme={theme}
+                      styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                      handleCollapser={() => this.toggleExpander('upload')}
+                      text={t('admin:uploadData')}
+                      faClass="fa fa-cloud-upload"
+                      content={uploadButtons}
+                    />
+                  ) : '' }
                   <CollapsingBar
                     showArrow
                     collapsed={!expander.download}

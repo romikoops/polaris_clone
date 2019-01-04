@@ -101,34 +101,36 @@ export class AdminHubsIndex extends Component {
       flexOptions="flex"
       content={(
         <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-          <CollapsingBar
-            showArrow
-            collapsed={!expander.upload}
-            theme={theme}
-            styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-            handleCollapser={() => this.toggleExpander('upload')}
-            text={t('admin:uploadData')}
-            faClass="fa fa-cloud-upload"
-            content={(
-              <div>
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-align-center-center layout-wrap`}
-                >
-                  <p className="flex-100 center">{t('admin:uploadHubs')}</p>
-                  <FileUploader
-                    theme={theme}
-                    url={hubUrl}
-                    type="xlsx"
-                    text={t('admin:hubExcel')}
-                    dispatchFn={documentDispatch.uploadHubs}
-                  />
+          { scope.show_beta_features ? (
+            <CollapsingBar
+              showArrow
+              collapsed={!expander.upload}
+              theme={theme}
+              styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+              handleCollapser={() => this.toggleExpander('upload')}
+              text={t('admin:uploadData')}
+              faClass="fa fa-cloud-upload"
+              content={(
+                <div>
+                  <div
+                    className={`${
+                      styles.action_section
+                    } flex-100 layout-row layout-align-center-center layout-wrap`}
+                  >
+                    <p className="flex-100 center">{t('admin:uploadHubs')}</p>
+                    <FileUploader
+                      theme={theme}
+                      url={hubUrl}
+                      type="xlsx"
+                      text={t('admin:hubExcel')}
+                      dispatchFn={documentDispatch.uploadHubs}
+                    />
+                  </div>
+                  {motBasedUploadButtons}
                 </div>
-                {motBasedUploadButtons}
-              </div>
-            )}
-          />
+              )}
+            />
+          ) : '' }
           <CollapsingBar
             showArrow
             collapsed={!expander.download}
