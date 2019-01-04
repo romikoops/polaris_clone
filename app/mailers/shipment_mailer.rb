@@ -27,7 +27,7 @@ class ShipmentMailer < ApplicationMailer
     mail_options = {
       from: tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, tenant.email_for(:sales, shipment.mode_of_transport)),
-      subject: 'Your booking through ItsMyCargo'
+      subject: "Your booking through #{tenant.name}"
     }
 
     mail(mail_options, &:html)
