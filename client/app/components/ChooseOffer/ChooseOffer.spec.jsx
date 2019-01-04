@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, user, shipmentData, tenant, shipment, change } from '../../mocks'
+import { theme, identity, user, shipmentData, tenant, shipment, change, match } from '../../mocks'
 import { unconnectedChooseOffer as ChooseOffer} from './ChooseOffer'
 
 jest.mock('uuid', () => {
@@ -37,7 +37,9 @@ const propsBase = {
     goTo: identity
   },
   lastAvailableDate: new Date('2017-07-13T04:41:20'),
-  tenant
+  tenant,
+  match,
+  bookingHasCompleted: () => false
 }
 
 let originalDate

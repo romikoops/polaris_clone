@@ -192,6 +192,8 @@ export class ShipmentDetails extends Component {
   }
 
   componentDidMount () {
+    const { bookingHasCompleted, match } = this.props
+    bookingHasCompleted(match.params.shipmentId)
     window.scrollTo(0, 0)
   }
 

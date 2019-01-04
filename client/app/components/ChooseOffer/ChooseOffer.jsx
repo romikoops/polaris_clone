@@ -63,7 +63,8 @@ class ChooseOffer extends Component {
     this.getRoutes = this.getRoutes.bind(this)
   }
   componentDidMount () {
-    const { prevRequest, setStage } = this.props
+    const { prevRequest, setStage, bookingHasCompleted, match } = this.props
+    bookingHasCompleted(match.params.shipmentId)
     window.scrollTo(0, 0)
     setStage(3)
   }
