@@ -164,11 +164,8 @@ custom_content = {
     }
   ]
 }
-s3 = Aws::S3::Client.new(
-  # access_key_id: Settings.aws.access_key_id,
-  # secret_access_key: Settings.aws.secret_access_key,
-  # region: Settings.aws.region
-)
+s3 = Aws::S3::Client.new()
+
 custom_content.each do |subdomain, content_array|
   tenant = Tenant.find_by_subdomain(subdomain)
   Content.where(tenant_id: tenant.id).destroy_all

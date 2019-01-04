@@ -97,7 +97,7 @@ exports[`shallow render 1`] = `
       </li>
       <li>
         <a
-          href="https://foosubdomain.itsmycargo.com/terms_and_conditions"
+          href="/terms_and_conditions"
           target="_blank"
         >
           Terms and Conditions
@@ -242,7 +242,7 @@ exports[`theme is falsy 1`] = `
       </li>
       <li>
         <a
-          href="https://foosubdomain.itsmycargo.com/terms_and_conditions"
+          href="/terms_and_conditions"
           target="_blank"
         >
           Terms and Conditions

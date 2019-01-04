@@ -2,20 +2,20 @@
 
 require 'rails_helper'
 
-
 describe ChargeBreakdown, type: :model do
   context 'instance methods' do
     let(:charge_breakdown)          { create(:charge_breakdown) }
     let(:price)                     { create(:price) }
 
-    let!(:charge) {
-      create(:charge,
+    let!(:charge) do
+      create(
+        :charge,
         charge_breakdown:         charge_breakdown,
         charge_category:          ChargeCategory.base_node,
         children_charge_category: ChargeCategory.grand_total,
         price:                    price
       )
-    }
+    end
 
     context '.charges.from_category' do
       it 'returns a collection of charges' do

@@ -4,7 +4,8 @@ import {
   theme,
   shipmentData,
   identity,
-  tenant
+  tenant,
+  match
 } from '../../mocks'
 
 jest.mock('uuid', () => {
@@ -155,7 +156,9 @@ const propsBase = {
         'yea'
       ]
     }
-  }
+  },
+  match,
+  bookingHasCompleted: () => false
 }
 
 test('shallow render', () => {

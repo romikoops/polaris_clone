@@ -94,8 +94,9 @@ export class BookingDetails extends Component {
 
   componentDidMount () {
     const {
-      prevRequest, setStage, hideRegistration, reusedShipment
+      prevRequest, setStage, hideRegistration, reusedShipment, bookingHasCompleted, match
     } = this.props
+    bookingHasCompleted(match.params.shipmentId)
     if (reusedShipment && reusedShipment.shipment && !this.state.prevRequestLoaded) {
       this.loadReusedShipment(reusedShipment)
     } else if (prevRequest && prevRequest.shipment) {

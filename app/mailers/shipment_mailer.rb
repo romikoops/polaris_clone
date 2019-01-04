@@ -27,7 +27,7 @@ class ShipmentMailer < ApplicationMailer
     mail_options = {
       from: tenant.emails.dig('support','general'),
       to: tenant.email_for(:sales, shipment.mode_of_transport),
-      subject: 'Your booking through ItsMyCargo'
+      subject: "Your booking through #{tenant.name}"
     }
 
     mail(mail_options, &:html)
@@ -46,7 +46,7 @@ class ShipmentMailer < ApplicationMailer
       from: tenant.emails.dig('support','general'),
       to: user.email.blank? ? 'itsmycargodev@gmail.com' : user.email,
       bcc: ['bookingemails@itsmycargo.com'],
-      subject: 'Your booking through ItsMyCargo'
+      subject: "Your booking through #{tenant.name}"
     }
 
     mail(mail_options, &:html)
@@ -64,7 +64,7 @@ class ShipmentMailer < ApplicationMailer
       from: tenant.emails.dig('support','general'),
       to: user.email.blank? ? 'itsmycargodev@gmail.com' : user.email,
       bcc: ['bookingemails@itsmycargo.com'],
-      subject: 'Your booking through ItsMyCargo'
+      subject: "Your booking through #{tenant.name}"
     }
 
     mail(mail_options, &:html)

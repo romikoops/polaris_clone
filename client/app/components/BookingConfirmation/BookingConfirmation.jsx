@@ -133,10 +133,11 @@ export class BookingConfirmation extends Component {
   }
 
   componentDidMount () {
-    const { setStage } = this.props
+    const { setStage, match, bookingHasCompleted } = this.props
     setStage(5)
     this.getRemarks()
     window.scrollTo(0, 0)
+    bookingHasCompleted(match.params.shipmentId)
   }
 
   handleCollapser (key) {

@@ -1,5 +1,0 @@
-<% if @resource.try(:unconfirmed_email?) %>
-  <%= render "account_layout", greeting_text: "We're contacting you to notify you that your email is being changed to #{@resource.unconfirmed_email}"%>
-<% else %>
-  <%= render "account_layout", greeting_text: "We're contacting you to notify you that your email has been changed to #{@resource.email}"%>
-<% end %>

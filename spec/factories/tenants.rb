@@ -3,6 +3,34 @@
 FactoryBot.define do
   factory :tenant do
     subdomain 'demo'
+    name 'Demo'
+    addresses do
+      {
+        main: 'Brooktorkai 7, 20457 Hamburg, Germany',
+        components: []
+      }
+    end
+    phones do
+      {
+        main: '+46 31-85 32 00',
+        support: '0173042031020'
+      }
+    end
+    theme do
+      {
+        colors: {
+          primary: '#0D5BA9',
+          secondary: '#23802A',
+          brightPrimary: '#2491FD',
+          brightSecondary: '#25ED36'
+        },
+        logoLarge: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
+        logoSmall: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
+        logoWide: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png',
+        logoWhite: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png',
+        background: 'https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg'
+      }
+    end
     scope do
       {
         modes_of_transport: {
@@ -59,10 +87,10 @@ FactoryBot.define do
     emails do
       {
         sales: {
-          general: "sales.general@demo.com"
+          general: 'sales.general@demo.com'
         },
         support: {
-          general: "support@demo.com",
+          general: 'support@demo.com'
         }
       }
     end
@@ -71,25 +99,23 @@ FactoryBot.define do
       emails do
         {
           sales: {
-            air: "sales.air@demo.com",
-            ocean: "sales.ocean@demo.com",
-            rail: "sales.rail@demo.com",
-            general: "sales.general@demo.com"
+            air: 'sales.air@demo.com',
+            ocean: 'sales.ocean@demo.com',
+            rail: 'sales.rail@demo.com',
+            general: 'sales.general@demo.com'
           },
           support: {
-            general: "support@demo.com",
-            air: "support.air@demo.com",
-            ocean: "support.sea@demo.com",
-            rail: "support.rail@demo.com"
+            general: 'support@demo.com',
+            air: 'support.air@demo.com',
+            ocean: 'support.sea@demo.com',
+            rail: 'support.rail@demo.com'
           }
         }
       end
     end
 
     before(:create) do |tenant|
-      if tenant.max_dimensions.empty?
-        MaxDimensionsBundle.create_defaults_for(tenant, all: true)
-      end
+      MaxDimensionsBundle.create_defaults_for(tenant, all: true) if tenant.max_dimensions.empty?
     end
   end
 end

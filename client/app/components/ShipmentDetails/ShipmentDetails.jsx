@@ -192,6 +192,8 @@ export class ShipmentDetails extends Component {
   }
 
   componentDidMount () {
+    const { bookingHasCompleted, match } = this.props
+    bookingHasCompleted(match.params.shipmentId)
     window.scrollTo(0, 0)
   }
 
@@ -1145,7 +1147,7 @@ export class ShipmentDetails extends Component {
                   />
                 </div>
               )}
-              <div className="flex-35 layout-row layout-align-end">
+              <div className="flex-35 layout-row layout-wrap layout-align-end">
                 <RoundButton
                   text={isQuote(tenant) ? t('common:getQuotes') : t('common:getOffers')}
                   handleNext={this.handleNextStage}
@@ -1155,8 +1157,6 @@ export class ShipmentDetails extends Component {
                   active={getOffersBtnIsActive(this.state)}
                   disabled={!getOffersBtnIsActive(this.state)}
                 />
-              </div>
-              <div className="flex-100 layout-row layout-align-end">
                 {
                   this.state.excessChargeableWeightText && (
                     <p style={{ fontSize: '14px', width: '317px' }}>
