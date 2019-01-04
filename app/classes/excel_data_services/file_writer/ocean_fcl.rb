@@ -12,7 +12,7 @@ module ExcelDataServices
         pricings = tenant.pricings.for_mode_of_transport('ocean').for_load_type('container')
         raw_pricing_rows = build_raw_pricing_rows(pricings)
 
-        dynamic_headers = raw_pricing_rows.map { |x| x[:shipping_type]&.downcase&.to_sym }.uniq.compact.sort
+        dynamic_headers = build_dynamic_headers(raw_pricing_rows)
         data_with_dynamic_headers, data_static_fee_col = raw_pricing_rows.group_by { |row| row[:range].blank? }.values
 
         rows_data_with_dynamic_headers = build_rows_data_with_dynamic_headers(data_with_dynamic_headers, dynamic_headers)
@@ -22,11 +22,28 @@ module ExcelDataServices
           'With Ranges' => rows_data_static_fee_col }
       end
 
+      def build_dynamic_headers(raw_pricing_rows)
+        raw_pricing_rows.map { |row| row[:shipping_type]&.downcase&.to_sym }.uniq.compact.sort
+      end
+
+      def merge_grouped_rows(grouped_rows)
+        grouped_rows.map do |group|
+          group.reduce({}) do |memo, obj|
+            # Values that are not nil take precedence
+            memo.merge!(obj) { |_key, old_val, new_val| new_val.nil? ? old_val : new_val }
+          end
+        end
+      end
+
+      def group_by_static_headers(data_with_dynamic_headers)
+        data_with_dynamic_headers.group_by { |el| el.values_at(*DYNAMIC_FEE_COLS_NO_RANGES_HEADERS) }.values
+      end
+
       def build_rows_data_with_dynamic_headers(data_with_dynamic_headers, dynamic_headers)
         return nil unless data_with_dynamic_headers && dynamic_headers
 
         sort!(data_with_dynamic_headers)
-        data_with_dynamic_headers.map do |attributes|
+        unmerged_rows = data_with_dynamic_headers.map do |attributes|
           row_data = {}
 
           DYNAMIC_FEE_COLS_NO_RANGES_ATTRIBUTES_LOOKUP.each do |key, value|
@@ -44,6 +61,9 @@ module ExcelDataServices
 
           row_data
         end
+
+        grouped_rows = group_by_static_headers(unmerged_rows)
+        merge_grouped_rows(grouped_rows)
       end
 
       def build_raw_headers(sheet_name, rows_data)
