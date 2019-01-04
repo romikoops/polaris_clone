@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router'
-import { AdminPriceCreator }from './'
+import { AdminPriceCreator } from '.'
 import CardPricingIndex from './CardPricingIndex'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
@@ -23,9 +23,11 @@ export class AdminPricingsIndex extends Component {
     this.viewRoute = this.viewRoute.bind(this)
     this.toggleCreator = this.toggleCreator.bind(this)
   }
+
   componentDidMount () {
     window.scrollTo(0, 0)
   }
+
   getInitialPricingPage () {
     const { adminDispatch, scope } = this.props
     const pages = {}
@@ -36,6 +38,7 @@ export class AdminPricingsIndex extends Component {
     })
     adminDispatch.getPricings(false, pages)
   }
+
   toggleCreator (mot) {
     this.setState(prevState => ({
       newPricing: {
@@ -44,24 +47,30 @@ export class AdminPricingsIndex extends Component {
       }
     }))
   }
+
   viewAllRoutes () {
     this.setState({ redirectRoutes: true })
   }
+
   viewAllClients () {
     this.setState({ redirectClients: true })
   }
+
   viewClient (client) {
     const { adminDispatch } = this.props
     adminDispatch.getClientPricings(client.id, true)
   }
+
   viewRoute (route) {
     const { adminDispatch } = this.props
     adminDispatch.getItineraryPricings(route.id, true)
   }
+
   lclUpload (file) {
     const { documentDispatch } = this.props
     documentDispatch.uploadPricings(file, 'lcl', false)
   }
+
   fclUpload (file) {
     const { documentDispatch } = this.props
     documentDispatch.uploadPricings(file, 'fcl', false)
@@ -87,39 +96,40 @@ export class AdminPricingsIndex extends Component {
       itineraries, detailedItineraries, transportCategories, lastUpdate, numItineraryPages
     } = pricingData
     const modesOfTransport = scope.modes_of_transport
-    const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName =>
-      Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool))
+    const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName => Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool))
 
-    const motTabs = modeOfTransportNames.sort().map(mot => (<Tab
-      tabTitle={capitalize(mot)}
-      theme={theme}
-      mot={mot}
-    >
-      <CardPricingIndex
-        itineraries={detailedItineraries[mot]}
-        numPages={numItineraryPages}
+    const motTabs = modeOfTransportNames.sort().map(mot => (
+      <Tab
+        tabTitle={capitalize(mot)}
         theme={theme}
-        scope={scope}
         mot={mot}
-        adminDispatch={adminDispatch}
-        toggleCreator={() => this.toggleCreator(mot)}
-        documentDispatch={this.props.documentDispatch}
-        lastUpdate={lastUpdate}
-      />
-      {newPricing[mot] ? (
-        <AdminPriceCreator
+      >
+        <CardPricingIndex
+          itineraries={detailedItineraries[mot]}
+          numPages={numItineraryPages}
           theme={theme}
-          itineraries={itineraries}
-          clients={clients}
+          scope={scope}
+          mot={mot}
           adminDispatch={adminDispatch}
-          detailedItineraries={detailedItineraries}
-          transportCategories={transportCategories}
-          closeForm={this.toggleCreator}
+          toggleCreator={() => this.toggleCreator(mot)}
+          documentDispatch={this.props.documentDispatch}
+          lastUpdate={lastUpdate}
         />
-      ) : (
-        ''
-      )}
-    </Tab>))
+        {newPricing[mot] ? (
+          <AdminPriceCreator
+            theme={theme}
+            itineraries={itineraries}
+            clients={clients}
+            adminDispatch={adminDispatch}
+            detailedItineraries={detailedItineraries}
+            transportCategories={transportCategories}
+            closeForm={this.toggleCreator}
+          />
+        ) : (
+          ''
+        )}
+      </Tab>
+    ))
     motTabs.push(<Tab
       tabTitle={t('admin:trucking')}
       theme={theme}
