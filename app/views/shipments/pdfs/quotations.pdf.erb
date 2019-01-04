@@ -215,7 +215,7 @@
         <% next if !charge%>
         <div class="sub-prices">
           <div class="total-price-single">
-            <h4><%= charge["name"] == 'Freight' ? "#{s.mode_of_transport} #{charge["name"]}" : charge["name"] %></h4>
+            <h4><%= charge_key == 'cargo' ? "#{s.mode_of_transport} Freight" : charge["name"] %></h4>
             <% if charge != "Grand Total" && scope['cargo_price_notes'] && scope['cargo_price_notes'][charge_key] %>
               <p><%= scope['cargo_price_notes'][charge_key.to_s]%></p>
             <% elsif charge != "Grand Total" && !scope['hide_grand_total'] %>
