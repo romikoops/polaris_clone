@@ -25,7 +25,7 @@ export function priceSpacing (value) {
 function displaysValue (value, number, decimals) {
   if (!decimals || parseFloat(number) === 0 || decimals === 3) return value
   const tail = value.substr(-1 * decimals)
-  let nullValueString = '' 
+  let nullValueString = ''
   for (let i = 0; i < decimals; i++) {
     nullValueString += '0'
   }
