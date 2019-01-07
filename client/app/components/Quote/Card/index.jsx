@@ -167,19 +167,14 @@ class QuoteCard extends PureComponent {
           <div className={`flex-10 layout-row layout-align-center-center ${styles.mot_icon}`}>
             {switchIcon(result.meta.mode_of_transport, gradientStyle)}
           </div>
-          <div className={`flex-60 layout-row layout-align-start-center ${styles.origin_destination}`}>
-            <div className="layout-column layout-align-center-start">
+          <div className={`flex-55 layout-row layout-align-start-center ${styles.origin_destination}`}>
+            <div className="layout-column layout-align-center-start flex-100">
               <p>
-                {t('common:from')}
-                :
-                {' '}
-                <span>{originHub.name}</span>
+                {`${t('common:from')}: `}<span>{originHub.name}</span>
+                
               </p>
               <p>
-                {t('common:to')}
-                :
-                {' '}
-                <span>{destinationHub.name}</span>
+                {`${t('common:to')}: `}<span>{destinationHub.name}</span>
               </p>
             </div>
           </div>
@@ -197,12 +192,10 @@ class QuoteCard extends PureComponent {
             </div>
             <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.unit_info}`}>
               <p className="flex-60 layout-row layout-align-start-center">
-                {capitalize(t('cargo:totalWeight'))}:
+                {`${capitalize(t('cargo:totalWeight'))}: `}
               </p>
               <span className="flex layout-row layout-align-start-center">
-                { numberSpacing(calcPayload, 1) }
-                {' '}
-                kg
+                { `${numberSpacing(calcPayload, 1)} kg` }
               </span>
             </div>
           </div>
