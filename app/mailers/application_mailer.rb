@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationMailer < ActionMailer::Base
+
   default from: "itsmycargodev@gmail.com"
   layout "mailer"
 
@@ -10,5 +11,13 @@ class ApplicationMailer < ActionMailer::Base
     @company = company
     @phone = phone
     mail(to: "support@itsmycargo.com", subject: "ItsMyCargo Beta Prospect!", &:text)
+  end
+
+  def mail_target_interceptor(user, email)
+    if user.internal?
+      return 'bookingemails@itsmycargo.com'
+    else
+      return email
+    end
   end
 end

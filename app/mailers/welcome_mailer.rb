@@ -14,7 +14,7 @@ class WelcomeMailer < ApplicationMailer
 
     mail(
       from: @tenant.emails.dig('support', 'general'),
-      to: @user.email,
+      to: mail_target_interceptor(@user, @user.email),
       subject: @content['subject'][0]&.text
     ) do |format|
       format.html
