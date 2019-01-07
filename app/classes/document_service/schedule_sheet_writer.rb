@@ -39,10 +39,20 @@ module DocumentService
     end
 
     def find_trip
+      #dates limited for performance reasons
+      start_date = Date.today
+      end_date = Date.today + 3.months 
+      # variables hardcoded until params are sent from front end
       if options[:mode_of_transport] && !options[:itinerary_id]
-      Trip.joins("INNER JOIN itineraries ON trips.itinerary_id = itineraries.id AND itineraries.mode_of_transport = '#{options[:mode_of_transport]}' AND itineraries.tenant_id = #{options[:tenant_id]}").order(:start_date)
+        Trip
+          .joins("INNER JOIN itineraries ON trips.itinerary_id = itineraries.id AND itineraries.mode_of_transport = '#{options[:mode_of_transport]}' AND itineraries.tenant_id = #{options[:tenant_id]}")
+          .where("start_date > ? AND end_date < ?", start_date, end_date)
+          .order(:start_date)
       else
-        Trip.joins("INNER JOIN itineraries ON trips.itinerary_id = itineraries.id AND itineraries.tenant_id = #{options[:tenant_id]}").order(:start_date)
+        Trip
+          .joins("INNER JOIN itineraries ON trips.itinerary_id = itineraries.id AND itineraries.tenant_id = #{options[:tenant_id]}")
+          .where("start_date > ? AND end_date < ?", start_date, end_date)
+          .order(:start_date)
       end
     end
 
