@@ -244,7 +244,11 @@ class Shipment < ApplicationRecord
   end
 
   def cargo_count
-    cargo_units.reduce(0) { |sum, unit| sum + unit.quantity }
+    if aggregated_cargo
+      1
+    else
+      cargo_units.reduce(0) { |sum, unit| sum + unit.quantity }
+    end
   end
 
   def valid_until
