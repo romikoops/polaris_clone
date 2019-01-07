@@ -153,6 +153,20 @@ exports[`document.viewer is truthy 1`] = `
                 }
               }
               toggleNew={null}
+              user={
+                Object {
+                  "company_name": "FOO_COMPANY",
+                  "currency": "EUR",
+                  "email": "foo@bar.baz",
+                  "first_name": "John",
+                  "guest": false,
+                  "last_name": "Doe",
+                  "phone": "6345789",
+                  "role": Object {
+                    "name": "shipper",
+                  },
+                }
+              }
             />
           </Tab>
         </Tabs>
@@ -164,7 +178,7 @@ exports[`document.viewer is truthy 1`] = `
 
 exports[`scheduleData is falsy 1`] = `""`;
 
-exports[`scope.show_beta_features is truthy 1`] = `
+exports[`shallow render 1`] = `
 <GenericError
   t={[Function]}
   theme={
@@ -222,7 +236,218 @@ exports[`scope.show_beta_features is truthy 1`] = `
                   "modes_of_transport": Object {
                     "air": "Air",
                   },
-                  "show_beta_features": true,
+                }
+              }
+              sideMenuNodes={
+                Array [
+                  <SideOptionsBox
+                    content={
+                      <div
+                        className="flex-100 layout-row layout-wrap layout-align-center-start"
+                      >
+                        
+                        <CollapsingBar
+                          collapsed={true}
+                          content={
+                            <div>
+                              <div
+                                className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                              >
+                                <p
+                                  className="flex-100"
+                                >
+                                  Download Schedules Sheet
+                                </p>
+                                <DocumentsDownloader
+                                  disabled={false}
+                                  documentDispatch={null}
+                                  downloadUrls={Object {}}
+                                  loading={false}
+                                  options={Object {}}
+                                  size="small"
+                                  square={false}
+                                  t={[Function]}
+                                  target="schedules"
+                                  theme={
+                                    Object {
+                                      "colors": Object {
+                                        "primary": "#333",
+                                        "secondary": "#fafafa",
+                                      },
+                                    }
+                                  }
+                                  tooltip=""
+                                />
+                              </div>
+                            </div>
+                          }
+                          contentHeader=""
+                          faClass="fa fa-cloud-download"
+                          handleCollapser={[Function]}
+                          headerWrapClasses=""
+                          mainWrapperStyle={Object {}}
+                          minHeight=""
+                          parentClass=""
+                          showArrow={true}
+                          startCollapsed={false}
+                          text="Download Data"
+                          theme={
+                            Object {
+                              "colors": Object {
+                                "primary": "#333",
+                                "secondary": "#fafafa",
+                              },
+                            }
+                          }
+                        />
+                        
+                      </div>
+                    }
+                    flexOptions=""
+                    header="Data manager"
+                  />,
+                ]
+              }
+              t={[Function]}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              toggleNew={null}
+              user={
+                Object {
+                  "company_name": "FOO_COMPANY",
+                  "currency": "EUR",
+                  "email": "foo@bar.baz",
+                  "first_name": "John",
+                  "guest": false,
+                  "last_name": "Doe",
+                  "phone": "6345789",
+                  "role": Object {
+                    "name": "shipper",
+                  },
+                }
+              }
+            />
+          </Tab>
+        </Tabs>
+      </div>
+    </div>
+  </div>
+</GenericError>
+`;
+
+exports[`state.showList is false 1`] = `
+<GenericError
+  t={[Function]}
+  theme={
+    Object {
+      "colors": Object {
+        "primary": "#333",
+        "secondary": "#fafafa",
+      },
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left"
+  >
+    <div
+      className="component_view flex layout-row layout-align-start-start"
+    >
+      <div
+        className="layout-row flex-100 layout-wrap layout-align-start-center"
+      >
+        <AdminScheduleGenerator
+          hubs={Array []}
+          itineraries={
+            Array [
+              Object {
+                "modes_of_transport": "air",
+              },
+            ]
+          }
+          itinerary={Object {}}
+          t={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          toggleNew={[Function]}
+          vehicleTypes={Array []}
+        />
+      </div>
+    </div>
+  </div>
+</GenericError>
+`;
+
+exports[`user.internal is truthy 1`] = `
+<GenericError
+  t={[Function]}
+  theme={
+    Object {
+      "colors": Object {
+        "primary": "#333",
+        "secondary": "#fafafa",
+      },
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left"
+  >
+    <div
+      className="component_view flex layout-row layout-align-start-start"
+    >
+      <div
+        className="flex-100 layout-row layout-align-center-start"
+      >
+        <Tabs
+          defaultActiveTabIndex={0}
+          paddingFixes={true}
+          wrapperTabs="layout-row flex-45 flex-sm-40 flex-xs-80"
+        >
+          <Tab
+            extraClick={[Function]}
+            icon=""
+            isActive={false}
+            isUniq={false}
+            linkClassName=""
+            mot="air"
+            onClick={null}
+            tabIndex={0}
+            tabTitle="air"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          >
+            <CardRoutesIndex
+              adminDispatch={[Function]}
+              handleClick={[Function]}
+              hubs={Array []}
+              itineraries={Array []}
+              limit={9}
+              mot="air"
+              newText=""
+              scope={
+                Object {
+                  "modes_of_transport": Object {
+                    "air": "Air",
+                  },
                 }
               }
               sideMenuNodes={
@@ -493,207 +718,24 @@ exports[`scope.show_beta_features is truthy 1`] = `
                 }
               }
               toggleNew={null}
-            />
-          </Tab>
-        </Tabs>
-      </div>
-    </div>
-  </div>
-</GenericError>
-`;
-
-exports[`shallow render 1`] = `
-<GenericError
-  t={[Function]}
-  theme={
-    Object {
-      "colors": Object {
-        "primary": "#333",
-        "secondary": "#fafafa",
-      },
-    }
-  }
->
-  <div
-    className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left"
-  >
-    <div
-      className="component_view flex layout-row layout-align-start-start"
-    >
-      <div
-        className="flex-100 layout-row layout-align-center-start"
-      >
-        <Tabs
-          defaultActiveTabIndex={0}
-          paddingFixes={true}
-          wrapperTabs="layout-row flex-45 flex-sm-40 flex-xs-80"
-        >
-          <Tab
-            extraClick={[Function]}
-            icon=""
-            isActive={false}
-            isUniq={false}
-            linkClassName=""
-            mot="air"
-            onClick={null}
-            tabIndex={0}
-            tabTitle="air"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-          >
-            <CardRoutesIndex
-              adminDispatch={[Function]}
-              handleClick={[Function]}
-              hubs={Array []}
-              itineraries={Array []}
-              limit={9}
-              mot="air"
-              newText=""
-              scope={
+              user={
                 Object {
-                  "modes_of_transport": Object {
-                    "air": "Air",
+                  "company_name": "FOO_COMPANY",
+                  "currency": "EUR",
+                  "email": "foo@bar.baz",
+                  "first_name": "John",
+                  "guest": false,
+                  "internal": true,
+                  "last_name": "Doe",
+                  "phone": "6345789",
+                  "role": Object {
+                    "name": "shipper",
                   },
                 }
               }
-              sideMenuNodes={
-                Array [
-                  <SideOptionsBox
-                    content={
-                      <div
-                        className="flex-100 layout-row layout-wrap layout-align-center-start"
-                      >
-                        
-                        <CollapsingBar
-                          collapsed={true}
-                          content={
-                            <div>
-                              <div
-                                className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
-                              >
-                                <p
-                                  className="flex-100"
-                                >
-                                  Download Schedules Sheet
-                                </p>
-                                <DocumentsDownloader
-                                  disabled={false}
-                                  documentDispatch={null}
-                                  downloadUrls={Object {}}
-                                  loading={false}
-                                  options={Object {}}
-                                  size="small"
-                                  square={false}
-                                  t={[Function]}
-                                  target="schedules"
-                                  theme={
-                                    Object {
-                                      "colors": Object {
-                                        "primary": "#333",
-                                        "secondary": "#fafafa",
-                                      },
-                                    }
-                                  }
-                                  tooltip=""
-                                />
-                              </div>
-                            </div>
-                          }
-                          contentHeader=""
-                          faClass="fa fa-cloud-download"
-                          handleCollapser={[Function]}
-                          headerWrapClasses=""
-                          mainWrapperStyle={Object {}}
-                          minHeight=""
-                          parentClass=""
-                          showArrow={true}
-                          startCollapsed={false}
-                          text="Download Data"
-                          theme={
-                            Object {
-                              "colors": Object {
-                                "primary": "#333",
-                                "secondary": "#fafafa",
-                              },
-                            }
-                          }
-                        />
-                        
-                      </div>
-                    }
-                    flexOptions=""
-                    header="Data manager"
-                  />,
-                ]
-              }
-              t={[Function]}
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-              toggleNew={null}
             />
           </Tab>
         </Tabs>
-      </div>
-    </div>
-  </div>
-</GenericError>
-`;
-
-exports[`state.showList is false 1`] = `
-<GenericError
-  t={[Function]}
-  theme={
-    Object {
-      "colors": Object {
-        "primary": "#333",
-        "secondary": "#fafafa",
-      },
-    }
-  }
->
-  <div
-    className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left"
-  >
-    <div
-      className="component_view flex layout-row layout-align-start-start"
-    >
-      <div
-        className="layout-row flex-100 layout-wrap layout-align-start-center"
-      >
-        <AdminScheduleGenerator
-          hubs={Array []}
-          itineraries={
-            Array [
-              Object {
-                "modes_of_transport": "air",
-              },
-            ]
-          }
-          itinerary={Object {}}
-          t={[Function]}
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-          toggleNew={[Function]}
-          vehicleTypes={Array []}
-        />
       </div>
     </div>
   </div>

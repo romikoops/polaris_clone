@@ -156,7 +156,8 @@ class AdminSchedules extends Component {
       adminDispatch,
       document,
       documentDispatch,
-      scope
+      scope,
+      user
     } = this.props
 
     if (!scheduleData || !hubs) {
@@ -206,7 +207,7 @@ class AdminSchedules extends Component {
         header={t('admin:dataManager')}
         content={(
           <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-            { scope.show_beta_features ? (
+            { user.internal ? (
               <CollapsingBar
                 showArrow
                 collapsed={!expander.upload}
@@ -292,7 +293,7 @@ class AdminSchedules extends Component {
                 </div>
               )}
             />
-            { scope.show_beta_features ? (
+            { user.internal ? (
               <CollapsingBar
                 showArrow
                 collapsed={!expander.new}
@@ -325,6 +326,7 @@ class AdminSchedules extends Component {
           itineraries={itineraries.filter(itin => itin.mode_of_transport === mot)}
           theme={theme}
           scope={scope}
+          user={user}
           mot={mot}
           adminDispatch={adminDispatch}
           sideMenuNodes={sideMenuNodes}
@@ -357,27 +359,6 @@ class AdminSchedules extends Component {
     )
   }
 }
-AdminSchedules.propTypes = {
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  hubs: PropTypes.arrayOf(PropTypes.hub),
-  scheduleData: PropTypes.shape({
-    routes: PropTypes.arrayOf(PropTypes.route),
-    mapData: PropTypes.arrayOf(PropTypes.object),
-    detailedItineraries: PropTypes.array.isRequired,
-    itineraryIds: PropTypes.Array,
-    itineraries: PropTypes.objectOf(PropTypes.any).isRequired
-  }),
-  document: PropTypes.objectOf(PropTypes.any),
-  itineraries: PropTypes.objectOf(PropTypes.any).isRequired,
-  adminDispatch: PropTypes.func.isRequired,
-  setCurrentUrl: PropTypes.func.isRequired,
-  documentDispatch: PropTypes.objectOf(PropTypes.func),
-  scope: PropTypes.objectOf(PropTypes.any),
-  match: PropTypes.shape({
-    url: PropTypes.string
-  })
-}
 
 AdminSchedules.defaultProps = {
   theme: null,
@@ -391,10 +372,12 @@ AdminSchedules.defaultProps = {
   }
 }
 function mapStateToProps (state) {
-  const { document } = state
+  const { document, authentication } = state
+  const { user } = authentication
 
   return {
-    document
+    document,
+    user
   }
 }
 function mapDispatchToProps (dispatch) {

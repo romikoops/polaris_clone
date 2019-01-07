@@ -2,11 +2,10 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import { AdminRoutesIndex, AdminRouteView, AdminRouteForm } from './'
+import { AdminRoutesIndex, AdminRouteView, AdminRouteForm } from '.'
 import { adminActions } from '../../actions'
 import { Modal } from '../Modal/Modal'
-import GenericError from '../../components/ErrorHandling/Generic'
+import GenericError from '../ErrorHandling/Generic'
 
 class AdminRoutes extends Component {
   constructor (props) {
@@ -20,8 +19,11 @@ class AdminRoutes extends Component {
     this.closeModal = this.closeModal.bind(this)
     this.saveNewRoute = this.saveNewRoute.bind(this)
   }
+
   componentDidMount () {
-    const { adminDispatch, allHubs, loading, match } = this.props
+    const {
+      adminDispatch, allHubs, loading, match
+    } = this.props
     if (allHubs.length < 1 && !loading) {
       adminDispatch.getAllHubs()
     }
@@ -41,9 +43,11 @@ class AdminRoutes extends Component {
     const { adminDispatch } = this.props
     adminDispatch.goTo('/admin/routes')
   }
+
   closeModal () {
     this.setState({ newRoute: false })
   }
+
   saveNewRoute (route) {
     const { adminDispatch } = this.props
     adminDispatch.newRoute(route)
@@ -51,7 +55,16 @@ class AdminRoutes extends Component {
 
   render () {
     const {
-      theme, allHubs, itinerary, itineraries, hubHash, adminDispatch, loading, tenant, mapData
+      theme,
+      allHubs,
+      itinerary,
+      itineraries,
+      hubHash,
+      adminDispatch,
+      loading,
+      tenant,
+      user,
+      mapData
     } = this.props
 
     return (
@@ -59,7 +72,7 @@ class AdminRoutes extends Component {
         <div className="flex-100 layout-row layout-wrap layout-align-start-start">
           {this.state.newRoute ? (
             <Modal
-              component={
+              component={(
                 <AdminRouteForm
                   theme={theme}
                   close={this.closeModal}
@@ -67,7 +80,7 @@ class AdminRoutes extends Component {
                   saveRoute={this.saveNewRoute}
                   adminDispatch={adminDispatch}
                 />
-              }
+              )}
               verticalPadding="30px"
               horizontalPadding="40px"
               parentToggle={this.closeModal}
@@ -91,6 +104,7 @@ class AdminRoutes extends Component {
                   loading={loading}
                   tenant={tenant}
                   mapData={mapData}
+                  user={user}
                   toggleNewRoute={this.toggleNewRoute}
                 />
               )}
@@ -114,25 +128,6 @@ class AdminRoutes extends Component {
       </GenericError>
     )
   }
-}
-AdminRoutes.propTypes = {
-  theme: PropTypes.theme,
-  allHubs: PropTypes.arrayOf(PropTypes.hub),
-  adminDispatch: PropTypes.shape({
-    getRoute: PropTypes.func,
-    newRoute: PropTypes.func
-  }).isRequired,
-  dispatch: PropTypes.func.isRequired,
-  setCurrentUrl: PropTypes.func.isRequired,
-  history: PropTypes.history.isRequired,
-  route: PropTypes.route.isRequired,
-  routes: PropTypes.arrayOf(PropTypes.route).isRequired,
-  mapData: PropTypes.arrayOf(PropTypes.object),
-  hubHash: PropTypes.objectOf(PropTypes.hub),
-  loading: PropTypes.bool,
-  itinerary: PropTypes.objectOf(PropTypes.any).isRequired,
-  itineraries: PropTypes.objectOf(PropTypes.any).isRequired,
-  tenant: PropTypes.tenant
 }
 
 AdminRoutes.defaultProps = {

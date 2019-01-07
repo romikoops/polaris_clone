@@ -82,7 +82,8 @@ class AdminHubs extends Component {
       document,
       documentDispatch,
       numHubPages,
-      tenant
+      tenant,
+      user
     } = this.props
 
     const uploadStatus = document.viewer ? (
@@ -124,6 +125,7 @@ class AdminHubs extends Component {
                   countries={countries}
                   adminDispatch={adminDispatch}
                   {...props}
+                  user={user}
                   toggleNewHub={this.toggleNewHub}
                   viewHub={this.viewHub}
                   scope={scope}
@@ -154,30 +156,6 @@ class AdminHubs extends Component {
       </GenericError>
     )
   }
-}
-AdminHubs.propTypes = {
-  theme: PropTypes.theme,
-  hub: PropTypes.hub,
-  hubHash: PropTypes.objectOf(PropTypes.hub),
-  hubs: PropTypes.arrayOf(PropTypes.hub),
-  dispatch: PropTypes.func.isRequired,
-  setCurrentUrl: PropTypes.func.isRequired,
-  history: PropTypes.history.isRequired,
-  tenant: PropTypes.tenant,
-  loading: PropTypes.bool,
-  countries: PropTypes.arrayOf(PropTypes.any),
-  numHubPages: PropTypes.number,
-  appDispatch: PropTypes.shape({
-    fetchCountries: PropTypes.func
-  }).isRequired,
-  adminDispatch: PropTypes.shape({
-    getHubs: PropTypes.func,
-    saveNewHub: PropTypes.func
-  }).isRequired,
-  documentDispatch: PropTypes.shape({
-    uploadPricings: PropTypes.func
-  }).isRequired,
-  document: PropTypes.objectOf(PropTypes.any).isRequired
 }
 
 AdminHubs.defaultProps = {

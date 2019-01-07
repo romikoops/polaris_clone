@@ -62,7 +62,7 @@ export class AdminRoutesIndex extends Component {
 
   render () {
     const {
-      t, theme, itineraries, adminDispatch, tenant, toggleNewRoute
+      t, theme, itineraries, adminDispatch, tenant, toggleNewRoute, user
     } = this.props
 
     if (!itineraries) {
@@ -89,6 +89,7 @@ export class AdminRoutesIndex extends Component {
         theme={theme}
         scope={scope}
         mot={mot}
+        user={user}
         newText={t('admin:newRoutePlain')}
         adminDispatch={adminDispatch}
         toggleNew={toggleNewRoute}
@@ -110,17 +111,6 @@ export class AdminRoutesIndex extends Component {
       </div>
     )
   }
-}
-AdminRoutesIndex.propTypes = {
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  loading: PropTypes.bool,
-  adminDispatch: PropTypes.shape({
-    getRoutes: PropTypes.func
-  }).isRequired,
-  toggleNewRoute: PropTypes.func.isRequired,
-  itineraries: PropTypes.objectOf(PropTypes.any).isRequired,
-  tenant: PropTypes.tenant
 }
 
 AdminRoutesIndex.defaultProps = {

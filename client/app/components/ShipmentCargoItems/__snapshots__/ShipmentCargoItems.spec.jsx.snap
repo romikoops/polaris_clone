@@ -514,7 +514,6 @@ exports[`shallow rendering 1`] = `
                       <span
                         className="input_value"
                       >
-                        NaN
                          m
                         <sup
                           style={
@@ -563,7 +562,7 @@ exports[`shallow rendering 1`] = `
                       <span
                         className="input_value"
                       >
-                        NaN
+                        2.0
                          kg
                       </span>
                     </p>

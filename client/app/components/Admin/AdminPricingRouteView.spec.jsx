@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
-  theme, identity, client, change
+  theme, identity, client, change, internalUser
 } from '../../mocks'
 import AdminPricingRouteView from './AdminPricingRouteView'
 
@@ -36,9 +36,6 @@ const propsBase = {
   clients: [client],
   loading: false,
   match: {},
-  scope: {
-    show_beta_features: false
-  },
   itineraryPricings: {
     itinerary: {},
     itineraryPricingData: {},
@@ -50,7 +47,8 @@ const propsBase = {
     params: {
       id: '1'
     }
-  }
+  },
+  user: internalUser
 }
 
 test('shallow render', () => {
@@ -118,12 +116,10 @@ test('theme is falsy', () => {
   expect(shallow(<AdminPricingRouteView {...props} />)).toMatchSnapshot()
 })
 
-test('scope.show_beta_features is true', () => {
+test('user.internal is true', () => {
   const props = {
     ...propsBase,
-    scope: {
-      show_beta_features: true
-    }
+    user: internalUser
   }
   expect(shallow(<AdminPricingRouteView {...props} />)).toMatchSnapshot()
 })
@@ -138,9 +134,7 @@ test('state.editorBool is true', () => {
 test('state.showPricingAdder is true', () => {
   const props = {
     ...propsBase,
-    scope: {
-      show_beta_features: true
-    }
+    user: internalUser
   }
   const wrapper = shallow(<AdminPricingRouteView {...props} />)
   wrapper.setState({ showPricingAdder: true })
