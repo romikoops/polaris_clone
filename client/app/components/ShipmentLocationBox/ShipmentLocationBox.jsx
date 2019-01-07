@@ -596,7 +596,7 @@ class ShipmentLocationBox extends PureComponent {
       return
     }
     const counterpart = target === 'origin' ? 'destination' : 'origin'
-    const fieldsHaveErrors = !this.state[target].fullAddress
+    const fieldsHaveErrors = !get(this.state, [target, 'fullAddress'], false)
     this.setState({ [`${target}FieldsHaveErrors`]: fieldsHaveErrors })
     const addressFormsHaveErrors = fieldsHaveErrors || this.state[`${counterpart}FieldsHaveErrors`]
     this.props.handleSelectLocation(target, addressFormsHaveErrors)
