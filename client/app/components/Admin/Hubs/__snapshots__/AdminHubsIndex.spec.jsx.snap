@@ -2,7 +2,114 @@
 
 exports[`hubs is falsy 1`] = `""`;
 
-exports[`scope.show_beta_features is truthy 1`] = `
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left"
+>
+  <Connect(AdminHubsComp)
+    actionNodes={
+      Array [
+        <SideOptionsBox
+          content={
+            <div
+              className="flex-100 layout-row layout-wrap layout-align-center-start"
+            >
+              
+              <CollapsingBar
+                collapsed={true}
+                content={
+                  <div>
+                    <div
+                      className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                    >
+                      <p
+                        className="flex-100 center"
+                      >
+                        Download Hubs Sheet
+                      </p>
+                      <Connect(DocumentsDownloader)
+                        t={[Function]}
+                        target="hubs"
+                        theme={
+                          Object {
+                            "colors": Object {
+                              "primary": "#333",
+                              "secondary": "#fafafa",
+                            },
+                          }
+                        }
+                      />
+                    </div>
+                    <div>
+                      <div
+                        className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                      >
+                        <p
+                          className="flex-100 center"
+                        >
+                          Download {{mot}} Local Charges Sheet
+                        </p>
+                        <Connect(DocumentsDownloader)
+                          options={
+                            Object {
+                              "mot": "all",
+                            }
+                          }
+                          t={[Function]}
+                          target="local_charges"
+                          theme={
+                            Object {
+                              "colors": Object {
+                                "primary": "#333",
+                                "secondary": "#fafafa",
+                              },
+                            }
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+                }
+                contentHeader=""
+                faClass="fa fa-cloud-download"
+                handleCollapser={[Function]}
+                headerWrapClasses=""
+                mainWrapperStyle={Object {}}
+                minHeight=""
+                parentClass=""
+                showArrow={true}
+                startCollapsed={false}
+                styleHeader={
+                  Object {
+                    "background": "#E0E0E0",
+                    "color": "#4F4F4F",
+                  }
+                }
+                text="Download Data"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+              
+            </div>
+          }
+          flexOptions="flex"
+          header="Data manager"
+        />,
+      ]
+    }
+    handleClick={[Function]}
+    t={[Function]}
+  />
+</div>
+`;
+
+exports[`user.internal is truthy 1`] = `
 <div
   className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left"
 >
@@ -244,113 +351,6 @@ exports[`scope.show_beta_features is truthy 1`] = `
                   }
                 }
               />
-            </div>
-          }
-          flexOptions="flex"
-          header="Data manager"
-        />,
-      ]
-    }
-    handleClick={[Function]}
-    t={[Function]}
-  />
-</div>
-`;
-
-exports[`shallow render 1`] = `
-<div
-  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left"
->
-  <Connect(AdminHubsComp)
-    actionNodes={
-      Array [
-        <SideOptionsBox
-          content={
-            <div
-              className="flex-100 layout-row layout-wrap layout-align-center-start"
-            >
-              
-              <CollapsingBar
-                collapsed={true}
-                content={
-                  <div>
-                    <div
-                      className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
-                    >
-                      <p
-                        className="flex-100 center"
-                      >
-                        Download Hubs Sheet
-                      </p>
-                      <Connect(DocumentsDownloader)
-                        t={[Function]}
-                        target="hubs"
-                        theme={
-                          Object {
-                            "colors": Object {
-                              "primary": "#333",
-                              "secondary": "#fafafa",
-                            },
-                          }
-                        }
-                      />
-                    </div>
-                    <div>
-                      <div
-                        className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
-                      >
-                        <p
-                          className="flex-100 center"
-                        >
-                          Download {{mot}} Local Charges Sheet
-                        </p>
-                        <Connect(DocumentsDownloader)
-                          options={
-                            Object {
-                              "mot": "all",
-                            }
-                          }
-                          t={[Function]}
-                          target="local_charges"
-                          theme={
-                            Object {
-                              "colors": Object {
-                                "primary": "#333",
-                                "secondary": "#fafafa",
-                              },
-                            }
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                }
-                contentHeader=""
-                faClass="fa fa-cloud-download"
-                handleCollapser={[Function]}
-                headerWrapClasses=""
-                mainWrapperStyle={Object {}}
-                minHeight=""
-                parentClass=""
-                showArrow={true}
-                startCollapsed={false}
-                styleHeader={
-                  Object {
-                    "background": "#E0E0E0",
-                    "color": "#4F4F4F",
-                  }
-                }
-                text="Download Data"
-                theme={
-                  Object {
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                  }
-                }
-              />
-              
             </div>
           }
           flexOptions="flex"

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
-  schedule, theme, location, identity, change
+  schedule, theme, location, identity, change, user, internalUser
 } from '../../mocks'
 
 import AdminSchedules from './AdminSchedules'
@@ -54,7 +54,8 @@ const propsBase = {
   },
   match: {
     url: 'URL'
-  }
+  },
+  user
 }
 
 test('shallow render', () => {
@@ -83,11 +84,10 @@ test('document.viewer is truthy', () => {
   expect(shallow(<AdminSchedules {...props} />)).toMatchSnapshot()
 })
 
-test('scope.show_beta_features is truthy', () => {
-  const props = change(
-    propsBase,
-    'scope',
-    { show_beta_features: true }
-  )
+test('user.internal is truthy', () => {
+  const props = {
+    ...propsBase,
+    user: internalUser
+  }
   expect(shallow(<AdminSchedules {...props} />)).toMatchSnapshot()
 })

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 
-import { theme, identity } from '../../../mocks'
+import { theme, identity, internalUser, user } from '../../../mocks'
 import CardRoutesIndex from '.'
 
 const propsBase = {
@@ -21,7 +21,8 @@ const propsBase = {
   adminDispatch: {
     getClientPricings: identity,
     getRoutePricings: identity
-  }
+  },
+  user
 }
 
 test('shallow render', () => {
@@ -36,11 +37,11 @@ test('scope is falsy', () => {
   expect(shallow(<CardRoutesIndex {...props} />)).toMatchSnapshot()
 })
 
-test('toggleNew && scope.show_beta_features', () => {
+test('toggleNew && user is internal', () => {
   const props = {
     ...propsBase,
     toggleNew: true,
-    scope: { show_beta_features: true }
+    user: internalUser
   }
   expect(shallow(<CardRoutesIndex {...props} />)).toMatchSnapshot()
 })

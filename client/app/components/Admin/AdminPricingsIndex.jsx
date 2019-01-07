@@ -78,7 +78,7 @@ export class AdminPricingsIndex extends Component {
 
   render () {
     const {
-      t, theme, pricingData, clients, adminDispatch, scope, hubHash
+      t, theme, pricingData, clients, adminDispatch, scope, hubHash, user
     } = this.props
     const { newPricing } = this.state
     if (!pricingData) {
@@ -110,6 +110,7 @@ export class AdminPricingsIndex extends Component {
           theme={theme}
           scope={scope}
           mot={mot}
+          user={user}
           adminDispatch={adminDispatch}
           toggleCreator={() => this.toggleCreator(mot)}
           documentDispatch={this.props.documentDispatch}
@@ -155,25 +156,6 @@ export class AdminPricingsIndex extends Component {
       </div>
     )
   }
-}
-AdminPricingsIndex.propTypes = {
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  clients: PropTypes.arrayOf(PropTypes.client),
-  adminDispatch: PropTypes.shape({
-    getClientPricings: PropTypes.func,
-    getRoutePricings: PropTypes.func
-  }).isRequired,
-  documentDispatch: PropTypes.shape({
-    closeViewer: PropTypes.func,
-    uploadPricings: PropTypes.func
-  }).isRequired,
-  pricingData: PropTypes.shape({
-    routes: PropTypes.array,
-    lastUpdate: PropTypes.string
-  }),
-  scope: PropTypes.scope,
-  hubHash: PropTypes.objectOf(PropTypes.hub)
 }
 
 AdminPricingsIndex.defaultProps = {

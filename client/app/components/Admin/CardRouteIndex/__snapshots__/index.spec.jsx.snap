@@ -97,7 +97,7 @@ exports[`shallow render 1`] = `
 </div>
 `;
 
-exports[`toggleNew && scope.show_beta_features 1`] = `
+exports[`toggleNew && user is internal 1`] = `
 <div
   className="flex-100 layout-row layout-align-md-space-between-start layout-align-space-around-start"
 >

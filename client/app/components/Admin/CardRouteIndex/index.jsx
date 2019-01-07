@@ -11,6 +11,7 @@ import {
 
 import PricingSearchBar from './SubComponents/PricingSearchBar'
 import { filters } from '../../../helpers'
+import { user } from '../../../mocks';
 
 class CardRoutesIndex extends Component {
   constructor (props) {
@@ -117,7 +118,7 @@ class CardRoutesIndex extends Component {
   render () {
     const { searchText, page, numPages } = this.state
     const {
-      limit, scope, toggleNew, mot, newText, sideMenuNodes, t
+      limit, scope, toggleNew, mot, newText, sideMenuNodes, t, user
     } = this.props
     if (!scope) return ''
 
@@ -174,7 +175,7 @@ class CardRoutesIndex extends Component {
               target={mot}
             />
             {sideMenuNodes}
-            {toggleNew && scope.show_beta_features ? <PricingButton
+            {toggleNew && user.internal ? <PricingButton
               onClick={toggleNew}
               text={newText}
               onDisabledClick={() => console.log('this button is disabled')}
@@ -185,23 +186,6 @@ class CardRoutesIndex extends Component {
       </div>
     )
   }
-}
-CardRoutesIndex.propTypes = {
-  t: PropTypes.func.isRequired,
-  theme: PropTypes.theme,
-  hubs: PropTypes.arrayOf(PropTypes.hub),
-  itineraries: PropTypes.arrayOf(PropTypes.itinerary),
-  limit: PropTypes.number,
-  toggleNew: PropTypes.func,
-  handleClick: PropTypes.func,
-  adminDispatch: PropTypes.shape({
-    getClientPricings: PropTypes.func,
-    getRoutePricings: PropTypes.func
-  }).isRequired,
-  scope: PropTypes.scope,
-  mot: PropTypes.string,
-  newText: PropTypes.string,
-  sideMenuNodes: PropTypes.arrayOf(PropTypes.node)
 }
 
 CardRoutesIndex.defaultProps = {

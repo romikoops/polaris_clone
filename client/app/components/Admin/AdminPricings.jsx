@@ -70,7 +70,8 @@ class AdminPricings extends Component {
       tenant,
       loading,
       trucking,
-      truckingDetail
+      truckingDetail,
+      user
     } = this.props
     const filteredClients = clients.filter(x => !x.guest)
     const backButton = (
@@ -110,6 +111,7 @@ class AdminPricings extends Component {
                   theme={theme}
                   scope={tenant.scope}
                   hubs={hubs}
+                  user={user}
                   hubHash={hubHash}
                   clients={filteredClients}
                   pricingData={pricingData}
