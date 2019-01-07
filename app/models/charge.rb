@@ -22,7 +22,7 @@ class Charge < ApplicationRecord
 
     children_charges = children.map do |charge|
       children_charge_category = charge.children_charge_category
-      key = children_charge_category.try(:cargo_unit).try(:id) || children_charge_category.code
+      key = children_charge_category.try(:cargo_unit).try(:id) || children_charge_category&.code&.downcase
       [key, charge.deconstruct_tree_into_schedule_charge]
     end.to_h
 
