@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity } from '../../../mocks'
+import { theme, identity, internalUser } from '../../../mocks'
 import CardPricingIndex from '.'
 
 const propsBase = {
@@ -18,19 +18,18 @@ const propsBase = {
     uploadPricings: identity
   },
   scope: {},
-  mot: 'ocean'
+  mot: 'ocean',
+  user: internalUser
 }
 
 test('shallow render', () => {
   expect(shallow(<CardPricingIndex {...propsBase} />)).toMatchSnapshot()
 })
 
-test('scope has show_beta_features', () => {
+test('user is internal', () => {
   const props = {
     ...propsBase,
-    scope: {
-      show_beta_features: true
-    }
+    user: internalUser
   }
   expect(shallow(<CardPricingIndex {...props} />)).toMatchSnapshot()
 })

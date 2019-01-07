@@ -124,7 +124,7 @@ class CardPricingIndex extends Component {
   render () {
     const { searchText, page, expander } = this.state
     const {
-      theme, scope, toggleCreator, mot, allNumPages, t
+      theme, scope, toggleCreator, mot, allNumPages, t, user
     } = this.props
 
     const newButton = (
@@ -285,7 +285,7 @@ class CardPricingIndex extends Component {
               flexOptions="flex-100"
               content={(
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                  { scope.show_beta_features ? (
+                  { user.internal ? (
                     <CollapsingBar
                       showArrow
                       collapsed={!expander.upload}
@@ -307,7 +307,7 @@ class CardPricingIndex extends Component {
                     faClass="fa fa-cloud-download"
                     content={downloadButtons}
                   />
-                  { scope.show_beta_features ? (
+                  { user.internal ? (
                     <CollapsingBar
                       showArrow
                       collapsed={!expander.new}
@@ -335,24 +335,6 @@ class CardPricingIndex extends Component {
       </div>
     )
   }
-}
-CardPricingIndex.propTypes = {
-  theme: PropTypes.theme,
-  t: PropTypes.func.isRequired,
-  hubs: PropTypes.arrayOf(PropTypes.hub),
-  itineraries: PropTypes.arrayOf(PropTypes.itinerary),
-  toggleCreator: PropTypes.func,
-  allNumPages: PropTypes.objectOf(PropTypes.any),
-  adminDispatch: PropTypes.shape({
-    getClientPricings: PropTypes.func,
-    getRoutePricings: PropTypes.func
-  }).isRequired,
-  documentDispatch: PropTypes.shape({
-    closeViewer: PropTypes.func,
-    uploadPricings: PropTypes.func
-  }).isRequired,
-  scope: PropTypes.scope,
-  mot: PropTypes.string
 }
 
 CardPricingIndex.defaultProps = {

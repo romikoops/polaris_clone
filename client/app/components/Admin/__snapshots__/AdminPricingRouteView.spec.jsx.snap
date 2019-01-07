@@ -12,8 +12,6 @@ exports[`itineraryPricings.userPricings is truthy 1`] = `""`;
 
 exports[`pricingData is falsy 1`] = `""`;
 
-exports[`scope.show_beta_features is true 1`] = `""`;
-
 exports[`shallow render 1`] = `""`;
 
 exports[`state.confirm is true 1`] = `""`;
@@ -23,3 +21,5 @@ exports[`state.editorBool is true 1`] = `""`;
 exports[`state.showPricingAdder is true 1`] = `""`;
 
 exports[`theme is falsy 1`] = `""`;
+
+exports[`user.internal is true 1`] = `""`;
