@@ -96,6 +96,14 @@ module ExcelTool
       )
     end
 
+    def _nexus_update
+      @nexus.update!(
+        latitude:         hub_row[:latitude],
+        longitude:        hub_row[:longitude],
+        photo:            hub_row[:photo]
+      )
+    end
+
     def find_or_create_address
       Address.find_or_create_by(
         name:             hub_row[:hub_name],
@@ -212,8 +220,11 @@ module ExcelTool
         @mandatory_charge ||= default_mandatory_charge
 
         @nexus = _nexus
-        @nexus ||= _nexus_create
-
+        if @nexus
+          _nexus_update
+        else
+          @nexus = _nexus_create
+        end
         @address = find_or_create_address
         update_address_geocode
         update_or_create_hub
