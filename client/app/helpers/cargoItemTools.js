@@ -1,3 +1,5 @@
+import { numberSpacing } from '../helpers'
+
 const effectiveKgPerCubicMeter = {
   air: 167,
   rail: 550,
@@ -13,7 +15,7 @@ export function chargeableWeight (cargoItem, mot) {
     +cargoItem.payload_in_kg * cargoItem.quantity
   )
 
-  return finalValue.toFixed(1)
+  return numberSpacing(finalValue, 1)
 }
 
 export function chargeableVolume (cargoItem, mot) {
@@ -24,7 +26,7 @@ export function chargeableVolume (cargoItem, mot) {
     +cargoItem.payload_in_kg * cargoItem.quantity / effectiveKgPerCubicMeter[mot]
   )
 
-  return finalValue.toFixed(3)
+  return numberSpacing(finalValue, 1)
 }
 
 export function volume (cargoItem) {
@@ -33,11 +35,11 @@ export function volume (cargoItem) {
   const unitVolume =
     cargoItem.dimension_x * cargoItem.dimension_y * cargoItem.dimension_z / 100 ** 3
 
-  return (unitVolume * cargoItem.quantity).toFixed(3)
+  return numberSpacing((unitVolume * cargoItem.quantity), 3)
 }
 
 export function weight (cargoItem) {
   if (!cargoItem) return undefined
 
-  return (cargoItem.payload_in_kg * cargoItem.quantity).toFixed(1)
+  return (numberSpacing(cargoItem.payload_in_kg * cargoItem.quantity), 2)
 }
