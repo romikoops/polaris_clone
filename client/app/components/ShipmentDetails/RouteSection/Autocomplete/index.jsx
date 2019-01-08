@@ -425,6 +425,7 @@ class Autocomplete extends PureComponent {
             onBlur={this.shouldTriggerInputChange}
             data-hj-whitelist
             autoComplete="remove"
+            autoComplete="new-password"
           />
 
         </div>
