@@ -146,7 +146,7 @@ export default function getInputs (
 
   inputs.grossWeight = (
     <div className={`layout-row flex-30 layout-wrap layout-align-start-center ${styles.input_weight}`}>
-      <h4>{t('common:Gross Weight')}</h4>
+      <h4>{t('common:grossWeightPerItem')}</h4>
       <div className={`flex-60 layout-row ${styles.input_box}`}>
 
         <img data-for={tooltipId} data-tip={t('common:grossWeight')} src={kg} alt="weight" border="0" />
