@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+
 FactoryBot.define do
   factory :trucking_destination do
     trait :zipcode do
@@ -30,3 +31,17 @@ FactoryBot.define do
     country_code 'SE'
   end
 end
+
+# == Schema Information
+#
+# Table name: trucking_destinations
+#
+#  id           :bigint(8)        not null, primary key
+#  zipcode      :string
+#  country_code :string
+#  city_name    :string
+#  distance     :integer
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  location_id  :integer
+#

@@ -42,10 +42,11 @@ class Charge < ApplicationRecord
     schedule_charge = { 'grand_total' => schedule_charge } if parent.nil?
     schedule_charge.each do |key, charge_h|
       next if %w(total value currency).include? key
+
       children_charge_category = ChargeCategory.find_or_create_by(name: key, code: key)
       price_h = charge_h['value'].nil? ? charge_h['total'] : charge_h
       price_h ||= {
-        'value'    => 0,
+        'value' => 0,
         'currency' => 'EUR'
       }
       price = Price.create(value: price_h['value'], currency: price_h['currency'])
@@ -119,3 +120,19 @@ class Charge < ApplicationRecord
     parent.update_price!
   end
 end
+
+# == Schema Information
+#
+# Table name: charges
+#
+#  id                          :bigint(8)        not null, primary key
+#  parent_id                   :integer
+#  price_id                    :integer
+#  charge_category_id          :integer
+#  children_charge_category_id :integer
+#  charge_breakdown_id         :integer
+#  detail_level                :integer
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
+#  edited_price_id             :integer
+#

@@ -48,9 +48,9 @@ class TransportCategory < ApplicationRecord
             presence: true,
             uniqueness: {
               scope: %i(vehicle_id cargo_class),
-              message: lambda do |_self, _|
-                         "'#{_self.name}' taken for " \
-                             "vehicle id '#{_self.vehicle_id}' cargo class '#{_self.cargo_class}'"
+              message: lambda do |record, _|
+                         "'#{record.name}' taken for " \
+                             "vehicle id '#{record.vehicle_id}' cargo class '#{record.cargo_class}'"
                        end
             }
 
@@ -76,8 +76,8 @@ class TransportCategory < ApplicationRecord
   private
 
   def set_load_type
-    LOAD_TYPES.each do |_load_type|
-      self.load_type = _load_type if cargo_class_is_from?(_load_type)
+    LOAD_TYPES.each do |ld|
+      self.load_type = ld if cargo_class_is_from?(ld)
     end
   end
 
@@ -85,3 +85,17 @@ class TransportCategory < ApplicationRecord
     LOAD_TYPE_CARGO_CLASSES[load_type].include?(cargo_class)
   end
 end
+
+# == Schema Information
+#
+# Table name: transport_categories
+#
+#  id                :bigint(8)        not null, primary key
+#  vehicle_id        :integer
+#  mode_of_transport :string
+#  name              :string
+#  cargo_class       :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  load_type         :string
+#

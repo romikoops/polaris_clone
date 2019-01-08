@@ -1,5 +1,6 @@
 # frozen_string_literal:true
 
+
 RATES = {
 	:kg => [
 		{:rate => {:base => 100.0,
@@ -165,3 +166,20 @@ FactoryBot.define do
   	association :tenant
   end
 end
+
+# == Schema Information
+#
+# Table name: trucking_pricings
+#
+#  id                        :bigint(8)        not null, primary key
+#  load_meterage             :jsonb
+#  cbm_ratio                 :integer
+#  modifier                  :string
+#  tenant_id                 :integer
+#  created_at                :datetime
+#  updated_at                :datetime
+#  rates                     :jsonb
+#  fees                      :jsonb
+#  identifier_modifier       :string
+#  trucking_pricing_scope_id :integer
+#

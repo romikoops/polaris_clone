@@ -15,12 +15,12 @@ class Contact < ApplicationRecord
   validates :email,        presence: true, length: { minimum: 3 }
 
   # validates uniqueness for each user
-  validates :user_id, uniqueness: { scope:   %i(first_name last_name phone email),
+  validates :user_id, uniqueness: { scope: %i(first_name last_name phone email),
                                     message: 'Contact must be unique to add.' }
 
   # Filterrific configuration
   filterrific default_filter_params: { sorted_by: 'created_at_asc' },
-              available_filters:     %w(
+              available_filters: %w(
                 sorted_by
                 search_query
                 contacts_query
@@ -30,6 +30,7 @@ class Contact < ApplicationRecord
 
   scope :search_query, lambda { |query|
     return nil if query.blank?
+
     # condition query, parse into individual keywords
     terms = query.to_s.delete(',').downcase.split(/\s+/)
     # replace "*" with "%" for wildcard searches,
@@ -58,6 +59,7 @@ class Contact < ApplicationRecord
     str_query = "%#{query}%"
 
     return nil if query.blank?
+
     where(
       'first_name ILIKE ? OR last_name ILIKE ? OR company_name ILIKE ? OR email ILIKE ?',
       str_query, str_query, str_query, str_query
@@ -95,10 +97,10 @@ class Contact < ApplicationRecord
           include: {
             country: { only: :name }
           },
-          except:  %i(created_at updated_at country_id)
+          except: %i(created_at updated_at country_id)
         }
       },
-      except:  %i(created_at updated_at address_id)
+      except: %i(created_at updated_at address_id)
     )
 
     as_json(new_options)
@@ -113,3 +115,20 @@ class Contact < ApplicationRecord
     "#{first_name} #{last_name} #{company_name}#{address_if_exists}"
   end
 end
+
+# == Schema Information
+#
+# Table name: contacts
+#
+#  id           :bigint(8)        not null, primary key
+#  user_id      :integer
+#  address_id   :integer
+#  company_name :string
+#  first_name   :string
+#  last_name    :string
+#  phone        :string
+#  email        :string
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  alias        :boolean          default(FALSE)
+#

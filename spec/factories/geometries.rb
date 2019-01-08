@@ -28,3 +28,17 @@ FactoryBot.define do
 		name_4 "Testname4"    
   end
 end
+
+# == Schema Information
+#
+# Table name: geometries
+#
+#  id         :bigint(8)        not null, primary key
+#  name_1     :string
+#  name_2     :string
+#  name_3     :string
+#  name_4     :string
+#  data       :geometry({:srid= geometry, 0
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#

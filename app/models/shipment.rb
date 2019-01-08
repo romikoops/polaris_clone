@@ -2,7 +2,7 @@
 
 class Shipment < ApplicationRecord
   extend ShippingTools
-  # include ActiveModel::Validations
+
   STATUSES = %w(
     booking_process_started
     requested_by_unconfirmed_account
@@ -276,12 +276,14 @@ class Shipment < ApplicationRecord
   def has_dangerous_goods?
     return aggregated_cargo.dangerous_goods? unless aggregated_cargo.nil?
     return cargo_units.any?(&:dangerous_goods) unless cargo_units.nil?
+
     nil
   end
 
   def has_non_stackable_cargo?
     return true unless aggregated_cargo.nil?
     return cargo_units.any? { |cargo_unit| !cargo_unit.stackable } unless cargo_units.nil?
+
     nil
   end
 
@@ -412,14 +414,14 @@ class Shipment < ApplicationRecord
 
   def with_address_options_json(options = {})
     as_options_json(options).merge(
-      pickup_address:   pickup_address_with_country,
+      pickup_address: pickup_address_with_country,
       delivery_address: delivery_address_with_country
     )
   end
 
   def with_address_index_json(options = {})
     as_index_json(options).merge(
-      pickup_address:   pickup_address_with_country,
+      pickup_address: pickup_address_with_country,
       delivery_address: delivery_address_with_country
     )
   end
@@ -531,11 +533,13 @@ class Shipment < ApplicationRecord
 
   def planned_pickup_date_is_a_datetime?
     return if planned_pickup_date.nil?
+
     errors.add(:planned_pickup_date, 'must be a DateTime') unless planned_pickup_date.is_a?(ActiveSupport::TimeWithZone)
   end
 
   def desired_start_date_is_a_datetime?
     return if desired_start_date.nil?
+
     errors.add(:desired_start_date, 'must be a DateTime') unless desired_start_date.is_a?(ActiveSupport::TimeWithZone)
   end
 
@@ -567,3 +571,48 @@ class Shipment < ApplicationRecord
     errors.add(:itinerary, "id does not match the trips's itinerary_id")
   end
 end
+
+# == Schema Information
+#
+# Table name: shipments
+#
+#  id                                  :bigint(8)        not null, primary key
+#  user_id                             :integer
+#  uuid                                :string
+#  imc_reference                       :string
+#  status                              :string
+#  load_type                           :string
+#  planned_pickup_date                 :datetime
+#  has_pre_carriage                    :boolean
+#  has_on_carriage                     :boolean
+#  cargo_notes                         :string
+#  created_at                          :datetime         not null
+#  updated_at                          :datetime         not null
+#  tenant_id                           :integer
+#  planned_eta                         :datetime
+#  planned_etd                         :datetime
+#  itinerary_id                        :integer
+#  trucking                            :jsonb
+#  customs_credit                      :boolean          default(FALSE)
+#  total_goods_value                   :jsonb
+#  trip_id                             :integer
+#  eori                                :string
+#  direction                           :string
+#  notes                               :string
+#  origin_hub_id                       :integer
+#  destination_hub_id                  :integer
+#  booking_placed_at                   :datetime
+#  insurance                           :jsonb
+#  customs                             :jsonb
+#  transport_category_id               :bigint(8)
+#  incoterm_id                         :integer
+#  closing_date                        :datetime
+#  incoterm_text                       :string
+#  origin_nexus_id                     :integer
+#  destination_nexus_id                :integer
+#  planned_origin_drop_off_date        :datetime
+#  quotation_id                        :integer
+#  planned_delivery_date               :datetime
+#  planned_destination_collection_date :datetime
+#  desired_start_date                  :datetime
+#

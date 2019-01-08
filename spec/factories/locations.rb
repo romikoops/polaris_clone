@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 lat = 57.000000
 lng = 11.100000
 delta = 0.3
@@ -51,3 +52,18 @@ FactoryBot.define do
     bounds multi_polygon
   end
 end
+
+# == Schema Information
+#
+# Table name: locations
+#
+#  id            :bigint(8)        not null, primary key
+#  postal_code   :string
+#  suburb        :string
+#  neighbourhood :string
+#  city          :string
+#  province      :string
+#  country       :string
+#  admin_level   :string
+#  bounds        :geometry({:srid= geometry, 0
+#

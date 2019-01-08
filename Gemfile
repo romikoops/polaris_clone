@@ -139,7 +139,7 @@ gem 'holidays'
 gem 'mobility', '~> 0.8.6'
 
 group :development, :test do
-  # set environment variables - enforce loading environment right away
+  gem 'annotate'
   gem 'dotenv-rails', require: 'dotenv/rails-now'
   gem 'factory_bot_rails'
   gem 'fuubar'

@@ -3,7 +3,7 @@
 class Geometry < ApplicationRecord
   validates :name_1, :name_2, :name_3, :name_4, presence: true
   validates :name_1, uniqueness: {
-    scope:   %i(name_2 name_3 name_4),
+    scope: %i(name_2 name_3 name_4),
     message: ->(obj, _) { "is a duplicate for the names: #{obj.names.log_format}" }
   }
 
@@ -48,8 +48,6 @@ class Geometry < ApplicationRecord
     results['contains']
   end
 
-  private
-
   def self.cascading_find_by_two_names(raw_name_1, raw_name_2)
     name_2 = raw_name_2.split.map(&:capitalize).join(' ')
     name_1_test = raw_name_1.try(:split)
@@ -58,6 +56,7 @@ class Geometry < ApplicationRecord
     (1..4).to_a.reverse_each do |i|
       (2..4).to_a.reverse_each do |j|
         next if i >= j
+
         result = where("name_#{i}" => name_1, "name_#{j}" => name_2).first
         return result unless result.nil?
       end
@@ -77,3 +76,17 @@ class Geometry < ApplicationRecord
     nil
   end
 end
+
+# == Schema Information
+#
+# Table name: geometries
+#
+#  id         :bigint(8)        not null, primary key
+#  name_1     :string
+#  name_2     :string
+#  name_3     :string
+#  name_4     :string
+#  data       :geometry({:srid= geometry, 0
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#

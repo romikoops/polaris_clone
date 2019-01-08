@@ -5,7 +5,7 @@ class ApplicationRecord < ActiveRecord::Base
   include AwsConfig
 
   def self.given_attribute_names
-    attribute_names - %w[id created_at updated_at]
+    attribute_names - %w(id created_at updated_at)
   end
 
   def given_attributes
@@ -14,18 +14,18 @@ class ApplicationRecord < ActiveRecord::Base
     end
   end
 
-  def to_postgres_insertable(attribute_names=self.class.given_attribute_names)
+  def to_postgres_insertable(attribute_names = self.class.given_attribute_names)
     attribute_names.sort.map do |attr_name|
       val = self[attr_name]
       case val
       when nil
-        "NULL"
+        'NULL'
       when Hash
         "'#{val.to_json}'::jsonb"
       when String
         "'#{val}'"
       when nil
-        "NULL"
+        'NULL'
       else
         val
       end

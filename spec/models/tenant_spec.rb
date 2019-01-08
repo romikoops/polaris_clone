@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+
 require 'rails_helper'
 
 describe Tenant, type: :model do
@@ -60,3 +61,22 @@ describe Tenant, type: :model do
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: tenants
+#
+#  id          :bigint(8)        not null, primary key
+#  theme       :jsonb
+#  emails      :jsonb
+#  subdomain   :string
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  phones      :jsonb
+#  addresses   :jsonb
+#  name        :string
+#  scope       :jsonb
+#  currency    :string           default("EUR")
+#  web         :jsonb
+#  email_links :jsonb
+#

@@ -20,8 +20,8 @@ class Hub < ApplicationRecord
 
   MOT_HUB_NAME = {
     'ocean' => 'Port',
-    'air'   => 'Airport',
-    'rail'  => 'Railway Station'
+    'air' => 'Airport',
+    'rail' => 'Railway Station'
   }.freeze
 
   self.per_page = 9
@@ -54,13 +54,13 @@ class Hub < ApplicationRecord
 
   def self.create_from_nexus(nexus, mot, tenant_id)
     nexus.hubs.find_or_create_by(
-      nexus_id:  nexus.id,
+      nexus_id: nexus.id,
       tenant_id: tenant_id,
-      hub_type:  mot,
-      latitude:  nexus.latitude,
+      hub_type: mot,
+      latitude: nexus.latitude,
       longitude: nexus.longitude,
-      name:      "#{nexus.name} #{MOT_HUB_NAME[mot]}",
-      photo:     nexus.photo
+      name: "#{nexus.name} #{MOT_HUB_NAME[mot]}",
+      photo: nexus.photo
     )
   end
 
@@ -88,7 +88,7 @@ class Hub < ApplicationRecord
         %w(pre on).each_with_object({}) do |carriage, carriage_obj|
           carriage_obj[carriage] = truck_type_availabilities.where(
             load_type: load_type,
-            carriage:  carriage
+            carriage: carriage
           ).pluck(:truck_type)
         end
     end
@@ -175,7 +175,7 @@ class Hub < ApplicationRecord
   def as_options_json(options = {})
     new_options = options.reverse_merge(
       include: {
-        nexus:    { only: %i(id name) },
+        nexus: { only: %i(id name) },
         address: {
           include: {
             country: { only: %i(name) }
@@ -186,3 +186,24 @@ class Hub < ApplicationRecord
     as_json(new_options)
   end
 end
+
+# == Schema Information
+#
+# Table name: hubs
+#
+#  id                  :bigint(8)        not null, primary key
+#  tenant_id           :integer
+#  address_id          :integer
+#  name                :string
+#  hub_type            :string
+#  latitude            :float
+#  longitude           :float
+#  hub_status          :string           default("active")
+#  hub_code            :string
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  trucking_type       :string
+#  photo               :string
+#  nexus_id            :integer
+#  mandatory_charge_id :integer
+#
