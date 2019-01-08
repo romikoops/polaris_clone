@@ -25,7 +25,7 @@ exports[`shallow rendering 1`] = `
           className="flex-100 layout-align-start-center layout-row cargo_unit_header"
         >
           <h3>
-            Your Cargo
+            Cargo Group {{index}}
           </h3>
           <div
             className="delete_icon"
@@ -294,7 +294,7 @@ exports[`shallow rendering 1`] = `
                   className="layout-row flex-30 layout-wrap layout-align-start-center input_weight"
                 >
                   <h4>
-                    NO_TRANSLATION | key "common:Gross Weight"
+                    Gross Weight per item
                   </h4>
                   <div
                     className="flex-60 layout-row input_box"
@@ -606,7 +606,7 @@ exports[`shallow rendering 1`] = `
           />
           <p>
              
-            Add unit
+            Add Cargo Group
           </p>
         </div>
       </div>

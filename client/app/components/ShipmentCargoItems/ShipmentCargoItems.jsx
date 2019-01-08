@@ -134,7 +134,7 @@ class ShipmentCargoItems extends Component {
           style={{ position: 'relative', margin: '30px 0' }}
         >
           <div className={`flex-100 layout-align-start-center layout-row ${styles.cargo_unit_header}`}>
-            <h3>{t('cargo:yourCargo')}</h3>
+            <h3>{t('cargo:cargoGroup', { index: i + 1 })}</h3>
             {cargoItem ? (
               <div className={styles.delete_icon} onClick={() => this.deleteCargo(i)}>
                 {t('common:delete')}
@@ -233,7 +233,7 @@ class ShipmentCargoItems extends Component {
                 onClick={this.addNewCargo}
               >
                 <i className="fa fa-plus-square-o clip" style={textStyle} />
-                <p> {t('shipment:addUnit')}</p>
+                <p> {t('shipment:addCargoGroup')}</p>
               </div>
             </div>
           </div>
