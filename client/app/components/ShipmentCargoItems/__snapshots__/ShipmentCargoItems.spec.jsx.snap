@@ -562,7 +562,6 @@ exports[`shallow rendering 1`] = `
                       <span
                         className="input_value"
                       >
-                        2.0
                          kg
                       </span>
                     </p>
@@ -572,11 +571,15 @@ exports[`shallow rendering 1`] = `
                   >
                     <div
                       className="layout-row flex-none layout-wrap layout-align-end-center"
-                      style={
-                        Object {
-                          "height": "18px",
-                        }
-                      }
+                    >
+                      <p
+                        className="subchargeable flex-none"
+                      >
+                        Chargeable:
+                      </p>
+                    </div>
+                    <div
+                      className="chargeable_weight_values flex layout-row layout-align-start-center"
                     />
                   </div>
                 </div>
