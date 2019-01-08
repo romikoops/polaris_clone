@@ -23,23 +23,19 @@ exports[`detailed billing working properly 1`] = `
       />
     </div>
     <div
-      className="flex-60 layout-row layout-align-start-center origin_destination"
+      className="flex-55 layout-row layout-align-start-center origin_destination"
     >
       <div
-        className="layout-column layout-align-center-start"
+        className="layout-column layout-align-center-start flex-100"
       >
         <p>
-          From
-          :
-           
+          From: 
           <span>
             Gothenburg
           </span>
         </p>
         <p>
-          To
-          :
-           
+          To: 
           <span>
             Shanghai
           </span>
@@ -93,19 +89,18 @@ exports[`detailed billing working properly 1`] = `
         />
       </div>
       <div
-        className="flex-100 layout-row layout-wrap layout-align-end-center unit_info"
+        className="flex-100 layout-row layout-wrap layout-align-start-center unit_info"
       >
         <p
-          className="flex-100 layout-row layout-align-end-center"
+          className="flex-60 layout-row layout-align-start-center"
         >
-          Total Weight
-          : 
-          <span>
-            0.0
-             
-            kg
-          </span>
+          Total Weight: 
         </p>
+        <span
+          className="flex layout-row layout-align-start-center"
+        >
+          0.0 kg
+        </span>
       </div>
     </div>
   </div>
@@ -304,23 +299,19 @@ exports[`shallow rendering 1`] = `
       />
     </div>
     <div
-      className="flex-60 layout-row layout-align-start-center origin_destination"
+      className="flex-55 layout-row layout-align-start-center origin_destination"
     >
       <div
-        className="layout-column layout-align-center-start"
+        className="layout-column layout-align-center-start flex-100"
       >
         <p>
-          From
-          :
-           
+          From: 
           <span>
             Gothenburg
           </span>
         </p>
         <p>
-          To
-          :
-           
+          To: 
           <span>
             Shanghai
           </span>
@@ -388,19 +379,18 @@ exports[`shallow rendering 1`] = `
         />
       </div>
       <div
-        className="flex-100 layout-row layout-wrap layout-align-end-center unit_info"
+        className="flex-100 layout-row layout-wrap layout-align-start-center unit_info"
       >
         <p
-          className="flex-100 layout-row layout-align-end-center"
+          className="flex-60 layout-row layout-align-start-center"
         >
-          Total Weight
-          : 
-          <span>
-            0.0
-             
-            kg
-          </span>
+          Total Weight: 
         </p>
+        <span
+          className="flex layout-row layout-align-start-center"
+        >
+          0.0 kg
+        </span>
       </div>
     </div>
   </div>
@@ -580,23 +570,19 @@ exports[`show schedule options working 1`] = `
       />
     </div>
     <div
-      className="flex-60 layout-row layout-align-start-center origin_destination"
+      className="flex-55 layout-row layout-align-start-center origin_destination"
     >
       <div
-        className="layout-column layout-align-center-start"
+        className="layout-column layout-align-center-start flex-100"
       >
         <p>
-          From
-          :
-           
+          From: 
           <span>
             Gothenburg
           </span>
         </p>
         <p>
-          To
-          :
-           
+          To: 
           <span>
             Shanghai
           </span>
@@ -650,19 +636,18 @@ exports[`show schedule options working 1`] = `
         />
       </div>
       <div
-        className="flex-100 layout-row layout-wrap layout-align-end-center unit_info"
+        className="flex-100 layout-row layout-wrap layout-align-start-center unit_info"
       >
         <p
-          className="flex-100 layout-row layout-align-end-center"
+          className="flex-60 layout-row layout-align-start-center"
         >
-          Total Weight
-          : 
-          <span>
-            0.0
-             
-            kg
-          </span>
+          Total Weight: 
         </p>
+        <span
+          className="flex layout-row layout-align-start-center"
+        >
+          0.0 kg
+        </span>
       </div>
     </div>
   </div>
@@ -861,23 +846,19 @@ exports[`show schedules set to true 1`] = `
       />
     </div>
     <div
-      className="flex-60 layout-row layout-align-start-center origin_destination"
+      className="flex-55 layout-row layout-align-start-center origin_destination"
     >
       <div
-        className="layout-column layout-align-center-start"
+        className="layout-column layout-align-center-start flex-100"
       >
         <p>
-          From
-          :
-           
+          From: 
           <span>
             Gothenburg
           </span>
         </p>
         <p>
-          To
-          :
-           
+          To: 
           <span>
             Shanghai
           </span>
@@ -945,19 +926,18 @@ exports[`show schedules set to true 1`] = `
         />
       </div>
       <div
-        className="flex-100 layout-row layout-wrap layout-align-end-center unit_info"
+        className="flex-100 layout-row layout-wrap layout-align-start-center unit_info"
       >
         <p
-          className="flex-100 layout-row layout-align-end-center"
+          className="flex-60 layout-row layout-align-start-center"
         >
-          Total Weight
-          : 
-          <span>
-            0.0
-             
-            kg
-          </span>
+          Total Weight: 
         </p>
+        <span
+          className="flex layout-row layout-align-start-center"
+        >
+          0.0 kg
+        </span>
       </div>
     </div>
   </div>
@@ -1137,23 +1117,19 @@ exports[`single result rendering removes the "add" button 1`] = `
       />
     </div>
     <div
-      className="flex-60 layout-row layout-align-start-center origin_destination"
+      className="flex-55 layout-row layout-align-start-center origin_destination"
     >
       <div
-        className="layout-column layout-align-center-start"
+        className="layout-column layout-align-center-start flex-100"
       >
         <p>
-          From
-          :
-           
+          From: 
           <span>
             Gothenburg
           </span>
         </p>
         <p>
-          To
-          :
-           
+          To: 
           <span>
             Shanghai
           </span>
@@ -1221,19 +1197,18 @@ exports[`single result rendering removes the "add" button 1`] = `
         />
       </div>
       <div
-        className="flex-100 layout-row layout-wrap layout-align-end-center unit_info"
+        className="flex-100 layout-row layout-wrap layout-align-start-center unit_info"
       >
         <p
-          className="flex-100 layout-row layout-align-end-center"
+          className="flex-60 layout-row layout-align-start-center"
         >
-          Total Weight
-          : 
-          <span>
-            0.0
-             
-            kg
-          </span>
+          Total Weight: 
         </p>
+        <span
+          className="flex layout-row layout-align-start-center"
+        >
+          0.0 kg
+        </span>
       </div>
     </div>
   </div>
