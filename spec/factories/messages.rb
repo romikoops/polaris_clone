@@ -3,3 +3,18 @@ FactoryBot.define do
     
   end
 end
+
+# == Schema Information
+#
+# Table name: messages
+#
+#  id              :bigint(8)        not null, primary key
+#  title           :string
+#  message         :string
+#  conversation_id :integer
+#  read            :boolean
+#  read_at         :datetime
+#  sender_id       :integer
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#

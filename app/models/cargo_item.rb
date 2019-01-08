@@ -2,14 +2,14 @@
 
 class CargoItem < ApplicationRecord
   EFFECTIVE_TONNAGE_PER_CUBIC_METER = {
-    air:      "0.167",
-    rail:     "0.550",
-    ocean:    "1.000",
-    trucking: "0.333",
-    truck:    "0.333"
+    air: '0.167',
+    rail: '0.550',
+    ocean: '1.000',
+    trucking: '0.333',
+    truck: '0.333'
   }.map_values { |v| BigDecimal(v) }
 
-  DIMENSIONS = %i[dimension_x dimension_y dimension_z payload_in_kg chargeable_weight].freeze
+  DIMENSIONS = %i(dimension_x dimension_y dimension_z payload_in_kg chargeable_weight).freeze
   has_paper_trail
   belongs_to :shipment
   delegate :tenant, to: :shipment
@@ -54,7 +54,7 @@ class CargoItem < ApplicationRecord
     # Creates and auxiliary class, cloned from CargoItem, with one aditional
     # validation, which depends on the mode of transport.
     klass = CustomValidations.cargo_item_max_dimensions(CargoItem.clone, mode_of_transport)
-    Module.const_set("AuxCargoItem", klass)
+    Module.const_set('AuxCargoItem', klass)
 
     # Instantiates the auxiliary class, sets the chargeable weight,
     # and checks if the item is still valid, thereby applying the new validation.
@@ -66,6 +66,29 @@ class CargoItem < ApplicationRecord
   private
 
   def set_default_cargo_class!
-    self.cargo_class ||= "lcl"
+    self.cargo_class ||= 'lcl'
   end
 end
+
+# == Schema Information
+#
+# Table name: cargo_items
+#
+#  id                 :bigint(8)        not null, primary key
+#  shipment_id        :integer
+#  payload_in_kg      :decimal(, )
+#  dimension_x        :decimal(, )
+#  dimension_y        :decimal(, )
+#  dimension_z        :decimal(, )
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  dangerous_goods    :boolean
+#  cargo_class        :string
+#  hs_codes           :string           default([]), is an Array
+#  cargo_item_type_id :integer
+#  customs_text       :string
+#  chargeable_weight  :decimal(, )
+#  stackable          :boolean          default(TRUE)
+#  quantity           :integer
+#  unit_price         :jsonb
+#

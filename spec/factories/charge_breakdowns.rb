@@ -24,3 +24,14 @@ FactoryBot.define do
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: charge_breakdowns
+#
+#  id          :bigint(8)        not null, primary key
+#  shipment_id :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  trip_id     :integer
+#

@@ -13,7 +13,7 @@ class User < ApplicationRecord
 
   validates :tenant_id, presence: true
   validates :email, presence: true, uniqueness: {
-    scope:   :tenant_id,
+    scope: :tenant_id,
     message: ->(obj, _) { "'#{obj.email}' taken for Tenant '#{obj.tenant.subdomain}'" }
   }
   has_paper_trail
@@ -57,7 +57,7 @@ class User < ApplicationRecord
 
   # Filterrific
   filterrific default_filter_params: { sorted_by: 'created_at_asc' },
-              available_filters:     %w(
+              available_filters: %w(
                 sorted_by
                 search_query
               )
@@ -65,6 +65,7 @@ class User < ApplicationRecord
 
   scope :search_query, lambda { |query|
     return nil if query.blank?
+
     # condition query, parse into individual keywords
     terms = query.to_s.delete(',').downcase.split(/\s+/)
     # replace "*" with "%" for wildcard searches,
@@ -174,6 +175,7 @@ class User < ApplicationRecord
   # Override devise method to include additional info as opts hash
   def send_confirmation_instructions(opts = {})
     return if guest
+
     generate_confirmation_token! unless @raw_confirmation_token
 
     # fall back to "default" config name
@@ -252,3 +254,46 @@ class User < ApplicationRecord
     false
   end
 end
+
+# == Schema Information
+#
+# Table name: users
+#
+#  id                     :bigint(8)        not null, primary key
+#  provider               :string           default("tenant_email"), not null
+#  uid                    :string           default(""), not null
+#  encrypted_password     :string           default(""), not null
+#  reset_password_token   :string
+#  reset_password_sent_at :datetime
+#  remember_created_at    :datetime
+#  sign_in_count          :integer          default(0), not null
+#  current_sign_in_at     :datetime
+#  last_sign_in_at        :datetime
+#  current_sign_in_ip     :string
+#  last_sign_in_ip        :string
+#  confirmation_token     :string
+#  confirmed_at           :datetime
+#  confirmation_sent_at   :datetime
+#  unconfirmed_email      :string
+#  nickname               :string
+#  image                  :string
+#  email                  :string
+#  tenant_id              :integer
+#  company_name           :string
+#  first_name             :string
+#  last_name              :string
+#  phone                  :string
+#  tokens                 :json
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  role_id                :bigint(8)
+#  guest                  :boolean          default(FALSE)
+#  currency               :string           default("EUR")
+#  vat_number             :string
+#  allow_password_change  :boolean          default(FALSE), not null
+#  optin_status           :jsonb
+#  optin_status_id        :integer
+#  external_id            :string
+#  agency_id              :integer
+#  internal               :boolean          default(FALSE)
+#

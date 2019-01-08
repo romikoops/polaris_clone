@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Addon < ApplicationRecord
   belongs_to :hub
 
@@ -8,7 +10,9 @@ class Addon < ApplicationRecord
     addons = determine_addons(origin_hub, destination_hub, cargo_class, tenant_vehicle_id, mot, user)
     condensed_addons = condense_addons(addons, cargos, user, mot)
   end
+
   private
+
   def self.determine_addons(origin_hub, destination_hub, cargo_class, tenant_vehicle_id, mot, user)
     counterpart_origin_addons = origin_hub.addons.where(
       cargo_class: cargo_class,
@@ -60,22 +64,21 @@ class Addon < ApplicationRecord
         tenant_id: user.tenant_id
       )
     end
-    
-    return {destination: destination_addons, origin: origin_addons}
-    
+
+    { destination: destination_addons, origin: origin_addons }
   end
 
   def self.condense_addons(addons, cargos, user, mot)
     condensed_addons = []
     addons[:origin].each do |oao|
-      matching_ao = addons[:destination].select{|dao| dao.addon_type === oao.addon_type}
+      matching_ao = addons[:destination].select { |dao| dao.addon_type === oao.addon_type }
 
-      new_ao = oao.dup().as_json
+      new_ao = oao.dup.as_json
       if !matching_ao.empty?
         new_ao.delete(:fees)
         new_ao[:export] = calc_addon_charges(oao[:fees], cargos, user, mot)
         new_ao[:import] = calc_addon_charges(matching_ao.first[:fees], cargos, user, mot)
-        
+
         new_ao[:flag] = 'ambidirectional'
         condensed_addons << new_ao
       else
@@ -91,3 +94,27 @@ class Addon < ApplicationRecord
     hash_addons
   end
 end
+
+# == Schema Information
+#
+# Table name: addons
+#
+#  id                   :bigint(8)        not null, primary key
+#  title                :string
+#  text                 :jsonb            is an Array
+#  tenant_id            :integer
+#  read_more            :string
+#  accept_text          :string
+#  decline_text         :string
+#  additional_info_text :string
+#  cargo_class          :string
+#  hub_id               :integer
+#  counterpart_hub_id   :integer
+#  mode_of_transport    :string
+#  tenant_vehicle_id    :integer
+#  direction            :string
+#  addon_type           :string
+#  fees                 :jsonb
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#

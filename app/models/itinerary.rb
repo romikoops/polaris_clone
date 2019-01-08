@@ -21,6 +21,7 @@ class Itinerary < ApplicationRecord
 
   validate :must_have_stops
   self.per_page = 12
+  
   def generate_schedules_from_sheet(stops, start_date, end_date, tenant_vehicle_id, closing_date, vessel, voyage_code, load_type)
     results = {
       layovers: [],
@@ -475,3 +476,15 @@ class Itinerary < ApplicationRecord
     errors.add(:base, 'Itinerary must have stops') if stops.empty?
   end
 end
+
+# == Schema Information
+#
+# Table name: itineraries
+#
+#  id                :bigint(8)        not null, primary key
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  name              :string
+#  mode_of_transport :string
+#  tenant_id         :integer
+#

@@ -3,7 +3,7 @@
 class MaxDimensionsBundle < ApplicationRecord
   belongs_to :tenant
   validates :mode_of_transport, presence: true, uniqueness: {
-    scope:   %i(tenant_id aggregate),
+    scope: %i(tenant_id aggregate),
     message: lambda do |obj, _|
       max_dimensions_name = "max#{aggregate ? '_aggregate' : ''}_dimensions"
 
@@ -20,34 +20,34 @@ class MaxDimensionsBundle < ApplicationRecord
 
   CARGO_ITEM_DEFAULTS = {
     general: {
-      dimension_x:       590.0,
-      dimension_y:       234.2,
-      dimension_z:       228.0,
-      payload_in_kg:     21_770.0,
+      dimension_x: 590.0,
+      dimension_y: 234.2,
+      dimension_z: 228.0,
+      payload_in_kg: 21_770.0,
       chargeable_weight: 21_770.0
     },
-    air:     {
-      dimension_x:       120.0,
-      dimension_y:       100.0,
-      dimension_z:       150.0,
-      payload_in_kg:     1_000.0,
+    air: {
+      dimension_x: 120.0,
+      dimension_y: 100.0,
+      dimension_z: 150.0,
+      payload_in_kg: 1_000.0,
       chargeable_weight: 1_000.0
     }
   }.freeze
 
   CARGO_ITEM_AGGREGATE_DEFAULTS = {
     general: {
-      dimension_x:       0,
-      dimension_y:       0,
-      dimension_z:       0,
-      payload_in_kg:     0,
+      dimension_x: 0,
+      dimension_y: 0,
+      dimension_z: 0,
+      payload_in_kg: 0,
       chargeable_weight: 0
     },
-    air:     {
-      dimension_x:       0,
-      dimension_y:       0,
-      dimension_z:       0,
-      payload_in_kg:     1_000.0,
+    air: {
+      dimension_x: 0,
+      dimension_y: 0,
+      dimension_z: 0,
+      payload_in_kg: 1_000.0,
       chargeable_weight: 1_000.0
     }
   }.freeze
@@ -76,10 +76,10 @@ class MaxDimensionsBundle < ApplicationRecord
   def to_max_dimension_hash
     {
       mode_of_transport.to_sym => {
-        dimension_x:       dimension_x,
-        dimension_y:       dimension_y,
-        dimension_z:       dimension_z,
-        payload_in_kg:     payload_in_kg,
+        dimension_x: dimension_x,
+        dimension_y: dimension_y,
+        dimension_z: dimension_z,
+        payload_in_kg: payload_in_kg,
         chargeable_weight: chargeable_weight
       }
     }
@@ -89,6 +89,7 @@ class MaxDimensionsBundle < ApplicationRecord
 
   def self.excluded_in_options?(options, mode_of_transport)
     return false if options[:modes_of_transport].nil?
+
     modes_of_transport = [options[:modes_of_transport]].flatten.compact
     modes_of_transport.exclude?(mode_of_transport)
   end
@@ -100,3 +101,20 @@ class MaxDimensionsBundle < ApplicationRecord
     ]
   end
 end
+
+# == Schema Information
+#
+# Table name: max_dimensions_bundles
+#
+#  id                :bigint(8)        not null, primary key
+#  mode_of_transport :string
+#  tenant_id         :integer
+#  aggregate         :boolean
+#  dimension_x       :decimal(, )
+#  dimension_y       :decimal(, )
+#  dimension_z       :decimal(, )
+#  payload_in_kg     :decimal(, )
+#  chargeable_weight :decimal(, )
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#

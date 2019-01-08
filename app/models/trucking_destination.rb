@@ -4,7 +4,7 @@ class TruckingDestination < ApplicationRecord
   self.ignored_columns = %w(geometry_id)
   validates given_attribute_names.first.to_sym,
             uniqueness: {
-              scope:   given_attribute_names[1..-1],
+              scope: given_attribute_names[1..-1],
               message: 'is a duplicate (all attributes match an existing record in the DB)'
             }
 
@@ -28,7 +28,21 @@ class TruckingDestination < ApplicationRecord
     ",
           hub_lng: args[:hub].longitude,
           hub_lat: args[:hub].latitude,
-          lng:     args[:longitude],
-          lat:     args[:latitude])
+          lng: args[:longitude],
+          lat: args[:latitude])
   end
 end
+
+# == Schema Information
+#
+# Table name: trucking_destinations
+#
+#  id           :bigint(8)        not null, primary key
+#  zipcode      :string
+#  country_code :string
+#  city_name    :string
+#  distance     :integer
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  location_id  :integer
+#

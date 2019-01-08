@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+
 require 'rails_helper'
 
 describe TruckingDestination, type: :model do
@@ -51,3 +52,17 @@ describe TruckingDestination, type: :model do
   end
 
 end
+
+# == Schema Information
+#
+# Table name: trucking_destinations
+#
+#  id           :bigint(8)        not null, primary key
+#  zipcode      :string
+#  country_code :string
+#  city_name    :string
+#  distance     :integer
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  location_id  :integer
+#
