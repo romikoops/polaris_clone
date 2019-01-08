@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Location < ApplicationRecord
+  has_many :location_names
   include PgSearch
 
   validates :postal_code, uniqueness: {

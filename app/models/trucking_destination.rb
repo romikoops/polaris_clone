@@ -44,5 +44,5 @@ end
 #  distance     :integer
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
-#  location_id  :integer
+#  location_id  :uuid
 #

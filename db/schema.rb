@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
   enable_extension "postgis"
   enable_extension "postgis_tiger_geocoder"
   enable_extension "postgis_topology"
+  enable_extension "unaccent"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -419,6 +420,26 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.index ["uuid"], name: "index_local_charges_on_uuid", unique: true
   end
 
+  create_table "location_names", force: :cascade do |t|
+    t.string "language"
+    t.string "locality_2"
+    t.string "locality_3"
+    t.string "locality_4"
+    t.string "locality_5"
+    t.string "locality_6"
+    t.string "locality_7"
+    t.string "locality_8"
+    t.string "locality_9"
+    t.string "locality_10"
+    t.string "locality_11"
+    t.string "country"
+    t.string "postal_code"
+    t.string "name"
+    t.integer "location_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "locations", force: :cascade do |t|
     t.string "postal_code"
     t.string "suburb"
@@ -434,6 +455,45 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.index "to_tsvector('english'::regconfig, (postal_code)::text)", name: "locations_to_tsvector_idx", using: :gin
     t.index "to_tsvector('english'::regconfig, (suburb)::text)", name: "locations_to_tsvector_idx1", using: :gin
     t.index ["postal_code", "suburb", "neighbourhood", "city", "province", "country"], name: "uniq_index", unique: true
+  end
+
+  create_table "locations_locations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.geometry "bounds", limit: {:srid=>0, :type=>"geometry"}
+    t.integer "osm_id"
+    t.string "name"
+    t.integer "admin_level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "locations_names", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "language"
+    t.integer "osm_id"
+    t.integer "place_rank"
+    t.string "osm_type"
+    t.string "street"
+    t.string "city"
+    t.string "country"
+    t.string "county"
+    t.string "state"
+    t.string "country_code"
+    t.string "display_name"
+    t.string "alternative_names"
+    t.string "name"
+    t.geometry "point", limit: {:srid=>0, :type=>"geometry"}
+    t.string "postal_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index "to_tsvector('english'::regconfig, (alternative_names)::text)", name: "locations_names_to_tsvector_idx8", using: :gin
+    t.index "to_tsvector('english'::regconfig, (city)::text)", name: "locations_names_to_tsvector_idx10", using: :gin
+    t.index "to_tsvector('english'::regconfig, (country)::text)", name: "locations_names_to_tsvector_idx1", using: :gin
+    t.index "to_tsvector('english'::regconfig, (country_code)::text)", name: "locations_names_to_tsvector_idx5", using: :gin
+    t.index "to_tsvector('english'::regconfig, (display_name)::text)", name: "locations_names_to_tsvector_idx6", using: :gin
+    t.index "to_tsvector('english'::regconfig, (language)::text)", name: "locations_names_to_tsvector_idx3", using: :gin
+    t.index "to_tsvector('english'::regconfig, (name)::text)", name: "locations_names_to_tsvector_idx7", using: :gin
+    t.index "to_tsvector('english'::regconfig, (osm_id)::text)", name: "locations_names_to_tsvector_idx4", using: :gin
+    t.index "to_tsvector('english'::regconfig, (postal_code)::text)", name: "locations_names_to_tsvector_idx9", using: :gin
+    t.index ["language", "osm_id", "street", "country", "country_code", "display_name", "name", "postal_code"], name: "uniq_index_1", unique: true
   end
 
   create_table "mandatory_charges", force: :cascade do |t|
@@ -799,7 +859,7 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.integer "distance"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "location_id"
+    t.uuid "location_id"
     t.index ["city_name"], name: "index_trucking_destinations_on_city_name"
     t.index ["country_code"], name: "index_trucking_destinations_on_country_code"
     t.index ["distance"], name: "index_trucking_destinations_on_distance"
