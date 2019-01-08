@@ -1,101 +1,60 @@
-// import React, { Component } from 'react'
-// import { withNamespaces } from 'react-i18next'
-// import * as Scroll from 'react-scroll'
-// import Toggle from 'react-toggle'
-// import { bindActionCreators } from 'redux'
-// import { connect } from 'react-redux'
-// import { get } from 'lodash'
-// import ReactTooltip from 'react-tooltip'
-// import { errorActions } from '../../actions'
-// import PropTypes from '../../prop-types'
-// import GmapsLoader from '../../hocs/GmapsLoader'
-// import styles from './ShipmentDetails.scss'
-// import defaults from '../../styles/default_classes.scss'
-// import { moment } from '../../constants'
-// import '../../styles/day-picker-custom.scss'
-// import { RoundButton } from '../RoundButton/RoundButton'
-// import ShipmentLocationBox from '../ShipmentLocationBox/ShipmentLocationBox'
-// import ShipmentContainers from '../ShipmentContainers/ShipmentContainers'
-// import ShipmentCargoItems from '../ShipmentCargoItems/ShipmentCargoItems'
-// import ShipmentAggregatedCargo from '../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
-// import {
-//   camelize, isEmpty, chargeableWeight, isQuote
-// } from '../../helpers'
-// import Checkbox from '../Checkbox/Checkbox'
-// import NotesRow from '../Notes/Row'
-// import '../../styles/select-css-custom.scss'
-// import getModals from './getModals'
-// import toggleCSS from './toggleCSS'
-// import getOffersBtnIsActive, {
-//   noDangerousGoodsCondition,
-//   stackableGoodsCondition
-// } from './getOffersBtnIsActive'
-// import formatCargoItemTypes from './formatCargoItemTypes'
-// import addressFieldsAreValid from './addressFieldsAreValid'
-// import calcAvailableMotsForRoute,
-// { shouldUpdateAvailableMotsForRoute } from './calcAvailableMotsForRoute'
-// import getRequests from '../ShipmentLocationBox/getRequests'
-// import reuseShipments from '../../helpers/reuseShipment'
-// import DayPickerSection from './DayPickerSection'
-
-/* Props
-
-  tenant={tenant}
-  user={user}
-  shipmentData={shipmentData}
-  prevRequest={get(request, ['stage2'], {})}
-  req={get(request, ['stage1'], {})}
-  getOffers={data => shipmentDispatch.getOffers(data, true)}
-  setStage={this.selectShipmentStage}
-  messages={error ? error.stage2 : []}
-  shipmentDispatch={shipmentDispatch}
-  bookingSummaryDispatch={bookingSummaryDispatch}
-  reusedShipment={reusedShipment}
-  showRegistration={showRegistration}
-  hideRegistration={() => this.hideRegistration()}
-
-*/
-
 import React from 'react'
 import Formsy from 'formsy-react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { get } from 'lodash'
+import moment from 'moment'
 import RouteSection from './RouteSection'
 import DayPickerSection from './DayPickerSection'
 import CargoSection from './CargoSection'
 import GetOffersSection from './GetOffersSection'
-import { shipmentActions } from '../../actions'
+import { shipmentActions, bookingProcessActions } from '../../actions'
 
 class ShipmentDetails extends React.PureComponent {
   constructor (props) {
     super(props)
 
     this.getOffers = this.getOffers.bind(this)
+    this.handleInvalidGetOffersAttempt = this.handleInvalidGetOffersAttempt.bind(this)
+
+    if (props.shipment.id && props.shipment.id !== props.shipmentId) {
+      props.bookingProcessDispatch.resetStore()
+    }
+
+    props.bookingProcessDispatch.updateShipment('id', props.shipmentId)
   }
 
   getOffers () {
-    const { shipmentDetails, shipmentDispatch } = this.props
+    const { shipment, shipmentDispatch } = this.props
     const { getOffers } = shipmentDispatch
 
-    // Old Request
-    //
-    // {
-    //   id: this.state.shipment.id,
-    //   origin,
-    //   destination,
-    //   incoterm,
-    //   direction: this.state.shipment.direction,
-    //   selected_day: selectedDay || moment().format('DD/MM/YYYY'),
-    //   trucking: this.state.shipment.trucking,
-    //   cargo_items_attributes: this.state.cargoItems,
-    //   containers_attributes: this.state.containers,
-    //   aggregated_cargo_attributes: this.state.aggregated && this.state.aggregatedCargo
-    // }
+    const request = {
+      shipment: {
+        id: shipment.id,
+        origin: shipment.origin,
+        destination: shipment.destination,
+        direction: shipment.direction,
+        selected_day: shipment.selectedDay || moment().format('DD/MM/YYYY'),
 
-    // TODO: Build Request using data from the shipmentDetails store
-    const request = {}
+        // TODO: Change what the API expects. This logic belongs in the backend.
+        cargo_items_attributes: shipment.loadType === 'cargo_item' ? shipment.cargoUnits : [],
+        containers_attributes: shipment.loadType === 'container' ? shipment.cargoUnits : [],
 
-    getOffers(request)
+        // TODO: implement
+        trucking: shipment.trucking,
+        incoterm: {},
+        aggregated_cargo_attributes: {
+          weight: 0,
+          volume: 0
+        }
+      }
+    }
+
+    getOffers(request, true)
+  }
+
+  handleInvalidGetOffersAttempt () {
+    console.log('Invalid Attempt', this.props)
   }
 
   render () {
@@ -104,9 +63,13 @@ class ShipmentDetails extends React.PureComponent {
         className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start"
         style={{ minHeight: '100%' }}
       >
-        <Formsy onValidSubmit={this.getOffers} className="flex-100 layout-row layout-wrap">
+        <Formsy
+          onValidSubmit={this.getOffers}
+          onInvalidSubmit={this.handleInvalidGetOffersAttempt}
+          className="flex-100 layout-row layout-wrap"
+        >
           <RouteSection />
-          {/* <DayPickerSection /> */}
+          <DayPickerSection />
           <CargoSection />
           <GetOffersSection />
         </Formsy>
@@ -116,14 +79,17 @@ class ShipmentDetails extends React.PureComponent {
 }
 
 function mapStateToProps (state) {
-  const { shipmentDetails } = state
+  const { bookingProcess, bookingData } = state
+  const { response } = bookingData
+  const shipmentId = get(response, 'stage1.shipment.id')
 
-  return shipmentDetails
+  return { ...bookingProcess, shipmentId }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    shipmentDispatch: bindActionCreators(shipmentActions, dispatch)
+    shipmentDispatch: bindActionCreators(shipmentActions, dispatch),
+    bookingProcessDispatch: bindActionCreators(bookingProcessActions, dispatch)
   }
 }
 
