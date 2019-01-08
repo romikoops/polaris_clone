@@ -1,0 +1,20 @@
+:local {
+  .add_unit {
+    letter-spacing: 0.25px;
+    cursor: pointer;
+    z-index: 100;
+    i {
+      opacity: 0.8;
+      font-size: 30px;
+      transition: all 0.3s ease;
+      &:hover {
+        opacity: 1;
+      }
+    }
+    p {
+      margin-left: 15px;
+      font-weight: bold;
+      font-size: 17px;
+    }
+  }
+}

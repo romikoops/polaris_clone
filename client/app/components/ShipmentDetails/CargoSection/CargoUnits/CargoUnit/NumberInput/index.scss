@@ -1,0 +1,39 @@
+:local {
+  .cargo_unit_number_input {
+    img {
+      height: 27px;
+      padding-right: 12px;
+    }
+    h4 {
+      margin: 0;
+      margin-bottom: 7px;
+      padding-left: 40px;
+      font-size: 10px;
+    }
+    .input_box {
+      height: 30px;
+      border-radius: 3px;
+      .unit {
+        font-size: 14px;
+        padding: 0 10px;
+      }
+      input {
+        height: 22px;
+        border: 0;
+        font-size: 18px;
+        background: transparent;
+        border-bottom: 1px solid #BDBDBD;
+        padding: 0 20px 5px 10px;
+        transition: all 0.2s ease;
+        &:focus {
+          outline: none;
+          border-bottom: 1.5px solid #828282;
+        }
+    
+        &::-webkit-input-placeholder {
+          color: #BDBDBD;
+        }
+      }
+    }
+  }
+}
