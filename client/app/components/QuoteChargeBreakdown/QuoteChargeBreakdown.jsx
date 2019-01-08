@@ -59,7 +59,7 @@ class QuoteChargeBreakdown extends Component {
 
   displayKeyAndName (fee) {
     const { t } = this.props
-    
+
     switch (fee[0]) {
       case 'trucking_lcl' || 'trucking_fcl':
         return t('cargo:truckingRate')
@@ -115,6 +115,7 @@ class QuoteChargeBreakdown extends Component {
     if (scope.freight_in_original_currency && key === 'cargo') {
       const pricesArray = Object.entries(quote[key]).filter(array => !this.unbreakableKeys.includes(array[0]))
       const feeKeys = Object.keys(pricesArray[0][1]).filter(pKey => !this.unbreakableKeys.includes(pKey))
+      if (feeKeys.length === 1 && feeKeys[0] === 'unknown') return ''
       const { currency } = pricesArray[0][1][feeKeys[0]]
       let value = 0.0
       pricesArray.forEach((price) => {
@@ -133,11 +134,8 @@ class QuoteChargeBreakdown extends Component {
   }
 
   dynamicSubKey (key, price, i) {
-    const { t, scope } = this.props
+    const { t } = this.props
 
-    // if (scope.consolidate_cargo && key === 'cargo') {
-    //   return t('cargo:consolidatedCargoRate')
-    // }
     if (key === 'cargo') {
       return t('cargo:unitFreightRate', { unitNo: i + 1 })
     }
@@ -180,23 +178,17 @@ class QuoteChargeBreakdown extends Component {
                 </span>
               </div>
               <div className="flex-50 layout-row layout-align-end-center">
-                {/* {scope.cargo_price_notes && scope.cargo_price_notes[key] ? (
-                  <p style={{ textAlign: 'right', width: '100%' }}>{scope.cargo_price_notes[key]}</p>
-                ) : ( */}
-                  <p>
-                    {numberSpacing(price[1].value || price[1].total.value, 2)}
+                <p>
+                  {numberSpacing(price[1].value || price[1].total.value, 2)}
                     &nbsp;
-                    {(price[1].currency || price[1].total.currency)}
-                  </p>
-                {/* // )} */}
+                  {(price[1].currency || price[1].total.currency)}
+                </p>
               </div>
             </div>
           )
 
           return subPrices
         }) : ''}
-        {/* {scope.cargo_price_notes && scope.cargo_price_notes[key] ? ''
-          : ( */}
         <div className={`flex-100 layout-row layout-align-space-between-center ${styles.currency_header}`}>
           <div className="flex-70 layout-row layout-align-start-center">
             <span className="flex-none bold">
@@ -208,7 +200,6 @@ class QuoteChargeBreakdown extends Component {
             <p className="flex-none bold">{`${numberSpacing(currencyTotals[currencyFees[0]] || 0, 2)} ${currencyFees[0]}`}</p>
           </div>
         </div>
-          {/* ) } */}
       </div>
     ))
   }
@@ -227,6 +218,16 @@ class QuoteChargeBreakdown extends Component {
     if (key === 'cargo' && scope.fine_fee_detail) return this.generateUnitContent(key)
 
     return this.generateContent(key)
+  }
+
+  shouldShowSubTotal (currencySections) {
+    if (Object.keys(currencySections).length > 1) return true
+
+    if (Object.values(currencySections)[0].length > 1) return true
+
+    if (Object.values(currencySections)[0][0][0] === 'unknown') return false
+
+    return true
   }
 
   generateUnitContent (key) {
@@ -263,6 +264,7 @@ class QuoteChargeBreakdown extends Component {
         ] : [
           <p className={`flex-none ${styles.item_dims}`}>{`${t('cargo:perUnitWeight')} ${cargo.payload_in_kg}kg`}</p>
         ]
+      const showSubTotal = this.shouldShowSubTotal(currencySections)
       const sections = Object.entries(currencySections).map(currencyFees => (
         <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
 
@@ -281,27 +283,28 @@ class QuoteChargeBreakdown extends Component {
                       &nbsp;
                       {(price[1].currency || price[1].total.currency)}
                     </p>
-                 )}
+                  )}
                 </div>
               </div>
             )
 
             return subPrices
           }) : ''}
-          {/* {scope.cargo_price_notes && scope.cargo_price_notes[key] ? ''
-            : ( */}
-              <div className={`flex-100 layout-row layout-align-space-between-center ${styles.currency_header}`}>
-                <div className="flex-45 layout-row layout-align-start-center">
-                  <span className="flex-none bold">
-                    {' '}
-                    {t('cargo:feesIn', { currency: currencyFees[0] })}
-                  </span>
-                </div>
-                <div className="flex-45 layout-row layout-align-end-center">
-                  <p className="flex-none bold">{`${numberSpacing(currencyTotals[currencyFees[0]] || 0, 2)} ${currencyFees[0]}`}</p>
-                </div>
+
+          { showSubTotal ? (
+            <div className={`flex-100 layout-row layout-align-space-between-center ${styles.currency_header}`}>
+              <div className="flex-45 layout-row layout-align-start-center">
+                <span className="flex-none bold">
+                  {' '}
+                  {t('cargo:feesIn', { currency: currencyFees[0] })}
+                </span>
               </div>
-            {/* ) } */}
+              <div className="flex-45 layout-row layout-align-end-center">
+                <p className="flex-none bold">{`${numberSpacing(currencyTotals[currencyFees[0]] || 0, 2)} ${currencyFees[0]}`}</p>
+              </div>
+            </div>
+          ) : '' }
+
         </div>
       ))
 

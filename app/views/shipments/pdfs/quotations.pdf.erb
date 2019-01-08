@@ -4,6 +4,7 @@
   <% tenant_logo_asset = "logoLarge_" + tenant["subdomain"] + ".png" %>
   <% tenant_logo_url = tenant.theme["logoLarge"] %>
   <% scope = tenant.scope %>
+  <% hide_cargo_sub_totals = false %>
   <% precarriage_color = shipment.has_pre_carriage ? primary_color : neutral_color %>
   <% oncarriage_color = shipment.has_on_carriage ? primary_color : neutral_color %>
 
@@ -200,9 +201,12 @@
               .each do |k|
                 charge[k] = original_charge[k]
                 charge[k]['total']['value'] = 0.0
-                original_charge[k].keys
+                item_charge_keys = original_charge[k].keys
                   .reject {|fk| ['name', 'total', 'edited_total'].include?(fk)}
-                  .each do |fk|
+                if item_charge_keys.length == 1 && item_charge_keys.first == 'unknown'
+                  hide_cargo_sub_totals = true
+                end
+                item_charge_keys.each do |fk|
                     charge['total']['value'] += original_charge[k][fk]['value']
                     charge['total']['currency'] = original_charge[k][fk]['currency']
                     charge[k]['total']['value'] += original_charge[k][fk]['value']
@@ -216,16 +220,12 @@
         <div class="sub-prices">
           <div class="total-price-single">
             <h4><%= charge_key == 'cargo' ? "#{s.mode_of_transport} Freight" : charge["name"] %></h4>
-            <%# <% if charge != "Grand Total" && scope['cargo_price_notes'] && scope['cargo_price_notes'][charge_key] %>
-
-            <% if charge != "Grand Total" && !scope['hide_grand_total'] %>
+            <% if charge_key != 'cargo' && charge != "Grand Total" && !scope['hide_grand_total'] || (charge_key == 'cargo' && !hide_cargo_sub_totals) %>
               <h3><%= '%.2f' % charge["total"]["value"].to_f %>&nbsp;<%= charge["total"]["currency"] %></h3>
             <% end %>
           </div>
           <div class="subtotal-price-group">
-            <% if charge != "Grand Total" 
-            # && !scope.dig('cargo_price_notes', charge_key)
-             %>
+            <% if charge != "Grand Total" %>
               <%
                 sorted_charges = if ['export', 'import'].include?(charge_key)
                   charge
@@ -245,22 +245,24 @@
                   end
                 %>
               <% sorted_charges.each do |currency_key, sub_charges| %>
-                <div class="subtotal-currency-single">
-                  <h4>Fees charged in <%= currency_key %>:</h4>
-                  <h3>
-                    <%=
-                      if scope['hide_sub_totals'] && charge_key == 'unknown'
-                        "#{s.mode_of_transport} Freight: "
-                      elsif ['export', 'import'].include?(charge_key)
-                        "#{'%.2f' % sub_charges.sum{|c| c['value']}}&nbsp;#{currency_key}"
-                      elsif charge_key == 'cargo' && scope['fine_fee_detail']
-                        "#{'%.2f' % sub_charges.sum{|c| c['value']}}&nbsp;#{currency_key}"
-                      else
-                        "#{'%.2f' % sub_charges.sum{|c| c['total']['value']}}&nbsp;#{currency_key}"
-                      end
-                      %>
-                  </h3>
-                </div>
+                <% if charge_key != 'cargo' || (charge_key == 'cargo' && !hide_cargo_sub_totals) %>
+                  <div class="subtotal-currency-single">
+                    <h4>Fees charged in <%= currency_key %>:</h4>
+                    <h3>
+                      <%=
+                        if scope['hide_sub_totals'] && charge_key == 'unknown'
+                          "#{s.mode_of_transport} Freight: "
+                        elsif ['export', 'import'].include?(charge_key)
+                          "#{'%.2f' % sub_charges.sum{|c| c['value']}}&nbsp;#{currency_key}"
+                        elsif charge_key == 'cargo' && scope['fine_fee_detail']
+                          "#{'%.2f' % sub_charges.sum{|c| c['value']}}&nbsp;#{currency_key}"
+                        else
+                          "#{'%.2f' % sub_charges.sum{|c| c['total']['value']}}&nbsp;#{currency_key}"
+                        end
+                        %>
+                    </h3>
+                  </div>
+                <% end %>
                 <% sub_charges.each_with_index do |sub_charge, i| 
                 %>
                   <div class="subtotal-price-single">

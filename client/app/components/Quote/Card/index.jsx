@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import { get } from 'lodash'
 import { withNamespaces } from 'react-i18next'
 import styles from './index.scss'
 import { moment } from '../../../constants'
@@ -8,7 +9,8 @@ import {
   numberSpacing,
   capitalize,
   formattedPriceValue,
-  isQuote
+  isQuote,
+  onlyUnique
 } from '../../../helpers'
 import { ChargeIcons } from './ChargeIcons'
 import QuoteChargeBreakdown from '../../QuoteChargeBreakdown/QuoteChargeBreakdown'
@@ -61,6 +63,47 @@ class QuoteCard extends PureComponent {
       showSchedules: !prevState.showSchedules
     }
     ), () => this.toggleExpander(key))
+  }
+
+  shouldHideGrandTotal () {
+    const { result, tenant } = this.props
+    const { quote } = result
+    const { scope } = tenant
+    if (scope.hide_grand_total) return true
+    if (scope.hide_converted_grand_total) {
+      const topKeys = ['cargo', 'trucking_pre', 'trucking_on', 'import', 'export']
+      const currencies = []
+      topKeys.forEach((k) => {
+        const charge = quote[k]
+        if (charge) {
+          if (['trucking_pre', 'trucking_on'].includes(k)) {
+            currencies.push(charge.total.currency)
+          }
+          if (['import', 'export'].includes(k)) {
+            Object.keys(charge)
+              .filter(key => !['name', 'total', 'edited_total'].includes(key))
+              .forEach((subKey) => {
+                currencies.push(charge[subKey].currency)
+              })
+          }
+          if (k === 'cargo') {
+            Object.keys(charge)
+              .filter(key => !['name', 'total', 'edited_total'].includes(key))
+              .forEach((subKey) => {
+                Object.keys(charge[subKey])
+                  .filter(key => !['name', 'total', 'edited_total', 'unknown'].includes(key))
+                  .forEach((cargoKey) => {
+                    currencies.push(get(charge, [subKey, cargoKey, 'currency'], false))
+                  })
+              })
+          }
+        }
+      })
+
+      return currencies.filter(val => val).filter(onlyUnique).length > 1
+    }
+
+    return false
   }
 
   handleSelectSchedule (schedule) {
@@ -151,6 +194,7 @@ class QuoteCard extends PureComponent {
       : cargo.reduce((sum, cargoUnit) => (sum + +cargoUnit.payload_in_kg * +cargoUnit.quantity), 0)
 
     const responsiveFlex = isQuote(tenant) ? 'flex-lg-80 offset-lg-20' : ''
+    const hideGrandTotal = this.shouldHideGrandTotal()
 
     return (
       <div className={`
@@ -249,11 +293,11 @@ class QuoteCard extends PureComponent {
           <div className={`flex-100 layout-row layout-align-space-between-stretch layout-wrap ${styles.total_row}`}>
 
             <div className={`${isQuote(tenant) ? 'flex' : 'flex-40'} layout-row layout-align-start-center`}>
-              <span style={{ textAlign: 'right' }}>{scope.hide_grand_total ? '' : t('common:total')}</span>
+              <span style={{ textAlign: 'right' }}>{hideGrandTotal ? '' : t('common:total')}</span>
             </div>
             <div className={`${isQuote(tenant) ? 'flex-75' : 'flex'}  layout-row layout-align-end-center`}>
               <p style={!isQuote(tenant) ? { paddingRight: '18px' } : {}}>
-                {scope.hide_grand_total
+                {hideGrandTotal
                   ? ''
                   : `${formattedPriceValue(quote.total.value)} ${quote.total.currency}`}
               </p>
