@@ -1,13 +1,10 @@
 AllCops:
   TargetRubyVersion: 2.5
   Exclude:
-    - 'bin/*'
+    - '**/bin/*'
     - 'client/**/*'
     - 'db/schema.rb'
-    - 'engines/*/bin/*'
-    - 'lib/*/bin/*'
-    - 'qa/bin/*'
-    - Rakefile
+    - '**/Rakefile'
 
 Metrics/AbcSize:
   Max: 25
