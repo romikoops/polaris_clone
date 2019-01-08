@@ -11,6 +11,9 @@ Gem::Specification.new do |s|
   s.email       = ['GITUSER_EMAIL']
   s.summary     = 'Summary of EngineTemplate.'
 
+  # Uncomment line below to mark this component to be directly required by app.
+  # s.metadata = { 'type' => 'direct' }
+
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   s.add_dependency 'core'

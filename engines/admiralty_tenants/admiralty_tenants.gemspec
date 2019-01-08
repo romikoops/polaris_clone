@@ -11,6 +11,8 @@ Gem::Specification.new do |s|
   s.email       = ['mikko.kokkonen@itsmycargo.com']
   s.summary     = 'Summary of AdmiraltyTenants.'
 
+  # s.metadata = { 'type' => 'direct' }
+
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   s.add_dependency 'admiralty_assets'
