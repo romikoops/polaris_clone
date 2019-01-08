@@ -16,9 +16,9 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'factory_bot_rails'
   s.add_development_dependency 'ffaker'
-  s.add_development_dependency 'pg', '~> 0.17'
+  s.add_development_dependency 'fuubar'
   s.add_development_dependency 'pry'
-  s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'rspec_junit_formatter'
+  s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'simplecov'
 end
