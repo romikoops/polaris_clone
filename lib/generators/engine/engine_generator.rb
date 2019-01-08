@@ -7,7 +7,7 @@ class EngineGenerator < Rails::Generators::NamedBase
     # Define engine destination
     engine = "engines/#{name}"
 
-    raise 'Invalid Engine Name' unless name[/\a[a-zA-Z_]+\Z/]
+    raise 'Invalid Engine Name' unless name[/\A[a-zA-Z_]+\z/]
 
     # Copy our template as new engine
     directory 'engine', engine
