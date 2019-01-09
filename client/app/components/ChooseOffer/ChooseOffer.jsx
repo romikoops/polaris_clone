@@ -275,7 +275,7 @@ class ChooseOffer extends Component {
             parentToggle={this.toggleNewHub}
           />
         ) : ''}
-        <div className={`flex-none ${defs.content_width} layout-row`}>
+        <div className={`flex-none content_width_booking layout-row`}>
           {!isQuote(tenant) ? <div className="flex-20 layout-row layout-wrap">
             <RouteFilterBox
               theme={theme}

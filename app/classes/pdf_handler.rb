@@ -20,6 +20,7 @@ class PdfHandler
     @logo       = args[:logo]
     @load_type  = args[:load_type]
     @remarks    = args[:remarks]
+    @hide_cargo_sub_totals = false
     @cargo_data = {
       vol: {},
       kg: {}
@@ -58,7 +59,8 @@ class PdfHandler
         remarks: @remarks,
         tenant: @shipment.tenant,
         cargo_data: @cargo_data,
-        notes: @shipment.route_notes
+        notes: @shipment.route_notes,
+        hide_cargo_sub_totals: @hide_cargo_sub_totals
       }
     )
     response = BreezyPDFLite::RenderRequest.new(
