@@ -9,6 +9,7 @@ export const ALIGN_END_CENTER = 'layout-align-end-center'
 export const ALIGN_AROUND_STRETCH = 'layout-align-space-around-stretch'
 export const ALIGN_AROUND_CENTER = 'layout-align-space-around-center'
 export const ALIGN_SPACE_BETWEEN = 'layout-align-space-between'
+export const ALIGN_START_START = 'layout-align-start-start'
 
 export const ROW = (mode) => {
   if (mode === undefined) {

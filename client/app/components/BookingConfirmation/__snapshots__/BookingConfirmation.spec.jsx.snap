@@ -581,7 +581,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-start-center"
           >
             <div
-              className="flex-100 layout-row undefined"
+              className="flex-100 layout-row layout-align-start-start"
             >
               <div
                 className="flex-45 layout-row layout-wrap layout-align-start-start"
@@ -1497,7 +1497,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-start-center"
           >
             <div
-              className="flex-100 layout-row undefined"
+              className="flex-100 layout-row layout-align-start-start"
             >
               <div
                 className="flex-45 layout-row layout-wrap layout-align-start-start"
@@ -2578,7 +2578,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-start-center"
           >
             <div
-              className="flex-100 layout-row undefined"
+              className="flex-100 layout-row layout-align-start-start"
             >
               <div
                 className="flex-45 layout-row layout-wrap layout-align-start-start"
@@ -3488,7 +3488,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-start-center"
           >
             <div
-              className="flex-100 layout-row undefined"
+              className="flex-100 layout-row layout-align-start-start"
             >
               <div
                 className="flex-45 layout-row layout-wrap layout-align-start-start"
@@ -4398,7 +4398,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-start-center"
           >
             <div
-              className="flex-100 layout-row undefined"
+              className="flex-100 layout-row layout-align-start-start"
             >
               <div
                 className="flex-45 layout-row layout-wrap layout-align-start-start"
@@ -5308,7 +5308,7 @@ exports[`shallow render 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-start-center"
           >
             <div
-              className="flex-100 layout-row undefined"
+              className="flex-100 layout-row layout-align-start-start"
             >
               <div
                 className="flex-45 layout-row layout-wrap layout-align-start-start"
@@ -6545,7 +6545,7 @@ exports[`with cargo items 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-start-center"
           >
             <div
-              className="flex-100 layout-row undefined"
+              className="flex-100 layout-row layout-align-start-start"
             >
               <div
                 className="flex-45 layout-row layout-wrap layout-align-start-start"
@@ -7740,7 +7740,7 @@ exports[`with containers 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-start-center"
           >
             <div
-              className="flex-100 layout-row undefined"
+              className="flex-100 layout-row layout-align-start-start"
             >
               <div
                 className="flex-45 layout-row layout-wrap layout-align-start-start"
