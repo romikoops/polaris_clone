@@ -146,13 +146,6 @@ module TruckingTools
 
     case trucking_pricing.modifier
     when 'kg'
-
-      trucking_pricing['rates']['kg'].each do |rate|
-        if cargo_values['weight'].to_i <= rate['max_kg'].to_i && cargo_values['weight'].to_i >= rate['min_kg'].to_i
-          rate['rate']['min_value'] = rate['min_value']
-          return { rate: rate['rate'], fees: trucking_pricing['fees'] }
-        end
-      end
       if cargo_values['weight'].to_i > trucking_pricing['rates']['kg'].last['max_kg'].to_i && scope['hard_trucking_limit']
         raise TruckingTools::LoadMeterageExceeded
       elsif cargo_values['weight'].to_i > trucking_pricing['rates']['kg'].last['max_kg'].to_i && !scope['hard_trucking_limit']
@@ -160,6 +153,13 @@ module TruckingTools
         rate['rate']['min_value'] = rate['min_value']
         return { rate: rate['rate'], fees: trucking_pricing['fees'] }
       end
+      trucking_pricing['rates']['kg'].each do |rate|
+        if cargo_values['weight'].to_i <= rate['max_kg'].to_i && cargo_values['weight'].to_i >= rate['min_kg'].to_i
+          rate['rate']['min_value'] = rate['min_value']
+          return { rate: rate['rate'], fees: trucking_pricing['fees'] }
+        end
+      end
+
     when 'cbm'
       trucking_pricing['rates']['cbm'].each do |rate|
         next unless cargo_values['volume'] <= rate['max_cbm'].to_i && cargo_values['volume'] >= rate['min_cbm'].to_i

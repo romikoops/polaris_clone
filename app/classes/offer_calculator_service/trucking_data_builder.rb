@@ -54,8 +54,7 @@ module OfferCalculatorService
       raise ApplicationError::MissingTruckingData
     rescue TruckingTools::LoadMeterageExceeded
       raise ApplicationError::LoadMeterageExceeded
-    rescue StandardError => e
-      binding.pry
+    rescue StandardError
       raise ApplicationError::MissingTruckingData
     end
 
