@@ -1,6 +1,6 @@
 import React from 'react'
-import uuid from 'uuid'
 import { withNamespaces } from 'react-i18next'
+import uuid from 'uuid'
 import CargoUnitBox from '../CargoUnit/Box'
 import styles from './index.scss'
 import CargoUnitNumberInput from '../CargoUnit/NumberInput'
@@ -11,80 +11,152 @@ import kg from '../../../../../assets/images/cargo/kg.png'
 import length from '../../../../../assets/images/cargo/length.png'
 import width from '../../../../../assets/images/cargo/width.png'
 import height from '../../../../../assets/images/cargo/height.png'
+import calcMaxDimensionsToApply from '../../../../../helpers/calcMaxDimensionsToApply'
+import { ChargableProperties } from './ChargableProperties'
+
+const imageSources = {
+  length,
+  width,
+  height
+}
+
+function getAvailableCargoItemTypes (cargoItemTypes) {
+  if (!(Array.isArray(cargoItemTypes))) return []
+  const palletType = cargoItemTypes.filter(colli => colli.description === 'Pallet')
+  const nonPalletTypes = cargoItemTypes.filter(colli => colli.description !== 'Pallet')
+  nonPalletTypes.unshift(palletType[0])
+
+  return nonPalletTypes.map(cargoItemType => ({
+    label: cargoItemType.description,
+    key: cargoItemType.id,
+    dimension_x: cargoItemType.dimension_x,
+    dimension_y: cargoItemType.dimension_y
+  }))
+}
+
+function getSelectedColliType (availableCargoItemTypes, currentTypeId) {
+  // If the user delete its selection, then the value is `undefined`
+  if (!currentTypeId) return
+  const [currentCargoItemType] = availableCargoItemTypes.filter(
+    cargoType => cargoType.id === currentTypeId
+  )
+  const { description } = currentCargoItemType
+
+  return { label: description, value: description }
+}
+
+function CheckboxWrapper ({
+  i, labelText, disabled, onChange, cargoItem, prop, theme, checkedTransform = x => x, onWrapperClick = () => {}
+}) {
+  return (
+    <div
+      onClick={onWrapperClick}
+      className={`layout-row flex layout-wrap layout-align-start-center ${styles.cargo_unit_check}`}
+    >
+      <Checkbox
+        id={`${i}-${prop}`}
+        name={`${i}-${prop}`}
+        onChange={onChange}
+        checked={checkedTransform(cargoItem[prop])}
+        theme={theme}
+        size="15px"
+        disabled={disabled}
+      />
+      <div className="layout-row flex-75 layout-wrap layout-align-start-center">
+        <label className={`${styles.input_check} flex-none pointy`} htmlFor={`${i}-dangerousGoods`}>
+          <p>{labelText}</p>
+        </label>
+        <Tooltip color={theme.colors.primary} icon="fa-info-circle" text="dangerous_goods" />
+      </div>
+    </div>
+  )
+}
 
 function CargoItem ({
-  cargoItem, i, onDeleteUnit, theme, scope, t
+  cargoItem, cargoItemTypes, i, onDeleteUnit, theme, scope, t, ShipmentDetails, maxDimensions, onSelectColliType, onChangeCargoUnitCheckbox, toggleModal, toggleStackable, onChangeCargoUnitInput, uniqKey
 }) {
-  const tooltipId = uuid.v4()
-
   // TODO: implement collective weight based on scope
   // scope.frontend_consolidation ? inputs.collectiveWeight : inputs.grossWeight
 
   // TODO: implement cargoItemTypes
   // const showColliTypeErrors = !cargoItemTypes[i] || !cargoItemTypes[i].label
-  const cargoItemTypes = []
   const showColliTypeErrors = false
-  const availableCargoItemTypes = []
 
-  // TODO: implement
-  const toggleCheckbox = console.log
-  const toggleModal = console.log
+  const availableCargoItemTypes = getAvailableCargoItemTypes(cargoItemTypes)
+  const maxDimensionsToApply = calcMaxDimensionsToApply(
+    ShipmentDetails.availableMots,
+    maxDimensions
+  )
+
+  const selectedColliType = getSelectedColliType(
+    cargoItemTypes, cargoItem.cargoItemTypeId
+  )
+  const getMaxDimension = prop => Number(
+    maxDimensionsToApply[prop]
+  )
+  const getSharedProps = prop => ({
+    cargoItem,
+    className: prop === 'payloadInKg' ? 'flex-30 offset-5' : 'flex-20',
+    i,
+    maxDimension: getMaxDimension(prop),
+    name: `${i}-${prop}`,
+    onChange: onChangeCargoUnitInput,
+    onExcessDimensionsRequest: () => toggleModal('maxDimensions'),
+    value: cargoItem[prop]
+  })
+  const getImage = prop => (
+    <img
+      data-for={uuid.v4()}
+      data-tip={t(`common:${prop}`)}
+      src={imageSources[prop]}
+      alt={prop}
+      border="0"
+    />
+  )
+  const sharedPropsCheckbox = {
+    i,
+    theme,
+    cargoItem
+  }
 
   return (
-    <CargoUnitBox cargoUnit={cargoItem} i={i} onDeleteUnit={onDeleteUnit}>
+    <CargoUnitBox onChangeCargoUnitInput={onChangeCargoUnitInput} cargoUnit={cargoItem} i={i} onDeleteUnit={onDeleteUnit} unqiKey={uniqKey}>
       <div style={{ position: 'relative' }}>
         <div
           className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.padding_section}`}
           style={{ marginBottom: '20px' }}
         >
           <CargoUnitNumberInput
-            className="flex-20"
-            value={cargoItem.dimensionX}
-            image={<img data-for={tooltipId} data-tip={t('common:length')} src={length} alt="length" border="0" />}
-            unit="cm"
-            name={`${i}-dimensionX`}
-            onChange={console.log}
-            onExcessDimensionsRequest={console.log}
-            maxDimension="23"
-            maxDimensionsErrorText={t('errors:maxLength')}
+            image={getImage('length')}
             labelText={t('common:length')}
-          />
-          <CargoUnitNumberInput
-            className="flex-20"
-            value={cargoItem.dimensionY}
-            image={<img data-for={tooltipId} data-tip={t('common:width')} src={width} alt="width" border="0" />}
+            maxDimensionsErrorText={t('errors:maxLength')}
             unit="cm"
-            name={`${i}-dimensionY`}
-            onChange={console.log}
-            onExcessDimensionsRequest={console.log}
-            maxDimension="23"
-            maxDimensionsErrorText={t('errors:maxWidth')}
+            {...getSharedProps('dimensionX')}
+          />
+
+          <CargoUnitNumberInput
+            image={getImage('width')}
             labelText={t('common:width')}
-          />
-          <CargoUnitNumberInput
-            className="flex-20"
-            value={cargoItem.dimensionZ}
-            image={<img data-for={tooltipId} data-tip={t('common:height')} src={height} alt="height" border="0" />}
+            maxDimensionsErrorText={t('errors:maxWidth')}
             unit="cm"
-            name={`${i}-dimensionZ`}
-            onChange={console.log}
-            onExcessDimensionsRequest={console.log}
-            maxDimension="23"
-            maxDimensionsErrorText={t('errors:maxHeight')}
-            labelText={t('common:height')}
+            {...getSharedProps('dimensionY')}
           />
+
           <CargoUnitNumberInput
-            className="flex-30 offset-5"
-            value={cargoItem.payloadInKg}
-            image={<img data-for={tooltipId} data-tip={t('common:grossWeight')} src={kg} alt="weight" border="0" />}
+            image={getImage('height')}
+            labelText={t('common:height')}
+            maxDimensionsErrorText={t('errors:maxHeight')}
+            unit="cm"
+            {...getSharedProps('dimensionZ')}
+          />
+
+          <CargoUnitNumberInput
+            image={<img data-for={uuid.v4()} data-tip={t('common:grossWeight')} src={kg} alt="weight" border="0" />}
+            labelText={t('common:grossWeight')}
+            maxDimensionsErrorText={t('errors:maxWeight')}
             tooltip={<Tooltip color={theme.colors.primary} icon="fa-info-circle" text="payload_in_kg" />}
             unit="kg"
-            name={`${i}-payloadInKg`}
-            onChange={console.log}
-            onExcessDimensionsRequest={console.log}
-            maxDimension="23"
-            maxDimensionsErrorText={t('errors:maxWeight')}
-            labelText={t('common:Gross Weight')}
+            {...getSharedProps('payloadInKg')}
           />
         </div>
         <div className="flex-100 layout-row" />
@@ -100,66 +172,39 @@ function CargoItem ({
                 showErrors={showColliTypeErrors}
                 inputProps={{ name: `${i}-colliType` }}
                 name={`${i}-colliType`}
-                value={cargoItemTypes[i] && cargoItemTypes[i].label && cargoItemTypes[i]}
+                value={selectedColliType}
                 options={availableCargoItemTypes}
-                onChange={console.log}
+                onChange={onSelectColliType}
               />
             </div>
           </div>
 
-          <div
-            className={`layout-row flex layout-wrap layout-align-start-center ${styles.cargo_unit_check}`}
-            onClick={scope.dangerous_goods ? '' : () => toggleModal('noDangerousGoods')}
-          >
-            <Checkbox
-              id={`${i}-dangerous_goods`}
-              name={`${i}-dangerous_goods`}
-              onChange={(checked, e) => toggleCheckbox(checked, e)}
-              checked={cargoItem ? cargoItem.dangerous_goods : false}
-              theme={theme}
-              size="15px"
-              disabled={!scope.dangerous_goods}
-            />
-            <div className="layout-row flex-75 layout-wrap layout-align-start-center">
-              <label className={`${styles.input_check} flex-none pointy`} htmlFor={`${i}-dangerous_goods`}>
-                <p>{t('common:dangerousGoods')}</p>
-              </label>
-              <Tooltip color={theme.colors.primary} icon="fa-info-circle" text="dangerous_goods" />
-            </div>
-          </div>
-          <div
-            className={`layout-row flex layout-wrap layout-align-end-center ${styles.cargo_unit_check}`}
-            onClick={scope.non_stackable_goods ? '' : () => toggleModal('nonStackable')}
-          >
-            <Checkbox
-              id={`${i}-stackable`}
-              name={`${i}-stackable`}
-              onChange={(checked, e) => toggleCheckbox(!checked, e)}
-              checked={cargoItem ? !cargoItem.stackable : false}
-              theme={theme}
-              size="15px"
-              disabled={!scope.non_stackable_goods}
-            />
-            <div className="layout-row flex-65 layout-wrap layout-align-start-center">
-              <label className={`${styles.input_check} flex-none pointy`} htmlFor={`${i}-stackable`}>
-                <p>{t('common:nonStackable')}</p>
-              </label>
-              <Tooltip color={theme.colors.primary} icon="fa-info-circle" text="non_stackable" />
-            </div>
-          </div>
+          <CheckboxWrapper
+            disabled={!scope.dangerous_goods}
+            onChange={onChangeCargoUnitCheckbox}
+            prop="dangerousGoods"
+            labelText={t('common:dangerousGoods')}
+            onWrapperClick={scope.dangerous_goods ? '' : () => toggleModal('noDangerousGoods')}
+            {...sharedPropsCheckbox}
+          />
+          <CheckboxWrapper
+            disabled={!scope.non_stackable_goods}
+            onChange={toggleStackable}
+            prop="stackable"
+            labelText={t('common:nonStackable')}
+            checkedTransform={x => !x}
+            {...sharedPropsCheckbox}
+          />
         </div>
       </div>
       <div className={`${styles.cargo_item_info} flex-100'`}>
-        <div className={`${styles.inner_cargo_item_info} layout-row flex-100 layout-wrap layout-align-start`}>
-          <div className="flex-25 layout-wrap layout-row">
-            {'inputs.totalVolume'}
-            {'inputs.chargeableVolume'}
-          </div>
-          <div className={`${styles.padding_left} flex-25 layout-wrap layout-row`}>
-            {'inputs.totalWeight'}
-            {'inputs.chargeableWeight'}
-          </div>
-        </div>
+        <ChargableProperties
+          availableMots={ShipmentDetails.availableMots}
+          cargoItem={cargoItem}
+          maxDimensions={maxDimensionsToApply}
+          scope={scope}
+          t={t}
+        />
       </div>
     </CargoUnitBox>
   )

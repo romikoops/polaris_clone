@@ -4,13 +4,13 @@ import styles from './index.scss'
 import QuantityInput from '../QuantityInput'
 
 function CargoUnitBox ({
-  cargoUnit, i, onDeleteUnit, onChangeQuantityInput, children, t
+  cargoUnit, i, onDeleteUnit, onChangeCargoUnitInput, children, t, uniqKey
 }) {
   if (!cargoUnit) return ''
 
   return (
     <div
-      key={i}
+      key={uniqKey}
       name={`${i}-cargoItem`}
       className="layout-row flex-100 layout-wrap layout-align-stretch"
       style={{ position: 'relative', margin: '30px 0' }}
@@ -28,7 +28,7 @@ function CargoUnitBox ({
           <QuantityInput
             i={i}
             cargoItem={cargoUnit}
-            onChange={onChangeQuantityInput}
+            onChange={onChangeCargoUnitInput}
           />
         </div>
         <div className={`${styles.cargo_item_box} ${styles.cargo_item_inputs} flex-85`}>

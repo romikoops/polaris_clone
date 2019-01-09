@@ -6,6 +6,10 @@ function updateShipment (key, value) {
   return { type: 'UPDATE_BP_SHIPMENT', payload: { [key]: value } }
 }
 
+function updateModals (key) {
+  return { type: 'UPDATE_BP_MODALS', payload: key }
+}
+
 function addCargoUnit (cargoUnit) {
   return { type: 'ADD_CARGO_UNIT', payload: cargoUnit }
 }
@@ -18,13 +22,18 @@ function updatePageData (page, payload) {
   return { type: 'UPDATE_PAGE_DATA', page, payload }
 }
 
+function updateCargoUnit (index) {
+  return { type: 'UPDATE_CARGO_UNIT', payload: index }
+}
 
 export const shipmentDetailsActions = {
   resetStore,
   updateShipment,
   addCargoUnit,
-  deleteCargoUnit,
   updatePageData,
+  updateModals,
+  updateCargoUnit,
+  deleteCargoUnit
 }
 
 export default shipmentDetailsActions

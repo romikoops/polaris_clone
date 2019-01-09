@@ -1,20 +1,20 @@
 import React from 'react'
 import { withNamespaces } from 'react-i18next'
-import FormsyInput from '../../../../../FormsyInput/FormsyInput'
+import FormsyInput from '../../../../../Formsy/Input'
 import styles from './index.scss'
 
-function CargoUnitNumberInput ({
-  value, name, onChange, onExcessDimensionsRequest,
-  maxDimension, maxDimensionsErrorText, labelText,
-  className, tooltipId, unit, image, tooltip, t
-}) {
-  const errorStyles = {
-    whiteSpace: 'normal',
-    maxWidth: '200px',
-    fontSize: '10px',
-    top: '32px'
-  }
+const errorStyles = {
+  whiteSpace: 'normal',
+  maxWidth: '200px',
+  fontSize: '10px',
+  top: '32px'
+}
 
+function CargoUnitNumberInput ({
+  value, name, onChange, onBlur, onExcessDimensionsRequest,
+  maxDimension, maxDimensionsErrorText, labelText,
+  className, unit, image, tooltip, t
+}) {
   return (
     <div className={`layout-row layout-wrap layout-align-start-center ${styles.cargo_unit_number_input} ${className}`}>
       <h4>{labelText}</h4>
@@ -28,11 +28,12 @@ function CargoUnitNumberInput ({
           value={value}
           type="number"
           placeholder="0"
+          onBlur={onBlur}
           onChange={onChange}
           errorStyles={errorStyles}
           validations={{
-            nonNegative: (values, _value) => _value > 0,
-            maxDimension: (values, _value) => _value <= +maxDimension
+            nonNegative: (values, _value) => Number(_value) > 0,
+            maxDimension: (values, _value) => Number(_value) <= +maxDimension
           }}
           validationErrors={{
             isDefaultRequiredValue: t('common:greaterZero'),
@@ -57,5 +58,12 @@ function CargoUnitNumberInput ({
     </div>
   )
 }
-
+CargoUnitNumberInput.defaultProps = {
+  className: '',
+  image: '',
+  maxDimension: 1000,
+  onChange: () => {},
+  onBlur: () => {},
+  tooltip: ''
+}
 export default withNamespaces('common')(CargoUnitNumberInput)

@@ -53,6 +53,7 @@
     "containerClass": "Container Class",
     "viewHsCodes": "View Hs Codes",
     "length": "Length",
+    "weight":"Weight",
     "chargeableWeight": "Chargeable Weight",
     "width": "Width",
     "volume": "Volume",
@@ -724,6 +725,7 @@
     "welcomeTextQuoteTail": "online quoting tool"
   },
   "shipment": {
+    "addUnit": "Add Unit",
     "reuseShipment": "Reuse Shipment",
     "estimatedTimeDelivery": "Estimated Time Delivery",
     "estimatedDelivery": "Estimated Delivery",
