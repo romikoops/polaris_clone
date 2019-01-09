@@ -52,6 +52,11 @@ module OfferCalculatorService
       end
     rescue TruckingDataBuilder::MissingTruckingData
       raise ApplicationError::MissingTruckingData
+    rescue TruckingTools::LoadMeterageExceeded
+      raise ApplicationError::LoadMeterageExceeded
+    rescue StandardError => e
+      binding.pry
+      raise ApplicationError::MissingTruckingData
     end
 
     def calc_trucking_charges(distance, trucking_pricing)
@@ -66,8 +71,7 @@ module OfferCalculatorService
         distance,
         trucking_pricing.carriage
       )
-    rescue StandardError
-      raise TruckingDataBuilder::MissingTruckingData
+    
     end
   end
 end
