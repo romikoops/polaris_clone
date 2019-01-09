@@ -19,7 +19,10 @@
     </div>
   </div>
   <hr class="hr-shipment" style="border-color: <%= primary_color %>">
-  <p class="ref">Placed on&nbsp;<span><%= shipment.updated_at.strftime("%d/%m/%Y") %></span></p>
+  <div class="refrow"> 
+    <p class="ref">Placed on&nbsp;<span><%= shipment.updated_at.strftime("%d/%m/%Y") %></span></p>
+    <p class="ref text-right"><b>Price valid until:</b> <%= shipment.valid_until&.strftime('%d.%m.%Y') %></p>
+  </div>
   <div class="overview">
       <div class="info overview-child border-none">
           <% if shipment.mode_of_transport == "ocean" %>
