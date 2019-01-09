@@ -60,6 +60,8 @@ module DataValidator
                 build_fcl_data(itin_name, mot, pricing, start_hub, end_hub)
               end
 
+            results.uniq! { |result| result.except('DATE') }
+
             horizontal_headers = results.first.keys
             worksheet.write_col(0, 0, horizontal_headers, header_format(xlsx))
             results.map(&:values).each_with_index do |data, col_i|
@@ -75,7 +77,7 @@ module DataValidator
     private
 
     def setup_worksheet(worksheet, col_count)
-      worksheet.set_column(0, col_count - 1, 25) # set all columns to width 25
+      worksheet.set_column(0, col_count - 1, 30) # set all columns to width 30
       worksheet.freeze_panes(0, 1) # freeze first column
     end
 
@@ -90,87 +92,99 @@ module DataValidator
       hub.truck_type_availabilities.where(load_type: load_type, carriage: carriage).distinct.present?
     end
 
+    def trucking_permutations
+      @trucking_permutations ||= [true, false].repeated_permutation(2)
+    end
+
+    def trucking_address(hub)
+      TRUCKING_ADDRESSES_PER_COUNTRY[hub.address.country.code]
+    end
+
     def build_lcl_data(itin_name, mot, pricing, start_hub, end_hub)
       start_hub_has_trucking = hub_has_trucking(start_hub, 'cargo_item', 'pre')
       end_hub_has_trucking = hub_has_trucking(end_hub, 'cargo_item', 'on')
-      pre_carriage_address = TRUCKING_ADDRESSES_PER_COUNTRY[start_hub.address.country.code] if start_hub_has_trucking
-      on_carriage_address = TRUCKING_ADDRESSES_PER_COUNTRY[end_hub.address.country.code] if end_hub_has_trucking
+      pre_carriage_address = trucking_address(start_hub) if start_hub_has_trucking
+      on_carriage_address = trucking_address(end_hub) if end_hub_has_trucking
 
-      LCL_EXAMPLES.map do |cargo_data|
-        part_1 =
-          { 'ITINERARY' => itin_name,
-            'MOT' => mot,
-            'LOAD_TYPE' => pricing.load_type,
-            'ORIGIN_TRUCK_TYPE' => 'default',
-            'DESTINATION_TRUCK_TYPE' => 'default',
-            'UNITS' => nil }.merge(cargo_data)
+      LCL_EXAMPLES.flat_map do |cargo_data|
+        trucking_permutations.map do |should_do_truckings|
+          part_1 =
+            { 'ITINERARY' => itin_name,
+              'MOT' => mot,
+              'LOAD_TYPE' => pricing.load_type,
+              'ORIGIN_TRUCK_TYPE' => 'default',
+              'DESTINATION_TRUCK_TYPE' => 'default',
+              'UNITS' => nil }.merge(cargo_data)
 
-        part_2 =
-          { 'PICKUP_ADDRESS' => pre_carriage_address,
-            'DELIVERY_ADDRESS' => on_carriage_address,
-            'CARRIER' => pricing.carrier,
-            'SERVICE_LEVEL' => pricing.tenant_vehicle.name,
-            'FREIGHT' => nil }.merge(freight_key_hashes(pricing.pricing_details))
+          part_2 =
+            { 'PICKUP_ADDRESS' => should_do_truckings[0] ? pre_carriage_address : nil,
+              'DELIVERY_ADDRESS' => should_do_truckings[1] ? on_carriage_address : nil,
+              'CARRIER' => pricing.carrier,
+              'SERVICE_LEVEL' => pricing.tenant_vehicle.name,
+              'FREIGHT' => nil }.merge(freight_key_hashes(pricing.pricing_details))
 
-        part_3 =
-          { 'PRECARRIAGE' => nil,
-            'ONCARRIAGE' => nil,
-            'IMPORT' => nil }.merge(local_charge_key_hashes('import', 'lcl', mot, pricing.tenant_vehicle, end_hub, start_hub))
+          part_3 =
+            { 'PRECARRIAGE' => nil,
+              'ONCARRIAGE' => nil,
+              'IMPORT' => nil }.merge(local_charge_key_hashes('import', 'lcl', mot, pricing.tenant_vehicle, end_hub, start_hub))
 
-        part_4 =
-          { 'EXPORT' => nil }.merge(local_charge_key_hashes('export', 'lcl', mot, pricing.tenant_vehicle, start_hub, end_hub))
+          part_4 =
+            { 'EXPORT' => nil }.merge(local_charge_key_hashes('export', 'lcl', mot, pricing.tenant_vehicle, start_hub, end_hub))
 
-        part_5 =
-          { 'DATE' => DateTime.now + 7.days,
-            'TOTAL' => nil }
+          part_5 =
+            { 'DATE' => DateTime.now + 7.days,
+              'TOTAL' => nil }
 
-        [part_1,
-         part_2,
-         part_3,
-         part_4,
-         part_5].inject(:merge)
+          [part_1,
+           part_2,
+           part_3,
+           part_4,
+           part_5].inject(:merge)
+        end
       end
     end
 
     def build_fcl_data(itin_name, mot, pricing, start_hub, end_hub)
       start_hub_has_trucking = hub_has_trucking(start_hub, 'container', 'pre')
       end_hub_has_trucking = hub_has_trucking(end_hub, 'container', 'on')
-      pre_carriage_address = TRUCKING_ADDRESSES_PER_COUNTRY[start_hub.address.country.code] if start_hub_has_trucking
-      on_carriage_address = TRUCKING_ADDRESSES_PER_COUNTRY[end_hub.address.country.code] if end_hub_has_trucking
+      pre_carriage_address = trucking_address(start_hub) if start_hub_has_trucking
+      on_carriage_address = trucking_address(end_hub) if end_hub_has_trucking
 
-      FCL_EXAMPLES.map do |cargo_data|
-        part_1 =
-          { 'ITINERARY' => itin_name,
-            'MOT' => mot,
-            'LOAD_TYPE' => pricing.load_type,
-            'ORIGIN_TRUCK_TYPE' => 'chassis',
-            'DESTINATION_TRUCK_TYPE' => 'chassis',
-            'UNITS' => nil }.merge(cargo_data.merge('#1-size_class' => pricing.cargo_class))
+      FCL_EXAMPLES.flat_map do |cargo_data|
+        trucking_permutations.map do |should_do_truckings|
+          part_1 =
+            { 'ITINERARY' => itin_name,
+              'MOT' => mot,
+              'LOAD_TYPE' => pricing.load_type,
+              'ORIGIN_TRUCK_TYPE' => 'chassis',
+              'DESTINATION_TRUCK_TYPE' => 'chassis',
+              'UNITS' => nil }.merge(cargo_data.merge('#1-size_class' => pricing.cargo_class))
 
-        part_2 =
-          { 'PICKUP_ADDRESS' => pre_carriage_address,
-            'DELIVERY_ADDRESS' => on_carriage_address,
-            'CARRIER' => pricing.carrier,
-            'SERVICE_LEVEL' => pricing.tenant_vehicle.name,
-            'FREIGHT' => nil }.merge(freight_key_hashes(pricing.pricing_details))
+          part_2 =
+            { 'PICKUP_ADDRESS' => should_do_truckings[0] ? pre_carriage_address : nil,
+              'DELIVERY_ADDRESS' => should_do_truckings[1] ? on_carriage_address : nil,
+              'CARRIER' => pricing.carrier,
+              'SERVICE_LEVEL' => pricing.tenant_vehicle.name,
+              'FREIGHT' => nil }.merge(freight_key_hashes(pricing.pricing_details))
 
-        part_3 =
-          { 'PRECARRIAGE' => nil,
-            'ONCARRIAGE' => nil,
-            'IMPORT' => nil }.merge(local_charge_key_hashes('import', 'lcl', mot, pricing.tenant_vehicle, end_hub, start_hub))
+          part_3 =
+            { 'PRECARRIAGE' => nil,
+              'ONCARRIAGE' => nil,
+              'IMPORT' => nil }.merge(local_charge_key_hashes('import', 'lcl', mot, pricing.tenant_vehicle, end_hub, start_hub))
 
-        part_4 =
-          { 'EXPORT' => nil }.merge(local_charge_key_hashes('export', 'lcl', mot, pricing.tenant_vehicle, start_hub, end_hub))
+          part_4 =
+            { 'EXPORT' => nil }.merge(local_charge_key_hashes('export', 'lcl', mot, pricing.tenant_vehicle, start_hub, end_hub))
 
-        part_5 =
-          { 'DATE' => DateTime.now + 7.days,
-            'TOTAL' => nil }
+          part_5 =
+            { 'DATE' => DateTime.now + 7.days,
+              'TOTAL' => nil }
 
-        [part_1,
-         part_2,
-         part_3,
-         part_4,
-         part_5].inject(:merge)
+          [part_1,
+           part_2,
+           part_3,
+           part_4,
+           part_5].inject(:merge)
+        end
       end
     end
 
