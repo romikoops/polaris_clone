@@ -584,7 +584,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
               className="flex-100 layout-row undefined"
             >
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -616,7 +616,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -632,7 +632,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -648,7 +648,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -665,7 +665,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
             >
               <h4>
                 Remarks:
@@ -1500,7 +1500,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
               className="flex-100 layout-row undefined"
             >
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -1532,7 +1532,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -1548,7 +1548,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -1564,7 +1564,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -1581,7 +1581,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
             >
               <h4>
                 Remarks:
@@ -2581,7 +2581,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
               className="flex-100 layout-row undefined"
             >
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -2613,7 +2613,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -2629,7 +2629,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -2645,7 +2645,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -2662,7 +2662,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
             >
               <h4>
                 Remarks:
@@ -3491,7 +3491,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
               className="flex-100 layout-row undefined"
             >
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -3523,7 +3523,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -3539,7 +3539,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -3555,7 +3555,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -3572,7 +3572,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
             >
               <h4>
                 Remarks:
@@ -4401,7 +4401,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
               className="flex-100 layout-row undefined"
             >
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -4433,7 +4433,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -4449,7 +4449,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -4465,7 +4465,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -4482,7 +4482,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
             >
               <h4>
                 Remarks:
@@ -5311,7 +5311,7 @@ exports[`shallow render 1`] = `
               className="flex-100 layout-row undefined"
             >
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -5343,7 +5343,7 @@ exports[`shallow render 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -5359,7 +5359,7 @@ exports[`shallow render 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -5375,7 +5375,7 @@ exports[`shallow render 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -5392,7 +5392,7 @@ exports[`shallow render 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
             >
               <h4>
                 Remarks:
@@ -6548,7 +6548,7 @@ exports[`with cargo items 1`] = `
               className="flex-100 layout-row undefined"
             >
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -6580,7 +6580,7 @@ exports[`with cargo items 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -6596,7 +6596,7 @@ exports[`with cargo items 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -6612,7 +6612,7 @@ exports[`with cargo items 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -6629,7 +6629,7 @@ exports[`with cargo items 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
             >
               <h4>
                 Remarks:
@@ -7743,7 +7743,7 @@ exports[`with containers 1`] = `
               className="flex-100 layout-row undefined"
             >
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -7775,7 +7775,7 @@ exports[`with containers 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -7791,7 +7791,7 @@ exports[`with containers 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -7807,7 +7807,7 @@ exports[`with containers 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
               >
                 <p
                   className="flex-100"
@@ -7824,7 +7824,7 @@ exports[`with containers 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
             >
               <h4>
                 Remarks:

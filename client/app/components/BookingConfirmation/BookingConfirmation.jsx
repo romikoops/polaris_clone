@@ -447,7 +447,7 @@ export class BookingConfirmation extends Component {
               {Eori(shipment, t)}
 
               {shipment.cargo_notes ? (
-                <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
+                <div className={`${WRAP_ROW(45)} ${ALIGN_START} padding_top`}>
                   <p className="flex-100">
                     <b>{`${t('bookconf:description')}:`}</b>
                   </p>
@@ -457,7 +457,7 @@ export class BookingConfirmation extends Component {
                 ''
               )}
               {shipment.route_notes || shipment.notes ? (
-                <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
+                <div className={`${WRAP_ROW(45)} ${ALIGN_START} padding_top`}>
                   <p className="flex-100">
                     <b>{`${t('common:notes')}:`}</b>
                   </p>
@@ -468,7 +468,7 @@ export class BookingConfirmation extends Component {
                 ''
               )}
               {shipment.incoterm_text ? (
-                <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
+                <div className={`${WRAP_ROW(45)} ${ALIGN_START} padding_top`}>
                   <p className="flex-100">
                     <b>{`${t('common:incoterm')}:`}</b>
                   </p>
@@ -479,7 +479,7 @@ export class BookingConfirmation extends Component {
               )}
             </div>
             {remarkBody ? (
-              <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
+              <div className={`${WRAP_ROW(45)} ${ALIGN_START} padding_top`}>
                 <h4>{`${t('shipment:remarks')}:`}</h4>
                 <ul>
                   {remarkBody}
@@ -818,11 +818,11 @@ function getShipperAndConsignee ({
 
 function getTerms ({ theme, terms, t }) {
   const termBullets = terms.map(term => (
-<li key={v4()}> 
-{' '}
-{term}
-</li>
-))
+    <li key={v4()}>
+      {' '}
+      {term}
+    </li>
+  ))
 
   return (
     <div className={`layout-row ${ALIGN_START_CENTER}`}>
@@ -855,7 +855,7 @@ function getPanelStyle (flag) {
 
 function TotalGoodsValue (shipment, t) {
   return shipment.total_goods_value ? (
-    <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
+    <div className={`${WRAP_ROW(45)} ${ALIGN_START}`}>
       <p className="flex-100">
         <b>{`${t('bookconf:totalValue')}:`}</b>
       </p>
