@@ -8,7 +8,7 @@ SimpleCov.start 'rails' do
   minimum_coverage 12
 
   if ENV['COVERAGE_DIR']
-    command_name 'api/rspec'
+    command_name 'api'
     coverage_dir(ENV['COVERAGE_DIR'])
     merge_timeout 3600
   end

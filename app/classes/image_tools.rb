@@ -22,7 +22,6 @@ module ImageTools
       file = image.split("/").last
       filename = file.split(".")[0]
       resp = reduce_and_upload(filename, image)
-      p resp[:sm]
     end
   end
 
