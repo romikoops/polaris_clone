@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  mount Locations::Engine => '/locations'
+  mount Locations::Engine => '/'
 end

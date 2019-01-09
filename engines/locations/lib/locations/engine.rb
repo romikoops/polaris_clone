@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'pg_search'
+
 module Locations
   class Engine < ::Rails::Engine
     isolate_namespace Locations
