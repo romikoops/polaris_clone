@@ -215,7 +215,6 @@ class Address < ApplicationRecord
     end
   end
 
-
   def closest_hubs
     hubs = Nexus.all
     distances = {}
@@ -231,7 +230,6 @@ class Address < ApplicationRecord
 
     hubs_array
   end
-
 
   def self.cascading_find_by_name(raw_name)
     name = raw_name.split.map(&:capitalize).join(' ')
@@ -278,3 +276,26 @@ class Address < ApplicationRecord
     self.zip_code = zip_code.gsub(/[^a-zA-z\d]/, '')
   end
 end
+
+# == Schema Information
+#
+# Table name: addresses
+#
+#  id               :bigint(8)        not null, primary key
+#  name             :string
+#  location_type    :string
+#  latitude         :float
+#  longitude        :float
+#  geocoded_address :string
+#  street           :string
+#  street_number    :string
+#  zip_code         :string
+#  city             :string
+#  street_address   :string
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  province         :string
+#  photo            :string
+#  premise          :string
+#  country_id       :integer
+#

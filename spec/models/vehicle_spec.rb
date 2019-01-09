@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 describe Vehicle, type: :model do
-
   context 'validations' do
     describe '#name' do
       it { should validate_presence_of(:name) }
@@ -13,7 +12,6 @@ describe Vehicle, type: :model do
 
   context 'class methods' do
     describe '.create_from_name' do
-
       let(:tenant) { create(:tenant) }
       let(:vehicle_name) { 'standard' }
       let(:mode_of_transport) { 'air' }
@@ -58,8 +56,17 @@ describe Vehicle, type: :model do
           expect { described_class.create_from_name(vehicle_name, mode_of_transport, tenant.id) }.not_to change { TransportCategory.count }.from(TransportCategory.count)
         end
       end
-
     end
   end
-
 end
+
+# == Schema Information
+#
+# Table name: vehicles
+#
+#  id                :bigint(8)        not null, primary key
+#  name              :string
+#  mode_of_transport :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#

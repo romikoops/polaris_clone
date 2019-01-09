@@ -5,7 +5,7 @@ class PricingDetail < ApplicationRecord
   belongs_to :tenant
   belongs_to :priceable, polymorphic: true
 
-  def as_json(options={})
+  def as_json(options = {})
     new_options = options.reverse_merge(
       methods: shipping_type, only: []
     )
@@ -14,13 +14,13 @@ class PricingDetail < ApplicationRecord
 
   def to_fee
     {
-      rate:          rate,
-      rate_basis:    rate_basis,
-      currency:      currency_name,
-      hw_threshold:  hw_threshold,
+      rate: rate,
+      rate_basis: rate_basis,
+      currency: currency_name,
+      hw_threshold: hw_threshold,
       hw_rate_basis: hw_rate_basis,
-      min:           min,
-      range:         range
+      min: min,
+      range: range
     }.compact.with_indifferent_access
   end
 
@@ -40,3 +40,24 @@ class PricingDetail < ApplicationRecord
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: pricing_details
+#
+#  id             :bigint(8)        not null, primary key
+#  rate           :decimal(, )
+#  rate_basis     :string
+#  min            :decimal(, )
+#  hw_threshold   :decimal(, )
+#  hw_rate_basis  :string
+#  shipping_type  :string
+#  range          :jsonb
+#  currency_name  :string
+#  currency_id    :bigint(8)
+#  priceable_type :string
+#  priceable_id   :bigint(8)
+#  tenant_id      :bigint(8)
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#

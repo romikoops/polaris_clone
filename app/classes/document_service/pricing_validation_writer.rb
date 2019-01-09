@@ -23,11 +23,6 @@ module DocumentService
         new_worksheet_hash = add_worksheet_to_workbook(@workbook, [], page)
         @worksheet = new_worksheet_hash[:worksheet]
         @workbook = new_worksheet_hash[:workbook]
-        # begin
-        #   set_formatting(column_hash)
-        # rescue
-        #   binding.pry
-        # end
         @worksheet = write_to_sheet(@worksheet, @row, 0, header_data)
         @row += 1
 
@@ -153,7 +148,6 @@ module DocumentService
         data = column_hash[column_id][:data]
         case header
         when 'ITINERARY'
-          p data[:itinerary][:name]
           3.times do
             row << data[:itinerary][:name]
           end

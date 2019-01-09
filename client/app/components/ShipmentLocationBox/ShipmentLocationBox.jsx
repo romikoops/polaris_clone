@@ -407,7 +407,8 @@ class ShipmentLocationBox extends PureComponent {
       keyboard: false
     })
     markers[target] = marker
-
+    const originMarkerExists = has(markers, ['origin', 'title'])
+    const destMarkerExists = has(markers, ['destination', 'title'])
     this.setState({ markers }, () => this.adjustMapBounds())
 
     if (this.state.speciality === 'truck' && originMarkerExists && destMarkerExists) {

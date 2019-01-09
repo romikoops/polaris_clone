@@ -8,7 +8,7 @@ class Nexus < ApplicationRecord
   geocoded_by :geocoded_address
 
   reverse_geocoded_by :latitude, :longitude do |location, results|
-    if geo = results.first
+    if (geo = results.first)
       location.country = Country.find_by(code: geo.country_code)
     end
 
@@ -33,14 +33,15 @@ class Nexus < ApplicationRecord
   def self.migrate_hubs_from_location
     hub_type_name = {
       'ocean' => 'Port',
-      'air'   => 'Airport',
-      'rail'  => 'Railyard',
+      'air' => 'Airport',
+      'rail' => 'Railyard',
       'truck' => 'Depot'
     }
 
     hubs = Hub.all
     hubs.each do |hub|
       next if hub.nexus.is_a? Nexus
+
       old_nexus = Address.find_by(id: hub.nexus_id)
       unless old_nexus
         nexus_name = hub.name.gsub(" #{hub_type_name[hub.hub_type]}", '')
@@ -48,12 +49,12 @@ class Nexus < ApplicationRecord
       end
       new_nexus = Nexus.find_by(name: old_nexus.name, tenant_id: hub.tenant_id)
       new_nexus ||= Nexus.create!(
-        name:       old_nexus.name,
-        latitude:   old_nexus.latitude,
-        longitude:  old_nexus.longitude,
-        photo:      old_nexus.photo,
+        name: old_nexus.name,
+        latitude: old_nexus.latitude,
+        longitude: old_nexus.longitude,
+        photo: old_nexus.photo,
         country_id: old_nexus.country_id,
-        tenant_id:  hub.tenant_id
+        tenant_id: hub.tenant_id
       )
       hub.nexus_id = new_nexus.id
       hub.save!
@@ -63,14 +64,15 @@ class Nexus < ApplicationRecord
   def self.migrate_shipments_from_location
     hub_type_name = {
       'ocean' => 'Port',
-      'air'   => 'Airport',
-      'rail'  => 'Railyard',
+      'air' => 'Airport',
+      'rail' => 'Railyard',
       'truck' => 'Depot'
     }
 
     shipments = Shipment.all
     shipments.each do |shipment|
       next if shipment.origin_nexus.is_a?(Nexus) && shipment.destination_nexus.is_a?(Nexus)
+
       %w(origin destination).each do |dir|
         old_nexus = Address.find_by(id: shipment["#{dir}_nexus_id"])
         unless old_nexus
@@ -79,12 +81,12 @@ class Nexus < ApplicationRecord
         end
         new_nexus = Nexus.find_by(name: old_nexus.name, tenant_id: shipment.tenant_id)
         new_nexus ||= Nexus.create!(
-          name:       old_nexus.name,
-          latitude:   old_nexus.latitude,
-          longitude:  old_nexus.longitude,
-          photo:      old_nexus.photo,
+          name: old_nexus.name,
+          latitude: old_nexus.latitude,
+          longitude: old_nexus.longitude,
+          photo: old_nexus.photo,
           country_id: old_nexus.country_id,
-          tenant_id:  shipment.tenant_id
+          tenant_id: shipment.tenant_id
         )
         shipment["#{dir}_nexus_id"] = new_nexus.id
       end
@@ -118,16 +120,32 @@ class Nexus < ApplicationRecord
     temp_address.reverse_geocode
     nexus = Nexus.find_by(name: city, country: country, tenant_id: tenant_id)
     return nexus unless nexus.nil?
+
     country_to_save = country || temp_address.country
     nexus = Nexus.create!(
-      name:       city,
-      latitude:   temp_address.latitude,
-      longitude:  temp_address.longitude,
-      photo:      '',
+      name: city,
+      latitude: temp_address.latitude,
+      longitude: temp_address.longitude,
+      photo: '',
       country_id: country_to_save.id,
-      tenant_id:  tenant_id
+      tenant_id: tenant_id
     )
 
     nexus
   end
 end
+
+# == Schema Information
+#
+# Table name: nexuses
+#
+#  id         :bigint(8)        not null, primary key
+#  name       :string
+#  tenant_id  :integer
+#  latitude   :float
+#  longitude  :float
+#  photo      :string
+#  country_id :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#

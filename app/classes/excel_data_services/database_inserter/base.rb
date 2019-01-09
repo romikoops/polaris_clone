@@ -89,7 +89,7 @@ module ExcelDataServices
         mot = itinerary.mode_of_transport
         stops_as_hubs_names = stop_names.map { |stop_name| append_hub_suffix(stop_name, mot) }
         stops_as_hubs_names.map.with_index do |hub_name, i|
-          hub = @tenant.hubs.find_by(name: hub_name)
+          hub = tenant.hubs.find_by(name: hub_name)
           raise HubNotFoundError, "Stop (Hub) with name \"#{hub_name}\" not found!" unless hub
 
           stop = itinerary.stops.find_by(hub_id: hub.id, index: i)
@@ -113,13 +113,13 @@ module ExcelDataServices
         carrier = find_or_create_carrier(row)
         tenant_vehicle = TenantVehicle.find_by(name: service_level,
                                                mode_of_transport: row[:mot],
-                                               tenant_id: @tenant.id,
+                                               tenant_id: tenant.id,
                                                carrier: carrier)
 
         # TODO: fix!! `Vehicle` shouldn't be creating a `TenantVehicle`!:
         tenant_vehicle || Vehicle.create_from_name(service_level,
                                                    row[:mot],
-                                                   @tenant.id,
+                                                   tenant.id,
                                                    carrier.name) # returns a `TenantVehicle`!
       end
 
@@ -149,7 +149,7 @@ module ExcelDataServices
         pricing_detail_params = { rate_basis: row[:rate_basis],
                                   shipping_type: row[:fee_code].upcase,
                                   currency_name: row[:currency].upcase,
-                                  tenant_id: @tenant.id }
+                                  tenant_id: tenant.id }
         if row.has_key?(:range)
           min_rate_in_range = row[:range].map { |r| r['rate'] }.min
           min_rate = row[:fee_min].blank? ? min_rate_in_range : row[:fee_min]
@@ -180,8 +180,8 @@ module ExcelDataServices
           # TODO: what is called 'load_type' in the excel file is actually a cargo_class!
           transport_category: find_transport_category(tenant_vehicle, row[:load_type]),
           tenant_vehicle: tenant_vehicle,
-          tenant: @tenant,
-          user: nil,
+          tenant: tenant,
+          user: User.find_by(tenant_id: tenant.id, email: row[:customer_email]),
           wm_rate: 1000,
           effective_date: Date.parse(row[:effective_date].to_s),
           expiration_date: Date.parse(row[:expiration_date].to_s)

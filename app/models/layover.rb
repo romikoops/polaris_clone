@@ -28,3 +28,19 @@ class Layover < ApplicationRecord
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: layovers
+#
+#  id           :bigint(8)        not null, primary key
+#  stop_id      :integer
+#  eta          :datetime
+#  etd          :datetime
+#  stop_index   :integer
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  itinerary_id :integer
+#  trip_id      :integer
+#  closing_date :datetime
+#

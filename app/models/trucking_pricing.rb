@@ -49,6 +49,7 @@ class TruckingPricing < ApplicationRecord
     t.trucking_pricings.map do |tp|
       hub = Hub.find(tp.hub_id)
       next unless hub.tenant_id != t.id
+
       new_hub = Hub.find_by(name: hub.name, tenant_id: t.id)
       tp.hub_truckings.each do |ht|
         ht.hub_id = new_hub.id
@@ -102,3 +103,20 @@ class TruckingPricing < ApplicationRecord
     as_json(options.reverse_merge(methods: SCOPING_ATTRIBUTE_NAMES))
   end
 end
+
+# == Schema Information
+#
+# Table name: trucking_pricings
+#
+#  id                        :bigint(8)        not null, primary key
+#  load_meterage             :jsonb
+#  cbm_ratio                 :integer
+#  modifier                  :string
+#  tenant_id                 :integer
+#  created_at                :datetime
+#  updated_at                :datetime
+#  rates                     :jsonb
+#  fees                      :jsonb
+#  identifier_modifier       :string
+#  trucking_pricing_scope_id :integer
+#

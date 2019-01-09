@@ -12,7 +12,14 @@ class Document < ApplicationRecord
   end
 
   def self.obj_key(shipment, type, file_name)
-    'documents/' + shipment.tenant.subdomain + '/shipments/' + shipment['uuid'] + '/' + type + '/' + Time.now.to_i.to_s + '-' + file_name
+    [
+      'documents',
+      shipment.tenant.subdomain,
+      'shipments',
+      shipment['uuid'],
+      type,
+      "#{Time.now.to_i}-#{file_name}"
+    ].join('/')
   end
 
   def self.delete_document(id)
@@ -46,3 +53,21 @@ class Document < ApplicationRecord
     ActiveStorage::Blob.service.send(:path_for, file.key)
   end
 end
+
+# == Schema Information
+#
+# Table name: documents
+#
+#  id               :bigint(8)        not null, primary key
+#  user_id          :integer
+#  shipment_id      :integer
+#  doc_type         :string
+#  url              :string
+#  text             :string
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  approved         :string
+#  approval_details :jsonb
+#  tenant_id        :integer
+#  quotation_id     :integer
+#

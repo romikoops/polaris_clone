@@ -23,23 +23,19 @@ exports[`detailed billing working properly 1`] = `
       />
     </div>
     <div
-      className="flex-60 layout-row layout-align-start-center origin_destination"
+      className="flex-55 layout-row layout-align-start-center origin_destination"
     >
       <div
-        className="layout-column layout-align-center-start"
+        className="layout-column layout-align-center-start flex-100"
       >
         <p>
-          From
-          :
-           
+          From: 
           <span>
             Gothenburg
           </span>
         </p>
         <p>
-          To
-          :
-           
+          To: 
           <span>
             Shanghai
           </span>
@@ -53,11 +49,103 @@ exports[`detailed billing working properly 1`] = `
         className="flex-100 layout-row layout-wrap layout-align-end-center charge_icons"
       >
         <ChargeIcons
-          destinationFees={false}
+          destinationFees={
+            Object {
+              "edited_total": null,
+              "imp": Object {
+                "currency": "GBP",
+                "name": "Customs Clearance",
+                "value": 0,
+              },
+              "name": "Import",
+              "total": Object {
+                "currency": "GBP",
+                "value": 0,
+              },
+            }
+          }
           mot=""
-          onCarriage={false}
-          originFees={false}
-          preCarriage={false}
+          onCarriage={
+            Object {
+              "edited_total": null,
+              "name": "Trucking On",
+              "total": Object {
+                "currency": "GBP",
+                "value": 80,
+              },
+              "trucking_lcl": Object {
+                "edited_total": null,
+                "name": "Trucking Lcl",
+                "stackable": Object {
+                  "currency": "GBP",
+                  "name": "Stackable",
+                  "value": 80,
+                },
+                "total": Object {
+                  "currency": "GBP",
+                  "value": 80,
+                },
+              },
+            }
+          }
+          originFees={
+            Object {
+              "ams": Object {
+                "currency": "CNY",
+                "name": "AMS ENS ACI",
+                "value": 180,
+              },
+              "bkn": Object {
+                "currency": "CNY",
+                "name": "CFS",
+                "value": 190,
+              },
+              "doc": Object {
+                "currency": "CNY",
+                "name": "Documentation",
+                "value": 350,
+              },
+              "edited_total": null,
+              "name": "Export",
+              "tel": Object {
+                "currency": "CNY",
+                "name": "TELEX",
+                "value": 150,
+              },
+              "total": Object {
+                "currency": "GBP",
+                "value": 111.52,
+              },
+              "vgm": Object {
+                "currency": "CNY",
+                "name": "VGM",
+                "value": 105,
+              },
+            }
+          }
+          preCarriage={
+            Object {
+              "edited_total": null,
+              "name": "Trucking Pre",
+              "total": Object {
+                "currency": "GBP",
+                "value": 61.76,
+              },
+              "trucking_lcl": Object {
+                "edited_total": null,
+                "name": "Trucking Lcl",
+                "stackable": Object {
+                  "currency": "CNY",
+                  "name": "Stackable",
+                  "value": 540,
+                },
+                "total": Object {
+                  "currency": "CNY",
+                  "value": 540,
+                },
+              },
+            }
+          }
           tenant={
             Object {
               "id": 123,
@@ -93,19 +181,18 @@ exports[`detailed billing working properly 1`] = `
         />
       </div>
       <div
-        className="flex-100 layout-row layout-wrap layout-align-end-center unit_info"
+        className="flex-100 layout-row layout-wrap layout-align-start-center unit_info"
       >
         <p
-          className="flex-100 layout-row layout-align-end-center"
+          className="flex-60 layout-row layout-align-start-center"
         >
-          Total Weight
-          : 
-          <span>
-            0.0
-             
-            kg
-          </span>
+          Total Weight: 
         </p>
+        <span
+          className="flex layout-row layout-align-start-center"
+        >
+          0.0 kg
+        </span>
       </div>
     </div>
   </div>
@@ -165,9 +252,120 @@ exports[`detailed billing working properly 1`] = `
       cargo={Array []}
       quote={
         Object {
+          "cargo": Object {
+            "265": Object {
+              "bas": Object {
+                "currency": "GBP",
+                "name": "Bas",
+                "value": 187.5,
+              },
+              "edited_total": null,
+              "name": "Cargoitem",
+              "total": Object {
+                "currency": "GBP",
+                "value": 187.5,
+              },
+            },
+            "edited_total": null,
+            "name": "Cargo",
+            "total": Object {
+              "currency": "GBP",
+              "value": 187.5,
+            },
+          },
+          "edited_total": null,
+          "export": Object {
+            "ams": Object {
+              "currency": "CNY",
+              "name": "AMS ENS ACI",
+              "value": 180,
+            },
+            "bkn": Object {
+              "currency": "CNY",
+              "name": "CFS",
+              "value": 190,
+            },
+            "doc": Object {
+              "currency": "CNY",
+              "name": "Documentation",
+              "value": 350,
+            },
+            "edited_total": null,
+            "name": "Export",
+            "tel": Object {
+              "currency": "CNY",
+              "name": "TELEX",
+              "value": 150,
+            },
+            "total": Object {
+              "currency": "GBP",
+              "value": 111.52,
+            },
+            "vgm": Object {
+              "currency": "CNY",
+              "name": "VGM",
+              "value": 105,
+            },
+          },
+          "import": Object {
+            "edited_total": null,
+            "imp": Object {
+              "currency": "GBP",
+              "name": "Customs Clearance",
+              "value": 0,
+            },
+            "name": "Import",
+            "total": Object {
+              "currency": "GBP",
+              "value": 0,
+            },
+          },
+          "name": "Grand Total",
           "total": Object {
-            "currency": "EUR",
-            "value": 100,
+            "currency": "GBP",
+            "value": 440.78,
+          },
+          "trucking_on": Object {
+            "edited_total": null,
+            "name": "Trucking On",
+            "total": Object {
+              "currency": "GBP",
+              "value": 80,
+            },
+            "trucking_lcl": Object {
+              "edited_total": null,
+              "name": "Trucking Lcl",
+              "stackable": Object {
+                "currency": "GBP",
+                "name": "Stackable",
+                "value": 80,
+              },
+              "total": Object {
+                "currency": "GBP",
+                "value": 80,
+              },
+            },
+          },
+          "trucking_pre": Object {
+            "edited_total": null,
+            "name": "Trucking Pre",
+            "total": Object {
+              "currency": "GBP",
+              "value": 61.76,
+            },
+            "trucking_lcl": Object {
+              "edited_total": null,
+              "name": "Trucking Lcl",
+              "stackable": Object {
+                "currency": "CNY",
+                "name": "Stackable",
+                "value": 540,
+              },
+              "total": Object {
+                "currency": "CNY",
+                "value": 540,
+              },
+            },
           },
         }
       }
@@ -221,7 +419,7 @@ exports[`detailed billing working properly 1`] = `
         <p
           style={Object {}}
         >
-          100.00 EUR
+          440.78 GBP
         </p>
         <div
           className="flex-gt-md-25 flex-33 layout-row layout-align-end-center"
@@ -304,23 +502,19 @@ exports[`shallow rendering 1`] = `
       />
     </div>
     <div
-      className="flex-60 layout-row layout-align-start-center origin_destination"
+      className="flex-55 layout-row layout-align-start-center origin_destination"
     >
       <div
-        className="layout-column layout-align-center-start"
+        className="layout-column layout-align-center-start flex-100"
       >
         <p>
-          From
-          :
-           
+          From: 
           <span>
             Gothenburg
           </span>
         </p>
         <p>
-          To
-          :
-           
+          To: 
           <span>
             Shanghai
           </span>
@@ -334,11 +528,103 @@ exports[`shallow rendering 1`] = `
         className="flex-100 layout-row layout-wrap layout-align-end-center charge_icons"
       >
         <ChargeIcons
-          destinationFees={false}
+          destinationFees={
+            Object {
+              "edited_total": null,
+              "imp": Object {
+                "currency": "GBP",
+                "name": "Customs Clearance",
+                "value": 0,
+              },
+              "name": "Import",
+              "total": Object {
+                "currency": "GBP",
+                "value": 0,
+              },
+            }
+          }
           mot=""
-          onCarriage={false}
-          originFees={false}
-          preCarriage={false}
+          onCarriage={
+            Object {
+              "edited_total": null,
+              "name": "Trucking On",
+              "total": Object {
+                "currency": "GBP",
+                "value": 80,
+              },
+              "trucking_lcl": Object {
+                "edited_total": null,
+                "name": "Trucking Lcl",
+                "stackable": Object {
+                  "currency": "GBP",
+                  "name": "Stackable",
+                  "value": 80,
+                },
+                "total": Object {
+                  "currency": "GBP",
+                  "value": 80,
+                },
+              },
+            }
+          }
+          originFees={
+            Object {
+              "ams": Object {
+                "currency": "CNY",
+                "name": "AMS ENS ACI",
+                "value": 180,
+              },
+              "bkn": Object {
+                "currency": "CNY",
+                "name": "CFS",
+                "value": 190,
+              },
+              "doc": Object {
+                "currency": "CNY",
+                "name": "Documentation",
+                "value": 350,
+              },
+              "edited_total": null,
+              "name": "Export",
+              "tel": Object {
+                "currency": "CNY",
+                "name": "TELEX",
+                "value": 150,
+              },
+              "total": Object {
+                "currency": "GBP",
+                "value": 111.52,
+              },
+              "vgm": Object {
+                "currency": "CNY",
+                "name": "VGM",
+                "value": 105,
+              },
+            }
+          }
+          preCarriage={
+            Object {
+              "edited_total": null,
+              "name": "Trucking Pre",
+              "total": Object {
+                "currency": "GBP",
+                "value": 61.76,
+              },
+              "trucking_lcl": Object {
+                "edited_total": null,
+                "name": "Trucking Lcl",
+                "stackable": Object {
+                  "currency": "CNY",
+                  "name": "Stackable",
+                  "value": 540,
+                },
+                "total": Object {
+                  "currency": "CNY",
+                  "value": 540,
+                },
+              },
+            }
+          }
           tenant={
             Object {
               "emails": Object {
@@ -388,19 +674,18 @@ exports[`shallow rendering 1`] = `
         />
       </div>
       <div
-        className="flex-100 layout-row layout-wrap layout-align-end-center unit_info"
+        className="flex-100 layout-row layout-wrap layout-align-start-center unit_info"
       >
         <p
-          className="flex-100 layout-row layout-align-end-center"
+          className="flex-60 layout-row layout-align-start-center"
         >
-          Total Weight
-          : 
-          <span>
-            0.0
-             
-            kg
-          </span>
+          Total Weight: 
         </p>
+        <span
+          className="flex layout-row layout-align-start-center"
+        >
+          0.0 kg
+        </span>
       </div>
     </div>
   </div>
@@ -460,9 +745,120 @@ exports[`shallow rendering 1`] = `
       cargo={Array []}
       quote={
         Object {
+          "cargo": Object {
+            "265": Object {
+              "bas": Object {
+                "currency": "GBP",
+                "name": "Bas",
+                "value": 187.5,
+              },
+              "edited_total": null,
+              "name": "Cargoitem",
+              "total": Object {
+                "currency": "GBP",
+                "value": 187.5,
+              },
+            },
+            "edited_total": null,
+            "name": "Cargo",
+            "total": Object {
+              "currency": "GBP",
+              "value": 187.5,
+            },
+          },
+          "edited_total": null,
+          "export": Object {
+            "ams": Object {
+              "currency": "CNY",
+              "name": "AMS ENS ACI",
+              "value": 180,
+            },
+            "bkn": Object {
+              "currency": "CNY",
+              "name": "CFS",
+              "value": 190,
+            },
+            "doc": Object {
+              "currency": "CNY",
+              "name": "Documentation",
+              "value": 350,
+            },
+            "edited_total": null,
+            "name": "Export",
+            "tel": Object {
+              "currency": "CNY",
+              "name": "TELEX",
+              "value": 150,
+            },
+            "total": Object {
+              "currency": "GBP",
+              "value": 111.52,
+            },
+            "vgm": Object {
+              "currency": "CNY",
+              "name": "VGM",
+              "value": 105,
+            },
+          },
+          "import": Object {
+            "edited_total": null,
+            "imp": Object {
+              "currency": "GBP",
+              "name": "Customs Clearance",
+              "value": 0,
+            },
+            "name": "Import",
+            "total": Object {
+              "currency": "GBP",
+              "value": 0,
+            },
+          },
+          "name": "Grand Total",
           "total": Object {
-            "currency": "EUR",
-            "value": 100,
+            "currency": "GBP",
+            "value": 440.78,
+          },
+          "trucking_on": Object {
+            "edited_total": null,
+            "name": "Trucking On",
+            "total": Object {
+              "currency": "GBP",
+              "value": 80,
+            },
+            "trucking_lcl": Object {
+              "edited_total": null,
+              "name": "Trucking Lcl",
+              "stackable": Object {
+                "currency": "GBP",
+                "name": "Stackable",
+                "value": 80,
+              },
+              "total": Object {
+                "currency": "GBP",
+                "value": 80,
+              },
+            },
+          },
+          "trucking_pre": Object {
+            "edited_total": null,
+            "name": "Trucking Pre",
+            "total": Object {
+              "currency": "GBP",
+              "value": 61.76,
+            },
+            "trucking_lcl": Object {
+              "edited_total": null,
+              "name": "Trucking Lcl",
+              "stackable": Object {
+                "currency": "CNY",
+                "name": "Stackable",
+                "value": 540,
+              },
+              "total": Object {
+                "currency": "CNY",
+                "value": 540,
+              },
+            },
           },
         }
       }
@@ -516,7 +912,7 @@ exports[`shallow rendering 1`] = `
         <p
           style={Object {}}
         >
-          100.00 EUR
+          440.78 GBP
         </p>
         <div
           className="flex-gt-md-25 flex-33 layout-row layout-align-end-center"
@@ -580,23 +976,19 @@ exports[`show schedule options working 1`] = `
       />
     </div>
     <div
-      className="flex-60 layout-row layout-align-start-center origin_destination"
+      className="flex-55 layout-row layout-align-start-center origin_destination"
     >
       <div
-        className="layout-column layout-align-center-start"
+        className="layout-column layout-align-center-start flex-100"
       >
         <p>
-          From
-          :
-           
+          From: 
           <span>
             Gothenburg
           </span>
         </p>
         <p>
-          To
-          :
-           
+          To: 
           <span>
             Shanghai
           </span>
@@ -610,11 +1002,103 @@ exports[`show schedule options working 1`] = `
         className="flex-100 layout-row layout-wrap layout-align-end-center charge_icons"
       >
         <ChargeIcons
-          destinationFees={false}
+          destinationFees={
+            Object {
+              "edited_total": null,
+              "imp": Object {
+                "currency": "GBP",
+                "name": "Customs Clearance",
+                "value": 0,
+              },
+              "name": "Import",
+              "total": Object {
+                "currency": "GBP",
+                "value": 0,
+              },
+            }
+          }
           mot=""
-          onCarriage={false}
-          originFees={false}
-          preCarriage={false}
+          onCarriage={
+            Object {
+              "edited_total": null,
+              "name": "Trucking On",
+              "total": Object {
+                "currency": "GBP",
+                "value": 80,
+              },
+              "trucking_lcl": Object {
+                "edited_total": null,
+                "name": "Trucking Lcl",
+                "stackable": Object {
+                  "currency": "GBP",
+                  "name": "Stackable",
+                  "value": 80,
+                },
+                "total": Object {
+                  "currency": "GBP",
+                  "value": 80,
+                },
+              },
+            }
+          }
+          originFees={
+            Object {
+              "ams": Object {
+                "currency": "CNY",
+                "name": "AMS ENS ACI",
+                "value": 180,
+              },
+              "bkn": Object {
+                "currency": "CNY",
+                "name": "CFS",
+                "value": 190,
+              },
+              "doc": Object {
+                "currency": "CNY",
+                "name": "Documentation",
+                "value": 350,
+              },
+              "edited_total": null,
+              "name": "Export",
+              "tel": Object {
+                "currency": "CNY",
+                "name": "TELEX",
+                "value": 150,
+              },
+              "total": Object {
+                "currency": "GBP",
+                "value": 111.52,
+              },
+              "vgm": Object {
+                "currency": "CNY",
+                "name": "VGM",
+                "value": 105,
+              },
+            }
+          }
+          preCarriage={
+            Object {
+              "edited_total": null,
+              "name": "Trucking Pre",
+              "total": Object {
+                "currency": "GBP",
+                "value": 61.76,
+              },
+              "trucking_lcl": Object {
+                "edited_total": null,
+                "name": "Trucking Lcl",
+                "stackable": Object {
+                  "currency": "CNY",
+                  "name": "Stackable",
+                  "value": 540,
+                },
+                "total": Object {
+                  "currency": "CNY",
+                  "value": 540,
+                },
+              },
+            }
+          }
           tenant={
             Object {
               "id": 123,
@@ -650,19 +1134,18 @@ exports[`show schedule options working 1`] = `
         />
       </div>
       <div
-        className="flex-100 layout-row layout-wrap layout-align-end-center unit_info"
+        className="flex-100 layout-row layout-wrap layout-align-start-center unit_info"
       >
         <p
-          className="flex-100 layout-row layout-align-end-center"
+          className="flex-60 layout-row layout-align-start-center"
         >
-          Total Weight
-          : 
-          <span>
-            0.0
-             
-            kg
-          </span>
+          Total Weight: 
         </p>
+        <span
+          className="flex layout-row layout-align-start-center"
+        >
+          0.0 kg
+        </span>
       </div>
     </div>
   </div>
@@ -722,9 +1205,120 @@ exports[`show schedule options working 1`] = `
       cargo={Array []}
       quote={
         Object {
+          "cargo": Object {
+            "265": Object {
+              "bas": Object {
+                "currency": "GBP",
+                "name": "Bas",
+                "value": 187.5,
+              },
+              "edited_total": null,
+              "name": "Cargoitem",
+              "total": Object {
+                "currency": "GBP",
+                "value": 187.5,
+              },
+            },
+            "edited_total": null,
+            "name": "Cargo",
+            "total": Object {
+              "currency": "GBP",
+              "value": 187.5,
+            },
+          },
+          "edited_total": null,
+          "export": Object {
+            "ams": Object {
+              "currency": "CNY",
+              "name": "AMS ENS ACI",
+              "value": 180,
+            },
+            "bkn": Object {
+              "currency": "CNY",
+              "name": "CFS",
+              "value": 190,
+            },
+            "doc": Object {
+              "currency": "CNY",
+              "name": "Documentation",
+              "value": 350,
+            },
+            "edited_total": null,
+            "name": "Export",
+            "tel": Object {
+              "currency": "CNY",
+              "name": "TELEX",
+              "value": 150,
+            },
+            "total": Object {
+              "currency": "GBP",
+              "value": 111.52,
+            },
+            "vgm": Object {
+              "currency": "CNY",
+              "name": "VGM",
+              "value": 105,
+            },
+          },
+          "import": Object {
+            "edited_total": null,
+            "imp": Object {
+              "currency": "GBP",
+              "name": "Customs Clearance",
+              "value": 0,
+            },
+            "name": "Import",
+            "total": Object {
+              "currency": "GBP",
+              "value": 0,
+            },
+          },
+          "name": "Grand Total",
           "total": Object {
-            "currency": "EUR",
-            "value": 100,
+            "currency": "GBP",
+            "value": 440.78,
+          },
+          "trucking_on": Object {
+            "edited_total": null,
+            "name": "Trucking On",
+            "total": Object {
+              "currency": "GBP",
+              "value": 80,
+            },
+            "trucking_lcl": Object {
+              "edited_total": null,
+              "name": "Trucking Lcl",
+              "stackable": Object {
+                "currency": "GBP",
+                "name": "Stackable",
+                "value": 80,
+              },
+              "total": Object {
+                "currency": "GBP",
+                "value": 80,
+              },
+            },
+          },
+          "trucking_pre": Object {
+            "edited_total": null,
+            "name": "Trucking Pre",
+            "total": Object {
+              "currency": "GBP",
+              "value": 61.76,
+            },
+            "trucking_lcl": Object {
+              "edited_total": null,
+              "name": "Trucking Lcl",
+              "stackable": Object {
+                "currency": "CNY",
+                "name": "Stackable",
+                "value": 540,
+              },
+              "total": Object {
+                "currency": "CNY",
+                "value": 540,
+              },
+            },
           },
         }
       }
@@ -778,7 +1372,7 @@ exports[`show schedule options working 1`] = `
         <p
           style={Object {}}
         >
-          100.00 EUR
+          440.78 GBP
         </p>
         <div
           className="flex-gt-md-25 flex-33 layout-row layout-align-end-center"
@@ -861,23 +1455,19 @@ exports[`show schedules set to true 1`] = `
       />
     </div>
     <div
-      className="flex-60 layout-row layout-align-start-center origin_destination"
+      className="flex-55 layout-row layout-align-start-center origin_destination"
     >
       <div
-        className="layout-column layout-align-center-start"
+        className="layout-column layout-align-center-start flex-100"
       >
         <p>
-          From
-          :
-           
+          From: 
           <span>
             Gothenburg
           </span>
         </p>
         <p>
-          To
-          :
-           
+          To: 
           <span>
             Shanghai
           </span>
@@ -891,11 +1481,103 @@ exports[`show schedules set to true 1`] = `
         className="flex-100 layout-row layout-wrap layout-align-end-center charge_icons"
       >
         <ChargeIcons
-          destinationFees={false}
+          destinationFees={
+            Object {
+              "edited_total": null,
+              "imp": Object {
+                "currency": "GBP",
+                "name": "Customs Clearance",
+                "value": 0,
+              },
+              "name": "Import",
+              "total": Object {
+                "currency": "GBP",
+                "value": 0,
+              },
+            }
+          }
           mot=""
-          onCarriage={false}
-          originFees={false}
-          preCarriage={false}
+          onCarriage={
+            Object {
+              "edited_total": null,
+              "name": "Trucking On",
+              "total": Object {
+                "currency": "GBP",
+                "value": 80,
+              },
+              "trucking_lcl": Object {
+                "edited_total": null,
+                "name": "Trucking Lcl",
+                "stackable": Object {
+                  "currency": "GBP",
+                  "name": "Stackable",
+                  "value": 80,
+                },
+                "total": Object {
+                  "currency": "GBP",
+                  "value": 80,
+                },
+              },
+            }
+          }
+          originFees={
+            Object {
+              "ams": Object {
+                "currency": "CNY",
+                "name": "AMS ENS ACI",
+                "value": 180,
+              },
+              "bkn": Object {
+                "currency": "CNY",
+                "name": "CFS",
+                "value": 190,
+              },
+              "doc": Object {
+                "currency": "CNY",
+                "name": "Documentation",
+                "value": 350,
+              },
+              "edited_total": null,
+              "name": "Export",
+              "tel": Object {
+                "currency": "CNY",
+                "name": "TELEX",
+                "value": 150,
+              },
+              "total": Object {
+                "currency": "GBP",
+                "value": 111.52,
+              },
+              "vgm": Object {
+                "currency": "CNY",
+                "name": "VGM",
+                "value": 105,
+              },
+            }
+          }
+          preCarriage={
+            Object {
+              "edited_total": null,
+              "name": "Trucking Pre",
+              "total": Object {
+                "currency": "GBP",
+                "value": 61.76,
+              },
+              "trucking_lcl": Object {
+                "edited_total": null,
+                "name": "Trucking Lcl",
+                "stackable": Object {
+                  "currency": "CNY",
+                  "name": "Stackable",
+                  "value": 540,
+                },
+                "total": Object {
+                  "currency": "CNY",
+                  "value": 540,
+                },
+              },
+            }
+          }
           tenant={
             Object {
               "emails": Object {
@@ -945,19 +1627,18 @@ exports[`show schedules set to true 1`] = `
         />
       </div>
       <div
-        className="flex-100 layout-row layout-wrap layout-align-end-center unit_info"
+        className="flex-100 layout-row layout-wrap layout-align-start-center unit_info"
       >
         <p
-          className="flex-100 layout-row layout-align-end-center"
+          className="flex-60 layout-row layout-align-start-center"
         >
-          Total Weight
-          : 
-          <span>
-            0.0
-             
-            kg
-          </span>
+          Total Weight: 
         </p>
+        <span
+          className="flex layout-row layout-align-start-center"
+        >
+          0.0 kg
+        </span>
       </div>
     </div>
   </div>
@@ -1017,9 +1698,120 @@ exports[`show schedules set to true 1`] = `
       cargo={Array []}
       quote={
         Object {
+          "cargo": Object {
+            "265": Object {
+              "bas": Object {
+                "currency": "GBP",
+                "name": "Bas",
+                "value": 187.5,
+              },
+              "edited_total": null,
+              "name": "Cargoitem",
+              "total": Object {
+                "currency": "GBP",
+                "value": 187.5,
+              },
+            },
+            "edited_total": null,
+            "name": "Cargo",
+            "total": Object {
+              "currency": "GBP",
+              "value": 187.5,
+            },
+          },
+          "edited_total": null,
+          "export": Object {
+            "ams": Object {
+              "currency": "CNY",
+              "name": "AMS ENS ACI",
+              "value": 180,
+            },
+            "bkn": Object {
+              "currency": "CNY",
+              "name": "CFS",
+              "value": 190,
+            },
+            "doc": Object {
+              "currency": "CNY",
+              "name": "Documentation",
+              "value": 350,
+            },
+            "edited_total": null,
+            "name": "Export",
+            "tel": Object {
+              "currency": "CNY",
+              "name": "TELEX",
+              "value": 150,
+            },
+            "total": Object {
+              "currency": "GBP",
+              "value": 111.52,
+            },
+            "vgm": Object {
+              "currency": "CNY",
+              "name": "VGM",
+              "value": 105,
+            },
+          },
+          "import": Object {
+            "edited_total": null,
+            "imp": Object {
+              "currency": "GBP",
+              "name": "Customs Clearance",
+              "value": 0,
+            },
+            "name": "Import",
+            "total": Object {
+              "currency": "GBP",
+              "value": 0,
+            },
+          },
+          "name": "Grand Total",
           "total": Object {
-            "currency": "EUR",
-            "value": 100,
+            "currency": "GBP",
+            "value": 440.78,
+          },
+          "trucking_on": Object {
+            "edited_total": null,
+            "name": "Trucking On",
+            "total": Object {
+              "currency": "GBP",
+              "value": 80,
+            },
+            "trucking_lcl": Object {
+              "edited_total": null,
+              "name": "Trucking Lcl",
+              "stackable": Object {
+                "currency": "GBP",
+                "name": "Stackable",
+                "value": 80,
+              },
+              "total": Object {
+                "currency": "GBP",
+                "value": 80,
+              },
+            },
+          },
+          "trucking_pre": Object {
+            "edited_total": null,
+            "name": "Trucking Pre",
+            "total": Object {
+              "currency": "GBP",
+              "value": 61.76,
+            },
+            "trucking_lcl": Object {
+              "edited_total": null,
+              "name": "Trucking Lcl",
+              "stackable": Object {
+                "currency": "CNY",
+                "name": "Stackable",
+                "value": 540,
+              },
+              "total": Object {
+                "currency": "CNY",
+                "value": 540,
+              },
+            },
           },
         }
       }
@@ -1073,7 +1865,7 @@ exports[`show schedules set to true 1`] = `
         <p
           style={Object {}}
         >
-          100.00 EUR
+          440.78 GBP
         </p>
         <div
           className="flex-gt-md-25 flex-33 layout-row layout-align-end-center"
@@ -1137,23 +1929,19 @@ exports[`single result rendering removes the "add" button 1`] = `
       />
     </div>
     <div
-      className="flex-60 layout-row layout-align-start-center origin_destination"
+      className="flex-55 layout-row layout-align-start-center origin_destination"
     >
       <div
-        className="layout-column layout-align-center-start"
+        className="layout-column layout-align-center-start flex-100"
       >
         <p>
-          From
-          :
-           
+          From: 
           <span>
             Gothenburg
           </span>
         </p>
         <p>
-          To
-          :
-           
+          To: 
           <span>
             Shanghai
           </span>
@@ -1167,11 +1955,103 @@ exports[`single result rendering removes the "add" button 1`] = `
         className="flex-100 layout-row layout-wrap layout-align-end-center charge_icons"
       >
         <ChargeIcons
-          destinationFees={false}
+          destinationFees={
+            Object {
+              "edited_total": null,
+              "imp": Object {
+                "currency": "GBP",
+                "name": "Customs Clearance",
+                "value": 0,
+              },
+              "name": "Import",
+              "total": Object {
+                "currency": "GBP",
+                "value": 0,
+              },
+            }
+          }
           mot=""
-          onCarriage={false}
-          originFees={false}
-          preCarriage={false}
+          onCarriage={
+            Object {
+              "edited_total": null,
+              "name": "Trucking On",
+              "total": Object {
+                "currency": "GBP",
+                "value": 80,
+              },
+              "trucking_lcl": Object {
+                "edited_total": null,
+                "name": "Trucking Lcl",
+                "stackable": Object {
+                  "currency": "GBP",
+                  "name": "Stackable",
+                  "value": 80,
+                },
+                "total": Object {
+                  "currency": "GBP",
+                  "value": 80,
+                },
+              },
+            }
+          }
+          originFees={
+            Object {
+              "ams": Object {
+                "currency": "CNY",
+                "name": "AMS ENS ACI",
+                "value": 180,
+              },
+              "bkn": Object {
+                "currency": "CNY",
+                "name": "CFS",
+                "value": 190,
+              },
+              "doc": Object {
+                "currency": "CNY",
+                "name": "Documentation",
+                "value": 350,
+              },
+              "edited_total": null,
+              "name": "Export",
+              "tel": Object {
+                "currency": "CNY",
+                "name": "TELEX",
+                "value": 150,
+              },
+              "total": Object {
+                "currency": "GBP",
+                "value": 111.52,
+              },
+              "vgm": Object {
+                "currency": "CNY",
+                "name": "VGM",
+                "value": 105,
+              },
+            }
+          }
+          preCarriage={
+            Object {
+              "edited_total": null,
+              "name": "Trucking Pre",
+              "total": Object {
+                "currency": "GBP",
+                "value": 61.76,
+              },
+              "trucking_lcl": Object {
+                "edited_total": null,
+                "name": "Trucking Lcl",
+                "stackable": Object {
+                  "currency": "CNY",
+                  "name": "Stackable",
+                  "value": 540,
+                },
+                "total": Object {
+                  "currency": "CNY",
+                  "value": 540,
+                },
+              },
+            }
+          }
           tenant={
             Object {
               "emails": Object {
@@ -1221,19 +2101,18 @@ exports[`single result rendering removes the "add" button 1`] = `
         />
       </div>
       <div
-        className="flex-100 layout-row layout-wrap layout-align-end-center unit_info"
+        className="flex-100 layout-row layout-wrap layout-align-start-center unit_info"
       >
         <p
-          className="flex-100 layout-row layout-align-end-center"
+          className="flex-60 layout-row layout-align-start-center"
         >
-          Total Weight
-          : 
-          <span>
-            0.0
-             
-            kg
-          </span>
+          Total Weight: 
         </p>
+        <span
+          className="flex layout-row layout-align-start-center"
+        >
+          0.0 kg
+        </span>
       </div>
     </div>
   </div>
@@ -1293,9 +2172,120 @@ exports[`single result rendering removes the "add" button 1`] = `
       cargo={Array []}
       quote={
         Object {
+          "cargo": Object {
+            "265": Object {
+              "bas": Object {
+                "currency": "GBP",
+                "name": "Bas",
+                "value": 187.5,
+              },
+              "edited_total": null,
+              "name": "Cargoitem",
+              "total": Object {
+                "currency": "GBP",
+                "value": 187.5,
+              },
+            },
+            "edited_total": null,
+            "name": "Cargo",
+            "total": Object {
+              "currency": "GBP",
+              "value": 187.5,
+            },
+          },
+          "edited_total": null,
+          "export": Object {
+            "ams": Object {
+              "currency": "CNY",
+              "name": "AMS ENS ACI",
+              "value": 180,
+            },
+            "bkn": Object {
+              "currency": "CNY",
+              "name": "CFS",
+              "value": 190,
+            },
+            "doc": Object {
+              "currency": "CNY",
+              "name": "Documentation",
+              "value": 350,
+            },
+            "edited_total": null,
+            "name": "Export",
+            "tel": Object {
+              "currency": "CNY",
+              "name": "TELEX",
+              "value": 150,
+            },
+            "total": Object {
+              "currency": "GBP",
+              "value": 111.52,
+            },
+            "vgm": Object {
+              "currency": "CNY",
+              "name": "VGM",
+              "value": 105,
+            },
+          },
+          "import": Object {
+            "edited_total": null,
+            "imp": Object {
+              "currency": "GBP",
+              "name": "Customs Clearance",
+              "value": 0,
+            },
+            "name": "Import",
+            "total": Object {
+              "currency": "GBP",
+              "value": 0,
+            },
+          },
+          "name": "Grand Total",
           "total": Object {
-            "currency": "EUR",
-            "value": 100,
+            "currency": "GBP",
+            "value": 440.78,
+          },
+          "trucking_on": Object {
+            "edited_total": null,
+            "name": "Trucking On",
+            "total": Object {
+              "currency": "GBP",
+              "value": 80,
+            },
+            "trucking_lcl": Object {
+              "edited_total": null,
+              "name": "Trucking Lcl",
+              "stackable": Object {
+                "currency": "GBP",
+                "name": "Stackable",
+                "value": 80,
+              },
+              "total": Object {
+                "currency": "GBP",
+                "value": 80,
+              },
+            },
+          },
+          "trucking_pre": Object {
+            "edited_total": null,
+            "name": "Trucking Pre",
+            "total": Object {
+              "currency": "GBP",
+              "value": 61.76,
+            },
+            "trucking_lcl": Object {
+              "edited_total": null,
+              "name": "Trucking Lcl",
+              "stackable": Object {
+                "currency": "CNY",
+                "name": "Stackable",
+                "value": 540,
+              },
+              "total": Object {
+                "currency": "CNY",
+                "value": 540,
+              },
+            },
           },
         }
       }
@@ -1349,7 +2339,7 @@ exports[`single result rendering removes the "add" button 1`] = `
         <p
           style={Object {}}
         >
-          100.00 EUR
+          440.78 GBP
         </p>
       </div>
       <div

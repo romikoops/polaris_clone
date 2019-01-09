@@ -4,10 +4,12 @@ require 'bundler/setup'
 
 require 'simplecov'
 SimpleCov.start do
+  minimum_coverage 98
+
   if ENV['COVERAGE_DIR']
-    SimpleCov.coverage_dir(ENV['COVERAGE_DIR'])
-    SimpleCov.merge_timeout 3600
-    SimpleCov.command_name 'charge_calculator/rspec'
+    command_name 'charge_calculator'
+    coverage_dir(ENV['COVERAGE_DIR'])
+    merge_timeout 3600
   end
 end
 

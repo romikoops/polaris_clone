@@ -33,7 +33,7 @@ class Pricing < ApplicationRecord
   def as_json(options = {})
     new_options = options.reverse_merge(
       methods: %i(data exceptions load_type cargo_class carrier service_level),
-      only:    %i(
+      only: %i(
         effective_date expiration_date wm_rate itinerary_id
         tenant_id transport_category_id id currency_name tenant_vehicle_id user_id
       )
@@ -42,10 +42,9 @@ class Pricing < ApplicationRecord
   end
 
   def for_table_json(options = {})
-
     new_options = options.reverse_merge(
       methods: %i(data exceptions load_type cargo_class carrier service_level user_email),
-      only:    %i(
+      only: %i(
         effective_date expiration_date wm_rate itinerary_id
         tenant_id transport_category_id id currency_name tenant_vehicle_id user_id
       )
@@ -99,15 +98,32 @@ class Pricing < ApplicationRecord
       currency = pricing_detail_data.delete('currency')
       pricing_detail_params = pricing_detail_data.merge(
         shipping_type: shipping_type,
-        tenant:        tenant
+        tenant: tenant
       )
       range = pricing_detail_params.delete('range')
       pricing_detail = pricing_to_update.pricing_details.find_or_create_by(
         shipping_type: shipping_type,
-        tenant:        tenant
+        tenant: tenant
       )
       pricing_detail.update!(pricing_detail_params)
       pricing_detail.update!(range: range, currency_name: currency)
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: pricings
+#
+#  id                    :bigint(8)        not null, primary key
+#  wm_rate               :decimal(, )
+#  effective_date        :datetime
+#  expiration_date       :datetime
+#  tenant_id             :bigint(8)
+#  transport_category_id :bigint(8)
+#  user_id               :bigint(8)
+#  itinerary_id          :bigint(8)
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  tenant_vehicle_id     :integer
+#

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+
 FactoryBot.define do
   factory :container do
     size_class 'fcl_20' # TODO: set right size class
@@ -13,3 +14,24 @@ FactoryBot.define do
     association :shipment
   end
 end
+
+# == Schema Information
+#
+# Table name: containers
+#
+#  id              :bigint(8)        not null, primary key
+#  shipment_id     :integer
+#  size_class      :string
+#  weight_class    :string
+#  payload_in_kg   :decimal(, )
+#  tare_weight     :decimal(, )
+#  gross_weight    :decimal(, )
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  dangerous_goods :boolean
+#  cargo_class     :string
+#  hs_codes        :string           default([]), is an Array
+#  customs_text    :string
+#  quantity        :integer
+#  unit_price      :jsonb
+#

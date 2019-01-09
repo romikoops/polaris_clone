@@ -22,3 +22,20 @@ describe Contact, type: :model do
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: contacts
+#
+#  id           :bigint(8)        not null, primary key
+#  user_id      :integer
+#  address_id   :integer
+#  company_name :string
+#  first_name   :string
+#  last_name    :string
+#  phone        :string
+#  email        :string
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  alias        :boolean          default(FALSE)
+#

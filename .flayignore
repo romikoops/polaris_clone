@@ -1,4 +1,7 @@
-config/environments/*
+**/bin/*
+**/config/environments/*
+**/spec/*_helper.rb
+**/spec/**/*_spec.rb
 db/schema.rb
-spec/*_spec.rb
-spec/spec_helper.rb
+engines/*/lib/*/engine.rb
+engines/*/spec/dummy/*

@@ -9,10 +9,10 @@ require 'pathname'
 APP_ROOT = Pathname.new(File.expand_path('..', __dir__))
 
 # Set up environment
-ENV['RAILS_ENV']    ||= 'test'
-ENV['COVERAGE']     ||= 'true'
-ENV['CI']           ||= nil
-ENV['SPEC_OPTS']    ||= ENV['CI'] ? '--format RspecJunitFormatter --out rspec.xml --format Fuubar --color' : ''
+ENV['RAILS_ENV'] ||= 'test'
+ENV['COVERAGE'] ||= 'true'
+ENV['CI'] ||= nil
+ENV['SPEC_OPTS'] ||= "--format Fuubar --color #{(ENV['CI'] ? '--format RspecJunitFormatter --out rspec.xml' : '')}"
 ENV['COVERAGE_DIR'] ||= APP_ROOT.join('coverage').to_s
 
 # Set up coloring
@@ -29,8 +29,7 @@ def yellow(msg)
 end
 
 def bundle!
-  path = ENV['CI'] ? '--path vendor' : ''
-  system("bundle check #{path}") || system!("bundle install #{path}")
+  system('bundle check') || system!('bundle install')
 end
 
 def runner(dir:, name:)
@@ -103,13 +102,29 @@ end
 
 runner(dir: APP_ROOT, name: 'api')
 
+# Load Simplecov
+@simplecov = begin
+               require 'simplecov'
+               SimpleCov.configure { merge_timeout 3600 }
+               SimpleCov::ResultMerger.results.map { |r| [r.command_name, r.covered_percent] }.to_h
+             rescue LoadError
+               {}
+             end
+
+field_length = (ENGINES + LIBRARIES + %w(api)).map(&:length).max
+
+puts '=' * (field_length + 45)
 @results.each do |name, result|
+  coverage = @simplecov.fetch(name, 0.0).round(1)
+
   puts format(
-    "%#{(ENGINES + LIBRARIES + %w(api)).map(&:length).max}s: %s",
-    name,
-    (result ? green('SUCCESS') : red('FAILED'))
+    "%<name>#{field_length}s: %<result>7s (Coverage %<percent>5s %%)",
+    name: name,
+    result: (result ? green('SUCCESS') : red('FAILED')),
+    percent: coverage
   )
 end
+puts '=' * (field_length + 45)
 
 if @results.values.reduce(:&)
   puts green('*** TEST PASSED ***')

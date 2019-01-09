@@ -939,6 +939,7 @@ export class ShipmentDetails extends Component {
     const routeIds = shipmentData.itineraries ? shipmentData.itineraries.map(route => route.id) : []
     const { notes } = shipmentData
     const noteStyle = notes && notes.length > 0 ? styles.open_notes : styles.closed_notes
+    const { origin, destination } = this.state
 
     const styleTagJSX = theme ? <style>{toggleCSS(theme)}</style> : ''
 
@@ -960,8 +961,8 @@ export class ShipmentDetails extends Component {
             handleCarriageChange={(...args) => this.handleCarriageChange(...args)}
             has_on_carriage={this.state.has_on_carriage}
             has_pre_carriage={this.state.has_pre_carriage}
-            origin={this.state.origin}
-            destination={this.state.destination}
+            origin={origin}
+            destination={destination}
             nextStageAttempts={nextStageAttempts}
             handleAddressChange={this.handleAddressChange}
             shipmentData={shipmentData}
@@ -995,6 +996,8 @@ export class ShipmentDetails extends Component {
           nextStageAttempts={nextStageAttempts}
           selectedDay={selectedDay}
           incoterm={incoterm}
+          origin={origin}
+          destination={destination}
           hasPreCarriage={this.state.has_pre_carriage}
           hasOnCarriage={this.state.has_on_carriage}
           hide={isQuote(tenant)}

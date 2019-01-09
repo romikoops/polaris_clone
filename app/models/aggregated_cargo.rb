@@ -18,3 +18,16 @@ class AggregatedCargo < ApplicationRecord
     false
   end
 end
+
+# == Schema Information
+#
+# Table name: aggregated_cargos
+#
+#  id                :bigint(8)        not null, primary key
+#  weight            :decimal(, )
+#  volume            :decimal(, )
+#  chargeable_weight :decimal(, )
+#  shipment_id       :integer
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#

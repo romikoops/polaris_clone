@@ -1,5 +1,0 @@
-version: 1
-cron:
- — name: "clear_shoryuken"
-   url: "/clear_shoryuken"
-   schedule: "0 3 * * *"

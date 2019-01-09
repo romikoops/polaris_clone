@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'bigdecimal'
+
 class Container < ApplicationRecord
   # The following Constants are currently being stored directly
   # in the Front End, but may be needed in future refactoring.
@@ -8,8 +9,8 @@ class Container < ApplicationRecord
   # DESCRIPTIONS         = ContainerLookups.get_descriptions
   # WEIGHTS              = ContainerLookups.get_weights
   TARE_WEIGHTS = {
-    fcl_20:    2370,
-    fcl_40:    3750,
+    fcl_20: 2370,
+    fcl_40: 3750,
     fcl_40_hq: 4000
   }.freeze
   PRICING_WEIGHT_STEPS = ContainerLookups.get_pricing_weight_steps
@@ -66,3 +67,24 @@ class Container < ApplicationRecord
     self.size_class  ||= cargo_class
   end
 end
+
+# == Schema Information
+#
+# Table name: containers
+#
+#  id              :bigint(8)        not null, primary key
+#  shipment_id     :integer
+#  size_class      :string
+#  weight_class    :string
+#  payload_in_kg   :decimal(, )
+#  tare_weight     :decimal(, )
+#  gross_weight    :decimal(, )
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  dangerous_goods :boolean
+#  cargo_class     :string
+#  hs_codes        :string           default([]), is an Array
+#  customs_text    :string
+#  quantity        :integer
+#  unit_price      :jsonb
+#

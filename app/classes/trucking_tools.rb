@@ -5,6 +5,8 @@ require 'bigdecimal'
 module TruckingTools
   module_function
 
+  LoadMeterageExceeded = Class.new(StandardError)
+
   LOAD_METERAGE_AREA_DIVISOR = 24_000
   CBM_VOLUME_DIVISOR = 1_000_000
   DEFAULT_MAX = 1_000_000
@@ -24,7 +26,7 @@ module TruckingTools
       end
     end
     fees[:rate] = fare_calculator('rate', pricing[:rate], cargo, km, scope)
-    
+
     fees.each do |_k, fee|
       next unless fee
       if !result['value']
@@ -139,21 +141,25 @@ module TruckingTools
   end
 
   def filter_trucking_pricings(trucking_pricing, cargo_values, _direction)
+    scope = trucking_pricing.tenant.scope
     return {} if cargo_values['weight'].to_i == 0
+
     case trucking_pricing.modifier
     when 'kg'
-
+      if cargo_values['weight'].to_i > trucking_pricing['rates']['kg'].last['max_kg'].to_i && scope['hard_trucking_limit']
+        raise TruckingTools::LoadMeterageExceeded
+      elsif cargo_values['weight'].to_i > trucking_pricing['rates']['kg'].last['max_kg'].to_i && !scope['hard_trucking_limit']
+        rate = trucking_pricing['rates']['kg'].last
+        rate['rate']['min_value'] = rate['min_value']
+        return { rate: rate['rate'], fees: trucking_pricing['fees'] }
+      end
       trucking_pricing['rates']['kg'].each do |rate|
         if cargo_values['weight'].to_i <= rate['max_kg'].to_i && cargo_values['weight'].to_i >= rate['min_kg'].to_i
           rate['rate']['min_value'] = rate['min_value']
           return { rate: rate['rate'], fees: trucking_pricing['fees'] }
         end
       end
-      if cargo_values['weight'].to_i > trucking_pricing['rates']['kg'].last['max_kg'].to_i
-        rate = trucking_pricing['rates']['kg'].last
-        rate['rate']['min_value'] = rate['min_value']
-        return { rate: rate['rate'], fees: trucking_pricing['fees'] }
-      end
+
     when 'cbm'
       trucking_pricing['rates']['cbm'].each do |rate|
         next unless cargo_values['volume'] <= rate['max_cbm'].to_i && cargo_values['volume'] >= rate['min_cbm'].to_i
@@ -227,7 +233,6 @@ module TruckingTools
   end
 
   def consolidated_load_meterage(trucking_pricing, cargo_object, cargos)
-    
     if cargos.first.is_a? AggregatedCargo
       total_area =  cargos.first.volume / 1.3
       non_stackable = false
@@ -235,7 +240,7 @@ module TruckingTools
       total_area =  cargos.sum { |cargo| cargo.dimension_x * cargo.dimension_y * cargo.quantity }
       non_stackable = cargos.select(&:stackable).empty?
     end
-    
+
     load_area_limit = trucking_pricing.load_meterage['area_limit'] || DEFAULT_MAX
     if total_area >= load_area_limit || non_stackable
       cargos.each do |cargo|

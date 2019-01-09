@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+
 FactoryBot.define do
   factory :itinerary do
     transient do
@@ -19,3 +20,15 @@ FactoryBot.define do
     end
   end
 end
+
+# == Schema Information
+#
+# Table name: itineraries
+#
+#  id                :bigint(8)        not null, primary key
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  name              :string
+#  mode_of_transport :string
+#  tenant_id         :integer
+#

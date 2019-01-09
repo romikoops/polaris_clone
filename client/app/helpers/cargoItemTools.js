@@ -26,7 +26,7 @@ export function chargeableVolume (cargoItem, mot) {
     +cargoItem.payload_in_kg * cargoItem.quantity / effectiveKgPerCubicMeter[mot]
   )
 
-  return numberSpacing(finalValue, 1)
+  return numberSpacing(finalValue, 3)
 }
 
 export function volume (cargoItem) {
@@ -35,11 +35,11 @@ export function volume (cargoItem) {
   const unitVolume =
     cargoItem.dimension_x * cargoItem.dimension_y * cargoItem.dimension_z / 100 ** 3
 
-  return numberSpacing((unitVolume * cargoItem.quantity), 3)
+  return (unitVolume * cargoItem.quantity)
 }
 
 export function weight (cargoItem) {
   if (!cargoItem) return undefined
 
-  return (numberSpacing(cargoItem.payload_in_kg * cargoItem.quantity), 2)
+  return numberSpacing((cargoItem.payload_in_kg * cargoItem.quantity), 1)
 }

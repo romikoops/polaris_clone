@@ -12,7 +12,7 @@ backend:
   resources:
     requests:
       memory: 512Mi
-      cpu: 250m
+      cpu: 500m
 
 frontend:
   image:
@@ -69,11 +69,13 @@ postgresql:
     liveness:
       initialDelay: 60
       timeoutSeconds: 5
-      failureThreshold: 6
+      periodSeconds: 10
+      failureThreshold: 30
     readiness:
       initialDelay: 60
       timeoutSeconds: 3
-      periodSeconds: 5
+      periodSeconds: 10
+      failureThreshold: 12
 
   persistence:
     enabled: false
@@ -83,7 +85,7 @@ postgresql:
   resources:
     requests:
       memory: 512Mi
-      cpu: 250m
+      cpu: 500m
 
   nodeSelector: {}
   tolerations: []

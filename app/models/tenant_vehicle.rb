@@ -9,7 +9,11 @@ class TenantVehicle < ApplicationRecord
   after_create do |tvt|
     vt = tvt.vehicle
     tvt.mode_of_transport = vt.mode_of_transport
-    default_tvt = TenantVehicle.find_by(mode_of_transport: tvt.mode_of_transport, is_default: true, tenant_id: tvt.tenant_id)
+    default_tvt = TenantVehicle.find_by(
+      mode_of_transport: tvt.mode_of_transport,
+      is_default: true,
+      tenant_id: tvt.tenant_id
+    )
     tvt.is_default = true unless default_tvt
     tvt.save!
   end
@@ -18,3 +22,18 @@ class TenantVehicle < ApplicationRecord
     as_json(include: { carrier: { only: %i(id name) } })
   end
 end
+
+# == Schema Information
+#
+# Table name: tenant_vehicles
+#
+#  id                :bigint(8)        not null, primary key
+#  vehicle_id        :integer
+#  tenant_id         :integer
+#  is_default        :boolean
+#  mode_of_transport :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  name              :string
+#  carrier_id        :integer
+#

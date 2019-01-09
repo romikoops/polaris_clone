@@ -17,6 +17,10 @@ fixer:
 google:
   api_key:
 
+google_sign_in:
+  client_id:
+  client_secret:
+
 mailer:
   queue:
 

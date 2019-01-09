@@ -236,6 +236,7 @@ class ShipmentQuotationContent extends Component {
               <QuoteChargeBreakdown
                 theme={theme}
                 scope={scope}
+                showBreakdowns
                 quote={shipment.selected_offer}
                 mot={shipment.mode_of_transport}
               />

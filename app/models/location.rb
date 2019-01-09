@@ -4,14 +4,14 @@ class Location < ApplicationRecord
   include PgSearch
 
   validates :postal_code, uniqueness: {
-    scope:   %i(neighbourhood city province country),
+    scope: %i(neighbourhood city province country),
     message: ->(obj, _) { "is a duplicate for the names: #{obj.names.log_format}" }
   }
 
   pg_search_scope :autocomplete,
-                  :against => [:postal_code, :neighbourhood, :city, :province, :country],
-                  :using => {
-                    :tsearch => {:prefix => true}
+                  against: %i(postal_code neighbourhood city province country),
+                  using: {
+                    tsearch: { prefix: true }
                   }
 
   def self.find_by_coordinates(lat:, lng:)
@@ -82,11 +82,13 @@ class Location < ApplicationRecord
       results_1 = where(name_i => name_1)
 
       next if results_1.empty?
+
       results_1.each do |result|
         sub_keys = keys.slice!(0, keys.length - (i + 1))
         sub_keys.to_a.reverse_each.with_index do |name_j, j|
           sub_results = results_1.where(name_j => name_2)
-          next if !sub_keys.reverse[j + 1]
+          next unless sub_keys.reverse[j + 1]
+
           specific_result = sub_results.where(sub_keys.reverse[j + 1] => name_2).first
           result = specific_result || sub_results.first
 
@@ -95,6 +97,7 @@ class Location < ApplicationRecord
       end
     end
     return final_result unless final_result.nil?
+
     keys.to_a.reverse_each.with_index do |name_i, _i|
       final_result = where(name_i => name_2).first
 
@@ -114,5 +117,19 @@ class Location < ApplicationRecord
 
     nil
   end
-
 end
+
+# == Schema Information
+#
+# Table name: locations
+#
+#  id            :bigint(8)        not null, primary key
+#  postal_code   :string
+#  suburb        :string
+#  neighbourhood :string
+#  city          :string
+#  province      :string
+#  country       :string
+#  admin_level   :string
+#  bounds        :geometry({:srid= geometry, 0
+#

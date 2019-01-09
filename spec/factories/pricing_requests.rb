@@ -5,3 +5,16 @@ FactoryBot.define do
     status "requested"
   end
 end
+
+# == Schema Information
+#
+# Table name: pricing_requests
+#
+#  id         :bigint(8)        not null, primary key
+#  pricing_id :integer
+#  user_id    :integer
+#  tenant_id  :integer
+#  status     :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#

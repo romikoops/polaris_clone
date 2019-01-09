@@ -31,6 +31,7 @@ class UserShipmentView extends Component {
 
     return { currency: curr, total: total.toFixed(2) }
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -39,6 +40,7 @@ class UserShipmentView extends Component {
 
     this.back = this.back.bind(this)
   }
+
   componentDidMount () {
     const {
       shipmentData, loading, userDispatch, match
@@ -155,15 +157,17 @@ class UserShipmentView extends Component {
       }
     })
 
-    return Object.keys(cargoGroups).map(prop =>
-      (<CargoContainerGroup
+    return Object.keys(cargoGroups).map(prop => (
+      <CargoContainerGroup
         key={v4()}
         group={cargoGroups[prop]}
         theme={theme}
         hsCodes={hsCodes}
         shipment={shipment}
-      />))
+      />
+    ))
   }
+
   reuseShipment () {
     const { shipmentData, userDispatch } = this.props
     const {
@@ -235,7 +239,11 @@ class UserShipmentView extends Component {
         gradient={gradientBorderStyle}
         className="layout-row flex-100 layout-align-center-center"
         content={(
-          <p className="layout-align-center-center layout-row"> {t('common:requested')} </p>
+          <p className="layout-align-center-center layout-row">
+            {' '}
+            {t('common:requested')}
+            {' '}
+          </p>
         )}
       />
     ) : (
@@ -261,7 +269,11 @@ class UserShipmentView extends Component {
 
     const statusFinished = (shipment.status === 'finished') ? (
       <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box}`}>
-        <p className="layout-align-center-center layout-row"> {t('common:finished')} </p>
+        <p className="layout-align-center-center layout-row">
+          {' '}
+          {t('common:finished')}
+          {' '}
+        </p>
       </div>
     ) : (
       ''
@@ -298,10 +310,22 @@ class UserShipmentView extends Component {
       <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top extra_padding">
         <div className={`${adminStyles.margin_box_right} layout-row flex-100 layout-align-center-stretch margin_bottom`}>
           <div className={`layout-row flex layout-align-space-between-center ${adminStyles.title_shipment_grey}`}>
-            <p className="layout-align-start-center layout-row">{t('common:ref')}:&nbsp; <span>{shipment.imc_reference}</span></p>
-            <p className="layout-row layout-align-end-end"><strong>{t('shipment:placedAt')}:&nbsp;</strong> {createdDate}</p>
+            <p className="layout-align-start-center layout-row">
+              {t('common:ref')}
+:&nbsp;
+              {' '}
+              <span>{shipment.imc_reference}</span>
+            </p>
+            <p className="layout-row layout-align-end-end">
+              <strong>
+                {t('shipment:placedAt')}
+:&nbsp;
+              </strong>
+              {' '}
+              {createdDate}
+            </p>
           </div>
-          {reuseShipment}
+          {user.internal ? reuseShipment : ''}
           {statusRequested}
           {statusInProcess}
           {statusFinished}

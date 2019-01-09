@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+
 FactoryBot.define do
   factory :tenant_vehicle do
     name 'standard'
@@ -13,3 +14,18 @@ FactoryBot.define do
   end
 
 end
+
+# == Schema Information
+#
+# Table name: tenant_vehicles
+#
+#  id                :bigint(8)        not null, primary key
+#  vehicle_id        :integer
+#  tenant_id         :integer
+#  is_default        :boolean
+#  mode_of_transport :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  name              :string
+#  carrier_id        :integer
+#

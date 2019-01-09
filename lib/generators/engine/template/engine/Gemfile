@@ -2,13 +2,17 @@
 
 source 'https://rubygems.org'
 
-# Allow access to other engines
-path '..'
-
 # Declare your gem's dependencies in engine_template.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
 # development dependencies will be added by default to the :development group.
 gemspec
+
+# Allow access to other engines
+Gem::Specification.load(Dir['*.gemspec'].first).dependencies.each do |dep|
+  next unless File.directory?(File.join('..', dep.name))
+
+  gem dep.name, path: '..'
+end
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or

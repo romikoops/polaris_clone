@@ -112,9 +112,9 @@ typings/
 blank.html
 
 .rspec_status
-lib/*/Gemfile.lock
 rspec.xml
 /client/junit.xml
+examples.txt
 
 config/settings.local.yml
 config/settings/*.local.yml
@@ -123,3 +123,17 @@ config/environments/*.local.yml
 # Ignore QA Reports
 /qa/report/*
 !/qa/report/.keep
+
+# Ignore Library and Component Files
+lib/*/Gemfile.lock
+engines/*/Gemfile.lock
+
+# Ignore all logfiles and tempfiles.
+engines/*/spec/dummy/log/*
+engines/*/spec/dummy/tmp/*
+!engines/*/spec/dummy/log/.keep
+!engines/*/spec/dummy/tmp/.keep
+
+# Ignore uploaded files in development
+engines/*/spec/dummy/storage/*
+!engines/*/spec/dummy/storage/.keep
