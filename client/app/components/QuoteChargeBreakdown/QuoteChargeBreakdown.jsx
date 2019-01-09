@@ -325,6 +325,7 @@ class QuoteChargeBreakdown extends Component {
     const {
       theme,
       quote,
+      showBreakdowns,
       scope
     } = this.props
     if (Object.keys(quote).length === 0) return ''
@@ -334,7 +335,7 @@ class QuoteChargeBreakdown extends Component {
       .map(key => (
         <CollapsingBar
           showArrow
-          collapsed={!this.state.expander[`${key}`]}
+          collapsed={showBreakdowns ? this.state.expander[`${key}`] : !this.state.expander[`${key}`]}
           theme={theme}
           contentStyle={styles.sub_price_row_wrapper}
           headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
