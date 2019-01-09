@@ -116,7 +116,7 @@ class GeometrySeeder
       end
       multi_polygon = RGeo::Cartesian.factory.multi_polygon(polygons)
       area_name = names[0].sub(names[1], '').strip
-      attributes = { 
+      attributes = {
         bounds: multi_polygon,
         postal_code: names[1],
         neighbourhood: area_name,
@@ -124,8 +124,6 @@ class GeometrySeeder
         province: nil,
         country: 'Germany'
       }
-      # binding.pry
-      # names.each_with_index { |name, i| attributes["name_#{i + 1}"] = name }
 
       attributes
     end
@@ -147,7 +145,6 @@ class GeometrySeeder
     puts 'Reading from kml...'
     GeometrySeeder.get_s3_file('data/sweden_postal.kml')
     geometry_hash = Hash.from_xml(File.open(TMP_PATH))
-    # binding.pry
     geometries = geometry_hash['kml']['Document']['Folder']['Placemark']
 
     puts
@@ -168,9 +165,8 @@ class GeometrySeeder
       end
 
       # Geometry Data
-     
+
       names = geo['ExtendedData']['SchemaData']['SimpleData']
-      # binding.pry
       polygons_raw_data = geo['MultiGeometry'] ? [geo['MultiGeometry']['Polygon']].flatten : [geo['Polygon']]
 
       polygons = polygons_raw_data.map do |polygon_raw_data|
@@ -186,7 +182,7 @@ class GeometrySeeder
       end
       multi_polygon = RGeo::Cartesian.factory.multi_polygon(polygons)
 
-      attributes = { 
+      attributes = {
         bounds: multi_polygon,
         postal_code: names[1],
         neighbourhood: names[2],
@@ -194,7 +190,7 @@ class GeometrySeeder
         province: nil,
         country: 'Sweden'
       }
-      
+
       attributes
     end
 

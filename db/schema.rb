@@ -880,6 +880,14 @@ ActiveRecord::Schema.define(version: 2019_01_07_165648) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  create_table "users_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "email"
+    t.string "name"
+    t.string "google_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "vehicles", force: :cascade do |t|
     t.string "name"
     t.string "mode_of_transport"

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'activerecord-postgis-adapter'
+require 'config'
 require 'rails'
 require 'strong_migrations'
 

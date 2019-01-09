@@ -1,0 +1,12 @@
+<dl class="row">
+  <% scope.each do |key, value| %>
+    <dt class="col-sm-3"><%= key %></dt>
+    <dd class="col-sm-9">
+      <% if value.is_a?(Hash) -%>
+        <%= render 'scope', scope: value %>
+      <% else -%>
+        <%= value.blank? ? 'N/A' : value %>
+      <% end %>
+    </dd>
+  <% end %>
+</dl>

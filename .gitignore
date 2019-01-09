@@ -127,3 +127,13 @@ config/environments/*.local.yml
 # Ignore Library and Component Files
 lib/*/Gemfile.lock
 engines/*/Gemfile.lock
+
+# Ignore all logfiles and tempfiles.
+engines/*/spec/dummy/log/*
+engines/*/spec/dummy/tmp/*
+!engines/*/spec/dummy/log/.keep
+!engines/*/spec/dummy/tmp/.keep
+
+# Ignore uploaded files in development
+engines/*/spec/dummy/storage/*
+!engines/*/spec/dummy/storage/.keep

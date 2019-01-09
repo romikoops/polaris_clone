@@ -1,0 +1,27 @@
+<div class="row justify-content-center">
+  <div class="col-sm-9">
+    <nav class="navbar navbar-expand-sm navbar-light bg-white">
+      <span class="navbar-brand"><%= @tenant.name %></span>
+
+      <ul class="navbar-nav mr-auto">
+      </ul>
+      <span class="navbar-text">
+        <%= link_to 'Edit', edit_tenant_path(@tenant), class: 'btn btn-warning' %>
+      </span>
+    </nav>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-sm-9">
+    <dl class="row">
+      <dt class="col-sm-2">Tenant Subdomain</dt>
+      <dd class="col-sm-10"><%= @tenant.subdomain %>.itsmycargo.com</dd>
+
+      <dt class="col-sm-2">Scope</dt>
+      <dd class="col-sm-10">
+          <%= render 'scope', scope: @tenant.scope %>
+      </dd>
+    </dl>
+  </div>
+</div>

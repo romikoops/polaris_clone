@@ -3,7 +3,9 @@
 class Tenant < ApplicationRecord
   include ImageTools
   include DataValidator
-  
+
+  has_paper_trail
+
   has_many :shipments, dependent: :destroy
   has_many :hubs, dependent: :destroy
   has_many :nexuses, dependent: :destroy
