@@ -160,13 +160,14 @@ module ExcelTool
 
     def agent
       @agent = User.find_by(
-        first_name:  @agent_row[:first_name],
-        last_name:  @agent_row[:last_name],
+        tenant_id: @user.tenant_id,
+        external_id:  @agent_row[:external_id],
+        agency_id: @agent_agency.id,
+        role: @agent_role
+      )
+      @agent ||= User.find_by(
         tenant_id: @user.tenant_id,
         email:  @agent_row[:email],
-        phone:  @agent_row[:phone],
-        vat_number:  @agent_row[:vat_number],
-        external_id:  @agent_row[:external_id],
         agency_id: @agent_agency.id,
         role: @agent_role
       )
