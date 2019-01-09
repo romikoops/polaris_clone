@@ -98,6 +98,10 @@ en:
       http_code: 400
       code: 1014
       message: "A problem occured calculating trucking for this shipment"
+    load_meterage_exceeded:
+      http_code: 400
+      code: 1015
+      message: "Your shipment has exceeded the load meterage limits for online booking."
     
 
     # Authentication Errors
