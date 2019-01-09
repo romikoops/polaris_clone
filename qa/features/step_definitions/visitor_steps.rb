@@ -31,8 +31,6 @@ When('I select {string} as {string}') do |place, type|
         letters = place.split('')
         letters.each_with_index do |c, i|
           find('input').send_keys(c)
-          pause = (i / letters.length > 0.9) ? 1 : 0.1
-          sleep(pause)
         end
         first_result = all(:css, '.ccb_result', wait: 30).first
         if first_result

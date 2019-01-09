@@ -76,7 +76,7 @@ spec:
         - name: RAILS_ENV
           value: review
         - name: RAILS_MAX_THREADS
-          value: "5"
+          value: "32"
         - name: DATABASE_URL
           value: {{ $databaseUrl | quote }}
         - name: K8S_NAMESPACE
