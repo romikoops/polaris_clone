@@ -115,7 +115,7 @@ module ExcelTool
         )
       end
       def update_agency_manager
-        @agency_manager.update_attributes(
+        @agency.update_attributes(
           first_name:  @agency_row[:first_name],
           last_name:  @agency_row[:last_name],
           tenant_id: @user.tenant_id,
