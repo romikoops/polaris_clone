@@ -16,7 +16,8 @@ exports[`loading is true 1`] = `
         className="layout-align-start-center layout-row"
       >
         Ref
-        :  
+        : 
+         
         <span />
       </p>
       <p
@@ -28,17 +29,6 @@ exports[`loading is true 1`] = `
         </strong>
          
         19
-      </p>
-    </div>
-    <div
-      className="layout-row flex-15 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy shipment_view_margin_buffer  reuse_shipment_box"
-      onClick={[Function]}
-      style="#333"
-    >
-      <p
-        className="layout-align-center-center layout-row"
-      >
-        Reuse Shipment
       </p>
     </div>
   </div>
@@ -339,7 +329,8 @@ exports[`shallow render 1`] = `
         className="layout-align-start-center layout-row"
       >
         Ref
-        :  
+        : 
+         
         <span />
       </p>
       <p
@@ -351,17 +342,6 @@ exports[`shallow render 1`] = `
         </strong>
          
         19
-      </p>
-    </div>
-    <div
-      className="layout-row flex-15 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy shipment_view_margin_buffer  reuse_shipment_box"
-      onClick={[Function]}
-      style="#333"
-    >
-      <p
-        className="layout-align-center-center layout-row"
-      >
-        Reuse Shipment
       </p>
     </div>
   </div>
@@ -662,7 +642,8 @@ exports[`shipmentData.cargoItems is present 1`] = `
         className="layout-align-start-center layout-row"
       >
         Ref
-        :  
+        : 
+         
         <span />
       </p>
       <p
@@ -674,17 +655,6 @@ exports[`shipmentData.cargoItems is present 1`] = `
         </strong>
          
         19
-      </p>
-    </div>
-    <div
-      className="layout-row flex-15 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy shipment_view_margin_buffer  reuse_shipment_box"
-      onClick={[Function]}
-      style="#333"
-    >
-      <p
-        className="layout-align-center-center layout-row"
-      >
-        Reuse Shipment
       </p>
     </div>
   </div>
@@ -1059,7 +1029,8 @@ exports[`shipmentData.contacts is present 1`] = `
         className="layout-align-start-center layout-row"
       >
         Ref
-        :  
+        : 
+         
         <span />
       </p>
       <p
@@ -1071,17 +1042,6 @@ exports[`shipmentData.contacts is present 1`] = `
         </strong>
          
         19
-      </p>
-    </div>
-    <div
-      className="layout-row flex-15 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy shipment_view_margin_buffer  reuse_shipment_box"
-      onClick={[Function]}
-      style="#333"
-    >
-      <p
-        className="layout-align-center-center layout-row"
-      >
-        Reuse Shipment
       </p>
     </div>
   </div>
@@ -1428,7 +1388,8 @@ exports[`shipmentData.documents is present 1`] = `
         className="layout-align-start-center layout-row"
       >
         Ref
-        :  
+        : 
+         
         <span />
       </p>
       <p
@@ -1440,17 +1401,6 @@ exports[`shipmentData.documents is present 1`] = `
         </strong>
          
         19
-      </p>
-    </div>
-    <div
-      className="layout-row flex-15 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy shipment_view_margin_buffer  reuse_shipment_box"
-      onClick={[Function]}
-      style="#333"
-    >
-      <p
-        className="layout-align-center-center layout-row"
-      >
-        Reuse Shipment
       </p>
     </div>
   </div>
