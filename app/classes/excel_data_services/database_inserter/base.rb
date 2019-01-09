@@ -181,7 +181,7 @@ module ExcelDataServices
           transport_category: find_transport_category(tenant_vehicle, row[:load_type]),
           tenant_vehicle: tenant_vehicle,
           tenant: tenant,
-          user: tenant.users.find_by_email(row[:customer_email]),
+          user: User.find_by(tenant_id: tenant.id, email: row[:customer_email]),
           wm_rate: 1000,
           effective_date: Date.parse(row[:effective_date].to_s),
           expiration_date: Date.parse(row[:expiration_date].to_s)
