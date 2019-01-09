@@ -8,6 +8,17 @@ import {
 } from '../../helpers'
 
 class QuoteChargeBreakdown extends Component {
+
+  static shouldShowSubTotal (currencySections) {
+    if (Object.keys(currencySections).length > 1) return true
+
+    if (Object.values(currencySections)[0].length > 1) return true
+
+    if (Object.values(currencySections)[0][0][0] === 'unknown') return false
+
+    return true
+  }
+
   constructor (props) {
     super(props)
     this.unbreakableKeys = ['total', 'edited_total', 'name']
@@ -27,10 +38,10 @@ class QuoteChargeBreakdown extends Component {
   }
 
   determineSubKey (charge) {
-    const { scope, mot } = this.props
+    const { scope, mot, t } = this.props
 
     if (charge[0] === 'unknown') {
-      return `${capitalize(mot)} Freight: ${charge[1].name}`
+      return `${t('shipment:motCargo', { mot: capitalize(mot) })}: ${charge[1].name}`
     }
 
     switch (scope.fee_detail) {
@@ -220,16 +231,6 @@ class QuoteChargeBreakdown extends Component {
     return this.generateContent(key)
   }
 
-  shouldShowSubTotal (currencySections) {
-    if (Object.keys(currencySections).length > 1) return true
-
-    if (Object.values(currencySections)[0].length > 1) return true
-
-    if (Object.values(currencySections)[0][0][0] === 'unknown') return false
-
-    return true
-  }
-
   generateUnitContent (key) {
     const { quote, t, scope } = this.props
 
@@ -264,7 +265,7 @@ class QuoteChargeBreakdown extends Component {
         ] : [
           <p className={`flex-none ${styles.item_dims}`}>{`${t('cargo:perUnitWeight')} ${cargo.payload_in_kg}kg`}</p>
         ]
-      const showSubTotal = this.shouldShowSubTotal(currencySections)
+      const showSubTotal = QuoteChargeBreakdown.shouldShowSubTotal(currencySections)
       const sections = Object.entries(currencySections).map(currencyFees => (
         <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
 
@@ -334,13 +335,11 @@ class QuoteChargeBreakdown extends Component {
     const {
       theme,
       quote,
-      showBreakdowns,
-      scope
+      showBreakdowns
     } = this.props
     if (Object.keys(quote).length === 0) return ''
 
     return this.quoteKeys()
-      // .filter(key => ((!scope.cargo_price_notes || (scope.cargo_price_notes && !scope.cargo_price_notes[key]))))
       .map(key => (
         <CollapsingBar
           showArrow
