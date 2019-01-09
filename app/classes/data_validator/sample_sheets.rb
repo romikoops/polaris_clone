@@ -6,6 +6,13 @@ module DataValidator
   class SampleSheets < DataValidator::BaseValidator
     attr_reader :tenants, :n_sample_itineraries
 
+    TRUCKING_ADDRESSES_PER_COUNTRY = {
+      'DE' => 'Afrikastraße 1, 20457 Hamburg, Germany',
+      'GB' => '1 Oxford St, Soho, London W1D 2DF, UK',
+      'CN' => '88 Henan Middle Rd, Huangpu Qu, Shanghai Shi, China, 200002',
+      'SE' => 'Torgny Segerstedtsgatan 80, 426 77 Västra Frölunda, Sweden'
+    }.freeze
+
     LCL_EXAMPLES = [{
       '#1-payload_in_kg' => 1000,
       '#1-dimension_x' => 120,
@@ -30,8 +37,9 @@ module DataValidator
 
     def perform
       tenants.each do |tenant|
-        tempfile = Tempfile.new('excel')
-        xlsx = WriteXLSX.new(tempfile, tempdir: Rails.root.join('tmp', 'write_xlsx/').to_s)
+        file_path = Rails.root.join('tmp', 'sample_sheets', "#{tenant.subdomain}__sample_sheet.xlsx")
+        FileUtils.mkdir_p(File.dirname(file_path))
+        xlsx = WriteXLSX.new(file_path, tempdir: Rails.root.join('tmp', 'write_xlsx/').to_s)
 
         itineraries(tenant).each do |itinerary|
           itin_name = itinerary.name
@@ -40,7 +48,8 @@ module DataValidator
           end_hub = Hub.find(itinerary.destination_hub_ids.first)
 
           itinerary.pricings.each_with_index do |pricing, pr_i|
-            worksheet = xlsx.add_worksheet("#{pr_i + 1} - #{pricing.load_type} - #{itin_name}".delete(' ')[0..30])
+            sheet_name = "#{pr_i + 1} - #{pricing.load_type} - #{itin_name}".delete(' ')[0..30]
+            worksheet = xlsx.add_worksheet(sheet_name)
             setup_worksheet(worksheet, itinerary.pricings.length + 1)
 
             results =
@@ -60,13 +69,6 @@ module DataValidator
         end
 
         xlsx.close
-
-        src = tempfile.path
-        dst = Rails.root.join('tmp', 'sample_sheets', "#{tenant.subdomain}__sample_sheet.xlsx")
-        FileUtils.mkdir_p(File.dirname(dst))
-        FileUtils.cp(src, dst)
-
-        tempfile&.unlink
       end
     end
 
@@ -84,7 +86,16 @@ module DataValidator
       @header_format
     end
 
+    def hub_has_trucking(hub, load_type, carriage)
+      hub.truck_type_availabilities.where(load_type: load_type, carriage: carriage).distinct.present?
+    end
+
     def build_lcl_data(itin_name, mot, pricing, start_hub, end_hub)
+      start_hub_has_trucking = hub_has_trucking(start_hub, 'cargo_item', 'pre')
+      end_hub_has_trucking = hub_has_trucking(end_hub, 'cargo_item', 'on')
+      pre_carriage_address = TRUCKING_ADDRESSES_PER_COUNTRY[start_hub.address.country.code] if start_hub_has_trucking
+      on_carriage_address = TRUCKING_ADDRESSES_PER_COUNTRY[end_hub.address.country.code] if end_hub_has_trucking
+
       LCL_EXAMPLES.map do |cargo_data|
         part_1 =
           { 'ITINERARY' => itin_name,
@@ -95,8 +106,8 @@ module DataValidator
             'UNITS' => nil }.merge(cargo_data)
 
         part_2 =
-          { 'PICKUP_ADDRESS' => nil,
-            'DELIVERY_ADDRESS' => nil,
+          { 'PICKUP_ADDRESS' => pre_carriage_address,
+            'DELIVERY_ADDRESS' => on_carriage_address,
             'CARRIER' => pricing.carrier,
             'SERVICE_LEVEL' => pricing.tenant_vehicle.name,
             'FREIGHT' => nil }.merge(freight_key_hashes(pricing.pricing_details))
@@ -122,6 +133,11 @@ module DataValidator
     end
 
     def build_fcl_data(itin_name, mot, pricing, start_hub, end_hub)
+      start_hub_has_trucking = hub_has_trucking(start_hub, 'container', 'pre')
+      end_hub_has_trucking = hub_has_trucking(end_hub, 'container', 'on')
+      pre_carriage_address = TRUCKING_ADDRESSES_PER_COUNTRY[start_hub.address.country.code] if start_hub_has_trucking
+      on_carriage_address = TRUCKING_ADDRESSES_PER_COUNTRY[end_hub.address.country.code] if end_hub_has_trucking
+
       FCL_EXAMPLES.map do |cargo_data|
         part_1 =
           { 'ITINERARY' => itin_name,
@@ -132,8 +148,8 @@ module DataValidator
             'UNITS' => nil }.merge(cargo_data.merge('#1-size_class' => pricing.cargo_class))
 
         part_2 =
-          { 'PICKUP_ADDRESS' => nil,
-            'DELIVERY_ADDRESS' => nil,
+          { 'PICKUP_ADDRESS' => pre_carriage_address,
+            'DELIVERY_ADDRESS' => on_carriage_address,
             'CARRIER' => pricing.carrier,
             'SERVICE_LEVEL' => pricing.tenant_vehicle.name,
             'FREIGHT' => nil }.merge(freight_key_hashes(pricing.pricing_details))
