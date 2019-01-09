@@ -103,19 +103,13 @@ module ExcelTool
       end
       def agency_manager
         @agency_manager = User.find_by(
-          first_name:  @agency_row[:first_name],
-          last_name:  @agency_row[:last_name],
           tenant_id: @user.tenant_id,
           email:  @agency_row[:email],
-          phone:  @agency_row[:phone],
-          vat_number:  @agency_row[:vat_number],
-          external_id:  @agency_row[:external_id],
-          agency_id: @agency.id,
           role: @manager_role
         )
       end
       def update_agency_manager
-        @agency.update_attributes(
+        @agency_manager.update_attributes(
           first_name:  @agency_row[:first_name],
           last_name:  @agency_row[:last_name],
           tenant_id: @user.tenant_id,
