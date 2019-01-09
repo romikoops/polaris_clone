@@ -148,7 +148,6 @@ module DocumentService
         data = column_hash[column_id][:data]
         case header
         when 'ITINERARY'
-          p data[:itinerary][:name]
           3.times do
             row << data[:itinerary][:name]
           end

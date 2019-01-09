@@ -98,8 +98,6 @@ module MongoTools
   def update_array_fn(client, table, key, updates)
     updateArr = {}
     updateArr = { data: { "$each" => updates } }
-    # updateArr = {'$each' => updates}
-    p updateArr
     client[table.to_sym].update_one(key, { "$push" => updateArr }, upsert: true)
   end
 
