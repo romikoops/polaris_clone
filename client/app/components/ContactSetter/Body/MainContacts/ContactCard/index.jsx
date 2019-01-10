@@ -50,27 +50,28 @@ export default function ShipmentContactsBoxMainContactsContactCard ({
       <div className="flex-100 layout-row layout-align-start-start">
         <i className={`${styles.main_icon} fa fa-user`} style={iconStyle} />
         <h3 className={`${styles.contact_name}`}>
-          <Truncate lines={1}>{contact.firstName} {contact.lastName}</Truncate> <br />
+          {contact.firstName} {contact.lastName} 
+          <br />
           <span className={styles.secondary_info}>
             <Truncate lines={1}>{contact.companyName} </Truncate>
           </span>
         </h3>
       </div>
       <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-        <div className="flex-100 layout-row layout-align-space-around-center">
-          <i className={`${styles.main_icon} fa fa-map-marker flex-10`} style={iconStyle} />
+        <div className="flex-100 layout-row layout-align-space-around-start">
+          <i className={`${styles.main_icon} fa fa-map-marker flex-none`} style={iconStyle} />
           <p className={`${styles.secondary_info} flex`}>
             { addressDetails }
-          </p>
-        </div>
-        <div className="flex-100 layout-row layout-align-end-center">
-          <p className={`${styles.secondary_info_city} flex-90 offset-10`}>
-            <b> { address.city } </b>, {address.zipCode}
-          </p>
-        </div>
-        <div className="flex-100 layout-row layout-align-end-center">
-          <p className={`${styles.secondary_info_country} flex-90 offset-10`}>
-            <Truncate lines={1}> { address.country }</Truncate>
+            <br />
+            <b>
+              {address.city}
+            </b>
+            ,
+            {address.zipCode}
+            <br />
+            <Truncate lines={1}>
+              { address.country }
+            </Truncate>
           </p>
         </div>
       </div>
@@ -79,11 +80,11 @@ export default function ShipmentContactsBoxMainContactsContactCard ({
         'layout-row layout-wrap layout-align-space-between-center'
       }
       >
-        <div className="flex-50 layout-row layout-align-start-center">
+        <div className="flex-100 layout-row layout-align-start-center" style={{ paddingBottom: '12px' }}>
           <i className="fa fa-envelope flex-none" style={iconStyle} />
           <p className={`${styles.contact_data} flex`}><Truncate lines={1}> {contact.email} </Truncate></p>
         </div>
-        <div className="flex-45 layout-row layout-align-end-center">
+        <div className="flex-100 layout-row layout-align-end-center">
           <i className="fa fa-phone flex-none" style={iconStyle} />
           <p className={`${styles.contact_data} flex`}><Truncate lines={1}> {contact.phone} </Truncate></p>
         </div>

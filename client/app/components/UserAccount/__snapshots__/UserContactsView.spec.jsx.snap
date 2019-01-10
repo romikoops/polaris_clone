@@ -21,7 +21,7 @@ exports[`props.contactData.address is falsy 1`] = `
       className="layout-align-start-center layout-row flex-70"
     >
       <h1
-        className="flex-none cli"
+        className="flex-none layout-row cli"
       >
         John
          
@@ -135,7 +135,7 @@ exports[`props.loading is true 1`] = `
       className="layout-align-start-center layout-row flex-70"
     >
       <h1
-        className="flex-none cli"
+        className="flex-none layout-row cli"
       >
         John
          
@@ -286,7 +286,7 @@ exports[`shallow render 1`] = `
       className="layout-align-start-center layout-row flex-70"
     >
       <h1
-        className="flex-none cli"
+        className="flex-none layout-row cli"
       >
         John
          
@@ -437,7 +437,7 @@ exports[`state.editBool is true 1`] = `
       className="layout-align-start-center layout-row flex-70"
     >
       <h1
-        className="flex-none cli"
+        className="flex-none layout-row cli"
       >
         John
          

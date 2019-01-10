@@ -48,7 +48,7 @@ function QuoteCardScheduleListItem ({ schedule, theme, onSelectSchedule, t }) {
       <div className="flex-25 layout-row layout-wrap" style={{ textAlign: 'right' }}>
         <RoundButton
           classNames="quote_card_select"
-          size="small"
+          size="full"
           handleNext={() => onSelectSchedule(schedule)}
           theme={theme}
           text={t('common:select')}

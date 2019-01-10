@@ -121,7 +121,7 @@ export class AdminHubFees extends Component {
     const newObj = { import: {}, export: {} }
     const tmpObj = {}
 
-    if (!charges.fees) {
+    if (!charges) {
       return
     }
     Object.keys(charges.fees).forEach((key) => {

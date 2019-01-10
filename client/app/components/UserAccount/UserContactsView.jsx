@@ -151,7 +151,10 @@ const UntranslatedProfileBox = ({
         </sup>
       </div>
       <div className="flex-100 layout-row layout-align-start-center ">
-        <p className="flex-none"> {user.company_name}</p>
+        <p className="flex-none">
+          {' '}
+          {user.company_name}
+        </p>
       </div>
     </div>
     <div className="flex-50 layout-row layout-align-start-start layout-wrap">
@@ -161,7 +164,10 @@ const UntranslatedProfileBox = ({
         </sup>
       </div>
       <div className="flex-100 layout-row layout-align-start-center ">
-        <p className="flex-none"> {user.email}</p>
+        <p className="flex-none">
+          {' '}
+          {user.email}
+        </p>
       </div>
     </div>
     <div className="flex-50 layout-row layout-align-start-start layout-wrap">
@@ -171,7 +177,10 @@ const UntranslatedProfileBox = ({
         </sup>
       </div>
       <div className="flex-100 layout-row layout-align-start-center ">
-        <p className="flex-none"> {user.phone}</p>
+        <p className="flex-none">
+          {' '}
+          {user.phone}
+        </p>
       </div>
     </div>
   </div>
@@ -211,6 +220,7 @@ class UserContactsView extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.goBack = this.goBack.bind(this)
   }
+
   componentDidMount () {
     const {
       contactData, loading, userDispatch, match
@@ -220,10 +230,12 @@ class UserContactsView extends Component {
     }
     window.scrollTo(0, 0)
   }
+
   goBack () {
     const { userDispatch } = this.props
     userDispatch.goBack()
   }
+
   editProfile () {
     const { contactData } = this.props
     const { contact } = contactData
@@ -240,11 +252,13 @@ class UserContactsView extends Component {
       editObj: newEditObj
     })
   }
+
   closeEdit () {
     this.setState({
       editBool: false
     })
   }
+
   handleChange (ev) {
     const { name, value } = ev.target
     this.setState({
@@ -254,11 +268,13 @@ class UserContactsView extends Component {
       }
     })
   }
+
   saveEdit () {
     const { userDispatch } = this.props
     userDispatch.updateContact(this.state.editObj)
     this.closeEdit()
   }
+
   render () {
     const {
       theme, contactData, hubs, userDispatch, t
@@ -285,8 +301,10 @@ class UserContactsView extends Component {
             <i className={`fa fa-user clip ${styles.bigProfile}`} style={textStyle} />
           </span>
           <div className="layout-align-start-center layout-row flex-70">
-            <h1 className="flex-none cli">
-              {contact.first_name} {contact.last_name}
+            <h1 className="flex-none layout-row cli">
+              {contact.first_name}
+              {' '}
+              {contact.last_name}
             </h1>
           </div>
         </div>

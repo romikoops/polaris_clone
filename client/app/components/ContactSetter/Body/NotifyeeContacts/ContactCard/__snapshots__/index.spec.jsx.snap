@@ -19,6 +19,11 @@ exports[`shallow render 1`] = `
   </div>
   <div
     className="flex-100 layout-row layout-align-start-start"
+    style={
+      Object {
+        "paddingTop": "38px",
+      }
+    }
   >
     <i
       className="user_icon fa fa-user clip"

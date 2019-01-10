@@ -10,7 +10,8 @@ export default function CollapsingHeading ({
   contentHeader,
   mainWrapperStyle,
   showArrow,
-  headerWrapClasses
+  headerWrapClasses,
+  hideIcon
 }) {
   return (
     <div
@@ -20,7 +21,7 @@ export default function CollapsingHeading ({
     >
       {text ? (
         <div className="layout-row flex layout-align-start-center">
-          <i className={faClass} />
+          {hideIcon ? '' : <i className={faClass} />}
           <h3 className={`flex ${styles.collapsed_heading}`}>{text}</h3>
         </div>
       ) : (
@@ -53,12 +54,14 @@ CollapsingHeading.propTypes = {
   faClass: Proptypes.string,
   contentHeader: Proptypes.node.isRequired,
   showArrow: Proptypes.bool,
+  hideIcon: Proptypes.bool,
   headerWrapClasses: Proptypes.string
 }
 
 CollapsingHeading.defaultProps = {
   text: '',
   collapsed: false,
+  hideIcon: false,
   theme: null,
   handleCollapser: null,
   faClass: '',

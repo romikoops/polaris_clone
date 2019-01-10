@@ -32,7 +32,7 @@ export default function ContactSetterBodyNotifyeeContactsContactCard ({
       className={`layout-row ${styles.contact_card}`}
     >
       { icons }
-      <div className="flex-100 layout-row layout-align-start-start">
+      <div className="flex-100 layout-row layout-align-start-start" style={{ paddingTop: '38px' }}>
         <i className={`${styles.user_icon} fa fa-user clip`} style={iconStyle} />
         <h3 className={`${styles.contact_name}`}>
           {contact.firstName} {contact.lastName} <br />

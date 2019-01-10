@@ -41,8 +41,6 @@ import {
 import CargoContainerGroup from '../Cargo/Container/Group'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
 
-const ACCEPT = `${ROW(33)} height_100`
-
 const AFTER_CONTAINER =
   `${WRAP_ROW('NONE')} ${ALIGN_CENTER_START} content_width_booking`
 
@@ -53,35 +51,25 @@ const BACK_TO_DASHBOARD_CELL =
   `${defaults.content_width} flex-none ${ROW('CONTENT')} ${ALIGN_START_CENTER}`
 const BOOKING = `${ROW('NONE')} content_width_booking ${ALIGN_CENTER}`
 const BUTTON = `${ROW('NONE')} ${ALIGN_END}`
-const CHECKBOX = `${ROW(65)} ${ALIGN_START_CENTER}`
-const CHECKBOX_CELL = `${ROW(15)} ${ALIGN_CENTER}`
-const COLLAPSER = `${ROW(10)} ${ALIGN_CENTER}`
 
 /**
  * Prepend with `BOOKING_CONFIRMATION` to make e2e test easier to write
  */
 const CONTAINER = `BOOKING_CONFIRMATION ${WRAP_ROW(100)} ${ALIGN_CENTER_START}`
 
-const HEADING = `${styles.heading_style} ${ROW(100)} ${ALIGN_BETWEEN_CENTER}`
 const INNER_WRAPPER = `${styles.inner_wrapper} ${WRAP_ROW(100)} ${ALIGN_START}`
 const INNER_WRAPPER_CELL = `${WRAP_ROW(100)} ${ALIGN_BETWEEN_START}`
 
-const ITINERARY =
-  `${styles.shipment_card_itinerary} ${WRAP_ROW(100)} ${ALIGN_BETWEEN_CENTER}`
 const LAYOUT_WRAP = `${WRAP_ROW(100)} ${ALIGN_START_CENTER}`
 const UPLOADED_DOCS = `${ROW(35)} layout-wrap ${ALIGN_START} ${styles.uploaded_doc}`
 const MISSING_DOCS = `${ROW(35)} layout-wrap ${ALIGN_START} ${styles.no_doc}`
 
-const SHIPMENT_CARD = `${styles.shipment_card} ${WRAP_ROW(100)} ${ALIGN_BETWEEN_CENTER}`
-
-const SHIPMENT_CARD_CONTAINER =
-  `${styles.shipment_card} ${WRAP_ROW(100)} ${ALIGN_BETWEEN_CENTER}`
 const SUBTITLE = `${styles.sec_subtitle_text} flex-none offset-5`
 const SUBTITLE_NORMAL = `${styles.sec_subtitle_text_normal} flex-none`
 const SUMM_TOP = `${styles.b_summ_top} ${ROW(100)} ${ALIGN_AROUND_STRETCH}`
 const TOTAL_ROW = `${styles.total_row} ${WRAP_ROW(100)} ${ALIGN_AROUND_CENTER}`
 
-const acceptStyle = { height: '150px', marginBottom: '15px' }
+const acceptStyle = { marginBottom: '15px' }
 
 export function calcFareTotals (feeHash) {
   if (!feeHash) return 0
@@ -140,6 +128,11 @@ export class BookingConfirmation extends Component {
     bookingHasCompleted(match.params.shipmentId)
   }
 
+  getRemarks () {
+    const { remarkDispatch } = this.props
+    remarkDispatch.getRemarks()
+  }
+
   handleCollapser (key) {
     this.setState({
       collapser: {
@@ -147,11 +140,6 @@ export class BookingConfirmation extends Component {
         [key]: !this.state.collapser[key]
       }
     })
-  }
-
-  getRemarks () {
-    const { remarkDispatch } = this.props
-    remarkDispatch.getRemarks()
   }
 
   requestShipment () {
@@ -203,7 +191,7 @@ export class BookingConfirmation extends Component {
 
     if (!shipment || !addresses || !cargoItemTypes) return <h1>{t('bookconf:loading')}</h1>
 
-    const { acceptTerms, collapser } = this.state
+    const { acceptTerms } = this.state
     const terms = getTenantTerms(tenant, t)
     const textStyle = getTextStyle(theme)
     const createdDate = getCreatedDate(shipment)
@@ -260,7 +248,6 @@ export class BookingConfirmation extends Component {
       t
     })
 
-    const HeadingFactory = HeadingFactoryFn(theme)
     const Terms = getTerms({ theme, terms, t })
     const status = shipmentStatii[shipment.status]
 
@@ -270,6 +257,7 @@ export class BookingConfirmation extends Component {
         text={t('common:overview')}
         parentClass={styles.shipment_card_border}
         showArrow
+        hideIcon
       >
         <div className={INNER_WRAPPER}>
 
@@ -447,7 +435,7 @@ export class BookingConfirmation extends Component {
               {Eori(shipment, t)}
 
               {shipment.cargo_notes ? (
-                <div className={`${WRAP_ROW(45)} ${ALIGN_START} padding_top`}>
+                <div className={`${WRAP_ROW(45)} ${ALIGN_START}`}>
                   <p className="flex-100">
                     <b>{`${t('bookconf:description')}:`}</b>
                   </p>
@@ -514,10 +502,12 @@ export class BookingConfirmation extends Component {
       <CollapsingBar
         text={t('common:agree')}
         parentClass={styles.shipment_card_border}
+        showArrow
+        hideIcon
       >
-        <div className="layout-row layout-align-space-between-start flex-100">
-          <div className="layout-row layout-align-start-center flex-65">
-            <div className={`${ROW(15)} ${ALIGN_CENTER}`}>
+        <div className="layout-row layout-align-space-between-start layout-wrap flex-100">
+          <div className="layout-row layout-align-start-start flex-100">
+            <div className={`${ROW(15)} layout-align-end-center`} style={{ marginTop: '1.33em' }}>
               <Checkbox
                 id="accept_terms"
                 className="ccb_accept_terms"
@@ -531,7 +521,7 @@ export class BookingConfirmation extends Component {
             </label>
           </div>
 
-          <div className="layout-row layout-align-start-end flex-33" style={acceptStyle}>
+          <div className="layout-row layout-align-start-end flex-33 offset-20" style={acceptStyle}>
             {acceptTerms ? acceptedBtn : nonAcceptedBtn}
           </div>
         </div>

@@ -49,6 +49,7 @@ class CargoDetails extends Component {
 
     return '0 EUR'
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -68,16 +69,20 @@ class CargoDetails extends Component {
     this.handleTotalGoodsCurrency = this.handleTotalGoodsCurrency.bind(this)
     this.toggleCustomAddon = this.toggleCustomAddon.bind(this)
   }
+
   toggleInsurance (bool) {
     this.setState({ insuranceView: bool })
     this.props.handleInsurance(bool)
   }
+
   toggleCustoms (bool) {
     this.setState({ customsView: bool })
   }
+
   toggleCustomAddon (target) {
     this.props.toggleCustomAddon(target)
   }
+
   toggleSpecificCustoms (target) {
     const { setCustomsFee, customsData, shipmentData } = this.props
     const { customs } = shipmentData
@@ -93,10 +98,12 @@ class CargoDetails extends Component {
 
     setCustomsFee(target, resp)
   }
+
   deleteDoc (doc) {
     const { shipmentDispatch } = this.props
     shipmentDispatch.deleteDocument(doc.id)
   }
+
   fileFn (file) {
     const { shipmentData, shipmentDispatch } = this.props
     const { shipment } = shipmentData
@@ -155,23 +162,28 @@ class CargoDetails extends Component {
 
     return converted
   }
+
   handleChange (event) {
     this.props.handleChange(event)
   }
+
   toggleIncotermModal () {
     this.setState(prevState => ({
       showModal: !prevState.showModal
     }))
   }
+
   handleTotalGoodsCurrency (selection) {
     this.setState({ totalGoodsCurrency: selection })
     this.props.handleTotalGoodsCurrency(selection.value)
   }
+
   insuranceReadMore () {
     const { tenant } = this.props
     const url = `http://${tenant.subdomain}.itsmycargo.com/insurance`
     window.open(url, '_blank')
   }
+
   render () {
     const { totalGoodsCurrency } = this.state
     const {
@@ -194,7 +206,6 @@ class CargoDetails extends Component {
       documents,
       shipment
     } = shipmentData
-    
 
     const incotermBox = (
       <div className="flex-100 layout-wrap layout-row">
@@ -234,7 +245,9 @@ class CargoDetails extends Component {
     const fadedOnCarriageText = shipment.has_on_carriage ? '' : styles.faded_text
     const textComp = (
       <b style={{ fontWeight: 'normal', fontSize: '.83em' }}>
-        ({t('cargo:ifApplicable')})
+        (
+        {t('cargo:ifApplicable')}
+)
       </b>
     )
 
@@ -272,7 +285,10 @@ class CargoDetails extends Component {
               className="flex-100 layout-row layout-align-start-center"
               style={{ height: '36px' }}
             >
-              <p className="flex-none"> {handleText}</p>
+              <p className="flex-none">
+                {' '}
+                {handleText}
+              </p>
             </div>
             <div
               className="flex-100 layout-row layout-align-start-center layout-wrap"
@@ -431,164 +447,170 @@ class CargoDetails extends Component {
     return (
       <div name="cargoDetailsBox" className="flex-100 layout-row layout-wrap padd_top">
         {scope.customs_export_paper && addons.customs_export_paper
-          ? <div className="flex-100 layout-row layout-align-center padd_top">
-            <div
-              className={`flex-none ${
-                defaults.content_width
-              } layout-row layout-wrap section_padding`}
-            >
-              <CustomsExportPaper
-                addon={addons.customs_export_paper}
-                tenant={tenant}
-                documents={documents}
-                fileFn={this.fileFn}
-                deleteDoc={this.deleteDoc}
-                toggleCustomAddon={this.toggleCustomAddon}
-              />
+          ? (
+            <div className="flex-100 layout-row layout-align-center padd_top">
+              <div
+                className={`flex-none ${
+                  defaults.content_width
+                } layout-row layout-wrap section_padding`}
+              >
+                <CustomsExportPaper
+                  addon={addons.customs_export_paper}
+                  tenant={tenant}
+                  documents={documents}
+                  fileFn={this.fileFn}
+                  deleteDoc={this.deleteDoc}
+                  toggleCustomAddon={this.toggleCustomAddon}
+                />
+              </div>
             </div>
-          </div>
+          )
           : ''}
         {this.state.showModal ? modal : ''}
         <div className="flex-100 layout-row layout-align-center">
           <div className={`flex-none ${defaults.content_width} layout-row layout-wrap`}>
-            <div className="flex-100 layout-row layout-align-space-between-center">
-              <div className="flex-45 layout-align-start-center layout-row">
-                <div className="flex-none">
-                  <TextHeading
-                    theme={theme}
-                    size={2}
-                    text={t('cargo:cargoDetails')}
-                  />
+            <div className="flex-100 layout-row layout-sm-wrap">
+
+              <div className="flex-50">
+                <div className="flex-100">
+                  <div className="flex-100 layout-align-start-center layout-row">
+                    <div className="flex-none">
+                      <TextHeading
+                        theme={theme}
+                        size={2}
+                        text={t('cargo:cargoDetails')}
+                      />
+                    </div>
+                  </div>
+                  {' '}
+                  <div className="flex-none">
+                    <TextHeading
+                      theme={theme}
+                      size={3}
+                      text={t('cargo:totalValue')}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="flex-45 layout-align-start-center layout-row">
-                <div className="flex-none">
-                  <TextHeading
-                    theme={theme}
-                    size={2}
-                    text={t('cargo:shipmentDocuments')}
-                  />
-                </div>
-                <div className="flex-none" style={{ marginLeft: '10px' }}>
-                  <p className="flex-none">( if available )</p>
-                </div>
-              </div>
-            </div>
-            <div className="flex-100 layout-row layout-wrap">
-              <div className="flex-100">
-                {' '}
-                <div className="flex-none">
-                  <TextHeading
-                    theme={theme}
-                    size={3}
-                    text={t('cargo:totalValue')}
-                  />
-                </div>
-              </div>
-              <div
-                className="flex-100 flex-gt-sm-50 layout-row layout-wrap
+                <div
+                  className="flex-100 layout-row layout-wrap
                   layout-align-start-start"
-              >
-                <div className="flex-100 layout-row layout-wrap">
-                  <div className="flex-100 layout-row">
-                    <div className="flex-66 layout-row">
-                      <FormsyInput
-                        className={`flex-100 ccb_total_goods_value ${styles.cargo_input} `}
+                >
+                  <div className="flex-100 layout-row layout-wrap">
+                    <div className="flex-100 layout-row">
+                      <div className="flex-66 layout-row">
+                        <FormsyInput
+                          className={`flex-100 ccb_total_goods_value ${styles.cargo_input} `}
+                          wrapperClassName={`flex-100 ${styles.wrapper_cargo_input}`}
+                          errorMessageStyles={{
+                            fontSize: '13px',
+                            bottom: '-17px'
+                          }}
+                          value={totalGoodsValue.value}
+                          type="number"
+                          name="totalGoodsValue"
+                          onBlur={this.handleChange}
+                          submitAttempted={finishBookingAttempted}
+                          validations={{ nonNegative: (values, value) => !mandatoryFormFields.total_goods_value || value > 0 }}
+                          validationErrors={{
+                            nonNegative: t('common:greaterZero'),
+                            isDefaultRequiredValue: t('common:greaterZero')
+                          }}
+                          required={mandatoryFormFields.total_goods_value}
+                        />
+                      </div>
+                      <div className="flex-33 layout-row">
+                        <NamedSelect
+                          className="flex-100 ccb_currency"
+                          options={currencyOptions}
+                          onChange={this.handleTotalGoodsCurrency}
+                          value={totalGoodsCurrency}
+                          clearable={false}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex-100 layout-row layout-wrap" id="cargo_notes">
+                    <div className="flex-100">
+                      <div className={`flex-none ${styles.f_header}`}>
+                        {' '}
+                        <TextHeading
+                          theme={theme}
+                          size={3}
+                          text={t('cargo:descriptionGoods')}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex-100">
+                      <FormsyTextarea
+                        className={`flex-100 ccb_description_goods ${styles.cargo_text_area} `}
                         wrapperClassName={`flex-100 ${styles.wrapper_cargo_input}`}
                         errorMessageStyles={{
                           fontSize: '13px',
                           bottom: '-17px'
                         }}
-                        value={totalGoodsValue.value}
-                        type="number"
-                        name="totalGoodsValue"
+                        type="textarea"
+                        name="cargoNotes"
+                        value={this.props.cargoNotes}
                         onBlur={this.handleChange}
                         submitAttempted={finishBookingAttempted}
-                        validations={{ nonNegative: (values, value) => !mandatoryFormFields.total_goods_value || value > 0 }}
                         validationErrors={{
-                          nonNegative: t('common:greaterZero'),
-                          isDefaultRequiredValue: t('common:greaterZero')
+                          isDefaultRequiredValue: t('common:nonEmpty')
                         }}
-                        required={mandatoryFormFields.total_goods_value}
-                      />
-                    </div>
-                    <div className="flex-33 layout-row">
-                      <NamedSelect
-                        className="flex-100 ccb_currency"
-                        options={currencyOptions}
-                        onChange={this.handleTotalGoodsCurrency}
-                        value={totalGoodsCurrency}
-                        clearable={false}
+                        required={mandatoryFormFields.description_of_goods}
                       />
                     </div>
                   </div>
-                </div>
-                <div className="flex-100 layout-row layout-wrap" id="cargo_notes">
-                  <div className="flex-100">
-                    <div className={`flex-none ${styles.f_header}`}>
-                      {' '}
-                      <TextHeading
-                        theme={theme}
-                        size={3}
-                        text={t('cargo:descriptionGoods')}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex-100">
-                    <FormsyTextarea
-                      className={`flex-100 ccb_description_goods ${styles.cargo_text_area} `}
-                      wrapperClassName={`flex-100 ${styles.wrapper_cargo_input}`}
-                      errorMessageStyles={{
-                        fontSize: '13px',
-                        bottom: '-17px'
-                      }}
-                      type="textarea"
-                      name="cargoNotes"
-                      value={this.props.cargoNotes}
-                      onBlur={this.handleChange}
-                      submitAttempted={finishBookingAttempted}
-                      validationErrors={{
-                        isDefaultRequiredValue: t('common:nonEmpty')
-                      }}
-                      required={mandatoryFormFields.description_of_goods}
-                    />
-                  </div>
-                </div>
-                <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-                  <div className="flex-100">
-                    <div className={`flex-none ${styles.f_header}`}>
-                      {' '}
-                      <h4 className="no_m flex-30">Incoterms <span>(Optional)</span></h4>
-                      <p
-                        className={`pointy flex-none ${styles.incoterm_info}`}
-                        onClick={() => this.toggleIncotermModal()}
-                      >
+                  <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+                    <div className="flex-100">
+                      <div className={`flex-none ${styles.f_header}`}>
+                        {' '}
+                        <h4 className="no_m flex-30">
+                        Incoterms
+                          {' '}
+                          <span>(Optional)</span>
+                        </h4>
+                        <p
+                          className={`pointy flex-none ${styles.incoterm_info}`}
+                          onClick={() => this.toggleIncotermModal()}
+                        >
                         More info
-                      </p>
+                        </p>
 
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex-100 layout-row layout-align-start-start input_box_full">
-                    <FormsyTextarea
-                      className={`flex-100 ${styles.cargo_text_area} `}
-                      wrapperClassName={`flex-100 ${styles.wrapper_cargo_input}`}
-                      errorMessageStyles={{
-                        fontSize: '13px',
-                        bottom: '-17px'
-                      }}
-                      type="textarea"
-                      name="incotermText"
-                      value={this.props.incotermText}
-                      onBlur={this.handleChange}
-                      submitAttempted={finishBookingAttempted}
-                    />
+                    <div className="flex-100 layout-row layout-align-start-start input_box_full">
+                      <FormsyTextarea
+                        className={`flex-100 ${styles.cargo_text_area} `}
+                        wrapperClassName={`flex-100 ${styles.wrapper_cargo_input}`}
+                        errorMessageStyles={{
+                          fontSize: '13px',
+                          bottom: '-17px'
+                        }}
+                        type="textarea"
+                        name="incotermText"
+                        value={this.props.incotermText}
+                        onBlur={this.handleChange}
+                        submitAttempted={finishBookingAttempted}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
               <div
-                className="flex-100 flex-gt-sm-45 offset-gt-sm-5
+                className="flex-50 padding_left offset-gt-sm-5
                   layout-row layout-wrap layout-align-start-start"
               >
+                <div className="flex-100 layout-align-start-center layout-row">
+                  <div className="flex-none">
+                    <TextHeading
+                      theme={theme}
+                      size={2}
+                      text={t('cargo:shipmentDocuments')}
+                    />
+                    <br />
+                    ({t('common:ifAvailable')})
+                  </div>
+                </div>
                 <div className="flex-100 layout-row layout-wrap" name="packing_sheet">
                   <div className="flex-100 layout-row margin_5">
                     <DocumentsMultiForm

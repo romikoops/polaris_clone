@@ -15,7 +15,7 @@ exports[`shallow render 1`] = `
               headerElement"
       >
         <div
-          className="flex-60 layout-row layout-align-space-around-center"
+          className="flex layout-row layout-align-space-around-center"
         >
           <div
             className="layout-row flex-none layout-align-center-center"
@@ -37,7 +37,7 @@ exports[`shallow render 1`] = `
           </div>
         </div>
         <div
-          className="flex-40 layout-row layout-align-end-center"
+          className="flex-40 flex-sm-20 layout-row layout-align-end-center"
         >
           <SquareButton
             active={true}

@@ -29,7 +29,7 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system (see config/storage.yml for options)
   config.active_storage.service = :local
-  routes.default_url_options = { host: 'localhost', port: 3000, protocol: 'http' }
+  routes.default_url_options = { host: '192.168.8.100', port: 3000, protocol: 'http' }
 
   config.active_job.queue_adapter = :async
 

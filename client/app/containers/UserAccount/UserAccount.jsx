@@ -10,6 +10,7 @@ import {
   UserBilling,
   UserContacts
 } from '../../components/UserAccount'
+import { moment } from '../../constants'
 import UserProfile from '../../components/UserAccount/UserProfile'
 // eslint-disable-next-line import/no-named-as-default
 import UserShipmentsGroup from '../../components/User/Shipments/Group'
@@ -33,6 +34,7 @@ class UserAccount extends Component {
     this.state = { currentUrl: '/account' }
 
     this.getLocations = this.getLocations.bind(this)
+    this.bookNow = this.bookNow.bind(this)
     this.destroyAddress = this.destroyAddress.bind(this)
     this.makePrimary = this.makePrimary.bind(this)
     this.setUrl = this.setUrl.bind(this)
@@ -104,6 +106,36 @@ class UserAccount extends Component {
         break
       default:
         break
+    }
+  }
+
+  bookNow () {
+    const {
+      tenant, loggedIn, authDispatch, userDispatch, user
+    } = this.props
+
+    if (tenant.scope.closed_shop && (!user || user.guest || !loggedIn)) {
+      authDispatch.showLogin()
+    } else if (loggedIn) {
+      userDispatch.goTo('/booking')
+    } else {
+      const unixTimeStamp = moment().unix().toString()
+      const randNum = Math.floor(Math.random() * 100).toString()
+      const randSuffix = unixTimeStamp + randNum
+      const email = `guest${randSuffix}@${tenant.subdomain}.com`
+
+      authDispatch.register(
+        {
+          email,
+          password: 'guestpassword',
+          password_confirmation: 'guestpassword',
+          first_name: 'Guest',
+          last_name: '',
+          tenant_id: tenant.id,
+          guest: true
+        },
+        '/booking'
+      )
     }
   }
 
@@ -413,7 +445,7 @@ class UserAccount extends Component {
               </GenericError>
             </div>
           </div>
-          <Footer tenant={tenant} />
+          <Footer tenant={tenant} theme={theme} bookNow={this.bookNow} />
         </div>
       </div>
     )
