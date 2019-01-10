@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_07_165648) do
+ActiveRecord::Schema.define(version: 2019_01_10_151535) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -295,6 +295,7 @@ ActiveRecord::Schema.define(version: 2019_01_07_165648) do
     t.integer "trucking_pricing_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["hub_id"], name: "index_hub_truckings_on_hub_id"
     t.index ["trucking_pricing_id", "trucking_destination_id", "hub_id"], name: "foreign_keys", unique: true
   end
 
@@ -396,6 +397,7 @@ ActiveRecord::Schema.define(version: 2019_01_07_165648) do
     t.integer "itinerary_id"
     t.integer "trip_id"
     t.datetime "closing_date"
+    t.index ["stop_id"], name: "index_layovers_on_stop_id"
   end
 
   create_table "local_charges", force: :cascade do |t|
@@ -817,6 +819,7 @@ ActiveRecord::Schema.define(version: 2019_01_07_165648) do
     t.jsonb "fees"
     t.string "identifier_modifier"
     t.integer "trucking_pricing_scope_id"
+    t.index ["trucking_pricing_scope_id"], name: "index_trucking_pricings_on_trucking_pricing_scope_id"
   end
 
   create_table "user_addresses", force: :cascade do |t|
