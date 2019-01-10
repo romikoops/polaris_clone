@@ -24,7 +24,7 @@ module TruckingTools
       end
     end
     fees[:rate] = fare_calculator('rate', pricing[:rate], cargo, km, scope)
-    
+
     fees.each do |_k, fee|
       next unless fee
       if !result['value']
@@ -227,7 +227,6 @@ module TruckingTools
   end
 
   def consolidated_load_meterage(trucking_pricing, cargo_object, cargos)
-    
     if cargos.first.is_a? AggregatedCargo
       total_area =  cargos.first.volume / 1.3
       non_stackable = false
@@ -235,9 +234,9 @@ module TruckingTools
       total_area =  cargos.sum { |cargo| cargo.dimension_x * cargo.dimension_y * cargo.quantity }
       non_stackable = cargos.select(&:stackable).empty?
     end
-    
+
     load_area_limit = trucking_pricing.load_meterage['area_limit'] || DEFAULT_MAX
-    if total_area >= load_area_limit || non_stackable
+    if total_area > load_area_limit || non_stackable
       cargos.each do |cargo|
         calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
       end
@@ -347,6 +346,7 @@ module TruckingTools
     cbm_weight = cbm_var * (trucking_pricing.cbm_ratio || 0)
     raw_payload = cargo.payload_in_kg * cargo.quantity
     trucking_chargeable_weight = [load_meter_weight, raw_payload, cbm_weight].max
+
     cargo_object['non_stackable']['weight'] += trucking_chargeable_weight
     cargo_object['non_stackable']['volume'] += cargo.volume * cargo.quantity
     cargo_object['non_stackable']['number_of_items'] += cargo.quantity
