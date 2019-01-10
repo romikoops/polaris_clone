@@ -12,8 +12,13 @@ class WelcomeMailer < ApplicationMailer
     @theme = @tenant.theme
     @content = Content.get_component('WelcomeMail', @tenant.id)
 
-    attachments.inline['logo.png'] = File.read("#{Rails.root}/client/app/assets/images/logos/emails/#{@tenant.subdomain}_white.png")
-    attachments.inline['ngl_welcome_image.jpg'] = URI.open('https://assets.itsmycargo.com/assets/tenants/normanglobal/ngl_welcome_image.jpg').read
+    attachments.inline['logo.png'] = URI.open(
+      "https://assets.itsmycargo.com/assets/logos/emails/#{@tenant.subdomain}_white.png"
+    ).read
+
+    attachments.inline['ngl_welcome_image.jpg'] = URI.open(
+      'https://assets.itsmycargo.com/assets/tenants/normanglobal/ngl_welcome_image.jpg'
+    ).read
 
     mail(
       from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
