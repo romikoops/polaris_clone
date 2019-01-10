@@ -2,7 +2,7 @@ import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { intersection } from 'lodash'
-import { bookingProcessActions, errorActions } from '../../../actions'
+import { bookingProcessActions, shipmentActions, errorActions } from '../../../actions'
 import RouteSectionMap from './Map'
 import RouteSectionForm from './Form'
 import CarriageToggle from './CarriageToggle'
@@ -49,7 +49,7 @@ class RouteSection extends React.PureComponent {
 
   static getDerivedStateFromProps (nextProps, prevState) {
     const {
-      lookupTablesForRoutes, routes, shipment, bookingProcessDispatch
+      lookupTablesForRoutes, routes, shipment, tenant, bookingProcessDispatch, shipmentDispatch
     } = nextProps
     const {
       preCarriage, onCarriage, origin, destination
@@ -108,6 +108,8 @@ class RouteSection extends React.PureComponent {
         availableRoutes.push(route)
 
         // availableMots (for redux store)
+        itineraryIds.push(route.itineraryId)
+
         const { modeOfTransport } = route
         if (!availableMots.includes(modeOfTransport)) availableMots.push(modeOfTransport)
 
@@ -130,7 +132,7 @@ class RouteSection extends React.PureComponent {
       bookingProcessDispatch.updatePageData('ShipmentDetails', { availableRoutes, availableMots })
 
       // update lastAvailableDate (backend call -> for redux store)
-      if (!isQuote(tenant)) {
+      if (!isQuote(tenant) && availableRoutes.length > 0) {
         const country = preCarriage ? availableRoutes[0].origin.country : origin.country
         shipmentDispatch.getLastAvailableDate({ itinerary_ids: itineraryIds, country })
       }
@@ -349,6 +351,7 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     bookingProcessDispatch: bindActionCreators(bookingProcessActions, dispatch),
+    shipmentDispatch: bindActionCreators(shipmentActions, dispatch),
     errorDispatch: bindActionCreators(errorActions, dispatch)
   }
 }
