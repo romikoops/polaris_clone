@@ -16,3 +16,7 @@ export function uniqueItems (array) {
 export function uniqueObjects (array, prop) {
   return array.filter((obj, pos, arr) => arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos)
 }
+
+export function intersection (array1, array2) {
+  return array1.filter(value => array2.indexOf(value) > -1)
+}
