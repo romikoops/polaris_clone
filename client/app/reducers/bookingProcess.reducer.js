@@ -6,9 +6,6 @@ const initialState = {
     direction: 'export',
     loadType: 'cargo_item',
 
-    // TODO: implement update action in shipmentDetails
-    lastAvailableDate: moment().add(20, 'd'),
-
     onCarriage: false,
     preCarriage: false,
     origin: {},

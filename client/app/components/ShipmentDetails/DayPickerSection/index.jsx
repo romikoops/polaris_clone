@@ -31,13 +31,13 @@ class DayPickerSection extends React.PureComponent {
 
   render () {
     const {
-      tenant, theme, scope, shipment, t
+      tenant, theme, scope, shipment, lastAvailableDate, t
     } = this.props
 
     if (isQuote(tenant)) return ''
 
     const {
-      selectedDay, incoterm, preCarriage, onCarriage, direction, lastAvailableDate
+      selectedDay, incoterm, preCarriage, onCarriage, direction
     } = shipment
 
     // TODO: implement
@@ -123,13 +123,15 @@ DayPickerSection.defaultProps = {
 }
 
 function mapStateToProps (state) {
-  const { bookingProcess, app } = state
+  const { bookingProcess, bookingData, app } = state
   const { shipment } = bookingProcess
+  const { lastAvailableDate } = bookingData.response.stage1
+
   const { tenant } = app
   const { theme, scope } = tenant
 
   return {
-    shipment, theme, scope, tenant
+    shipment, theme, scope, tenant, lastAvailableDate
   }
 }
 
