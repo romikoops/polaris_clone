@@ -242,7 +242,7 @@ module TruckingTools
     end
 
     load_area_limit = trucking_pricing.load_meterage['area_limit'] || DEFAULT_MAX
-    if total_area >= load_area_limit || non_stackable
+    if total_area > load_area_limit || non_stackable
       cargos.each do |cargo|
         calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
       end
@@ -352,6 +352,7 @@ module TruckingTools
     cbm_weight = cbm_var * (trucking_pricing.cbm_ratio || 0)
     raw_payload = cargo.payload_in_kg * cargo.quantity
     trucking_chargeable_weight = [load_meter_weight, raw_payload, cbm_weight].max
+
     cargo_object['non_stackable']['weight'] += trucking_chargeable_weight
     cargo_object['non_stackable']['volume'] += cargo.volume * cargo.quantity
     cargo_object['non_stackable']['number_of_items'] += cargo.quantity

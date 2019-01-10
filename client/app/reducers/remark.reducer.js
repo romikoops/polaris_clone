@@ -33,7 +33,12 @@ export default function remark (state = {}, action) {
         newState[_remark.category] = newState[_remark.category] || {}
         newState[_remark.category][_remark.subcategory] =
           newState[_remark.category][_remark.subcategory] || []
-        newState[_remark.category][_remark.subcategory].push({ id: _remark.id, body: _remark.body })
+        const index = newState[_remark.category][_remark.subcategory].findIndex(r => r.id === _remark.id)
+        if (index === -1) {
+          newState[_remark.category][_remark.subcategory].push({ id: _remark.id, body: _remark.body })
+        } else {
+          newState[_remark.category][_remark.subcategory][index] = _remark
+        }
       })
 
       return {
