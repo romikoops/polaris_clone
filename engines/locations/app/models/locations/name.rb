@@ -70,8 +70,10 @@ module Locations
         locality_9,
         locality_10,
         locality_11
-      ].reverse.compact.join(' ')
+      ].reverse.compact.join(', ')
     end
+
+  
   end
 end
 

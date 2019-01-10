@@ -109,44 +109,8 @@
 #   # ).perform
 # end
 
-lat = 31.310542
-lng = 121.3496233
-delta = 0.3
 
-# Hardcoding a square polygon around the lat, lng  pair to be tested.
-serialized_coordinate_pairs = [
-	"#{lng + delta},#{lat + delta}",
-	"#{lng + delta},#{lat - delta}",
-	"#{lng - delta},#{lat - delta}",
-	"#{lng - delta},#{lat + delta}",
-	"#{lng + delta},#{lat + delta}"
-]
 
-points = serialized_coordinate_pairs.map do |serialized_coordinate_pair|
-  RGeo::Cartesian.factory.point(*serialized_coordinate_pair.split(",").map(&:to_f))
-end
-line_string   = RGeo::Cartesian.factory.line_string(points)
-polygon       = RGeo::Cartesian.factory.polygon(line_string)
-multi_polygon = RGeo::Cartesian.factory.multi_polygon([polygon])
+x = Location.create(city: 'TEST2', bounds: "010300000001000000050000000831E1E1874F5E40B5B05D90E3493F400831E1E1874F5E40E9E390C3167D3F40D4FDADAE545C5E40E9E390C3167D3F40D4FDADAE545C5E40B5B05D90E3493F400831E1E1874F5E40B5B05D90E3493F40")
+binding.pry
 
-lat = 57.000000
-lng = 11.100000
-delta = 0.3
-
-# Hardcoding a square polygon around the lat, lng  pair to be tested.
-serialized_coordinate_pairs = [
-  "#{lng + delta},#{lat + delta}",
-  "#{lng + delta},#{lat - delta}",
-  "#{lng - delta},#{lat - delta}",
-  "#{lng - delta},#{lat + delta}",
-  "#{lng + delta},#{lat + delta}"
-]
-
-points = serialized_coordinate_pairs.map do |serialized_coordinate_pair|
-  RGeo::Cartesian.factory.point(*serialized_coordinate_pair.split(',').map(&:to_f))
-end
-line_string   = RGeo::Cartesian.factory.line_string(points)
-polygon       = RGeo::Cartesian.factory.polygon(line_string)
-multi_polygon = RGeo::Cartesian.factory.multi_polygon([polygon])
-
-Location.create(city: 'TEST', bounds: multi_polygon)

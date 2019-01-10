@@ -1,9 +1,13 @@
+# frozen_string_literal: true
+
 module Locations
   class Location < ApplicationRecord
     has_many :names
-    validates :bounds, uniqueness: {
-     message: ->(record, _) { "is a duplicate for the names: #{record.names.to_s.tr('"', "'")}" }
-    }
+    validates :bounds, uniqueness: true
+
+    def self.contains(lat:, lon:)
+      where(arel_table[:bounds].st_contains("POINT(#{lon} #{lat})"))
+    end
   end
 end
 

@@ -87,6 +87,7 @@ PATH
     locations (0.0.1)
       core
       pg_search
+      rgeo-geojson
 
 PATH
   remote: engines/users

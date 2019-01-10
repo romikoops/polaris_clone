@@ -14,6 +14,7 @@ PATH
     locations (0.0.1)
       core
       pg_search
+      rgeo-geojson
 
 GEM
   remote: https://rubygems.org/
@@ -170,6 +171,8 @@ GEM
     rgeo (2.0.0)
     rgeo-activerecord (6.1.0)
       activerecord (~> 5.0)
+      rgeo (>= 1.0.0)
+    rgeo-geojson (2.1.1)
       rgeo (>= 1.0.0)
     rspec-core (3.8.0)
       rspec-support (~> 3.8.0)
