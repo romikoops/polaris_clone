@@ -70,7 +70,6 @@ module OfferCalculatorService
         distance,
         trucking_pricing.carriage
       )
-    
     end
   end
 end

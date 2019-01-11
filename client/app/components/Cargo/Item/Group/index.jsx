@@ -107,7 +107,7 @@ cm
         <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
           <div className="">
             <p className="flex-none layout-row layout-align-center-center">
-              <span>{numberSpacing(group.items[0].payload_in_kg, 1)}</span>
+              <span>{numberSpacing(group.items[0].payload_in_kg, 2)}</span>
 &nbsp;kg
             </p>
             <p className="flex-none layout-row layout-align-center-center">{t('cargo:grossWeight')}</p>
@@ -151,7 +151,7 @@ cm
           styles.panel
         } flex-100 layout-row layout-wrap layout-align-none-center layout-wrap`}
       >
-        <CargoItemGroupAggregated group={group} hideUnits={hideUnits}/>
+        <CargoItemGroupAggregated group={group} hideUnits={hideUnits} />
       </div>
     )
     const cargoCategory = group.cargoType ? group.cargoType.category : cargoGlossary[group.size_class]

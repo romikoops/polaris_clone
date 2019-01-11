@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { get } from 'lodash'
 import { shallow } from 'enzyme'
 import { theme, identity } from '../../mocks'
 

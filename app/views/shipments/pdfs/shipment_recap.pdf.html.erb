@@ -308,7 +308,7 @@
           <div class="cargo-section">
             <p class="cargo-value">
               <span class="cargo-type">
-                <% if tenant.scope['consolidate_cargo'] %>
+                <% if tenant.scope.dig('consolidation', 'cargo') %>
                   <%= format('%.2f', (cargo.payload_in_kg || cargo.weight) * cargo.quantity) %>
                 <% else %>
                   <%= format('%.2f', (cargo.payload_in_kg || cargo.weight)) %>
@@ -320,7 +320,7 @@
           <div class="cargo-section">
             <p class="cargo-value">
               <span class="cargo-type">
-                <% if tenant.scope['consolidate_cargo'] %>
+                <% if tenant.scope.dig('consolidation', 'cargo') %>
                   <%= format('%.3f', cargo.volume * cargo.quantity) %>
                 <% else %>
                   <%= format('%.3f', cargo.volume) %>
@@ -330,7 +330,7 @@
             <p class="cargo-subtitle">Volume</p>
           </div>
           <div class="cargo-section cargo-section-last">
-            <% unless tenant.scope['consolidate_cargo'] %>
+            <% unless tenant.scope.dig('consolidation', 'cargo') %>
               <p class="cargo-value">
                 <span class="cargo-type">
                   <%= '%.2f' % cargo.chargeable_weight %>

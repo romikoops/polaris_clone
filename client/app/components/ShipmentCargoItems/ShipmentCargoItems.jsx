@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { get } from 'lodash'
 import { withNamespaces } from 'react-i18next'
 import styles from './ShipmentCargoItems.scss'
 import defs from '../../styles/default_classes.scss'
@@ -163,7 +164,7 @@ class ShipmentCargoItems extends Component {
                   {inputs.width}
                   {inputs.height}
                   <div className="flex-5" />
-                  {scope.frontend_consolidation ? inputs.collectiveWeight : inputs.grossWeight}
+                  {get(scope, ['consolidation', 'cargo', 'frontend'], false) ? inputs.collectiveWeight : inputs.grossWeight}
                 </div>
                 <div className="flex-100 layout-row" />
                 <div
@@ -187,14 +188,19 @@ class ShipmentCargoItems extends Component {
                     `${styles.inner_cargo_item_info} layout-row flex-100 layout-wrap layout-align-start`
                   }
                 >
-                  <div className="flex-25 layout-wrap layout-row">
-                    {inputs.totalVolume}
-                    {inputs.chargeableVolume}
-                  </div>
-                  <div className={`${styles.padding_left} flex-25 layout-wrap layout-row`}>
-                    {inputs.totalWeight}
-                    {inputs.chargeableWeight}
-                  </div>
+                  <div className="flex-100 layout-row layout-wrap">
+                    <div className="flex-45 layout-wrap layout-row">
+                      {inputs.totalVolume}
+                    </div>
+                    <div className={`${styles.padding_left} flex-45 layout-wrap layout-row`}>
+                      {inputs.totalWeight}
+                    </div>
+                    </div>
+                    <div className="flex-100 layout-row layout-wrap">
+                      {inputs.chargeableWeight}
+                    </div>
+                  
+                  
                 </div>
               </div>
 

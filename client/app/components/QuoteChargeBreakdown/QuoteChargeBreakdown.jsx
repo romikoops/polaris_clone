@@ -8,7 +8,6 @@ import {
 } from '../../helpers'
 
 class QuoteChargeBreakdown extends Component {
-
   static shouldShowSubTotal (currencySections) {
     if (Object.keys(currencySections).length > 1) return true
 
@@ -145,10 +144,13 @@ class QuoteChargeBreakdown extends Component {
   }
 
   dynamicSubKey (key, price, i) {
-    const { t } = this.props
+    const { t, scope } = this.props
 
-    if (key === 'cargo') {
+    if (key === 'cargo' && !get(scope, ['consolidation', 'cargo', 'backend'])) {
       return t('cargo:unitFreightRate', { unitNo: i + 1 })
+    }
+    if (key === 'cargo' && get(scope, ['consolidation', 'cargo', 'backend'])) {
+      return t('cargo:consolidatedCargoRate')
     }
 
     return this.determineSubKey(price)
@@ -218,7 +220,23 @@ class QuoteChargeBreakdown extends Component {
   fetchCargoData (id) {
     const { cargo } = this.props
     if (id === 'cargo_item') {
-      return cargo[0]
+      const consolidatedCargo = {
+        dimension_x: 0,
+        dimension_y: 0,
+        dimension_z: 0,
+        payload_in_kg: 0,
+        quantity: 0,
+        cargo_class: cargo[0].cargo_class
+      }
+      cargo.forEach((cargoItem) => {
+        consolidatedCargo.dimension_x += parseFloat(cargoItem.dimension_x)
+        consolidatedCargo.dimension_y += parseFloat(cargoItem.dimension_y)
+        consolidatedCargo.dimension_z += parseFloat(cargoItem.dimension_z)
+        consolidatedCargo.payload_in_kg += parseFloat(cargoItem.payload_in_kg)
+        consolidatedCargo.quantity += parseFloat(cargoItem.quantity)
+      })
+
+      return consolidatedCargo
     }
 
     return cargo.filter(cargo => String(cargo.id) === String(id))[0]
@@ -258,13 +276,30 @@ class QuoteChargeBreakdown extends Component {
         currencyTotals[currency] += parseFloat(value)
         currencySections[currency].push(price)
       })
-      const dimensions = cargo.cargo_class === 'lcl'
-        ? [
-          <p className={`flex-none ${styles.item_dims}`}>{`W: ${cargo.dimension_x}cm L:${cargo.dimension_y}cm H: ${cargo.dimension_z}cm`}</p>,
-          <p className={`flex-none ${styles.item_dims}`}>{`${t('cargo:perUnitWeight')} ${cargo.payload_in_kg}kg`}</p>
-        ] : [
-          <p className={`flex-none ${styles.item_dims}`}>{`${t('cargo:perUnitWeight')} ${cargo.payload_in_kg}kg`}</p>
+      let dimensions
+      if (cargo.cargo_class === 'lcl' && get(scope, ['consolidation', 'cargo', 'backend'], false)) {
+        dimensions = [
+          <p className={`flex-none ${styles.item_dims}`}>
+            {`W: ${cargo.dimension_x}cm L:${cargo.dimension_y}cm H: ${cargo.dimension_z}cm`}
+          </p>,
+          <p className={`flex-none ${styles.item_dims}`}>
+            {`${t('cargo:grossWeight')} ${cargo.payload_in_kg}kg`}
+          </p>
         ]
+      } else if (cargo.cargo_class === 'lcl' && !get(scope, ['consolidation', 'cargo', 'backend'], false)) {
+        dimensions = [
+          <p className={`flex-none ${styles.item_dims}`}>
+            {`W: ${cargo.dimension_x}cm L:${cargo.dimension_y}cm H: ${cargo.dimension_z}cm`}
+          </p>,
+          <p className={`flex-none ${styles.item_dims}`}>
+            {`${t('cargo:perUnitWeight')} ${cargo.payload_in_kg}kg`}
+          </p>
+        ]
+      } else {
+        dimensions = [<p className={`flex-none ${styles.item_dims}`}>
+          {`${t('cargo:perUnitWeight')} ${cargo.payload_in_kg}kg`}
+        </p>]
+      }
       const showSubTotal = QuoteChargeBreakdown.shouldShowSubTotal(currencySections)
       const sections = Object.entries(currencySections).map(currencyFees => (
         <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
@@ -308,11 +343,14 @@ class QuoteChargeBreakdown extends Component {
 
         </div>
       ))
+      const unitString = get(scope, ['consolidation', 'cargo', 'backend'], false)
+        ? `${cargo.quantity} x ${t('cargo:consolidatedCargoItems')}`
+        : `${cargo.quantity} x ${nameToDisplay(cargo.cargo_class)}`
 
       return (
         <div className="flex-100 layout-row layout-wrap">
           <div className={`flex-100 layout-row layout-align-space-between-center ${styles.cargo_summary}`}>
-            <p className={`flex-none ${styles.item_dims}`}>{`${cargo.quantity} x ${nameToDisplay(cargo.cargo_class)}`}</p>
+            <p className={`flex-none ${styles.item_dims}`}>{unitString}</p>
             {dimensions}
           </div>
           {sections}

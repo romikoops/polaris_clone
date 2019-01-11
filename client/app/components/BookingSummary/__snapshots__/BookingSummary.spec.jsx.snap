@@ -109,7 +109,7 @@ exports[`loadType is cargo_item 1`] = `
     <p
       className="flex-50 layout-row layout-align-center-start"
     >
-      100.0
+      100.00
        kg
     </p>
   </div>
@@ -237,7 +237,7 @@ exports[`modeOfTransport is falsy 1`] = `
     <p
       className="flex-50 layout-row layout-align-center-start"
     >
-      100.0
+      100.00
        kg
     </p>
   </div>
@@ -353,7 +353,7 @@ exports[`shallow render 1`] = `
     <p
       className="flex-50 layout-row layout-align-center-start"
     >
-      100.0
+      100.00
        kg
     </p>
   </div>
@@ -469,7 +469,7 @@ exports[`theme is falsy 1`] = `
     <p
       className="flex-50 layout-row layout-align-center-start"
     >
-      100.0
+      100.00
        kg
     </p>
   </div>
@@ -585,7 +585,7 @@ exports[`trucking.on_carriage is empty object 1`] = `
     <p
       className="flex-50 layout-row layout-align-center-start"
     >
-      100.0
+      100.00
        kg
     </p>
   </div>
@@ -701,7 +701,7 @@ exports[`trucking.pre_carriage is empty object 1`] = `
     <p
       className="flex-50 layout-row layout-align-center-start"
     >
-      100.0
+      100.00
        kg
     </p>
   </div>
