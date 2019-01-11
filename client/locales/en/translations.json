@@ -565,6 +565,7 @@
   },
   "cargo": {
     "consolidatedCargoRate": "Consolidated Freight Rate",
+    "consolidatedCargoItems": "Consolidated Cargo Items",
     "cargoDetails": "Cargo Details",
     "cargoGrossWeight": "Cargo Gross Weight",
     "cargoInsurance": "Cargo Insurance provides cover on all risk terms for physical loss or damage to cargo during transport by land, sea or air.",
