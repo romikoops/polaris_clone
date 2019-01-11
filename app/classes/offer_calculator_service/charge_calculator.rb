@@ -112,7 +112,7 @@ module OfferCalculatorService
       isAggCargo = !@shipment.aggregated_cargo.nil?
       cargo_unit_array = isAggCargo ? [@shipment.aggregated_cargo] : @shipment.cargo_units
 
-      if @user.tenant.scope['consolidate_cargo'] && cargo_unit_array.first.is_a?(CargoItem)
+      if @user.tenant.scope.dig('consolidation', 'cargo') && cargo_unit_array.first.is_a?(CargoItem)
         cargo_unit_array = consolidate_cargo(cargo_unit_array, @schedule.mode_of_transport)
       end
       cargo_unit_array.each do |cargo_unit|

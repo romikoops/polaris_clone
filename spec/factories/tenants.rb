@@ -48,10 +48,14 @@ FactoryBot.define do
             cargo_item: true
           }
         },
+
         closed_shop: false,
         continuous_rounding: false,
         closed_registration: false,
-        consolidate_cargo: false,
+        consolidation: {
+          cargo: false,
+          trucking: false
+        },
         customs_export_paper: false,
         fixed_currency: true,
         dangerous_goods: false,
