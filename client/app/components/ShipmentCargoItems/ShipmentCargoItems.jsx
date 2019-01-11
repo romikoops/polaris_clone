@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { get } from 'lodash'
 import { withNamespaces } from 'react-i18next'
 import styles from './ShipmentCargoItems.scss'
 import defs from '../../styles/default_classes.scss'
@@ -163,7 +164,7 @@ class ShipmentCargoItems extends Component {
                   {inputs.width}
                   {inputs.height}
                   <div className="flex-5" />
-                  {scope.frontend_consolidation ? inputs.collectiveWeight : inputs.grossWeight}
+                  {get(scope, ['consolidation', 'cargo', 'frontend'], false) ? inputs.collectiveWeight : inputs.grossWeight}
                 </div>
                 <div className="flex-100 layout-row" />
                 <div
