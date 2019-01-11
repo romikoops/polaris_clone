@@ -83,7 +83,7 @@ Rails.application.routes.draw do
       # to: "open_pricings#overwrite_main_carriage", as: :open_main_carriage_pricings_overwrite
       post 'shipments/:shipment_id/upload/:type', to: 'shipments#upload_client_document'
       resources :local_charges, only: %i(index update)
-      post 'local_charges/upload', to: 'local_charges#upload_local_charges'
+      post 'local_charges/upload', to: 'local_charges#upload'
 
       resources :local_charges, only: %i(index update) do
         collection do
