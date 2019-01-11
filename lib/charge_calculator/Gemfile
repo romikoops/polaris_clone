@@ -1,17 +1,16 @@
 # frozen_string_literal: true
 
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 # Specify your gem's dependencies in charge_calculator.gemspec
 gemspec
 
-gem "rule_engine", git: "https://gitlab.com/itsmycargo/rule-engine.git"
+gem 'rule_engine', git: 'https://gitlab.com/itsmycargo/rule-engine.git'
 
-gem "awesome_print"
-gem "pry"
+gem 'pry'
 
 group :test do
-  gem "json-schema"
+  gem 'json-schema'
 end

@@ -157,6 +157,7 @@ end
 group :test do
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
+  gem 'simplecov-cobertura', require: false
   gem 'timecop'
   gem 'vcr', '~>2.8.0'
   gem 'webmock'
