@@ -34,18 +34,5 @@ module Locations
         expect(LocationDecorator.new(location).description('zh')).to eq(chinese_string)
       end
     end
-
-    context 'autocomplete search' do
-      it 'returns the object with geojson and english description' do
-        result = LocationDecorator.new(location).search_result('en')
-        expect(result[:description]).to eq(english_string)
-        expect(result[:geojson]).to eq(example_bounds)
-      end
-      it 'returns the object with geojson and chinese description' do
-        result = LocationDecorator.new(location).search_result('zh')
-        expect(result[:description]).to eq(chinese_string)
-        expect(result[:geojson]).to eq(example_bounds)
-      end
-    end
   end
 end

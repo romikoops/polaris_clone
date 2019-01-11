@@ -54,10 +54,12 @@ class LocationCsvSeeder
           location_attributes_by_lang.each do |lang, data|
             data['language'] = lang
             data['country'] = 'China'
+            data['location_id'] = location.id
 
-            location.names.find_or_create_by!(data)
+            name = Locations::Name.find_or_initialize_by(language: lang, location_id: location.id)
+            name.update(data)
           end
-        rescue
+        rescue => e
           binding.pry
         end
         
