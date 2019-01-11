@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DataValidator
   class ItineraryPriceValidator < DataValidator::BaseValidator
     attr_reader :path, :user, :port_object
@@ -76,7 +78,6 @@ module DataValidator
           end
         end
       end
-      awesome_print @validation_results
     end
   end
 end

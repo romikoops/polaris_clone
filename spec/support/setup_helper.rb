@@ -367,7 +367,6 @@ module SetupHelper
       test_json = JSON.parse(File.read(file))
       test_json.each do |sheet|
         sheet = sheet.deep_symbolize_keys
-        pp sheet[:trucking]
         sheet[:eta] = DateTime.parse(sheet[:eta])
         sheet[:etd] = DateTime.parse(sheet[:etd])
         sheet[:closing_date] = DateTime.parse(sheet[:closing_date])

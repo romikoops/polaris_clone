@@ -108,7 +108,6 @@ GEM
     ast (2.4.0)
     autoprefixer-rails (9.4.4)
       execjs
-    awesome_print (1.8.0)
     aws-eventstream (1.0.1)
     aws-partitions (1.107.0)
     aws-sdk (3.0.1)
@@ -1137,7 +1136,6 @@ DEPENDENCIES
   admiralty_auth!
   admiralty_tenants!
   annotate
-  awesome_print
   aws-sdk (~> 3)
   aws-sdk-sqs (~> 1.9.0)
   bootsnap (>= 1.1.0)

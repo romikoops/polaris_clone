@@ -43,8 +43,6 @@ module ExcelRakeHelpers
                 data: sheets_data,
                 options: { should_generate_trips: false } }
     insertion_stats = klass.new(options).perform
-
-    awesome_print insertion_stats
   end
 
   def self.upload_local_charges_sheet(tenant, tenant_name, mot = nil)

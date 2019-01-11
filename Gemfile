@@ -32,7 +32,6 @@ gem 'omniauth'
 gem 'sass-rails'
 gem 'sprockets-rails', require: 'sprockets/railtie'
 
-gem 'awesome_print'
 gem 'aws-sdk-sqs', '~> 1.9.0'
 gem 'font-awesome-rails'
 gem 'rufo'
