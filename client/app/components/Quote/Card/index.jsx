@@ -239,7 +239,7 @@ class QuoteCard extends PureComponent {
                 {`${capitalize(t('cargo:totalWeight'))}: `}
               </p>
               <span className="flex layout-row layout-align-start-center">
-                { `${numberSpacing(calcPayload, 1)} kg` }
+                { `${numberSpacing(calcPayload, 2)} kg` }
               </span>
             </div>
           </div>

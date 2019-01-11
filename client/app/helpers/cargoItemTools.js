@@ -15,7 +15,7 @@ export function chargeableWeight (cargoItem, mot) {
     +cargoItem.payload_in_kg * cargoItem.quantity
   )
 
-  return numberSpacing(finalValue, 1)
+  return numberSpacing(finalValue, 2)
 }
 
 export function chargeableVolume (cargoItem, mot) {

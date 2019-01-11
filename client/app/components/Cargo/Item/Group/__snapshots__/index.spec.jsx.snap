@@ -211,7 +211,7 @@ exports[`props.viewHSCodes is true 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                56.0
+                56.00
               </span>
                kg
             </p>
@@ -464,7 +464,7 @@ exports[`shallow render 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                56.0
+                56.00
               </span>
                kg
             </p>
@@ -717,7 +717,7 @@ exports[`state.unitView is true 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                56.0
+                56.00
               </span>
                kg
             </p>
@@ -970,7 +970,7 @@ exports[`state.viewer is true 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                56.0
+                56.00
               </span>
                kg
             </p>

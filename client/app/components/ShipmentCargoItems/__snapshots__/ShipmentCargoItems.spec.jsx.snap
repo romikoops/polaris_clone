@@ -499,73 +499,65 @@ exports[`shallow rendering 1`] = `
                 className="inner_cargo_item_info layout-row flex-100 layout-wrap layout-align-start"
               >
                 <div
-                  className="flex-25 layout-wrap layout-row"
+                  className="flex-100 layout-row layout-wrap"
                 >
                   <div
-                    className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
-                  >
-                    <p
-                      className="input_label flex-none"
-                    >
-                      Total
-                       
-                      Volume
-                      :  
-                      <span
-                        className="input_value"
-                      >
-                         m
-                        <sup
-                          style={
-                            Object {
-                              "fontSize": "10px",
-                              "height": "17px",
-                              "marginLeft": "1px",
-                            }
-                          }
-                        >
-                          3
-                        </sup>
-                      </span>
-                    </p>
-                  </div>
-                  <div
-                    className="chargeable_weight layout-row flex-100 layout-wrap layout-align-start-center"
+                    className="flex-45 layout-wrap layout-row"
                   >
                     <div
-                      className="layout-row flex-none layout-wrap layout-align-end-center"
+                      className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
                     >
                       <p
-                        className="subchargeable flex-none"
+                        className="input_label flex-none"
                       >
-                        Chargeable:
+                        Total
+                         
+                        Volume
+                        :  
+                        <span
+                          className="input_value"
+                        >
+                           m
+                          <sup
+                            style={
+                              Object {
+                                "fontSize": "10px",
+                                "height": "17px",
+                                "marginLeft": "1px",
+                              }
+                            }
+                          >
+                            3
+                          </sup>
+                        </span>
                       </p>
                     </div>
+                  </div>
+                  <div
+                    className="padding_left flex-45 layout-wrap layout-row"
+                  >
                     <div
-                      className="chargeable_weight_values flex layout-row layout-align-start-center"
-                    />
+                      className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
+                    >
+                      <p
+                        className="input_label flex-none"
+                      >
+                        Total
+                         
+                        NO_TRANSLATION | key "common:weight"
+                        :  
+                        <span
+                          className="input_value"
+                        >
+                           kg
+                        </span>
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <div
-                  className="padding_left flex-25 layout-wrap layout-row"
+                  className="flex-100 layout-row layout-wrap"
                 >
-                  <div
-                    className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
-                  >
-                    <p
-                      className="input_label flex-none"
-                    >
-                      Total
-                       
-                      NO_TRANSLATION | key "common:weight"
-                      :  
-                      <span
-                        className="input_value"
-                      >
-                         kg
-                      </span>
-                    </p>
-                  </div>
                   <div
                     className="chargeable_weight layout-row flex-100 layout-wrap layout-align-start-center"
                   >
@@ -575,7 +567,7 @@ exports[`shallow rendering 1`] = `
                       <p
                         className="subchargeable flex-none"
                       >
-                        Chargeable:
+                        Chargeable Weight | Volume:
                       </p>
                     </div>
                     <div

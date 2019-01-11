@@ -65,7 +65,7 @@
             <% if s.load_type != 'container'%>
               <p>
                 <strong>Volume:</strong>
-                <%= '%.2f' % cargo_data[:vol][s.id] %>&nbsp;m<sup>3</sup>
+                <%= '%.3f' % cargo_data[:vol][s.id] %>&nbsp;m<sup>3</sup>
               </p>
             <% end %>
             <% if shipment.vessel_name %>
@@ -124,7 +124,7 @@
               </div>
               <div class="cargo-section cargo-section-last">
                 <p class="cargo-value">
-                  <span class="cargo-type"><%= '%.2f' % cargo.volume %></span>&nbsp;m<sup>3</sup>
+                  <span class="cargo-type"><%= '%.3f' % cargo.volume %></span>&nbsp;m<sup>3</sup>
                 </p>
                 <p class="cargo-subtitle">Volume</p>
               </div>
