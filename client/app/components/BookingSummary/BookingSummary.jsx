@@ -79,7 +79,7 @@ function BookingSummary (props) {
       <div className="flex layout-column layout-align-stretch">
         <h4 className="flex-50 layout-row layout-align-center-center">{t('cargo:totalWeight')}</h4>
         <p className="flex-50 layout-row layout-align-center-start">
-          { numberSpacing(totalWeight, 1) } kg
+          { numberSpacing(totalWeight, 2) } kg
         </p>
       </div>
       {

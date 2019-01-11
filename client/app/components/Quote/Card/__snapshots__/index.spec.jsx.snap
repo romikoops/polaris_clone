@@ -191,7 +191,7 @@ exports[`detailed billing working properly 1`] = `
         <span
           className="flex layout-row layout-align-start-center"
         >
-          0.0 kg
+          0.00 kg
         </span>
       </div>
     </div>
@@ -684,7 +684,7 @@ exports[`shallow rendering 1`] = `
         <span
           className="flex layout-row layout-align-start-center"
         >
-          0.0 kg
+          0.00 kg
         </span>
       </div>
     </div>
@@ -1144,7 +1144,7 @@ exports[`show schedule options working 1`] = `
         <span
           className="flex layout-row layout-align-start-center"
         >
-          0.0 kg
+          0.00 kg
         </span>
       </div>
     </div>
@@ -1637,7 +1637,7 @@ exports[`show schedules set to true 1`] = `
         <span
           className="flex layout-row layout-align-start-center"
         >
-          0.0 kg
+          0.00 kg
         </span>
       </div>
     </div>
@@ -2111,7 +2111,7 @@ exports[`single result rendering removes the "add" button 1`] = `
         <span
           className="flex layout-row layout-align-start-center"
         >
-          0.0 kg
+          0.00 kg
         </span>
       </div>
     </div>

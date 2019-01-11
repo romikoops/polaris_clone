@@ -187,14 +187,19 @@ class ShipmentCargoItems extends Component {
                     `${styles.inner_cargo_item_info} layout-row flex-100 layout-wrap layout-align-start`
                   }
                 >
-                  <div className="flex-25 layout-wrap layout-row">
-                    {inputs.totalVolume}
-                    {inputs.chargeableVolume}
-                  </div>
-                  <div className={`${styles.padding_left} flex-25 layout-wrap layout-row`}>
-                    {inputs.totalWeight}
-                    {inputs.chargeableWeight}
-                  </div>
+                  <div className="flex-100 layout-row layout-wrap">
+                    <div className="flex-45 layout-wrap layout-row">
+                      {inputs.totalVolume}
+                    </div>
+                    <div className={`${styles.padding_left} flex-45 layout-wrap layout-row`}>
+                      {inputs.totalWeight}
+                    </div>
+                    </div>
+                    <div className="flex-100 layout-row layout-wrap">
+                      {inputs.chargeableWeight}
+                    </div>
+                  
+                  
                 </div>
               </div>
 
