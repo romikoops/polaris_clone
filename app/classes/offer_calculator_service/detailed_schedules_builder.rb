@@ -77,7 +77,7 @@ module OfferCalculatorService
       result_to_return = []
       cargo_classes = shipment.aggregated_cargo ? ['lcl'] : shipment.cargo_units.pluck(:cargo_class)
       schedule_groupings = schedules.group_by do |schedule|
-        "#{schedule.mode_of_transport}_#{schedule.vehicle_name}_#{schedule.carrier_name}_#{schedule.load_type}"
+        "#{schedule.mode_of_transport}_#{schedule.vehicle_name}_#{schedule.carrier_name}_#{schedule.load_type}_#{schedule.origin_hub_id}_#{schedule.destination_hub_id}"
       end
       schedule_groupings.each do |_key, schedules_array|
         schedules_array.sort_by!(&:eta)
