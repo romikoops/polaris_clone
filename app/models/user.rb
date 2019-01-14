@@ -161,6 +161,10 @@ class User < ApplicationRecord
     as_json(include: :optin_status)
   end
 
+  def get_external_id
+    external_id || agency_manager&.external_id
+  end
+
   # Devise Token Auth override
   def token_validation_response
     as_json(

@@ -20,7 +20,7 @@
         <p><strong><%= shipment.user.first_name %> <%= shipment.user.last_name %></strong></p>
         <p><%= shipment.user.email %></p>
         <p><%= shipment.user.phone %></p>
-        <% if shipment.user.external_id %>
+        <% if shipment.user.get_external_id %>
           <p>Customer ID: <%= shipment.user.external_id.to_i %></p>
         <% end %>
     </div>
