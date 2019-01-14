@@ -24,14 +24,9 @@ http {
 
   keepalive_timeout  65;
 
-  map $subdomain $tenant {
-      default  $subdomain;
-      ''       'greencarrier';
-  }
-
   server {
     listen 80;
-    server_name ~^(?<subdomain>[^\.]*?)\.(?<domain>.*)$;
+    server_name _;
 
     location /config.201811291749.js {
       add_header Content-Type application/javascript;
@@ -39,9 +34,8 @@ http {
 window.keel = {
   apiUrl: \'{{ .Env.API_URL }}\',
   environment: \'review\',
-  namespace: \'{{ .Env.K8S_NAMESPACE }}\',
+  reviewApp: \'{{ .Env.REVIEW_NAME }}\',
   sentryUrl: \'https://16d43a033af648da8b2f2933f6e62717@sentry.itsmycargo.tech/3\',
-  tenantName: \'$tenant\',
   gtmId: \'{{ .Env.GTM_ID }}\'
 }
 ';

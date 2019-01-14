@@ -1,5 +1,3 @@
-{{- if .Values.ingress.enabled -}}
-{{- $serviceName := include "app.fullname" . -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -20,22 +18,21 @@ metadata:
       more_set_headers "X-Robots-Tag: none";
 spec:
   rules:
-  - host: "api-{{ include "hostname" .Values.service.url }}"
+  - host: "api-{{ .Release.Name }}.{{ .Values.ingress.domain }}"
     http:
       paths:
         - path: /
           backend:
-            serviceName: {{ $serviceName }}
+            serviceName: {{ include "app.fullname" . }}
             servicePort: http-backend
-  - host: "{{ include "hostname" .Values.service.url }}"
+  - host: "{{ .Release.Name }}.{{ .Values.ingress.domain }}"
     http:
       paths:
       - path: /
         backend:
-          serviceName: {{ $serviceName }}
+          serviceName: {{ include "app.fullname" . }}
           servicePort: http-frontend
   tls:
-  - secretName: {{ .Values.service.domain }}-tls
+  - secretName: review-tls
     hosts:
-    - "*.{{ .Values.service.domain }}"
-{{- end }}
+    - "*.{{ .Values.ingress.domain }}"

@@ -415,7 +415,6 @@ module ExcelTool
       else
         all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]['fees'][charge[:key]] = expanded_charge(charge)
       end
-      awesome_print all_charges
       all_charges
     end
 

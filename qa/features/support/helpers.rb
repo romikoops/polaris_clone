@@ -16,9 +16,10 @@ module Helpers
   end
 
   def print_console_log
+    return unless page.driver.browser.manage.respond_to?(:logs)
+
     logs = page.driver.browser.manage.logs.get(:browser).map { |line| "#{line.level}\t#{line.message}" }
 
-    puts "\n"
     puts logs.join("\n")
   end
 

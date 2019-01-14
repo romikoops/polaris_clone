@@ -18,7 +18,7 @@ RUN apk add --update --no-cache \
   pngquant
 
 COPY package.json package-lock.json ./
-RUN npm install --production
+RUN npm install --no-progress --production
 
 COPY . .
 
@@ -36,7 +36,7 @@ RUN \
     RELEASE=$RELEASE \
     npm run build
 # Clear out source-maps
-RUN rm -v dist/*.js.map.gz
+RUN rm -v /dist/*.map*
 
 # Deployment Image
 FROM nginx:alpine
@@ -46,7 +46,7 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
     && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
-COPY --from=builder --chown=nginx:nginx ./dist/ /usr/share/nginx/html/
+COPY --from=builder --chown=nginx:nginx /dist/ /usr/share/nginx/html/
 COPY nginx/nginx.tmpl /etc/nginx/
 
 CMD ["dockerize", "-template", "/etc/nginx/nginx.tmpl:/etc/nginx/nginx.conf", "nginx", "-g", "daemon off;"]

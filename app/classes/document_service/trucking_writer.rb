@@ -171,10 +171,8 @@ module DocumentService
       row = 1
       fee_header_values.each_with_index { |hv, i| fees_sheet.write(0, i, hv, header_format) }
       dir_fees.deep_symbolize_keys!
-      awesome_print dir_fees
       dir_fees.each do |carriage_dir, fees|
           fees.each do |key, fee|
-            awesome_print fee
             fees_sheet.write(row, 0, fee[:name])
             fees_sheet.write(row, 1, hub.hub_type)
             fees_sheet.write(row, 2, key)
