@@ -36,6 +36,8 @@ const initialState = {
 
 export default function bookingProcess (state = initialState, action) {
   switch (action.type) {
+    case 'RESET_BP_STORE':
+      return { ...initialState }
     case 'UPDATE_BP_SHIPMENT':
       return {
         ...state,

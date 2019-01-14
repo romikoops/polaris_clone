@@ -1,3 +1,7 @@
+function resetStore () {
+  return { type: 'RESET_BP_STORE' }
+}
+
 function updateShipment (key, value) {
   return { type: 'UPDATE_BP_SHIPMENT', payload: { [key]: value } }
 }
@@ -16,6 +20,7 @@ function updatePageData (page, payload) {
 
 
 export const shipmentDetailsActions = {
+  resetStore,
   updateShipment,
   addCargoUnit,
   deleteCargoUnit,
