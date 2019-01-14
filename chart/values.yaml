@@ -24,15 +24,16 @@ frontend:
       memory: 24Mi
       cpu: 100m
 
-service:
-  enabled: true
-  url:
+ingress:
   domain:
 
-ingress:
-  enabled: true
-credentials: ""
 masterKey: ""
+reviewName:
+postgres:
+  host:
+  user:
+  password:
+  database:
 
 nodeSelector: {}
 tolerations: []
@@ -43,56 +44,3 @@ affinity:
       - matchExpressions:
         - key: cloud.google.com/gke-preemptible
           operator: Exists
-
-postgresql:
-  enabled: true
-  image: eu.gcr.io/itsmycargo-main/postgres-review
-  imageTag: stable
-  imagePullPolicy: Always
-
-  seed:
-    gcs_bucket: itsmycargo-main-engineering-resources
-    variant: full_anon
-    credentials: ""
-
-  ## Create a database user
-  ## Default: postgres
-  postgresUser: postgres
-  ## Default: random 10 character string
-  postgresPassword: "postgres"
-  ## Create a database
-  ## Default: the postgres user
-  postgresDatabase: "app"
-
-  # Override default liveness & readiness probes
-  probes:
-    liveness:
-      initialDelay: 60
-      timeoutSeconds: 5
-      periodSeconds: 10
-      failureThreshold: 30
-    readiness:
-      initialDelay: 60
-      timeoutSeconds: 3
-      periodSeconds: 10
-      failureThreshold: 12
-
-  persistence:
-    enabled: false
-    # storageClass: "regional-standard"
-    size: 10Gi
-
-  resources:
-    requests:
-      memory: 512Mi
-      cpu: 500m
-
-  nodeSelector: {}
-  tolerations: []
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: cloud.google.com/gke-preemptible
-            operator: Exists

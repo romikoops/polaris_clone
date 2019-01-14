@@ -1,4 +1,4 @@
-FROM ruby:2.5-alpine AS builder
+FROM ruby:2.5-alpine3.8 AS builder
 LABEL maintainer="development@itsmycargo.com"
 
 ARG BUNDLE_WITHOUT="development test"
@@ -21,7 +21,6 @@ WORKDIR /app
 
 COPY tmp/docker/ ./
 COPY Gemfile Gemfile.lock ./
-RUN find .
 RUN bundle config --global frozen 1 \
     && bundle install -j4 --retry 3 \
     # Remove unneeded files (cached *.gem, *.o, *.c)
@@ -35,7 +34,7 @@ RUN echo "$RELEASE" > ./REVISION
 
 RUN RAILS_ENV=production bin/rails assets:precompile
 
-FROM ruby:2.5-alpine AS app
+FROM ruby:2.5-alpine3.8 AS app
 LABEL maintainer="development@itsmycargo.com"
 
 ENV MALLOC_ARENA_MAX 2
@@ -55,9 +54,8 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 
 RUN npm install -g 'mjml@4.2.0'
 
-# Add user
-RUN addgroup -g 1000 -S app \
- && adduser -u 1000 -S app -G app
+# # Add user
+RUN addgroup -S app && adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G app app
 USER app
 
 # Copy app with gems from former build stage

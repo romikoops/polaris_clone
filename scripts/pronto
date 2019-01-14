@@ -13,7 +13,7 @@ echo "    Formatter: ${FORMATTER}"
 echo ""
 
 echo "Installing NPM packages..."
-(cd client/; npm install)
+(cd client/; npm install --no-progress)
 
 echo "Running Pronto..."
 pronto run -f ${FORMATTER} -c origin/${TARGET_BRANCH:-dev}

@@ -4,7 +4,7 @@ module.exports = {
   testRegex: '.spec.(jsx|js)$',
   collectCoverage: true,
   collectCoverageFrom: ['app/**/*.(jsx|js)'],
-  coverageReporters: ['lcov', 'text-summary'],
+  coverageReporters: ['text-summary'],
   verbose: true,
   setupFiles: ['./jest.init.js'],
   setupTestFrameworkScriptFile: './node_modules/jest-enzyme/lib/index.js',

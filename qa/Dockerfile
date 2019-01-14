@@ -21,5 +21,3 @@ RUN bundle config --global frozen 1 \
     && find /usr/local/bundle/gems/ -name "*.o" -delete
 
 COPY . ./
-
-USER nobody

@@ -11,6 +11,11 @@ SimpleCov.start do
     coverage_dir(ENV['COVERAGE_DIR'])
     merge_timeout 3600
   end
+
+  if ENV['CI']
+    require 'simplecov-cobertura'
+    formatter SimpleCov::Formatter::CoberturaFormatter
+  end
 end
 
 require 'charge_calculator'

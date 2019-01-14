@@ -12,6 +12,11 @@ SimpleCov.start 'rails' do
     coverage_dir(ENV['COVERAGE_DIR'])
     merge_timeout 3600
   end
+
+  if ENV['CI']
+    require 'simplecov-cobertura'
+    formatter SimpleCov::Formatter::CoberturaFormatter
+  end
 end
 
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration

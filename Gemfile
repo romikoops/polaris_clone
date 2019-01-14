@@ -32,7 +32,6 @@ gem 'omniauth'
 gem 'sass-rails'
 gem 'sprockets-rails', require: 'sprockets/railtie'
 
-gem 'awesome_print'
 gem 'aws-sdk-sqs', '~> 1.9.0'
 gem 'font-awesome-rails'
 gem 'rufo'
@@ -157,6 +156,7 @@ end
 group :test do
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
+  gem 'simplecov-cobertura', require: false
   gem 'timecop'
   gem 'vcr', '~>2.8.0'
   gem 'webmock'

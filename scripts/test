@@ -29,7 +29,7 @@ def yellow(msg)
 end
 
 def bundle!
-  system('bundle check') || system!('bundle install')
+  system('bundle check') || system!('bundle install -j2')
 end
 
 def runner(dir:, name:)

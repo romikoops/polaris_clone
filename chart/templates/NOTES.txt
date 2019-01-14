@@ -1,1 +1,7 @@
-# ItsMyCargo Review Application
+
+Tail the logs of the application to see whether all runs well:
+
+kubectl logs -f -l app={{ template "app.fullname" . }} -n {{ .Release.Namespace }}
+
+  name: {{ template "app.fullname" . }}
+  namespace: {{ .Release.Namespace }}

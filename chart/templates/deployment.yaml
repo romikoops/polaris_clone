@@ -1,5 +1,5 @@
-{{- $postgresName := printf "%s-%s" .Release.Name "postgresql" -}}
-{{- $databaseUrl := printf "postgis://%s:%s@%s/%s" .Values.postgresql.postgresUser .Values.postgresql.postgresPassword $postgresName .Values.postgresql.postgresDatabase -}}
+{{- $serviceHost := printf "%s.%s" .Release.Name .Values.ingress.domain -}}
+{{- $databaseUrl := printf "postgis://%s:%s@%s/%s" .Values.postgres.user .Values.postgres.password .Values.postgres.host .Values.postgres.database -}}
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
@@ -38,9 +38,6 @@ spec:
         image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
         imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
         args:
-        - dockerize
-        - -wait=tcp://{{ $postgresName }}:5432
-        - -timeout=5m
         - bin/rails
         - db:migrate
         env:
@@ -52,23 +49,16 @@ spec:
           value: {{ .Release.Namespace | quote }}
         - name: REVIEW_NAME
           value: {{ .Release.Name | quote }}
-        - name: API_HOST
-          value: "api-{{ include "hostname" .Values.service.url }}"
-        - name: REVIEW_URL
-          value: {{ include "hostname" .Values.service.url }}
         - name: RAILS_MASTER_KEY
           valueFrom:
             secretKeyRef:
               name: {{ template "app.fullname" . }}
-              key: master.key
+              key: master_key
       containers:
       - name: backend
         image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
         imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
         args:
-        - dockerize
-        - -wait=tcp://{{ $postgresName }}:5432
-        - -timeout=5m
         - bin/puma
         - -C
         - config/puma.rb
@@ -86,16 +76,16 @@ spec:
         - name: DEFAULT_TENANT
           value: demo
         - name: API_HOST
-          value: "api-{{ include "hostname" .Values.service.url }}"
+          value: "api-{{ $serviceHost }}"
         - name: REVIEW_URL
-          value: {{ include "hostname" .Values.service.url }}
+          value: "https://{{ $serviceHost }}"
         - name: CORS_ORIGINS
-          value: "https:\\/\\/{{ include "hostname" .Values.service.url | replace "." "\\\\." }}"
+          value: "https:\\/\\/{{ $serviceHost | replace "." "\\\\." }}"
         - name: RAILS_MASTER_KEY
           valueFrom:
             secretKeyRef:
               name: {{ template "app.fullname" . }}
-              key: master.key
+              key: master_key
         ports:
         - name: http-backend
           containerPort: 3000
@@ -117,16 +107,14 @@ spec:
         image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
         imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
         env:
-        - name: API_HOST
-          value: "api-{{ include "hostname" .Values.service.url }}"
         - name: API_URL
-          value: "https://api-{{ include "hostname" .Values.service.url }}"
+          value: "https://api-{{ $serviceHost }}"
         - name: K8S_NAMESPACE
           value: {{ .Release.Namespace | quote }}
         - name: REVIEW_NAME
           value: {{ .Release.Name }}
         - name: REVIEW_URL
-          value: {{ include "hostname" .Values.service.url }}
+          value: "https://{{ .Release.Name }}.{{ .Values.ingress.domain }}"
         - name: GTM_ID
           value: GTM-P29HCHV
         ports:
@@ -146,10 +134,3 @@ spec:
           periodSeconds: 10
         resources:
 {{ toYaml .Values.frontend.resources | indent 10 }}
-      volumes:
-      - name: credentials
-        secret:
-          secretName: {{ include "app.fullname" . }}
-          items:
-          - key: credentials.json
-            path: credentials.json

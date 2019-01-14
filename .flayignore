@@ -5,3 +5,4 @@
 db/schema.rb
 engines/*/lib/*/engine.rb
 engines/*/spec/dummy/*
+scripts/

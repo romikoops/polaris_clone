@@ -21,7 +21,7 @@ end
 #############################
 Capybara.register_driver :remote do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.new(
-    browser_name: ENV.fetch('BROWSERNAME'),
+    browser_name: ENV.fetch('BROWSERNAME', 'chrome'),
     javascript_enabled: true,
     takes_screenshot: true,
     css_selectors_enabled: true,
@@ -30,7 +30,7 @@ Capybara.register_driver :remote do |app|
 
   Capybara::Selenium::Driver.new(app,
                                  browser: ENV.fetch('BROWSERNAME').to_sym,
-                                 url: ENV['SELENIUM_URL'],
+                                 url: ENV.fetch('SELENIUM_URL', 'http://localhost:4444/wd/hub'),
                                  desired_capabilities: capabilities)
 end
 

@@ -1,4 +1,5 @@
 #!/bin/sh -e
 
-rm -rf tmp/docker/
-rsync -vtrla --progress --partial --prune-empty-dirs --include='*/' --include="*.gemspec" --exclude='*' "." "tmp/docker/"
+rm -rf tmp/docker
+mkdir -p tmp/docker
+find . -depth -type f -name '*.gemspec' | cpio -d -v -p tmp/docker/

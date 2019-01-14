@@ -7,16 +7,24 @@ const Dotenv = require('dotenv-webpack')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const SentryCliPlugin = require('@sentry/webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
-module.exports = {
+module.exports = (env, options) => ({
   entry: './app/index.jsx',
 
   output: {
-    filename: '[name].[contenthash].js',
+    filename: options.mode === 'production' ? '[name].[contenthash].js' : '[name].js',
     path: path.resolve(__dirname, '../dist'),
     publicPath: '/'
+  },
+
+  devtool: options.mode === 'production' ? 'source-map' : 'inline-source-map',
+
+  devServer: {
+    historyApiFallback: true,
+    contentBase: './dist'
   },
 
   optimization: {
@@ -27,10 +35,7 @@ module.exports = {
         sourceMap: true
       }),
       new OptimizeCSSAssetsPlugin({})
-    ],
-    // splitChunks: {
-    //   chunks: 'all'
-    // }
+    ]
   },
 
   module: {
@@ -38,7 +43,7 @@ module.exports = {
       {
         test: /\.s?css$/,
         use: [
-          process.env.NODE_ENV !== 'production' ? 'style-loader' : MiniCssExtractPlugin.loader,
+          options.mode !== 'production' ? 'style-loader' : MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: {
@@ -116,6 +121,8 @@ module.exports = {
   },
 
   plugins: [
+    new ProgressBarPlugin(),
+
     new Dotenv(),
     new webpack.EnvironmentPlugin({
       BASE_URL: '//localhost:3000',
@@ -152,11 +159,11 @@ module.exports = {
     }),
 
     new SentryCliPlugin({
-      dryRun: process.env.NODE_ENV !== 'production',
+      dryRun: options.mode !== 'production',
       release: process.env.RELEASE,
       include: 'dist/',
       ignoreFile: '.sentrycliignore',
       ignore: ['config.201811291749.js']
     })
   ]
-}
+})
