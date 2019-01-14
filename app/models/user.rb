@@ -162,7 +162,7 @@ class User < ApplicationRecord
   end
 
   def external_id
-    self[:external_id] || agency&.agency_manager&.external_id
+    self[:external_id] || (role.name != 'agency_manager' && agency&.agency_manager&.external_id)
   end
 
   # Devise Token Auth override
