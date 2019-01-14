@@ -6,8 +6,6 @@ module Locations
       query = Locations::Name
 
       query = query.where(country: countries) if countries.present?
-      require 'pry';
-      binding.pry
       location_ids = query
         .autocomplete(term)
         .pluck(:location_id)

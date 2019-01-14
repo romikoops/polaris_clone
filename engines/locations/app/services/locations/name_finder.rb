@@ -25,13 +25,20 @@ module Locations
         locality_11
         name
       ).reverse
-
+        # binding.pry
       sorted_attributes.each do |attr|
-        step_results = filtered_results.select { |result| terms.include? result[attr] }
+        # binding.pry
+        
+        step_results = filtered_results.select do |result|
+          next if result[attr].nil?
+          comparable_term = result[attr]&.downcase.sub('district', '').sub('province', '').strip
+          terms.include? comparable_term
+        end
         next if step_results.empty?
         if step_results.length == 1
-          return step_results.first
+          return step_results.first.location
         else
+          binding.pry
           raise Locations::NameFinder::MultipleResultsFound
         end
       end

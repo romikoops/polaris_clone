@@ -210,6 +210,7 @@ module ExcelTool
             end
           elsif identifier_type == 'location_id'
             geometry = find_geometry(idents_and_country)
+            binding.pry if geometry.nil?
             next if geometry.nil?
 
             stats[:trucking_destinations][:number_created] += 1
@@ -572,19 +573,20 @@ module ExcelTool
       geometry = if @identifier_modifier == 'postal_code'
                    Locations::Name.find_by_postal_code(idents_and_country[:ident].upcase)&.location
                  else
-                  binding.pry
+                  # binding.pry
                    Locations::NameFinder.find_highest_admin_level(
                      idents_and_country[:sub_ident],
                      idents_and_country[:ident]
                    )
                  end
-
+                #  binding.pry
       if geometry.nil?
+        binding.pry
         geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
         return nil if geocoder_results.first.nil?
 
         coordinates = geocoder_results.first.geometry['location']
-        geometry = Location.find_by_coordinates(coordinates['lat'], coordinates['lng'])
+        geometry = Locations::Location.contains(lat: coordinates['lat'], lon: coordinates['lng']).first
       end
 
       geometry

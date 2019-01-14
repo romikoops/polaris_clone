@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TruckingDestination < ApplicationRecord
-  self.ignored_columns = %w(geometry_id)
+  self.ignored_columns = %w(location_id)
   validates given_attribute_names.first.to_sym,
             uniqueness: {
               scope: given_attribute_names[1..-1],
@@ -44,5 +44,4 @@ end
 #  distance     :integer
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
-#  location_id  :uuid
 #
