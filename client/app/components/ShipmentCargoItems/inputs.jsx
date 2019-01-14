@@ -12,7 +12,7 @@ import height from '../../assets/images/cargo/height.png'
 import {
   switchIcon,
   chargeableWeight,
-  chargeableVolume,
+  chargeableWeightTon,
   volume,
   numberSpacing,
   calcMaxDimensionsToApply,
@@ -253,8 +253,8 @@ export default function getInputs (
       <div className={`flex-none layout-align-center-center layout-row ${styles.single_charge}`}>
         { switchIcon(mot) }
         <p className={`${styles.chargeable_weight_value} ${styles.input_value}`}>
-          {chargeableWeight(cargoItem, mot)}
-          <span>&nbsp;kg&nbsp;</span>
+          {chargeableWeightTon(cargoItem, mot)}
+          <span>&nbsp;t&nbsp;</span>
           |
           <span>
               &nbsp;m

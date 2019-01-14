@@ -146,10 +146,10 @@ module TruckingTools
 
     case trucking_pricing.modifier
     when 'kg'
-      if cargo_values['weight'].to_i > trucking_pricing['rates']['kg'].last['max_kg'].to_i && scope['hard_trucking_limit']
+      if cargo_values['weight'].to_i > trucking_pricing['rates']['kg'].compact.last['max_kg'].to_i && scope['hard_trucking_limit']
         raise TruckingTools::LoadMeterageExceeded
-      elsif cargo_values['weight'].to_i > trucking_pricing['rates']['kg'].last['max_kg'].to_i && !scope['hard_trucking_limit']
-        rate = trucking_pricing['rates']['kg'].last
+      elsif cargo_values['weight'].to_i > trucking_pricing['rates']['kg'].compact.last['max_kg'].to_i && !scope['hard_trucking_limit']
+        rate = trucking_pricing['rates']['kg'].compact.last
         rate['rate']['min_value'] = rate['min_value']
         return { rate: rate['rate'], fees: trucking_pricing['fees'] }
       end
@@ -190,10 +190,10 @@ module TruckingTools
         result['cbm'] = trucking_pricing['rates']['cbm'].first['rate']['value']
         result['min_value'] = trucking_pricing['rates']['cbm'].first['min_value']
         result['currency'] = trucking_pricing['rates']['cbm'].first['rate']['currency']
-      elsif cargo_values['volume'] > trucking_pricing['rates']['cbm'].last['max_cbm'].to_i
-        result['cbm'] = trucking_pricing['rates']['cbm'].last['rate']['value']
-        result['min_value'] = trucking_pricing['rates']['cbm'].last['min_value']
-        result['currency'] = trucking_pricing['rates']['cbm'].last['rate']['currency']
+      elsif cargo_values['volume'] > trucking_pricing['rates']['cbm'].compact.last['max_cbm'].to_i
+        result['cbm'] = trucking_pricing['rates']['cbm'].compact.last['rate']['value']
+        result['min_value'] = trucking_pricing['rates']['cbm'].compact.last['min_value']
+        result['currency'] = trucking_pricing['rates']['cbm'].compact.last['rate']['currency']
       end
       return { rate: result, fees: trucking_pricing['fees'] }
     when 'unit'

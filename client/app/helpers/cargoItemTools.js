@@ -17,6 +17,16 @@ export function chargeableWeight (cargoItem, mot) {
 
   return numberSpacing(finalValue, 2)
 }
+export function chargeableWeightTon (cargoItem, mot) {
+  if (!cargoItem) return undefined
+
+  const finalValue = Math.max(
+    +volume(cargoItem) * effectiveKgPerCubicMeter[mot],
+    +cargoItem.payload_in_kg * cargoItem.quantity
+  )
+
+  return numberSpacing(finalValue / 1000, 3)
+}
 
 export function chargeableVolume (cargoItem, mot) {
   if (!cargoItem) return undefined
