@@ -6,11 +6,14 @@ module Locations
       query = Locations::Name
 
       query = query.where(country: countries) if countries.present?
-      
-      query.autocomplete(term).map{|result|
-        require 'pry';
-        binding.pry
-         LocationDecorator.new(result.location)}
+      require 'pry';
+      binding.pry
+      location_ids = query
+        .autocomplete(term)
+        .pluck(:location_id)
+        .uniq
+      Locations::Location.where(id: location_ids)
+        .map{ |location| LocationDecorator.new(location) }
     end
   end
 end

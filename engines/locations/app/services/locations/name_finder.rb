@@ -12,6 +12,7 @@ module Locations
 
       sorted_attributes = %w(
         country
+        postal_code
         locality_2
         locality_3
         locality_4
@@ -26,7 +27,7 @@ module Locations
       ).reverse
 
       sorted_attributes.each do |attr|
-        step_results = filtered_results.select { |result| terms.include?result[attr] }
+        step_results = filtered_results.select { |result| terms.include? result[attr] }
         next if step_results.empty?
         if step_results.length == 1
           return step_results.first

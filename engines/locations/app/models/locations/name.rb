@@ -6,37 +6,42 @@ module Locations
     include PgSearch
 
     validates :location, uniqueness: {
-      scope: %i(locality_2
-                locality_3
-                locality_4
-                locality_5
-                locality_6
-                locality_7
-                locality_8
-                locality_9
-                locality_10
-                locality_11
-                country
-                postal_code
-                name
-                language),
+      scope: %i(
+        locality_2
+        locality_3
+        locality_4
+        locality_5
+        locality_6
+        locality_7
+        locality_8
+        locality_9
+        locality_10
+        locality_11
+        country
+        postal_code
+        name
+        language
+      ),
       message: ->(record, _) { "is a duplicate for the names: #{record.names.to_s.tr('"', "'")}" }
     }
 
     pg_search_scope :autocomplete,
-                    against: %i(locality_2
-                                locality_3
-                                locality_4
-                                locality_5
-                                locality_6
-                                locality_7
-                                locality_8
-                                locality_9
-                                locality_10
-                                locality_11
-                                country
-                                postal_code
-                                name),
+                    against: %i(
+                      locality_2
+                      locality_3
+                      locality_4
+                      locality_5
+                      locality_6
+                      locality_7
+                      locality_8
+                      locality_9
+                      locality_10
+                      locality_11
+                      country
+                      postal_code
+                      name
+                    ),
+                    ignoring: :accents,
                     using: {
                       tsearch: { prefix: true }
                     }
@@ -44,6 +49,7 @@ module Locations
     def names
       [
         country,
+        postal_code,
         locality_2,
         locality_3,
         locality_4,
@@ -60,6 +66,7 @@ module Locations
     def description
       [
         country,
+        postal_code,
         locality_2,
         locality_3,
         locality_4,
@@ -72,8 +79,6 @@ module Locations
         locality_11
       ].reverse.compact.join(', ')
     end
-
-  
   end
 end
 
