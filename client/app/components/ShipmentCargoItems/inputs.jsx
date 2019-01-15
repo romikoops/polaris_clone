@@ -223,7 +223,8 @@ export default function getInputs (
     </div>
   )
 
-  function chargeableWeightElemJSX (mot) {
+  function chargeableWeightElemJSX (mot, i) {
+    const key = `${mot}-${i || 0}`
     if (
       (
         availableMotsForRoute.length > 0 &&
@@ -240,7 +241,7 @@ export default function getInputs (
       )
     ) {
       return (
-        <div className={`flex-none layout-align-center-center layout-row ${styles.single_charge}`}>
+        <div key={key} className={`flex-none layout-align-center-center layout-row ${styles.single_charge}`}>
           { switchIcon(mot) }
           <p className={`${styles.chargeable_weight_value} ${styles.input_value}`}>
             {t('common:unavailable')}
@@ -250,7 +251,7 @@ export default function getInputs (
     }
 
     return (
-      <div className={`flex-none layout-align-center-center layout-row ${styles.single_charge}`}>
+      <div key={key} className={`flex-none layout-align-center-center layout-row ${styles.single_charge}`}>
         { switchIcon(mot) }
         <p className={`${styles.chargeable_weight_value} ${styles.input_value}`}>
           {chargeableWeightTon(cargoItem, mot)}
@@ -531,7 +532,7 @@ export default function getInputs (
   inputs.nonStackable = (
     <div
       className={`layout-row flex layout-wrap layout-align-end-center ${styles.cargo_unit_check}`}
-      onClick={scope.non_stackable_goods ? '' : () => toggleModal('nonStackable')}
+      onClick={scope.non_stackable_goods ? () => {} : () => toggleModal('nonStackable')}
     >
       <Checkbox
         id={`${i}-stackable`}

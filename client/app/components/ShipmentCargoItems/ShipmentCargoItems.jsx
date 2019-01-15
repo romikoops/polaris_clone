@@ -129,7 +129,7 @@ class ShipmentCargoItems extends Component {
 
       return (
         <div
-          key={i}
+          key={`${i}-cargoItem`}
           name={`${i}-cargoItem`}
           className="layout-row flex-100 layout-wrap layout-align-stretch"
           style={{ position: 'relative', margin: '30px 0' }}
@@ -239,7 +239,10 @@ class ShipmentCargoItems extends Component {
                 onClick={this.addNewCargo}
               >
                 <i className="fa fa-plus-square-o clip" style={textStyle} />
-                <p> {t('shipment:addCargoGroup')}</p>
+                <p>
+                  {' '}
+                  {t('shipment:addUnit')}
+                </p>
               </div>
             </div>
           </div>
