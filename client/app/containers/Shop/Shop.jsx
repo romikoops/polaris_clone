@@ -216,7 +216,7 @@ class Shop extends Component {
             setStage={this.selectShipmentStageAndGo}
             disabledClick={Shop.statusRequested(this.props)}
             goForward={() => this.determineForwardFunction(stageTracker.stage)}
-            hasNextStage={stageActions.hasNextStage(response, stageTracker.stage)}
+            hasNextStage={Boolean(stageActions.hasNextStage(response, stageTracker.stage))}
           />
         </GenericError >
         <GenericError theme={theme}>
@@ -253,7 +253,7 @@ class Shop extends Component {
                 messages={error ? error.stage2 : []}
                 shipmentDispatch={shipmentDispatch}
                 bookingSummaryDispatch={bookingSummaryDispatch}
-                reusedShipment={reusedShipment}
+                reusedShipment={reusedShipment === false ? {} : reusedShipment}
                 showRegistration={showRegistration}
                 bookingHasCompleted={this.bookingHasCompleted}
                 hideRegistration={() => this.hideRegistration()}
@@ -378,10 +378,6 @@ Shop.propTypes = {
   history: PropTypes.history.isRequired,
   match: PropTypes.shape({
     url: PropTypes.string
-  }).isRequired,
-  contactData: PropTypes.shape({
-    contact: PropTypes.contact,
-    address: PropTypes.address
   }).isRequired,
   shipmentDispatch: PropTypes.shape({
     updateContact: PropTypes.func,

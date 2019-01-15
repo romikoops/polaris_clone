@@ -1681,7 +1681,7 @@ class ShipmentLocationBox extends PureComponent {
 }
 
 ShipmentLocationBox.propTypes = {
-  nextStageAttempts: PropTypes.integer,
+  nextStageAttempts: PropTypes.number,
   t: PropTypes.func.isRequired,
   handleSelectLocation: PropTypes.func.isRequired,
   gMaps: PropTypes.gMaps.isRequired,
@@ -1710,7 +1710,7 @@ ShipmentLocationBox.propTypes = {
     shipment: PropTypes.shipment
   }),
   scope: PropTypes.scope.isRequired,
-  filteredRouteIndexes: PropTypes.arrayOf(PropTypes.number).isRequired,
+  filteredRouteIndexes: PropTypes.object.isRequired,
   updateFilteredRouteIndexes: PropTypes.func.isRequired,
   hideMap: PropTypes.bool
 }

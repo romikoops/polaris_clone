@@ -90,7 +90,7 @@ class QuantityInput extends PureComponent {
 QuantityInput.propTypes = {
   cargoItem: PropTypes.objectOf(PropTypes.any),
   t: PropTypes.func.isRequired,
-  i: PropTypes.integer,
+  i: PropTypes.number,
   handleDelta: PropTypes.func,
   nextStageAttempt: PropTypes.bool
 }

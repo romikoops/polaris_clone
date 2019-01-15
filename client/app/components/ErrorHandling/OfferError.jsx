@@ -63,7 +63,7 @@ class OfferError extends PureComponent {
         if (contactData) {
           content.emails.push(
 
-            <div className={`flex-100 layout-row layout-align-space-between-center layout-wrap ${styles.contact_detail_section}`}>
+            <div key={`offer-emails-${key}`} className={`flex-100 layout-row layout-align-space-between-center layout-wrap ${styles.contact_detail_section}`}>
               <p className="flex-none">{t('user:email')}</p>
               <a href={`mailto:${contactData}`} className="flex-none pointy">{contactData}</a>
             </div>
@@ -75,7 +75,7 @@ class OfferError extends PureComponent {
     if (contactData) {
       content.phones.push(
 
-        <div className={`flex-100 layout-row layout-align-space-between-center layout-wrap ${styles.contact_detail_section}`}>
+        <div key="offer-phones-last" className={`flex-100 layout-row layout-align-space-between-center layout-wrap ${styles.contact_detail_section}`}>
           <p className="flex-none">{t('user:phone')}</p>
           <a href={`tel:${contactData}`} className="flex-none pointy">{contactData}</a>
         </div>
@@ -88,7 +88,7 @@ class OfferError extends PureComponent {
       if (contactData) {
         content.emails.push(
 
-          <div className={`flex-100 layout-row layout-align-space-between-center layout-wrap ${styles.contact_detail_section}`}>
+          <div key="offer-emails-last" className={`flex-100 layout-row layout-align-space-between-center layout-wrap ${styles.contact_detail_section}`}>
             <p className="flex-none">{t('user:email')}</p>
             <a href={`mailto:${contactData}`} className="flex-none">{contactData}</a>
           </div>

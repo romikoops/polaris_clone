@@ -956,7 +956,7 @@ export class ShipmentDetails extends Component {
           <GmapsLoader
             theme={theme}
             setTargetAddress={this.setTargetAddress}
-            allNexuses={shipmentData.allNexuses}
+            allNexuses={shipmentData.allNexuses || {}}
             component={ShipmentLocationBox}
             handleCarriageChange={(...args) => this.handleCarriageChange(...args)}
             has_on_carriage={this.state.has_on_carriage}

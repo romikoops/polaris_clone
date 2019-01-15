@@ -38,7 +38,7 @@ export default function getModals (props, toggleFunc, t) {
   ]
 
   const supportEmailObjs = tenant.emails.support
-  const supportEmailTexts = supportEmailObjs ? Object.keys(supportEmailObjs).map((keyDepartment) => {
+  const supportEmailTexts = supportEmailObjs ? Object.keys(supportEmailObjs).map((keyDepartment, i) => {
     const department = (() => {
       switch (keyDepartment.toLowerCase()) {
         case 'ocean':
@@ -51,7 +51,7 @@ export default function getModals (props, toggleFunc, t) {
     })()
 
     return (
-      <span>
+      <span key={`support-email-${i}`}>
         <span style={{ marginLeft: '10px' }}>
           {'- '}
           {department}
@@ -224,8 +224,8 @@ export default function getModals (props, toggleFunc, t) {
             <br />
           </p>
           <ol>
-            { dangerousGoodsClasses.map(dangerousGoodsClass => (
-              <li>
+            { dangerousGoodsClasses.map((dangerousGoodsClass, i) => (
+              <li key={`dangerous-goods-${i}`}>
                 {' '}
                 { dangerousGoodsClass}
                 {' '}
