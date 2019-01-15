@@ -99,6 +99,7 @@ module ExcelTool
           row_key = "#{row_zone_name}_#{row_truck_type}"
           single_ident_values_and_country = all_ident_values_and_countries[row_zone_name]
           next if single_ident_values_and_country.nil? || single_ident_values_and_country.first.nil?
+          binding.pry if single_ident_values_and_country.length > 30
 
           single_ident_values = single_ident_values_and_country.map { |h| h[:ident] }
           trucking_pricing = create_trucking_pricing(meta)
@@ -210,7 +211,6 @@ module ExcelTool
             end
           elsif identifier_type == 'location_id'
             geometry = find_geometry(idents_and_country)
-            binding.pry if geometry.nil?
             next if geometry.nil?
 
             stats[:trucking_destinations][:number_created] += 1
@@ -483,7 +483,7 @@ module ExcelTool
       case identifier_type
       when 'distance', 'location_id'
         single_ident_values_and_country.map do |h|
-          "(#{h[:ident]}, '#{h[:country]}', current_timestamp, current_timestamp)"
+          "('#{h[:ident]}', '#{h[:country]}', current_timestamp, current_timestamp)"
         end
       else
         single_ident_values_and_country.map do |h|
@@ -497,6 +497,7 @@ module ExcelTool
     end
 
     def build_td_query(single_ident_values, single_ident_values_and_country)
+      identifier_cast = identifier_type == 'location_id' ? '::uuid' : ''
       <<-SQL
         WITH
           existing_identifiers AS (
@@ -507,7 +508,7 @@ module ExcelTool
           inserted_td_ids AS (
             INSERT INTO trucking_destinations(#{identifier_type}, country_code, created_at, updated_at)
               -- insert non-existent trucking_destinations
-              SELECT ident_value, country_code::text, cr_at, up_at
+              SELECT ident_value#{identifier_cast}, country_code::text, cr_at, up_at
               FROM (VALUES #{identity_country(single_ident_values_and_country)})
                 AS t(ident_value, country_code, cr_at, up_at)
               WHERE ident_value::text NOT IN (
@@ -574,14 +575,19 @@ module ExcelTool
                    Locations::Name.find_by_postal_code(idents_and_country[:ident].upcase)&.location
                  else
                   # binding.pry
+                  begin
+                  p [idents_and_country[:sub_ident], idents_and_country[:ident]]
                    Locations::NameFinder.find_highest_admin_level(
                      idents_and_country[:sub_ident],
                      idents_and_country[:ident]
                    )
+                   rescue => e
+                  binding.pry 
+                  end
                  end
                 #  binding.pry
       if geometry.nil?
-        binding.pry
+        # binding.pry
         geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
         return nil if geocoder_results.first.nil?
 

@@ -31,11 +31,17 @@ module Locations
         
         step_results = filtered_results.select do |result|
           next if result[attr].nil?
-          comparable_term = result[attr]&.downcase.sub('district', '').sub('province', '').strip
+          # binding.pry
+          comparable_term = result[attr]&.downcase
+            .sub('district', '')
+            .sub('province', '')
+            .sub('city', '')
+            .sub('new', '')
+            .strip
           terms.include? comparable_term
         end
         next if step_results.empty?
-        if step_results.length == 1
+        if step_results.length == 1 || step_results.map(&:location_id).uniq.length == 1
           return step_results.first.location
         else
           binding.pry

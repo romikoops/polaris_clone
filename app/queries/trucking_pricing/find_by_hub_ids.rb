@@ -66,7 +66,7 @@ module Queries
                 WHERE hub_truckings.hub_id IN (:hub_ids)
               ) AS sub_query_lvl_3
             ) AS sub_query_lvl_2
-            LEFT OUTER JOIN locations ON sub_query_lvl_2.ident_value = locations.id
+            LEFT OUTER JOIN locations_locations ON sub_query_lvl_2.ident_value = locations.id
             GROUP BY tp_id, ident_type, range
             ORDER BY MAX(ident_value)
           ) AS sub_query_lvl_1
