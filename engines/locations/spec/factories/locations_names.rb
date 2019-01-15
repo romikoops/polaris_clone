@@ -10,7 +10,7 @@ FactoryBot.define do
     locality_9 nil
     locality_10 nil
     locality_11 nil
-    name 'Shanghai'
+    name nil
     country 'China'
   end
 end

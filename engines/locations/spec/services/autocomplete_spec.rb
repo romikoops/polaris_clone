@@ -38,9 +38,7 @@ module Locations
      
       it 'returns results including the desired object' do
         results = Autocomplete.search(term: 'Baoshun', countries: ['China'], lang: 'en')
-        require 'pry';
-        binding.pry
-        expect(results).to include(target_result)
+        expect(results.first.class).to eq(LocationDecorator)
       end
       # it 'returns a geoJson object' do
       #   expect(LocationDecorator.new(location).geojson).to eq(example_bounds)
