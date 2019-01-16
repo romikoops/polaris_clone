@@ -44,11 +44,11 @@ export default function GmapsLoader (props) {
 
 GmapsLoader.propTypes = {
   theme: PropTypes.theme,
-  component: PropTypes.node.isRequired,
+  component: PropTypes.func.isRequired,
   allNexuses: PropTypes.shape({
     origins: PropTypes.array,
     destinations: PropTypes.array
-  }).isRequired,
+  }),
   has_on_carriage: PropTypes.bool,
   has_pre_carriage: PropTypes.bool,
   origin: PropTypes.address.isRequired,
@@ -64,7 +64,7 @@ GmapsLoader.propTypes = {
   setTargetAddress: PropTypes.func.isRequired,
   handleCarriageChange: PropTypes.func.isRequired,
   shipmentData: PropTypes.shipmentData,
-  nextStageAttempts: PropTypes.integer,
+  nextStageAttempts: PropTypes.number,
   handleAddressChange: PropTypes.func.isRequired,
   routeIds: PropTypes.arrayOf(PropTypes.object),
   handleSelectLocation: PropTypes.func.isRequired,

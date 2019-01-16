@@ -8,7 +8,7 @@ exports[`shallow rendering 1`] = `
     className="layout-row flex-100 "
   >
     <div
-      className="layout-row flex-60"
+      className="layout-row flex-sm-100 flex-60"
     >
       <div
         isActive={true}

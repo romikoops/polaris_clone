@@ -10,6 +10,15 @@ module UsersDeviseTokenAuth
       super do |resource|
         # Create token even though email is not confirmed
         resource.create_token
+
+        resource.role_id = Role.find_by_name('agency_manager').id if quotation_tool?(resource)
+
+        @agency = Agency.find_or_create_by!(
+          name: resource.company_name,
+          tenant_id: resource.tenant.id
+        )
+
+        resource.agency_id = @agency.id
         resource.save!
 
         # Create Address for non-guest Users
@@ -21,6 +30,10 @@ module UsersDeviseTokenAuth
 
         @headers = resource.create_new_auth_token
       end
+    end
+
+    def quotation_tool?(resource)
+      @quotation_tool ||= resource.tenant.scope.values_at('closed_quotation_tool', 'open_quotation_tool').all?
     end
 
     def render_create_success

@@ -160,7 +160,7 @@ class AdminAddressTile extends Component {
 
     return (
       <div
-        className="tile_padding  margin_bottom flex-20 layout-row layout-wrap layout-align-start-stretch"
+        className="tile_padding  margin_bottom flex-20 flex-sm-45 layout-row layout-wrap layout-align-start-stretch"
       >
         <div
           className={`${

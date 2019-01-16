@@ -31,4 +31,9 @@
   .date_btns {
     padding: 10px 5px;
   }
+  @media only screen and (max-width: 960px) {
+    .pagination_info {
+      display: none;
+    }
+  }
 }

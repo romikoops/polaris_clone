@@ -63,7 +63,7 @@ TextHeading.propTypes = {
   text: PropTypes.string.isRequired,
   size: PropTypes.number.isRequired,
   color: PropTypes.string,
-  Comp: PropTypes.Component
+  Comp: PropTypes.func
 }
 TextHeading.defaultProps = {
   color: '',

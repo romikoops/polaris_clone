@@ -80,14 +80,7 @@ export default function TruckingDetails (props) {
 
 TruckingDetails.propTypes = {
   theme: PropTypes.theme,
-  trucking: PropTypes.shape({
-    on_carriage: {
-      truck: PropTypes.string
-    },
-    pre_carriage: {
-      truck: PropTypes.string
-    }
-  }).isRequired,
+  trucking: PropTypes.object.isRequired,
   truckTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleTruckingDetailsChange: PropTypes.func.isRequired,
   target: PropTypes.string.isRequired

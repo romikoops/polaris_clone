@@ -31,10 +31,10 @@
   .tab:after {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
+    top: -1px;
+    left: -1px;
     bottom: 0;
-    right: 0;
+    right: -1px;
     background: white;
     z-index: 0;
   }

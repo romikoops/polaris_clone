@@ -956,7 +956,7 @@ export class ShipmentDetails extends Component {
           <GmapsLoader
             theme={theme}
             setTargetAddress={this.setTargetAddress}
-            allNexuses={shipmentData.allNexuses}
+            allNexuses={shipmentData.allNexuses || {}}
             component={ShipmentLocationBox}
             handleCarriageChange={(...args) => this.handleCarriageChange(...args)}
             has_on_carriage={this.state.has_on_carriage}
@@ -1150,7 +1150,7 @@ export class ShipmentDetails extends Component {
                   />
                 </div>
               )}
-              <div className="flex-35 layout-row layout-wrap layout-align-end">
+              <div className="flex-35 layout-row layout-wrap layout-align-end padding_left">
                 <RoundButton
                   text={isQuote(tenant) ? t('common:getQuotes') : t('common:getOffers')}
                   handleNext={this.handleNextStage}

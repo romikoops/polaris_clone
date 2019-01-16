@@ -35,12 +35,12 @@ const NotesRow = ({
 
 NotesRow.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.any),
-  itinerary: PropTypes.itinerary,
+  itinerary: PropTypes.object,
   adminDispatch: PropTypes.func,
   t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   toggleNotesEdit: PropTypes.func,
-  textStyle: PropTypes.objectOf(PropTypes.style)
+  textStyle: PropTypes.object
 }
 
 NotesRow.defaultProps = {

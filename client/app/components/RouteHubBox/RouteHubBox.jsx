@@ -161,7 +161,7 @@ class RouteHubBox extends Component {
     const timeDiff =
       shipment.planned_eta ? (
         <div
-          className={`flex-100 layout-row layout-align-space-between-stretch ${styles.time_diff}`}
+          className="flex-100 layout-row layout-align-space-between-stretch layout-wrap"
         >
           <p className="no_m center flex-none">
             {' '}
@@ -213,7 +213,10 @@ class RouteHubBox extends Component {
                 className="flex-85 height_100 layout-row layout-wrap layout-align-end-center"
                 style={{ marginTop: '75px' }}
               >
-                <div className="flex-100 width_100 layout-row layout-align-center-center">
+                <div
+                  className="flex-100 width_100 layout-row layout-align-center-center"
+                  style={{ marginBottom: '25px' }}
+                >
                   {RouteHubBox.faIcon(shipment.mode_of_transport)}
                 </div>
                 <div className="flex" style={dashedLineStyles} />
@@ -222,7 +225,7 @@ class RouteHubBox extends Component {
               </div>
             </div>
             <div className="flex-85 layout-row layout-wrap ">
-              <div className={` flex-100 layout-row layout-align-space-between-stretch ${styles.time_diff}`}>
+              <div className=" flex-100 layout-row layout-align-space-between-stretch layout-wrap">
                 <p className="flex-none">
                   <b>
                     {t('shipment:serviceLevel')}
@@ -233,7 +236,7 @@ class RouteHubBox extends Component {
               </div>
               {shipment.carrier
                 ? (
-                  <div className={`flex-100 layout-row layout-align-space-between-stretch  ${styles.time_diff}`}>
+                  <div className="flex-100 layout-row layout-align-space-between-stretch layout-wrap">
 
                     <p className="flex-none">
                       <b>

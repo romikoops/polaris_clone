@@ -261,12 +261,12 @@ export class AdminHubView extends Component {
 
     const editorModal = (
       <AdminHubEdit
-  hub={hub}
+        hub={hub}
         theme={theme}
-  saveHub={this.saveHub}
+        saveHub={this.saveHub}
         adminDispatch={adminActions}
         close={() => this.toggleEdit()}
-/>
+      />
     )
     const toggleCSS = `
     .react-toggle--checked .react-toggle-track {
@@ -295,9 +295,9 @@ export class AdminHubView extends Component {
     const mandatoryChargeBox = (
       <MandatoryChargeBox
         mandatoryCharge={mandatoryCharge}
-  theme={theme}
-  saveChanges={e => this.saveMandatoryChargeEdit(e)}
-/>
+        theme={theme}
+        saveChanges={e => this.saveMandatoryChargeEdit(e)}
+      />
     )
     const gradientBorderStyle =
     theme && theme.colors
@@ -311,12 +311,12 @@ export class AdminHubView extends Component {
         {routes
           .slice(sliceStartIndex, sliceEndIndex)
           .map(r => (
-<ItineraryRow
-            itinerary={r}
-            theme={theme}
-            adminDispatch={adminActions}
-          />
-))}
+            <ItineraryRow
+              itinerary={r}
+              theme={theme}
+              adminDispatch={adminActions}
+            />
+          ))}
         <div className="flex-100 layout-row layout-align-center-center margin_bottom">
           <div
             className={`
@@ -329,8 +329,8 @@ export class AdminHubView extends Component {
             <i className="fa fa-chevron-left" />
             <p>
 &nbsp;&nbsp;&nbsp;&nbsp;
-{t('common:basicBack')}
-</p>
+              {t('common:basicBack')}
+            </p>
           </div>
           {}
           <p>{page}</p>
@@ -342,9 +342,9 @@ export class AdminHubView extends Component {
             onClick={page < numPages ? () => this.deltaPage(1) : null}
           >
             <p>
-{t('common:next')}
+              {t('common:next')}
 &nbsp;&nbsp;&nbsp;&nbsp;
-</p>
+            </p>
             <i className="fa fa-chevron-right" />
           </div>
         </div>
@@ -379,7 +379,7 @@ export class AdminHubView extends Component {
             </div>
 
           </div>
-          <div className="flex-100 layout-row layout-align-space-between-stretch buffer_10">
+          <div className="flex-100 layout-row layout-wrap layout-align-space-between-stretch buffer_10">
             <GradientBorder
               wrapperClassName="flex flex-xs-100 flex-sm-100 layout-row layout-align-space-between-stretch"
               className="flex-100 layout-row"
@@ -408,7 +408,7 @@ export class AdminHubView extends Component {
             />
             <div className={`flex layout-row flex-xs-100 flex-sm-100 ${hubStyles.address_data_box}`}>
               <div className={`flex-55 layout-row ${hubStyles.address_box}`}>
-                <div className={`flex-none layout-column layout-align-center-center ${hubStyles.address_icon}`}>
+                <div className={`flex-none layout-column layout-align-start-center ${hubStyles.address_icon}`}>
                   <i className="flex-none fa fa-map-marker clip" style={gradientIcon} />
                 </div>
                 <div className="flex layout-align-space-around-start">

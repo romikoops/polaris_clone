@@ -22,7 +22,7 @@ export function CardLinkRow ({
   ))
 
   return (
-    <div className={`${styles.card_link_row} layout-row flex-100 layout-align-space-around-center`}>
+    <div className={`${styles.card_link_row} layout-row layout-wrap flex-100 layout-align-space-around-center`}>
       {cardLinks}
     </div>
   )

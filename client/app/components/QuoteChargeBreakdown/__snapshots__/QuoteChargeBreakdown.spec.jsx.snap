@@ -63,6 +63,7 @@ Array [
     faClass=""
     handleCollapser={[Function]}
     headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
+    hideIcon={false}
     mainWrapperStyle={
       Object {
         "borderTop": "1px solid #E0E0E0",
@@ -165,6 +166,7 @@ Array [
     faClass=""
     handleCollapser={[Function]}
     headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
+    hideIcon={false}
     mainWrapperStyle={
       Object {
         "borderTop": "1px solid #E0E0E0",
@@ -239,6 +241,7 @@ Array [
     faClass=""
     handleCollapser={[Function]}
     headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
+    hideIcon={false}
     mainWrapperStyle={
       Object {
         "borderTop": "1px solid #E0E0E0",
@@ -282,6 +285,7 @@ Array [
     faClass=""
     handleCollapser={[Function]}
     headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
+    hideIcon={false}
     mainWrapperStyle={
       Object {
         "borderTop": "1px solid #E0E0E0",
@@ -356,6 +360,7 @@ Array [
     faClass=""
     handleCollapser={[Function]}
     headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
+    hideIcon={false}
     mainWrapperStyle={
       Object {
         "borderTop": "1px solid #E0E0E0",

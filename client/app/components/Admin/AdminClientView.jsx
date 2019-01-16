@@ -25,6 +25,7 @@ export class AdminClientView extends Component {
 
     return shipment
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -39,18 +40,23 @@ export class AdminClientView extends Component {
     this.toggleNewManager = this.toggleNewManager.bind(this)
     this.assignNewManager = this.assignNewManager.bind(this)
   }
+
   componentDidMount () {
     window.scrollTo(0, 0)
   }
+
   handleManagerAssigment (event) {
     this.setState({ selectedManager: event })
   }
+
   handleRoleAssigment (event) {
     this.setState({ selectedRole: event })
   }
+
   toggleNewManager () {
     this.setState({ showAddManager: !this.state.showAddManager })
   }
+
   assignNewManager () {
     const { adminDispatch, clientData } = this.props
     const { client } = clientData
@@ -62,24 +68,29 @@ export class AdminClientView extends Component {
     })
     this.toggleNewManager()
   }
+
   deleteClient (id) {
     const { clientData, adminDispatch } = this.props
     const { client } = clientData
     adminDispatch.deleteClient(client.id, true)
     this.closeConfirm()
   }
+
   confirmDelete () {
     this.setState({
       confirm: true
     })
   }
+
   closeConfirm () {
     this.setState({ confirm: false })
   }
+
   handleShipmentAction (id, action) {
     const { adminDispatch } = this.props
     adminDispatch.confirmShipment(id, action)
   }
+
   handleClick (shipment) {
     const { handleClick, adminDispatch } = this.props
     if (handleClick) {
@@ -88,6 +99,7 @@ export class AdminClientView extends Component {
       adminDispatch.getShipment(shipment.id, true)
     }
   }
+
   render () {
     const {
       t, theme, clientData, hubs, managers, adminDispatch
@@ -210,7 +222,10 @@ export class AdminClientView extends Component {
             </sup>
           </div>
           <div className="flex-100 layout-row layout-align-start-center ">
-            <p className="flex-none"> {user.company_name}</p>
+            <p className="flex-none"> 
+{' '}
+{user.company_name}
+</p>
           </div>
         </div>
         <div className="flex-50 layout-row layout-align-start-start layout-wrap">
@@ -220,7 +235,10 @@ export class AdminClientView extends Component {
             </sup>
           </div>
           <div className="flex-100 layout-row layout-align-start-center ">
-            <p className="flex-none"> {user.email}</p>
+            <p className="flex-none"> 
+{' '}
+{user.email}
+</p>
           </div>
         </div>
         <div className="flex-50 layout-row layout-align-start-start layout-wrap">
@@ -230,7 +248,10 @@ export class AdminClientView extends Component {
             </sup>
           </div>
           <div className="flex-100 layout-row layout-align-start-center ">
-            <p className="flex-none"> {user.phone}</p>
+            <p className="flex-none"> 
+{' '}
+{user.phone}
+</p>
           </div>
         </div>
       </div>
@@ -278,14 +299,16 @@ export class AdminClientView extends Component {
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding">
-        <div className="flex-40 layout-row layout-wrap layout-align-start-center layout-padding margin_bottom">
+        <div className="flex-100 layout-row layout-wrap layout-align-start-center padding_top margin_bottom">
           <div className={`flex-100 layout-row layout-align-start-stretch ${styles.username_title}`}>
-            <span className="layout-row flex-20 layout-align-center-center">
+            <span className="layout-row flex-none layout-align-center-center">
               <i className={`fa fa-user clip ${styles.bigProfile}`} style={textStyle} />
             </span>
-            <div className="layout-align-start-center layout-row flex">
-              <h1 className="flex-none cli">
-                {capitalizeCities(client.first_name)} {capitalizeCities(client.last_name)}
+            <div className="layout-align-start-center layout-row flex padding_left">
+              <h1 className="flex-none layout-row cli">
+                {capitalizeCities(client.first_name)}
+                {' '}
+                {capitalizeCities(client.last_name)}
               </h1>
             </div>
           </div>
