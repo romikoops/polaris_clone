@@ -255,8 +255,11 @@ class Shipment < ApplicationRecord
 
   def valid_until
     cargo_classes = cargo_units.pluck(:cargo_class)
+    start_date = planned_etd || desired_start_date
+    end_date = planned_eta || desired_start_date
     self&.itinerary&.pricings
         .for_cargo_class(cargo_classes)
+        .for_dates(start_date, end_date)
         .where(tenant_vehicle_id: trip.tenant_vehicle_id)
         .order(expiration_date: :asc).first&.expiration_date
   end
