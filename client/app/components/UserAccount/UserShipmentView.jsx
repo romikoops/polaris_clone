@@ -346,6 +346,7 @@ class UserShipmentView extends Component {
               cargoView={cargoView}
               shipmentData={shipmentData}
               user={user}
+              cargo={cargoItems || containers}
               userDispatch={userDispatch}
               remarkDispatch={remarkDispatch}
             />) : (
@@ -359,6 +360,7 @@ class UserShipmentView extends Component {
               selectedStyle={selectedStyle}
               deselectedStyle={deselectedStyle}
               scope={scope}
+              cargo={cargoItems || containers}
               feeHash={feeHash}
               cargoView={cargoView}
               remarkDispatch={remarkDispatch}

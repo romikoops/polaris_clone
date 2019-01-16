@@ -17,6 +17,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       shipment_association = open_shipments
     when 'finished'
       shipment_association = finished_shipments
+    when 'quoted'
+      shipment_association = quoted_shipments
     when 'rejected'
       shipment_association = rejected_shipments
     when 'archived'
