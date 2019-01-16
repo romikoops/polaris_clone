@@ -24,7 +24,7 @@ module.exports = (env, options) => ({
 
   devServer: {
     historyApiFallback: true,
-    contentBase: './dist'
+    contentBase: path.resolve(__dirname, './dist')
   },
 
   optimization: {
@@ -131,10 +131,7 @@ module.exports = (env, options) => ({
     }),
 
     new CleanWebpackPlugin(
-      [path.resolve(__dirname, './dist')],
-      {
-        root: path.resolve(__dirname, '../')
-      }
+      [path.resolve(__dirname, './dist')]
     ),
 
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
@@ -161,7 +158,7 @@ module.exports = (env, options) => ({
     new SentryCliPlugin({
       dryRun: options.mode !== 'production',
       release: process.env.RELEASE,
-      include: 'dist/',
+      include: path.resolve(__dirname, './dist'),
       ignoreFile: '.sentrycliignore',
       ignore: ['config.201811291749.js']
     })
