@@ -75,7 +75,7 @@ module ExcelDataServices
                                             :counterpart_country,
                                             :carrier,
                                             :service_level)
-          
+
         local_charge = @tenant.local_charges.find_or_initialize_by(local_charge_params)
         add_stats(:local_charges, local_charge)
         local_charge.tap(&:save!)
