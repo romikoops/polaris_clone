@@ -34,7 +34,7 @@ class QuoteMailer < ApplicationMailer
     attachments.inline[pdf_name] = quotation
 
     mail(
-      from: tenant.emails.dig('support','general'),
+      from: tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, email),
       subject: "Quotation for #{@shipment.imc_reference}"
     ) do |format|
@@ -56,7 +56,7 @@ class QuoteMailer < ApplicationMailer
       quotes:      quotes,
       color:       @user.tenant.theme['colors']['primary'],
       name:        'quotation',
-      remarks:    Remark.where(tenant_id: @user.tenant_id).order(order: :asc)
+      remarks:     Remark.where(tenant_id: @user.tenant_id).order(order: :asc)
     )
     quotation.generate
   end
