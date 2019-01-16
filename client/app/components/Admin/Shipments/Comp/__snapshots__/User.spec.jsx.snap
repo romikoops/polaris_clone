@@ -12,7 +12,7 @@ exports[`shallow render 1`] = `
     <Tabs
       defaultActiveTabIndex={0}
       paddingFixes=""
-      wrapperTabs="layout-row flex-60"
+      wrapperTabs="layout-row flex-sm-100 flex-60"
     >
       <Tab
         extraClick={[Function]}
@@ -447,7 +447,7 @@ exports[`shipments.pages is truthy 1`] = `
     <Tabs
       defaultActiveTabIndex={0}
       paddingFixes=""
-      wrapperTabs="layout-row flex-60"
+      wrapperTabs="layout-row flex-sm-100 flex-60"
     >
       <Tab
         extraClick={[Function]}

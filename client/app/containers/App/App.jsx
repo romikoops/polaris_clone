@@ -152,6 +152,7 @@ class App extends Component {
                 path="/account"
                 component={UserAccount}
                 user={user}
+                tenant={tenant}
                 loggedIn={loggedIn}
                 theme={theme}
               />

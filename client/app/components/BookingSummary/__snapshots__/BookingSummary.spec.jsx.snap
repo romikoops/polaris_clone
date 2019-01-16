@@ -2,7 +2,7 @@
 
 exports[`loadType is cargo_item 1`] = `
 <div
-  className="booking_summary flex-50 layout-row"
+  className="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
 >
   <div
     className="route_sec flex-40 layout-column layout-align-stretch"
@@ -99,7 +99,7 @@ exports[`loadType is cargo_item 1`] = `
     </div>
   </div>
   <div
-    className="flex layout-column layout-align-stretch"
+    className="flex flex-sm-40 layout-column layout-align-stretch"
   >
     <h4
       className="flex-50 layout-row layout-align-center-center"
@@ -133,7 +133,7 @@ exports[`loadType is cargo_item 1`] = `
 
 exports[`modeOfTransport is falsy 1`] = `
 <div
-  className="booking_summary flex-50 layout-row"
+  className="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
 >
   <div
     className="route_sec flex-40 layout-column layout-align-stretch"
@@ -227,7 +227,7 @@ exports[`modeOfTransport is falsy 1`] = `
     </div>
   </div>
   <div
-    className="flex layout-column layout-align-stretch"
+    className="flex flex-sm-40 layout-column layout-align-stretch"
   >
     <h4
       className="flex-50 layout-row layout-align-center-center"
@@ -246,7 +246,7 @@ exports[`modeOfTransport is falsy 1`] = `
 
 exports[`shallow render 1`] = `
 <div
-  className="booking_summary flex-50 layout-row"
+  className="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
 >
   <div
     className="route_sec flex-40 layout-column layout-align-stretch"
@@ -343,7 +343,7 @@ exports[`shallow render 1`] = `
     </div>
   </div>
   <div
-    className="flex layout-column layout-align-stretch"
+    className="flex flex-sm-40 layout-column layout-align-stretch"
   >
     <h4
       className="flex-50 layout-row layout-align-center-center"
@@ -362,7 +362,7 @@ exports[`shallow render 1`] = `
 
 exports[`theme is falsy 1`] = `
 <div
-  className="booking_summary flex-50 layout-row"
+  className="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
 >
   <div
     className="route_sec flex-40 layout-column layout-align-stretch"
@@ -459,7 +459,7 @@ exports[`theme is falsy 1`] = `
     </div>
   </div>
   <div
-    className="flex layout-column layout-align-stretch"
+    className="flex flex-sm-40 layout-column layout-align-stretch"
   >
     <h4
       className="flex-50 layout-row layout-align-center-center"
@@ -478,7 +478,7 @@ exports[`theme is falsy 1`] = `
 
 exports[`trucking.on_carriage is empty object 1`] = `
 <div
-  className="booking_summary flex-50 layout-row"
+  className="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
 >
   <div
     className="route_sec flex-40 layout-column layout-align-stretch"
@@ -575,7 +575,7 @@ exports[`trucking.on_carriage is empty object 1`] = `
     </div>
   </div>
   <div
-    className="flex layout-column layout-align-stretch"
+    className="flex flex-sm-40 layout-column layout-align-stretch"
   >
     <h4
       className="flex-50 layout-row layout-align-center-center"
@@ -594,7 +594,7 @@ exports[`trucking.on_carriage is empty object 1`] = `
 
 exports[`trucking.pre_carriage is empty object 1`] = `
 <div
-  className="booking_summary flex-50 layout-row"
+  className="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
 >
   <div
     className="route_sec flex-40 layout-column layout-align-stretch"
@@ -691,7 +691,7 @@ exports[`trucking.pre_carriage is empty object 1`] = `
     </div>
   </div>
   <div
-    className="flex layout-column layout-align-stretch"
+    className="flex flex-sm-40 layout-column layout-align-stretch"
   >
     <h4
       className="flex-50 layout-row layout-align-center-center"

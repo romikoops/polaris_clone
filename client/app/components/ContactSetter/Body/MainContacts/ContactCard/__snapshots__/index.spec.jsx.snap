@@ -39,16 +39,9 @@ exports[`shallow render 1`] = `
     <h3
       className="contact_name"
     >
-      <Truncate
-        ellipsis="…"
-        lines={1}
-        trimWhitespace={false}
-      >
-        John
-         
-        Doe
-      </Truncate>
+      John
        
+      Doe
       <br />
       <span
         className="secondary_info"
@@ -68,10 +61,10 @@ exports[`shallow render 1`] = `
     className="flex-100 layout-row layout-align-start-start layout-wrap"
   >
     <div
-      className="flex-100 layout-row layout-align-space-around-center"
+      className="flex-100 layout-row layout-align-space-around-start"
     >
       <i
-        className="main_icon fa fa-map-marker flex-10"
+        className="main_icon fa fa-map-marker flex-none"
         style={
           Object {
             "0": "#",
@@ -83,34 +76,16 @@ exports[`shallow render 1`] = `
       />
       <p
         className="secondary_info flex"
-      />
-    </div>
-    <div
-      className="flex-100 layout-row layout-align-end-center"
-    >
-      <p
-        className="secondary_info_city flex-90 offset-10"
       >
-        <b>
-           
-           
-        </b>
-        , 
-      </p>
-    </div>
-    <div
-      className="flex-100 layout-row layout-align-end-center"
-    >
-      <p
-        className="secondary_info_country flex-90 offset-10"
-      >
+        <br />
+        <b />
+        ,
+        <br />
         <Truncate
           ellipsis="…"
           lines={1}
           trimWhitespace={false}
-        >
-           
-        </Truncate>
+        />
       </p>
     </div>
   </div>
@@ -118,7 +93,12 @@ exports[`shallow render 1`] = `
     className="contact_data_sec flex-100 layout-row layout-wrap layout-align-space-between-center"
   >
     <div
-      className="flex-50 layout-row layout-align-start-center"
+      className="flex-100 layout-row layout-align-start-center"
+      style={
+        Object {
+          "paddingBottom": "12px",
+        }
+      }
     >
       <i
         className="fa fa-envelope flex-none"
@@ -146,7 +126,7 @@ exports[`shallow render 1`] = `
       </p>
     </div>
     <div
-      className="flex-45 layout-row layout-align-end-center"
+      className="flex-100 layout-row layout-align-end-center"
     >
       <i
         className="fa fa-phone flex-none"

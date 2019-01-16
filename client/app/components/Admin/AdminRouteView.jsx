@@ -159,7 +159,7 @@ export class AdminRouteView extends Component {
             {itinerary.name}
           </p>
           <div className="flex-40 layout-row layout-align-space-between-center">
-            <div className="flex-70 layout-row layout-align-end-center">
+            <div className="flex-40 layout-row layout-align-end-center">
               <NamedSelect
                 theme={theme}
                 className="flex-100"
@@ -168,7 +168,7 @@ export class AdminRouteView extends Component {
                 onChange={e => this.handleNavChange(e)}
               />
             </div>
-            <div className="flex-25 layout-row layout-align-end-center">
+            <div className="flex-55 layout-row layout-align-end-center">
               <RoundButton
                 theme={theme}
                 text={t('common:delete')}

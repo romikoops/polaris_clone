@@ -193,7 +193,7 @@ function IncotermRow ({
       <div
         className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
       >
-        <p className="flex-none no_m">{t('shipment:motCargo', {mot: capitalize(mot)})}</p>
+        <p className="flex-none no_m center">{t('shipment:motCargo', {mot: capitalize(mot)})}</p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? freightFeesValue : ''}
     </div>

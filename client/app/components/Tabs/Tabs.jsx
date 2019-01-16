@@ -53,7 +53,7 @@ export default class Tabs extends PureComponent {
 
     return (
       <div className="layout-column flex-100 width_100">
-        <div className={`layout-row flex-100 ${paddingFixes ? 'paddin_top' : ''}`}>
+        <div className={`layout-row flex-100 ${paddingFixes ? 'padding_top' : ''}`}>
           <div className={wrapperTabs}>
             {this.renderChildrenWithTabsApiAsProps()}
           </div>
@@ -74,7 +74,7 @@ Tabs.propTypes = {
 }
 
 Tabs.defaultProps = {
-  wrapperTabs: 'layout-row flex-60',
+  wrapperTabs: 'layout-row flex-sm-100 flex-60',
   paddingFixes: '',
   defaultActiveTabIndex: 0,
   children: null

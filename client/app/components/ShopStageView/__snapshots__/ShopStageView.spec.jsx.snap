@@ -27,7 +27,7 @@ exports[`shallow rendering 1`] = `
         className="fa fa-chevron-right fade"
       />
       <p
-        className="flex-none fade"
+        className="flex-70 fade"
       >
          
          

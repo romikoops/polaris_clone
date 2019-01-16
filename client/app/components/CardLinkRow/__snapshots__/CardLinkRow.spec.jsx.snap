@@ -2,7 +2,7 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="card_link_row layout-row flex-100 layout-align-space-around-center"
+  className="card_link_row layout-row layout-wrap flex-100 layout-align-space-around-center"
 >
   <CardLink
     allowedCargoTypes={Object {}}

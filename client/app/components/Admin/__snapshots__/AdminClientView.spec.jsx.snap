@@ -7,13 +7,13 @@ exports[`clientData.managerAssignments is falsy 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
 >
   <div
-    className="flex-40 layout-row layout-wrap layout-align-start-center layout-padding margin_bottom"
+    className="flex-100 layout-row layout-wrap layout-align-start-center padding_top margin_bottom"
   >
     <div
       className="flex-100 layout-row layout-align-start-stretch username_title"
     >
       <span
-        className="layout-row flex-20 layout-align-center-center"
+        className="layout-row flex-none layout-align-center-center"
       >
         <i
           className="fa fa-user clip bigProfile"
@@ -25,10 +25,10 @@ exports[`clientData.managerAssignments is falsy 1`] = `
         />
       </span>
       <div
-        className="layout-align-start-center layout-row flex"
+        className="layout-align-start-center layout-row flex padding_left"
       >
         <h1
-          className="flex-none cli"
+          className="flex-none layout-row cli"
         >
           Sebastian
            
@@ -204,13 +204,13 @@ exports[`managerAssignments is truthy 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
 >
   <div
-    className="flex-40 layout-row layout-wrap layout-align-start-center layout-padding margin_bottom"
+    className="flex-100 layout-row layout-wrap layout-align-start-center padding_top margin_bottom"
   >
     <div
       className="flex-100 layout-row layout-align-start-stretch username_title"
     >
       <span
-        className="layout-row flex-20 layout-align-center-center"
+        className="layout-row flex-none layout-align-center-center"
       >
         <i
           className="fa fa-user clip bigProfile"
@@ -222,10 +222,10 @@ exports[`managerAssignments is truthy 1`] = `
         />
       </span>
       <div
-        className="layout-align-start-center layout-row flex"
+        className="layout-align-start-center layout-row flex padding_left"
       >
         <h1
-          className="flex-none cli"
+          className="flex-none layout-row cli"
         >
           Sebastian
            
@@ -541,13 +541,13 @@ exports[`managers is falsy 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
 >
   <div
-    className="flex-40 layout-row layout-wrap layout-align-start-center layout-padding margin_bottom"
+    className="flex-100 layout-row layout-wrap layout-align-start-center padding_top margin_bottom"
   >
     <div
       className="flex-100 layout-row layout-align-start-stretch username_title"
     >
       <span
-        className="layout-row flex-20 layout-align-center-center"
+        className="layout-row flex-none layout-align-center-center"
       >
         <i
           className="fa fa-user clip bigProfile"
@@ -559,10 +559,10 @@ exports[`managers is falsy 1`] = `
         />
       </span>
       <div
-        className="layout-align-start-center layout-row flex"
+        className="layout-align-start-center layout-row flex padding_left"
       >
         <h1
-          className="flex-none cli"
+          className="flex-none layout-row cli"
         >
           Sebastian
            
@@ -738,13 +738,13 @@ exports[`shallow render 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
 >
   <div
-    className="flex-40 layout-row layout-wrap layout-align-start-center layout-padding margin_bottom"
+    className="flex-100 layout-row layout-wrap layout-align-start-center padding_top margin_bottom"
   >
     <div
       className="flex-100 layout-row layout-align-start-stretch username_title"
     >
       <span
-        className="layout-row flex-20 layout-align-center-center"
+        className="layout-row flex-none layout-align-center-center"
       >
         <i
           className="fa fa-user clip bigProfile"
@@ -756,10 +756,10 @@ exports[`shallow render 1`] = `
         />
       </span>
       <div
-        className="layout-align-start-center layout-row flex"
+        className="layout-align-start-center layout-row flex padding_left"
       >
         <h1
-          className="flex-none cli"
+          className="flex-none layout-row cli"
         >
           Sebastian
            
@@ -935,13 +935,13 @@ exports[`state.confirm is true 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
 >
   <div
-    className="flex-40 layout-row layout-wrap layout-align-start-center layout-padding margin_bottom"
+    className="flex-100 layout-row layout-wrap layout-align-start-center padding_top margin_bottom"
   >
     <div
       className="flex-100 layout-row layout-align-start-stretch username_title"
     >
       <span
-        className="layout-row flex-20 layout-align-center-center"
+        className="layout-row flex-none layout-align-center-center"
       >
         <i
           className="fa fa-user clip bigProfile"
@@ -953,10 +953,10 @@ exports[`state.confirm is true 1`] = `
         />
       </span>
       <div
-        className="layout-align-start-center layout-row flex"
+        className="layout-align-start-center layout-row flex padding_left"
       >
         <h1
-          className="flex-none cli"
+          className="flex-none layout-row cli"
         >
           Sebastian
            
@@ -1147,13 +1147,13 @@ exports[`state.showAddManager is true 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
 >
   <div
-    className="flex-40 layout-row layout-wrap layout-align-start-center layout-padding margin_bottom"
+    className="flex-100 layout-row layout-wrap layout-align-start-center padding_top margin_bottom"
   >
     <div
       className="flex-100 layout-row layout-align-start-stretch username_title"
     >
       <span
-        className="layout-row flex-20 layout-align-center-center"
+        className="layout-row flex-none layout-align-center-center"
       >
         <i
           className="fa fa-user clip bigProfile"
@@ -1165,10 +1165,10 @@ exports[`state.showAddManager is true 1`] = `
         />
       </span>
       <div
-        className="layout-align-start-center layout-row flex"
+        className="layout-align-start-center layout-row flex padding_left"
       >
         <h1
-          className="flex-none cli"
+          className="flex-none layout-row cli"
         >
           Sebastian
            
@@ -1449,13 +1449,13 @@ exports[`theme is falsy 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
 >
   <div
-    className="flex-40 layout-row layout-wrap layout-align-start-center layout-padding margin_bottom"
+    className="flex-100 layout-row layout-wrap layout-align-start-center padding_top margin_bottom"
   >
     <div
       className="flex-100 layout-row layout-align-start-stretch username_title"
     >
       <span
-        className="layout-row flex-20 layout-align-center-center"
+        className="layout-row flex-none layout-align-center-center"
       >
         <i
           className="fa fa-user clip bigProfile"
@@ -1467,10 +1467,10 @@ exports[`theme is falsy 1`] = `
         />
       </span>
       <div
-        className="layout-align-start-center layout-row flex"
+        className="layout-align-start-center layout-row flex padding_left"
       >
         <h1
-          className="flex-none cli"
+          className="flex-none layout-row cli"
         >
           Sebastian
            

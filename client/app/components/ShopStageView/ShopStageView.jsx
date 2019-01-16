@@ -214,7 +214,7 @@ class ShopStageView extends Component {
               { isQuote(tenant) ? t('common:quotation') : t('common:booking') }
             </h3>
             <i className="fa fa-chevron-right fade" />
-            <p className="flex-none fade">
+            <p className="flex-70 fade">
               {' '}
               {this.state.stageHeader}
               {' '}

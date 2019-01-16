@@ -4,7 +4,7 @@ exports[`address is falsy 1`] = `""`;
 
 exports[`shallow render 1`] = `
 <div
-  className="tile_padding  margin_bottom flex-20 layout-row layout-wrap layout-align-start-stretch"
+  className="tile_padding  margin_bottom flex-20 flex-sm-45 layout-row layout-wrap layout-align-start-stretch"
 >
   <div
     className="location-box flex layout-row layout-wrap layout-align-start-stretch"
@@ -85,7 +85,7 @@ exports[`shallow render 1`] = `
 
 exports[`showDelete is false 1`] = `
 <div
-  className="tile_padding  margin_bottom flex-20 layout-row layout-wrap layout-align-start-stretch"
+  className="tile_padding  margin_bottom flex-20 flex-sm-45 layout-row layout-wrap layout-align-start-stretch"
 >
   <div
     className="location-box flex layout-row layout-wrap layout-align-start-stretch"
@@ -166,7 +166,7 @@ exports[`showDelete is false 1`] = `
 
 exports[`state.editor is truthy 1`] = `
 <div
-  className="tile_padding  margin_bottom flex-20 layout-row layout-wrap layout-align-start-stretch"
+  className="tile_padding  margin_bottom flex-20 flex-sm-45 layout-row layout-wrap layout-align-start-stretch"
 >
   <div
     className="location-box flex layout-row layout-wrap layout-align-start-stretch"
@@ -288,7 +288,7 @@ exports[`state.editor is truthy 1`] = `
 
 exports[`state.showEdit is true 1`] = `
 <div
-  className="tile_padding  margin_bottom flex-20 layout-row layout-wrap layout-align-start-stretch"
+  className="tile_padding  margin_bottom flex-20 flex-sm-45 layout-row layout-wrap layout-align-start-stretch"
 >
   <div
     className="location-box flex layout-row layout-wrap layout-align-start-stretch"
@@ -405,7 +405,7 @@ exports[`state.showEdit is true 1`] = `
 
 exports[`theme is falsy 1`] = `
 <div
-  className="tile_padding  margin_bottom flex-20 layout-row layout-wrap layout-align-start-stretch"
+  className="tile_padding  margin_bottom flex-20 flex-sm-45 layout-row layout-wrap layout-align-start-stretch"
 >
   <div
     className="location-box flex layout-row layout-wrap layout-align-start-stretch"

@@ -17,7 +17,7 @@ function ShipmentAggregatedCargo ({
       className="layout-row layout-wrap layout-align-center content_width_booking"
       style={{ padding: '30px 0 70px 0' }}
     >
-      <div className={`${styles.input_box} flex-45 layout-row`}>
+      <div className={`${styles.input_box} flex-45 flex-sm-70 layout-row`}>
         <div className="flex-25 layout-row layout-align-center-center">
           {t('cargo:totalVolume')}
         </div>
@@ -31,7 +31,7 @@ function ShipmentAggregatedCargo ({
           {t('acronym:meterCubed')}
         </div>
       </div>
-      <div className={`${styles.input_box} flex-45 offset-10 layout-row`}>
+      <div className={`${styles.input_box} flex-45 flex-sm-70 offset-gt-md-10 layout-row`}>
         <div className="flex-25 layout-row layout-align-center-center">
           {t('cargo:totalWeight')}
         </div>

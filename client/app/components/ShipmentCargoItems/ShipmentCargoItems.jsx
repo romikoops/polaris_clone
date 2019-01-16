@@ -195,12 +195,12 @@ class ShipmentCargoItems extends Component {
                     <div className={`${styles.padding_left} flex-45 layout-wrap layout-row`}>
                       {inputs.totalWeight}
                     </div>
-                    </div>
-                    <div className="flex-100 layout-row layout-wrap">
-                      {inputs.chargeableWeight}
-                    </div>
-                  
-                  
+                  </div>
+                  <div className="flex-100 layout-row layout-wrap">
+                    {inputs.chargeableWeight}
+                  </div>
+
+
                 </div>
               </div>
 
@@ -239,9 +239,9 @@ class ShipmentCargoItems extends Component {
                 onClick={this.addNewCargo}
               >
                 <i className="fa fa-plus-square-o clip" style={textStyle} />
-                <p>
+                <p> 
                   {' '}
-                  {t('shipment:addUnit')}
+                  {t('shipment:addCargoGroup')}
                 </p>
               </div>
             </div>

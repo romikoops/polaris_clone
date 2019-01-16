@@ -67,7 +67,7 @@ function QuoteCardScheduleList ({
                       <p className="flex-none">{t('common:earlierDeparturesBase')}</p>
                     </div>
                   </div>
-                  <div className="flex-40 layout-row layout-align-center">
+                  <div className="flex-40 layout-row layout-align-center hide-sm">
                     <p className="flex-100 center">
                       {`${moment(firstSchedule.closing_date).format('ll')} -
                         ${moment(lastSchedule.closing_date).format('ll')}
@@ -80,7 +80,7 @@ function QuoteCardScheduleList ({
                     onClick={nextPage}
                   >
                     <div className="flex-none layout-row layout-align-space-around-center">
-                      <p className="flex-none">{t('common:laterDeparturesBase')}</p>
+                      <p className="flex-none" style={{ textAlign: 'right' }}>{t('common:laterDeparturesBase')}</p>
                       <i className="flex-none fa fa-chevron-right" />
                     </div>
                   </div>

@@ -32,6 +32,7 @@ class ChooseOffer extends Component {
       return result2 * sortOrder
     }
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -62,8 +63,11 @@ class ChooseOffer extends Component {
     this.handleScheduleRequest = this.handleScheduleRequest.bind(this)
     this.getRoutes = this.getRoutes.bind(this)
   }
+
   componentDidMount () {
-    const { prevRequest, setStage, bookingHasCompleted, match } = this.props
+    const {
+      prevRequest, setStage, bookingHasCompleted, match
+    } = this.props
     bookingHasCompleted(match.params.shipmentId)
     window.scrollTo(0, 0)
     setStage(3)
@@ -72,11 +76,13 @@ class ChooseOffer extends Component {
   setDuration (val) {
     this.setState({ durationFilter: val })
   }
+
   setDepartureDate (date) {
     const { shipmentDispatch, req } = this.props
     req.shipment.selected_day = date
     shipmentDispatch.getOffers(req)
   }
+
   setMoT (val, target) {
     this.setState({
       selectedMoT: {
@@ -85,12 +91,15 @@ class ChooseOffer extends Component {
       }
     })
   }
+
   toAccount () {
     this.props.goTo('/account')
   }
+
   bookNow () {
     this.props.goTo('/booking')
   }
+
   handleClick (checked, value) {
     if (checked) {
       this.setState(prevState => ({ selectedOffers: [...prevState.selectedOffers, value] }))
@@ -119,16 +128,19 @@ class ChooseOffer extends Component {
       isChecked: !prevState.isChecked
     }))
   }
+
   toggleLimits (target) {
     this.setState({ limits: { ...this.state.limits, [target]: !this.state.limits[target] } })
     this.showMore()
   }
+
   handleCurrencyUpdate (e) {
     const { value } = e
     const { shipmentDispatch, req } = this.props
     this.setState({ currentCurrency: e })
     shipmentDispatch.updateCurrency(value, req)
   }
+
   showMore () {
     const { outerLimit } = this.state
     const dayFactor = 10
@@ -138,10 +150,12 @@ class ChooseOffer extends Component {
     shipmentDispatch.getOffers(req, false)
     this.setState({ outerLimit: req.delay })
   }
+
   downloadQuotations () {
     const { shipmentDispatch } = this.props
     shipmentDispatch.downloadQuotations()
   }
+
   shiftDepartureDate (operator, days) {
     const { shipmentDispatch, req } = this.props
     let newDepartureDate
@@ -158,9 +172,11 @@ class ChooseOffer extends Component {
 
     shipmentDispatch.getOffersForNewDate(req, false)
   }
+
   chooseResult (obj) {
     this.props.chooseOffer(obj)
   }
+
   selectQuotes (shipment, quotes, email) {
     const {
       shipmentDispatch
@@ -275,41 +291,55 @@ class ChooseOffer extends Component {
             parentToggle={this.toggleNewHub}
           />
         ) : ''}
-        <div className={`flex-none content_width_booking layout-row`}>
-          {!isQuote(tenant) ? <div className="flex-20 layout-row layout-wrap">
-            <RouteFilterBox
-              theme={theme}
-              tenant={tenant}
-              cargos={shipmentData.cargoUnits}
-              pickup={shipment.has_pre_carriage}
-              setDurationFilter={this.setDuration}
-              durationFilter={this.state.durationFilter}
-              setMoT={this.setMoT}
-              moT={this.state.selectedMoT}
-              departureDate={depDay}
-              shipment={shipment}
-              availableMotKeys={availableMoTKeys}
-              lastAvailableDate={lastAvailableDate}
-              setDepartureDate={this.setDepartureDate}
-            />
-          </div> : ''}
-          <div className="flex  offset-5 layout-row layout-wrap">
+        <div className="flex-none content_width_booking layout-row">
+          {!isQuote(tenant) ? (
+            <div className="flex-20 flex-sm-30 layout-row layout-wrap">
+              <RouteFilterBox
+                theme={theme}
+                tenant={tenant}
+                cargos={shipmentData.cargoUnits}
+                pickup={shipment.has_pre_carriage}
+                setDurationFilter={this.setDuration}
+                durationFilter={this.state.durationFilter}
+                setMoT={this.setMoT}
+                moT={this.state.selectedMoT}
+                departureDate={depDay}
+                shipment={shipment}
+                availableMotKeys={availableMoTKeys}
+                lastAvailableDate={lastAvailableDate}
+                setDepartureDate={this.setDepartureDate}
+              />
+            </div>
+          ) : ''}
+          <div className={`${styles.quotes_wrapper} flex flex-sm-70 offset-md-5 offset-lg-5 layout-row layout-wrap`}>
             <div className="flex-100 layout-row layout-wrap">
               {routesToRender}
             </div>
           </div>
           {isQuote(tenant) ? (
             <div className={`flex-20 offset-5 quote_options layout-wrap layout-align-center-start ${styles.download_section}`}>
-              <p className={`flex-100 layout-row ${styles.offer_title}`} >{isQuote(tenant) ? t('shipment:sendQuote') : t('shipment:selectedOffers') }</p>
+              <p className={`flex-100 layout-row ${styles.offer_title}`}>{isQuote(tenant) ? t('shipment:sendQuote') : t('shipment:selectedOffers') }</p>
               {selectedOffers.length !== 0 ? (
-                selectedOffers.map((offer, i) =>
-                  (<div className={`flex-100 layout-row layout-align-start-center ${styles.selected_offer}`}>
+                selectedOffers.map((offer, i) => (
+                  <div className={`flex-100 layout-row layout-align-start-center ${styles.selected_offer}`}>
                     { scope.hide_grand_total
-                      ? <span> {t('shipment:quoteNo', { number: i + 1 })}</span>
-                      : <span>{numberSpacing(offer.quote.total.value, 2)}&nbsp;{shipmentData.results[0].quote.total.currency}</span>
+                      ? (
+                        <span>
+                          {' '}
+                          {t('shipment:quoteNo', { number: i + 1 })}
+                        </span>
+                      )
+                      : (
+                        <span>
+                          {numberSpacing(offer.quote.total.value, 2)}
+                        &nbsp;
+                          {shipmentData.results[0].quote.total.currency}
+                        </span>
+                      )
                     }
                     <i className="fa fa-times pointy layout-row layout-align-end-center" onClick={() => this.handleClick(false, offer)} />
-                  </div>))
+                  </div>
+                ))
               ) : ''}
               <div className={`flex-100 layout-row layout-align-center-center ${styles.download_button}`}>
                 <div className="flex-90 layout-row layout-align-center-center layout-wrap">

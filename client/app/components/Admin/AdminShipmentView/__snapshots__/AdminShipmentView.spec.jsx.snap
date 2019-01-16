@@ -5,10 +5,10 @@ exports[`service && service.total 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start header_buffer"
 >
   <div
-    className="margin_box_right layout-row flex-100 layout-align-center-stretch margin_bottom"
+    className="margin_box_right layout-row flex-100 layout-wrap layout-align-center-stretch margin_bottom"
   >
     <div
-      className="layout-row flex layout-align-space-between-center title_shipment_grey"
+      className="layout-row flex flex-sm-100 layout-align-space-between-center title_shipment_grey"
     >
       <p
         className="layout-align-start-center layout-row"
@@ -425,10 +425,10 @@ exports[`shallow render 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start header_buffer"
 >
   <div
-    className="margin_box_right layout-row flex-100 layout-align-center-stretch margin_bottom"
+    className="margin_box_right layout-row flex-100 layout-wrap layout-align-center-stretch margin_bottom"
   >
     <div
-      className="layout-row flex layout-align-space-between-center title_shipment_grey"
+      className="layout-row flex flex-sm-100 layout-align-space-between-center title_shipment_grey"
     >
       <p
         className="layout-align-start-center layout-row"

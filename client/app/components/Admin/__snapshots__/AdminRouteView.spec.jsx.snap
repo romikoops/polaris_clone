@@ -19,7 +19,7 @@ exports[`shallow render 1`] = `
       className="flex-40 layout-row layout-align-space-between-center"
     >
       <div
-        className="flex-70 layout-row layout-align-end-center"
+        className="flex-40 layout-row layout-align-end-center"
       >
         <NamedSelect
           className="flex-100"
@@ -48,7 +48,7 @@ exports[`shallow render 1`] = `
         />
       </div>
       <div
-        className="flex-25 layout-row layout-align-end-center"
+        className="flex-55 layout-row layout-align-end-center"
       >
         <RoundButton
           active={false}
@@ -363,7 +363,7 @@ exports[`state.confirm is true 1`] = `
       className="flex-40 layout-row layout-align-space-between-center"
     >
       <div
-        className="flex-70 layout-row layout-align-end-center"
+        className="flex-40 layout-row layout-align-end-center"
       >
         <NamedSelect
           className="flex-100"
@@ -392,7 +392,7 @@ exports[`state.confirm is true 1`] = `
         />
       </div>
       <div
-        className="flex-25 layout-row layout-align-end-center"
+        className="flex-55 layout-row layout-align-end-center"
       >
         <RoundButton
           active={false}
@@ -692,7 +692,7 @@ exports[`state.editNotes is true 1`] = `
       className="flex-40 layout-row layout-align-space-between-center"
     >
       <div
-        className="flex-70 layout-row layout-align-end-center"
+        className="flex-40 layout-row layout-align-end-center"
       >
         <NamedSelect
           className="flex-100"
@@ -721,7 +721,7 @@ exports[`state.editNotes is true 1`] = `
         />
       </div>
       <div
-        className="flex-25 layout-row layout-align-end-center"
+        className="flex-55 layout-row layout-align-end-center"
       >
         <RoundButton
           active={false}

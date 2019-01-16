@@ -106,7 +106,7 @@ class PricingList extends PureComponent {
 
     return (
       <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-        <div className="flex-100 layout-row layout-align-start-center greyBg">
+        <div className="flex-100 layout-row layout-align-start-center greyBg margin_top">
           <span><b>{t('common:pricings')}</b></span>
         </div>
         <div className="flex-100 layout-row layout-align-start-center">

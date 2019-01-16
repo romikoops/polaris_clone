@@ -10,7 +10,7 @@ exports[`shallow rendering 1`] = `
   }
 >
   <div
-    className="input_box flex-45 layout-row"
+    className="input_box flex-45 flex-sm-70 layout-row"
   >
     <div
       className="flex-25 layout-row layout-align-center-center"
@@ -32,7 +32,7 @@ exports[`shallow rendering 1`] = `
     </div>
   </div>
   <div
-    className="input_box flex-45 offset-10 layout-row"
+    className="input_box flex-45 flex-sm-70 offset-gt-md-10 layout-row"
   >
     <div
       className="flex-25 layout-row layout-align-center-center"

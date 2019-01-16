@@ -76,7 +76,7 @@ exports[`destinationFees is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m"
+        className="flex-none no_m center"
       >
         {{mot}} Freight
       </p>
@@ -236,7 +236,7 @@ exports[`feeHash is empty object 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m"
+        className="flex-none no_m center"
       >
         {{mot}} Freight
       </p>
@@ -374,7 +374,7 @@ exports[`firstStep is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m"
+        className="flex-none no_m center"
       >
         {{mot}} Freight
       </p>
@@ -544,7 +544,7 @@ exports[`onCarriage is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m"
+        className="flex-none no_m center"
       >
         {{mot}} Freight
       </p>
@@ -712,7 +712,7 @@ exports[`preCarriage is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m"
+        className="flex-none no_m center"
       >
         {{mot}} Freight
       </p>
@@ -882,7 +882,7 @@ exports[`shallow render 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m"
+        className="flex-none no_m center"
       >
         {{mot}} Freight
       </p>

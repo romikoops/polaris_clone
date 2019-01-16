@@ -132,7 +132,7 @@ class UserDashboard extends Component {
               className={`layout-row flex-100 layout-align-start-center
               ${ustyles.headerElement}`}
             >
-              <div className="flex-60 layout-row layout-align-space-around-center">
+              <div className="flex layout-row layout-align-space-around-center">
                 <div className="layout-row flex-none layout-align-center-center">
                   <i
                     className={`fa fa-user clip ${ustyles.bigProfile}`}
@@ -141,12 +141,12 @@ class UserDashboard extends Component {
                 </div>
                 <div className={`${ustyles.welcome} flex layout-row ccb_dashboard`}>
                   {t('common:welcomeBack')}
-&nbsp;
+                  &nbsp;
                   {' '}
                   <b>{user.first_name}</b>
                 </div>
               </div>
-              <div className="flex-40 layout-row layout-align-end-center">
+              <div className="flex-40 flex-sm-20 layout-row layout-align-end-center">
                 <SquareButton
                   theme={theme}
                   handleNext={this.startBooking}
