@@ -192,6 +192,15 @@ class QuoteCard extends PureComponent {
     const calcPayload = aggregatedCargo && aggregatedCargo.id
       ? aggregatedCargo.weight
       : cargo.reduce((sum, cargoUnit) => (sum + +cargoUnit.payload_in_kg * +cargoUnit.quantity), 0)
+    const calcVolume = aggregatedCargo && aggregatedCargo.id
+      ? aggregatedCargo.volume
+      : cargo.reduce((sum, cargoUnit) => (
+        sum + 
+        (+cargoUnit.dimension_x *
+        +cargoUnit.dimension_y *
+        +cargoUnit.dimension_z /
+        1000000)
+        * +cargoUnit.quantity), 0)
 
     const responsiveFlex = isQuote(tenant) ? 'flex-lg-80 offset-lg-20' : ''
     const hideGrandTotal = this.shouldHideGrandTotal()
@@ -235,13 +244,28 @@ class QuoteCard extends PureComponent {
               />
             </div>
             <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.unit_info}`}>
-              <p className="flex-60 layout-row layout-align-start-center">
-                {`${capitalize(t('cargo:totalWeight'))}: `}
-              </p>
-              <span className="flex layout-row layout-align-start-center">
-                { `${numberSpacing(calcPayload, 2)} kg` }
-              </span>
+              <div className={`flex-100 layout-row layout-align-start-center ${styles.unit_info}`}>
+                <p className="flex-100 layout-row layout-align-start">
+                  {`${capitalize(t('cargo:totalWeight'))}: `}
+                  <span className="flex layout-row layout-align-end">
+                  { ` ${numberSpacing(calcPayload, 2)} kg` }
+                </span>
+                </p>
+               
+              </div>
+              <div className={`flex-100 layout-row layout-align-start-center ${styles.unit_info}`}>
+                <p className="flex-100 layout-row layout-align-start">
+                  {`${capitalize(t('cargo:totalVolume'))}: `}
+                  <span className="flex layout-row layout-align-end">
+                  { ` ${numberSpacing(calcVolume, 3)} m` }
+                  <sup>3</sup>
+                </span>
+                
+                </p>
+                
+              </div>
             </div>
+            
           </div>
         </div>
         <div className="flex-100 layout-row layout-align-start-center" style={{ paddingBottom: '18px' }}>
