@@ -20,12 +20,12 @@
       </mj-text>
     </mj-column>
     <mj-column width="100%" padding="0 2.5%">
-      <% @content['body'].each do |section|%>
+      <% @content['body'].each do |section| %>
         <mj-text line-height="24px">
-          <%== section.text%>
+          <%== section['text'] %>
         </mj-text>
-        <% if section.image.attached?%>
-          <mj-image  src="<%= Rails.application.routes.url_helpers.rails_blob_url(section.image, disposition: 'attachment') %>" />
+        <% if section['image_url'] %>
+          <mj-image  src="<%= section['image_url'] %>" />
         <% end %>
         <mj-divider border-width="1px" border-style="dashed" border-color="lightgrey" />
       <% end %>
@@ -40,8 +40,8 @@
 <mj-wrapper full-width="full-width" padding="0px">
   <mj-section full-width="full-width">
     <mj-column width="100%" padding="0 2.5%">
-      <% @content['social'].each do |section|%>
-          <%== section.text%>
+      <% @content['social'].each do |section| %>
+          <%== section['text'] %>
       <% end %>
     </mj-column>
   </mj-section>
@@ -60,12 +60,12 @@
 <mj-wrapper full-width="full-width" padding="0px">
   <mj-section full-width="full-width">
     <mj-column width="100%" padding="0 2.5%">
-      <% @content['footer'].each do |section|%>
+      <% @content['footer'].each do |section| %>
         <mj-text line-height="24px" >
-          <%== section.text%>
+          <%== section['text'] %>
         </mj-text>
-        <% if section.image.attached?%>
-          <mj-image src="<%= Rails.application.routes.url_helpers.rails_blob_url(section.image, disposition: 'attachment') %>" />
+        <% if section['image_url']%>
+          <mj-image src="<%= section['image_url'] %>" />
         <% end %>
       <% end %>
     </mj-column>

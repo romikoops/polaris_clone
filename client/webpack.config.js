@@ -16,7 +16,7 @@ module.exports = (env, options) => ({
 
   output: {
     filename: options.mode === 'production' ? '[name].[contenthash].js' : '[name].js',
-    path: path.resolve(__dirname, '../dist'),
+    path: path.resolve(__dirname, './dist'),
     publicPath: '/'
   },
 
@@ -131,7 +131,7 @@ module.exports = (env, options) => ({
     }),
 
     new CleanWebpackPlugin(
-      [path.resolve(__dirname, '../dist')],
+      [path.resolve(__dirname, './dist')],
       {
         root: path.resolve(__dirname, '../')
       }
