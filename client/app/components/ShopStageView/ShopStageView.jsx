@@ -123,10 +123,11 @@ class ShopStageView extends Component {
       theme,
       hasNextStage,
       tenant,
+      currentStage,
       t
     } = this.props
-    
-    const stepBarShowStyle = hasNextStage ? '' : styles.hide_nav_options
+    const shouldHideNavButtons = currentStage > 5
+    const stepBarShowStyle = shouldHideNavButtons ? styles.hide_nav_options : ''
     const { bookingProcessImage } = theme
     const bookingProcessImageWrapped = bookingProcessImage
       ? `url(${bookingProcessImage})`
@@ -146,7 +147,7 @@ class ShopStageView extends Component {
     const backBtn = (
       <div
         className={`${styles.stage_box} flex-none layout-column layout-align-start-center ${stepBarShowStyle}`}
-        onClick={hasNextStage ? () => ShopStageView.goBack() : null}
+        onClick={shouldHideNavButtons ? () => ShopStageView.goBack() : null}
       >
         <div className={styles.wrapper_shop_stage_current}>
           <div
