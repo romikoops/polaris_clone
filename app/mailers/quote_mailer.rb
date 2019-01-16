@@ -56,7 +56,7 @@ class QuoteMailer < ApplicationMailer
       quotes:      quotes,
       color:       @user.tenant.theme['colors']['primary'],
       name:        'quotation',
-      remarks:    Remark.where(tenant_id: @user.tenant_id)
+      remarks:    Remark.where(tenant_id: @user.tenant_id).order(order: :asc)
     )
     quotation.generate
   end
