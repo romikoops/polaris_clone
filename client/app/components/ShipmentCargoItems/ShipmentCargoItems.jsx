@@ -241,7 +241,7 @@ class ShipmentCargoItems extends Component {
                 <i className="fa fa-plus-square-o clip" style={textStyle} />
                 <p>
                   {' '}
-                  {t('shipment:addUnit')}
+                  {t('shipment:addCargoGroup')}
                 </p>
               </div>
             </div>

@@ -601,7 +601,7 @@ exports[`shallow rendering 1`] = `
           />
           <p>
              
-            NO_TRANSLATION | key "shipment:addUnit"
+            Add Cargo Group
           </p>
         </div>
       </div>
