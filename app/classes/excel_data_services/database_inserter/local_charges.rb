@@ -23,7 +23,7 @@ module ExcelDataServices
               end
             end
           else
-            carrier = Carrier.find_or_create_by(name: params[:carrier])
+            carrier = Carrier.find_or_create_by(name: params[:carrier]) if params[:carrier]
             tenant_vehicles = find_or_create_tenant_vehicles(params, carrier)
             tenant_vehicles.each do |tenant_vehicle|
               find_or_create_local_charge(params, tenant_vehicle)
