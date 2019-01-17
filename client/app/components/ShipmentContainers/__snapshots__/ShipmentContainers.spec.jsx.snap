@@ -266,7 +266,7 @@ exports[`containers.dangerous_goods is true 1`] = `
           onClick={[Function]}
         >
           <p>
-            NO_TRANSLATION | key "shipment:addUnit"
+            Add Cargo Group
               
           </p>
           <i
@@ -771,7 +771,7 @@ exports[`nextStageAttempt is true 1`] = `
           onClick={[Function]}
         >
           <p>
-            NO_TRANSLATION | key "shipment:addUnit"
+            Add Cargo Group
               
           </p>
           <i
@@ -1276,7 +1276,7 @@ exports[`scope.dangerous_goods is true 1`] = `
           onClick={[Function]}
         >
           <p>
-            NO_TRANSLATION | key "shipment:addUnit"
+            Add Cargo Group
               
           </p>
           <i
@@ -1781,7 +1781,7 @@ exports[`shallow rendering 1`] = `
           onClick={[Function]}
         >
           <p>
-            NO_TRANSLATION | key "shipment:addUnit"
+            Add Cargo Group
               
           </p>
           <i

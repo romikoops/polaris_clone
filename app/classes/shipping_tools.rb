@@ -18,13 +18,14 @@ module ShippingTools
       trip = Trip.find(schedule['trip_id'])
       on_carriage_hash = (shipment.trucking['on_carriage'] if !!result['quote']['trucking_on'])
       pre_carriage_hash = (shipment.trucking['pre_carriage'] if !!result['quote']['trucking_pre'])
+
       new_shipment = main_quote.shipments.create!(
         status: 'quoted',
         user_id: shipment.user_id,
         imc_reference: shipment.imc_reference,
         origin_hub_id: schedule['origin_hub']['id'],
         destination_hub_id: schedule['destination_hub']['id'],
-        origin_nexus_id: shipment.origin_nexus_id,
+        origin_nexus_id: shipment.origin_nexus_id || shipment&.origin_hub&.nexus_id,
         destination_nexus_id: shipment.destination_nexus_id,
         quotation_id: schedule['id'],
         trip_id: trip.id,
@@ -37,7 +38,8 @@ module ShippingTools
           on_carriage: on_carriage_hash
         },
         load_type: shipment.load_type,
-        itinerary_id: trip.itinerary_id
+        itinerary_id: trip.itinerary_id,
+        desired_start_date: shipment.desired_start_date
       )
       new_shipment.cargo_units = shipment.cargo_units.map(&:dup)
       shipment.charge_breakdowns.each do |charge_breakdown|
@@ -131,7 +133,7 @@ module ShippingTools
       shipments: [shipment],
       load_type: load_type,
       name: 'shipment_recap',
-      remarks: Remark.where(tenant_id: shipment.tenant_id).order(created_at: :desc)
+      remarks: Remark.where(tenant_id: shipment.tenant_id).order(order: :asc)
     )
 
     shipment_recap.generate
@@ -618,7 +620,7 @@ module ShippingTools
       logo: logo,
       quotation: main_quote,
       name: 'quotation',
-      remarks: Remark.where(tenant_id: tenant.id).order(created_at: :desc)
+      remarks: Remark.where(tenant_id: tenant.id).order(order: :asc)
     )
     quotation.generate
   end
@@ -635,12 +637,10 @@ module ShippingTools
   def self.shipper_notification_email(user, shipment)
     ShipmentMailer.shipper_notification(user, shipment).deliver_later
   end
-  
+
   def self.shipper_welcome_email(user, shipment)
     no_welcome_content = Content.where(tenant_id: user.tenant_id, component: 'WelcomeMail').empty?
-    unless no_welcome_content
-      WelcomeMailer.welcome_email(user, shipment).deliver_later
-    end
+    WelcomeMailer.welcome_email(user, shipment).deliver_later unless no_welcome_content
   end
 
   def self.shipper_confirmation_email(user, shipment)

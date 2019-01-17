@@ -12,7 +12,7 @@ module Admin
     end
 
     def index
-      remarks = Remark.where(tenant_id: current_tenant.id).order(created_at: :asc)
+      remarks = Remark.where(tenant_id: current_tenant.id).order(order: :asc)
       response_handler(remarks)
     end
 

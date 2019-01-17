@@ -173,6 +173,7 @@ export class ShipmentDetails extends Component {
     this.handleSelectLocation = this.handleSelectLocation.bind(this)
     this.loadPrevReq = this.loadPrevReq.bind(this)
     this.updateFilteredRouteIndexes = this.updateFilteredRouteIndexes.bind(this)
+    this.returnToDashboard = this.returnToDashboard.bind(this)
   }
 
   componentWillMount () {
@@ -784,7 +785,8 @@ export class ShipmentDetails extends Component {
   }
 
   returnToDashboard () {
-    this.props.shipmentDispatch.getDashboard(true)
+    const { shipmentDispatch } = this.props
+    shipmentDispatch.getDashboard(true)
   }
 
   handleCarriageChange (target, value, options) {

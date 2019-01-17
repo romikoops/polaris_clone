@@ -46,6 +46,7 @@ exports[`loading is true 1`] = `
           },
         }
       }
+      cargo={Array []}
       cargoView={Array []}
       deselectedStyle={
         Object {
@@ -359,6 +360,7 @@ exports[`shallow render 1`] = `
           },
         }
       }
+      cargo={Array []}
       cargoView={Array []}
       deselectedStyle={
         Object {
@@ -671,6 +673,18 @@ exports[`shipmentData.cargoItems is present 1`] = `
             "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
           },
         }
+      }
+      cargo={
+        Array [
+          Object {
+            "cargo_item_type_id": "foo",
+            "id": 0,
+          },
+          Object {
+            "cargo_item_type_id": "bar",
+            "id": 1,
+          },
+        ]
       }
       cargoView={
         Array [
@@ -1059,6 +1073,7 @@ exports[`shipmentData.contacts is present 1`] = `
           },
         }
       }
+      cargo={Array []}
       cargoView={Array []}
       deselectedStyle={
         Object {
@@ -1418,6 +1433,7 @@ exports[`shipmentData.documents is present 1`] = `
           },
         }
       }
+      cargo={Array []}
       cargoView={Array []}
       deselectedStyle={
         Object {

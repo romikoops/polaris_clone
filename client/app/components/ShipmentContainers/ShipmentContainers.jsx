@@ -259,7 +259,7 @@ class ShipmentContainers extends Component {
                 className="layout-row flex-none layout-align-start-center"
                 onClick={this.addContainer}
               >
-                <p>{t('shipment:addUnit')}&nbsp;&nbsp;</p>
+                <p>{t('shipment:addCargoGroup')}&nbsp;&nbsp;</p>
                 <i className="fa fa-plus-square-o clip" style={textStyle} />
               </div>
             </div>

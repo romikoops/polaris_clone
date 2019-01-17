@@ -110,7 +110,7 @@ class ShipmentQuotationCard extends Component {
             <div className="layout-row flex-10">
               <div className="layout-row layout-align-center-center">
                 <span className={`${styles.smallText}`}>
-                  <b>x</b><span className={`${styles.bigText}`}>{shipment.cargo_units ? shipment.cargo_units.length : '0'}</span>
+                  <b>x</b><span className={`${styles.bigText}`}>{shipment.cargo_count}</span>
                 </span>
               </div>
             </div>

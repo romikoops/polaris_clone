@@ -149,7 +149,7 @@ exports[`has oncarriage 1`] = `
             <span
               className="bigText"
             >
-              1
+              2
             </span>
           </span>
         </div>
@@ -313,7 +313,7 @@ exports[`has precarriage 1`] = `
             <span
               className="bigText"
             >
-              1
+              2
             </span>
           </span>
         </div>
@@ -477,7 +477,7 @@ exports[`shallow rendering 1`] = `
             <span
               className="bigText"
             >
-              1
+              2
             </span>
           </span>
         </div>
