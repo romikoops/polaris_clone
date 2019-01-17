@@ -1,0 +1,311 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`with empty props 1`] = `""`;
+
+exports[`with imported props 1`] = `
+<CargoItem
+  ShipmentDetails={
+    Object {
+      "availableMots": Array [
+        "ocean",
+        "air",
+      ],
+      "availableRoutes": Array [
+        Object {
+          "destination": Object {
+            "country": "CN",
+            "hubId": 3027,
+            "hubName": "Qingdao Port",
+            "latitude": 36.083811,
+            "longitude": 120.323534,
+            "nexusId": 601,
+            "nexusName": "Qingdao",
+            "stopId": 4657,
+            "truckTypes": Array [],
+          },
+          "itineraryId": 2863,
+          "itineraryName": "Gothenburg - Qingdao",
+          "modeOfTransport": "ocean",
+          "origin": Object {
+            "country": "SE",
+            "hubId": 3023,
+            "hubName": "Gothenburg Port",
+            "latitude": 57.694253,
+            "longitude": 11.854048,
+            "nexusId": 597,
+            "nexusName": "Gothenburg",
+            "stopId": 4656,
+            "truckTypes": Array [
+              "default",
+            ],
+          },
+        },
+        Object {
+          "destination": Object {
+            "country": "CN",
+            "hubId": 3034,
+            "hubName": "Qingdao Airport",
+            "latitude": 36.083811,
+            "longitude": 120.323534,
+            "nexusId": 601,
+            "nexusName": "Qingdao",
+            "stopId": 4847,
+            "truckTypes": Array [],
+          },
+          "itineraryId": 2958,
+          "itineraryName": "Gothenburg - Qingdao",
+          "modeOfTransport": "air",
+          "origin": Object {
+            "country": "SE",
+            "hubId": 3030,
+            "hubName": "Gothenburg Airport",
+            "latitude": 57.694253,
+            "longitude": 11.854048,
+            "nexusId": 597,
+            "nexusName": "Gothenburg",
+            "stopId": 4846,
+            "truckTypes": Array [
+              "default",
+            ],
+          },
+        },
+      ],
+    }
+  }
+  cargoItem={
+    Object {
+      "cargoItemTypeId": 23,
+      "dangerousGoods": false,
+      "dimensionX": 7,
+      "dimensionY": 7,
+      "dimensionZ": 8,
+      "payloadInKg": 11,
+      "quantity": 7,
+      "stackable": false,
+      "totalVolume": 0,
+      "totalWeight": 0,
+    }
+  }
+  cargoItemTypes={
+    Array [
+      Object {
+        "area": null,
+        "category": "Pallet",
+        "created_at": "2018-06-27T17:28:28.431Z",
+        "description": "Pallet",
+        "dimension_x": null,
+        "dimension_y": null,
+        "id": 25,
+        "updated_at": "2018-06-27T17:28:28.431Z",
+      },
+      Object {
+        "area": null,
+        "category": "Carton",
+        "created_at": "2018-06-27T17:28:28.417Z",
+        "description": "Carton",
+        "dimension_x": null,
+        "dimension_y": null,
+        "id": 22,
+        "updated_at": "2018-06-27T17:28:28.417Z",
+      },
+      Object {
+        "area": null,
+        "category": "Crate",
+        "created_at": "2018-06-27T17:28:28.422Z",
+        "description": "Crate",
+        "dimension_x": null,
+        "dimension_y": null,
+        "id": 23,
+        "updated_at": "2018-06-27T17:28:28.422Z",
+      },
+      Object {
+        "area": null,
+        "category": "Bottle",
+        "created_at": "2018-06-27T17:28:28.436Z",
+        "description": "Bottle",
+        "dimension_x": null,
+        "dimension_y": null,
+        "id": 26,
+        "updated_at": "2018-06-27T17:28:28.436Z",
+      },
+      Object {
+        "area": null,
+        "category": "Stack",
+        "created_at": "2018-06-27T17:28:28.440Z",
+        "description": "Stack",
+        "dimension_x": null,
+        "dimension_y": null,
+        "id": 27,
+        "updated_at": "2018-06-27T17:28:28.440Z",
+      },
+      Object {
+        "area": null,
+        "category": "Drum",
+        "created_at": "2018-06-27T17:28:28.445Z",
+        "description": "Drum",
+        "dimension_x": null,
+        "dimension_y": null,
+        "id": 28,
+        "updated_at": "2018-06-27T17:28:28.445Z",
+      },
+      Object {
+        "area": null,
+        "category": "Skid",
+        "created_at": "2018-06-27T17:28:28.450Z",
+        "description": "Skid",
+        "dimension_x": null,
+        "dimension_y": null,
+        "id": 29,
+        "updated_at": "2018-06-27T17:28:28.450Z",
+      },
+      Object {
+        "area": null,
+        "category": "Barrel",
+        "created_at": "2018-06-27T17:28:28.454Z",
+        "description": "Barrel",
+        "dimension_x": null,
+        "dimension_y": null,
+        "id": 30,
+        "updated_at": "2018-06-27T17:28:28.454Z",
+      },
+    ]
+  }
+  destination={
+    Object {
+      "country": "CN",
+      "latitude": 36.083811,
+      "longitude": 120.323534,
+      "nexusId": 601,
+      "nexusName": "Qingdao",
+    }
+  }
+  direction="export"
+  i={0}
+  id={4606}
+  maxDimensions={
+    Object {
+      "air": Object {
+        "chargeableWeight": "1000.0",
+        "dimensionX": "120.0",
+        "dimensionY": "100.0",
+        "dimensionZ": "150.0",
+        "payloadInKg": "1000.0",
+      },
+      "general": Object {
+        "chargeableWeight": "21770.0",
+        "dimensionX": "590.0",
+        "dimensionY": "234.2",
+        "dimensionZ": "228.0",
+        "payloadInKg": "21770.0",
+      },
+    }
+  }
+  onCarriage={[Function]}
+  onChangeCargoUnitCheckbox={[Function]}
+  onChangeCargoUnitInput={[Function]}
+  onChangeCargoUnitSelect={[Function]}
+  onDeleteUnit={[Function]}
+  onSelectColliType={[Function]}
+  origin={
+    Object {
+      "country": "SE",
+      "latitude": 57.694253,
+      "longitude": 11.854048,
+      "nexusId": 597,
+      "nexusName": "Gothenburg",
+    }
+  }
+  preCarriage={false}
+  scope={
+    Object {
+      "cargo_info_level": "hs_codes",
+      "carriage_options": Object {
+        "on_carriage": Object {
+          "export": "optional",
+          "import": "optional",
+        },
+        "pre_carriage": Object {
+          "export": "optional",
+          "import": "optional",
+        },
+      },
+      "closed_quotation_tool": false,
+      "closed_registration": false,
+      "closed_shop": false,
+      "consolidate_cargo": false,
+      "continuous_rounding": false,
+      "customs_export_paper": false,
+      "dangerous_goods": false,
+      "detailed_billing": false,
+      "fee_detail": "key_and_name",
+      "fixed_currency": false,
+      "fixed_exchange_rates": false,
+      "has_customs": true,
+      "has_insurance": true,
+      "incoterm_info_level": "text",
+      "links": Object {
+        "about": "",
+        "legal": "",
+      },
+      "modes_of_transport": Object {
+        "air": Object {
+          "cargo_item": true,
+          "container": true,
+        },
+        "ocean": Object {
+          "cargo_item": true,
+          "container": true,
+        },
+        "rail": Object {
+          "cargo_item": true,
+          "container": true,
+        },
+        "truck": Object {
+          "cargo_item": false,
+          "container": false,
+        },
+      },
+      "non_stackable_goods": true,
+      "open_quotation_tool": false,
+      "require_full_address": true,
+      "show_beta_features": true,
+      "terms": Array [
+        "You verify that all the information provided above is true",
+        "You agree to the presented terms and conditions.",
+        "Demo is to discuss the validity of the presented prices with the product owners.",
+      ],
+      "total_dimensions": true,
+    }
+  }
+  selectedDay="2019-01-24T10:00:00.000Z"
+  t={[Function]}
+  theme={
+    Object {
+      "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+      "colors": Object {
+        "brightPrimary": "#2491FD",
+        "brightSecondary": "#25ED36",
+        "primary": "#0D5BA9",
+        "secondary": "#23802A",
+      },
+      "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+      "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+      "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+      "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+    }
+  }
+  toggleModal={[Function]}
+  toggleStackable={[Function]}
+  trucking={
+    Object {
+      "onCarriage": Object {
+        "truckType": "",
+      },
+      "preCarriage": Object {
+        "truckType": "",
+      },
+    }
+  }
+  uniqKey="c29c2d51-b51a-4e01-87ed-8379eb38e529"
+/>
+`;
