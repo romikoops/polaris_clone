@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 module Locations
-  RSpec.describe NameDecorator do
+  RSpec.describe LocationDecorator do
     let!(:location) { FactoryBot.create(:locations_location) }
     let!(:example_bounds) { RGeo::GeoJSON.encode(RGeo::GeoJSON::Feature.new(location.bounds)) }
     let!(:location_names) do

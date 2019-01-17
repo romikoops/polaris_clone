@@ -13,12 +13,9 @@
 ActiveRecord::Schema.define(version: 2019_02_13_141635) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "fuzzystrmatch"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "postgis"
-  enable_extension "postgis_tiger_geocoder"
-  enable_extension "postgis_topology"
   enable_extension "unaccent"
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -420,26 +417,6 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.index ["uuid"], name: "index_local_charges_on_uuid", unique: true
   end
 
-  create_table "location_names", force: :cascade do |t|
-    t.string "language"
-    t.string "locality_2"
-    t.string "locality_3"
-    t.string "locality_4"
-    t.string "locality_5"
-    t.string "locality_6"
-    t.string "locality_7"
-    t.string "locality_8"
-    t.string "locality_9"
-    t.string "locality_10"
-    t.string "locality_11"
-    t.string "country"
-    t.string "postal_code"
-    t.string "name"
-    t.integer "location_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "locations", force: :cascade do |t|
     t.string "postal_code"
     t.string "suburb"
@@ -459,7 +436,7 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
 
   create_table "locations_locations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.geometry "bounds", limit: {:srid=>0, :type=>"geometry"}
-    t.integer "osm_id"
+    t.bigint "osm_id"
     t.string "name"
     t.integer "admin_level"
     t.datetime "created_at", null: false
@@ -468,8 +445,8 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
 
   create_table "locations_names", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "language"
-    t.integer "osm_id"
-    t.integer "place_rank"
+    t.bigint "osm_id"
+    t.bigint "place_rank"
     t.string "osm_type"
     t.string "street"
     t.string "city"
@@ -494,6 +471,7 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.index "to_tsvector('english'::regconfig, (osm_id)::text)", name: "locations_names_to_tsvector_idx4", using: :gin
     t.index "to_tsvector('english'::regconfig, (postal_code)::text)", name: "locations_names_to_tsvector_idx9", using: :gin
     t.index ["language", "osm_id", "street", "country", "country_code", "display_name", "name", "postal_code"], name: "uniq_index_1", unique: true
+    t.index ["osm_type"], name: "index_locations_names_on_osm_type"
   end
 
   create_table "mandatory_charges", force: :cascade do |t|
@@ -747,10 +725,10 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
-    t.datetime "closing_date"
-    t.string "incoterm_text"
     t.integer "origin_nexus_id"
     t.integer "destination_nexus_id"
+    t.datetime "closing_date"
+    t.string "incoterm_text"
     t.datetime "planned_origin_drop_off_date"
     t.integer "quotation_id"
     t.datetime "planned_delivery_date"
@@ -939,7 +917,6 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.string "currency", default: "EUR"
     t.string "vat_number"
     t.boolean "allow_password_change", default: false, null: false
-    t.jsonb "optin_status", default: {}
     t.integer "optin_status_id"
     t.string "external_id"
     t.integer "agency_id"

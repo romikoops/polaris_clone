@@ -65,8 +65,8 @@ end
 #
 #  id                :uuid             not null, primary key
 #  language          :string
-#  osm_id            :integer
-#  place_rank        :integer
+#  osm_id            :bigint(8)
+#  place_rank        :bigint(8)
 #  osm_type          :string
 #  street            :string
 #  city              :string

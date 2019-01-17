@@ -10,8 +10,8 @@ FactoryBot.define do
     name nil
     point '01010000007182250DA47B5E406EC328081E453F40'
     postal_code nil
-    osm_type
-    state
-    county
+    osm_type nil
+    state nil
+    county nil
   end
 end
