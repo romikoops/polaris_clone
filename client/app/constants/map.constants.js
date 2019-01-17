@@ -1,4 +1,4 @@
-export const API_KEY = 'AIzaSyBEJhYgBzz9MVTOybSNSu5IMPz5eC2-J5M'
+export const API_KEY = 'AIzaSyBfJ1OOMRaPnvJXqm2VjlgMI8XEbp2Ur1M'
 
 export const mapStyling = [
   {
