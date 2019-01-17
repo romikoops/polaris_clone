@@ -7,13 +7,13 @@ module Locations
     context 'validations' do
       let(:location) { FactoryBot.create(:locations_location) }
       it 'is valid with valid attributes' do
-        expect(FactoryBot.build(:locations_name, location: location)).to be_valid
+        expect(FactoryBot.build(:locations_location)).to be_valid
       end
 
       it 'is unique' do
-        location_name = FactoryBot.create(:locations_name, location: location)
+        location_1 = FactoryBot.create(:locations_location)
 
-        expect(FactoryBot.build(:locations_name, name: location_name.name, location: location)).not_to be_valid
+        expect(FactoryBot.build(:locations_location, name: location_1.name)).not_to be_valid
       end
     end
 

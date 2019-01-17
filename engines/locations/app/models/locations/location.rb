@@ -3,7 +3,14 @@
 module Locations
   class Location < ApplicationRecord
     has_many :names
-    validates :bounds, uniqueness: true
+    validates :osm_id, uniqueness: {
+      scope: %i(
+        bounds
+        admin_level
+        name
+      ),
+      message: ->(record, _) { "is a duplicate for the names: #{[record.name, record.admin_level].join(', ')}" }
+    }
 
     def self.contains(lat:, lon:)
       where(arel_table[:bounds].st_contains("POINT(#{lon} #{lat})"))

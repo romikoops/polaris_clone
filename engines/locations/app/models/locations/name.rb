@@ -2,42 +2,33 @@
 
 module Locations
   class Name < ApplicationRecord
-    belongs_to :location
     include PgSearch
 
-    validates :location, uniqueness: {
+    validates :osm_id, uniqueness: {
       scope: %i(
-        locality_2
-        locality_3
-        locality_4
-        locality_5
-        locality_6
-        locality_7
-        locality_8
-        locality_9
-        locality_10
-        locality_11
-        country
-        postal_code
-        name
         language
+        street
+        city
+        country
+        country_code
+        display_name
+        alternative_names
+        name
+        point
+        postal_code
       ),
       message: ->(record, _) { "is a duplicate for the names: #{record.names.to_s.tr('"', "'")}" }
     }
 
     pg_search_scope :autocomplete,
                     against: %i(
-                      locality_2
-                      locality_3
-                      locality_4
-                      locality_5
-                      locality_6
-                      locality_7
-                      locality_8
-                      locality_9
-                      locality_10
-                      locality_11
+                      street
+                      city
                       country
+                      country_code
+                      display_name
+                      alternative_names
+                      name
                       postal_code
                       name
                     ),
@@ -48,36 +39,22 @@ module Locations
 
     def names
       [
-        country,
+        name,
+        street,
+        city,
         postal_code,
-        locality_2,
-        locality_3,
-        locality_4,
-        locality_5,
-        locality_6,
-        locality_7,
-        locality_8,
-        locality_9,
-        locality_10,
-        locality_11
-      ].reverse.compact
+        country
+      ].compact
     end
 
     def description
       [
-        country,
+        name,
+        street,
+        city,
         postal_code,
-        locality_2,
-        locality_3,
-        locality_4,
-        locality_5,
-        locality_6,
-        locality_7,
-        locality_8,
-        locality_9,
-        locality_10,
-        locality_11
-      ].reverse.compact.join(', ')
+        country
+      ].compact.join(', ')
     end
   end
 end

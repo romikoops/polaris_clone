@@ -6,7 +6,7 @@ class LocationCsvSeeder
   TMP_PATH = 'tmp/tmp_csv.gz'
   def self.perform
     # load_map_data('data/location_data/asia.csv.gz')
-    load_name_data('data/location_data/osm_china_1.csv.gz')
+    load_name_data('data/location_data/china_osm_2.csv.gz')
     
   end
 
@@ -17,11 +17,9 @@ class LocationCsvSeeder
       csv = CSV.new(gz, headers: true)
       puts
       puts 'Preparing Geometries attributes...'
-      data_rows = csv.readlines
 
       locations = []
       csv.each do |row|
-
         locations << {
           name: row['name'],
           bounds: row['way'],
@@ -33,7 +31,9 @@ class LocationCsvSeeder
           locations = []
         end
       end
-      Locations::Location.import(locations)
+      unless locations.empty?
+        Locations::Location.import(locations)
+      end
     end
     
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)
@@ -43,24 +43,37 @@ class LocationCsvSeeder
 
   def self.load_name_data(url)
     LocationCsvSeeder.get_s3_file(url)
+    keys = %i(name
+      alternative_names
+      osm_type
+      osm_id
+      coords
+      place_rank
+      street
+      city
+      county
+      state
+      country
+      country_code
+      display_name)
 
     Zlib::GzipReader.open(TMP_PATH) do |gz|
-      csv = CSV.new(gz, headers: true)
+      csv = CSV.new(gz, headers: false)
       puts
-      puts 'Preparing Geometries attributes...'
+      puts 'Preparing Location Names attributes...'
       names = []
       csv.each do |row|
-        names << {
-          language: 'en',
-          osm_id: row['osm_id'],
-          street: row['street'],
-          country: row['country'],
-          country_code: row['country_code'],
-          display_name: row['display_name'],
-          name: row['name'],
-          point: row['coords'],
-          postal_code: row['postal_code']
+        obj = {
+          language: 'en'
         }
+        keys.each_with_index do |k, i|
+          if k == :coords
+            obj[:point] = row[i]
+          else
+            obj[k] = row[i]
+          end
+        end
+        names << obj
         if names.length > 100
           Locations::Name.import(names)
           names = []
@@ -72,7 +85,7 @@ class LocationCsvSeeder
 
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)
 
-    puts 'Locations updated...'
+    puts 'Location Names updated...'
   end
 
   def germany_no_bounds

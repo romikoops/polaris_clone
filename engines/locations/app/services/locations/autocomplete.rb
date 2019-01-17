@@ -5,13 +5,8 @@ module Locations
     def self.search(term:, countries:, lang: 'en')
       query = Locations::Name
 
-      query = query.where(country: countries) if countries.present?
-      location_ids = query
-        .autocomplete(term)
-        .pluck(:location_id)
-        .uniq
-      Locations::Location.where(id: location_ids)
-        .map{ |location| LocationDecorator.new(location) }
+      query = query.where(country_code: countries) if countries.present?
+      query.autocomplete(term)
     end
   end
 end
