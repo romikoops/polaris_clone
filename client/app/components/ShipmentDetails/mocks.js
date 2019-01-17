@@ -1,8 +1,6 @@
-export const direction = 'export'
-export const aggregatedCargo = false
-export const loadType = 'cargo_item'
-export const onCarriage = false
-export const preCarriage = false
+// Will remove it later
+// ============================================
+import { get } from 'lodash'
 
 export const trucking = { preCarriage: { truckType: '' }, onCarriage: { truckType: '' } }
 export const id = 4606
@@ -108,34 +106,63 @@ export const origin = {
 export const destination = {
   latitude: 36.083811, longitude: 120.323534, nexusId: 601, nexusName: 'Qingdao', country: 'CN'
 }
-export const cargoItemInstance = {
+export const cargoItem = {
   payloadInKg: 11, totalVolume: 0, totalWeight: 0, dimensionX: 7, dimensionY: 7, dimensionZ: 8, quantity: 7, cargoItemTypeId: 23, dangerousGoods: false, stackable: false
 }
-export const cargoUnits = [cargoItemInstance]
+
+export const cargoItemAggregated = {
+  payloadInKg: 0, totalVolume: 122, totalWeight: 346, dimensionX: 0, dimensionY: 0, dimensionZ: 0, quantity: 1, cargoItemTypeId: '', dangerousGoods: false, stackable: true
+}
+
+export const cargoItemContainer = {
+  sizeClass: 'highCube', quantity: 14, dangerousGoods: false, weight: 16
+}
+
+export const cargoUnits = [cargoItem]
 
 export const identity = x => x
 
 export const importedProps = {
   ShipmentDetails,
-  aggregatedCargo,
+  aggregatedCargo: false,
   cargoItemTypes,
   cargoUnits,
   destination,
-  direction,
+  direction: 'export',
   id,
-  loadType,
+  loadType: 'cargo_item',
   maxDimensions,
-  onCarriage: identity,
+  onCarriage: false,
   onChangeCargoUnitCheckbox: identity,
   onChangeCargoUnitInput: identity,
   onChangeCargoUnitSelect: identity,
   onDeleteUnit: identity,
   onUpdateCargoUnit: identity,
   origin,
-  preCarriage,
+  preCarriage: false,
   scope,
   selectedDay,
   theme,
   toggleModal: identity,
   trucking
+}
+
+export function logPath (props, path) {
+  console.log(path, get(props, path, 'NO SUCH PATH'))
+}
+
+export function log (props) {
+  let holder = '{\n'
+  const declarations = []
+  Object.keys(props).forEach((key) => {
+    const toLog = `const ${key} = ${JSON.stringify(props[key])}`
+    if (toLog.length < 150) console.log(toLog)
+    declarations.push(toLog)
+
+    holder = `${holder}\n  ${key},`
+  })
+  holder = `${holder}\n}`
+  console.log(declarations.join('\n'))
+  // console.log(holder)
+  // console.log(JSON.stringify(props, null, 2))
 }
