@@ -5,69 +5,74 @@ require 'csv'
 class LocationCsvSeeder
   TMP_PATH = 'tmp/tmp_csv.gz'
   def self.perform
-    drydock_china
+    # load_map_data('data/location_data/asia.csv.gz')
+    load_name_data('data/location_data/osm_china_1.csv.gz')
     
   end
 
-  def self.drydock_china
-    LocationCsvSeeder.get_s3_file('data/location_data/drydock_asia_china.csv.gz')
+  def self.load_map_data(url)
+    LocationCsvSeeder.get_s3_file(url)
 
     Zlib::GzipReader.open(TMP_PATH) do |gz|
       csv = CSV.new(gz, headers: true)
       puts
       puts 'Preparing Geometries attributes...'
       data_rows = csv.readlines
-      total = data_rows.size
-      completion_percentage = 0
-      new_completion_percentage = 0
-      puts 'PROGRESS BAR'
-      puts '_' * 100
-      
-      data_rows.each_with_index do |row, i|
-        
-        new_completion_percentage = i * 100 / total
-        if new_completion_percentage > completion_percentage
-          completion_percentage = new_completion_percentage
-          print '-'
-        end
-        raw_data = row.entries
-        location_attributes_by_lang = Hash.new {|h, k| h[k] = {}}
-        bounds = raw_data.select {|arr| arr[0] == 'way'}&.first&.second
-        next if bounds.nil?
-        location_attributes = raw_data.reject{|arr| ['way', 'name', 'orig'].include?(arr[0])}
-        .reject {|arr| arr[1].nil? }
-        .map { |arr| [arr[0], JSON.parse(arr[1])] }
-        .each { |attribute_array|
-          attribute_array[1].each do |lang, text|
-            next if text.nil?
-            attribute_key = if attribute_array[0] == 'names'
-              'name'
-            else
-              attribute_array[0]
-            end
 
-            location_attributes_by_lang[lang][attribute_key] = text
-          end
+      locations = []
+      csv.each do |row|
+
+        locations << {
+          name: row['name'],
+          bounds: row['way'],
+          osm_id: row['osm_id'],
+          admin_level: row['admin_level']
         }
-        location = Locations::Location.find_or_create_by!(bounds: bounds)
-        begin
-          location_attributes_by_lang.each do |lang, data|
-            data['language'] = lang
-            data['country'] = 'China'
-            data['location_id'] = location.id
-
-            name = Locations::Name.find_or_initialize_by(language: lang, location_id: location.id)
-            name.update(data)
-          end
-        rescue => e
-          binding.pry
+        if locations.length > 100
+          Locations::Location.import(locations)
+          locations = []
         end
-        
       end
+      Locations::Location.import(locations)
     end
+    
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)
 
-    puts 'Chinese Locations updated...'
+    puts 'Locations updated...'
+  end
+
+  def self.load_name_data(url)
+    LocationCsvSeeder.get_s3_file(url)
+
+    Zlib::GzipReader.open(TMP_PATH) do |gz|
+      csv = CSV.new(gz, headers: true)
+      puts
+      puts 'Preparing Geometries attributes...'
+      names = []
+      csv.each do |row|
+        names << {
+          language: 'en',
+          osm_id: row['osm_id'],
+          street: row['street'],
+          country: row['country'],
+          country_code: row['country_code'],
+          display_name: row['display_name'],
+          name: row['name'],
+          point: row['coords'],
+          postal_code: row['postal_code']
+        }
+        if names.length > 100
+          Locations::Name.import(names)
+          names = []
+        end
+      end
+
+      Locations::Name.import(names)
+    end
+
+    File.delete(TMP_PATH) if File.exist?(TMP_PATH)
+
+    puts 'Locations updated...'
   end
 
   def germany_no_bounds

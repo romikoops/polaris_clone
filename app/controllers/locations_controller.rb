@@ -13,9 +13,9 @@ class LocationsController < ApplicationController
       results: results.map do |result| 
         {
           geojson: result.geojson,
-          description: result.description
-          postal_code: result.postal_code
-          city: result.city
+          description: result.description,
+          postal_code: result.postal_code,
+          city: result.city,
           country: result.country
         }
       end
