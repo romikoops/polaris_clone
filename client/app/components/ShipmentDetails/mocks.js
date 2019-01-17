@@ -2,6 +2,16 @@
 // ============================================
 import { get } from 'lodash'
 
+import en from '../../../locales/en/translations.json'
+
+export const t = (key) => {
+  const [scope, id] = key.split(':')
+
+  return en[scope] && en[scope][id]
+    ? en[scope][id]
+    : `NO_TRANSLATION | key "${key}"`
+}
+
 export const trucking = { preCarriage: { truckType: '' }, onCarriage: { truckType: '' } }
 export const id = 4606
 export const selectedDay = '2019-01-24T10:00:00.000Z'
@@ -28,9 +38,11 @@ export const ShipmentDetailsAvailableRoutes = [{
   }
 }]
 
+export const availableMots = ['ocean', 'air']
+
 export const ShipmentDetails = {
   availableRoutes: ShipmentDetailsAvailableRoutes,
-  availableMots: ['ocean', 'air']
+  availableMots
 }
 
 export const cargoItemTypes = [{
@@ -106,8 +118,8 @@ export const origin = {
 export const destination = {
   latitude: 36.083811, longitude: 120.323534, nexusId: 601, nexusName: 'Qingdao', country: 'CN'
 }
-export const cargoItem = {
-  payloadInKg: 11, totalVolume: 0, totalWeight: 0, dimensionX: 7, dimensionY: 7, dimensionZ: 8, quantity: 7, cargoItemTypeId: 23, dangerousGoods: false, stackable: false
+const cargoItem = {
+  payloadInKg: 223, totalVolume: 0, totalWeight: 0, dimensionX: 5, dimensionY: 132, dimensionZ: 12, quantity: 6, cargoItemTypeId: 23, dangerousGoods: false, stackable: true
 }
 
 export const cargoItemAggregated = {
@@ -116,6 +128,10 @@ export const cargoItemAggregated = {
 
 export const cargoItemContainer = {
   sizeClass: 'highCube', quantity: 14, dangerousGoods: false, weight: 16
+}
+
+export const maxDimensionsToApply = {
+  dimensionX: '590.0', dimensionY: '234.2', dimensionZ: '228.0', payloadInKg: '21770.0', chargeableWeight: '21770.0'
 }
 
 export const cargoUnits = [cargoItem]
@@ -163,6 +179,6 @@ export function log (props) {
   })
   holder = `${holder}\n}`
   console.log(declarations.join('\n'))
-  // console.log(holder)
+  console.log(holder)
   // console.log(JSON.stringify(props, null, 2))
 }

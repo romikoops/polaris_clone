@@ -1,0 +1,203 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`happy path 1`] = `
+<div
+  className="inner_cargo_item_info layout-row flex-100 layout-wrap layout-align-start"
+>
+  <div
+    className="flex-25 layout-wrap layout-row"
+  >
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
+    >
+      <p
+        className="input_label flex-none"
+      >
+        Total
+         
+        Volume
+        :  
+        <span
+          className="input_value"
+        >
+           m
+          <sup
+            style={
+              Object {
+                "fontSize": "10px",
+                "height": "17px",
+                "marginLeft": "1px",
+              }
+            }
+          >
+            3
+          </sup>
+        </span>
+      </p>
+    </div>
+    <div
+      className="chargeable_weight layout-row flex-100 layout-wrap layout-align-start-center"
+    >
+      <div
+        className="layout-row flex-none layout-wrap layout-align-end-center"
+      >
+        <p
+          className="subchargeable flex-none"
+        >
+          Chargeable:
+        </p>
+      </div>
+      <div
+        className="chargeable_weight_values flex layout-row layout-align-start-center"
+      >
+        <div
+          className="flex-none layout-align-center-center layout-row single_charge"
+        >
+          <i
+            className="fa fa-plane  "
+            style={Object {}}
+          />
+          <p
+            className="chargeable_weight_value input_value"
+          >
+            <span>
+               m
+              <sup
+                style={
+                  Object {
+                    "fontSize": "10px",
+                    "height": "17px",
+                    "marginLeft": "1px",
+                  }
+                }
+              >
+                3
+              </sup>
+            </span>
+          </p>
+        </div>
+        <div
+          className="flex-none layout-align-center-center layout-row single_charge"
+        >
+          <i
+            className="fa fa-train  "
+            style={Object {}}
+          />
+          <p
+            className="chargeable_weight_value input_value"
+          >
+            Unavailable
+          </p>
+        </div>
+        <div
+          className="flex-none layout-align-center-center layout-row single_charge"
+        >
+          <i
+            className="fa fa-anchor  "
+            style={Object {}}
+          />
+          <p
+            className="chargeable_weight_value input_value"
+          >
+            <span>
+               m
+              <sup
+                style={
+                  Object {
+                    "fontSize": "10px",
+                    "height": "17px",
+                    "marginLeft": "1px",
+                  }
+                }
+              >
+                3
+              </sup>
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="padding_left flex-25 layout-wrap layout-row"
+  >
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
+    >
+      <p
+        className="input_label flex-none"
+      >
+        Total
+         
+        Weight
+        :  
+        <span
+          className="input_value"
+        >
+           kg
+        </span>
+      </p>
+    </div>
+    <div
+      className="chargeable_weight layout-row flex-100 layout-wrap layout-align-start-center"
+    >
+      <div
+        className="layout-row flex-none layout-wrap layout-align-end-center"
+      >
+        <p
+          className="subchargeable flex-none"
+        >
+          Chargeable:
+        </p>
+      </div>
+      <div
+        className="chargeable_weight_values flex layout-row layout-align-start-center"
+      >
+        <div
+          className="flex-none layout-align-center-center layout-row single_charge"
+        >
+          <i
+            className="fa fa-plane  "
+            style={Object {}}
+          />
+          <p
+            className="chargeable_weight_value input_value"
+          >
+            <span>
+               kg
+            </span>
+          </p>
+        </div>
+        <div
+          className="flex-none layout-align-center-center layout-row single_charge"
+        >
+          <i
+            className="fa fa-train  "
+            style={Object {}}
+          />
+          <p
+            className="chargeable_weight_value input_value"
+          >
+            Unavailable
+          </p>
+        </div>
+        <div
+          className="flex-none layout-align-center-center layout-row single_charge"
+        >
+          <i
+            className="fa fa-anchor  "
+            style={Object {}}
+          />
+          <p
+            className="chargeable_weight_value input_value"
+          >
+            <span>
+               kg
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
