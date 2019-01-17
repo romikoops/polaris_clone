@@ -20,7 +20,7 @@ const imageSources = {
   height
 }
 
-function getAvailableCargoItemTypes (cargoItemTypes) {
+export function getAvailableCargoItemTypes (cargoItemTypes) {
   if (!(Array.isArray(cargoItemTypes))) return []
   const palletType = cargoItemTypes.filter(colli => colli.description === 'Pallet')
   const nonPalletTypes = cargoItemTypes.filter(colli => colli.description !== 'Pallet')
@@ -34,7 +34,7 @@ function getAvailableCargoItemTypes (cargoItemTypes) {
   }))
 }
 
-function getSelectedColliType (availableCargoItemTypes, currentTypeId) {
+export function getSelectedColliType (availableCargoItemTypes, currentTypeId) {
   // If the user delete its selection, then the value is `undefined`
   if (!currentTypeId) return
   const [currentCargoItemType] = availableCargoItemTypes.filter(
@@ -45,7 +45,7 @@ function getSelectedColliType (availableCargoItemTypes, currentTypeId) {
   return { label: description, value: description }
 }
 
-function CheckboxWrapper ({
+export function CheckboxWrapper ({
   i, labelText, disabled, onChange, cargoItem, prop, theme, checkedTransform = x => x, onWrapperClick = () => {}
 }) {
   return (

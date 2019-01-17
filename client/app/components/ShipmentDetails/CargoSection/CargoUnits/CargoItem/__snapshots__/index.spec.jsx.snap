@@ -1,0 +1,461 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`happy path 1`] = `
+<CargoUnitBox
+  cargoUnit={
+    Object {
+      "cargoItemTypeId": 23,
+      "dangerousGoods": false,
+      "dimensionX": 7,
+      "dimensionY": 7,
+      "dimensionZ": 8,
+      "payloadInKg": 11,
+      "quantity": 7,
+      "stackable": false,
+      "totalVolume": 0,
+      "totalWeight": 0,
+    }
+  }
+  i={0}
+  onChangeCargoUnitInput={[Function]}
+  onDeleteUnit={[Function]}
+  t={[Function]}
+>
+  <div
+    style={
+      Object {
+        "position": "relative",
+      }
+    }
+  >
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
+      style={
+        Object {
+          "marginBottom": "20px",
+        }
+      }
+    >
+      <CargoUnitNumberInput
+        cargoItem={
+          Object {
+            "cargoItemTypeId": 23,
+            "dangerousGoods": false,
+            "dimensionX": 7,
+            "dimensionY": 7,
+            "dimensionZ": 8,
+            "payloadInKg": 11,
+            "quantity": 7,
+            "stackable": false,
+            "totalVolume": 0,
+            "totalWeight": 0,
+          }
+        }
+        className="flex-20"
+        i={0}
+        image={
+          <img
+            alt="length"
+            border="0"
+            data-for="19a150c0-2cba-4824-87ca-cb184108c0b9"
+            data-tip="Length"
+          />
+        }
+        labelText="Length"
+        maxDimension={590}
+        maxDimensionsErrorText="Maximum length is"
+        name="0-dimensionX"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onExcessDimensionsRequest={[Function]}
+        t={[Function]}
+        tooltip=""
+        unit="cm"
+        value={7}
+      />
+      <CargoUnitNumberInput
+        cargoItem={
+          Object {
+            "cargoItemTypeId": 23,
+            "dangerousGoods": false,
+            "dimensionX": 7,
+            "dimensionY": 7,
+            "dimensionZ": 8,
+            "payloadInKg": 11,
+            "quantity": 7,
+            "stackable": false,
+            "totalVolume": 0,
+            "totalWeight": 0,
+          }
+        }
+        className="flex-20"
+        i={0}
+        image={
+          <img
+            alt="width"
+            border="0"
+            data-for="450f1da9-23a7-4b4f-b0aa-00763430a0ac"
+            data-tip="Width"
+          />
+        }
+        labelText="Width"
+        maxDimension={234.2}
+        maxDimensionsErrorText="Maximum width is"
+        name="0-dimensionY"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onExcessDimensionsRequest={[Function]}
+        t={[Function]}
+        tooltip=""
+        unit="cm"
+        value={7}
+      />
+      <CargoUnitNumberInput
+        cargoItem={
+          Object {
+            "cargoItemTypeId": 23,
+            "dangerousGoods": false,
+            "dimensionX": 7,
+            "dimensionY": 7,
+            "dimensionZ": 8,
+            "payloadInKg": 11,
+            "quantity": 7,
+            "stackable": false,
+            "totalVolume": 0,
+            "totalWeight": 0,
+          }
+        }
+        className="flex-20"
+        i={0}
+        image={
+          <img
+            alt="height"
+            border="0"
+            data-for="b17c6239-dec5-4996-b934-e56bc81e4534"
+            data-tip="Height"
+          />
+        }
+        labelText="Height"
+        maxDimension={228}
+        maxDimensionsErrorText="Maximum height is"
+        name="0-dimensionZ"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onExcessDimensionsRequest={[Function]}
+        t={[Function]}
+        tooltip=""
+        unit="cm"
+        value={8}
+      />
+      <CargoUnitNumberInput
+        cargoItem={
+          Object {
+            "cargoItemTypeId": 23,
+            "dangerousGoods": false,
+            "dimensionX": 7,
+            "dimensionY": 7,
+            "dimensionZ": 8,
+            "payloadInKg": 11,
+            "quantity": 7,
+            "stackable": false,
+            "totalVolume": 0,
+            "totalWeight": 0,
+          }
+        }
+        className="flex-30 offset-5"
+        i={0}
+        image={
+          <img
+            alt="weight"
+            border="0"
+            data-for="248879dc-399f-4576-b36e-97cecb390142"
+            data-tip="Gross Weight"
+          />
+        }
+        labelText="Gross Weight"
+        maxDimension={21770}
+        maxDimensionsErrorText="Maximum weight is"
+        name="0-payloadInKg"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onExcessDimensionsRequest={[Function]}
+        t={[Function]}
+        tooltip={
+          <Tooltip
+            color="#0D5BA9"
+            icon="fa-info-circle"
+            text="payload_in_kg"
+            theme={Object {}}
+            toolText=""
+          />
+        }
+        unit="kg"
+        value={11}
+      />
+    </div>
+    <div
+      className="flex-100 layout-row"
+    />
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
+      style={
+        Object {
+          "margin": "20px 0",
+        }
+      }
+    >
+      <div
+        className="layout-row flex-40 layout-wrap layout-align-start-center colli_type"
+      >
+        <div
+          style={
+            Object {
+              "width": "95%",
+            }
+          }
+        >
+          <NamedSelect
+            className="select_100"
+            inputProps={
+              Object {
+                "name": "0-colliType",
+              }
+            }
+            name="0-colliType"
+            options={
+              Array [
+                Object {
+                  "dimension_x": null,
+                  "dimension_y": null,
+                  "key": 25,
+                  "label": "Pallet",
+                },
+                Object {
+                  "dimension_x": null,
+                  "dimension_y": null,
+                  "key": 22,
+                  "label": "Carton",
+                },
+                Object {
+                  "dimension_x": null,
+                  "dimension_y": null,
+                  "key": 23,
+                  "label": "Crate",
+                },
+                Object {
+                  "dimension_x": null,
+                  "dimension_y": null,
+                  "key": 26,
+                  "label": "Bottle",
+                },
+                Object {
+                  "dimension_x": null,
+                  "dimension_y": null,
+                  "key": 27,
+                  "label": "Stack",
+                },
+                Object {
+                  "dimension_x": null,
+                  "dimension_y": null,
+                  "key": 28,
+                  "label": "Drum",
+                },
+                Object {
+                  "dimension_x": null,
+                  "dimension_y": null,
+                  "key": 29,
+                  "label": "Skid",
+                },
+                Object {
+                  "dimension_x": null,
+                  "dimension_y": null,
+                  "key": 30,
+                  "label": "Barrel",
+                },
+              ]
+            }
+            placeholder="Select your colli type"
+            showErrors={false}
+            value={
+              Object {
+                "label": "Crate",
+                "value": "Crate",
+              }
+            }
+          />
+        </div>
+      </div>
+      <CheckboxWrapper
+        cargoItem={
+          Object {
+            "cargoItemTypeId": 23,
+            "dangerousGoods": false,
+            "dimensionX": 7,
+            "dimensionY": 7,
+            "dimensionZ": 8,
+            "payloadInKg": 11,
+            "quantity": 7,
+            "stackable": false,
+            "totalVolume": 0,
+            "totalWeight": 0,
+          }
+        }
+        disabled={true}
+        i={0}
+        labelText="Dangerous Goods"
+        onChange={[Function]}
+        onWrapperClick={[Function]}
+        prop="dangerousGoods"
+        theme={
+          Object {
+            "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+            "colors": Object {
+              "brightPrimary": "#2491FD",
+              "brightSecondary": "#25ED36",
+              "primary": "#0D5BA9",
+              "secondary": "#23802A",
+            },
+            "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+            "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+            "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+            "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+          }
+        }
+      />
+      <CheckboxWrapper
+        cargoItem={
+          Object {
+            "cargoItemTypeId": 23,
+            "dangerousGoods": false,
+            "dimensionX": 7,
+            "dimensionY": 7,
+            "dimensionZ": 8,
+            "payloadInKg": 11,
+            "quantity": 7,
+            "stackable": false,
+            "totalVolume": 0,
+            "totalWeight": 0,
+          }
+        }
+        checkedTransform={[Function]}
+        disabled={false}
+        i={0}
+        labelText="Non Stackable"
+        prop="stackable"
+        theme={
+          Object {
+            "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+            "colors": Object {
+              "brightPrimary": "#2491FD",
+              "brightSecondary": "#25ED36",
+              "primary": "#0D5BA9",
+              "secondary": "#23802A",
+            },
+            "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+            "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+            "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+            "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="cargo_item_info flex-100'"
+  >
+    <ChargableProperties
+      availableMots={
+        Array [
+          "ocean",
+          "air",
+        ]
+      }
+      cargoItem={
+        Object {
+          "cargoItemTypeId": 23,
+          "dangerousGoods": false,
+          "dimensionX": 7,
+          "dimensionY": 7,
+          "dimensionZ": 8,
+          "payloadInKg": 11,
+          "quantity": 7,
+          "stackable": false,
+          "totalVolume": 0,
+          "totalWeight": 0,
+        }
+      }
+      maxDimensions={
+        Object {
+          "chargeableWeight": "21770.0",
+          "dimensionX": "590.0",
+          "dimensionY": "234.2",
+          "dimensionZ": "228.0",
+          "payloadInKg": "21770.0",
+        }
+      }
+      scope={
+        Object {
+          "cargo_info_level": "hs_codes",
+          "carriage_options": Object {
+            "on_carriage": Object {
+              "export": "optional",
+              "import": "optional",
+            },
+            "pre_carriage": Object {
+              "export": "optional",
+              "import": "optional",
+            },
+          },
+          "closed_quotation_tool": false,
+          "closed_registration": false,
+          "closed_shop": false,
+          "consolidate_cargo": false,
+          "continuous_rounding": false,
+          "customs_export_paper": false,
+          "dangerous_goods": false,
+          "detailed_billing": false,
+          "fee_detail": "key_and_name",
+          "fixed_currency": false,
+          "fixed_exchange_rates": false,
+          "has_customs": true,
+          "has_insurance": true,
+          "incoterm_info_level": "text",
+          "links": Object {
+            "about": "",
+            "legal": "",
+          },
+          "modes_of_transport": Object {
+            "air": Object {
+              "cargo_item": true,
+              "container": true,
+            },
+            "ocean": Object {
+              "cargo_item": true,
+              "container": true,
+            },
+            "rail": Object {
+              "cargo_item": true,
+              "container": true,
+            },
+            "truck": Object {
+              "cargo_item": false,
+              "container": false,
+            },
+          },
+          "non_stackable_goods": true,
+          "open_quotation_tool": false,
+          "require_full_address": true,
+          "show_beta_features": true,
+          "terms": Array [
+            "You verify that all the information provided above is true",
+            "You agree to the presented terms and conditions.",
+            "Demo is to discuss the validity of the presented prices with the product owners.",
+          ],
+          "total_dimensions": true,
+        }
+      }
+      t={[Function]}
+    />
+  </div>
+</CargoUnitBox>
+`;
