@@ -42,7 +42,8 @@ class ShipmentQuotationContent extends Component {
       feeHash,
       t,
       cargoView,
-      remark
+      remark,
+      cargo
     } = this.props
 
     const remarkBody = remark.quotation ? remark.quotation.shipment.map(_remark => (
@@ -236,6 +237,7 @@ class ShipmentQuotationContent extends Component {
               <QuoteChargeBreakdown
                 theme={theme}
                 scope={scope}
+                cargo={cargo}
                 showBreakdowns
                 quote={shipment.selected_offer}
                 mot={shipment.mode_of_transport}

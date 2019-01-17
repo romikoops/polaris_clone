@@ -25,7 +25,7 @@ module ShippingTools
         imc_reference: shipment.imc_reference,
         origin_hub_id: schedule['origin_hub']['id'],
         destination_hub_id: schedule['destination_hub']['id'],
-        origin_nexus_id: shipment.origin_nexus_id,
+        origin_nexus_id: shipment.origin_nexus_id || shipment&.origin_hub&.nexus_id,
         destination_nexus_id: shipment.destination_nexus_id,
         quotation_id: schedule['id'],
         trip_id: trip.id,
