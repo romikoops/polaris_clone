@@ -42,4 +42,5 @@ end
 #  body        :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  order       :integer
 #
