@@ -20,7 +20,7 @@ module Locations
                     ),
                     ignoring: :accents,
                     using: {
-                      tsearch: { prefix: true }
+                      tsearch: { prefix: true, dictionary: 'simple' }
                     }
 
     def names
