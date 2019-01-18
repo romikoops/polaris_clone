@@ -1,0 +1,122 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`happy path 1`] = `
+<div
+  className="flex-100 layout-row"
+>
+  <div
+    className="flex-100 layout-row layout-align-center"
+  >
+    <div
+      className="quantity layout-row flex-100 layout-wrap layout-align-start-center"
+    >
+      <p
+        className="flex-100 layout-row layout-align-center-start"
+        style={
+          Object {
+            "marginBottom": "25px",
+          }
+        }
+      >
+        Quantity
+      </p>
+      <div
+        className="flex-100 layout-row"
+      >
+        <Formsy(FormsyInput)
+          errorMessageStyles={
+            Object {
+              "bottom": "unset",
+              "fontSize": "10px",
+              "top": "-14px",
+            }
+          }
+          innerRef={[Function]}
+          min="1"
+          name="0-quantity"
+          onChange={[Function]}
+          required={false}
+          step="any"
+          type="number"
+          validationError=""
+          validationErrors={
+            Object {
+              "nonNegative": "Must be greater than 0",
+            }
+          }
+          validations={
+            Object {
+              "nonNegative": [Function],
+            }
+          }
+          value={6}
+          wrapperClassName="flex-100"
+        />
+      </div>
+      <hr
+        className="flex-35"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`with empty props 1`] = `
+<div
+  className="flex-100 layout-row"
+>
+  <div
+    className="flex-100 layout-row layout-align-center"
+  >
+    <div
+      className="quantity layout-row flex-100 layout-wrap layout-align-start-center"
+    >
+      <p
+        className="flex-100 layout-row layout-align-center-start"
+        style={
+          Object {
+            "marginBottom": "25px",
+          }
+        }
+      >
+        Quantity
+      </p>
+      <div
+        className="flex-100 layout-row"
+      >
+        <Formsy(FormsyInput)
+          errorMessageStyles={
+            Object {
+              "bottom": "unset",
+              "fontSize": "10px",
+              "top": "-14px",
+            }
+          }
+          innerRef={[Function]}
+          min="1"
+          name="-1-quantity"
+          required={false}
+          step="any"
+          type="number"
+          validationError=""
+          validationErrors={
+            Object {
+              "nonNegative": "Must be greater than 0",
+            }
+          }
+          validations={
+            Object {
+              "nonNegative": [Function],
+            }
+          }
+          value=""
+          wrapperClassName="flex-100"
+        />
+      </div>
+      <hr
+        className="flex-35"
+      />
+    </div>
+  </div>
+</div>
+`;

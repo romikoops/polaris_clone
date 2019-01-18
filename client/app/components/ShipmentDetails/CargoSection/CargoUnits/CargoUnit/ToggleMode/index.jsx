@@ -4,11 +4,11 @@ import styles from './index.scss'
 
 export default function CargoItemToggleMode ({
   checked,
-  disabed,
+  disabled,
   onToggleAggregated,
   t
 }) {
-  if (disabed) return ''
+  if (disabled) return ''
 
   return (
     <div className="layout-row flex-100 layout-wrap layout-align-center margin_top padding_top">
