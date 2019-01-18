@@ -63,6 +63,7 @@ exports[`props.shipment is truthy 1`] = `
               "currency": "USD",
               "value": "200.99",
             },
+            "trucking": Object {},
           },
         ]
       }

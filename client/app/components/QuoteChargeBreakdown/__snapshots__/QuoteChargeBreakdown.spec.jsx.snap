@@ -38,20 +38,19 @@ Array [
     }
     contentHeader={
       <div
-        className="flex-100 layout-row layout-align-start-center price_row"
+        className="flex-100 layout-row layout-align-start-center
+              price_row "
       >
         <div
-          className="flex-none layout-row layout-align-start-center"
-        />
-        <div
-          className="flex-45 layout-row layout-align-start-center"
+          className="flex layout-row layout-align-start-center"
         >
           <span>
             Trucking Pre
           </span>
+          
         </div>
         <div
-          className="flex-50 layout-row layout-align-end-center"
+          className="flex-35 layout-row layout-align-end-center "
         >
           <p>
             61.76 GBP
@@ -141,20 +140,19 @@ Array [
     }
     contentHeader={
       <div
-        className="flex-100 layout-row layout-align-start-center price_row"
+        className="flex-100 layout-row layout-align-start-center
+              price_row "
       >
         <div
-          className="flex-none layout-row layout-align-start-center"
-        />
-        <div
-          className="flex-45 layout-row layout-align-start-center"
+          className="flex layout-row layout-align-start-center"
         >
           <span>
             Export
           </span>
+          
         </div>
         <div
-          className="flex-50 layout-row layout-align-end-center"
+          className="flex-35 layout-row layout-align-end-center "
         >
           <p>
             111.52 GBP
@@ -216,20 +214,19 @@ Array [
     }
     contentHeader={
       <div
-        className="flex-100 layout-row layout-align-start-center price_row"
+        className="flex-100 layout-row layout-align-start-center
+              price_row "
       >
         <div
-          className="flex-none layout-row layout-align-start-center"
-        />
-        <div
-          className="flex-45 layout-row layout-align-start-center"
+          className="flex layout-row layout-align-start-center"
         >
           <span>
             Cargo
           </span>
+          
         </div>
         <div
-          className="flex-50 layout-row layout-align-end-center"
+          className="flex-35 layout-row layout-align-end-center "
         >
           <p>
             187.50 GBP
@@ -260,20 +257,19 @@ Array [
     content={Array []}
     contentHeader={
       <div
-        className="flex-100 layout-row layout-align-start-center price_row"
+        className="flex-100 layout-row layout-align-start-center
+              price_row "
       >
         <div
-          className="flex-none layout-row layout-align-start-center"
-        />
-        <div
-          className="flex-45 layout-row layout-align-start-center"
+          className="flex layout-row layout-align-start-center"
         >
           <span>
             Import
           </span>
+          
         </div>
         <div
-          className="flex-50 layout-row layout-align-end-center"
+          className="flex-35 layout-row layout-align-end-center "
         >
           <p>
             0.00 GBP
@@ -335,20 +331,19 @@ Array [
     }
     contentHeader={
       <div
-        className="flex-100 layout-row layout-align-start-center price_row"
+        className="flex-100 layout-row layout-align-start-center
+              price_row "
       >
         <div
-          className="flex-none layout-row layout-align-start-center"
-        />
-        <div
-          className="flex-45 layout-row layout-align-start-center"
+          className="flex layout-row layout-align-start-center"
         >
           <span>
             Trucking On
           </span>
+          
         </div>
         <div
-          className="flex-50 layout-row layout-align-end-center"
+          className="flex-35 layout-row layout-align-end-center "
         >
           <p>
             80.00 GBP

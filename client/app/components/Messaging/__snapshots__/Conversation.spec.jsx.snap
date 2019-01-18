@@ -339,6 +339,7 @@ exports[`state.showDetails is true 1`] = `
             "currency": "USD",
             "value": "200.99",
           },
+          "trucking": Object {},
         }
       }
       t={[Function]}

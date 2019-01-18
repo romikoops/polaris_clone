@@ -304,6 +304,7 @@ export const shipment = {
     value: '200.99',
     currency: 'USD'
   },
+  trucking: {},
   cargo_count: 2,
   planned_etd: '2018-11-12T12:14:08+01:00',
   planned_eta: '2018-12-01T12:14:08+01:00'

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, tenant, identity, selectedOffer } from '../../../mocks'
+import { theme, tenant, identity, selectedOffer, shipment } from '../../../mocks'
 
 import QuoteCard from './index'
 
@@ -22,6 +22,7 @@ const propsBase = {
     quote: selectedOffer,
     schedules: [{ eta: '10-8-2018', closing_date: '10-8-2018', etd: '10-8-2018' }]
   },
+  shipment,
   cargo: [],
   pickup: true,
   aggregatedCargo: {},
