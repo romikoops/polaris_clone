@@ -3,22 +3,8 @@
 module Locations
   class Name < ApplicationRecord
     include PgSearch
-
-    validates :osm_id, uniqueness: {
-      scope: %i(
-        language
-        street
-        city
-        country
-        country_code
-        display_name
-        alternative_names
-        name
-        point
-        postal_code
-      ),
-      message: ->(record, _) { "is a duplicate for the names: #{record.names.to_s.tr('"', "'")}" }
-    }
+    belongs_to :location, primary_key: 'osm_id', optional: true
+    validates :osm_id, presence: true
 
     pg_search_scope :autocomplete,
                     against: %i(

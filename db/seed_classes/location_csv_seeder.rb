@@ -20,12 +20,14 @@ class LocationCsvSeeder
 
       locations = []
       csv.each do |row|
-        locations << {
-          name: row['name'],
-          bounds: row['way'],
-          osm_id: row['osm_id'],
-          admin_level: row['admin_level']
-        }
+        if row['admin_level']
+          locations << {
+            name: row['name'],
+            bounds: row['way'],
+            osm_id: row['osm_id'].to_i.abs,
+            admin_level: row['admin_level']
+          }
+        end
         if locations.length > 100
           Locations::Location.import(locations)
           locations = []
@@ -69,6 +71,8 @@ class LocationCsvSeeder
         keys.each_with_index do |k, i|
           if k == :coords
             obj[:point] = row[i]
+          elsif k == :osm_id
+            obj[k] = row[i].to_i.abs
           else
             obj[k] = row[i]
           end

@@ -2,18 +2,14 @@
 
 module Locations
   class Location < ApplicationRecord
-    has_many :names
-    validates :osm_id, uniqueness: {
-      scope: %i(
-        bounds
-        admin_level
-        name
-      ),
-      message: ->(record, _) { "is a duplicate for the names: #{[record.name, record.admin_level].join(', ')}" }
-    }
+    validates :osm_id, uniqueness: true
 
     def self.contains(lat:, lon:)
       where(arel_table[:bounds].st_contains("POINT(#{lon} #{lat})"))
+    end
+
+    def geojson
+      RGeo::GeoJSON.encode(RGeo::GeoJSON::Feature.new(bounds))
     end
   end
 end

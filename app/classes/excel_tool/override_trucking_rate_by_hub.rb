@@ -22,6 +22,7 @@ module ExcelTool
       @all_ident_values_and_countries = {}
       @charges = {}
       @locations = []
+      @missing_locations = []
     end
 
     def perform
@@ -33,6 +34,8 @@ module ExcelTool
       import_locations
       end_time = DateTime.now
       diff = (end_time - start_time) / 86_400
+      puts @missing_locations
+      puts "Time elapsed: #{diff}"
       { results: results, stats: stats }
     end
 
@@ -211,8 +214,10 @@ module ExcelTool
             end
           elsif identifier_type == 'location_id'
             geometry = find_geometry(idents_and_country)
-            next if geometry.nil?
-
+            if geometry.nil?
+              @missing_locations << idents_and_country.join(', ')
+              next
+            end
             stats[:trucking_destinations][:number_created] += 1
 
             { ident: geometry&.id, country: idents_and_country[:country] }
