@@ -6,6 +6,7 @@ import Tooltip from '../../../../Tooltip/Tooltip'
 import { NamedSelect } from '../../../../NamedSelect/NamedSelect'
 import Checkbox from '../../../../Checkbox/Checkbox'
 import CargoUnitNumberInput from '../CargoUnit/NumberInput'
+import CheckboxWrapper from '../../../GetOffersSection/Checkboxes/CheckboxWrapper'
 
 const availableContainerTypes = [
   '20\' Dry Container',
@@ -48,7 +49,7 @@ function Container ({
             </div>
           </div>
 
-          <div className="layout-row flex-40">
+          <div className="layout-row flex-35">
             <CargoUnitNumberInput
               labelText={t('cargo:cargoGrossWeight')}
               name={`${i}-weight`}
@@ -60,32 +61,22 @@ function Container ({
           </div>
 
           <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
+            className="layout-row flex-25 layout-wrap layout-align-start-center"
             onClick={scope.dangerous_goods ? '' : () => toggleModal('noDangerousGoods')}
           >
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-              <label
-                className="flex-none pointy"
-                htmlFor={`${i}-dangerous_goods`}
-              >
-                <p>{t('common:dangerousGoods')}</p>
-              </label>
-
-              <Tooltip color={theme.colors.primary} icon="fa-info-circle" text="dangerous_goods" />
-
-              <div
-                className="layout-row flex-75 layout-wrap layout-align-start-center"
-              >
-                <Checkbox
-                  checked={container.dangerousGoods}
-                  disabled={!scope.dangerous_goods}
-                  id={`${i}-dangerousGoods`}
-                  name={`${i}-dangerousGoods`}
-                  onChange={onChangeCargoUnitCheckbox}
-                  size="34px"
-                  theme={theme}
-                />
-              </div>
+              <CheckboxWrapper
+                id={`${i}-dangerousGoods`}
+                name={`${i}-dangerousGoods`}
+                theme={theme}
+                size="14px"
+                disabled={!scope.dangerous_goods}
+                checked={container.dangerousGoods}
+                onChange={onChangeCargoUnitCheckbox}
+                labelContent={t('common:dangerousGoods')}
+                show
+                tooltipText="dangerous_goods"
+              />
             </div>
           </div>
 

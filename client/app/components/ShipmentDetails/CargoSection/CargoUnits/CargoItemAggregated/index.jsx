@@ -34,7 +34,7 @@ function CargoItemAggregated ({
           style={{ padding: '30px 0 70px 0' }}
         >
           <div className={`${styles.input_box} flex-45 layout-row`}>
-            <div className="flex-25 layout-row layout-align-center-center">
+            <div className="flex-45 layout-row layout-align-center-center">
               {t('cargo:totalVolume')}
             </div>
             <CargoUnitNumberInput
@@ -47,7 +47,7 @@ function CargoItemAggregated ({
           </div>
 
           <div className={`${styles.input_box} flex-45 offset-10 layout-row`}>
-            <div className="flex-25 layout-row layout-align-center-center">
+            <div className="flex-45 layout-row layout-align-center-center">
               {t('cargo:totalWeight')}
             </div>
             <CargoUnitNumberInput

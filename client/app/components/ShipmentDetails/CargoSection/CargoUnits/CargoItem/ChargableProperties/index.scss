@@ -1,5 +1,6 @@
 :local {
   .chargeable_weight {
+    padding-top: 8px;
     p.chargeable_weight_value {
       margin: 0 0 0 5px;
       font-size: 12px !important;
@@ -20,5 +21,6 @@
   }
   .charge_volume {
     border-bottom: 1px solid white;
+    padding-bottom: 8px;
   }
 }

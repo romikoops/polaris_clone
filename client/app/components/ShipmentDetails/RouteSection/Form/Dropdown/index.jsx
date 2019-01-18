@@ -35,16 +35,14 @@ function getOptions (targets) {
 }
 
 function Dropdown ({
-  theme,
   target,
-  carriage,
   availableTargets,
   formData,
   onDropdownSelect,
   t
 }) {
   return (
-    <div className="dropdown">
+    <div className={`dropdown ${styles.route_dropdown}`}>
       <FormsySelect
         name={`${target}-nexus`}
         className={styles.select}

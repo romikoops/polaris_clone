@@ -18,7 +18,7 @@ function CargoUnitNumberInput ({
   return (
     <div className={`layout-row layout-wrap layout-align-start-center ${styles.cargo_unit_number_input} ${className}`}>
       <h4>{labelText}</h4>
-      <div className={`flex-100 layout-row layout-align-space-between ${styles.input_box}`}>
+      <div className={`flex-100 layout-row layout-align-start-end ${styles.input_box}`}>
         {image}
         {tooltip}
 

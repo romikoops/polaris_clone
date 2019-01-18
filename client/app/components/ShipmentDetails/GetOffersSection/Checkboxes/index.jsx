@@ -21,6 +21,7 @@ function Checkboxes ({
         onChange={onChangeNoDangerousGoodsConfirmation}
         show={show.noDangerousGoodsConfirmed}
         style={{ marginBottom: '28px' }}
+        size="30px"
         labelContent={(
           <p style={{ margin: 0, fontSize: '14px' }}>
             {t('cargo:confirmSafe')}
@@ -41,6 +42,7 @@ function Checkboxes ({
         onChange={onChangeStackableGoodsConfirmation}
         show={show.stackableGoodsConfirmed}
         style={{ marginBottom: '15px' }}
+        size="30px"
         labelContent={(
           <p style={{ margin: 0, fontSize: '14px', width: '100%' }}>
             {t('cargo:confirmStackable')}

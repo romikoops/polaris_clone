@@ -6,7 +6,7 @@ import { Tooltip } from '../../../Tooltip/Tooltip'
 import { humanizeSnakeCase } from '../../../../helpers/stringTools'
 
 function TruckingDetails ({
-  theme, trucking, truckTypes, onTruckingDetailsChange, target, hide
+  theme, trucking, truckTypes, onTruckingDetailsChange, target, hide, carriageType
 }) {
   if (hide) return ''
 
@@ -32,7 +32,11 @@ function TruckingDetails ({
 
     return (
       <div
-        className={`${styles.form_group} ${disabledClass} flex-50 layout-row layout-align-start-end`}
+        className={`
+          ${styles.form_group} ${disabledClass}
+          ${carriageType === 'pre' ? 'flex-40' : 'flex-100'}
+          layout-row layout-align-end-end
+        `}
         data-tip={`${humanizedTruckType} is not available for the given address.`}
         data-for={id}
       >
@@ -58,21 +62,15 @@ function TruckingDetails ({
     const baseTruckTypes = ['side_lifter', 'chassis']
 
     return (
-      <div className={`${styles.carriage_sec}  flex-100 layout-row layout-wrap`}>
-        <div className="flex-100 layout-row layout-align-space-around">
-          { baseTruckTypes.map(_truckType => formGroup(carriage, _truckType)) }
-        </div>
+      <div className={`${styles.carriage_sec} flex-100 layout-row layout-align-end-end`}>
+        { baseTruckTypes.map(_truckType => formGroup(carriage, _truckType)) }
       </div>
     )
   }
 
   return (
-    <div className="flex-100 layout-row">
-      <div className={`${styles.trucking_details} flex-100 layout-row layout-wrap layout-align-center`}>
-        <div className="flex-100 layout-row layout-wrap layout-align-center">
-          { carriageSection(target) }
-        </div>
-      </div>
+    <div className={`flex-100 layout-row ${styles.trucking_details}`}>
+      { carriageSection(target) }
     </div>
   )
 }

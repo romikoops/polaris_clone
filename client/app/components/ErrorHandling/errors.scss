@@ -15,7 +15,7 @@
   .error_right {
     position: absolute;
     right: 5px;
-    top: 130px;
+    top: 93px;
     bottom: 5px;
   }
   .error_center {
@@ -29,7 +29,7 @@
   }
   .error_left {
     position: absolute;
-    top: 130px;
+    top: 93px;
     left: 5px;
     bottom: 5px;
   }
@@ -37,17 +37,19 @@
     width: 450px;
     opacity: 1;
     z-index: 20;
+    display: block;
   }
   .hide_error_drawer {
     width: 0;
-    opacity: 0;
+    display: none;
   }
   .error_content {
     width: 450px;
     padding: 15px;
     background: rgba(0, 0, 0, 0.55);
     color: white;
-    height: 100%;
+    // TO ADD FOR COLLAPSING:
+    // height: 100%;
     font-size: 14px;
     p {
       margin: 5px;

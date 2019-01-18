@@ -11,7 +11,7 @@ export default function CargoItemToggleMode ({
   if (disabed) return ''
 
   return (
-    <div className="layout-row flex-100 layout-wrap layout-align-center">
+    <div className="layout-row flex-100 layout-wrap layout-align-center margin_top padding_top">
       <div className="content_width_booking layout-row layout-wrap layout-align-center">
         <div
           className={

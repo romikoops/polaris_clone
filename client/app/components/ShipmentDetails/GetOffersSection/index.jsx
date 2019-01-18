@@ -113,8 +113,8 @@ class GetOffersSection extends React.PureComponent {
     const aggregated = false
 
     return (
-      <div className="get_offers_section">
-        <div className="border_divider layout-row flex-100 layout-wrap layout-align-center-center">
+      <div className={`get_offers_section layout-row flex-100 layout-wrap layout-align-center-center margin_top ${styles.get_offers_section}`}>
+        <div className={`${styles.border_divider} border_divider layout-row flex-100 layout-wrap layout-align-center-center`}>
           <div
             className={
               `${styles.btn_sec} content_width_booking ` +

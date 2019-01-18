@@ -160,7 +160,7 @@ class RouteSectionMapContent extends React.PureComponent {
     return (
       <div className={`flex-100 ${styles.route_section_map}`}>
         <div id="map" style={this.mapStyle} />
-        <div className={`flex-100 ${styles.children_wrapper}`}>
+        <div className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.children_wrapper}`}>
           { children({ gMaps, map: this.map, setMarker: this.setMarker }) }
         </div>
       </div>

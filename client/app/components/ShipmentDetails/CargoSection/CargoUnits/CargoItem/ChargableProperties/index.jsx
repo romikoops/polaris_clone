@@ -199,11 +199,12 @@ export function ChargableProperties ({
 
   return (
     <div className={`${styles.inner_cargo_item_info} layout-row flex-100 layout-wrap layout-align-start`}>
-      <div className="flex-25 layout-wrap layout-row">
+      <div className="flex-45 layout-wrap layout-row">
         {totalVolume}
         {chargeableVolume}
       </div>
-      <div className={`${styles.padding_left} flex-25 layout-wrap layout-row`}>
+      <div className="flex-5" />
+      <div className={`${styles.padding_left} flex-45 layout-wrap layout-row`}>
         {totalWeight}
         {chargeableWeight}
       </div>
