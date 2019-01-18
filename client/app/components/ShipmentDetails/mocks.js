@@ -118,7 +118,7 @@ export const origin = {
 export const destination = {
   latitude: 36.083811, longitude: 120.323534, nexusId: 601, nexusName: 'Qingdao', country: 'CN'
 }
-const cargoItem = {
+export const cargoItem = {
   payloadInKg: 223, totalVolume: 0, totalWeight: 0, dimensionX: 5, dimensionY: 132, dimensionZ: 12, quantity: 6, cargoItemTypeId: 23, dangerousGoods: false, stackable: true
 }
 

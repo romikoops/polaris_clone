@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`happy path 1`] = `
+<div
+  className="layout-row flex-100 layout-wrap layout-align-stretch"
+  key="UNIQ_KEY"
+  name="0-cargoItem"
+  style={
+    Object {
+      "margin": "30px 0",
+      "position": "relative",
+    }
+  }
+>
+  <div
+    className="flex-100 layout-align-start-center layout-row cargo_unit_header"
+  >
+    <h3>
+      Your Cargo
+    </h3>
+    <div
+      className="delete_icon"
+      onClick={[Function]}
+    >
+      Delete
+      <i
+        className="fa fa-trash"
+      />
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap cargo_unit_inputs"
+  >
+    <div
+      className="flex-15 layout-row layout-align-center"
+    >
+      <QuantityInput
+        cargoItem={
+          Object {
+            "cargoItemTypeId": 23,
+            "dangerousGoods": false,
+            "dimensionX": 5,
+            "dimensionY": 132,
+            "dimensionZ": 12,
+            "payloadInKg": 223,
+            "quantity": 6,
+            "stackable": true,
+            "totalVolume": 0,
+            "totalWeight": 0,
+          }
+        }
+        i={0}
+        onChange={[Function]}
+        t={[Function]}
+      />
+    </div>
+    <div
+      className="cargo_item_box cargo_item_inputs flex-85"
+    >
+      <div
+        id="childen"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`with empty props 1`] = `""`;
