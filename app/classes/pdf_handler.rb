@@ -29,8 +29,8 @@ class PdfHandler
     }
 
     @shipments << @shipment if @shipments.empty?
-    @shipments.each do |_s|
-      calculate_cargo_data(shipment)
+    @shipments.each do |s|
+      calculate_cargo_data(s)
     end
 
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
@@ -51,7 +51,7 @@ class PdfHandler
                                   shipment.cargo_units.inject(0) do |sum, hash|
                                     sum + hash[:quantity].to_f * hash[:chargeable_weight].to_f
                                   end
-        end
+                                end
     chargeable_weight[:trucking_pre] =
       @shipment.trucking.dig('pre_carriage', 'chargeable_weight')
     chargeable_weight[:trucking_on] =
