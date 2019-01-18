@@ -21,40 +21,54 @@ class PdfHandler
     @load_type  = args[:load_type]
     @remarks    = args[:remarks]
     @hide_cargo_sub_totals = false
-    
+
     @cargo_data = {
       vol: {},
       kg: {},
       chargeable_weight: {}
     }
 
-    if @shipments.empty?
-      @shipments << @shipment
-    end
-    @shipments.each do |s|
-      @cargo_data[:kg][s.id] =  if s.aggregated_cargo
-                                  s.aggregated_cargo.weight.to_f
-                                else
-                                  s.cargo_units.inject(0) { |sum, hash| sum + hash[:quantity].to_f * hash[:payload_in_kg].to_f }
-                                end
-      @cargo_data[:chargeable_weight][s.id]= {}
-      @cargo_data[:chargeable_weight][s.id][:cargo] =  if s.aggregated_cargo
-                                  s.aggregated_cargo.weight.to_f
-                                else
-                                  s.cargo_units.inject(0) { |sum, hash| sum + hash[:quantity].to_f * hash[:chargeable_weight].to_f }
-                                end
-      @cargo_data[:chargeable_weight][s.id][:trucking_pre] =  @shipment.trucking.dig('pre_carriage', 'chargeable_weight')
-      @cargo_data[:chargeable_weight][s.id][:trucking_on] =  @shipment.trucking.dig('on_carriage', 'chargeable_weight')
-      @cargo_data[:vol][s.id] = if s.aggregated_cargo
-                                  s.aggregated_cargo.volume.to_f
-                                else
-                                  s.cargo_units.inject(0) do |sum, hash|
-                                    sum + (hash[:quantity].to_f * hash[:dimension_x].to_f * hash[:dimension_y].to_f * hash[:dimension_z].to_f / 1_000_000)
-                                  end
-                                end
+    @shipments << @shipment if @shipments.empty?
+    @shipments.each do |_s|
+      calculate_cargo_data(shipment)
     end
 
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
+  end
+
+  def calculate_cargo_data(shipment)
+    kg = if shipment.aggregated_cargo
+           shipment.aggregated_cargo.weight.to_f
+         else
+           shipment.cargo_units.inject(0) do |sum, hash|
+             sum + hash[:quantity].to_f * hash[:payload_in_kg].to_f
+           end
+    end
+    chargeable_weight = {}
+    chargeable_weight[:cargo] = if shipment.aggregated_cargo
+                                  shipment.aggregated_cargo.weight.to_f
+                                else
+                                  shipment.cargo_units.inject(0) do |sum, hash|
+                                    sum + hash[:quantity].to_f * hash[:chargeable_weight].to_f
+                                  end
+        end
+    chargeable_weight[:trucking_pre] =
+      @shipment.trucking.dig('pre_carriage', 'chargeable_weight')
+    chargeable_weight[:trucking_on] =
+      @shipment.trucking.dig('on_carriage', 'chargeable_weight')
+    vol = if shipment.aggregated_cargo
+            shipment.aggregated_cargo.volume.to_f
+          else
+            shipment.cargo_units.inject(0) do |sum, hash|
+              sum + (hash[:quantity].to_f *
+                hash[:dimension_x].to_f *
+                hash[:dimension_y].to_f *
+                hash[:dimension_z].to_f / 1_000_000)
+            end
+          end
+    @cargo_data[:kg][shipment.id] = kg
+    @cargo_data[:chargeable_weight][shipment.id] = chargeable_weight
+    @cargo_data[:vol][shipment.id] = vol
   end
 
   def generate

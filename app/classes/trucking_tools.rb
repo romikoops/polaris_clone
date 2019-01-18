@@ -234,7 +234,7 @@ module TruckingTools
     
     target = "#{trucking_pricing.trucking_pricing_scope.carriage}_carriage"
     total_chargeable_weight =
-      cargo_object.dig('stackable','weight') + cargo_object.dig('non_stackable','weight')
+      cargo_object.dig('stackable', 'weight') + cargo_object.dig('non_stackable', 'weight')
     cargos.first.shipment.set_trucking_chargeable_weight(target, total_chargeable_weight)
 
     cargo_object
