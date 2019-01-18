@@ -42,6 +42,11 @@ module ShippingTools
         desired_start_date: shipment.desired_start_date
       )
       new_shipment.cargo_units = shipment.cargo_units.map(&:dup)
+      if new_shipment.lcl? && !new_shipment.aggregated_cargo.nil?
+        new_shipment.aggregated_cargo.set_chargeable_weight!
+      elsif new_shipment.lcl? && new_shipment.aggregated_cargo.nil?
+        new_shipment.cargo_units.map(&:set_chargeable_weight!)
+      end
       shipment.charge_breakdowns.each do |charge_breakdown|
         new_charge_breakdown = charge_breakdown.dup
         new_charge_breakdown.update(shipment: new_shipment)

@@ -357,6 +357,7 @@ exports[`shallow render 1`] = `
               "currency": "USD",
               "value": "200.99",
             },
+            "trucking": Object {},
           },
         ]
       }
@@ -644,6 +645,7 @@ exports[`tenant is falsy 1`] = `
               "currency": "USD",
               "value": "200.99",
             },
+            "trucking": Object {},
           },
         ]
       }
@@ -924,6 +926,7 @@ exports[`theme is falsy 1`] = `
               "currency": "USD",
               "value": "200.99",
             },
+            "trucking": Object {},
           },
         ]
       }

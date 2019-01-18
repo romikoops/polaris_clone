@@ -810,11 +810,14 @@ Ref:&nbsp;
               gradientBorderStyle={gradientBorderStyle}
               gradientStyle={gradientStyle}
               estimatedTimes={estimatedTimes}
+              showBreakdowns
+              scope={scope}
               shipment={shipment}
               background={background}
               selectedStyle={selectedStyle}
               deselectedStyle={deselectedStyle}
               feeHash={feeHash}
+              cargo={cargoItems || containers}
               cargoView={cargoView}
               remarkDispatch={remarkDispatch}
             />

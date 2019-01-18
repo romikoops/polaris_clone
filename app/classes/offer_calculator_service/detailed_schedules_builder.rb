@@ -23,7 +23,10 @@ module OfferCalculatorService
         {
           quote: grand_total_charge.deconstruct_tree_into_schedule_charge.deep_symbolize_keys,
           schedules: grouped_result[:schedules].map(&:to_detailed_hash),
-          meta: meta(schedule: grouped_result[:schedules].first)
+          meta: meta(
+            schedule: grouped_result[:schedules].first,
+            shipment: @shipment
+          )
         }
       end
 
@@ -59,7 +62,15 @@ module OfferCalculatorService
       filtered_detailed_schedules
     end
 
-    def meta(schedule:)
+    def meta(schedule:, shipment:)
+      chargeable_weight = if shipment.lcl? && shipment.aggregated_cargo
+                            shipment.aggregated_cargo.chargeable_weight
+                          elsif shipment.lcl? && !shipment.aggregated_cargo
+                            shipment.cargo_items.reduce(0) { |acc, c| acc + c.calc_chargeable_weight(schedule.mode_of_transport) }
+                          else
+                            0
+      end
+
       {
         mode_of_transport: schedule.mode_of_transport,
         name: schedule.trip.itinerary.name,
@@ -69,7 +80,8 @@ module OfferCalculatorService
         tenant_vehicle_id: schedule.trip.tenant_vehicle_id,
         itinerary_id: schedule.trip.itinerary_id,
         destination_hub: schedule.destination_hub,
-        charge_trip_id: schedule.trip_id
+        charge_trip_id: schedule.trip_id,
+        ocean_chargeable_weight: chargeable_weight
       }
     end
 
@@ -91,7 +103,7 @@ module OfferCalculatorService
           isQuote = false
         end
         user_pricing_id = user.role.name == 'agent' ? user.agency_pricing_id : user.id
-        
+
         # Find the pricings for the cargo classes and effective date ranges then group by cargo_class
         tenant_vehicle_id = schedules_array.first.trip.tenant_vehicle_id
         pricings_by_cargo_class = schedules_array.first.trip.itinerary.pricings

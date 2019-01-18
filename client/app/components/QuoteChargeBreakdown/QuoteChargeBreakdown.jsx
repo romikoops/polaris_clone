@@ -193,7 +193,7 @@ class QuoteChargeBreakdown extends Component {
               <div className="flex-50 layout-row layout-align-end-center">
                 <p>
                   {numberSpacing(price[1].value || price[1].total.value, 2)}
-                    &nbsp;
+                  &nbsp;
                   {(price[1].currency || price[1].total.currency)}
                 </p>
               </div>
@@ -290,7 +290,7 @@ class QuoteChargeBreakdown extends Component {
                   </span>
                 </div>
                 <div className="flex-25 layout-row layout-align-end-center">
-                  { price[0] === 'unknown' ? '' : (
+                  {price[0] === 'unknown' ? '' : (
                     <p>
                       {numberSpacing(price[1].value || price[1].total.value, 2)}
                       &nbsp;
@@ -304,7 +304,7 @@ class QuoteChargeBreakdown extends Component {
             return subPrices
           }) : ''}
 
-          { showSubTotal ? (
+          {showSubTotal ? (
             <div className={`flex-100 layout-row layout-align-space-between-center ${styles.currency_header}`}>
               <div className="flex-45 layout-row layout-align-start-center">
                 <span className="flex-none bold">
@@ -316,13 +316,10 @@ class QuoteChargeBreakdown extends Component {
                 <p className="flex-none bold">{`${numberSpacing(currencyTotals[currencyFees[0]] || 0, 2)} ${currencyFees[0]}`}</p>
               </div>
             </div>
-          ) : '' }
+          ) : ''}
 
         </div>
       ))
-      const unitString = get(scope, ['consolidation', 'cargo', 'backend'], false)
-        ? `${cargo.quantity} x ${t('cargo:consolidatedCargoItems')}`
-        : `${cargo.quantity} x ${nameToDisplay(cargo.cargo_class)}`
 
       return (
         <div className="flex-100 layout-row layout-wrap">
@@ -342,13 +339,54 @@ class QuoteChargeBreakdown extends Component {
     return capitalize(t(key))
   }
 
+  renderChargeableWeight (key) {
+    const {
+      t, trucking, meta, cargo
+    } = this.props
+
+    let target
+    let value
+    switch (key) {
+      case 'trucking_pre':
+        target = 'pre_carriage'
+
+        break
+      case 'trucking_on':
+        target = 'on_carriage'
+        break
+
+      default:
+        target = key
+        break
+    }
+    switch (key) {
+      case 'trucking_pre' || 'trucking_on':
+        value = trucking[target].chargeable_weight
+        break
+      case 'cargo':
+        if (meta) {
+          value = get(meta, ['ocean_chargeable_weight'], 0)
+        } else {
+          value = cargo.reduce((acc, c) => (acc + +c.chargeable_weight), 0)
+        }
+        break
+      default:
+        break
+    }
+
+    return `(${t('cargo:chargebleWeightWithValue', { value })})`
+  }
+
   render () {
     const {
       theme,
       quote,
-      showBreakdowns
+      showBreakdowns,
+      scope,
+      shrinkHeaders
     } = this.props
     if (Object.keys(quote).length === 0) return ''
+    const headerClass = shrinkHeaders ? styles.small_headers : ''
 
     return this.quoteKeys()
       .map(key => (
@@ -361,14 +399,24 @@ class QuoteChargeBreakdown extends Component {
           handleCollapser={() => this.toggleExpander(`${key}`)}
           mainWrapperStyle={{ borderTop: '1px solid #E0E0E0', minHeight: '50px' }}
           contentHeader={(
-            <div className={`flex-100 layout-row layout-align-start-center ${styles.price_row}`}>
-              <div
-                className="flex-none layout-row layout-align-start-center"
-              />
-              <div className="flex-45 layout-row layout-align-start-center">
+            <div
+              className={`flex-100 layout-row layout-align-start-center
+              ${styles.price_row} ${headerClass}`}
+            >
+              <div className="flex layout-row layout-align-start-center">
                 <span>{this.motName(quote[key].name)}</span>
+                {
+                  scope.show_chargeable_weight && !['import', 'export'].includes(key)
+                    ? (
+                      <span className={styles.chargeable_weight}>
+                        {' '}
+                        {this.renderChargeableWeight(key)}
+                        {' '}
+                      </span>
+                    ) : ''
+                }
               </div>
-              <div className="flex-50 layout-row layout-align-end-center">
+              <div className={`flex-35 layout-row layout-align-end-center ${headerClass}`}>
                 <p>
                   {
                     this.dynamicSectionTotal(key)

@@ -21,10 +21,13 @@ class PdfHandler
     @load_type  = args[:load_type]
     @remarks    = args[:remarks]
     @hide_cargo_sub_totals = false
+    
     @cargo_data = {
       vol: {},
-      kg: {}
+      kg: {},
+      chargeable_weight: {}
     }
+
     if @shipments.empty?
       @shipments << @shipment
     end
@@ -34,6 +37,14 @@ class PdfHandler
                                 else
                                   s.cargo_units.inject(0) { |sum, hash| sum + hash[:quantity].to_f * hash[:payload_in_kg].to_f }
                                 end
+      @cargo_data[:chargeable_weight][s.id]= {}
+      @cargo_data[:chargeable_weight][s.id][:cargo] =  if s.aggregated_cargo
+                                  s.aggregated_cargo.weight.to_f
+                                else
+                                  s.cargo_units.inject(0) { |sum, hash| sum + hash[:quantity].to_f * hash[:chargeable_weight].to_f }
+                                end
+      @cargo_data[:chargeable_weight][s.id][:trucking_pre] =  @shipment.trucking.dig('pre_carriage', 'chargeable_weight')
+      @cargo_data[:chargeable_weight][s.id][:trucking_on] =  @shipment.trucking.dig('on_carriage', 'chargeable_weight')
       @cargo_data[:vol][s.id] = if s.aggregated_cargo
                                   s.aggregated_cargo.volume.to_f
                                 else
