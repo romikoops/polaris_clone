@@ -102,7 +102,7 @@ class ShipmentDetails extends React.PureComponent {
     return (
       <div
         className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start"
-        style={{ minHeight: '100%' }}
+        style={{ minHeight: '90%' }}
       >
         <Formsy onValidSubmit={this.getOffers} className="flex-100 layout-row layout-wrap">
           <RouteSection />

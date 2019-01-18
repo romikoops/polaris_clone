@@ -9,5 +9,11 @@
     right: 0;
     left: 0;
     bottom: 0;
+    background: rgba(0,0,0,.55);
+    padding: 10px 0;
+    height: 87px;
+    width: 100%;
+    z-index: 25;
+    transition: all .3s ease;
   }
 }

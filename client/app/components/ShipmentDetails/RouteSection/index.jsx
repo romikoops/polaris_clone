@@ -272,7 +272,7 @@ class RouteSection extends React.PureComponent {
     const { origins, destinations, truckTypes } = this.state
 
     return (
-      <div className="route_section flex-100 content_width_booking">
+      <div className="route_section flex-100 content_width_booking margin_top">
         <RouteSectionMap theme={theme}>
           {
             ({ gMaps, map, setMarker }) => {
@@ -287,44 +287,60 @@ class RouteSection extends React.PureComponent {
                 gMaps,
                 map
               }
+              const preCarriageSection = (
+                <div className="flex-45 layout-row layout-wrap layout-align-start-start">
+                  <div className="flex-45 layout-row layout-wrap">
+                    <CarriageToggle carriage="pre" theme={theme} checked={preCarriage} onChange={this.handleCarriageChange} />
+                    <TruckingDetails
+                      carriageType="pre"
+                      hide={loadType !== 'container' || !preCarriage}
+                      theme={theme}
+                      trucking={trucking}
+                      truckTypes={truckTypes.origin}
+                      target="preCarriage"
+                      onTruckingDetailsChange={this.handleTruckingDetailsChange}
+                    />
+                  </div>
+                  <RouteSectionForm
+                    {...sharedFormProps}
+                    target="origin"
+                    carriage={preCarriage}
+                    formData={origin}
+                    availableTargets={origins}
+                    availableCounterparts={destinations}
+                    countries={this.countries.origin}
+                  />
+                </div>
+              )
+              const onCarriageSection = (
+                <div className="flex-45 layout-row layout-wrap layout-align-start-start">
+                  <div className="flex-35 layout-row layout-wrap">
+                    <CarriageToggle carriage="on" theme={theme} checked={onCarriage} onChange={this.handleCarriageChange} />
+                    <TruckingDetails
+                      carriageType="on"
+                      hide={loadType !== 'container' || !onCarriage}
+                      theme={theme}
+                      trucking={trucking}
+                      truckTypes={truckTypes.destination}
+                      target="onCarriage"
+                      onTruckingDetailsChange={this.handleTruckingDetailsChange}
+                    />
+                  </div>
+                  <RouteSectionForm
+                    {...sharedFormProps}
+                    target="destination"
+                    carriage={onCarriage}
+                    formData={destination}
+                    availableTargets={destinations}
+                    availableCounterparts={origins}
+                    countries={this.countries.destination}
+                  />
+                </div>
+              )
 
               return [
-                <CarriageToggle carriage="pre" checked={preCarriage} onChange={this.handleCarriageChange} />,
-                <TruckingDetails
-                  hide={loadType !== 'container' || !preCarriage}
-                  theme={theme}
-                  trucking={trucking}
-                  truckTypes={truckTypes.origin}
-                  target="preCarriage"
-                  onTruckingDetailsChange={this.handleTruckingDetailsChange}
-                />,
-                <RouteSectionForm
-                  {...sharedFormProps}
-                  target="origin"
-                  carriage={preCarriage}
-                  formData={origin}
-                  availableTargets={origins}
-                  availableCounterparts={destinations}
-                  countries={this.countries.origin}
-                />,
-                <CarriageToggle carriage="on" checked={onCarriage} onChange={this.handleCarriageChange} />,
-                <TruckingDetails
-                  hide={loadType !== 'container' || !onCarriage}
-                  theme={theme}
-                  trucking={trucking}
-                  truckTypes={truckTypes.destination}
-                  target="onCarriage"
-                  onTruckingDetailsChange={this.handleTruckingDetailsChange}
-                />,
-                <RouteSectionForm
-                  {...sharedFormProps}
-                  target="destination"
-                  carriage={onCarriage}
-                  formData={destination}
-                  availableTargets={destinations}
-                  availableCounterparts={origins}
-                  countries={this.countries.destination}
-                />,
+                preCarriageSection,
+                onCarriageSection,
                 <OfferError availableMots={availableMots} componentName="RouteSection" />
               ]
             }

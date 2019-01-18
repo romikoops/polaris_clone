@@ -1,8 +1,20 @@
 import React from 'react'
 import Checkbox from '../../../../Checkbox/Checkbox'
+import Tooltip from '../../../../Tooltip/Tooltip'
 
 function CheckboxWrapper ({
-  id, name, className, theme, checked, labelContent, onChange, show, style
+  id,
+  name,
+  className,
+  theme,
+  checked,
+  labelContent,
+  onChange,
+  show,
+  style,
+  disabled,
+  size,
+  tooltipText
 }) {
   if (!show) return ''
 
@@ -16,16 +28,20 @@ function CheckboxWrapper ({
           id={id}
           theme={theme}
           onChange={onChange}
-          size="30px"
+          size={size}
           name={name}
           checked={checked}
+          disabled={disabled}
         />
       </div>
-      <div className="flex">
-        <label htmlFor={id} className="pointy">
-          {labelContent}
-        </label>
-      </div>
+      <label htmlFor={id} className="pointy">
+        {labelContent}
+      </label>
+      {
+        tooltipText ? (
+          <Tooltip color={theme.colors.primary} icon="fa-info-circle" text={tooltipText} />
+        ) : ''
+      }
     </div>
   )
 }

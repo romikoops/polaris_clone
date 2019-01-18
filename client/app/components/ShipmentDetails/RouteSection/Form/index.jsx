@@ -7,7 +7,7 @@ function RouteSectionForm ({
   ...childProps
 }) {
   return (
-    <div className="route_section_form">
+    <div className="route_section_form flex-55 layout-row layout-wrap">
       {
         carriage
           ? (
