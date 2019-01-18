@@ -271,6 +271,16 @@ exports[`detailed billing working properly 1`] = `
   >
     <QuoteChargeBreakdown
       cargo={Array []}
+      meta={
+        Object {
+          "destination_hub": Object {
+            "name": "Shanghai",
+          },
+          "origin_hub": Object {
+            "name": "Gothenburg",
+          },
+        }
+      }
       quote={
         Object {
           "cargo": Object {
@@ -413,6 +423,7 @@ exports[`detailed billing working properly 1`] = `
           },
         }
       }
+      trucking={Object {}}
     />
   </CollapsingContent>
   <div
@@ -785,6 +796,16 @@ exports[`shallow rendering 1`] = `
   >
     <QuoteChargeBreakdown
       cargo={Array []}
+      meta={
+        Object {
+          "destination_hub": Object {
+            "name": "Shanghai",
+          },
+          "origin_hub": Object {
+            "name": "Gothenburg",
+          },
+        }
+      }
       quote={
         Object {
           "cargo": Object {
@@ -927,6 +948,7 @@ exports[`shallow rendering 1`] = `
           },
         }
       }
+      trucking={Object {}}
     />
   </CollapsingContent>
   <div
@@ -1266,6 +1288,16 @@ exports[`show schedule options working 1`] = `
   >
     <QuoteChargeBreakdown
       cargo={Array []}
+      meta={
+        Object {
+          "destination_hub": Object {
+            "name": "Shanghai",
+          },
+          "origin_hub": Object {
+            "name": "Gothenburg",
+          },
+        }
+      }
       quote={
         Object {
           "cargo": Object {
@@ -1408,6 +1440,7 @@ exports[`show schedule options working 1`] = `
           },
         }
       }
+      trucking={Object {}}
     />
   </CollapsingContent>
   <div
@@ -1780,6 +1813,16 @@ exports[`show schedules set to true 1`] = `
   >
     <QuoteChargeBreakdown
       cargo={Array []}
+      meta={
+        Object {
+          "destination_hub": Object {
+            "name": "Shanghai",
+          },
+          "origin_hub": Object {
+            "name": "Gothenburg",
+          },
+        }
+      }
       quote={
         Object {
           "cargo": Object {
@@ -1922,6 +1965,7 @@ exports[`show schedules set to true 1`] = `
           },
         }
       }
+      trucking={Object {}}
     />
   </CollapsingContent>
   <div
@@ -2275,6 +2319,16 @@ exports[`single result rendering removes the "add" button 1`] = `
   >
     <QuoteChargeBreakdown
       cargo={Array []}
+      meta={
+        Object {
+          "destination_hub": Object {
+            "name": "Shanghai",
+          },
+          "origin_hub": Object {
+            "name": "Gothenburg",
+          },
+        }
+      }
       quote={
         Object {
           "cargo": Object {
@@ -2417,6 +2471,7 @@ exports[`single result rendering removes the "add" button 1`] = `
           },
         }
       }
+      trucking={Object {}}
     />
   </CollapsingContent>
   <div

@@ -201,6 +201,10 @@ class Shipment < ApplicationRecord
     self.itinerary ||= layover.trip.itinerary
   end
 
+  def set_trucking_chargeable_weight(target, weight)
+    trucking[target]['chargeable_weight'] = weight
+  end
+
   def pickup_address
     Address.where(id: trucking.dig('pre_carriage', 'address_id')).first
   end
@@ -326,6 +330,14 @@ class Shipment < ApplicationRecord
 
   def has_insurance?
     !!selected_offer.dig('insurance')
+  end
+
+  def lcl?
+    load_type == 'cargo_item'
+  end
+
+  def fcl?
+    load_type == 'container'
   end
 
   def confirm!

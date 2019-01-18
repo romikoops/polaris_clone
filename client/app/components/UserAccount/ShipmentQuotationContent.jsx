@@ -238,6 +238,8 @@ class ShipmentQuotationContent extends Component {
                 theme={theme}
                 scope={scope}
                 cargo={cargo}
+                shrinkHeaders
+                trucking={shipment.trucking}
                 showBreakdowns
                 quote={shipment.selected_offer}
                 mot={shipment.mode_of_transport}

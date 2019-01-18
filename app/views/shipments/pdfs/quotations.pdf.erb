@@ -218,7 +218,14 @@
         <% next if !charge%>
         <div class="sub-prices">
           <div class="total-price-single">
-            <h4><%= charge_key == 'cargo' ? "#{s.mode_of_transport} Freight" : charge["name"] %></h4>
+            <h4>
+              <%= charge_key == 'cargo' ? "#{s.mode_of_transport} Freight" : charge["name"] %>
+                <small class="chargeable_weight"><%= if scope['show_chargeable_weight'] && !['import', 'export'].include?(charge_key)
+                  " (Chargeable Weight: #{cargo_data[:chargeable_weight][s.id][charge_key.to_sym]} kg)"
+                  end%>
+                </small>
+                 
+            </h4>
             <% if charge_key != 'cargo' && charge != "Grand Total" && !scope['hide_grand_total'] || (charge_key == 'cargo' && !hide_cargo_sub_totals) %>
               <h3><%= '%.2f' % charge["total"]["value"].to_f %>&nbsp;<%= charge["total"]["currency"] %></h3>
             <% end %>

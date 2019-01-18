@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react'
 import { get } from 'lodash'
 import { withNamespaces } from 'react-i18next'
 import styles from './index.scss'
-import { moment } from '../../../constants'
 import {
   switchIcon,
   gradientTextGenerator,
@@ -175,11 +174,13 @@ class QuoteCard extends PureComponent {
       cargo,
       aggregatedCargo,
       onClickAdd,
-      t
+      t,
+      shipment
     } = this.props
     const { scope } = tenant
     const {
       quote,
+      meta,
       schedules,
       finalResults
     } = result
@@ -309,7 +310,9 @@ class QuoteCard extends PureComponent {
             theme={theme}
             scope={tenant.scope}
             quote={quote}
+            meta={meta}
             cargo={cargo}
+            trucking={shipment.trucking}
             mot={result.meta.mode_of_transport}
           />
         </CollapsingContent>
