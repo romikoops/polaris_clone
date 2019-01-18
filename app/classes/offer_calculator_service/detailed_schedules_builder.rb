@@ -69,7 +69,7 @@ module OfferCalculatorService
                             shipment.aggregated_cargo.chargeable_weight
                           elsif shipment.lcl? && !shipment.aggregated_cargo
                             shipment.cargo_items.reduce(0) do |acc, c|
-                              acc + c.calc_chargeable_weight(schedule.mode_of_transport)
+                              acc + c.calc_chargeable_weight(schedule.mode_of_transport) * c.quantity
                             end
                           else
                             0
