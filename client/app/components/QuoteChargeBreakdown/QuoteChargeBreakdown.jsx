@@ -367,7 +367,7 @@ class QuoteChargeBreakdown extends Component {
         if (meta) {
           value = get(meta, ['ocean_chargeable_weight'], 0)
         } else {
-          value = cargo.reduce((acc, c) => (acc + +c.chargeable_weight), 0)
+          value = cargo.reduce((acc, c) => (acc + +c.chargeable_weight * +c.quantity), 0)
         }
         break
       default:
