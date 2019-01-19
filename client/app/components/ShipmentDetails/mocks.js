@@ -2,20 +2,12 @@
 // ============================================
 import { get } from 'lodash'
 
-import en from '../../../locales/en/translations.json'
-
-export const t = (key) => {
-  const [scope, id] = key.split(':')
-
-  return en[scope] && en[scope][id]
-    ? en[scope][id]
-    : `NO_TRANSLATION | key "${key}"`
-}
+export const t = x => x
 
 export const trucking = { preCarriage: { truckType: '' }, onCarriage: { truckType: '' } }
 export const id = 4606
 export const selectedDay = '2019-01-24T10:00:00.000Z'
-
+export const lastAvailableDate = '2019-03-12T12:00:00.000Z'
 export const ShipmentDetailsAvailableRoutes = [{
   itineraryId: 2863,
   itineraryName: 'Gothenburg - Qingdao',
@@ -138,7 +130,7 @@ export const cargoUnits = [cargoItem]
 
 export const identity = x => x
 
-export const importedProps = {
+export const cargoUnitProps = {
   ShipmentDetails,
   aggregatedCargo: false,
   cargoItemTypes,
@@ -163,22 +155,148 @@ export const importedProps = {
   trucking
 }
 
+export const tenant = {
+  id: 3,
+  theme: {
+    colors: {
+      primary: '#0D5BA9',
+      secondary: '#23802A',
+      brightPrimary: '#2491FD',
+      brightSecondary: '#25ED36'
+    },
+    logoWide: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png',
+    logoLarge: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
+    logoSmall: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
+    logoWhite: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png',
+    background: 'https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg'
+  },
+  emails: {
+    sales: {
+      air: 'sales@demo.com',
+      rail: 'sales@demo.com',
+      ocean: 'sales@demo.com',
+      general: 'sales@demo.com'
+    },
+    support: {
+      air: 'imc.air@demo.com',
+      rail: 'imc.rail@demo.com',
+      ocean: 'imc.sea@demo.com',
+      general: 'support@demo.com'
+    }
+  },
+  subdomain: 'demo',
+  created_at: '2018-05-15T10:09:24.288Z',
+  updated_at: '2018-12-12T17:09:04.594Z',
+  phones: {
+    main: '+46 31-85 32 00',
+    support: '0173042031020'
+  },
+  addresses: {
+    main: 'Brooktorkai 7, 20457 Hamburg, Germany',
+    components: []
+  },
+  name: 'Demo',
+  scope: {
+    links: {
+      about: '',
+      legal: ''
+    },
+    terms: [
+      'You verify that all the information provided above is true',
+      'You agree to the presented terms and conditions.',
+      'Demo is to discuss the validity of the presented prices with the product owners.'
+    ],
+    fee_detail: 'key_and_name',
+    closed_shop: false,
+    has_customs: true,
+    has_insurance: true,
+    fixed_currency: false,
+    dangerous_goods: false,
+    cargo_info_level: 'hs_codes',
+    carriage_options: {
+      on_carriage: {
+        export: 'optional',
+        import: 'optional'
+      },
+      pre_carriage: {
+        export: 'optional',
+        import: 'optional'
+      }
+    },
+    detailed_billing: false,
+    total_dimensions: true,
+    consolidate_cargo: false,
+    modes_of_transport: {
+      air: {
+        container: true,
+        cargo_item: true
+      },
+      rail: {
+        container: true,
+        cargo_item: true
+      },
+      ocean: {
+        container: true,
+        cargo_item: true
+      },
+      truck: {
+        container: false,
+        cargo_item: false
+      }
+    },
+    show_beta_features: true,
+    closed_registration: false,
+    continuous_rounding: false,
+    incoterm_info_level: 'text',
+    non_stackable_goods: true,
+    open_quotation_tool: false,
+    customs_export_paper: false,
+    fixed_exchange_rates: false,
+    require_full_address: true,
+    closed_quotation_tool: false
+  },
+  currency: 'EUR',
+  web: {
+    index: 'index.html',
+    subdomain: 'demo',
+    cloudfront: 'E19KMYH87T6B3G'
+  },
+  email_links: {
+    confirmation_instructions: [
+      {
+        href: 'www.example.com',
+        text: 'All assignments will be performed in accordance with the General Conditions of the Nordic Association of Freight Forwarders (NSAB 2015)',
+        link_text: 'Nordic Association of Freight Forwarders'
+      },
+      {
+        href: 'www.example2.com',
+        text: 'This is just an example2.',
+        link_text: 'example2'
+      }
+    ]
+  }
+}
+
 export function logPath (props, path) {
   console.log(path, get(props, path, 'NO SUCH PATH'))
 }
 
 export function log (props) {
-  let holder = '{\n'
-  const declarations = []
-  Object.keys(props).forEach((key) => {
-    const toLog = `const ${key} = ${JSON.stringify(props[key])}`
-    if (toLog.length < 150) console.log(toLog)
-    declarations.push(toLog)
+  try {
+    let holder = '{\n'
+    const declarations = []
+    Object.keys(props).forEach((key) => {
+      const toLog = `const ${key} = ${JSON.stringify(props[key])}`
+      if (toLog.length < 150) console.log(toLog)
+      declarations.push(toLog)
 
-    holder = `${holder}\n  ${key},`
-  })
-  holder = `${holder}\n}`
-  console.log(declarations.join('\n'))
-  console.log(holder)
+      holder = `${holder}\n  ${key},`
+    })
+    holder = `${holder}\n}`
+    console.log(declarations.join('\n'))
+    console.log(holder)
+  } catch (e) {
+    console.log('LOG')
+  }
   // console.log(JSON.stringify(props, null, 2))
 }

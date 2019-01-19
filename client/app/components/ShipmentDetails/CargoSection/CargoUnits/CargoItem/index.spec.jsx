@@ -4,7 +4,7 @@ import CargoItem, {
   getSelectedColliType,
   getAvailableCargoItemTypes
 } from '.'
-import { importedProps, cargoItem, cargoItemTypes } from '../../../mocks'
+import { cargoUnitProps, cargoItem, cargoItemTypes } from '../../../mocks'
 
 test('with empty props', () => {
   expect(() => shallow(<CargoItem />)).toThrow()
@@ -12,8 +12,8 @@ test('with empty props', () => {
 
 test('happy path', () => {
   const props = {
-    ...importedProps,
-    i:0,
+    ...cargoUnitProps,
+    i: 0,
     cargoItem
   }
   expect(shallow(<CargoItem {...props} />)).toMatchSnapshot()

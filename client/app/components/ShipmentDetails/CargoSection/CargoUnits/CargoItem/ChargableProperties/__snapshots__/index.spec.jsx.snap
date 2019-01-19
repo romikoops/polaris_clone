@@ -13,13 +13,14 @@ exports[`happy path 1`] = `
       <p
         className="input_label flex-none"
       >
-        Total
+        common:total
          
-        Volume
+        common:volume
         :  
         <span
           className="input_value"
         >
+          0.048
            m
           <sup
             style={
@@ -44,7 +45,7 @@ exports[`happy path 1`] = `
         <p
           className="subchargeable flex-none"
         >
-          Chargeable:
+          cargo:chargeble:
         </p>
       </div>
       <div
@@ -60,6 +61,7 @@ exports[`happy path 1`] = `
           <p
             className="chargeable_weight_value input_value"
           >
+            8.012
             <span>
                m
               <sup
@@ -86,7 +88,7 @@ exports[`happy path 1`] = `
           <p
             className="chargeable_weight_value input_value"
           >
-            Unavailable
+            common:unavailable
           </p>
         </div>
         <div
@@ -99,6 +101,7 @@ exports[`happy path 1`] = `
           <p
             className="chargeable_weight_value input_value"
           >
+            1.338
             <span>
                m
               <sup
@@ -127,13 +130,14 @@ exports[`happy path 1`] = `
       <p
         className="input_label flex-none"
       >
-        Total
+        common:total
          
-        Weight
+        common:weight
         :  
         <span
           className="input_value"
         >
+          1,338.0
            kg
         </span>
       </p>
@@ -147,7 +151,7 @@ exports[`happy path 1`] = `
         <p
           className="subchargeable flex-none"
         >
-          Chargeable:
+          cargo:chargeble:
         </p>
       </div>
       <div
@@ -178,7 +182,7 @@ exports[`happy path 1`] = `
           <p
             className="chargeable_weight_value input_value"
           >
-            Unavailable
+            common:unavailable
           </p>
         </div>
         <div

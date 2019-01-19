@@ -1,19 +1,19 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import CargoUnits from '.'
-import { importedProps, cargoItemAggregated, cargoItemContainer } from '../../mocks'
+import { cargoUnitProps, cargoItemAggregated, cargoItemContainer } from '../../mocks'
 
 test('with empty props', () => {
   expect(shallow(<CargoUnits />)).toMatchSnapshot()
 })
 
 test('load type is cargo item', () => {
-  expect(shallow(<CargoUnits {...importedProps} />)).toMatchSnapshot()
+  expect(shallow(<CargoUnits {...cargoUnitProps} />)).toMatchSnapshot()
 })
 
 test('load type is cargo item aggregated', () => {
   const props = {
-    ...importedProps,
+    ...cargoUnitProps,
     cargoUnits: [cargoItemAggregated],
     aggregatedCargo: true
   }
@@ -22,7 +22,7 @@ test('load type is cargo item aggregated', () => {
 
 test('load type is container', () => {
   const props = {
-    ...importedProps,
+    ...cargoUnitProps,
     loadType: 'container',
     cargoUnits: [cargoItemContainer]
   }

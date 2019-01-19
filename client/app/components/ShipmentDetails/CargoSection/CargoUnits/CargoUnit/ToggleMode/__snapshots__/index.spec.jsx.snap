@@ -18,7 +18,7 @@ exports[`happy path 1`] = `
           }
         }
       >
-        Cargo Units
+        cargo:cargoUnits
       </h3>
       <Toggle
         checked={false}
@@ -42,7 +42,7 @@ exports[`happy path 1`] = `
           }
         }
       >
-        Total Dimensions
+        cargo:totalDimensions
       </h3>
     </div>
   </div>
@@ -67,7 +67,7 @@ exports[`when checked 1`] = `
           }
         }
       >
-        Cargo Units
+        cargo:cargoUnits
       </h3>
       <Toggle
         checked={true}
@@ -91,7 +91,7 @@ exports[`when checked 1`] = `
           }
         }
       >
-        Total Dimensions
+        cargo:totalDimensions
       </h3>
     </div>
   </div>

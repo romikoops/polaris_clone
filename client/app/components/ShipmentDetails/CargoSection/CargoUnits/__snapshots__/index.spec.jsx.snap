@@ -74,12 +74,12 @@ exports[`load type is cargo item 1`] = `
     Object {
       "cargoItemTypeId": 23,
       "dangerousGoods": false,
-      "dimensionX": 7,
-      "dimensionY": 7,
-      "dimensionZ": 8,
-      "payloadInKg": 11,
-      "quantity": 7,
-      "stackable": false,
+      "dimensionX": 5,
+      "dimensionY": 132,
+      "dimensionZ": 12,
+      "payloadInKg": 223,
+      "quantity": 6,
+      "stackable": true,
       "totalVolume": 0,
       "totalWeight": 0,
     }
@@ -304,7 +304,7 @@ exports[`load type is cargo item 1`] = `
       },
     }
   }
-  uniqKey="6ddd8ce8-cdfd-48cc-81d7-046aa6009e8b"
+  uniqKey="95078195-ce47-48d9-ba9c-0a4500578f5e"
 />
 `;
 
