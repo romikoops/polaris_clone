@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 require 'rails_helper'
 
 describe Pricing, type: :model do

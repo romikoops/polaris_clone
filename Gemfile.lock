@@ -439,6 +439,8 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.4.0)
+    rubocop-rspec (1.31.0)
+      rubocop (>= 0.60.0)
     ruby-debug-ide (0.6.1)
       rake (>= 0.8.1)
     ruby-graphviz (1.2.3)
@@ -595,6 +597,7 @@ DEPENDENCIES
   rspec-rails
   rspec_junit_formatter
   rubocop
+  rubocop-rspec
   ruby-debug-ide
   sass-rails
   sentry-raven

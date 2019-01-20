@@ -137,6 +137,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'rspec_junit_formatter'
   gem 'rubocop'
+  gem 'rubocop-rspec'
 
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i(mri mingw x64_mingw)

@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :tenant_vehicle do
-    name 'standard'
-    mode_of_transport 'ocean'
+    name { 'standard' }
+    mode_of_transport { 'ocean' }
     association :tenant
     before(:create) do |tenant_vehicle|
       filter = tenant_vehicle.as_json(only: %i(mode_of_transport name))

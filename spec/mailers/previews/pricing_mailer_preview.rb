@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PricingMailerPreview < ActionMailer::Preview
   def request_email
     @pricing = Pricing.last

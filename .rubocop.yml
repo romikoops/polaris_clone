@@ -48,6 +48,11 @@ Naming/FileName:
 Naming/VariableNumber:
   EnforcedStyle: snake_case
 
+# Disable Time over DateTime for legacy specs
+Style/DateTime:
+  Exclude:
+    - spec/*
+
 Style/Documentation:
   Enabled: false
 
@@ -64,6 +69,8 @@ Style/IfUnlessModifier:
 # value to a local variable for those cases.
 Style/MethodCalledOnDoEndBlock:
   Enabled: true
+  Exclude:
+    - spec/*
 
 Style/PercentLiteralDelimiters:
   PreferredDelimiters:

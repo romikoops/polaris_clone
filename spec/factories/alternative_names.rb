@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :alternative_name do
-    
   end
 end
 

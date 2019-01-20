@@ -52,7 +52,7 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
              itinerary: itinerary_2,
              tenant_vehicle: tenant_vehicle_2,
              transport_category: transport_category)
-      service = OfferCalculatorService::DetailedSchedulesBuilder.new(shipment)
+      service = described_class.new(shipment)
       results = service.grouped_schedules(schedules: schedules, shipment: shipment, user: user)
       expect(results.length).to eq(2)
       expect(results.any? { |r| r.dig(:pricing_ids, 'lcl').nil? }).to eq(false)
@@ -70,7 +70,7 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
              itinerary: itinerary_2,
              tenant_vehicle: tenant_vehicle_2,
              transport_category: transport_category)
-      service = OfferCalculatorService::DetailedSchedulesBuilder.new(shipment)
+      service = described_class.new(shipment)
 
       results = service.sort_pricings(
         schedules: schedules,
@@ -83,9 +83,10 @@ RSpec.describe OfferCalculatorService::DetailedSchedulesBuilder do
       expect(results.values.first.first).to eq(pricing_1)
     end
   end
+
   describe '.sort_schedule_permutations', :vcr do
     it 'returns an object containing schedules grouped by pricing permutation' do
-      service = OfferCalculatorService::DetailedSchedulesBuilder.new(shipment)
+      service = described_class.new(shipment)
 
       results = service.sort_schedule_permutations(schedules: schedules)
       expect(results.keys.length).to eq(2)

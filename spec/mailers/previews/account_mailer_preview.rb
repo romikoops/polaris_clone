@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AccountMailerPreview < ActionMailer::Preview
   def confirmation_instructions
     @tenant = Tenant.normanglobal
