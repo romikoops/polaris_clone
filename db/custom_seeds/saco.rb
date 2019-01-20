@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 include ExcelTools
-include MongoTools
 
 subdomains = %w(saco saco-sandbox)
 subdomains.each do |sub|

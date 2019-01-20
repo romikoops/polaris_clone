@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module CurrencyTools
-  require 'http'
+require 'net/http'
 
+module CurrencyTools
   def get_rates(base, tenant_id)
     tenant = Tenant.find(tenant_id)
     if tenant && tenant.scope['fixed_exchange_rates']
@@ -11,7 +11,7 @@ module CurrencyTools
     else
       cached_rates = Currency.find_by(base: base, tenant_id: nil)
     end
-   
+
     if cached_rates.nil? || cached_rates.today.nil? || cached_rates.updated_at < Date.today - 1.day
       cached_rates = refresh_rates(base)
     end
@@ -69,8 +69,8 @@ module CurrencyTools
 
   def refresh_rates(base)
     currency_obj = Currency.find_by(base: base)
-    url = "http://data.fixer.io/latest?access_key=#{Settings.fixer.api_key}&base=#{base}"
-    response = JSON.parse(HTTP.get(url).to_s)
+    url = URI("http://data.fixer.io/latest?access_key=#{Settings.fixer.api_key}&base=#{base}")
+    response = JSON.parse(Net::HTTP.get(url))
     rates = response['rates']
 
     if !currency_obj

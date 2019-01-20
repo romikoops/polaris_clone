@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 include ExcelTools
-include MongoTools
-# subdomains = %w(demo greencarrier easyshipping hartrodt)
 subdomains = %w(normanglobal normanglobal-sandbox)
 subdomains.each do |sub|
   # # Tenant.all.each do |tenant|
@@ -36,7 +34,7 @@ subdomains.each do |sub|
   # #   # # # # # # Overwrite trucking data from excel sheet
 
   puts "# Overwrite Trucking  From Sheet"
-  
+
   puts "! Shanghai Port"
   hub = tenant.hubs.find_by_name('Shanghai Port')
   trucking = "data/normanglobal/normanglobal__trucking_ltl__china_default.xlsx"

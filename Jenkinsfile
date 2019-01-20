@@ -425,15 +425,13 @@ void cucumberTests() {
           }
         } catch (err) {
           // Fetch Pod Logs
-          podLog(namespace: 'review', selector: "app=imc-app,release=${env.REVIEW_NAME}", container: 'backend',  file: 'backend.log')
-          podLog(namespace: 'review', selector: "app=imc-app,release=${env.REVIEW_NAME}", container: 'frontend', file: 'frontend.log')
+          podLog(namespace: 'review', selector: "app=imc-app,release=${env.REVIEW_NAME}", container: 'backend')
+          podLog(namespace: 'review', selector: "app=imc-app,release=${env.REVIEW_NAME}", container: 'frontend')
 
           throw err
         } finally {
           junit allowEmptyResults: true, testResults: '**/*.xml'
           archiveArtifacts allowEmptyArchive: true, artifacts: '**/report/**/*'
-          archiveArtifacts allowEmptyArchive: true, artifacts: 'backend.log'
-          archiveArtifacts allowEmptyArchive: true, artifacts: 'frontend.log'
         }
       }
     }

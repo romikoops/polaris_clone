@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 include ExcelTools
-include MongoTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
 subdomains = %w(speedtrans speedtrans-sandbox)
 subdomains.each do |sub|

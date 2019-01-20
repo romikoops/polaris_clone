@@ -2,7 +2,6 @@
 
 class SearchController < ApplicationController
   include Response
-  include MongoTools
   before_action :require_login
 
   def search_hs_codes

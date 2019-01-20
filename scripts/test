@@ -29,7 +29,8 @@ def yellow(msg)
 end
 
 def bundle!
-  system('bundle check') || system!('bundle install -j2')
+  opts = ENV['CI'] ? '-j$(nproc)' : ''
+  system('bundle check') || system!("bundle install #{opts}")
 end
 
 def runner(dir:, name:)
