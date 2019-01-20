@@ -20,23 +20,28 @@ export class AdminClientTile extends Component {
     this.toggleShowDelete = this.toggleShowDelete.bind(this)
     this.deleteThis = this.deleteThis.bind(this)
   }
+
   handleLink () {
     const { target, navFn } = this.props
     navFn(target)
   }
+
   toggleShowDelete () {
     this.setState({ showDelete: !this.state.showDelete })
   }
+
   deleteThis () {
     const { client, deleteFn } = this.props
     deleteFn(client)
   }
+
   clickEv () {
     const { handleClick, client } = this.props
     if (handleClick) {
       handleClick(client)
     }
   }
+
   render () {
     const {
       t,
@@ -59,7 +64,7 @@ export class AdminClientTile extends Component {
     const content = (
       <div
         className={`
-        ${styles.margin} flex-80 layout-row layout-wrap layout-align-center-center`}
+        ${styles.margin} flex-80 layout-row layout-wrap layout-align-center-center ccb_contact`}
         onClick={this.clickEv}
       >
         <div
