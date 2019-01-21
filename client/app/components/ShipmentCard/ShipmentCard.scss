@@ -63,14 +63,17 @@
   }
   .check, .edit, .trash {
     transition: all 0.2s ease;
+    width: 54px;
   }
   .topRight {
     position: absolute;
     top: 0px;
     right: 0px;
     height: 32px;
-    width: 160px;
-    opacity: 0.2;
+    width: 220px;
+    opacity: 0.8;
+    border-left: 3px solid #E0E0E0;
+    border-bottom: 3px solid #E0E0E0;
     font-size: 12px;
     transition: all 0.3s ease;
     .check:hover {
