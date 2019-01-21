@@ -78,12 +78,12 @@ class Footer extends React.PureComponent {
           </div>
         </div>
         <div className="flex-25 flex-gt-sm-25 layout-row layout-wrap layout-align-start-start">
-          <div className="flex-25 flex-gt-sm-25 layout-row">
+          <div className="flex-25 layout-wrap layout-row">
             <h4 className={styles.title}>
               {t('footer:contact')}
             </h4>
           </div>
-
+          
           <div className={`flex-100 layout-row layout-wrap ${styles.contacts}`}>
             <a
               className="pointy flex-100 layout-row layout-align-start-center"
@@ -101,8 +101,8 @@ class Footer extends React.PureComponent {
             </div>
           </div>
         </div>
-        <div className="flex-20 flex-gt-sm-20 layout-row layout-wrap layout-align-start-start">
-          <div className="flex-100 flex-gt-sm-100 layout-row">
+        <div className="flex-25 flex-gt-sm-25 layout-row layout-wrap layout-align-start-start">
+          <div className="flex-100 layout-wrap layout-row">
             <h4 className={styles.title}>
               {t('footer:company')}
             </h4>
