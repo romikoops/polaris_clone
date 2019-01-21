@@ -293,12 +293,12 @@ class UserShipmentView extends Component {
     const feeHash = shipment.selected_offer
     const etdJSX = (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}
+        {moment(shipment.planned_etd).format('DD/MM/YYYY')}
       </p>
     )
     const etaJSX = (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}
+        {moment(shipment.planned_eta).format('DD/MM/YYYY')}
       </p>
     )
     const estimatedTimes = {
@@ -312,14 +312,14 @@ class UserShipmentView extends Component {
           <div className={`layout-row flex flex-sm-100 layout-align-space-between-center ${adminStyles.title_shipment_grey}`}>
             <p className="layout-align-start-center layout-row">
               {t('common:ref')}
-:&nbsp;
+              :&nbsp;
               {' '}
               <span>{shipment.imc_reference}</span>
             </p>
             <p className="layout-row layout-align-end-end">
               <strong>
                 {t('shipment:placedAt')}
-:&nbsp;
+                :&nbsp;
               </strong>
               {' '}
               {createdDate}

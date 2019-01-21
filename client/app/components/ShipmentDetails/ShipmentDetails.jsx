@@ -245,8 +245,9 @@ export class ShipmentDetails extends Component {
       if (!isQuote(tenant)) {
         const { routes } = shipmentData
         const itineraryIds = nextState.filteredRouteIndexes.selected.map(i => routes[i].itineraryId).join(',')
+
         const country = nextState.has_pre_carriage
-          ? routes[nextState.filteredRouteIndexes.selected[0]].origin.country
+          ? get(routes, [nextState.filteredRouteIndexes.selected[0], 'origin', 'country'], null)
           : nextState.origin.country
 
         shipmentDispatch.getLastAvailableDate({ itinerary_ids: itineraryIds, country })

@@ -8,18 +8,18 @@ When('I request the first public rate') do
   itinerary_rows = all('.rt-tr-group')
   itinerary_rows.each do |it_row|
     next if @rate_row
-    it_row.find('.rt-expander').click
-    pricing_table = it_row.find('.ReactTable')
-    pricings_rows = pricing_table.all('.rt-tr-group')
-    pricings_rows.each do |p_row|
-      next if @rate_row
 
-      has_button = p_row.has_selector?('button')
-      next if !has_button
+    it_row.find('.rt-expander').click
+    pricings_rows = it_row.find('.ReactTable').all('.rt-tr-group')
+
+    @rate_row = pricings_rows.find do |p_row|
+      next unless p_row.has_selector?('button', wait: 1)
+
       button = p_row.find('button')
-      
-      @rate_row = p_row
+
       button.click
+
+      p_row
     end
   end
 end

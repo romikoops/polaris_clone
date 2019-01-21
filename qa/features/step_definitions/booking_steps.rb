@@ -56,7 +56,9 @@ And('I select {string} to Clearance') do |clearance|
 end
 
 When('I agree to the terms and conditions') do
+  expect(all('.ccb_accept_terms .fa-check').count).to eq(0)
   find('.ccb_accept_terms').click
+  expect(all('.ccb_accept_terms .fa-check').count).to eq(1)
 end
 
 And('I have more than {int} contacts') do |num_contacts|

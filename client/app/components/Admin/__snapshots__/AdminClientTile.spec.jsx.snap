@@ -29,7 +29,7 @@ exports[`deleteable is true 1`] = `
         >
           <div
             className="
-        margin flex-80 layout-row layout-wrap layout-align-center-center"
+        margin flex-80 layout-row layout-wrap layout-align-center-center ccb_contact"
             onClick={[Function]}
           >
             <div
@@ -142,7 +142,7 @@ exports[`shallow render 1`] = `
         >
           <div
             className="
-        margin flex-80 layout-row layout-wrap layout-align-center-center"
+        margin flex-80 layout-row layout-wrap layout-align-center-center ccb_contact"
             onClick={[Function]}
           >
             <div
@@ -255,7 +255,7 @@ exports[`showTooltip is true 1`] = `
         >
           <div
             className="
-        margin flex-80 layout-row layout-wrap layout-align-center-center"
+        margin flex-80 layout-row layout-wrap layout-align-center-center ccb_contact"
             onClick={[Function]}
           >
             <div
@@ -375,7 +375,7 @@ exports[`state.showDelete is true 1`] = `
         >
           <div
             className="
-        margin flex-80 layout-row layout-wrap layout-align-center-center"
+        margin flex-80 layout-row layout-wrap layout-align-center-center ccb_contact"
             onClick={[Function]}
           >
             <div
@@ -488,7 +488,7 @@ exports[`theme is falsy 1`] = `
         >
           <div
             className="
-        margin flex-80 layout-row layout-wrap layout-align-center-center"
+        margin flex-80 layout-row layout-wrap layout-align-center-center ccb_contact"
             onClick={[Function]}
           >
             <div

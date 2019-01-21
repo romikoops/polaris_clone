@@ -1,31 +1,7 @@
 {
-  "plugins": ["jest"],
-  "extends": ["airbnb", "standard", "plugin:jest/recommended"],
-  "parser": "babel-eslint",
-  "rules": {
-    "padding-line-between-statements": [
-      1,
-      { "blankLine": "always", "prev": "*", "next": "return" }
-    ],
-    "max-len": [1, { "code": 120 }],
-    "react/no-typos": ["warn"],
-    "react/jsx-closing-tag-location": 0,
-    "no-plusplus": [
-      "error",
-      {
-        "allowForLoopAfterthoughts": true
-      }
-    ],
-    "jsx-a11y/label-has-for": 0,
-    "jsx-a11y/click-events-have-key-events": 0,
-    "jsx-a11y/no-static-element-interactions": 0,
-    "jsx-a11y/anchor-is-valid": 0,
-    "jsx-a11y/no-noninteractive-element-interactions": 0,
-    "jsx-a11y/heading-has-content": 0,
-    "jsx-a11y/alt-text": 0,
-    "react/jsx-indent": 0,
-    "react/jsx-no-target-blank": 0,
-    "react/no-unescaped-entities": "warn",
-    "react/prop-types": 0
-  }
+  "extends": [
+    "@itsmycargo"
+  ],
+
+  "parser": "babel-eslint"
 }

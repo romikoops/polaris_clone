@@ -10,10 +10,16 @@ FactoryBot.define do
     mode_of_transport 'ocean'
     association :tenant
 
-    after(:build) do |itinerary|
-      2.times do
-        itinerary.stops << create(:stop, itinerary: itinerary,
-        hub: create(:hub, tenant: itinerary.tenant, nexus: create(:nexus, tenant: itinerary.tenant)))
+    after(:build) do |itinerary, evaluator|
+      next if itinerary.stops.length >= 2
+
+      evaluator.num_stops.times do
+        itinerary.stops << build(:stop,
+                                 itinerary: itinerary,
+                                 hub: build(:hub,
+                                            tenant: itinerary.tenant,
+                                            nexus: build(:nexus,
+                                                         tenant: itinerary.tenant)))
       end
     end
   end

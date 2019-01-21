@@ -14,6 +14,7 @@ import {
   formattedPriceValue,
   cargoPlurals
 } from '../../helpers'
+
 class AdminShipmentCard extends Component {
   constructor (props) {
     super(props)
@@ -23,6 +24,7 @@ class AdminShipmentCard extends Component {
     }
     this.selectShipment = this.selectShipment.bind(this)
   }
+
   handleDeny () {
     const { shipment, dispatches } = this.props
     dispatches.confirmShipment(shipment.id, 'decline')
@@ -43,26 +45,32 @@ class AdminShipmentCard extends Component {
     const { shipment, dispatches } = this.props
     dispatches.getShipment(shipment.id, true)
   }
+
   handleView () {
     const { shipment, dispatches } = this.props
     dispatches.getShipment(shipment.id, true)
   }
+
   handleFinished () {
     const { shipment, dispatches } = this.props
     dispatches.confirmShipment(shipment.id, 'finished')
   }
+
   confirmDelete () {
     this.setState({
       confirm: true
     })
   }
+
   closeConfirm () {
     this.setState({ confirm: false })
   }
+
   selectShipment () {
     const { shipment, dispatches } = this.props
     dispatches.getShipment(shipment.id, true)
   }
+
   render () {
     const {
       shipment,
@@ -98,11 +106,23 @@ class AdminShipmentCard extends Component {
 
     const requestedLinks = ['requested', 'requested_by_unconfirmed_account'].includes(shipment.status) ? (
       <div className={`layout-row layout-align-center-center ${styles.topRight}`}>
-        <p className={`${styles.check} pointy`} onClick={() => this.handleAccept()}>{t('common:accept')}</p>
+        <div className={`${styles.edit} layout-row layout-align-center-center pointy`} onClick={() => this.handleEdit()}>
+          <i className="flex-none fa fa-eye" />
+          &nbsp;
+          <p>{t('common:modify')}</p>
+        </div>
         &nbsp;&nbsp;|&nbsp;&nbsp;
-        <p className={`${styles.edit} pointy`} onClick={() => this.handleEdit()}>{t('common:modify')}</p>
+        <div className={`${styles.check} layout-row layout-align-center-center pointy`} onClick={() => this.handleAccept()}>
+          <i className="flex-none fa fa-check" />
+          &nbsp;
+          <p>{t('common:accept')}</p>
+        </div>
         &nbsp;&nbsp;|&nbsp;&nbsp;
-        <p className={`${styles.trash} pointy`} onClick={() => this.confirmDelete()}>{t('common:reject')}</p>
+        <div className={`${styles.trash} layout-row layout-align-center-center pointy`} onClick={() => this.confirmDelete()}>
+          <i className="flex-none fa fa-trash" />
+          &nbsp;
+          <p>{t('common:reject')}</p>
+        </div>
       </div>
     ) : ''
 
@@ -110,47 +130,55 @@ class AdminShipmentCard extends Component {
     const originHubObj = splitName(shipment.origin_hub.name)
 
     const timeRow = plannedDate && shipment.planned_etd && shipment.planned_eta
-      ? (<div className={`layout-row flex-100 layout-align-start-center
+      ? (
+        <div className={`layout-row flex-100 layout-align-start-center
     ${styles.middle_bottom_box} ${styles.smallText}`}
-      >
-        <div className="flex-20 layout-align-center-start">
-          <span className="flex-100"><b>{t('common:pickupDate')}</b><br />
-            <span className={`${styles.grey}`}>
-              {moment(plannedDate).format('DD/MM/YYYY')}
+        >
+          <div className="flex-20 layout-align-center-start">
+            <span className="flex-100">
+              <b>{t('common:pickupDate')}</b>
+              <br />
+              <span className={`${styles.grey}`}>
+                {moment(plannedDate).format('DD/MM/YYYY')}
+              </span>
             </span>
-          </span>
-        </div>
-        <div className="flex-20 layout-align-center-start">
-          <span className="flex-100"><b>{t('common:etd')}</b><br />
-            <span className={`${styles.grey}`}>
-              {moment(shipment.planned_etd).format('DD/MM/YYYY')}
-            </span>
-          </span>
-        </div>
-        <div className="flex-20 layout-align-center-start">
-          <span className="flex-100"><b>{t('common:eta')}</b><br />
-            <span className={`${styles.grey}`}>
-              {moment(shipment.planned_eta).format('DD/MM/YYYY')}
-            </span>
-          </span>
-        </div>
-        <div className={`flex-40 layout-align-start-end ${styles.carriages}`}>
-          <div className="layout-row layout-align-end-end">
-            <i
-              className={shipment.has_pre_carriage ? 'fa fa-check clip' : 'fa fa-times'}
-              style={shipment.has_pre_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
-            />
-            <p>{t('shipment:preCarriageBase')}</p>
           </div>
-          <div className="layout-row layout-align-end-end">
-            <i
-              className={shipment.has_on_carriage ? 'fa fa-check clip' : 'fa fa-times'}
-              style={shipment.has_on_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
-            />
-            <p>{t('shipment:onCarriageBase')}</p>
+          <div className="flex-20 layout-align-center-start">
+            <span className="flex-100">
+              <b>{t('common:etd')}</b>
+              <br />
+              <span className={`${styles.grey}`}>
+                {moment(shipment.planned_etd).format('DD/MM/YYYY')}
+              </span>
+            </span>
+          </div>
+          <div className="flex-20 layout-align-center-start">
+            <span className="flex-100">
+              <b>{t('common:eta')}</b>
+              <br />
+              <span className={`${styles.grey}`}>
+                {moment(shipment.planned_eta).format('DD/MM/YYYY')}
+              </span>
+            </span>
+          </div>
+          <div className={`flex-40 layout-align-start-end ${styles.carriages}`}>
+            <div className="layout-row layout-align-end-end">
+              <i
+                className={shipment.has_pre_carriage ? 'fa fa-check clip' : 'fa fa-times'}
+                style={shipment.has_pre_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
+              />
+              <p>{t('shipment:preCarriageBase')}</p>
+            </div>
+            <div className="layout-row layout-align-end-end">
+              <i
+                className={shipment.has_on_carriage ? 'fa fa-check clip' : 'fa fa-times'}
+                style={shipment.has_on_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
+              />
+              <p>{t('shipment:onCarriageBase')}</p>
+            </div>
           </div>
         </div>
-      </div>) : (
+      ) : (
         <div className={`layout-row flex-100 layout-align-start-center
       ${styles.middle_bottom_box} ${styles.smallText}`}
         >
@@ -194,14 +222,27 @@ class AdminShipmentCard extends Component {
           </div>
           <div className={`flex-60 layout-row layout-align-start-center ${styles.hub_name}`}>
             <div className="layout-column layout-align-center-start">
-              <p>{t('common:from')}:&nbsp;<span>{originHubObj.name}</span></p>
-              <p>{t('common:to')}:&nbsp;<span>{destinationHubObj.name}</span></p>
+              <p>
+                {t('common:from')}
+:&nbsp;
+                <span>{originHubObj.name}</span>
+              </p>
+              <p>
+                {t('common:to')}
+:&nbsp;
+                <span>{destinationHubObj.name}</span>
+              </p>
             </div>
           </div>
-          <div className={`layout-row flex-20 layout-align-start-center ${styles.ett}`}>
+          <div className={`layout-row flex-20 layout-align-start-end ${styles.ett}`}>
             <div>
-              <b>{moment(shipment.planned_eta).diff(shipment.planned_etd, 'days')} {t('common:days')}</b><br />
-              <span className={`${styles.grey}`}>
+              <b>
+                {moment(shipment.planned_eta).diff(shipment.planned_etd, 'days')}
+                {' '}
+                {t('common:days')}
+              </b>
+              <br />
+              <span className={`${styles.grey}`} style={{ fontSize: '10px' }}>
                 {t('shipment:estimatedTransitTime')}
               </span>
             </div>
@@ -212,8 +253,16 @@ class AdminShipmentCard extends Component {
         >
           <div className="layout-row flex-50 flex-sm-40 flex-md-40 flex-xl-40 layout-align-center-center">
             <div className="flex-100">
-              <b className={styles.ref_row_card}>{t('common:ref')}:&nbsp;{shipment.imc_reference}</b>
-              <p>{t('shipment:placedAt')}&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY | HH:mm')}</p>
+              <b className={styles.ref_row_card}>
+                {t('common:ref')}
+:&nbsp;
+                {shipment.imc_reference}
+              </b>
+              <p>
+                {t('shipment:placedAt')}
+&nbsp;
+                {moment(shipment.booking_placed_at).format('DD/MM/YYYY | HH:mm')}
+              </p>
             </div>
           </div>
 
@@ -246,7 +295,11 @@ class AdminShipmentCard extends Component {
           <div className={`layout-row flex-40 layout-align-start-stretch
             ${styles.middle_bottom_box} ${styles.smallText}`}
           >
-            <div className="flex-100 layout-row"><b>{t('shipment:arrivedOn')}:&nbsp;</b>
+            <div className="flex-100 layout-row">
+              <b>
+                {t('shipment:arrivedOn')}
+:&nbsp;
+              </b>
               <span className={`${styles.grey}`}>
                 {moment(shipment.planned_eta).format('DD/MM/YYYY')}
               </span>
@@ -261,7 +314,8 @@ class AdminShipmentCard extends Component {
             <div className="layout-row flex-10">
               <div className="layout-row layout-align-center-center">
                 <span className={`${styles.smallText}`}>
-                  <b>x</b><span className={`${styles.bigText}`}>{shipment.cargo_count}</span>
+                  <b>x</b>
+                  <span className={`${styles.bigText}`}>{shipment.cargo_count}</span>
                 </span>
               </div>
             </div>
@@ -286,7 +340,11 @@ class AdminShipmentCard extends Component {
               <span>
                 { formattedPriceValue(totalPrice(shipment).value) }
               </span>
-              <span> { totalPrice(shipment).currency } </span>
+              <span>
+                {' '}
+                { totalPrice(shipment).currency }
+                {' '}
+              </span>
             </span>
           </div>
         </div>

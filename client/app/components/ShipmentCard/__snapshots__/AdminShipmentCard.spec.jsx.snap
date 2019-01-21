@@ -38,7 +38,7 @@ exports[`shallow rendering 1`] = `
       </div>
     </div>
     <div
-      className="layout-row flex-20 layout-align-start-center ett"
+      className="layout-row flex-20 layout-align-start-end ett"
     >
       <div>
         <b>
@@ -49,6 +49,11 @@ exports[`shallow rendering 1`] = `
         <br />
         <span
           className="grey"
+          style={
+            Object {
+              "fontSize": "10px",
+            }
+          }
         >
           Estimated Transit Time
         </span>

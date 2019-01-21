@@ -53,6 +53,11 @@
         width: 14px;
       }
     }
+    @media (max-width: 960px){
+      flex-direction: column;
+      align-self: center;
+      align-items: center;
+    }
   }
   .social_links {
     margin-top: 18px;
