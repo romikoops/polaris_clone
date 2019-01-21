@@ -176,6 +176,10 @@ class User < ApplicationRecord
     )
   end
 
+  def pricing_id
+    role.name == 'agent' ? agency_pricing_id : id
+  end
+
   # Override devise method to include additional info as opts hash
   def send_confirmation_instructions(opts = {})
     return if guest

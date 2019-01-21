@@ -38,8 +38,6 @@ module OfferCalculatorService
       detailed_schedules_with_service_level_count(detailed_schedules: compacted_detailed_schedules)
     end
 
-    private
-
     def detailed_schedules_with_service_level_count(detailed_schedules:)
       filtered_detailed_schedules = detailed_schedules.dup
 
@@ -92,61 +90,47 @@ module OfferCalculatorService
     def grouped_schedules(schedules:, shipment:, user:)
       result_to_return = []
       cargo_classes = shipment.aggregated_cargo ? ['lcl'] : shipment.cargo_units.pluck(:cargo_class)
-      schedule_groupings = schedules.group_by do |schedule|
-        [schedule.mode_of_transport,
-         schedule.vehicle_name,
-         schedule.carrier_name,
-         schedule.load_type,
-         schedule.origin_hub_id,
-         schedule.destination_hub_id].join('_')
-      end
+      schedule_groupings = sort_schedule_permutations(schedules: schedules)
+
       schedule_groupings.each do |_key, schedules_array|
         schedules_array.sort_by!(&:eta)
-        if schedules_array&.any? { |s| s.etd.nil? || s.eta.nil? }
-          isQuote = true
-          start_date = Date.today
-          end_date = start_date + 1.month
-        else
-          start_date = schedules_array.first.etd
-          end_date = schedules_array.last.eta
-          isQuote = false
-        end
-        user_pricing_id = user.role.name == 'agent' ? user.agency_pricing_id : user.id
+
+        start_date, end_date, is_quote = extract_dates_and_quote(schedules_array)
+        user_pricing_id = user.pricing_id
 
         # Find the pricings for the cargo classes and effective date ranges then group by cargo_class
-        tenant_vehicle_id = schedules_array.first.trip.tenant_vehicle_id
-        pricings_by_cargo_class = schedules_array.first.trip.itinerary.pricings
-                                                 .where(tenant_vehicle_id: tenant_vehicle_id)
-                                                 .for_cargo_class(cargo_classes)
-        pricings_by_cargo_class = pricings_by_cargo_class.for_dates(start_date, end_date) if start_date && end_date
-        pricings_by_cargo_class = pricings_by_cargo_class
-                                  .select do |pricing|
-                                    (pricing.user_id == user_pricing_id) || pricing.user_id.nil?
-                                  end
-                                  .group_by { |pricing| pricing.transport_category_id.to_s }
+
+        pricings_by_cargo_class = sort_pricings(
+          schedules: schedules_array,
+          user_pricing_id: user_pricing_id,
+          cargo_classes: cargo_classes,
+          start_date: start_date,
+          end_date: end_date
+        )
 
         # Find the group with the most pricings and create the object to be passed on
         most_diverse_set = pricings_by_cargo_class.values.max_by(&:length)
         other_pricings = pricings_by_cargo_class
                          .values
-                         .reject { |pricing_group| pricing_group == most_diverse_set }.flatten
+                         .reject { |pricing_group| pricing_group == most_diverse_set }
+                         .flatten
         if most_diverse_set.nil?
           result_to_return << nil
         else
+
           most_diverse_set.each do |pricing|
-            schedules_for_object = if isQuote
-                                     schedules_array
-                                   else
-                                     schedules_array.select do |sched|
-                                       sched.etd < pricing.expiration_date &&
-                                       sched.etd > pricing.effective_date
-                                     end
-                                   end
+            schedules_for_obj = schedules_array
+            unless is_quote
+              schedules_for_obj.select! do |sched|
+                sched.etd < pricing.expiration_date && sched.etd > pricing.effective_date
+              end
+            end
+
             obj = {
               pricing_ids: {
                 pricing.transport_category.cargo_class.to_s => pricing.id
               },
-              schedules: schedules_for_object
+              schedules: schedules_for_obj
             }
             other_pricings.each do |other_pricing|
               if other_pricing.effective_date < obj[:schedules].first.etd &&
@@ -160,6 +144,43 @@ module OfferCalculatorService
       end
 
       result_to_return
+    end
+
+    def sort_schedule_permutations(schedules:)
+      schedules.group_by do |schedule|
+        [schedule.mode_of_transport,
+         schedule.vehicle_name,
+         schedule.carrier_name,
+         schedule.load_type,
+         schedule.origin_hub_id,
+         schedule.destination_hub_id].join('_')
+      end
+    end
+
+    def sort_pricings(schedules:, user_pricing_id:, cargo_classes:, start_date:, end_date:)
+      tenant_vehicle_id = schedules.first.trip.tenant_vehicle_id
+      pricings_by_cargo_class = schedules.first.trip.itinerary.pricings
+                                         .where(tenant_vehicle_id: tenant_vehicle_id)
+                                         .for_cargo_class(cargo_classes)
+
+      pricings_by_cargo_class = pricings_by_cargo_class.for_dates(start_date, end_date) if start_date && end_date
+
+      pricings_by_cargo_class
+        .select { |pricing| (pricing.user_id == user_pricing_id) || pricing.user_id.nil? }
+        .group_by { |pricing| pricing.transport_category_id.to_s }
+    end
+
+    def extract_dates_and_quote(schedules)
+      if schedules&.any? { |s| s.etd.nil? || s.eta.nil? }
+        is_quote = true
+        start_date = Date.today
+        end_date = start_date + 1.month
+      else
+        start_date = schedules.first.etd
+        end_date = schedules.last.eta
+        is_quote = false
+      end
+      [start_date, end_date, is_quote]
     end
 
     def invalid_quote?(quote:)
