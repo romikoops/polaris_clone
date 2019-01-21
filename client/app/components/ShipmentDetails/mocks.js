@@ -1,9 +1,3 @@
-// Will remove it later
-// ============================================
-import { get } from 'lodash'
-
-export const t = x => x
-
 export const trucking = { preCarriage: { truckType: '' }, onCarriage: { truckType: '' } }
 export const id = 4606
 export const selectedDay = '2019-01-24T10:00:00.000Z'
@@ -277,26 +271,33 @@ export const tenant = {
   }
 }
 
-export function logPath (props, path) {
-  console.log(path, get(props, path, 'NO SUCH PATH'))
-}
-
-export function log (props) {
-  try {
-    let holder = '{\n'
-    const declarations = []
-    Object.keys(props).forEach((key) => {
-      const toLog = `const ${key} = ${JSON.stringify(props[key])}`
-      if (toLog.length < 150) console.log(toLog)
-      declarations.push(toLog)
-
-      holder = `${holder}\n  ${key},`
-    })
-    holder = `${holder}\n}`
-    console.log(declarations.join('\n'))
-    console.log(holder)
-  } catch (e) {
-    console.log('LOG')
+export const user = {
+  id: 1,
+  email: 'shipper@itsmycargo.com',
+  tenant_id: 3,
+  uid: '3***shipper@itsmycargo.com',
+  provider: 'tenant_email',
+  nickname: null,
+  image: null,
+  company_name: 'ItsMyCargo',
+  first_name: 'Someone',
+  last_name: 'Staff',
+  phone: '123456789',
+  guest: false,
+  currency: 'EUR',
+  vat_number: null,
+  allow_password_change: false,
+  optin_status: {
+    id: 1,
+    cookies: true,
+    tenant: true,
+    itsmycargo: true
+  },
+  external_id: null,
+  agency_id: null,
+  internal: null,
+  role: {
+    id: 2,
+    name: 'shipper'
   }
-  // console.log(JSON.stringify(props, null, 2))
 }
