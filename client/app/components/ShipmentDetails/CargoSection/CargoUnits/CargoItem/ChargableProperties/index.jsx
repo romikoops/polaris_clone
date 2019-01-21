@@ -1,27 +1,14 @@
 import React from 'react'
+import { withNamespaces } from 'react-i18next'
 import styles from './index.scss'
 import {
   numberSpacing, volume, weight, switchIcon, chargeableWeight, chargeableVolume
 } from '../../../../../../helpers'
 
 function chargeableWeightElemJSX ({
-  mot, t, availableMots, cargoItem, maxDimensions
+  mot, t, unavailable, cargoItem
 }) {
-  if (
-    (
-      availableMots.length > 0 &&
-      !availableMots.includes(mot)
-    ) ||
-    (
-      cargoItem &&
-      maxDimensions[mot] &&
-      (
-        +cargoItem.dimension_z > +maxDimensions[mot].dimensionZ ||
-        +cargoItem.dimension_y > +maxDimensions[mot].dimensionY ||
-        chargeableWeight(cargoItem, mot) > +maxDimensions[mot].chargeableWeight
-      )
-    )
-  ) {
+  if (unavailable(mot)) {
     return (
       <div className={`flex-none layout-align-center-center layout-row ${styles.single_charge}`}>
         { switchIcon(mot) }
@@ -44,23 +31,9 @@ function chargeableWeightElemJSX ({
 }
 
 function chargeableVolumeElemJSX ({
-  mot, t, availableMots, cargoItem, maxDimensions
+  mot, t, unavailable, cargoItem
 }) {
-  if (
-    (
-      availableMots.length > 0 &&
-      !availableMots.includes(mot)
-    ) ||
-    (
-      cargoItem &&
-      maxDimensions[mot] &&
-      (
-        +cargoItem.dimension_z > +maxDimensions[mot].dimensionZ ||
-        +cargoItem.dimension_y > +maxDimensions[mot].dimensionY ||
-        chargeableWeight(cargoItem, mot) > +maxDimensions[mot].chargeableWeight
-      )
-    )
-  ) {
+  if (unavailable(mot)) {
     return (
       <div className={`flex-none layout-align-center-center layout-row ${styles.single_charge}`}>
         { switchIcon(mot) }
@@ -88,11 +61,26 @@ function chargeableVolumeElemJSX ({
 function getChargableProperties ({
   t, cargoItem, scope, maxDimensions, availableMots
 }) {
+  const unavailable = mot => (
+    availableMots.length > 0 &&
+    !availableMots.includes(mot)
+  ) ||
+  (
+    cargoItem &&
+    maxDimensions[mot] &&
+    (
+      +cargoItem.dimension_z > +maxDimensions[mot].dimensionZ ||
+      +cargoItem.dimension_y > +maxDimensions[mot].dimensionY ||
+      chargeableWeight(cargoItem, mot) > +maxDimensions[mot].chargeableWeight
+    )
+  )
+
   const sharedProps = {
     t,
     cargoItem,
     availableMots,
-    maxDimensions
+    maxDimensions,
+    unavailable
   }
   const chargeableWeightMots = Object.keys(scope.modes_of_transport).filter(
     mot => scope.modes_of_transport[mot].cargo_item
@@ -180,7 +168,7 @@ function getChargableProperties ({
   }
 }
 
-export function ChargableProperties ({
+function ChargableProperties ({
   t,
   cargoItem,
   availableMots,
@@ -211,3 +199,5 @@ export function ChargableProperties ({
     </div>
   )
 }
+
+export default withNamespaces(['common', 'cargo'])(ChargableProperties)

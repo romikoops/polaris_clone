@@ -12,7 +12,7 @@ import length from '../../../../../assets/images/cargo/length.png'
 import width from '../../../../../assets/images/cargo/width.png'
 import height from '../../../../../assets/images/cargo/height.png'
 import calcMaxDimensionsToApply from '../../../../../helpers/calcMaxDimensionsToApply'
-import { ChargableProperties } from './ChargableProperties'
+import ChargableProperties from './ChargableProperties'
 
 const imageSources = {
   length,
@@ -203,7 +203,6 @@ function CargoItem ({
           cargoItem={cargoItem}
           maxDimensions={maxDimensionsToApply}
           scope={scope}
-          t={t}
         />
       </div>
     </CargoUnitBox>
