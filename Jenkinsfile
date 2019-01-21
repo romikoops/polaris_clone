@@ -3,6 +3,71 @@
 def label = "${UUID.randomUUID().toString()}"
 
 wrap.pipeline {
+  wrap.stage('Code Style') {
+    podTemplate(label: label, inheritFrom: 'default',
+      containers: [
+        containerTemplate(name: 'danger', image: 'eu.gcr.io/itsmycargo-main/danger:latest', ttyEnabled: true, command: 'cat',
+          resourceRequestCpu: '250m',
+          resourceLimitCpu: '300m',
+          resourceRequestMemory: '200Mi',
+          resourceLimitMemory: '300Mi',
+        ),
+        containerTemplate(name: 'pronto', image: 'eu.gcr.io/itsmycargo-main/pronto:latest', ttyEnabled: true, command: 'cat',
+          resourceRequestCpu: '250m',
+          resourceLimitCpu: '300m',
+          resourceRequestMemory: '200Mi',
+          resourceLimitMemory: '300Mi',
+        ),
+      ]
+    ) {
+      wrap.node(label) {
+        checkoutScm()
+
+        def jobs = [:]
+
+        jobs['danger'] = {
+          withEnv(["DANGER_GITLAB_API_TOKEN=${GITLAB_TOKEN}"]) {
+            container('danger') {
+              timeout(5) { sh 'danger' }
+            }
+          }
+        }
+
+        jobs['pronto'] = {
+          container('pronto') {
+            timeout(5) {
+              sh "npm install -g @itsmycargo/eslint-config"
+
+              sh "pronto run -f checkstyle -c origin/${env.gitlabTargetBranch} --no-exit-code > checkstyle-result.xml"
+
+              ViolationsToGitLab([
+                apiToken: "${GITLAB_TOKEN}",
+                apiTokenPrivate: true,
+                authMethodHeader: true,
+
+                commentOnlyChangedContent: true,
+                createSingleFileComments: true,
+                gitLabUrl: 'https://gitlab.com',
+                keepOldComments: false,
+                mergeRequestIid: "${env.gitlabMergeRequestIid}",
+                projectId: "${env.gitlabMergeRequestTargetProjectId}",
+                shouldSetWip: true,
+                commentTemplate: "{{violation.message}}",
+                violationConfigs: [
+                  [parser: 'CHECKSTYLE', pattern: '.*\\.xml$', reporter: 'Pronto']
+                ]
+              ])
+            }
+          }
+        }
+
+        if (env.gitlabMergeRequestIid) {
+          parallel(jobs)
+        }
+      }
+    }
+  }
+
   podTemplate(label: label, inheritFrom: 'default',
     containers: [
       containerTemplate(name: 'api', image: 'ruby:2.5-alpine3.8', ttyEnabled: true, command: 'cat',
@@ -21,19 +86,6 @@ wrap.pipeline {
         resourceRequestMemory: '1000Mi',
         resourceLimitMemory: '1200Mi',
       ),
-      containerTemplate(name: 'danger', image: 'eu.gcr.io/itsmycargo-main/danger:latest', ttyEnabled: true, command: 'cat',
-        resourceRequestCpu: '250m',
-        resourceLimitCpu: '300m',
-        resourceRequestMemory: '200Mi',
-        resourceLimitMemory: '300Mi',
-      ),
-      containerTemplate(name: 'pronto', image: 'eu.gcr.io/itsmycargo-main/pronto:latest', ttyEnabled: true, command: 'cat',
-        resourceRequestCpu: '250m',
-        resourceLimitCpu: '300m',
-        resourceRequestMemory: '200Mi',
-        resourceLimitMemory: '300Mi',
-      ),
-
       containerTemplate(name: 'postgis', image: 'mdillon/postgis',
         resourceRequestCpu: '250m',
         resourceLimitCpu: '500m',
@@ -42,154 +94,125 @@ wrap.pipeline {
       )
     ]
   ) {
-    gitlabBuilds(builds: ['Test']) {
-      wrap.node(label) {
-        milestone()
+    wrap.node(label) {
+      wrap.stage('Checkout') { checkoutScm() }
 
-        checkoutScm()
+      gitlabCommitStatus(name: 'Test', builds: [[projectId: env.gitLabProjectId, revisionHash: env.GIT_COMMIT]]) {
+        stage('Prepare') {
+          milestone()
 
-        gitlabCommitStatus(name: 'Test') {
-          stage('Prepare') {
-            milestone()
+          def jobs = [:]
 
-            parallel(
-              api: {
-                container('api') {
-                  timeout(10) {
-                    withEnv(["BUNDLE_GITLAB__COM=gitlab-ci-token:${GITLAB_TOKEN}"]) {
-                      sh """
-                        apk add --no-cache --update \
-                          build-base \
-                          cmake \
-                          git \
-                          linux-headers \
-                          nodejs \
-                          npm \
-                          postgresql-dev \
-                          tzdata
-                        npm install -g 'mjml@4.2.0'
-                      """
-                      sh 'scripts/prepare'
-                    }
-                  }
-                }
-              },
-              client: {
-                container('client') {
-                  timeout(10) {
-                    sh """
+          jobs['api'] = {
+            container('api') {
+              timeout(10) {
+                withEnv(["BUNDLE_GITLAB__COM=gitlab-ci-token:${GITLAB_TOKEN}"]) {
+                  sh """
                     apk add --no-cache --update \
-                      autoconf automake bash build-base gifsicle lcms2-dev libjpeg-turbo-utils libpng-dev libtool libwebp-tools nasm optipng pngquant
-                    """
+                      build-base \
+                      cmake \
+                      git \
+                      linux-headers \
+                      nodejs \
+                      npm \
+                      postgresql-dev \
+                      tzdata
+                    npm install -g 'mjml@4.2.0'
+                  """
+                  sh 'scripts/prepare'
+                }
+              }
+            }
+          }
 
-                    dir('client') {
-                      sh "npm install --no-progress"
-                    }
+          jobs['client'] = {
+            container('client') {
+              timeout(10) {
+                sh """
+                  apk add --no-cache --update \
+                    autoconf automake bash build-base gifsicle lcms2-dev libjpeg-turbo-utils libpng-dev libtool \
+                    libwebp-tools nasm optipng pngquant
+                """
+
+                dir('client') {
+                  sh "npm install --no-progress"
+                }
+              }
+            }
+          }
+
+          parallel(jobs)
+        }
+
+        stage('Test') {
+          milestone()
+
+          def jobs = [:]
+
+          jobs['api'] = {
+            container('api') {
+              timeout(10) {
+                withEnv(["BUNDLE_GITLAB__COM=gitlab-ci-token:${GITLAB_TOKEN}"]) {
+                  try {
+                    sh "scripts/test"
+                  } catch (err) {
+                    throw err
+                  } finally {
+                    junit allowEmptyResults: true, testResults: '**/rspec.xml'
+                    publishCoverage adapters: [istanbulCoberturaAdapter('**/coverage.xml')]
                   }
                 }
               }
-            )
+            }
           }
 
-          stage('Test & Code Style') {
-            milestone()
-
-            parallel(
-              danger: {
-                withEnv(["DANGER_GITLAB_API_TOKEN=${GITLAB_TOKEN}"]) {
-                  container('danger') {
-                    timeout(5) { sh 'danger' }
+          jobs['client'] = {
+            container('client') {
+              timeout(10) {
+                try {
+                  dir('client') {
+                    sh "npm run test:ci"
                   }
-                }
-              },
-              pronto: {
-                container('pronto') {
-                  timeout(5) {
-                    sh "pronto run -f checkstyle -c origin/${gitlabTargetBranch} --no-exit-code > checkstyle-result.xml"
-
-                    ViolationsToGitLab([
-                      apiToken: "${GITLAB_TOKEN}",
-                      apiTokenPrivate: true,
-                      authMethodHeader: true,
-
-                      commentOnlyChangedContent: true,
-                      createSingleFileComments: true,
-                      gitLabUrl: 'https://gitlab.com',
-                      keepOldComments: false,
-                      mergeRequestIid: "${env.gitlabMergeRequestIid}",
-                      projectId: "${env.gitlabMergeRequestTargetProjectId}",
-                      shouldSetWip: true,
-                      commentTemplate: "{{violation.message}}",
-                      violationConfigs: [
-                        [parser: 'CHECKSTYLE', pattern: '.*\\.xml$', reporter: 'Pronto']
-                      ]
-                    ])
-                  }
-                }
-              },
-
-              api: {
-                container('api') {
-                  timeout(10) {
-                    withEnv(["BUNDLE_GITLAB__COM=gitlab-ci-token:${GITLAB_TOKEN}"]) {
-                      try {
-                        sh "scripts/test"
-                      } catch (err) {
-                        throw err
-                      } finally {
-                        junit allowEmptyResults: true, testResults: '**/rspec.xml'
-                        publishCoverage adapters: [istanbulCoberturaAdapter('**/coverage.xml')]
-                      }
-                    }
-                  }
-                }
-              },
-              client: {
-                container('client') {
-                  timeout(10) {
-                    try {
-                      dir('client') {
-                        sh "npm run test:ci"
-                      }
-                    } catch (err) {
-                      throw err
-                    } finally {
-                      junit allowEmptyResults: true, testResults: '**/junit.xml'
-                      publishCoverage adapters: [istanbulCoberturaAdapter('**/cobertura-coverage.xml')]
-                    }
-                  }
+                } catch (err) {
+                  throw err
+                } finally {
+                  junit allowEmptyResults: true, testResults: '**/junit.xml'
+                  publishCoverage adapters: [istanbulCoberturaAdapter('**/cobertura-coverage.xml')]
                 }
               }
-            )
+            }
           }
+
+          parallel(jobs)
         }
       }
     }
   }
 
   if (env.gitlabMergeRequestIid) {
-    gitlabCommitStatus(name: 'Review') {
-      stage('Prepare Deploy') {
-        milestone()
+    gitlabCommitStatus(name: 'QA', builds: [[projectId: env.gitLabProjectId, revisionHash: env.GIT_COMMIT]]) {
+      lock(label: "${env.GIT_BRANCH}", inversePrecedence: true) {
+        wrap.stage('Prepare Deploy') {
+          milestone()
+          prepareDeploy()
+        }
 
-        prepareDeploy()
-      }
+        wrap.stage('Review') {
+          milestone()
+          deployReview()
+        }
 
-      stage('Deploy') {
-        milestone()
-        deployReview()
-      }
+        stage('QA') {
+          milestone()
 
-      stage('QA') {
-        milestone()
-
-        timeout(45) {
           def jobs = [:]
 
           jobs << knapsack(2, 'Cucumber') { cucumberTests() }
 
           parallel jobs
         }
+
+        milestone()
       }
     }
   }
@@ -221,57 +244,62 @@ void prepareDeploy() {
     wrap.node("${label}") {
       checkoutScm()
 
-      parallel(
-        database: {
-          build(
-            job: 'Tasks/Production/review/dbreset',
-            parameters: [string(name: 'database', value: "mr-${env.gitlabMergeRequestIid}")]
-          )
-        },
-        api: {
-          retry(2) {
-            container('docker') {
-              timeout(15) {
-                sh """
-                  rm -rf tmp/docker
-                  mkdir -p tmp/docker
-                  find . -depth -type f -name '*.gemspec' | cpio -d -v -p tmp/docker/
-                """
+      def jobs = [:]
 
+      jobs['database'] = {
+        build(
+          job: 'Tasks/Production/review/dbreset',
+          parameters: [string(name: 'database', value: "mr-${env.gitlabMergeRequestIid}")]
+        )
+      }
+
+      jobs['api'] = {
+        retry(2) {
+          container('docker') {
+            timeout(15) {
+              sh """
+                rm -rf tmp/docker
+                mkdir -p tmp/docker
+                find . -depth -type f -name '*.gemspec' | cpio -d -v -p tmp/docker/
+              """
+
+              sh """
+                docker build \
+                  --build-arg RELEASE=${env.gitlabMergeRequestLastCommit} \
+                  --tag eu.gcr.io/itsmycargo-main/ci/imc-api:${env.gitlabMergeRequestLastCommit} \
+                  .
+              """
+
+              sh "docker login -u _json_key --password-stdin eu.gcr.io/itsmycargo-main <\$GOOGLE_APPLICATION_CREDENTIALS"
+              sh "docker push eu.gcr.io/itsmycargo-main/ci/imc-api:${env.gitlabMergeRequestLastCommit}"
+            }
+          }
+        }
+      }
+
+      jobs['client'] = {
+        retry(2) {
+          container('docker') {
+            timeout(15) {
+              dir('client') {
                 sh """
-                  docker build \
-                    --build-arg RELEASE=${env.gitlabMergeRequestLastCommit} \
-                    --tag eu.gcr.io/itsmycargo-main/ci/imc-api:${env.gitlabMergeRequestLastCommit} \
-                    .
+                docker build \
+                  --build-arg RELEASE=${env.gitlabMergeRequestLastCommit} \
+                  --build-arg SENTRY_AUTH_TOKEN=099b9abd2844497db3dace7307576c12fadc7d47bd68416584cdb4b90709de95 \
+                  --tag eu.gcr.io/itsmycargo-main/ci/imc-client:${env.gitlabMergeRequestLastCommit} \
+                  .
                 """
 
                 sh "docker login -u _json_key --password-stdin eu.gcr.io/itsmycargo-main <\$GOOGLE_APPLICATION_CREDENTIALS"
-                sh "docker push eu.gcr.io/itsmycargo-main/ci/imc-api:${env.gitlabMergeRequestLastCommit}"
+                sh "docker push eu.gcr.io/itsmycargo-main/ci/imc-client:${env.gitlabMergeRequestLastCommit}"
               }
             }
           }
-        },
-        client: {
-          retry(2) {
-            container('docker') {
-                timeout(15) {
-                  dir('client') {
-                    sh """
-                    docker build \
-                      --build-arg RELEASE=${env.gitlabMergeRequestLastCommit} \
-                      --build-arg SENTRY_AUTH_TOKEN=099b9abd2844497db3dace7307576c12fadc7d47bd68416584cdb4b90709de95 \
-                      --tag eu.gcr.io/itsmycargo-main/ci/imc-client:${env.gitlabMergeRequestLastCommit} \
-                      .
-                    """
+        }
+      }
 
-                    sh "docker login -u _json_key --password-stdin eu.gcr.io/itsmycargo-main <\$GOOGLE_APPLICATION_CREDENTIALS"
-                    sh "docker push eu.gcr.io/itsmycargo-main/ci/imc-client:${env.gitlabMergeRequestLastCommit}"
-                  }
-                }
-              }
-            }
-          }
-      )
+      jobs.failFast = true
+      parallel jobs
     }
   }
 }
@@ -323,7 +351,7 @@ void deployReview() {
             chart/
         """
 
-        addGitLabMRComment comment: "Review app https://foo.itsmycaeto.tech"
+
       }
     }
   }
@@ -365,7 +393,7 @@ void cucumberTests() {
     ],
     volumes: [hostPathVolume(hostPath: '/dev/shm', mountPath: '/dev/shm')]
   ) {
-    retry(2) {
+    retryOrAbort(2) {
       wrap.node(label) {
         checkoutScm()
 
@@ -381,19 +409,31 @@ void cucumberTests() {
                 sh "apk add --no-cache --update build-base"
                 sh "bundle install -j\$(nproc) --retry 3"
 
-                sh "bundle exec knapsack cucumber \"--tags 'not @wip' --format pretty --format junit --out .\""
+                timeout(45) {
+                  try {
+                    sh "bundle exec knapsack cucumber \"--tags 'not @wip' --format junit --out . --format rerun --out rerun.txt --format pretty\""
+                  } catch (hudson.AbortException e) {
+                    if (e.getMessage().contains('script returned exit code 1') && findFiles(glob: 'rerun.txt').size() > 0) {
+                      sh "bundle exec cucumber --format junit --out . --format pretty \$(cat rerun.txt)"
+                    } else {
+                      throw e
+                    }
+                  }
+                }
               }
             }
           }
         } catch (err) {
-          containerLog('selenium-cucumber')
-          containerLog('selenium-hub')
-          containerLog('selenium-chrome')
+          // Fetch Pod Logs
+          podLog(namespace: 'review', selector: "app=imc-app,release=${env.REVIEW_NAME}", container: 'backend',  file: 'backend.log')
+          podLog(namespace: 'review', selector: "app=imc-app,release=${env.REVIEW_NAME}", container: 'frontend', file: 'frontend.log')
 
           throw err
         } finally {
           junit allowEmptyResults: true, testResults: '**/*.xml'
           archiveArtifacts allowEmptyArchive: true, artifacts: '**/report/**/*'
+          archiveArtifacts allowEmptyArchive: true, artifacts: 'backend.log'
+          archiveArtifacts allowEmptyArchive: true, artifacts: 'frontend.log'
         }
       }
     }

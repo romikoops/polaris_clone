@@ -87,6 +87,7 @@ class ContactsIndex extends Component {
     const newSearchTimeout = setTimeout(this.searchContactsFromPage(event.target.value), 750)
     this.setState({ searchTimeout: newSearchTimeout, searchText: event.target.value })
   }
+  
   render () {
     const {
       theme,
