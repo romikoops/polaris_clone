@@ -28,6 +28,10 @@ class CargoItem < ApplicationRecord
     end
   end
 
+  def self.calc_chargeable_weight_from_values(volume, payload_in_kg, mot)
+    [volume * EFFECTIVE_TONNAGE_PER_CUBIC_METER[mot.to_sym] * 1000, payload_in_kg].max
+  end
+
   # Instance Methods
   def volume
     dimension_x * dimension_y * dimension_z / 1_000_000
@@ -44,7 +48,7 @@ class CargoItem < ApplicationRecord
   end
 
   def calc_chargeable_weight(mot)
-    [volume * EFFECTIVE_TONNAGE_PER_CUBIC_METER[mot.to_sym] * 1000, payload_in_kg].max
+    CargoItem.calc_chargeable_weight_from_values(volume, payload_in_kg, mot)
   end
 
   def valid_for_mode_of_transport?(mode_of_transport)

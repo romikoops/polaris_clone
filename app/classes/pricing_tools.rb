@@ -6,7 +6,6 @@ module PricingTools
   include CurrencyTools
   DEFAULT_MAX = Float::INFINITY
   def get_user_price(pricing_id, shipment_date)
-
     pricing = Pricing.find(pricing_id)
 
     return if pricing.nil?
@@ -315,7 +314,7 @@ module PricingTools
              when 'PER_X_KG_FLAT'
                max = fee['max'] || DEFAULT_MAX
                base = fee['base'].to_d
-               val = fee['value'] * (cargo_hash[:weight].round(2) / base).ceil() * base
+               val = fee['value'] * (cargo_hash[:weight].round(2) / base).ceil * base
                min = fee['min'] || 0
                res = [val, min].max
                [res, max].min
@@ -339,6 +338,7 @@ module PricingTools
                ton = (cargo_hash[:weight] / 1000) * (fee['value'] || fee['rate'])
                min = fee['min'] || 0
                res = [cbm, ton, min].max
+
                [res, max].min
              when /RANGE/
                handle_range_fee(fee, cargo_hash)
