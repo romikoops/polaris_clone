@@ -1,0 +1,141 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`happy path 1`] = `
+<div
+  className="route_section_form"
+>
+  <Autocomplete
+    countries={Array []}
+    errorDispatch={Object {}}
+    gMaps={Object {}}
+    hasErrors={false}
+    map={Object {}}
+    onAutocompleteTrigger={[Function]}
+    scope={
+      Object {
+        "cargo_info_level": "hs_codes",
+        "carriage_options": Object {
+          "on_carriage": Object {
+            "export": "optional",
+            "import": "optional",
+          },
+          "pre_carriage": Object {
+            "export": "optional",
+            "import": "optional",
+          },
+        },
+        "closed_quotation_tool": false,
+        "closed_registration": false,
+        "closed_shop": false,
+        "consolidate_cargo": false,
+        "continuous_rounding": false,
+        "customs_export_paper": false,
+        "dangerous_goods": false,
+        "detailed_billing": false,
+        "fee_detail": "key_and_name",
+        "fixed_currency": false,
+        "fixed_exchange_rates": false,
+        "has_customs": true,
+        "has_insurance": true,
+        "incoterm_info_level": "text",
+        "links": Object {
+          "about": "",
+          "legal": "",
+        },
+        "modes_of_transport": Object {
+          "air": Object {
+            "cargo_item": true,
+            "container": true,
+          },
+          "ocean": Object {
+            "cargo_item": true,
+            "container": true,
+          },
+          "rail": Object {
+            "cargo_item": true,
+            "container": true,
+          },
+          "truck": Object {
+            "cargo_item": false,
+            "container": false,
+          },
+        },
+        "non_stackable_goods": true,
+        "open_quotation_tool": false,
+        "require_full_address": true,
+        "show_beta_features": true,
+        "terms": Array [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "Demo is to discuss the validity of the presented prices with the product owners.",
+        ],
+        "total_dimensions": true,
+      }
+    }
+    t={[Function]}
+    target="TARGET"
+    theme={
+      Object {
+        "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+        "colors": Object {
+          "brightPrimary": "#2491FD",
+          "brightSecondary": "#25ED36",
+          "primary": "#0D5BA9",
+          "secondary": "#23802A",
+        },
+        "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+        "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+        "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+        "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+      }
+    }
+  />
+  <CollapsingContent
+    collapsed={false}
+    content=""
+    minHeight=""
+    wrapperContentClasses=""
+  >
+    <_class
+      name="TARGET-street"
+      onBlur={[Function]}
+    />
+    <_class
+      name="TARGET-number"
+      onBlur={[Function]}
+    />
+    <_class
+      name="TARGET-zipCode"
+      onBlur={[Function]}
+    />
+    <_class
+      name="TARGET-city"
+      onBlur={[Function]}
+    />
+    <_class
+      name="TARGET-country"
+      onBlur={[Function]}
+    />
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <div
+        className="clear_sec flex-none layout-row layout-align-end-center"
+        onClick={[Function]}
+      >
+        <i
+          className="fa fa-times flex-none"
+        />
+        <p
+          className="offset-5 flex-none"
+          style={
+            Object {
+              "paddingRight": "10px",
+            }
+          }
+        />
+      </div>
+    </div>
+  </CollapsingContent>
+</div>
+`;

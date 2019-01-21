@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`carriage is on 1`] = `
+<label>
+  Delivery
+  <Toggle
+    checked={true}
+    className="flex-none ccb_on_carriage"
+    icons={
+      Object {
+        "checked": <Unknown />,
+        "unchecked": <Unknown />,
+      }
+    }
+    id="onCarriage"
+    name="onCarriage"
+    onChange={[Function]}
+    tabIndex="-1"
+  />
+</label>
+`;
+
+exports[`happy path 1`] = `
+<label>
+  Pick-up
+  <Toggle
+    checked={true}
+    className="flex-none ccb_pre_carriage"
+    icons={
+      Object {
+        "checked": <Unknown />,
+        "unchecked": <Unknown />,
+      }
+    }
+    id="preCarriage"
+    name="preCarriage"
+    onChange={[Function]}
+    tabIndex="-1"
+  />
+</label>
+`;
+
+exports[`with empty props 1`] = `
+<label>
+  Delivery
+  <Toggle
+    className="flex-none ccb_undefined_carriage"
+    icons={
+      Object {
+        "checked": <Unknown />,
+        "unchecked": <Unknown />,
+      }
+    }
+    id="undefinedCarriage"
+    name="undefinedCarriage"
+    tabIndex="-1"
+  />
+</label>
+`;
