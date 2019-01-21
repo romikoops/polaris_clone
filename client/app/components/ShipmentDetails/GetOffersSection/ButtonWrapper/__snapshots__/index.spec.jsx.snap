@@ -1,0 +1,120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`happy path 1`] = `
+<div
+  className="flex-35 layout-row layout-wrap layout-align-end"
+>
+  <RoundButton
+    active={true}
+    back={[Function]}
+    classNames="layout-row layout-align-end"
+    disabled={false}
+    flexContainer="100"
+    handleDisabled={[Function]}
+    handleNext={[Function]}
+    icon=""
+    iconClass="ICON_CLASS"
+    inverse={false}
+    size=""
+    text="TEXT"
+    theme={
+      Object {
+        "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+        "colors": Object {
+          "brightPrimary": "#2491FD",
+          "brightSecondary": "#25ED36",
+          "primary": "#0D5BA9",
+          "secondary": "#23802A",
+        },
+        "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+        "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+        "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+        "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+      }
+    }
+    type="TYPE"
+  />
+  <p
+    style={
+      Object {
+        "color": "rgb(211, 104, 80)",
+        "fontSize": "14px",
+        "width": "317px",
+      }
+    }
+  >
+    FOO_SUB_TEXT
+  </p>
+  <p
+    style={
+      Object {
+        "color": "rgb(211, 104, 80)",
+        "fontSize": "14px",
+        "width": "317px",
+      }
+    }
+  >
+    BAR_SUB_TEXT
+  </p>
+</div>
+`;
+
+exports[`show is falsy 1`] = `""`;
+
+exports[`sub texts is falsy 1`] = `
+<div
+  className="flex-35 layout-row layout-wrap layout-align-end"
+>
+  <RoundButton
+    active={true}
+    back={[Function]}
+    classNames="layout-row layout-align-end"
+    disabled={false}
+    flexContainer="100"
+    handleDisabled={[Function]}
+    handleNext={[Function]}
+    icon=""
+    iconClass="ICON_CLASS"
+    inverse={false}
+    size=""
+    text="TEXT"
+    theme={
+      Object {
+        "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+        "colors": Object {
+          "brightPrimary": "#2491FD",
+          "brightSecondary": "#25ED36",
+          "primary": "#0D5BA9",
+          "secondary": "#23802A",
+        },
+        "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+        "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+        "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+        "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+      }
+    }
+    type="TYPE"
+  />
+</div>
+`;
+
+exports[`with empty props 1`] = `
+<div
+  className="flex-35 layout-row layout-wrap layout-align-end"
+>
+  <RoundButton
+    active={null}
+    back={null}
+    classNames="layout-row layout-align-end"
+    disabled={null}
+    flexContainer="100"
+    handleDisabled={null}
+    handleNext={null}
+    icon=""
+    iconClass={null}
+    inverse={false}
+    size=""
+    theme={null}
+  />
+</div>
+`;
