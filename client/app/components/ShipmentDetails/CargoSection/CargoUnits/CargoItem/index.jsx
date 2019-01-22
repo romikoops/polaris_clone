@@ -10,7 +10,6 @@ import kg from '../../../../../assets/images/cargo/kg.png'
 import length from '../../../../../assets/images/cargo/length.png'
 import width from '../../../../../assets/images/cargo/width.png'
 import height from '../../../../../assets/images/cargo/height.png'
-// TODO test the helper
 import calcMaxDimensionsToApply from '../../../../../helpers/calcMaxDimensionsToApply'
 
 import CheckboxWrapper from './checkboxWrapper'

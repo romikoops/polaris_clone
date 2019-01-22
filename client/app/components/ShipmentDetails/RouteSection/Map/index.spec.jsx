@@ -42,6 +42,6 @@ test('with empty props', () => {
   expect(shallow(<RouteSectionMapContent />)).toMatchSnapshot()
 })
 
-test('happy path', () => {
+test('shallow render', () => {
   expect(shallow(<RouteSectionMapContent {...propsBase} />)).toMatchSnapshot()
 })
