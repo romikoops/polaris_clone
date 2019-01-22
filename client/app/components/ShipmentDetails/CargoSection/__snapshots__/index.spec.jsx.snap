@@ -261,7 +261,7 @@ exports[`cargoUnits is empty 1`] = `
           "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
         }
       }
-      toggleModal={[Function]}
+      toggleModal={null}
     />
     <div
       className="flex-100 layout-row layout-align-start"
@@ -566,7 +566,7 @@ exports[`happy path 1`] = `
           "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
         }
       }
-      toggleModal={[Function]}
+      toggleModal={null}
     />
     <div
       className="flex-100 layout-row layout-align-start"

@@ -14,7 +14,7 @@ exports[`carriage is on 1`] = `
     }
     id="onCarriage"
     name="onCarriage"
-    onChange={[Function]}
+    onChange={null}
     tabIndex="-1"
   />
 </label>
@@ -34,7 +34,7 @@ exports[`happy path 1`] = `
     }
     id="preCarriage"
     name="preCarriage"
-    onChange={[Function]}
+    onChange={null}
     tabIndex="-1"
   />
 </label>

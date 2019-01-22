@@ -35,7 +35,7 @@ const propsBase = {
   target: 'TARGET',
   availableTargets,
   formData: {},
-  onDropdownSelect: x => x
+  onDropdownSelect: null
 }
 
 test('with empty props', () => {

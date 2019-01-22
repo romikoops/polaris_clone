@@ -8,8 +8,7 @@ import {
   lookupTablesForRoutes,
   availableMots,
   routes,
-  theme,
-  identity
+  theme
 } from '../mocks'
 
 const shipmentBase = {
@@ -53,10 +52,10 @@ const shipmentBase = {
 
 const propsBase = {
   bookingProcessDispatch: {
-    updatePageData: identity
+    updatePageData: x => x
   },
   shipmentDispatch: {
-    getLastAvailableDate: identity
+    getLastAvailableDate: x => x
   },
   availableMots,
   theme,

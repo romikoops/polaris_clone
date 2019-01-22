@@ -4,7 +4,6 @@ import CargoSection from '.'
 import {
   ShipmentDetails,
   cargoItemTypes,
-  identity,
   maxDimensions,
   scope,
   cargoItem,
@@ -21,7 +20,7 @@ const propsBase = {
     aggregatedCargo: false
   },
   ShipmentDetails,
-  toggleModal: identity
+  toggleModal: null
 }
 
 jest.mock('react-redux', () => ({
@@ -40,7 +39,7 @@ test('cargoUnits is empty', () => {
   const props = {
     ...propsBase,
     bookingProcessDispatch: {
-      addCargoUnit: identity
+      addCargoUnit: x => x
     },
     shipment: {
       aggregatedCargo: false,

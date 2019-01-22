@@ -1,10 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import ButtonWrapper from '.'
-import {
-  identity,
-  theme
-} from '../../mocks'
+import { theme } from '../../mocks'
 
 const propsBase = {
   show: 'SHOW',
@@ -13,11 +10,11 @@ const propsBase = {
   active: true,
   disabled: false,
   type: 'TYPE',
-  onClick: identity,
-  onClickDisabled: identity,
+  onClick: null,
+  onClickDisabled: null,
   theme,
   iconClass: 'ICON_CLASS',
-  back: identity
+  back: null
 }
 
 test('with empty props', () => {

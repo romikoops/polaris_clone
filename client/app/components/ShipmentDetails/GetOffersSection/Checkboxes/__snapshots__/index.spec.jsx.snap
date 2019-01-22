@@ -5,7 +5,7 @@ exports[`happy path 1`] = `
   className="flex-60 layout-row layout-wrap layout-align-start-center"
 >
   <CheckboxWrapper
-    checked={[Function]}
+    checked={null}
     className="SHAKE_CLASS_DANGEROUS"
     id="no_dangerous_goods_confirmation"
     labelContent={

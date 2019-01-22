@@ -10,7 +10,7 @@ exports[`happy path 1`] = `
     gMaps={Object {}}
     hasErrors={false}
     map={Object {}}
-    onAutocompleteTrigger={[Function]}
+    onAutocompleteTrigger={null}
     scope={
       Object {
         "cargo_info_level": "hs_codes",
@@ -98,23 +98,23 @@ exports[`happy path 1`] = `
   >
     <_class
       name="TARGET-street"
-      onBlur={[Function]}
+      onBlur={null}
     />
     <_class
       name="TARGET-number"
-      onBlur={[Function]}
+      onBlur={null}
     />
     <_class
       name="TARGET-zipCode"
-      onBlur={[Function]}
+      onBlur={null}
     />
     <_class
       name="TARGET-city"
-      onBlur={[Function]}
+      onBlur={null}
     />
     <_class
       name="TARGET-country"
-      onBlur={[Function]}
+      onBlur={null}
     />
     <div
       className="flex-100 layout-row layout-align-start-center"

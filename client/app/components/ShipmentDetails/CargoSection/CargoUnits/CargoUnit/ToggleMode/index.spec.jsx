@@ -1,12 +1,11 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import CargoItemToggleMode from '.'
-import { identity } from '../../../../mocks'
 
 const propsBase = {
   checked: false,
   disabed: false,
-  onToggleAggregated: identity
+  onToggleAggregated: null
 }
 
 test('with empty props', () => {

@@ -5,7 +5,7 @@ import CarriageToggle from '.'
 const propsBase = {
   carriage: 'pre',
   checked: true,
-  onChange: x => x
+  onChange: null
 }
 
 test('with empty props', () => {

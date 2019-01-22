@@ -1,14 +1,11 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import Checkboxes from '.'
-import {
-  identity,
-  theme
-} from '../../mocks'
+import { theme } from '../../mocks'
 
 const propsBase = {
   theme,
-  noDangerousGoodsConfirmed: identity,
+  noDangerousGoodsConfirmed: null,
   stackableGoodsConfirmed: true,
   onChangeNoDangerousGoodsConfirmation: true,
   onChangeStackableGoodsConfirmation: true,

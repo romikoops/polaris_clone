@@ -122,7 +122,7 @@ export const maxDimensionsToApply = {
 
 export const cargoUnits = [cargoItem]
 
-export const identity = x => x
+const identity = x => x
 
 export const cargoUnitProps = {
   ShipmentDetails,

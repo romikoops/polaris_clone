@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`carriage is false 1`] = `
+<div
+  className="route_section_form"
+>
+  <Dropdown
+    childrenProps={
+      Object {
+        "childrenPropBar": "childrenPropBar",
+        "childrenPropFoo": "childrenPropFoo",
+      }
+    }
+    t={[Function]}
+  />
+</div>
+`;
+
+exports[`carriage is true 1`] = `
+<div
+  className="route_section_form"
+>
+  <AddressFields
+    childrenProps={
+      Object {
+        "childrenPropBar": "childrenPropBar",
+        "childrenPropFoo": "childrenPropFoo",
+      }
+    }
+  />
+</div>
+`;
+
+exports[`with empty props 1`] = `
+<div
+  className="route_section_form"
+>
+  <Dropdown
+    t={[Function]}
+  />
+</div>
+`;

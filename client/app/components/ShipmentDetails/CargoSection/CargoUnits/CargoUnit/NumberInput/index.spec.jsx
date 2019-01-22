@@ -1,14 +1,14 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import CargoUnitBox from '.'
-import { identity, maxDimensionsToApply } from '../../../../mocks'
+import { maxDimensionsToApply } from '../../../../mocks'
 
 const propsBase = {
   value: 11,
   name: '0-cargo_item',
-  onChange: identity,
-  onBlur: identity,
-  onExcessDimensionsRequest: identity,
+  onChange: null,
+  onBlur: null,
+  onExcessDimensionsRequest: null,
   maxDimension: maxDimensionsToApply,
   maxDimensionsErrorText: 'DIMENSIONS_ERROR_TEXT',
   labelText: 'LABEL_TEXT',

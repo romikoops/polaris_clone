@@ -11,7 +11,7 @@ exports[`happy path 1`] = `
       className="toggle_aggregated_sec flex-50 layout-row layout-align-space-around-center"
     >
       <h3
-        onClick={[Function]}
+        onClick={null}
         style={
           Object {
             "opacity": 1,
@@ -31,11 +31,11 @@ exports[`happy path 1`] = `
         }
         id="aggregated_cargo"
         name="aggregated_cargo"
-        onChange={[Function]}
+        onChange={null}
         tabIndex="-1"
       />
       <h3
-        onClick={[Function]}
+        onClick={null}
         style={
           Object {
             "opacity": 0.4,
@@ -60,7 +60,7 @@ exports[`when checked 1`] = `
       className="toggle_aggregated_sec flex-50 layout-row layout-align-space-around-center"
     >
       <h3
-        onClick={[Function]}
+        onClick={null}
         style={
           Object {
             "opacity": 0.4,
@@ -80,11 +80,11 @@ exports[`when checked 1`] = `
         }
         id="aggregated_cargo"
         name="aggregated_cargo"
-        onChange={[Function]}
+        onChange={null}
         tabIndex="-1"
       />
       <h3
-        onClick={[Function]}
+        onClick={null}
         style={
           Object {
             "opacity": 1,

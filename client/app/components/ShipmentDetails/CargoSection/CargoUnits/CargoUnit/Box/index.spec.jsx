@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import CargoUnitBox from '.'
-import { identity, cargoItem } from '../../../../mocks'
+import { cargoItem } from '../../../../mocks'
 
 const propsBase = {
   cargoUnit: cargoItem,
   i: 0,
-  onDeleteUnit: identity,
-  onChangeCargoUnitInput: identity,
+  onDeleteUnit: null,
+  onChangeCargoUnitInput: null,
   children: <div id="childen" />,
   uniqKey: 'UNIQ_KEY'
 }

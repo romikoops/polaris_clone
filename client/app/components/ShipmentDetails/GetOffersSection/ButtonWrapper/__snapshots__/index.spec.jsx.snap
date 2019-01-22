@@ -6,12 +6,12 @@ exports[`happy path 1`] = `
 >
   <RoundButton
     active={true}
-    back={[Function]}
+    back={null}
     classNames="layout-row layout-align-end"
     disabled={false}
     flexContainer="100"
-    handleDisabled={[Function]}
-    handleNext={[Function]}
+    handleDisabled={null}
+    handleNext={null}
     icon=""
     iconClass="ICON_CLASS"
     inverse={false}
@@ -67,12 +67,12 @@ exports[`sub texts is falsy 1`] = `
 >
   <RoundButton
     active={true}
-    back={[Function]}
+    back={null}
     classNames="layout-row layout-align-end"
     disabled={false}
     flexContainer="100"
-    handleDisabled={[Function]}
-    handleNext={[Function]}
+    handleDisabled={null}
+    handleNext={null}
     icon=""
     iconClass="ICON_CLASS"
     inverse={false}

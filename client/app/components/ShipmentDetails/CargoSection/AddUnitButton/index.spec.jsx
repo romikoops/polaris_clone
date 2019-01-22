@@ -1,14 +1,11 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import AddUnitButton from '.'
-import {
-  identity,
-  theme
-} from '../../mocks'
+import { theme } from '../../mocks'
 
 const propsBase = {
   theme,
-  onClick: identity
+  onClick: null
 }
 
 test('with empty props', () => {

@@ -3,7 +3,7 @@
 exports[`happy path 1`] = `
 <div
   className="layout-row flex-none add_unit layout-wrap layout-align-center-center"
-  onClick={[Function]}
+  onClick={null}
 >
   <i
     className="fa fa-plus-square-o clip"

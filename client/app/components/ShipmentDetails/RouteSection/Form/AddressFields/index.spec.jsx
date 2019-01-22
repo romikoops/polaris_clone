@@ -3,8 +3,7 @@ import { shallow } from 'enzyme'
 import AddressFields from '.'
 import {
   scope,
-  theme,
-  identity
+  theme
 } from '../../../mocks'
 
 const propsBase = {
@@ -14,8 +13,8 @@ const propsBase = {
   scope,
   target: 'TARGET',
   carriage: 'pre',
-  onAutocompleteTrigger: identity,
-  onInputBlur: identity,
+  onAutocompleteTrigger: null,
+  onInputBlur: null,
   formData: {},
   countries: []
 }

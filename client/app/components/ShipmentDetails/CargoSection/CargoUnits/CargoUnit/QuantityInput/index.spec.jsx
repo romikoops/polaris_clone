@@ -1,12 +1,12 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import QuantityInput from '.'
-import { cargoItem, identity } from '../../../../mocks'
+import { cargoItem } from '../../../../mocks'
 
 const propsBase = {
   cargoItem,
   i: 0,
-  onChange: identity
+  onChange: null
 }
 
 test('with empty props', () => {

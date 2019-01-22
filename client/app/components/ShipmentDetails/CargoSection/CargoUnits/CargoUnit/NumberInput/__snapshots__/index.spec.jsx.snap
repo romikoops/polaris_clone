@@ -28,8 +28,8 @@ exports[`happy path 1`] = `
       }
       innerRef={[Function]}
       name="0-cargo_item"
-      onBlur={[Function]}
-      onChange={[Function]}
+      onBlur={null}
+      onChange={null}
       placeholder="0"
       required={true}
       type="number"
@@ -42,7 +42,7 @@ exports[`happy path 1`] = `
             <br />
             <span
               className="emulate_link blue_link"
-              onClick={[Function]}
+              onClick={null}
             >
               Request excess dimensions
             </span>
