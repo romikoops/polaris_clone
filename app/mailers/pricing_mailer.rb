@@ -18,7 +18,7 @@ class PricingMailer < ApplicationMailer
     return if email.nil?
 
     mail(
-      from: tenant.emails.dig('support','general'),
+      from: @tenant.emails.dig('support','general'),
       to: mail_target_interceptor(@user, email),
       subject: "New Rate Request for #{@itinerary.name} from #{@user.full_name}"
     ) do |format|
