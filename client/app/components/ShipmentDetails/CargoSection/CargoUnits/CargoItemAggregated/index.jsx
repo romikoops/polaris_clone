@@ -64,4 +64,4 @@ function CargoItemAggregated ({
   )
 }
 
-export default withNamespaces('common')(CargoItemAggregated)
+export default withNamespaces(['common', 'errors'])(CargoItemAggregated)

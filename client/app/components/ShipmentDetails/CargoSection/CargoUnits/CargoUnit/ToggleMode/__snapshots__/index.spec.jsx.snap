@@ -18,7 +18,7 @@ exports[`happy path 1`] = `
           }
         }
       >
-        cargo:cargoUnits
+        Cargo Units
       </h3>
       <Toggle
         checked={false}
@@ -42,7 +42,7 @@ exports[`happy path 1`] = `
           }
         }
       >
-        cargo:totalDimensions
+        Total Dimensions
       </h3>
     </div>
   </div>
@@ -67,7 +67,7 @@ exports[`when checked 1`] = `
           }
         }
       >
-        cargo:cargoUnits
+        Cargo Units
       </h3>
       <Toggle
         checked={true}
@@ -91,7 +91,7 @@ exports[`when checked 1`] = `
           }
         }
       >
-        cargo:totalDimensions
+        Total Dimensions
       </h3>
     </div>
   </div>
@@ -99,3 +99,48 @@ exports[`when checked 1`] = `
 `;
 
 exports[`when disabled 1`] = `""`;
+
+exports[`with empty props 1`] = `
+<div
+  className="layout-row flex-100 layout-wrap layout-align-center"
+>
+  <div
+    className="content_width_booking layout-row layout-wrap layout-align-center"
+  >
+    <div
+      className="toggle_aggregated_sec flex-50 layout-row layout-align-space-around-center"
+    >
+      <h3
+        style={
+          Object {
+            "opacity": 1,
+          }
+        }
+      >
+        Cargo Units
+      </h3>
+      <Toggle
+        className="flex-none aggregated_cargo"
+        icons={
+          Object {
+            "checked": <Unknown />,
+            "unchecked": <Unknown />,
+          }
+        }
+        id="aggregated_cargo"
+        name="aggregated_cargo"
+        tabIndex="-1"
+      />
+      <h3
+        style={
+          Object {
+            "opacity": 0.4,
+          }
+        }
+      >
+        Total Dimensions
+      </h3>
+    </div>
+  </div>
+</div>
+`;

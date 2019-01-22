@@ -35,9 +35,6 @@ class CargoSection extends React.PureComponent {
       sizeClass: 'smallDryContainer',
       quantity: 1,
       dangerousGoods: false
-      // Below props are still not used
-      // tareWeight: 0,
-      // payloadInKg: 0
     }
     if (props.shipment.cargoUnits.length === 0) this.handleAddUnit()
   }
@@ -106,14 +103,14 @@ class CargoSection extends React.PureComponent {
 
   render () {
     const {
-      theme, scope, cargoItemTypes, maxDimensions, t, shipment, ShipmentDetails, toggleModal
+      theme, scope, cargoItemTypes, maxDimensions, shipment, ShipmentDetails, toggleModal
     } = this.props
 
     return (
       <div className="route_section_form layout-row flex-100 layout-wrap layout-align-center-center">
         <div className="layout-row flex-none layout-wrap layout-align-center-center content_width_booking">
           {shipment.loadType === 'cargo_item' && (
-            <CargoUnitToggleMode disabled={!scope.total_dimensions} t={t} checked={shipment.aggregatedCargo} onToggleAggregated={this.handleToggleAggregated} />
+            <CargoUnitToggleMode disabled={!scope.total_dimensions} checked={shipment.aggregatedCargo} onToggleAggregated={this.handleToggleAggregated} />
           )}
           <CargoUnits
             ShipmentDetails={ShipmentDetails}

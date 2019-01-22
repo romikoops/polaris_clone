@@ -1,17 +1,16 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import CargoItemToggleMode from '.'
-import { identity, t } from '../../../../mocks'
+import { identity } from '../../../../mocks'
 
 const propsBase = {
   checked: false,
   disabed: false,
-  onToggleAggregated: identity,
-  t
+  onToggleAggregated: identity
 }
 
 test('with empty props', () => {
-  expect(() => shallow(<CargoItemToggleMode />)).toThrow()
+  expect(shallow(<CargoItemToggleMode />)).toMatchSnapshot()
 })
 
 test('happy path', () => {

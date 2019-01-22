@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shipment has destination 1`] = `
+<div
+  className="route_section flex-100 content_width_booking"
+>
+  <RouteSectionMap
+    theme={
+      Object {
+        "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+        "colors": Object {
+          "brightPrimary": "#2491FD",
+          "brightSecondary": "#25ED36",
+          "primary": "#0D5BA9",
+          "secondary": "#23802A",
+        },
+        "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+        "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+        "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+        "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+      }
+    }
+  >
+    <Component />
+  </RouteSectionMap>
+</div>
+`;
+
+exports[`shipment has origin 1`] = `
+<div
+  className="route_section flex-100 content_width_booking"
+>
+  <RouteSectionMap
+    theme={
+      Object {
+        "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+        "colors": Object {
+          "brightPrimary": "#2491FD",
+          "brightSecondary": "#25ED36",
+          "primary": "#0D5BA9",
+          "secondary": "#23802A",
+        },
+        "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+        "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+        "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+        "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+      }
+    }
+  >
+    <Component />
+  </RouteSectionMap>
+</div>
+`;
+
+exports[`shipment has origin and destination 1`] = `
+<div
+  className="route_section flex-100 content_width_booking"
+>
+  <RouteSectionMap
+    theme={
+      Object {
+        "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+        "colors": Object {
+          "brightPrimary": "#2491FD",
+          "brightSecondary": "#25ED36",
+          "primary": "#0D5BA9",
+          "secondary": "#23802A",
+        },
+        "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+        "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+        "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+        "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+      }
+    }
+  >
+    <Component />
+  </RouteSectionMap>
+</div>
+`;

@@ -82,8 +82,6 @@ class ShipmentDetails extends React.PureComponent {
   }
 
   render () {
-    const { t } = this.props
-
     return (
       <div
         className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start"
@@ -98,7 +96,7 @@ class ShipmentDetails extends React.PureComponent {
         >
           <RouteSection />
           <DayPickerSection />
-          <CargoSection toggleModal={this.toggleModal} t={t} />
+          <CargoSection toggleModal={this.toggleModal} />
           <GetOffersSection />
         </Formsy>
       </div>
