@@ -9,7 +9,7 @@ module OfferCalculatorService
       @trucking_data = args[:trucking_data]
       @schedule      = args[:data][:schedules].first
       @user          = args[:user]
-      @data         = args[:data]
+      @data = args[:data]
       super(args[:shipment])
     end
 
@@ -112,7 +112,7 @@ module OfferCalculatorService
       isAggCargo = !@shipment.aggregated_cargo.nil?
       cargo_unit_array = isAggCargo ? [@shipment.aggregated_cargo] : @shipment.cargo_units
 
-      if @user.tenant.scope.dig('consolidation', 'cargo') && cargo_unit_array.first.is_a?(CargoItem)
+      if @user.tenant.scope.dig('consolidation', 'cargo', 'backend') && cargo_unit_array.first.is_a?(CargoItem)
         cargo_unit_array = consolidate_cargo(cargo_unit_array, @schedule.mode_of_transport)
       end
       cargo_unit_array.each do |cargo_unit|
@@ -203,9 +203,11 @@ module OfferCalculatorService
         cargo[:volume] += (cargo_unit.volume * cargo_unit.quantity)
         cargo[:payload_in_kg] += (cargo_unit.payload_in_kg * cargo_unit.quantity)
         cargo[:cargo_class] = cargo_unit.cargo_class
-        cargo[:chargeable_weight] += (cargo_unit.calc_chargeable_weight(mot) * cargo_unit.quantity)
         cargo[:num_of_items] += cargo_unit.quantity
       end
+      cargo[:chargeable_weight] =
+        CargoItem.calc_chargeable_weight_from_values(cargo[:volume], cargo[:payload_in_kg], mot)
+
       [cargo]
     end
   end

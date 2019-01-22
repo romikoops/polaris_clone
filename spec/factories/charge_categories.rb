@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :charge_category do
-    name "Grand Total"
-    code "grand_total"
+    name { 'Grand Total' }
+    code { 'grand_total' }
   end
 end
 

@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-
 FactoryBot.define do
   factory :role do
-    name 'shipper'
+    name { 'shipper' }
   end
-
 end
 
 # == Schema Information

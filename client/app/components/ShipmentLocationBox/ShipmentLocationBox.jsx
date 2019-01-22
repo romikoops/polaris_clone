@@ -794,6 +794,7 @@ class ShipmentLocationBox extends PureComponent {
               },
               lastTarget: target
             }), () => {
+              this.props.handleSelectLocation(target, false)
               this.prepForSelect(target)
               setTimeout(() => {
                 if (!this.isOnFocus[target]) this.changeAddressFormVisibility(target, false)

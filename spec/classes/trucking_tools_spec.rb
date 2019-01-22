@@ -21,12 +21,12 @@ RSpec.describe TruckingTools do
   let(:cargo_object) do
     {
       'stackable' => {
-        'volume'          => 0,
-        'weight'          => 0,
+        'volume' => 0,
+        'weight' => 0,
         'number_of_items' => 0
       }, 'non_stackable' => {
-        'volume'          => 0,
-        'weight'          => 0,
+        'volume' => 0,
+        'weight' => 0,
         'number_of_items' => 0
       }
     }
@@ -37,14 +37,14 @@ RSpec.describe TruckingTools do
       aggregated_cargo = create(:aggregated_cargo, shipment_id: shipment.id, volume: 3.0, weight: 1500)
       trucking_pricing = create(:trucking_pricing, cbm_ratio: 1000)
 
-      TruckingTools.calc_aggregated_cargo_cbm_ratio(trucking_pricing, cargo_object, aggregated_cargo)
+      described_class.calc_aggregated_cargo_cbm_ratio(trucking_pricing, cargo_object, aggregated_cargo)
       expect(cargo_object['stackable']['weight']).to eq(3000)
     end
     it 'calculates the correct trucking weight for aggregate cargo with weight gt vol' do
       aggregated_cargo = create(:aggregated_cargo, shipment_id: shipment.id, volume: 1.5, weight: 3000)
       trucking_pricing = create(:trucking_pricing, cbm_ratio: 1000)
 
-      TruckingTools.calc_aggregated_cargo_cbm_ratio(trucking_pricing, cargo_object, aggregated_cargo)
+      described_class.calc_aggregated_cargo_cbm_ratio(trucking_pricing, cargo_object, aggregated_cargo)
       expect(cargo_object['stackable']['weight']).to eq(3000)
     end
   end
@@ -71,10 +71,10 @@ RSpec.describe TruckingTools do
         }
       }
       trucking_pricing = create(:trucking_pricing, cbm_ratio: 250, load_meterage: {}, tenant: tenant)
-      cargo_object = TruckingTools.get_cargo_item_object(trucking_pricing, [cargo_1, cargo_2])
+      cargo_object = described_class.get_cargo_item_object(trucking_pricing, [cargo_1, cargo_2])
       expect(cargo_object['stackable']['weight']).to eq(1056)
     end
-    
+
     it 'correctly consolidates the cargo values for scope consolidation.trucking.calculation with agg cargo' do
       aggregated_cargo = create(:aggregated_cargo, shipment_id: shipment.id, volume: 1.5, weight: 3000)
 
@@ -84,7 +84,7 @@ RSpec.describe TruckingTools do
         }
       }
       trucking_pricing = create(:trucking_pricing, cbm_ratio: 250, load_meterage: {}, tenant: tenant)
-      cargo_object = TruckingTools.get_cargo_item_object(trucking_pricing, [aggregated_cargo])
+      cargo_object = described_class.get_cargo_item_object(trucking_pricing, [aggregated_cargo])
       expect(cargo_object['stackable']['weight']).to eq(3000)
     end
 
@@ -109,7 +109,7 @@ RSpec.describe TruckingTools do
         }
       }
       trucking_pricing = create(:trucking_pricing, cbm_ratio: 250, load_meterage: {}, tenant: tenant)
-      cargo_object = TruckingTools.get_cargo_item_object(trucking_pricing, [cargo_1, cargo_2])
+      cargo_object = described_class.get_cargo_item_object(trucking_pricing, [cargo_1, cargo_2])
       expect(cargo_object['stackable']['weight']).to eq(1136)
     end
   end

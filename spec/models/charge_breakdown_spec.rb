@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 require 'rails_helper'
 
 describe ChargeBreakdown, type: :model do
@@ -11,10 +10,10 @@ describe ChargeBreakdown, type: :model do
     let!(:charge) do
       create(
         :charge,
-        charge_breakdown:         charge_breakdown,
-        charge_category:          ChargeCategory.base_node,
+        charge_breakdown: charge_breakdown,
+        charge_category: ChargeCategory.base_node,
         children_charge_category: ChargeCategory.grand_total,
-        price:                    price
+        price: price
       )
     end
 

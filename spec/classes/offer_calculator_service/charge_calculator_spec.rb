@@ -27,11 +27,11 @@ RSpec.describe OfferCalculatorService::ChargeCalculator do
         @trucking_data_builder = OfferCalculatorService::TruckingDataBuilder.new(shipment)
         c_hub = { origin: [origin_hub.id], destination: [destination_hub.id] }
         @trucking_data = @trucking_data_builder.perform(c_hub)
-        offer_charge = OfferCalculatorService::ChargeCalculator.new(
-          shipment:      shipment,
+        offer_charge = described_class.new(
+          shipment: shipment,
           trucking_data: @trucking_data,
-          schedule:      schedule,
-          user:          user
+          schedule: schedule,
+          user: user
         ).perform
 
         expect(offer_charge.price.value.to_f.round(2)).to eq(test[:target_price])

@@ -1,4 +1,6 @@
-shared_context 'failed create' do
+# frozen_string_literal: true
+
+shared_examples 'failed create' do
   it 'returns status code 422 (unprocessable entity)' do
     expect(response.status).to eq(422)
   end
@@ -9,7 +11,7 @@ shared_context 'failed create' do
   end
 end
 
-shared_context 'a successful show request' do |root|
+shared_examples 'a successful show request' do |root|
   it 'returns status code 200 (OK)' do
     expect(response.status).to eq(200)
   end

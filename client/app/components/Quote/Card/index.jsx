@@ -254,7 +254,8 @@ class QuoteCard extends PureComponent {
                 </p>
                
               </div>
-              <div className={`flex-100 layout-row layout-align-start-center ${styles.unit_info}`}>
+              { result.meta.load_type === 'cargo_item' ? 
+              (<div className={`flex-100 layout-row layout-align-start-center ${styles.unit_info}`}>
                 <p className="flex-100 layout-row layout-align-start">
                   {`${capitalize(t('cargo:totalVolume'))}: `}
                   <span className="flex layout-row layout-align-end">
@@ -264,7 +265,7 @@ class QuoteCard extends PureComponent {
                 
                 </p>
                 
-              </div>
+              </div>) : '' }
             </div>
             
           </div>

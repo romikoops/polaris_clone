@@ -4,7 +4,6 @@ DEBUG = false
 
 module ExcelTools
   include ImageTools
-  include MongoTools
   include PricingTools
 
   def load_hub_images(params)

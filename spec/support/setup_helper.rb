@@ -234,15 +234,15 @@ module SetupHelper
 
     def schedule(shipment)
       Schedule.new(
-        origin_hub_id:        shipment.origin_hub.id,
-        destination_hub_id:   shipment.destination_hub.id,
-        origin_hub_name:      shipment.origin_hub.name,
+        origin_hub_id: shipment.origin_hub.id,
+        destination_hub_id: shipment.destination_hub.id,
+        origin_hub_name: shipment.origin_hub.name,
         destination_hub_name: shipment.destination_hub.name,
-        mode_of_transport:    shipment.mode_of_transport,
-        eta:                  shipment.planned_eta,
-        etd:                  shipment.planned_etd,
-        closing_date:         shipment.closing_date,
-        trip_id:              shipment.trip_id
+        mode_of_transport: shipment.mode_of_transport,
+        eta: shipment.planned_eta,
+        etd: shipment.planned_etd,
+        closing_date: shipment.closing_date,
+        trip_id: shipment.trip_id
       )
     end
 

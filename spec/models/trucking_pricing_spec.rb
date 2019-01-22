@@ -115,6 +115,7 @@ describe TruckingPricing, type: :model do
                  trucking_destination: trucking_destination_geometry,
                  trucking_pricing: trucking_pricing)
         end
+
         it 'finds the correct trucking_pricing with avulsed address filters' do
           trucking_pricings = described_class.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
@@ -163,6 +164,7 @@ describe TruckingPricing, type: :model do
                  trucking_destination: trucking_destination_distance,
                  trucking_pricing: trucking_pricing)
         end
+
         it 'finds the correct trucking_pricing with avulsed address filters', pending: 'Outdated spec' do
           trucking_pricings = described_class.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,

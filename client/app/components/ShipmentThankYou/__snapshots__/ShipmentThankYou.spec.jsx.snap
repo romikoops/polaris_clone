@@ -40,7 +40,7 @@ exports[`shallow rendering 1`] = `
             <br />
             Your booking will be confirmed after a review.
             <br />
-            Do not hesitate to contact us either through the message center or your account manager
+            Do not hesitate to contact us or your account manager directly via email or phone.
           </p>
         </div>
         <hr

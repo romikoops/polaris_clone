@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :pricing_request do
     association :pricing
     association :tenant
-    status "requested"
+    status { 'requested' }
   end
 end
 

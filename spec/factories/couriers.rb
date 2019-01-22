@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :courier do
-  	name "example courier"
-  	association :tenant
+    name { 'example courier' }
+    association :tenant
   end
 end
 
