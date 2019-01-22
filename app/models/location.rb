@@ -47,7 +47,8 @@ class Location < ApplicationRecord
 
   def as_result_json(options = {})
     new_options = options.reverse_merge(
-      methods: %i(geojson description)
+      methods: %i(geojson description),
+      except: %i(bounds)
     )
     as_json(new_options)
   end
