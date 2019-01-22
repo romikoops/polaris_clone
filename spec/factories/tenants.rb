@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-
 FactoryBot.define do
   factory :tenant do
-    subdomain 'demo'
-    name 'Demo'
+    subdomain { 'demo' }
+    name { 'Demo' }
     addresses do
       {
         main: 'Brooktorkai 7, 20457 Hamburg, Germany',

@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :hub_trucking do
-  	association :hub
-  	association :trucking_pricing
-  	association :trucking_destination
+    association :hub
+    association :trucking_pricing
+    association :trucking_destination
   end
 end
 

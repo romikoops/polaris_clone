@@ -2,6 +2,7 @@
 **/config/environments/*
 **/spec/*_helper.rb
 **/spec/**/*_spec.rb
+**/spec/factories/*
 db/schema.rb
 engines/*/lib/*/engine.rb
 engines/*/spec/dummy/*

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 require 'rails_helper'
 
 describe Remark, type: :model do
@@ -11,19 +10,19 @@ describe Remark, type: :model do
     let(:remark_two) { build(:remark, tenant: tenant, body: 'Body of Remark Two') }
 
     context 'Different bodies' do
-      it 'Should have different bodies' do
+      it 'has different bodies' do
         remark_one.body != remark_two.body
       end
     end
 
     context 'Same tenant' do
-      it 'Should have the same tenant' do
+      it 'has the same tenant' do
         remark_one.tenant == remark_two.tenant
       end
     end
 
     context 'Body can be changed' do
-      it 'Should be able to change the body text' do
+      it 'is able to change the body text' do
         remark_two.body = 'New Body'
         remark_two.body == 'New Body'
       end

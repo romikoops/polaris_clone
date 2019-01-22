@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'bigdecimal'
+require 'net/http'
 
 module ShippingTools
   include PricingTools
@@ -613,7 +614,7 @@ module ShippingTools
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
     @quotes = main_quote.shipments.map(&:selected_offer)
 
-    logo = Base64.encode64(HTTP.get(tenant.theme['logoLarge']).body)
+    logo = Base64.encode64(Net::HTTP.get(URI(tenant.theme['logoLarge'])))
 
     quotation = PdfHandler.new(
       layout: 'pdfs/simple.pdf.html.erb',

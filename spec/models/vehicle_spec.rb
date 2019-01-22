@@ -5,8 +5,8 @@ require 'rails_helper'
 describe Vehicle, type: :model do
   context 'validations' do
     describe '#name' do
-      it { should validate_presence_of(:name) }
-      it { should validate_uniqueness_of(:name).scoped_to(:mode_of_transport).with_message(/taken for mode of transport/) }
+      it { is_expected.to validate_presence_of(:name) }
+      it { is_expected.to validate_uniqueness_of(:name).scoped_to(:mode_of_transport).with_message(/taken for mode of transport/) }
     end
   end
 
@@ -18,15 +18,15 @@ describe Vehicle, type: :model do
 
       context 'vehicle not present' do
         it 'creates a new vehicle', pending: 'Broken Tests' do
-          expect { described_class.create_from_name(vehicle_name, mode_of_transport, tenant.id) }.to change { described_class.count }.from(0).to(1)
+          expect { described_class.create_from_name(vehicle_name, mode_of_transport, tenant.id) }.to change(described_class, :count).from(0).to(1)
         end
 
         it 'creates a new tenant vehicle', pending: 'Broken Tests' do
-          expect { described_class.create_from_name(vehicle_name, mode_of_transport, tenant.id) }.to change { TenantVehicle.count }.from(0).to(1)
+          expect { described_class.create_from_name(vehicle_name, mode_of_transport, tenant.id) }.to change(TenantVehicle, :count).from(0).to(1)
         end
 
         it 'creates new transport categories', pending: 'Broken Tests' do
-          expect { described_class.create_from_name(vehicle_name, mode_of_transport, tenant.id) }.to change { TransportCategory.count }.from(0).to(16)
+          expect { described_class.create_from_name(vehicle_name, mode_of_transport, tenant.id) }.to change(TransportCategory, :count).from(0).to(16)
         end
       end
 
@@ -35,15 +35,15 @@ describe Vehicle, type: :model do
         let!(:tenant_vehicle) { create(:tenant_vehicle, name: vehicle_name, mode_of_transport: mode_of_transport, tenant: tenant, vehicle: vehicle) }
 
         it 'does not create a new vehicle', pending: 'Broken Tests' do
-          expect { described_class.create_from_name(vehicle_name, mode_of_transport, tenant.id) }.not_to change { described_class.count }.from(described_class.count)
+          expect { described_class.create_from_name(vehicle_name, mode_of_transport, tenant.id) }.not_to change(described_class, :count).from(described_class.count)
         end
 
         it 'does not create a new tenant vehicle', pending: 'Broken Tests' do
-          expect { described_class.create_from_name(vehicle_name, mode_of_transport, tenant.id) }.not_to change { TenantVehicle.count }.from(TenantVehicle.count)
+          expect { described_class.create_from_name(vehicle_name, mode_of_transport, tenant.id) }.not_to change(TenantVehicle, :count).from(TenantVehicle.count)
         end
 
         it 'creates new transport categories', pending: 'Broken Tests' do
-          expect { described_class.create_from_name(vehicle_name, mode_of_transport, tenant.id) }.to change { TransportCategory.count }.from(TransportCategory.count).to(16)
+          expect { described_class.create_from_name(vehicle_name, mode_of_transport, tenant.id) }.to change(TransportCategory, :count).from(TransportCategory.count).to(16)
         end
       end
 
@@ -53,7 +53,7 @@ describe Vehicle, type: :model do
         let!(:transport_category) { create(:transport_category, vehicle_id: tenant_vehicle.vehicle_id) }
 
         it 'does not create new transport categories', pending: 'Outdated spec' do
-          expect { described_class.create_from_name(vehicle_name, mode_of_transport, tenant.id) }.not_to change { TransportCategory.count }.from(TransportCategory.count)
+          expect { described_class.create_from_name(vehicle_name, mode_of_transport, tenant.id) }.not_to change(TransportCategory, :count).from(TransportCategory.count)
         end
       end
     end

@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :optin_status do
-    tenant false
-    itsmycargo false
-    cookies false
+    tenant { false }
+    itsmycargo { false }
+    cookies { false }
   end
 end
 

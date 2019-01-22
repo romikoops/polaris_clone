@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-
 FactoryBot.define do
   factory :pricing do
-    wm_rate 'Gothenburg'
-    effective_date Date.today
-    expiration_date 10.days.from_now
+    wm_rate { 'Gothenburg' }
+    effective_date { Date.today }
+    expiration_date { 10.days.from_now }
     association :transport_category
     association :tenant
     association :itinerary

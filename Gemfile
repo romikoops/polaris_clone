@@ -4,9 +4,12 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.1'
+gem 'rails', '~> 5.2.2'
 # Use sqlite3 as the database for Active Record
-gem 'pg', '~> 0.21'
+gem 'pg', '>= 0.18', '< 2.0'
+# Use postGIS
+gem 'activerecord-postgis-adapter', '~> 5.2.2'
+
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 # Use activerecord-import for bulk insertion
@@ -32,16 +35,18 @@ gem 'omniauth'
 gem 'sass-rails'
 gem 'sprockets-rails', require: 'sprockets/railtie'
 
-gem 'aws-sdk-sqs', '~> 1.9.0'
+# AWS SDK
+gem 'aws-sdk-cloudfront', '~> 1.11.0'
+gem 'aws-sdk-route53', '~> 1.17.0'
+gem 'aws-sdk-s3', '~> 1.30.1'
+gem 'aws-sdk-sqs', '~> 1.10.0'
+
 gem 'font-awesome-rails'
-gem 'rufo'
 gem 'shoryuken'
 
-gem 'activerecord-postgis-adapter'
 gem 'rgeo-geojson'
 
 # Full Text Search
-
 gem 'pg_search'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -77,17 +82,10 @@ gem 'os'
 # Use BreezyPdf to generate PDFs from HTML
 gem 'breezy_pdf_lite'
 
-# MongoDB gems
-gem 'mongo', '~> 2.4'
-# gem 'nio4r', '~> 2.2.0'
-
 # Use roo for handling CSV and Excel files
 gem 'roo'
-# gem 'roo-xls'
+gem 'roo-xls'
 gem 'write_xlsx'
-
-# Usee http for simple requests
-gem 'http'
 
 # Use chronic for parsing dates
 gem 'chronic'
@@ -104,9 +102,8 @@ gem 'will_paginate', '~> 3.1.5'
 # Email support
 gem 'recipient_interceptor'
 
-# Easier CSS for emails
-gem 'inky-rb', require: 'inky'
-gem 'premailer-rails'
+# New email gem
+gem 'mjml-rails', '~> 4.1'
 
 # Image resizing
 gem 'mini_magick'
@@ -114,15 +111,10 @@ gem 'mini_magick'
 # Audit trail for changes
 gem 'paper_trail'
 
-# AWS SDK for hosting and S3
-gem 'aws-sdk', '~> 3'
-
 # Google translate api
 gem 'google-cloud-translate'
 gem 'googleauth'
 gem 'signet'
-# New email gem
-gem 'mjml-rails', '~> 4.1'
 
 # Better console
 gem 'pry-rails'
@@ -145,6 +137,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'rspec_junit_formatter'
   gem 'rubocop'
+  gem 'rubocop-rspec'
 
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i(mri mingw x64_mingw)

@@ -1,23 +1,24 @@
+# frozen_string_literal: true
+
 COUNTRIES = [
-	{ name: "Sweden", code: "SE", flag: "https://restcountries.eu/data/swe.svg" },
-	{ name: "China", code: "CN", flag: "https://restcountries.eu/data/chn.svg" },
-	{ name: "Germany", code: "DE", flag: "https://restcountries.eu/data/deu.svg" }
-]
+  { name: 'Sweden', code: 'SE', flag: 'https://restcountries.eu/data/swe.svg' },
+  { name: 'China', code: 'CN', flag: 'https://restcountries.eu/data/chn.svg' },
+  { name: 'Germany', code: 'DE', flag: 'https://restcountries.eu/data/deu.svg' }
+].freeze
 FactoryBot.define do
   factory :country do
     trait :with_sequence do
-      [:name, :code, :flag].each do |attribute|
+      %i(name code flag).each do |attribute|
         sequence(attribute) do |n|
           COUNTRIES[(n % COUNTRIES.size) - 1][attribute]
         end
       end
-     end
-
-    [:name, :code, :flag].each do |attribute|
-      send attribute, COUNTRIES.first[attribute]      
     end
 
-   end
+    %i(name code flag).each do |attribute|
+      send attribute, COUNTRIES.first[attribute]
+    end
+  end
 end
 
 # == Schema Information

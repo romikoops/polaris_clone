@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WelcomeMailerPreview < ActionMailer::Preview
   def welcome_email
     @tenant = Tenant.normanglobal

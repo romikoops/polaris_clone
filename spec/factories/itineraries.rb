@@ -3,11 +3,11 @@
 FactoryBot.define do
   factory :itinerary do
     transient do
-      num_stops 2
+      num_stops { 2 }
     end
 
-    name 'Gothenburg - Shanghai'
-    mode_of_transport 'ocean'
+    name { 'Gothenburg - Shanghai' }
+    mode_of_transport { 'ocean' }
     association :tenant
 
     after(:build) do |itinerary, evaluator|

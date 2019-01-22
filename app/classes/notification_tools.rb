@@ -1,13 +1,6 @@
 # frozen_string_literal: true
 
 module NotificationTools
-  include MongoTools
-
-  # def get_messages_for_user(user)
-  #   query = [{'tenant_id' => {"$eq" => user.tenant_id}}, {"user_id" => {"$eq" => user.id}}]
-  #   resp = get_items_query('messages', query)
-  #   return resp.to_a
-  # end
   def get_messages_for_user(user)
     conversations = user.conversations.each_with_object(Hash.new(0)) do |conversation, return_h|
       next unless conversation.shipment

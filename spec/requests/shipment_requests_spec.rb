@@ -28,10 +28,10 @@ describe 'Shipment requests', type: :request do
 
   let!(:charge) do
     create(:charge,
-           charge_breakdown:         charge_breakdown,
-           charge_category:          ChargeCategory.base_node,
+           charge_breakdown: charge_breakdown,
+           charge_category: ChargeCategory.base_node,
            children_charge_category: ChargeCategory.grand_total,
-           price:                    price)
+           price: price)
   end
 
   context 'user logged in' do
@@ -45,8 +45,8 @@ describe 'Shipment requests', type: :request do
       let(:response_data) do
         {
           # TBD - check cargo_item_types
-          routes:                 ROUTES,
-          maxDimensions:          MAX_DIMENSIONS,
+          routes: ROUTES,
+          maxDimensions: MAX_DIMENSIONS,
           maxAggregateDimensions: MAX_AGGREGATE_DIMENSIONS,
           shipment: {
             user_id: tenant.users.last.id, status: 'booking_process_started', load_type: load_type, tenant_id: tenant.id
@@ -162,17 +162,17 @@ describe 'Shipment requests', type: :request do
           customs_credit: nil,
           user_id: user.id,
           schedule: {
-            origin_hub:             origin_hub.as_json(only: %i(id name)),
-            destination_hub:        destination_hub.as_json(only: %i(id name)),
-            mode_of_transport:      'ocean',
-            itinerary_id:           itinerary.id,
-            eta:                    destination_layover.eta.iso8601(3),
-            etd:                    origin_layover.etd.iso8601(3),
-            closing_date:           origin_layover.closing_date.iso8601(3),
-            trip_id:                trip.id,
-            origin_layover_id:      origin_layover.id,
+            origin_hub: origin_hub.as_json(only: %i(id name)),
+            destination_hub: destination_hub.as_json(only: %i(id name)),
+            mode_of_transport: 'ocean',
+            itinerary_id: itinerary.id,
+            eta: destination_layover.eta.iso8601(3),
+            etd: origin_layover.etd.iso8601(3),
+            closing_date: origin_layover.closing_date.iso8601(3),
+            trip_id: trip.id,
+            origin_layover_id: origin_layover.id,
             destination_layover_id: destination_layover.id,
-            total_price:            { value: '1111.0', currency: 'EUR' }
+            total_price: { value: '1111.0', currency: 'EUR' }
           }
         }
 
@@ -186,7 +186,7 @@ describe 'Shipment requests', type: :request do
       let(:cargo_notes) { 'example note' }
       let(:response_data) do
         {
-          shipment:   {}, # TBD
+          shipment: {}, # TBD
           cargoItems: [],
           containers: [
             {
@@ -202,11 +202,11 @@ describe 'Shipment requests', type: :request do
               id: destination_nexus.id, name: destination_nexus.name, address_type: nil, latitude: destination_nexus.latitude, longitude: destination_nexus.longitude, geocoded_address: destination_nexus.geocoded_address, zip_code: destination_nexus.zip_code, city: destination_nexus.city
             }
           },
-          consignee:      {}, # TBD
-          notifyees:      [],
-          shipper:        {}, # TBD
-          documents:      [], # TBD
-          cargoItemTypes: {}  # TBD
+          consignee: {}, # TBD
+          notifyees: [],
+          shipper: {}, # TBD
+          documents: [], # TBD
+          cargoItemTypes: {} # TBD
         }
       end
 
@@ -275,7 +275,7 @@ describe 'Shipment requests', type: :request do
         post subdomain_shipment_update_shipment_path(subdomain_id: 'demo', shipment_id: shipment.id), as: :json, params: {
           shipment: {
             user_id: user.id,
-            shipper:   SHIPPER,
+            shipper: SHIPPER,
             consignee: CONSIGNEE,
             notifyees: [],
             hsCodes: {},

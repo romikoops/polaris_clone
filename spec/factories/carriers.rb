@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :carrier do
     association :tenant_vehicles
-    name 'Hapag Lloyd'
+    name { 'Hapag Lloyd' }
   end
 end
 

@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-
 FactoryBot.define do
   factory :trucking_destination do
     trait :zipcode do
-      zipcode '15211'
+      zipcode { '15211' }
     end
 
     trait :with_location do
@@ -12,7 +11,7 @@ FactoryBot.define do
     end
 
     trait :distance do
-      distance 172
+      distance { 172 }
     end
 
     trait :zipcode_sequence do
@@ -28,7 +27,7 @@ FactoryBot.define do
       end
     end
 
-    country_code 'SE'
+    country_code { 'SE' }
   end
 end
 

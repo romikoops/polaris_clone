@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :cargo_item_type do
-    dimension_x 101
-    dimension_y 121
-    description ""
-    area ""
-    category "Pallet"
+    dimension_x { 101 }
+    dimension_y { 121 }
+    description { '' }
+    area { '' }
+    category { 'Pallet' }
   end
 end
 
