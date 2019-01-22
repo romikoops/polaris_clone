@@ -1,9 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import CargoItem, {
-  getSelectedColliType,
-  getAvailableCargoItemTypes
-} from '.'
+import CargoItem from '.'
 import { cargoUnitProps, cargoItem, cargoItemTypes } from '../../../mocks'
 
 test('with empty props', () => {
@@ -20,23 +17,23 @@ test('happy path', () => {
 })
 
 test('happy path getSelectedColliType', () => {
-  const result = getSelectedColliType(cargoItemTypes, 23)
+  const result = CargoItem.getSelectedColliType(cargoItemTypes, 23)
   const expected = { label: 'Crate', value: 'Crate' }
   expect(result).toEqual(expected)
 })
 
 test('getSelectedColliType with undefined as type id', () => {
-  const result = getSelectedColliType(cargoItemTypes)
+  const result = CargoItem.getSelectedColliType(cargoItemTypes)
   expect(result).toBeUndefined()
 })
 
 test('getAvailableCargoItemTypes with undefined input', () => {
-  const result = getAvailableCargoItemTypes()
+  const result = CargoItem.getAvailableCargoItemTypes()
   expect(result).toEqual([])
 })
 
 test('happy path getAvailableCargoItemTypes', () => {
-  const result = getAvailableCargoItemTypes(cargoItemTypes)
+  const result = CargoItem.getAvailableCargoItemTypes(cargoItemTypes)
   const expected = [{
     label: 'Pallet', key: 25, dimension_x: null, dimension_y: null
   },

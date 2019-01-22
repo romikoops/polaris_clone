@@ -1,6 +1,3 @@
-import * as React from 'react'
-import { shallow } from 'enzyme'
-
 import {
   cargoItem,
   cargoItemAggregated,
@@ -60,7 +57,7 @@ test('bookingProcessDispatch.resetStore is called', () => {
       updateShipment: identity
     }
   }
-  const Component = new ShipmentDetails(props)
+  new ShipmentDetails(props)
   expect(spy).toHaveBeenCalled()
 })
 
@@ -156,4 +153,33 @@ test('get offers when selected day is falsy', () => {
 
   expect(spyCall.shipment.selected_day).not.toEqual(selectedDay)
   expect(typeof spyCall.shipment.selected_day).toBe('string')
+})
+
+test('happy path getVisibleModal', () => {
+  const props = {
+    ...propsBase,
+    BookingDetails: {
+      modals: {
+        nonStackable: true,
+        noDangerousGoods: false
+      }
+    }
+  }
+  const Component = new ShipmentDetails(props)
+  const visibleModal = Component.getVisibleModal()
+  expect(typeof visibleModal).toBe('object')
+})
+
+test('getVisibleModal when all modal states are false', () => {
+  const props = {
+    ...propsBase,
+    BookingDetails: {
+      modals: {
+        nonStackable: false,
+        noDangerousGoods: false
+      }
+    }
+  }
+  const Component = new ShipmentDetails(props)
+  expect(Component.getVisibleModal()).toBe('')
 })

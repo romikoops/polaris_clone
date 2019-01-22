@@ -6,13 +6,14 @@ import styles from './index.scss'
 import CargoUnitNumberInput from '../CargoUnit/NumberInput'
 import Tooltip from '../../../../Tooltip/Tooltip'
 import { NamedSelect } from '../../../../NamedSelect/NamedSelect'
-import Checkbox from '../../../../Checkbox/Checkbox'
 import kg from '../../../../../assets/images/cargo/kg.png'
 import length from '../../../../../assets/images/cargo/length.png'
 import width from '../../../../../assets/images/cargo/width.png'
 import height from '../../../../../assets/images/cargo/height.png'
 // TODO test the helper
 import calcMaxDimensionsToApply from '../../../../../helpers/calcMaxDimensionsToApply'
+
+import CheckboxWrapper from './checkboxWrapper'
 import ChargableProperties from './ChargableProperties'
 
 const imageSources = {
@@ -21,59 +22,32 @@ const imageSources = {
   height
 }
 
-export function getAvailableCargoItemTypes (cargoItemTypes) {
-  if (!(Array.isArray(cargoItemTypes))) return []
-  const palletType = cargoItemTypes.filter(colli => colli.description === 'Pallet')
-  const nonPalletTypes = cargoItemTypes.filter(colli => colli.description !== 'Pallet')
-  nonPalletTypes.unshift(palletType[0])
-
-  return nonPalletTypes.map(cargoItemType => ({
-    label: cargoItemType.description,
-    key: cargoItemType.id,
-    dimension_x: cargoItemType.dimension_x,
-    dimension_y: cargoItemType.dimension_y
-  }))
-}
-
-export function getSelectedColliType (availableCargoItemTypes, currentTypeId) {
-  // If the user delete its selection, then the value is `undefined`
-  if (!currentTypeId) return
-  const [currentCargoItemType] = availableCargoItemTypes.filter(
-    cargoType => cargoType.id === currentTypeId
-  )
-  const { description } = currentCargoItemType
-
-  return { label: description, value: description }
-}
-
-export function CheckboxWrapper ({
-  i, labelText, disabled, onChange, cargoItem, prop, theme, checkedTransform = x => x, onWrapperClick = () => {}
-}) {
-  return (
-    <div
-      onClick={onWrapperClick}
-      className={`layout-row flex layout-wrap layout-align-start-center ${styles.cargo_unit_check}`}
-    >
-      <Checkbox
-        id={`${i}-${prop}`}
-        name={`${i}-${prop}`}
-        onChange={onChange}
-        checked={checkedTransform(cargoItem[prop])}
-        theme={theme}
-        size="15px"
-        disabled={disabled}
-      />
-      <div className="layout-row flex-75 layout-wrap layout-align-start-center">
-        <label className={`${styles.input_check} flex-none pointy`} htmlFor={`${i}-dangerousGoods`}>
-          <p>{labelText}</p>
-        </label>
-        <Tooltip color={theme.colors.primary} icon="fa-info-circle" text="dangerous_goods" />
-      </div>
-    </div>
-  )
-}
-
 class CargoItem extends React.PureComponent {
+  static getSelectedColliType (availableCargoItemTypes, currentTypeId) {
+    // If the user delete its selection, then the value is `undefined`
+    if (!currentTypeId) return
+    const [currentCargoItemType] = availableCargoItemTypes.filter(
+      cargoType => cargoType.id === currentTypeId
+    )
+    const { description } = currentCargoItemType
+
+    return { label: description, value: description }
+  }
+
+  static getAvailableCargoItemTypes (cargoItemTypes) {
+    if (!(Array.isArray(cargoItemTypes))) return []
+    const palletType = cargoItemTypes.filter(colli => colli.description === 'Pallet')
+    const nonPalletTypes = cargoItemTypes.filter(colli => colli.description !== 'Pallet')
+    nonPalletTypes.unshift(palletType[0])
+
+    return nonPalletTypes.map(cargoItemType => ({
+      label: cargoItemType.description,
+      key: cargoItemType.id,
+      dimension_x: cargoItemType.dimension_x,
+      dimension_y: cargoItemType.dimension_y
+    }))
+  }
+
   constructor (props) {
     super(props)
     this.getSharedProps = this.getSharedProps.bind(this)
@@ -108,19 +82,18 @@ class CargoItem extends React.PureComponent {
     const {
       i,
       onChangeCargoUnitInput,
-      toggleModal,
-      cargoItem
+      cargoItem,
+      toggleModal
     } = this.props
-    const maxDimensionsToApply = this.getMaxDimensionsToApply()
-    const getMaxDimension = prop => Number(
-      maxDimensionsToApply[prop]
+    const maxDimension = Number(
+      this.getMaxDimensionsToApply()[prop]
     )
 
     return {
       cargoItem,
       className: prop === 'payloadInKg' ? 'flex-30 offset-5' : 'flex-20',
       i,
-      maxDimension: getMaxDimension(prop),
+      maxDimension,
       name: `${i}-${prop}`,
       onChange: onChangeCargoUnitInput,
       onExcessDimensionsRequest: () => toggleModal('maxDimensions'),
@@ -141,11 +114,16 @@ class CargoItem extends React.PureComponent {
       scope,
       t,
       theme,
+      toggleModal,
       toggleStackable,
       uniqKey
     } = this.props
-    const availableCargoItemTypes = getAvailableCargoItemTypes(cargoItemTypes)
-    const selectedColliType = getSelectedColliType(
+    // TODO: implement collective weight based on scope
+    // scope.frontend_consolidation ? inputs.collectiveWeight : inputs.grossWeight
+
+    // TODO: implement cargoItemTypes
+    const availableCargoItemTypes = CargoItem.getAvailableCargoItemTypes(cargoItemTypes)
+    const selectedColliType = CargoItem.getSelectedColliType(
       cargoItemTypes, cargoItem.cargoItemTypeId
     )
 
@@ -156,7 +134,13 @@ class CargoItem extends React.PureComponent {
     }
 
     return (
-      <CargoUnitBox onChangeCargoUnitInput={onChangeCargoUnitInput} cargoUnit={cargoItem} i={i} onDeleteUnit={onDeleteUnit} unqiKey={uniqKey}>
+      <CargoUnitBox
+        cargoUnit={cargoItem}
+        i={i}
+        onChangeCargoUnitInput={onChangeCargoUnitInput}
+        onDeleteUnit={onDeleteUnit}
+        unqiKey={uniqKey}
+      >
         <div style={{ position: 'relative' }}>
           <div
             className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.padding_section}`}

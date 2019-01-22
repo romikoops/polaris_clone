@@ -57,7 +57,7 @@ exports[`happy path 1`] = `
           <img
             alt="length"
             border="0"
-            data-for="e2dcafba-666c-41f7-a2a0-58ee989db103"
+            data-for="9ab1f1ab-b9be-4bff-ab72-722b8b7c944c"
             data-tip="Length"
           />
         }
@@ -94,7 +94,7 @@ exports[`happy path 1`] = `
           <img
             alt="width"
             border="0"
-            data-for="af6b3eae-2d2d-41af-9d49-2b3ec7c0e0e4"
+            data-for="6bca2253-6502-4446-ac14-00684724cfc0"
             data-tip="Width"
           />
         }
@@ -131,7 +131,7 @@ exports[`happy path 1`] = `
           <img
             alt="height"
             border="0"
-            data-for="af05d611-05e0-4c2e-9eb7-9c206ada4d4e"
+            data-for="b32d7faf-1821-47d8-8611-c90af27df1ac"
             data-tip="Height"
           />
         }
@@ -168,7 +168,7 @@ exports[`happy path 1`] = `
           <img
             alt="weight"
             border="0"
-            data-for="f999ba5a-2061-45c9-b98c-855833362a45"
+            data-for="4d2812af-74a0-4946-b5e2-c7db978cc0af"
             data-tip="Gross Weight"
           />
         }
