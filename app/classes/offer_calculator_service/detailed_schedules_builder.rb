@@ -74,6 +74,7 @@ module OfferCalculatorService
       end
 
       {
+        load_type: shipment.load_type,
         mode_of_transport: schedule.mode_of_transport,
         name: schedule.trip.itinerary.name,
         service_level: schedule.vehicle_name,
