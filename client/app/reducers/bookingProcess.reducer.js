@@ -1,9 +1,6 @@
 const initialState = {
   shipment: {
-    // TODO: implement shipment type page
-    direction: 'export',
     aggregatedCargo: false,
-    loadType: 'cargo_item',
     onCarriage: false,
     preCarriage: false,
     origin: {},
