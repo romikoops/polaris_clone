@@ -197,23 +197,6 @@ exports[`detailed billing working properly 1`] = `
             </span>
           </p>
         </div>
-        <div
-          className="flex-100 layout-row layout-align-start-center unit_info"
-        >
-          <p
-            className="flex-100 layout-row layout-align-start"
-          >
-            Total Volume: 
-            <span
-              className="flex layout-row layout-align-end"
-            >
-               0.000 m
-              <sup>
-                3
-              </sup>
-            </span>
-          </p>
-        </div>
       </div>
     </div>
   </div>
@@ -722,23 +705,6 @@ exports[`shallow rendering 1`] = `
             </span>
           </p>
         </div>
-        <div
-          className="flex-100 layout-row layout-align-start-center unit_info"
-        >
-          <p
-            className="flex-100 layout-row layout-align-start"
-          >
-            Total Volume: 
-            <span
-              className="flex layout-row layout-align-end"
-            >
-               0.000 m
-              <sup>
-                3
-              </sup>
-            </span>
-          </p>
-        </div>
       </div>
     </div>
   </div>
@@ -1211,23 +1177,6 @@ exports[`show schedule options working 1`] = `
               className="flex layout-row layout-align-end"
             >
                0.00 kg
-            </span>
-          </p>
-        </div>
-        <div
-          className="flex-100 layout-row layout-align-start-center unit_info"
-        >
-          <p
-            className="flex-100 layout-row layout-align-start"
-          >
-            Total Volume: 
-            <span
-              className="flex layout-row layout-align-end"
-            >
-               0.000 m
-              <sup>
-                3
-              </sup>
             </span>
           </p>
         </div>
@@ -1739,23 +1688,6 @@ exports[`show schedules set to true 1`] = `
             </span>
           </p>
         </div>
-        <div
-          className="flex-100 layout-row layout-align-start-center unit_info"
-        >
-          <p
-            className="flex-100 layout-row layout-align-start"
-          >
-            Total Volume: 
-            <span
-              className="flex layout-row layout-align-end"
-            >
-               0.000 m
-              <sup>
-                3
-              </sup>
-            </span>
-          </p>
-        </div>
       </div>
     </div>
   </div>
@@ -2242,23 +2174,6 @@ exports[`single result rendering removes the "add" button 1`] = `
               className="flex layout-row layout-align-end"
             >
                0.00 kg
-            </span>
-          </p>
-        </div>
-        <div
-          className="flex-100 layout-row layout-align-start-center unit_info"
-        >
-          <p
-            className="flex-100 layout-row layout-align-start"
-          >
-            Total Volume: 
-            <span
-              className="flex layout-row layout-align-end"
-            >
-               0.000 m
-              <sup>
-                3
-              </sup>
             </span>
           </p>
         </div>
