@@ -6,12 +6,12 @@ exports[`happy path 1`] = `
     Object {
       "cargoItemTypeId": 23,
       "dangerousGoods": false,
-      "dimensionX": 7,
-      "dimensionY": 7,
-      "dimensionZ": 8,
-      "payloadInKg": 11,
-      "quantity": 7,
-      "stackable": false,
+      "dimensionX": 5,
+      "dimensionY": 132,
+      "dimensionZ": 12,
+      "payloadInKg": 223,
+      "quantity": 6,
+      "stackable": true,
       "totalVolume": 0,
       "totalWeight": 0,
     }
@@ -41,12 +41,12 @@ exports[`happy path 1`] = `
           Object {
             "cargoItemTypeId": 23,
             "dangerousGoods": false,
-            "dimensionX": 7,
-            "dimensionY": 7,
-            "dimensionZ": 8,
-            "payloadInKg": 11,
-            "quantity": 7,
-            "stackable": false,
+            "dimensionX": 5,
+            "dimensionY": 132,
+            "dimensionZ": 12,
+            "payloadInKg": 223,
+            "quantity": 6,
+            "stackable": true,
             "totalVolume": 0,
             "totalWeight": 0,
           }
@@ -57,7 +57,7 @@ exports[`happy path 1`] = `
           <img
             alt="length"
             border="0"
-            data-for="19a150c0-2cba-4824-87ca-cb184108c0b9"
+            data-for="e2dcafba-666c-41f7-a2a0-58ee989db103"
             data-tip="Length"
           />
         }
@@ -71,19 +71,19 @@ exports[`happy path 1`] = `
         t={[Function]}
         tooltip=""
         unit="cm"
-        value={7}
+        value={5}
       />
       <CargoUnitNumberInput
         cargoItem={
           Object {
             "cargoItemTypeId": 23,
             "dangerousGoods": false,
-            "dimensionX": 7,
-            "dimensionY": 7,
-            "dimensionZ": 8,
-            "payloadInKg": 11,
-            "quantity": 7,
-            "stackable": false,
+            "dimensionX": 5,
+            "dimensionY": 132,
+            "dimensionZ": 12,
+            "payloadInKg": 223,
+            "quantity": 6,
+            "stackable": true,
             "totalVolume": 0,
             "totalWeight": 0,
           }
@@ -94,7 +94,7 @@ exports[`happy path 1`] = `
           <img
             alt="width"
             border="0"
-            data-for="450f1da9-23a7-4b4f-b0aa-00763430a0ac"
+            data-for="af6b3eae-2d2d-41af-9d49-2b3ec7c0e0e4"
             data-tip="Width"
           />
         }
@@ -108,19 +108,19 @@ exports[`happy path 1`] = `
         t={[Function]}
         tooltip=""
         unit="cm"
-        value={7}
+        value={132}
       />
       <CargoUnitNumberInput
         cargoItem={
           Object {
             "cargoItemTypeId": 23,
             "dangerousGoods": false,
-            "dimensionX": 7,
-            "dimensionY": 7,
-            "dimensionZ": 8,
-            "payloadInKg": 11,
-            "quantity": 7,
-            "stackable": false,
+            "dimensionX": 5,
+            "dimensionY": 132,
+            "dimensionZ": 12,
+            "payloadInKg": 223,
+            "quantity": 6,
+            "stackable": true,
             "totalVolume": 0,
             "totalWeight": 0,
           }
@@ -131,7 +131,7 @@ exports[`happy path 1`] = `
           <img
             alt="height"
             border="0"
-            data-for="b17c6239-dec5-4996-b934-e56bc81e4534"
+            data-for="af05d611-05e0-4c2e-9eb7-9c206ada4d4e"
             data-tip="Height"
           />
         }
@@ -145,19 +145,19 @@ exports[`happy path 1`] = `
         t={[Function]}
         tooltip=""
         unit="cm"
-        value={8}
+        value={12}
       />
       <CargoUnitNumberInput
         cargoItem={
           Object {
             "cargoItemTypeId": 23,
             "dangerousGoods": false,
-            "dimensionX": 7,
-            "dimensionY": 7,
-            "dimensionZ": 8,
-            "payloadInKg": 11,
-            "quantity": 7,
-            "stackable": false,
+            "dimensionX": 5,
+            "dimensionY": 132,
+            "dimensionZ": 12,
+            "payloadInKg": 223,
+            "quantity": 6,
+            "stackable": true,
             "totalVolume": 0,
             "totalWeight": 0,
           }
@@ -168,7 +168,7 @@ exports[`happy path 1`] = `
           <img
             alt="weight"
             border="0"
-            data-for="248879dc-399f-4576-b36e-97cecb390142"
+            data-for="f999ba5a-2061-45c9-b98c-855833362a45"
             data-tip="Gross Weight"
           />
         }
@@ -190,7 +190,7 @@ exports[`happy path 1`] = `
           />
         }
         unit="kg"
-        value={11}
+        value={223}
       />
     </div>
     <div
@@ -275,7 +275,6 @@ exports[`happy path 1`] = `
               ]
             }
             placeholder="Select your colli type"
-            showErrors={false}
             value={
               Object {
                 "label": "Crate",
@@ -290,12 +289,12 @@ exports[`happy path 1`] = `
           Object {
             "cargoItemTypeId": 23,
             "dangerousGoods": false,
-            "dimensionX": 7,
-            "dimensionY": 7,
-            "dimensionZ": 8,
-            "payloadInKg": 11,
-            "quantity": 7,
-            "stackable": false,
+            "dimensionX": 5,
+            "dimensionY": 132,
+            "dimensionZ": 12,
+            "payloadInKg": 223,
+            "quantity": 6,
+            "stackable": true,
             "totalVolume": 0,
             "totalWeight": 0,
           }
@@ -327,12 +326,12 @@ exports[`happy path 1`] = `
           Object {
             "cargoItemTypeId": 23,
             "dangerousGoods": false,
-            "dimensionX": 7,
-            "dimensionY": 7,
-            "dimensionZ": 8,
-            "payloadInKg": 11,
-            "quantity": 7,
-            "stackable": false,
+            "dimensionX": 5,
+            "dimensionY": 132,
+            "dimensionZ": 12,
+            "payloadInKg": 223,
+            "quantity": 6,
+            "stackable": true,
             "totalVolume": 0,
             "totalWeight": 0,
           }
@@ -374,12 +373,12 @@ exports[`happy path 1`] = `
         Object {
           "cargoItemTypeId": 23,
           "dangerousGoods": false,
-          "dimensionX": 7,
-          "dimensionY": 7,
-          "dimensionZ": 8,
-          "payloadInKg": 11,
-          "quantity": 7,
-          "stackable": false,
+          "dimensionX": 5,
+          "dimensionY": 132,
+          "dimensionZ": 12,
+          "payloadInKg": 223,
+          "quantity": 6,
+          "stackable": true,
           "totalVolume": 0,
           "totalWeight": 0,
         }

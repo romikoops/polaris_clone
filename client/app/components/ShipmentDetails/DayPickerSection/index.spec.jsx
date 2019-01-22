@@ -29,6 +29,10 @@ const propsBase = {
   theme
 }
 
+// This test suite will keep failing
+// as it needs moment mock applied with IMC-890
+// ============================================
+
 test('with empty props', () => {
   expect(() => shallow(<DayPickerSection />)).toThrow()
 })

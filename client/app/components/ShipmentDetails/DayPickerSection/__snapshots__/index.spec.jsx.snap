@@ -80,7 +80,7 @@ exports[`happy path 1`] = `
             Object {
               "disabledDays": Object {
                 "after": 2019-03-12T12:00:00.000Z,
-                "before": 2019-01-19T06:44:33.000Z,
+                "before": 2019-01-22T12:01:53.000Z,
               },
               "month": 2018-12-31T22:00:00.000Z,
               "name": "dayPicker",
@@ -290,7 +290,7 @@ exports[`pre carriage is true 1`] = `
             Object {
               "disabledDays": Object {
                 "after": 2019-03-12T12:00:00.000Z,
-                "before": 2019-01-19T06:44:33.000Z,
+                "before": 2019-01-22T12:01:53.000Z,
               },
               "month": 2018-12-31T22:00:00.000Z,
               "name": "dayPicker",
@@ -500,7 +500,7 @@ exports[`selected day is falsy 1`] = `
             Object {
               "disabledDays": Object {
                 "after": 2019-03-12T12:00:00.000Z,
-                "before": 2019-01-19T06:44:33.000Z,
+                "before": 2019-01-22T12:01:53.000Z,
               },
               "month": 2018-12-31T22:00:00.000Z,
               "name": "dayPicker",
