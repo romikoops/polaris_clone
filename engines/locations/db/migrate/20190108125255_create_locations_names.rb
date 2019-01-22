@@ -6,9 +6,12 @@ class CreateLocationsNames < ActiveRecord::Migration[5.2]
       t.string 'language'
       t.integer 'osm_id', :limit => 8
       t.integer 'place_rank', :limit => 8
+      t.integer 'importance', :limit => 8
       t.string 'osm_type', index: true
       t.string 'street'
       t.string 'city'
+      t.string 'osm_class'
+      t.string 'name_type'
       t.string 'country'
       t.string 'county'
       t.string 'state'

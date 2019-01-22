@@ -40,24 +40,10 @@ module Locations
     let(:chinese_string) { '宝山城市工业园区, 中国' }
 
     context '.search' do
-     
       it 'returns results including the desired object (en)' do
         results = Autocomplete.search(term: 'Baoshun', country_codes: ['cn'], lang: 'en')
-        expect(results.first.class).to eq(target_result_en)
+        expect(results.first).to eq(target_result_en)
       end
-      it 'returns results including the desired object (zh)' do
-        results = Autocomplete.search(term: '宝山城市工业园区', country_codes: ['cn'], lang: 'en')
-        expect(results.first.class).to eq(target_result_zh)
-      end
-      # it 'returns a geoJson object' do
-      #   expect(LocationDecorator.new(location).geojson).to eq(example_bounds)
-      # end
-      # it 'returns a the description in the English' do
-      #   expect(LocationDecorator.new(location).description('en')).to eq(english_string)
-      # end
-      # it 'returns a the description in the Chinese' do
-      #   expect(LocationDecorator.new(location).description('zh')).to eq(chinese_string)
-      # end
     end
 
   end

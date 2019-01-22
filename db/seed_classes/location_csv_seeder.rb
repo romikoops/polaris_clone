@@ -73,6 +73,10 @@ class LocationCsvSeeder
             obj[:point] = row[i]
           elsif k == :osm_id
             obj[k] = row[i].to_i.abs
+          elsif k == :type
+            obj[:name_type] = row[i]
+          elsif k == :class
+            obj[:osm_class] = row[i]
           else
             obj[k] = row[i]
           end

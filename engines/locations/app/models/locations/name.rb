@@ -53,9 +53,12 @@ end
 #  language          :string
 #  osm_id            :bigint(8)
 #  place_rank        :bigint(8)
+#  importance        :bigint(8)
 #  osm_type          :string
 #  street            :string
 #  city              :string
+#  osm_class         :string
+#  name_type         :string
 #  country           :string
 #  county            :string
 #  state             :string

@@ -582,10 +582,10 @@ module ExcelTool
                   # binding.pry
                   begin
                   p [idents_and_country[:sub_ident], idents_and_country[:ident]]
-                   Locations::NameFinder.find_highest_admin_level(
+                   Locations::NameFinder.seeding(
                      idents_and_country[:sub_ident],
                      idents_and_country[:ident]
-                   )
+                   )&.location
                    rescue => e
                   binding.pry 
                   end
