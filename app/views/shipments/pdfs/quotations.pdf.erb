@@ -212,14 +212,21 @@
                     charge[k]['total']['currency'] = original_charge[k][fk]['currency']
                   end
               end
+              charge['name'] = original_charge['name']
           else
             charge = s.selected_offer[charge_key]
           end %>
         <% next if !charge%>
+        <% charge_name =  if charge_key == 'cargo' && charge['name'] == 'Freight' 
+                            "#{s.mode_of_transport} Freight"
+                          else 
+                            charge["name"]
+                          end
+        %>
         <div class="sub-prices">
           <div class="total-price-single">
             <h4>
-              <%= charge_key == 'cargo' ? "#{s.mode_of_transport} Freight" : charge["name"] %>
+                <%= charge_name %>
                 <small class="chargeable_weight"><%= if scope['show_chargeable_weight'] && !['import', 'export'].include?(charge_key)
                   " (Chargeable Weight: #{cargo_data[:chargeable_weight][s.id][charge_key.to_sym]} kg)"
                   end%>
