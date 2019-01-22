@@ -2,70 +2,9 @@
 
 def label = "${UUID.randomUUID().toString()}"
 
-wrap.pipeline {
+wrap.pipeline(timeout: 90) {
   wrap.stage('Code Style') {
-    podTemplate(label: label, inheritFrom: 'default',
-      containers: [
-        containerTemplate(name: 'danger', image: 'eu.gcr.io/itsmycargo-main/danger:latest', ttyEnabled: true, command: 'cat',
-          resourceRequestCpu: '250m',
-          resourceLimitCpu: '300m',
-          resourceRequestMemory: '200Mi',
-          resourceLimitMemory: '300Mi',
-        ),
-        containerTemplate(name: 'pronto', image: 'eu.gcr.io/itsmycargo-main/pronto:latest', ttyEnabled: true, command: 'cat',
-          resourceRequestCpu: '250m',
-          resourceLimitCpu: '300m',
-          resourceRequestMemory: '200Mi',
-          resourceLimitMemory: '300Mi',
-        ),
-      ]
-    ) {
-      wrap.node(label) {
-        checkoutScm()
-
-        def jobs = [:]
-
-        jobs['danger'] = {
-          withEnv(["DANGER_GITLAB_API_TOKEN=${GITLAB_TOKEN}"]) {
-            container('danger') {
-              timeout(5) { sh 'danger' }
-            }
-          }
-        }
-
-        jobs['pronto'] = {
-          container('pronto') {
-            timeout(5) {
-              sh "npm install -g @itsmycargo/eslint-config"
-
-              sh "pronto run -f checkstyle -c origin/${env.gitlabTargetBranch} --no-exit-code > checkstyle-result.xml"
-
-              ViolationsToGitLab([
-                apiToken: "${GITLAB_TOKEN}",
-                apiTokenPrivate: true,
-                authMethodHeader: true,
-
-                commentOnlyChangedContent: true,
-                createSingleFileComments: true,
-                gitLabUrl: 'https://gitlab.com',
-                keepOldComments: false,
-                mergeRequestIid: "${env.gitlabMergeRequestIid}",
-                projectId: "${env.gitlabMergeRequestTargetProjectId}",
-                shouldSetWip: true,
-                commentTemplate: "{{violation.message}}",
-                violationConfigs: [
-                  [parser: 'CHECKSTYLE', pattern: '.*\\.xml$', reporter: 'Pronto']
-                ]
-              ])
-            }
-          }
-        }
-
-        if (env.gitlabMergeRequestIid) {
-          parallel(jobs)
-        }
-      }
-    }
+    codestyle(targetBranch: 'dev', eslint: 'client/')
   }
 
   podTemplate(label: label, inheritFrom: 'default',
