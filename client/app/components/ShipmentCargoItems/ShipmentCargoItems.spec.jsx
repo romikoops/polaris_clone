@@ -40,6 +40,8 @@ const propsBase = {
     description: 'FOO',
     key: 5,
     dimension_x: 13,
+    dimension_z: 13,
+    quantity: 2,
     dimension_y: 24,
     dangerous_goods: false,
     stackable: false
@@ -82,4 +84,44 @@ const createShallow = propsInput => shallow(<ShipmentCargoItems {...propsInput} 
 
 test('shallow rendering', () => {
   expect(createShallow(propsBase)).toMatchSnapshot()
+})
+test('shallow rendering dynamic chargeable value', () => {
+  const newPropsBase = {
+    ...propsBase,
+    scope: {
+      ...propsBase.scope,
+      chargeable_weight_view: 'dynamic'
+    }
+  }
+  expect(createShallow(newPropsBase)).toMatchSnapshot()
+})
+test('shallow rendering weight chargeable value', () => {
+  const newPropsBase = {
+    ...propsBase,
+    scope: {
+      ...propsBase.scope,
+      chargeable_weight_view: 'weight'
+    }
+  }
+  expect(createShallow(newPropsBase)).toMatchSnapshot()
+})
+test('shallow rendering volume chargeable value', () => {
+  const newPropsBase = {
+    ...propsBase,
+    scope: {
+      ...propsBase.scope,
+      chargeable_weight_view: 'volume'
+    }
+  }
+  expect(createShallow(newPropsBase)).toMatchSnapshot()
+})
+test('shallow rendering both chargeable value', () => {
+  const newPropsBase = {
+    ...propsBase,
+    scope: {
+      ...propsBase.scope,
+      chargeable_weight_view: 'both'
+    }
+  }
+  expect(createShallow(newPropsBase)).toMatchSnapshot()
 })
