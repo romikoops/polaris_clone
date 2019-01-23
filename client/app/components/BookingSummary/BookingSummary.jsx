@@ -3,7 +3,7 @@ import { withNamespaces } from 'react-i18next'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import Truncate from 'react-truncate'
-import PropTypes from '../../prop-types'
+import { has } from 'lodash'
 import styles from './BookingSummary.scss'
 import { dashedGradient, switchIcon, numberSpacing } from '../../helpers'
 
@@ -11,6 +11,7 @@ function BookingSummary (props) {
   const {
     theme, totalWeight, totalVolume, cities, nexuses, trucking, modeOfTransport, loadType, t
   } = props
+
   const dashedLineStyles = {
     marginTop: '6px',
     height: '2px',
@@ -48,28 +49,28 @@ function BookingSummary (props) {
           <div className={`flex-50 layout-row layout-align-center-center layout-wrap ${styles.header_hub}`}>
             <h4 className="flex-100">
               <Truncate lines={1}>
-                {trucking.pre_carriage.truck_type ? cities.origin : nexuses.origin}
+                {trucking.preCarriage.truckType ? cities.origin : nexuses.origin}
               </Truncate>
             </h4>
             <p className={`${styles.trucking_elem} flex-none`}>
               {
                 (
-                  (cities.origin && trucking.pre_carriage.truck_type) ||
-                  (nexuses.origin && !trucking.pre_carriage.truck_type)
-                ) && `${(trucking.pre_carriage.truck_type ? t('common:withPickup') : t('common:withoutPickup'))}`
+                  (cities.origin && trucking.preCarriage.truckType) ||
+                  (nexuses.origin && !trucking.preCarriage.truckType)
+                ) && `${(trucking.preCarriage.truckType ? t('common:withPickup') : t('common:withoutPickup'))}`
               }
             </p>
           </div>
           <div className={`flex-50 layout-row layout-align-center-center layout-wrap ${styles.header_hub}`}>
             <h4 className="flex-100">
-              {trucking.on_carriage.truck_type ? cities.destination : nexuses.destination}
+              {trucking.onCarriage.truckType ? cities.destination : nexuses.destination}
             </h4>
             <p className={`${styles.trucking_elem} flex-none`}>
               {
                 (
-                  (cities.destination && trucking.on_carriage.truck_type) ||
-                  (nexuses.destination && !trucking.on_carriage.truck_type)
-                ) && `${(trucking.on_carriage.truck_type ? t('common:with') : t('common:without'))} 
+                  (cities.destination && trucking.onCarriage.truckType) ||
+                  (nexuses.destination && !trucking.onCarriage.truckType)
+                ) && `${(trucking.onCarriage.truckType ? t('common:with') : t('common:without'))} 
                 ${t('shipment:delivery').toLowerCase()}`
               }
             </p>
@@ -79,7 +80,9 @@ function BookingSummary (props) {
       <div className="flex flex-sm-40 layout-column layout-align-stretch">
         <h4 className="flex-50 layout-row layout-align-center-center">{t('cargo:totalWeight')}</h4>
         <p className="flex-50 layout-row layout-align-center-start">
-          { numberSpacing(totalWeight, 2) } kg
+          { numberSpacing(totalWeight, 2) }
+          {' '}
+          kg
         </p>
       </div>
       {
@@ -87,34 +90,15 @@ function BookingSummary (props) {
           <div className="flex layout-column layout-align-stretch">
             <h4 className="flex-50 layout-row layout-align-center-center">{t('cargo:totalVolume')}</h4>
             <p className="flex-50 layout-row layout-align-center-start">
-              { numberSpacing(totalVolume, 3) } m³
+              { numberSpacing(totalVolume, 3) }
+              {' '}
+              m³
             </p>
           </div>
         )
       }
     </div>
   )
-}
-
-BookingSummary.propTypes = {
-  theme: PropTypes.theme,
-  t: PropTypes.func.isRequired,
-  modeOfTransport: PropTypes.string,
-  totalWeight: PropTypes.number,
-  totalVolume: PropTypes.number,
-  cities: PropTypes.shape({
-    origin: PropTypes.string,
-    destination: PropTypes.string
-  }),
-  nexuses: PropTypes.shape({
-    origin: PropTypes.string,
-    destination: PropTypes.string
-  }),
-  trucking: PropTypes.shape({
-    onCarriage: PropTypes.objectOf(PropTypes.string),
-    preCarriage: PropTypes.objectOf(PropTypes.string)
-  }),
-  loadType: PropTypes.string
 }
 
 BookingSummary.defaultProps = {
@@ -131,18 +115,53 @@ BookingSummary.defaultProps = {
     destination: ''
   },
   trucking: {
-    on_carriage: { truck_type: '' },
-    pre_carriage: { truck_type: '' }
+    onCarriage: { truckType: '' },
+    preCarriage: { truckType: '' }
   },
   loadType: ''
 }
 
 function mapStateToProps (state) {
-  const { app, bookingSummary } = state
+  const { app, bookingProcess } = state
   const { tenant } = app
   const { theme } = tenant
+  const { shipment } = bookingProcess
 
-  return { ...bookingSummary, theme }
+  let totalWeight = 0
+  let totalVolume = 0
+
+  const { loadType, trucking, modeOfTransport } = shipment
+
+  if (loadType === 'container') {
+    shipment.cargoUnits.forEach((container) => {
+      totalWeight += container.quantity * container.payloadInKg
+    })
+  } else if (shipment.aggregated) {
+    totalVolume = (shipment.cargoUnits[0] && shipment.cargoUnits[0].volume) || 0
+    totalWeight = (shipment.cargoUnits[0] && shipment.cargoUnits[0].weight) || 0
+  } else if (loadType === 'cargo_item') {
+    shipment.cargoUnits.forEach((cargoItem) => {
+      totalVolume += cargoItem.quantity * ['X', 'Y', 'Z'].reduce((product, coordinate) => (
+        product * cargoItem[`dimension${coordinate}`]
+      ), 1) / 1000000
+      totalWeight += cargoItem.quantity * cargoItem.payloadInKg
+    })
+  }
+
+  const cities = {}
+  if (has(shipment, ['origin', 'city'])) {
+    cities.origin = shipment.origin.city
+  }
+  if (has(shipment, ['destination', 'city'])) {
+    cities.destination = shipment.destination.city
+  }
+  const nexuses = {}
+  if (shipment.origin) nexuses.origin = shipment.origin.nexusName
+  if (shipment.destination) nexuses.destination = shipment.destination.nexusName
+
+  return {
+    totalWeight, totalVolume, cities, nexuses, loadType, trucking, modeOfTransport, theme
+  }
 }
 
 export default withNamespaces(['cargo', 'common', 'shipment'])(withRouter(connect(mapStateToProps)(BookingSummary)))
