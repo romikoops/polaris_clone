@@ -42,7 +42,11 @@ module Locations
     context '.search' do
       it 'returns results including the desired object (en)' do
         results = Autocomplete.search(term: 'Baoshun', country_codes: ['cn'], lang: 'en')
-        expect(results.first).to eq(target_result_en)
+        expect(results.first.city).to eq('Baoshun')
+        expect(results.first.name).to eq('Shanghai')
+        expect(results.first.geojson).to eq(example_bounds)
+        expect(results.first.lat_lng).to eq({lat: 31.2699895, lng: 121.9318879})
+        expect(results.first.class).to eq(Locations::NameDecorator)
       end
     end
 

@@ -3,11 +3,12 @@
 module Locations
   class NameDecorator < SimpleDelegator
     def geojson
-      Locations::LocationBounds.bounds(osm_id)
+      return location.bounds if location
+      Locations::Location.find_by_osm_id(osm_id)&.geojson
     end
 
     def lat_lng
-      { lat: point.x, lng: point.y}
+      { lat: point.y, lng: point.x}
     end
   end
 end

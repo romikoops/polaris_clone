@@ -214,7 +214,9 @@ module ExcelTool
             end
           elsif identifier_type == 'location_id'
             geometry = find_geometry(idents_and_country)
+
             if geometry.nil?
+            
               @missing_locations << idents_and_country.join(', ')
               next
             end

@@ -6,12 +6,19 @@ module Locations
 
     def self.seeding(*terms)
       all_results = terms.map do |text|
-        search_match = Locations::Name.autocomplete(text)
-        direct_match =
-          Locations::Name.where("name ILIKE ? OR alternative_names ILIKE ?", "%#{text}%", "%#{text}%")
-        search_match | direct_match
+        # search_match = Locations::Name.autocomplete(text)
+        # direct_match =
+        #   Locations::Name.where("name ILIKE ? OR alternative_names ILIKE ?", "%#{text}%", "%#{text}%")
+        # search_match | direct_match
+        Locations::Name.autocomplete(text)
       end
-      filtered_results = all_results.reject(&:empty?).inject(:&)&.uniq
+      filtered_results = all_results
+        .reject(&:empty?)
+        .inject(:&)
+        .reject{|r| r.place_rank.nil?}
+        .compact&.uniq
+      # require 'pry';
+      # binding.pry
       filtered_results.sort_by! {|r| r.place_rank }
 
       return filtered_results.first

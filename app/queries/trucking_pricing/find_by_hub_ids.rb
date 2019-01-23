@@ -58,7 +58,7 @@ module Queries
                   CASE
                     WHEN trucking_destinations.zipcode  IS NOT NULL THEN trucking_destinations.zipcode::integer
                     WHEN trucking_destinations.distance IS NOT NULL THEN trucking_destinations.distance::integer
-                    ELSE trucking_destinations.location_id
+                    ELSE trucking_destinations.location_id::uuid
                   END AS ident_value
                 FROM trucking_pricings
                 JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id

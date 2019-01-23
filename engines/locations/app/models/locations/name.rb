@@ -8,15 +8,10 @@ module Locations
 
     pg_search_scope :autocomplete,
                     against: %i(
-                      street
-                      city
-                      country
-                      country_code
                       display_name
                       alternative_names
                       name
                       postal_code
-                      name
                     ),
                     ignoring: :accents,
                     using: {

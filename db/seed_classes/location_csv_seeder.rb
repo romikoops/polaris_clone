@@ -49,8 +49,11 @@ class LocationCsvSeeder
       alternative_names
       osm_type
       osm_id
-      coords
+      class
+      type
+      coord
       place_rank
+      importance
       street
       city
       county
@@ -69,7 +72,7 @@ class LocationCsvSeeder
           language: 'en'
         }
         keys.each_with_index do |k, i|
-          if k == :coords
+          if k == :coord
             obj[:point] = row[i]
           elsif k == :osm_id
             obj[k] = row[i].to_i.abs

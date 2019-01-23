@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 class TruckingDestination < ApplicationRecord
-  self.ignored_columns = %w(location_id)
+
   validates given_attribute_names.first.to_sym,
             uniqueness: {
               scope: given_attribute_names[1..-1],
               message: 'is a duplicate (all attributes match an existing record in the DB)'
             }
 
-  belongs_to :location, optional: true
+  belongs_to :location, optional: true, class_name: 'Locations::Location'
   has_many :hub_truckings
   has_many :trucking_pricings, through: :hub_truckings
   has_many :hubs, through: :hub_truckings
