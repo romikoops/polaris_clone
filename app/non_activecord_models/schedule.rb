@@ -74,8 +74,8 @@ class Schedule
       AND   origin_stops.id      IN (?)
       AND   destination_stops.id IN (?)
       AND   origin_layovers.trip_id = destination_layovers.trip_id
-      AND   origin_layovers.closing_date < ?
-      AND   origin_layovers.closing_date > ?
+      AND   origin_layovers.etd < ?
+      AND   origin_layovers.etd > ?
       AND   trips.load_type = ?
       ORDER BY origin_layovers.etd
     "
