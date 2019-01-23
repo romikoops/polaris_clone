@@ -20,6 +20,10 @@ class RouteSection extends React.PureComponent {
       collapsedAddressFields: {
         origin: true,
         destination: true
+      },
+      truckingAvailability: {
+        origin: null,
+        destination: null
       }
     }
 
@@ -229,6 +233,15 @@ class RouteSection extends React.PureComponent {
     }
   }
 
+  updateTruckingAvailability (target, value) {
+    this.setState(prevState => ({
+      truckingAvailability: {
+        ...prevState.truckingAvailability,
+        [target]: value
+      }
+    }))
+  }
+
   handleAutocompleteTrigger (target, address, setMarker) {
     const {
       bookingProcessDispatch, errorDispatch, shipment
@@ -242,6 +255,9 @@ class RouteSection extends React.PureComponent {
     const targets = target === 'origin' ? origins : destinations
     const availableHubIds = targets.map(targetData => targetData.hubId)
 
+    this.updateTruckingAvailability(target, 'request')
+    this.updateCollapsedAddressFields(target, false)
+
     getRequests.findAvailability(
       address.latitude,
       address.longitude,
@@ -250,6 +266,9 @@ class RouteSection extends React.PureComponent {
       availableHubIds,
       (truckingAvailable, nexusIds, hubIds) => {
         if (!truckingAvailable) {
+          this.updateTruckingAvailability(target, 'not_available')
+          this.updateCollapsedAddressFields(target, true)
+
           errorDispatch.setError({
             componentName: 'RouteSection',
             code: '1101',
@@ -259,11 +278,12 @@ class RouteSection extends React.PureComponent {
           })
           bookingProcessDispatch.updateShipment(target, { fullAddress: address.fullAddress })
         } else {
+          this.updateTruckingAvailability(target, 'animate_available')
+          setTimeout(() => this.updateTruckingAvailability(target, 'available'), 1000)
+
           bookingProcessDispatch.updateShipment(target, { ...address, hubIds })
 
           setMarker(target, { lat: address.latitude, lng: address.longitude })
-
-          this.updateCollapsedAddressFields(target, false)
         }
       }
     )
@@ -301,7 +321,7 @@ class RouteSection extends React.PureComponent {
     } = shipment
 
     const {
-      origins, destinations, truckTypes, collapsedAddressFields
+      origins, destinations, truckTypes, collapsedAddressFields, truckingAvailability
     } = this.state
 
     return (
@@ -357,6 +377,7 @@ class RouteSection extends React.PureComponent {
                       availableTargets={origins}
                       availableCounterparts={destinations}
                       countries={this.countries.origin}
+                      truckingAvailable={truckingAvailability.origin}
                     />
                   </div>
                   <div className="flex-45 layout-row layout-wrap layout-align-start-start">
@@ -388,6 +409,7 @@ class RouteSection extends React.PureComponent {
                       availableTargets={destinations}
                       availableCounterparts={origins}
                       countries={this.countries.destination}
+                      truckingAvailable={truckingAvailability.destination}
                     />
                   </div>
                   <OfferError availableMots={availableMots} componentName="RouteSection" />
