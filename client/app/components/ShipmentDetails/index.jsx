@@ -27,8 +27,8 @@ class ShipmentDetails extends React.PureComponent {
     )
 
     if (props.shipment.id && props.shipment.id !== props.shipmentId) {
-      props.bookingProcessDispatch.resetStore()
       const { loadType, direction } = props.shipment
+      props.bookingProcessDispatch.resetStore()
       props.bookingProcessDispatch.updateShipment('loadType', loadType)
       props.bookingProcessDispatch.updateShipment('direction', direction)
     }

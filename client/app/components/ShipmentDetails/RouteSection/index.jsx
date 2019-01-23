@@ -22,7 +22,6 @@ class RouteSection extends React.PureComponent {
     this.handleInputBlur = this.handleInputBlur.bind(this)
     this.handleDropdownSelect = this.handleDropdownSelect.bind(this)
     this.handleAutocompleteTrigger = this.handleAutocompleteTrigger.bind(this)
-    this.handleCarriageChange = this.handleCarriageChange.bind(this)
     this.handleTruckingDetailsChange = this.handleTruckingDetailsChange.bind(this)
 
     const { routes } = props
