@@ -51,6 +51,7 @@ class FormsyDayPickerInput extends Component {
     const fullInputProps = {
       ...inputProps,
       style: inputStyles,
+      autoComplete: 'off',
       value,
       name,
       placeholder,
