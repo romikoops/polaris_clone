@@ -8,7 +8,7 @@ import CarriageToggle from './CarriageToggle'
 import OfferError from '../../ErrorHandling/OfferError'
 import TruckingDetails from './TruckingDetails'
 import {
-  camelize, camelToSnakeCase, onlyUnique, intersection, isQuote
+  camelize, camelToSnakeCase, onlyUnique, intersection, isQuote, determineSpecialism
 } from '../../../helpers'
 import getRequests from './getRequests'
 
@@ -50,6 +50,8 @@ class RouteSection extends React.PureComponent {
 
       this.handleCarriageChange({ target: { name: camelize(carriage), checked: true } }, { force: true })
     })
+
+    this.specialty = determineSpecialism(scope.modes_of_transport)
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
@@ -304,7 +306,12 @@ class RouteSection extends React.PureComponent {
 
     return (
       <div className="route_section flex-100 content_width_booking margin_top">
-        <RouteSectionMap theme={theme} origin={origin} destination={destination}>
+        <RouteSectionMap
+          theme={theme}
+          origin={origin}
+          destination={destination}
+          withDrivingDirections={this.specialty === 'truck'}
+        >
           {
             ({ gMaps, map, setMarker }) => {
               const sharedFormProps = {
@@ -323,7 +330,13 @@ class RouteSection extends React.PureComponent {
                 <React.Fragment>
                   <div className="flex-45 layout-row layout-wrap layout-align-start-start">
                     <div className="flex-45 layout-row layout-wrap">
-                      <CarriageToggle carriage="pre" theme={theme} checked={preCarriage} onChange={this.handleCarriageChange} />
+                      <CarriageToggle
+                        carriage="pre"
+                        theme={theme}
+                        checked={preCarriage}
+                        onChange={this.handleCarriageChange}
+                        labelOnly={this.specialty === 'truck'}
+                      />
                       <TruckingDetails
                         carriageType="pre"
                         hide={loadType !== 'container' || !preCarriage}
@@ -348,7 +361,13 @@ class RouteSection extends React.PureComponent {
                   </div>
                   <div className="flex-45 layout-row layout-wrap layout-align-start-start">
                     <div className="flex-35 layout-row layout-wrap">
-                      <CarriageToggle carriage="on" theme={theme} checked={onCarriage} onChange={this.handleCarriageChange} />
+                      <CarriageToggle
+                        carriage="on"
+                        theme={theme}
+                        checked={onCarriage}
+                        onChange={this.handleCarriageChange}
+                        labelOnly={this.specialty === 'truck'}
+                      />
                       <TruckingDetails
                         carriageType="on"
                         hide={loadType !== 'container' || !onCarriage}

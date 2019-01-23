@@ -10,9 +10,6 @@ class RouteSectionMapContent extends React.PureComponent {
   constructor (props) {
     super(props)
 
-    // TODO: determine specialty using existing helper and tenant scope
-    this.specialty = 'ocean'
-
     this.mapStyle = {
       width: '100%',
       height: '600px',
@@ -71,25 +68,29 @@ class RouteSectionMapContent extends React.PureComponent {
 
   setMarker (target, address) {
     const { markers } = this.state
+    const { withDrivingDirections } = this.props
 
     // Clear previous marker from map
     if (has(markers, [target, 'title'])) {
       markers[target].setMap(null)
     }
 
-    this.setState(prevState => ({
-      markers: {
-        ...prevState.markers,
-        [target]: this.getMarker(target, address)
-      }
-    }), this.adjustMapBounds)
+    this.setState(
+      prevState => ({
+        markers: {
+          ...prevState.markers,
+          [target]: this.getMarker(target, address)
+        }
+      }),
+      () => {
+        this.adjustMapBounds()
 
-    this.setDrivingDirections()
+        if (withDrivingDirections) this.setDrivingDirections()
+      }
+    )
   }
 
   setDrivingDirections () {
-    if (this.speciality !== 'truck') return
-
     const { markers } = this.state
 
     if (Object.values(markers).some(marker => marker == null)) return
@@ -106,7 +107,7 @@ class RouteSectionMapContent extends React.PureComponent {
   }
 
   initMap () {
-    const { gMaps, origin, destination } = this.props
+    const { gMaps, origin, destination, withDrivingDirections } = this.props
 
     const mapsOptions = {
       center: {
@@ -127,7 +128,7 @@ class RouteSectionMapContent extends React.PureComponent {
 
     this.directionsDisplay = false
     this.directionsService = false
-    if (this.speciality === 'truck') {
+    if (withDrivingDirections) {
       this.directionsService = new gMaps.DirectionsService()
       this.directionsDisplay = new gMaps.DirectionsRenderer({ suppressMarkers: true })
     }
