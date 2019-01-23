@@ -13,7 +13,7 @@ class QuoteChargeBreakdown extends Component {
 
     if (Object.values(currencySections)[0].length > 1) return true
 
-    if (Object.values(currencySections)[0][0][0] === 'unknown') return false
+    if (Object.values(currencySections)[0][0][0].includes('unknown')) return false
 
     return true
   }
@@ -39,7 +39,7 @@ class QuoteChargeBreakdown extends Component {
   determineSubKey (charge) {
     const { scope, mot, t } = this.props
 
-    if (charge[0] === 'unknown') {
+    if (charge[0].includes('unknown')) {
       return `${t('shipment:motCargo', { mot: capitalize(mot) })}: ${charge[1].name}`
     }
 
@@ -125,7 +125,7 @@ class QuoteChargeBreakdown extends Component {
     if (scope.freight_in_original_currency && key === 'cargo') {
       const pricesArray = Object.entries(quote[key]).filter(array => !this.unbreakableKeys.includes(array[0]))
       const feeKeys = Object.keys(pricesArray[0][1]).filter(pKey => !this.unbreakableKeys.includes(pKey))
-      if (feeKeys.length === 1 && feeKeys[0] === 'unknown') return ''
+      if (feeKeys.length === 1 && feeKeys[0].includes('unknown')) return ''
       const { currency } = pricesArray[0][1][feeKeys[0]]
       let value = 0.0
       pricesArray.forEach((price) => {
@@ -290,7 +290,7 @@ class QuoteChargeBreakdown extends Component {
                   </span>
                 </div>
                 <div className="flex-25 layout-row layout-align-end-center">
-                  {price[0] === 'unknown' ? '' : (
+                  {price[0].includes('unknown') ? '' : (
                     <p>
                       {numberSpacing(price[1].value || price[1].total.value, 2)}
                       &nbsp;
