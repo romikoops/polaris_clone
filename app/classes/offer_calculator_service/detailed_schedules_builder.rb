@@ -185,7 +185,7 @@ module OfferCalculatorService
       ## If etd filter results in no pricings, check using closing_date
       if start_date && end_date && pricings_by_cargo_class_and_dates.empty?
         pricings_by_cargo_class_and_dates = pricings_by_cargo_class
-                                              .for_dates(closing_start_date, closing_end_date)
+                                            .for_dates(closing_start_date, closing_end_date)
       end
       pricings_by_cargo_class_and_dates
         .select { |pricing| (pricing.user_id == user_pricing_id) || pricing.user_id.nil? }
