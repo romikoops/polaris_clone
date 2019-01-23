@@ -9,7 +9,7 @@ import CarriageToggle from './CarriageToggle'
 import OfferError from '../../ErrorHandling/OfferError'
 import TruckingDetails from './TruckingDetails'
 import {
-  camelize, camelToSnakeCase, onlyUnique, isQuote
+  camelize, camelToSnakeCase, onlyUnique, isQuote, determineSpecialism
 } from '../../../helpers'
 import getRequests from './getRequests'
 
@@ -45,6 +45,8 @@ class RouteSection extends React.PureComponent {
 
       this.handleCarriageChange({ target: { name: camelize(carriage), checked: true } }, { force: true })
     })
+
+    this.specialty = determineSpecialism(scope.modes_of_transport)
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
@@ -273,7 +275,12 @@ class RouteSection extends React.PureComponent {
 
     return (
       <div className="route_section flex-100 content_width_booking margin_top">
-        <RouteSectionMap theme={theme}>
+        <RouteSectionMap
+          theme={theme}
+          origin={origin}
+          destination={destination}
+          withDrivingDirections={this.specialty === 'truck'}
+        >
           {
             ({ gMaps, map, setMarker }) => {
               const sharedFormProps = {
