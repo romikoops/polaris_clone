@@ -118,6 +118,8 @@ class Autocomplete extends PureComponent {
         this.deltaHighlightIndex(-1)
         break
       case 'Enter':
+        event.preventDefault()
+
         this.handleSelectFromIndex()
         break
       default:
