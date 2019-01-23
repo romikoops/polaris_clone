@@ -3,8 +3,8 @@
 module Locations
   class Name < ApplicationRecord
     include PgSearch
-    belongs_to :location, primary_key: 'osm_id', optional: true
-    validates :osm_id, presence: true
+    belongs_to :location, optional: true
+    # validates :osm_id, presence: true
 
     pg_search_scope :autocomplete,
                     against: %i(

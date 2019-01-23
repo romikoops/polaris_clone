@@ -5,8 +5,10 @@ require 'csv'
 class LocationCsvSeeder
   TMP_PATH = 'tmp/tmp_csv.gz'
   def self.perform
-    load_map_data('data/location_data/asia.csv.gz')
+    # load_map_data('data/location_data/asia.csv.gz')
     load_name_data('data/location_data/china_osm_2.csv.gz')
+    # load_map_data('data/location_data/europe.csv.gz')
+    # load_name_data('data/location_data/germany_osm_1.csv.gz')
     
   end
 
@@ -25,7 +27,8 @@ class LocationCsvSeeder
             name: row['name'],
             bounds: row['way'],
             osm_id: row['osm_id'].to_i.abs,
-            admin_level: row['admin_level']
+            admin_level: row['admin_level'],
+            country_code: 'cn'
           }
         end
         if locations.length > 100
@@ -76,6 +79,7 @@ class LocationCsvSeeder
             obj[:point] = row[i]
           elsif k == :osm_id
             obj[k] = row[i].to_i.abs
+            obj[:location_id] = Locations::Location.find_by_osm_id(obj[k])&.id
           elsif k == :type
             obj[:name_type] = row[i]
           elsif k == :class
@@ -84,6 +88,7 @@ class LocationCsvSeeder
             obj[k] = row[i]
           end
         end
+        
         names << obj
         if names.length > 100
           Locations::Name.import(names)

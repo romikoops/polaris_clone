@@ -46,47 +46,63 @@ class GeometryCsvSeeder
 
     # puts 'Germany Geometries seeded...'
 
-    GeometryCsvSeeder.get_s3_file('data/uk_areas.csv.gz')
+    GeometryCsvSeeder.get_s3_file('data/location_data/uk_areas.csv.gz')
 
     Zlib::GzipReader.open(TMP_PATH) do |gz|
       csv = CSV.new(gz, col_sep: "\t", quote_char: "'")
-
+      locations = []
+      names = []
       csv.each do |row|
-        Locations::Location.import([{
-                          country: 'United Kingdom of Great Britain and Northern Ireland',
-                          country_code: 'uk',
-                          bounds: RGeo::GeoJSON.decode(row.second),
-                          postal_code: row.first
-                        }],
-                        on_duplicate_key_update: {
-                          conflict_target: %i(postal_code city province country),
-                          columns:         %i(bounds)
-                        })
+        location = Locations::Location.new(
+          country_code: 'GB',
+          bounds: RGeo::GeoJSON.decode(row.second),
+          name: row.first
+        )
+        name = Locations::Name.new(
+          country_code: 'GB',
+          country: 'United Kingdom of Great Britain and Northern Ireland',
+          name: row.first,
+          postal_code: row.first,
+          location: location
+        )
+        locations << location
+        names << name
+        # binding.pry
+    # AB -> bounds
+       
       end
+      Locations::Location.import(locations)
+      Locations::Name.import(names)
     end
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)
 
     puts 'UK Area Geometries seeded...'
 
-    GeometryCsvSeeder.get_s3_file('data/uk_districts.csv.gz')
+    GeometryCsvSeeder.get_s3_file('data/location_data/uk_districts.csv.gz')
 
     Zlib::GzipReader.open(TMP_PATH) do |gz|
       csv = CSV.new(gz, col_sep: "\t", quote_char: "'")
-
+      names = []
+      locations = []
       csv.each do |row|
-        postal_code = row.first
-        area_code, = postal_code.match(/([A-Z]+)(\d+)/).captures
-        Locations::Location.import([{
-                          country: 'United Kingdom of Great Britain and Northern Ireland',
-                          country_code: 'uk',
-                          bounds: RGeo::GeoJSON.decode(row.second),
-                          postal_code: postal_code
-                        }],
-                        on_duplicate_key_update: {
-                          conflict_target: %i(postal_code  city province country),
-                          columns:         %i(bounds)
-                        })
+       ## AB10 -> bounds
+        location = Locations::Location.new(
+          country_code: 'GB',
+          bounds: RGeo::GeoJSON.decode(row.second),
+          name: row.first
+        )
+        name = Locations::Name.new(
+          country_code: 'GB',
+          country: 'United Kingdom of Great Britain and Northern Ireland',
+          name: row.first,
+          postal_code: row.first,
+          location_id: location.id
+        )
+        locations << location
+        names << name
       end
+      Locations::Location.import(locations)
+      Locations::Name.import(names)
     end
     File.delete(TMP_PATH) if File.exist?(TMP_PATH)
 

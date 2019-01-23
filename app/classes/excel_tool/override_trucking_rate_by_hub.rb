@@ -217,7 +217,7 @@ module ExcelTool
 
             if geometry.nil?
             
-              @missing_locations << idents_and_country.join(', ')
+              @missing_locations << idents_and_country.values.join(', ')
               next
             end
             stats[:trucking_destinations][:number_created] += 1
@@ -578,10 +578,11 @@ module ExcelTool
     end
 
     def find_geometry(idents_and_country)
+      
       geometry = if @identifier_modifier == 'postal_code'
-                   Locations::Name.find_by_postal_code(idents_and_country[:ident].upcase)&.location
+                   Locations::Name.find_by(postal_code: idents_and_country[:ident].upcase, country_code: idents_and_country[:country])&.location
                  else
-                  # binding.pry
+                  
                   begin
                   p [idents_and_country[:sub_ident], idents_and_country[:ident]]
                    Locations::NameFinder.seeding(
@@ -592,9 +593,9 @@ module ExcelTool
                   binding.pry 
                   end
                  end
-                #  binding.pry
+                
       if geometry.nil?
-        # binding.pry
+        
         geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
         return nil if geocoder_results.first.nil?
 
