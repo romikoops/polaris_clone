@@ -4,6 +4,7 @@ import AddressFields from './AddressFields'
 
 function RouteSectionForm ({
   carriage,
+  collapsedAddressFields,
   ...childProps
 }) {
   return (
@@ -11,7 +12,7 @@ function RouteSectionForm ({
       {
         carriage
           ? (
-            <AddressFields {...childProps} />
+            <AddressFields {...childProps} collapsed={collapsedAddressFields} />
           )
           : (
             <Dropdown {...childProps} />

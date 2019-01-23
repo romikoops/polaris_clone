@@ -16,11 +16,10 @@ function AddressFields ({
   onInputBlur,
   formData,
   t,
-  countries
+  countries,
+  collapsed,
+  onClickCollapser
 }) {
-  // TODO: Add Collapsing logic
-  const hideFields = false
-
   return (
     <div className={`route_section_form ${styles.route_section_form_wrapper}`}>
       <Autocomplete
@@ -44,8 +43,9 @@ function AddressFields ({
         <CollapsingBar
           headerWrapClasses={`${styles.header_wrapper}`}
           wrapperContentClasses={`${styles.content_wrapper}`}
+          collapsed={collapsed}
           contentHeader={(
-            <div className={`${styles.btn_address_form}`}>
+            <div className={`${styles.btn_address_form}`} onClick={() => onClickCollapser(target)} >
               <i className={`${styles.down} flex-none fa fa-angle-double-down`} />
               <i className={`${styles.up} flex-none fa fa-angle-double-up ccb_origin_expand`} />
             </div>
@@ -104,7 +104,6 @@ function AddressFields ({
             </div>
           )}
         />
-        <CollapsingContent collapsed={hideFields} />
       </div>
     </div>
   )

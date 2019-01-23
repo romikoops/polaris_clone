@@ -237,9 +237,9 @@ class Autocomplete extends PureComponent {
   handleInputChange (input) {
     const { countries } = this.props
     const options = { input }
-    // if (countries.length > 0) {
-    //   options.componentRestrictions = { country: countries }
-    // }
+    if (countries.length > 0) {
+      options.componentRestrictions = { country: countries }
+    }
 
     this.setState({ queryingLocations: true }, () => {
       this.addressService.getPlacePredictions(options, (results, status) => {

@@ -16,13 +16,20 @@ class RouteSection extends React.PureComponent {
   constructor (props) {
     super(props)
 
-    this.state = {}
+    this.state = {
+      collapsedAddressFields: {
+        origin: true,
+        destination: true
+      }
+    }
 
     this.handleCarriageChange = this.handleCarriageChange.bind(this)
     this.handleInputBlur = this.handleInputBlur.bind(this)
     this.handleDropdownSelect = this.handleDropdownSelect.bind(this)
     this.handleAutocompleteTrigger = this.handleAutocompleteTrigger.bind(this)
     this.handleTruckingDetailsChange = this.handleTruckingDetailsChange.bind(this)
+    this.handleClickCollapser = this.handleClickCollapser.bind(this)
+    this.updateCollapsedAddressFields = this.updateCollapsedAddressFields.bind(this)
 
     const { routes } = props
     this.countries = { origin: [], destination: [] }
@@ -212,7 +219,7 @@ class RouteSection extends React.PureComponent {
 
       bookingProcessDispatch.updateShipment(target, targetData)
 
-      setMarker(target, { lat, lng }, value.name)
+      setMarker(target, { lat, lng })
     } else {
       bookingProcessDispatch.updateShipment(target, {})
 
@@ -252,10 +259,34 @@ class RouteSection extends React.PureComponent {
         } else {
           bookingProcessDispatch.updateShipment(target, { ...address, hubIds })
 
-          setMarker(target, { lat: address.latitude, lng: address.longitude }, address.fullAddress)
+          setMarker(target, { lat: address.latitude, lng: address.longitude })
+
+          this.updateCollapsedAddressFields(target, false)
         }
       }
     )
+  }
+
+  handleClickCollapser (target) {
+    this.setState(prevState => (
+      {
+        collapsedAddressFields: {
+          ...prevState.collapsedAddressFields,
+          [target]: !prevState.collapsedAddressFields[target]
+        }
+      }
+    ))
+  }
+
+  updateCollapsedAddressFields (target, value) {
+    this.setState(prevState => (
+      {
+        collapsedAddressFields: {
+          ...prevState.collapsedAddressFields,
+          [target]: value
+        }
+      }
+    ))
   }
 
   render () {
@@ -267,11 +298,13 @@ class RouteSection extends React.PureComponent {
       onCarriage, preCarriage, origin, destination, trucking, loadType
     } = shipment
 
-    const { origins, destinations, truckTypes } = this.state
+    const {
+      origins, destinations, truckTypes, collapsedAddressFields
+    } = this.state
 
     return (
       <div className="route_section flex-100 content_width_booking margin_top">
-        <RouteSectionMap theme={theme}>
+        <RouteSectionMap theme={theme} origin={origin} destination={destination}>
           {
             ({ gMaps, map, setMarker }) => {
               const sharedFormProps = {
@@ -285,62 +318,62 @@ class RouteSection extends React.PureComponent {
                 gMaps,
                 map
               }
-              const preCarriageSection = (
-                <div className="flex-45 layout-row layout-wrap layout-align-start-start">
-                  <div className="flex-45 layout-row layout-wrap">
-                    <CarriageToggle carriage="pre" theme={theme} checked={preCarriage} onChange={this.handleCarriageChange} />
-                    <TruckingDetails
-                      carriageType="pre"
-                      hide={loadType !== 'container' || !preCarriage}
-                      theme={theme}
-                      trucking={trucking}
-                      truckTypes={truckTypes.origin}
-                      target="preCarriage"
-                      onTruckingDetailsChange={this.handleTruckingDetailsChange}
-                    />
-                  </div>
-                  <RouteSectionForm
-                    {...sharedFormProps}
-                    target="origin"
-                    carriage={preCarriage}
-                    formData={origin}
-                    availableTargets={origins}
-                    availableCounterparts={destinations}
-                    countries={this.countries.origin}
-                  />
-                </div>
-              )
-              const onCarriageSection = (
-                <div className="flex-45 layout-row layout-wrap layout-align-start-start">
-                  <div className="flex-35 layout-row layout-wrap">
-                    <CarriageToggle carriage="on" theme={theme} checked={onCarriage} onChange={this.handleCarriageChange} />
-                    <TruckingDetails
-                      carriageType="on"
-                      hide={loadType !== 'container' || !onCarriage}
-                      theme={theme}
-                      trucking={trucking}
-                      truckTypes={truckTypes.destination}
-                      target="onCarriage"
-                      onTruckingDetailsChange={this.handleTruckingDetailsChange}
-                    />
-                  </div>
-                  <RouteSectionForm
-                    {...sharedFormProps}
-                    target="destination"
-                    carriage={onCarriage}
-                    formData={destination}
-                    availableTargets={destinations}
-                    availableCounterparts={origins}
-                    countries={this.countries.destination}
-                  />
-                </div>
-              )
 
-              return [
-                preCarriageSection,
-                onCarriageSection,
-                <OfferError availableMots={availableMots} componentName="RouteSection" />
-              ]
+              return (
+                <React.Fragment>
+                  <div className="flex-45 layout-row layout-wrap layout-align-start-start">
+                    <div className="flex-45 layout-row layout-wrap">
+                      <CarriageToggle carriage="pre" theme={theme} checked={preCarriage} onChange={this.handleCarriageChange} />
+                      <TruckingDetails
+                        carriageType="pre"
+                        hide={loadType !== 'container' || !preCarriage}
+                        theme={theme}
+                        trucking={trucking}
+                        truckTypes={truckTypes.origin}
+                        target="preCarriage"
+                        onTruckingDetailsChange={this.handleTruckingDetailsChange}
+                      />
+                    </div>
+                    <RouteSectionForm
+                      {...sharedFormProps}
+                      collapsedAddressFields={collapsedAddressFields.origin}
+                      onClickCollapser={this.handleClickCollapser}
+                      target="origin"
+                      carriage={preCarriage}
+                      formData={origin}
+                      availableTargets={origins}
+                      availableCounterparts={destinations}
+                      countries={this.countries.origin}
+                    />
+                  </div>
+                  <div className="flex-45 layout-row layout-wrap layout-align-start-start">
+                    <div className="flex-35 layout-row layout-wrap">
+                      <CarriageToggle carriage="on" theme={theme} checked={onCarriage} onChange={this.handleCarriageChange} />
+                      <TruckingDetails
+                        carriageType="on"
+                        hide={loadType !== 'container' || !onCarriage}
+                        theme={theme}
+                        trucking={trucking}
+                        truckTypes={truckTypes.destination}
+                        target="onCarriage"
+                        onTruckingDetailsChange={this.handleTruckingDetailsChange}
+                      />
+                    </div>
+                    <RouteSectionForm
+                      {...sharedFormProps}
+                      collapsedAddressFields={collapsedAddressFields.destination}
+                      onClickCollapser={this.handleClickCollapser}
+                      target="destination"
+                      carriage={onCarriage}
+                      formData={destination}
+                      availableTargets={destinations}
+                      availableCounterparts={origins}
+                      countries={this.countries.destination}
+                    />
+                  </div>
+                  <OfferError availableMots={availableMots} componentName="RouteSection" />
+                </React.Fragment>
+              )
             }
           }
         </RouteSectionMap>

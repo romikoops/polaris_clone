@@ -20,7 +20,7 @@ class RouteSectionMapContent extends React.PureComponent {
       boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
     }
 
-    this.state = { markers: {} }
+    this.state = { markers: { origin: null, destination: null } }
 
     this.getIcon = this.getIcon.bind(this)
     this.setMarker = this.setMarker.bind(this)
@@ -54,7 +54,7 @@ class RouteSectionMapContent extends React.PureComponent {
     return null
   }
 
-  getMarker (target, address, name) {
+  getMarker (target, address) {
     if (!address) return null
 
     const { gMaps } = this.props
@@ -62,14 +62,14 @@ class RouteSectionMapContent extends React.PureComponent {
     return new gMaps.Marker({
       position: address,
       map: this.map,
-      title: name,
+      title: target,
       icon: this.getIcon(target),
       optimized: false,
       keyboard: false
     })
   }
 
-  setMarker (target, address, name) {
+  setMarker (target, address) {
     const { markers } = this.state
 
     // Clear previous marker from map
@@ -80,7 +80,7 @@ class RouteSectionMapContent extends React.PureComponent {
     this.setState(prevState => ({
       markers: {
         ...prevState.markers,
-        [target]: this.getMarker(target, address, name)
+        [target]: this.getMarker(target, address)
       }
     }), this.adjustMapBounds)
 
@@ -106,7 +106,7 @@ class RouteSectionMapContent extends React.PureComponent {
   }
 
   initMap () {
-    const { gMaps } = this.props
+    const { gMaps, origin, destination } = this.props
 
     const mapsOptions = {
       center: {
@@ -122,7 +122,7 @@ class RouteSectionMapContent extends React.PureComponent {
       zoomControl: false
     }
 
-    this.map = new gMaps.Map(document.getElementById('map'), mapsOptions)
+    this.map = new gMaps.Map(this.mapDiv, mapsOptions)
     removeTabIndex(this.map, gMaps)
 
     this.directionsDisplay = false
@@ -131,6 +131,16 @@ class RouteSectionMapContent extends React.PureComponent {
       this.directionsService = new gMaps.DirectionsService()
       this.directionsDisplay = new gMaps.DirectionsRenderer({ suppressMarkers: true })
     }
+
+    // set initial markers
+    if (origin.latitude && origin.longitude) {
+      this.setMarker('origin', { lat: origin.latitude, lng: origin.longitude })
+    }
+    if (destination.latitude && destination.longitude) {
+      this.setMarker('destination', { lat: destination.latitude, lng: destination.longitude })
+    }
+
+    this.forceUpdate()
   }
 
   adjustMapBounds () {
@@ -159,9 +169,9 @@ class RouteSectionMapContent extends React.PureComponent {
 
     return (
       <div className={`flex-100 ${styles.route_section_map}`}>
-        <div id="map" style={this.mapStyle} />
+        <div ref={(div) => { this.mapDiv = div }} id="map" style={this.mapStyle} />
         <div className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.children_wrapper}`}>
-          { children({ gMaps, map: this.map, setMarker: this.setMarker }) }
+          { this.map && children({ gMaps, map: this.map, setMarker: this.setMarker }) }
         </div>
       </div>
     )
