@@ -7,6 +7,7 @@ class CreateLocationsLocations < ActiveRecord::Migration[5.2]
       t.integer :osm_id, :limit => 8
       t.string :name
       t.integer :admin_level
+      t.string :country_code
       t.timestamps
     end
   end

@@ -4,9 +4,10 @@ class CreateLocationsNames < ActiveRecord::Migration[5.2]
   def change
     create_table :locations_names, id: :uuid do |t|
       t.string 'language'
-      t.integer 'osm_id', :limit => 8
-      t.integer 'place_rank', :limit => 8
-      t.integer 'importance', :limit => 8
+      t.uuid    'location_id'
+      t.integer 'osm_id', limit: 8
+      t.integer 'place_rank', limit: 8
+      t.integer 'importance', limit: 8
       t.string 'osm_type', index: true
       t.string 'street'
       t.string 'city'

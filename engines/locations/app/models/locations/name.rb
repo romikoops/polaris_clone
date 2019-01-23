@@ -46,6 +46,7 @@ end
 #
 #  id                :uuid             not null, primary key
 #  language          :string
+#  location_id       :uuid
 #  osm_id            :bigint(8)
 #  place_rank        :bigint(8)
 #  importance        :bigint(8)

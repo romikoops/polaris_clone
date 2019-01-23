@@ -442,12 +442,14 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.bigint "osm_id"
     t.string "name"
     t.integer "admin_level"
+    t.string "country_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "locations_names", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "language"
+    t.uuid "location_id"
     t.bigint "osm_id"
     t.bigint "place_rank"
     t.bigint "importance"
