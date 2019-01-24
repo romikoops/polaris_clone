@@ -7,15 +7,15 @@ jira_keys_regexp = Regexp.new(/((?:#{jira_keys})-[0-9]+)/)
 jira_issues = []
 
 # Search Commits
-jira_issues << git.commits.map { |commit| commit.message.scan(jira_keys_regexp) }.compact
-fix_chore_commits = git.commits.none? { |commit| commit.message.scan(/\A(chore|fix|hotfix):/i).empty? }
+jira_issues += git.commits.flat_map { |commit| commit.message.scan(jira_keys_regexp) }.compact.uniq
+fix_chore_commits = git.commits.any? { |commit| !commit.message.scan(/\A(chore|fix|hotfix):/i).empty? }
 
 # MR Tickets
-mr_title_issues = gitlab.mr_title.scan(jira_keys_regexp)
+mr_title_issues = gitlab.mr_title.scan(jira_keys_regexp).flatten.uniq
 fix_chore_mr = !gitlab.mr_title.scan(/(chore|fix|hotfix):/i).empty?
 
 message = ''
-if jira_issues.flatten.uniq.empty? && !fix_chore_commits
+if jira_issues.empty? && !fix_chore_commits
   message += <<~MESSAGE
     This Merge Request does not mention any JIRA tickets in any of its commit messages.
 
