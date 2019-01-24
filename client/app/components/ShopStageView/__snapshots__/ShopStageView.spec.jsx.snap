@@ -39,7 +39,7 @@ exports[`shallow rendering 1`] = `
   >
     <div
       className="stage_box flex-none layout-column layout-align-start-center "
-      onClick={null}
+      onClick={[Function]}
     >
       <div
         className="wrapper_shop_stage_current"
