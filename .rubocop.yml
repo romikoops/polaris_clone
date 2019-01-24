@@ -27,6 +27,7 @@ Metrics/LineLength:
     - engines/*/spec/**/*_spec.rb
     - qa/features/**/*.feature
     - spec/**/*_spec.rb
+    - db/custom_seeds/*.rb
 
 Metrics/MethodLength:
   Max: 25

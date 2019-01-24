@@ -360,4 +360,12 @@
       </ul>
     </div>
   <% end %>
+  <% unless content['disclaimer'].nil? %>
+    <div class="remarks">
+      <ul> <% content['disclaimer'].each do |section| %>
+        <li class="note-header"> <%= section['text'] %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 </div>

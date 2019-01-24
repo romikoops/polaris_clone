@@ -2,7 +2,10 @@
 
 class QuoteMailerPreview < ActionMailer::Preview
   def quotation_email
-    quotation = Quotation.last
+    # quotation = Quotation.last
+    # @shipments = Shipment.where(quotation_id: quotation.id)
+    ids = Tenant.gateway.shipments.ids
+    quotation = Quotation.where(original_shipment_id: ids).last
     @shipments = Shipment.where(quotation_id: quotation.id)
     @shipment = @shipments.first
     @email = 'demo@itsmycargo.com'

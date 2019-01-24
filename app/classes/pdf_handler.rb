@@ -8,19 +8,20 @@ class PdfHandler
   def initialize(args = {})
     args.symbolize_keys!
 
-    @layout     = args[:layout]
-    @template   = args[:template]
-    @footer     = args[:footer]
-    @margin     = args[:margin]
-    @shipment   = args[:shipment]
-    @shipments  = args[:shipments] || []
-    @name       = args[:name]
-    @quotes     = args[:quotes]
-    @quotation  = args[:quotation]
-    @logo       = args[:logo]
-    @load_type  = args[:load_type]
-    @remarks    = args[:remarks]
+    @layout                = args[:layout]
+    @template              = args[:template]
+    @footer                = args[:footer]
+    @margin                = args[:margin]
+    @shipment              = args[:shipment]
+    @shipments             = args[:shipments] || []
+    @name                  = args[:name]
+    @quotes                = args[:quotes]
+    @quotation             = args[:quotation]
+    @logo                  = args[:logo]
+    @load_type             = args[:load_type]
+    @remarks               = args[:remarks]
     @hide_cargo_sub_totals = false
+    @content               = {}
 
     @cargo_data = {
       vol: {},
@@ -32,6 +33,7 @@ class PdfHandler
     @shipments.each do |s|
       calculate_cargo_data(s)
     end
+    @content = Content.get_component('QuotePdf', @shipment.tenant_id) if @name == 'quotation'
 
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
   end
@@ -43,7 +45,7 @@ class PdfHandler
            shipment.cargo_units.inject(0) do |sum, hash|
              sum + hash[:quantity].to_f * hash[:payload_in_kg].to_f
            end
-    end
+         end
     chargeable_weight = {}
     chargeable_weight[:cargo] = if shipment.aggregated_cargo
                                   shipment.aggregated_cargo.weight.to_f
@@ -85,7 +87,8 @@ class PdfHandler
         tenant: @shipment.tenant,
         cargo_data: @cargo_data,
         notes: @shipment.route_notes,
-        hide_cargo_sub_totals: @hide_cargo_sub_totals
+        hide_cargo_sub_totals: @hide_cargo_sub_totals,
+        content: @content
       }
     )
     response = BreezyPDFLite::RenderRequest.new(
