@@ -192,11 +192,15 @@ module ExcelDataServices
         pricing_to_update.save!
 
         pricing_detail_params_arr = build_pricing_detail_params_for_pricing(row, data_extraction_method)
+        existing_pricing_details = pricing_to_update.pricing_details
+        new_pricing_details = []
         pricing_detail_params_arr.each do |pricing_detail_params|
           pricing_detail = pricing_to_update.pricing_details.find_or_initialize_by(pricing_detail_params)
           add_stats(:pricing_details, pricing_detail)
           pricing_detail.save!
+          new_pricing_details << pricing_detail
         end
+        (existing_pricing_details - new_pricing_details).map(&:destroy)
       end
     end
   end
