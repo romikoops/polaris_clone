@@ -23,7 +23,7 @@ class PdfHandler
     @hide_cargo_sub_totals = false
     @content               = {}
     @hide_grand_total = {}
-    @scope      = @shipment.tenant.scope
+    @scope = @shipment.tenant.scope
 
     @cargo_data = {
       vol: {},
@@ -34,38 +34,43 @@ class PdfHandler
     @shipments << @shipment if @shipments.empty?
     @shipments.each do |s|
       calculate_cargo_data(s)
-      @hide_grand_total[s.id.to_s] = should_hide_grand_total(s)
+      @hide_grand_total[s.id] = hide_grand_total?(s)
     end
     @content = Content.get_component('QuotePdf', @shipment.tenant_id) if @name == 'quotation'
 
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
   end
 
-  def should_hide_grand_total(shipment)
+  def hide_grand_total?(shipment)
     return true if @scope['hide_grand_total']
     return false if !@scope['hide_grand_total'] && !@scope['hide_converted_grand_total']
 
     currencies = []
-    shipment.selected_offer
-            .except('total', 'edited_total', 'name')
-            .each do |charge_key, charge|
-      currencies << if %w(export import).include?(charge_key)
-                      charge
-                    .except('total', 'edited_total', 'name')
-                    .keys.map { |k| charge[k]['currency'] }
-                    elsif charge_key == 'cargo'
-                      charge.except('total', 'edited_total', 'name').keys
-                            .reject {|k| k.include?('unknown')}
-                            .map { |k| charge[k].except('total', 'edited_total', 'name') }
-                            .map { |obj| obj.keys.map { |k| obj[k]['currency'] } }
-                    else
-                      charge
-                    .except('total', 'edited_total', 'name')
-                    .keys.map { |k| charge[k]['total']['currency'] }
-                    end
-    end
-
-    currencies.flatten.compact.uniq.count > 1
+    result = shipment
+             .selected_offer
+             .except('total', 'edited_total', 'name')
+             .find do |charge_key, charge|
+               charge_keys = charge
+                             .except('total', 'edited_total', 'name')
+                             .keys
+               charge_currencies = if %w(export import).include?(charge_key)
+                                     charge_keys.map { |k| charge[k]['currency'] }
+                                   elsif charge_key == 'cargo'
+                                     charge_keys
+                                       .map do |k|
+                                         charge[k]
+                                           .except('total', 'edited_total', 'name')
+                                           .keys
+                                           .reject { |rk| rk.include?('unknown') }
+                                           .map { |ck| charge.dig(k, ck, 'currency') }
+                                       end
+                                   else
+                                     charge_keys.map { |k| charge[k]['total']['currency'] }
+                                   end
+               currencies += charge_currencies.flatten
+               currencies.compact.uniq.count > 1
+             end
+    result.present?
   end
 
   def calculate_cargo_data(shipment)

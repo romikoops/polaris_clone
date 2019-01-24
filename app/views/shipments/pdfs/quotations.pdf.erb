@@ -326,7 +326,7 @@
           </div>
         </div>
       <% end %>
-      <% unless hide_grand_total[s.id.to_s] %>
+      <% unless hide_grand_total[s.id] %>
         <div class="total-row">
           <h4>Total</h4>
           <p class="quote"><%= '%.2f' % s.selected_offer["total"]["value"].to_f %>

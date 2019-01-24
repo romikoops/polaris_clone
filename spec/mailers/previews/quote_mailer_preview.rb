@@ -2,7 +2,8 @@
 
 class QuoteMailerPreview < ActionMailer::Preview
   def quotation_email
-    quotation = Quotation.last
+    # quotation = Quotation.last
+    quotation = Tenant.fivestar.shipments.where.not(quotation_id: nil).last.quotation
     @shipments = Shipment.where(quotation_id: quotation.id)
     @shipments = Shipment.where(quotation_id: quotation.id)
     @shipment = @shipments.first
