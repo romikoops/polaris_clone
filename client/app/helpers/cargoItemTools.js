@@ -1,4 +1,4 @@
-import { numberSpacing } from "./"
+import { numberSpacing } from './'
 
 export const effectiveKgPerCubicMeter = {
   air: 167,
@@ -48,58 +48,62 @@ export function fixedWeightChargeableString(cargoItems, weight, t, scope) {
   const chargeableVolumeVal = chargeableWeightVal / 1000
   return chargeableString (chargeableVolumeVal, chargeableWeightVal, showVolume, t, scope)
 }
-export function chargeableObject (volume, weight, showVolume, t, scope) {
+export function chargeableObject (volumeVal, weightVal, showVolume, t, scope) {
   switch (scope.chargeable_weight_view) {
     case 'weight':
       
       return {
-        value: `<span>${numberSpacing(weight, 2)}</span> kg`,
+        value: `<span>${numberSpacing(weightVal, 2)}</span> kg`,
         title: t('cargo:chargeableWeight')
       }
     case 'volume':
       
       return {
-        value: `<span>${numberSpacing(volume, 3)}</span> m<sup>3</sup>`,
+        value: `<span>${numberSpacing(volumeVal, 3)}</span> m<sup>3</sup>`,
         title: t('cargo:chargeableVolume')
       }
     case 'both':
       
       return {
-        value: `<span>${numberSpacing(volume, 3)}</span> t | m<sup>3</sup>`,
+        value: `<span>${numberSpacing(volumeVal, 3)}</span> t | m<sup>3</sup>`,
         title: t('cargo:chargeableWeightVol')
       }
     case 'dynamic':
-      
+
       return showVolume ? {
-        value: `<span>${numberSpacing(volume, 3)}</span> m<sup>3</sup>`,
+        value: `<span>${numberSpacing(volumeVal, 3)}</span> m<sup>3</sup>`,
         title: t('cargo:chargebleVolume')
       } : {
-        value: `<span>${numberSpacing(weight, 2)}</span> kg`,
+        value: `<span>${numberSpacing(weightVal, 2)}</span> kg`,
         title: t('cargo:chargeableWeight')
       }
     default:
       return {
-        value: `<span>${numberSpacing(volume, 3)}</span> t | m<sup>3</sup>`,
+        value: `<span>${numberSpacing(volumeVal, 3)}</span> t | m<sup>3</sup>`,
         title: t('cargo:chargeableWeightVol')
       }
   }
 }
-export function chargeableString (volume, weight, showVolume, t, scope) {
+export function chargeableString (volumeVal, weightVal, showVolume, t, scope) {
   switch (scope.chargeable_weight_view) {
     case 'weight':
       
-      return t('cargo:chargeableWeightWithValue', { value: weight})
+      return t('cargo:chargeableWeightWithValue', { value: weightVal})
     case 'volume':
       
-      return t('cargo:chargeableVolumeWithValue', { value: volume})
+      return t('cargo:chargeableVolumeWithValue', { value: volumeVal})
     case 'both':
       
-      return t('cargo:chargeableWeightVolWithValue', { value: volume})
+      return t('cargo:chargeableWeightVolWithValue', { value: volumeVal})
     case 'dynamic':
       
-      return showVolume ? t('cargo:chargeableVolumeWithValue', { value: volume}) :  t('cargo:chargeableWeightWithValue', { value: weight})
+      if (showVolume) {
+        return t('cargo:chargeableVolumeWithValue', { value: volumeVal})
+      } else {
+        return t('cargo:chargeableWeightWithValue', { value: weightVal})
+      }
     default:
-      return t('cargo:chargeableWeightVolWithValue', { value: volume})
+      return t('cargo:chargeableWeightVolWithValue', { value: volumeVal})
   }
 }
 export function chargeableWeight (cargoItem, mot) {
