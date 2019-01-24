@@ -651,6 +651,7 @@
     "containers": "Containers",
     "cargoItems": "Cargo Items",
     "yourCargo": "Your Cargo",
+    "yourContainer": "Your Container",
     "cargoGroup": "Cargo Group {{index}}",
     "fillFormCargoDetails": "(Fill the form with your cargo details)",
     "nonStackableFirst": "We currently do not offer freight rates for non-stackable cargo in our Web Shop.",

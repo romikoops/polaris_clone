@@ -4,20 +4,20 @@ import styles from './index.scss'
 import QuantityInput from '../QuantityInput'
 
 function CargoUnitBox ({
-  cargoUnit, i, onDeleteUnit, onChangeCargoUnitInput, children, t, uniqKey
+  cargoUnit, i, onDeleteUnit, onChangeCargoUnitInput, children, t, uniqKey, container
 }) {
   if (!cargoUnit) return ''
 
   return (
     <div
       key={uniqKey}
-      name={`${i}-cargoItem`}
+      name={`${i}-${container ? 'container' : 'cargoItem'}`}
       className="layout-row flex-100 layout-wrap layout-align-stretch"
       style={{ position: 'relative', margin: '30px 0' }}
     >
       <div className={`flex-100 layout-align-start-center layout-row ${styles.cargo_unit_header}`}>
-        <h3>{t('cargo:yourCargo')}</h3>
-
+        <h3>{container ? t('cargo:yourContainer') : t('cargo:yourCargo')}</h3>
+        {console.log(children)}
         <div className={styles.delete_icon} onClick={() => onDeleteUnit(cargoUnit, i)}>
           {t('common:delete')}
           <i className="fa fa-trash" />

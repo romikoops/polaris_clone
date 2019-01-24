@@ -128,6 +128,13 @@
       width: 1200px;
     }
   }
+  .content_width_booking_half {
+    width: 650px;
+    max-width: 95%;
+    @media screen and (min-width: 1920px) {
+      width: 1000px;
+    }
+  }
   .margin_5 {
     margin-top: 5px;
     margin-bottom: 5px;

@@ -128,10 +128,12 @@ class CargoSection extends React.PureComponent {
       theme, scope, cargoItemTypes, maxDimensions, shipment, ShipmentDetails, toggleModal, totalShipmentErrors
     } = this.props
 
+    const cargoItem = shipment.loadType === 'cargo_item'
+
     return (
       <div className="route_section_form layout-row flex-100 layout-wrap layout-align-center-center">
-        <div className="layout-row flex-none layout-wrap layout-align-center-center content_width_booking">
-          {shipment.loadType === 'cargo_item' && (
+        <div className={`layout-row flex-none layout-wrap layout-align-center-center ${cargoItem ? 'content_width_booking' : 'content_width_booking_half'}`}>
+          {cargoItem && (
             <CargoUnitToggleMode disabled={!scope.total_dimensions} checked={shipment.aggregatedCargo} onToggleAggregated={this.handleToggleAggregated} />
           )}
           <CargoUnits

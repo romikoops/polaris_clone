@@ -25,15 +25,27 @@ function Container ({
       cargoUnit={container}
       i={i}
       onDeleteUnit={onDeleteUnit}
+      container
     >
       <div style={{ position: 'relative' }}>
+        <div className="layout-row flex-55">
+          <CargoUnitNumberInput
+            className={styles.padding_section}
+            labelText={t('cargo:cargoGrossWeight')}
+            name={`${i}-payloadInKg`}
+            onChange={onChangeCargoUnitInput}
+            unit="kg"
+            maxDimension={maxPayloadInKg}
+            value={container.payloadInKg}
+          />
+        </div>
         <div className="flex-100 layout-row" />
         <div
-          className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.padding_section}`}
+          className={`layout-row flex-100 layout-wrap layout-align-space-between-center ${styles.padding_section}`}
           style={{ margin: '20px 0' }}
         >
 
-          <div className="layout-row flex-40 layout-wrap layout-align-start-center colli_type">
+          <div className="layout-row flex-60 layout-wrap layout-align-start-center colli_type">
             <div style={{ width: '95%' }}>
               <NamedSelect
                 className={styles.select_100}
@@ -47,19 +59,8 @@ function Container ({
             </div>
           </div>
 
-          <div className="layout-row flex-35">
-            <CargoUnitNumberInput
-              labelText={t('cargo:cargoGrossWeight')}
-              name={`${i}-payloadInKg`}
-              onChange={onChangeCargoUnitInput}
-              unit="kg"
-              maxDimension={maxPayloadInKg}
-              value={container.payloadInKg}
-            />
-          </div>
-
           <div
-            className="layout-row flex-25 layout-wrap layout-align-start-center"
+            className="layout-row flex-40 layout-wrap layout-align-start-center"
             onClick={scope.dangerous_goods ? '' : () => toggleModal('noDangerousGoods')}
           >
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
