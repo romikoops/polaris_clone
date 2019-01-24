@@ -8,12 +8,14 @@ jira_issues = []
 
 # Search Commits
 jira_issues << git.commits.map { |commit| commit.message.scan(jira_keys_regexp) }.compact
+fix_chore_commits = git.commits.none? { |commit| commit.message.scan(/\A(chore|fix|hotfix):/i).empty? }
 
 # MR Tickets
 mr_title_issues = gitlab.mr_title.scan(jira_keys_regexp)
+fix_chore_mr = !gitlab.mr_title.scan(/(chore|fix|hotfix):/i).empty?
 
 message = ''
-if jira_issues.flatten.uniq.empty?
+if jira_issues.flatten.uniq.empty? && !fix_chore_commits
   message += <<~MESSAGE
     This Merge Request does not mention any JIRA tickets in any of its commit messages.
 
@@ -22,7 +24,7 @@ if jira_issues.flatten.uniq.empty?
   MESSAGE
 end
 
-if mr_title_issues.empty?
+if mr_title_issues.empty? && !fix_chore_mr
   message += <<~MESSAGE
     This Merge Request does not mention JIRA Ticket in its title.
 
@@ -32,7 +34,7 @@ if mr_title_issues.empty?
   MESSAGE
 end
 
-if (mr_title_issues - jira_issues).empty?
+if !mr_title_issues.empty? && !(mr_title_issues - jira_issues).empty?
   message += <<-MESSAGE
     This Merge Request mentions different JIRA tickets in commit messages and title.
     Please make sure that correct ticket numbers are mentioned in commits and title.
