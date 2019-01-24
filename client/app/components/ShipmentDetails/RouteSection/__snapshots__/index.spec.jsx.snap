@@ -1,5 +1,50 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`shipment has both origin and destination 1`] = `
+<div
+  className="route_section flex-100 content_width_booking margin_top"
+>
+  <RouteSectionMap
+    destination={
+      Object {
+        "country": "SE",
+        "latitude": 57.694253,
+        "longitude": 11.854048,
+        "nexusId": 597,
+        "nexusName": "Gothenburg",
+      }
+    }
+    origin={
+      Object {
+        "country": "CN",
+        "latitude": 30.626539,
+        "longitude": 122.064958,
+        "nexusId": 599,
+        "nexusName": "Shanghai",
+      }
+    }
+    theme={
+      Object {
+        "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+        "colors": Object {
+          "brightPrimary": "#2491FD",
+          "brightSecondary": "#25ED36",
+          "primary": "#0D5BA9",
+          "secondary": "#23802A",
+        },
+        "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+        "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+        "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+        "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+      }
+    }
+    withDrivingDirections={false}
+  >
+    <Component />
+  </RouteSectionMap>
+</div>
+`;
+
 exports[`shipment has destination 1`] = `
 <div
   className="route_section flex-100 content_width_booking margin_top"
@@ -37,66 +82,13 @@ exports[`shipment has destination 1`] = `
 </div>
 `;
 
-exports[`shipment has origin 1`] = `
+exports[`shipment has neither origin nor destination 1`] = `
 <div
   className="route_section flex-100 content_width_booking margin_top"
 >
   <RouteSectionMap
     destination={Object {}}
-    origin={
-      Object {
-        "country": "CN",
-        "latitude": 36.083811,
-        "longitude": 120.323534,
-        "nexusId": 601,
-        "nexusName": "Qingdao",
-      }
-    }
-    theme={
-      Object {
-        "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
-        "colors": Object {
-          "brightPrimary": "#2491FD",
-          "brightSecondary": "#25ED36",
-          "primary": "#0D5BA9",
-          "secondary": "#23802A",
-        },
-        "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
-        "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
-        "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
-        "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
-      }
-    }
-    withDrivingDirections={false}
-  >
-    <Component />
-  </RouteSectionMap>
-</div>
-`;
-
-exports[`shipment has origin and destination 1`] = `
-<div
-  className="route_section flex-100 content_width_booking margin_top"
->
-  <RouteSectionMap
-    destination={
-      Object {
-        "country": "SE",
-        "latitude": 57.694253,
-        "longitude": 11.854048,
-        "nexusId": 597,
-        "nexusName": "Gothenburg",
-      }
-    }
-    origin={
-      Object {
-        "country": "CN",
-        "latitude": 36.083811,
-        "longitude": 120.323534,
-        "nexusId": 601,
-        "nexusName": "Qingdao",
-      }
-    }
+    origin={Object {}}
     theme={
       Object {
         "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",

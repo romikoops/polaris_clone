@@ -12,6 +12,13 @@ import {
   theme
 } from '../mocks'
 
+const originBase = {
+  latitude: 30.626539,
+  longitude: 122.064958,
+  nexusId: 599,
+  nexusName: 'Shanghai',
+  country: 'CN'
+}
 const destinationBase = {
   latitude: 57.694253,
   longitude: 11.854048,
@@ -20,21 +27,13 @@ const destinationBase = {
   country: 'SE'
 }
 
-const originBase = {
-  latitude: 36.083811,
-  longitude: 120.323534,
-  nexusId: 601,
-  nexusName: 'Qingdao',
-  country: 'CN'
-}
-
 const shipmentBase = {
   direction: 'export',
   aggregatedCargo: false,
   loadType: 'cargo_item',
   onCarriage: false,
   preCarriage: false,
-  origin: originBase,
+  origin: {},
   destination: {},
   cargoUnits: [
     {
@@ -78,94 +77,345 @@ const propsBase = {
   lookupTablesForRoutes
 }
 
+const shipmentHasOrigin = {
+  ...shipmentBase,
+  origin: originBase
+}
+const shipmentHasTruckingOrigin = {
+  ...shipmentBase,
+  preCarriage: true,
+  origin: {
+    ...originBase,
+    hubIds: [3025]
+  }
+}
+const shipmentHasTruckingOriginHasDestination = {
+  ...shipmentBase,
+  preCarriage: true,
+  origin: {
+    ...originBase,
+    hubIds: [3025]
+  },
+  destination: destinationBase
+}
+const shipmentHasTruckingOriginHasTruckingDestination = {
+  ...shipmentBase,
+  onCarriage: true,
+  preCarriage: true,
+  origin: {
+    ...originBase,
+    hubIds: [3025]
+  },
+  destination: {
+    ...destinationBase,
+    hubIds: [3030, 3023]
+  }
+}
+const shipmentHasDestination = {
+  ...shipmentBase,
+  destination: destinationBase
+}
+const shipmentHasTruckingDestination = {
+  ...shipmentBase,
+  onCarriage: true,
+  destination: {
+    ...destinationBase,
+    hubIds: [3030, 3023]
+  }
+}
+const shipmentHasTruckingDestinationHasOrigin = {
+  ...shipmentBase,
+  onCarriage: true,
+  destination: {
+    ...destinationBase,
+    hubIds: [3030, 3023]
+  },
+  origin: originBase
+}
+
 jest.mock('react-redux', () => ({
   connect: (mapStateToProps, mapDispatchToProps) => Component => Component
 }))
 
-test('with empty props', () => {
-  expect(() => shallow(<RouteSection />)).toThrow()
-})
-
-test('shipment has origin trucking', () => {
+// getDerivedStateFromProps tests
+// ============================================
+describe('shipment has neither origin nor destination', () => {
   const spy = jest.fn()
-  const origin = {
-    ...originBase,
-    hubIds: [3037,3023]
-  }
   const props = {
     ...propsBase,
-    bookingProcessDispatch:{
+    bookingProcessDispatch: {
       updatePageData: spy
     },
-    shipment:{
-      ...shipmentBase,
-      preCarriage:true,
-      origin
-    }
+    shipment: shipmentBase
   }
-  RouteSection.getDerivedStateFromProps(props, {})
-  const [[key, payload]] = spy.mock.calls
-  const expected = [ 2852, 2853, 2858, 2861, 2863, 2866, 2869, 2918, 2921, 2925, 2928 ]
+  const result = RouteSection.getDerivedStateFromProps(props, {})
 
-  expect(map(payload.availableRoutes, 'itineraryId')).toEqual(expected)
-  expect(key).toBe('ShipmentDetails')
+  test('side effect', () => {
+    const [[key, payload]] = spy.mock.calls
+    /**
+     * Assert the length of the list, instead of the list itself, if length is too long
+     */
+    expect(map(payload.availableRoutes, 'itineraryId').length).toBe(126)
+    expect(key).toBe('ShipmentDetails')
+  })
+
+  test('truckTypes', () => {
+    const expected = { destination: ['default'], origin: ['default'] }
+    expect(result.truckTypes).toEqual(expected)
+  })
+
+  test('nexusIds of origins', () => {
+    /**
+     * In this case lodash's `map` works as `pluck`
+     */
+    expect(map(result.origins, 'nexusId').length).toBe(126)
+  })
+
+  test('nexusIds of destinations', () => {
+    expect(map(result.destinations, 'nexusId').length).toBe(126)
+  })
+
+  test('nexusIds of destinations are not the same as nexusIds of origins', () => {
+    expect(map(result.origins, 'nexusId')).not.toEqual(map(result.destinations, 'nexusId'))
+  })
 })
 
-test('shipment has destination trucking', () => {
+describe('shipment has origin', () => {
   const spy = jest.fn()
-  const destination = {
-    ...destinationBase,
-    hubIds: [3023]
-  }
   const props = {
     ...propsBase,
-    bookingProcessDispatch:{
+    bookingProcessDispatch: {
       updatePageData: spy
     },
-    shipment:{
-      ...shipmentBase,
-      onCarriage:true,
-      origin: {},
-      destination
-    }
+    shipment: shipmentHasOrigin
   }
-  RouteSection.getDerivedStateFromProps(props, {})
-  const [[key, payload]] = spy.mock.calls
-  const expected = [2849, 2871, 2873, 2876, 2878]
-  
-  expect(map(payload.availableRoutes, 'itineraryId')).toEqual(expected)
-  expect(key).toBe('ShipmentDetails')
+  const result = RouteSection.getDerivedStateFromProps(props, {})
+
+  it('side effect', () => {
+    const [[key, payload]] = spy.mock.calls
+    const expected = [2849, 2880, 2884, 2887, 2964, 17322, 17493, 17504]
+    expect(map(payload.availableRoutes, 'itineraryId')).toEqual(expected)
+    expect(key).toBe('ShipmentDetails')
+  })
+
+  test('truckTypes', () => {
+    const expected = { destination: ['default'], origin: ['default'] }
+    expect(result.truckTypes).toEqual(expected)
+  })
+
+  test('nexusIds of origins', () => {
+    expect(map(result.origins, 'nexusId').length).toBe(126)
+  })
+
+  test('nexusIds of destinations', () => {
+    const expected = [597, 597, 604, 605, 608, 608, 3282, 2932]
+    expect(map(result.destinations, 'nexusId')).toEqual(expected)
+  })
 })
 
-test('shipment has origin', () => {
-  expect(shallow(<RouteSection {...propsBase} />)).toMatchSnapshot()
-})
-
-test('shipment has origin and destination', () => {
-  const shipment = {
-    ...shipmentBase,
-    destination: destinationBase
-  }
+describe('shipment has origin with trucking', () => {
+  const spy = jest.fn()
   const props = {
     ...propsBase,
-    shipment
+    bookingProcessDispatch: {
+      updatePageData: spy
+    },
+    shipment: shipmentHasTruckingOrigin
   }
-  expect(shallow(<RouteSection {...props} />)).toMatchSnapshot()
+  const result = RouteSection.getDerivedStateFromProps(props, {})
+
+  test('side effect', () => {
+    const [[key, payload]] = spy.mock.calls
+    const expected = [2849, 2964, 17493, 17504]
+    expect(map(payload.availableRoutes, 'itineraryId')).toEqual(expected)
+    expect(key).toBe('ShipmentDetails')
+  })
+
+  test('truckTypes', () => {
+    const expected = { destination: ['default'], origin: ['default'] }
+    expect(result.truckTypes).toEqual(expected)
+  })
+
+  test('nexusIds of origins', () => {
+    expect(map(result.origins, 'nexusId').length).toBe(126)
+  })
+
+  test('nexusIds of destinations', () => {
+    const expected = [597, 608, 3282, 2932]
+    expect(map(result.destinations, 'nexusId')).toEqual(expected)
+  })
 })
 
-test('shipment has destination', () => {
-  const shipment = {
-    ...shipmentBase,
-    origin: {},
-    destination: destinationBase
-  }
+describe('shipment has origin with trucking and destination', () => {
+  const spy = jest.fn()
   const props = {
     ...propsBase,
-    shipment
+    bookingProcessDispatch: {
+      updatePageData: spy
+    },
+    shipment: shipmentHasTruckingOriginHasDestination
   }
-  expect(shallow(<RouteSection {...props} />)).toMatchSnapshot()
+  const result = RouteSection.getDerivedStateFromProps(props, {})
+
+  test('side effect', () => {
+    const [[key, payload]] = spy.mock.calls
+    const expected = [2849]
+    expect(map(payload.availableRoutes, 'itineraryId')).toEqual(expected)
+    expect(key).toBe('ShipmentDetails')
+  })
+
+  test('truckTypes', () => {
+    const expected = { destination: ['default'], origin: ['default'] }
+    expect(result.truckTypes).toEqual(expected)
+  })
+
+  test('nexusIds of origins', () => {
+    const expected = [599, 600, 601, 598, 602, 599, 598, 601, 602]
+    expect(map(result.origins, 'nexusId')).toEqual(expected)
+  })
+
+  test('nexusIds of destinations', () => {
+    const expected = [597, 608, 3282, 2932]
+    expect(map(result.destinations, 'nexusId')).toEqual(expected)
+  })
 })
 
+describe('shipment has origin with trucking and destination with trucking', () => {
+  const spy = jest.fn()
+  const props = {
+    ...propsBase,
+    bookingProcessDispatch: {
+      updatePageData: spy
+    },
+    shipment: shipmentHasTruckingOriginHasTruckingDestination
+  }
+  const result = RouteSection.getDerivedStateFromProps(props, {})
+
+  test('side effect', () => {
+    const [[key, payload]] = spy.mock.calls
+    const expected = [2849]
+    expect(map(payload.availableRoutes, 'itineraryId')).toEqual(expected)
+    expect(key).toBe('ShipmentDetails')
+  })
+
+  test('truckTypes', () => {
+    const expected = { destination: ['default'], origin: ['default'] }
+    expect(result.truckTypes).toEqual(expected)
+  })
+
+  test('nexusIds of origins', () => {
+    const expected = [599, 598, 601, 602, 599, 600, 601, 598, 602]
+    expect(map(result.origins, 'nexusId')).toEqual(expected)
+  })
+
+  test('nexusIds of destinations', () => {
+    const expected = [597, 608, 3282, 2932]
+    expect(map(result.destinations, 'nexusId')).toEqual(expected)
+  })
+})
+
+describe('shipment has destination', () => {
+  const spy = jest.fn()
+  const props = {
+    ...propsBase,
+    bookingProcessDispatch: {
+      updatePageData: spy
+    },
+    shipment: shipmentHasDestination
+  }
+  const result = RouteSection.getDerivedStateFromProps(props, {})
+
+  test('side effect', () => {
+    const [[key, payload]] = spy.mock.calls
+    const expected = [2849, 2871, 2873, 2876, 2878, 2880, 2889, 2898, 2908]
+    expect(map(payload.availableRoutes, 'itineraryId')).toEqual(expected)
+    expect(key).toBe('ShipmentDetails')
+  })
+
+  test('truckTypes', () => {
+    const expected = { destination: ['default'], origin: ['default'] }
+    expect(result.truckTypes).toEqual(expected)
+  })
+
+  test('nexusIds of origins', () => {
+    const expected = [599, 600, 601, 598, 602, 599, 598, 601, 602]
+    expect(map(result.origins, 'nexusId')).toEqual(expected)
+  })
+
+  test('nexusIds of destinations', () => {
+    expect(map(result.destinations, 'nexusId').length).toBe(126)
+  })
+})
+
+describe('shipment has destination with trucking', () => {
+  const spy = jest.fn()
+  const props = {
+    ...propsBase,
+    bookingProcessDispatch: {
+      updatePageData: spy
+    },
+    shipment: shipmentHasTruckingDestination
+  }
+  const result = RouteSection.getDerivedStateFromProps(props, {})
+
+  test('side effect', () => {
+    const [[key, payload]] = spy.mock.calls
+    const expected = [2880, 2889, 2898, 2908, 2849, 2871, 2873, 2876, 2878]
+    expect(map(payload.availableRoutes, 'itineraryId')).toEqual(expected)
+    expect(key).toBe('ShipmentDetails')
+  })
+
+  test('truckTypes', () => {
+    const expected = { destination: ['default'], origin: ['default'] }
+    expect(result.truckTypes).toEqual(expected)
+  })
+
+  test('nexusIds of origins', () => {
+    const expected = [599, 598, 601, 602, 599, 600, 601, 598, 602]
+    expect(map(result.origins, 'nexusId')).toEqual(expected)
+  })
+
+  test('nexusIds of destinations', () => {
+    expect(map(result.destinations, 'nexusId').length).toBe(126)
+  })
+})
+
+describe('shipment has destination with trucking and origin', () => {
+  const spy = jest.fn()
+  const props = {
+    ...propsBase,
+    bookingProcessDispatch: {
+      updatePageData: spy
+    },
+    shipment: shipmentHasTruckingDestinationHasOrigin
+  }
+  const result = RouteSection.getDerivedStateFromProps(props, {})
+
+  test('side effect', () => {
+    const [[key, payload]] = spy.mock.calls
+    const expected = [2880, 2849]
+    expect(map(payload.availableRoutes, 'itineraryId')).toEqual(expected)
+    expect(key).toBe('ShipmentDetails')
+  })
+
+  test('truckTypes', () => {
+    const expected = { destination: ['default'], origin: ['default'] }
+    expect(result.truckTypes).toEqual(expected)
+  })
+
+  test('nexusIds of origins', () => {
+    const expected = [599, 598, 601, 602, 599, 600, 601, 598, 602]
+    expect(map(result.origins, 'nexusId')).toEqual(expected)
+  })
+
+  test('nexusIds of destinations', () => {
+    const expected = [597, 597, 604, 605, 608, 608, 3282, 2932]
+    expect(map(result.destinations, 'nexusId')).toEqual(expected)
+  })
+})
+
+// Component's methods tests
+// ============================================
 test('handleDropdownSelect', () => {
   const spy = jest.fn()
   const setMarker = jest.fn()
@@ -201,7 +451,7 @@ test('handleDropdownSelect', () => {
       country: 'country'
     }
   ]
-  const expectedMarkerCall = ["TARGET", {"lat": "latitude", "lng": "longitude"}]
+  const expectedMarkerCall = ['TARGET', { lat: 'latitude', lng: 'longitude' }]
 
   expect(spyCall).toEqual(expectedSpyCall)
   expect(setMarkerCall).toEqual(expectedMarkerCall)
@@ -313,4 +563,37 @@ test('handleCarriageChang when checked is false', () => {
 
   expect(key).toBe('onCarriage')
   expect(payload).toBe(true)
+})
+
+// Snapshot tests
+// ============================================
+test('with empty props', () => {
+  expect(() => shallow(<RouteSection />)).toThrow()
+})
+
+test('shipment has neither origin nor destination', () => {
+  expect(shallow(<RouteSection {...propsBase} />)).toMatchSnapshot()
+})
+
+test('shipment has both origin and destination', () => {
+  const props = {
+    ...propsBase,
+    shipment: {
+      ...shipmentBase,
+      origin: originBase,
+      destination: destinationBase
+    }
+  }
+  expect(shallow(<RouteSection {...props} />)).toMatchSnapshot()
+})
+
+test('shipment has destination', () => {
+  const props = {
+    ...propsBase,
+    shipment: {
+      ...shipmentBase,
+      destination: destinationBase
+    }
+  }
+  expect(shallow(<RouteSection {...props} />)).toMatchSnapshot()
 })
