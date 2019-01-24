@@ -22,7 +22,8 @@ class PdfHandler
     @remarks               = args[:remarks]
     @hide_cargo_sub_totals = false
     @content               = {}
-    @scope                 = @shipment.tenant.scope
+    @hide_grand_total = {}
+    @scope      = @shipment.tenant.scope
 
     @cargo_data = {
       vol: {},
@@ -33,10 +34,38 @@ class PdfHandler
     @shipments << @shipment if @shipments.empty?
     @shipments.each do |s|
       calculate_cargo_data(s)
+      @hide_grand_total[s.id.to_s] = should_hide_grand_total(s)
     end
     @content = Content.get_component('QuotePdf', @shipment.tenant_id) if @name == 'quotation'
 
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
+  end
+
+  def should_hide_grand_total(shipment)
+    return true if @scope['hide_grand_total']
+    return false if !@scope['hide_grand_total'] && !@scope['hide_converted_grand_total']
+
+    currencies = []
+    shipment.selected_offer
+            .except('total', 'edited_total', 'name')
+            .each do |charge_key, charge|
+      currencies << if %w(export import).include?(charge_key)
+                      charge
+                    .except('total', 'edited_total', 'name')
+                    .keys.map { |k| charge[k]['currency'] }
+                    elsif charge_key == 'cargo'
+                      charge.except('total', 'edited_total', 'name').keys
+                            .reject {|k| k.include?('unknown')}
+                            .map { |k| charge[k].except('total', 'edited_total', 'name') }
+                            .map { |obj| obj.keys.map { |k| obj[k]['currency'] } }
+                    else
+                      charge
+                    .except('total', 'edited_total', 'name')
+                    .keys.map { |k| charge[k]['total']['currency'] }
+                    end
+    end
+
+    currencies.flatten.compact.uniq.count > 1
   end
 
   def calculate_cargo_data(shipment)
@@ -157,7 +186,8 @@ class PdfHandler
         cargo_data: @cargo_data,
         notes: @shipment.route_notes,
         hide_cargo_sub_totals: @hide_cargo_sub_totals,
-        content: @content
+        content: @content,
+        hide_grand_total: @hide_grand_total
       }
     )
     response = BreezyPDFLite::RenderRequest.new(

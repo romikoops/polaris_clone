@@ -233,7 +233,14 @@
 
                  
             </h4>
-            <% if charge_key != 'cargo' && charge != "Grand Total" && !scope['hide_grand_total'] || (charge_key == 'cargo' && !hide_cargo_sub_totals)%>
+             <% if charge_key == 'cargo'
+                no_custom_fees = charge.except('name').values.flat_map(&:keys).none? {|k| k.include?('unknown')}
+              end %>
+            <% if charge_key != 'cargo' &&
+                  no_custom_fees && 
+                  charge != "Grand Total" &&
+                  !scope['hide_grand_total'] || (charge_key == 'cargo' && !hide_cargo_sub_totals && no_custom_fees)
+            %>
               <h3><%= '%.2f' % charge["total"]["value"].to_f %>&nbsp;<%= charge["total"]["currency"] %></h3>
             <% end %>
           </div>
@@ -258,7 +265,8 @@
                   end
                 %>
               <% sorted_charges.each do |currency_key, sub_charges| %>
-                <% if charge_key != 'cargo' || (charge_key == 'cargo' && !hide_cargo_sub_totals)%>
+                <% if (charge_key != 'cargo' || (charge_key == 'cargo' && !hide_cargo_sub_totals)) &&
+                    sub_charges.none?{|c| c['key'].include?('unknown')}%>
                   <div class="subtotal-currency-single">
                     <h4>Fees charged in <%= currency_key %>:</h4>
                     <h3>
@@ -318,7 +326,7 @@
           </div>
         </div>
       <% end %>
-      <% if !scope['hide_grand_total']%>
+      <% unless hide_grand_total[s.id.to_s] %>
         <div class="total-row">
           <h4>Total</h4>
           <p class="quote"><%= '%.2f' % s.selected_offer["total"]["value"].to_f %>
