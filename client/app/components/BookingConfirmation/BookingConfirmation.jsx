@@ -658,6 +658,7 @@ function prepCargoItemGroups (cargos, props) {
         group={group}
         theme={props.theme}
         hsCodes={hsCodes}
+        scope={scope}
         shipment={shipment}
         hideUnits={scope.cargo_overview_only}
       />

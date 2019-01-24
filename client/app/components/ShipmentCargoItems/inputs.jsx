@@ -402,7 +402,7 @@ export default function getInputs (
         return [
           ( <div className="layout-row flex-none layout-wrap layout-align-end-center">
               <p className={`${styles.subchargeable} flex-none`}>
-                {showVolume ? `${t('cargo:chargebleVolume')}:` : `${t('cargo:chargebleWeight')}:`}
+                {showVolume ? `${t('cargo:chargebleVolume')}:` : `${t('cargo:chargeableWeight')}:`}
               </p>
             </div>),
           ( <div className={
@@ -417,7 +417,7 @@ export default function getInputs (
         return [
           ( <div className="layout-row flex-none layout-wrap layout-align-end-center">
               <p className={`${styles.subchargeable} flex-none`}>
-                {`${t('cargo:chargebleWeight')}:`}
+                {`${t('cargo:chargeableWeight')}:`}
               </p>
             </div>),
           ( <div className={
@@ -447,7 +447,7 @@ export default function getInputs (
         return [
         ( <div className="layout-row flex-none layout-wrap layout-align-end-center">
             <p className={`${styles.subchargeable} flex-none`}>
-              {`${t('cargo:chargebleWeightVol')}:`}
+              {`${t('cargo:chargeableWeightVol')}:`}
             </p>
           </div>),
         ( <div className={
@@ -462,7 +462,7 @@ export default function getInputs (
         return [
           ( <div className="layout-row flex-none layout-wrap layout-align-end-center">
               <p className={`${styles.subchargeable} flex-none`}>
-                {`${t('cargo:chargebleWeightVol')}:`}
+                {`${t('cargo:chargeableWeightVol')}:`}
               </p>
             </div>),
           ( <div className={
@@ -485,7 +485,7 @@ export default function getInputs (
       {determineChargeableType(scope, chargeableWeightMots)}
       {/* <div className="layout-row flex-none layout-wrap layout-align-end-center">
         <p className={`${styles.subchargeable} flex-none`}>
-          {`${t('cargo:chargebleWeightVol')}:`}
+          {`${t('cargo:chargeableWeightVol')}:`}
         </p>
       </div>
       <div className={

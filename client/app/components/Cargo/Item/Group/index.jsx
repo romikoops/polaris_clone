@@ -10,7 +10,7 @@ import length from '../../../../assets/images/cargo/length.png'
 import height from '../../../../assets/images/cargo/height.png'
 import width from '../../../../assets/images/cargo/width.png'
 import { LOAD_TYPES, cargoGlossary } from '../../../../constants'
-import { gradientTextGenerator, numberSpacing } from '../../../../helpers'
+import { gradientTextGenerator, numberSpacing, singleItemChargeableObject } from '../../../../helpers'
 
 class CargoItemGroup extends Component {
   constructor (props) {
@@ -42,7 +42,7 @@ class CargoItemGroup extends Component {
 
   render () {
     const {
-      group, shipment, theme, t, hideUnits
+      group, shipment, theme, t, hideUnits, scope
     } = this.props
     const gradientTextStyle =
       theme && theme.colors
@@ -51,6 +51,7 @@ class CargoItemGroup extends Component {
     const { unitView, collapsed } = this.state
     const showTooltip = true
     const tooltipId = v4()
+    const chargeableData = singleItemChargeableObject(group.items[0], shipment.mode_of_transport, t, scope)
     const unitArr = (
       <div
         key={v4()}
@@ -58,7 +59,7 @@ class CargoItemGroup extends Component {
           styles.detailed_row
         } flex-100 layout-row layout-wrap layout-align-none-center`}
       >
-        <div className="flex-10 layout-row layout-align-center-center">
+        <div className="flex-5 layout-row layout-align-center-center">
           <p className="flex-none" style={{ fontSize: '10px' }}>{t('cargo:singleItem')}</p>
         </div>
 
@@ -130,14 +131,15 @@ cm
           </div>
         </div>
         { !group.size_class ? (
-          <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
+          <div className={`${styles.unit_data_cell} flex-20 layout-row layout-align-center-center`}>
             <div className="">
-              <p className="flex-none layout-row layout-align-center-center">
-                <span>{numberSpacing((group.items[0].chargeable_weight), 2)}</span>
-                {' '}
-&nbsp;kg
+              <p 
+                className="flex-none layout-row layout-align-center-center" 
+                dangerouslySetInnerHTML={{ __html: chargeableData.value }}
+              >
+
               </p>
-              <p className="flex-none layout-row layout-align-center-center">{t('common:chargeableWeight')}</p>
+              <p className="flex-none layout-row layout-align-center-center">{chargeableData.title}</p>
             </div>
           </div>
         ) : '' }

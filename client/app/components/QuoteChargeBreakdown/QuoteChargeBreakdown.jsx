@@ -4,7 +4,7 @@ import { get } from 'lodash'
 import styles from './QuoteChargeBreakdown.scss'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import {
-  numberSpacing, capitalize, formattedPriceValue, nameToDisplay, humanizeSnakeCaseUp
+  numberSpacing, capitalize, formattedPriceValue, nameToDisplay, humanizeSnakeCaseUp, fixedWeightChargeableString
 } from '../../helpers'
 
 class QuoteChargeBreakdown extends Component {
@@ -341,7 +341,7 @@ class QuoteChargeBreakdown extends Component {
 
   renderChargeableWeight (key) {
     const {
-      t, trucking, meta, cargo
+      t, trucking, meta, cargo, scope
     } = this.props
 
     let target
@@ -365,7 +365,7 @@ class QuoteChargeBreakdown extends Component {
         break
       case 'cargo':
         if (meta) {
-          value = get(meta, ['ocean_chargeable_weight'], 0)
+          return `${fixedWeightChargeableString(cargo,  get(meta, ['ocean_chargeable_weight'], 0), t, scope)}`
         } else {
           value = cargo.reduce((acc, c) => (acc + +c.chargeable_weight * +c.quantity), 0)
         }
@@ -374,7 +374,7 @@ class QuoteChargeBreakdown extends Component {
         break
     }
 
-    return `(${t('cargo:chargebleWeightWithValue', { value })})`
+    return `(${t('cargo:chargeableWeightWithValue', { value })})`
   }
 
   render () {
@@ -408,10 +408,11 @@ class QuoteChargeBreakdown extends Component {
                 {
                   scope.show_chargeable_weight && !['import', 'export'].includes(key)
                     ? (
-                      <span className={styles.chargeable_weight}>
-                        {' '}
-                        {this.renderChargeableWeight(key)}
-                        {' '}
+                      <span
+                        className={styles.chargeable_weight}
+                        dangerouslySetInnerHTML={{ __html: this.renderChargeableWeight(key) }}
+                      >
+                      
                       </span>
                     ) : ''
                 }

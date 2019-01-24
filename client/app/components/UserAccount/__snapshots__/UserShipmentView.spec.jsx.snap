@@ -706,7 +706,70 @@ exports[`shipmentData.cargoItems is present 1`] = `
                 "volume": NaN,
               }
             }
-            shipment={Object {}}
+            scope={
+              Object {
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              }
+            }
+            shipment={
+              Object {
+                "cargo_count": 1,
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": false,
+                "has_pre_carriage": false,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "load_type": "OCEAN_LOAD_TYPE",
+                "notes": "FOO_NOTES",
+                "planned_eta": "2018-12-01T12:14:08+01:00",
+                "planned_etd": "2018-11-12T12:14:08+01:00",
+                "schedules_charges": Object {
+                  "AIR_HUB_ROUTE_KEY": Object {
+                    "total": 200,
+                  },
+                  "OCEAN_HUB_ROUTE_KEY": Object {
+                    "total": 40,
+                  },
+                  "RAIL_HUB_ROUTE_KEY": Object {
+                    "total": 125,
+                  },
+                  "TRUCK_HUB_ROUTE_KEY": Object {
+                    "total": 75,
+                  },
+                },
+                "selected_offer": Object {
+                  "cargo": Object {},
+                  "total": Object {
+                    "value": 77,
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
+                "trucking": Object {
+                  "on_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
+                  "pre_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
+                },
+              }
+            }
             t={[Function]}
             theme={
               Object {
@@ -735,7 +798,70 @@ exports[`shipmentData.cargoItems is present 1`] = `
                 "volume": NaN,
               }
             }
-            shipment={Object {}}
+            scope={
+              Object {
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              }
+            }
+            shipment={
+              Object {
+                "cargo_count": 1,
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": false,
+                "has_pre_carriage": false,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "load_type": "OCEAN_LOAD_TYPE",
+                "notes": "FOO_NOTES",
+                "planned_eta": "2018-12-01T12:14:08+01:00",
+                "planned_etd": "2018-11-12T12:14:08+01:00",
+                "schedules_charges": Object {
+                  "AIR_HUB_ROUTE_KEY": Object {
+                    "total": 200,
+                  },
+                  "OCEAN_HUB_ROUTE_KEY": Object {
+                    "total": 40,
+                  },
+                  "RAIL_HUB_ROUTE_KEY": Object {
+                    "total": 125,
+                  },
+                  "TRUCK_HUB_ROUTE_KEY": Object {
+                    "total": 75,
+                  },
+                },
+                "selected_offer": Object {
+                  "cargo": Object {},
+                  "total": Object {
+                    "value": 77,
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
+                "trucking": Object {
+                  "on_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
+                  "pre_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
+                },
+              }
+            }
             t={[Function]}
             theme={
               Object {

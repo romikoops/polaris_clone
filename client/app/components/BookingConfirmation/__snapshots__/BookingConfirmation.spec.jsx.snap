@@ -6352,6 +6352,14 @@ exports[`with cargo items 1`] = `
                 }
               }
               key="RANDOM_KEY_14"
+              scope={
+                Object {
+                  "terms": Array [
+                    "FOO_TERM",
+                    "BAR_TERM",
+                  ],
+                }
+              }
               shipment={
                 Object {
                   "cargo_count": 1,
@@ -6528,6 +6536,14 @@ exports[`with cargo items 1`] = `
                 }
               }
               key="RANDOM_KEY_15"
+              scope={
+                Object {
+                  "terms": Array [
+                    "FOO_TERM",
+                    "BAR_TERM",
+                  ],
+                }
+              }
               shipment={
                 Object {
                   "cargo_count": 1,
