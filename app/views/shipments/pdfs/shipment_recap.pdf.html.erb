@@ -336,11 +336,12 @@
             <% unless tenant.scope.dig('consolidation', 'cargo') %>
               <p class="cargo-value">
                 <span class="cargo-type">
-                  <%= '%.2f' % cargo.chargeable_weight %>
+                 <%= cargo_data[:chargeable_weight][shipment.id][cargo.id.to_s][:value] %>
                 </span>
-                &nbsp;kg
               </p>
-              <p class="cargo-subtitle">Chargeable Weight</p>
+              <p class="cargo-subtitle">
+                <%= cargo_data[:chargeable_weight][shipment.id][cargo.id.to_s][:title] %>
+              </p>
             <% end %>
           </div>
         </div>

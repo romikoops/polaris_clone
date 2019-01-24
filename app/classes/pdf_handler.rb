@@ -117,6 +117,16 @@ class PdfHandler
           title: 'Chargeable'
         }
       end
+    else
+      chargeable_weight_cargo = chargeable_value / 1000
+      cargo_string = " (Chargeable: #{'%.3f' % chargeable_weight_cargo} t | m<sup>3</sup>)"
+      shipment.cargo_units.each do |hash|
+        string = "#{'%.3f' % (hash[:chargeable_weight] / 1000)} t | m<sup>3</sup>"
+        chargeable_weight[hash[:id].to_s] = {
+          value: string,
+          title: 'Chargeable'
+        }
+      end
     end
     chargeable_weight[:cargo] = "<small class='chargeable_weight'>#{cargo_string}</small>"
     trucking_pre_string =
