@@ -1,4 +1,4 @@
-import { numberSpacing } from './'
+import { numberSpacing } from '.'
 
 export const effectiveKgPerCubicMeter = {
   air: 167,
@@ -6,7 +6,7 @@ export const effectiveKgPerCubicMeter = {
   truck: 333,
   ocean: 1000
 }
-export function singleItemChargeableObject(cargoItem, mot, t, scope) {
+export function singleItemChargeableObject (cargoItem, mot, t, scope) {
   if (!cargoItem) return undefined
   const volumeVal = +volume(cargoItem)
   const weightVal = +cargoItem.payload_in_kg * cargoItem.quantity
@@ -17,9 +17,9 @@ export function singleItemChargeableObject(cargoItem, mot, t, scope) {
   )
   const chargeableVolumeVal = chargeableWeightVal / 1000
 
-  return chargeableObject (chargeableVolumeVal, chargeableWeightVal, showVolume, t, scope)
+  return chargeableObject(chargeableVolumeVal, chargeableWeightVal, showVolume, t, scope)
 }
-export function multiItemChargeableObject(cargoItems, mot, t, scope) {
+export function multiItemChargeableObject (cargoItems, mot, t, scope) {
   if (!cargoItems) return undefined
   const volumeVal = cargoItems.reduce((product, item) => (
     product + +volume(item)
@@ -33,9 +33,10 @@ export function multiItemChargeableObject(cargoItems, mot, t, scope) {
     weightVal
   )
   const chargeableVolumeVal = chargeableWeightVal / 1000
-  return chargeableObject (chargeableVolumeVal, chargeableWeightVal, showVolume, t, scope)
+
+  return chargeableObject(chargeableVolumeVal, chargeableWeightVal, showVolume, t, scope)
 }
-export function fixedWeightChargeableString(cargoItems, weight, t, scope) {
+export function fixedWeightChargeableString (cargoItems, fixedWeight, t, scope) {
   if (!cargoItems) return undefined
   const volumeVal = cargoItems.reduce((product, item) => (
     product + +volume(item)
@@ -44,26 +45,27 @@ export function fixedWeightChargeableString(cargoItems, weight, t, scope) {
     product + +item.payload_in_kg * item.quantity
   ), 0)
   const showVolume = volumeVal > weightVal
-  const chargeableWeightVal = weight
+  const chargeableWeightVal = fixedWeight
   const chargeableVolumeVal = chargeableWeightVal / 1000
-  return chargeableString (chargeableVolumeVal, chargeableWeightVal, showVolume, t, scope)
+
+  return chargeableString(chargeableVolumeVal, chargeableWeightVal, showVolume, t, scope)
 }
 export function chargeableObject (volumeVal, weightVal, showVolume, t, scope) {
   switch (scope.chargeable_weight_view) {
     case 'weight':
-      
+
       return {
         value: `<span>${numberSpacing(weightVal, 2)}</span> kg`,
         title: t('cargo:chargeableWeight')
       }
     case 'volume':
-      
+
       return {
         value: `<span>${numberSpacing(volumeVal, 3)}</span> m<sup>3</sup>`,
         title: t('cargo:chargeableVolume')
       }
     case 'both':
-      
+
       return {
         value: `<span>${numberSpacing(volumeVal, 3)}</span> t | m<sup>3</sup>`,
         title: t('cargo:chargeableWeightVol')
@@ -87,23 +89,24 @@ export function chargeableObject (volumeVal, weightVal, showVolume, t, scope) {
 export function chargeableString (volumeVal, weightVal, showVolume, t, scope) {
   switch (scope.chargeable_weight_view) {
     case 'weight':
-      
-      return t('cargo:chargeableWeightWithValue', { value: weightVal})
+
+      return t('cargo:chargeableWeightWithValue', { value: weightVal })
     case 'volume':
-      
-      return t('cargo:chargeableVolumeWithValue', { value: volumeVal})
+
+      return t('cargo:chargeableVolumeWithValue', { value: volumeVal })
     case 'both':
-      
-      return t('cargo:chargeableWeightVolWithValue', { value: volumeVal})
+
+      return t('cargo:chargeableWeightVolWithValue', { value: volumeVal })
     case 'dynamic':
-      
+
       if (showVolume) {
-        return t('cargo:chargeableVolumeWithValue', { value: volumeVal})
-      } else {
-        return t('cargo:chargeableWeightWithValue', { value: weightVal})
+        return t('cargo:chargeableVolumeWithValue', { value: volumeVal })
       }
+
+      return t('cargo:chargeableWeightWithValue', { value: weightVal })
+
     default:
-      return t('cargo:chargeableWeightVolWithValue', { value: volumeVal})
+      return t('cargo:chargeableWeightVolWithValue', { value: volumeVal })
   }
 }
 export function chargeableWeight (cargoItem, mot) {

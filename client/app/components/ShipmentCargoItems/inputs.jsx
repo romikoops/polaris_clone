@@ -224,7 +224,7 @@ export default function getInputs (
     </div>
   )
 
-  function chargeableWeightVolElemJSX (mot, i) {
+  function chargeableWeightVolElemJSX (mot) {
     const key = `${mot}-${i || 0}`
     if (
       (
@@ -393,87 +393,88 @@ export default function getInputs (
   }
 
   const chargeableWeightMots = Object.keys(scope.modes_of_transport).filter(mot => scope.modes_of_transport[mot].cargo_item)
-  function determineChargeableType (scope, chargeableWeightMots) {
+  function determineChargeableType () {
     switch (scope.chargeable_weight_view) {
-      case 'dynamic':
-      const chargeableWeightValue = weight(cargoItem)
-      const chargeableVolumeValue = volume(cargoItem)
-      const showVolume = chargeableVolumeValue > (chargeableWeightValue / effectiveKgPerCubicMeter[chargeableWeightMots.first])
+      case 'dynamic': {
+        const chargeableWeightValue = weight(cargoItem)
+        const chargeableVolumeValue = volume(cargoItem)
+        const showVolume = chargeableVolumeValue > (chargeableWeightValue / effectiveKgPerCubicMeter[chargeableWeightMots[0]])
+
         return [
-          ( <div className="layout-row flex-none layout-wrap layout-align-end-center">
-              <p className={`${styles.subchargeable} flex-none`}>
-                {showVolume ? `${t('cargo:chargebleVolume')}:` : `${t('cargo:chargeableWeight')}:`}
-              </p>
-            </div>),
-          ( <div className={
-              `${styles.chargeable_weight_values} flex ` +
+          (<div className="layout-row flex-none layout-wrap layout-align-end-center">
+            <p className={`${styles.subchargeable} flex-none`}>
+              {showVolume ? `${t('cargo:chargebleVolume')}:` : `${t('cargo:chargeableWeight')}:`}
+            </p>
+          </div>),
+          (<div className={
+            `${styles.chargeable_weight_values} flex ` +
               'layout-row layout-align-start-center'
-            }
-            >
-              {chargeableWeightMots.map((mot, i) => (chargeableDynamicElemJSX(mot, i)))}
-            </div>)
-          ]
+          }
+          >
+            {chargeableWeightMots.map(mot => (chargeableDynamicElemJSX(mot, i)))}
+          </div>)
+        ]
+      }
       case 'weight':
         return [
-          ( <div className="layout-row flex-none layout-wrap layout-align-end-center">
-              <p className={`${styles.subchargeable} flex-none`}>
-                {`${t('cargo:chargeableWeight')}:`}
-              </p>
-            </div>),
-          ( <div className={
-              `${styles.chargeable_weight_values} flex ` +
+          (<div className="layout-row flex-none layout-wrap layout-align-end-center">
+            <p className={`${styles.subchargeable} flex-none`}>
+              {`${t('cargo:chargeableWeight')}:`}
+            </p>
+          </div>),
+          (<div className={
+            `${styles.chargeable_weight_values} flex ` +
               'layout-row layout-align-start-center'
-            }
-            >
-              {chargeableWeightMots.map((mot, i) => (chargeableWeightElemJSX(mot, i)))}
-            </div>)
-          ]
+          }
+          >
+            {chargeableWeightMots.map(mot => (chargeableWeightElemJSX(mot, i)))}
+          </div>)
+        ]
       case 'volume':
         return [
-          ( <div className="layout-row flex-none layout-wrap layout-align-end-center">
-              <p className={`${styles.subchargeable} flex-none`}>
-                {`${t('cargo:chargebleVolume')}:`}
-              </p>
-            </div>),
-          ( <div className={
-              `${styles.chargeable_weight_values} flex ` +
+          (<div className="layout-row flex-none layout-wrap layout-align-end-center">
+            <p className={`${styles.subchargeable} flex-none`}>
+              {`${t('cargo:chargebleVolume')}:`}
+            </p>
+          </div>),
+          (<div className={
+            `${styles.chargeable_weight_values} flex ` +
               'layout-row layout-align-start-center'
-            }
-            >
-              {chargeableWeightMots.map((mot, i) => (chargeableVolumeElemJSX(mot, i)))}
-            </div>)
-          ]
+          }
+          >
+            {chargeableWeightMots.map(mot => (chargeableVolumeElemJSX(mot, i)))}
+          </div>)
+        ]
       case 'both':
         return [
-        ( <div className="layout-row flex-none layout-wrap layout-align-end-center">
+          (<div className="layout-row flex-none layout-wrap layout-align-end-center">
             <p className={`${styles.subchargeable} flex-none`}>
               {`${t('cargo:chargeableWeightVol')}:`}
             </p>
           </div>),
-        ( <div className={
+          (<div className={
             `${styles.chargeable_weight_values} flex ` +
             'layout-row layout-align-start-center'
           }
           >
-            {chargeableWeightMots.map((mot, i) => (chargeableWeightVolElemJSX(mot, i)))}
+            {chargeableWeightMots.map(mot => (chargeableWeightVolElemJSX(mot)))}
           </div>)
         ]
       default:
         return [
-          ( <div className="layout-row flex-none layout-wrap layout-align-end-center">
-              <p className={`${styles.subchargeable} flex-none`}>
-                {`${t('cargo:chargeableWeightVol')}:`}
-              </p>
-            </div>),
-          ( <div className={
-              `${styles.chargeable_weight_values} flex ` +
+          (<div className="layout-row flex-none layout-wrap layout-align-end-center">
+            <p className={`${styles.subchargeable} flex-none`}>
+              {`${t('cargo:chargeableWeightVol')}:`}
+            </p>
+          </div>),
+          (<div className={
+            `${styles.chargeable_weight_values} flex ` +
               'layout-row layout-align-start-center'
-            }
-            >
-              {chargeableWeightMots.map((mot, i) => (chargeableWeightVolElemJSX(mot, i)))}
-            </div>)
-          ]
-        break;
+          }
+          >
+            {chargeableWeightMots.map(mot => (chargeableWeightVolElemJSX(mot)))}
+          </div>)
+        ]
     }
   }
   inputs.chargeableWeight = (
@@ -482,20 +483,7 @@ export default function getInputs (
       'layout-wrap layout-align-start-center'
     }
     >
-      {determineChargeableType(scope, chargeableWeightMots)}
-      {/* <div className="layout-row flex-none layout-wrap layout-align-end-center">
-        <p className={`${styles.subchargeable} flex-none`}>
-          {`${t('cargo:chargeableWeightVol')}:`}
-        </p>
-      </div>
-      <div className={
-        `${styles.chargeable_weight_values} flex ` +
-        'layout-row layout-align-start-center'
-      }
-      >
-        {chargeableWeightMots.map(mot => (chargeableWeightElemJSX(mot)))}
-      </div> */}
-
+      {determineChargeableType()}
     </div>
   )
 
