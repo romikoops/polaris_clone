@@ -147,7 +147,7 @@ class ShopStageView extends Component {
     const backBtn = (
       <div
         className={`${styles.stage_box} flex-none layout-column layout-align-start-center ${stepBarShowStyle}`}
-        onClick={shouldHideNavButtons ? () => ShopStageView.goBack() : null}
+        onClick={!shouldHideNavButtons ? () => ShopStageView.goBack() : null}
       >
         <div className={styles.wrapper_shop_stage_current}>
           <div
