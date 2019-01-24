@@ -2,9 +2,19 @@
 
 exports[`shipment has destination 1`] = `
 <div
-  className="route_section flex-100 content_width_booking"
+  className="route_section flex-100 content_width_booking margin_top"
 >
   <RouteSectionMap
+    destination={
+      Object {
+        "country": "SE",
+        "latitude": 57.694253,
+        "longitude": 11.854048,
+        "nexusId": 597,
+        "nexusName": "Gothenburg",
+      }
+    }
+    origin={Object {}}
     theme={
       Object {
         "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
@@ -20,6 +30,7 @@ exports[`shipment has destination 1`] = `
         "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
       }
     }
+    withDrivingDirections={false}
   >
     <Component />
   </RouteSectionMap>
@@ -28,9 +39,19 @@ exports[`shipment has destination 1`] = `
 
 exports[`shipment has origin 1`] = `
 <div
-  className="route_section flex-100 content_width_booking"
+  className="route_section flex-100 content_width_booking margin_top"
 >
   <RouteSectionMap
+    destination={Object {}}
+    origin={
+      Object {
+        "country": "CN",
+        "latitude": 36.083811,
+        "longitude": 120.323534,
+        "nexusId": 601,
+        "nexusName": "Qingdao",
+      }
+    }
     theme={
       Object {
         "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
@@ -46,6 +67,7 @@ exports[`shipment has origin 1`] = `
         "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
       }
     }
+    withDrivingDirections={false}
   >
     <Component />
   </RouteSectionMap>
@@ -54,9 +76,27 @@ exports[`shipment has origin 1`] = `
 
 exports[`shipment has origin and destination 1`] = `
 <div
-  className="route_section flex-100 content_width_booking"
+  className="route_section flex-100 content_width_booking margin_top"
 >
   <RouteSectionMap
+    destination={
+      Object {
+        "country": "SE",
+        "latitude": 57.694253,
+        "longitude": 11.854048,
+        "nexusId": 597,
+        "nexusName": "Gothenburg",
+      }
+    }
+    origin={
+      Object {
+        "country": "CN",
+        "latitude": 36.083811,
+        "longitude": 120.323534,
+        "nexusId": 601,
+        "nexusName": "Qingdao",
+      }
+    }
     theme={
       Object {
         "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
@@ -72,6 +112,7 @@ exports[`shipment has origin and destination 1`] = `
         "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
       }
     }
+    withDrivingDirections={false}
   >
     <Component />
   </RouteSectionMap>

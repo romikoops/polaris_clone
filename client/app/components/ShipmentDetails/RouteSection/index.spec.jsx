@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { map } from 'lodash'
 import { shallow } from 'enzyme'
 import RouteSection from '.'
 import {
@@ -11,7 +12,7 @@ import {
   theme
 } from '../mocks'
 
-const destination = {
+const destinationBase = {
   latitude: 57.694253,
   longitude: 11.854048,
   nexusId: 597,
@@ -19,7 +20,7 @@ const destination = {
   country: 'SE'
 }
 
-const origin = {
+const originBase = {
   latitude: 36.083811,
   longitude: 120.323534,
   nexusId: 601,
@@ -33,7 +34,7 @@ const shipmentBase = {
   loadType: 'cargo_item',
   onCarriage: false,
   preCarriage: false,
-  origin,
+  origin: originBase,
   destination: {},
   cargoUnits: [
     {
@@ -85,6 +86,57 @@ test('with empty props', () => {
   expect(() => shallow(<RouteSection />)).toThrow()
 })
 
+test('shipment has origin trucking', () => {
+  const spy = jest.fn()
+  const origin = {
+    ...originBase,
+    hubIds: [3037,3023]
+  }
+  const props = {
+    ...propsBase,
+    bookingProcessDispatch:{
+      updatePageData: spy
+    },
+    shipment:{
+      ...shipmentBase,
+      preCarriage:true,
+      origin
+    }
+  }
+  RouteSection.getDerivedStateFromProps(props, {})
+  const [[key, payload]] = spy.mock.calls
+  const expected = [ 2852, 2853, 2858, 2861, 2863, 2866, 2869, 2918, 2921, 2925, 2928 ]
+
+  expect(map(payload.availableRoutes, 'itineraryId')).toEqual(expected)
+  expect(key).toBe('ShipmentDetails')
+})
+
+test('shipment has destination trucking', () => {
+  const spy = jest.fn()
+  const destination = {
+    ...destinationBase,
+    hubIds: [3023]
+  }
+  const props = {
+    ...propsBase,
+    bookingProcessDispatch:{
+      updatePageData: spy
+    },
+    shipment:{
+      ...shipmentBase,
+      onCarriage:true,
+      origin: {},
+      destination
+    }
+  }
+  RouteSection.getDerivedStateFromProps(props, {})
+  const [[key, payload]] = spy.mock.calls
+  const expected = [2849, 2871, 2873, 2876, 2878]
+  
+  expect(map(payload.availableRoutes, 'itineraryId')).toEqual(expected)
+  expect(key).toBe('ShipmentDetails')
+})
+
 test('shipment has origin', () => {
   expect(shallow(<RouteSection {...propsBase} />)).toMatchSnapshot()
 })
@@ -92,7 +144,7 @@ test('shipment has origin', () => {
 test('shipment has origin and destination', () => {
   const shipment = {
     ...shipmentBase,
-    destination
+    destination: destinationBase
   }
   const props = {
     ...propsBase,
@@ -105,7 +157,7 @@ test('shipment has destination', () => {
   const shipment = {
     ...shipmentBase,
     origin: {},
-    destination
+    destination: destinationBase
   }
   const props = {
     ...propsBase,
@@ -149,7 +201,7 @@ test('handleDropdownSelect', () => {
       country: 'country'
     }
   ]
-  const expectedMarkerCall = ['TARGET', { lat: 'latitude', lng: 'longitude' }, 'name']
+  const expectedMarkerCall = ["TARGET", {"lat": "latitude", "lng": "longitude"}]
 
   expect(spyCall).toEqual(expectedSpyCall)
   expect(setMarkerCall).toEqual(expectedMarkerCall)
