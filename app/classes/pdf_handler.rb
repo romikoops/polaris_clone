@@ -41,7 +41,7 @@ class PdfHandler
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
   end
 
-  def hide_grand_total?(shipment)
+  def hide_grand_total?(shipment) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     return true if @scope['hide_grand_total']
     return false if !@scope['hide_grand_total'] && !@scope['hide_converted_grand_total']
 
