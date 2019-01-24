@@ -23,6 +23,7 @@ module ExcelTool
         if hub
           rows = parse_sheet(first_sheet)
           next if rows.empty?
+
           sanitize_rows(rows)
           hash = build_hash(rows, hub_fees, customs, hub)
           counterparts = hash[:counterparts]
@@ -64,32 +65,32 @@ module ExcelTool
 
     def parse_sheet(first_sheet)
       first_sheet.parse(
-        fee:             'FEE',
-        mot:             'MOT',
-        fee_code:        'FEE_CODE',
-        load_type:       'LOAD_TYPE',
-        direction:       'DIRECTION',
-        currency:        'CURRENCY',
-        rate_basis:      'RATE_BASIS',
-        ton:             'TON',
-        cbm:             'CBM',
-        kg:              'KG',
-        item:            'ITEM',
-        shipment:        'SHIPMENT',
-        bill:            'BILL',
-        container:       'CONTAINER',
-        minimum:         'MINIMUM',
-        maximum:         'MAXIMUM',
-        wm:              'WM',
-        effective_date:  'EFFECTIVE_DATE',
+        fee: 'FEE',
+        mot: 'MOT',
+        fee_code: 'FEE_CODE',
+        load_type: 'LOAD_TYPE',
+        direction: 'DIRECTION',
+        currency: 'CURRENCY',
+        rate_basis: 'RATE_BASIS',
+        ton: 'TON',
+        cbm: 'CBM',
+        kg: 'KG',
+        item: 'ITEM',
+        shipment: 'SHIPMENT',
+        bill: 'BILL',
+        container: 'CONTAINER',
+        minimum: 'MINIMUM',
+        maximum: 'MAXIMUM',
+        wm: 'WM',
+        effective_date: 'EFFECTIVE_DATE',
         expiration_date: 'EXPIRATION_DATE',
-        range_min:       'RANGE_MIN',
-        range_max:       'RANGE_MAX',
-        service_level:   'SERVICE_LEVEL',
-        destination:     'DESTINATION',
-        base:            'BASE',
-        dangerous:       'DANGEROUS',
-        carrier:         'CARRIER'
+        range_min: 'RANGE_MIN',
+        range_max: 'RANGE_MAX',
+        service_level: 'SERVICE_LEVEL',
+        destination: 'DESTINATION',
+        base: 'BASE',
+        dangerous: 'DANGEROUS',
+        carrier: 'CARRIER'
       )
     end
 
@@ -129,9 +130,9 @@ module ExcelTool
         carrier.get_tenant_vehicle(user.tenant_id, row[:mot].downcase, row[:service_level]).try(:id)
       else
         TenantVehicle.find_by(
-          tenant_id:         user.tenant_id,
+          tenant_id: user.tenant_id,
           mode_of_transport: row[:mot].downcase,
-          name:              row[:service_level]
+          name: row[:service_level]
         ).try(:id)
       end
     end
@@ -207,9 +208,11 @@ module ExcelTool
               next unless @dangerous[hub_key][tv_id]
               next unless @dangerous[hub_key][tv_id][direction_key]
               next unless @dangerous[hub_key][tv_id][direction_key][lt]
+
               dangerous_fees = @dangerous[hub_key][tv_id][direction_key][lt]
 
               next unless dangerous_fees
+
               dangerous_fees.each do |key, fee|
                 obj['fees'][key] = fee
               end
@@ -253,11 +256,11 @@ module ExcelTool
     def hub_fees_and_customs_builder(direction, mot, hub, lt, tv_id, hub_key)
       {
         'fees' => {},
-        'direction'         => direction,
+        'direction' => direction,
         'mode_of_transport' => mot,
-        'tenant_id'         => hub.tenant_id,
-        'hub_id'            => hub.id,
-        'load_type'         => lt,
+        'tenant_id' => hub.tenant_id,
+        'hub_id' => hub.id,
+        'load_type' => lt,
         'tenant_vehicle_id' => tv_id != 'general' ? tv_id : nil,
         'counterpart_hub_id' => hub_key != 'general' ? hub_key : nil
       }
@@ -266,38 +269,164 @@ module ExcelTool
     def build_charge(row)
       case row[:rate_basis].upcase
       when 'PER_SHIPMENT'
-        charge = { currency: row[:currency], value: row[:shipment], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], max: row[:maximum] }
+        charge = {
+          currency: row[:currency],
+          value: row[:shipment],
+          rate_basis: row[:rate_basis],
+          key: row[:fee_code],
+          name: row[:fee],
+          max: row[:maximum]
+        }
       when 'PER_CONTAINER'
-        charge = { currency: row[:currency], value: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], max: row[:maximum] }
+        charge = {
+          currency: row[:currency],
+          value: row[:container],
+          rate_basis: row[:rate_basis],
+          key: row[:fee_code],
+          name: row[:fee],
+          max: row[:maximum]
+        }
       when 'PER_BILL'
-        charge = { currency: row[:currency], min: row[:minimum], value: row[:bill], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], max: row[:maximum] }
+        charge = {
+          currency: row[:currency],
+          min: row[:minimum],
+          value: row[:bill],
+          rate_basis: row[:rate_basis],
+          key: row[:fee_code],
+          name: row[:fee],
+          max: row[:maximum]
+        }
       when 'PER_CBM'
-        charge = { currency: row[:currency], min: row[:minimum], value: row[:cbm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], max: row[:maximum] }
+        charge = {
+          currency: row[:currency],
+          min: row[:minimum],
+          value: row[:cbm],
+          rate_basis: row[:rate_basis],
+          key: row[:fee_code],
+          name: row[:fee],
+          max: row[:maximum]
+        }
       when 'PER_KG'
-        charge = { currency: row[:currency], min: row[:minimum], value: row[:kg], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], max: row[:maximum] }
+        charge = {
+          currency: row[:currency],
+          min: row[:minimum],
+          value: row[:kg],
+          rate_basis: row[:rate_basis],
+          key: row[:fee_code],
+          name: row[:fee],
+          max: row[:maximum]
+        }
       when 'PER_TON'
-        charge = { currency: row[:currency], ton: row[:ton], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], max: row[:maximum] }
+        charge = {
+          currency: row[:currency],
+          ton: row[:ton],
+          min: row[:minimum],
+          rate_basis: row[:rate_basis],
+          key: row[:fee_code],
+          name: row[:fee],
+          max: row[:maximum]
+        }
       when 'PER_WM'
-        charge = { currency: row[:currency], value: row[:wm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], max: row[:maximum] }
+        charge = {
+          currency: row[:currency],
+          value: row[:wm],
+          rate_basis: row[:rate_basis],
+          key: row[:fee_code],
+          name: row[:fee],
+          max: row[:maximum]
+        }
       when 'PER_ITEM'
-        charge = { currency: row[:currency], value: row[:item], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], max: row[:maximum] }
+        charge = {
+          currency: row[:currency],
+          value: row[:item],
+          rate_basis: row[:rate_basis],
+          key: row[:fee_code],
+          name: row[:fee],
+          max: row[:maximum]
+        }
       when 'PER_CBM_TON'
-        charge = { currency: row[:currency], cbm: row[:cbm], ton: row[:ton], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], max: row[:maximum] }
+        charge = {
+          currency: row[:currency],
+          cbm: row[:cbm],
+          ton: row[:ton],
+          min: row[:minimum],
+          rate_basis: row[:rate_basis],
+          key: row[:fee_code],
+          name: row[:fee],
+          max: row[:maximum]
+        }
       when 'PER_SHIPMENT_CONTAINER'
-        charge = { currency: row[:currency], shipment: row[:shipment], container: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], max: row[:maximum] }
+        charge = {
+          currency: row[:currency],
+          shipment: row[:shipment],
+          container: row[:container],
+          rate_basis: row[:rate_basis],
+          key: row[:fee_code],
+          name: row[:fee],
+          max: row[:maximum]
+        }
       when 'PER_BILL_CONTAINER'
-        charge = { currency: row[:currency], bill: row[:bill], container: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], max: row[:maximum] }
+        charge = {
+          currency: row[:currency],
+          bill: row[:bill],
+          container: row[:container],
+          rate_basis: row[:rate_basis],
+          key: row[:fee_code],
+          name: row[:fee],
+          max: row[:maximum]
+        }
       when 'PER_CBM_KG'
-        charge = { currency: row[:currency], cbm: row[:cbm], kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], max: row[:maximum] }
+        charge = {
+          currency: row[:currency],
+          cbm: row[:cbm],
+          kg: row[:kg],
+          min: row[:minimum],
+          rate_basis: row[:rate_basis],
+          key: row[:fee_code],
+          name: row[:fee],
+          max: row[:maximum]
+        }
       when 'PER_KG_RANGE'
-        charge = { currency: row[:currency], kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], range_min: row[:range_min], range_max: row[:range_max], max: row[:maximum] }
+        charge = {
+          currency: row[:currency],
+          kg: row[:kg],
+          min: row[:minimum],
+          rate_basis: row[:rate_basis],
+          key: row[:fee_code],
+          name: row[:fee],
+          range_min: row[:range_min],
+          range_max: row[:range_max],
+          max: row[:maximum]
+        }
+      when 'PER_UNIT_TON_CBM_RANGE'
+        charge = {
+          currency: row[:currency],
+          cbm: row[:cbm],
+          ton: row[:ton],
+          min: row[:minimum],
+          rate_basis: row[:rate_basis],
+          key: row[:fee_code],
+          name: row[:fee],
+          range_min: row[:range_min],
+          range_max: row[:range_max],
+          max: row[:maximum]
+        }
       when 'PER_X_KG_FLAT'
-        charge = { currency: row[:currency], value: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], base: row[:base], max: row[:maximum] }
+        charge = {
+          currency: row[:currency],
+          value: row[:kg],
+          min: row[:minimum],
+          rate_basis: row[:rate_basis],
+          key: row[:fee_code],
+          name: row[:fee],
+          base: row[:base],
+          max: row[:maximum]
+        }
       end
 
       charge[:expiration_date] = row[:expiration_date]
       charge[:effective_date] = row[:effective_date]
-      ChargeCategory.find_or_create_by!(code:row[:fee_code], name: row[:fee], tenant_id: @user.tenant_id)
+      ChargeCategory.find_or_create_by!(code: row[:fee_code], name: row[:fee], tenant_id: @user.tenant_id)
       charge
     end
 
@@ -375,16 +504,17 @@ module ExcelTool
       case charge[:rate_basis]
       when 'PER_KG_RANGE'
         charge[:kg]
+      when 'PER_UNIT_TON_CBM_RANGE'
+        charge[:cbm] || charge[:ton]
       end
     end
 
     def pushable_charge(charge)
       {
-        currency:   charge[:currency],
-        rate_basis: charge[:rate_basis],
-        min:        charge[:range_min],
-        max:        charge[:range_max],
-        rate:       rate_value(charge)
+        currency: charge[:currency],
+        min: charge[:range_min],
+        max: charge[:range_max],
+        rate: rate_value(charge)
       }
     end
 
@@ -392,19 +522,19 @@ module ExcelTool
       {
         effective_date: charge[:effective_date],
         expiration_date: charge[:expiration_date],
-        currency:   charge[:currency],
+        currency: charge[:currency],
         rate_basis: charge[:rate_basis],
-        min:        charge[:min],
-        range:      [
+        min: charge[:min],
+        range: [
           {
             currency: charge[:currency],
-            min:      charge[:range_min],
-            max:      charge[:range_max],
-            rate:     rate_value(charge)
+            min: charge[:range_min],
+            max: charge[:range_max],
+            rate: rate_value(charge)
           }
         ],
-        key:        charge[:key],
-        name:       charge[:name]
+        key: charge[:key],
+        name: charge[:name]
       }
     end
 

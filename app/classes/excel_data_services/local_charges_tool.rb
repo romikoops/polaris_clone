@@ -55,6 +55,7 @@ module ExcelDataServices
       when 'PER_BILL_CONTAINER' then { container: data[:container], bill: data[:bill] }
       when 'PER_CBM_KG' then { kg: data[:kg], cbm: data[:cbm] }
       when 'PER_KG_RANGE' then { range_min: data[:range_min], range_max: data[:range_max], kg: data[:kg] }
+      when 'PER_WM_RANGE' then { range_min: data[:range_min], range_max: data[:range_max], wm: data[:wm] }
       when 'PER_X_KG_FLAT' then { value: data[:kg], base: data[:base] }
       else
         raise UnknownRateBasisReadingError, "RATE_BASIS \"#{rate_basis}\" not found!"
@@ -77,6 +78,7 @@ module ExcelDataServices
       when 'PER_BILL_CONTAINER' then { container: data[:container], bill: data[:bill] }
       when 'PER_CBM_KG' then { kg: data[:kg], cbm: data[:cbm] }
       when 'PER_KG_RANGE' then { range_min: data[:range_min], range_max: data[:range_max], kg: data[:kg] }
+      when 'PER_WM_RANGE' then { range_min: data[:range_min], range_max: data[:range_max], kg: data[:wm] }
       when 'PER_X_KG_FLAT' then { kg: data[:value], base: data[:base] }
       else
         raise UnknownRateBasisWritingError, "RATE_BASIS \"#{rate_basis}\" not found!"
