@@ -14,6 +14,7 @@ class QuoteMailer < ApplicationMailer
     tenant = @user.tenant
     @theme = tenant.theme
     @email = email[/[^@]+/]
+    @content = Content.get_component('QuotePdf', tenant.id)
 
     quotation = generate_and_upload_quotation(@quotes)
     @document = Document.create!(
