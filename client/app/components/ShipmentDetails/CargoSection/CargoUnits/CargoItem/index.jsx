@@ -1,6 +1,7 @@
 import React from 'react'
 import { withNamespaces } from 'react-i18next'
 import uuid from 'uuid'
+import { get } from 'lodash'
 import CargoUnitBox from '../CargoUnit/Box'
 import styles from './index.scss'
 import CargoUnitNumberInput from '../CargoUnit/NumberInput'
@@ -85,8 +86,10 @@ class CargoItem extends React.PureComponent {
       toggleModal
     } = this.props
     const maxDimension = Number(
-      this.getMaxDimensionsToApply()[prop]
+      this.getMaxDimensionsToApply()[prop === 'collectiveWeight' ? 'payloadInKg' : prop]
     )
+
+    const value = prop === 'collectiveWeight' ? cargoItem.payloadInKg * cargoItem.quantity : cargoItem[prop]
 
     return {
       cargoItem,
@@ -96,7 +99,7 @@ class CargoItem extends React.PureComponent {
       name: `${i}-${prop}`,
       onChange: onChangeCargoUnitInput,
       onExcessDimensionsRequest: () => toggleModal('maxDimensions'),
-      value: cargoItem[prop]
+      value
     }
   }
 
@@ -117,10 +120,7 @@ class CargoItem extends React.PureComponent {
       toggleStackable,
       uniqKey
     } = this.props
-    // TODO: implement collective weight based on scope
-    // scope.frontend_consolidation ? inputs.collectiveWeight : inputs.grossWeight
 
-    // TODO: implement cargoItemTypes
     const availableCargoItemTypes = CargoItem.getAvailableCargoItemTypes(cargoItemTypes)
     const selectedColliType = CargoItem.getSelectedColliType(
       cargoItemTypes, cargoItem.cargoItemTypeId
@@ -169,14 +169,31 @@ class CargoItem extends React.PureComponent {
               {...this.getSharedProps('dimensionZ')}
             />
 
-            <CargoUnitNumberInput
-              image={<img data-for={uuid.v4()} data-tip={t('common:grossWeight')} src={kg} alt="weight" border="0" />}
-              labelText={t('common:grossWeight')}
-              maxDimensionsErrorText={t('errors:maxWeight')}
-              tooltip={<Tooltip color={theme.colors.primary} icon="fa-info-circle" text="payload_in_kg" />}
-              unit="kg"
-              {...this.getSharedProps('payloadInKg')}
-            />
+            {
+              get(scope, ['consolidation', 'cargo', 'frontend'], false)
+                ? (
+                  <CargoUnitNumberInput
+                    labelText={t('common:grossWeight')}
+                    maxDimensionsErrorText={t('errors:maxWeight')}
+                    tooltip={<Tooltip color={theme.colors.primary} icon="fa-info-circle" text="payload_in_kg" />}
+                    unit="kg"
+                    {...this.getSharedProps('collectiveWeight')}
+                    onChange={onChangeCargoUnitInput}
+                  />
+                )
+                : (
+                  <CargoUnitNumberInput
+                    image={
+                      <img data-for={uuid.v4()} data-tip={t('common:grossWeight')} src={kg} alt="weight" border="0" />
+                    }
+                    labelText={t('common:grossWeightPerItem')}
+                    maxDimensionsErrorText={t('errors:maxWeight')}
+                    unit="kg"
+                    {...this.getSharedProps('payloadInKg')}
+                  />
+                )
+            }
+
           </div>
           <div className="flex-100 layout-row" />
           <div

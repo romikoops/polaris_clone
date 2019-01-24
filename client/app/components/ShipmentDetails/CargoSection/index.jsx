@@ -55,14 +55,34 @@ class CargoSection extends React.PureComponent {
     bookingProcessDispatch.addCargoUnit(this.getNewUnit())
   }
 
+  handleChangeCollectiveWeight (index, newValue) {
+    const { shipment } = this.props
+    const { cargoUnits } = shipment
+    const { quantity } = cargoUnits[index]
+
+    const { bookingProcessDispatch } = this.props
+    bookingProcessDispatch.updateCargoUnit({
+      index: Number(index),
+      prop: 'payloadInKg',
+      newValue: newValue / quantity
+    })
+  }
+
   handleChangeCargoUnitInput (e) {
     const [index, prop] = e.target.name.split('-')
+    const newValue = Number(e.target.value)
+
+    if (prop === 'collectiveWeight') {
+      this.handleChangeCollectiveWeight(index, newValue)
+
+      return
+    }
 
     const { bookingProcessDispatch } = this.props
     bookingProcessDispatch.updateCargoUnit({
       index: Number(index),
       prop,
-      newValue: Number(e.target.value)
+      newValue
     })
   }
 
