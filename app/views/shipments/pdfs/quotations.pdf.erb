@@ -106,9 +106,9 @@
               </div>
               <div class="cargo-section ">
                 <p class="cargo-value">
-                  <span class="cargo-type"><%='%.2f' % cargo.chargeable_weight %></span>&nbsp;kg
+                  <span class="cargo-type"><%= cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:value] %></span>
                 </p>
-                <p class="cargo-subtitle">Chargeable&nbsp;Weight</p>
+                <p class="cargo-subtitle"> <%= cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:title] %></p>
               </div>
               <div class="cargo-section">
                 <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % cargo.dimension_x %></span>&nbsp;cm </p>
@@ -227,10 +227,10 @@
           <div class="total-price-single">
             <h4>
                 <%= charge_name %>
-                <small class="chargeable_weight"><%= if scope['show_chargeable_weight'] && !['import', 'export'].include?(charge_key)
-                  " (Chargeable Weight: #{cargo_data[:chargeable_weight][s.id][charge_key.to_sym]} kg)"
-                  end%>
-                </small>
+                <% if scope['show_chargeable_weight'] && !['import', 'export'].include?(charge_key) %>
+                  <%= cargo_data[:chargeable_weight][s.id][charge_key.to_sym] %>
+                 <% end %>
+
                  
             </h4>
             <% if charge_key != 'cargo' && charge != "Grand Total" && !scope['hide_grand_total'] || (charge_key == 'cargo' && !hide_cargo_sub_totals)%>
