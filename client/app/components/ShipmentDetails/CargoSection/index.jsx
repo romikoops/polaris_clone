@@ -34,6 +34,7 @@ class CargoSection extends React.PureComponent {
     this.container = {
       sizeClass: 'smallDryContainer',
       quantity: 1,
+      payloadInKg: 0,
       dangerousGoods: false
     }
     if (props.shipment.cargoUnits.length === 0) this.handleAddUnit()

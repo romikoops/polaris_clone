@@ -52,10 +52,12 @@ class ShipmentDetails extends React.PureComponent {
         containers_attributes: shipment.loadType === 'container' ? shipment.cargoUnits : [],
         trucking: shipment.trucking,
         incoterm: {},
-        aggregated_cargo_attributes: {
-          weight: shipment.aggregatedCargo ? shipment.cargoUnits[0].totalWeight : 0,
-          volume: shipment.aggregatedCargo ? shipment.cargoUnits[0].totalVolume : 0
-        }
+        aggregated_cargo_attributes: shipment.aggregatedCargo
+          ? {
+            weight: shipment.cargoUnits[0].totalWeight,
+            volume: shipment.cargoUnits[0].totalVolume
+          }
+          : null
       }
     }
     getOffers(request, true)

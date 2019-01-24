@@ -178,7 +178,6 @@ class CargoItem extends React.PureComponent {
                     tooltip={<Tooltip color={theme.colors.primary} icon="fa-info-circle" text="payload_in_kg" />}
                     unit="kg"
                     {...this.getSharedProps('collectiveWeight')}
-                    onChange={onChangeCargoUnitInput}
                   />
                 )
                 : (
