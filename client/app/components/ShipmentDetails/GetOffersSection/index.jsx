@@ -8,6 +8,7 @@ import Checkboxes from './Checkboxes'
 import ButtonWrapper from './ButtonWrapper'
 import { isQuote } from '../../../helpers'
 import styles from './index.scss'
+import ErrorMessage from './ErrorMessage';
 
 class GetOffersSection extends React.PureComponent {
   constructor (props) {
@@ -36,10 +37,7 @@ class GetOffersSection extends React.PureComponent {
   }
 
   getOffersBtnIsActive () {
-    // TODO: implement excessWeightText
-    const excessWeightText = ''
-
-    return this.noDangerousGoodsCondition() && this.stackableGoodsCondition() && !excessWeightText
+    return this.noDangerousGoodsCondition() && this.stackableGoodsCondition()
   }
 
   cargoContainsDangerousGoods () {
@@ -57,11 +55,10 @@ class GetOffersSection extends React.PureComponent {
 
   stackableGoodsCondition () {
     const { stackableGoodsConfirmed } = this.state
+    const { shipment } = this.props
+    const { aggregatedCargo } = shipment
 
-    // TODO: implement agregated
-    const aggregated = false
-
-    return stackableGoodsConfirmed || !aggregated
+    return stackableGoodsConfirmed || !aggregatedCargo
   }
 
   resetShakeClass () {
@@ -98,20 +95,34 @@ class GetOffersSection extends React.PureComponent {
 
   render () {
     const {
-      user, tenant, theme, t
+      user, tenant, theme, shipment, totalShipmentErrors, t
     } = this.props
+
+    const { aggregatedCargo, loadType } = shipment
 
     const { shakeClass, noDangerousGoodsConfirmed, stackableGoodsConfirmed } = this.state
 
     const active = this.getOffersBtnIsActive()
     const disabled = !active
 
-    // TODO: implement excessChargeableWeightText
-    const excessChargeableWeightText = ''
-    // TODO: implement excessWeightText
-    const excessWeightText = ''
-    // TODO: implement agregated
-    const aggregated = false
+    const subTexts = []
+
+    if (loadType === 'cargo_item') {
+      Object.entries(totalShipmentErrors).forEach(([name, obj]) => {
+        if (!obj.errors) return
+  
+        obj.errors.forEach((error) => {
+          subTexts.push(
+            <ErrorMessage
+              error={error}
+              type={obj.type}
+              name={name}
+              tenant={tenant}
+            />
+          )
+        })
+      })
+    }
 
     return (
       <div className={`get_offers_section layout-row flex-100 layout-wrap layout-align-center-center margin_top ${styles.get_offers_section}`}>
@@ -151,7 +162,7 @@ class GetOffersSection extends React.PureComponent {
                 active={active}
                 disabled={disabled}
                 theme={theme}
-                subTexts={[excessChargeableWeightText, excessWeightText]}
+                subTexts={subTexts}
               />
             </div>
           </div>
@@ -169,7 +180,7 @@ function mapStateToProps (state) {
   const { theme, scope } = tenant
 
   return {
-    shipment, theme, scope, user
+    shipment, theme, scope, tenant, user
   }
 }
 

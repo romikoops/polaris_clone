@@ -1,4 +1,5 @@
 import React from 'react'
+import uuid from 'uuid'
 import RoundButton from '../../../RoundButton/RoundButton'
 
 function ButtonWrapper ({
@@ -23,7 +24,7 @@ function ButtonWrapper ({
 
       {
         subTexts.map(subText => subText && (
-          <p style={{ fontSize: '14px', width: '317px', color: 'rgb(211, 104, 80)' }}>
+          <p key={uuid.v4()} style={{ fontSize: '14px', width: '317px', color: 'rgb(211, 104, 80)' }}>
             { subText }
           </p>
         ))
