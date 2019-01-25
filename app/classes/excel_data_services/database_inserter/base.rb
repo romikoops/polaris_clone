@@ -200,7 +200,7 @@ module ExcelDataServices
           pricing_detail.save!
           new_pricing_details << pricing_detail
         end
-        (existing_pricing_details - new_pricing_details).map(&:destroy)
+        PricingDetail.where(id: (existing_pricing_details - new_pricing_details).map(&:id)).delete_all
       end
     end
   end
