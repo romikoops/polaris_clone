@@ -1,26 +1,12 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme } from '../../../../mocks'
+import {
+  gradientTextGenerator,
+  numberSpacing,
+  singleItemChargeableObject
+} from '../../../../helpers'
 
-jest.mock('../../../../helpers', () => ({
-  gradientTextGenerator: x => x,
-  numberSpacing: (number, decimals) => {
-    if (!number) {
-      return ''
-    }
-    let num
-    if (typeof number === 'string') {
-      num = parseFloat(number)
-    } else {
-      num = number
-    }
-
-    return num.toLocaleString('en', {
-      minimumFractionDigits: decimals || 0,
-      maximumFractionDigits: decimals || 0
-    })
-  }
-}))
 jest.mock('uuid', () => {
   let counter = -1
   const v4 = () => {
@@ -55,6 +41,7 @@ const group = {
 const propsBase = {
   theme,
   group,
+  scope: {},
   viewHSCodes: false,
   hsCodes: ['FOO_HSCODE', 'BAR_HSCODE']
 }
@@ -83,4 +70,45 @@ test('state.viewer is true', () => {
   wrapper.setState({ viewer: true })
 
   expect(wrapper).toMatchSnapshot()
+})
+
+test('shallow rendering dynamic chargeable value', () => {
+  const newPropsBase = {
+    ...propsBase,
+    scope: {
+      ...propsBase.scope,
+      chargeable_weight_view: 'dynamic'
+    }
+  }
+  expect(shallow(<CargoItemGroup {...newPropsBase} />)).toMatchSnapshot()
+})
+test('shallow rendering weight chargeable value', () => {
+  const newPropsBase = {
+    ...propsBase,
+    scope: {
+      ...propsBase.scope,
+      chargeable_weight_view: 'weight'
+    }
+  }
+  expect(shallow(<CargoItemGroup {...newPropsBase} />)).toMatchSnapshot()
+})
+test('shallow rendering volume chargeable value', () => {
+  const newPropsBase = {
+    ...propsBase,
+    scope: {
+      ...propsBase.scope,
+      chargeable_weight_view: 'volume'
+    }
+  }
+  expect(shallow(<CargoItemGroup {...newPropsBase} />)).toMatchSnapshot()
+})
+test('shallow rendering both chargeable value', () => {
+  const newPropsBase = {
+    ...propsBase,
+    scope: {
+      ...propsBase.scope,
+      chargeable_weight_view: 'both'
+    }
+  }
+  expect(shallow(<CargoItemGroup {...newPropsBase} />)).toMatchSnapshot()
 })

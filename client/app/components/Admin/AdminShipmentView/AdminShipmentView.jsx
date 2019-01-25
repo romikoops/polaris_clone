@@ -192,7 +192,7 @@ class AdminShipmentView extends Component {
 
   prepCargoItemGroups (cargos) {
     const { scope, theme, shipmentData } = this.props
-    const { cargoItemTypes, hsCodes } = shipmentData
+    const { cargoItemTypes, hsCodes, shipment } = shipmentData
     const cargoGroups = {}
     let groupCount = 1
     const resultArray = []
@@ -227,10 +227,11 @@ class AdminShipmentView extends Component {
     
     Object.keys(cargoGroups).forEach((k) => {
       resultArray.push(<CargoItemGroup
-        shipment={shipmentData.shipment}
+        shipment={shipment}
         group={cargoGroups[k]}
         theme={theme}
         hsCodes={hsCodes}
+        scope={scope}
         hideUnits={scope.cargo_overview_only}
       />)
     })
