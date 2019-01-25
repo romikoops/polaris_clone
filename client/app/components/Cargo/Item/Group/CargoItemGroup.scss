@@ -92,6 +92,7 @@
     img {
       margin-right: 14px;
     }
+    position: relative;
   }
   .side_border {
     border-right: 1px solid #E0E0E0;
@@ -120,8 +121,20 @@
     width: 35%;
     min-height: 40px;
   }
+  .icon_cargo_item_small {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 25px;
+    min-height: 25px;
+    margin-right: 25px;
+  }
   .height_box {
     height: 80px;
+  }
+  .title_bar {
+    background: #E0E0E0;
+    padding: 10px;
   }
 
 
@@ -159,6 +172,14 @@
       }
     }
   }
+
+  @media only screen and (min-width: 960px) {
+    .unit_data_cell {
+      .dims {
+       display: none;
+      }
+    }
+  }
   @media only screen and (max-width: 525px) {
     .unit_data_cell {
       p {
@@ -192,5 +213,10 @@
         font-size: 22px;
       }
     }
+  }
+  .operand {
+    position: absolute;
+    top: 20px;
+    right: -10px;
   }
 }
