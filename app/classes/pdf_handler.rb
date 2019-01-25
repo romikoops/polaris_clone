@@ -47,7 +47,7 @@ class PdfHandler
              sum + hash[:quantity].to_f * hash[:payload_in_kg].to_f
            end
          end
-    unless shipment.lcl?
+    unless shipment.fcl?
       chargeable_weight = {}
       vol = if shipment.aggregated_cargo
               shipment.aggregated_cargo.volume.to_f
