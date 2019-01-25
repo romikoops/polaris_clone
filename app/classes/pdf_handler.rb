@@ -106,20 +106,26 @@ class PdfHandler
         chargeable_weight_cargo = chargeable_value
         cargo_string = " (Chargeable Weight: #{format('%.2f', chargeable_weight_cargo)} kg)"
         shipment.cargo_units.each do |hash|
-          string = "#{format('%.2f', hash[:chargeable_weight])} kg"
+          single_string = "#{format('%.2f', hash[:chargeable_weight])} kg"
+          total_string = "#{format('%.2f', hash[:chargeable_weight])} kg"
           chargeable_weight[hash[:id].to_s] = {
-            value: string,
-            title: 'Chargeable Weight'
+            single_value: single_string,
+            single_title: 'Chargeable&nbsp;Weight',
+            total_value: total_string,
+            total_title: 'Total&nbsp;Chargeable&nbsp;Weight'
           }
         end
       when 'volume'
         chargeable_weight_cargo = chargeable_value / 1000
         cargo_string = " (Chargeable Volume: #{format('%.3f', chargeable_weight_cargo)} m<sup>3</sup>)"
         shipment.cargo_units.each do |hash|
-          string = "#{format('%.3f', (hash[:chargeable_weight] / 1000))} m<sup>3</sup>"
+          single_string = "#{format('%.3f', (hash[:chargeable_weight] / 1000))} m<sup>3</sup>"
+          total_string = "#{format('%.3f', (hash[:chargeable_weight] / 1000 * hash[:quantity]))} m<sup>3</sup>"
           chargeable_weight[hash[:id].to_s] = {
-            value: string,
-            title: 'Chargeable&nbsp;Volume'
+            single_value: single_string,
+            single_title: 'Chargeable&nbsp;Volume',
+            total_value: total_string,
+            total_title: 'Total&nbsp;Chargeable&nbsp;Volume'
           }
         end
       when 'dynamic'
@@ -132,34 +138,47 @@ class PdfHandler
                          " (Chargeable&nbsp;Weight: #{chargeable_weight_cargo} kg)"
                        end
         shipment.cargo_units.each do |hash|
-          string = if show_volume
-                     "#{format('%.3f', (hash[:chargeable_weight] / 1000))} m<sup>3</sup>"
-                   else
-                     "#{format('%.2f', hash[:chargeable_weight])} kg"
-                   end
+          single_string = if show_volume
+                            "#{format('%.3f', (hash[:chargeable_weight] / 1000))} m<sup>3</sup>"
+                          else
+                            "#{format('%.2f', hash[:chargeable_weight])} kg"
+                          end
+          total_string = if show_volume
+                           "#{format('%.3f', (hash[:chargeable_weight] * hash[:quantity] / 1000))} m<sup>3</sup>"
+                         else
+                           "#{format('%.2f', (hash[:chargeable_weight] * hash[:quantity]))} kg"
+                         end
           chargeable_weight[hash[:id].to_s] = {
-            value: string,
-            title: show_volume ? 'Chargeable&nbsp;Volume' : 'Chargeable&nbsp;Weight'
+            single_value: single_string,
+            single_title: show_volume ? 'Chargeable&nbsp;Volume' : 'Chargeable&nbsp;Weight',
+            total_value: total_string,
+            total_title: show_volume ? 'Total&nbsp;Chargeable&nbsp;Volume' : 'Total&nbsp;Chargeable&nbsp;Weight'
           }
         end
       when 'both'
         chargeable_weight_cargo = chargeable_value / 1000
         cargo_string = " (Chargeable: #{format('%.3f', chargeable_weight_cargo)} t | m<sup>3</sup>)"
         shipment.cargo_units.each do |hash|
-          string = "#{format('%.3f', (hash[:chargeable_weight] / 1000))} t | m<sup>3</sup>"
+          single_string = "#{format('%.3f', (hash[:chargeable_weight] / 1000))} t | m<sup>3</sup>"
+          total_string = "#{format('%.3f', (hash[:chargeable_weight] * hash[:quantity] / 1000))} t | m<sup>3</sup>"
           chargeable_weight[hash[:id].to_s] = {
-            value: string,
-            title: 'Chargeable'
+            single_value: single_string,
+            single_title: 'Chargeable',
+            total_value: total_string,
+            total_title: 'Total&nbsp;Chargeable'
           }
         end
       else
         chargeable_weight_cargo = chargeable_value / 1000
         cargo_string = " (Chargeable: #{format('%.3f', chargeable_weight_cargo)} t | m<sup>3</sup>)"
         shipment.cargo_units.each do |hash|
-          string = "#{format('%.3f', (hash[:chargeable_weight] / 1000))} t | m<sup>3</sup>"
+          single_string = "#{format('%.3f', (hash[:chargeable_weight] / 1000))} t | m<sup>3</sup>"
+          total_string = "#{format('%.3f', (hash[:chargeable_weight] * hash[:quantity] / 1000))} t | m<sup>3</sup>"
           chargeable_weight[hash[:id].to_s] = {
-            value: string,
-            title: 'Chargeable'
+            single_value: single_string,
+            single_title: 'Chargeable',
+            total_value: total_string,
+            total_title: 'Total&nbsp;Chargeable'
           }
         end
       end

@@ -7,7 +7,11 @@ class ShipmentMailerPreview < ActionMailer::Preview
   end
 
   def shipper_notification
+<<<<<<< HEAD
     @shipment = Tenant.normanglobal.shipments.requested.last
+=======
+    @shipment = Shipment.where(status: 'requested', load_type: 'cargo_item').last
+>>>>>>> 7c9d39d3d... IMC-1212 - conflicts resolved
     ShipmentMailer.shipper_notification(@shipment.user, @shipment)
   end
 

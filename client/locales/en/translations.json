@@ -618,6 +618,8 @@
     "totalWeight": "Total Weight",
     "totalGrossWeight": "Total Gross Weight",
     "totalChargeableWeight": "Total Chargeable Weight",
+    "totalChargeableVolume": "Total Chargeable Volume",
+    "totalChargeableWeightVol": "Total Chargeable",
     "weightClass": "Weight Class",
     "confirmStackable": "I hereby confirm that my cargo consists of stackable items exclusively.",
     "nonStackable": "Should you wish to ship non-stackable cargo, please select",

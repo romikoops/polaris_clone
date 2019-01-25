@@ -8,8 +8,8 @@ export const effectiveKgPerCubicMeter = {
 }
 export function singleItemChargeableObject (cargoItem, mot, t, scope) {
   if (!cargoItem) return undefined
-  const volumeVal = +volume(cargoItem)
-  const weightVal = +cargoItem.payload_in_kg * cargoItem.quantity
+  const volumeVal = +singleVolume(cargoItem)
+  const weightVal = +cargoItem.payload_in_kg
   const showVolume = volumeVal > weightVal
   const chargeableWeightVal = Math.max(
     volumeVal * effectiveKgPerCubicMeter[mot],
@@ -17,7 +17,7 @@ export function singleItemChargeableObject (cargoItem, mot, t, scope) {
   )
   const chargeableVolumeVal = chargeableWeightVal / 1000
 
-  return chargeableObject(chargeableVolumeVal, chargeableWeightVal, showVolume, t, scope)
+  return chargeableObject(chargeableVolumeVal, chargeableWeightVal, showVolume, t, scope, cargoItem.quantity)
 }
 export function multiItemChargeableObject (cargoItems, mot, t, scope) {
   if (!cargoItems) return undefined
@@ -34,7 +34,7 @@ export function multiItemChargeableObject (cargoItems, mot, t, scope) {
   )
   const chargeableVolumeVal = chargeableWeightVal / 1000
 
-  return chargeableObject(chargeableVolumeVal, chargeableWeightVal, showVolume, t, scope)
+  return chargeableObject(chargeableVolumeVal, chargeableWeightVal, showVolume, t, scope, 1)
 }
 export function fixedWeightChargeableString (cargoItems, fixedWeight, t, scope) {
   if (!cargoItems) return undefined
@@ -50,39 +50,51 @@ export function fixedWeightChargeableString (cargoItems, fixedWeight, t, scope) 
 
   return chargeableString(chargeableVolumeVal, chargeableWeightVal, showVolume, t, scope)
 }
-export function chargeableObject (volumeVal, weightVal, showVolume, t, scope) {
+export function chargeableObject (volumeVal, weightVal, showVolume, t, scope, quantity = 1) {
   switch (scope.chargeable_weight_view) {
     case 'weight':
 
       return {
         value: `<span>${numberSpacing(weightVal, 2)}</span> kg`,
-        title: t('cargo:chargeableWeight')
+        title: t('cargo:chargeableWeight'),
+        total_value: `<span>${numberSpacing(weightVal * quantity, 2)}</span> kg`,
+        total_title: t('cargo:totalChargeableWeight')
       }
     case 'volume':
 
       return {
         value: `<span>${numberSpacing(volumeVal, 3)}</span> m<sup>3</sup>`,
-        title: t('cargo:chargeableVolume')
+        title: t('cargo:chargeableVolume'),
+        total_value: `<span>${numberSpacing(volumeVal * quantity, 3)}</span> m<sup>3</sup>`,
+        total_title: t('cargo:totalChargeableVolume')
       }
     case 'both':
 
       return {
         value: `<span>${numberSpacing(volumeVal, 3)}</span> t | m<sup>3</sup>`,
-        title: t('cargo:chargeableWeightVol')
+        title: t('cargo:chargeableWeightVol'),
+        total_value: `<span>${numberSpacing(volumeVal * quantity, 3)}</span> t | m<sup>3</sup>`,
+        total_title: t('cargo:totalChargeableWeightVol')
       }
     case 'dynamic':
 
       return showVolume ? {
         value: `<span>${numberSpacing(volumeVal, 3)}</span> m<sup>3</sup>`,
-        title: t('cargo:chargebleVolume')
+        title: t('cargo:chargebleVolume'),
+        total_value: `<span>${numberSpacing(volumeVal * quantity, 3)}</span> m<sup>3</sup>`,
+        total_title: t('cargo:totalChargeableVolume')
       } : {
         value: `<span>${numberSpacing(weightVal, 2)}</span> kg`,
-        title: t('cargo:chargeableWeight')
+        title: t('cargo:chargeableWeight'),
+        total_value: `<span>${numberSpacing(weightVal * quantity, 2)}</span> kg`,
+        total_title: t('cargo:totalChargeableWeight')
       }
     default:
       return {
         value: `<span>${numberSpacing(volumeVal, 3)}</span> t | m<sup>3</sup>`,
-        title: t('cargo:chargeableWeightVol')
+        title: t('cargo:chargeableWeightVol'),
+        total_value: `<span>${numberSpacing(volumeVal * quantity, 3)}</span> t | m<sup>3</sup>`,
+        total_title: t('cargo:totalChargeableWeightVol')
       }
   }
 }
@@ -148,6 +160,14 @@ export function volume (cargoItem) {
     cargoItem.dimension_x * cargoItem.dimension_y * cargoItem.dimension_z / 100 ** 3
 
   return (unitVolume * cargoItem.quantity)
+}
+export function singleVolume (cargoItem) {
+  if (!cargoItem) return undefined
+
+  const unitVolume =
+    cargoItem.dimension_x * cargoItem.dimension_y * cargoItem.dimension_z / 100 ** 3
+
+  return unitVolume
 }
 
 export function weight (cargoItem) {

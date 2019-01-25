@@ -1,0 +1,3145 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`props.viewHSCodes is true 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-start-center  title_bar"
+  >
+    <div
+      className="flex layout-row layout-align-start-center"
+    >
+      <div
+        className="icon_cargo_item_small"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        1 x undefined
+      </p>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
+  >
+    <div
+      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+      key="RANDOM_KEY_4"
+    >
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="length"
+              border="0"
+              data-for="RANDOM_KEY_3"
+              data-tip="Length"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_3"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                90
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Length
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="width"
+              border="0"
+              data-for="RANDOM_KEY_3"
+              data-tip="Width"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_3"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                100
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Width
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="height"
+              border="0"
+              data-for="RANDOM_KEY_3"
+              data-tip="Height"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_3"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                100
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Height
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              1.080
+            </span>
+             
+             m
+            <sup>
+              3
+            </sup>
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Volume
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell side_border flex layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              5.000
+            </span>
+             
+             m
+            <sup>
+              3
+            </sup>
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Volume
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+      key="RANDOM_KEY_5"
+    >
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              56.00
+            </span>
+             kg
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Item Gross Weight
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell side_border flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+             kg
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Gross Weight
+          </p>
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<span></span> t | m<sup>3</sup>",
+              }
+            }
+          />
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Chargeable Weight | Volume
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<span></span> t | m<sup>3</sup>",
+              }
+            }
+          />
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Chargeable
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-start-center  title_bar"
+  >
+    <div
+      className="flex layout-row layout-align-start-center"
+    >
+      <div
+        className="icon_cargo_item_small"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        1 x undefined
+      </p>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
+  >
+    <div
+      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+      key="RANDOM_KEY_1"
+    >
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="length"
+              border="0"
+              data-for="RANDOM_KEY_0"
+              data-tip="Length"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_0"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                90
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Length
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="width"
+              border="0"
+              data-for="RANDOM_KEY_0"
+              data-tip="Width"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_0"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                100
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Width
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="height"
+              border="0"
+              data-for="RANDOM_KEY_0"
+              data-tip="Height"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_0"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                100
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Height
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              1.080
+            </span>
+             
+             m
+            <sup>
+              3
+            </sup>
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Volume
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell side_border flex layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              5.000
+            </span>
+             
+             m
+            <sup>
+              3
+            </sup>
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Volume
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+      key="RANDOM_KEY_2"
+    >
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              56.00
+            </span>
+             kg
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Item Gross Weight
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell side_border flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+             kg
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Gross Weight
+          </p>
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<span></span> t | m<sup>3</sup>",
+              }
+            }
+          />
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Chargeable Weight | Volume
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<span></span> t | m<sup>3</sup>",
+              }
+            }
+          />
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Chargeable
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow rendering both chargeable value 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-start-center  title_bar"
+  >
+    <div
+      className="flex layout-row layout-align-start-center"
+    >
+      <div
+        className="icon_cargo_item_small"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        1 x undefined
+      </p>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
+  >
+    <div
+      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+      key="RANDOM_KEY_28"
+    >
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="length"
+              border="0"
+              data-for="RANDOM_KEY_27"
+              data-tip="Length"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_27"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                90
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Length
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="width"
+              border="0"
+              data-for="RANDOM_KEY_27"
+              data-tip="Width"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_27"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                100
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Width
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="height"
+              border="0"
+              data-for="RANDOM_KEY_27"
+              data-tip="Height"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_27"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                100
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Height
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              1.080
+            </span>
+             
+             m
+            <sup>
+              3
+            </sup>
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Volume
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell side_border flex layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              5.000
+            </span>
+             
+             m
+            <sup>
+              3
+            </sup>
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Volume
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+      key="RANDOM_KEY_29"
+    >
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              56.00
+            </span>
+             kg
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Item Gross Weight
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell side_border flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+             kg
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Gross Weight
+          </p>
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<span></span> t | m<sup>3</sup>",
+              }
+            }
+          />
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Chargeable Weight | Volume
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<span></span> t | m<sup>3</sup>",
+              }
+            }
+          />
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Chargeable
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow rendering dynamic chargeable value 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-start-center  title_bar"
+  >
+    <div
+      className="flex layout-row layout-align-start-center"
+    >
+      <div
+        className="icon_cargo_item_small"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        1 x undefined
+      </p>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
+  >
+    <div
+      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+      key="RANDOM_KEY_19"
+    >
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="length"
+              border="0"
+              data-for="RANDOM_KEY_18"
+              data-tip="Length"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_18"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                90
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Length
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="width"
+              border="0"
+              data-for="RANDOM_KEY_18"
+              data-tip="Width"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_18"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                100
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Width
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="height"
+              border="0"
+              data-for="RANDOM_KEY_18"
+              data-tip="Height"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_18"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                100
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Height
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              1.080
+            </span>
+             
+             m
+            <sup>
+              3
+            </sup>
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Volume
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell side_border flex layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              5.000
+            </span>
+             
+             m
+            <sup>
+              3
+            </sup>
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Volume
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+      key="RANDOM_KEY_20"
+    >
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              56.00
+            </span>
+             kg
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Item Gross Weight
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell side_border flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+             kg
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Gross Weight
+          </p>
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<span></span> kg",
+              }
+            }
+          />
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Chargeable Weight
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<span></span> kg",
+              }
+            }
+          />
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Chargeable Weight
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow rendering volume chargeable value 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-start-center  title_bar"
+  >
+    <div
+      className="flex layout-row layout-align-start-center"
+    >
+      <div
+        className="icon_cargo_item_small"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        1 x undefined
+      </p>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
+  >
+    <div
+      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+      key="RANDOM_KEY_25"
+    >
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="length"
+              border="0"
+              data-for="RANDOM_KEY_24"
+              data-tip="Length"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_24"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                90
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Length
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="width"
+              border="0"
+              data-for="RANDOM_KEY_24"
+              data-tip="Width"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_24"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                100
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Width
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="height"
+              border="0"
+              data-for="RANDOM_KEY_24"
+              data-tip="Height"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_24"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                100
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Height
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              1.080
+            </span>
+             
+             m
+            <sup>
+              3
+            </sup>
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Volume
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell side_border flex layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              5.000
+            </span>
+             
+             m
+            <sup>
+              3
+            </sup>
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Volume
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+      key="RANDOM_KEY_26"
+    >
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              56.00
+            </span>
+             kg
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Item Gross Weight
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell side_border flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+             kg
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Gross Weight
+          </p>
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<span></span> m<sup>3</sup>",
+              }
+            }
+          />
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Chargeable Volume
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<span></span> m<sup>3</sup>",
+              }
+            }
+          />
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Chargeable Volume
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow rendering weight chargeable value 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-start-center  title_bar"
+  >
+    <div
+      className="flex layout-row layout-align-start-center"
+    >
+      <div
+        className="icon_cargo_item_small"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        1 x undefined
+      </p>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
+  >
+    <div
+      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+      key="RANDOM_KEY_22"
+    >
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="length"
+              border="0"
+              data-for="RANDOM_KEY_21"
+              data-tip="Length"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_21"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                90
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Length
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="width"
+              border="0"
+              data-for="RANDOM_KEY_21"
+              data-tip="Width"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_21"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                100
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Width
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="height"
+              border="0"
+              data-for="RANDOM_KEY_21"
+              data-tip="Height"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_21"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                100
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Height
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              1.080
+            </span>
+             
+             m
+            <sup>
+              3
+            </sup>
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Volume
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell side_border flex layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              5.000
+            </span>
+             
+             m
+            <sup>
+              3
+            </sup>
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Volume
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+      key="RANDOM_KEY_23"
+    >
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              56.00
+            </span>
+             kg
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Item Gross Weight
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell side_border flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+             kg
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Gross Weight
+          </p>
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<span></span> kg",
+              }
+            }
+          />
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Chargeable Weight
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<span></span> kg",
+              }
+            }
+          />
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Chargeable Weight
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`state.unitView is true 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-start-center  title_bar"
+  >
+    <div
+      className="flex layout-row layout-align-start-center"
+    >
+      <div
+        className="icon_cargo_item_small"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        1 x undefined
+      </p>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
+  >
+    <div
+      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+      key="RANDOM_KEY_10"
+    >
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="length"
+              border="0"
+              data-for="RANDOM_KEY_9"
+              data-tip="Length"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_9"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                90
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Length
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="width"
+              border="0"
+              data-for="RANDOM_KEY_9"
+              data-tip="Width"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_9"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                100
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Width
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="height"
+              border="0"
+              data-for="RANDOM_KEY_9"
+              data-tip="Height"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_9"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                100
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Height
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              1.080
+            </span>
+             
+             m
+            <sup>
+              3
+            </sup>
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Volume
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell side_border flex layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              5.000
+            </span>
+             
+             m
+            <sup>
+              3
+            </sup>
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Volume
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+      key="RANDOM_KEY_11"
+    >
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              56.00
+            </span>
+             kg
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Item Gross Weight
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell side_border flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+             kg
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Gross Weight
+          </p>
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<span></span> t | m<sup>3</sup>",
+              }
+            }
+          />
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Chargeable Weight | Volume
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<span></span> t | m<sup>3</sup>",
+              }
+            }
+          />
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Chargeable
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`state.viewer is true 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-start-center  title_bar"
+  >
+    <div
+      className="flex layout-row layout-align-start-center"
+    >
+      <div
+        className="icon_cargo_item_small"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        1 x undefined
+      </p>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
+  >
+    <div
+      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+      key="RANDOM_KEY_16"
+    >
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="length"
+              border="0"
+              data-for="RANDOM_KEY_15"
+              data-tip="Length"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_15"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                90
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Length
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="width"
+              border="0"
+              data-for="RANDOM_KEY_15"
+              data-tip="Width"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_15"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                100
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Width
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <div
+            className="layout-row"
+          >
+            <img
+              alt="height"
+              border="0"
+              data-for="RANDOM_KEY_15"
+              data-tip="Height"
+            />
+            <ReactTooltip
+              className="tooltip"
+              effect="solid"
+              id="RANDOM_KEY_15"
+              insecure={true}
+              resizeHide={true}
+              wrapper="div"
+            />
+            <p
+              className="flex-none"
+            >
+              <span>
+                100
+              </span>
+               
+              cm
+            </p>
+          </div>
+          <p
+            className="flex-none layout-row layout-align-center-center dims"
+          >
+            Height
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              1.080
+            </span>
+             
+             m
+            <sup>
+              3
+            </sup>
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Volume
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell side_border flex layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              5.000
+            </span>
+             
+             m
+            <sup>
+              3
+            </sup>
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Volume
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+      key="RANDOM_KEY_17"
+    >
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span>
+              56.00
+            </span>
+             kg
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Item Gross Weight
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell side_border flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+             kg
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Gross Weight
+          </p>
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<span></span> t | m<sup>3</sup>",
+              }
+            }
+          />
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Chargeable Weight | Volume
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          x
+        </div>
+      </div>
+      <div
+        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <span />
+          </p>
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Quantity
+          </p>
+        </div>
+        <div
+          className="flex-none operand"
+        >
+          =
+        </div>
+      </div>
+      <div
+        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+      >
+        <div
+          className=""
+        >
+          <p
+            className="flex-none layout-row layout-align-center-center"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<span></span> t | m<sup>3</sup>",
+              }
+            }
+          />
+          <p
+            className="flex-none layout-row layout-align-center-center"
+          >
+            Total Chargeable
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
