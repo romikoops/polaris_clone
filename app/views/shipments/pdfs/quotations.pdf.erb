@@ -131,43 +131,60 @@
                 </div>
               </div>
               <div class="cargo-row display-flex-center text-center border-bottom">
-                <div class="cargo-section">
-                  <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % (cargo.payload_in_kg || cargo.weight) %></span>&nbsp;kg </p>
-                  <p class="cargo-subtitle">Gross&nbsp;Weight&nbsp;per&nbsp;Item</p>
-                   <div class="operand">x</div>
-                </div>
-                <div class="cargo-section">
-                  <p class="cargo-value">
-                    <span class="cargo-type"><%= cargo.quantity %> </span>
-                  </p>
-                  <p class="cargo-subtitle">Quantity</p>
-                  <div class="operand">=</div>
-                </div>
-                 <div class="cargo-section">
-                  <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % (cargo.payload_in_kg * cargo.quantity || cargo.weight) %></span>&nbsp;kg </p>
-                  <p class="cargo-subtitle">Total&nbsp;Gross&nbsp;Weight</p>
-                  <div class="divider"></div>
-                </div>
-                <div class="cargo-section ">
-                  <p class="cargo-value">
-                    <span class="cargo-type"><%= cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:single_value] %></span>
-                  </p>
-                  <p class="cargo-subtitle"> <%= cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:single_title] %></p>
-                  <div class="operand">x</div>
-                </div>
-                <div class="cargo-section">
-                  <p class="cargo-value">
-                    <span class="cargo-type"><%= cargo.quantity %> </span>
-                  </p>
-                  <p class="cargo-subtitle">Quantity</p>
-                  <div class="operand">=</div>
-                </div>
-                <div class="cargo-section ">
-                  <p class="cargo-value">
-                    <span class="cargo-type"><%= cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:total_value] %></span>
-                  </p>
-                  <p class="cargo-subtitle"><%= cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:total_title] %></p>
-                </div>
+                <% unless scope['cargo_overview_only'] %>
+                  <div class="cargo-section">
+                    <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % (cargo.payload_in_kg || cargo.weight) %></span>&nbsp;kg </p>
+                    <p class="cargo-subtitle">Gross&nbsp;Weight&nbsp;per&nbsp;Item</p>
+                    <div class="operand">x</div>
+                  </div>
+                  <div class="cargo-section">
+                    <p class="cargo-value">
+                      <span class="cargo-type"><%= cargo.quantity %> </span>
+                    </p>
+                    <p class="cargo-subtitle">Quantity</p>
+                    <div class="operand">=</div>
+                  </div>
+                  <div class="cargo-section">
+                    <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % (cargo.payload_in_kg * cargo.quantity || cargo.weight) %></span>&nbsp;kg </p>
+                    <p class="cargo-subtitle">Total&nbsp;Gross&nbsp;Weight</p>
+                    <div class="divider"></div>
+                  </div>
+                <% else %>
+                  <div class="cargo-section-half">
+                    <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % (cargo.payload_in_kg * cargo.quantity || cargo.weight) %></span>&nbsp;kg </p>
+                    <p class="cargo-subtitle">Total&nbsp;Gross&nbsp;Weight</p>
+                    <div class="divider"></div>
+                  </div>
+                <% end %>
+                <% unless scope['cargo_overview_only'] %>
+                  <div class="cargo-section ">
+                    <p class="cargo-value">
+                      <span class="cargo-type"><%= cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:single_value] %></span>
+                    </p>
+                    <p class="cargo-subtitle"> <%= cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:single_title] %></p>
+                    <div class="operand">x</div>
+                  </div>
+                  <div class="cargo-section">
+                    <p class="cargo-value">
+                      <span class="cargo-type"><%= cargo.quantity %> </span>
+                    </p>
+                    <p class="cargo-subtitle">Quantity</p>
+                    <div class="operand">=</div>
+                  </div>
+                  <div class="cargo-section ">
+                    <p class="cargo-value">
+                      <span class="cargo-type"><%= cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:total_value] %></span>
+                    </p>
+                    <p class="cargo-subtitle"><%= cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:total_title] %></p>
+                  </div>
+                <% else %>
+                  <div class="cargo-section-half ">
+                    <p class="cargo-value">
+                      <span class="cargo-type"><%= cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:total_value] %></span>
+                    </p>
+                    <p class="cargo-subtitle"><%= cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:total_title] %></p>
+                  </div>
+                <% end %>
               </div>
             </div>
           <% end %>

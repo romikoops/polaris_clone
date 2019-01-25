@@ -300,7 +300,7 @@ exports[`props.viewHSCodes is true 1`] = `
         </div>
       </div>
       <div
-        className="unit_data_cell side_border flex-20 layout-row layout-align-center-center"
+        className="unit_data_cell side_border flex layout-row layout-align-center-center"
       >
         <div
           className=""
@@ -368,7 +368,7 @@ exports[`props.viewHSCodes is true 1`] = `
         </div>
       </div>
       <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+        className="unit_data_cell flex layout-row layout-align-center-center"
       >
         <div
           className=""
@@ -693,7 +693,7 @@ exports[`shallow render 1`] = `
         </div>
       </div>
       <div
-        className="unit_data_cell side_border flex-20 layout-row layout-align-center-center"
+        className="unit_data_cell side_border flex layout-row layout-align-center-center"
       >
         <div
           className=""
@@ -761,7 +761,7 @@ exports[`shallow render 1`] = `
         </div>
       </div>
       <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+        className="unit_data_cell flex layout-row layout-align-center-center"
       >
         <div
           className=""
@@ -1086,7 +1086,7 @@ exports[`shallow rendering both chargeable value 1`] = `
         </div>
       </div>
       <div
-        className="unit_data_cell side_border flex-20 layout-row layout-align-center-center"
+        className="unit_data_cell side_border flex layout-row layout-align-center-center"
       >
         <div
           className=""
@@ -1154,7 +1154,7 @@ exports[`shallow rendering both chargeable value 1`] = `
         </div>
       </div>
       <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+        className="unit_data_cell flex layout-row layout-align-center-center"
       >
         <div
           className=""
@@ -1479,7 +1479,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
         </div>
       </div>
       <div
-        className="unit_data_cell side_border flex-20 layout-row layout-align-center-center"
+        className="unit_data_cell side_border flex layout-row layout-align-center-center"
       >
         <div
           className=""
@@ -1547,7 +1547,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
         </div>
       </div>
       <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+        className="unit_data_cell flex layout-row layout-align-center-center"
       >
         <div
           className=""
@@ -1872,7 +1872,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
         </div>
       </div>
       <div
-        className="unit_data_cell side_border flex-20 layout-row layout-align-center-center"
+        className="unit_data_cell side_border flex layout-row layout-align-center-center"
       >
         <div
           className=""
@@ -1940,7 +1940,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
         </div>
       </div>
       <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+        className="unit_data_cell flex layout-row layout-align-center-center"
       >
         <div
           className=""
@@ -2265,7 +2265,7 @@ exports[`shallow rendering weight chargeable value 1`] = `
         </div>
       </div>
       <div
-        className="unit_data_cell side_border flex-20 layout-row layout-align-center-center"
+        className="unit_data_cell side_border flex layout-row layout-align-center-center"
       >
         <div
           className=""
@@ -2333,7 +2333,7 @@ exports[`shallow rendering weight chargeable value 1`] = `
         </div>
       </div>
       <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+        className="unit_data_cell flex layout-row layout-align-center-center"
       >
         <div
           className=""
@@ -2658,7 +2658,7 @@ exports[`state.unitView is true 1`] = `
         </div>
       </div>
       <div
-        className="unit_data_cell side_border flex-20 layout-row layout-align-center-center"
+        className="unit_data_cell side_border flex layout-row layout-align-center-center"
       >
         <div
           className=""
@@ -2726,7 +2726,7 @@ exports[`state.unitView is true 1`] = `
         </div>
       </div>
       <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+        className="unit_data_cell flex layout-row layout-align-center-center"
       >
         <div
           className=""
@@ -3051,7 +3051,7 @@ exports[`state.viewer is true 1`] = `
         </div>
       </div>
       <div
-        className="unit_data_cell side_border flex-20 layout-row layout-align-center-center"
+        className="unit_data_cell side_border flex layout-row layout-align-center-center"
       >
         <div
           className=""
@@ -3119,7 +3119,7 @@ exports[`state.viewer is true 1`] = `
         </div>
       </div>
       <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
+        className="unit_data_cell flex layout-row layout-align-center-center"
       >
         <div
           className=""

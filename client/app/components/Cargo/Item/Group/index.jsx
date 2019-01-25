@@ -49,9 +49,9 @@ class CargoItemGroup extends Component {
 
   render () {
     const {
-      group, shipment, theme, t, scope
+      group, shipment, theme, t, scope, hideUnits
     } = this.props
- 
+
     const showTooltip = true
     const tooltipId = v4()
     const chargeableData = singleItemChargeableObject(group.items[0], shipment.mode_of_transport, t, scope)
@@ -174,28 +174,30 @@ cm
           styles.detailed_row
         } flex-100 layout-row layout-wrap layout-align-none-center`}
       >
-        <div className={`${styles.unit_data_cell} flex-20 layout-row layout-align-center-center`}>
-          <div className="">
-            <p className="flex-none layout-row layout-align-center-center">
-              <span>{numberSpacing(group.items[0].payload_in_kg, 2)}</span>
+        { hideUnits ? ''
+          : [(<div className={`${styles.unit_data_cell} flex-20 layout-row layout-align-center-center`}>
+            <div className="">
+              <p className="flex-none layout-row layout-align-center-center">
+                <span>{numberSpacing(group.items[0].payload_in_kg, 2)}</span>
               &nbsp;kg
-            </p>
-            <p className="flex-none layout-row layout-align-center-center">{t('common:itemGrossWeight')}</p>
-          </div>
-          <div className={`flex-none ${styles.operand}`}>x</div>
-        </div>
-        <div className={`${styles.unit_data_cell}  flex-10 layout-row layout-align-center-center`}>
-          <div className="">
-            <p className="flex-none layout-row layout-align-center-center">
-              <span>
-                {group.items[0].quantity}
-              </span>
-            </p>
-            <p className="flex-none layout-row layout-align-center-center">{t('common:quantity')}</p>
-          </div>
-          <div className={`flex-none ${styles.operand}`}>=</div>
-        </div>
-        <div className={`${styles.unit_data_cell} ${styles.side_border} flex-20 layout-row layout-align-center-center`}>
+              </p>
+              <p className="flex-none layout-row layout-align-center-center">{t('common:itemGrossWeight')}</p>
+            </div>
+            <div className={`flex-none ${styles.operand}`}>x</div>
+          </div>),
+          (<div className={`${styles.unit_data_cell}  flex-10 layout-row layout-align-center-center`}>
+            <div className="">
+              <p className="flex-none layout-row layout-align-center-center">
+                <span>
+                  {group.items[0].quantity}
+                </span>
+              </p>
+              <p className="flex-none layout-row layout-align-center-center">{t('common:quantity')}</p>
+            </div>
+            <div className={`flex-none ${styles.operand}`}>=</div>
+          </div>)]
+        }
+        <div className={`${styles.unit_data_cell} ${styles.side_border} flex layout-row layout-align-center-center`}>
           <div className="">
             <p className="flex-none layout-row layout-align-center-center">
               <span>
@@ -206,29 +208,30 @@ cm
             <p className="flex-none layout-row layout-align-center-center">{t('cargo:totalGrossWeight')}</p>
           </div>
         </div>
-
-        <div className={`${styles.unit_data_cell} flex-20 layout-row layout-align-center-center`}>
-          <div className="">
-            <p
-              className="flex-none layout-row layout-align-center-center"
-              dangerouslySetInnerHTML={{ __html: chargeableData.value }}
-            />
-            <p className="flex-none layout-row layout-align-center-center">{chargeableData.title}</p>
-          </div>
-          <div className={`flex-none ${styles.operand}`}>x</div>
-        </div>
-        <div className={`${styles.unit_data_cell}  flex-10 layout-row layout-align-center-center`}>
-          <div className="">
-            <p className="flex-none layout-row layout-align-center-center">
-              <span>
-                {group.items[0].quantity}
-              </span>
-            </p>
-            <p className="flex-none layout-row layout-align-center-center">{t('common:quantity')}</p>
-          </div>
-          <div className={`flex-none ${styles.operand}`}>=</div>
-        </div>
-        <div className={`${styles.unit_data_cell} flex-20 layout-row layout-align-center-center`}>
+        { hideUnits ? ''
+          : [(<div className={`${styles.unit_data_cell} flex-20 layout-row layout-align-center-center`}>
+            <div className="">
+              <p
+                className="flex-none layout-row layout-align-center-center"
+                dangerouslySetInnerHTML={{ __html: chargeableData.value }}
+              />
+              <p className="flex-none layout-row layout-align-center-center">{chargeableData.title}</p>
+            </div>
+            <div className={`flex-none ${styles.operand}`}>x</div>
+          </div>),
+          (<div className={`${styles.unit_data_cell}  flex-10 layout-row layout-align-center-center`}>
+            <div className="">
+              <p className="flex-none layout-row layout-align-center-center">
+                <span>
+                  {group.items[0].quantity}
+                </span>
+              </p>
+              <p className="flex-none layout-row layout-align-center-center">{t('common:quantity')}</p>
+            </div>
+            <div className={`flex-none ${styles.operand}`}>=</div>
+          </div>)]
+        }
+        <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
           <div className="">
             <p
               className="flex-none layout-row layout-align-center-center"
