@@ -26,13 +26,13 @@ module ExcelDataServices
       end
 
       def build_row_data(charge_category)
-       
         {
           fee_code: charge_category.code.upcase,
           fee_name: charge_category.name,
           internal_code: nil
         }
       end
+
       def sort!(data)
         data.sort_by! do |h|
           h[:fee_code]

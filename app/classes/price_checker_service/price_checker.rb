@@ -86,7 +86,7 @@ module PriceCheckerService
         )
 
         unless local_charges_data.empty?
-          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('export'))
+          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('export', @user.tenant_id))
         end
       end
 
@@ -103,7 +103,7 @@ module PriceCheckerService
         )
 
         unless local_charges_data.empty?
-          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('import'))
+          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('import', @user.tenant_id))
         end
       end
     end
@@ -111,7 +111,7 @@ module PriceCheckerService
     def create_trucking_charges
       @trucking_data.each do |carriage, data|
         charge_category = ChargeCategory.find_or_create_by(
-          name: "Trucking #{carriage.capitalize}-Carriage", code: "trucking_#{carriage}"
+          name: "Trucking #{carriage.capitalize}-Carriage", code: "trucking_#{carriage}".downcase
         )
 
         parent_charge = create_parent_charge(charge_category)
@@ -120,7 +120,7 @@ module PriceCheckerService
         hub_data = data[hub.id]
 
         hub_data[:trucking_charge_data].each do |cargo_class, trucking_charges|
-          children_charge_category = ChargeCategory.from_code("trucking_#{cargo_class}")
+          children_charge_category = ChargeCategory.from_code("trucking_#{cargo_class}", @user.tenant_id)
 
           create_charges_from_fees_data!(
             trucking_charges, children_charge_category, charge_category, parent_charge
@@ -135,7 +135,7 @@ module PriceCheckerService
         sum + cargo_unit.try(:quantity).to_i
       end
 
-      charge_category = ChargeCategory.from_code('cargo')
+      charge_category = ChargeCategory.from_code('cargo', @user.tenant_id)
       parent_charge = create_parent_charge(charge_category)
 
       isAggCargo = !@shipment.aggregated_cargo.nil?
@@ -160,7 +160,7 @@ module PriceCheckerService
 
         children_charge_category = ChargeCategory.find_or_create_by(
           name:          cargo_unit_model.humanize,
-          code:          cargo_unit_model.underscore,
+          code:          cargo_unit_model.underscore.downcase,
           cargo_unit_id: cargo_unit[:id]
         )
 
@@ -198,7 +198,7 @@ module PriceCheckerService
         next if code.to_s == 'total' || charge.empty?
 
         Charge.create(
-          children_charge_category: ChargeCategory.from_code(code),
+          children_charge_category: ChargeCategory.from_code(code, @user.tenant_id),
           charge_category:          children_charge_category,
 
           parent:                   parent_charge,

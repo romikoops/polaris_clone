@@ -7,6 +7,7 @@ module ExcelDataServices
         MissingValuesForRateBasisError = Class.new(ExcelDataServices::FileParser::Base::ParsingError)
 
         private
+
         def build_charge_params(data)
           all_charge_params = []
           data.values.each do |per_sheet_values|
@@ -14,6 +15,7 @@ module ExcelDataServices
           end
           all_charge_params.flatten
         end
+
         def restructure_data(data)
           build_charge_params(data)
         end

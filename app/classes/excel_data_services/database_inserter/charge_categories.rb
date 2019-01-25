@@ -14,34 +14,29 @@ module ExcelDataServices
       end
 
       private
+
       def update_or_create_charge_category(params)
-        existing_exact_charge = ChargeCategory.find_by(
-                                  tenant_id: params[:tenant_id],
-                                  code: params[:fee_code],
-                                  name: params[:fee_name]
-                                )
-        return if existing_exact_charge.present?
-        existing_charge = ChargeCategory.find_by(
-                            tenant_id: params[:tenant_id],
-                            code: params[:fee_code]
-                          )
-        # TO DO - determine logic for updating fees and internal code logic
-        # is_valid = validate_existing_charge(existing_charge)
-        if existing_charge.present?
-          existing_charge.update(name: params[:fee_name])
-          add_stats(:charge_categories, existing_charge)
-        else
-          ChargeCategory.create!(
-            tenant_id: params[:tenant_id],
-            code: params[:fee_code],
-            name: params[:fee_name]
-          )
-        end
+        correct_charge = ChargeCategory.find_or_create_by(
+          tenant_id: @tenant.id,
+          code: params[:fee_code].downcase,
+          name: params[:fee_name]
+        )
+        validate_and_correct_existing_charges(correct_charge)
+        add_stats(:charge_categories, correct_charge)
       end
 
-      def validate_existing_charge(charge)
-        return false if charge.code.downcase == charge.name.downcase
-        true
+      def validate_and_correct_existing_charges(charge)
+        other_charge_category_ids = ChargeCategory.where.not(id: charge.id)
+                                                  .where(
+                                                    tenant_id: @tenant.id,
+                                                    code: [charge.code.upcase, charge.code.downcase]
+                                                  ).ids
+        Charge.where(charge_category_id: other_charge_category_ids)
+              .update_all(charge_category_id: charge.id)
+        Charge.where(children_charge_category_id: other_charge_category_ids)
+              .update_all(children_charge_category_id: charge.id)
+
+        ChargeCategory.where(id: other_charge_category_ids).destroy_all
       end
     end
   end

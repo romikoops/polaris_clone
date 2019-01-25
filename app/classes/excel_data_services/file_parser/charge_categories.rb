@@ -13,7 +13,7 @@ module ExcelDataServices
       end
 
       def sanitize_row_data(row_data)
-        row_data = strip_whitespaces(row_data)
+        strip_whitespaces(row_data)
       end
     end
   end

@@ -40,7 +40,7 @@ class ChargeCategory < ApplicationRecord
   end
 
   def self.from_code(code, tenant_id = nil)
-    code = code.to_s.upcase
+    code = code.to_s.downcase
     tenant_charge_category = find_by(code: code, tenant_id: tenant_id)
     return tenant_charge_category unless tenant_charge_category.nil?
 
@@ -52,7 +52,7 @@ class ChargeCategory < ApplicationRecord
   end
 
   def self.from_fee(fee)
-    code = fee['key']
+    code = fee['key'].downcase
     name = fee.fetch('name') do
       fee['key'].to_s.humanize.split(' ').map(&:capitalize).join(' ')
     end

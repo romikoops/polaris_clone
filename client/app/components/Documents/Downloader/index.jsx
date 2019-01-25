@@ -2,7 +2,6 @@ import React from 'react'
 import { withNamespaces } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Promise } from 'es6-promise-promise'
 import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
 import { documentActions } from '../../../actions'
@@ -50,6 +49,9 @@ class DocumentsDownloader extends React.Component {
         break
       case 'shipment_recap':
         documentDispatch.downloadShipment(options)
+        break
+      case 'charge_categories':
+        documentDispatch.downloadChargeCategories()
         break
       case 'quotations':
         documentDispatch.downloadQuotations(options)

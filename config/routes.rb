@@ -91,6 +91,12 @@ Rails.application.routes.draw do
           post :download
         end
       end
+      resources :charge_categories, only: %i(index update) do
+        collection do
+          post :upload
+          get :download
+        end
+      end
       get 'local_charges/:id/hub', to: 'local_charges#hub_charges'
       post 'local_charges/:id/edit', to: 'local_charges#edit'
       post 'customs_fees/:id/edit', to: 'local_charges#edit_customs'

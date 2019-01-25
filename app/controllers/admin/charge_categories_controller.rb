@@ -22,4 +22,15 @@ class Admin::ChargeCategoriesController < Admin::AdminBaseController
 
     response_handler(key: 'charge_categories', url: rails_blob_url(document.file, disposition: 'attachment'))
   end
+
+
+  private
+
+  def upload_params
+    params.permit(:file)
+  end
+
+  def download_params
+    params.require(:options).permit(:mot)
+  end
 end

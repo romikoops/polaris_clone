@@ -124,7 +124,7 @@ class CardPricingIndex extends Component {
   render () {
     const { searchText, page, expander } = this.state
     const {
-      theme, scope, toggleCreator, mot, allNumPages, t, user
+      theme, scope, toggleCreator, mot, allNumPages, t, user, documentDispatch
     } = this.props
 
     const newButton = (
@@ -172,7 +172,7 @@ class CardPricingIndex extends Component {
           if (loadType) options.load_type = snakeCase(loadType)
 
           return (
-            <div
+            [(<div
               className={`${
                 adminStyles.action_section
               } flex-100 layout-row layout-wrap layout-align-center-center`}
@@ -186,7 +186,20 @@ class CardPricingIndex extends Component {
                 size="full"
                 text={t('admin:dedicatedPricing')}
               />
-            </div>
+            </div>),
+            (<div
+              className={`${
+                styles.action_section
+              } flex-100 layout-row layout-align-center-center layout-wrap`}
+            >
+              <p className="flex-100 center">{t('admin:uploadChargeCategories')}</p>
+              <FileUploader
+                theme={theme}
+                type="xlsx"
+                text={t('admin:chargeCategoriesExcel')}
+                dispatchFn={documentDispatch.uploadChargeCategories}
+              />
+            </div>)]
           )
         })}
       </div>
@@ -206,7 +219,7 @@ class CardPricingIndex extends Component {
           if (loadType) options.load_type = snakeCase(loadType)
 
           return (
-            <div
+            [(<div
               className={`${
                 adminStyles.action_section
               } flex-100 layout-row layout-wrap layout-align-center-center`}
@@ -218,7 +231,15 @@ class CardPricingIndex extends Component {
                 options={options}
                 size="full"
               />
-            </div>
+            </div>),
+            (<div
+              className={`${
+                styles.action_section
+              } flex-100 layout-row layout-wrap layout-align-center-center`}
+            >
+              <p className="flex-100 center">{t('admin:downloadChargeCategories')}</p>
+              <DocumentsDownloader theme={theme} target="charge_categories" />
+            </div>)]
           )
         })}
       </div>

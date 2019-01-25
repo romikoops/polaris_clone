@@ -126,6 +126,20 @@ export class AdminHubsIndex extends Component {
                       dispatchFn={documentDispatch.uploadHubs}
                     />
                   </div>
+                  <div
+                    className={`${
+                      styles.action_section
+                    } flex-100 layout-row layout-align-center-center layout-wrap`}
+                  >
+                    <p className="flex-100 center">{t('admin:uploadChargeCategories')}</p>
+                    <FileUploader
+                      theme={theme}
+                      url={hubUrl}
+                      type="xlsx"
+                      text={t('admin:chargeCategoriesExcel')}
+                      dispatchFn={documentDispatch.uploadChargeCategories}
+                    />
+                  </div>
                   {motBasedUploadButtons}
                 </div>
               )}
@@ -148,6 +162,14 @@ export class AdminHubsIndex extends Component {
                 >
                   <p className="flex-100 center">{t('admin:downloadHubs')}</p>
                   <DocumentsDownloader theme={theme} target="hubs" />
+                </div>
+                <div
+                  className={`${
+                    styles.action_section
+                  } flex-100 layout-row layout-wrap layout-align-center-center`}
+                >
+                  <p className="flex-100 center">{t('admin:downloadChargeCategories')}</p>
+                  <DocumentsDownloader theme={theme} target="charge_categories" />
                 </div>
                 {motBasedDownloadButtons}
               </div>

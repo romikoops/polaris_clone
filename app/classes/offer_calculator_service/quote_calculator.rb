@@ -56,7 +56,7 @@ module OfferCalculatorService
           @user
         )
         unless local_charges_data.empty?
-          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code("export"))
+          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code("export", @user.tenant_id))
         end
       end
 
@@ -73,7 +73,7 @@ module OfferCalculatorService
         )
 
         unless local_charges_data.empty?
-          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code("import"))
+          create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code("import", @user.tenant_id))
         end
       end
     end
@@ -81,7 +81,7 @@ module OfferCalculatorService
     def create_trucking_charges
       @trucking_data.each do |carriage, data|
         charge_category = ChargeCategory.find_or_create_by(
-          name: "Trucking #{carriage.capitalize}-Carriage", code: "trucking_#{carriage}"
+          name: "Trucking #{carriage.capitalize}-Carriage", code: "trucking_#{carriage}".downcase
         )
 
         parent_charge = create_parent_charge(charge_category)
@@ -90,7 +90,7 @@ module OfferCalculatorService
         hub_data = data[hub.id]
 
         hub_data[:trucking_charge_data].each do |cargo_class, trucking_charges|
-          children_charge_category = ChargeCategory.from_code("trucking_#{cargo_class}")
+          children_charge_category = ChargeCategory.from_code("trucking_#{cargo_class}", @user.tenant_id)
 
           create_charges_from_fees_data!(
             trucking_charges, children_charge_category, charge_category, parent_charge
@@ -105,7 +105,7 @@ module OfferCalculatorService
         sum + cargo_unit.try(:quantity).to_i
       end
 
-      charge_category = ChargeCategory.from_code("cargo")
+      charge_category = ChargeCategory.from_code("cargo", @user.tenant_id)
       parent_charge = create_parent_charge(charge_category)
       cargo_unit_array = @shipment.aggregated_cargo ? [@shipment.aggregated_cargo] : @shipment.cargo_units
       
@@ -127,7 +127,7 @@ module OfferCalculatorService
         
         children_charge_category = ChargeCategory.find_or_create_by(
           name:          cargo_unit_model.humanize,
-          code:          cargo_unit_model.underscore,
+          code:          cargo_unit_model.underscore.downcase,
           cargo_unit_id: cargo_unit[:id]
         )
 
@@ -165,7 +165,7 @@ module OfferCalculatorService
         next if code.to_s == "total" || charge.empty?
 
         Charge.create(
-          children_charge_category: ChargeCategory.from_code(code),
+          children_charge_category: ChargeCategory.from_code(code, @user.tenant_id),
           charge_category:          children_charge_category,
           charge_breakdown:         @charge_breakdown,
           parent:                   parent_charge,

@@ -59,7 +59,10 @@ module OfferCalculatorService
 
         return nil if local_charges_data.except('total').empty?
 
-        pre_carriage = create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('export', @user.tenant_id))
+        pre_carriage = create_charges_from_fees_data!(
+          local_charges_data,
+          ChargeCategory.from_code('export', @user.tenant_id)
+        )
       end
 
       if @shipment.has_on_carriage || @schedule.destination_hub.mandatory_charge.import_charges
@@ -76,7 +79,10 @@ module OfferCalculatorService
 
         return nil if local_charges_data.except('total').empty?
 
-        on_carriage = create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('import', @user.tenant_id))
+        on_carriage = create_charges_from_fees_data!(
+          local_charges_data,
+          ChargeCategory.from_code('import', @user.tenant_id)
+        )
       end
 
       { pre_carriage: pre_carriage, on_carriage: on_carriage }
@@ -131,7 +137,7 @@ module OfferCalculatorService
 
         children_charge_category = ChargeCategory.find_or_create_by(
           name:          cargo_unit_model.humanize,
-          code:          cargo_unit_model.underscore,
+          code:          cargo_unit_model.underscore.downcase,
           cargo_unit_id: cargo_unit[:id]
         )
 
