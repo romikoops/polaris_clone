@@ -11,10 +11,13 @@ import DayPickerSection from './DayPickerSection'
 import CargoSection from './CargoSection'
 import GetOffersSection from './GetOffersSection'
 import { shipmentActions, bookingProcessActions } from '../../actions'
+import { getTotalShipmentErrors } from './CargoSection/getErrors'
 
 class ShipmentDetails extends React.PureComponent {
   constructor (props) {
     super(props)
+    this.state = { totalShipmentErrors: {} }
+
     this.toggleModal = this.toggleModal.bind(this)
     this.getVisibleModal = this.getVisibleModal.bind(this)
     this.getOffers = this.getOffers.bind(this)
@@ -34,6 +37,25 @@ class ShipmentDetails extends React.PureComponent {
     }
 
     props.bookingProcessDispatch.updateShipment('id', props.shipmentId)
+  }
+
+  static getDerivedStateFromProps (nextProps, prevState) {
+    const { shipment, maxAggregateDimensions } = nextProps
+    const {
+      loadType, cargoUnits, preCarriage, onCarriage
+    } = shipment
+    const { availableMots } = nextProps.ShipmentDetails
+
+    if (loadType !== 'cargo_item' || !availableMots) return {}
+
+    const totalShipmentErrors = getTotalShipmentErrors({
+      modesOfTransport: availableMots,
+      maxDimensions: maxAggregateDimensions,
+      cargoItems: cargoUnits,
+      hasTrucking: preCarriage || onCarriage
+    })
+
+    return { totalShipmentErrors }
   }
 
   getOffers () {
@@ -84,6 +106,8 @@ class ShipmentDetails extends React.PureComponent {
   }
 
   render () {
+    const { totalShipmentErrors } = this.state
+
     return (
       <div
         className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start"
@@ -98,8 +122,8 @@ class ShipmentDetails extends React.PureComponent {
         >
           <RouteSection />
           <DayPickerSection />
-          <CargoSection toggleModal={this.toggleModal} />
-          <GetOffersSection />
+          <CargoSection toggleModal={this.toggleModal} totalShipmentErrors={totalShipmentErrors}/>
+          <GetOffersSection totalShipmentErrors={totalShipmentErrors} />
         </Formsy>
       </div>
     )
@@ -110,8 +134,9 @@ function mapStateToProps (state) {
   const { bookingProcess, bookingData } = state
   const { response } = bookingData
   const shipmentId = get(response, 'stage1.shipment.id')
+  const maxAggregateDimensions = get(response, 'stage1.maxAggregateDimensions')
 
-  return { ...bookingProcess, shipmentId }
+  return { ...bookingProcess, shipmentId, maxAggregateDimensions }
 }
 
 function mapDispatchToProps (dispatch) {
@@ -121,4 +146,6 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default withNamespaces(['errors', 'cargo', 'common', 'dangerousGoods'])(connect(mapStateToProps, mapDispatchToProps)(ShipmentDetails))
+export default withNamespaces(['errors', 'cargo', 'common', 'dangerousGoods'])(
+  connect(mapStateToProps, mapDispatchToProps)(ShipmentDetails)
+)

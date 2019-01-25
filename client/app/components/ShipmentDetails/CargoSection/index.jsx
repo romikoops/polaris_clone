@@ -6,6 +6,7 @@ import { bookingProcessActions } from '../../../actions'
 import CargoUnits from './CargoUnits'
 import CargoUnitToggleMode from './CargoUnits/CargoUnit/ToggleMode'
 import AddUnitButton from './AddUnitButton'
+import { getTotalShipmentErrors } from './getErrors'
 
 class CargoSection extends React.PureComponent {
   constructor (props) {
@@ -124,7 +125,7 @@ class CargoSection extends React.PureComponent {
 
   render () {
     const {
-      theme, scope, cargoItemTypes, maxDimensions, shipment, ShipmentDetails, toggleModal
+      theme, scope, cargoItemTypes, maxDimensions, shipment, ShipmentDetails, toggleModal, totalShipmentErrors
     } = this.props
 
     return (
@@ -145,6 +146,7 @@ class CargoSection extends React.PureComponent {
             onUpdateCargoUnit={this.handleUpdateCargoUnit}
             scope={scope}
             theme={theme}
+            totalShipmentErrors={totalShipmentErrors}
             {...shipment}
           />
 

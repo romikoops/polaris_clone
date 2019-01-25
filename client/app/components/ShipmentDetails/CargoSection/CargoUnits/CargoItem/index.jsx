@@ -118,7 +118,8 @@ class CargoItem extends React.PureComponent {
       theme,
       toggleModal,
       toggleStackable,
-      uniqKey
+      uniqKey,
+      totalShipmentErrors
     } = this.props
 
     const availableCargoItemTypes = CargoItem.getAvailableCargoItemTypes(cargoItemTypes)
@@ -150,6 +151,11 @@ class CargoItem extends React.PureComponent {
               labelText={t('common:length')}
               maxDimensionsErrorText={t('errors:maxLength')}
               unit="cm"
+              validations={{
+                totalShipmentChargeableWeight: () => (
+                  totalShipmentErrors.chargeableWeight.type !== 'error'
+                )
+              }}
               {...this.getSharedProps('dimensionX')}
             />
 
@@ -158,6 +164,11 @@ class CargoItem extends React.PureComponent {
               labelText={t('common:width')}
               maxDimensionsErrorText={t('errors:maxWidth')}
               unit="cm"
+              validations={{
+                totalShipmentChargeableWeight: () => (
+                  totalShipmentErrors.chargeableWeight.type !== 'error'
+                )
+              }}
               {...this.getSharedProps('dimensionY')}
             />
 
@@ -166,6 +177,11 @@ class CargoItem extends React.PureComponent {
               labelText={t('common:height')}
               maxDimensionsErrorText={t('errors:maxHeight')}
               unit="cm"
+              validations={{
+                totalShipmentChargeableWeight: () => (
+                  totalShipmentErrors.chargeableWeight.type !== 'error'
+                )
+              }}
               {...this.getSharedProps('dimensionZ')}
             />
 
@@ -173,6 +189,14 @@ class CargoItem extends React.PureComponent {
               get(scope, ['consolidation', 'cargo', 'frontend'], false)
                 ? (
                   <CargoUnitNumberInput
+                    validations={{
+                      totalShipmentPayloadInKg: () => (
+                        totalShipmentErrors.payloadInKg.type !== 'error'
+                      ),
+                      totalShipmentChargeableWeight: () => (
+                        totalShipmentErrors.chargeableWeight.type !== 'error'
+                      )
+                    }}
                     labelText={t('common:grossWeight')}
                     maxDimensionsErrorText={t('errors:maxWeight')}
                     tooltip={<Tooltip color={theme.colors.primary} icon="fa-info-circle" text="payload_in_kg" />}
@@ -182,6 +206,14 @@ class CargoItem extends React.PureComponent {
                 )
                 : (
                   <CargoUnitNumberInput
+                    validations={{
+                      totalShipmentPayloadInKg: () => (
+                        totalShipmentErrors.payloadInKg.type !== 'error'
+                      ),
+                      totalShipmentChargeableWeight: () => (
+                        totalShipmentErrors.chargeableWeight.type !== 'error'
+                      )
+                    }}
                     image={
                       <img data-for={uuid.v4()} data-tip={t('common:grossWeight')} src={kg} alt="weight" border="0" />
                     }
