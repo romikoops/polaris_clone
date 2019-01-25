@@ -121,25 +121,25 @@ export function chargeableString (volumeVal, weightVal, showVolume, t, scope) {
       return t('cargo:chargeableWeightVolWithValue', { value: volumeVal })
   }
 }
-export function chargeableWeight (cargoItem, mot) {
+export function chargeableWeightValue (cargoItem, mot) {
   if (!cargoItem) return undefined
 
-  const finalValue = Math.max(
-    +volume(cargoItem) * effectiveKgPerCubicMeter[mot],
-    +cargoItem.payload_in_kg * cargoItem.quantity
-  )
-
-  return numberSpacing(finalValue, 2)
-}
-export function chargeableWeightTon (cargoItem, mot) {
-  if (!cargoItem) return undefined
-
-  const finalValue = Math.max(
+  return Math.max(
     +volume(cargoItem) * effectiveKgPerCubicMeter[mot],
     +cargoItem.payloadInKg * cargoItem.quantity
   )
 
-  return numberSpacing(finalValue / 1000, 3)
+}
+
+export function chargeableWeight (cargoItem, mot) {
+  if (!cargoItem) return undefined
+
+  return numberSpacing(chargeableWeightValue(cargoItem, mot), 2)
+}
+export function chargeableWeightTon (cargoItem, mot) {
+  if (!cargoItem) return undefined
+
+  return numberSpacing(chargeableWeightValue(cargoItem, mot) / 1000, 3)
 }
 
 export function chargeableVolume (cargoItem, mot) {
