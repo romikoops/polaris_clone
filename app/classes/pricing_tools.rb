@@ -247,8 +247,9 @@ module PricingTools
 
       res = [value, min].max
     when 'PER_UNIT_TON_CBM_RANGE'
+      ratio = volume / (weight_kg / 1000)
       fee_range = fee['range'].find do |range|
-        (range['min']..range['max']).cover?(quantity)
+        (range['min']..range['max']).cover?(ratio)
       end
       value = 0 if fee_range.nil?
       unless fee_range.nil?
