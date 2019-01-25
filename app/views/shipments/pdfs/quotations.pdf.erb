@@ -89,51 +89,91 @@
             <h1>Cargo Details</h1>
           </div>
           <% s.cargo_items.each_with_index do |cargo, i| %>
-            <div class="first-cargo-row display-flex-center text-center border-bottom">
-              <div class="cargo-index cargo-section">
-                <p class="cargo-value"><%= i + 1 %></p>
+            <div>
+              <div class="title_row">
+                <p class=""><strong><%= cargo.quantity %>&nbsp;x</strong> <%= cargo.cargo_item_type.description %></p>
               </div>
-              <div class="cargo-items cargo-section">
-                <p class="cargo-subtitle"><strong><%= cargo.quantity %>&nbsp;x</strong> <%= load_type %></p>
+              <div class="cargo-row display-flex-center text-center border-bottom">
+                <div class="cargo-section">
+                  <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % cargo.dimension_x %></span>&nbsp;cm </p>
+                  <p class="cargo-subtitle">Length</p>
+                  <div class="operand">x</div>
+                </div>
+                <div class="cargo-section">
+                  <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % cargo.dimension_y %></span>&nbsp;cm </p>
+                  <p class="cargo-subtitle">Width</p>
+                  <div class="operand">x</div>
+                </div>
+                <div class="cargo-section">
+                  <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % cargo.dimension_z %></span>&nbsp;cm </p>
+                  <p class="cargo-subtitle">Height</p>
+                  <div class="operand">=</div>
+                </div>
+                <div class="cargo-section cargo-section-last">
+                  <p class="cargo-value">
+                    <span class="cargo-type"><%= '%.3f' % cargo.volume %></span>&nbsp;m<sup>3</sup>
+                  </p>
+                  <p class="cargo-subtitle">Volume</p>
+                  <div class="operand">x</div>
+                </div>
+                <div class="cargo-section">
+                  <p class="cargo-value">
+                    <span class="cargo-type"><%= cargo.quantity %> </span>
+                  </p>
+                  <p class="cargo-subtitle">Quantity</p>
+                  <div class="operand">=</div>
+                </div>
+                <div class="cargo-section cargo-section-last">
+                  <p class="cargo-value">
+                    <span class="cargo-type"><%= '%.3f' % (cargo.volume * cargo.quantity) %></span>&nbsp;m<sup>3</sup>
+                  </p>
+                  <p class="cargo-subtitle">Total Volume</p>
+                </div>
               </div>
-              <div class="cargo-section">
-                <p class="cargo-value"><span class="cargo_type"><%= cargo.cargo_item_type.description %></span></p>
-                <p class="cargo-subtitle">Cargo&nbsp;type</p>
-              </div>
-              <div class="cargo-section">
-                <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % (cargo.payload_in_kg || cargo.weight) %></span>&nbsp;kg </p>
-                <p class="cargo-subtitle">Gross&nbsp;Weight&nbsp;per&nbsp;Item</p>
-              </div>
-              <div class="cargo-section ">
-                <p class="cargo-value">
-                  <span class="cargo-type"><%= cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:value] %></span>
-                </p>
-                <p class="cargo-subtitle"> <%= cargo_data[:chargeable_weight][s.id][cargo.id.to_s][:title] %></p>
-              </div>
-              <div class="cargo-section">
-                <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % cargo.dimension_x %></span>&nbsp;cm </p>
-                <p class="cargo-subtitle">Length</p>
-              </div>
-              <div class="cargo-section">
-                <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % cargo.dimension_y %></span>&nbsp;cm </p>
-                <p class="cargo-subtitle">Width</p>
-              </div>
-              <div class="cargo-section">
-                <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % cargo.dimension_z %></span>&nbsp;cm </p>
-                <p class="cargo-subtitle">Height</p>
-              </div>
-              <div class="cargo-section cargo-section-last">
-                <p class="cargo-value">
-                  <span class="cargo-type"><%= '%.3f' % cargo.volume %></span>&nbsp;m<sup>3</sup>
-                </p>
-                <p class="cargo-subtitle">Volume</p>
+              <div class="cargo-row display-flex-center text-center border-bottom">
+                <div class="cargo-section">
+                  <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % (cargo.payload_in_kg || cargo.weight) %></span>&nbsp;kg </p>
+                  <p class="cargo-subtitle">Gross&nbsp;Weight&nbsp;per&nbsp;Item</p>
+                   <div class="operand">x</div>
+                </div>
+                <div class="cargo-section">
+                  <p class="cargo-value">
+                    <span class="cargo-type"><%= cargo.quantity %> </span>
+                  </p>
+                  <p class="cargo-subtitle">Quantity</p>
+                  <div class="operand">=</div>
+                </div>
+                 <div class="cargo-section">
+                  <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % (cargo.payload_in_kg * cargo.quantity || cargo.weight) %></span>&nbsp;kg </p>
+                  <p class="cargo-subtitle">Total&nbsp;Gross&nbsp;Weight</p>
+                  <div class="divider"></div>
+                </div>
+                <div class="cargo-section ">
+                  <p class="cargo-value">
+                    <span class="cargo-type"><%='%.2f' % cargo.chargeable_weight %></span>&nbsp;kg
+                  </p>
+                  <p class="cargo-subtitle">Chargeable&nbsp;Weight</p>
+                  <div class="operand">x</div>
+                </div>
+                <div class="cargo-section">
+                  <p class="cargo-value">
+                    <span class="cargo-type"><%= cargo.quantity %> </span>
+                  </p>
+                  <p class="cargo-subtitle">Quantity</p>
+                  <div class="operand">=</div>
+                </div>
+                <div class="cargo-section ">
+                  <p class="cargo-value">
+                    <span class="cargo-type"><%='%.2f' % (cargo.chargeable_weight * cargo.quantity) %></span>&nbsp;kg
+                  </p>
+                  <p class="cargo-subtitle">Total&nbsp;Chargeable&nbsp;Weight</p>
+                </div>
               </div>
             </div>
-
           <% end %>
           <% s.containers.each_with_index do |container, i| %>
 
-            <div class="first-cargo-row display-flex-center text-center border-bottom">
+            <div class="cargo-row display-flex-center text-center border-bottom">
               <div class="cargo-index cargo-section">
                 <p class="cargo-value"><%= i + 1 %></p>
               </div>
@@ -153,7 +193,7 @@
           <% end %>
           <% if  s.aggregated_cargo %>
 
-            <div class="first-cargo-row display-flex-center text-center border-bottom">
+            <div class="cargo-row display-flex-center text-center border-bottom">
               <div class="cargo-index cargo-section">
                 <p class="cargo-value">1</p>
               </div>

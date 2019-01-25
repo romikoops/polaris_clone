@@ -91,6 +91,7 @@
     }
     img {
       margin-right: 14px;
+      height: 30px;
     }
     position: relative;
   }
@@ -172,14 +173,10 @@
       }
     }
   }
+  .dims {
+    margin: none;
+   }
 
-  @media only screen and (min-width: 960px) {
-    .unit_data_cell {
-      .dims {
-       display: none;
-      }
-    }
-  }
   @media only screen and (max-width: 525px) {
     .unit_data_cell {
       p {

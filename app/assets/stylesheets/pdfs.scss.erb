@@ -617,13 +617,25 @@ br{
     padding-left: 30px;
   }
 }
-
-.first-cargo-row {
+.title_row {
+  background: #F8F8F8;
+  padding: 5px;
+  p {
+    padding-left: 15px;
+  }
+}
+.cargo-row {
   p {
     margin: 0;
   }
   .cargo-section {
     padding: 8px 8px;
+    position: relative;
+    .operand {
+      position: absolute;
+      right: -15px;
+      top: 10px;
+    }
   }
   .cargo-section-last {
     padding-right: 35px;
@@ -646,6 +658,15 @@ br{
   .cargo-subtitle {
     font-size: 8px;
     flex-wrap: no-wrap;
+  }
+  .divider {
+    height: 100%;
+    width: 1px;
+    position: absolute;
+    right: -5px;
+    top: 0;
+    bottom: 0;
+    border-right: 2px solid #F8F8F8;
   }
 }
 .cargo-details-all {
