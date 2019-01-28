@@ -23,8 +23,8 @@ module PriceCheckerService
         @schedule = schedule
         @grand_total_charge = Charge.create(
           children_charge_category: ChargeCategory.grand_total,
-          charge_category:          ChargeCategory.base_node,
-          price:                    Price.create(currency: @user.currency)
+          charge_category: ChargeCategory.base_node,
+          price: Price.create(currency: @user.currency)
         )
 
         calc_local_charges
@@ -138,14 +138,14 @@ module PriceCheckerService
       charge_category = ChargeCategory.from_code('cargo', @user.tenant_id)
       parent_charge = create_parent_charge(charge_category)
 
-      isAggCargo = !@shipment.aggregated_cargo.nil?
-      cargo_unit_array = isAggCargo ? [@shipment.aggregated_cargo] : @shipment.cargo_units
+      is_agg_cargo = !@shipment.aggregated_cargo.nil?
+      cargo_unit_array = is_agg_cargo ? [@shipment.aggregated_cargo] : @shipment.cargo_units
 
       if @user.tenant.scope.dig('consolidation', 'cargo') && cargo_unit_array.first.is_a?(CargoItem)
         cargo_unit_array = consolidate_cargo(cargo_unit_array, @itinerary.mode_of_transport)
       end
       cargo_unit_array.each do |cargo_unit|
-        cargo_class = isAggCargo ? 'lcl' : cargo_unit[:cargo_class]
+        cargo_class = is_agg_cargo ? 'lcl' : cargo_unit[:cargo_class]
         charge_result = send("determine_#{@shipment.load_type}_price",
                              cargo_unit,
                              @shipment_data[:pricing][:pricing_ids][cargo_class],
@@ -159,8 +159,8 @@ module PriceCheckerService
         cargo_unit_model = cargo_unit.class.to_s == 'Hash' ? 'CargoItem' : cargo_unit.class.to_s
 
         children_charge_category = ChargeCategory.find_or_create_by(
-          name:          cargo_unit_model.humanize,
-          code:          cargo_unit_model.underscore.downcase,
+          name: cargo_unit_model.humanize,
+          code: cargo_unit_model.underscore.downcase,
           cargo_unit_id: cargo_unit[:id]
         )
 
@@ -173,10 +173,9 @@ module PriceCheckerService
     def create_parent_charge(children_charge_category)
       Charge.create(
         children_charge_category: children_charge_category,
-        charge_category:          ChargeCategory.grand_total,
-
-        parent:                   @grand_total_charge,
-        price:                    Price.create(currency: @user.currency)
+        charge_category: ChargeCategory.grand_total,
+        parent: @grand_total_charge,
+        price: Price.create(currency: @user.currency)
       )
     end
 
@@ -188,10 +187,9 @@ module PriceCheckerService
     )
       parent_charge = Charge.create(
         children_charge_category: children_charge_category,
-        charge_category:          charge_category,
-
-        parent:                   parent,
-        price:                    Price.create(fees_data['total'] || fees_data[:total])
+        charge_category: charge_category,
+        parent: parent,
+        price: Price.create(fees_data['total'] || fees_data[:total])
       )
 
       fees_data.each do |code, charge|
@@ -199,10 +197,9 @@ module PriceCheckerService
 
         Charge.create(
           children_charge_category: ChargeCategory.from_code(code, @user.tenant_id),
-          charge_category:          children_charge_category,
-
-          parent:                   parent_charge,
-          price:                    Price.create(charge)
+          charge_category: children_charge_category,
+          parent: parent_charge,
+          price: Price.create(charge)
         )
       end
     end
@@ -213,15 +210,15 @@ module PriceCheckerService
 
     def consolidate_cargo(cargo_array, mot)
       cargo = {
-        id:                'ids',
-        dimension_x:       0,
-        dimension_y:       0,
-        dimension_z:       0,
-        volume:            0,
-        payload_in_kg:     0,
-        cargo_class:       '',
+        id: 'ids',
+        dimension_x: 0,
+        dimension_y: 0,
+        dimension_z: 0,
+        volume: 0,
+        payload_in_kg: 0,
+        cargo_class: '',
         chargeable_weight: 0,
-        num_of_items:      0
+        num_of_items: 0
       }
       cargo_array.each do |cargo_unit|
         cargo[:id] += "-#{cargo_unit.id}"

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::ChargeCategoriesController < Admin::AdminBaseController
-
+class Admin::ChargeCategoriesController < Admin::AdminBaseController # rubocop:disable # Style/ClassAndModuleChildren
   def upload
     file = upload_params[:file].tempfile
 
@@ -17,12 +16,11 @@ class Admin::ChargeCategoriesController < Admin::AdminBaseController
   def download
     file_name = "#{current_tenant.subdomain.downcase}__charge_categories"
 
-    options = { tenant: current_tenant, file_name: file_name}
+    options = { tenant: current_tenant, file_name: file_name }
     document = ExcelDataServices::FileWriter::ChargeCategories.new(options).perform
 
     response_handler(key: 'charge_categories', url: rails_blob_url(document.file, disposition: 'attachment'))
   end
-
 
   private
 
