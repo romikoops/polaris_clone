@@ -47,7 +47,7 @@ class RouteSection extends React.PureComponent {
     })
 
     this.truckTypes = {
-      container: ['side_lifter', 'chassis'],
+      container: ['chassis', 'side_lifter'],
       cargo_item: ['default']
     }
 
