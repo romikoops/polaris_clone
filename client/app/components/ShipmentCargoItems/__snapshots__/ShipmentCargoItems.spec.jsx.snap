@@ -2514,7 +2514,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
                       <p
                         className="subchargeable flex-none"
                       >
-                        NO_TRANSLATION | key "cargo:chargebleVolume":
+                        Chargeable Volume:
                       </p>
                     </div>
                     <div
