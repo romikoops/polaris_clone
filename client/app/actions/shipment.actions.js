@@ -86,7 +86,7 @@ function getOffers (data, redirect) {
           }))
           const errorToRender = {
             ...newData,
-            componentName: "ShipmentLocationBox",
+            componentName: 'RouteSection',
             side: 'center'
           }
           dispatch(errorActions.setError(errorToRender))
