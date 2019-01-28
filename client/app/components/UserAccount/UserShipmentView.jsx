@@ -75,7 +75,7 @@ class UserShipmentView extends Component {
 
   prepCargoItemGroups (cargos) {
     const { tenant, theme, shipmentData } = this.props
-    const { cargoItemTypes, hsCodes } = shipmentData
+    const { cargoItemTypes, hsCodes, shipment } = shipmentData
     const cargoGroups = {}
     let groupCount = 1
     const resultArray = []
@@ -112,6 +112,8 @@ class UserShipmentView extends Component {
         group={cargoGroups[k]}
         theme={theme}
         hsCodes={hsCodes}
+        scope={tenant.scope}
+        shipment={shipment}
         hideUnits={tenant.scope.cargo_overview_only}
       />)
     })

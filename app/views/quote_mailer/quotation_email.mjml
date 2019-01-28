@@ -88,4 +88,15 @@
 
     </mj-column>
   </mj-section>
+  <mj-section full-width="full-width" padding="0px">
+    <mj-column width="100%">
+      <mj-text font-size="8px">
+        <% unless @content['disclaimer'].nil? %>
+            <% @content['disclaimer'].each do |section| %>
+              <%== section['text'] %>
+            <% end %>
+        <% end %>
+      </mj-text>
+    </mj-column>
+  </mj-section>
 </mj-wrapper>

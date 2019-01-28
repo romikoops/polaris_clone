@@ -96,7 +96,7 @@ module OfferCalculatorService
       schedule_groupings.each do |_key, schedules_array|
         schedules_array.sort_by!(&:eta)
 
-        start_date, end_date, is_quote = extract_dates_and_quote(schedules_array)
+        dates = extract_dates_and_quote(schedules_array)
         user_pricing_id = user.pricing_id
 
         # Find the pricings for the cargo classes and effective date ranges then group by cargo_class
@@ -105,8 +105,7 @@ module OfferCalculatorService
           schedules: schedules_array,
           user_pricing_id: user_pricing_id,
           cargo_classes: cargo_classes,
-          start_date: start_date,
-          end_date: end_date
+          dates: dates
         )
 
         # Find the group with the most pricings and create the object to be passed on
@@ -120,10 +119,16 @@ module OfferCalculatorService
         else
 
           most_diverse_set.each do |pricing|
-            schedules_for_obj = schedules_array
-            unless is_quote
+            schedules_for_obj = schedules_array.dup
+            unless dates[:is_quote]
               schedules_for_obj.select! do |sched|
                 sched.etd < pricing.expiration_date && sched.etd > pricing.effective_date
+              end
+              if schedules_for_obj.empty?
+                schedules_for_obj = schedules_array.select do |sched|
+                  sched.closing_date < pricing.expiration_date &&
+                    sched.closing_date > pricing.effective_date
+                end
               end
             end
 
@@ -137,8 +142,14 @@ module OfferCalculatorService
             other_pricings.each do |other_pricing|
               if other_pricing.effective_date < obj[:schedules].first.etd &&
                  other_pricing.expiration_date > obj[:schedules].last.etd
-                obj[:pricing_ids][other_pricing.transport_category.cargo_class.to_s] = other_pricing.id
+                obj[:pricing_ids][other_pricing.transport_category.cargo_class.to_s] =
+                  other_pricing.id
               end
+              next unless obj[:pricing_ids][other_pricing.transport_category.cargo_class.to_s].nil? &&
+                          other_pricing.effective_date < obj[:schedules].first.closing_date &&
+                          other_pricing.expiration_date > obj[:schedules].last.closing_date
+
+              obj[:pricing_ids][other_pricing.transport_category.cargo_class.to_s] = other_pricing.id
             end
             result_to_return << obj
           end
@@ -159,15 +170,24 @@ module OfferCalculatorService
       end
     end
 
-    def sort_pricings(schedules:, user_pricing_id:, cargo_classes:, start_date:, end_date:)
+    def sort_pricings(schedules:, user_pricing_id:, cargo_classes:, dates:)
       tenant_vehicle_id = schedules.first.trip.tenant_vehicle_id
+      start_date = dates[:start_date]
+      end_date = dates[:end_date]
+      closing_start_date = dates[:closing_start_date]
+      closing_end_date = dates[:closing_end_date]
       pricings_by_cargo_class = schedules.first.trip.itinerary.pricings
                                          .where(tenant_vehicle_id: tenant_vehicle_id)
                                          .for_cargo_class(cargo_classes)
-
-      pricings_by_cargo_class = pricings_by_cargo_class.for_dates(start_date, end_date) if start_date && end_date
-
-      pricings_by_cargo_class
+      if start_date && end_date
+        pricings_by_cargo_class_and_dates = pricings_by_cargo_class.for_dates(start_date, end_date)
+      end
+      ## If etd filter results in no pricings, check using closing_date
+      if start_date && end_date && pricings_by_cargo_class_and_dates.empty?
+        pricings_by_cargo_class_and_dates = pricings_by_cargo_class
+                                            .for_dates(closing_start_date, closing_end_date)
+      end
+      pricings_by_cargo_class_and_dates
         .select { |pricing| (pricing.user_id == user_pricing_id) || pricing.user_id.nil? }
         .group_by { |pricing| pricing.transport_category_id.to_s }
     end
@@ -177,12 +197,22 @@ module OfferCalculatorService
         is_quote = true
         start_date = Date.today
         end_date = start_date + 1.month
+        closing_start_date = start_date - 5.days
+        closing_end_date = end_date - 5.days
       else
         start_date = schedules.first.etd
-        end_date = schedules.last.eta
+        end_date = schedules.last.etd
+        closing_start_date = schedules.first.closing_date
+        closing_end_date = schedules.last.closing_date
         is_quote = false
       end
-      [start_date, end_date, is_quote]
+      {
+        start_date: start_date,
+        end_date: end_date,
+        is_quote: is_quote,
+        closing_start_date: closing_start_date,
+        closing_end_date: closing_end_date
+      }
     end
 
     def invalid_quote?(quote:)

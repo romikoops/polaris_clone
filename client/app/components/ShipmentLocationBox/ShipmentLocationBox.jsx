@@ -494,16 +494,20 @@ class ShipmentLocationBox extends PureComponent {
 
   extractCountries (props) {
     const { routes } = props.shipmentData
-    const countries_origin = []
-    const countries_destination = []
+    const countriesOrigin = []
+    const countriesDestination = []
     routes.forEach((route) => {
-      countries_origin.push(route.origin.country.toLowerCase())
-      countries_destination.push(route.destination.country.toLowerCase())
+      if (route.origin.truckTypes.length > 0) {
+        countriesOrigin.push(route.origin.country.toLowerCase())
+      }
+      if (route.destination.truckTypes.length > 0) {
+        countriesDestination.push(route.destination.country.toLowerCase())
+      }
     })
 
     const countries = {
-      origin: countries_origin.filter(onlyUnique),
-      destination: countries_destination.filter(onlyUnique)
+      origin: countriesOrigin.filter(onlyUnique),
+      destination: countriesDestination.filter(onlyUnique)
     }
 
     this.setState({ countries })

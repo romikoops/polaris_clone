@@ -8,19 +8,21 @@ class PdfHandler
   def initialize(args = {})
     args.symbolize_keys!
 
-    @layout     = args[:layout]
-    @template   = args[:template]
-    @footer     = args[:footer]
-    @margin     = args[:margin]
-    @shipment   = args[:shipment]
-    @shipments  = args[:shipments] || []
-    @name       = args[:name]
-    @quotes     = args[:quotes]
-    @quotation  = args[:quotation]
-    @logo       = args[:logo]
-    @load_type  = args[:load_type]
-    @remarks    = args[:remarks]
+    @layout                = args[:layout]
+    @template              = args[:template]
+    @footer                = args[:footer]
+    @margin                = args[:margin]
+    @shipment              = args[:shipment]
+    @shipments             = args[:shipments] || []
+    @name                  = args[:name]
+    @quotes                = args[:quotes]
+    @quotation             = args[:quotation]
+    @logo                  = args[:logo]
+    @load_type             = args[:load_type]
+    @remarks               = args[:remarks]
     @hide_cargo_sub_totals = false
+    @content               = {}
+    @scope                 = @shipment.tenant.scope
 
     @cargo_data = {
       vol: {},
@@ -32,6 +34,7 @@ class PdfHandler
     @shipments.each do |s|
       calculate_cargo_data(s)
     end
+    @content = Content.get_component('QuotePdf', @shipment.tenant_id) if @name == 'quotation'
 
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
   end
@@ -43,32 +46,100 @@ class PdfHandler
            shipment.cargo_units.inject(0) do |sum, hash|
              sum + hash[:quantity].to_f * hash[:payload_in_kg].to_f
            end
-    end
-    chargeable_weight = {}
-    chargeable_weight[:cargo] = if shipment.aggregated_cargo
-                                  shipment.aggregated_cargo.weight.to_f
-                                else
-                                  shipment.cargo_units.inject(0) do |sum, hash|
-                                    sum + hash[:quantity].to_f * hash[:chargeable_weight].to_f
-                                  end
-                                end
-    chargeable_weight[:trucking_pre] =
-      @shipment.trucking.dig('pre_carriage', 'chargeable_weight')
-    chargeable_weight[:trucking_on] =
-      @shipment.trucking.dig('on_carriage', 'chargeable_weight')
-    vol = if shipment.aggregated_cargo
-            shipment.aggregated_cargo.volume.to_f
-          else
-            shipment.cargo_units.inject(0) do |sum, hash|
-              sum + (hash[:quantity].to_f *
-                hash[:dimension_x].to_f *
-                hash[:dimension_y].to_f *
-                hash[:dimension_z].to_f / 1_000_000)
+         end
+    unless shipment.fcl?
+      chargeable_weight = {}
+      vol = if shipment.aggregated_cargo
+              shipment.aggregated_cargo.volume.to_f
+            else
+              shipment.cargo_units.inject(0) do |sum, hash|
+                sum + (hash[:quantity].to_f *
+                  hash[:dimension_x].to_f *
+                  hash[:dimension_y].to_f *
+                  hash[:dimension_z].to_f / 1_000_000)
+              end
             end
-          end
+      chargeable_value = if shipment.aggregated_cargo
+                           shipment.aggregated_cargo.weight.to_f
+                         else
+                           shipment.cargo_units.inject(0) do |sum, hash|
+                             sum + hash[:quantity].to_f * hash[:chargeable_weight].to_f
+                           end
+                         end
+
+      case @scope['chargeable_weight_view']
+      when 'weight'
+        chargeable_weight_cargo = chargeable_value
+        cargo_string = " (Chargeable Weight: #{format('%.2f', chargeable_weight_cargo)} kg)"
+        shipment.cargo_units.each do |hash|
+          string = "#{format('%.2f', hash[:chargeable_weight])} kg"
+          chargeable_weight[hash[:id].to_s] = {
+            value: string,
+            title: 'Chargeable Weight'
+          }
+        end
+      when 'volume'
+        chargeable_weight_cargo = chargeable_value / 1000
+        cargo_string = " (Chargeable Volume: #{format('%.3f', chargeable_weight_cargo)} m<sup>3</sup>)"
+        shipment.cargo_units.each do |hash|
+          string = "#{format('%.3f', (hash[:chargeable_weight] / 1000))} m<sup>3</sup>"
+          chargeable_weight[hash[:id].to_s] = {
+            value: string,
+            title: 'Chargeable&nbsp;Volume'
+          }
+        end
+      when 'dynamic'
+        show_volume = vol > kg
+
+        chargeable_weight_cargo = show_volume ? chargeable_value / 1000 : chargeable_value
+        cargo_string = if show_volume
+                         " (Chargeable&nbsp;Volume: #{chargeable_weight_cargo} m<sup>3</sup>)"
+                       else
+                         " (Chargeable&nbsp;Weight: #{chargeable_weight_cargo} kg)"
+                       end
+        shipment.cargo_units.each do |hash|
+          string = if show_volume
+                     "#{format('%.3f', (hash[:chargeable_weight] / 1000))} m<sup>3</sup>"
+                   else
+                     "#{format('%.2f', hash[:chargeable_weight])} kg"
+                   end
+          chargeable_weight[hash[:id].to_s] = {
+            value: string,
+            title: show_volume ? 'Chargeable&nbsp;Volume' : 'Chargeable&nbsp;Weight'
+          }
+        end
+      when 'both'
+        chargeable_weight_cargo = chargeable_value / 1000
+        cargo_string = " (Chargeable: #{format('%.3f', chargeable_weight_cargo)} t | m<sup>3</sup>)"
+        shipment.cargo_units.each do |hash|
+          string = "#{format('%.3f', (hash[:chargeable_weight] / 1000))} t | m<sup>3</sup>"
+          chargeable_weight[hash[:id].to_s] = {
+            value: string,
+            title: 'Chargeable'
+          }
+        end
+      else
+        chargeable_weight_cargo = chargeable_value / 1000
+        cargo_string = " (Chargeable: #{format('%.3f', chargeable_weight_cargo)} t | m<sup>3</sup>)"
+        shipment.cargo_units.each do |hash|
+          string = "#{format('%.3f', (hash[:chargeable_weight] / 1000))} t | m<sup>3</sup>"
+          chargeable_weight[hash[:id].to_s] = {
+            value: string,
+            title: 'Chargeable'
+          }
+        end
+      end
+      chargeable_weight[:cargo] = "<small class='chargeable_weight'>#{cargo_string}</small>"
+      trucking_pre_string =
+        " (Chargeable Weight: #{@shipment.trucking.dig('pre_carriage', 'chargeable_weight')} kg)"
+      trucking_on_string =
+        " (Chargeable Weight: #{@shipment.trucking.dig('on_carriage', 'chargeable_weight')} kg)"
+      chargeable_weight[:trucking_pre] = "<small class='chargeable_weight'>#{trucking_pre_string}</small>"
+      chargeable_weight[:trucking_on] = "<small class='chargeable_weight'>#{trucking_on_string}</small>"
+      @cargo_data[:chargeable_weight][shipment.id] = chargeable_weight
+      @cargo_data[:vol][shipment.id] = vol
+    end
     @cargo_data[:kg][shipment.id] = kg
-    @cargo_data[:chargeable_weight][shipment.id] = chargeable_weight
-    @cargo_data[:vol][shipment.id] = vol
   end
 
   def generate
@@ -85,7 +156,8 @@ class PdfHandler
         tenant: @shipment.tenant,
         cargo_data: @cargo_data,
         notes: @shipment.route_notes,
-        hide_cargo_sub_totals: @hide_cargo_sub_totals
+        hide_cargo_sub_totals: @hide_cargo_sub_totals,
+        content: @content
       }
     )
     response = BreezyPDFLite::RenderRequest.new(

@@ -92,7 +92,11 @@ exports[`props.viewHSCodes is true 1`] = `
     >
       <i
         className="collapsed fa fa-chevron-down clip pointy"
-        style="#333"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
       />
     </div>
   </div>
@@ -107,7 +111,7 @@ exports[`props.viewHSCodes is true 1`] = `
         key="RANDOM_KEY_3"
       >
         <div
-          className="flex-10 layout-row layout-align-center-center"
+          className="flex-5 layout-row layout-align-center-center"
         >
           <p
             className="flex-none"
@@ -345,7 +349,11 @@ exports[`shallow render 1`] = `
     >
       <i
         className="collapsed fa fa-chevron-down clip pointy"
-        style="#333"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
       />
     </div>
   </div>
@@ -360,7 +368,7 @@ exports[`shallow render 1`] = `
         key="RANDOM_KEY_1"
       >
         <div
-          className="flex-10 layout-row layout-align-center-center"
+          className="flex-5 layout-row layout-align-center-center"
         >
           <p
             className="flex-none"
@@ -440,6 +448,1034 @@ exports[`shallow render 1`] = `
             className="tooltip"
             effect="solid"
             id="RANDOM_KEY_0"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              100
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                56.00
+              </span>
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Gross Weight
+            </p>
+          </div>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                1.08
+              </span>
+               
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Volume
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow rendering both chargeable value 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-center-center height_box height_box"
+  >
+    <div
+      className="flex-5 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center cargo_unit"
+      />
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        x 1
+      </p>
+      <div
+        className="icon_cargo_item"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <div
+        className=""
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          >
+            FOO_CATEGORY
+          </span>
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Cargo type
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex-55 layout-row"
+    >
+      <div
+        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+      >
+        <CargoItemGroupAggregated
+          group={
+            Object {
+              "cargoType": Object {
+                "category": "FOO_CATEGORY",
+              },
+              "items": Array [
+                Object {
+                  "chargeable_weight": 80,
+                  "dimension_x": 90,
+                  "dimension_y": 100,
+                  "dimension_z": 120,
+                  "gross_weight": 76,
+                  "payload_in_kg": 56,
+                  "tare_weight": 20,
+                },
+              ],
+              "quantity": "FOO_QUANTITY",
+              "size_class": "dry_goods",
+              "volume": 5,
+            }
+          }
+          t={[Function]}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-5 layout-row layout-align-center-center"
+      onChange={[Function]}
+      onClick={[Function]}
+    >
+      <i
+        className="collapsed fa fa-chevron-down clip pointy"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="unit_viewer "
+  >
+    <div
+      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    >
+      <div
+        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+        key="RANDOM_KEY_19"
+      >
+        <div
+          className="flex-5 layout-row layout-align-center-center"
+        >
+          <p
+            className="flex-none"
+            style={
+              Object {
+                "fontSize": "10px",
+              }
+            }
+          >
+            Single Item
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="length"
+            border="0"
+            data-for="RANDOM_KEY_18"
+            data-tip="Length"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_18"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              90
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="height"
+            border="0"
+            data-for="RANDOM_KEY_18"
+            data-tip="Height"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_18"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              120
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="width"
+            border="0"
+            data-for="RANDOM_KEY_18"
+            data-tip="Width"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_18"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              100
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                56.00
+              </span>
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Gross Weight
+            </p>
+          </div>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                1.08
+              </span>
+               
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Volume
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow rendering dynamic chargeable value 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-center-center height_box height_box"
+  >
+    <div
+      className="flex-5 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center cargo_unit"
+      />
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        x 1
+      </p>
+      <div
+        className="icon_cargo_item"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <div
+        className=""
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          >
+            FOO_CATEGORY
+          </span>
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Cargo type
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex-55 layout-row"
+    >
+      <div
+        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+      >
+        <CargoItemGroupAggregated
+          group={
+            Object {
+              "cargoType": Object {
+                "category": "FOO_CATEGORY",
+              },
+              "items": Array [
+                Object {
+                  "chargeable_weight": 80,
+                  "dimension_x": 90,
+                  "dimension_y": 100,
+                  "dimension_z": 120,
+                  "gross_weight": 76,
+                  "payload_in_kg": 56,
+                  "tare_weight": 20,
+                },
+              ],
+              "quantity": "FOO_QUANTITY",
+              "size_class": "dry_goods",
+              "volume": 5,
+            }
+          }
+          t={[Function]}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-5 layout-row layout-align-center-center"
+      onChange={[Function]}
+      onClick={[Function]}
+    >
+      <i
+        className="collapsed fa fa-chevron-down clip pointy"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="unit_viewer "
+  >
+    <div
+      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    >
+      <div
+        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+        key="RANDOM_KEY_13"
+      >
+        <div
+          className="flex-5 layout-row layout-align-center-center"
+        >
+          <p
+            className="flex-none"
+            style={
+              Object {
+                "fontSize": "10px",
+              }
+            }
+          >
+            Single Item
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="length"
+            border="0"
+            data-for="RANDOM_KEY_12"
+            data-tip="Length"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_12"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              90
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="height"
+            border="0"
+            data-for="RANDOM_KEY_12"
+            data-tip="Height"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_12"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              120
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="width"
+            border="0"
+            data-for="RANDOM_KEY_12"
+            data-tip="Width"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_12"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              100
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                56.00
+              </span>
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Gross Weight
+            </p>
+          </div>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                1.08
+              </span>
+               
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Volume
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow rendering volume chargeable value 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-center-center height_box height_box"
+  >
+    <div
+      className="flex-5 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center cargo_unit"
+      />
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        x 1
+      </p>
+      <div
+        className="icon_cargo_item"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <div
+        className=""
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          >
+            FOO_CATEGORY
+          </span>
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Cargo type
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex-55 layout-row"
+    >
+      <div
+        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+      >
+        <CargoItemGroupAggregated
+          group={
+            Object {
+              "cargoType": Object {
+                "category": "FOO_CATEGORY",
+              },
+              "items": Array [
+                Object {
+                  "chargeable_weight": 80,
+                  "dimension_x": 90,
+                  "dimension_y": 100,
+                  "dimension_z": 120,
+                  "gross_weight": 76,
+                  "payload_in_kg": 56,
+                  "tare_weight": 20,
+                },
+              ],
+              "quantity": "FOO_QUANTITY",
+              "size_class": "dry_goods",
+              "volume": 5,
+            }
+          }
+          t={[Function]}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-5 layout-row layout-align-center-center"
+      onChange={[Function]}
+      onClick={[Function]}
+    >
+      <i
+        className="collapsed fa fa-chevron-down clip pointy"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="unit_viewer "
+  >
+    <div
+      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    >
+      <div
+        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+        key="RANDOM_KEY_17"
+      >
+        <div
+          className="flex-5 layout-row layout-align-center-center"
+        >
+          <p
+            className="flex-none"
+            style={
+              Object {
+                "fontSize": "10px",
+              }
+            }
+          >
+            Single Item
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="length"
+            border="0"
+            data-for="RANDOM_KEY_16"
+            data-tip="Length"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_16"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              90
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="height"
+            border="0"
+            data-for="RANDOM_KEY_16"
+            data-tip="Height"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_16"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              120
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="width"
+            border="0"
+            data-for="RANDOM_KEY_16"
+            data-tip="Width"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_16"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              100
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                56.00
+              </span>
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Gross Weight
+            </p>
+          </div>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                1.08
+              </span>
+               
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Volume
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow rendering weight chargeable value 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-center-center height_box height_box"
+  >
+    <div
+      className="flex-5 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center cargo_unit"
+      />
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        x 1
+      </p>
+      <div
+        className="icon_cargo_item"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <div
+        className=""
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          >
+            FOO_CATEGORY
+          </span>
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Cargo type
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex-55 layout-row"
+    >
+      <div
+        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+      >
+        <CargoItemGroupAggregated
+          group={
+            Object {
+              "cargoType": Object {
+                "category": "FOO_CATEGORY",
+              },
+              "items": Array [
+                Object {
+                  "chargeable_weight": 80,
+                  "dimension_x": 90,
+                  "dimension_y": 100,
+                  "dimension_z": 120,
+                  "gross_weight": 76,
+                  "payload_in_kg": 56,
+                  "tare_weight": 20,
+                },
+              ],
+              "quantity": "FOO_QUANTITY",
+              "size_class": "dry_goods",
+              "volume": 5,
+            }
+          }
+          t={[Function]}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-5 layout-row layout-align-center-center"
+      onChange={[Function]}
+      onClick={[Function]}
+    >
+      <i
+        className="collapsed fa fa-chevron-down clip pointy"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="unit_viewer "
+  >
+    <div
+      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    >
+      <div
+        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+        key="RANDOM_KEY_15"
+      >
+        <div
+          className="flex-5 layout-row layout-align-center-center"
+        >
+          <p
+            className="flex-none"
+            style={
+              Object {
+                "fontSize": "10px",
+              }
+            }
+          >
+            Single Item
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="length"
+            border="0"
+            data-for="RANDOM_KEY_14"
+            data-tip="Length"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_14"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              90
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="height"
+            border="0"
+            data-for="RANDOM_KEY_14"
+            data-tip="Height"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_14"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              120
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="width"
+            border="0"
+            data-for="RANDOM_KEY_14"
+            data-tip="Width"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_14"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -598,7 +1634,11 @@ exports[`state.unitView is true 1`] = `
     >
       <i
         className="collapsed fa fa-chevron-down clip pointy"
-        style="#333"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
       />
     </div>
   </div>
@@ -613,7 +1653,7 @@ exports[`state.unitView is true 1`] = `
         key="RANDOM_KEY_7"
       >
         <div
-          className="flex-10 layout-row layout-align-center-center"
+          className="flex-5 layout-row layout-align-center-center"
         >
           <p
             className="flex-none"
@@ -851,7 +1891,11 @@ exports[`state.viewer is true 1`] = `
     >
       <i
         className="collapsed fa fa-chevron-down clip pointy"
-        style="#333"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
       />
     </div>
   </div>
@@ -866,7 +1910,7 @@ exports[`state.viewer is true 1`] = `
         key="RANDOM_KEY_11"
       >
         <div
-          className="flex-10 layout-row layout-align-center-center"
+          className="flex-5 layout-row layout-align-center-center"
         >
           <p
             className="flex-none"
