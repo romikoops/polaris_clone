@@ -44,7 +44,7 @@ export function fixedWeightChargeableString (cargoItems, fixedWeight, t, scope) 
   const weightVal = cargoItems.reduce((product, item) => (
     product + +item.payload_in_kg * item.quantity
   ), 0)
-  const showVolume = volumeVal > weightVal
+  const showVolume = volumeVal > (weightVal / 1000)
   const chargeableWeightVal = fixedWeight
   const chargeableVolumeVal = chargeableWeightVal / 1000
 
