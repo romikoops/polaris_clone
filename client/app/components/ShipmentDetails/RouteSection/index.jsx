@@ -38,8 +38,12 @@ class RouteSection extends React.PureComponent {
     const { routes } = props
     this.countries = { origin: [], destination: [] }
     routes.forEach((route) => {
-      this.countries.origin.push(route.origin.country.toLowerCase())
-      this.countries.destination.push(route.destination.country.toLowerCase())
+      if (route.origin.truckTypes.length > 0) {
+        this.countries.origin.push(route.origin.country.toLowerCase())
+      }
+      if (route.destination.truckTypes.length > 0) {
+        this.countries.destination.push(route.destination.country.toLowerCase())
+      }
     })
 
     this.truckTypes = {
