@@ -365,10 +365,10 @@ class QuoteChargeBreakdown extends Component {
         break
       case 'cargo':
         if (meta) {
-          return `${fixedWeightChargeableString(cargo,  get(meta, ['ocean_chargeable_weight'], 0), t, scope)}`
-        } else {
-          value = cargo.reduce((acc, c) => (acc + +c.chargeable_weight * +c.quantity), 0)
+          return `(${fixedWeightChargeableString(cargo, get(meta, ['ocean_chargeable_weight'], 0), t, scope)})`
         }
+        
+        value = cargo.reduce((acc, c) => (acc + +c.chargeable_weight * +c.quantity), 0)
         break
       default:
         break

@@ -403,7 +403,7 @@ export default function getInputs (
         return [
           (<div className="layout-row flex-none layout-wrap layout-align-end-center">
             <p className={`${styles.subchargeable} flex-none`}>
-              {showVolume ? `${t('cargo:chargebleVolume')}:` : `${t('cargo:chargeableWeight')}:`}
+              {showVolume ? `${t('cargo:chargeableVolume')}:` : `${t('cargo:chargeableWeight')}:`}
             </p>
           </div>),
           (<div className={
@@ -434,7 +434,7 @@ export default function getInputs (
         return [
           (<div className="layout-row flex-none layout-wrap layout-align-end-center">
             <p className={`${styles.subchargeable} flex-none`}>
-              {`${t('cargo:chargebleVolume')}:`}
+              {`${t('cargo:chargeableVolume')}:`}
             </p>
           </div>),
           (<div className={
