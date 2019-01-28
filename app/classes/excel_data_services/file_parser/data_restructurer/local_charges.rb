@@ -69,7 +69,7 @@ module ExcelDataServices
             error_info << { row_nr: row[:row_nr], rate_basis_name: rate_basis } if value.nil?
           end
 
-          ChargeCategory.find_or_create_by!(code: row[:fee_code], name: row[:fee], tenant_id: tenant.id)
+          ChargeCategory.find_or_create_by!(code: row[:fee_code].downcase, name: row[:fee], tenant_id: tenant.id)
 
           charge_params = { charge_params: standard_charge_params.merge(specific_charge_params) }
           charge_params.merge(error_data: error_data)

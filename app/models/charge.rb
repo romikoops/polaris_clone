@@ -43,7 +43,7 @@ class Charge < ApplicationRecord
     schedule_charge.each do |key, charge_h|
       next if %w(total value currency).include? key
 
-      children_charge_category = ChargeCategory.find_or_create_by(name: key, code: key)
+      children_charge_category = ChargeCategory.find_or_create_by(name: key, code: key.downcase)
       price_h = charge_h['value'].nil? ? charge_h['total'] : charge_h
       price_h ||= {
         'value' => 0,

@@ -56,6 +56,31 @@ function uploadHubs (file) {
     )
   }
 }
+function uploadChargeCategories (file) {
+  function request (uploadData) {
+    return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
+  }
+  function success (uploadData) {
+    return { type: documentConstants.UPLOAD_SUCCESS, payload: uploadData.data }
+  }
+  function failure (error) {
+    return { type: documentConstants.UPLOAD_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    documentService.uploadChargeCategories(file).then(
+      (data) => {
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 function downloadPricings (options) {
   function request (downloadData) {
     return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
@@ -230,6 +255,32 @@ function downloadHubs () {
     )
   }
 }
+function downloadChargeCategories () {
+  function request (downloadData) {
+    return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
+  }
+  function success (downloadData) {
+    return { type: documentConstants.DOWNLOAD_SUCCESS, payload: downloadData.data }
+  }
+  function failure (error) {
+    return { type: documentConstants.DOWNLOAD_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    documentService.downloadChargeCategories().then(
+      (data) => {
+        dispatch(alertActions.success('Downloading Successful successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 function downloadGdpr (options) {
   function request (downloadData) {
     return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
@@ -359,7 +410,9 @@ export const documentActions = {
   downloadTrucking,
   downloadGdpr,
   downloadShipment,
-  downloadQuotations
+  downloadQuotations,
+  downloadChargeCategories,
+  uploadChargeCategories
 }
 
 export default documentActions
