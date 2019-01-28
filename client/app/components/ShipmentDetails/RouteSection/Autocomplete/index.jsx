@@ -2,13 +2,14 @@ import React, { PureComponent } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { camelCase } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import styles from './index.scss'
 import listenerTools from '../../../../helpers/listeners'
-// import errorStyles from '../../../../styles/errors.scss'
-// import getRequests from './getRequests'
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner'
 import { moment } from '../../../../constants'
 import addressFromPlace from './addressFromPlace'
+import { errorActions } from '../../../../actions'
 
 // WIP - Should be refactored out of this file
 import { getTenantApiUrl } from '../../../../constants/api.constants'
@@ -306,7 +307,7 @@ class Autocomplete extends PureComponent {
       errorKey = `errors:${camelCase(status)}`
     }
     const error = {
-      component: 'ShipmentLocationBox',
+      component: 'RouteSection',
       code: '1101',
       target,
       side: target === 'origin' ? 'left' : 'right',
@@ -366,7 +367,6 @@ class Autocomplete extends PureComponent {
             </div>)
         })
       : []
-
 
     return (
       <div className={`auto_origin ccb_carriage flex-100 layout-row layout-wrap layout-align-center-center ${styles.autocomplete_container}`}>
@@ -432,4 +432,12 @@ class Autocomplete extends PureComponent {
   }
 }
 
-export default withNamespaces(['common', 'errors'])(Autocomplete)
+function mapDispatchToProps (dispatch) {
+  return {
+    errorDispatch: bindActionCreators(errorActions, dispatch)
+  }
+}
+
+export default withNamespaces(['common', 'errors'])(
+  connect(null, mapDispatchToProps)(Autocomplete)
+)
