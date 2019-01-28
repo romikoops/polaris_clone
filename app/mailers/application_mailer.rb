@@ -1,23 +1,14 @@
 # frozen_string_literal: true
 
 class ApplicationMailer < ActionMailer::Base
-
-  default from: "itsmycargodev@gmail.com"
-  layout "mailer"
-
-  def beta_prospect_mail(prospect_name, email, company, phone)
-    @prospect_name = prospect_name
-    @email = email
-    @company = company
-    @phone = phone
-    mail(to: "support@itsmycargo.com", subject: "ItsMyCargo Beta Prospect!", &:text)
-  end
+  default from: 'no-reply@itsmycargo.tech'
+  layout 'mailer'
 
   def mail_target_interceptor(user, email)
     if user.internal?
-      return 'bookingemails@itsmycargo.com'
+      Settings.emails.booking
     else
-      return email
+      email
     end
   end
 end

@@ -5,9 +5,7 @@ class ShipmentMailer < ApplicationMailer
   layout 'mailer'
   add_template_helper(ApplicationHelper)
 
-  TESTING_EMAIL = 'warwick@itsmycargo.com'
-
-  def tenant_notification(user, shipment)
+  def tenant_notification(user, shipment) # rubocop:disable Metrics/AbcSize
     @user = user
     tenant = user.tenant
     @shipment = shipment
@@ -25,7 +23,9 @@ class ShipmentMailer < ApplicationMailer
     create_pdf_attachment(@shipment)
     attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
     mail_options = {
-      from: tenant.emails.dig('support', 'general'),
+      from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
+                         .tap { |a| a.display_name = 'ItsMyCargo Bookings' }.format,
+      reply_to: 'support@itsmycargo.com',
       to: mail_target_interceptor(@user, tenant.email_for(:sales, shipment.mode_of_transport)),
       subject: "Your booking through #{tenant.name}"
     }
@@ -33,38 +33,40 @@ class ShipmentMailer < ApplicationMailer
     mail(mail_options, &:html)
   end
 
-  def shipper_notification(user, shipment)
+  def shipper_notification(user, shipment) # rubocop:disable Metrics/AbcSize
     @user = user
-    tenant = user.tenant
     @shipment = shipment
-    @scope = tenant.scope
+    @scope = @user.tenant.scope
 
     create_pdf_attachment(@shipment)
-    attachments.inline['logo.png']       = URI.open(tenant.theme['logoLarge']).read
-    attachments.inline['logo_small.png'] = URI.try(:open, tenant.theme['logoSmall']).try(:read)
+    attachments.inline['logo.png']       = URI.open(@user.tenant.theme['logoLarge']).read
+    attachments.inline['logo_small.png'] = URI.try(:open, @user.tenant.theme['logoSmall']).try(:read)
     mail_options = {
-      from: tenant.emails.dig('support', 'general'),
-      to: mail_target_interceptor(@user, user.email.blank? ? 'itsmycargodev@gmail.com' : user.email),
-      bcc: ['bookingemails@itsmycargo.com'],
-      subject: "Your booking through #{tenant.name}"
+      from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
+                         .tap { |a| a.display_name = @user.tenant.name }.format,
+      reply_to: @user.tenant.emails.dig('support', 'general'),
+      to: mail_target_interceptor(@user, @user.email.blank? ? 'itsmycargodev@gmail.com' : @user.email),
+      bcc: [Settings.emails.booking],
+      subject: "Your booking through #{@user.tenant.name}"
     }
 
     mail(mail_options, &:html)
   end
 
-  def shipper_confirmation(user, shipment)
+  def shipper_confirmation(user, shipment) # rubocop:disable Metrics/AbcSize
     @user = user
-    tenant = user.tenant
     @shipment = shipment
-    @scope = tenant.scope
+    @scope = @user.tenant.scope
     create_pdf_attachment(@shipment)
-    attachments.inline['logo.png']       = URI.open(tenant.theme['logoLarge']).read
-    attachments.inline['logo_small.png'] = try(:open, tenant.theme['logoSmall']).try(:read)
+    attachments.inline['logo.png']       = URI.open(@user.tenant.theme['logoLarge']).read
+    attachments.inline['logo_small.png'] = try(:open, @user.tenant.theme['logoSmall']).try(:read)
     mail_options = {
-      from: tenant.emails.dig('support', 'general'),
+      from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
+                         .tap { |a| a.display_name = @user.tenant.name }.format,
+      reply_to: @user.tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, user.email.blank? ? 'itsmycargodev@gmail.com' : user.email),
-      bcc: ['bookingemails@itsmycargo.com'],
-      subject: "Your booking through #{tenant.name}"
+      bcc: [Settings.emails.booking],
+      subject: "Your booking through #{@user.tenant.name}"
     }
 
     mail(mail_options, &:html)

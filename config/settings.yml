@@ -21,8 +21,16 @@ google_sign_in:
   client_id:
   client_secret:
 
+emails:
+  booking:
+  domain:
+
 mailer:
   queue:
+
+mailgun:
+  api_key:
+  domain:
 
 sentry:
   dsn: 'https://d25ea82032c14d0a83892dd95bccbdc5:6b0c931c2de24da489b5bbd959ead860@sentry.itsmycargo.tech/2'
