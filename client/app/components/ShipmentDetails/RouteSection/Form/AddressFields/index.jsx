@@ -22,7 +22,7 @@ function AddressFields ({
   truckingAvailable
 }) {
   return (
-    <div className={`route_section_form ${styles.route_section_form_wrapper}`}>
+    <div className={`ccb_route_section_form_${target} ${styles.route_section_form_wrapper}`}>
       <Autocomplete
         gMaps={gMaps}
         map={map}

@@ -25,8 +25,10 @@ function CollapsableFields ({
     )
   }
 
+  const truckingClass = truckingAvailable === 'available' ? `ccb_${target}_found` : ''
+
   return (
-    <div className="flex-100">
+    <div className={`flex-100 ${truckingClass}`}>
       <div className={`flex-100 layout-row ${styles.form_title}`}>
         <h5>{target === 'origin' ? t('shipment:enterPickUp') : t('shipment:enterDelivery')}</h5>
       </div>
