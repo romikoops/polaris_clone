@@ -120,6 +120,34 @@ exports[`shallow render 1`] = `
                     />
                   </div>
                   <div
+                    className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                  >
+                    <p
+                      className="flex-100 center"
+                    >
+                      Upload Charge Definitions Sheet
+                    </p>
+                    <FileUploader
+                      dispatchFn={null}
+                      formClasses=""
+                      size="small"
+                      square={false}
+                      t={[Function]}
+                      text="Charge Definitions .xlsx"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                      tooltip=""
+                      type="xlsx"
+                      uploadFn={null}
+                    />
+                  </div>
+                  <div
                     className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
                   >
                     <p
@@ -143,6 +171,34 @@ exports[`shallow render 1`] = `
                         }
                       }
                       tooltip="By using the Excel template you can update all your LCL rates with one upload"
+                      type="xlsx"
+                      uploadFn={null}
+                    />
+                  </div>
+                  <div
+                    className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                  >
+                    <p
+                      className="flex-100 center"
+                    >
+                      Upload Charge Definitions Sheet
+                    </p>
+                    <FileUploader
+                      dispatchFn={null}
+                      formClasses=""
+                      size="small"
+                      square={false}
+                      t={[Function]}
+                      text="Charge Definitions .xlsx"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                      tooltip=""
                       type="xlsx"
                       uploadFn={null}
                     />
@@ -213,6 +269,27 @@ exports[`shallow render 1`] = `
                     className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
                   >
                     <p
+                      className="flex-100 center"
+                    >
+                      Download Charge Definitions Sheet
+                    </p>
+                    <Connect(DocumentsDownloader)
+                      t={[Function]}
+                      target="charge_categories"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                  >
+                    <p
                       className="flex-100"
                     >
                       Download {{mot}} {{loadType}} Pricings Sheet
@@ -227,6 +304,27 @@ exports[`shallow render 1`] = `
                       size="full"
                       t={[Function]}
                       target="pricing_container"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                  >
+                    <p
+                      className="flex-100 center"
+                    >
+                      Download Charge Definitions Sheet
+                    </p>
+                    <Connect(DocumentsDownloader)
+                      t={[Function]}
+                      target="charge_categories"
                       theme={
                         Object {
                           "colors": Object {
@@ -453,6 +551,34 @@ exports[`state.page > 1 1`] = `
                     />
                   </div>
                   <div
+                    className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                  >
+                    <p
+                      className="flex-100 center"
+                    >
+                      Upload Charge Definitions Sheet
+                    </p>
+                    <FileUploader
+                      dispatchFn={null}
+                      formClasses=""
+                      size="small"
+                      square={false}
+                      t={[Function]}
+                      text="Charge Definitions .xlsx"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                      tooltip=""
+                      type="xlsx"
+                      uploadFn={null}
+                    />
+                  </div>
+                  <div
                     className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
                   >
                     <p
@@ -476,6 +602,34 @@ exports[`state.page > 1 1`] = `
                         }
                       }
                       tooltip="By using the Excel template you can update all your LCL rates with one upload"
+                      type="xlsx"
+                      uploadFn={null}
+                    />
+                  </div>
+                  <div
+                    className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                  >
+                    <p
+                      className="flex-100 center"
+                    >
+                      Upload Charge Definitions Sheet
+                    </p>
+                    <FileUploader
+                      dispatchFn={null}
+                      formClasses=""
+                      size="small"
+                      square={false}
+                      t={[Function]}
+                      text="Charge Definitions .xlsx"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                      tooltip=""
                       type="xlsx"
                       uploadFn={null}
                     />
@@ -546,6 +700,27 @@ exports[`state.page > 1 1`] = `
                     className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
                   >
                     <p
+                      className="flex-100 center"
+                    >
+                      Download Charge Definitions Sheet
+                    </p>
+                    <Connect(DocumentsDownloader)
+                      t={[Function]}
+                      target="charge_categories"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                  >
+                    <p
                       className="flex-100"
                     >
                       Download {{mot}} {{loadType}} Pricings Sheet
@@ -560,6 +735,27 @@ exports[`state.page > 1 1`] = `
                       size="full"
                       t={[Function]}
                       target="pricing_container"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                  >
+                    <p
+                      className="flex-100 center"
+                    >
+                      Download Charge Definitions Sheet
+                    </p>
+                    <Connect(DocumentsDownloader)
+                      t={[Function]}
+                      target="charge_categories"
                       theme={
                         Object {
                           "colors": Object {
@@ -786,6 +982,34 @@ exports[`user is internal 1`] = `
                     />
                   </div>
                   <div
+                    className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                  >
+                    <p
+                      className="flex-100 center"
+                    >
+                      Upload Charge Definitions Sheet
+                    </p>
+                    <FileUploader
+                      dispatchFn={null}
+                      formClasses=""
+                      size="small"
+                      square={false}
+                      t={[Function]}
+                      text="Charge Definitions .xlsx"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                      tooltip=""
+                      type="xlsx"
+                      uploadFn={null}
+                    />
+                  </div>
+                  <div
                     className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
                   >
                     <p
@@ -809,6 +1033,34 @@ exports[`user is internal 1`] = `
                         }
                       }
                       tooltip="By using the Excel template you can update all your LCL rates with one upload"
+                      type="xlsx"
+                      uploadFn={null}
+                    />
+                  </div>
+                  <div
+                    className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                  >
+                    <p
+                      className="flex-100 center"
+                    >
+                      Upload Charge Definitions Sheet
+                    </p>
+                    <FileUploader
+                      dispatchFn={null}
+                      formClasses=""
+                      size="small"
+                      square={false}
+                      t={[Function]}
+                      text="Charge Definitions .xlsx"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                      tooltip=""
                       type="xlsx"
                       uploadFn={null}
                     />
@@ -879,6 +1131,27 @@ exports[`user is internal 1`] = `
                     className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
                   >
                     <p
+                      className="flex-100 center"
+                    >
+                      Download Charge Definitions Sheet
+                    </p>
+                    <Connect(DocumentsDownloader)
+                      t={[Function]}
+                      target="charge_categories"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                  >
+                    <p
                       className="flex-100"
                     >
                       Download {{mot}} {{loadType}} Pricings Sheet
@@ -893,6 +1166,27 @@ exports[`user is internal 1`] = `
                       size="full"
                       t={[Function]}
                       target="pricing_container"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                  >
+                    <p
+                      className="flex-100 center"
+                    >
+                      Download Charge Definitions Sheet
+                    </p>
+                    <Connect(DocumentsDownloader)
+                      t={[Function]}
+                      target="charge_categories"
                       theme={
                         Object {
                           "colors": Object {
