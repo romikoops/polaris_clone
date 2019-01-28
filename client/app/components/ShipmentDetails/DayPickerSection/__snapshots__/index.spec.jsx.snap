@@ -79,10 +79,10 @@ exports[`happy path 1`] = `
           dayPickerProps={
             Object {
               "disabledDays": Object {
-                "after": 2019-03-12T12:00:00.000Z,
-                "before": 2019-01-22T12:01:53.000Z,
+                "after": 2017-06-27T13:41:20.000Z,
+                "before": 2017-06-27T13:41:20.000Z,
               },
-              "month": 2018-12-31T22:00:00.000Z,
+              "month": 2017-06-27T13:41:20.000Z,
               "name": "dayPicker",
             }
           }
@@ -109,7 +109,7 @@ exports[`happy path 1`] = `
               "noAvailableDate": [Function],
             }
           }
-          value="24/01/2019"
+          value="13/06/2017"
         />
       </div>
     </div>
@@ -289,10 +289,10 @@ exports[`pre carriage is true 1`] = `
           dayPickerProps={
             Object {
               "disabledDays": Object {
-                "after": 2019-03-12T12:00:00.000Z,
-                "before": 2019-01-22T12:01:53.000Z,
+                "after": 2017-07-26T07:41:20.000Z,
+                "before": 2017-07-26T07:41:20.000Z,
               },
-              "month": 2018-12-31T22:00:00.000Z,
+              "month": 2017-07-26T07:41:20.000Z,
               "name": "dayPicker",
             }
           }
@@ -319,7 +319,7 @@ exports[`pre carriage is true 1`] = `
               "noAvailableDate": [Function],
             }
           }
-          value="24/01/2019"
+          value="11/07/2017"
         />
       </div>
     </div>
@@ -499,10 +499,10 @@ exports[`selected day is falsy 1`] = `
           dayPickerProps={
             Object {
               "disabledDays": Object {
-                "after": 2019-03-12T12:00:00.000Z,
-                "before": 2019-01-22T12:01:53.000Z,
+                "after": 2017-07-11T21:41:20.000Z,
+                "before": 2017-07-11T21:41:20.000Z,
               },
-              "month": 2018-12-31T22:00:00.000Z,
+              "month": 2017-07-11T21:41:20.000Z,
               "name": "dayPicker",
             }
           }

@@ -2,112 +2,108 @@
 
 exports[`happy path 1`] = `
 <div
-  className="flex-100 layout-row"
+  className="flex-100 layout-row trucking_details"
 >
   <div
-    className="trucking_details flex-100 layout-row layout-wrap layout-align-center"
+    className="carriage_sec flex-100 layout-row layout-align-end-end"
   >
     <div
-      className="flex-100 layout-row layout-wrap layout-align-center"
+      className="
+          form_group 
+          flex-100
+          layout-row layout-align-end-end
+        "
+      data-for="UUID_MOCK_KEY_0"
+      data-tip="Side Lifter is not available for the given address."
     >
       <div
-        className="carriage_sec  flex-100 layout-row layout-wrap"
+        className=""
+      />
+      <input
+        checked={false}
+        disabled={false}
+        id="TARGET-side_lifter"
+        name="TARGETTruck"
+        onChange={null}
+        type="radio"
+        value="TARGETTruck"
+      />
+      <label
+        htmlFor="TARGET-side_lifter"
       >
-        <div
-          className="flex-100 layout-row layout-align-space-around"
-        >
-          <div
-            className="form_group  flex-50 layout-row layout-align-start-end"
-            data-for="c84e561c-563e-4959-8c7c-b366220a3a5d"
-            data-tip="Side Lifter is not available for the given address."
-          >
-            <div
-              className=""
-            />
-            <input
-              checked={false}
-              disabled={false}
-              id="TARGET-side_lifter"
-              name="TARGETTruck"
-              onChange={null}
-              type="radio"
-              value="TARGETTruck"
-            />
-            <label
-              htmlFor="TARGET-side_lifter"
-            >
-              Side Lifter
-            </label>
-            <Tooltip
-              color="white"
-              icon="fa-info-circle"
-              text="side_lifter"
-              theme={
-                Object {
-                  "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
-                  "colors": Object {
-                    "brightPrimary": "#2491FD",
-                    "brightSecondary": "#25ED36",
-                    "primary": "#0D5BA9",
-                    "secondary": "#23802A",
-                  },
-                  "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
-                  "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
-                  "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
-                  "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
-                }
-              }
-              toolText=""
-              wrapperClassName="tooltip"
-            />
-          </div>
-          <div
-            className="form_group  flex-50 layout-row layout-align-start-end"
-            data-for="b5dddbc4-1914-41e1-9973-eca3f241d712"
-            data-tip="Chassis is not available for the given address."
-          >
-            <div
-              className=""
-            />
-            <input
-              checked={true}
-              disabled={false}
-              id="TARGET-chassis"
-              name="TARGETTruck"
-              onChange={null}
-              type="radio"
-              value="TARGETTruck"
-            />
-            <label
-              htmlFor="TARGET-chassis"
-            >
-              Chassis
-            </label>
-            <Tooltip
-              color="white"
-              icon="fa-info-circle"
-              text="chassis"
-              theme={
-                Object {
-                  "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
-                  "colors": Object {
-                    "brightPrimary": "#2491FD",
-                    "brightSecondary": "#25ED36",
-                    "primary": "#0D5BA9",
-                    "secondary": "#23802A",
-                  },
-                  "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
-                  "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
-                  "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
-                  "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
-                }
-              }
-              toolText=""
-              wrapperClassName="tooltip"
-            />
-          </div>
-        </div>
-      </div>
+        Side Lifter
+      </label>
+      <Tooltip
+        color="white"
+        icon="fa-info-circle"
+        text="side_lifter"
+        theme={
+          Object {
+            "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+            "colors": Object {
+              "brightPrimary": "#2491FD",
+              "brightSecondary": "#25ED36",
+              "primary": "#0D5BA9",
+              "secondary": "#23802A",
+            },
+            "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+            "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+            "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+            "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+          }
+        }
+        toolText=""
+        wrapperClassName="tooltip"
+      />
+    </div>
+    <div
+      className="
+          form_group 
+          flex-100
+          layout-row layout-align-end-end
+        "
+      data-for="UUID_MOCK_KEY_1"
+      data-tip="Chassis is not available for the given address."
+    >
+      <div
+        className=""
+      />
+      <input
+        checked={true}
+        disabled={false}
+        id="TARGET-chassis"
+        name="TARGETTruck"
+        onChange={null}
+        type="radio"
+        value="TARGETTruck"
+      />
+      <label
+        htmlFor="TARGET-chassis"
+      >
+        Chassis
+      </label>
+      <Tooltip
+        color="white"
+        icon="fa-info-circle"
+        text="chassis"
+        theme={
+          Object {
+            "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+            "colors": Object {
+              "brightPrimary": "#2491FD",
+              "brightSecondary": "#25ED36",
+              "primary": "#0D5BA9",
+              "secondary": "#23802A",
+            },
+            "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+            "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+            "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+            "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+          }
+        }
+        toolText=""
+        wrapperClassName="tooltip"
+      />
     </div>
   </div>
 </div>
@@ -117,128 +113,124 @@ exports[`hide is true 1`] = `""`;
 
 exports[`target truck type is not part of truckTypes 1`] = `
 <div
-  className="flex-100 layout-row"
+  className="flex-100 layout-row trucking_details"
 >
   <div
-    className="trucking_details flex-100 layout-row layout-wrap layout-align-center"
+    className="carriage_sec flex-100 layout-row layout-align-end-end"
   >
     <div
-      className="flex-100 layout-row layout-wrap layout-align-center"
+      className="
+          form_group disabled
+          flex-100
+          layout-row layout-align-end-end
+        "
+      data-for="UUID_MOCK_KEY_2"
+      data-tip="Side Lifter is not available for the given address."
     >
+      <ReactTooltip
+        effect="solid"
+        id="UUID_MOCK_KEY_2"
+        insecure={true}
+        place="bottom"
+        resizeHide={true}
+        wrapper="div"
+      />
       <div
-        className="carriage_sec  flex-100 layout-row layout-wrap"
+        className="overlay"
+      />
+      <input
+        checked={false}
+        disabled={true}
+        id="TARGET-side_lifter"
+        name="TARGETTruck"
+        onChange={null}
+        type="radio"
+        value="TARGETTruck"
+      />
+      <label
+        htmlFor="TARGET-side_lifter"
       >
-        <div
-          className="flex-100 layout-row layout-align-space-around"
-        >
-          <div
-            className="form_group disabled flex-50 layout-row layout-align-start-end"
-            data-for="6583acd9-b445-4762-a286-6a214b0692a6"
-            data-tip="Side Lifter is not available for the given address."
-          >
-            <ReactTooltip
-              effect="solid"
-              id="6583acd9-b445-4762-a286-6a214b0692a6"
-              insecure={true}
-              place="bottom"
-              resizeHide={true}
-              wrapper="div"
-            />
-            <div
-              className="overlay"
-            />
-            <input
-              checked={false}
-              disabled={true}
-              id="TARGET-side_lifter"
-              name="TARGETTruck"
-              onChange={null}
-              type="radio"
-              value="TARGETTruck"
-            />
-            <label
-              htmlFor="TARGET-side_lifter"
-            >
-              Side Lifter
-            </label>
-            <Tooltip
-              color="white"
-              icon="fa-info-circle"
-              text="side_lifter"
-              theme={
-                Object {
-                  "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
-                  "colors": Object {
-                    "brightPrimary": "#2491FD",
-                    "brightSecondary": "#25ED36",
-                    "primary": "#0D5BA9",
-                    "secondary": "#23802A",
-                  },
-                  "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
-                  "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
-                  "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
-                  "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
-                }
-              }
-              toolText=""
-              wrapperClassName="tooltip"
-            />
-          </div>
-          <div
-            className="form_group disabled flex-50 layout-row layout-align-start-end"
-            data-for="742e9854-e3e0-4491-a5c7-8b83be7eee5e"
-            data-tip="Chassis is not available for the given address."
-          >
-            <ReactTooltip
-              effect="solid"
-              id="742e9854-e3e0-4491-a5c7-8b83be7eee5e"
-              insecure={true}
-              place="bottom"
-              resizeHide={true}
-              wrapper="div"
-            />
-            <div
-              className="overlay"
-            />
-            <input
-              checked={true}
-              disabled={true}
-              id="TARGET-chassis"
-              name="TARGETTruck"
-              onChange={null}
-              type="radio"
-              value="TARGETTruck"
-            />
-            <label
-              htmlFor="TARGET-chassis"
-            >
-              Chassis
-            </label>
-            <Tooltip
-              color="white"
-              icon="fa-info-circle"
-              text="chassis"
-              theme={
-                Object {
-                  "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
-                  "colors": Object {
-                    "brightPrimary": "#2491FD",
-                    "brightSecondary": "#25ED36",
-                    "primary": "#0D5BA9",
-                    "secondary": "#23802A",
-                  },
-                  "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
-                  "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
-                  "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
-                  "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
-                }
-              }
-              toolText=""
-              wrapperClassName="tooltip"
-            />
-          </div>
-        </div>
-      </div>
+        Side Lifter
+      </label>
+      <Tooltip
+        color="white"
+        icon="fa-info-circle"
+        text="side_lifter"
+        theme={
+          Object {
+            "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+            "colors": Object {
+              "brightPrimary": "#2491FD",
+              "brightSecondary": "#25ED36",
+              "primary": "#0D5BA9",
+              "secondary": "#23802A",
+            },
+            "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+            "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+            "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+            "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+          }
+        }
+        toolText=""
+        wrapperClassName="tooltip"
+      />
+    </div>
+    <div
+      className="
+          form_group disabled
+          flex-100
+          layout-row layout-align-end-end
+        "
+      data-for="UUID_MOCK_KEY_3"
+      data-tip="Chassis is not available for the given address."
+    >
+      <ReactTooltip
+        effect="solid"
+        id="UUID_MOCK_KEY_3"
+        insecure={true}
+        place="bottom"
+        resizeHide={true}
+        wrapper="div"
+      />
+      <div
+        className="overlay"
+      />
+      <input
+        checked={true}
+        disabled={true}
+        id="TARGET-chassis"
+        name="TARGETTruck"
+        onChange={null}
+        type="radio"
+        value="TARGETTruck"
+      />
+      <label
+        htmlFor="TARGET-chassis"
+      >
+        Chassis
+      </label>
+      <Tooltip
+        color="white"
+        icon="fa-info-circle"
+        text="chassis"
+        theme={
+          Object {
+            "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+            "colors": Object {
+              "brightPrimary": "#2491FD",
+              "brightSecondary": "#25ED36",
+              "primary": "#0D5BA9",
+              "secondary": "#23802A",
+            },
+            "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+            "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+            "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+            "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
+          }
+        }
+        toolText=""
+        wrapperClassName="tooltip"
+      />
     </div>
   </div>
 </div>

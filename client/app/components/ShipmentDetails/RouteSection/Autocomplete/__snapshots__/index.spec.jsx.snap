@@ -13,7 +13,7 @@ exports[`happy path 1`] = `
     onClick={[Function]}
   >
     <input
-      autoComplete="new-password"
+      autoComplete="remove"
       data-hj-whitelist={true}
       name="TARGET-fullAddress"
       onBlur={[Function]}

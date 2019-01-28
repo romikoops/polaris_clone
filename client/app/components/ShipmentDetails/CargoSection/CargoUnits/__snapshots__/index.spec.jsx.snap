@@ -304,7 +304,7 @@ exports[`load type is cargo item 1`] = `
       },
     }
   }
-  uniqKey="95078195-ce47-48d9-ba9c-0a4500578f5e"
+  uniqKey="UUID_MOCK_KEY_0"
 />
 `;
 

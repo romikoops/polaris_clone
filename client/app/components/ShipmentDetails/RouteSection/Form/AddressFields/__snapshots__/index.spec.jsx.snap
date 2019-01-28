@@ -2,9 +2,9 @@
 
 exports[`happy path 1`] = `
 <div
-  className="route_section_form"
+  className="ccb_route_section_form_TARGET route_section_form_wrapper"
 >
-  <Autocomplete
+  <Connect(Autocomplete)
     countries={Array []}
     errorDispatch={Object {}}
     gMaps={Object {}}
@@ -90,52 +90,48 @@ exports[`happy path 1`] = `
       }
     }
   />
-  <CollapsingContent
-    collapsed={false}
-    content=""
-    minHeight=""
-    wrapperContentClasses=""
+  <div
+    className="
+          flex-100 layout-row layout-wrap layout-align-center ccb_on_address_form 
+          address_form
+        "
   >
-    <_class
-      name="TARGET-street"
-      onBlur={null}
-    />
-    <_class
-      name="TARGET-number"
-      onBlur={null}
-    />
-    <_class
-      name="TARGET-zipCode"
-      onBlur={null}
-    />
-    <_class
-      name="TARGET-city"
-      onBlur={null}
-    />
-    <_class
-      name="TARGET-country"
-      onBlur={null}
-    />
-    <div
-      className="flex-100 layout-row layout-align-start-center"
+    <CollapsingBar
+      collapsed={null}
+      content=""
+      contentHeader={
+        <div
+          className="btn_address_form"
+          onClick={[Function]}
+        >
+          <i
+            className="undefined flex-none fa fa-angle-double-down"
+          />
+        </div>
+      }
+      faClass=""
+      handleCollapser={null}
+      headerWrapClasses="header_wrapper"
+      hideIcon={false}
+      mainWrapperStyle={Object {}}
+      minHeight=""
+      parentClass=""
+      showArrow={false}
+      startCollapsed={false}
+      text=""
+      theme={null}
+      wrapperContentClasses="content_wrapper"
     >
       <div
-        className="clear_sec flex-none layout-row layout-align-end-center"
-        onClick={[Function]}
+        className="layout-row layout-align-center-center collapsable_fields_wrapper"
       >
-        <i
-          className="fa fa-times flex-none"
-        />
-        <p
-          className="offset-5 flex-none"
-          style={
-            Object {
-              "paddingRight": "10px",
-            }
-          }
+        <CollapsableFields
+          formData={Object {}}
+          t={[Function]}
+          target="TARGET"
         />
       </div>
-    </div>
-  </CollapsingContent>
+    </CollapsingBar>
+  </div>
 </div>
 `;

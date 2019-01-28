@@ -230,6 +230,7 @@ exports[`shallow render 1`] = `
                   },
                 }
               }
+              wrapperContentClasses=""
             />
             <CollapsingBar
               collapsed={true}
@@ -362,6 +363,7 @@ exports[`shallow render 1`] = `
                   },
                 }
               }
+              wrapperContentClasses=""
             />
             <CollapsingBar
               collapsed={true}
@@ -422,6 +424,7 @@ exports[`shallow render 1`] = `
                   },
                 }
               }
+              wrapperContentClasses=""
             />
           </div>
         }
@@ -661,6 +664,7 @@ exports[`state.page > 1 1`] = `
                   },
                 }
               }
+              wrapperContentClasses=""
             />
             <CollapsingBar
               collapsed={true}
@@ -793,6 +797,7 @@ exports[`state.page > 1 1`] = `
                   },
                 }
               }
+              wrapperContentClasses=""
             />
             <CollapsingBar
               collapsed={true}
@@ -853,6 +858,7 @@ exports[`state.page > 1 1`] = `
                   },
                 }
               }
+              wrapperContentClasses=""
             />
           </div>
         }
@@ -1092,6 +1098,7 @@ exports[`user is internal 1`] = `
                   },
                 }
               }
+              wrapperContentClasses=""
             />
             <CollapsingBar
               collapsed={true}
@@ -1224,6 +1231,7 @@ exports[`user is internal 1`] = `
                   },
                 }
               }
+              wrapperContentClasses=""
             />
             <CollapsingBar
               collapsed={true}
@@ -1284,6 +1292,7 @@ exports[`user is internal 1`] = `
                   },
                 }
               }
+              wrapperContentClasses=""
             />
           </div>
         }

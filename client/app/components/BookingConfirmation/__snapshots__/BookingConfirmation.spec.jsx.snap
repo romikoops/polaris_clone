@@ -918,6 +918,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
         startCollapsed={false}
         text="Cargo Details"
         theme={null}
+        wrapperContentClasses=""
       >
         <div
           className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -2287,6 +2288,7 @@ exports[`shallow render 1`] = `
         startCollapsed={false}
         text="Cargo Details"
         theme={null}
+        wrapperContentClasses=""
       >
         <div
           className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -3656,6 +3658,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
         startCollapsed={false}
         text="Cargo Details"
         theme={null}
+        wrapperContentClasses=""
       >
         <div
           className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -5009,6 +5012,7 @@ exports[`shipment.eori is falsy 1`] = `
         startCollapsed={false}
         text="Cargo Details"
         theme={null}
+        wrapperContentClasses=""
       >
         <div
           className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -6362,6 +6366,7 @@ exports[`shipment.incoterm_text is falsy 1`] = `
         startCollapsed={false}
         text="Cargo Details"
         theme={null}
+        wrapperContentClasses=""
       >
         <div
           className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -7715,6 +7720,7 @@ exports[`shipment.notes is falsy 1`] = `
         startCollapsed={false}
         text="Cargo Details"
         theme={null}
+        wrapperContentClasses=""
       >
         <div
           className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -9062,6 +9068,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
         startCollapsed={false}
         text="Cargo Details"
         theme={null}
+        wrapperContentClasses=""
       >
         <div
           className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -10283,6 +10290,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
         startCollapsed={false}
         text="Cargo Details"
         theme={null}
+        wrapperContentClasses=""
       >
         <div
           className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -11658,6 +11666,7 @@ exports[`state.acceptTerms is true 1`] = `
         startCollapsed={false}
         text="Cargo Details"
         theme={null}
+        wrapperContentClasses=""
       >
         <div
           className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -13021,6 +13030,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
         startCollapsed={false}
         text="Cargo Details"
         theme={null}
+        wrapperContentClasses=""
       >
         <div
           className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -14361,6 +14371,7 @@ exports[`theme is falsy 1`] = `
         startCollapsed={false}
         text="Cargo Details"
         theme={null}
+        wrapperContentClasses=""
       >
         <div
           className="flex-100 layout-row layout-wrap layout-align-start-center"

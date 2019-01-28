@@ -30,6 +30,7 @@ exports[`happy path 1`] = `
     }
     name="no_dangerous_goods_confirmation"
     onChange={true}
+    size="30px"
     style={
       Object {
         "marginBottom": "28px",
@@ -85,6 +86,7 @@ exports[`happy path 1`] = `
     }
     name="stackable_goods_confirmation"
     onChange={true}
+    size="30px"
     style={
       Object {
         "marginBottom": "15px",

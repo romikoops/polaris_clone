@@ -1,5 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
+import '../../../mocks/libraries/moment'
+import '../../../mocks/libraries/momentStatic'
 import DayPickerSection from '.'
 import {
   selectedDay,
@@ -28,10 +30,6 @@ const propsBase = {
   lastAvailableDate,
   theme
 }
-
-// This test suite will keep failing
-// as it needs moment mock applied with IMC-890
-// ============================================
 
 test('with empty props', () => {
   expect(() => shallow(<DayPickerSection />)).toThrow()

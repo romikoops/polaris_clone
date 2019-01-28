@@ -57,7 +57,7 @@ exports[`happy path 1`] = `
           <img
             alt="length"
             border="0"
-            data-for="7d0d48d8-0a6a-4735-9935-d0189eb193c2"
+            data-for="UUID_MOCK_KEY_0"
             data-tip="Length"
           />
         }
@@ -71,6 +71,11 @@ exports[`happy path 1`] = `
         t={[Function]}
         tooltip=""
         unit="cm"
+        validations={
+          Object {
+            "totalShipmentChargeableWeight": [Function],
+          }
+        }
         value={5}
       />
       <CargoUnitNumberInput
@@ -94,7 +99,7 @@ exports[`happy path 1`] = `
           <img
             alt="width"
             border="0"
-            data-for="a38241c3-deee-4002-9748-8b4e55f21de0"
+            data-for="UUID_MOCK_KEY_1"
             data-tip="Width"
           />
         }
@@ -108,6 +113,11 @@ exports[`happy path 1`] = `
         t={[Function]}
         tooltip=""
         unit="cm"
+        validations={
+          Object {
+            "totalShipmentChargeableWeight": [Function],
+          }
+        }
         value={132}
       />
       <CargoUnitNumberInput
@@ -131,7 +141,7 @@ exports[`happy path 1`] = `
           <img
             alt="height"
             border="0"
-            data-for="26965c55-ffb5-4a8a-b636-aad7fa6f0117"
+            data-for="UUID_MOCK_KEY_2"
             data-tip="Height"
           />
         }
@@ -145,6 +155,11 @@ exports[`happy path 1`] = `
         t={[Function]}
         tooltip=""
         unit="cm"
+        validations={
+          Object {
+            "totalShipmentChargeableWeight": [Function],
+          }
+        }
         value={12}
       />
       <CargoUnitNumberInput
@@ -168,11 +183,11 @@ exports[`happy path 1`] = `
           <img
             alt="weight"
             border="0"
-            data-for="6d584dcf-4e83-43a3-8349-ad615defb6b5"
+            data-for="UUID_MOCK_KEY_3"
             data-tip="Gross Weight"
           />
         }
-        labelText="Gross Weight"
+        labelText="Gross Weight per item"
         maxDimension={21770}
         maxDimensionsErrorText="Maximum weight is"
         name="0-payloadInKg"
@@ -180,16 +195,14 @@ exports[`happy path 1`] = `
         onChange={[Function]}
         onExcessDimensionsRequest={[Function]}
         t={[Function]}
-        tooltip={
-          <Tooltip
-            color="#0D5BA9"
-            icon="fa-info-circle"
-            text="payload_in_kg"
-            theme={Object {}}
-            toolText=""
-          />
-        }
+        tooltip=""
         unit="kg"
+        validations={
+          Object {
+            "totalShipmentChargeableWeight": [Function],
+            "totalShipmentPayloadInKg": [Function],
+          }
+        }
         value={223}
       />
     </div>

@@ -148,26 +148,16 @@ exports[`tmpCity is truthy 1`] = `
       <div
         className="flex-55 layout-row layout-align-start-center input_box"
       >
-        <Formsy(FormsyInput)
-          innerRef={[Function]}
+        <_class
           name="city"
           placeholder="City"
-          required={false}
           type="text"
-          validationError=""
-          validationErrors={Object {}}
-          validations={null}
           value="CITY"
         />
-        <Formsy(FormsyInput)
-          innerRef={[Function]}
+        <_class
           name="country"
           placeholder="Country"
-          required={false}
           type="text"
-          validationError=""
-          validationErrors={Object {}}
-          validations={null}
         />
       </div>
     </div>

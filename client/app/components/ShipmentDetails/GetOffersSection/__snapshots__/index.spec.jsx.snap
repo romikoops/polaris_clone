@@ -2,10 +2,16 @@
 
 exports[`happy path 1`] = `
 <div
-  className="get_offers_section"
+  className="
+          get_offers_section layout-row flex-100 layout-wrap
+          layout-align-center-center margin_top get_offers_section
+        "
 >
   <div
-    className="border_divider layout-row flex-100 layout-wrap layout-align-center-center"
+    className="
+          border_divider border_divider
+          layout-row flex-100 layout-wrap layout-align-center-center
+        "
   >
     <div
       className="btn_sec content_width_booking layout-row flex-none layout-wrap layout-align-start-start"
@@ -14,6 +20,7 @@ exports[`happy path 1`] = `
         noDangerousGoodsConfirmed={false}
         onChangeNoDangerousGoodsConfirmation={[Function]}
         onChangeStackableGoodsConfirmation={[Function]}
+        onClickDangerousGoodsInfo={[Function]}
         shakeClass={
           Object {
             "noDangerousGoodsConfirmed": "",
@@ -23,7 +30,7 @@ exports[`happy path 1`] = `
         show={
           Object {
             "noDangerousGoodsConfirmed": true,
-            "stackableGoodsConfirmed": false,
+            "stackableGoodsConfirmed": undefined,
           }
         }
         stackableGoodsConfirmed={false}
@@ -81,12 +88,7 @@ exports[`happy path 1`] = `
           onClick={null}
           onClickDisabled={[Function]}
           show={true}
-          subTexts={
-            Array [
-              "",
-              "",
-            ]
-          }
+          subTexts={Array []}
           text="Get Offers"
           theme={
             Object {

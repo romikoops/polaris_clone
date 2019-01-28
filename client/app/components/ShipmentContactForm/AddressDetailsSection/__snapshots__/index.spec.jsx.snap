@@ -58,7 +58,7 @@ exports[`shallow rendering 1`] = `
       <div
         className="grouped_inputs flex-100 layout-row"
       >
-        <Formsy(FormsyInput)
+        <_class
           className="input"
           errorMessageStyles={
             Object {
@@ -66,13 +66,11 @@ exports[`shallow rendering 1`] = `
               "fontSize": "12px",
             }
           }
-          innerRef={[Function]}
           name="address-street"
           placeholder="Street"
           required={true}
           submitAttempted={false}
           type="text"
-          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must be at least two characters long",
@@ -83,7 +81,7 @@ exports[`shallow rendering 1`] = `
           value="FOO_ADDRESS_STREET"
           wrapperClassName="wrapper_input flex-75"
         />
-        <Formsy(FormsyInput)
+        <_class
           className="input"
           errorMessageStyles={
             Object {
@@ -91,19 +89,16 @@ exports[`shallow rendering 1`] = `
               "fontSize": "12px",
             }
           }
-          innerRef={[Function]}
           name="address-streetNumber"
           placeholder="Number"
           required={true}
           submitAttempted={false}
           type="text"
-          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must not be blank",
             }
           }
-          validations={null}
           value="FOO_ADDRESS_STREET_NUMBER"
           wrapperClassName="wrapper_input offset-5 flex-15"
         />
@@ -111,7 +106,7 @@ exports[`shallow rendering 1`] = `
       <div
         className="grouped_inputs flex-100 layout-row"
       >
-        <Formsy(FormsyInput)
+        <_class
           className="input"
           errorMessageStyles={
             Object {
@@ -119,13 +114,11 @@ exports[`shallow rendering 1`] = `
               "fontSize": "12px",
             }
           }
-          innerRef={[Function]}
           name="address-city"
           placeholder="City"
           required={true}
           submitAttempted={false}
           type="text"
-          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must be at least two characters long",
@@ -140,7 +133,7 @@ exports[`shallow rendering 1`] = `
       <div
         className="grouped_inputs flex-100 layout-row"
       >
-        <Formsy(FormsyInput)
+        <_class
           className="input"
           errorMessageStyles={
             Object {
@@ -148,13 +141,11 @@ exports[`shallow rendering 1`] = `
               "fontSize": "12px",
             }
           }
-          innerRef={[Function]}
           name="address-zipCode"
           placeholder="Postal Code"
           required={true}
           submitAttempted={false}
           type="text"
-          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must be at least four characters long",
@@ -165,7 +156,7 @@ exports[`shallow rendering 1`] = `
           value="FOO_ADDRESS_ZIP_CODE"
           wrapperClassName="wrapper_input flex-40"
         />
-        <Formsy(FormsyInput)
+        <_class
           className="input"
           errorMessageStyles={
             Object {
@@ -173,13 +164,11 @@ exports[`shallow rendering 1`] = `
               "fontSize": "12px",
             }
           }
-          innerRef={[Function]}
           name="address-country"
           placeholder="Country"
           required={true}
           submitAttempted={false}
           type="text"
-          validationError=""
           validationErrors={
             Object {
               "isDefaultRequiredValue": "Must be at least three characters long",
@@ -191,15 +180,10 @@ exports[`shallow rendering 1`] = `
           wrapperClassName="wrapper_input offset-5 flex-50"
         />
       </div>
-      <Formsy(FormsyInput)
-        innerRef={[Function]}
+      <_class
         name="address-geocodedAddress"
         placeholder=""
-        required={false}
         type="hidden"
-        validationError=""
-        validationErrors={Object {}}
-        validations={null}
         value="FOO_GEOCODED_ADDRESS"
         wrapperClassName="flex-100"
       />

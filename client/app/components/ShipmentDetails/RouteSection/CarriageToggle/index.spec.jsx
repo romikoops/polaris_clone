@@ -1,8 +1,10 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import CarriageToggle from '.'
+import { theme } from '../../mocks'
 
 const propsBase = {
+  theme,
   carriage: 'pre',
   checked: true,
   onChange: null

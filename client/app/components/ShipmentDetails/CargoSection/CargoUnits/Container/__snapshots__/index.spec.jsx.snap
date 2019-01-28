@@ -10,6 +10,7 @@ exports[`happy path 1`] = `
       "weight": 16,
     }
   }
+  container={true}
   onChangeCargoUnitInput={[Function]}
   onDeleteUnit={[Function]}
   t={[Function]}
@@ -22,10 +23,26 @@ exports[`happy path 1`] = `
     }
   >
     <div
+      className="layout-row flex-55"
+    >
+      <CargoUnitNumberInput
+        className="padding_section"
+        image=""
+        labelText="Cargo Gross Weight"
+        maxDimension={200000}
+        name="undefined-payloadInKg"
+        onBlur={[Function]}
+        onChange={[Function]}
+        t={[Function]}
+        tooltip=""
+        unit="kg"
+      />
+    </div>
+    <div
       className="flex-100 layout-row"
     />
     <div
-      className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
+      className="layout-row flex-100 layout-wrap layout-align-space-between-center padding_section"
       style={
         Object {
           "margin": "20px 0",
@@ -33,7 +50,7 @@ exports[`happy path 1`] = `
       }
     >
       <div
-        className="layout-row flex-40 layout-wrap layout-align-start-center colli_type"
+        className="layout-row flex-60 layout-wrap layout-align-start-center colli_type"
       >
         <div
           style={
@@ -54,93 +71,57 @@ exports[`happy path 1`] = `
             options={
               Array [
                 Object {
-                  "label": "20' Dry Container",
-                  "value": "smallDryContainer",
+                  "label": "20‘ Dry Container",
+                  "value": "fcl_20",
                 },
                 Object {
-                  "label": "40' Dry Container",
-                  "value": "largeDryContainer",
+                  "label": "40‘ Dry Container",
+                  "value": "fcl_40",
                 },
                 Object {
-                  "label": "40' High Cube",
-                  "value": "highCube",
+                  "label": "40‘ High Cube",
+                  "value": "fcl_40_hq",
                 },
               ]
             }
             placeholder=" Container Size"
-            showErrors={false}
             value="highCube"
           />
         </div>
       </div>
       <div
-        className="layout-row flex-40"
-      >
-        <CargoUnitNumberInput
-          className=""
-          image=""
-          labelText="Cargo Gross Weight"
-          maxDimension={200000}
-          name="undefined-weight"
-          onBlur={[Function]}
-          onChange={[Function]}
-          t={[Function]}
-          tooltip=""
-          unit="kg"
-          value={16}
-        />
-      </div>
-      <div
-        className="layout-row flex-20 layout-wrap layout-align-start-center"
+        className="layout-row flex-40 layout-wrap layout-align-start-center"
         onClick={[Function]}
       >
         <div
           className="layout-row flex-100 layout-wrap layout-align-start-center"
         >
-          <label
-            className="flex-none pointy"
-            htmlFor="undefined-dangerous_goods"
-          >
-            <p>
-              Dangerous Goods
-            </p>
-          </label>
-          <Tooltip
-            color="#0D5BA9"
-            icon="fa-info-circle"
-            text="dangerous_goods"
-            theme={Object {}}
-            toolText=""
-          />
-          <div
-            className="layout-row flex-75 layout-wrap layout-align-start-center"
-          >
-            <Checkbox
-              checked={false}
-              className=""
-              disabled={true}
-              id="undefined-dangerousGoods"
-              name="undefined-dangerousGoods"
-              onChange={[Function]}
-              onClick={null}
-              size="34px"
-              theme={
-                Object {
-                  "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
-                  "colors": Object {
-                    "brightPrimary": "#2491FD",
-                    "brightSecondary": "#25ED36",
-                    "primary": "#0D5BA9",
-                    "secondary": "#23802A",
-                  },
-                  "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
-                  "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
-                  "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
-                  "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
-                }
+          <CheckboxWrapper
+            checked={false}
+            disabled={true}
+            id="undefined-dangerousGoods"
+            labelContent="Dangerous Goods"
+            name="undefined-dangerousGoods"
+            onChange={[Function]}
+            show={true}
+            size="14px"
+            theme={
+              Object {
+                "background": "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+                "colors": Object {
+                  "brightPrimary": "#2491FD",
+                  "brightSecondary": "#25ED36",
+                  "primary": "#0D5BA9",
+                  "secondary": "#23802A",
+                },
+                "logoLarge": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+                "logoSmall": "https://assets.itsmycargo.com/assets/logos/logo_box.png",
+                "logoWhite": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png",
+                "logoWide": "https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png",
               }
-            />
-          </div>
+            }
+            tooltipText="dangerous_goods"
+          />
         </div>
       </div>
     </div>

@@ -21,7 +21,7 @@ exports[`happy path 1`] = `
         className="input_box flex-45 layout-row"
       >
         <div
-          className="flex-25 layout-row layout-align-center-center"
+          className="flex-45 layout-row layout-align-center-center"
         >
           Total Volume
         </div>
@@ -64,7 +64,7 @@ exports[`happy path 1`] = `
         className="input_box flex-45 offset-10 layout-row"
       >
         <div
-          className="flex-25 layout-row layout-align-center-center"
+          className="flex-45 layout-row layout-align-center-center"
         >
           Total Weight
         </div>

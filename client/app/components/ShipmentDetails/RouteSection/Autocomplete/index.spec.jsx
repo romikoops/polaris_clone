@@ -6,6 +6,10 @@ import {
   theme
 } from '../../mocks'
 
+jest.mock('react-redux', () => ({
+  connect: (mapStateToProps, mapDispatchToProps) => Component => Component
+}))
+
 const propsBase = {
   theme,
   scope,

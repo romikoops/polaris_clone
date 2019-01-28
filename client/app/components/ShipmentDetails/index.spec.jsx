@@ -76,10 +76,7 @@ test('get offers when cargo type is cargo item', () => {
   expect(spyCall.shipment.selected_day).toBe(selectedDay)
   expect(spyCall.shipment.cargo_items_attributes).toEqual([cargoItem])
   expect(spyCall.shipment.containers_attributes).toEqual([])
-  expect(spyCall.shipment.aggregated_cargo_attributes).toEqual({
-    weight: 0,
-    volume: 0
-  })
+  expect(spyCall.shipment.aggregated_cargo_attributes).toEqual(null)
 })
 
 test('get offers when cargo type is aggregated cargo item', () => {
@@ -128,10 +125,7 @@ test('get offers when cargo type is container', () => {
 
   expect(spyCall.shipment.cargo_items_attributes).toEqual([])
   expect(spyCall.shipment.containers_attributes).toEqual([cargoItemContainer])
-  expect(spyCall.shipment.aggregated_cargo_attributes).toEqual({
-    weight: 0,
-    volume: 0
-  })
+  expect(spyCall.shipment.aggregated_cargo_attributes).toEqual(null)
 })
 
 test('get offers when selected day is falsy', () => {

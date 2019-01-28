@@ -2,7 +2,7 @@
 
 exports[`happy path 1`] = `
 <div
-  className="dropdown"
+  className="dropdown route_dropdown"
 >
   <Formsy(FormsySelect)
     className="select"

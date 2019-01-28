@@ -531,7 +531,6 @@ exports[`shallow rendering 1`] = `
                         <span
                           className="input_value"
                         >
-                          0.120
                            m
                           <sup
                             style={
@@ -559,12 +558,11 @@ exports[`shallow rendering 1`] = `
                       >
                         Total
                          
-                        NO_TRANSLATION | key "common:weight"
+                        Weight
                         :  
                         <span
                           className="input_value"
                         >
-                          1,000.0
                            kg
                         </span>
                       </p>
@@ -1111,7 +1109,6 @@ exports[`shallow rendering 1`] = `
                         <span
                           className="input_value"
                         >
-                          2.450
                            m
                           <sup
                             style={
@@ -1139,12 +1136,11 @@ exports[`shallow rendering 1`] = `
                       >
                         Total
                          
-                        NO_TRANSLATION | key "common:weight"
+                        Weight
                         :  
                         <span
                           className="input_value"
                         >
-                          700.0
                            kg
                         </span>
                       </p>
@@ -1772,7 +1768,6 @@ exports[`shallow rendering both chargeable value 1`] = `
                         <span
                           className="input_value"
                         >
-                          0.120
                            m
                           <sup
                             style={
@@ -1800,12 +1795,11 @@ exports[`shallow rendering both chargeable value 1`] = `
                       >
                         Total
                          
-                        NO_TRANSLATION | key "common:weight"
+                        Weight
                         :  
                         <span
                           className="input_value"
                         >
-                          1,000.0
                            kg
                         </span>
                       </p>
@@ -2352,7 +2346,6 @@ exports[`shallow rendering both chargeable value 1`] = `
                         <span
                           className="input_value"
                         >
-                          2.450
                            m
                           <sup
                             style={
@@ -2380,12 +2373,11 @@ exports[`shallow rendering both chargeable value 1`] = `
                       >
                         Total
                          
-                        NO_TRANSLATION | key "common:weight"
+                        Weight
                         :  
                         <span
                           className="input_value"
                         >
-                          700.0
                            kg
                         </span>
                       </p>
@@ -3013,7 +3005,6 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
                         <span
                           className="input_value"
                         >
-                          0.120
                            m
                           <sup
                             style={
@@ -3041,12 +3032,11 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
                       >
                         Total
                          
-                        NO_TRANSLATION | key "common:weight"
+                        Weight
                         :  
                         <span
                           className="input_value"
                         >
-                          1,000.0
                            kg
                         </span>
                       </p>
@@ -3593,7 +3583,6 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
                         <span
                           className="input_value"
                         >
-                          2.450
                            m
                           <sup
                             style={
@@ -3621,12 +3610,11 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
                       >
                         Total
                          
-                        NO_TRANSLATION | key "common:weight"
+                        Weight
                         :  
                         <span
                           className="input_value"
                         >
-                          700.0
                            kg
                         </span>
                       </p>
@@ -4254,7 +4242,6 @@ exports[`shallow rendering volume chargeable value 1`] = `
                         <span
                           className="input_value"
                         >
-                          0.120
                            m
                           <sup
                             style={
@@ -4282,12 +4269,11 @@ exports[`shallow rendering volume chargeable value 1`] = `
                       >
                         Total
                          
-                        NO_TRANSLATION | key "common:weight"
+                        Weight
                         :  
                         <span
                           className="input_value"
                         >
-                          1,000.0
                            kg
                         </span>
                       </p>
@@ -4834,7 +4820,6 @@ exports[`shallow rendering volume chargeable value 1`] = `
                         <span
                           className="input_value"
                         >
-                          2.450
                            m
                           <sup
                             style={
@@ -4862,12 +4847,11 @@ exports[`shallow rendering volume chargeable value 1`] = `
                       >
                         Total
                          
-                        NO_TRANSLATION | key "common:weight"
+                        Weight
                         :  
                         <span
                           className="input_value"
                         >
-                          700.0
                            kg
                         </span>
                       </p>
@@ -5495,7 +5479,6 @@ exports[`shallow rendering weight chargeable value 1`] = `
                         <span
                           className="input_value"
                         >
-                          0.120
                            m
                           <sup
                             style={
@@ -5523,12 +5506,11 @@ exports[`shallow rendering weight chargeable value 1`] = `
                       >
                         Total
                          
-                        NO_TRANSLATION | key "common:weight"
+                        Weight
                         :  
                         <span
                           className="input_value"
                         >
-                          1,000.0
                            kg
                         </span>
                       </p>
@@ -6075,7 +6057,6 @@ exports[`shallow rendering weight chargeable value 1`] = `
                         <span
                           className="input_value"
                         >
-                          2.450
                            m
                           <sup
                             style={
@@ -6103,12 +6084,11 @@ exports[`shallow rendering weight chargeable value 1`] = `
                       >
                         Total
                          
-                        NO_TRANSLATION | key "common:weight"
+                        Weight
                         :  
                         <span
                           className="input_value"
                         >
-                          700.0
                            kg
                         </span>
                       </p>

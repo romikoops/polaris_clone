@@ -2,7 +2,7 @@
 
 exports[`carriage is false 1`] = `
 <div
-  className="route_section_form"
+  className="route_section_form flex-55 layout-row layout-wrap"
 >
   <Dropdown
     childrenProps={
@@ -18,7 +18,7 @@ exports[`carriage is false 1`] = `
 
 exports[`carriage is true 1`] = `
 <div
-  className="route_section_form"
+  className="route_section_form flex-55 layout-row layout-wrap"
 >
   <AddressFields
     childrenProps={
@@ -27,13 +27,14 @@ exports[`carriage is true 1`] = `
         "childrenPropFoo": "childrenPropFoo",
       }
     }
+    t={[Function]}
   />
 </div>
 `;
 
 exports[`with empty props 1`] = `
 <div
-  className="route_section_form"
+  className="route_section_form flex-55 layout-row layout-wrap"
 >
   <Dropdown
     t={[Function]}

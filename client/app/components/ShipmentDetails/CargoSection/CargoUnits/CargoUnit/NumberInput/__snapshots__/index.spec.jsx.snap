@@ -8,7 +8,7 @@ exports[`happy path 1`] = `
     LABEL_TEXT
   </h4>
   <div
-    className="flex-100 layout-row layout-align-space-between input_box"
+    className="flex-100 layout-row layout-align-start-end input_box"
   >
     <img
       id="mock"
@@ -74,7 +74,7 @@ exports[`with empty props 1`] = `
 >
   <h4 />
   <div
-    className="flex-100 layout-row layout-align-space-between input_box"
+    className="flex-100 layout-row layout-align-start-end input_box"
   >
     <Formsy(FormsyInput)
       errorStyles={

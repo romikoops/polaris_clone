@@ -5,7 +5,7 @@ exports[`cargoUnits is empty 1`] = `
   className="route_section_form layout-row flex-100 layout-wrap layout-align-center-center"
 >
   <div
-    className="layout-row flex-none layout-wrap layout-align-center-center content_width_booking"
+    className="layout-row flex-none layout-wrap layout-align-center-center content_width_booking_half"
   >
     <CargoUnits
       ShipmentDetails={
@@ -295,7 +295,7 @@ exports[`happy path 1`] = `
   className="route_section_form layout-row flex-100 layout-wrap layout-align-center-center"
 >
   <div
-    className="layout-row flex-none layout-wrap layout-align-center-center content_width_booking"
+    className="layout-row flex-none layout-wrap layout-align-center-center content_width_booking_half"
   >
     <CargoUnits
       ShipmentDetails={

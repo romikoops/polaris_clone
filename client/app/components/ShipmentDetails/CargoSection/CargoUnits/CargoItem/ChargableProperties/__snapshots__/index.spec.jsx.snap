@@ -5,7 +5,7 @@ exports[`happy path 1`] = `
   className="inner_cargo_item_info layout-row flex-100 layout-wrap layout-align-start"
 >
   <div
-    className="flex-25 layout-wrap layout-row"
+    className="flex-45 layout-wrap layout-row"
   >
     <div
       className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
@@ -13,9 +13,9 @@ exports[`happy path 1`] = `
       <p
         className="input_label flex-none"
       >
-        common:total
+        Total
          
-        common:volume
+        Volume
         :  
         <span
           className="input_value"
@@ -45,7 +45,7 @@ exports[`happy path 1`] = `
         <p
           className="subchargeable flex-none"
         >
-          cargo:chargeble:
+          NO_TRANSLATION | key "cargo:chargeble":
         </p>
       </div>
       <div
@@ -88,7 +88,7 @@ exports[`happy path 1`] = `
           <p
             className="chargeable_weight_value input_value"
           >
-            common:unavailable
+            Unavailable
           </p>
         </div>
         <div
@@ -122,7 +122,10 @@ exports[`happy path 1`] = `
     </div>
   </div>
   <div
-    className="padding_left flex-25 layout-wrap layout-row"
+    className="flex-5"
+  />
+  <div
+    className="padding_left flex-45 layout-wrap layout-row"
   >
     <div
       className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
@@ -130,9 +133,9 @@ exports[`happy path 1`] = `
       <p
         className="input_label flex-none"
       >
-        common:total
+        Total
          
-        common:weight
+        Weight
         :  
         <span
           className="input_value"
@@ -151,7 +154,7 @@ exports[`happy path 1`] = `
         <p
           className="subchargeable flex-none"
         >
-          cargo:chargeble:
+          NO_TRANSLATION | key "cargo:chargeble":
         </p>
       </div>
       <div
@@ -167,6 +170,7 @@ exports[`happy path 1`] = `
           <p
             className="chargeable_weight_value input_value"
           >
+            1,338.00
             <span>
                kg
             </span>
@@ -182,7 +186,7 @@ exports[`happy path 1`] = `
           <p
             className="chargeable_weight_value input_value"
           >
-            common:unavailable
+            Unavailable
           </p>
         </div>
         <div
@@ -195,6 +199,7 @@ exports[`happy path 1`] = `
           <p
             className="chargeable_weight_value input_value"
           >
+            1,338.00
             <span>
                kg
             </span>

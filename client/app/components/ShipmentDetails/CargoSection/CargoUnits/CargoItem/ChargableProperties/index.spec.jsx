@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { ChargableProperties } from '.'
+import ChargableProperties from '.'
 import {
   t, scope, availableMots, cargoItem, maxDimensionsToApply
 } from '../../../../mocks'
