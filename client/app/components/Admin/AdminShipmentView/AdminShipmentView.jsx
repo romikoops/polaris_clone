@@ -198,7 +198,6 @@ class AdminShipmentView extends Component {
     const resultArray = []
     cargos.forEach((c) => {
       if (!cargoGroups[c.id]) {
-        // debugger
         cargoGroups[c.id] = {
           dimension_y: parseFloat(c.dimension_y) * parseInt(c.quantity, 10),
           dimension_z: parseFloat(c.dimension_z) * parseInt(c.quantity, 10),

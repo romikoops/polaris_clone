@@ -315,7 +315,7 @@
                 <% unless scope['cargo_overview_only'] %>
                   <tr>
                     <td class="table-title"><p>Gross&nbsp;Weight&nbsp;per&nbsp;Item</p></td>
-                    <td class="table-value"><span><%= '%.2f' % (cargo.payload_in_kg || cargo.weight) %>&nbsp;kg</span> </td>
+                    <td class="table-value"><span><%= '%.2f' % (cargo.payload_in_kg) %>&nbsp;kg</span> </td>
                   </tr>
                 <% end %>
                 <tr>
@@ -329,7 +329,7 @@
                 <tr>
                   <td class="table-title"><p>Total&nbsp;Gross&nbsp;Weight</p></td>
                   <td class="table-value">
-                    <span><%= '%.2f' % (cargo.payload_in_kg * cargo.quantity || cargo.weight) %>&nbsp;kg</span>
+                    <span><%= '%.2f' % (cargo.payload_in_kg * cargo.quantity) %>&nbsp;kg</span>
                   </td>
                 </tr>
                 <tr>

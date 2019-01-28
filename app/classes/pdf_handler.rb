@@ -143,11 +143,13 @@ class PdfHandler
                           else
                             "#{format('%.2f', hash[:chargeable_weight])} kg"
                           end
+
           total_string = if show_volume
                            "#{format('%.3f', (hash[:chargeable_weight] * hash[:quantity] / 1000))} m<sup>3</sup>"
                          else
                            "#{format('%.2f', (hash[:chargeable_weight] * hash[:quantity]))} kg"
                          end
+
           chargeable_weight[hash[:id].to_s] = {
             single_value: single_string,
             single_title: show_volume ? 'Chargeable&nbsp;Volume' : 'Chargeable&nbsp;Weight',
