@@ -322,6 +322,7 @@ br{
   height: auto;
 }
 .sub-prices {
+  margin-top: 25px;
   background: white;
 }
 .all-row {
@@ -514,6 +515,7 @@ br{
   }
 }
 .notes-row {
+  margin-top: 15px;
   span {
     font-size: 11px;
     font-weight: bold;
@@ -608,7 +610,7 @@ br{
 }
 .cargo-details-title {
   height: 40px;
-  background: #f5f5f5;
+  background: #e6e4e4;
   h1 {
     margin: 0;
     font-size: 14px;
@@ -621,9 +623,35 @@ br{
   background: #F8F8F8;
   padding: 5px;
   p {
+    margin: 0;
     padding-left: 15px;
   }
 }
+.data-table {
+  width: 100%;
+  tr {
+    width: 100%;
+  }
+  .table-title {
+    width: 50%;
+    text-align: start;
+    p {
+      margin: 0;
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
+  .table-value {
+    width: 50%;
+    text-align: end;
+    span {
+      margin: 0;
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
+}
+
 .cargo-row {
   p {
     margin: 0;
@@ -685,6 +713,10 @@ br{
 }
 .cargo-details-all {
   page-break-inside: avoid;
+}
+.no_page_break {
+  page-break-inside: avoid;
+  border: 3px solid #e6e4e4;
 }
 .chargeable_weight {
   font-size: 10px;
