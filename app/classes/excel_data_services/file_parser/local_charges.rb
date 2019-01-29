@@ -6,6 +6,12 @@ module ExcelDataServices
       include ExcelDataServices::LocalChargesTool
       include DataRestructurer::LocalCharges
 
+      def initialize(tenant:, file_or_path:)
+        super
+
+        @missing_value_errors = []
+      end
+
       private
 
       def build_valid_headers(_data_extraction_method)
