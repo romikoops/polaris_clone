@@ -10,36 +10,9 @@ describe 'Pricing requests', type: :request do
   let(:role) { create(:role, name: 'admin') }
   let(:user) { create(:user, tenant: tenant, role: role) }
 
-  let(:transport_category) { create(:transport_category) }
-
-  let(:origin_nexus) { create(:nexus) }
-  let(:destination_nexus) { create(:nexus) }
-  let!(:ocean_itinerary) { create(:itinerary, tenant: tenant, stops: [ocean_origin_stop, ocean_destination_stop], layovers: [ocean_origin_layover, ocean_destination_layover], trips: [ocean_trip], mode_of_transport: 'ocean') }
-  let(:ocean_trip) { create(:trip) }
-  let(:ocean_origin_hub) { create(:hub, tenant: tenant, nexus: origin_nexus) }
-  let(:ocean_destination_hub) { create(:hub, tenant: tenant, nexus: destination_nexus) }
-  let(:ocean_origin_stop) { create(:stop, index: 0, hub_id: ocean_origin_hub.id, layovers: [ocean_origin_layover]) }
-  let(:ocean_destination_stop) { create(:stop, index: 1, hub_id: ocean_destination_hub.id, layovers: [ocean_destination_layover]) }
-  let(:ocean_origin_layover) { create(:layover, stop_index: 0, trip: ocean_trip) }
-  let(:ocean_destination_layover) { create(:layover, stop_index: 1, trip: ocean_trip) }
-
-  let!(:air_itinerary) { create(:itinerary, tenant: tenant, stops: [air_origin_stop, air_destination_stop], layovers: [air_origin_layover, air_destination_layover], trips: [air_trip], mode_of_transport: 'air') }
-  let(:air_trip) { create(:trip) }
-  let(:air_origin_hub) { create(:hub, tenant: tenant, nexus: origin_nexus) }
-  let(:air_destination_hub) { create(:hub, tenant: tenant, nexus: destination_nexus) }
-  let(:air_origin_stop) { create(:stop, index: 0, hub_id: air_origin_hub.id, layovers: [air_origin_layover]) }
-  let(:air_destination_stop) { create(:stop, index: 1, hub_id: air_destination_hub.id, layovers: [air_destination_layover]) }
-  let(:air_origin_layover) { create(:layover, stop_index: 0, trip: air_trip) }
-  let(:air_destination_layover) { create(:layover, stop_index: 1, trip: air_trip) }
-
-  let!(:rail_itinerary) { create(:itinerary, tenant: tenant, stops: [rail_origin_stop, rail_destination_stop], layovers: [rail_origin_layover, rail_destination_layover], trips: [rail_trip], mode_of_transport: 'rail') }
-  let(:rail_trip) { create(:trip) }
-  let(:rail_origin_hub) { create(:hub, tenant: tenant, nexus: origin_nexus) }
-  let(:rail_destination_hub) { create(:hub, tenant: tenant, nexus: destination_nexus) }
-  let(:rail_origin_stop) { create(:stop, index: 0, hub_id: rail_origin_hub.id, layovers: [rail_origin_layover]) }
-  let(:rail_destination_stop) { create(:stop, index: 1, hub_id: rail_destination_hub.id, layovers: [rail_destination_layover]) }
-  let(:rail_origin_layover) { create(:layover, stop_index: 0, trip: rail_trip) }
-  let(:rail_destination_layover) { create(:layover, stop_index: 1, trip: rail_trip) }
+  let!(:ocean_itinerary) { create(:itinerary, :with_trip, tenant: tenant, mode_of_transport: 'ocean') }
+  let!(:air_itinerary) { create(:itinerary, :with_trip, tenant: tenant, mode_of_transport: 'air') }
+  let!(:rail_itinerary) { create(:itinerary, :with_trip, tenant: tenant, mode_of_transport: 'rail') }
 
   context 'user logged in' do
     let(:pages) do
