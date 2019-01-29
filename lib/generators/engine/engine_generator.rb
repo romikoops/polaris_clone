@@ -9,15 +9,19 @@ class EngineGenerator < Rails::Generators::NamedBase
 
     raise 'Invalid Engine Name' unless name[/\A[a-zA-Z_]+\z/]
 
+    # Create engine template
+    template_dir = Rails.root.join('tmp', '._template')
+    template_engine = template_dir.join('engine')
+
     # Copy our template as new engine
-    directory 'engine', engine
+    directory 'engine', template_engine, verbose: false
 
     # Rename required files
-    inside engine do
+    inside template_engine do
       Dir['**/*'].each do |item|
         next unless File.file?(item)
 
-        gsub_file item, /(engine_template|EngineTemplate|GITUSER_NAME|GITUSER_EMAIL)/ do |m|
+        gsub_file item, /(engine_template|EngineTemplate|GITUSER_NAME|GITUSER_EMAIL)/, verbose: false do |m|
           case m
           when 'engine_template' then name
           when 'EngineTemplate'  then name.camelize
@@ -28,10 +32,15 @@ class EngineGenerator < Rails::Generators::NamedBase
       end
 
       Dir['**/*engine_template*'].each do |item|
-        run "mv #{Shellwords.escape(item)} #{Shellwords.escape(item.gsub(/engine_template/, name))}"
+        run "mv #{Shellwords.escape(item)} #{Shellwords.escape(item.gsub(/engine_template/, name))}", verbose: false
       end
 
-      Dir['bin/*'].each { |bin| chmod bin, 0o0755 }
+      Dir['bin/*'].each { |bin| chmod bin, 0o0755, verbose: false }
     end
+
+    source_paths.unshift(template_dir)
+    directory 'engine', engine
+  ensure
+    remove_dir template_dir, verbose: false
   end
 end
