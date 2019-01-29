@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'doorkeeper'
+require 'sorcery'
+
 module ApiAuth
   class Engine < ::Rails::Engine
     isolate_namespace ApiAuth

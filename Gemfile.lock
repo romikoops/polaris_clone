@@ -68,12 +68,15 @@ PATH
   specs:
     api_auth (9999.1.0.0)
       core
+      doorkeeper (~> 5.0.2)
+      sorcery (~> 0.13.0)
 
 PATH
   remote: engines/api_docs
   specs:
     api_docs (9999.1.0.0)
       core
+      raddocs
 
 PATH
   remote: engines/api
@@ -302,6 +305,8 @@ GEM
     docile (1.3.1)
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
+    doorkeeper (5.0.2)
+      railties (>= 4.2)
     dotenv (2.6.0)
     dotenv-rails (2.6.0)
       dotenv (= 2.6.0)
@@ -416,6 +421,9 @@ GEM
     graphql-client (0.14.0)
       activesupport (>= 3.0, < 6.0)
       graphql (~> 1.6)
+    haml (5.0.4)
+      temple (>= 0.8.0)
+      tilt
     hashdiff (0.3.8)
     hashie (3.6.0)
     holidays (7.1.0)
@@ -483,6 +491,7 @@ GEM
     multi_json (1.13.1)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
+    mustermann (1.0.3)
     nap (1.1.0)
     netrc (0.11.0)
     nio4r (2.3.1)
@@ -543,8 +552,14 @@ GEM
     puma (3.12.0)
     rack (2.0.6)
     rack-cors (1.0.2)
+    rack-protection (2.0.5)
+      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
+    raddocs (2.2.0)
+      haml (>= 4.0)
+      json
+      sinatra (~> 2.0)
     rails (5.2.2)
       actioncable (= 5.2.2)
       actionmailer (= 5.2.2)
@@ -705,6 +720,11 @@ GEM
       simplecov (~> 0.8)
     simplecov-html (0.10.2)
     simplecov-lcov (0.7.0)
+    sinatra (2.0.5)
+      mustermann (~> 1.0)
+      rack (~> 2.0)
+      rack-protection (= 2.0.5)
+      tilt (~> 2.0)
     skylight (3.1.4)
       skylight-core (= 3.1.4)
     skylight-core (3.1.4)
@@ -730,6 +750,7 @@ GEM
     strong_migrations (0.3.1)
       activerecord (>= 3.2.0)
     table_print (1.5.6)
+    temple (0.8.1)
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     thor (0.20.3)

@@ -13,6 +13,8 @@ namespace :db do
 
   namespace :import do
     task fetch: :environment do
+      DateHelper = Class.new { include ActionView::Helpers::DateHelper }.new
+
       puts 'Downloading latest Database Seed file...'
 
       ENV['GOOGLE_CLOUD_KEYFILE'] = KEYFILE if File.exist?(KEYFILE)
@@ -28,7 +30,7 @@ namespace :db do
 
         # Warn if seed file is out-of-date
         puts ''
-        puts "  Created: #{file.created_at}"
+        puts "  Created: #{file.created_at} (#{DateHelper.time_ago_in_words(file.created_at)} ago)"
         if file.created_at < 1.day.ago
           puts '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
           puts '!!!!!                          !!!!!'
@@ -63,7 +65,7 @@ namespace :db do
 
       puts 'Restore from Database Seed'
       gzip_cmd = "gzip -cd #{SEED_FILE}"
-      psql_cmd = "psql #{ENV.fetch('DATABASE_NAME', 'imcr_development')}"
+      psql_cmd = "psql -q -v ON_ERROR_STOP=1 #{ENV.fetch('DATABASE_NAME', 'imcr_development')}"
 
       system("#{gzip_cmd} | #{psql_cmd}") || exit(1)
     end

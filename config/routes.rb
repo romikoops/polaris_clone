@@ -5,6 +5,12 @@ Rails.application.routes.draw do
 
   mount Admiralty::Engine, at: '/admiralty'
 
+  scope :v1 do
+    mount Api::Engine, at: '/'
+    mount ApiAuth::Engine, at: '/'
+    mount ApiDocs::Engine, at: '/'
+  end
+
   get '/health_check', to: 'server_checks#health_check'
   get '/', to: 'server_checks#health_check'
 
