@@ -155,3 +155,9 @@ export function weight (cargoItem) {
 
   return numberSpacing((cargoItem.payload_in_kg * cargoItem.quantity), 1)
 }
+
+export function rawWeight (cargoItem) {
+  if (!cargoItem) return undefined
+
+  return cargoItem.payload_in_kg * cargoItem.quantity
+}
