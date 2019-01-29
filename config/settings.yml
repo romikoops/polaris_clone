@@ -11,6 +11,11 @@ breezy:
 cors:
   origins: <%= ENV['CORS_ORIGINS'] %>
 
+emails:
+  booking:
+  domain:
+  support: support@itsmycargo.com
+
 fixer:
   api_key:
 
@@ -20,10 +25,6 @@ google:
 google_sign_in:
   client_id:
   client_secret:
-
-emails:
-  booking:
-  domain:
 
 mailer:
   queue:

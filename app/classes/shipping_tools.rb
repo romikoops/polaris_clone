@@ -325,7 +325,7 @@ module ShippingTools
     destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
     options = { methods: %i(selected_offer mode_of_transport service_level vessel_name carrier), include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }] }
     shipment_as_json = shipment.as_json(options).merge(
-      pickup_address:   shipment.pickup_address_with_country,
+      pickup_address: shipment.pickup_address_with_country,
       delivery_address: shipment.delivery_address_with_country
     )
     addresses = {
@@ -336,16 +336,16 @@ module ShippingTools
     }
 
     {
-      shipment:        shipment_as_json,
-      cargoItems:      cargo_items      || nil,
-      containers:      containers       || nil,
+      shipment: shipment_as_json,
+      cargoItems: cargo_items      || nil,
+      containers: containers       || nil,
       aggregatedCargo: aggregated_cargo || nil,
-      addresses:       addresses,
-      consignee:       consignee,
-      notifyees:       notifyees,
-      shipper:         shipper,
-      documents:       documents,
-      cargoItemTypes:  cargo_item_types
+      addresses: addresses,
+      consignee: consignee,
+      notifyees: notifyees,
+      shipper: shipper,
+      documents: documents,
+      cargoItemTypes: cargo_item_types
     }
   end
 
@@ -436,14 +436,14 @@ module ShippingTools
     @user_addresses = current_user.user_addresses.map do |uloc|
       {
         address: uloc.address.to_custom_hash,
-        contact:  current_user.attributes
+        contact: current_user.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
 
     @contacts = current_user.contacts.map do |contact|
       {
         address: contact.address.try(:to_custom_hash) || {},
-        contact:  contact.attributes
+        contact: contact.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
 
@@ -489,8 +489,8 @@ module ShippingTools
       total: total_fees
     }
     hubs = {
-      startHub: { data: @origin_hub,      address: @origin_hub.nexus },
-      endHub:   { data: @destination_hub, address: @destination_hub.nexus }
+      startHub: { data: @origin_hub, address: @origin_hub.nexus },
+      endHub: { data: @destination_hub, address: @destination_hub.nexus }
     }
     options = { methods: %i(selected_offer mode_of_transport service_level vessel_name carrier), include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }] }
     origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
@@ -500,19 +500,19 @@ module ShippingTools
       delivery_address: shipment.delivery_address_with_country
     )
     {
-      shipment:       shipment_as_json,
-      hubs:           hubs,
-      contacts:       @contacts,
-      userLocations:  @user_addresses,
-      schedule:       @schedule,
+      shipment: shipment_as_json,
+      hubs: hubs,
+      contacts: @contacts,
+      userLocations: @user_addresses,
+      schedule: @schedule,
       dangerousGoods: @dangerous,
-      documents:      documents,
-      containers:     containers,
-      cargoItems:     cargo_items,
-      customs:        customs_fee,
-      addons:         addons,
-      addresses:      {
-        origin:      origin.try(:to_custom_hash),
+      documents: documents,
+      containers: containers,
+      cargoItems: cargo_items,
+      customs: customs_fee,
+      addons: addons,
+      addresses: {
+        origin: origin.try(:to_custom_hash),
         destination: destination.try(:to_custom_hash)
       }
     }
@@ -615,6 +615,7 @@ module ShippingTools
     @quotes = main_quote.shipments.map(&:selected_offer)
 
     logo = Base64.encode64(Net::HTTP.get(URI(tenant.theme['logoLarge'])))
+    QuoteMailer.quotation_admin_email(shipment, main_quote.shipments.to_a, main_quote).deliver_later
 
     quotation = PdfHandler.new(
       layout: 'pdfs/simple.pdf.html.erb',
@@ -634,6 +635,7 @@ module ShippingTools
   def self.save_and_send_quotes(shipment, schedules, email)
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
     QuoteMailer.quotation_email(shipment, main_quote.shipments.to_a, email, main_quote).deliver_later
+    QuoteMailer.quotation_admin_email(shipment, main_quote.shipments.to_a, main_quote).deliver_later
   end
 
   def self.tenant_notification_email(user, shipment)
