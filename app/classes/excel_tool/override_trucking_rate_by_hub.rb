@@ -368,7 +368,7 @@ module ExcelTool
           }
         end
 
-        ChargeCategory.find_or_create_by!(code: row[:fee_code], name: row[:fee])
+        ChargeCategory.find_or_create_by!(code: row[:fee_code].downcase, name: row[:fee])
       end
     end
 

@@ -88,6 +88,17 @@ function uploadLocalCharges (file, mot) {
 
   return fetch(`${getTenantApiUrl()}/admin/local_charges/upload`, requestOptions).then(handleResponse)
 }
+function uploadChargeCategories (file) {
+  const formData = new FormData()
+  formData.append('file', file)
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader() },
+    body: formData
+  }
+
+  return fetch(`${getTenantApiUrl()}/admin/charge_categories/upload`, requestOptions).then(handleResponse)
+}
 
 function downloadLocalCharges (options) {
   const requestOptions = {
@@ -126,6 +137,14 @@ function downloadHubs () {
   }
 
   return fetch(`${getTenantApiUrl()}/admin/hubs/sheet/download`, requestOptions).then(handleResponse)
+}
+function downloadChargeCategories () {
+  const requestOptions = {
+    method: 'GET',
+    headers: { ...authHeader() }
+  }
+
+  return fetch(`${getTenantApiUrl()}/admin/charge_categories/download`, requestOptions).then(handleResponse)
 }
 
 function downloadGdpr (id) {
@@ -170,7 +189,9 @@ export const documentService = {
   downloadTrucking,
   downloadGdpr,
   downloadShipment,
-  downloadQuotations
+  downloadQuotations,
+  downloadChargeCategories,
+  uploadChargeCategories
 }
 
 export default documentService

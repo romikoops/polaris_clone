@@ -10,7 +10,7 @@ module ExcelDataServices
 
         data.each do |params|
           params[:fees].each do |fee_code, values|
-            ChargeCategory.find_or_create_by!(code: fee_code,
+            ChargeCategory.find_or_create_by!(code: fee_code.downcase,
                                               name: values[:name],
                                               tenant_id: tenant.id)
           end

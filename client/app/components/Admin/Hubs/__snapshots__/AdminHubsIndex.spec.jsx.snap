@@ -40,6 +40,27 @@ exports[`shallow render 1`] = `
                         }
                       />
                     </div>
+                    <div
+                      className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                    >
+                      <p
+                        className="flex-100 center"
+                      >
+                        Download Charge Definitions Sheet
+                      </p>
+                      <Connect(DocumentsDownloader)
+                        t={[Function]}
+                        target="charge_categories"
+                        theme={
+                          Object {
+                            "colors": Object {
+                              "primary": "#333",
+                              "secondary": "#fafafa",
+                            },
+                          }
+                        }
+                      />
+                    </div>
                     <div>
                       <div
                         className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
@@ -155,6 +176,35 @@ exports[`user.internal is truthy 1`] = `
                         url="/admin/hubs/process_csv"
                       />
                     </div>
+                    <div
+                      className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
+                    >
+                      <p
+                        className="flex-100 center"
+                      >
+                        Upload Charge Definitions Sheet
+                      </p>
+                      <FileUploader
+                        dispatchFn={null}
+                        formClasses=""
+                        size="small"
+                        square={false}
+                        t={[Function]}
+                        text="Charge Definitions .xlsx"
+                        theme={
+                          Object {
+                            "colors": Object {
+                              "primary": "#333",
+                              "secondary": "#fafafa",
+                            },
+                          }
+                        }
+                        tooltip=""
+                        type="xlsx"
+                        uploadFn={null}
+                        url="/admin/hubs/process_csv"
+                      />
+                    </div>
                     <div>
                       <div
                         className="action_section flex-100 layout-row layout-align-center-center layout-wrap"
@@ -229,6 +279,27 @@ exports[`user.internal is truthy 1`] = `
                       <Connect(DocumentsDownloader)
                         t={[Function]}
                         target="hubs"
+                        theme={
+                          Object {
+                            "colors": Object {
+                              "primary": "#333",
+                              "secondary": "#fafafa",
+                            },
+                          }
+                        }
+                      />
+                    </div>
+                    <div
+                      className="action_section flex-100 layout-row layout-wrap layout-align-center-center"
+                    >
+                      <p
+                        className="flex-100 center"
+                      >
+                        Download Charge Definitions Sheet
+                      </p>
+                      <Connect(DocumentsDownloader)
+                        t={[Function]}
+                        target="charge_categories"
                         theme={
                           Object {
                             "colors": Object {

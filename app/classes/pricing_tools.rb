@@ -234,7 +234,6 @@ module PricingTools
   def handle_range_fee(fee, cargo_hash) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
     weight_kg = cargo_hash.fetch(:weight)
     volume = cargo_hash.fetch(:volume)
-    quantity = cargo_hash.fetch(:quantity)
     min = fee['min'] || 0
     max = fee['max'] || DEFAULT_MAX
     rate_basis = RateBasis.get_internal_key(fee['rate_basis'])

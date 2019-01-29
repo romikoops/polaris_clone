@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'quote_calculator'
-
 module OfferCalculatorService
   class DetailedQuoteBuilder < Base
     def perform(route_objs, trucking_data, user)
@@ -16,7 +14,7 @@ module OfferCalculatorService
           user:          user
         ).perform
         next if grand_total_charge.nil?
-        
+
         result = {
           quote: grand_total_charge.deconstruct_tree_into_schedule_charge,
           schedules: schedules.map(&:to_detailed_hash),
