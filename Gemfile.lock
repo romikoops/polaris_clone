@@ -64,6 +64,24 @@ PATH
       core
 
 PATH
+  remote: engines/api_auth
+  specs:
+    api_auth (9999.1.0.0)
+      core
+
+PATH
+  remote: engines/api_docs
+  specs:
+    api_docs (9999.1.0.0)
+      core
+
+PATH
+  remote: engines/api
+  specs:
+    api (9999.1.0.0)
+      core
+
+PATH
   remote: engines/core
   specs:
     core (9999.1.0.0)
@@ -90,6 +108,19 @@ PATH
       rgeo
       rgeo-geojson
       searchkick
+
+PATH
+  remote: engines/mailers
+  specs:
+    mailers (9999.1.0.0)
+      core
+
+PATH
+  remote: engines/tenants
+  specs:
+    tenants (9999.1.0.0)
+      core
+      sorcery (~> 0.13.0)
 
 PATH
   remote: engines/trucking
@@ -458,6 +489,7 @@ GEM
     no_proxy_fix (0.1.2)
     nokogiri (1.10.1)
       mini_portile2 (~> 2.4.0)
+    oauth (0.5.4)
     oauth2 (1.4.1)
       faraday (>= 0.8, < 0.16.0)
       jwt (>= 1.0, < 3.0)
@@ -677,6 +709,10 @@ GEM
       skylight-core (= 3.1.4)
     skylight-core (3.1.4)
       activesupport (>= 4.2.0)
+    sorcery (0.13.0)
+      bcrypt (~> 3.1)
+      oauth (~> 0.4, >= 0.4.4)
+      oauth2 (~> 1.0, >= 0.8.0)
     spreadsheet (1.2.0)
       ruby-ole (>= 1.0)
     spring (2.0.2)
@@ -740,6 +776,9 @@ DEPENDENCIES
   admiralty_auth!
   admiralty_tenants!
   annotate
+  api!
+  api_auth!
+  api_docs!
   aws-sdk-cloudfront (~> 1.11.0)
   aws-sdk-route53 (~> 1.17.0)
   aws-sdk-s3 (~> 1.30.1)
@@ -775,6 +814,7 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.2)
   locations!
   lograge
+  mailers!
   mailgun-ruby (~> 1.1, >= 1.1.11)
   marginalia (~> 1.5)
   mini_magick
@@ -826,6 +866,7 @@ DEPENDENCIES
   sprockets-rails
   strong_migrations
   table_print
+  tenants!
   timecop
   traceroute
   trucking!
