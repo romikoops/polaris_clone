@@ -22,7 +22,8 @@ class PdfHandler
     @remarks               = args[:remarks]
     @hide_cargo_sub_totals = false
     @content               = {}
-    @scope                 = @shipment.tenant.scope
+    @hide_grand_total = {}
+    @scope = @shipment.tenant.scope
 
     @cargo_data = {
       vol: {},
@@ -33,10 +34,43 @@ class PdfHandler
     @shipments << @shipment if @shipments.empty?
     @shipments.each do |s|
       calculate_cargo_data(s)
+      @hide_grand_total[s.id] = hide_grand_total?(s)
     end
     @content = Content.get_component('QuotePdf', @shipment.tenant_id) if @name == 'quotation'
 
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
+  end
+
+  def hide_grand_total?(shipment) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    return true if @scope['hide_grand_total']
+    return false if !@scope['hide_grand_total'] && !@scope['hide_converted_grand_total']
+
+    currencies = []
+    result = shipment
+             .selected_offer
+             .except('total', 'edited_total', 'name')
+             .find do |charge_key, charge|
+               charge_keys = charge
+                             .except('total', 'edited_total', 'name')
+                             .keys
+               charge_currencies = if %w(export import).include?(charge_key)
+                                     charge_keys.map { |k| charge[k]['currency'] }
+                                   elsif charge_key == 'cargo'
+                                     charge_keys
+                                       .map do |k|
+                                         charge[k]
+                                           .except('total', 'edited_total', 'name')
+                                           .keys
+                                           .reject { |rk| rk.include?('unknown') }
+                                           .map { |ck| charge.dig(k, ck, 'currency') }
+                                       end
+                                   else
+                                     charge_keys.map { |k| charge[k]['total']['currency'] }
+                                   end
+               currencies += charge_currencies.flatten
+               currencies.compact.uniq.count > 1
+             end
+    result.present?
   end
 
   def calculate_cargo_data(shipment)
@@ -157,7 +191,8 @@ class PdfHandler
         cargo_data: @cargo_data,
         notes: @shipment.route_notes,
         hide_cargo_sub_totals: @hide_cargo_sub_totals,
-        content: @content
+        content: @content,
+        hide_grand_total: @hide_grand_total
       }
     )
     response = BreezyPDFLite::RenderRequest.new(
