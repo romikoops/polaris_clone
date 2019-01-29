@@ -16,10 +16,13 @@ Gem::Specification.new do |s|
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   s.add_dependency 'activerecord-postgis-adapter', '5.2.2'
-  s.add_dependency 'config', '~> 1.7.0'
+  s.add_dependency 'config', '~> 1.7.1'
   s.add_dependency 'pg', '>= 0.18', '< 2.0'
   s.add_dependency 'rails', '5.2.2'
   s.add_dependency 'strong_migrations', '0.3.1'
+
+  # Fix dry-logic issue
+  s.add_dependency 'dry-logic', '>= 0.4.2', '< 0.5.0'
 
   s.add_development_dependency 'factory_bot_rails'
   s.add_development_dependency 'ffaker'
