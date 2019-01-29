@@ -22,6 +22,7 @@ module ExcelDataServices
 
           raise MissingValuesForRateBasisError, @missing_value_errors.join("\n") unless @missing_value_errors.empty?
 
+          create_missing_charge_categories(charges_data)
           assign_correct_hubs(charges_data)
         end
 
@@ -121,6 +122,16 @@ module ExcelDataServices
         def cache_errors(rate_basis, data)
           @missing_value_errors <<
             "Missing value for #{rate_basis} in row ##{data[:row_nr]}! Did you enter the value in the correct column?"
+        end
+
+        def create_missing_charge_categories(charges_data)
+          keys_and_names = charges_data.flat_map do |single_data|
+            single_data[:fees].values.map { |fee| fee.slice(:key, :name) }
+          end
+
+          keys_and_names.uniq { |pair| pair[:key] }.each do |pair|
+            ChargeCategory.from_code(pair[:key], tenant.id, pair[:name])
+          end
         end
 
         def assign_correct_hubs(data)
