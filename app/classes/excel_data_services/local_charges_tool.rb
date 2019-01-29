@@ -57,6 +57,13 @@ module ExcelDataServices
       when 'PER_KG_RANGE' then { range_min: data[:range_min], range_max: data[:range_max], kg: data[:kg] }
       when 'PER_WM_RANGE' then { range_min: data[:range_min], range_max: data[:range_max], wm: data[:wm] }
       when 'PER_X_KG_FLAT' then { value: data[:kg], base: data[:base] }
+      when 'PER_UNIT_TON_CBM_RANGE'
+        {
+          cbm: data[:cbm],
+          ton: data[:ton],
+          range_min: data[:range_min],
+          range_max: data[:range_max]
+        }
       else
         raise UnknownRateBasisReadingError, "RATE_BASIS \"#{rate_basis}\" not found!"
       end
@@ -80,6 +87,13 @@ module ExcelDataServices
       when 'PER_KG_RANGE' then { range_min: data[:range_min], range_max: data[:range_max], kg: data[:kg] }
       when 'PER_WM_RANGE' then { range_min: data[:range_min], range_max: data[:range_max], kg: data[:wm] }
       when 'PER_X_KG_FLAT' then { kg: data[:value], base: data[:base] }
+      when 'PER_UNIT_TON_CBM_RANGE'
+        {
+          cbm: data[:cbm],
+          ton: data[:ton],
+          range_min: data[:range_min],
+          range_max: data[:range_max]
+        }
       else
         raise UnknownRateBasisWritingError, "RATE_BASIS \"#{rate_basis}\" not found!"
       end
