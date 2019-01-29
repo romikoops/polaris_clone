@@ -15,7 +15,8 @@ RSpec.describe AccountMailer, type: :mailer do
     end
 
     it 'renders the correct sender' do
-      expect(mail.from).to eq(['support@demo.com'])
+      expect(mail.from).to eq(['no-reply@demo.itsmycargo.test'])
+      expect(mail.reply_to).to eq(['support@demo.com'])
     end
 
     it 'renders the correct receiver' do
@@ -37,7 +38,8 @@ RSpec.describe AccountMailer, type: :mailer do
     end
 
     it 'renders the correct sender' do
-      expect(mail.from).to eq(['support@demo.com'])
+      expect(mail.from).to eq(['no-reply@demo.itsmycargo.test'])
+      expect(mail.reply_to).to eq(['support@demo.com'])
     end
 
     it 'renders the correct receiver' do
@@ -45,7 +47,7 @@ RSpec.describe AccountMailer, type: :mailer do
     end
 
     it 'renders a body with the correct text' do
-      expect(mail.body.encoded).to match('Change my password')
+      expect(mail.html_part.body).to match('Change my password')
     end
   end
 end

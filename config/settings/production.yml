@@ -4,6 +4,10 @@ aws:
   region: eu-central-1
   bucket: assets.itsmycargo.com
 
+emails:
+  booking: bookingemails@itsmycargo.com
+  domain: itsmycargo.shop
+
 fixer:
   api_key: <%= Rails.application.credentials.dig(:production, :fixer, :api_key) %>
 
@@ -16,6 +20,10 @@ google:
 
 mailer:
   queue: https://sqs.eu-central-1.amazonaws.com/003688427525/mailers
+
+mailgun:
+  api_key: <%= Rails.application.credentials.dig(:production, :mailgun, :api_key) %>
+  domain: itsmycargo.shop
 
 smtp:
   host: smtp.sendgrid.net

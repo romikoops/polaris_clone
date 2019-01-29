@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -29,7 +31,7 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system (see config/storage.yml for options)
   config.active_storage.service = :local
-  routes.default_url_options = { host: '192.168.8.100', port: 3000, protocol: 'http' }
+  routes.default_url_options = { host: 'localhost', port: 3000, protocol: 'http' }
 
   config.active_job.queue_adapter = :async
 
@@ -39,6 +41,7 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   config.action_mailer.delivery_method = :letter_opener
+
   config.action_mailer.perform_deliveries = true
 
   # Print deprecation notices to the Rails logger.

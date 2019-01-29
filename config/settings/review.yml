@@ -4,6 +4,9 @@ aws:
   region: eu-central-1
   bucket: imcdev
 
+emails:
+  domain: itsmycargo.tech
+
 fixer:
   api_key: <%= Rails.application.credentials.dig(:review, :fixer, :api_key) %>
 
@@ -14,6 +17,9 @@ google_sign_in:
 google:
   api_key: <%= Rails.application.credentials.dig(:review, :google, :api_key) %>
 
+mailgun:
+  api_key: <%= Rails.application.credentials.dig(:review, :mailgun, :api_key) %>
+  domain: itsmycargo.tech
 
 smtp:
   host: smtp.mailgun.org
