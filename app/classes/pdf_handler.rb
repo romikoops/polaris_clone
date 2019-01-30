@@ -5,7 +5,7 @@ class PdfHandler
 
   attr_reader :name, :full_name, :pdf, :url, :path
 
-  def initialize(args = {})
+  def initialize(args = {}) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     args.symbolize_keys!
 
     @layout                = args[:layout]
@@ -28,7 +28,8 @@ class PdfHandler
     @cargo_data = {
       vol: {},
       kg: {},
-      chargeable_weight: {}
+      chargeable_weight: {},
+      item_strings: {}
     }
 
     @shipments << @shipment if @shipments.empty?
@@ -36,6 +37,7 @@ class PdfHandler
       calculate_cargo_data(s)
       @hide_grand_total[s.id] = hide_grand_total?(s)
     end
+
     @content = Content.get_component('QuotePdf', @shipment.tenant_id) if @name == 'quotation'
 
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
@@ -81,6 +83,13 @@ class PdfHandler
              sum + hash[:quantity].to_f * hash[:payload_in_kg].to_f
            end
          end
+    quantity_strings = {}
+    shipment.cargo_units.each do |unit|
+      cargo_class = unit.is_a?(CargoItem) ? unit.cargo_item_type.description : unit.size_class.humanize.upcase
+      quantity_strings[unit.id.to_s] = "#{unit.quantity} x #{cargo_class}"
+    end
+    @cargo_data[:item_strings][shipment.id] = quantity_strings
+
     unless shipment.fcl?
       chargeable_weight = {}
       vol = if shipment.aggregated_cargo
@@ -100,7 +109,6 @@ class PdfHandler
                              sum + hash[:quantity].to_f * hash[:chargeable_weight].to_f
                            end
                          end
-
       case @scope['chargeable_weight_view']
       when 'weight'
         chargeable_weight_cargo = chargeable_value

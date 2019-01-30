@@ -240,7 +240,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     response = Rails.cache.fetch("#{quoted_shipments.cache_key}/quote_index", expires_in: 12.hours) do
       per_page = params.fetch(:per_page, 4).to_f
 
-      quoted = quoted_shipments.order(:updated_at)
+      quoted = quoted_shipments.order(updated_at: :desc)
                                .paginate(page: params[:quoted_page], per_page: per_page)
       num_pages = {
         quoted: quoted.total_pages
