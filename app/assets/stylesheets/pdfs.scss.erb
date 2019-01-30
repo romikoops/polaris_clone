@@ -43,7 +43,7 @@ i.fa {
   color: #4F4F4F !important;
   font-family: 'Roboto', sans-serif !important;
   .title {
-    padding-bottom: 35px;
+    <%# padding-bottom: 35px; %>
     justify-content: space-between;
     h1 {
       font-size: 18px !important;
@@ -221,34 +221,37 @@ br{
 .subtotal-price-single {
   background: #F8F8F8 !important;
   -webkit-print-color-adjust: exact !important;
-  border-bottom: 1.5px solid #E0E0E0;
+  <%# border-bottom: 1.5px solid #E0E0E0; %>
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 5px;
+ 
 }
 .subtotal-currency-single {
   background: white !important;
   -webkit-print-color-adjust: exact !important;
-  border-bottom: 1.5px solid #E0E0E0;
+  <%# border-bottom: 1.5px solid #E0E0E0; %>
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 5px;
 }
 .subtotal-currency-single h3 {
-  padding-right: 45px;
+
   margin: 8px 0;
   font-size: 15px;
   text-align: right;
   font-weight: bold;
 }
 .subtotal-currency-single h4 {
-  padding-left: 45px;
+
   font-weight: bold;
   margin: 8px 0;
   font-size: 12px;
 }
 .subtotal-price-single h3 {
-  padding-right: 60px;
+
   margin: 8px 0;
   font-size: 12px;
   text-align: right;
@@ -256,17 +259,17 @@ br{
 
 }
 .subtotal-price-single h4 {
-  padding-left: 60px;
+
   margin: 8px 0;
   font-size: 12px;
   font-weight: normal;
 }
 .subtotal-price-group {
   .subtotal-price-single {
-    border-bottom: 1.5px solid #E0E0E0;
+    <%# border-bottom: 1.5px solid #E0E0E0; %>
   }
   .subtotal-price-single:last-child {
-    border-bottom: none !important;
+    <%# border-bottom: none !important; %>
   }
 }
 .total-price-single {
@@ -276,25 +279,24 @@ br{
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 5px;
+  background: #e6e4e4;
 }
 .total-price-single h4 {
   font-size: 16px;
   font-weight: bold;
   margin: 10px 0;
-  padding-left: 35px;
   text-transform: capitalize;
 }
 .total-price-single p {
   font-size: 12px;
   margin: 10px 0;
-  padding-right: 35px;
 }
 .total-price-single h3 {
   font-size: 20px;
   font-weight: bold;
   text-align: right;
   margin: 8px 0;
-  padding-right: 35px;
 }
 .total-row {
   display: flex;
@@ -322,11 +324,12 @@ br{
   height: auto;
 }
 .sub-prices {
-  margin-top: 25px;
+  margin-top: 10px;
   background: white;
+  border: 2px solid #BDBDBD;
 }
 .all-row {
-  margin-bottom: 120px;
+  margin-bottom: 60px;
   position: relative;
   border: 2px solid #4F4F4F;
 }
@@ -716,6 +719,8 @@ br{
 }
 .no_page_break {
   page-break-inside: avoid;
+}
+.grey-border {
   border: 3px solid #e6e4e4;
 }
 .chargeable_weight {
