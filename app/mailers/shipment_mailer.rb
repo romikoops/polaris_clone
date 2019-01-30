@@ -46,6 +46,7 @@ class ShipmentMailer < ApplicationMailer
 
   def shipper_notification(user, shipment) # rubocop:disable Metrics/AbcSize
     @user = user
+    tenant = user.tenant
     @shipment = shipment
     @scope = @user.tenant.scope
 
@@ -63,12 +64,12 @@ class ShipmentMailer < ApplicationMailer
                                               .try(:read)
     attachments.inline['icon.png'] = @mot_icon
     mail_options = {
-      from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
-                         .tap { |a| a.display_name = @user.tenant.name }.format,
-      reply_to: @user.tenant.emails.dig('support', 'general'),
+      from: Mail::Address.new("no-reply@#{tenant.subdomain}.#{Settings.emails.domain}")
+                         .tap { |a| a.display_name = tenant.name }.format,
+      reply_to: tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, @user.email.blank? ? 'itsmycargodev@gmail.com' : @user.email),
       bcc: [Settings.emails.booking],
-      subject: "Your booking through #{@user.tenant.name}"
+      subject: "Your booking through #{tenant.name}"
     }
 
     mail(mail_options, &:html)

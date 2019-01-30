@@ -1,28 +1,40 @@
 <% primary_color = @user.tenant.theme["colors"]["primary"] %>
-<mj-text>
-  <p style="display: none;max-height: 0px;overflow: hidden;">
-    Hello <%= @email %>, <%= @user.full_name %> from <%= @shipment.tenant.name %>
-          prepared for you a document with the best quotations for the itinerary: 
-  </p>
-</mj-text>
-<mj-text>
-  <p style="display: none;max-height: 0px;overflow: hidden;">
-    &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
-  </p>
-</mj-text>
-<mj-section padding="20px 5%" background-color="#BDBDBD">
-  <mj-column>
-    <mj-text>
-      <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.subdomain}", style: "width: 150px" %>
-    </mj-text>
-  </mj-column>
-  <mj-column>
-    <mj-navbar base-url="" hamburger="hamburger" ico-color="black">
-      <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
-      <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'contact')%>" color="white">help</mj-navbar-link>
-    </mj-navbar>
-  </mj-column>
-</mj-section>
+<mj-wrapper >
+  <mj-section>
+    <mj-column>
+      <mj-text>
+        <p style="display: none;max-height: 0px;overflow: hidden;">
+          Hello <%= @email %>, <%= @user.full_name %> from <%= @shipment.tenant.name %>
+                prepared for you a document with the best quotations for the itinerary: 
+        </p>
+      </mj-text>
+      <mj-text>
+        <p style="display: none;max-height: 0px;overflow: hidden;">
+          &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+        </p>
+      </mj-text>
+    </mj-column>
+  </mj-section>
+</mj-wrapper>
+<mj-wrapper border="1px solid #f3f3f3" border-top="none">
+  <mj-section padding="20px 5%" background-color="#BDBDBD">
+    <mj-column>
+      <mj-text>
+        <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.subdomain}", style: "width: 150px" %>
+      </mj-text>
+    </mj-column>
+    <mj-column>
+      <mj-navbar base-url="" hamburger="hamburger" ico-color="black">
+        <% unless @user.tenant.scope.dig('links', 'about').blank? %>
+          <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
+        <% end %>
+        <% unless @user.tenant.scope.dig('links', 'support').blank? %>
+          <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'support')%>" color="white">help</mj-navbar-link>
+        <% end %>
+      </mj-navbar>
+    </mj-column>
+  </mj-section>
+</mj-wrapper>
 
 <mj-wrapper border="1px solid #f3f3f3" border-top="none">
   <mj-section padding="0px">
@@ -34,10 +46,6 @@
         </p>
       </mj-text>
     </mj-column>
-    <mj-column>
-      <mj-image width="200px" src="<%= @shipment.tenant.theme[" logoLarge"] %>" />
-      <mj-spacer height="25px" />
-    </mj-column>
   </mj-section>
 
   <mj-section full-width="full-width" padding="0px">
@@ -45,7 +53,7 @@
       <mj-text line-height="24px">
         <p>
           <%= @user.full_name %> from <strong>
-            <%= @shipment.tenant.name %></strong> <br>
+            <%= @shipment.tenant.name %></strong>
           prepared for you a document with the best quotations for the itinerary:
         </p>
       </mj-text>

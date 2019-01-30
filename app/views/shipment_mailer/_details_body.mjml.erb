@@ -39,7 +39,7 @@
                 <% end %>  
               <% end %>  
             <% else %>
-              From: <strong><%= @shipment.origin_hub.name %></strong>
+              <strong> From:</strong> <%= @shipment.origin_hub.name %>
             <% end %>
           </p>
           <p>
@@ -51,7 +51,7 @@
                 <% end %>  
               <% end %>  
             <% else %>
-              To: <strong><%= @shipment.destination_hub.name %></strong>
+              <strong>To:</strong> <%= @shipment.destination_hub.name %>
             <% end %>
           </p>
         </mj-text>

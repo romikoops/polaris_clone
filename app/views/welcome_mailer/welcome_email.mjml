@@ -1,6 +1,19 @@
 <% primary_color = @user.tenant.theme["colors"]["primary"] %>
 <% secondary_color = @user.tenant.theme["colors"]["secondary"] %>
-
+<mj-section>
+  <mj-column>
+    <mj-text>
+      <p style="display: none;max-height: 0px;overflow: hidden;">
+        Hello <%= @user.full_name %> and welcome to the <%= @user.tenant.name %> online shop: 
+      </p>
+    </mj-text>
+    <mj-text>
+      <p style="display: none;max-height: 0px;overflow: hidden;">
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+      </p>
+    </mj-text>
+  </mj-column>
+</mj-section>
 <mj-section padding="20px 5%" background-color="#BDBDBD">
   <mj-column>
     <mj-text>
@@ -9,8 +22,12 @@
   </mj-column>
   <mj-column>
     <mj-navbar base-url="" hamburger="hamburger" ico-color="white">
-      <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
-      <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'contact')%>" color="white">help</mj-navbar-link>
+      <% unless @user.tenant.scope.dig('links', 'about').blank? %>
+        <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
+      <% end %>
+      <% unless @user.tenant.scope.dig('links', 'support').blank? %>
+        <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'support')%>" color="white">help</mj-navbar-link>
+      <% end %>
     </mj-navbar>
   </mj-column>
 </mj-section>
