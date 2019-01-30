@@ -15,15 +15,12 @@ const propsBase = {
   appDispatch: {
     setCurrency: identity
   },
-  aliases: [],
   addresses: [],
   authDispatch: {
     updateUser: identity
   },
   userDispatch: {
-    makePrimary: identity,
-    newAlias: identity,
-    deleteAlias: identity
+    makePrimary: identity
   }
 }
 
@@ -39,15 +36,7 @@ test('user is falsy', () => {
   expect(shallow(<UserProfile {...props} />)).toMatchSnapshot()
 })
 
-test('aliases is truthy', () => {
-  const props = {
-    ...propsBase,
-    aliases: [{ foo: 0 }, { bar: 1 }]
-  }
-  expect(shallow(<UserProfile {...props} />)).toMatchSnapshot()
-})
-
-test('state.editBool is true', () => {
+test.skip('state.editBool is true', () => {
   const wrapper = shallow(<UserProfile {...propsBase} />)
   wrapper.setState({ editBool: true })
 

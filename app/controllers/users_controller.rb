@@ -8,14 +8,13 @@ class UsersController < ApplicationController
 
   def home
     response = Rails.cache.fetch("#{current_user.shipments.cache_key}/dashboard_index", expires_in: 12.hours) do
-      @contacts = current_user.contacts.where(alias: false).map do |contact|
+      @contacts = current_user.contacts.map do |contact|
         contact.as_json(
           include: { address: { include: { country: { only: :name } },
                                 except: %i(created_at updated_at country_id) } },
           except: %i(created_at updated_at address_id)
         )
       end
-      @aliases = current_user.contacts.where(alias: true)
       user_locs = current_user.user_addresses
       addresses = user_locs.map do |ul|
         { user: ul, address: ul.address.to_custom_hash }
@@ -25,7 +24,6 @@ class UsersController < ApplicationController
         shipments:         shipments_hash,
         contacts:          @contacts,
         num_contact_pages: (current_user.contacts.count.to_f / 6).to_f.ceil,
-        aliases:           @aliases,
         addresses:         addresses
       }
     end

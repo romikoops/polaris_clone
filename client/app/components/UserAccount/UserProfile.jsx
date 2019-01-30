@@ -31,8 +31,6 @@ class UserProfile extends Component {
     this.state = {
       editBool: false,
       editObj: {},
-      newAlias: {},
-      newAliasBool: false,
       passwordResetSent: false,
       passwordResetRequested: false,
       currentCurrency: {}
@@ -42,10 +40,6 @@ class UserProfile extends Component {
     this.closeEdit = this.closeEdit.bind(this)
     this.saveEdit = this.saveEdit.bind(this)
     this.handleChange = this.handleChange.bind(this)
-    this.toggleNewAlias = this.toggleNewAlias.bind(this)
-    this.handleFormChange = this.handleFormChange.bind(this)
-    this.saveNewAlias = this.saveNewAlias.bind(this)
-    this.deleteAlias = this.deleteAlias.bind(this)
     this.setCurrency = this.setCurrency.bind(this)
     this.saveCurrency = this.saveCurrency.bind(this)
     this.handlePasswordChange = this.handlePasswordChange.bind(this)
@@ -136,45 +130,16 @@ class UserProfile extends Component {
     this.closeEdit()
   }
 
-  toggleNewAlias () {
-    this.setState({ newAliasBool: !this.state.newAliasBool })
-  }
-
-  handleFormChange (event) {
-    const { name, value } = event.target
-    this.setState({
-      newAlias: {
-        ...this.state.newAlias,
-        [name]: value
-      }
-    })
-  }
-
-  deleteAlias (alias) {
-    const { userDispatch } = this.props
-    userDispatch.deleteAlias(alias.id)
-  }
-
-  saveNewAlias () {
-    const { newAlias } = this.state
-    const { userDispatch } = this.props
-    userDispatch.newAlias(newAlias)
-    this.toggleNewAlias()
-  }
-
   render () {
     const {
-      user, aliases, addresses, theme, userDispatch, tenant, t
+      user, addresses, theme, userDispatch, tenant, t
     } = this.props
     if (!user) {
       return ''
     }
     const {
-      editBool, editObj, newAliasBool, newAlias, passwordResetSent, passwordResetRequested, showDeleteAccountModal
+      editBool, editObj, passwordResetSent, passwordResetRequested, showDeleteAccountModal
     } = this.state
-    const contactArr = aliases.map(cont => (
-      <AdminClientTile client={cont} theme={theme} deleteable deleteFn={this.deleteAlias} flexClasses="flex-45" />
-    ))
     const textStyle = theme && theme.colors
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }
@@ -218,188 +183,8 @@ class UserProfile extends Component {
       </div>
     ) : currencySection
 
-    const newAliasBox = (
-      <div
-        className={`flex-none layout-row layout-wrap layout-align-center-center ${
-          styles.new_contact
-        }`}
-      >
-        <div
-          className={`flex-none layout-row layout-wrap layout-align-center-center ${
-            styles.new_contact_backdrop
-          }`}
-          onClick={this.toggleNewAlias}
-        />
-        <div
-          className={`flex-none layout-row layout-wrap layout-align-start-start ${
-            styles.new_contact_content
-          }`}
-        >
-          <div
-            className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center margin-bottom`}
-          >
-            <i className="fa fa-user flex-10" style={textStyle} />
-            <p className="flex-none">
-              {t('user:newAlias')}
-            </p>
-          </div>
-          <div className="flex-100 layout-row layout-align-center-center input_box_label relative">
-            <label htmlFor="companyName">
-              {t('user:companyName')}
-            </label>
-            <input
-              className="flex"
-              type="text"
-              value={newAlias.companyName}
-              name="companyName"
-              id="companyName"
-              placeholder={t('user:companyName')}
-              onChange={this.handleFormChange}
-            />
-          </div>
-          <div className="flex-50 layout-row layout-align-center-center input_box_label relative">
-            <label htmlFor="firstName">
-              {t('user:firstName')}
-            </label>
-            <input
-              className="flex"
-              type="text"
-              value={newAlias.firstName}
-              name="firstName"
-              id="firstName"
-              placeholder={t('user:firstName')}
-              onChange={this.handleFormChange}
-            />
-          </div>
-          <div className="flex-50 layout-row layout-align-center-center input_box_label relative">
-            <label htmlFor="lastName">
-              {t('user:lastName')}
-            </label>
-            <input
-              className="flex"
-              type="text"
-              value={newAlias.lastName}
-              name="lastName"
-              id="lastName"
-              placeholder={t('user:lastName')}
-              onChange={this.handleFormChange}
-            />
-          </div>
-          <div className="flex-50 layout-row layout-align-center-center input_box_label relative">
-            <label htmlFor="email">
-              {t('user:email')}
-            </label>
-            <input
-              className="flex"
-              type="text"
-              value={newAlias.email}
-              name="email"
-              id="email"
-              placeholder={t('user:email')}
-              onChange={this.handleFormChange}
-            />
-          </div>
-          <div className="flex-50 layout-row layout-align-center-center input_box_label relative">
-            <label htmlFor="phone">
-              {t('user:phone')}
-            </label>
-            <input
-              className="flex"
-              type="text"
-              value={newAlias.phone}
-              name="phone"
-              id="phone"
-              placeholder={t('user:phone')}
-              onChange={this.handleFormChange}
-            />
-          </div>
-          <div className="flex-75 layout-row layout-align-center-center input_box_label relative">
-            <label htmlFor="street">
-              {t('user:street')}
-            </label>
-            <input
-              className="flex"
-              type="text"
-              value={newAlias.street}
-              name="street"
-              id="street"
-              placeholder={t('user:street')}
-              onChange={this.handleFormChange}
-            />
-          </div>
-          <div className="flex-25 layout-row layout-align-center-center input_box_label relative">
-            <label htmlFor="number">
-              {t('user:number')}
-            </label>
-            <input
-              className="flex"
-              type="text"
-              value={newAlias.number}
-              name="number"
-              id="number"
-              placeholder={t('user:number')}
-              onChange={this.handleFormChange}
-            />
-          </div>
-          <div className="flex-20 layout-row layout-align-center-center input_box_label relative">
-            <label htmlFor="zipCode">
-              {t('user:postalCode')}
-            </label>
-            <input
-              className="flex"
-              type="text"
-              value={newAlias.zipCode}
-              name="zipCode"
-              id="zipCode"
-              placeholder={t('user:postalCode')}
-              onChange={this.handleFormChange}
-            />
-          </div>
-          <div className="flex-40 layout-row layout-align-center-center input_box_label relative">
-            <label htmlFor="city">
-              {t('user:city')}
-            </label>
-            <input
-              className="flex"
-              type="text"
-              value={newAlias.city}
-              name="city"
-              id="city"
-              placeholder={t('user:city')}
-              onChange={this.handleFormChange}
-            />
-          </div>
-          <div className="flex-40 layout-row layout-align-center-center input_box_label relative">
-            <label htmlFor="country">
-              {t('user:country')}
-            </label>
-            <input
-              className="flex"
-              type="text"
-              value={newAlias.country}
-              name="country"
-              id="country"
-              placeholder={t('user:country')}
-              onChange={this.handleFormChange}
-            />
-          </div>
-          <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row}`}>
-            <RoundButton
-              theme={theme}
-              size="small"
-              active
-              text={t('common:save')}
-              handleNext={this.saveNewAlias}
-              iconClass="fa-floppy-o"
-            />
-          </div>
-        </div>
-      </div>
-    )
-
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-center extra_padding">
-        {newAliasBool ? newAliasBox : ''}
         {deleteAccountModal}
         <div className="flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding">
           {editBool ? (
@@ -523,37 +308,7 @@ class UserProfile extends Component {
             className={`flex-gt-sm-50 flex-100 layout-row layout-wrap layout-align-start-center section_padding card_padding_right ${
               styles.section
             } `}
-          >
-            <div
-              className="flex-100 layout-align-start-center greyBg"
-            >
-              <span><b>{t('user:aliases')}</b></span>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-space-between-stretch">
-              <div
-                key="addNewAliasButton"
-                className={`pointy ${styles.tile_padding} layout-row layout-align-center-stretch flex-45 margin_bottom`}
-                onClick={this.toggleNewAlias}
-              >
-                <div
-                  className={`${styles['location-box']} ${
-                    styles['new-address']
-                  } layout-row layout-align-start-center layout-wrap`}
-                >
-                  <div className="layout-row layout-align-center flex-100">
-                    <div className={`${styles['plus-icon']}`} />
-                  </div>
-
-                  <div className="layout-row layout-align-center flex-100">
-                    <h3>
-                      {t('user:addAlias')}
-                    </h3>
-                  </div>
-                </div>
-              </div>
-              {contactArr}
-            </div>
-          </div>
+          />
         </div>
       </div>
     )
@@ -562,7 +317,6 @@ class UserProfile extends Component {
 
 UserProfile.defaultProps = {
   theme: null,
-  aliases: [],
   addresses: [],
   tenant: {}
 }

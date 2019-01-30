@@ -595,62 +595,6 @@ function newContact (data, callback) {
   }
 }
 
-function newAlias (data) {
-  function request (newAliasData) {
-    return { type: userConstants.NEW_ALIAS_REQUEST, payload: newAliasData }
-  }
-
-  function success (newAliasData) {
-    return { type: userConstants.NEW_ALIAS_SUCCESS, payload: newAliasData }
-  }
-
-  function failure (error) {
-    return { type: userConstants.NEW_ALIAS_FAILURE, error }
-  }
-
-  return (dispatch) => {
-    dispatch(request())
-
-    userService.newAlias(data).then(
-      (newData) => {
-        dispatch(success(newData))
-      },
-      (error) => {
-        dispatch(failure(error))
-        dispatch(alertActions.error(error))
-      }
-    )
-  }
-}
-
-function deleteAlias (aliasId) {
-  function request (newAliasData) {
-    return { type: userConstants.DELETE_ALIAS_REQUEST, payload: newAliasData }
-  }
-
-  function success (newAliasData) {
-    return { type: userConstants.DELETE_ALIAS_SUCCESS, payload: newAliasData }
-  }
-
-  function failure (error) {
-    return { type: userConstants.DELETE_ALIAS_FAILURE, error }
-  }
-
-  return (dispatch) => {
-    dispatch(request())
-
-    userService.deleteAlias(aliasId).then(
-      (data) => {
-        dispatch(success(data))
-      },
-      (error) => {
-        dispatch(failure(error))
-        dispatch(alertActions.error(error))
-      }
-    )
-  }
-}
-
 function deleteContactAddress (addressId) {
   function request (delAddress) {
     return { type: userConstants.DELETE_CONTACT_ADDRESS_REQUEST, payload: delAddress }
@@ -856,8 +800,6 @@ export const userActions = {
   updateContact,
   newUserAddress,
   newContact,
-  newAlias,
-  deleteAlias,
   saveAddressEdit,
   clearLoading,
   deleteContactAddress,

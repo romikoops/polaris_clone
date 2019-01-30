@@ -173,8 +173,6 @@ Rails.application.routes.draw do
     resources :contacts, only: %i(index show create update)
     post 'contacts/update_contact_address/:id', to: 'contacts#update_contact_address'
     get 'search/contacts', to: 'contacts#search_contacts'
-    post 'contacts/new_alias', to: 'contacts#new_alias'
-    post 'contacts/delete_alias/:id', to: 'contacts#delete_alias'
     get 'contacts/validations/form', to: 'contacts#is_valid'
     post 'contacts/delete_contact_address/:id', to: 'contacts#delete_contact_address'
     post 'shipments/:shipment_id/upload/:type', to: 'shipments#upload_document'
