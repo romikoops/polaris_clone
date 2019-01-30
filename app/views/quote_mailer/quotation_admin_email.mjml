@@ -4,8 +4,7 @@
     <mj-column padding="0 2.5%">
       <mj-text line-height="24px" font-size="27px" padding-left="34px">
         <p>
-          Hello
-          <%= @email %>
+          <%= @shipment.tenant.name %>
         </p>
       </mj-text>
     </mj-column>
@@ -20,8 +19,8 @@
       <mj-text line-height="24px">
         <p>
           <%= @user.full_name %> from <strong>
-            <%= @shipment.tenant.name %></strong> <br>
-          prepared for you a document with the best quotations for the itinerary:
+            <%= @user.agency.name %></strong> <br>
+          generated a quote through your ItsMyCargo Quotation Tool:
         </p>
       </mj-text>
     </mj-column>
@@ -80,10 +79,8 @@
   <mj-section full-width="full-width" padding="0px">
     <mj-column width="100%" padding="0 2.5%">
       <mj-text>
-        <% if @user.tenant.emails.dig('support', 'general') %>
-          <p>For further information regarding the quotations please contact <%= @user.tenant.emails.dig('support', 'general')%>,</p>
-        <% end %>
-        <p>Thank you for your interest and best regards,</p>
+
+        <p>Best regards,</p>
         <p></p>
 
       </mj-text>

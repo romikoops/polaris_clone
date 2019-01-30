@@ -54,7 +54,7 @@ class Tenant < ApplicationRecord
 
     branch = branch_raw.to_s
 
-    return 'itsmycargodev@gmail.com' if emails[branch].blank?
+    return Settings.emails.booking if emails[branch].blank?
 
     emails[branch][mode_of_transport] || emails[branch]['general']
   end
