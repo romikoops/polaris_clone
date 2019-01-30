@@ -17,7 +17,7 @@ function AddUnitButton ({ onClick, theme, t }) {
     >
       <i className="fa fa-plus-square-o clip" style={textStyle} />
       <p>
-        {t('shipment:addUnit')}
+        {t('shipment:addCargoGroup')}
       </p>
     </div>
   )
