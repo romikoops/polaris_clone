@@ -54,11 +54,8 @@ exports[`aliases is truthy 1`] = `
             <EditProfileBox
               close={[Function]}
               handleChange={[Function]}
-              handlePasswordChange={[Function]}
               hide={true}
               onSave={[Function]}
-              passwordResetRequested={false}
-              passwordResetSent={false}
               style={
                 Object {
                   "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
@@ -77,7 +74,11 @@ exports[`aliases is truthy 1`] = `
             />
             <ProfileBox
               edit={[Function]}
+              handlePasswordChange={[Function]}
               hide={false}
+              hideEdit={true}
+              passwordResetRequested={false}
+              passwordResetSent={false}
               style={
                 Object {
                   "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
@@ -108,32 +109,6 @@ exports[`aliases is truthy 1`] = `
                 }
               }
             />
-            <div
-              className="flex-40 layout-row layout-align-center-center layout-wrap currency_box"
-            >
-              <div
-                className="flex-75 layout-row layout-align-end-center layout-wrap"
-              >
-                <div
-                  className="flex-100 layout-row layout-align-center-center layout-wrap currency_grey"
-                >
-                  <p
-                    className="flex-none"
-                  >
-                    Currency
-                    :
-                  </p>
-                  <span>
-                    <strong>
-                      EUR
-                    </strong>
-                  </span>
-                </div>
-              </div>
-              <div
-                className="flex-75 layout-row layout-align-space-around-center layout-wrap"
-              />
-            </div>
           </div>
         }
         contentClassName="layout-row flex"
@@ -145,116 +120,7 @@ exports[`aliases is truthy 1`] = `
         padding={false}
         title=""
         titleAction={false}
-        wrapperClassName="flex-gt-sm-60 flex-100 layout-row layout-align-start-center "
-      />
-      <GreyBox
-        borderStyle=""
-        content={
-          <div
-            className="flex-100 layout-row layout-wrap conditions_box"
-          >
-            <div
-              className="flex-100"
-            >
-              <p
-                className="emulate_link blue_link"
-                onClick={[Function]}
-              >
-                More info
-              </p>
-            </div>
-            <div
-              className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
-            >
-              <div
-                className="flex-66 layout-row layout-align-start-center"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Download all data from ItsMyCargo
-                </p>
-              </div>
-              <div
-                className="flex-33 layout-row layout-align-start"
-              >
-                <DocumentsDownloader
-                  disabled={false}
-                  documentDispatch={null}
-                  downloadUrls={Object {}}
-                  loading={false}
-                  options={
-                    Object {
-                      "userId": undefined,
-                    }
-                  }
-                  size="full"
-                  square={false}
-                  t={[Function]}
-                  target="gdpr"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                  tooltip=""
-                />
-              </div>
-            </div>
-            <div
-              className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
-            >
-              <div
-                className="flex-66 layout-row layout-align-start-center"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Request to delete account
-                </p>
-              </div>
-              <div
-                className="flex-33 layout-row layout-align-start"
-              >
-                <RoundButton
-                  active={false}
-                  back={false}
-                  classNames=""
-                  disabled={false}
-                  flexContainer="100"
-                  handleDisabled={null}
-                  handleNext={[Function]}
-                  icon=""
-                  iconClass=""
-                  inverse={false}
-                  size="full"
-                  text="Request"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                />
-              </div>
-            </div>
-          </div>
-        }
-        contentClassName="layout-row layout-wrap flex layout-align-start-start"
-        flex={0}
-        flexGtLg={0}
-        flexMd={0}
-        fullWidth={false}
-        isBox={false}
-        padding={false}
-        title="Your Data"
-        titleAction={false}
-        wrapperClassName="flex-gt-sm-35 flex-100 layout-row layout-align-stretch"
+        wrapperClassName="flex layout-row layout-align-start-center"
       />
     </div>
   </div>
@@ -410,11 +276,8 @@ exports[`shallow render 1`] = `
             <EditProfileBox
               close={[Function]}
               handleChange={[Function]}
-              handlePasswordChange={[Function]}
               hide={true}
               onSave={[Function]}
-              passwordResetRequested={false}
-              passwordResetSent={false}
               style={
                 Object {
                   "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
@@ -433,7 +296,11 @@ exports[`shallow render 1`] = `
             />
             <ProfileBox
               edit={[Function]}
+              handlePasswordChange={[Function]}
               hide={false}
+              hideEdit={true}
+              passwordResetRequested={false}
+              passwordResetSent={false}
               style={
                 Object {
                   "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
@@ -464,32 +331,6 @@ exports[`shallow render 1`] = `
                 }
               }
             />
-            <div
-              className="flex-40 layout-row layout-align-center-center layout-wrap currency_box"
-            >
-              <div
-                className="flex-75 layout-row layout-align-end-center layout-wrap"
-              >
-                <div
-                  className="flex-100 layout-row layout-align-center-center layout-wrap currency_grey"
-                >
-                  <p
-                    className="flex-none"
-                  >
-                    Currency
-                    :
-                  </p>
-                  <span>
-                    <strong>
-                      EUR
-                    </strong>
-                  </span>
-                </div>
-              </div>
-              <div
-                className="flex-75 layout-row layout-align-space-around-center layout-wrap"
-              />
-            </div>
           </div>
         }
         contentClassName="layout-row flex"
@@ -501,116 +342,7 @@ exports[`shallow render 1`] = `
         padding={false}
         title=""
         titleAction={false}
-        wrapperClassName="flex-gt-sm-60 flex-100 layout-row layout-align-start-center "
-      />
-      <GreyBox
-        borderStyle=""
-        content={
-          <div
-            className="flex-100 layout-row layout-wrap conditions_box"
-          >
-            <div
-              className="flex-100"
-            >
-              <p
-                className="emulate_link blue_link"
-                onClick={[Function]}
-              >
-                More info
-              </p>
-            </div>
-            <div
-              className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
-            >
-              <div
-                className="flex-66 layout-row layout-align-start-center"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Download all data from ItsMyCargo
-                </p>
-              </div>
-              <div
-                className="flex-33 layout-row layout-align-start"
-              >
-                <DocumentsDownloader
-                  disabled={false}
-                  documentDispatch={null}
-                  downloadUrls={Object {}}
-                  loading={false}
-                  options={
-                    Object {
-                      "userId": undefined,
-                    }
-                  }
-                  size="full"
-                  square={false}
-                  t={[Function]}
-                  target="gdpr"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                  tooltip=""
-                />
-              </div>
-            </div>
-            <div
-              className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
-            >
-              <div
-                className="flex-66 layout-row layout-align-start-center"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Request to delete account
-                </p>
-              </div>
-              <div
-                className="flex-33 layout-row layout-align-start"
-              >
-                <RoundButton
-                  active={false}
-                  back={false}
-                  classNames=""
-                  disabled={false}
-                  flexContainer="100"
-                  handleDisabled={null}
-                  handleNext={[Function]}
-                  icon=""
-                  iconClass=""
-                  inverse={false}
-                  size="full"
-                  text="Request"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                />
-              </div>
-            </div>
-          </div>
-        }
-        contentClassName="layout-row layout-wrap flex layout-align-start-start"
-        flex={0}
-        flexGtLg={0}
-        flexMd={0}
-        fullWidth={false}
-        isBox={false}
-        padding={false}
-        title="Your Data"
-        titleAction={false}
-        wrapperClassName="flex-gt-sm-35 flex-100 layout-row layout-align-stretch"
+        wrapperClassName="flex layout-row layout-align-start-center"
       />
     </div>
   </div>
@@ -690,11 +422,8 @@ exports[`state.editBool is true 1`] = `
             <EditProfileBox
               close={[Function]}
               handleChange={[Function]}
-              handlePasswordChange={[Function]}
               hide={false}
               onSave={[Function]}
-              passwordResetRequested={false}
-              passwordResetSent={false}
               style={
                 Object {
                   "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
@@ -713,7 +442,11 @@ exports[`state.editBool is true 1`] = `
             />
             <ProfileBox
               edit={[Function]}
+              handlePasswordChange={[Function]}
               hide={true}
+              hideEdit={true}
+              passwordResetRequested={false}
+              passwordResetSent={false}
               style={
                 Object {
                   "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
@@ -744,162 +477,6 @@ exports[`state.editBool is true 1`] = `
                 }
               }
             />
-            <div
-              className="flex-40 layout-row layout-align-center-center layout-wrap currency_box"
-            >
-              <div
-                className="flex-75 layout-row layout-align-end-center layout-wrap"
-              >
-                <div
-                  className="flex-100 layout-row layout-wrap layout-align-center-center"
-                >
-                  <p
-                    className="flex-none"
-                  >
-                    Currency
-                    :
-                  </p>
-                  <NamedSelect
-                    className="flex-100"
-                    onChange={[Function]}
-                    options={
-                      Array [
-                        Object {
-                          "label": "EUR",
-                          "value": "EUR",
-                        },
-                        Object {
-                          "label": "AUD",
-                          "value": "AUD",
-                        },
-                        Object {
-                          "label": "BGN",
-                          "value": "BGN",
-                        },
-                        Object {
-                          "label": "BRL",
-                          "value": "BRL",
-                        },
-                        Object {
-                          "label": "CAD",
-                          "value": "CAD",
-                        },
-                        Object {
-                          "label": "CHF",
-                          "value": "CHF",
-                        },
-                        Object {
-                          "label": "CNY",
-                          "value": "CNY",
-                        },
-                        Object {
-                          "label": "CZK",
-                          "value": "CZK",
-                        },
-                        Object {
-                          "label": "DKK",
-                          "value": "DKK",
-                        },
-                        Object {
-                          "label": "GBP",
-                          "value": "GBP",
-                        },
-                        Object {
-                          "label": "HKD",
-                          "value": "HKD",
-                        },
-                        Object {
-                          "label": "HRK",
-                          "value": "HRK",
-                        },
-                        Object {
-                          "label": "HUF",
-                          "value": "HUF",
-                        },
-                        Object {
-                          "label": "IDR",
-                          "value": "IDR",
-                        },
-                        Object {
-                          "label": "ILS",
-                          "value": "ILS",
-                        },
-                        Object {
-                          "label": "INR",
-                          "value": "INR",
-                        },
-                        Object {
-                          "label": "JPY",
-                          "value": "JPY",
-                        },
-                        Object {
-                          "label": "KRW",
-                          "value": "KRW",
-                        },
-                        Object {
-                          "label": "MXN",
-                          "value": "MXN",
-                        },
-                        Object {
-                          "label": "MYR",
-                          "value": "MYR",
-                        },
-                        Object {
-                          "label": "NOK",
-                          "value": "NOK",
-                        },
-                        Object {
-                          "label": "NZD",
-                          "value": "NZD",
-                        },
-                        Object {
-                          "label": "PHP",
-                          "value": "PHP",
-                        },
-                        Object {
-                          "label": "PLN",
-                          "value": "PLN",
-                        },
-                        Object {
-                          "label": "RON",
-                          "value": "RON",
-                        },
-                        Object {
-                          "label": "RUB",
-                          "value": "RUB",
-                        },
-                        Object {
-                          "label": "SEK",
-                          "value": "SEK",
-                        },
-                        Object {
-                          "label": "SGD",
-                          "value": "SGD",
-                        },
-                        Object {
-                          "label": "THB",
-                          "value": "THB",
-                        },
-                        Object {
-                          "label": "TRY",
-                          "value": "TRY",
-                        },
-                        Object {
-                          "label": "USD",
-                          "value": "USD",
-                        },
-                        Object {
-                          "label": "ZAR",
-                          "value": "ZAR",
-                        },
-                      ]
-                    }
-                    placeholder="Select Currency"
-                    value={Object {}}
-                  />
-                </div>
-              </div>
-            </div>
           </div>
         }
         contentClassName="layout-row flex"
@@ -911,116 +488,7 @@ exports[`state.editBool is true 1`] = `
         padding={false}
         title=""
         titleAction={false}
-        wrapperClassName="flex-gt-sm-60 flex-100 layout-row layout-align-start-center "
-      />
-      <GreyBox
-        borderStyle=""
-        content={
-          <div
-            className="flex-100 layout-row layout-wrap conditions_box"
-          >
-            <div
-              className="flex-100"
-            >
-              <p
-                className="emulate_link blue_link"
-                onClick={[Function]}
-              >
-                More info
-              </p>
-            </div>
-            <div
-              className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
-            >
-              <div
-                className="flex-66 layout-row layout-align-start-center"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Download all data from ItsMyCargo
-                </p>
-              </div>
-              <div
-                className="flex-33 layout-row layout-align-start"
-              >
-                <DocumentsDownloader
-                  disabled={false}
-                  documentDispatch={null}
-                  downloadUrls={Object {}}
-                  loading={false}
-                  options={
-                    Object {
-                      "userId": undefined,
-                    }
-                  }
-                  size="full"
-                  square={false}
-                  t={[Function]}
-                  target="gdpr"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                  tooltip=""
-                />
-              </div>
-            </div>
-            <div
-              className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
-            >
-              <div
-                className="flex-66 layout-row layout-align-start-center"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Request to delete account
-                </p>
-              </div>
-              <div
-                className="flex-33 layout-row layout-align-start"
-              >
-                <RoundButton
-                  active={false}
-                  back={false}
-                  classNames=""
-                  disabled={false}
-                  flexContainer="100"
-                  handleDisabled={null}
-                  handleNext={[Function]}
-                  icon=""
-                  iconClass=""
-                  inverse={false}
-                  size="full"
-                  text="Request"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                />
-              </div>
-            </div>
-          </div>
-        }
-        contentClassName="layout-row layout-wrap flex layout-align-start-start"
-        flex={0}
-        flexGtLg={0}
-        flexMd={0}
-        fullWidth={false}
-        isBox={false}
-        padding={false}
-        title="Your Data"
-        titleAction={false}
-        wrapperClassName="flex-gt-sm-35 flex-100 layout-row layout-align-stretch"
+        wrapperClassName="flex layout-row layout-align-start-center"
       />
     </div>
   </div>

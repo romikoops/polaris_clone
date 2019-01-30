@@ -2,8 +2,6 @@ import React from 'react'
 import { withNamespaces } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
-import { RoundButton } from '../RoundButton/RoundButton'
-import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
 
 const EditProfileBox = ({
   user, handleChange, onSave, close, style, theme, handlePasswordChange, passwordResetSent, passwordResetRequested, t, hide
@@ -108,32 +106,6 @@ const EditProfileBox = ({
           name="phone"
         />
       </div>
-    </div>
-    <div
-      className={`flex-100 layout-row layout-align-center layout-wrap padding_top ${styles.form_group_submit_btn}`}
-    >
-      <div className="flex-50 layout-row layout-align-start-center">
-        <RoundButton
-          theme={theme}
-          size="medium"
-          active
-          text={t('user:changeMyPassword')}
-          handleNext={handlePasswordChange}
-        />
-      </div>
-      <div className={`${styles.spinner} flex-50 layout-row layout-align-start-start`}>
-        {passwordResetRequested &&
-        <LoadingSpinner
-          size="extra_small"
-        />}
-      </div>
-      { passwordResetSent && (
-        <div className="flex-100 layout-row layout-align-center-start padding_top">
-          <p>
-            {t('user:checkForPassword')}
-          </p>
-        </div>
-      )}
     </div>
   </div>
 )
