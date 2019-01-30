@@ -68,13 +68,15 @@ module ExcelDataServices
       def find_or_create_local_charge(params, tenant_vehicle)
         params[:mode_of_transport] = params[:mot]
         params[:tenant_vehicle_id] = tenant_vehicle.id
-        local_charge_params = params.except(:mot,
-                                            :hub,
-                                            :country,
-                                            :counterpart_hub,
-                                            :counterpart_country,
-                                            :carrier,
-                                            :service_level)
+
+        local_charge_params = params.slice(:load_type,
+                                           :direction,
+                                           :dangerous,
+                                           :fees,
+                                           :hub_id,
+                                           :counterpart_hub_id,
+                                           :mode_of_transport,
+                                           :tenant_vehicle_id)
 
         local_charge = @tenant.local_charges.find_or_initialize_by(local_charge_params)
         add_stats(:local_charges, local_charge)

@@ -14,7 +14,8 @@ RSpec.describe ShipmentMailer, type: :mailer do
     end
 
     it 'renders the correct sender' do
-      expect(mail.from).to eq(['support@demo.com'])
+      expect(mail.from).to eq(['no-reply@demo.itsmycargo.test'])
+      expect(mail.reply_to).to eq(['support@itsmycargo.com'])
     end
 
     it 'renders the correct receiver' do
@@ -30,7 +31,8 @@ RSpec.describe ShipmentMailer, type: :mailer do
     end
 
     it 'renders the correct sender' do
-      expect(mail.from).to eq(['support@demo.com'])
+      expect(mail.from).to eq(['no-reply@demo.itsmycargo.test'])
+      expect(mail.reply_to).to eq(['support@demo.com'])
     end
 
     it 'renders the correct receiver' do
@@ -46,7 +48,8 @@ RSpec.describe ShipmentMailer, type: :mailer do
     end
 
     it 'renders the correct sender' do
-      expect(mail.from).to eq(['support@demo.com'])
+      expect(mail.from).to eq(['no-reply@demo.itsmycargo.test'])
+      expect(mail.reply_to).to eq(['support@demo.com'])
     end
 
     it 'renders the correct receiver' do

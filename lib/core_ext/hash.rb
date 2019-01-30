@@ -40,6 +40,6 @@ class Hash
   end
 
   def to_sql_where
-    "WHERE " + map { |k, v| v.is_a?(String) ? "#{k} = '#{v}'" : "#{k} = #{v}" }.join(" AND ")
+    'WHERE ' + map { |k, v| v.is_a?(String) ? "#{k} = '#{v}'" : "#{k} = #{v}" }.join(' AND ')
   end
 end

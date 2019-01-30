@@ -17,6 +17,7 @@ import {
   numberSpacing,
   calcMaxDimensionsToApply,
   weight,
+  rawWeight,
   effectiveKgPerCubicMeter
 } from '../../helpers'
 import styles from './ShipmentCargoItems.scss'
@@ -345,7 +346,7 @@ export default function getInputs (
   }
   function chargeableDynamicElemJSX (mot, i) {
     const key = `${mot}-${i || 0}`
-    const chargeableWeightValue = weight(cargoItem)
+    const chargeableWeightValue = rawWeight(cargoItem)
     const chargeableVolumeValue = volume(cargoItem)
     const showVolume = chargeableVolumeValue > (chargeableWeightValue / effectiveKgPerCubicMeter[mot])
     if (
@@ -396,7 +397,7 @@ export default function getInputs (
   function determineChargeableType () {
     switch (scope.chargeable_weight_view) {
       case 'dynamic': {
-        const chargeableWeightValue = weight(cargoItem)
+        const chargeableWeightValue = rawWeight(cargoItem)
         const chargeableVolumeValue = volume(cargoItem)
         const showVolume = chargeableVolumeValue > (chargeableWeightValue / effectiveKgPerCubicMeter[chargeableWeightMots[0]])
 

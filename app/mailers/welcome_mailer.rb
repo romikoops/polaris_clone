@@ -13,7 +13,9 @@ class WelcomeMailer < ApplicationMailer
     @content = Content.get_component('WelcomeMail', @tenant.id)
 
     mail(
-      from: @tenant.emails.dig('support', 'general'),
+      from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
+                         .tap { |a| a.display_name = @user.tenant.name }.format,
+      reply_to: @user.tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, @user.email),
       subject: @content['subject'][0][:text]
     ) do |format|

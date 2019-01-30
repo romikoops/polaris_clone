@@ -4,6 +4,9 @@ aws:
   region: eu-central-1
   bucket: assets.itsmycargo.com
 
+emails:
+  domain: itsmycargo.shop
+
 fixer:
   api_key: <%= Rails.application.credentials.dig(:staging, :fixer, :api_key) %>
 
@@ -13,6 +16,10 @@ google_sign_in:
 
 google:
   api_key: <%= Rails.application.credentials.dig(:staging, :google, :api_key) %>
+
+mailgun:
+  api_key: <%= Rails.application.credentials.dig(:staging, :mailgun, :api_key) %>
+  domain: itsmycargo.shop
 
 smtp:
   host: sendgrid.net

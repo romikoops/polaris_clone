@@ -11,15 +11,13 @@ class QuoteMailer < ApplicationMailer
     @quotation = quotation
     @quotes = @shipments.map(&:selected_offer)
     @user = @shipment.user
-    tenant = @user.tenant
-    @theme = tenant.theme
+    @theme = @user.tenant.theme
     @email = email[/[^@]+/]
     @content = Content.get_component('QuotePdf', tenant.id)
 
     quotation = generate_and_upload_quotation(@quotes)
     @document = Document.create!(
       shipment: shipment,
-      # quotation: quotation, # TODO: Implement proper quotation tools
       text: "quotation_#{shipment.imc_reference}",
       doc_type: 'quotation',
       user: @user,
@@ -31,11 +29,13 @@ class QuoteMailer < ApplicationMailer
       }
     )
     pdf_name = "quotation_#{@shipment.imc_reference}.pdf"
-    attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
+    attachments.inline['logo.png'] = URI.open(@theme['logoLarge']).read
     attachments.inline[pdf_name] = quotation
 
     mail(
-      from: tenant.emails.dig('support', 'general'),
+      from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
+                         .tap { |a| a.display_name = @user.tenant.name }.format,
+      reply_to: @user.tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, email),
       subject: "Quotation for #{@shipment.imc_reference}"
     ) do |format|
@@ -48,16 +48,16 @@ class QuoteMailer < ApplicationMailer
 
   def generate_and_upload_quotation(quotes)
     quotation = PdfHandler.new(
-      layout:      'pdfs/simple.pdf.html.erb',
-      template:    'shipments/pdfs/quotations.pdf.erb',
-      margin:      { top: 15, bottom: 5, left: 8, right: 8 },
-      shipment:    @shipment,
-      shipments:   @shipments,
-      quotation:   @quotation,
-      quotes:      quotes,
-      color:       @user.tenant.theme['colors']['primary'],
-      name:        'quotation',
-      remarks:     Remark.where(tenant_id: @user.tenant_id).order(order: :asc)
+      layout: 'pdfs/simple.pdf.html.erb',
+      template: 'shipments/pdfs/quotations.pdf.erb',
+      margin: { top: 15, bottom: 5, left: 8, right: 8 },
+      shipment: @shipment,
+      shipments: @shipments,
+      quotation: @quotation,
+      quotes: quotes,
+      color: @user.tenant.theme['colors']['primary'],
+      name: 'quotation',
+      remarks: Remark.where(tenant_id: @user.tenant_id).order(order: :asc)
     )
     quotation.generate
   end

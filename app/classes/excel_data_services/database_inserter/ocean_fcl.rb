@@ -9,7 +9,7 @@ module ExcelDataServices
         params = row[:fees].map do |fee_code, fee_value|
           next unless fee_value
 
-          ChargeCategory.from_code(fee_code, tenant_id = tenant.id)
+          ChargeCategory.from_code(fee_code, tenant.id)
 
           {
             range: nil,

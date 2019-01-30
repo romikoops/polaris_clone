@@ -14,13 +14,14 @@ import { moment } from '../../constants'
 import UserProfile from '../../components/UserAccount/UserProfile'
 // eslint-disable-next-line import/no-named-as-default
 import UserShipmentsGroup from '../../components/User/Shipments/Group'
-import { userActions, authenticationActions, appActions, remarkActions } from '../../actions'
+import {
+  userActions, authenticationActions, appActions, remarkActions
+} from '../../actions'
 import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
 import PropTypes from '../../prop-types'
 import Header from '../../components/Header/Header'
 import Loading from '../../components/Loading/Loading'
 import SideNav from '../../components/SideNav/SideNav'
-import Footer from '../../components/Footer/Footer'
 import defs from '../../styles/default_classes.scss'
 import styles from './UserAccount.scss'
 import NavBar from '../Nav'
@@ -180,8 +181,6 @@ class UserAccount extends Component {
 
     const loadingScreen = loading ? <Loading theme={theme} /> : ''
     const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} currentUrl={this.state.currentUrl} />
-    const minHeightForFooter = window.innerHeight - 350
-    const footerStyle = { minHeight: `${minHeightForFooter}px`, position: 'relative', paddingBottom: '230px' }
 
     return (
       <div className="layout-row flex-100 hundred">
@@ -194,7 +193,6 @@ class UserAccount extends Component {
         </GenericError>
         <div
           className="layout-row flex layout-wrap layout-align-center-start"
-          style={footerStyle}
         >
           <GenericError theme={theme}>
             <NavBar className={`${styles.top_margin}`} />
@@ -445,7 +443,6 @@ class UserAccount extends Component {
               </GenericError>
             </div>
           </div>
-          <Footer tenant={tenant} theme={theme} bookNow={this.bookNow} />
         </div>
       </div>
     )

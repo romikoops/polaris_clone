@@ -5,7 +5,6 @@ import { Switch, Route, withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
 import { adminActions, tenantActions, remarkActions } from '../../actions'
-import Footer from '../../components/Footer/Footer'
 import { AdminDashboard, AdminServiceCharges, SuperAdmin } from '../../components/Admin'
 import AdminShipments from '../../components/Admin/AdminShipments'
 import AdminClients from '../../components/Admin/AdminClients'
@@ -71,14 +70,15 @@ class Admin extends Component {
       })
     }
     const loadingScreen = loading || documentLoading ? <Loading theme={theme} /> : ''
-    const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} currentUrl={this.state.currentUrl} tenant={tenant} />
-    const minHeightForFooter = window.innerHeight - 350
-    const footerStyle = {
-      minHeight: `${minHeightForFooter}px`,
-      position: 'relative',
-      paddingBottom: '230px'
-    }
-    const footerWidth = this.pageWindow ? this.pageWindow.offsetWidth : false
+    const menu = (
+      <FloatingMenu
+        Comp={SideNav}
+        theme={theme}
+        user={user}
+        currentUrl={this.state.currentUrl}
+        tenant={tenant}
+      />
+    )
 
     return (
       <div className="flex-100 layout-row layout-align-center-start layout-wrap hundred">
@@ -91,7 +91,6 @@ class Admin extends Component {
         </GenericError>
         <div
           className="flex layout-row layout-align-center-start layout-wrap"
-          style={footerStyle}
           ref={(ref) => { this.pageWindow = ref }}
         >
           <GenericError theme={theme}>
@@ -310,9 +309,6 @@ class Admin extends Component {
               </Switch>
             </div>
           </div>
-          <GenericError theme={theme}>
-            <Footer width={footerWidth} theme={theme} tenant={tenant} />
-          </GenericError>
         </div>
       </div>
     )

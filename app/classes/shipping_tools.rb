@@ -192,7 +192,7 @@ module ShippingTools
     # TBD - Adjust for itinerary logic
     if shipment_data[:insurance][:bool]
       @insurance_charge = Charge.create(
-        children_charge_category: ChargeCategory.from_code('insurance', @user.tenant_id),
+        children_charge_category: ChargeCategory.from_code('insurance', shipment.tenant_id),
         charge_category: ChargeCategory.grand_total,
         charge_breakdown: charge_breakdown,
         price: Price.create(currency: shipment.user.currency, value: shipment_data[:insurance][:value]),
@@ -201,7 +201,7 @@ module ShippingTools
     end
     if shipment_data[:customs][:total][:val].to_d.positive? || shipment_data[:customs][:total][:hasUnknown]
       @customs_charge = Charge.create(
-        children_charge_category: ChargeCategory.from_code('customs', @user.tenant_id),
+        children_charge_category: ChargeCategory.from_code('customs', shipment.tenant_id),
         charge_category: ChargeCategory.grand_total,
         charge_breakdown: charge_breakdown,
         price: Price.create(
@@ -212,7 +212,7 @@ module ShippingTools
       )
       if shipment_data[:customs][:import][:bool]
         @import_customs_charge = Charge.create(
-          children_charge_category: ChargeCategory.from_code('import_customs', @user.tenant_id),
+          children_charge_category: ChargeCategory.from_code('import_customs', shipment.tenant_id),
           charge_category: ChargeCategory.grand_total,
           charge_breakdown: charge_breakdown,
           price: Price.create(
@@ -224,7 +224,7 @@ module ShippingTools
       end
       if shipment_data[:customs][:export][:bool]
         @export_customs_charge = Charge.create(
-          children_charge_category: ChargeCategory.from_code('export_customs', @user.tenant_id),
+          children_charge_category: ChargeCategory.from_code('export_customs', shipment.tenant_id),
           charge_category: ChargeCategory.grand_total,
           charge_breakdown: charge_breakdown,
           price: Price.create(
@@ -239,7 +239,7 @@ module ShippingTools
     end
     if shipment_data[:addons][:customs_export_paper]
       @addons_charge = Charge.create(
-        children_charge_category: ChargeCategory.from_code('addons', @user.tenant_id),
+        children_charge_category: ChargeCategory.from_code('addons', shipment.tenant_id),
         charge_category: ChargeCategory.grand_total,
         charge_breakdown: charge_breakdown,
         price: Price.create(
@@ -249,7 +249,7 @@ module ShippingTools
         parent: charge_breakdown.charge('grand_total')
       )
       @customs_export_paper = Charge.create(
-        children_charge_category: ChargeCategory.from_code('customs_export_paper', @user.tenant_id),
+        children_charge_category: ChargeCategory.from_code('customs_export_paper', shipment.tenant_id),
         charge_category: ChargeCategory.grand_total,
         charge_breakdown: charge_breakdown,
         price: Price.create(
