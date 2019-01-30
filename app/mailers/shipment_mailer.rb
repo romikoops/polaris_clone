@@ -29,7 +29,7 @@ class ShipmentMailer < ApplicationMailer
     ).read
 
     create_pdf_attachment(@shipment)
-  
+
     attachments.inline['logo.png'] = URI.try(:open, tenant.theme['logoLarge']).try(:read)
     attachments.inline['icon.png'] = @mot_icon
     mail_options = {
@@ -49,7 +49,7 @@ class ShipmentMailer < ApplicationMailer
     @shipment = shipment
     @scope = @user.tenant.scope
 
-    base_url = Rails.env.production? ? "https://#{tenant.subdomain}.itsmycargo.com" : "http://localhost:8080"
+    base_url = Rails.env.production? ? "https://#{tenant.subdomain}.itsmycargo.com" : 'http://localhost:8080'
     @shipment_page = "#{base_url}/account/shipments/view/#{shipment.id}"
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipment.mode_of_transport}.png"
@@ -76,7 +76,7 @@ class ShipmentMailer < ApplicationMailer
     @shipment = shipment
     tenant = shipment.tenant
     @scope = tenant.scope
-    base_url = Rails.env.production? ? "https://#{tenant.subdomain}.itsmycargo.com" : "http://localhost:8080"
+    base_url = Rails.env.production? ? "https://#{tenant.subdomain}.itsmycargo.com" : 'http://localhost:8080'
     @shipment_page = "#{base_url}/account/shipments/view/#{shipment.id}"
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipment.mode_of_transport}.png"
