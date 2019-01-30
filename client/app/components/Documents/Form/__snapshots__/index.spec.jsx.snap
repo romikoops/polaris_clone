@@ -15,7 +15,7 @@ exports[`displayOnly is true 1`] = `
       <p
         className="flex-none"
       >
-        FOO_TEXT
+        TEXT
       </p>
     </div>
     <div
@@ -30,6 +30,7 @@ exports[`displayOnly is true 1`] = `
           lines={1}
           trimWhitespace={false}
         >
+          FOO_DOCUMENT_TEXT
            
         </Truncate>
       </p>
@@ -84,7 +85,7 @@ exports[`multiple is true 1`] = `
       <p
         className="flex-none"
       >
-        FOO_TEXT
+        TEXT
       </p>
     </div>
     <div
@@ -99,6 +100,7 @@ exports[`multiple is true 1`] = `
           lines={1}
           trimWhitespace={false}
         >
+          FOO_DOCUMENT_TEXT
            
         </Truncate>
       </p>
@@ -109,8 +111,8 @@ exports[`multiple is true 1`] = `
   >
     <div
       className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
-      data-for="RANDOM_KEY_2"
-      data-tip="FOO_TOOLTIP"
+      data-for="UUID_MOCK_KEY_2"
+      data-tip="TOOLTIP"
     >
       <form>
         <button
@@ -120,19 +122,23 @@ exports[`multiple is true 1`] = `
         >
           <i
             className="fa fa-upload clip"
-            style="#333"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+              }
+            }
           />
         </button>
         <ReactTooltip
           className="tooltip"
           effect="solid"
-          id="RANDOM_KEY_2"
+          id="UUID_MOCK_KEY_2"
           insecure={true}
           resizeHide={true}
           wrapper="div"
         />
         <input
-          name="FOO_TYPE"
+          name="TYPE"
           onChange={[Function]}
           type="file"
         />
@@ -175,7 +181,7 @@ exports[`shallow render 1`] = `
       <p
         className="flex-none"
       >
-        FOO_TEXT
+        TEXT
       </p>
     </div>
     <div
@@ -190,6 +196,7 @@ exports[`shallow render 1`] = `
           lines={1}
           trimWhitespace={false}
         >
+          FOO_DOCUMENT_TEXT
            
         </Truncate>
       </p>
@@ -200,8 +207,8 @@ exports[`shallow render 1`] = `
   >
     <div
       className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
-      data-for="RANDOM_KEY_0"
-      data-tip="FOO_TOOLTIP"
+      data-for="UUID_MOCK_KEY_0"
+      data-tip="TOOLTIP"
     >
       <form>
         <button
@@ -211,19 +218,23 @@ exports[`shallow render 1`] = `
         >
           <i
             className="fa fa-upload clip"
-            style="#333"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+              }
+            }
           />
         </button>
         <ReactTooltip
           className="tooltip"
           effect="solid"
-          id="RANDOM_KEY_0"
+          id="UUID_MOCK_KEY_0"
           insecure={true}
           resizeHide={true}
           wrapper="div"
         />
         <input
-          name="FOO_TYPE"
+          name="TYPE"
           onChange={[Function]}
           type="file"
         />
@@ -271,7 +282,7 @@ exports[`theme is falsy 1`] = `
       <p
         className="flex-none"
       >
-        FOO_TEXT
+        TEXT
       </p>
     </div>
     <div
@@ -286,6 +297,7 @@ exports[`theme is falsy 1`] = `
           lines={1}
           trimWhitespace={false}
         >
+          FOO_DOCUMENT_TEXT
            
         </Truncate>
       </p>
@@ -296,8 +308,8 @@ exports[`theme is falsy 1`] = `
   >
     <div
       className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
-      data-for="RANDOM_KEY_4"
-      data-tip="FOO_TOOLTIP"
+      data-for="UUID_MOCK_KEY_4"
+      data-tip="TOOLTIP"
     >
       <form>
         <button
@@ -317,13 +329,13 @@ exports[`theme is falsy 1`] = `
         <ReactTooltip
           className="tooltip"
           effect="solid"
-          id="RANDOM_KEY_4"
+          id="UUID_MOCK_KEY_4"
           insecure={true}
           resizeHide={true}
           wrapper="div"
         />
         <input
-          name="FOO_TYPE"
+          name="TYPE"
           onChange={[Function]}
           type="file"
         />
@@ -371,7 +383,7 @@ exports[`viewer is true 1`] = `
       <p
         className="flex-none"
       >
-        FOO_TEXT
+        TEXT
       </p>
     </div>
     <div
@@ -386,6 +398,7 @@ exports[`viewer is true 1`] = `
           lines={1}
           trimWhitespace={false}
         >
+          FOO_DOCUMENT_TEXT
            
         </Truncate>
       </p>
@@ -396,8 +409,8 @@ exports[`viewer is true 1`] = `
   >
     <div
       className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
-      data-for="RANDOM_KEY_3"
-      data-tip="FOO_TOOLTIP"
+      data-for="UUID_MOCK_KEY_3"
+      data-tip="TOOLTIP"
     >
       <form>
         <button
@@ -407,19 +420,23 @@ exports[`viewer is true 1`] = `
         >
           <i
             className="fa fa-upload clip"
-            style="#333"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+              }
+            }
           />
         </button>
         <ReactTooltip
           className="tooltip"
           effect="solid"
-          id="RANDOM_KEY_3"
+          id="UUID_MOCK_KEY_3"
           insecure={true}
           resizeHide={true}
           wrapper="div"
         />
         <input
-          name="FOO_TYPE"
+          name="TYPE"
           onChange={[Function]}
           type="file"
         />
@@ -441,7 +458,11 @@ exports[`viewer is true 1`] = `
     >
       <i
         className="clip fa fa-eye"
-        style="#333"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
       />
     </a>
   </div>

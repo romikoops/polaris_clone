@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { mount } from 'enzyme'
 import { omit } from 'lodash'
-import { identity, change } from '../../../mocks'
+import { identity, change } from '../../../mock'
 // eslint-disable-next-line no-named-as-default
 import PanelBox from './PanelBox'
 

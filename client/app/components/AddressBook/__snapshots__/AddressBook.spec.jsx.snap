@@ -20,7 +20,7 @@ exports[`shallow render 1`] = `
   </div>
   <div
     className="flex-50 layout-row layout-align-start-stretch ccb_contact"
-    key="RANDOM_KEY_0"
+    key="UUID_MOCK_KEY_0"
     style={
       Object {
         "padding": "15px",
@@ -28,6 +28,26 @@ exports[`shallow render 1`] = `
     }
   >
     <ContactCard
+      contactData={
+        Object {
+          "address": Object {
+            "city": "CONTACT_ADDRESS_CITY",
+            "country": "CONTACT_ADDRESS_COUNTRY",
+            "street_number": "CONTACT_ADDRESS_STREET_NUMBER",
+            "zip_code": "CONTACT_ADDRESS_ZIP_CODE",
+          },
+          "companyName": "CONTACT_COMPANY_NAME",
+          "data": Object {
+            "company_name": "CONTACT_DATA_COMPANY_NAME",
+            "email": "CONTACT_DATA_COMPANY_EMAIL",
+            "phone": "CONTACT_DATA_COMPANY_PHONE",
+          },
+          "email": "foo@bar.baz",
+          "firstName": "John",
+          "lastName": "Doe",
+          "phone": "0761452887",
+        }
+      }
       contactType=""
       theme={
         Object {

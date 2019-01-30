@@ -43,3 +43,47 @@ exports[`shallow render 1`] = `
   </div>
 </div>
 `;
+
+exports[`theme has logo 1`] = `
+<div
+  className="layout-fill layout-row layout-align-center-center loader_box"
+>
+  <div
+    className="layout-column layout-align-center-center loader"
+  >
+    <img
+      alt=""
+      className="flex-none logo"
+      src="LOGO"
+    />
+    <div
+      className="flex-none layout-row layout-align-space-between-center dot_row"
+    >
+      <div
+        className="dot1 flex-none"
+        style={
+          Object {
+            "backgroundColor": "#333",
+          }
+        }
+      />
+      <div
+        className="dot2 flex-none"
+        style={
+          Object {
+            "backgroundColor": "#333",
+          }
+        }
+      />
+      <div
+        className="dot3 flex-none"
+        style={
+          Object {
+            "backgroundColor": "#333",
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, tenant } from '../../../../mocks'
+import { theme, identity, tenant } from '../../../../mock'
 
 import AdminCurrencyCenter from '.'
 

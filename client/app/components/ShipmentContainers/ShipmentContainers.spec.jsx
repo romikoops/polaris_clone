@@ -1,43 +1,12 @@
 import * as React from 'react'
-import { shallow, mount } from 'enzyme'
-import { theme, identity } from '../../mocks'
-// eslint-disable-next-line import/first no-named-as-default
+import { shallow } from 'enzyme'
+import { theme, identity, containers } from '../../mocks'
 import ShipmentContainers from './ShipmentContainers'
-
-jest.mock('uuid', () => {
-  let counter = -1
-  const v4 = () => {
-    counter += 1
-
-    return `RANDOM_KEY_${counter}`
-  }
-
-  return { v4 }
-})
-jest.mock('../Checkbox/Checkbox', () => ({
-  // eslint-disable-next-line react/prop-types
-  Checkbox: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../NamedSelect/NamedSelect', () => ({
-  // eslint-disable-next-line react/prop-types
-  NamedSelect: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../Tooltip/Tooltip', () => ({
-  // eslint-disable-next-line react/prop-types
-  Tooltip: ({ children }) => <div>{children}</div>
-}))
-
-const baseContainer = {
-  payload_in_kg: 11,
-  tareWeight: 15,
-  quantity: 3,
-  dangerous_goods: false
-}
 
 const propsBase = {
   theme,
   addContainer: identity,
-  containers: [baseContainer],
+  containers,
   deleteItem: identity,
   handleDelta: identity,
   nextStageAttempt: false,
@@ -47,18 +16,20 @@ const propsBase = {
   toggleModal: identity
 }
 
-const createShallow = propsInput => shallow(<ShipmentContainers {...propsInput} />)
-
 test('shallow rendering', () => {
-  expect(createShallow(propsBase)).toMatchSnapshot()
+  expect(
+    shallow(<ShipmentContainers {...propsBase} />)
+  ).toMatchSnapshot()
 })
 
-test('nextStageAttempt is true', () => {
+test('theme is falsy', () => {
   const props = {
     ...propsBase,
-    nextStageAttempt: true
+    theme: null
   }
-  expect(createShallow(props)).toMatchSnapshot()
+  expect(
+    shallow(<ShipmentContainers {...props} />)
+  ).toMatchSnapshot()
 })
 
 test('scope.dangerous_goods is true', () => {
@@ -68,26 +39,18 @@ test('scope.dangerous_goods is true', () => {
       dangerous_goods: true
     }
   }
-  expect(createShallow(props)).toMatchSnapshot()
+  expect(
+    shallow(<ShipmentContainers {...props} />)
+  ).toMatchSnapshot()
 })
 
-test('containers.dangerous_goods is true', () => {
-  const props = {
-    ...propsBase,
-    containers: [{
-      ...baseContainer,
-      dangerous_goods: true
-    }]
-  }
-  expect(createShallow(props)).toMatchSnapshot()
-})
-
-test('props.addContainer is called', () => {
+test('addContainer is called', () => {
   const props = {
     ...propsBase,
     addContainer: jest.fn()
   }
-  const wrapper = createShallow(props)
+  const wrapper = shallow(<ShipmentContainers {...props} />)
+
   const clickableDiv = wrapper.find('.add_unit_wrapper > div').first()
   clickableDiv.simulate('click')
 
@@ -96,12 +59,12 @@ test('props.addContainer is called', () => {
   expect(wrapper.state().firstRenderInputs).toEqual(true)
 })
 
-test('props.deleteItem is called', () => {
+test('deleteItem is called', () => {
   const props = {
     ...propsBase,
     deleteItem: jest.fn()
   }
-  const wrapper = createShallow(props)
+  const wrapper = shallow(<ShipmentContainers {...props} />)
   const icon = wrapper.find('i').first()
 
   expect(props.deleteItem).not.toHaveBeenCalled()
@@ -109,26 +72,13 @@ test('props.deleteItem is called', () => {
   expect(props.deleteItem).toHaveBeenCalled()
 })
 
-test('firstRenderInputs fn sets the state to the boolean that it is passed', () => {
+test('firstRenderInputs is called', () => {
   const props = {
     ...propsBase,
     setFirstRenderInputs: jest.fn()
   }
-  const wrapper = createShallow(props)
+  const wrapper = shallow(<ShipmentContainers {...props} />)
 
   wrapper.instance().setFirstRenderInputs(false)
   expect(wrapper.state().firstRenderInputs).toEqual(false)
-})
-
-// not working yet
-test.skip('handleContainerQ modifies Props', () => {
-  const props = {
-    ...propsBase,
-    handleContainerQ: jest.fn()
-  }
-
-  const wrapper = createWrapper(props)
-
-  wrapper.instance().handleContainerQ(identity)
-  expect(wrapper.props().handleDelta).toEqual(identity)
 })

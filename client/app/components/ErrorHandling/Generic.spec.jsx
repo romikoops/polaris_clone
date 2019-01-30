@@ -11,3 +11,9 @@ const propsBase = {
 test('shallow render', () => {
   expect(shallow(<GenericError {...propsBase} />)).toMatchSnapshot()
 })
+
+test('state.hasError is true', () => {
+  const wrapper = shallow(<GenericError {...propsBase} />)
+  wrapper.setState({ hasError: true })
+  expect(wrapper).toMatchSnapshot()
+})

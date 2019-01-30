@@ -60,6 +60,7 @@ exports[`shallow render 1`] = `
           aria-hidden="true"
           className="fa fa-phone"
         />
+        TENANT_SUPPORT_PHONE
       </div>
       <div
         className="flex-100 layout-row social_links"
@@ -145,6 +146,8 @@ exports[`shallow render 1`] = `
 </div>
 `;
 
+exports[`tenant is falsy 1`] = `""`;
+
 exports[`theme is falsy 1`] = `
 <div
   className="flex-100 layout-row layout-wrap layout-align-center-start footer"
@@ -205,6 +208,7 @@ exports[`theme is falsy 1`] = `
           aria-hidden="true"
           className="fa fa-phone"
         />
+        TENANT_SUPPORT_PHONE
       </div>
       <div
         className="flex-100 layout-row social_links"

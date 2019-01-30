@@ -1,20 +1,17 @@
+import '../../mocks/libraries/react-redux'
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, tenant } from '../../mocks'
-// eslint-disable-next-line import/no-named-as-default
+import { theme, tenant, identity } from '../../mocks'
+
 import Footer from './Footer'
 
-jest.mock('react-redux', () => ({
-  connect: (x, y) => Component => Component
-}))
-
 const propsBase = {
-  theme,
-  tenant,
   store: {
-    getState: jest.fn(),
-    subscribe: jest.fn()
-  }
+    getState: identity,
+    subscribe: identity
+  },
+  tenant,
+  theme
 }
 
 test('shallow render', () => {
@@ -25,6 +22,14 @@ test('theme is falsy', () => {
   const props = {
     ...propsBase,
     theme: null
+  }
+  expect(shallow(<Footer {...props} />)).toMatchSnapshot()
+})
+
+test('tenant is falsy', () => {
+  const props = {
+    ...propsBase,
+    tenant: null
   }
   expect(shallow(<Footer {...props} />)).toMatchSnapshot()
 })

@@ -1,8 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`props.hubHash is falsy 1`] = `""`;
-
-exports[`props.shipment is truthy 1`] = `
+exports[`shallow render 1`] = `
 <div
   className="flex-100 layout-row layout-wrap layout-align-start-start"
 >
@@ -23,7 +21,10 @@ exports[`props.shipment is truthy 1`] = `
       shipments={
         Array [
           Object {
+            "booking_placed_at": "2018-11-01T11:14:33z",
             "cargo_count": 2,
+            "cargo_items_attributes": Array [],
+            "cargo_notes": "SHIPMENT_CARGO_NOTES",
             "cargo_units": Array [
               Object {
                 "dimension_x": 107,
@@ -32,38 +33,110 @@ exports[`props.shipment is truthy 1`] = `
                 "quantity": 2,
               },
             ],
-            "clientName": "undefined undefined",
-            "companyName": "undefined",
+            "clientName": "John Doe",
+            "companyName": "FOO_COMPANY",
+            "containers_attributes": Array [],
+            "delivery_address": "SHIPMENT_DELIVERY_ADDRESS",
+            "destination": Object {
+              "fullAddress": "SHIPMENT_DESTINATION_FULL_ADDRESS",
+            },
             "destinationHub": "",
             "destination_hub": Object {
-              "name": "FOO_DESTINATION_HUB",
+              "name": "SHIPMENT_DESTINATION_HUB",
+              "startHub": Object {
+                "address": Object {},
+              },
             },
+            "direction": "import",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
             "id": 654,
-            "imc_reference": "FOO_IMC_REFERENCE",
-            "originHub": undefined,
-            "origin_hub": Object {
-              "name": "FOO_ORIGIN_HUB",
+            "imc_reference": "SHIPMENT_IMC_REFERENCE",
+            "incoterm": "SHIPMENT_INCOTERM",
+            "incoterm_text": "SHIPMENT_INCOTERM_TEXT",
+            "load_type": "cargo_item",
+            "notes": "SHIPMENT_NOTES",
+            "origin": Object {
+              "fullAddress": "SHIPMENT_ORIGIN_FULL_ADDRESS",
             },
-            "planned_eta": "2018-12-01T12:14:08+01:00",
-            "planned_etd": "2018-11-12T12:14:08+01:00",
+            "originHub": "",
+            "origin_hub": Object {
+              "name": "SHIPMENT_ORIGIN_HUB",
+              "startHub": Object {
+                "address": Object {
+                  "city": "FOO_ADDRESS_CITY",
+                  "country": "FOO_ADDRESS_COUNTRY",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_ADDRESS_STREET",
+                  "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+                  "user": Object {
+                    "primary": true,
+                  },
+                  "zipCode": "FOO_ADDRESS_ZIP_CODE",
+                },
+              },
+            },
+            "pickup_address": "SHIPMENT_PICKUP_ADDRESS",
+            "planned_eta": "2018-12-01T18:14:33z",
+            "planned_etd": "2018-11-12T12:37:08z",
+            "planned_origin_drop_off_date": "2018-12-01T22:14:33z",
+            "planned_pickup_date": "2018-12-08T04:30:08z",
             "schedule_set": Array [
               Object {
-                "hub_route_key": "foo-bar",
+                "hub_route_key": "SHIPMENT_SCHEDULE_SET_HUB_ROUTE_KEY",
               },
             ],
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
             "selected_offer": Object {
               "cargo": Object {},
+              "customs": Object {
+                "hasUnknown": false,
+                "val": 12,
+              },
+              "insurance": Object {
+                "val": 5,
+              },
               "total": Object {
-                "value": 77,
+                "value": 87,
               },
             },
             "service_level": "standard",
-            "status": "FOO_STATUS",
+            "status": "finished",
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 150000,
+            },
             "total_price": Object {
               "currency": "USD",
-              "value": "200.99",
+              "value": 137550,
             },
-            "trucking": Object {},
+            "trucking": Object {
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 28,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+            "updated_at": "2018-11-01T18:14:33z",
           },
         ]
       }
@@ -84,55 +157,4 @@ exports[`props.shipment is truthy 1`] = `
 </div>
 `;
 
-exports[`shallow render 1`] = `
-<div
-  className="flex-100 layout-row layout-wrap layout-align-start-start"
->
-  <div
-    className="flex-100 layout-row layout-wrap layout-align-start-start"
-  >
-    <AdminSearchableShipments
-      adminDispatch={Object {}}
-      handleClick={[Function]}
-      handleShipmentAction={[Function]}
-      hubs={
-        Object {
-          "foo": "bar",
-        }
-      }
-      limit={0}
-      seeAll={false}
-      shipments={Array []}
-      theme={
-        Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
-        }
-      }
-      title="FOO_TITLE Shipments"
-      tooltip="Shipments requested from the open or client shop. Investigate the shipment data and evaluate whether to accept, edit or decline the shipment"
-      userView={true}
-    />
-    <div
-      className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center"
-    >
-      <div
-        className="flex-100 layout-row layout-align-space-between-center sec_subheader"
-      >
-        <p
-          className=" sec_subheader_text flex-none"
-        >
-          No Shipments yet
-        </p>
-      </div>
-      <p
-        className="flex-none"
-      >
-        As shipments are requested, they will appear here
-      </p>
-    </div>
-  </div>
-</div>
-`;
+exports[`shipments is falsy 1`] = `""`;

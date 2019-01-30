@@ -1,7 +1,8 @@
+import '../../mocks/libraries/react-redux'
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme, user, tenant } from '../../mocks'
-// eslint-disable-next-line import/no-named-as-default
+
 import InsuranceDetails from './InsuranceDetails'
 
 const propsBase = {
@@ -12,4 +13,12 @@ const propsBase = {
 
 test('shallow render', () => {
   expect(shallow(<InsuranceDetails {...propsBase} />)).toMatchSnapshot()
+})
+
+test('tenant is falsy', () => {
+  const props = {
+    ...propsBase,
+    tenant: null
+  }
+  expect(shallow(<InsuranceDetails {...props} />)).toMatchSnapshot()
 })

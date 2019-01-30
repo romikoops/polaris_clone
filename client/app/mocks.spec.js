@@ -1,4 +1,4 @@
-import { change } from './mocks'
+import { change } from './mock'
 
 const origin = {
   a: 0,

@@ -3,8 +3,8 @@
 exports[`shallow render 1`] = `
 <div
   className="flex-none layout-row upload_btn_wrapper "
-  data-for="RANDOM_KEY_0"
-  data-tip="FOO_TOOLTIP"
+  data-for="UUID_MOCK_KEY_0"
+  data-tip="TOOLTIP"
 >
   <form
     className=""
@@ -34,13 +34,13 @@ exports[`shallow render 1`] = `
     <ReactTooltip
       className="tooltip"
       effect="solid"
-      id="RANDOM_KEY_0"
+      id="UUID_MOCK_KEY_0"
       insecure={true}
       resizeHide={true}
       wrapper="div"
     />
     <input
-      name="FOO_TYPE"
+      name="TYPE"
       onChange={[Function]}
       type="file"
     />
@@ -51,8 +51,8 @@ exports[`shallow render 1`] = `
 exports[`square is true 1`] = `
 <div
   className="flex-none layout-row upload_btn_wrapper "
-  data-for="RANDOM_KEY_1"
-  data-tip="FOO_TOOLTIP"
+  data-for="UUID_MOCK_KEY_1"
+  data-tip="TOOLTIP"
 >
   <form
     className=""
@@ -81,13 +81,13 @@ exports[`square is true 1`] = `
     <ReactTooltip
       className="tooltip"
       effect="solid"
-      id="RANDOM_KEY_1"
+      id="UUID_MOCK_KEY_1"
       insecure={true}
       resizeHide={true}
       wrapper="div"
     />
     <input
-      name="FOO_TYPE"
+      name="TYPE"
       onChange={[Function]}
       type="file"
     />
@@ -98,8 +98,8 @@ exports[`square is true 1`] = `
 exports[`state.error is true 1`] = `
 <div
   className="flex-none layout-row upload_btn_wrapper "
-  data-for="RANDOM_KEY_3"
-  data-tip="FOO_TOOLTIP"
+  data-for="UUID_MOCK_KEY_3"
+  data-tip="TOOLTIP"
 >
   <form
     className=""
@@ -129,13 +129,13 @@ exports[`state.error is true 1`] = `
     <ReactTooltip
       className="tooltip"
       effect="solid"
-      id="RANDOM_KEY_3"
+      id="UUID_MOCK_KEY_3"
       insecure={true}
       resizeHide={true}
       wrapper="div"
     />
     <input
-      name="FOO_TYPE"
+      name="TYPE"
       onChange={[Function]}
       type="file"
     />

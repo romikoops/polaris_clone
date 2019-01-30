@@ -1,5 +1,105 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`documents contains empty object 1`] = `
+<div
+  className="form flex-100 layout-row layout-align-none-center layout-wrap"
+  style={
+    Object {
+      "height": "70px",
+    }
+  }
+>
+  <div
+    className="form_label flex-40 layout-row layout-align-start-center"
+  >
+    <p
+      className="flex-none"
+    >
+      TEXT
+    </p>
+  </div>
+  <div
+    className="flex-60 layout-row layout-align-center-center layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <p
+        className="flex"
+      >
+        <Truncate
+          ellipsis="…"
+          lines={1}
+          trimWhitespace={false}
+        >
+           
+        </Truncate>
+      </p>
+      <div
+        className="icon_btn flex-none layout-row layout-align-center-center"
+        onClick={[Function]}
+      >
+        <i
+          className="fa fa-trash pointy"
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <p
+        className="flex"
+      >
+        Upload another file
+      </p>
+      <div
+        className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
+        data-for="UUID_MOCK_KEY_3"
+        data-tip="TOOLTIP"
+      >
+        <form>
+          <button
+            className="icon_btn flex-none layout-row layout-align-center-center"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-upload clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+            />
+          </button>
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="UUID_MOCK_KEY_3"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <input
+            name="TYPE"
+            onChange={[Function]}
+            type="file"
+          />
+        </form>
+      </div>
+    </div>
+  </div>
+  <div
+    className="file_error  flex-100 layout-row layout-align-center"
+  >
+    <p
+      className="flex-100"
+    >
+      Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed
+    </p>
+  </div>
+</div>
+`;
+
 exports[`documents is falsy 1`] = `
 <div
   className="form flex-100 layout-row layout-align-none-center layout-wrap"
@@ -15,7 +115,7 @@ exports[`documents is falsy 1`] = `
     <p
       className="flex-none"
     >
-      FOO_TEXT
+      TEXT
     </p>
   </div>
   <div
@@ -31,8 +131,8 @@ exports[`documents is falsy 1`] = `
       </p>
       <div
         className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
-        data-for="RANDOM_KEY_2"
-        data-tip="FOO_TOOLTIP"
+        data-for="UUID_MOCK_KEY_2"
+        data-tip="TOOLTIP"
       >
         <form>
           <button
@@ -41,19 +141,23 @@ exports[`documents is falsy 1`] = `
           >
             <i
               className="fa fa-upload clip"
-              style="#333"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
             />
           </button>
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_2"
+            id="UUID_MOCK_KEY_2"
             insecure={true}
             resizeHide={true}
             wrapper="div"
           />
           <input
-            name="FOO_TYPE"
+            name="TYPE"
             onChange={[Function]}
             type="file"
           />
@@ -78,7 +182,7 @@ exports[`shallow render 1`] = `
   className="form flex-100 layout-row layout-align-none-center layout-wrap"
   style={
     Object {
-      "height": "140px",
+      "height": "105px",
     }
   }
 >
@@ -88,7 +192,7 @@ exports[`shallow render 1`] = `
     <p
       className="flex-none"
     >
-      FOO_TEXT
+      TEXT
     </p>
   </div>
   <div
@@ -106,6 +210,7 @@ exports[`shallow render 1`] = `
           lines={1}
           trimWhitespace={false}
         >
+          FOO_DOCUMENT_TEXT
            
         </Truncate>
       </p>
@@ -130,29 +235,7 @@ exports[`shallow render 1`] = `
           lines={1}
           trimWhitespace={false}
         >
-           
-        </Truncate>
-      </p>
-      <div
-        className="icon_btn flex-none layout-row layout-align-center-center"
-        onClick={[Function]}
-      >
-        <i
-          className="fa fa-trash pointy"
-        />
-      </div>
-    </div>
-    <div
-      className="flex-100 layout-row layout-align-start-center"
-    >
-      <p
-        className="flex"
-      >
-        <Truncate
-          ellipsis="…"
-          lines={1}
-          trimWhitespace={false}
-        >
+          BAR_DOCUMENT_TEXT
            
         </Truncate>
       </p>
@@ -175,8 +258,8 @@ exports[`shallow render 1`] = `
       </p>
       <div
         className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
-        data-for="RANDOM_KEY_0"
-        data-tip="FOO_TOOLTIP"
+        data-for="UUID_MOCK_KEY_0"
+        data-tip="TOOLTIP"
       >
         <form>
           <button
@@ -185,19 +268,23 @@ exports[`shallow render 1`] = `
           >
             <i
               className="fa fa-upload clip"
-              style="#333"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
             />
           </button>
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_0"
+            id="UUID_MOCK_KEY_0"
             insecure={true}
             resizeHide={true}
             wrapper="div"
           />
           <input
-            name="FOO_TYPE"
+            name="TYPE"
             onChange={[Function]}
             type="file"
           />
@@ -217,12 +304,12 @@ exports[`shallow render 1`] = `
 </div>
 `;
 
-exports[`theme is falsy 1`] = `
+exports[`state.error is true 1`] = `
 <div
   className="form flex-100 layout-row layout-align-none-center layout-wrap"
   style={
     Object {
-      "height": "140px",
+      "height": "105px",
     }
   }
 >
@@ -232,7 +319,7 @@ exports[`theme is falsy 1`] = `
     <p
       className="flex-none"
     >
-      FOO_TEXT
+      TEXT
     </p>
   </div>
   <div
@@ -250,6 +337,7 @@ exports[`theme is falsy 1`] = `
           lines={1}
           trimWhitespace={false}
         >
+          FOO_DOCUMENT_TEXT
            
         </Truncate>
       </p>
@@ -274,29 +362,7 @@ exports[`theme is falsy 1`] = `
           lines={1}
           trimWhitespace={false}
         >
-           
-        </Truncate>
-      </p>
-      <div
-        className="icon_btn flex-none layout-row layout-align-center-center"
-        onClick={[Function]}
-      >
-        <i
-          className="fa fa-trash pointy"
-        />
-      </div>
-    </div>
-    <div
-      className="flex-100 layout-row layout-align-start-center"
-    >
-      <p
-        className="flex"
-      >
-        <Truncate
-          ellipsis="…"
-          lines={1}
-          trimWhitespace={false}
-        >
+          BAR_DOCUMENT_TEXT
            
         </Truncate>
       </p>
@@ -319,8 +385,135 @@ exports[`theme is falsy 1`] = `
       </p>
       <div
         className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
-        data-for="RANDOM_KEY_1"
-        data-tip="FOO_TOOLTIP"
+        data-for="UUID_MOCK_KEY_5"
+        data-tip="TOOLTIP"
+      >
+        <form>
+          <button
+            className="icon_btn flex-none layout-row layout-align-center-center"
+            onClick={[Function]}
+          >
+            <i
+              className="fa fa-upload clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+            />
+          </button>
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="UUID_MOCK_KEY_5"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <input
+            name="TYPE"
+            onChange={[Function]}
+            type="file"
+          />
+        </form>
+      </div>
+    </div>
+  </div>
+  <div
+    className="file_error error flex-100 layout-row layout-align-center"
+  >
+    <p
+      className="flex-100"
+    >
+      Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed
+    </p>
+  </div>
+</div>
+`;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="form flex-100 layout-row layout-align-none-center layout-wrap"
+  style={
+    Object {
+      "height": "105px",
+    }
+  }
+>
+  <div
+    className="form_label flex-40 layout-row layout-align-start-center"
+  >
+    <p
+      className="flex-none"
+    >
+      TEXT
+    </p>
+  </div>
+  <div
+    className="flex-60 layout-row layout-align-center-center layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <p
+        className="flex pointy"
+        onClick={[Function]}
+      >
+        <Truncate
+          ellipsis="…"
+          lines={1}
+          trimWhitespace={false}
+        >
+          FOO_DOCUMENT_TEXT
+           
+        </Truncate>
+      </p>
+      <div
+        className="icon_btn flex-none layout-row layout-align-center-center"
+        onClick={[Function]}
+      >
+        <i
+          className="fa fa-trash pointy"
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <p
+        className="flex pointy"
+        onClick={[Function]}
+      >
+        <Truncate
+          ellipsis="…"
+          lines={1}
+          trimWhitespace={false}
+        >
+          BAR_DOCUMENT_TEXT
+           
+        </Truncate>
+      </p>
+      <div
+        className="icon_btn flex-none layout-row layout-align-center-center"
+        onClick={[Function]}
+      >
+        <i
+          className="fa fa-trash pointy"
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <p
+        className="flex"
+      >
+        Upload another file
+      </p>
+      <div
+        className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
+        data-for="UUID_MOCK_KEY_1"
+        data-tip="TOOLTIP"
       >
         <form>
           <button
@@ -339,13 +532,13 @@ exports[`theme is falsy 1`] = `
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_1"
+            id="UUID_MOCK_KEY_1"
             insecure={true}
             resizeHide={true}
             wrapper="div"
           />
           <input
-            name="FOO_TYPE"
+            name="TYPE"
             onChange={[Function]}
             type="file"
           />

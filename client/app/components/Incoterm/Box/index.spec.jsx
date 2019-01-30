@@ -2,11 +2,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme, identity, shipment } from '../../../mocks'
 
-jest.mock('../../../helpers', () => ({
-  gradientTextGenerator: x => x
-}))
-// eslint-disable-next-line
-import IncotermBox from './'
+import IncotermBox from '.'
 
 const propsBase = {
   theme,
@@ -14,13 +10,13 @@ const propsBase = {
   preCarriage: false,
   shipment,
   tenantScope: { incoterm_info_level: 'simple' },
-  incoterm: 'FOO_INCOTERM',
+  incoterm: 'INCOTERM',
   setIncoterm: identity,
   errorStyles: {},
   showIncotermError: false,
   nextStageAttempt: false,
   value: false,
-  direction: 'FOO_DIRECTION'
+  direction: 'export'
 }
 
 test('incoterm_info_level is simple', () => {
@@ -51,6 +47,39 @@ test('incoterm_info_level render is full', () => {
     tenantScope: {
       incoterm_info_level: 'full'
     }
+  }
+  expect(shallow(<IncotermBox {...props} />)).toMatchSnapshot()
+})
+
+test('tenantScope is empty object', () => {
+  const props = {
+    ...propsBase,
+    tenantScope: {}
+  }
+  expect(shallow(<IncotermBox {...props} />)).toMatchSnapshot()
+})
+
+test('preCarriage is true', () => {
+  const props = {
+    ...propsBase,
+    preCarriage: true
+  }
+  expect(shallow(<IncotermBox {...props} />)).toMatchSnapshot()
+})
+
+test('onCarriage is true', () => {
+  const props = {
+    ...propsBase,
+    onCarriage: true
+  }
+  expect(shallow(<IncotermBox {...props} />)).toMatchSnapshot()
+})
+
+test('preCarriage&&onCarriage is true', () => {
+  const props = {
+    ...propsBase,
+    onCarriage: true,
+    preCarriage: true
   }
   expect(shallow(<IncotermBox {...props} />)).toMatchSnapshot()
 })

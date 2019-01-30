@@ -43,22 +43,35 @@ exports[`shallow rendering 1`] = `
           <div
             className="flex-15 layout-row layout-align-center"
           >
-            <[object Object]
+            <QuantityInput
               cargoItem={
                 Object {
+                  "cargo_item_type_id": "foo",
+                  "chargeable_weight": 250,
                   "dangerous_goods": false,
-                  "description": "FOO",
-                  "dimension_x": 13,
-                  "dimension_y": 24,
-                  "dimension_z": 13,
-                  "key": 5,
-                  "quantity": 2,
+                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 10,
+                  "dimension_y": 60,
+                  "dimension_z": 40,
+                  "gross_weight": 76,
+                  "hs_codes": Array [
+                    4,
+                  ],
+                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                  "id": 1,
+                  "key": "FOO_CARGO_ITEM_KEY",
+                  "payload_in_kg": 200,
+                  "quantity": 5,
+                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
                   "stackable": false,
+                  "tare_weight": 20,
+                  "weight": 220,
                 }
               }
               handleDelta={[Function]}
               i={0}
               nextStageAttempt={false}
+              t={[Function]}
             />
           </div>
           <div
@@ -96,7 +109,7 @@ exports[`shallow rendering 1`] = `
                     <img
                       alt="length"
                       border="0"
-                      data-for="RANDOM_KEY_0"
+                      data-for="UUID_MOCK_KEY_0"
                       data-tip="Length"
                     />
                     <ValidatedInput
@@ -139,7 +152,7 @@ exports[`shallow rendering 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value={13}
+                      value={10}
                       wrapperClassName="flex-60"
                     />
                     <div
@@ -166,7 +179,7 @@ exports[`shallow rendering 1`] = `
                     <img
                       alt="width"
                       border="0"
-                      data-for="RANDOM_KEY_0"
+                      data-for="UUID_MOCK_KEY_0"
                       data-tip="Width"
                     />
                     <ValidatedInput
@@ -209,7 +222,7 @@ exports[`shallow rendering 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value={24}
+                      value={60}
                       wrapperClassName="flex-60"
                     />
                     <div
@@ -236,7 +249,7 @@ exports[`shallow rendering 1`] = `
                     <img
                       alt="height"
                       border="0"
-                      data-for="RANDOM_KEY_0"
+                      data-for="UUID_MOCK_KEY_0"
                       data-tip="Height"
                     />
                     <ValidatedInput
@@ -279,7 +292,7 @@ exports[`shallow rendering 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value={13}
+                      value={40}
                       wrapperClassName="flex-60"
                     />
                     <div
@@ -304,7 +317,7 @@ exports[`shallow rendering 1`] = `
                     <img
                       alt="weight"
                       border="0"
-                      data-for="RANDOM_KEY_0"
+                      data-for="UUID_MOCK_KEY_0"
                       data-tip="Gross Weight"
                     />
                     <Tooltip
@@ -352,7 +365,7 @@ exports[`shallow rendering 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value=""
+                      value={200}
                       wrapperClassName="flex-90"
                     />
                     <div
@@ -519,7 +532,7 @@ exports[`shallow rendering 1`] = `
                         <span
                           className="input_value"
                         >
-                          0.008
+                          0.120
                            m
                           <sup
                             style={
@@ -552,6 +565,590 @@ exports[`shallow rendering 1`] = `
                         <span
                           className="input_value"
                         >
+                          1,000.0
+                           kg
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-100 layout-row layout-wrap"
+                >
+                  <div
+                    className="chargeable_weight layout-row flex-100 layout-wrap layout-align-start-center"
+                  >
+                    <div
+                      className="layout-row flex-none layout-wrap layout-align-end-center"
+                    >
+                      <p
+                        className="subchargeable flex-none"
+                      >
+                        Chargeable Weight | Volume:
+                      </p>
+                    </div>
+                    <div
+                      className="chargeable_weight_values flex layout-row layout-align-start-center"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="layout-row flex-100 layout-wrap layout-align-stretch"
+        key="1-cargoItem"
+        name="1-cargoItem"
+        style={
+          Object {
+            "margin": "30px 0",
+            "position": "relative",
+          }
+        }
+      >
+        <div
+          className="flex-100 layout-align-start-center layout-row cargo_unit_header"
+        >
+          <h3>
+            Cargo Group {{index}}
+          </h3>
+          <div
+            className="delete_icon"
+            onClick={[Function]}
+          >
+            Delete
+            <i
+              className="fa fa-trash"
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap cargo_unit_inputs"
+        >
+          <div
+            className="flex-15 layout-row layout-align-center"
+          >
+            <QuantityInput
+              cargoItem={
+                Object {
+                  "cargo_item_type_id": "bar",
+                  "chargeable_weight": 150,
+                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 100,
+                  "dimension_y": 50,
+                  "dimension_z": 70,
+                  "hs_codes": Array [],
+                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+                  "id": 2,
+                  "key": "BAR_CARGO_ITEM_KEY",
+                  "payload_in_kg": 100,
+                  "quantity": 7,
+                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 17,
+                  "weight": 140,
+                }
+              }
+              handleDelta={[Function]}
+              i={1}
+              nextStageAttempt={false}
+              t={[Function]}
+            />
+          </div>
+          <div
+            className="cargo_item_box cargo_item_inputs flex-85"
+          >
+            <div
+              style={
+                Object {
+                  "position": "relative",
+                }
+              }
+            >
+              <div
+                className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
+                style={
+                  Object {
+                    "marginBottom": "20px",
+                  }
+                }
+              >
+                <div
+                  className="layout-row flex-20 layout-wrap layout-align-start-center input_length"
+                >
+                  <h4>
+                    Length
+                  </h4>
+                  <div
+                    className="flex-90 layout-row input_box"
+                    data-event="disable"
+                    data-tip=""
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <img
+                      alt="length"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_1"
+                      data-tip="Length"
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      min="0"
+                      name="1-dimension_x"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      step="any"
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum length is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={100}
+                      wrapperClassName="flex-60"
+                    />
+                    <div
+                      className="flex-25 layout-row layout-align-center-center"
+                    >
+                      cm
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex-20 layout-wrap layout-align-start-center input_width"
+                >
+                  <h4>
+                    Width
+                  </h4>
+                  <div
+                    className="flex-90 layout-row input_box"
+                    data-event="disable"
+                    data-tip=""
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <img
+                      alt="width"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_1"
+                      data-tip="Width"
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      min="0"
+                      name="1-dimension_y"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      step="any"
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum width is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={50}
+                      wrapperClassName="flex-60"
+                    />
+                    <div
+                      className="flex-25 layout-row layout-align-center-center"
+                    >
+                      cm
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex-20 layout-wrap layout-align-start-center input_height"
+                >
+                  <h4>
+                    Height
+                  </h4>
+                  <div
+                    className="flex-90 layout-row input_box"
+                    data-event="disable"
+                    data-tip=""
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <img
+                      alt="height"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_1"
+                      data-tip="Height"
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      min="0"
+                      name="1-dimension_z"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      step="any"
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum height is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={70}
+                      wrapperClassName="flex-60"
+                    />
+                    <div
+                      className="flex-25 layout-row layout-align-center-center"
+                    >
+                      cm
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-5"
+                />
+                <div
+                  className="layout-row flex-30 layout-wrap layout-align-start-center input_weight"
+                >
+                  <h4>
+                    Gross Weight per item
+                  </h4>
+                  <div
+                    className="flex-60 layout-row input_box"
+                  >
+                    <img
+                      alt="weight"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_1"
+                      data-tip="Gross Weight"
+                    />
+                    <Tooltip
+                      color="#333"
+                      icon="fa-info-circle"
+                      text="payload_in_kg"
+                      theme={Object {}}
+                      toolText=""
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      name="1-payload_in_kg"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum weight is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={100}
+                      wrapperClassName="flex-90"
+                    />
+                    <div
+                      className="flex-20 layout-row layout-align-center-center"
+                    >
+                      kg
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                className="flex-100 layout-row"
+              />
+              <div
+                className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
+                style={
+                  Object {
+                    "margin": "20px 0",
+                  }
+                }
+              >
+                <div
+                  className="layout-row flex-40 layout-wrap layout-align-start-center colli_type"
+                >
+                  <div
+                    style={
+                      Object {
+                        "width": "95%",
+                      }
+                    }
+                  >
+                    <NamedSelect
+                      className="select_100"
+                      inputProps={
+                        Object {
+                          "name": "1-colliType",
+                        }
+                      }
+                      name="1-colliType"
+                      onChange={[Function]}
+                      options={
+                        Array [
+                          Object {
+                            "description": "BAR",
+                            "dimension_x": 5,
+                            "dimension_y": 6,
+                            "key": 7,
+                          },
+                        ]
+                      }
+                      placeholder="Select your colli type"
+                      showErrors={false}
+                    />
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex layout-wrap layout-align-end-center cargo_unit_check"
+                  onClick={[Function]}
+                >
+                  <Checkbox
+                    checked={true}
+                    className=""
+                    disabled={true}
+                    id="1-stackable"
+                    name="1-stackable"
+                    onChange={[Function]}
+                    onClick={null}
+                    size="15px"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <div
+                    className="layout-row flex-65 layout-wrap layout-align-start-center"
+                  >
+                    <label
+                      className="input_check flex-none pointy"
+                      htmlFor="1-stackable"
+                    >
+                      <p>
+                        Non Stackable
+                      </p>
+                    </label>
+                    <Tooltip
+                      color="#333"
+                      icon="fa-info-circle"
+                      text="non_stackable"
+                      theme={Object {}}
+                      toolText=""
+                    />
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex layout-wrap layout-align-start-center cargo_unit_check"
+                  onClick={[Function]}
+                >
+                  <Checkbox
+                    checked={false}
+                    className=""
+                    disabled={true}
+                    id="1-dangerous_goods"
+                    name="1-dangerous_goods"
+                    onChange={[Function]}
+                    onClick={null}
+                    size="15px"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <div
+                    className="layout-row flex-75 layout-wrap layout-align-start-center"
+                  >
+                    <label
+                      className="input_check flex-none pointy"
+                      htmlFor="1-dangerous_goods"
+                    >
+                      <p>
+                        Dangerous Goods
+                      </p>
+                    </label>
+                    <Tooltip
+                      color="#333"
+                      icon="fa-info-circle"
+                      text="dangerous_goods"
+                      theme={Object {}}
+                      toolText=""
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="cargo_item_info expanded flex-100"
+            >
+              <div
+                className="inner_cargo_item_info layout-row flex-100 layout-wrap layout-align-start"
+              >
+                <div
+                  className="flex-100 layout-row layout-wrap"
+                >
+                  <div
+                    className="flex-45 layout-wrap layout-row"
+                  >
+                    <div
+                      className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
+                    >
+                      <p
+                        className="input_label flex-none"
+                      >
+                        Total
+                         
+                        Volume
+                        :  
+                        <span
+                          className="input_value"
+                        >
+                          2.450
+                           m
+                          <sup
+                            style={
+                              Object {
+                                "fontSize": "10px",
+                                "height": "17px",
+                                "marginLeft": "1px",
+                              }
+                            }
+                          >
+                            3
+                          </sup>
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="padding_left flex-45 layout-wrap layout-row"
+                  >
+                    <div
+                      className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
+                    >
+                      <p
+                        className="input_label flex-none"
+                      >
+                        Total
+                         
+                        NO_TRANSLATION | key "common:weight"
+                        :  
+                        <span
+                          className="input_value"
+                        >
+                          700.0
                            kg
                         </span>
                       </p>
@@ -691,22 +1288,35 @@ exports[`shallow rendering both chargeable value 1`] = `
           <div
             className="flex-15 layout-row layout-align-center"
           >
-            <[object Object]
+            <QuantityInput
               cargoItem={
                 Object {
+                  "cargo_item_type_id": "foo",
+                  "chargeable_weight": 250,
                   "dangerous_goods": false,
-                  "description": "FOO",
-                  "dimension_x": 13,
-                  "dimension_y": 24,
-                  "dimension_z": 13,
-                  "key": 5,
-                  "quantity": 2,
+                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 10,
+                  "dimension_y": 60,
+                  "dimension_z": 40,
+                  "gross_weight": 76,
+                  "hs_codes": Array [
+                    4,
+                  ],
+                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                  "id": 1,
+                  "key": "FOO_CARGO_ITEM_KEY",
+                  "payload_in_kg": 200,
+                  "quantity": 5,
+                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
                   "stackable": false,
+                  "tare_weight": 20,
+                  "weight": 220,
                 }
               }
               handleDelta={[Function]}
               i={0}
               nextStageAttempt={false}
+              t={[Function]}
             />
           </div>
           <div
@@ -744,7 +1354,7 @@ exports[`shallow rendering both chargeable value 1`] = `
                     <img
                       alt="length"
                       border="0"
-                      data-for="RANDOM_KEY_4"
+                      data-for="UUID_MOCK_KEY_8"
                       data-tip="Length"
                     />
                     <ValidatedInput
@@ -787,7 +1397,7 @@ exports[`shallow rendering both chargeable value 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value={13}
+                      value={10}
                       wrapperClassName="flex-60"
                     />
                     <div
@@ -814,7 +1424,7 @@ exports[`shallow rendering both chargeable value 1`] = `
                     <img
                       alt="width"
                       border="0"
-                      data-for="RANDOM_KEY_4"
+                      data-for="UUID_MOCK_KEY_8"
                       data-tip="Width"
                     />
                     <ValidatedInput
@@ -857,7 +1467,7 @@ exports[`shallow rendering both chargeable value 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value={24}
+                      value={60}
                       wrapperClassName="flex-60"
                     />
                     <div
@@ -884,7 +1494,7 @@ exports[`shallow rendering both chargeable value 1`] = `
                     <img
                       alt="height"
                       border="0"
-                      data-for="RANDOM_KEY_4"
+                      data-for="UUID_MOCK_KEY_8"
                       data-tip="Height"
                     />
                     <ValidatedInput
@@ -927,7 +1537,7 @@ exports[`shallow rendering both chargeable value 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value={13}
+                      value={40}
                       wrapperClassName="flex-60"
                     />
                     <div
@@ -952,7 +1562,7 @@ exports[`shallow rendering both chargeable value 1`] = `
                     <img
                       alt="weight"
                       border="0"
-                      data-for="RANDOM_KEY_4"
+                      data-for="UUID_MOCK_KEY_8"
                       data-tip="Gross Weight"
                     />
                     <Tooltip
@@ -1000,7 +1610,7 @@ exports[`shallow rendering both chargeable value 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value=""
+                      value={200}
                       wrapperClassName="flex-90"
                     />
                     <div
@@ -1167,7 +1777,7 @@ exports[`shallow rendering both chargeable value 1`] = `
                         <span
                           className="input_value"
                         >
-                          0.008
+                          0.120
                            m
                           <sup
                             style={
@@ -1200,6 +1810,590 @@ exports[`shallow rendering both chargeable value 1`] = `
                         <span
                           className="input_value"
                         >
+                          1,000.0
+                           kg
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-100 layout-row layout-wrap"
+                >
+                  <div
+                    className="chargeable_weight layout-row flex-100 layout-wrap layout-align-start-center"
+                  >
+                    <div
+                      className="layout-row flex-none layout-wrap layout-align-end-center"
+                    >
+                      <p
+                        className="subchargeable flex-none"
+                      >
+                        Chargeable Weight | Volume:
+                      </p>
+                    </div>
+                    <div
+                      className="chargeable_weight_values flex layout-row layout-align-start-center"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="layout-row flex-100 layout-wrap layout-align-stretch"
+        key="1-cargoItem"
+        name="1-cargoItem"
+        style={
+          Object {
+            "margin": "30px 0",
+            "position": "relative",
+          }
+        }
+      >
+        <div
+          className="flex-100 layout-align-start-center layout-row cargo_unit_header"
+        >
+          <h3>
+            Cargo Group {{index}}
+          </h3>
+          <div
+            className="delete_icon"
+            onClick={[Function]}
+          >
+            Delete
+            <i
+              className="fa fa-trash"
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap cargo_unit_inputs"
+        >
+          <div
+            className="flex-15 layout-row layout-align-center"
+          >
+            <QuantityInput
+              cargoItem={
+                Object {
+                  "cargo_item_type_id": "bar",
+                  "chargeable_weight": 150,
+                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 100,
+                  "dimension_y": 50,
+                  "dimension_z": 70,
+                  "hs_codes": Array [],
+                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+                  "id": 2,
+                  "key": "BAR_CARGO_ITEM_KEY",
+                  "payload_in_kg": 100,
+                  "quantity": 7,
+                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 17,
+                  "weight": 140,
+                }
+              }
+              handleDelta={[Function]}
+              i={1}
+              nextStageAttempt={false}
+              t={[Function]}
+            />
+          </div>
+          <div
+            className="cargo_item_box cargo_item_inputs flex-85"
+          >
+            <div
+              style={
+                Object {
+                  "position": "relative",
+                }
+              }
+            >
+              <div
+                className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
+                style={
+                  Object {
+                    "marginBottom": "20px",
+                  }
+                }
+              >
+                <div
+                  className="layout-row flex-20 layout-wrap layout-align-start-center input_length"
+                >
+                  <h4>
+                    Length
+                  </h4>
+                  <div
+                    className="flex-90 layout-row input_box"
+                    data-event="disable"
+                    data-tip=""
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <img
+                      alt="length"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_9"
+                      data-tip="Length"
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      min="0"
+                      name="1-dimension_x"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      step="any"
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum length is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={100}
+                      wrapperClassName="flex-60"
+                    />
+                    <div
+                      className="flex-25 layout-row layout-align-center-center"
+                    >
+                      cm
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex-20 layout-wrap layout-align-start-center input_width"
+                >
+                  <h4>
+                    Width
+                  </h4>
+                  <div
+                    className="flex-90 layout-row input_box"
+                    data-event="disable"
+                    data-tip=""
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <img
+                      alt="width"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_9"
+                      data-tip="Width"
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      min="0"
+                      name="1-dimension_y"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      step="any"
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum width is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={50}
+                      wrapperClassName="flex-60"
+                    />
+                    <div
+                      className="flex-25 layout-row layout-align-center-center"
+                    >
+                      cm
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex-20 layout-wrap layout-align-start-center input_height"
+                >
+                  <h4>
+                    Height
+                  </h4>
+                  <div
+                    className="flex-90 layout-row input_box"
+                    data-event="disable"
+                    data-tip=""
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <img
+                      alt="height"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_9"
+                      data-tip="Height"
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      min="0"
+                      name="1-dimension_z"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      step="any"
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum height is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={70}
+                      wrapperClassName="flex-60"
+                    />
+                    <div
+                      className="flex-25 layout-row layout-align-center-center"
+                    >
+                      cm
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-5"
+                />
+                <div
+                  className="layout-row flex-30 layout-wrap layout-align-start-center input_weight"
+                >
+                  <h4>
+                    Gross Weight per item
+                  </h4>
+                  <div
+                    className="flex-60 layout-row input_box"
+                  >
+                    <img
+                      alt="weight"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_9"
+                      data-tip="Gross Weight"
+                    />
+                    <Tooltip
+                      color="#333"
+                      icon="fa-info-circle"
+                      text="payload_in_kg"
+                      theme={Object {}}
+                      toolText=""
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      name="1-payload_in_kg"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum weight is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={100}
+                      wrapperClassName="flex-90"
+                    />
+                    <div
+                      className="flex-20 layout-row layout-align-center-center"
+                    >
+                      kg
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                className="flex-100 layout-row"
+              />
+              <div
+                className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
+                style={
+                  Object {
+                    "margin": "20px 0",
+                  }
+                }
+              >
+                <div
+                  className="layout-row flex-40 layout-wrap layout-align-start-center colli_type"
+                >
+                  <div
+                    style={
+                      Object {
+                        "width": "95%",
+                      }
+                    }
+                  >
+                    <NamedSelect
+                      className="select_100"
+                      inputProps={
+                        Object {
+                          "name": "1-colliType",
+                        }
+                      }
+                      name="1-colliType"
+                      onChange={[Function]}
+                      options={
+                        Array [
+                          Object {
+                            "description": "BAR",
+                            "dimension_x": 5,
+                            "dimension_y": 6,
+                            "key": 7,
+                          },
+                        ]
+                      }
+                      placeholder="Select your colli type"
+                      showErrors={false}
+                    />
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex layout-wrap layout-align-end-center cargo_unit_check"
+                  onClick={[Function]}
+                >
+                  <Checkbox
+                    checked={true}
+                    className=""
+                    disabled={true}
+                    id="1-stackable"
+                    name="1-stackable"
+                    onChange={[Function]}
+                    onClick={null}
+                    size="15px"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <div
+                    className="layout-row flex-65 layout-wrap layout-align-start-center"
+                  >
+                    <label
+                      className="input_check flex-none pointy"
+                      htmlFor="1-stackable"
+                    >
+                      <p>
+                        Non Stackable
+                      </p>
+                    </label>
+                    <Tooltip
+                      color="#333"
+                      icon="fa-info-circle"
+                      text="non_stackable"
+                      theme={Object {}}
+                      toolText=""
+                    />
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex layout-wrap layout-align-start-center cargo_unit_check"
+                  onClick={[Function]}
+                >
+                  <Checkbox
+                    checked={false}
+                    className=""
+                    disabled={true}
+                    id="1-dangerous_goods"
+                    name="1-dangerous_goods"
+                    onChange={[Function]}
+                    onClick={null}
+                    size="15px"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <div
+                    className="layout-row flex-75 layout-wrap layout-align-start-center"
+                  >
+                    <label
+                      className="input_check flex-none pointy"
+                      htmlFor="1-dangerous_goods"
+                    >
+                      <p>
+                        Dangerous Goods
+                      </p>
+                    </label>
+                    <Tooltip
+                      color="#333"
+                      icon="fa-info-circle"
+                      text="dangerous_goods"
+                      theme={Object {}}
+                      toolText=""
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="cargo_item_info expanded flex-100"
+            >
+              <div
+                className="inner_cargo_item_info layout-row flex-100 layout-wrap layout-align-start"
+              >
+                <div
+                  className="flex-100 layout-row layout-wrap"
+                >
+                  <div
+                    className="flex-45 layout-wrap layout-row"
+                  >
+                    <div
+                      className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
+                    >
+                      <p
+                        className="input_label flex-none"
+                      >
+                        Total
+                         
+                        Volume
+                        :  
+                        <span
+                          className="input_value"
+                        >
+                          2.450
+                           m
+                          <sup
+                            style={
+                              Object {
+                                "fontSize": "10px",
+                                "height": "17px",
+                                "marginLeft": "1px",
+                              }
+                            }
+                          >
+                            3
+                          </sup>
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="padding_left flex-45 layout-wrap layout-row"
+                  >
+                    <div
+                      className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
+                    >
+                      <p
+                        className="input_label flex-none"
+                      >
+                        Total
+                         
+                        NO_TRANSLATION | key "common:weight"
+                        :  
+                        <span
+                          className="input_value"
+                        >
+                          700.0
                            kg
                         </span>
                       </p>
@@ -1339,22 +2533,35 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
           <div
             className="flex-15 layout-row layout-align-center"
           >
-            <[object Object]
+            <QuantityInput
               cargoItem={
                 Object {
+                  "cargo_item_type_id": "foo",
+                  "chargeable_weight": 250,
                   "dangerous_goods": false,
-                  "description": "FOO",
-                  "dimension_x": 13,
-                  "dimension_y": 24,
-                  "dimension_z": 13,
-                  "key": 5,
-                  "quantity": 2,
+                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 10,
+                  "dimension_y": 60,
+                  "dimension_z": 40,
+                  "gross_weight": 76,
+                  "hs_codes": Array [
+                    4,
+                  ],
+                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                  "id": 1,
+                  "key": "FOO_CARGO_ITEM_KEY",
+                  "payload_in_kg": 200,
+                  "quantity": 5,
+                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
                   "stackable": false,
+                  "tare_weight": 20,
+                  "weight": 220,
                 }
               }
               handleDelta={[Function]}
               i={0}
               nextStageAttempt={false}
+              t={[Function]}
             />
           </div>
           <div
@@ -1392,7 +2599,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
                     <img
                       alt="length"
                       border="0"
-                      data-for="RANDOM_KEY_1"
+                      data-for="UUID_MOCK_KEY_2"
                       data-tip="Length"
                     />
                     <ValidatedInput
@@ -1435,7 +2642,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value={13}
+                      value={10}
                       wrapperClassName="flex-60"
                     />
                     <div
@@ -1462,7 +2669,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
                     <img
                       alt="width"
                       border="0"
-                      data-for="RANDOM_KEY_1"
+                      data-for="UUID_MOCK_KEY_2"
                       data-tip="Width"
                     />
                     <ValidatedInput
@@ -1505,7 +2712,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value={24}
+                      value={60}
                       wrapperClassName="flex-60"
                     />
                     <div
@@ -1532,7 +2739,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
                     <img
                       alt="height"
                       border="0"
-                      data-for="RANDOM_KEY_1"
+                      data-for="UUID_MOCK_KEY_2"
                       data-tip="Height"
                     />
                     <ValidatedInput
@@ -1575,7 +2782,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value={13}
+                      value={40}
                       wrapperClassName="flex-60"
                     />
                     <div
@@ -1600,7 +2807,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
                     <img
                       alt="weight"
                       border="0"
-                      data-for="RANDOM_KEY_1"
+                      data-for="UUID_MOCK_KEY_2"
                       data-tip="Gross Weight"
                     />
                     <Tooltip
@@ -1648,7 +2855,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value=""
+                      value={200}
                       wrapperClassName="flex-90"
                     />
                     <div
@@ -1815,7 +3022,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
                         <span
                           className="input_value"
                         >
-                          0.008
+                          0.120
                            m
                           <sup
                             style={
@@ -1848,6 +3055,590 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
                         <span
                           className="input_value"
                         >
+                          1,000.0
+                           kg
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-100 layout-row layout-wrap"
+                >
+                  <div
+                    className="chargeable_weight layout-row flex-100 layout-wrap layout-align-start-center"
+                  >
+                    <div
+                      className="layout-row flex-none layout-wrap layout-align-end-center"
+                    >
+                      <p
+                        className="subchargeable flex-none"
+                      >
+                        Chargeable Weight:
+                      </p>
+                    </div>
+                    <div
+                      className="chargeable_weight_values flex layout-row layout-align-start-center"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="layout-row flex-100 layout-wrap layout-align-stretch"
+        key="1-cargoItem"
+        name="1-cargoItem"
+        style={
+          Object {
+            "margin": "30px 0",
+            "position": "relative",
+          }
+        }
+      >
+        <div
+          className="flex-100 layout-align-start-center layout-row cargo_unit_header"
+        >
+          <h3>
+            Cargo Group {{index}}
+          </h3>
+          <div
+            className="delete_icon"
+            onClick={[Function]}
+          >
+            Delete
+            <i
+              className="fa fa-trash"
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap cargo_unit_inputs"
+        >
+          <div
+            className="flex-15 layout-row layout-align-center"
+          >
+            <QuantityInput
+              cargoItem={
+                Object {
+                  "cargo_item_type_id": "bar",
+                  "chargeable_weight": 150,
+                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 100,
+                  "dimension_y": 50,
+                  "dimension_z": 70,
+                  "hs_codes": Array [],
+                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+                  "id": 2,
+                  "key": "BAR_CARGO_ITEM_KEY",
+                  "payload_in_kg": 100,
+                  "quantity": 7,
+                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 17,
+                  "weight": 140,
+                }
+              }
+              handleDelta={[Function]}
+              i={1}
+              nextStageAttempt={false}
+              t={[Function]}
+            />
+          </div>
+          <div
+            className="cargo_item_box cargo_item_inputs flex-85"
+          >
+            <div
+              style={
+                Object {
+                  "position": "relative",
+                }
+              }
+            >
+              <div
+                className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
+                style={
+                  Object {
+                    "marginBottom": "20px",
+                  }
+                }
+              >
+                <div
+                  className="layout-row flex-20 layout-wrap layout-align-start-center input_length"
+                >
+                  <h4>
+                    Length
+                  </h4>
+                  <div
+                    className="flex-90 layout-row input_box"
+                    data-event="disable"
+                    data-tip=""
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <img
+                      alt="length"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_3"
+                      data-tip="Length"
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      min="0"
+                      name="1-dimension_x"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      step="any"
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum length is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={100}
+                      wrapperClassName="flex-60"
+                    />
+                    <div
+                      className="flex-25 layout-row layout-align-center-center"
+                    >
+                      cm
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex-20 layout-wrap layout-align-start-center input_width"
+                >
+                  <h4>
+                    Width
+                  </h4>
+                  <div
+                    className="flex-90 layout-row input_box"
+                    data-event="disable"
+                    data-tip=""
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <img
+                      alt="width"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_3"
+                      data-tip="Width"
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      min="0"
+                      name="1-dimension_y"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      step="any"
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum width is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={50}
+                      wrapperClassName="flex-60"
+                    />
+                    <div
+                      className="flex-25 layout-row layout-align-center-center"
+                    >
+                      cm
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex-20 layout-wrap layout-align-start-center input_height"
+                >
+                  <h4>
+                    Height
+                  </h4>
+                  <div
+                    className="flex-90 layout-row input_box"
+                    data-event="disable"
+                    data-tip=""
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <img
+                      alt="height"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_3"
+                      data-tip="Height"
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      min="0"
+                      name="1-dimension_z"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      step="any"
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum height is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={70}
+                      wrapperClassName="flex-60"
+                    />
+                    <div
+                      className="flex-25 layout-row layout-align-center-center"
+                    >
+                      cm
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-5"
+                />
+                <div
+                  className="layout-row flex-30 layout-wrap layout-align-start-center input_weight"
+                >
+                  <h4>
+                    Gross Weight per item
+                  </h4>
+                  <div
+                    className="flex-60 layout-row input_box"
+                  >
+                    <img
+                      alt="weight"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_3"
+                      data-tip="Gross Weight"
+                    />
+                    <Tooltip
+                      color="#333"
+                      icon="fa-info-circle"
+                      text="payload_in_kg"
+                      theme={Object {}}
+                      toolText=""
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      name="1-payload_in_kg"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum weight is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={100}
+                      wrapperClassName="flex-90"
+                    />
+                    <div
+                      className="flex-20 layout-row layout-align-center-center"
+                    >
+                      kg
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                className="flex-100 layout-row"
+              />
+              <div
+                className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
+                style={
+                  Object {
+                    "margin": "20px 0",
+                  }
+                }
+              >
+                <div
+                  className="layout-row flex-40 layout-wrap layout-align-start-center colli_type"
+                >
+                  <div
+                    style={
+                      Object {
+                        "width": "95%",
+                      }
+                    }
+                  >
+                    <NamedSelect
+                      className="select_100"
+                      inputProps={
+                        Object {
+                          "name": "1-colliType",
+                        }
+                      }
+                      name="1-colliType"
+                      onChange={[Function]}
+                      options={
+                        Array [
+                          Object {
+                            "description": "BAR",
+                            "dimension_x": 5,
+                            "dimension_y": 6,
+                            "key": 7,
+                          },
+                        ]
+                      }
+                      placeholder="Select your colli type"
+                      showErrors={false}
+                    />
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex layout-wrap layout-align-end-center cargo_unit_check"
+                  onClick={[Function]}
+                >
+                  <Checkbox
+                    checked={true}
+                    className=""
+                    disabled={true}
+                    id="1-stackable"
+                    name="1-stackable"
+                    onChange={[Function]}
+                    onClick={null}
+                    size="15px"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <div
+                    className="layout-row flex-65 layout-wrap layout-align-start-center"
+                  >
+                    <label
+                      className="input_check flex-none pointy"
+                      htmlFor="1-stackable"
+                    >
+                      <p>
+                        Non Stackable
+                      </p>
+                    </label>
+                    <Tooltip
+                      color="#333"
+                      icon="fa-info-circle"
+                      text="non_stackable"
+                      theme={Object {}}
+                      toolText=""
+                    />
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex layout-wrap layout-align-start-center cargo_unit_check"
+                  onClick={[Function]}
+                >
+                  <Checkbox
+                    checked={false}
+                    className=""
+                    disabled={true}
+                    id="1-dangerous_goods"
+                    name="1-dangerous_goods"
+                    onChange={[Function]}
+                    onClick={null}
+                    size="15px"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <div
+                    className="layout-row flex-75 layout-wrap layout-align-start-center"
+                  >
+                    <label
+                      className="input_check flex-none pointy"
+                      htmlFor="1-dangerous_goods"
+                    >
+                      <p>
+                        Dangerous Goods
+                      </p>
+                    </label>
+                    <Tooltip
+                      color="#333"
+                      icon="fa-info-circle"
+                      text="dangerous_goods"
+                      theme={Object {}}
+                      toolText=""
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="cargo_item_info expanded flex-100"
+            >
+              <div
+                className="inner_cargo_item_info layout-row flex-100 layout-wrap layout-align-start"
+              >
+                <div
+                  className="flex-100 layout-row layout-wrap"
+                >
+                  <div
+                    className="flex-45 layout-wrap layout-row"
+                  >
+                    <div
+                      className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
+                    >
+                      <p
+                        className="input_label flex-none"
+                      >
+                        Total
+                         
+                        Volume
+                        :  
+                        <span
+                          className="input_value"
+                        >
+                          2.450
+                           m
+                          <sup
+                            style={
+                              Object {
+                                "fontSize": "10px",
+                                "height": "17px",
+                                "marginLeft": "1px",
+                              }
+                            }
+                          >
+                            3
+                          </sup>
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="padding_left flex-45 layout-wrap layout-row"
+                  >
+                    <div
+                      className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
+                    >
+                      <p
+                        className="input_label flex-none"
+                      >
+                        Total
+                         
+                        NO_TRANSLATION | key "common:weight"
+                        :  
+                        <span
+                          className="input_value"
+                        >
+                          700.0
                            kg
                         </span>
                       </p>
@@ -1987,22 +3778,35 @@ exports[`shallow rendering volume chargeable value 1`] = `
           <div
             className="flex-15 layout-row layout-align-center"
           >
-            <[object Object]
+            <QuantityInput
               cargoItem={
                 Object {
+                  "cargo_item_type_id": "foo",
+                  "chargeable_weight": 250,
                   "dangerous_goods": false,
-                  "description": "FOO",
-                  "dimension_x": 13,
-                  "dimension_y": 24,
-                  "dimension_z": 13,
-                  "key": 5,
-                  "quantity": 2,
+                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 10,
+                  "dimension_y": 60,
+                  "dimension_z": 40,
+                  "gross_weight": 76,
+                  "hs_codes": Array [
+                    4,
+                  ],
+                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                  "id": 1,
+                  "key": "FOO_CARGO_ITEM_KEY",
+                  "payload_in_kg": 200,
+                  "quantity": 5,
+                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
                   "stackable": false,
+                  "tare_weight": 20,
+                  "weight": 220,
                 }
               }
               handleDelta={[Function]}
               i={0}
               nextStageAttempt={false}
+              t={[Function]}
             />
           </div>
           <div
@@ -2040,7 +3844,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
                     <img
                       alt="length"
                       border="0"
-                      data-for="RANDOM_KEY_3"
+                      data-for="UUID_MOCK_KEY_6"
                       data-tip="Length"
                     />
                     <ValidatedInput
@@ -2083,7 +3887,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value={13}
+                      value={10}
                       wrapperClassName="flex-60"
                     />
                     <div
@@ -2110,7 +3914,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
                     <img
                       alt="width"
                       border="0"
-                      data-for="RANDOM_KEY_3"
+                      data-for="UUID_MOCK_KEY_6"
                       data-tip="Width"
                     />
                     <ValidatedInput
@@ -2153,7 +3957,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value={24}
+                      value={60}
                       wrapperClassName="flex-60"
                     />
                     <div
@@ -2180,7 +3984,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
                     <img
                       alt="height"
                       border="0"
-                      data-for="RANDOM_KEY_3"
+                      data-for="UUID_MOCK_KEY_6"
                       data-tip="Height"
                     />
                     <ValidatedInput
@@ -2223,7 +4027,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value={13}
+                      value={40}
                       wrapperClassName="flex-60"
                     />
                     <div
@@ -2248,7 +4052,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
                     <img
                       alt="weight"
                       border="0"
-                      data-for="RANDOM_KEY_3"
+                      data-for="UUID_MOCK_KEY_6"
                       data-tip="Gross Weight"
                     />
                     <Tooltip
@@ -2296,7 +4100,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value=""
+                      value={200}
                       wrapperClassName="flex-90"
                     />
                     <div
@@ -2463,7 +4267,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
                         <span
                           className="input_value"
                         >
-                          0.008
+                          0.120
                            m
                           <sup
                             style={
@@ -2496,6 +4300,590 @@ exports[`shallow rendering volume chargeable value 1`] = `
                         <span
                           className="input_value"
                         >
+                          1,000.0
+                           kg
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-100 layout-row layout-wrap"
+                >
+                  <div
+                    className="chargeable_weight layout-row flex-100 layout-wrap layout-align-start-center"
+                  >
+                    <div
+                      className="layout-row flex-none layout-wrap layout-align-end-center"
+                    >
+                      <p
+                        className="subchargeable flex-none"
+                      >
+                        Chargeable Volume:
+                      </p>
+                    </div>
+                    <div
+                      className="chargeable_weight_values flex layout-row layout-align-start-center"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="layout-row flex-100 layout-wrap layout-align-stretch"
+        key="1-cargoItem"
+        name="1-cargoItem"
+        style={
+          Object {
+            "margin": "30px 0",
+            "position": "relative",
+          }
+        }
+      >
+        <div
+          className="flex-100 layout-align-start-center layout-row cargo_unit_header"
+        >
+          <h3>
+            Cargo Group {{index}}
+          </h3>
+          <div
+            className="delete_icon"
+            onClick={[Function]}
+          >
+            Delete
+            <i
+              className="fa fa-trash"
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap cargo_unit_inputs"
+        >
+          <div
+            className="flex-15 layout-row layout-align-center"
+          >
+            <QuantityInput
+              cargoItem={
+                Object {
+                  "cargo_item_type_id": "bar",
+                  "chargeable_weight": 150,
+                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 100,
+                  "dimension_y": 50,
+                  "dimension_z": 70,
+                  "hs_codes": Array [],
+                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+                  "id": 2,
+                  "key": "BAR_CARGO_ITEM_KEY",
+                  "payload_in_kg": 100,
+                  "quantity": 7,
+                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 17,
+                  "weight": 140,
+                }
+              }
+              handleDelta={[Function]}
+              i={1}
+              nextStageAttempt={false}
+              t={[Function]}
+            />
+          </div>
+          <div
+            className="cargo_item_box cargo_item_inputs flex-85"
+          >
+            <div
+              style={
+                Object {
+                  "position": "relative",
+                }
+              }
+            >
+              <div
+                className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
+                style={
+                  Object {
+                    "marginBottom": "20px",
+                  }
+                }
+              >
+                <div
+                  className="layout-row flex-20 layout-wrap layout-align-start-center input_length"
+                >
+                  <h4>
+                    Length
+                  </h4>
+                  <div
+                    className="flex-90 layout-row input_box"
+                    data-event="disable"
+                    data-tip=""
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <img
+                      alt="length"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_7"
+                      data-tip="Length"
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      min="0"
+                      name="1-dimension_x"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      step="any"
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum length is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={100}
+                      wrapperClassName="flex-60"
+                    />
+                    <div
+                      className="flex-25 layout-row layout-align-center-center"
+                    >
+                      cm
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex-20 layout-wrap layout-align-start-center input_width"
+                >
+                  <h4>
+                    Width
+                  </h4>
+                  <div
+                    className="flex-90 layout-row input_box"
+                    data-event="disable"
+                    data-tip=""
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <img
+                      alt="width"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_7"
+                      data-tip="Width"
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      min="0"
+                      name="1-dimension_y"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      step="any"
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum width is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={50}
+                      wrapperClassName="flex-60"
+                    />
+                    <div
+                      className="flex-25 layout-row layout-align-center-center"
+                    >
+                      cm
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex-20 layout-wrap layout-align-start-center input_height"
+                >
+                  <h4>
+                    Height
+                  </h4>
+                  <div
+                    className="flex-90 layout-row input_box"
+                    data-event="disable"
+                    data-tip=""
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <img
+                      alt="height"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_7"
+                      data-tip="Height"
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      min="0"
+                      name="1-dimension_z"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      step="any"
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum height is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={70}
+                      wrapperClassName="flex-60"
+                    />
+                    <div
+                      className="flex-25 layout-row layout-align-center-center"
+                    >
+                      cm
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-5"
+                />
+                <div
+                  className="layout-row flex-30 layout-wrap layout-align-start-center input_weight"
+                >
+                  <h4>
+                    Gross Weight per item
+                  </h4>
+                  <div
+                    className="flex-60 layout-row input_box"
+                  >
+                    <img
+                      alt="weight"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_7"
+                      data-tip="Gross Weight"
+                    />
+                    <Tooltip
+                      color="#333"
+                      icon="fa-info-circle"
+                      text="payload_in_kg"
+                      theme={Object {}}
+                      toolText=""
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      name="1-payload_in_kg"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum weight is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={100}
+                      wrapperClassName="flex-90"
+                    />
+                    <div
+                      className="flex-20 layout-row layout-align-center-center"
+                    >
+                      kg
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                className="flex-100 layout-row"
+              />
+              <div
+                className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
+                style={
+                  Object {
+                    "margin": "20px 0",
+                  }
+                }
+              >
+                <div
+                  className="layout-row flex-40 layout-wrap layout-align-start-center colli_type"
+                >
+                  <div
+                    style={
+                      Object {
+                        "width": "95%",
+                      }
+                    }
+                  >
+                    <NamedSelect
+                      className="select_100"
+                      inputProps={
+                        Object {
+                          "name": "1-colliType",
+                        }
+                      }
+                      name="1-colliType"
+                      onChange={[Function]}
+                      options={
+                        Array [
+                          Object {
+                            "description": "BAR",
+                            "dimension_x": 5,
+                            "dimension_y": 6,
+                            "key": 7,
+                          },
+                        ]
+                      }
+                      placeholder="Select your colli type"
+                      showErrors={false}
+                    />
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex layout-wrap layout-align-end-center cargo_unit_check"
+                  onClick={[Function]}
+                >
+                  <Checkbox
+                    checked={true}
+                    className=""
+                    disabled={true}
+                    id="1-stackable"
+                    name="1-stackable"
+                    onChange={[Function]}
+                    onClick={null}
+                    size="15px"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <div
+                    className="layout-row flex-65 layout-wrap layout-align-start-center"
+                  >
+                    <label
+                      className="input_check flex-none pointy"
+                      htmlFor="1-stackable"
+                    >
+                      <p>
+                        Non Stackable
+                      </p>
+                    </label>
+                    <Tooltip
+                      color="#333"
+                      icon="fa-info-circle"
+                      text="non_stackable"
+                      theme={Object {}}
+                      toolText=""
+                    />
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex layout-wrap layout-align-start-center cargo_unit_check"
+                  onClick={[Function]}
+                >
+                  <Checkbox
+                    checked={false}
+                    className=""
+                    disabled={true}
+                    id="1-dangerous_goods"
+                    name="1-dangerous_goods"
+                    onChange={[Function]}
+                    onClick={null}
+                    size="15px"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <div
+                    className="layout-row flex-75 layout-wrap layout-align-start-center"
+                  >
+                    <label
+                      className="input_check flex-none pointy"
+                      htmlFor="1-dangerous_goods"
+                    >
+                      <p>
+                        Dangerous Goods
+                      </p>
+                    </label>
+                    <Tooltip
+                      color="#333"
+                      icon="fa-info-circle"
+                      text="dangerous_goods"
+                      theme={Object {}}
+                      toolText=""
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="cargo_item_info expanded flex-100"
+            >
+              <div
+                className="inner_cargo_item_info layout-row flex-100 layout-wrap layout-align-start"
+              >
+                <div
+                  className="flex-100 layout-row layout-wrap"
+                >
+                  <div
+                    className="flex-45 layout-wrap layout-row"
+                  >
+                    <div
+                      className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
+                    >
+                      <p
+                        className="input_label flex-none"
+                      >
+                        Total
+                         
+                        Volume
+                        :  
+                        <span
+                          className="input_value"
+                        >
+                          2.450
+                           m
+                          <sup
+                            style={
+                              Object {
+                                "fontSize": "10px",
+                                "height": "17px",
+                                "marginLeft": "1px",
+                              }
+                            }
+                          >
+                            3
+                          </sup>
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="padding_left flex-45 layout-wrap layout-row"
+                  >
+                    <div
+                      className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
+                    >
+                      <p
+                        className="input_label flex-none"
+                      >
+                        Total
+                         
+                        NO_TRANSLATION | key "common:weight"
+                        :  
+                        <span
+                          className="input_value"
+                        >
+                          700.0
                            kg
                         </span>
                       </p>
@@ -2635,22 +5023,35 @@ exports[`shallow rendering weight chargeable value 1`] = `
           <div
             className="flex-15 layout-row layout-align-center"
           >
-            <[object Object]
+            <QuantityInput
               cargoItem={
                 Object {
+                  "cargo_item_type_id": "foo",
+                  "chargeable_weight": 250,
                   "dangerous_goods": false,
-                  "description": "FOO",
-                  "dimension_x": 13,
-                  "dimension_y": 24,
-                  "dimension_z": 13,
-                  "key": 5,
-                  "quantity": 2,
+                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 10,
+                  "dimension_y": 60,
+                  "dimension_z": 40,
+                  "gross_weight": 76,
+                  "hs_codes": Array [
+                    4,
+                  ],
+                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                  "id": 1,
+                  "key": "FOO_CARGO_ITEM_KEY",
+                  "payload_in_kg": 200,
+                  "quantity": 5,
+                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
                   "stackable": false,
+                  "tare_weight": 20,
+                  "weight": 220,
                 }
               }
               handleDelta={[Function]}
               i={0}
               nextStageAttempt={false}
+              t={[Function]}
             />
           </div>
           <div
@@ -2688,7 +5089,7 @@ exports[`shallow rendering weight chargeable value 1`] = `
                     <img
                       alt="length"
                       border="0"
-                      data-for="RANDOM_KEY_2"
+                      data-for="UUID_MOCK_KEY_4"
                       data-tip="Length"
                     />
                     <ValidatedInput
@@ -2731,7 +5132,7 @@ exports[`shallow rendering weight chargeable value 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value={13}
+                      value={10}
                       wrapperClassName="flex-60"
                     />
                     <div
@@ -2758,7 +5159,7 @@ exports[`shallow rendering weight chargeable value 1`] = `
                     <img
                       alt="width"
                       border="0"
-                      data-for="RANDOM_KEY_2"
+                      data-for="UUID_MOCK_KEY_4"
                       data-tip="Width"
                     />
                     <ValidatedInput
@@ -2801,7 +5202,7 @@ exports[`shallow rendering weight chargeable value 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value={24}
+                      value={60}
                       wrapperClassName="flex-60"
                     />
                     <div
@@ -2828,7 +5229,7 @@ exports[`shallow rendering weight chargeable value 1`] = `
                     <img
                       alt="height"
                       border="0"
-                      data-for="RANDOM_KEY_2"
+                      data-for="UUID_MOCK_KEY_4"
                       data-tip="Height"
                     />
                     <ValidatedInput
@@ -2871,7 +5272,7 @@ exports[`shallow rendering weight chargeable value 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value={13}
+                      value={40}
                       wrapperClassName="flex-60"
                     />
                     <div
@@ -2896,7 +5297,7 @@ exports[`shallow rendering weight chargeable value 1`] = `
                     <img
                       alt="weight"
                       border="0"
-                      data-for="RANDOM_KEY_2"
+                      data-for="UUID_MOCK_KEY_4"
                       data-tip="Gross Weight"
                     />
                     <Tooltip
@@ -2944,7 +5345,7 @@ exports[`shallow rendering weight chargeable value 1`] = `
                           "nonNegative": [Function],
                         }
                       }
-                      value=""
+                      value={200}
                       wrapperClassName="flex-90"
                     />
                     <div
@@ -3111,7 +5512,7 @@ exports[`shallow rendering weight chargeable value 1`] = `
                         <span
                           className="input_value"
                         >
-                          0.008
+                          0.120
                            m
                           <sup
                             style={
@@ -3144,6 +5545,590 @@ exports[`shallow rendering weight chargeable value 1`] = `
                         <span
                           className="input_value"
                         >
+                          1,000.0
+                           kg
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-100 layout-row layout-wrap"
+                >
+                  <div
+                    className="chargeable_weight layout-row flex-100 layout-wrap layout-align-start-center"
+                  >
+                    <div
+                      className="layout-row flex-none layout-wrap layout-align-end-center"
+                    >
+                      <p
+                        className="subchargeable flex-none"
+                      >
+                        Chargeable Weight:
+                      </p>
+                    </div>
+                    <div
+                      className="chargeable_weight_values flex layout-row layout-align-start-center"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="layout-row flex-100 layout-wrap layout-align-stretch"
+        key="1-cargoItem"
+        name="1-cargoItem"
+        style={
+          Object {
+            "margin": "30px 0",
+            "position": "relative",
+          }
+        }
+      >
+        <div
+          className="flex-100 layout-align-start-center layout-row cargo_unit_header"
+        >
+          <h3>
+            Cargo Group {{index}}
+          </h3>
+          <div
+            className="delete_icon"
+            onClick={[Function]}
+          >
+            Delete
+            <i
+              className="fa fa-trash"
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap cargo_unit_inputs"
+        >
+          <div
+            className="flex-15 layout-row layout-align-center"
+          >
+            <QuantityInput
+              cargoItem={
+                Object {
+                  "cargo_item_type_id": "bar",
+                  "chargeable_weight": 150,
+                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 100,
+                  "dimension_y": 50,
+                  "dimension_z": 70,
+                  "hs_codes": Array [],
+                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+                  "id": 2,
+                  "key": "BAR_CARGO_ITEM_KEY",
+                  "payload_in_kg": 100,
+                  "quantity": 7,
+                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 17,
+                  "weight": 140,
+                }
+              }
+              handleDelta={[Function]}
+              i={1}
+              nextStageAttempt={false}
+              t={[Function]}
+            />
+          </div>
+          <div
+            className="cargo_item_box cargo_item_inputs flex-85"
+          >
+            <div
+              style={
+                Object {
+                  "position": "relative",
+                }
+              }
+            >
+              <div
+                className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
+                style={
+                  Object {
+                    "marginBottom": "20px",
+                  }
+                }
+              >
+                <div
+                  className="layout-row flex-20 layout-wrap layout-align-start-center input_length"
+                >
+                  <h4>
+                    Length
+                  </h4>
+                  <div
+                    className="flex-90 layout-row input_box"
+                    data-event="disable"
+                    data-tip=""
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <img
+                      alt="length"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_5"
+                      data-tip="Length"
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      min="0"
+                      name="1-dimension_x"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      step="any"
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum length is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={100}
+                      wrapperClassName="flex-60"
+                    />
+                    <div
+                      className="flex-25 layout-row layout-align-center-center"
+                    >
+                      cm
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex-20 layout-wrap layout-align-start-center input_width"
+                >
+                  <h4>
+                    Width
+                  </h4>
+                  <div
+                    className="flex-90 layout-row input_box"
+                    data-event="disable"
+                    data-tip=""
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <img
+                      alt="width"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_5"
+                      data-tip="Width"
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      min="0"
+                      name="1-dimension_y"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      step="any"
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum width is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={50}
+                      wrapperClassName="flex-60"
+                    />
+                    <div
+                      className="flex-25 layout-row layout-align-center-center"
+                    >
+                      cm
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex-20 layout-wrap layout-align-start-center input_height"
+                >
+                  <h4>
+                    Height
+                  </h4>
+                  <div
+                    className="flex-90 layout-row input_box"
+                    data-event="disable"
+                    data-tip=""
+                    onBlur={[Function]}
+                    onFocus={[Function]}
+                    onMouseEnter={[Function]}
+                  >
+                    <img
+                      alt="height"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_5"
+                      data-tip="Height"
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      min="0"
+                      name="1-dimension_z"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      step="any"
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum height is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={70}
+                      wrapperClassName="flex-60"
+                    />
+                    <div
+                      className="flex-25 layout-row layout-align-center-center"
+                    >
+                      cm
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="flex-5"
+                />
+                <div
+                  className="layout-row flex-30 layout-wrap layout-align-start-center input_weight"
+                >
+                  <h4>
+                    Gross Weight per item
+                  </h4>
+                  <div
+                    className="flex-60 layout-row input_box"
+                  >
+                    <img
+                      alt="weight"
+                      border="0"
+                      data-for="UUID_MOCK_KEY_5"
+                      data-tip="Gross Weight"
+                    />
+                    <Tooltip
+                      color="#333"
+                      icon="fa-info-circle"
+                      text="payload_in_kg"
+                      theme={Object {}}
+                      toolText=""
+                    />
+                    <ValidatedInput
+                      errorStyles={
+                        Object {
+                          "fontSize": "10px",
+                          "maxWidth": "200px",
+                          "top": "32px",
+                          "whiteSpace": "normal",
+                        }
+                      }
+                      name="1-payload_in_kg"
+                      nextStageAttempt={false}
+                      onChange={[Function]}
+                      placeholder="0"
+                      required={true}
+                      setFirstRenderInputs={[Function]}
+                      type="number"
+                      validationErrors={
+                        Object {
+                          "isDefaultRequiredValue": "Must be greater than 0",
+                          "maxDimension": <p>
+                            Maximum weight is undefined
+                            <br />
+                            <span
+                              className="emulate_link blue_link"
+                              onClick={[Function]}
+                            >
+                              Request excess dimensions
+                            </span>
+                          </p>,
+                          "nonNegative": "Must be greater than 0",
+                        }
+                      }
+                      validations={
+                        Object {
+                          "maxDimension": [Function],
+                          "nonNegative": [Function],
+                        }
+                      }
+                      value={100}
+                      wrapperClassName="flex-90"
+                    />
+                    <div
+                      className="flex-20 layout-row layout-align-center-center"
+                    >
+                      kg
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                className="flex-100 layout-row"
+              />
+              <div
+                className="layout-row flex-100 layout-wrap layout-align-start-center padding_section"
+                style={
+                  Object {
+                    "margin": "20px 0",
+                  }
+                }
+              >
+                <div
+                  className="layout-row flex-40 layout-wrap layout-align-start-center colli_type"
+                >
+                  <div
+                    style={
+                      Object {
+                        "width": "95%",
+                      }
+                    }
+                  >
+                    <NamedSelect
+                      className="select_100"
+                      inputProps={
+                        Object {
+                          "name": "1-colliType",
+                        }
+                      }
+                      name="1-colliType"
+                      onChange={[Function]}
+                      options={
+                        Array [
+                          Object {
+                            "description": "BAR",
+                            "dimension_x": 5,
+                            "dimension_y": 6,
+                            "key": 7,
+                          },
+                        ]
+                      }
+                      placeholder="Select your colli type"
+                      showErrors={false}
+                    />
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex layout-wrap layout-align-end-center cargo_unit_check"
+                  onClick={[Function]}
+                >
+                  <Checkbox
+                    checked={true}
+                    className=""
+                    disabled={true}
+                    id="1-stackable"
+                    name="1-stackable"
+                    onChange={[Function]}
+                    onClick={null}
+                    size="15px"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <div
+                    className="layout-row flex-65 layout-wrap layout-align-start-center"
+                  >
+                    <label
+                      className="input_check flex-none pointy"
+                      htmlFor="1-stackable"
+                    >
+                      <p>
+                        Non Stackable
+                      </p>
+                    </label>
+                    <Tooltip
+                      color="#333"
+                      icon="fa-info-circle"
+                      text="non_stackable"
+                      theme={Object {}}
+                      toolText=""
+                    />
+                  </div>
+                </div>
+                <div
+                  className="layout-row flex layout-wrap layout-align-start-center cargo_unit_check"
+                  onClick={[Function]}
+                >
+                  <Checkbox
+                    checked={false}
+                    className=""
+                    disabled={true}
+                    id="1-dangerous_goods"
+                    name="1-dangerous_goods"
+                    onChange={[Function]}
+                    onClick={null}
+                    size="15px"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <div
+                    className="layout-row flex-75 layout-wrap layout-align-start-center"
+                  >
+                    <label
+                      className="input_check flex-none pointy"
+                      htmlFor="1-dangerous_goods"
+                    >
+                      <p>
+                        Dangerous Goods
+                      </p>
+                    </label>
+                    <Tooltip
+                      color="#333"
+                      icon="fa-info-circle"
+                      text="dangerous_goods"
+                      theme={Object {}}
+                      toolText=""
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="cargo_item_info expanded flex-100"
+            >
+              <div
+                className="inner_cargo_item_info layout-row flex-100 layout-wrap layout-align-start"
+              >
+                <div
+                  className="flex-100 layout-row layout-wrap"
+                >
+                  <div
+                    className="flex-45 layout-wrap layout-row"
+                  >
+                    <div
+                      className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
+                    >
+                      <p
+                        className="input_label flex-none"
+                      >
+                        Total
+                         
+                        Volume
+                        :  
+                        <span
+                          className="input_value"
+                        >
+                          2.450
+                           m
+                          <sup
+                            style={
+                              Object {
+                                "fontSize": "10px",
+                                "height": "17px",
+                                "marginLeft": "1px",
+                              }
+                            }
+                          >
+                            3
+                          </sup>
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="padding_left flex-45 layout-wrap layout-row"
+                  >
+                    <div
+                      className="flex-100 layout-row layout-wrap layout-align-start-center charge_volume"
+                    >
+                      <p
+                        className="input_label flex-none"
+                      >
+                        Total
+                         
+                        NO_TRANSLATION | key "common:weight"
+                        :  
+                        <span
+                          className="input_value"
+                        >
+                          700.0
                            kg
                         </span>
                       </p>

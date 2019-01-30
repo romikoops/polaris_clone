@@ -148,9 +148,9 @@ exports[`initialEdit is falsy 1`] = `
             dayPickerProps={
               Object {
                 "disabledDays": Object {
-                  "before": 2017-07-25T04:41:20.000Z,
+                  "before": 2017-07-25T20:41:20.000Z,
                 },
-                "month": 2017-07-25T04:41:20.000Z,
+                "month": 2017-07-25T20:41:20.000Z,
                 "name": "dayPicker",
               }
             }
@@ -192,9 +192,9 @@ exports[`initialEdit is falsy 1`] = `
             dayPickerProps={
               Object {
                 "disabledDays": Object {
-                  "before": 2017-07-25T04:41:20.000Z,
+                  "before": 2017-07-25T20:41:20.000Z,
                 },
-                "month": 2017-07-25T04:41:20.000Z,
+                "month": 2017-07-25T20:41:20.000Z,
                 "name": "dayPicker",
               }
             }
@@ -569,7 +569,7 @@ exports[`state.confirm is true 1`] = `
           <p
             className="flex-90 price_cell_data"
           >
-            Sep 5, 2017
+            Sep 6, 2017
           </p>
           <div
             className="flex-none price_cell_divider"
@@ -586,7 +586,7 @@ exports[`state.confirm is true 1`] = `
           <p
             className="flex-90 price_cell_data"
           >
-            Sep 5, 2017
+            Sep 6, 2017
           </p>
         </div>
       </div>

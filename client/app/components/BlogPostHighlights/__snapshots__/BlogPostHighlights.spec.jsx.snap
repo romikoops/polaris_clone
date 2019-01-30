@@ -18,7 +18,7 @@ exports[`shallow render 1`] = `
   >
     <div
       className="blog_post layout-column"
-      key="RANDOM_KEY_0"
+      key="UUID_MOCK_KEY_0"
     >
       <div
         className="bp_image flex-33"
@@ -106,7 +106,7 @@ exports[`shallow render 1`] = `
     </div>
     <div
       className="blog_post layout-column"
-      key="RANDOM_KEY_1"
+      key="UUID_MOCK_KEY_1"
     >
       <div
         className="bp_image flex-33"
@@ -193,7 +193,7 @@ exports[`shallow render 1`] = `
     </div>
     <div
       className="blog_post layout-column"
-      key="RANDOM_KEY_2"
+      key="UUID_MOCK_KEY_2"
     >
       <div
         className="bp_image flex-33"

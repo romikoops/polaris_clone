@@ -3,7 +3,7 @@
 exports[`props.loading is false, state.requested is true 1`] = `
 <div
   className="flex-none layout-row layout-align-center-center document_downloader upload_btn_wrapper "
-  data-for="RANDOM_KEY_3"
+  data-for="UUID_MOCK_KEY_3"
   data-tip="FOO_TOOLTIP"
 >
   <RoundButton
@@ -34,7 +34,7 @@ exports[`props.loading is false, state.requested is true 1`] = `
 exports[`props.loading is true, state.requested is true 1`] = `
 <div
   className="flex-none layout-row layout-align-center-center document_downloader upload_btn_wrapper "
-  data-for="RANDOM_KEY_5"
+  data-for="UUID_MOCK_KEY_5"
   data-tip="FOO_TOOLTIP"
 >
   <LoadingSpinner
@@ -46,7 +46,7 @@ exports[`props.loading is true, state.requested is true 1`] = `
 exports[`shallow render 1`] = `
 <div
   className="flex-none layout-row layout-align-center-center document_downloader upload_btn_wrapper "
-  data-for="RANDOM_KEY_0"
+  data-for="UUID_MOCK_KEY_0"
   data-tip="FOO_TOOLTIP"
 >
   <RoundButton
@@ -77,7 +77,7 @@ exports[`shallow render 1`] = `
 exports[`square is true 1`] = `
 <div
   className="flex-none layout-row layout-align-center-center document_downloader upload_btn_wrapper "
-  data-for="RANDOM_KEY_1"
+  data-for="UUID_MOCK_KEY_1"
   data-tip="FOO_TOOLTIP"
 >
   <SquareButton

@@ -1,16 +1,15 @@
 import * as React from 'react'
 import { mount, shallow } from 'enzyme'
-import { theme, identity } from '../../mocks'
-// eslint-disable-next-line import/no-named-as-default
+import {
+  theme, identity, hsCodes, firstCargoItem
+} from '../../mocks'
 import HsCodeViewer from './HsCodeViewer'
 
 const propsBase = {
   theme,
   close: identity,
-  item: {
-    hs_codes: []
-  },
-  hsCodes: []
+  item: firstCargoItem,
+  hsCodes
 }
 
 test('shallow render', () => {
@@ -25,7 +24,24 @@ test('theme is falsy', () => {
   expect(shallow(<HsCodeViewer {...props} />)).toMatchSnapshot()
 })
 
-test('props.close is called', () => {
+test('viewer[hs] is truthy', () => {
+  const wrapper = shallow(<HsCodeViewer {...propsBase} />)
+  /**
+   * `viewer` has such value because `firstCargoItem` has `hs_codes: [4]`
+   */
+  wrapper.setState({
+    viewer: [
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  })
+  expect(wrapper).toMatchSnapshot()
+})
+
+test('close is called', () => {
   const props = {
     ...propsBase,
     close: jest.fn()

@@ -43,9 +43,32 @@ exports[`shallow rendering 1`] = `
               className="flex-100"
             >
                
+              SHIPMENT_ORIGIN_HUB
                
             </h6>
           </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-center-start address_padding"
+      >
+        <div
+          className="flex-50 layout-row layout-align-start-center"
+        >
+          <p
+            className="flex-none"
+          >
+            <b>
+              With Pick-up From:
+            </b>
+          </p>
+        </div>
+        <div
+          className="flex-50 layout-row layout-align-end-center"
+        >
+          <p
+            className=" itinerary_address flex-none"
+          />
         </div>
       </div>
       <div
@@ -213,9 +236,32 @@ exports[`shallow rendering 1`] = `
               className="flex-100"
             >
                
+              SHIPMENT_DESTINATION_HUB
                
             </h6>
           </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-center-start layout-wrap address_padding"
+      >
+        <div
+          className="flex-50 layout-row layout-align-start-center"
+        >
+          <p
+            className="flex-none"
+          >
+            <b>
+              With Delivery To:
+            </b>
+          </p>
+        </div>
+        <div
+          className="flex-50 layout-row layout-align-end-center"
+        >
+          <p
+            className=" itinerary_address flex-none"
+          />
         </div>
       </div>
       <div

@@ -1,336 +1,76 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`theme has truthy properties 1`] = `
-<styled.div
-  bg="green"
-  className="layout-row flex-100 layout-align-center"
-  tenant={
-    Object {
-      "data": Object {
-        "emails": Object {
-          "sales": Object {
-            "air": "sales@demo.com",
-            "general": "sales@demo.com",
-            "ocean": "sales@demo.com",
-            "rail": "sales@demo.com",
-          },
-          "support": Object {
-            "air": "imc.air@demo.com",
-            "general": "support@demo.com",
-            "ocean": "imc.sea@demo.com",
-            "rail": "imc.rail@demo.com",
-          },
-        },
-        "id": 123,
-        "name": "FOO_NAME",
-        "scope": Object {
-          "closed_quotation_tool": true,
-          "customs_export_paper": false,
-          "modes_of_transport": Object {
-            "air": Object {},
-            "ocean": Object {
-              "OCEAN_LOAD_TYPE": true,
-            },
-            "rail": Object {},
-            "truck": Object {},
-          },
-        },
-        "subdomain": "foosubdomain",
-        "theme": Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
-        },
-      },
-    }
-  }
->
-  <div
-    className="layout-row flex-100 layout-wrap"
-  >
-    <div
-      className="flex-100 layout-row"
-    >
-      <Component
-        invert={true}
-        isLanding={true}
-        noMessages={true}
-        scrollable={true}
-        theme={
-          Object {
-            "background": "green",
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-            "logoLarge": "FOO_LOGO_LARGE",
-            "logoWhite": "FOO_LOGO_WHITE",
-            "welcome_text": "FOO_WELCOME_TEXT",
-          }
-        }
-        user={
-          Object {
-            "company_name": "FOO_COMPANY",
-            "currency": "EUR",
-            "email": "foo@bar.baz",
-            "first_name": "John",
-            "guest": false,
-            "last_name": "Doe",
-            "phone": "6345789",
-            "role": Object {
-              "name": "shipper",
-            },
-            "role_id": 2,
-          }
-        }
-      />
-    </div>
-    <div
-      className="flex-50 layout-row layout-align-center layout-wrap"
-    >
-      <div
-        className="content_wrapper flex-100 layout-row layout-wrap layout-align-center-center"
-      >
-        <div
-          className="flex-75 banner_text"
-        >
-          <img
-            alt=""
-            className="flex-none tenant_logo_landing"
-            src="FOO_LOGO_WHITE"
-          />
-          <h2
-            className="flex-none"
-          >
-            <b>
-              Welcome to the
-            </b>
-            <br />
-            <i />
-            <br />
-            <b>
-              FOO_WELCOME_TEXT
-            </b>
-          </h2>
-          <div
-            className="wrapper_hr"
-          >
-            <hr />
-          </div>
-          <div
-            className="wrapper_h3"
-          >
-            <h3
-              className="flex-none"
-            >
-              Enjoy the most advanced and easy to use 
-              <b>
-                booking system
-              </b>
-               in the market. Finally, shipping is as simple as it should be.
-            </h3>
-          </div>
-        </div>
-        <ButtonSection
-          bookNow={[Function]}
-          className="hide_h_xxs"
-          showLogo={true}
-          t={[Function]}
-          tenant={
-            Object {
-              "data": Object {
-                "emails": Object {
-                  "sales": Object {
-                    "air": "sales@demo.com",
-                    "general": "sales@demo.com",
-                    "ocean": "sales@demo.com",
-                    "rail": "sales@demo.com",
-                  },
-                  "support": Object {
-                    "air": "imc.air@demo.com",
-                    "general": "support@demo.com",
-                    "ocean": "imc.sea@demo.com",
-                    "rail": "imc.rail@demo.com",
-                  },
-                },
-                "id": 123,
-                "name": "FOO_NAME",
-                "scope": Object {
-                  "closed_quotation_tool": true,
-                  "customs_export_paper": false,
-                  "modes_of_transport": Object {
-                    "air": Object {},
-                    "ocean": Object {
-                      "OCEAN_LOAD_TYPE": true,
-                    },
-                    "rail": Object {},
-                    "truck": Object {},
-                  },
-                },
-                "subdomain": "foosubdomain",
-                "theme": Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                },
-              },
-            }
-          }
-          theme={
-            Object {
-              "background": "green",
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-              "logoLarge": "FOO_LOGO_LARGE",
-              "logoWhite": "FOO_LOGO_WHITE",
-              "welcome_text": "FOO_WELCOME_TEXT",
-            }
-          }
-          user={
-            Object {
-              "company_name": "FOO_COMPANY",
-              "currency": "EUR",
-              "email": "foo@bar.baz",
-              "first_name": "John",
-              "guest": false,
-              "last_name": "Doe",
-              "phone": "6345789",
-              "role": Object {
-                "name": "shipper",
-              },
-              "role_id": 2,
-            }
-          }
-        />
-      </div>
-    </div>
-    <div
-      className="flex-50 layout-row layout-align-center layout-wrap"
-    >
-      <ButtonSection
-        bookNow={[Function]}
-        className="hide_h_gt_xxs"
-        showLogo={true}
-        t={[Function]}
-        tenant={
-          Object {
-            "data": Object {
-              "emails": Object {
-                "sales": Object {
-                  "air": "sales@demo.com",
-                  "general": "sales@demo.com",
-                  "ocean": "sales@demo.com",
-                  "rail": "sales@demo.com",
-                },
-                "support": Object {
-                  "air": "imc.air@demo.com",
-                  "general": "support@demo.com",
-                  "ocean": "imc.sea@demo.com",
-                  "rail": "imc.rail@demo.com",
-                },
-              },
-              "id": 123,
-              "name": "FOO_NAME",
-              "scope": Object {
-                "closed_quotation_tool": true,
-                "customs_export_paper": false,
-                "modes_of_transport": Object {
-                  "air": Object {},
-                  "ocean": Object {
-                    "OCEAN_LOAD_TYPE": true,
-                  },
-                  "rail": Object {},
-                  "truck": Object {},
-                },
-              },
-              "subdomain": "foosubdomain",
-              "theme": Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              },
-            },
-          }
-        }
-        theme={
-          Object {
-            "background": "green",
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-            "logoLarge": "FOO_LOGO_LARGE",
-            "logoWhite": "FOO_LOGO_WHITE",
-            "welcome_text": "FOO_WELCOME_TEXT",
-          }
-        }
-        user={
-          Object {
-            "company_name": "FOO_COMPANY",
-            "currency": "EUR",
-            "email": "foo@bar.baz",
-            "first_name": "John",
-            "guest": false,
-            "last_name": "Doe",
-            "phone": "6345789",
-            "role": Object {
-              "name": "shipper",
-            },
-            "role_id": 2,
-          }
-        }
-      />
-    </div>
-  </div>
-</styled.div>
-`;
-
-exports[`user.role_id is 1 1`] = `
+exports[`shallow render 1`] = `
 <styled.div
   bg="https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg"
   className="layout-row flex-100 layout-align-center"
   tenant={
     Object {
-      "data": Object {
-        "emails": Object {
-          "sales": Object {
-            "air": "sales@demo.com",
-            "general": "sales@demo.com",
-            "ocean": "sales@demo.com",
-            "rail": "sales@demo.com",
+      "emails": Object {
+        "sales": Object {
+          "air": "sales@demo.com",
+          "general": "sales@demo.com",
+          "ocean": "sales@demo.com",
+          "rail": "sales@demo.com",
+        },
+        "support": Object {
+          "air": "imc.air@demo.com",
+          "general": "support@demo.com",
+          "ocean": "imc.sea@demo.com",
+          "rail": "imc.rail@demo.com",
+        },
+      },
+      "id": 123,
+      "name": "TENANT_NAME",
+      "phones": Object {
+        "support": "TENANT_SUPPORT_PHONE",
+      },
+      "scope": Object {
+        "cargo_info_level": "text",
+        "carriage_options": Object {
+          "on_carriage": Object {
+            "export": "mandatory",
+            "import": "mandatory",
           },
-          "support": Object {
-            "air": "imc.air@demo.com",
-            "general": "support@demo.com",
-            "ocean": "imc.sea@demo.com",
-            "rail": "imc.rail@demo.com",
+          "pre_carriage": Object {
+            "export": "optional",
+            "import": "optional",
           },
         },
-        "id": 123,
-        "name": "FOO_NAME",
-        "scope": Object {
-          "closed_quotation_tool": true,
-          "customs_export_paper": false,
-          "modes_of_transport": Object {
-            "air": Object {},
-            "ocean": Object {
-              "OCEAN_LOAD_TYPE": true,
-            },
-            "rail": Object {},
-            "truck": Object {},
+        "closed_quotation_tool": true,
+        "customs_export_paper": false,
+        "detailed_billing": true,
+        "has_customs": true,
+        "has_insurance": true,
+        "hide_grand_total": true,
+        "mandatory_form_fields": Object {
+          "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+          "total_goods_value": 3370,
+        },
+        "modes_of_transport": Object {
+          "air": Object {
+            "AIR_LOAD_TYPE": 0,
+          },
+          "ocean": Object {
+            "OCEAN_LOAD_TYPE": 2,
+          },
+          "rail": Object {
+            "RAIL_LOAD_TYPE": 0,
+          },
+          "truck": Object {
+            "TRUCK_LOAD_TYPE": 0,
           },
         },
-        "subdomain": "foosubdomain",
-        "theme": Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
+        "terms": Array [
+          "FOO_TERM",
+          "BAR_TERM",
+        ],
+      },
+      "subdomain": "TENANT_SUBDOMAIN",
+      "theme": Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
         },
       },
     }
@@ -342,11 +82,24 @@ exports[`user.role_id is 1 1`] = `
     <div
       className="flex-100 layout-row"
     >
-      <Component
+      <Header
+        component={null}
+        currentStage="stage1"
+        error={null}
         invert={true}
         isLanding={true}
+        loggingIn={false}
+        loginAttempt={false}
+        messages={null}
         noMessages={true}
+        noRedirect={false}
+        registering={false}
+        req={null}
         scrollable={true}
+        showModal={false}
+        showRegistration={false}
+        t={[Function]}
+        tenant={null}
         theme={
           Object {
             "colors": Object {
@@ -393,10 +146,12 @@ exports[`user.role_id is 1 1`] = `
               Welcome to the
             </b>
             <br />
-            <i />
+            <i>
+              TENANT_NAME
+            </i>
             <br />
             <b>
-              shop for online freight
+              online quoting tool
             </b>
           </h2>
           <div
@@ -410,11 +165,11 @@ exports[`user.role_id is 1 1`] = `
             <h3
               className="flex-none"
             >
-              Enjoy the most advanced and easy to use 
+              Enjoy our modern and easy to use 
               <b>
-                booking system
+                quoting tool
               </b>
-               in the market. Finally, shipping is as simple as it should be.
+               right away. Finally, shipping is as simple as it should be.
             </h3>
           </div>
         </div>
@@ -425,41 +180,71 @@ exports[`user.role_id is 1 1`] = `
           t={[Function]}
           tenant={
             Object {
-              "data": Object {
-                "emails": Object {
-                  "sales": Object {
-                    "air": "sales@demo.com",
-                    "general": "sales@demo.com",
-                    "ocean": "sales@demo.com",
-                    "rail": "sales@demo.com",
+              "emails": Object {
+                "sales": Object {
+                  "air": "sales@demo.com",
+                  "general": "sales@demo.com",
+                  "ocean": "sales@demo.com",
+                  "rail": "sales@demo.com",
+                },
+                "support": Object {
+                  "air": "imc.air@demo.com",
+                  "general": "support@demo.com",
+                  "ocean": "imc.sea@demo.com",
+                  "rail": "imc.rail@demo.com",
+                },
+              },
+              "id": 123,
+              "name": "TENANT_NAME",
+              "phones": Object {
+                "support": "TENANT_SUPPORT_PHONE",
+              },
+              "scope": Object {
+                "cargo_info_level": "text",
+                "carriage_options": Object {
+                  "on_carriage": Object {
+                    "export": "mandatory",
+                    "import": "mandatory",
                   },
-                  "support": Object {
-                    "air": "imc.air@demo.com",
-                    "general": "support@demo.com",
-                    "ocean": "imc.sea@demo.com",
-                    "rail": "imc.rail@demo.com",
+                  "pre_carriage": Object {
+                    "export": "optional",
+                    "import": "optional",
                   },
                 },
-                "id": 123,
-                "name": "FOO_NAME",
-                "scope": Object {
-                  "closed_quotation_tool": true,
-                  "customs_export_paper": false,
-                  "modes_of_transport": Object {
-                    "air": Object {},
-                    "ocean": Object {
-                      "OCEAN_LOAD_TYPE": true,
-                    },
-                    "rail": Object {},
-                    "truck": Object {},
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "detailed_billing": true,
+                "has_customs": true,
+                "has_insurance": true,
+                "hide_grand_total": true,
+                "mandatory_form_fields": Object {
+                  "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                  "total_goods_value": 3370,
+                },
+                "modes_of_transport": Object {
+                  "air": Object {
+                    "AIR_LOAD_TYPE": 0,
+                  },
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": 2,
+                  },
+                  "rail": Object {
+                    "RAIL_LOAD_TYPE": 0,
+                  },
+                  "truck": Object {
+                    "TRUCK_LOAD_TYPE": 0,
                   },
                 },
-                "subdomain": "foosubdomain",
-                "theme": Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
+                "terms": Array [
+                  "FOO_TERM",
+                  "BAR_TERM",
+                ],
+              },
+              "subdomain": "TENANT_SUBDOMAIN",
+              "theme": Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
                 },
               },
             }
@@ -500,41 +285,71 @@ exports[`user.role_id is 1 1`] = `
         t={[Function]}
         tenant={
           Object {
-            "data": Object {
-              "emails": Object {
-                "sales": Object {
-                  "air": "sales@demo.com",
-                  "general": "sales@demo.com",
-                  "ocean": "sales@demo.com",
-                  "rail": "sales@demo.com",
+            "emails": Object {
+              "sales": Object {
+                "air": "sales@demo.com",
+                "general": "sales@demo.com",
+                "ocean": "sales@demo.com",
+                "rail": "sales@demo.com",
+              },
+              "support": Object {
+                "air": "imc.air@demo.com",
+                "general": "support@demo.com",
+                "ocean": "imc.sea@demo.com",
+                "rail": "imc.rail@demo.com",
+              },
+            },
+            "id": 123,
+            "name": "TENANT_NAME",
+            "phones": Object {
+              "support": "TENANT_SUPPORT_PHONE",
+            },
+            "scope": Object {
+              "cargo_info_level": "text",
+              "carriage_options": Object {
+                "on_carriage": Object {
+                  "export": "mandatory",
+                  "import": "mandatory",
                 },
-                "support": Object {
-                  "air": "imc.air@demo.com",
-                  "general": "support@demo.com",
-                  "ocean": "imc.sea@demo.com",
-                  "rail": "imc.rail@demo.com",
+                "pre_carriage": Object {
+                  "export": "optional",
+                  "import": "optional",
                 },
               },
-              "id": 123,
-              "name": "FOO_NAME",
-              "scope": Object {
-                "closed_quotation_tool": true,
-                "customs_export_paper": false,
-                "modes_of_transport": Object {
-                  "air": Object {},
-                  "ocean": Object {
-                    "OCEAN_LOAD_TYPE": true,
-                  },
-                  "rail": Object {},
-                  "truck": Object {},
+              "closed_quotation_tool": true,
+              "customs_export_paper": false,
+              "detailed_billing": true,
+              "has_customs": true,
+              "has_insurance": true,
+              "hide_grand_total": true,
+              "mandatory_form_fields": Object {
+                "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                "total_goods_value": 3370,
+              },
+              "modes_of_transport": Object {
+                "air": Object {
+                  "AIR_LOAD_TYPE": 0,
+                },
+                "ocean": Object {
+                  "OCEAN_LOAD_TYPE": 2,
+                },
+                "rail": Object {
+                  "RAIL_LOAD_TYPE": 0,
+                },
+                "truck": Object {
+                  "TRUCK_LOAD_TYPE": 0,
                 },
               },
-              "subdomain": "foosubdomain",
-              "theme": Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
+              "terms": Array [
+                "FOO_TERM",
+                "BAR_TERM",
+              ],
+            },
+            "subdomain": "TENANT_SUBDOMAIN",
+            "theme": Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
               },
             },
           }
@@ -568,47 +383,77 @@ exports[`user.role_id is 1 1`] = `
 </styled.div>
 `;
 
-exports[`user.role_id is 2 1`] = `
+exports[`theme has truthy properties 1`] = `
 <styled.div
-  bg="https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg"
+  bg="green"
   className="layout-row flex-100 layout-align-center"
   tenant={
     Object {
-      "data": Object {
-        "emails": Object {
-          "sales": Object {
-            "air": "sales@demo.com",
-            "general": "sales@demo.com",
-            "ocean": "sales@demo.com",
-            "rail": "sales@demo.com",
+      "emails": Object {
+        "sales": Object {
+          "air": "sales@demo.com",
+          "general": "sales@demo.com",
+          "ocean": "sales@demo.com",
+          "rail": "sales@demo.com",
+        },
+        "support": Object {
+          "air": "imc.air@demo.com",
+          "general": "support@demo.com",
+          "ocean": "imc.sea@demo.com",
+          "rail": "imc.rail@demo.com",
+        },
+      },
+      "id": 123,
+      "name": "TENANT_NAME",
+      "phones": Object {
+        "support": "TENANT_SUPPORT_PHONE",
+      },
+      "scope": Object {
+        "cargo_info_level": "text",
+        "carriage_options": Object {
+          "on_carriage": Object {
+            "export": "mandatory",
+            "import": "mandatory",
           },
-          "support": Object {
-            "air": "imc.air@demo.com",
-            "general": "support@demo.com",
-            "ocean": "imc.sea@demo.com",
-            "rail": "imc.rail@demo.com",
+          "pre_carriage": Object {
+            "export": "optional",
+            "import": "optional",
           },
         },
-        "id": 123,
-        "name": "FOO_NAME",
-        "scope": Object {
-          "closed_quotation_tool": true,
-          "customs_export_paper": false,
-          "modes_of_transport": Object {
-            "air": Object {},
-            "ocean": Object {
-              "OCEAN_LOAD_TYPE": true,
-            },
-            "rail": Object {},
-            "truck": Object {},
+        "closed_quotation_tool": true,
+        "customs_export_paper": false,
+        "detailed_billing": true,
+        "has_customs": true,
+        "has_insurance": true,
+        "hide_grand_total": true,
+        "mandatory_form_fields": Object {
+          "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+          "total_goods_value": 3370,
+        },
+        "modes_of_transport": Object {
+          "air": Object {
+            "AIR_LOAD_TYPE": 0,
+          },
+          "ocean": Object {
+            "OCEAN_LOAD_TYPE": 2,
+          },
+          "rail": Object {
+            "RAIL_LOAD_TYPE": 0,
+          },
+          "truck": Object {
+            "TRUCK_LOAD_TYPE": 0,
           },
         },
-        "subdomain": "foosubdomain",
-        "theme": Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
+        "terms": Array [
+          "FOO_TERM",
+          "BAR_TERM",
+        ],
+      },
+      "subdomain": "TENANT_SUBDOMAIN",
+      "theme": Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
         },
       },
     }
@@ -620,17 +465,34 @@ exports[`user.role_id is 2 1`] = `
     <div
       className="flex-100 layout-row"
     >
-      <Component
+      <Header
+        component={null}
+        currentStage="stage1"
+        error={null}
         invert={true}
         isLanding={true}
+        loggingIn={false}
+        loginAttempt={false}
+        messages={null}
         noMessages={true}
+        noRedirect={false}
+        registering={false}
+        req={null}
         scrollable={true}
+        showModal={false}
+        showRegistration={false}
+        t={[Function]}
+        tenant={null}
         theme={
           Object {
+            "background": "green",
             "colors": Object {
               "primary": "#333",
               "secondary": "#fafafa",
             },
+            "logoLarge": "LOGO_LARGE",
+            "logoWhite": "LOGO_WHITE",
+            "welcome_text": "WELCOME_TEXT",
           }
         }
         user={
@@ -645,7 +507,7 @@ exports[`user.role_id is 2 1`] = `
             "role": Object {
               "name": "shipper",
             },
-            "role_id": 2,
+            "role_id": 1,
           }
         }
       />
@@ -662,7 +524,7 @@ exports[`user.role_id is 2 1`] = `
           <img
             alt=""
             className="flex-none tenant_logo_landing"
-            src=""
+            src="LOGO_WHITE"
           />
           <h2
             className="flex-none"
@@ -671,10 +533,12 @@ exports[`user.role_id is 2 1`] = `
               Welcome to the
             </b>
             <br />
-            <i />
+            <i>
+              TENANT_NAME
+            </i>
             <br />
             <b>
-              shop for online freight
+              WELCOME_TEXT
             </b>
           </h2>
           <div
@@ -688,11 +552,11 @@ exports[`user.role_id is 2 1`] = `
             <h3
               className="flex-none"
             >
-              Enjoy the most advanced and easy to use 
+              Enjoy our modern and easy to use 
               <b>
-                booking system
+                quoting tool
               </b>
-               in the market. Finally, shipping is as simple as it should be.
+               right away. Finally, shipping is as simple as it should be.
             </h3>
           </div>
         </div>
@@ -703,82 +567,6 @@ exports[`user.role_id is 2 1`] = `
           t={[Function]}
           tenant={
             Object {
-              "data": Object {
-                "emails": Object {
-                  "sales": Object {
-                    "air": "sales@demo.com",
-                    "general": "sales@demo.com",
-                    "ocean": "sales@demo.com",
-                    "rail": "sales@demo.com",
-                  },
-                  "support": Object {
-                    "air": "imc.air@demo.com",
-                    "general": "support@demo.com",
-                    "ocean": "imc.sea@demo.com",
-                    "rail": "imc.rail@demo.com",
-                  },
-                },
-                "id": 123,
-                "name": "FOO_NAME",
-                "scope": Object {
-                  "closed_quotation_tool": true,
-                  "customs_export_paper": false,
-                  "modes_of_transport": Object {
-                    "air": Object {},
-                    "ocean": Object {
-                      "OCEAN_LOAD_TYPE": true,
-                    },
-                    "rail": Object {},
-                    "truck": Object {},
-                  },
-                },
-                "subdomain": "foosubdomain",
-                "theme": Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                },
-              },
-            }
-          }
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-          user={
-            Object {
-              "company_name": "FOO_COMPANY",
-              "currency": "EUR",
-              "email": "foo@bar.baz",
-              "first_name": "John",
-              "guest": false,
-              "last_name": "Doe",
-              "phone": "6345789",
-              "role": Object {
-                "name": "shipper",
-              },
-              "role_id": 2,
-            }
-          }
-        />
-      </div>
-    </div>
-    <div
-      className="flex-50 layout-row layout-align-center layout-wrap"
-    >
-      <ButtonSection
-        bookNow={[Function]}
-        className="hide_h_gt_xxs"
-        showLogo={true}
-        t={[Function]}
-        tenant={
-          Object {
-            "data": Object {
               "emails": Object {
                 "sales": Object {
                   "air": "sales@demo.com",
@@ -794,35 +582,179 @@ exports[`user.role_id is 2 1`] = `
                 },
               },
               "id": 123,
-              "name": "FOO_NAME",
+              "name": "TENANT_NAME",
+              "phones": Object {
+                "support": "TENANT_SUPPORT_PHONE",
+              },
               "scope": Object {
+                "cargo_info_level": "text",
+                "carriage_options": Object {
+                  "on_carriage": Object {
+                    "export": "mandatory",
+                    "import": "mandatory",
+                  },
+                  "pre_carriage": Object {
+                    "export": "optional",
+                    "import": "optional",
+                  },
+                },
                 "closed_quotation_tool": true,
                 "customs_export_paper": false,
-                "modes_of_transport": Object {
-                  "air": Object {},
-                  "ocean": Object {
-                    "OCEAN_LOAD_TYPE": true,
-                  },
-                  "rail": Object {},
-                  "truck": Object {},
+                "detailed_billing": true,
+                "has_customs": true,
+                "has_insurance": true,
+                "hide_grand_total": true,
+                "mandatory_form_fields": Object {
+                  "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                  "total_goods_value": 3370,
                 },
+                "modes_of_transport": Object {
+                  "air": Object {
+                    "AIR_LOAD_TYPE": 0,
+                  },
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": 2,
+                  },
+                  "rail": Object {
+                    "RAIL_LOAD_TYPE": 0,
+                  },
+                  "truck": Object {
+                    "TRUCK_LOAD_TYPE": 0,
+                  },
+                },
+                "terms": Array [
+                  "FOO_TERM",
+                  "BAR_TERM",
+                ],
               },
-              "subdomain": "foosubdomain",
+              "subdomain": "TENANT_SUBDOMAIN",
               "theme": Object {
                 "colors": Object {
                   "primary": "#333",
                   "secondary": "#fafafa",
                 },
               },
+            }
+          }
+          theme={
+            Object {
+              "background": "green",
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+              "logoLarge": "LOGO_LARGE",
+              "logoWhite": "LOGO_WHITE",
+              "welcome_text": "WELCOME_TEXT",
+            }
+          }
+          user={
+            Object {
+              "company_name": "FOO_COMPANY",
+              "currency": "EUR",
+              "email": "foo@bar.baz",
+              "first_name": "John",
+              "guest": false,
+              "last_name": "Doe",
+              "phone": "6345789",
+              "role": Object {
+                "name": "shipper",
+              },
+              "role_id": 1,
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-center layout-wrap"
+    >
+      <ButtonSection
+        bookNow={[Function]}
+        className="hide_h_gt_xxs"
+        showLogo={true}
+        t={[Function]}
+        tenant={
+          Object {
+            "emails": Object {
+              "sales": Object {
+                "air": "sales@demo.com",
+                "general": "sales@demo.com",
+                "ocean": "sales@demo.com",
+                "rail": "sales@demo.com",
+              },
+              "support": Object {
+                "air": "imc.air@demo.com",
+                "general": "support@demo.com",
+                "ocean": "imc.sea@demo.com",
+                "rail": "imc.rail@demo.com",
+              },
+            },
+            "id": 123,
+            "name": "TENANT_NAME",
+            "phones": Object {
+              "support": "TENANT_SUPPORT_PHONE",
+            },
+            "scope": Object {
+              "cargo_info_level": "text",
+              "carriage_options": Object {
+                "on_carriage": Object {
+                  "export": "mandatory",
+                  "import": "mandatory",
+                },
+                "pre_carriage": Object {
+                  "export": "optional",
+                  "import": "optional",
+                },
+              },
+              "closed_quotation_tool": true,
+              "customs_export_paper": false,
+              "detailed_billing": true,
+              "has_customs": true,
+              "has_insurance": true,
+              "hide_grand_total": true,
+              "mandatory_form_fields": Object {
+                "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                "total_goods_value": 3370,
+              },
+              "modes_of_transport": Object {
+                "air": Object {
+                  "AIR_LOAD_TYPE": 0,
+                },
+                "ocean": Object {
+                  "OCEAN_LOAD_TYPE": 2,
+                },
+                "rail": Object {
+                  "RAIL_LOAD_TYPE": 0,
+                },
+                "truck": Object {
+                  "TRUCK_LOAD_TYPE": 0,
+                },
+              },
+              "terms": Array [
+                "FOO_TERM",
+                "BAR_TERM",
+              ],
+            },
+            "subdomain": "TENANT_SUBDOMAIN",
+            "theme": Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
             },
           }
         }
         theme={
           Object {
+            "background": "green",
             "colors": Object {
               "primary": "#333",
               "secondary": "#fafafa",
             },
+            "logoLarge": "LOGO_LARGE",
+            "logoWhite": "LOGO_WHITE",
+            "welcome_text": "WELCOME_TEXT",
           }
         }
         user={
@@ -837,7 +769,7 @@ exports[`user.role_id is 2 1`] = `
             "role": Object {
               "name": "shipper",
             },
-            "role_id": 2,
+            "role_id": 1,
           }
         }
       />

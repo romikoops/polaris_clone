@@ -2,7 +2,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
   theme, user, identity, change
-} from '../../mocks'
+} from '../../mock'
 import AdminNav from './AdminNav'
 
 jest.mock('uuid', () => {

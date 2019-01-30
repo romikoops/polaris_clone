@@ -30,6 +30,7 @@ exports[`doc.approved === null 1`] = `
             lines={1}
             trimWhitespace={false}
           >
+            FOO_DOCUMENT_TEXT
              
           </Truncate>
         </p>
@@ -73,7 +74,7 @@ exports[`doc.approved === null 1`] = `
         <p
           className="flex-100"
         >
-          19
+          Dec 1, 2018 7:14 PM
         </p>
       </div>
     </div>
@@ -124,7 +125,7 @@ exports[`doc.approved === null 1`] = `
           />
         </div>
         <input
-          name="FOO_TYPE"
+          name="TYPE"
           onChange={[Function]}
           type="file"
         />
@@ -149,7 +150,23 @@ exports[`doc.approved === null 1`] = `
     </div>
     <div
       className="upload_btn_wrapper flex-33 layout-row layout-align-center-center"
-    />
+    >
+      <Link
+        className="flex-none layout-row layout-align-center-center"
+        replace={false}
+        target="_blank"
+        to="FOO_SIGNED_URL"
+      >
+        <i
+          className="clip fa fa-eye"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        />
+      </Link>
+    </div>
   </div>
 </div>
 `;
@@ -184,6 +201,7 @@ exports[`doc.approved === rejected 1`] = `
             lines={1}
             trimWhitespace={false}
           >
+            FOO_DOCUMENT_TEXT
              
           </Truncate>
         </p>
@@ -227,7 +245,7 @@ exports[`doc.approved === rejected 1`] = `
         <p
           className="flex-100"
         >
-          19
+          Dec 1, 2018 7:14 PM
         </p>
       </div>
     </div>
@@ -278,7 +296,7 @@ exports[`doc.approved === rejected 1`] = `
           />
         </div>
         <input
-          name="FOO_TYPE"
+          name="TYPE"
           onChange={[Function]}
           type="file"
         />
@@ -303,12 +321,28 @@ exports[`doc.approved === rejected 1`] = `
     </div>
     <div
       className="upload_btn_wrapper flex-33 layout-row layout-align-center-center"
-    />
+    >
+      <Link
+        className="flex-none layout-row layout-align-center-center"
+        replace={false}
+        target="_blank"
+        to="FOO_SIGNED_URL"
+      >
+        <i
+          className="clip fa fa-eye"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        />
+      </Link>
+    </div>
   </div>
 </div>
 `;
 
-exports[`doc.signed_url is truthy 1`] = `
+exports[`doc.signed_url is falsy 1`] = `
 <div
   className="flex-none layout-row layout-wrap layout-align-center-start tile "
 >
@@ -338,6 +372,7 @@ exports[`doc.signed_url is truthy 1`] = `
             lines={1}
             trimWhitespace={false}
           >
+            FOO_DOCUMENT_TEXT
              
           </Truncate>
         </p>
@@ -381,7 +416,7 @@ exports[`doc.signed_url is truthy 1`] = `
         <p
           className="flex-100"
         >
-          19
+          Dec 1, 2018 7:14 PM
         </p>
       </div>
     </div>
@@ -432,7 +467,7 @@ exports[`doc.signed_url is truthy 1`] = `
           />
         </div>
         <input
-          name="FOO_TYPE"
+          name="TYPE"
           onChange={[Function]}
           type="file"
         />
@@ -457,23 +492,7 @@ exports[`doc.signed_url is truthy 1`] = `
     </div>
     <div
       className="upload_btn_wrapper flex-33 layout-row layout-align-center-center"
-    >
-      <Link
-        className="flex-none layout-row layout-align-center-center"
-        replace={false}
-        target="_blank"
-        to="FOO_SIGNED_URL"
-      >
-        <i
-          className="clip fa fa-eye"
-          style={
-            Object {
-              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
-            }
-          }
-        />
-      </Link>
-    </div>
+    />
   </div>
 </div>
 `;
@@ -508,6 +527,7 @@ exports[`isAdmin is true 1`] = `
             lines={1}
             trimWhitespace={false}
           >
+            FOO_DOCUMENT_TEXT
              
           </Truncate>
         </p>
@@ -551,7 +571,7 @@ exports[`isAdmin is true 1`] = `
         <p
           className="flex-100"
         >
-          19
+          Dec 1, 2018 7:14 PM
         </p>
       </div>
     </div>
@@ -617,7 +637,23 @@ exports[`isAdmin is true 1`] = `
     </div>
     <div
       className="upload_btn_wrapper flex-33 layout-row layout-align-center-center"
-    />
+    >
+      <Link
+        className="flex-none layout-row layout-align-center-center"
+        replace={false}
+        target="_blank"
+        to="FOO_SIGNED_URL"
+      >
+        <i
+          className="clip fa fa-eye"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        />
+      </Link>
+    </div>
   </div>
 </div>
 `;
@@ -652,6 +688,7 @@ exports[`shallow render 1`] = `
             lines={1}
             trimWhitespace={false}
           >
+            FOO_DOCUMENT_TEXT
              
           </Truncate>
         </p>
@@ -695,7 +732,7 @@ exports[`shallow render 1`] = `
         <p
           className="flex-100"
         >
-          19
+          Dec 1, 2018 7:14 PM
         </p>
       </div>
     </div>
@@ -746,7 +783,7 @@ exports[`shallow render 1`] = `
           />
         </div>
         <input
-          name="FOO_TYPE"
+          name="TYPE"
           onChange={[Function]}
           type="file"
         />
@@ -771,7 +808,23 @@ exports[`shallow render 1`] = `
     </div>
     <div
       className="upload_btn_wrapper flex-33 layout-row layout-align-center-center"
-    />
+    >
+      <Link
+        className="flex-none layout-row layout-align-center-center"
+        replace={false}
+        target="_blank"
+        to="FOO_SIGNED_URL"
+      >
+        <i
+          className="clip fa fa-eye"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        />
+      </Link>
+    </div>
   </div>
 </div>
 `;
@@ -876,6 +929,7 @@ exports[`state.showDenialDetails is true 1`] = `
             lines={1}
             trimWhitespace={false}
           >
+            FOO_DOCUMENT_TEXT
              
           </Truncate>
         </p>
@@ -919,7 +973,7 @@ exports[`state.showDenialDetails is true 1`] = `
         <p
           className="flex-100"
         >
-          19
+          Dec 1, 2018 7:14 PM
         </p>
       </div>
     </div>
@@ -970,7 +1024,7 @@ exports[`state.showDenialDetails is true 1`] = `
           />
         </div>
         <input
-          name="FOO_TYPE"
+          name="TYPE"
           onChange={[Function]}
           type="file"
         />
@@ -995,7 +1049,23 @@ exports[`state.showDenialDetails is true 1`] = `
     </div>
     <div
       className="upload_btn_wrapper flex-33 layout-row layout-align-center-center"
-    />
+    >
+      <Link
+        className="flex-none layout-row layout-align-center-center"
+        replace={false}
+        target="_blank"
+        to="FOO_SIGNED_URL"
+      >
+        <i
+          className="clip fa fa-eye"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        />
+      </Link>
+    </div>
   </div>
 </div>
 `;
@@ -1030,6 +1100,7 @@ exports[`theme is falsy 1`] = `
             lines={1}
             trimWhitespace={false}
           >
+            FOO_DOCUMENT_TEXT
              
           </Truncate>
         </p>
@@ -1073,7 +1144,7 @@ exports[`theme is falsy 1`] = `
         <p
           className="flex-100"
         >
-          19
+          Dec 1, 2018 7:14 PM
         </p>
       </div>
     </div>
@@ -1124,7 +1195,7 @@ exports[`theme is falsy 1`] = `
           />
         </div>
         <input
-          name="FOO_TYPE"
+          name="TYPE"
           onChange={[Function]}
           type="file"
         />
@@ -1149,7 +1220,23 @@ exports[`theme is falsy 1`] = `
     </div>
     <div
       className="upload_btn_wrapper flex-33 layout-row layout-align-center-center"
-    />
+    >
+      <Link
+        className="flex-none layout-row layout-align-center-center"
+        replace={false}
+        target="_blank"
+        to="FOO_SIGNED_URL"
+      >
+        <i
+          className="clip fa fa-eye"
+          style={
+            Object {
+              "background": "black",
+            }
+          }
+        />
+      </Link>
+    </div>
   </div>
 </div>
 `;

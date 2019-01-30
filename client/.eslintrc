@@ -3,5 +3,18 @@
     "@itsmycargo"
   ],
 
-  "parser": "babel-eslint"
+  "parser": "babel-eslint",
+  "overrides": [
+    {
+      "files": [
+        "__mocks__/**/*.js", 
+        "app/mocks/**/*.js"
+      ],
+      "rules": {
+        "import/prefer-default-export":"off",
+        "camelcase": "off",
+        "max-len": "off"
+      }
+    }
+  ]
 }

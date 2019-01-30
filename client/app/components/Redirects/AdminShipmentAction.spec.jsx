@@ -1,19 +1,20 @@
+import '../../mocks/libraries/react-redux'
+import '../../mocks/libraries/react-router-dom'
 import * as React from 'react'
-import { shallow } from 'enzyme'
-import { user, address, identity, match, theme } from '../../mocks'
+import { render } from 'enzyme'
+import {
+  identity,
+  theme,
+  match,
+  user
+} from '../../mocks'
 import AdminShipmentAction from './AdminShipmentAction'
-
-jest.mock('react-redux', () => ({
-  connect: (mapStateToProps, mapDispatchToProps) => Component => Component
-}))
-jest.mock('react-router-dom', () => ({
-  withRouter: x => x
-}))
 
 const propsBase = {
   theme,
   loading: false,
   user,
+  showModal: true,
   loggedIn: false,
   adminDispatch: {
     goTo: identity,
@@ -24,12 +25,11 @@ const propsBase = {
     showLogin: identity,
     closeLogin: identity
   },
-  match,
-  address
+  match
 }
 
-test('shallow rendering', () => {
-  expect(shallow(<AdminShipmentAction {...propsBase} />)).toMatchSnapshot()
+test('happy path', () => {
+  expect(render(<AdminShipmentAction {...propsBase} />)).toMatchSnapshot()
 })
 
 test('loading is true', () => {
@@ -37,5 +37,5 @@ test('loading is true', () => {
     ...propsBase,
     loading: true
   }
-  expect(shallow(<AdminShipmentAction {...props} />)).toMatchSnapshot()
+  expect(render(<AdminShipmentAction {...props} />)).toMatchSnapshot()
 })

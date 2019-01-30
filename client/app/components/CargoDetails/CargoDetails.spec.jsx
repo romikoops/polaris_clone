@@ -1,37 +1,18 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, shipmentData, identity, change } from '../../mocks'
+import {
+  change,
+  currencies,
+  identity,
+  shipmentData,
+  tenant,
+  theme,
+  turnFalsy
+} from '../../mocks'
 
-jest.mock('../../helpers', () => ({
-  // eslint-disable-next-line react/prop-types
-  converter: x => x
-}))
-// eslint-disable-next-line
 import CargoDetails from './CargoDetails'
 
-const editedShipmentData = {
-  ...shipmentData,
-  customs: {
-    total: {
-      total: {
-        currency: 'EUR'
-      }
-    },
-    import: {
-      total: {
-        currency: 'EUR'
-      }
-    },
-    export: {
-      total: {
-        currency: 'EUR',
-        value: 100
-      }
-    }
-  }
-}
-
-const customsDataBase = {
+const customsData = {
   val: 'FOO_CUSTOM_DATA',
   import: {
     bool: true,
@@ -46,60 +27,59 @@ const customsDataBase = {
 
 const propsBase = {
   theme,
-  tenant: {
-    scope: {}
-  },
-  shipmentData: editedShipmentData,
+  tenant,
+  shipmentData,
   handleChange: identity,
   handleInsurance: identity,
-  cargoNotes: 'FOO_CARGO_NOTES',
+  cargoNotes: 'CARGO_NOTES',
   totalGoodsValue: { value: 11 },
   insurance: {
-    val: 'FOO_INSURANCE',
+    val: 'INSURANCE',
     bool: true
   },
-  customsData: customsDataBase,
+  customsData,
   setCustomsFee: identity,
   shipmentDispatch: {
     deleteDocument: identity,
     uploadDocument: identity
   },
-  currencies: [{
-    key: 'FOO_CURRENCIES_KEY',
-    rate: 6
-  }],
+  currencies,
   hsCodes: [],
   finishBookingAttempted: false,
   hsTexts: {},
   handleTotalGoodsCurrency: identity,
-  eori: 'FOO_EORI',
-  notes: 'FOO_NOTES',
-  incoterm: 'FOO_INCOTERM'
+  eori: 'EORI',
+  notes: 'NOTES',
+  incoterm: 'INCOTERM'
 }
 
+test('shallow render', () => {
+  expect(shallow(<CargoDetails {...propsBase} />)).toMatchSnapshot()
+})
+
+test('state.customsView is true', () => {
+  const wrapper = shallow(<CargoDetails {...propsBase} />)
+  wrapper.setState({ customsView: true })
+  expect(wrapper).toMatchSnapshot()
+})
+
+test('state.showModal is true', () => {
+  const wrapper = shallow(<CargoDetails {...propsBase} />)
+  wrapper.setState({ showModal: true })
+  expect(wrapper).toMatchSnapshot()
+})
+
+test('state.insuranceView is false', () => {
+  const wrapper = shallow(<CargoDetails {...propsBase} />)
+  wrapper.setState({ insuranceView: true })
+  expect(wrapper).toMatchSnapshot()
+})
+
 test('scope.has_customs || scope.has_insurance', () => {
-  const changeData = {
-    shipmentData: {
-      addons: {
-        customs_export_paper: true
-      }
-    },
-    tenant: {
-      scope: {
-        has_insurance: true,
-        has_customs: true,
-        customs_export_paper: true
-      }
-    }
+  const props = {
+    ...propsBase,
+    insurance: { bool: null }
   }
-  const props = change(
-    {
-      ...propsBase,
-      insurance: { bool: null }
-    },
-    '',
-    changeData
-  )
 
   expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
 })
@@ -117,16 +97,6 @@ test('shipment.has_pre_carriage ?', () => {
   expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
 })
 
-test('this.props.insurance.bool ?', () => {
-  const props = {
-    ...propsBase,
-    insurance: {
-      bool: false
-    }
-  }
-  expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
-})
-
 test('customsData[target].unknown', () => {
   const props = {
     ...propsBase,
@@ -135,23 +105,6 @@ test('customsData[target].unknown', () => {
       export: {}
     }
   }
-  expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
-})
-
-test('fee && !fee.unknown && fee.total.value', () => {
-  const changeData = {
-    import: {
-      unknown: false
-    },
-    export: {
-      unknown: false
-    }
-  }
-  const props = change(
-    propsBase,
-    'shipmentData.customs',
-    changeData
-  )
   expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
 })
 
@@ -172,10 +125,6 @@ test('customs.import.unknown && customs.export.unknown', () => {
   expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
 })
 
-test('shallow render', () => {
-  expect(shallow(<CargoDetails {...propsBase} />)).toMatchSnapshot()
-})
-
 test('totalGoodsValue.value > 20000', () => {
   const props = {
     ...propsBase,
@@ -186,26 +135,54 @@ test('totalGoodsValue.value > 20000', () => {
 })
 
 test('shipmentData.dangerousGoods is true', () => {
-  const props = {
-    ...propsBase,
-    shipmentData: {
-      ...editedShipmentData,
-      dangerousGoods: true
-    }
-  }
+  const props = change(
+    propsBase,
+    'shipmentData.dangerousGoods',
+    true
+  )
   expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
 })
 
-test('tenant.scope.has_insurance is true', () => {
-  const tenant = {
-    scope: {
-      has_insurance: true
+test('tenant.scope.has_insurance is false', () => {
+  const props = change(
+    propsBase,
+    'tenant.scope.has_insurance',
+    false
+  )
+
+  expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
+})
+
+test('tenant.scope.has_customs is false', () => {
+  const props = change(
+    propsBase,
+    'tenant.scope.has_customs',
+    false
+  )
+
+  expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
+})
+
+test('tenant.scope.customs_export_paper is false', () => {
+  const props = change(
+    propsBase,
+    'tenant.scope.customs_export_paper',
+    false
+  )
+
+  expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
+})
+
+test('scope.has_customs || scope.has_insurance || scope.customs_export_paper is false', () => {
+  const props = change(
+    propsBase,
+    'tenant.scope',
+    {
+      has_customs: false,
+      has_insurance: false,
+      customs_export_paper: false
     }
-  }
-  const props = {
-    ...propsBase,
-    tenant
-  }
+  )
 
   expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
 })

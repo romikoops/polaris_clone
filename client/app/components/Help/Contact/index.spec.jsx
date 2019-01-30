@@ -1,27 +1,16 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme } from '../../../mocks'
-// eslint-disable-next-line import/no-named-as-default
-import HelpContact from './'
-
-const tenantBase = {
-  theme,
-  emails: {
-    support: {
-      foo: 'foo@foo.com',
-      bar: 'bar@bar.com',
-      general: 'general@general.com'
-    }
-  },
-  phones: {
-    support: '+49 123445567'
-  }
-}
-
-const propsBase = {
-  tenant: tenantBase
-}
+import { tenant, turnFalsy } from '../../../mocks'
+import HelpContact from '.'
 
 test('shallow render', () => {
-  expect(shallow(<HelpContact {...propsBase} />)).toMatchSnapshot()
+  expect(shallow(<HelpContact tenant={tenant} />)).toMatchSnapshot()
+})
+
+test('tenant.phone.support is falsy', () => {
+  const newTenant = turnFalsy(
+    tenant,
+    'phones.support'
+  )
+  expect(shallow(<HelpContact tenant={newTenant} />)).toMatchSnapshot()
 })

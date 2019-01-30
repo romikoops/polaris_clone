@@ -1,70 +1,60 @@
+import '../../mocks/libraries/moment'
 import * as React from 'react'
-import { mount, shallow } from 'enzyme'
-import { theme, shipmentData, user, identity } from '../../mocks'
+import { shallow } from 'enzyme'
+import {
+  change, theme, shipmentData, user, identity
+} from '../../mocks'
 
-jest.mock('../../helpers', () => ({
-  switchIcon: x => x,
-  priceSpacing: x => x,
-  totalPrice: x => x
-}))
-jest.mock('../../constants', () => {
-  const format = () => 19
-
-  const moment = () => ({
-    format
-  })
-
-  return { moment }
-})
-jest.mock('../Tooltip/Tooltip', () => ({
-  // eslint-disable-next-line react/prop-types
-  Tooltip: ({ props }) => <div {...props} />
-}))
-jest.mock('../Price/Price', () => ({
-  // eslint-disable-next-line react/prop-types
-  Price: ({ props }) => <div {...props} />
-}))
-
-// eslint-disable-next-line
 import MessageShipmentData from './MessageShipmentData'
-
-const editedShipment = {
-  ...shipmentData.shipment,
-  origin_hub: { name: 'FOO_ORIGIN_HUB' },
-  destination_hub: { name: 'FOO_DESTINATION_HUB' }
-}
-const editedShipmentData = {
-  ...shipmentData,
-  shipment: editedShipment,
-  hubs: {
-    startHub: 'FOO_START_HUB',
-    endHub: 'FOO_END_HUB'
-  }
-}
 
 const propsBase = {
   theme,
-  name: 'FOO',
+  name: 'MAME',
   onChange: identity,
-  shipmentData: editedShipmentData,
+  shipmentData,
+  pickupDate: '2018-12-02T11:14:33z',
   closeInfo: identity,
-  user,
-  pickupDate: 11
+  user
 }
 
 test('shallow render', () => {
   expect(shallow(<MessageShipmentData {...propsBase} />)).toMatchSnapshot()
 })
 
-test('props.closeInfo is called', () => {
+test('shipmentData is falsy', () => {
   const props = {
     ...propsBase,
-    closeInfo: jest.fn()
+    shipmentData: null
   }
-  const wrapper = mount(<MessageShipmentData {...props} />)
-  const selector = 'div[className="flex-33 layout-row layout-align-space-around-center"]'
-  const clickableDiv = wrapper.find(selector).last()
-  clickableDiv.simulate('click')
+  expect(shallow(<MessageShipmentData {...props} />)).toMatchSnapshot()
+})
 
-  expect(props.closeInfo).toHaveBeenCalled()
+test('load_type !== cargo_item', () => {
+  const props = change(
+    propsBase,
+    'shipmentData.shipment.load_type',
+    'FOO_LOAD_TYPE'
+  )
+
+  expect(shallow(<MessageShipmentData {...props} />)).toMatchSnapshot()
+})
+
+test('has_pre_carriage is true', () => {
+  const props = change(
+    propsBase,
+    'shipmentData.shipment.has_pre_carriage',
+    true
+  )
+
+  expect(shallow(<MessageShipmentData {...props} />)).toMatchSnapshot()
+})
+
+test('has_on_carriage is true', () => {
+  const props = change(
+    propsBase,
+    'shipmentData.shipment.has_on_carriage',
+    true
+  )
+
+  expect(shallow(<MessageShipmentData {...props} />)).toMatchSnapshot()
 })

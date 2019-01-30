@@ -1,82 +1,58 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`shallow render 1`] = `
+exports[`happy path 1`] = `
 <div
-  className="layout-row layout-align-center-center ccb_loading loader_box"
+  class="layout-row layout-align-center-center ccb_loading loader_box"
 >
   <div
-    className="cube preload"
+    class="cube preload"
   >
     <div
-      className="cube_face cube_face_front"
+      class="cube_face cube_face_front"
     >
       <i
-        className="fa fa-plane clip"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
+        class="fa fa-plane clip"
+        style="background:-webkit-linear-gradient(-90deg, #333,#fafafa)"
       />
     </div>
     <div
-      className="cube_face cube_face_back"
+      class="cube_face cube_face_back"
     >
       <i
-        className="fa fa-anchor clip"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
+        class="fa fa-anchor clip"
+        style="background:-webkit-linear-gradient(-90deg, #333,#fafafa)"
       />
     </div>
     <div
-      className="cube_face cube_face_left"
+      class="cube_face cube_face_left"
     >
       <i
-        className="fa fa-truck clip"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
+        class="fa fa-truck clip"
+        style="background:-webkit-linear-gradient(-90deg, #333,#fafafa)"
       />
     </div>
     <div
-      className="cube_face cube_face_right"
+      class="cube_face cube_face_right"
     >
       <i
-        className="fa fa-truck clip"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
+        class="fa fa-truck clip"
+        style="background:-webkit-linear-gradient(-90deg, #333,#fafafa)"
       />
     </div>
     <div
-      className="cube_face cube_face_bottom"
+      class="cube_face cube_face_bottom"
     >
       <i
-        className="fa fa-anchor clip"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
+        class="fa fa-anchor clip"
+        style="background:-webkit-linear-gradient(-90deg, #333,#fafafa)"
       />
     </div>
     <div
-      className="cube_face cube_face_top"
+      class="cube_face cube_face_top"
     >
       <i
-        className="fa fa-plane clip"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
+        class="fa fa-plane clip"
+        style="background:-webkit-linear-gradient(-90deg, #333,#fafafa)"
       />
     </div>
   </div>
@@ -85,164 +61,57 @@ exports[`shallow render 1`] = `
 
 exports[`theme is falsy 1`] = `
 <div
-  className="layout-row layout-align-center-center ccb_loading loader_box"
+  class="layout-row layout-align-center-center ccb_loading loader_box"
 >
   <div
-    className="cube preload"
+    class="cube preload"
   >
     <div
-      className="cube_face cube_face_front"
+      class="cube_face cube_face_front"
     >
       <i
-        className="fa fa-plane clip"
-        style={
-          Object {
-            "color": "#E0E0E0",
-          }
-        }
+        class="fa fa-plane clip"
+        style="color:#E0E0E0"
       />
     </div>
     <div
-      className="cube_face cube_face_back"
+      class="cube_face cube_face_back"
     >
       <i
-        className="fa fa-anchor clip"
-        style={
-          Object {
-            "color": "#E0E0E0",
-          }
-        }
+        class="fa fa-anchor clip"
+        style="color:#E0E0E0"
       />
     </div>
     <div
-      className="cube_face cube_face_left"
+      class="cube_face cube_face_left"
     >
       <i
-        className="fa fa-truck clip"
-        style={
-          Object {
-            "color": "#E0E0E0",
-          }
-        }
+        class="fa fa-truck clip"
+        style="color:#E0E0E0"
       />
     </div>
     <div
-      className="cube_face cube_face_right"
+      class="cube_face cube_face_right"
     >
       <i
-        className="fa fa-truck clip"
-        style={
-          Object {
-            "color": "#E0E0E0",
-          }
-        }
+        class="fa fa-truck clip"
+        style="color:#E0E0E0"
       />
     </div>
     <div
-      className="cube_face cube_face_bottom"
+      class="cube_face cube_face_bottom"
     >
       <i
-        className="fa fa-anchor clip"
-        style={
-          Object {
-            "color": "#E0E0E0",
-          }
-        }
+        class="fa fa-anchor clip"
+        style="color:#E0E0E0"
       />
     </div>
     <div
-      className="cube_face cube_face_top"
+      class="cube_face cube_face_top"
     >
       <i
-        className="fa fa-plane clip"
-        style={
-          Object {
-            "color": "#E0E0E0",
-          }
-        }
-      />
-    </div>
-  </div>
-</div>
-`;
-
-exports[`theme.logoLarge is truthy 1`] = `
-<div
-  className="layout-row layout-align-center-center ccb_loading loader_box"
->
-  <div
-    className="cube preload"
-  >
-    <div
-      className="cube_face cube_face_front"
-    >
-      <i
-        className="fa fa-plane clip"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      />
-    </div>
-    <div
-      className="cube_face cube_face_back"
-    >
-      <i
-        className="fa fa-anchor clip"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      />
-    </div>
-    <div
-      className="cube_face cube_face_left"
-    >
-      <i
-        className="fa fa-truck clip"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      />
-    </div>
-    <div
-      className="cube_face cube_face_right"
-    >
-      <i
-        className="fa fa-truck clip"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      />
-    </div>
-    <div
-      className="cube_face cube_face_bottom"
-    >
-      <i
-        className="fa fa-anchor clip"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      />
-    </div>
-    <div
-      className="cube_face cube_face_top"
-    >
-      <i
-        className="fa fa-plane clip"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
+        class="fa fa-plane clip"
+        style="color:#E0E0E0"
       />
     </div>
   </div>

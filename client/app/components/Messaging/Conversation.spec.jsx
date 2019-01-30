@@ -1,33 +1,25 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { identity, shipment, user, tenant, client, theme } from '../../mocks'
+import {
+  client,
+  identity,
+  shipment,
+  tenant,
+  theme,
+  change,
+  user
+} from '../../mocks'
 
-jest.mock('uuid', () => {
-  let counter = -1
-  const v4 = () => {
-    counter += 1
-
-    return `RANDOM_KEY_${counter}`
-  }
-
-  return { v4 }
-})
-// eslint-disable-next-line
 import Conversation from './Conversation'
 
-const regularUser = {
-  ...user,
-  role_id: 2
-}
-
 const propsBase = {
-  sendMessage: identity,
+  clients: [client],
   conversation: { messages: ['FOO_MESSAGE', 'BAR_MESSAGE'] },
-  theme,
+  sendMessage: identity,
   shipment,
-  user: regularUser,
   tenant,
-  clients: [client]
+  theme,
+  user
 }
 
 test('shallow render', () => {
@@ -39,6 +31,15 @@ test('theme is falsy', () => {
     ...propsBase,
     theme: null
   }
+  expect(shallow(<Conversation {...props} />)).toMatchSnapshot()
+})
+
+test('isAdmin is true', () => {
+  const props = change(
+    propsBase,
+    'user.role.name',
+    'admin'
+  )
   expect(shallow(<Conversation {...props} />)).toMatchSnapshot()
 })
 

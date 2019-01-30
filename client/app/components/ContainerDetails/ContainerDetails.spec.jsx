@@ -1,16 +1,11 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme } from '../../mocks'
+import { theme, firstCargoItem } from '../../mocks'
 
-// eslint-disable-next-line
 import ContainerDetails from './ContainerDetails'
 
 const propsBase = {
-  item: {
-    payload_in_kg: 134,
-    size_class: 'FOO_SIZE_CLASS',
-    quantity: 5
-  },
+  item: firstCargoItem,
   index: 3,
   hsCodes: [],
   theme,
@@ -21,7 +16,7 @@ test('shallow render', () => {
   expect(shallow(<ContainerDetails {...propsBase} />)).toMatchSnapshot()
 })
 
-test('props.viewHSCodes is true', () => {
+test('viewHSCodes is true', () => {
   const props = {
     ...propsBase,
     viewHSCodes: true

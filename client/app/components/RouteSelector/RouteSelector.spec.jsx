@@ -1,30 +1,17 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, route, identity } from '../../mocks'
+import { theme, routes, identity } from '../../mocks'
 
-jest.mock('uuid', () => {
-  let counter = -1
-  const v4 = () => {
-    counter += 1
-
-    return `RANDOM_KEY_${counter}`
-  }
-
-  return { v4 }
-})
-// eslint-disable-next-line import/first
 import { RouteSelector } from './RouteSelector'
 
 const propsBase = {
-  theme,
   routeSelected: identity,
-  routes: [route]
+  routes,
+  theme
 }
 
-const createShallow = propsInput => shallow(<RouteSelector {...propsInput} />)
-
 test('shallow rendering', () => {
-  expect(createShallow(propsBase)).toMatchSnapshot()
+  expect(shallow(<RouteSelector {...propsBase} />)).toMatchSnapshot()
 })
 
 test('routes is falsy', () => {
@@ -32,5 +19,5 @@ test('routes is falsy', () => {
     ...propsBase,
     routes: null
   }
-  expect(createShallow(props)).toMatchSnapshot()
+  expect(shallow(<RouteSelector {...props} />)).toMatchSnapshot()
 })

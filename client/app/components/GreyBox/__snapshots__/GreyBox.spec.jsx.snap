@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`shallow render 1`] = `
+exports[`flex > 0 1`] = `
 <div
-  className="border_box FOO_WRAPPER_CLASS_NAME 
-      flex
+  className="border_box WRAPPER_CLASSNAME 
+      flex-10
       
       
       
@@ -11,7 +11,7 @@ exports[`shallow render 1`] = `
       "
 >
   <div
-    className="FOO_CONTENT_CLASS_NAME"
+    className="CONTENT_CLASSNAME"
   >
     <div
       className="layout-align-space-between-center flex-100 layout-row"
@@ -19,19 +19,152 @@ exports[`shallow render 1`] = `
       <p
         className="layout-align-start-center flex layout-row title_grey"
       >
-        FOO_TITLE
+        TITLE
       </p>
     </div>
-    <div>
-      FOO_CONTENT
-    </div>
+    CONTENT
   </div>
 </div>
 `;
 
-exports[`title is falsy 1`] = `
+exports[`flexGtLg > 0 1`] = `
 <div
-  className="border_box FOO_WRAPPER_CLASS_NAME 
+  className="border_box WRAPPER_CLASSNAME 
+      flex
+      flex-gt-lg-10
+      
+      
+       
+      "
+>
+  <div
+    className="CONTENT_CLASSNAME"
+  >
+    <div
+      className="layout-align-space-between-center flex-100 layout-row"
+    >
+      <p
+        className="layout-align-start-center flex layout-row title_grey"
+      >
+        TITLE
+      </p>
+    </div>
+    CONTENT
+  </div>
+</div>
+`;
+
+exports[`flexMd > 0 1`] = `
+<div
+  className="border_box WRAPPER_CLASSNAME 
+      flex
+      
+      flex-md-10
+      
+       
+      "
+>
+  <div
+    className="CONTENT_CLASSNAME"
+  >
+    <div
+      className="layout-align-space-between-center flex-100 layout-row"
+    >
+      <p
+        className="layout-align-start-center flex layout-row title_grey"
+      >
+        TITLE
+      </p>
+    </div>
+    CONTENT
+  </div>
+</div>
+`;
+
+exports[`fullWidth is true 1`] = `
+<div
+  className="border_box WRAPPER_CLASSNAME 
+      flex
+      
+      
+      
+       
+      fullWidth"
+>
+  <div
+    className="CONTENT_CLASSNAME"
+  >
+    <div
+      className="layout-align-space-between-center flex-100 layout-row"
+    >
+      <p
+        className="layout-align-start-center flex layout-row title_grey"
+      >
+        TITLE
+      </p>
+    </div>
+    CONTENT
+  </div>
+</div>
+`;
+
+exports[`isBox is true 1`] = `
+<div
+  className="border_box WRAPPER_CLASSNAME 
+      flex
+      
+      
+      
+      layout-row flex-sm-100 flex-xs-100 layout-align-center-center 
+      "
+>
+  <div
+    className="CONTENT_CLASSNAME"
+  >
+    <div
+      className="layout-align-space-between-center flex-100 layout-row"
+    >
+      <p
+        className="layout-align-start-center flex layout-row title_grey"
+      >
+        TITLE
+      </p>
+    </div>
+    CONTENT
+  </div>
+</div>
+`;
+
+exports[`padding is true 1`] = `
+<div
+  className="border_box WRAPPER_CLASSNAME 
+      flex
+      
+      
+      boxpadding
+       
+      "
+>
+  <div
+    className="CONTENT_CLASSNAME"
+  >
+    <div
+      className="layout-align-space-between-center flex-100 layout-row"
+    >
+      <p
+        className="layout-align-start-center flex layout-row title_grey"
+      >
+        TITLE
+      </p>
+    </div>
+    CONTENT
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="border_box WRAPPER_CLASSNAME 
       flex
       
       
@@ -40,11 +173,36 @@ exports[`title is falsy 1`] = `
       "
 >
   <div
-    className="FOO_CONTENT_CLASS_NAME"
+    className="CONTENT_CLASSNAME"
   >
-    <div>
-      FOO_CONTENT
+    <div
+      className="layout-align-space-between-center flex-100 layout-row"
+    >
+      <p
+        className="layout-align-start-center flex layout-row title_grey"
+      >
+        TITLE
+      </p>
     </div>
+    CONTENT
+  </div>
+</div>
+`;
+
+exports[`title is falsy 1`] = `
+<div
+  className="border_box WRAPPER_CLASSNAME 
+      flex
+      
+      
+      
+       
+      "
+>
+  <div
+    className="CONTENT_CLASSNAME"
+  >
+    CONTENT
   </div>
 </div>
 `;

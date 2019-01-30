@@ -1,53 +1,61 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, user, shipments, address, tenant } from '../../mocks'
-
-jest.mock('../../helpers', () => ({
-  gradientTextGenerator: x => x
-}))
-jest.mock('uuid', () => {
-  let counter = -1
-  const v4 = () => {
-    counter += 1
-
-    return `RANDOM_KEY_${counter}`
-  }
-
-  return { v4 }
-})
-jest.mock('./index.jsx', () => ({
-  // eslint-disable-next-line react/prop-types
-  UserLocations: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../Admin/AdminSearchables', () => ({
-  // eslint-disable-next-line react/prop-types
-  AdminSearchableClients: ({ children }) => <div>{children}</div>
-}))
-
-// eslint-disable-next-line import/first
+import {
+  address,
+  identity,
+  match,
+  tenant,
+  theme,
+  user
+} from '../../mocks'
 import UserDashboard from './UserDashboard'
 
 const propsBase = {
-  theme,
+  dashboard: {
+    addresses: [address],
+    contacts: [],
+    pricings: {},
+    shipments: {}
+  },
+  hubs: {},
+  match,
+  scope: tenant.scope,
+  seeAll: identity,
+  setCurrentUrl: identity,
   setNav: identity,
+  tenant,
+  theme,
+  user,
   userDispatch: {
     getShipment: identity,
     goTo: identity
-  },
-  setCurrentUrl: jest.fn(),
-  match: { url: 'google.com' },
-  seeAll: identity,
-  user,
-  scope: tenant.scope,
-  hubs: {},
-  dashboard: {
-    shipments,
-    pricings: {},
-    contacts: [],
-    addresses: [address]
   }
 }
 
 test('shallow render', () => {
   expect(shallow(<UserDashboard {...propsBase} />)).toMatchSnapshot()
+})
+
+test('theme is falsy', () => {
+  const props = {
+    ...propsBase,
+    theme: null
+  }
+  expect(shallow(<UserDashboard {...props} />)).toMatchSnapshot()
+})
+
+test('user is falsy', () => {
+  const props = {
+    ...propsBase,
+    user: null
+  }
+  expect(shallow(<UserDashboard {...props} />)).toMatchSnapshot()
+})
+
+test('tenant is falsy', () => {
+  const props = {
+    ...propsBase,
+    tenant: null
+  }
+  expect(shallow(<UserDashboard {...props} />)).toMatchSnapshot()
 })

@@ -1,11 +1,12 @@
+import '../../mocks/libraries/react-redux'
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { user, theme, address } from '../../mocks'
+import { user, theme } from '../../mocks'
 
-import ResetPasswordForm from './'
+import ResetPasswordForm from '.'
 
 const propsBase = {
-  user, theme, address
+  user, theme, location: {}
 }
 
 test('shallow rendering', () => {

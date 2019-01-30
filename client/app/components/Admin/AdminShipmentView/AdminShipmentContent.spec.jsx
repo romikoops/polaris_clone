@@ -1,9 +1,11 @@
+import '../../../mocks/libraries/react-redux'
+import '../../../mocks/libraries/moment'
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
   theme, identity, shipmentData, shipment, change, tenant
-} from '../../../mocks'
-import { AdminShipmentContent } from './AdminShipmentContent'
+} from '../../../mock'
+import AdminShipmentContent from './AdminShipmentContent'
 
 jest.mock('../../../helpers', () => ({
   numberSpacing: x => x,

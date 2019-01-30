@@ -1,20 +1,50 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`shallow render 1`] = `
+exports[`!errorHidden && !props.isValid() 1`] = `
 <div
-  className="FOO_WRAPPER wrapper_input"
+  className="WRAPPER_CLASSNAME wrapper_input"
 >
   <input
-    className="FOO_CLASSNAME"
+    className="CLASSNAME"
     disabled={false}
-    id="FOO_ID"
-    name="FOO_NAME"
+    id="ID"
+    name="NAME"
     onBlur={[Function]}
     onChange={[Function]}
     onFocus={[Function]}
-    placeholder="FOO_PLACEHOLDER"
+    placeholder="PLACEHOLDER"
+    style={
+      Object {
+        "background": "rgba(232, 114, 88, 0.3)",
+        "borderColor": "rgba(232, 114, 88, 0.01)",
+        "color": "rgba(211, 104, 80, 1)",
+      }
+    }
+    type="TYPE"
+    value=""
+  />
+  <span
+    className="error_message"
     style={Object {}}
-    type="FOO_TYPE"
+  />
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="WRAPPER_CLASSNAME wrapper_input"
+>
+  <input
+    className="CLASSNAME"
+    disabled={false}
+    id="ID"
+    name="NAME"
+    onBlur={[Function]}
+    onChange={[Function]}
+    onFocus={[Function]}
+    placeholder="PLACEHOLDER"
+    style={Object {}}
+    type="TYPE"
     value=""
   />
   <span

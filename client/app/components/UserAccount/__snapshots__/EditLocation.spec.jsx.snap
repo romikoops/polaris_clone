@@ -68,7 +68,6 @@ exports[`shallow render 1`] = `
         onChange={[Function]}
         placeholder="Street Number"
         type="string"
-        value={579}
       />
       <input
         className="flex-none input"
@@ -76,7 +75,6 @@ exports[`shallow render 1`] = `
         onChange={[Function]}
         placeholder="Street"
         type="string"
-        value="FOO_STREET"
       />
       <input
         className="flex-none input"
@@ -84,7 +82,6 @@ exports[`shallow render 1`] = `
         onChange={[Function]}
         placeholder="Postal Code"
         type="string"
-        value="22456"
       />
       <input
         className="flex-none input"
@@ -92,7 +89,6 @@ exports[`shallow render 1`] = `
         onChange={[Function]}
         placeholder="City"
         type="string"
-        value="FOO_CITY"
       />
       <input
         className="flex-none input"
@@ -100,7 +96,157 @@ exports[`shallow render 1`] = `
         onChange={[Function]}
         placeholder="Country"
         type="string"
-        value="Germany"
+      />
+      <div
+        className="flex-100 layout-row layout-align-start-center"
+      >
+        <div
+          className="flex-none layout-row layout-align-end-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-times flex-none"
+          />
+          <p
+            className="offset-5 flex-none"
+            style={
+              Object {
+                "paddingRight": "10px",
+              }
+            }
+          >
+            Clear
+          </p>
+        </div>
+      </div>
+    </div>
+    <RoundButton
+      active={true}
+      back={false}
+      classNames=""
+      disabled={false}
+      flexContainer="100"
+      handleDisabled={null}
+      handleNext={[Function]}
+      icon=""
+      iconClass="fa-check"
+      inverse={false}
+      size="small"
+      text="Save"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+</div>
+`;
+
+exports[`state.autocomplete.address is truthy 1`] = `
+<div
+  className="layout-row flex-100 layout-wrap"
+>
+  <h1
+    className="layout-row flex-100"
+    onClick={[Function]}
+  />
+  <div
+    className="flex-100 layout-row layout-align-end-center"
+  >
+    <div
+      className="flex-none layout-row layout-align-center-center"
+      onClick={[Function]}
+    >
+      <i
+        className="flex-none fa fa-checvron-left"
+      />
+      <p
+        className="flex-none"
+      >
+        Back
+      </p>
+    </div>
+  </div>
+  <div
+    className="flex-65 layout-row layout-wrap layout-align-center-start map_box"
+  >
+    <div
+      className="flex-100 layout-row layout-wrap overlay_auto"
+      style={
+        Object {
+          "display": "none",
+          "height": "0px",
+        }
+      }
+    >
+      <input
+        className="flex-none input"
+        id="address"
+        name="address"
+        onChange={[Function]}
+        placeholder="Search for address"
+        type="string"
+        value=""
+      />
+    </div>
+    <div
+      className="loc_map"
+      id="map"
+      style={
+        Object {
+          "borderRadius": "3px",
+          "boxShadow": "1px 1px 2px 2px rgba(0,1,2,0.25)",
+          "height": "400px",
+          "width": "100%",
+        }
+      }
+    />
+  </div>
+  <div
+    className="flex-30 offset-5 layout-row layout-wrap layout-align-center-end"
+  >
+    <div
+      className="flex-80 layout-row layout-wrap layout-align-end-space-around"
+    >
+      <input
+        className="flex-none input"
+        id="not-auto"
+        name="address-number"
+        onChange={[Function]}
+        placeholder="Street Number"
+        type="string"
+      />
+      <input
+        className="flex-none input"
+        name="address-street"
+        onChange={[Function]}
+        placeholder="Street"
+        type="string"
+      />
+      <input
+        className="flex-none input"
+        name="address-zipCode"
+        onChange={[Function]}
+        placeholder="Postal Code"
+        type="string"
+      />
+      <input
+        className="flex-none input"
+        name="address-city"
+        onChange={[Function]}
+        placeholder="City"
+        type="string"
+      />
+      <input
+        className="flex-none input"
+        name="address-country"
+        onChange={[Function]}
+        placeholder="Country"
+        type="string"
       />
       <div
         className="flex-100 layout-row layout-align-start-center"

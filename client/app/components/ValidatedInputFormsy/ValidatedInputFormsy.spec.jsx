@@ -2,19 +2,22 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { identity } from '../../mocks'
 
+import ValidatedInputFormsy from './ValidatedInputFormsy'
+
+// Without the mock, we get the following error
+// TypeError: Cannot read property 'attachToForm' of undefined
+// ============================================
 jest.mock('formsy-react', () => ({
   withFormsy: x => x
 }))
-// eslint-disable-next-line import/first
-import ValidatedInputFormsy from './ValidatedInputFormsy'
 
 const propsBase = {
   isValidValue: identity,
-  name: 'FOO_NAME',
-  className: 'FOO_CLASSNAME',
+  name: 'NAME',
+  className: 'CLASSNAME',
   disabled: false,
-  type: 'FOO_TYPE',
-  placeholder: 'FOO_PLACEHOLDER',
+  type: 'TYPE',
+  placeholder: 'PLACEHOLDER',
   inputRef: <div />,
   isValid: identity,
   getErrorMessage: identity,
@@ -25,13 +28,14 @@ const propsBase = {
   firstRenderInputs: false,
   nextStageAttempt: false,
   onKeyDown: identity,
-  min: 'FOO_MIN',
+  min: 'MIN',
   errorStyles: {}
 }
 
 test('shallow render', () => {
   expect(shallow(<ValidatedInputFormsy {...propsBase} />)).toMatchSnapshot()
 })
+
 test('props.nextStageAttempt is true', () => {
   const props = {
     ...propsBase,

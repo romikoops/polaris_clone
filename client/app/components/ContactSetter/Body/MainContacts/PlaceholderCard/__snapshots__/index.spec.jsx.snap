@@ -27,3 +27,27 @@ exports[`shallow render 1`] = `
   </div>
 </div>
 `;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="layout-row layout-wrap placeholder_card "
+  onClick={[Function]}
+  style={Object {}}
+>
+  <div
+    className="flex-100 layout-row layout-align-center-center"
+  >
+    <h3>
+      Choose a
+      <br />
+      <span
+        className="contact_type"
+      >
+         
+        FOO_CONTACT_TYPE
+         
+      </span>
+    </h3>
+  </div>
+</div>
+`;

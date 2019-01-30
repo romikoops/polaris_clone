@@ -1,5 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`scale is falsy 1`] = `
+<p
+  className="flex-none price"
+  style={Object {}}
+>
+  123
+  <sup>
+    .
+    55
+  </sup>
+   
+  <span
+    className="price_currency"
+  />
+</p>
+`;
+
 exports[`shallow rendering 1`] = `
 <p
   className="flex-none price"

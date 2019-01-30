@@ -3,10 +3,9 @@ import { shallow } from 'enzyme'
 import TextHeading from './TextHeading'
 
 const propsBase = {
-  text: 'FOO_TEXT',
+  text: 'TEXT',
   size: 1,
-  color: '#449',
-  // eslint-disable-next-line react/prop-types
+  color: 'COLOR',
   Comp: ({ children }) => <div>{children}</div>
 }
 

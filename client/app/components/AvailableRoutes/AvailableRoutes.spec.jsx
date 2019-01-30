@@ -1,10 +1,12 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import { AvailableRoutes } from './AvailableRoutes'
-import { identity, theme, user } from '../../mocks'
+import {
+  identity, theme, user, routes
+} from '../../mocks'
 
 const propsBase = {
-  routes: ['foo', 'bar'],
+  routes,
   theme,
   user,
   userDispatch: {

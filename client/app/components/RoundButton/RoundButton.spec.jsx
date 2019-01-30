@@ -6,14 +6,15 @@ import { RoundButton } from './RoundButton'
 const propsBase = {
   active: false,
   back: false,
-  theme,
-  icon: 'FOO_ICON',
-  text: 'FOO_TEXT',
-  iconClass: 'FOO_ICON_CLASS',
-  size: 'small',
-  handleNext: identity,
+  disabled: false,
   handleDisabled: identity,
-  disabled: false
+  handleNext: identity,
+  icon: 'ICON',
+  iconClass: 'ICON_CLASS',
+  inverse: false,
+  size: 'small',
+  text: 'TEXT',
+  theme
 }
 
 test('button click calls props.handleNext', () => {
@@ -41,6 +42,23 @@ test('button click calls props.handleDisabled', () => {
   expect(props.handleDisabled).toHaveBeenCalled()
 })
 
+test('inverse is true', () => {
+  const props = {
+    ...propsBase,
+    inverse: true
+  }
+  expect(shallow(<RoundButton {...props} />)).toMatchSnapshot()
+})
+
+test('inverse and disabled are true', () => {
+  const props = {
+    ...propsBase,
+    inverse: true,
+    disabled: true
+  }
+  expect(shallow(<RoundButton {...props} />)).toMatchSnapshot()
+})
+
 test('size is large', () => {
   const props = {
     ...propsBase,
@@ -55,7 +73,6 @@ test('size is full', () => {
     ...propsBase,
     size: 'full'
   }
-
   expect(shallow(<RoundButton {...props} />)).toMatchSnapshot()
 })
 

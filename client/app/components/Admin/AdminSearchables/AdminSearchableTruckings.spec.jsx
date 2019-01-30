@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { range } from 'lodash'
 import { shallow } from 'enzyme'
-import { theme, identity } from '../../../mocks'
+import { theme, identity } from '../../../mock'
 
 import AdminSearchableTruckings from './AdminSearchableTruckings'
 

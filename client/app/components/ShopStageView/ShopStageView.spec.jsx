@@ -1,18 +1,16 @@
+import '../../mocks/libraries/react-redux'
 import * as React from 'react'
-import { shallow, mount } from 'enzyme'
-import { identity, tenant, theme } from '../../mocks'
-// eslint-disable-next-line no-named-as-default
+import { shallow } from 'enzyme'
+import {
+  identity, tenant, theme, change
+} from '../../mocks'
+
 import ShopStageView from './ShopStageView'
-
-jest.mock('react-redux', () => ({
-  connect: (x, y) => Component => Component
-}))
-
-const createWrapper = propsInput => mount(<ShopStageView {...propsInput} />)
 
 const propsBase = {
   theme,
   tenant,
+  hasNextStage: false,
   setStage: identity,
   currentStage: 1,
   shopType: 'FOO_SHOP_TYPE',
@@ -32,35 +30,50 @@ test('shallow rendering', () => {
   expect(shallow(<ShopStageView {...propsBase} />)).toMatchSnapshot()
 })
 
-test('props.setStage is called', () => {
+test('hasNextStage is true', () => {
   const props = {
     ...propsBase,
-    currentStage: 3,
-    setStage: jest.fn()
+    hasNextStage: true
   }
-  const wrapper = createWrapper(props)
-  const pastStages = wrapper.find('.shop_stage_past')
-
-  expect(pastStages).toHaveLength(2)
-
-  expect(props.setStage).not.toHaveBeenCalled()
-  pastStages.first().simulate('click')
-  expect(props.setStage).toHaveBeenCalled()
+  expect(shallow(<ShopStageView {...props} />)).toMatchSnapshot()
 })
 
-test('setStage is not called when disabledClick is true', () => {
+test('tenant.scope is falsy', () => {
+  const props = change(
+    propsBase,
+    'tenant.scope',
+    {}
+  )
+  expect(shallow(<ShopStageView {...props} />)).toMatchSnapshot()
+})
+
+test('theme.bookingProcessImage is truthy', () => {
+  const props = change(
+    propsBase,
+    'theme.bookingProcessImage',
+    'BOOKING_PROCESS_IMAGE'
+  )
+  expect(shallow(<ShopStageView {...props} />)).toMatchSnapshot()
+})
+
+test('state.showHelp is true', () => {
+  const wrapper = shallow(<ShopStageView {...propsBase} />)
+  wrapper.setState({ showHelp: true })
+  expect(wrapper).toMatchSnapshot()
+})
+
+test.skip('setStage is called', () => {
   const props = {
     ...propsBase,
     currentStage: 3,
-    disabledClick: true,
     setStage: jest.fn()
   }
-  const wrapper = createWrapper(props)
+  const wrapper = shallow(<ShopStageView {...props} />)
   const pastStages = wrapper.find('.shop_stage_past')
 
   expect(pastStages).toHaveLength(2)
+  expect(props.setStage).not.toHaveBeenCalled()
 
-  expect(props.setStage).not.toHaveBeenCalled()
   pastStages.first().simulate('click')
-  expect(props.setStage).not.toHaveBeenCalled()
+  expect(props.setStage).toHaveBeenCalled()
 })

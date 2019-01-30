@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`props.aliases is truthy 1`] = `
+exports[`aliases is truthy 1`] = `
 <div
   className="flex-100 layout-row layout-wrap layout-align-start-center extra_padding"
 >
@@ -15,14 +15,19 @@ exports[`props.aliases is truthy 1`] = `
       >
         <i
           className="fa fa-user clip bigProfile"
-          style="#333"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
         />
       </div>
       <div
         className="layout-align-start-center layout-row flex"
       >
         <p>
-          Hello, 
+          Hello,
+           
         </p>
         <h1
           className="flex-none cli"
@@ -46,9 +51,39 @@ exports[`props.aliases is truthy 1`] = `
           <div
             className="layout-row flex-100"
           >
+            <EditProfileBox
+              close={[Function]}
+              handleChange={[Function]}
+              handlePasswordChange={[Function]}
+              hide={true}
+              onSave={[Function]}
+              passwordResetRequested={false}
+              passwordResetSent={false}
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+              t={[Function]}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              user={Object {}}
+            />
             <ProfileBox
               edit={[Function]}
-              style="#333"
+              hide={false}
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+              t={[Function]}
               theme={
                 Object {
                   "colors": Object {
@@ -69,6 +104,7 @@ exports[`props.aliases is truthy 1`] = `
                   "role": Object {
                     "name": "shipper",
                   },
+                  "role_id": 1,
                 }
               }
             />
@@ -84,7 +120,8 @@ exports[`props.aliases is truthy 1`] = `
                   <p
                     className="flex-none"
                   >
-                    Currency:
+                    Currency
+                    :
                   </p>
                   <span>
                     <strong>
@@ -114,8 +151,18 @@ exports[`props.aliases is truthy 1`] = `
         borderStyle=""
         content={
           <div
-            className="layout-row layout-wrap conditions_box"
+            className="flex-100 layout-row layout-wrap conditions_box"
           >
+            <div
+              className="flex-100"
+            >
+              <p
+                className="emulate_link blue_link"
+                onClick={[Function]}
+              >
+                More info
+              </p>
+            </div>
             <div
               className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
             >
@@ -129,15 +176,21 @@ exports[`props.aliases is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-33 layout-row layout-align-center-center "
+                className="flex-33 layout-row layout-align-start"
               >
-                <Unknown
+                <DocumentsDownloader
+                  disabled={false}
+                  documentDispatch={null}
+                  downloadUrls={Object {}}
+                  loading={false}
                   options={
                     Object {
                       "userId": undefined,
                     }
                   }
                   size="full"
+                  square={false}
+                  t={[Function]}
                   target="gdpr"
                   theme={
                     Object {
@@ -147,6 +200,7 @@ exports[`props.aliases is truthy 1`] = `
                       },
                     }
                   }
+                  tooltip=""
                 />
               </div>
             </div>
@@ -159,97 +213,25 @@ exports[`props.aliases is truthy 1`] = `
                 <p
                   className="flex-none"
                 >
-                   Terms and Conditions
+                  Request to delete account
                 </p>
               </div>
               <div
-                className="flex-33 layout-row layout-align-center-center "
+                className="flex-33 layout-row layout-align-start"
               >
                 <RoundButton
-                  active={true}
+                  active={false}
                   back={false}
+                  classNames=""
                   disabled={false}
+                  flexContainer="100"
                   handleDisabled={null}
                   handleNext={[Function]}
                   icon=""
                   iconClass=""
                   inverse={false}
                   size="full"
-                  text="Opt Out"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                />
-              </div>
-            </div>
-            <div
-              className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
-            >
-              <div
-                className="flex-66 layout-row layout-align-start-center"
-              >
-                <p
-                  className="flex-none"
-                >
-                  ItsMyCargo GMBH Terms and Conditions
-                </p>
-              </div>
-              <div
-                className="flex-33 layout-row layout-align-center-center "
-              >
-                <RoundButton
-                  active={true}
-                  back={false}
-                  disabled={false}
-                  handleDisabled={null}
-                  handleNext={[Function]}
-                  icon=""
-                  iconClass=""
-                  inverse={false}
-                  size="full"
-                  text="Opt Out"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                />
-              </div>
-            </div>
-            <div
-              className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
-            >
-              <div
-                className="flex-66 layout-row layout-align-start-center"
-              >
-                <p
-                  className="flex-none"
-                >
-                  ItsMyCargo's use of cookies
-                </p>
-              </div>
-              <div
-                className="flex-33 layout-row layout-align-center-center "
-              >
-                <RoundButton
-                  active={true}
-                  back={false}
-                  disabled={false}
-                  handleDisabled={null}
-                  handleNext={[Function]}
-                  icon=""
-                  iconClass=""
-                  inverse={false}
-                  size="full"
-                  text="Opt Out"
+                  text="Request"
                   theme={
                     Object {
                       "colors": Object {
@@ -263,16 +245,16 @@ exports[`props.aliases is truthy 1`] = `
             </div>
           </div>
         }
-        contentClassName="layout-column flex"
+        contentClassName="layout-row layout-wrap flex layout-align-start-start"
         flex={0}
         flexGtLg={0}
         flexMd={0}
         fullWidth={false}
         isBox={false}
         padding={false}
-        title="GDPR - Your Data"
+        title="Your Data"
         titleAction={false}
-        wrapperClassName="flex-gt-sm-35 flex-100 layout-row layout-align-start-start"
+        wrapperClassName="flex-gt-sm-35 flex-100 layout-row layout-align-stretch"
       />
     </div>
   </div>
@@ -327,6 +309,12 @@ exports[`props.aliases is truthy 1`] = `
           deleteFn={[Function]}
           deleteable={true}
           flexClasses="flex-45"
+          handleClick={null}
+          handleCollapser={null}
+          navFn={null}
+          showTooltip={false}
+          t={[Function]}
+          target=""
           theme={
             Object {
               "colors": Object {
@@ -335,6 +323,7 @@ exports[`props.aliases is truthy 1`] = `
               },
             }
           }
+          tooltip=""
         />
         <AdminClientTile
           client={
@@ -345,6 +334,12 @@ exports[`props.aliases is truthy 1`] = `
           deleteFn={[Function]}
           deleteable={true}
           flexClasses="flex-45"
+          handleClick={null}
+          handleCollapser={null}
+          navFn={null}
+          showTooltip={false}
+          t={[Function]}
+          target=""
           theme={
             Object {
               "colors": Object {
@@ -353,62 +348,13 @@ exports[`props.aliases is truthy 1`] = `
               },
             }
           }
+          tooltip=""
         />
       </div>
-    </div>
-    <div
-      className="flex-gt-sm-50 flex-100 layout-row layout-wrap layout-align-start-center section_padding section "
-    >
-      <div
-        className="flex-100 layout-align-start-center greyBg"
-      >
-        <span>
-          <b>
-            Saved Locations
-          </b>
-        </span>
-      </div>
-      <UserLocations
-        cols={2}
-        addresses={Array []}
-        makePrimary={[Function]}
-        setNav={[Function]}
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-        user={
-          Object {
-            "company_name": "FOO_COMPANY",
-            "currency": "EUR",
-            "email": "foo@bar.baz",
-            "first_name": "John",
-            "guest": false,
-            "last_name": "Doe",
-            "phone": "6345789",
-            "role": Object {
-              "name": "shipper",
-            },
-          }
-        }
-        userDispatch={
-          Object {
-            "deleteAlias": [Function],
-            "makePrimary": [Function],
-            "newAlias": [Function],
-          }
-        }
-      />
     </div>
   </div>
 </div>
 `;
-
-exports[`props.user is falsy 1`] = `""`;
 
 exports[`shallow render 1`] = `
 <div
@@ -425,14 +371,19 @@ exports[`shallow render 1`] = `
       >
         <i
           className="fa fa-user clip bigProfile"
-          style="#333"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
         />
       </div>
       <div
         className="layout-align-start-center layout-row flex"
       >
         <p>
-          Hello, 
+          Hello,
+           
         </p>
         <h1
           className="flex-none cli"
@@ -456,9 +407,39 @@ exports[`shallow render 1`] = `
           <div
             className="layout-row flex-100"
           >
+            <EditProfileBox
+              close={[Function]}
+              handleChange={[Function]}
+              handlePasswordChange={[Function]}
+              hide={true}
+              onSave={[Function]}
+              passwordResetRequested={false}
+              passwordResetSent={false}
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+              t={[Function]}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              user={Object {}}
+            />
             <ProfileBox
               edit={[Function]}
-              style="#333"
+              hide={false}
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+              t={[Function]}
               theme={
                 Object {
                   "colors": Object {
@@ -479,6 +460,7 @@ exports[`shallow render 1`] = `
                   "role": Object {
                     "name": "shipper",
                   },
+                  "role_id": 1,
                 }
               }
             />
@@ -494,7 +476,8 @@ exports[`shallow render 1`] = `
                   <p
                     className="flex-none"
                   >
-                    Currency:
+                    Currency
+                    :
                   </p>
                   <span>
                     <strong>
@@ -524,8 +507,18 @@ exports[`shallow render 1`] = `
         borderStyle=""
         content={
           <div
-            className="layout-row layout-wrap conditions_box"
+            className="flex-100 layout-row layout-wrap conditions_box"
           >
+            <div
+              className="flex-100"
+            >
+              <p
+                className="emulate_link blue_link"
+                onClick={[Function]}
+              >
+                More info
+              </p>
+            </div>
             <div
               className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
             >
@@ -539,15 +532,21 @@ exports[`shallow render 1`] = `
                 </p>
               </div>
               <div
-                className="flex-33 layout-row layout-align-center-center "
+                className="flex-33 layout-row layout-align-start"
               >
-                <Unknown
+                <DocumentsDownloader
+                  disabled={false}
+                  documentDispatch={null}
+                  downloadUrls={Object {}}
+                  loading={false}
                   options={
                     Object {
                       "userId": undefined,
                     }
                   }
                   size="full"
+                  square={false}
+                  t={[Function]}
                   target="gdpr"
                   theme={
                     Object {
@@ -557,6 +556,7 @@ exports[`shallow render 1`] = `
                       },
                     }
                   }
+                  tooltip=""
                 />
               </div>
             </div>
@@ -569,97 +569,25 @@ exports[`shallow render 1`] = `
                 <p
                   className="flex-none"
                 >
-                   Terms and Conditions
+                  Request to delete account
                 </p>
               </div>
               <div
-                className="flex-33 layout-row layout-align-center-center "
+                className="flex-33 layout-row layout-align-start"
               >
                 <RoundButton
-                  active={true}
+                  active={false}
                   back={false}
+                  classNames=""
                   disabled={false}
+                  flexContainer="100"
                   handleDisabled={null}
                   handleNext={[Function]}
                   icon=""
                   iconClass=""
                   inverse={false}
                   size="full"
-                  text="Opt Out"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                />
-              </div>
-            </div>
-            <div
-              className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
-            >
-              <div
-                className="flex-66 layout-row layout-align-start-center"
-              >
-                <p
-                  className="flex-none"
-                >
-                  ItsMyCargo GMBH Terms and Conditions
-                </p>
-              </div>
-              <div
-                className="flex-33 layout-row layout-align-center-center "
-              >
-                <RoundButton
-                  active={true}
-                  back={false}
-                  disabled={false}
-                  handleDisabled={null}
-                  handleNext={[Function]}
-                  icon=""
-                  iconClass=""
-                  inverse={false}
-                  size="full"
-                  text="Opt Out"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                />
-              </div>
-            </div>
-            <div
-              className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
-            >
-              <div
-                className="flex-66 layout-row layout-align-start-center"
-              >
-                <p
-                  className="flex-none"
-                >
-                  ItsMyCargo's use of cookies
-                </p>
-              </div>
-              <div
-                className="flex-33 layout-row layout-align-center-center "
-              >
-                <RoundButton
-                  active={true}
-                  back={false}
-                  disabled={false}
-                  handleDisabled={null}
-                  handleNext={[Function]}
-                  icon=""
-                  iconClass=""
-                  inverse={false}
-                  size="full"
-                  text="Opt Out"
+                  text="Request"
                   theme={
                     Object {
                       "colors": Object {
@@ -673,16 +601,16 @@ exports[`shallow render 1`] = `
             </div>
           </div>
         }
-        contentClassName="layout-column flex"
+        contentClassName="layout-row layout-wrap flex layout-align-start-start"
         flex={0}
         flexGtLg={0}
         flexMd={0}
         fullWidth={false}
         isBox={false}
         padding={false}
-        title="GDPR - Your Data"
+        title="Your Data"
         titleAction={false}
-        wrapperClassName="flex-gt-sm-35 flex-100 layout-row layout-align-start-start"
+        wrapperClassName="flex-gt-sm-35 flex-100 layout-row layout-align-stretch"
       />
     </div>
   </div>
@@ -729,54 +657,6 @@ exports[`shallow render 1`] = `
           </div>
         </div>
       </div>
-    </div>
-    <div
-      className="flex-gt-sm-50 flex-100 layout-row layout-wrap layout-align-start-center section_padding section "
-    >
-      <div
-        className="flex-100 layout-align-start-center greyBg"
-      >
-        <span>
-          <b>
-            Saved Locations
-          </b>
-        </span>
-      </div>
-      <UserLocations
-        cols={2}
-        addresses={Array []}
-        makePrimary={[Function]}
-        setNav={[Function]}
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-        user={
-          Object {
-            "company_name": "FOO_COMPANY",
-            "currency": "EUR",
-            "email": "foo@bar.baz",
-            "first_name": "John",
-            "guest": false,
-            "last_name": "Doe",
-            "phone": "6345789",
-            "role": Object {
-              "name": "shipper",
-            },
-          }
-        }
-        userDispatch={
-          Object {
-            "deleteAlias": [Function],
-            "makePrimary": [Function],
-            "newAlias": [Function],
-          }
-        }
-      />
     </div>
   </div>
 </div>
@@ -811,10 +691,16 @@ exports[`state.editBool is true 1`] = `
               close={[Function]}
               handleChange={[Function]}
               handlePasswordChange={[Function]}
+              hide={false}
               onSave={[Function]}
               passwordResetRequested={false}
               passwordResetSent={false}
-              style="#333"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+              t={[Function]}
               theme={
                 Object {
                   "colors": Object {
@@ -825,6 +711,39 @@ exports[`state.editBool is true 1`] = `
               }
               user={Object {}}
             />
+            <ProfileBox
+              edit={[Function]}
+              hide={true}
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                }
+              }
+              t={[Function]}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              user={
+                Object {
+                  "company_name": "FOO_COMPANY",
+                  "currency": "EUR",
+                  "email": "foo@bar.baz",
+                  "first_name": "John",
+                  "guest": false,
+                  "last_name": "Doe",
+                  "phone": "6345789",
+                  "role": Object {
+                    "name": "shipper",
+                  },
+                  "role_id": 1,
+                }
+              }
+            />
             <div
               className="flex-40 layout-row layout-align-center-center layout-wrap currency_box"
             >
@@ -832,23 +751,154 @@ exports[`state.editBool is true 1`] = `
                 className="flex-75 layout-row layout-align-end-center layout-wrap"
               >
                 <div
-                  className="flex-100 layout-row layout-align-center-center layout-wrap currency_grey"
+                  className="flex-100 layout-row layout-wrap layout-align-center-center"
                 >
                   <p
                     className="flex-none"
                   >
-                    Currency:
+                    Currency
+                    :
                   </p>
-                  <span>
-                    <strong>
-                      EUR
-                    </strong>
-                  </span>
+                  <NamedSelect
+                    className="flex-100"
+                    onChange={[Function]}
+                    options={
+                      Array [
+                        Object {
+                          "label": "EUR",
+                          "value": "EUR",
+                        },
+                        Object {
+                          "label": "AUD",
+                          "value": "AUD",
+                        },
+                        Object {
+                          "label": "BGN",
+                          "value": "BGN",
+                        },
+                        Object {
+                          "label": "BRL",
+                          "value": "BRL",
+                        },
+                        Object {
+                          "label": "CAD",
+                          "value": "CAD",
+                        },
+                        Object {
+                          "label": "CHF",
+                          "value": "CHF",
+                        },
+                        Object {
+                          "label": "CNY",
+                          "value": "CNY",
+                        },
+                        Object {
+                          "label": "CZK",
+                          "value": "CZK",
+                        },
+                        Object {
+                          "label": "DKK",
+                          "value": "DKK",
+                        },
+                        Object {
+                          "label": "GBP",
+                          "value": "GBP",
+                        },
+                        Object {
+                          "label": "HKD",
+                          "value": "HKD",
+                        },
+                        Object {
+                          "label": "HRK",
+                          "value": "HRK",
+                        },
+                        Object {
+                          "label": "HUF",
+                          "value": "HUF",
+                        },
+                        Object {
+                          "label": "IDR",
+                          "value": "IDR",
+                        },
+                        Object {
+                          "label": "ILS",
+                          "value": "ILS",
+                        },
+                        Object {
+                          "label": "INR",
+                          "value": "INR",
+                        },
+                        Object {
+                          "label": "JPY",
+                          "value": "JPY",
+                        },
+                        Object {
+                          "label": "KRW",
+                          "value": "KRW",
+                        },
+                        Object {
+                          "label": "MXN",
+                          "value": "MXN",
+                        },
+                        Object {
+                          "label": "MYR",
+                          "value": "MYR",
+                        },
+                        Object {
+                          "label": "NOK",
+                          "value": "NOK",
+                        },
+                        Object {
+                          "label": "NZD",
+                          "value": "NZD",
+                        },
+                        Object {
+                          "label": "PHP",
+                          "value": "PHP",
+                        },
+                        Object {
+                          "label": "PLN",
+                          "value": "PLN",
+                        },
+                        Object {
+                          "label": "RON",
+                          "value": "RON",
+                        },
+                        Object {
+                          "label": "RUB",
+                          "value": "RUB",
+                        },
+                        Object {
+                          "label": "SEK",
+                          "value": "SEK",
+                        },
+                        Object {
+                          "label": "SGD",
+                          "value": "SGD",
+                        },
+                        Object {
+                          "label": "THB",
+                          "value": "THB",
+                        },
+                        Object {
+                          "label": "TRY",
+                          "value": "TRY",
+                        },
+                        Object {
+                          "label": "USD",
+                          "value": "USD",
+                        },
+                        Object {
+                          "label": "ZAR",
+                          "value": "ZAR",
+                        },
+                      ]
+                    }
+                    placeholder="Select Currency"
+                    value={Object {}}
+                  />
                 </div>
               </div>
-              <div
-                className="flex-75 layout-row layout-align-space-around-center layout-wrap"
-              />
             </div>
           </div>
         }
@@ -867,8 +917,18 @@ exports[`state.editBool is true 1`] = `
         borderStyle=""
         content={
           <div
-            className="layout-row layout-wrap conditions_box"
+            className="flex-100 layout-row layout-wrap conditions_box"
           >
+            <div
+              className="flex-100"
+            >
+              <p
+                className="emulate_link blue_link"
+                onClick={[Function]}
+              >
+                More info
+              </p>
+            </div>
             <div
               className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
             >
@@ -882,15 +942,21 @@ exports[`state.editBool is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-33 layout-row layout-align-center-center "
+                className="flex-33 layout-row layout-align-start"
               >
-                <Unknown
+                <DocumentsDownloader
+                  disabled={false}
+                  documentDispatch={null}
+                  downloadUrls={Object {}}
+                  loading={false}
                   options={
                     Object {
                       "userId": undefined,
                     }
                   }
                   size="full"
+                  square={false}
+                  t={[Function]}
                   target="gdpr"
                   theme={
                     Object {
@@ -900,6 +966,7 @@ exports[`state.editBool is true 1`] = `
                       },
                     }
                   }
+                  tooltip=""
                 />
               </div>
             </div>
@@ -912,97 +979,25 @@ exports[`state.editBool is true 1`] = `
                 <p
                   className="flex-none"
                 >
-                   Terms and Conditions
+                  Request to delete account
                 </p>
               </div>
               <div
-                className="flex-33 layout-row layout-align-center-center "
+                className="flex-33 layout-row layout-align-start"
               >
                 <RoundButton
-                  active={true}
+                  active={false}
                   back={false}
+                  classNames=""
                   disabled={false}
+                  flexContainer="100"
                   handleDisabled={null}
                   handleNext={[Function]}
                   icon=""
                   iconClass=""
                   inverse={false}
                   size="full"
-                  text="Opt Out"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                />
-              </div>
-            </div>
-            <div
-              className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
-            >
-              <div
-                className="flex-66 layout-row layout-align-start-center"
-              >
-                <p
-                  className="flex-none"
-                >
-                  ItsMyCargo GMBH Terms and Conditions
-                </p>
-              </div>
-              <div
-                className="flex-33 layout-row layout-align-center-center "
-              >
-                <RoundButton
-                  active={true}
-                  back={false}
-                  disabled={false}
-                  handleDisabled={null}
-                  handleNext={[Function]}
-                  icon=""
-                  iconClass=""
-                  inverse={false}
-                  size="full"
-                  text="Opt Out"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                />
-              </div>
-            </div>
-            <div
-              className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
-            >
-              <div
-                className="flex-66 layout-row layout-align-start-center"
-              >
-                <p
-                  className="flex-none"
-                >
-                  ItsMyCargo's use of cookies
-                </p>
-              </div>
-              <div
-                className="flex-33 layout-row layout-align-center-center "
-              >
-                <RoundButton
-                  active={true}
-                  back={false}
-                  disabled={false}
-                  handleDisabled={null}
-                  handleNext={[Function]}
-                  icon=""
-                  iconClass=""
-                  inverse={false}
-                  size="full"
-                  text="Opt Out"
+                  text="Request"
                   theme={
                     Object {
                       "colors": Object {
@@ -1016,16 +1011,16 @@ exports[`state.editBool is true 1`] = `
             </div>
           </div>
         }
-        contentClassName="layout-column flex"
+        contentClassName="layout-row layout-wrap flex layout-align-start-start"
         flex={0}
         flexGtLg={0}
         flexMd={0}
         fullWidth={false}
         isBox={false}
         padding={false}
-        title="GDPR - Your Data"
+        title="Your Data"
         titleAction={false}
-        wrapperClassName="flex-gt-sm-35 flex-100 layout-row layout-align-start-start"
+        wrapperClassName="flex-gt-sm-35 flex-100 layout-row layout-align-stretch"
       />
     </div>
   </div>
@@ -1073,54 +1068,8 @@ exports[`state.editBool is true 1`] = `
         </div>
       </div>
     </div>
-    <div
-      className="flex-gt-sm-50 flex-100 layout-row layout-wrap layout-align-start-center section_padding section "
-    >
-      <div
-        className="flex-100 layout-align-start-center greyBg"
-      >
-        <span>
-          <b>
-            Saved Locations
-          </b>
-        </span>
-      </div>
-      <UserLocations
-        cols={2}
-        addresses={Array []}
-        makePrimary={[Function]}
-        setNav={[Function]}
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-        user={
-          Object {
-            "company_name": "FOO_COMPANY",
-            "currency": "EUR",
-            "email": "foo@bar.baz",
-            "first_name": "John",
-            "guest": false,
-            "last_name": "Doe",
-            "phone": "6345789",
-            "role": Object {
-              "name": "shipper",
-            },
-          }
-        }
-        userDispatch={
-          Object {
-            "deleteAlias": [Function],
-            "makePrimary": [Function],
-            "newAlias": [Function],
-          }
-        }
-      />
-    </div>
   </div>
 </div>
 `;
+
+exports[`user is falsy 1`] = `""`;

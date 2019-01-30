@@ -1,34 +1,36 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity } from '../../../../../mocks'
+import {
+  address,
+  contact,
+  identity,
+  theme
+} from '../../../../../mocks'
 
-jest.mock('../../../../../helpers', () => ({
-  nameToDisplay: x => x,
-  capitalize: x => x
-}))
-// eslint-disable-next-line
-import ShipmentContactsBoxMainContactsPlaceholderCard from './'
-
-const contact = {
-  email: 'foo@bar.baz',
-  phone: '0761452887',
-  firstName: 'John',
-  lastName: 'Doe',
-  companyName: 'FOO_CONTACT_COMPANY'
-}
+import ShipmentContactsBoxMainContactsPlaceholderCard from '.'
 
 const propsBase = {
   theme,
   contactData: {
     contact,
-    address: {}
+    address
   },
   contactType: 'FOO_CONTACT_TYPE',
   showAddressBook: identity
 }
 
 test('shallow render', () => {
-  const Component = <ShipmentContactsBoxMainContactsPlaceholderCard {...propsBase} />
+  expect(shallow(
+    <ShipmentContactsBoxMainContactsPlaceholderCard {...propsBase} />
+  )).toMatchSnapshot()
+})
 
-  expect(shallow(Component)).toMatchSnapshot()
+test('theme is falsy', () => {
+  const props = {
+    ...propsBase,
+    theme: null
+  }
+  expect(shallow(
+    <ShipmentContactsBoxMainContactsPlaceholderCard {...props} />
+  )).toMatchSnapshot()
 })

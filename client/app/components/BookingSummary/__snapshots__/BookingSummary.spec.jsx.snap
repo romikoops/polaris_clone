@@ -2,56 +2,47 @@
 
 exports[`loadType is cargo_item 1`] = `
 <div
-  className="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
+  class="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
 >
   <div
-    className="route_sec flex-40 layout-column layout-align-stretch"
+    class="route_sec flex-40 layout-column layout-align-stretch"
   >
     <div
-      className="flex-none layout-row layout-align-center"
+      class="flex-none layout-row layout-align-center"
     >
       <div
-        className="flex-none connection_graphics"
+        class="flex-none connection_graphics"
       >
         <i
-          className="fa fa-map-marker map_marker"
+          class="fa fa-map-marker map_marker"
         />
         <i
-          className="fa fa-flag-o flag"
+          class="fa fa-flag-o flag"
         />
         <div
-          className="mot_wrapper layout-row layout-align-center-center"
+          class="mot_wrapper layout-row layout-align-center-center"
         >
           <i
-            className="fa fa-anchor  "
-            style={Object {}}
+            class="fa fa-anchor  "
           />
         </div>
         <div
-          style={
-            Object {
-              "background": "linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa)",
-              "backgroundSize": "16px 2px, 100% 2px",
-              "height": "2px",
-              "marginTop": "6px",
-              "width": "100%",
-            }
-          }
+          style="margin-top:6px;height:2px;width:100%;background:linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa);background-size:16px 2px, 100% 2px"
         />
       </div>
     </div>
     <div
-      className="flex-50 layout-row layout-align-space-between"
+      class="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center"
+        class="flex-50 layout-row layout-align-center-center"
       >
         <h4>
           From
         </h4>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center"
+        class="flex-50 layout-row layout-align-center-center"
       >
         <h4>
           To
@@ -59,38 +50,42 @@ exports[`loadType is cargo_item 1`] = `
       </div>
     </div>
     <div
-      className="flex-50 layout-row layout-align-space-between"
+      class="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        class="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
       >
         <h4
-          className="flex-100"
+          class="flex-100"
         >
-          <Truncate
-            ellipsis="…"
-            lines={1}
-            trimWhitespace={false}
-          >
-            FOO_ORIGIN_CITY
-          </Truncate>
+          <span>
+            <span />
+            <span>
+              FOO_ORIGIN_CITY
+            </span>
+            <span
+              style="position:fixed;visibility:hidden;top:0;left:0"
+            >
+              …
+            </span>
+          </span>
         </h4>
         <p
-          className="trucking_elem flex-none"
+          class="trucking_elem flex-none"
         >
           with pick-up
         </p>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        class="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
       >
         <h4
-          className="flex-100"
+          class="flex-100"
         >
           FOO_DESTINATION_CITY
         </h4>
         <p
-          className="trucking_elem flex-none"
+          class="trucking_elem flex-none"
         >
           with 
                 delivery
@@ -99,33 +94,31 @@ exports[`loadType is cargo_item 1`] = `
     </div>
   </div>
   <div
-    className="flex flex-sm-40 layout-column layout-align-stretch"
+    class="flex flex-sm-40 layout-column layout-align-stretch"
   >
     <h4
-      className="flex-50 layout-row layout-align-center-center"
+      class="flex-50 layout-row layout-align-center-center"
     >
       Total Weight
     </h4>
     <p
-      className="flex-50 layout-row layout-align-center-start"
+      class="flex-50 layout-row layout-align-center-start"
     >
-      100.00
-       kg
+      100.00 kg
     </p>
   </div>
   <div
-    className="flex layout-column layout-align-stretch"
+    class="flex layout-column layout-align-stretch"
   >
     <h4
-      className="flex-50 layout-row layout-align-center-center"
+      class="flex-50 layout-row layout-align-center-center"
     >
       Total Volume
     </h4>
     <p
-      className="flex-50 layout-row layout-align-center-start"
+      class="flex-50 layout-row layout-align-center-start"
     >
-      200.000
-       m³
+      200.000 m³
     </p>
   </div>
 </div>
@@ -133,53 +126,45 @@ exports[`loadType is cargo_item 1`] = `
 
 exports[`modeOfTransport is falsy 1`] = `
 <div
-  className="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
+  class="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
 >
   <div
-    className="route_sec flex-40 layout-column layout-align-stretch"
+    class="route_sec flex-40 layout-column layout-align-stretch"
   >
     <div
-      className="flex-none layout-row layout-align-center"
+      class="flex-none layout-row layout-align-center"
     >
       <div
-        className="flex-none connection_graphics"
+        class="flex-none connection_graphics"
       >
         <i
-          className="fa fa-map-marker map_marker"
+          class="fa fa-map-marker map_marker"
         />
         <i
-          className="fa fa-flag-o flag"
+          class="fa fa-flag-o flag"
         />
         <div
-          className="mot_wrapper layout-row layout-align-center-center"
+          class="mot_wrapper layout-row layout-align-center-center"
         >
            
         </div>
         <div
-          style={
-            Object {
-              "background": "linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa)",
-              "backgroundSize": "16px 2px, 100% 2px",
-              "height": "2px",
-              "marginTop": "6px",
-              "width": "100%",
-            }
-          }
+          style="margin-top:6px;height:2px;width:100%;background:linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa);background-size:16px 2px, 100% 2px"
         />
       </div>
     </div>
     <div
-      className="flex-50 layout-row layout-align-space-between"
+      class="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center"
+        class="flex-50 layout-row layout-align-center-center"
       >
         <h4>
           From
         </h4>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center"
+        class="flex-50 layout-row layout-align-center-center"
       >
         <h4>
           To
@@ -187,38 +172,42 @@ exports[`modeOfTransport is falsy 1`] = `
       </div>
     </div>
     <div
-      className="flex-50 layout-row layout-align-space-between"
+      class="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        class="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
       >
         <h4
-          className="flex-100"
+          class="flex-100"
         >
-          <Truncate
-            ellipsis="…"
-            lines={1}
-            trimWhitespace={false}
-          >
-            FOO_ORIGIN_CITY
-          </Truncate>
+          <span>
+            <span />
+            <span>
+              FOO_ORIGIN_CITY
+            </span>
+            <span
+              style="position:fixed;visibility:hidden;top:0;left:0"
+            >
+              …
+            </span>
+          </span>
         </h4>
         <p
-          className="trucking_elem flex-none"
+          class="trucking_elem flex-none"
         >
           with pick-up
         </p>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        class="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
       >
         <h4
-          className="flex-100"
+          class="flex-100"
         >
           FOO_DESTINATION_CITY
         </h4>
         <p
-          className="trucking_elem flex-none"
+          class="trucking_elem flex-none"
         >
           with 
                 delivery
@@ -227,75 +216,65 @@ exports[`modeOfTransport is falsy 1`] = `
     </div>
   </div>
   <div
-    className="flex flex-sm-40 layout-column layout-align-stretch"
+    class="flex flex-sm-40 layout-column layout-align-stretch"
   >
     <h4
-      className="flex-50 layout-row layout-align-center-center"
+      class="flex-50 layout-row layout-align-center-center"
     >
       Total Weight
     </h4>
     <p
-      className="flex-50 layout-row layout-align-center-start"
+      class="flex-50 layout-row layout-align-center-start"
     >
-      100.00
-       kg
+      100.00 kg
     </p>
   </div>
 </div>
 `;
 
-exports[`shallow render 1`] = `
+exports[`render render 1`] = `
 <div
-  className="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
+  class="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
 >
   <div
-    className="route_sec flex-40 layout-column layout-align-stretch"
+    class="route_sec flex-40 layout-column layout-align-stretch"
   >
     <div
-      className="flex-none layout-row layout-align-center"
+      class="flex-none layout-row layout-align-center"
     >
       <div
-        className="flex-none connection_graphics"
+        class="flex-none connection_graphics"
       >
         <i
-          className="fa fa-map-marker map_marker"
+          class="fa fa-map-marker map_marker"
         />
         <i
-          className="fa fa-flag-o flag"
+          class="fa fa-flag-o flag"
         />
         <div
-          className="mot_wrapper layout-row layout-align-center-center"
+          class="mot_wrapper layout-row layout-align-center-center"
         >
           <i
-            className="fa fa-anchor  "
-            style={Object {}}
+            class="fa fa-anchor  "
           />
         </div>
         <div
-          style={
-            Object {
-              "background": "linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa)",
-              "backgroundSize": "16px 2px, 100% 2px",
-              "height": "2px",
-              "marginTop": "6px",
-              "width": "100%",
-            }
-          }
+          style="margin-top:6px;height:2px;width:100%;background:linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa);background-size:16px 2px, 100% 2px"
         />
       </div>
     </div>
     <div
-      className="flex-50 layout-row layout-align-space-between"
+      class="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center"
+        class="flex-50 layout-row layout-align-center-center"
       >
         <h4>
           From
         </h4>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center"
+        class="flex-50 layout-row layout-align-center-center"
       >
         <h4>
           To
@@ -303,38 +282,42 @@ exports[`shallow render 1`] = `
       </div>
     </div>
     <div
-      className="flex-50 layout-row layout-align-space-between"
+      class="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        class="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
       >
         <h4
-          className="flex-100"
+          class="flex-100"
         >
-          <Truncate
-            ellipsis="…"
-            lines={1}
-            trimWhitespace={false}
-          >
-            FOO_ORIGIN_CITY
-          </Truncate>
+          <span>
+            <span />
+            <span>
+              FOO_ORIGIN_CITY
+            </span>
+            <span
+              style="position:fixed;visibility:hidden;top:0;left:0"
+            >
+              …
+            </span>
+          </span>
         </h4>
         <p
-          className="trucking_elem flex-none"
+          class="trucking_elem flex-none"
         >
           with pick-up
         </p>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        class="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
       >
         <h4
-          className="flex-100"
+          class="flex-100"
         >
           FOO_DESTINATION_CITY
         </h4>
         <p
-          className="trucking_elem flex-none"
+          class="trucking_elem flex-none"
         >
           with 
                 delivery
@@ -343,18 +326,17 @@ exports[`shallow render 1`] = `
     </div>
   </div>
   <div
-    className="flex flex-sm-40 layout-column layout-align-stretch"
+    class="flex flex-sm-40 layout-column layout-align-stretch"
   >
     <h4
-      className="flex-50 layout-row layout-align-center-center"
+      class="flex-50 layout-row layout-align-center-center"
     >
       Total Weight
     </h4>
     <p
-      className="flex-50 layout-row layout-align-center-start"
+      class="flex-50 layout-row layout-align-center-start"
     >
-      100.00
-       kg
+      100.00 kg
     </p>
   </div>
 </div>
@@ -362,56 +344,47 @@ exports[`shallow render 1`] = `
 
 exports[`theme is falsy 1`] = `
 <div
-  className="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
+  class="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
 >
   <div
-    className="route_sec flex-40 layout-column layout-align-stretch"
+    class="route_sec flex-40 layout-column layout-align-stretch"
   >
     <div
-      className="flex-none layout-row layout-align-center"
+      class="flex-none layout-row layout-align-center"
     >
       <div
-        className="flex-none connection_graphics"
+        class="flex-none connection_graphics"
       >
         <i
-          className="fa fa-map-marker map_marker"
+          class="fa fa-map-marker map_marker"
         />
         <i
-          className="fa fa-flag-o flag"
+          class="fa fa-flag-o flag"
         />
         <div
-          className="mot_wrapper layout-row layout-align-center-center"
+          class="mot_wrapper layout-row layout-align-center-center"
         >
           <i
-            className="fa fa-anchor  "
-            style={Object {}}
+            class="fa fa-anchor  "
           />
         </div>
         <div
-          style={
-            Object {
-              "background": "black",
-              "backgroundSize": "16px 2px, 100% 2px",
-              "height": "2px",
-              "marginTop": "6px",
-              "width": "100%",
-            }
-          }
+          style="margin-top:6px;height:2px;width:100%;background:black;background-size:16px 2px, 100% 2px"
         />
       </div>
     </div>
     <div
-      className="flex-50 layout-row layout-align-space-between"
+      class="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center"
+        class="flex-50 layout-row layout-align-center-center"
       >
         <h4>
           From
         </h4>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center"
+        class="flex-50 layout-row layout-align-center-center"
       >
         <h4>
           To
@@ -419,38 +392,42 @@ exports[`theme is falsy 1`] = `
       </div>
     </div>
     <div
-      className="flex-50 layout-row layout-align-space-between"
+      class="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        class="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
       >
         <h4
-          className="flex-100"
+          class="flex-100"
         >
-          <Truncate
-            ellipsis="…"
-            lines={1}
-            trimWhitespace={false}
-          >
-            FOO_ORIGIN_CITY
-          </Truncate>
+          <span>
+            <span />
+            <span>
+              FOO_ORIGIN_CITY
+            </span>
+            <span
+              style="position:fixed;visibility:hidden;top:0;left:0"
+            >
+              …
+            </span>
+          </span>
         </h4>
         <p
-          className="trucking_elem flex-none"
+          class="trucking_elem flex-none"
         >
           with pick-up
         </p>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        class="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
       >
         <h4
-          className="flex-100"
+          class="flex-100"
         >
           FOO_DESTINATION_CITY
         </h4>
         <p
-          className="trucking_elem flex-none"
+          class="trucking_elem flex-none"
         >
           with 
                 delivery
@@ -459,18 +436,17 @@ exports[`theme is falsy 1`] = `
     </div>
   </div>
   <div
-    className="flex flex-sm-40 layout-column layout-align-stretch"
+    class="flex flex-sm-40 layout-column layout-align-stretch"
   >
     <h4
-      className="flex-50 layout-row layout-align-center-center"
+      class="flex-50 layout-row layout-align-center-center"
     >
       Total Weight
     </h4>
     <p
-      className="flex-50 layout-row layout-align-center-start"
+      class="flex-50 layout-row layout-align-center-start"
     >
-      100.00
-       kg
+      100.00 kg
     </p>
   </div>
 </div>
@@ -478,56 +454,47 @@ exports[`theme is falsy 1`] = `
 
 exports[`trucking.on_carriage is empty object 1`] = `
 <div
-  className="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
+  class="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
 >
   <div
-    className="route_sec flex-40 layout-column layout-align-stretch"
+    class="route_sec flex-40 layout-column layout-align-stretch"
   >
     <div
-      className="flex-none layout-row layout-align-center"
+      class="flex-none layout-row layout-align-center"
     >
       <div
-        className="flex-none connection_graphics"
+        class="flex-none connection_graphics"
       >
         <i
-          className="fa fa-map-marker map_marker"
+          class="fa fa-map-marker map_marker"
         />
         <i
-          className="fa fa-flag-o flag"
+          class="fa fa-flag-o flag"
         />
         <div
-          className="mot_wrapper layout-row layout-align-center-center"
+          class="mot_wrapper layout-row layout-align-center-center"
         >
           <i
-            className="fa fa-anchor  "
-            style={Object {}}
+            class="fa fa-anchor  "
           />
         </div>
         <div
-          style={
-            Object {
-              "background": "linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa)",
-              "backgroundSize": "16px 2px, 100% 2px",
-              "height": "2px",
-              "marginTop": "6px",
-              "width": "100%",
-            }
-          }
+          style="margin-top:6px;height:2px;width:100%;background:linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa);background-size:16px 2px, 100% 2px"
         />
       </div>
     </div>
     <div
-      className="flex-50 layout-row layout-align-space-between"
+      class="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center"
+        class="flex-50 layout-row layout-align-center-center"
       >
         <h4>
           From
         </h4>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center"
+        class="flex-50 layout-row layout-align-center-center"
       >
         <h4>
           To
@@ -535,38 +502,42 @@ exports[`trucking.on_carriage is empty object 1`] = `
       </div>
     </div>
     <div
-      className="flex-50 layout-row layout-align-space-between"
+      class="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        class="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
       >
         <h4
-          className="flex-100"
+          class="flex-100"
         >
-          <Truncate
-            ellipsis="…"
-            lines={1}
-            trimWhitespace={false}
-          >
-            FOO_ORIGIN_CITY
-          </Truncate>
+          <span>
+            <span />
+            <span>
+              FOO_ORIGIN_CITY
+            </span>
+            <span
+              style="position:fixed;visibility:hidden;top:0;left:0"
+            >
+              …
+            </span>
+          </span>
         </h4>
         <p
-          className="trucking_elem flex-none"
+          class="trucking_elem flex-none"
         >
           with pick-up
         </p>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        class="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
       >
         <h4
-          className="flex-100"
+          class="flex-100"
         >
           FOO_NEXUSES_DESTINATION
         </h4>
         <p
-          className="trucking_elem flex-none"
+          class="trucking_elem flex-none"
         >
           without 
                 delivery
@@ -575,18 +546,17 @@ exports[`trucking.on_carriage is empty object 1`] = `
     </div>
   </div>
   <div
-    className="flex flex-sm-40 layout-column layout-align-stretch"
+    class="flex flex-sm-40 layout-column layout-align-stretch"
   >
     <h4
-      className="flex-50 layout-row layout-align-center-center"
+      class="flex-50 layout-row layout-align-center-center"
     >
       Total Weight
     </h4>
     <p
-      className="flex-50 layout-row layout-align-center-start"
+      class="flex-50 layout-row layout-align-center-start"
     >
-      100.00
-       kg
+      100.00 kg
     </p>
   </div>
 </div>
@@ -594,56 +564,47 @@ exports[`trucking.on_carriage is empty object 1`] = `
 
 exports[`trucking.pre_carriage is empty object 1`] = `
 <div
-  className="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
+  class="booking_summary hide-sm hide-xs flex-50 layout-align-sm-center-center layout-row"
 >
   <div
-    className="route_sec flex-40 layout-column layout-align-stretch"
+    class="route_sec flex-40 layout-column layout-align-stretch"
   >
     <div
-      className="flex-none layout-row layout-align-center"
+      class="flex-none layout-row layout-align-center"
     >
       <div
-        className="flex-none connection_graphics"
+        class="flex-none connection_graphics"
       >
         <i
-          className="fa fa-map-marker map_marker"
+          class="fa fa-map-marker map_marker"
         />
         <i
-          className="fa fa-flag-o flag"
+          class="fa fa-flag-o flag"
         />
         <div
-          className="mot_wrapper layout-row layout-align-center-center"
+          class="mot_wrapper layout-row layout-align-center-center"
         >
           <i
-            className="fa fa-anchor  "
-            style={Object {}}
+            class="fa fa-anchor  "
           />
         </div>
         <div
-          style={
-            Object {
-              "background": "linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa)",
-              "backgroundSize": "16px 2px, 100% 2px",
-              "height": "2px",
-              "marginTop": "6px",
-              "width": "100%",
-            }
-          }
+          style="margin-top:6px;height:2px;width:100%;background:linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa);background-size:16px 2px, 100% 2px"
         />
       </div>
     </div>
     <div
-      className="flex-50 layout-row layout-align-space-between"
+      class="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center"
+        class="flex-50 layout-row layout-align-center-center"
       >
         <h4>
           From
         </h4>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center"
+        class="flex-50 layout-row layout-align-center-center"
       >
         <h4>
           To
@@ -651,38 +612,42 @@ exports[`trucking.pre_carriage is empty object 1`] = `
       </div>
     </div>
     <div
-      className="flex-50 layout-row layout-align-space-between"
+      class="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        class="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
       >
         <h4
-          className="flex-100"
+          class="flex-100"
         >
-          <Truncate
-            ellipsis="…"
-            lines={1}
-            trimWhitespace={false}
-          >
-            FOO_NEXUSES_ORIGIN
-          </Truncate>
+          <span>
+            <span />
+            <span>
+              FOO_NEXUSES_ORIGIN
+            </span>
+            <span
+              style="position:fixed;visibility:hidden;top:0;left:0"
+            >
+              …
+            </span>
+          </span>
         </h4>
         <p
-          className="trucking_elem flex-none"
+          class="trucking_elem flex-none"
         >
           without pick-up
         </p>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        class="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
       >
         <h4
-          className="flex-100"
+          class="flex-100"
         >
           FOO_DESTINATION_CITY
         </h4>
         <p
-          className="trucking_elem flex-none"
+          class="trucking_elem flex-none"
         >
           with 
                 delivery
@@ -691,18 +656,17 @@ exports[`trucking.pre_carriage is empty object 1`] = `
     </div>
   </div>
   <div
-    className="flex flex-sm-40 layout-column layout-align-stretch"
+    class="flex flex-sm-40 layout-column layout-align-stretch"
   >
     <h4
-      className="flex-50 layout-row layout-align-center-center"
+      class="flex-50 layout-row layout-align-center-center"
     >
       Total Weight
     </h4>
     <p
-      className="flex-50 layout-row layout-align-center-start"
+      class="flex-50 layout-row layout-align-center-start"
     >
-      100.00
-       kg
+      100.00 kg
     </p>
   </div>
 </div>
