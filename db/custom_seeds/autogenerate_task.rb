@@ -38,7 +38,7 @@ gen_obj = {
       { origin: 'SHANGHAI', destination:	'HELSINGBORG', departure:	'MONDAY',	transit_time: 37 },
       { origin: 'SHANGHAI', destination:	'STOCKHOLM', departure:	'SATURDAY',	transit_time: 40 },
       { origin: 'NINGBO', destination:	'GOTHENBURG', departure:	'SATURDAY',	transit_time: 39 },
-      { origin: 'NINGBO', destination:	'HELSINGBORG', departure:	'SATURDAY' ,	transit_time: 38 },
+      { origin: 'NINGBO', destination:	'HELSINGBORG', departure:	'SATURDAY',	transit_time: 38 },
       { origin: 'NINGBO', destination:	'STOCKHOLM', departure:	'THURSDAY',	transit_time: 41 },
       { origin: 'XIAMEN', destination:	'GOTHENBURG', departure:	'SATURDAY',	transit_time: 39 },
       { origin: 'XIAMEN', destination:	'HELSINGBORG', departure:	'SATURDAY',	transit_time: 39 },
