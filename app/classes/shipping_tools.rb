@@ -323,7 +323,10 @@ module ShippingTools
     destination_hub = shipment.destination_hub
     origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
     destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
-    options = { methods: %i(selected_offer mode_of_transport service_level vessel_name carrier), include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }] }
+    options = {
+      methods: %i(selected_offer mode_of_transport service_level vessel_name carrier),
+      include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }]
+    }
     shipment_as_json = shipment.as_json(options).merge(
       pickup_address: shipment.pickup_address_with_country,
       delivery_address: shipment.delivery_address_with_country
@@ -417,7 +420,8 @@ module ShippingTools
     @origin_hub      = Hub.find(@schedule['origin_hub']['id'])
     @destination_hub = Hub.find(@schedule['destination_hub']['id'])
     if shipment.has_pre_carriage
-      shipment.planned_pickup_date = shipment.trip.closing_date - 1.day - shipment.trucking['pre_carriage']['trucking_time_in_seconds'].seconds
+      trucking_seconds = shipment.trucking['pre_carriage']['trucking_time_in_seconds'].seconds
+      shipment.planned_pickup_date = shipment.trip.closing_date - 1.day - trucking_seconds
     else
       shipment.planned_origin_drop_off_date = shipment.trip.closing_date - 1.day
     end
@@ -476,10 +480,38 @@ module ShippingTools
       shipment.trip.tenant_vehicle_id,
       shipment.origin_hub_id
     )
-    addons = Addon.prepare_addons(@origin_hub, @destination_hub, cargoKey, shipment.trip.tenant_vehicle_id, shipment.mode_of_transport, cargos, current_user)
+    addons = Addon.prepare_addons(
+      @origin_hub,
+      @destination_hub,
+      cargoKey,
+      shipment.trip.tenant_vehicle_id,
+      shipment.mode_of_transport,
+      cargos,
+      current_user
+    )
 
-    import_fees = destination_customs_fee ? calc_customs_fees(destination_customs_fee['fees'], cargos, shipment.load_type, current_user, shipment.mode_of_transport) : { unknown: true }
-    export_fees = origin_customs_fee ? calc_customs_fees(origin_customs_fee['fees'], cargos, shipment.load_type, current_user, shipment.mode_of_transport) : { unknown: true }
+    import_fees = if destination_customs_fee
+                    calc_customs_fees(
+                      destination_customs_fee['fees'],
+                      cargos,
+                      shipment.load_type,
+                      current_user,
+                      shipment.mode_of_transport
+                    )
+                  else
+                    { unknown: true }
+    end
+    export_fees = if origin_customs_fee
+                    calc_customs_fees(
+                      origin_customs_fee['fees'],
+                      cargos,
+                      shipment.load_type,
+                      current_user,
+                      shipment.mode_of_transport
+                    )
+                  else
+                    { unknown: true }
+    end
     total_fees = { total: { value: 0, currency: current_user.currency } }
     total_fees[:total][:value] += import_fees['total'][:value] if import_fees['total'] && import_fees['total'][:value]
     total_fees[:total][:value] += export_fees['total'][:value] if export_fees['total'] && export_fees['total'][:value]
@@ -492,7 +524,10 @@ module ShippingTools
       startHub: { data: @origin_hub, address: @origin_hub.nexus },
       endHub: { data: @destination_hub, address: @destination_hub.nexus }
     }
-    options = { methods: %i(selected_offer mode_of_transport service_level vessel_name carrier), include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }] }
+    options = {
+      methods: %i(selected_offer mode_of_transport service_level vessel_name carrier),
+      include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }]
+    }
     origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
     destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
     shipment_as_json = shipment.as_json(options).merge(
