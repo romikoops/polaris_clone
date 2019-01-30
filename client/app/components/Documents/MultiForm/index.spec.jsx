@@ -1,41 +1,20 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity } from '../../../mocks'
+import { theme, identity, documents } from '../../../mocks'
 
-jest.mock('.././../../helpers', () => ({
-  authHeader: x => x,
-  gradientTextGenerator: x => x
-}))
-jest.mock('uuid', () => {
-  let counter = -1
-  const v4 = () => {
-    counter += 1
-
-    return `RANDOM_KEY_${counter}`
-  }
-
-  return { v4 }
-})
-jest.mock('isomorphic-fetch', () =>
-  () => Promise.resolve({ data: [] }))
-jest.mock('react-router', () => ({
-  // eslint-disable-next-line react/prop-types
-  Link: () => ({ props }) => <a {...props}>link</a>
-}))
-// eslint-disable-next-line
-import DocumentsMultiForm from './'
+import DocumentsMultiForm from '.'
 
 const propsBase = {
-  url: 'FOO_URL',
-  type: 'FOO_TYPE',
-  theme,
+  deleteFn: identity,
   dispatchFn: identity,
-  uploadFn: identity,
-  tooltip: 'FOO_TOOLTIP',
-  text: 'FOO_TEXT',
-  documents: [{ signed_url: 'FOO_SIGNED_URL' }, { signed_url: 'BAR_SIGNED_URL' }, {}],
+  documents,
   isRequired: false,
-  deleteFn: identity
+  text: 'TEXT',
+  theme,
+  tooltip: 'TOOLTIP',
+  type: 'TYPE',
+  uploadFn: identity,
+  url: 'URL'
 }
 
 test('shallow render', () => {
@@ -56,4 +35,18 @@ test('documents is falsy', () => {
     documents: null
   }
   expect(shallow(<DocumentsMultiForm {...props} />)).toMatchSnapshot()
+})
+
+test('documents contains empty object', () => {
+  const props = {
+    ...propsBase,
+    documents: [{}]
+  }
+  expect(shallow(<DocumentsMultiForm {...props} />)).toMatchSnapshot()
+})
+
+test('state.error is true', () => {
+  const wrapper = shallow(<DocumentsMultiForm {...propsBase} />)
+  wrapper.setState({ error: true })
+  expect(wrapper).toMatchSnapshot()
 })

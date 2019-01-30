@@ -1,9 +1,8 @@
 import * as React from 'react'
 import { mount, shallow } from 'enzyme'
-// eslint-disable-next-line
-import CardLink from './CardLink'
-
 import { theme, identity } from '../../mocks'
+
+import CardLink from './CardLink'
 
 const propsBase = {
   text: 'FOO_TEXT',

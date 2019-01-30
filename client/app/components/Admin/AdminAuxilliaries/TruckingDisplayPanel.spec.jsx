@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { mount } from 'enzyme'
-import { change, identity, theme } from '../../../mocks'
+import { change, identity, theme } from '../../../mock'
 // eslint-disable-next-line no-named-as-default
 import TruckingDisplayPanel from './TruckingDisplayPanel'
 

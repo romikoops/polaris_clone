@@ -315,62 +315,6 @@ export default function users (state = initialState, action) {
 
       return errNewContact
     }
-
-    case userConstants.NEW_ALIAS_REQUEST: {
-      const reqNewAlias = merge({}, state, {
-        loading: true
-      })
-
-      return reqNewAlias
-    }
-    case userConstants.NEW_ALIAS_SUCCESS: {
-      const { aliases } = state.dashboard
-      aliases.push(action.payload.data)
-
-      return {
-        ...state,
-        contactData: aliases,
-        loading: false
-      }
-    }
-    case userConstants.NEW_ALIAS_FAILURE: {
-      const errNewAlias = merge({}, state, {
-        loading: false,
-        error: { contactData: action.error }
-      })
-
-      return errNewAlias
-    }
-
-    case userConstants.DELETE_ALIAS_REQUEST: {
-      const reqDeleteAlias = merge({}, state, {
-        loading: true
-      })
-
-      return reqDeleteAlias
-    }
-    case userConstants.DELETE_ALIAS_SUCCESS: {
-      const aliasless = state.dashboard.aliases
-        .filter(x => x.id !== parseInt(action.payload.data, 10))
-
-      return {
-        ...state,
-        dashboard: {
-          ...state.dashboard,
-          aliases: aliasless
-        },
-        loading: false
-      }
-    }
-    case userConstants.DELETE_ALIAS_FAILURE: {
-      const errDeleteAlias = merge({}, state, {
-        loading: false,
-        error: { contactData: action.error }
-      })
-
-      return errDeleteAlias
-    }
-
     case userConstants.UPLOAD_DOCUMENT_REQUEST: {
       const reqDocUpload = merge({}, state, {})
 

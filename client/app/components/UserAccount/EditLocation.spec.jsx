@@ -1,11 +1,9 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, gMaps, address } from '../../mocks'
+import {
+  theme, identity, gMaps, address
+} from '../../mocks'
 
-jest.mock('react-redux', () => ({
-  connect: () => Component => Component
-}))
-// eslint-disable-next-line
 import EditLocation from './EditLocation'
 
 const propsBase = {
@@ -13,10 +11,20 @@ const propsBase = {
   toggleActiveView: identity,
   saveLocation: identity,
   gMaps,
-  geocodedAddress: 'FOO_GEO_ADDRESS',
+  geocodedAddress: 'GEO_ADDRESS',
   address
 }
 
 test('shallow render', () => {
   expect(shallow(<EditLocation {...propsBase} />)).toMatchSnapshot()
+})
+
+test('state.autocomplete.address is truthy', () => {
+  const wrapper = shallow(<EditLocation {...propsBase} />)
+  wrapper.setState({
+    autocomplete: {
+      address: 'ADDRESS'
+    }
+  })
+  expect(wrapper).toMatchSnapshot()
 })

@@ -37,7 +37,43 @@ exports[`shallow render 1`] = `
     <hr />
     <div
       className="flex-100 layout-row layout-wrap"
-    />
+    >
+      <div
+        className="flex-100 layout-row layout-wrap hs_cell"
+        key="4"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center"
+          onClick={[Function]}
+        >
+          <p
+            className="flex-none"
+          >
+             
+            4
+          </p>
+          <div
+            className="flex-10 layout-row layout-align-center-center"
+          >
+            <i
+              className="fa fa-chevron-down clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row cell_data_toggle closed"
+        >
+          <p
+            className="flex-100"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
@@ -79,7 +115,121 @@ exports[`theme is falsy 1`] = `
     <hr />
     <div
       className="flex-100 layout-row layout-wrap"
-    />
+    >
+      <div
+        className="flex-100 layout-row layout-wrap hs_cell"
+        key="4"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center"
+          onClick={[Function]}
+        >
+          <p
+            className="flex-none"
+          >
+             
+            4
+          </p>
+          <div
+            className="flex-10 layout-row layout-align-center-center"
+          >
+            <i
+              className="fa fa-chevron-down clip"
+              style={
+                Object {
+                  "background": "black",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row cell_data_toggle closed"
+        >
+          <p
+            className="flex-100"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`viewer[hs] is truthy 1`] = `
+<div
+  className="backdrop layout-row flex-none layout-wrap layout-align-center-center"
+>
+  <div
+    className="content layout-row flex-none layout-wrap layout-align-center-start"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <h2
+        className="flex-none clip"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      >
+        HS Codes
+      </h2>
+      <div
+        className="flex-10 layout-row layout-align-center-center"
+        onClick={[Function]}
+      >
+        <i
+          className="fa fa-times clip"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        />
+      </div>
+    </div>
+    <hr />
+    <div
+      className="flex-100 layout-row layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap hs_cell"
+        key="4"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center"
+          onClick={[Function]}
+        >
+          <p
+            className="flex-none"
+          >
+             
+            4
+          </p>
+          <div
+            className="flex-10 layout-row layout-align-center-center"
+          >
+            <i
+              className="fa fa-chevron-up clip"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row cell_data_toggle open"
+        >
+          <p
+            className="flex-100"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;

@@ -8,12 +8,7 @@ import {
   user
 } from '../../mocks'
 
-jest.mock('react-redux', () => ({
-  connect: (mapStateToProps, mapDispatchToProps) => Component => Component
-}))
-
-// eslint-disable-next-line
-import { TPureCookieConsentBar as CookieConsentBar } from './'
+import { TPureCookieConsentBar as CookieConsentBar } from '.'
 
 const propsBase = {
   theme,

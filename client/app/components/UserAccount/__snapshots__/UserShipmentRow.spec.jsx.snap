@@ -1,286 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`props.shipment.schedule_set.length < 1 1`] = `
-<div
-  className="flex-100 layout-row pointy route_result"
-  key="RANDOM_KEY_1"
->
-  <div
-    className="port_box flex-25 layout-row layout-wrap"
-    onClick={[Function]}
-  >
-    <div
-      className="flex-100 layout-row layout-align-center-center"
-    >
-      <h5
-        className="flex-none no_m"
-      >
-         
-        Booking Placed at: undefined
-      </h5>
-    </div>
-    <div
-      className="hub_half flex-100 layout-row layout-align-center-center"
-    >
-      <div
-        className="flex-10 layout-row layout-align-center-center"
-      >
-        <i
-          className="flex-none fa fa-map-marker map_marker"
-        />
-      </div>
-      <div
-        className="flex layout-row layout-align-center-center"
-      >
-        <h4
-          className="flex-100 center letter_3"
-        >
-           
-          FOO_NAME
-           
-        </h4>
-      </div>
-    </div>
-    <div
-      className="hub_mid_line flex-none layout-row layout-align-space-around-center layout-wrap"
-    >
-      <div
-        className="flex-100 layout-row layout-align-center-end"
-      >
-        <i
-          className="fa fa-ship"
-        />
-      </div>
-      <div
-        style={
-          Object {
-            "background": "linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa)",
-            "backgroundSize": "16px 2px, 100% 2px",
-            "height": "2px",
-            "marginTop": "6px",
-            "width": "100%",
-          }
-        }
-      />
-    </div>
-    <div
-      className="hub_half flex-100 layout-row layout-align-center-center"
-    >
-      <div
-        className="flex-10 layout-row layout-align-center-center"
-      >
-        <i
-          className="flex-none fa fa-flag-o flag"
-        />
-      </div>
-      <div
-        className="flex layout-row layout-align-center-center"
-      >
-        <h4
-          className="flex-100 center letter_3"
-        >
-           
-          BAR_NAME
-           
-        </h4>
-      </div>
-    </div>
-  </div>
-  <div
-    className="main_info flex layout-row layout-align-none-start layout-wrap"
-    onClick={[Function]}
-  >
-    <div
-      className="flex-100 layout-row layout-align-none-center"
-    >
-      <div
-        className="flex-50 layout-row layout-align-start-center"
-      >
-        <h4
-          className="flex-none no_m letter_3"
-        >
-           
-          Ref: FOO_IMC_REFERENCE
-        </h4>
-      </div>
-      <div
-        className="flex-50 layout-row layout-align-end-center"
-      >
-        <h4
-          className="flex-none letter_3 no_m"
-        >
-           
-          0 X  
-        </h4>
-      </div>
-    </div>
-    <div
-      className="flex-100 layout-row layout-align-none-center"
-    >
-      <div
-        className="user_info flex-50 layout-row layout-align-start-center"
-      >
-        <i
-          className="flex-none fa fa-user flag"
-          style={
-            Object {
-              "background": "-webkit-linear-gradient(left, undefined, undefined)",
-            }
-          }
-        />
-        <h4
-          className="flex-none letter_3"
-        >
-           
-          undefined undefined
-           
-        </h4>
-      </div>
-      <div
-        className="flex-50 layout-row layout-align-end-center"
-      >
-        <h4
-          className="flex-none letter_3 no_m"
-        >
-           
-          Total: CNY 109
-        </h4>
-      </div>
-    </div>
-    <div
-      className="flex-100 layout-row layout-align-none-center"
-    >
-      <div
-        className="flex-25 layout-wrap layout-row layout-align-center-center"
-      >
-        <div
-          className="flex-100 layout-row"
-        >
-          <h4
-            className="date_title"
-          >
-            Closing Date
-          </h4>
-        </div>
-        <div
-          className="flex-100 layout-row"
-        >
-          <p
-            className="flex-none sched_elem"
-          >
-             
-             
-          </p>
-          <p
-            className="flex-none sched_elem"
-          >
-             
-             
-          </p>
-        </div>
-      </div>
-      <div
-        className="flex-25 layout-wrap layout-row layout-align-center-center"
-      >
-        <div
-          className="flex-100 layout-row"
-        >
-          <h4
-            className="date_title"
-          >
-             
-            ETD
-             
-          </h4>
-        </div>
-        <div
-          className="flex-100 layout-row"
-        >
-          <p
-            className="flex-none sched_elem"
-          >
-             
-            2018-11-12T12:14:08+01:00
-             
-          </p>
-          <p
-            className="flex-none sched_elem"
-          >
-             
-            2018-11-12T12:14:08+01:00
-             
-          </p>
-        </div>
-      </div>
-      <div
-        className="flex-25 layout-wrap layout-row layout-align-center-center"
-      >
-        <div
-          className="flex-100 layout-row"
-        >
-          <h4
-            className="date_title"
-          >
-             
-            ETA
-             
-          </h4>
-        </div>
-        <div
-          className="flex-100 layout-row"
-        >
-          <p
-            className="flex-none sched_elem"
-          >
-             
-            2018-12-01T12:14:08+01:00
-             
-          </p>
-          <p
-            className="flex-none sched_elem"
-          >
-             
-            2018-12-01T12:14:08+01:00
-             
-          </p>
-        </div>
-      </div>
-      <div
-        className="flex-25 layout-wrap layout-row layout-align-center-center"
-      >
-        <div
-          className="flex-100 layout-row"
-        >
-          <h4
-            className="date_title"
-          >
-             
-            Estimated Transit Time
-             
-          </h4>
-        </div>
-        <div
-          className="flex-100 layout-row"
-        >
-          <p
-            className="flex-none sched_elem"
-          >
-             
-            2018-12-01T12:14:08+01:00
-              
-             Days
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
 exports[`shallow render 1`] = `
 <div
   className="flex-100 layout-row pointy route_result"
-  key="RANDOM_KEY_0"
+  key="UUID_MOCK_KEY_0"
 >
   <div
     className="port_box flex-25 layout-row layout-wrap"
@@ -293,7 +16,7 @@ exports[`shallow render 1`] = `
         className="flex-none no_m"
       >
          
-        Booking Placed at: undefined
+        Booking Placed at: 01/11/2018 | 12:14
       </h5>
     </div>
     <div
@@ -377,7 +100,7 @@ exports[`shallow render 1`] = `
           className="flex-none no_m letter_3"
         >
            
-          Ref: FOO_IMC_REFERENCE
+          Ref: SHIPMENT_IMC_REFERENCE
         </h4>
       </div>
       <div
@@ -420,7 +143,7 @@ exports[`shallow render 1`] = `
           className="flex-none letter_3 no_m"
         >
            
-          Total: CNY 109
+          Total: undefined 87.00
         </h4>
       </div>
     </div>
@@ -446,12 +169,14 @@ exports[`shallow render 1`] = `
             className="flex-none sched_elem"
           >
              
+            08/12/2018
              
           </p>
           <p
             className="flex-none sched_elem"
           >
              
+            05:30
              
           </p>
         </div>
@@ -477,14 +202,14 @@ exports[`shallow render 1`] = `
             className="flex-none sched_elem"
           >
              
-            2018-11-12T12:14:08+01:00
+            12/11/2018
              
           </p>
           <p
             className="flex-none sched_elem"
           >
              
-            2018-11-12T12:14:08+01:00
+            13:37
              
           </p>
         </div>
@@ -510,14 +235,14 @@ exports[`shallow render 1`] = `
             className="flex-none sched_elem"
           >
              
-            2018-12-01T12:14:08+01:00
+            01/12/2018
              
           </p>
           <p
             className="flex-none sched_elem"
           >
              
-            2018-12-01T12:14:08+01:00
+            19:14
              
           </p>
         </div>
@@ -543,7 +268,7 @@ exports[`shallow render 1`] = `
             className="flex-none sched_elem"
           >
              
-            2018-12-01T12:14:08+01:00
+            19
               
              Days
           </p>

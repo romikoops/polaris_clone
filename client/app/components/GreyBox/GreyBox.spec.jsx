@@ -1,70 +1,77 @@
 import * as React from 'react'
-import { shallow, mount } from 'enzyme'
+import { shallow } from 'enzyme'
 import GreyBox from './GreyBox'
-import styles from './GreyBox.scss'
 
 const propsBase = {
-  content: <div>FOO_CONTENT</div>,
-  wrapperClassName: 'FOO_WRAPPER_CLASS_NAME',
-  contentClassName: 'FOO_CONTENT_CLASS_NAME'
+  flexGtLg: 0,
+  flexMd: 0,
+  fullWidth: false,
+  isBox: false,
+  padding: false,
+  borderStyle: '',
+  content: ['CONTENT'],
+  titleAction: false,
+  wrapperClassName: 'WRAPPER_CLASSNAME',
+  contentClassName: 'CONTENT_CLASSNAME',
+  title: 'TITLE'
 }
 
-const createShallow = propsInput => shallow(<GreyBox {...propsInput} />)
-const createWrapper = propsInput => mount(<GreyBox {...propsInput} />)
-
 test('shallow render', () => {
-  const props = {
-    ...propsBase,
-    title: 'FOO_TITLE'
-  }
-  expect(createShallow(props)).toMatchSnapshot()
+  expect(shallow(<GreyBox {...propsBase} />)).toMatchSnapshot()
 })
 
 test('title is falsy', () => {
   const props = {
     ...propsBase,
-    title: ''
+    title: null
   }
-  expect(createShallow(props)).toMatchSnapshot()
+  expect(shallow(<GreyBox {...props} />)).toMatchSnapshot()
 })
 
-test('title to create title', () => {
+test('flex > 0', () => {
   const props = {
     ...propsBase,
-    title: 'FOO_TITLE'
+    flex: 10
   }
-
-  const wrapper = createWrapper(props)
-  const content = wrapper.find('.FOO_CONTENT_CLASS_NAME > div > p').first()
-  expect(content.text()).toEqual(props.title)
+  expect(shallow(<GreyBox {...props} />)).toMatchSnapshot()
 })
 
-test('paddingBool adds padding', () => {
+test('flexGtLg > 0', () => {
   const props = {
     ...propsBase,
-    padding: true
+    flexGtLg: 10
   }
-  const wrapper = createShallow(props)
-  const content = wrapper.find('.FOO_WRAPPER_CLASS_NAME').first()
-  expect(content.hasClass(styles.boxpadding)).toEqual(true)
+  expect(shallow(<GreyBox {...props} />)).toMatchSnapshot()
 })
 
-test('isBoxBool adds classes', () => {
+test('flexMd > 0', () => {
+  const props = {
+    ...propsBase,
+    flexMd: 10
+  }
+  expect(shallow(<GreyBox {...props} />)).toMatchSnapshot()
+})
+
+test('isBox is true', () => {
   const props = {
     ...propsBase,
     isBox: true
   }
-  const wrapper = createShallow(props)
-  const content = wrapper.find('.FOO_WRAPPER_CLASS_NAME').first()
-  expect(content.hasClass('layout-row flex-sm-100 flex-xs-100 layout-align-center-center')).toEqual(true)
+  expect(shallow(<GreyBox {...props} />)).toMatchSnapshot()
 })
 
-test('fullWidth adds styles.fullwidth', () => {
+test('padding is true', () => {
+  const props = {
+    ...propsBase,
+    padding: true
+  }
+  expect(shallow(<GreyBox {...props} />)).toMatchSnapshot()
+})
+
+test('fullWidth is true', () => {
   const props = {
     ...propsBase,
     fullWidth: true
   }
-  const wrapper = createShallow(props)
-  const content = wrapper.find('.FOO_WRAPPER_CLASS_NAME').first()
-  expect(content.hasClass(styles.fullWidth)).toEqual(true)
+  expect(shallow(<GreyBox {...props} />)).toMatchSnapshot()
 })

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { hub, identity } from '../../mocks'
+import { hub, identity } from '../../mock'
 
 import AdminTruckingIndex from './AdminTruckingIndex'
 

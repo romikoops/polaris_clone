@@ -1,22 +1,13 @@
+import '../../mocks/libraries/moment'
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, shipment, addresses } from '../../mocks'
+import { theme, shipment } from '../../mocks'
 
 import RouteHubBox from './RouteHubBox'
 
-const editedShipment = {
-  ...shipment,
-  origin_hub: {
-    startHub: { address: { } }
-  },
-  destination_hub: {
-    startHub: { address: { } }
-  }
-
-}
 const propsBase = {
   theme,
-  shipment: editedShipment
+  shipment
 }
 
 test('shallow rendering', () => {

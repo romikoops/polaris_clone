@@ -80,7 +80,9 @@
   <mj-section full-width="full-width" padding="0px">
     <mj-column width="100%" padding="0 2.5%">
       <mj-text>
-        <p>For further information regarding the quotations please contact XXXX,</p>
+        <% if @user.tenant.emails.dig('support', 'general') %>
+          <p>For further information regarding the quotations please contact <%= @user.tenant.emails.dig('support', 'general')%>,</p>
+        <% end %>
         <p>Thank you for your interest and best regards,</p>
         <p></p>
 

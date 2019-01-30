@@ -6,7 +6,7 @@ import {
   user,
   theme,
   identity
-} from '../../../../mocks'
+} from '../../../../mock'
 
 import AdminPricingTest from '.'
 

@@ -1,45 +1,30 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, clients, identity, shipment } from '../../../../mocks'
-// eslint-disable-next-line no-named-as-default
-import UserShipmentsGroup from './'
+import {
+  user, theme, identity, shipment
+} from '../../../../mocks'
 
-/**
- * ISSUE
- * props.shipment should be array of `shipment` object but
- * shipments[target].map leads to other conclusion such as array of array of shipment
- */
+import UserShipmentsGroup from '.'
+
 const propsBase = {
-  theme,
-  title: 'FOO_TITLE',
-  target: '0',
-  shipments: [[]],
-  user: clients,
   handleShipmentAction: identity,
   hubHash: { foo: 'bar' },
+  shipments: { foo: [shipment] },
+  target: 'foo',
+  theme,
+  title: 'FOO_TITLE',
+  user,
   userDispatch: {}
 }
 
-test.skip('shallow render', () => {
+test('shallow render', () => {
   expect(shallow(<UserShipmentsGroup {...propsBase} />)).toMatchSnapshot()
 })
 
-test('props.shipment is truthy', () => {
-  const editedShipment = {
-    ...shipment,
-    schedule_set: [{ hub_route_key: 'foo-bar' }]
-  }
+test('shipments is falsy', () => {
   const props = {
     ...propsBase,
-    shipments: [[editedShipment]]
-  }
-  expect(shallow(<UserShipmentsGroup {...props} />)).toMatchSnapshot()
-})
-
-test('props.hubHash is falsy', () => {
-  const props = {
-    ...propsBase,
-    hubHash: false
+    shipments: null
   }
   expect(shallow(<UserShipmentsGroup {...props} />)).toMatchSnapshot()
 })

@@ -1,17 +1,5 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-
-jest.mock('uuid', () => {
-  let counter = -1
-  const v4 = () => {
-    counter += 1
-
-    return `RANDOM_KEY_${counter}`
-  }
-
-  return { v4 }
-})
-// eslint-disable-next-line
 import { Carousel } from './Carousel'
 
 const slideFirst = {
@@ -50,6 +38,14 @@ test('slides is falsy', () => {
   const props = {
     ...propsBase,
     slides: null
+  }
+  expect(shallow(<Carousel {...props} />)).toMatchSnapshot()
+})
+
+test('noSlides is falsy', () => {
+  const props = {
+    ...propsBase,
+    noSlides: null
   }
   expect(shallow(<Carousel {...props} />)).toMatchSnapshot()
 })

@@ -1,19 +1,10 @@
+import '../../mocks/libraries/moment'
 import * as React from 'react'
 import { shallow, mount } from 'enzyme'
-import { theme, identity, user, shipmentData } from '../../mocks'
+import {
+  theme, identity, user, shipmentData
+} from '../../mocks'
 
-jest.mock('../../helpers', () => ({
-  gradientGenerator: x => x,
-  priceSpacing: x => x
-}))
-jest.mock('../../constants', () => {
-  const moment = x => ({
-    diff: y => x - y
-  })
-
-  return { moment }
-})
-// eslint-disable-next-line import/first
 import { BestRoutesBox } from './BestRoutesBox'
 
 const propsBase = {

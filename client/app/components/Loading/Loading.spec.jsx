@@ -1,24 +1,9 @@
+import '../../mocks/libraries/react-redux'
+import '../../mocks/libraries/react-router-dom'
 import * as React from 'react'
-import { shallow } from 'enzyme'
+import { render } from 'enzyme'
 import { identity, theme } from '../../mocks'
 
-jest.mock('react-redux', () => ({
-  connect: (mapStateToProps, mapDispatchToProps) => Component => Component
-}))
-jest.mock('react-router-dom', () => ({
-  withRouter: x => x
-}))
-jest.mock('uuid', () => {
-  let counter = -1
-  const v4 = () => {
-    counter += 1
-
-    return `RANDOM_KEY_${counter}`
-  }
-
-  return { v4 }
-})
-// eslint-disable-next-line
 import Loading from './Loading'
 
 const propsBase = {
@@ -28,8 +13,8 @@ const propsBase = {
   }
 }
 
-test('shallow render', () => {
-  expect(shallow(<Loading {...propsBase} />)).toMatchSnapshot()
+test('happy path', () => {
+  expect(render(<Loading {...propsBase} />)).toMatchSnapshot()
 })
 
 test('theme is falsy', () => {
@@ -37,16 +22,5 @@ test('theme is falsy', () => {
     ...propsBase,
     theme: null
   }
-  expect(shallow(<Loading {...props} />)).toMatchSnapshot()
-})
-
-test('theme.logoLarge is truthy', () => {
-  const props = {
-    ...propsBase,
-    theme: {
-      ...theme,
-      logoLarge: 'FOO_LOGO_LARGE'
-    }
-  }
-  expect(shallow(<Loading {...props} />)).toMatchSnapshot()
+  expect(render(<Loading {...props} />)).toMatchSnapshot()
 })

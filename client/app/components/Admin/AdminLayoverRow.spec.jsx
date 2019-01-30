@@ -1,6 +1,7 @@
+import '../../mocks/libraries/moment'
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, hub } from '../../mocks'
+import { theme, hub } from '../../mock'
 
 import AdminLayoverRow from './AdminLayoverRow'
 

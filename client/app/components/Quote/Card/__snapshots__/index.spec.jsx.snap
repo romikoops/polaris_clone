@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`detailed billing working properly 1`] = `
+exports[`aggregatedCargo is empty object 1`] = `
 <div
   className="
         flex-100 layout-row layout-wrap offer_result flex-lg-80 offset-lg-20
@@ -148,20 +148,67 @@ exports[`detailed billing working properly 1`] = `
           }
           tenant={
             Object {
-              "id": 123,
-              "scope": Object {
-                "closed_quotation_tool": true,
-                "detailed_billing": true,
-                "modes_of_transport": Object {
-                  "air": Object {},
-                  "ocean": Object {
-                    "OCEAN_LOAD_TYPE": true,
-                  },
-                  "rail": Object {},
-                  "truck": Object {},
+              "emails": Object {
+                "sales": Object {
+                  "air": "sales@demo.com",
+                  "general": "sales@demo.com",
+                  "ocean": "sales@demo.com",
+                  "rail": "sales@demo.com",
+                },
+                "support": Object {
+                  "air": "imc.air@demo.com",
+                  "general": "support@demo.com",
+                  "ocean": "imc.sea@demo.com",
+                  "rail": "imc.rail@demo.com",
                 },
               },
-              "subdomain": "foosubdomain",
+              "id": 123,
+              "name": "TENANT_NAME",
+              "phones": Object {
+                "support": "TENANT_SUPPORT_PHONE",
+              },
+              "scope": Object {
+                "cargo_info_level": "text",
+                "carriage_options": Object {
+                  "on_carriage": Object {
+                    "export": "mandatory",
+                    "import": "mandatory",
+                  },
+                  "pre_carriage": Object {
+                    "export": "optional",
+                    "import": "optional",
+                  },
+                },
+                "closed_quotation_tool": true,
+                "customs_export_paper": false,
+                "detailed_billing": true,
+                "has_customs": true,
+                "has_insurance": true,
+                "hide_grand_total": true,
+                "mandatory_form_fields": Object {
+                  "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                  "total_goods_value": 3370,
+                },
+                "modes_of_transport": Object {
+                  "air": Object {
+                    "AIR_LOAD_TYPE": 0,
+                  },
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": 2,
+                  },
+                  "rail": Object {
+                    "RAIL_LOAD_TYPE": 0,
+                  },
+                  "truck": Object {
+                    "TRUCK_LOAD_TYPE": 0,
+                  },
+                },
+                "terms": Array [
+                  "FOO_TERM",
+                  "BAR_TERM",
+                ],
+              },
+              "subdomain": "TENANT_SUBDOMAIN",
               "theme": Object {
                 "colors": Object {
                   "primary": "#333",
@@ -385,6 +432,536 @@ exports[`detailed billing working properly 1`] = `
       }
       scope={
         Object {
+          "cargo_info_level": "text",
+          "carriage_options": Object {
+            "on_carriage": Object {
+              "export": "mandatory",
+              "import": "mandatory",
+            },
+            "pre_carriage": Object {
+              "export": "optional",
+              "import": "optional",
+            },
+          },
+          "closed_quotation_tool": true,
+          "customs_export_paper": false,
+          "detailed_billing": true,
+          "has_customs": true,
+          "has_insurance": true,
+          "hide_grand_total": true,
+          "mandatory_form_fields": Object {
+            "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+            "total_goods_value": 3370,
+          },
+          "modes_of_transport": Object {
+            "air": Object {
+              "AIR_LOAD_TYPE": 0,
+            },
+            "ocean": Object {
+              "OCEAN_LOAD_TYPE": 2,
+            },
+            "rail": Object {
+              "RAIL_LOAD_TYPE": 0,
+            },
+            "truck": Object {
+              "TRUCK_LOAD_TYPE": 0,
+            },
+          },
+          "terms": Array [
+            "FOO_TERM",
+            "BAR_TERM",
+          ],
+        }
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      trucking={
+        Object {
+          "has_on_carriage": false,
+          "has_pre_carriage": false,
+          "on_carriage": Object {
+            "trucking_time_in_seconds": 28,
+          },
+          "pre_carriage": Object {
+            "trucking_time_in_seconds": 55,
+          },
+        }
+      }
+    />
+  </CollapsingContent>
+  <div
+    className="flex-100 layout-wrap layout-align-start-stretch"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-stretch layout-wrap total_row"
+    >
+      <div
+        className="flex layout-row layout-align-start-center"
+      >
+        <span
+          style={
+            Object {
+              "textAlign": "right",
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-75  layout-row layout-align-end-center"
+      >
+        <p
+          style={Object {}}
+        />
+        <div
+          className="flex-gt-md-25 flex-33 layout-row layout-align-end-center"
+        >
+          <RoundButton
+            active={true}
+            back={false}
+            classNames="ccb_select_quote pointy layout-row layout-align-center-center add_button shorter"
+            disabled={false}
+            flexContainer="100"
+            handleDisabled={null}
+            handleNext={[Function]}
+            icon=""
+            iconClass=""
+            inverse={false}
+            size="small"
+            text="Add"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-end-center"
+      >
+        <div
+          className="flex-40 layout-row layout-align-start-center"
+          style={
+            Object {
+              "textAlign": "left",
+            }
+          }
+        >
+          <div
+            className="flex layout-row layout-align-start-center pointy view_switch"
+            onClick={[Function]}
+          >
+            <p
+              className="flex-none"
+            >
+              View Schedules
+            </p>
+          </div>
+        </div>
+        <div
+          className="flex-60 layout-row layout-align-end-center layout-wrap"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`detailed billing working properly 1`] = `
+<div
+  className="
+        flex-100 layout-row layout-wrap offer_result flex-lg-80 offset-lg-20
+        wrapper 
+      "
+>
+  <div
+    className="flex-100 layout-row layout-align-start-center container"
+  >
+    <div
+      className="flex-10 layout-row layout-align-center-center mot_icon"
+    >
+      <i
+        className="fa fa-anchor clip "
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-55 layout-row layout-align-start-center origin_destination"
+    >
+      <div
+        className="layout-column layout-align-center-start flex-100"
+      >
+        <p>
+          From: 
+          <span>
+            Gothenburg
+          </span>
+        </p>
+        <p>
+          To: 
+          <span>
+            Shanghai
+          </span>
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex layout-row layout-wrap layout-align-end-center"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-end-center charge_icons"
+      >
+        <ChargeIcons
+          destinationFees={
+            Object {
+              "edited_total": null,
+              "imp": Object {
+                "currency": "GBP",
+                "name": "Customs Clearance",
+                "value": 0,
+              },
+              "name": "Import",
+              "total": Object {
+                "currency": "GBP",
+                "value": 0,
+              },
+            }
+          }
+          mot=""
+          onCarriage={
+            Object {
+              "edited_total": null,
+              "name": "Trucking On",
+              "total": Object {
+                "currency": "GBP",
+                "value": 80,
+              },
+              "trucking_lcl": Object {
+                "edited_total": null,
+                "name": "Trucking Lcl",
+                "stackable": Object {
+                  "currency": "GBP",
+                  "name": "Stackable",
+                  "value": 80,
+                },
+                "total": Object {
+                  "currency": "GBP",
+                  "value": 80,
+                },
+              },
+            }
+          }
+          originFees={
+            Object {
+              "ams": Object {
+                "currency": "CNY",
+                "name": "AMS ENS ACI",
+                "value": 180,
+              },
+              "bkn": Object {
+                "currency": "CNY",
+                "name": "CFS",
+                "value": 190,
+              },
+              "doc": Object {
+                "currency": "CNY",
+                "name": "Documentation",
+                "value": 350,
+              },
+              "edited_total": null,
+              "name": "Export",
+              "tel": Object {
+                "currency": "CNY",
+                "name": "TELEX",
+                "value": 150,
+              },
+              "total": Object {
+                "currency": "GBP",
+                "value": 111.52,
+              },
+              "vgm": Object {
+                "currency": "CNY",
+                "name": "VGM",
+                "value": 105,
+              },
+            }
+          }
+          preCarriage={
+            Object {
+              "edited_total": null,
+              "name": "Trucking Pre",
+              "total": Object {
+                "currency": "GBP",
+                "value": 61.76,
+              },
+              "trucking_lcl": Object {
+                "edited_total": null,
+                "name": "Trucking Lcl",
+                "stackable": Object {
+                  "currency": "CNY",
+                  "name": "Stackable",
+                  "value": 540,
+                },
+                "total": Object {
+                  "currency": "CNY",
+                  "value": 540,
+                },
+              },
+            }
+          }
+          tenant={
+            Object {
+              "id": 123,
+              "scope": Object {
+                "closed_quotation_tool": true,
+                "detailed_billing": true,
+                "modes_of_transport": Object {
+                  "air": Object {},
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": true,
+                  },
+                  "rail": Object {},
+                  "truck": Object {},
+                },
+              },
+              "subdomain": "foosubdomain",
+              "theme": Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              },
+            }
+          }
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-center unit_info"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center unit_info"
+        >
+          <p
+            className="flex-100 layout-row layout-align-start"
+          >
+            Total Weight: 
+            <span
+              className="flex layout-row layout-align-end"
+            >
+               220.00 kg
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-start-center"
+    style={
+      Object {
+        "paddingBottom": "18px",
+      }
+    }
+  />
+  <CollapsingContent
+    collapsed={true}
+    content=""
+    minHeight=""
+    wrapperContentClasses=""
+  >
+    <QuoteCardScheduleList
+      destinationHub={
+        Object {
+          "name": "Shanghai",
+        }
+      }
+      onSelectSchedule={[Function]}
+      originHub={
+        Object {
+          "name": "Gothenburg",
+        }
+      }
+      schedules={
+        Array [
+          Object {
+            "closing_date": "10-8-2018",
+            "eta": "10-8-2018",
+            "etd": "10-8-2018",
+          },
+        ]
+      }
+      t={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </CollapsingContent>
+  <CollapsingContent
+    collapsed={false}
+    content=""
+    minHeight=""
+    wrapperContentClasses=""
+  >
+    <QuoteChargeBreakdown
+      cargo={Array []}
+      meta={
+        Object {
+          "destination_hub": Object {
+            "name": "Shanghai",
+          },
+          "origin_hub": Object {
+            "name": "Gothenburg",
+          },
+        }
+      }
+      quote={
+        Object {
+          "cargo": Object {
+            "265": Object {
+              "bas": Object {
+                "currency": "GBP",
+                "name": "Bas",
+                "value": 187.5,
+              },
+              "edited_total": null,
+              "name": "Cargoitem",
+              "total": Object {
+                "currency": "GBP",
+                "value": 187.5,
+              },
+            },
+            "edited_total": null,
+            "name": "Cargo",
+            "total": Object {
+              "currency": "GBP",
+              "value": 187.5,
+            },
+          },
+          "edited_total": null,
+          "export": Object {
+            "ams": Object {
+              "currency": "CNY",
+              "name": "AMS ENS ACI",
+              "value": 180,
+            },
+            "bkn": Object {
+              "currency": "CNY",
+              "name": "CFS",
+              "value": 190,
+            },
+            "doc": Object {
+              "currency": "CNY",
+              "name": "Documentation",
+              "value": 350,
+            },
+            "edited_total": null,
+            "name": "Export",
+            "tel": Object {
+              "currency": "CNY",
+              "name": "TELEX",
+              "value": 150,
+            },
+            "total": Object {
+              "currency": "GBP",
+              "value": 111.52,
+            },
+            "vgm": Object {
+              "currency": "CNY",
+              "name": "VGM",
+              "value": 105,
+            },
+          },
+          "import": Object {
+            "edited_total": null,
+            "imp": Object {
+              "currency": "GBP",
+              "name": "Customs Clearance",
+              "value": 0,
+            },
+            "name": "Import",
+            "total": Object {
+              "currency": "GBP",
+              "value": 0,
+            },
+          },
+          "name": "Grand Total",
+          "total": Object {
+            "currency": "GBP",
+            "value": 440.78,
+          },
+          "trucking_on": Object {
+            "edited_total": null,
+            "name": "Trucking On",
+            "total": Object {
+              "currency": "GBP",
+              "value": 80,
+            },
+            "trucking_lcl": Object {
+              "edited_total": null,
+              "name": "Trucking Lcl",
+              "stackable": Object {
+                "currency": "GBP",
+                "name": "Stackable",
+                "value": 80,
+              },
+              "total": Object {
+                "currency": "GBP",
+                "value": 80,
+              },
+            },
+          },
+          "trucking_pre": Object {
+            "edited_total": null,
+            "name": "Trucking Pre",
+            "total": Object {
+              "currency": "GBP",
+              "value": 61.76,
+            },
+            "trucking_lcl": Object {
+              "edited_total": null,
+              "name": "Trucking Lcl",
+              "stackable": Object {
+                "currency": "CNY",
+                "name": "Stackable",
+                "value": 540,
+              },
+              "total": Object {
+                "currency": "CNY",
+                "value": 540,
+              },
+            },
+          },
+        }
+      }
+      scope={
+        Object {
           "closed_quotation_tool": true,
           "detailed_billing": true,
           "modes_of_transport": Object {
@@ -406,7 +983,18 @@ exports[`detailed billing working properly 1`] = `
           },
         }
       }
-      trucking={Object {}}
+      trucking={
+        Object {
+          "has_on_carriage": false,
+          "has_pre_carriage": false,
+          "on_carriage": Object {
+            "trucking_time_in_seconds": 28,
+          },
+          "pre_carriage": Object {
+            "trucking_time_in_seconds": 55,
+          },
+        }
+      }
     />
   </CollapsingContent>
   <div
@@ -657,19 +1245,52 @@ exports[`shallow rendering 1`] = `
                 },
               },
               "id": 123,
+              "name": "TENANT_NAME",
+              "phones": Object {
+                "support": "TENANT_SUPPORT_PHONE",
+              },
               "scope": Object {
+                "cargo_info_level": "text",
+                "carriage_options": Object {
+                  "on_carriage": Object {
+                    "export": "mandatory",
+                    "import": "mandatory",
+                  },
+                  "pre_carriage": Object {
+                    "export": "optional",
+                    "import": "optional",
+                  },
+                },
                 "closed_quotation_tool": true,
                 "customs_export_paper": false,
-                "modes_of_transport": Object {
-                  "air": Object {},
-                  "ocean": Object {
-                    "OCEAN_LOAD_TYPE": true,
-                  },
-                  "rail": Object {},
-                  "truck": Object {},
+                "detailed_billing": true,
+                "has_customs": true,
+                "has_insurance": true,
+                "hide_grand_total": true,
+                "mandatory_form_fields": Object {
+                  "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                  "total_goods_value": 3370,
                 },
+                "modes_of_transport": Object {
+                  "air": Object {
+                    "AIR_LOAD_TYPE": 0,
+                  },
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": 2,
+                  },
+                  "rail": Object {
+                    "RAIL_LOAD_TYPE": 0,
+                  },
+                  "truck": Object {
+                    "TRUCK_LOAD_TYPE": 0,
+                  },
+                },
+                "terms": Array [
+                  "FOO_TERM",
+                  "BAR_TERM",
+                ],
               },
-              "subdomain": "foosubdomain",
+              "subdomain": "TENANT_SUBDOMAIN",
               "theme": Object {
                 "colors": Object {
                   "primary": "#333",
@@ -701,7 +1322,7 @@ exports[`shallow rendering 1`] = `
             <span
               className="flex layout-row layout-align-end"
             >
-               0.00 kg
+               220.00 kg
             </span>
           </p>
         </div>
@@ -893,16 +1514,45 @@ exports[`shallow rendering 1`] = `
       }
       scope={
         Object {
+          "cargo_info_level": "text",
+          "carriage_options": Object {
+            "on_carriage": Object {
+              "export": "mandatory",
+              "import": "mandatory",
+            },
+            "pre_carriage": Object {
+              "export": "optional",
+              "import": "optional",
+            },
+          },
           "closed_quotation_tool": true,
           "customs_export_paper": false,
-          "modes_of_transport": Object {
-            "air": Object {},
-            "ocean": Object {
-              "OCEAN_LOAD_TYPE": true,
-            },
-            "rail": Object {},
-            "truck": Object {},
+          "detailed_billing": true,
+          "has_customs": true,
+          "has_insurance": true,
+          "hide_grand_total": true,
+          "mandatory_form_fields": Object {
+            "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+            "total_goods_value": 3370,
           },
+          "modes_of_transport": Object {
+            "air": Object {
+              "AIR_LOAD_TYPE": 0,
+            },
+            "ocean": Object {
+              "OCEAN_LOAD_TYPE": 2,
+            },
+            "rail": Object {
+              "RAIL_LOAD_TYPE": 0,
+            },
+            "truck": Object {
+              "TRUCK_LOAD_TYPE": 0,
+            },
+          },
+          "terms": Array [
+            "FOO_TERM",
+            "BAR_TERM",
+          ],
         }
       }
       t={[Function]}
@@ -914,7 +1564,18 @@ exports[`shallow rendering 1`] = `
           },
         }
       }
-      trucking={Object {}}
+      trucking={
+        Object {
+          "has_on_carriage": false,
+          "has_pre_carriage": false,
+          "on_carriage": Object {
+            "trucking_time_in_seconds": 28,
+          },
+          "pre_carriage": Object {
+            "trucking_time_in_seconds": 55,
+          },
+        }
+      }
     />
   </CollapsingContent>
   <div
@@ -932,18 +1593,14 @@ exports[`shallow rendering 1`] = `
               "textAlign": "right",
             }
           }
-        >
-          Total
-        </span>
+        />
       </div>
       <div
         className="flex-75  layout-row layout-align-end-center"
       >
         <p
           style={Object {}}
-        >
-          440.78 GBP
-        </p>
+        />
         <div
           className="flex-gt-md-25 flex-33 layout-row layout-align-end-center"
         >
@@ -974,6 +1631,25 @@ exports[`shallow rendering 1`] = `
       <div
         className="flex-100 layout-row layout-align-end-center"
       >
+        <div
+          className="flex-40 layout-row layout-align-start-center"
+          style={
+            Object {
+              "textAlign": "left",
+            }
+          }
+        >
+          <div
+            className="flex layout-row layout-align-start-center pointy view_switch"
+            onClick={[Function]}
+          >
+            <p
+              className="flex-none"
+            >
+              View Schedules
+            </p>
+          </div>
+        </div>
         <div
           className="flex-60 layout-row layout-align-end-center layout-wrap"
         />
@@ -1176,7 +1852,7 @@ exports[`show schedule options working 1`] = `
             <span
               className="flex layout-row layout-align-end"
             >
-               0.00 kg
+               220.00 kg
             </span>
           </p>
         </div>
@@ -1389,7 +2065,18 @@ exports[`show schedule options working 1`] = `
           },
         }
       }
-      trucking={Object {}}
+      trucking={
+        Object {
+          "has_on_carriage": false,
+          "has_pre_carriage": false,
+          "on_carriage": Object {
+            "trucking_time_in_seconds": 28,
+          },
+          "pre_carriage": Object {
+            "trucking_time_in_seconds": 55,
+          },
+        }
+      }
     />
   </CollapsingContent>
   <div
@@ -1477,7 +2164,7 @@ exports[`show schedule options working 1`] = `
 </div>
 `;
 
-exports[`show schedules set to true 1`] = `
+exports[`single result rendering removes add button 1`] = `
 <div
   className="
         flex-100 layout-row layout-wrap offer_result flex-lg-80 offset-lg-20
@@ -1640,19 +2327,52 @@ exports[`show schedules set to true 1`] = `
                 },
               },
               "id": 123,
+              "name": "TENANT_NAME",
+              "phones": Object {
+                "support": "TENANT_SUPPORT_PHONE",
+              },
               "scope": Object {
+                "cargo_info_level": "text",
+                "carriage_options": Object {
+                  "on_carriage": Object {
+                    "export": "mandatory",
+                    "import": "mandatory",
+                  },
+                  "pre_carriage": Object {
+                    "export": "optional",
+                    "import": "optional",
+                  },
+                },
                 "closed_quotation_tool": true,
                 "customs_export_paper": false,
-                "modes_of_transport": Object {
-                  "air": Object {},
-                  "ocean": Object {
-                    "OCEAN_LOAD_TYPE": true,
-                  },
-                  "rail": Object {},
-                  "truck": Object {},
+                "detailed_billing": true,
+                "has_customs": true,
+                "has_insurance": true,
+                "hide_grand_total": true,
+                "mandatory_form_fields": Object {
+                  "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                  "total_goods_value": 3370,
                 },
+                "modes_of_transport": Object {
+                  "air": Object {
+                    "AIR_LOAD_TYPE": 0,
+                  },
+                  "ocean": Object {
+                    "OCEAN_LOAD_TYPE": 2,
+                  },
+                  "rail": Object {
+                    "RAIL_LOAD_TYPE": 0,
+                  },
+                  "truck": Object {
+                    "TRUCK_LOAD_TYPE": 0,
+                  },
+                },
+                "terms": Array [
+                  "FOO_TERM",
+                  "BAR_TERM",
+                ],
               },
-              "subdomain": "foosubdomain",
+              "subdomain": "TENANT_SUBDOMAIN",
               "theme": Object {
                 "colors": Object {
                   "primary": "#333",
@@ -1684,7 +2404,7 @@ exports[`show schedules set to true 1`] = `
             <span
               className="flex layout-row layout-align-end"
             >
-               0.00 kg
+               220.00 kg
             </span>
           </p>
         </div>
@@ -1700,7 +2420,7 @@ exports[`show schedules set to true 1`] = `
     }
   />
   <CollapsingContent
-    collapsed={false}
+    collapsed={true}
     content=""
     minHeight=""
     wrapperContentClasses=""
@@ -1738,7 +2458,7 @@ exports[`show schedules set to true 1`] = `
     />
   </CollapsingContent>
   <CollapsingContent
-    collapsed={true}
+    collapsed={false}
     content=""
     minHeight=""
     wrapperContentClasses=""
@@ -1876,16 +2596,45 @@ exports[`show schedules set to true 1`] = `
       }
       scope={
         Object {
+          "cargo_info_level": "text",
+          "carriage_options": Object {
+            "on_carriage": Object {
+              "export": "mandatory",
+              "import": "mandatory",
+            },
+            "pre_carriage": Object {
+              "export": "optional",
+              "import": "optional",
+            },
+          },
           "closed_quotation_tool": true,
           "customs_export_paper": false,
-          "modes_of_transport": Object {
-            "air": Object {},
-            "ocean": Object {
-              "OCEAN_LOAD_TYPE": true,
-            },
-            "rail": Object {},
-            "truck": Object {},
+          "detailed_billing": true,
+          "has_customs": true,
+          "has_insurance": true,
+          "hide_grand_total": true,
+          "mandatory_form_fields": Object {
+            "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+            "total_goods_value": 3370,
           },
+          "modes_of_transport": Object {
+            "air": Object {
+              "AIR_LOAD_TYPE": 0,
+            },
+            "ocean": Object {
+              "OCEAN_LOAD_TYPE": 2,
+            },
+            "rail": Object {
+              "RAIL_LOAD_TYPE": 0,
+            },
+            "truck": Object {
+              "TRUCK_LOAD_TYPE": 0,
+            },
+          },
+          "terms": Array [
+            "FOO_TERM",
+            "BAR_TERM",
+          ],
         }
       }
       t={[Function]}
@@ -1897,7 +2646,18 @@ exports[`show schedules set to true 1`] = `
           },
         }
       }
-      trucking={Object {}}
+      trucking={
+        Object {
+          "has_on_carriage": false,
+          "has_pre_carriage": false,
+          "on_carriage": Object {
+            "trucking_time_in_seconds": 28,
+          },
+          "pre_carriage": Object {
+            "trucking_time_in_seconds": 55,
+          },
+        }
+      }
     />
   </CollapsingContent>
   <div
@@ -1915,48 +2675,37 @@ exports[`show schedules set to true 1`] = `
               "textAlign": "right",
             }
           }
-        >
-          Total
-        </span>
+        />
       </div>
       <div
         className="flex-75  layout-row layout-align-end-center"
       >
         <p
           style={Object {}}
-        >
-          440.78 GBP
-        </p>
-        <div
-          className="flex-gt-md-25 flex-33 layout-row layout-align-end-center"
-        >
-          <RoundButton
-            active={true}
-            back={false}
-            classNames="ccb_select_quote pointy layout-row layout-align-center-center add_button shorter"
-            disabled={false}
-            flexContainer="100"
-            handleDisabled={null}
-            handleNext={[Function]}
-            icon=""
-            iconClass=""
-            inverse={false}
-            size="small"
-            text="Add"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-          />
-        </div>
+        />
       </div>
       <div
         className="flex-100 layout-row layout-align-end-center"
       >
+        <div
+          className="flex-40 layout-row layout-align-start-center"
+          style={
+            Object {
+              "textAlign": "left",
+            }
+          }
+        >
+          <div
+            className="flex layout-row layout-align-start-center pointy view_switch"
+            onClick={[Function]}
+          >
+            <p
+              className="flex-none"
+            >
+              View Schedules
+            </p>
+          </div>
+        </div>
         <div
           className="flex-60 layout-row layout-align-end-center layout-wrap"
         />
@@ -1966,10 +2715,10 @@ exports[`show schedules set to true 1`] = `
 </div>
 `;
 
-exports[`single result rendering removes the "add" button 1`] = `
+exports[`tenant.scope is empty object 1`] = `
 <div
   className="
-        flex-100 layout-row layout-wrap offer_result flex-lg-80 offset-lg-20
+        flex-100 layout-row layout-wrap offer_result 
         wrapper 
       "
 >
@@ -2129,19 +2878,12 @@ exports[`single result rendering removes the "add" button 1`] = `
                 },
               },
               "id": 123,
-              "scope": Object {
-                "closed_quotation_tool": true,
-                "customs_export_paper": false,
-                "modes_of_transport": Object {
-                  "air": Object {},
-                  "ocean": Object {
-                    "OCEAN_LOAD_TYPE": true,
-                  },
-                  "rail": Object {},
-                  "truck": Object {},
-                },
+              "name": "TENANT_NAME",
+              "phones": Object {
+                "support": "TENANT_SUPPORT_PHONE",
               },
-              "subdomain": "foosubdomain",
+              "scope": Object {},
+              "subdomain": "TENANT_SUBDOMAIN",
               "theme": Object {
                 "colors": Object {
                   "primary": "#333",
@@ -2173,7 +2915,7 @@ exports[`single result rendering removes the "add" button 1`] = `
             <span
               className="flex layout-row layout-align-end"
             >
-               0.00 kg
+               220.00 kg
             </span>
           </p>
         </div>
@@ -2189,7 +2931,7 @@ exports[`single result rendering removes the "add" button 1`] = `
     }
   />
   <CollapsingContent
-    collapsed={true}
+    collapsed={false}
     content=""
     minHeight=""
     wrapperContentClasses=""
@@ -2227,7 +2969,7 @@ exports[`single result rendering removes the "add" button 1`] = `
     />
   </CollapsingContent>
   <CollapsingContent
-    collapsed={false}
+    collapsed={true}
     content=""
     minHeight=""
     wrapperContentClasses=""
@@ -2363,20 +3105,7 @@ exports[`single result rendering removes the "add" button 1`] = `
           },
         }
       }
-      scope={
-        Object {
-          "closed_quotation_tool": true,
-          "customs_export_paper": false,
-          "modes_of_transport": Object {
-            "air": Object {},
-            "ocean": Object {
-              "OCEAN_LOAD_TYPE": true,
-            },
-            "rail": Object {},
-            "truck": Object {},
-          },
-        }
-      }
+      scope={Object {}}
       t={[Function]}
       theme={
         Object {
@@ -2386,7 +3115,18 @@ exports[`single result rendering removes the "add" button 1`] = `
           },
         }
       }
-      trucking={Object {}}
+      trucking={
+        Object {
+          "has_on_carriage": false,
+          "has_pre_carriage": false,
+          "on_carriage": Object {
+            "trucking_time_in_seconds": 28,
+          },
+          "pre_carriage": Object {
+            "trucking_time_in_seconds": 55,
+          },
+        }
+      }
     />
   </CollapsingContent>
   <div
@@ -2396,7 +3136,7 @@ exports[`single result rendering removes the "add" button 1`] = `
       className="flex-100 layout-row layout-align-space-between-stretch layout-wrap total_row"
     >
       <div
-        className="flex layout-row layout-align-start-center"
+        className="flex-40 layout-row layout-align-start-center"
       >
         <span
           style={
@@ -2409,10 +3149,14 @@ exports[`single result rendering removes the "add" button 1`] = `
         </span>
       </div>
       <div
-        className="flex-75  layout-row layout-align-end-center"
+        className="flex  layout-row layout-align-end-center"
       >
         <p
-          style={Object {}}
+          style={
+            Object {
+              "paddingRight": "18px",
+            }
+          }
         >
           440.78 GBP
         </p>

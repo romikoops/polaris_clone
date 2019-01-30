@@ -1,36 +1,10 @@
+import '../../../mocks/libraries/react-redux'
+import '../../../mocks/libraries/react-router-dom'
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme, identity } from '../../../mocks'
 
-jest.mock('react-redux', () => ({
-  connect: (x, y) => Component => Component
-}))
-jest.mock('../../../helpers', () => ({
-  authHeader: x => x,
-  gradientTextGenerator: x => x
-}))
-jest.mock('uuid', () => {
-  let counter = -1
-  const v4 = () => {
-    counter += 1
-
-    return `RANDOM_KEY_${counter}`
-  }
-
-  return { v4 }
-})
-jest.mock('../../../actions', () => ({
-  documentActions: x => x
-}))
-jest.mock('isomorphic-fetch', () =>
-  () => Promise.resolve({ data: [] }))
-jest.mock('react-router', () => ({
-  // eslint-disable-next-line react/prop-types
-  Link: ({ props }) => <a {...props}>link</a>
-}))
-
-// eslint-disable-next-line
-import DocumentsDownloader from './'
+import DocumentsDownloader from '.'
 
 const propsBase = {
   theme,

@@ -223,18 +223,6 @@ function newContact (data) {
   return fetch(`${getTenantApiUrl()}/contacts`, requestOptions).then(handleResponse)
 }
 
-function newAlias (data) {
-  const formData = new FormData()
-  formData.append('new_contact', JSON.stringify(data))
-  const requestOptions = {
-    method: 'POST',
-    headers: authHeader(),
-    body: formData
-  }
-
-  return fetch(`${getTenantApiUrl()}/contacts/new_alias`, requestOptions).then(handleResponse)
-}
-
 function getShipments (_pages, perPage, params, redirect) {
   const pages = _pages || {
     open: 1,
@@ -271,15 +259,6 @@ function deltaShipmentsPage (target, page, perPage, params) {
 
   return fetch(`${getTenantApiUrl()}/shipments/pages/delta_page_handler?${query}${queryString}`, requestOptions)
     .then(handleResponse)
-}
-
-function deleteAlias (aliasId) {
-  const requestOptions = {
-    method: 'POST',
-    headers: authHeader()
-  }
-
-  return fetch(`${getTenantApiUrl()}/contacts/delete_alias/${aliasId}`, requestOptions).then(handleResponse)
 }
 
 function deleteContactAddress (addressId) {
@@ -359,8 +338,6 @@ export const userService = {
   getContacts,
   updateContact,
   newContact,
-  newAlias,
-  deleteAlias,
   saveAddressEdit,
   deleteContactAddress,
   editUserAddress,

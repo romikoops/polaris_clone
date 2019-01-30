@@ -1,5 +1,87 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`inverse and disabled are true 1`] = `
+<div
+  className="flex-100 "
+>
+  <GradientBorder
+    className="layout-row flex-100"
+    content={
+      <button
+        className="round_btn_inverse neutral small false"
+        onClick={[Function]}
+      >
+        <div
+          className="layout-fill layout-row layout-align-space-around-center"
+        >
+          <p
+            className="content"
+          >
+            <span
+              className="icon"
+            >
+              <img
+                alt=""
+                className="flex-none icon"
+                src="ICON"
+              />
+            </span>
+            TEXT
+          </p>
+        </div>
+      </button>
+    }
+    gradient={
+      Object {
+        "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+      }
+    }
+    wrapperClassName="flex pointy"
+  />
+</div>
+`;
+
+exports[`inverse is true 1`] = `
+<div
+  className="flex-100 "
+>
+  <GradientBorder
+    className="layout-row flex-100"
+    content={
+      <button
+        className="round_btn_inverse neutral small clickable"
+        onClick={[Function]}
+      >
+        <div
+          className="layout-fill layout-row layout-align-space-around-center"
+        >
+          <p
+            className="content"
+          >
+            <span
+              className="icon"
+            >
+              <img
+                alt=""
+                className="flex-none icon"
+                src="ICON"
+              />
+            </span>
+            TEXT
+          </p>
+        </div>
+      </button>
+    }
+    gradient={
+      Object {
+        "backgroundImage": "-webkit-linear-gradient(-90deg, #333, #fafafa)",
+      }
+    }
+    wrapperClassName="flex pointy"
+  />
+</div>
+`;
+
 exports[`size is full 1`] = `
 <div
   className="flex-100 "
@@ -21,10 +103,10 @@ exports[`size is full 1`] = `
           <img
             alt=""
             className="flex-none icon"
-            src="FOO_ICON"
+            src="ICON"
           />
         </span>
-        FOO_TEXT
+        TEXT
       </p>
     </div>
   </button>
@@ -52,10 +134,10 @@ exports[`size is large 1`] = `
           <img
             alt=""
             className="flex-none icon"
-            src="FOO_ICON"
+            src="ICON"
           />
         </span>
-        FOO_TEXT
+        TEXT
       </p>
     </div>
   </button>
@@ -83,10 +165,10 @@ exports[`size is small 1`] = `
           <img
             alt=""
             className="flex-none icon"
-            src="FOO_ICON"
+            src="ICON"
           />
         </span>
-        FOO_TEXT
+        TEXT
       </p>
     </div>
   </button>

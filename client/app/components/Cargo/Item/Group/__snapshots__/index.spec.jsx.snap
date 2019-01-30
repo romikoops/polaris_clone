@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`props.viewHSCodes is true 1`] = `
+exports[`group.cargoType is falsy 1`] = `
 <div
   className="info"
 >
@@ -12,7 +12,9 @@ exports[`props.viewHSCodes is true 1`] = `
     >
       <p
         className="flex-none layout-row layout-align-center-center cargo_unit"
-      />
+      >
+        GROUP_ALIAS
+      </p>
     </div>
     <div
       className="flex-20 layout-row layout-align-center-center side_border"
@@ -20,7 +22,7 @@ exports[`props.viewHSCodes is true 1`] = `
       <p
         className="flex-none layout-row layout-align-center-center"
       >
-        x 1
+        x 2
       </p>
       <div
         className="icon_cargo_item"
@@ -43,7 +45,7 @@ exports[`props.viewHSCodes is true 1`] = `
           <span
             className="cargo_type"
           >
-            FOO_CATEGORY
+            LCL
           </span>
         </p>
         <p
@@ -62,23 +64,53 @@ exports[`props.viewHSCodes is true 1`] = `
         <CargoItemGroupAggregated
           group={
             Object {
-              "cargoType": Object {
-                "category": "FOO_CATEGORY",
-              },
+              "cargoType": null,
+              "groupAlias": "GROUP_ALIAS",
               "items": Array [
                 Object {
-                  "chargeable_weight": 80,
-                  "dimension_x": 90,
-                  "dimension_y": 100,
-                  "dimension_z": 120,
+                  "cargo_item_type_id": "foo",
+                  "chargeable_weight": 250,
+                  "dangerous_goods": false,
+                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 10,
+                  "dimension_y": 60,
+                  "dimension_z": 40,
                   "gross_weight": 76,
-                  "payload_in_kg": 56,
+                  "hs_codes": Array [
+                    4,
+                  ],
+                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                  "id": 1,
+                  "key": "FOO_CARGO_ITEM_KEY",
+                  "payload_in_kg": 200,
+                  "quantity": 5,
+                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
                   "tare_weight": 20,
+                  "weight": 220,
+                },
+                Object {
+                  "cargo_item_type_id": "bar",
+                  "chargeable_weight": 150,
+                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 100,
+                  "dimension_y": 50,
+                  "dimension_z": 70,
+                  "hs_codes": Array [],
+                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+                  "id": 2,
+                  "key": "BAR_CARGO_ITEM_KEY",
+                  "payload_in_kg": 100,
+                  "quantity": 7,
+                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 17,
+                  "weight": 140,
                 },
               ],
-              "quantity": "FOO_QUANTITY",
-              "size_class": "dry_goods",
-              "volume": 5,
+              "payload_in_kg": 177,
+              "size_class": "lcl",
+              "weight": 180,
             }
           }
           t={[Function]}
@@ -108,7 +140,7 @@ exports[`props.viewHSCodes is true 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_3"
+        key="UUID_MOCK_KEY_11"
       >
         <div
           className="flex-5 layout-row layout-align-center-center"
@@ -130,13 +162,13 @@ exports[`props.viewHSCodes is true 1`] = `
           <img
             alt="length"
             border="0"
-            data-for="RANDOM_KEY_2"
+            data-for="UUID_MOCK_KEY_10"
             data-tip="Length"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_2"
+            id="UUID_MOCK_KEY_10"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -145,7 +177,7 @@ exports[`props.viewHSCodes is true 1`] = `
             className="flex-none"
           >
             <span>
-              90
+              10
             </span>
              
             cm
@@ -157,13 +189,13 @@ exports[`props.viewHSCodes is true 1`] = `
           <img
             alt="height"
             border="0"
-            data-for="RANDOM_KEY_2"
+            data-for="UUID_MOCK_KEY_10"
             data-tip="Height"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_2"
+            id="UUID_MOCK_KEY_10"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -172,7 +204,7 @@ exports[`props.viewHSCodes is true 1`] = `
             className="flex-none"
           >
             <span>
-              120
+              40
             </span>
              
             cm
@@ -184,13 +216,13 @@ exports[`props.viewHSCodes is true 1`] = `
           <img
             alt="width"
             border="0"
-            data-for="RANDOM_KEY_2"
+            data-for="UUID_MOCK_KEY_10"
             data-tip="Width"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_2"
+            id="UUID_MOCK_KEY_10"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -199,7 +231,7 @@ exports[`props.viewHSCodes is true 1`] = `
             className="flex-none"
           >
             <span>
-              100
+              60
             </span>
              
             cm
@@ -215,7 +247,7 @@ exports[`props.viewHSCodes is true 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                56.00
+                200.00
               </span>
                kg
             </p>
@@ -236,7 +268,7 @@ exports[`props.viewHSCodes is true 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                1.08
+                0.02
               </span>
                
                m
@@ -248,6 +280,318 @@ exports[`props.viewHSCodes is true 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               Volume
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`group.size_class is falsy 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-center-center height_box height_box"
+  >
+    <div
+      className="flex-5 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center cargo_unit"
+      >
+        GROUP_ALIAS
+      </p>
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        x 2
+      </p>
+      <div
+        className="icon_cargo_item"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <div
+        className=""
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          >
+            GROUP_CARGO_TYPE_CATEGORY
+          </span>
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Cargo type
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex-55 layout-row"
+    >
+      <div
+        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+      >
+        <CargoItemGroupAggregated
+          group={
+            Object {
+              "cargoType": Object {
+                "category": "GROUP_CARGO_TYPE_CATEGORY",
+              },
+              "groupAlias": "GROUP_ALIAS",
+              "items": Array [
+                Object {
+                  "cargo_item_type_id": "foo",
+                  "chargeable_weight": 250,
+                  "dangerous_goods": false,
+                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 10,
+                  "dimension_y": 60,
+                  "dimension_z": 40,
+                  "gross_weight": 76,
+                  "hs_codes": Array [
+                    4,
+                  ],
+                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                  "id": 1,
+                  "key": "FOO_CARGO_ITEM_KEY",
+                  "payload_in_kg": 200,
+                  "quantity": 5,
+                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 20,
+                  "weight": 220,
+                },
+                Object {
+                  "cargo_item_type_id": "bar",
+                  "chargeable_weight": 150,
+                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 100,
+                  "dimension_y": 50,
+                  "dimension_z": 70,
+                  "hs_codes": Array [],
+                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+                  "id": 2,
+                  "key": "BAR_CARGO_ITEM_KEY",
+                  "payload_in_kg": 100,
+                  "quantity": 7,
+                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 17,
+                  "weight": 140,
+                },
+              ],
+              "payload_in_kg": 177,
+              "size_class": null,
+              "weight": 180,
+            }
+          }
+          t={[Function]}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-5 layout-row layout-align-center-center"
+      onChange={[Function]}
+      onClick={[Function]}
+    >
+      <i
+        className="collapsed fa fa-chevron-down clip pointy"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="unit_viewer "
+  >
+    <div
+      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    >
+      <div
+        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+        key="UUID_MOCK_KEY_9"
+      >
+        <div
+          className="flex-5 layout-row layout-align-center-center"
+        >
+          <p
+            className="flex-none"
+            style={
+              Object {
+                "fontSize": "10px",
+              }
+            }
+          >
+            Single Item
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="length"
+            border="0"
+            data-for="UUID_MOCK_KEY_8"
+            data-tip="Length"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="UUID_MOCK_KEY_8"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              10
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="height"
+            border="0"
+            data-for="UUID_MOCK_KEY_8"
+            data-tip="Height"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="UUID_MOCK_KEY_8"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              40
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="width"
+            border="0"
+            data-for="UUID_MOCK_KEY_8"
+            data-tip="Width"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="UUID_MOCK_KEY_8"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              60
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                200.00
+              </span>
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Gross Weight
+            </p>
+          </div>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                0.02
+              </span>
+               
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Volume
+            </p>
+          </div>
+        </div>
+        <div
+          className="unit_data_cell flex-20 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
+              }
+            />
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Chargeable Weight | Volume
             </p>
           </div>
         </div>
@@ -269,7 +613,9 @@ exports[`shallow render 1`] = `
     >
       <p
         className="flex-none layout-row layout-align-center-center cargo_unit"
-      />
+      >
+        GROUP_ALIAS
+      </p>
     </div>
     <div
       className="flex-20 layout-row layout-align-center-center side_border"
@@ -277,7 +623,7 @@ exports[`shallow render 1`] = `
       <p
         className="flex-none layout-row layout-align-center-center"
       >
-        x 1
+        x 2
       </p>
       <div
         className="icon_cargo_item"
@@ -300,7 +646,7 @@ exports[`shallow render 1`] = `
           <span
             className="cargo_type"
           >
-            FOO_CATEGORY
+            GROUP_CARGO_TYPE_CATEGORY
           </span>
         </p>
         <p
@@ -320,22 +666,54 @@ exports[`shallow render 1`] = `
           group={
             Object {
               "cargoType": Object {
-                "category": "FOO_CATEGORY",
+                "category": "GROUP_CARGO_TYPE_CATEGORY",
               },
+              "groupAlias": "GROUP_ALIAS",
               "items": Array [
                 Object {
-                  "chargeable_weight": 80,
-                  "dimension_x": 90,
-                  "dimension_y": 100,
-                  "dimension_z": 120,
+                  "cargo_item_type_id": "foo",
+                  "chargeable_weight": 250,
+                  "dangerous_goods": false,
+                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 10,
+                  "dimension_y": 60,
+                  "dimension_z": 40,
                   "gross_weight": 76,
-                  "payload_in_kg": 56,
+                  "hs_codes": Array [
+                    4,
+                  ],
+                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                  "id": 1,
+                  "key": "FOO_CARGO_ITEM_KEY",
+                  "payload_in_kg": 200,
+                  "quantity": 5,
+                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
                   "tare_weight": 20,
+                  "weight": 220,
+                },
+                Object {
+                  "cargo_item_type_id": "bar",
+                  "chargeable_weight": 150,
+                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 100,
+                  "dimension_y": 50,
+                  "dimension_z": 70,
+                  "hs_codes": Array [],
+                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+                  "id": 2,
+                  "key": "BAR_CARGO_ITEM_KEY",
+                  "payload_in_kg": 100,
+                  "quantity": 7,
+                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 17,
+                  "weight": 140,
                 },
               ],
-              "quantity": "FOO_QUANTITY",
-              "size_class": "dry_goods",
-              "volume": 5,
+              "payload_in_kg": 177,
+              "size_class": "lcl",
+              "weight": 180,
             }
           }
           t={[Function]}
@@ -365,7 +743,7 @@ exports[`shallow render 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_1"
+        key="UUID_MOCK_KEY_1"
       >
         <div
           className="flex-5 layout-row layout-align-center-center"
@@ -387,13 +765,13 @@ exports[`shallow render 1`] = `
           <img
             alt="length"
             border="0"
-            data-for="RANDOM_KEY_0"
+            data-for="UUID_MOCK_KEY_0"
             data-tip="Length"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_0"
+            id="UUID_MOCK_KEY_0"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -402,7 +780,7 @@ exports[`shallow render 1`] = `
             className="flex-none"
           >
             <span>
-              90
+              10
             </span>
              
             cm
@@ -414,13 +792,13 @@ exports[`shallow render 1`] = `
           <img
             alt="height"
             border="0"
-            data-for="RANDOM_KEY_0"
+            data-for="UUID_MOCK_KEY_0"
             data-tip="Height"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_0"
+            id="UUID_MOCK_KEY_0"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -429,7 +807,7 @@ exports[`shallow render 1`] = `
             className="flex-none"
           >
             <span>
-              120
+              40
             </span>
              
             cm
@@ -441,13 +819,13 @@ exports[`shallow render 1`] = `
           <img
             alt="width"
             border="0"
-            data-for="RANDOM_KEY_0"
+            data-for="UUID_MOCK_KEY_0"
             data-tip="Width"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_0"
+            id="UUID_MOCK_KEY_0"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -456,7 +834,7 @@ exports[`shallow render 1`] = `
             className="flex-none"
           >
             <span>
-              100
+              60
             </span>
              
             cm
@@ -472,7 +850,7 @@ exports[`shallow render 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                56.00
+                200.00
               </span>
                kg
             </p>
@@ -493,7 +871,7 @@ exports[`shallow render 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                1.08
+                0.02
               </span>
                
                m
@@ -526,7 +904,9 @@ exports[`shallow rendering both chargeable value 1`] = `
     >
       <p
         className="flex-none layout-row layout-align-center-center cargo_unit"
-      />
+      >
+        GROUP_ALIAS
+      </p>
     </div>
     <div
       className="flex-20 layout-row layout-align-center-center side_border"
@@ -534,7 +914,7 @@ exports[`shallow rendering both chargeable value 1`] = `
       <p
         className="flex-none layout-row layout-align-center-center"
       >
-        x 1
+        x 2
       </p>
       <div
         className="icon_cargo_item"
@@ -557,7 +937,7 @@ exports[`shallow rendering both chargeable value 1`] = `
           <span
             className="cargo_type"
           >
-            FOO_CATEGORY
+            GROUP_CARGO_TYPE_CATEGORY
           </span>
         </p>
         <p
@@ -577,22 +957,54 @@ exports[`shallow rendering both chargeable value 1`] = `
           group={
             Object {
               "cargoType": Object {
-                "category": "FOO_CATEGORY",
+                "category": "GROUP_CARGO_TYPE_CATEGORY",
               },
+              "groupAlias": "GROUP_ALIAS",
               "items": Array [
                 Object {
-                  "chargeable_weight": 80,
-                  "dimension_x": 90,
-                  "dimension_y": 100,
-                  "dimension_z": 120,
+                  "cargo_item_type_id": "foo",
+                  "chargeable_weight": 250,
+                  "dangerous_goods": false,
+                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 10,
+                  "dimension_y": 60,
+                  "dimension_z": 40,
                   "gross_weight": 76,
-                  "payload_in_kg": 56,
+                  "hs_codes": Array [
+                    4,
+                  ],
+                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                  "id": 1,
+                  "key": "FOO_CARGO_ITEM_KEY",
+                  "payload_in_kg": 200,
+                  "quantity": 5,
+                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
                   "tare_weight": 20,
+                  "weight": 220,
+                },
+                Object {
+                  "cargo_item_type_id": "bar",
+                  "chargeable_weight": 150,
+                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 100,
+                  "dimension_y": 50,
+                  "dimension_z": 70,
+                  "hs_codes": Array [],
+                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+                  "id": 2,
+                  "key": "BAR_CARGO_ITEM_KEY",
+                  "payload_in_kg": 100,
+                  "quantity": 7,
+                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 17,
+                  "weight": 140,
                 },
               ],
-              "quantity": "FOO_QUANTITY",
-              "size_class": "dry_goods",
-              "volume": 5,
+              "payload_in_kg": 177,
+              "size_class": "lcl",
+              "weight": 180,
             }
           }
           t={[Function]}
@@ -622,7 +1034,7 @@ exports[`shallow rendering both chargeable value 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_19"
+        key="UUID_MOCK_KEY_31"
       >
         <div
           className="flex-5 layout-row layout-align-center-center"
@@ -644,13 +1056,13 @@ exports[`shallow rendering both chargeable value 1`] = `
           <img
             alt="length"
             border="0"
-            data-for="RANDOM_KEY_18"
+            data-for="UUID_MOCK_KEY_30"
             data-tip="Length"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_18"
+            id="UUID_MOCK_KEY_30"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -659,7 +1071,7 @@ exports[`shallow rendering both chargeable value 1`] = `
             className="flex-none"
           >
             <span>
-              90
+              10
             </span>
              
             cm
@@ -671,13 +1083,13 @@ exports[`shallow rendering both chargeable value 1`] = `
           <img
             alt="height"
             border="0"
-            data-for="RANDOM_KEY_18"
+            data-for="UUID_MOCK_KEY_30"
             data-tip="Height"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_18"
+            id="UUID_MOCK_KEY_30"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -686,7 +1098,7 @@ exports[`shallow rendering both chargeable value 1`] = `
             className="flex-none"
           >
             <span>
-              120
+              40
             </span>
              
             cm
@@ -698,13 +1110,13 @@ exports[`shallow rendering both chargeable value 1`] = `
           <img
             alt="width"
             border="0"
-            data-for="RANDOM_KEY_18"
+            data-for="UUID_MOCK_KEY_30"
             data-tip="Width"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_18"
+            id="UUID_MOCK_KEY_30"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -713,7 +1125,7 @@ exports[`shallow rendering both chargeable value 1`] = `
             className="flex-none"
           >
             <span>
-              100
+              60
             </span>
              
             cm
@@ -729,7 +1141,7 @@ exports[`shallow rendering both chargeable value 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                56.00
+                200.00
               </span>
                kg
             </p>
@@ -750,7 +1162,7 @@ exports[`shallow rendering both chargeable value 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                1.08
+                0.02
               </span>
                
                m
@@ -783,7 +1195,9 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
     >
       <p
         className="flex-none layout-row layout-align-center-center cargo_unit"
-      />
+      >
+        GROUP_ALIAS
+      </p>
     </div>
     <div
       className="flex-20 layout-row layout-align-center-center side_border"
@@ -791,7 +1205,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
       <p
         className="flex-none layout-row layout-align-center-center"
       >
-        x 1
+        x 2
       </p>
       <div
         className="icon_cargo_item"
@@ -814,7 +1228,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
           <span
             className="cargo_type"
           >
-            FOO_CATEGORY
+            GROUP_CARGO_TYPE_CATEGORY
           </span>
         </p>
         <p
@@ -834,22 +1248,54 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
           group={
             Object {
               "cargoType": Object {
-                "category": "FOO_CATEGORY",
+                "category": "GROUP_CARGO_TYPE_CATEGORY",
               },
+              "groupAlias": "GROUP_ALIAS",
               "items": Array [
                 Object {
-                  "chargeable_weight": 80,
-                  "dimension_x": 90,
-                  "dimension_y": 100,
-                  "dimension_z": 120,
+                  "cargo_item_type_id": "foo",
+                  "chargeable_weight": 250,
+                  "dangerous_goods": false,
+                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 10,
+                  "dimension_y": 60,
+                  "dimension_z": 40,
                   "gross_weight": 76,
-                  "payload_in_kg": 56,
+                  "hs_codes": Array [
+                    4,
+                  ],
+                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                  "id": 1,
+                  "key": "FOO_CARGO_ITEM_KEY",
+                  "payload_in_kg": 200,
+                  "quantity": 5,
+                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
                   "tare_weight": 20,
+                  "weight": 220,
+                },
+                Object {
+                  "cargo_item_type_id": "bar",
+                  "chargeable_weight": 150,
+                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 100,
+                  "dimension_y": 50,
+                  "dimension_z": 70,
+                  "hs_codes": Array [],
+                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+                  "id": 2,
+                  "key": "BAR_CARGO_ITEM_KEY",
+                  "payload_in_kg": 100,
+                  "quantity": 7,
+                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 17,
+                  "weight": 140,
                 },
               ],
-              "quantity": "FOO_QUANTITY",
-              "size_class": "dry_goods",
-              "volume": 5,
+              "payload_in_kg": 177,
+              "size_class": "lcl",
+              "weight": 180,
             }
           }
           t={[Function]}
@@ -879,7 +1325,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_13"
+        key="UUID_MOCK_KEY_25"
       >
         <div
           className="flex-5 layout-row layout-align-center-center"
@@ -901,13 +1347,13 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
           <img
             alt="length"
             border="0"
-            data-for="RANDOM_KEY_12"
+            data-for="UUID_MOCK_KEY_24"
             data-tip="Length"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_12"
+            id="UUID_MOCK_KEY_24"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -916,7 +1362,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
             className="flex-none"
           >
             <span>
-              90
+              10
             </span>
              
             cm
@@ -928,13 +1374,13 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
           <img
             alt="height"
             border="0"
-            data-for="RANDOM_KEY_12"
+            data-for="UUID_MOCK_KEY_24"
             data-tip="Height"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_12"
+            id="UUID_MOCK_KEY_24"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -943,7 +1389,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
             className="flex-none"
           >
             <span>
-              120
+              40
             </span>
              
             cm
@@ -955,13 +1401,13 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
           <img
             alt="width"
             border="0"
-            data-for="RANDOM_KEY_12"
+            data-for="UUID_MOCK_KEY_24"
             data-tip="Width"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_12"
+            id="UUID_MOCK_KEY_24"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -970,7 +1416,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
             className="flex-none"
           >
             <span>
-              100
+              60
             </span>
              
             cm
@@ -986,7 +1432,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                56.00
+                200.00
               </span>
                kg
             </p>
@@ -1007,7 +1453,7 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                1.08
+                0.02
               </span>
                
                m
@@ -1040,7 +1486,9 @@ exports[`shallow rendering volume chargeable value 1`] = `
     >
       <p
         className="flex-none layout-row layout-align-center-center cargo_unit"
-      />
+      >
+        GROUP_ALIAS
+      </p>
     </div>
     <div
       className="flex-20 layout-row layout-align-center-center side_border"
@@ -1048,7 +1496,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
       <p
         className="flex-none layout-row layout-align-center-center"
       >
-        x 1
+        x 2
       </p>
       <div
         className="icon_cargo_item"
@@ -1071,7 +1519,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
           <span
             className="cargo_type"
           >
-            FOO_CATEGORY
+            GROUP_CARGO_TYPE_CATEGORY
           </span>
         </p>
         <p
@@ -1091,22 +1539,54 @@ exports[`shallow rendering volume chargeable value 1`] = `
           group={
             Object {
               "cargoType": Object {
-                "category": "FOO_CATEGORY",
+                "category": "GROUP_CARGO_TYPE_CATEGORY",
               },
+              "groupAlias": "GROUP_ALIAS",
               "items": Array [
                 Object {
-                  "chargeable_weight": 80,
-                  "dimension_x": 90,
-                  "dimension_y": 100,
-                  "dimension_z": 120,
+                  "cargo_item_type_id": "foo",
+                  "chargeable_weight": 250,
+                  "dangerous_goods": false,
+                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 10,
+                  "dimension_y": 60,
+                  "dimension_z": 40,
                   "gross_weight": 76,
-                  "payload_in_kg": 56,
+                  "hs_codes": Array [
+                    4,
+                  ],
+                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                  "id": 1,
+                  "key": "FOO_CARGO_ITEM_KEY",
+                  "payload_in_kg": 200,
+                  "quantity": 5,
+                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
                   "tare_weight": 20,
+                  "weight": 220,
+                },
+                Object {
+                  "cargo_item_type_id": "bar",
+                  "chargeable_weight": 150,
+                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 100,
+                  "dimension_y": 50,
+                  "dimension_z": 70,
+                  "hs_codes": Array [],
+                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+                  "id": 2,
+                  "key": "BAR_CARGO_ITEM_KEY",
+                  "payload_in_kg": 100,
+                  "quantity": 7,
+                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 17,
+                  "weight": 140,
                 },
               ],
-              "quantity": "FOO_QUANTITY",
-              "size_class": "dry_goods",
-              "volume": 5,
+              "payload_in_kg": 177,
+              "size_class": "lcl",
+              "weight": 180,
             }
           }
           t={[Function]}
@@ -1136,7 +1616,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_17"
+        key="UUID_MOCK_KEY_29"
       >
         <div
           className="flex-5 layout-row layout-align-center-center"
@@ -1158,13 +1638,13 @@ exports[`shallow rendering volume chargeable value 1`] = `
           <img
             alt="length"
             border="0"
-            data-for="RANDOM_KEY_16"
+            data-for="UUID_MOCK_KEY_28"
             data-tip="Length"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_16"
+            id="UUID_MOCK_KEY_28"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -1173,7 +1653,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
             className="flex-none"
           >
             <span>
-              90
+              10
             </span>
              
             cm
@@ -1185,13 +1665,13 @@ exports[`shallow rendering volume chargeable value 1`] = `
           <img
             alt="height"
             border="0"
-            data-for="RANDOM_KEY_16"
+            data-for="UUID_MOCK_KEY_28"
             data-tip="Height"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_16"
+            id="UUID_MOCK_KEY_28"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -1200,7 +1680,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
             className="flex-none"
           >
             <span>
-              120
+              40
             </span>
              
             cm
@@ -1212,13 +1692,13 @@ exports[`shallow rendering volume chargeable value 1`] = `
           <img
             alt="width"
             border="0"
-            data-for="RANDOM_KEY_16"
+            data-for="UUID_MOCK_KEY_28"
             data-tip="Width"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_16"
+            id="UUID_MOCK_KEY_28"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -1227,7 +1707,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
             className="flex-none"
           >
             <span>
-              100
+              60
             </span>
              
             cm
@@ -1243,7 +1723,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                56.00
+                200.00
               </span>
                kg
             </p>
@@ -1264,7 +1744,7 @@ exports[`shallow rendering volume chargeable value 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                1.08
+                0.02
               </span>
                
                m
@@ -1297,7 +1777,9 @@ exports[`shallow rendering weight chargeable value 1`] = `
     >
       <p
         className="flex-none layout-row layout-align-center-center cargo_unit"
-      />
+      >
+        GROUP_ALIAS
+      </p>
     </div>
     <div
       className="flex-20 layout-row layout-align-center-center side_border"
@@ -1305,7 +1787,7 @@ exports[`shallow rendering weight chargeable value 1`] = `
       <p
         className="flex-none layout-row layout-align-center-center"
       >
-        x 1
+        x 2
       </p>
       <div
         className="icon_cargo_item"
@@ -1328,7 +1810,7 @@ exports[`shallow rendering weight chargeable value 1`] = `
           <span
             className="cargo_type"
           >
-            FOO_CATEGORY
+            GROUP_CARGO_TYPE_CATEGORY
           </span>
         </p>
         <p
@@ -1348,22 +1830,54 @@ exports[`shallow rendering weight chargeable value 1`] = `
           group={
             Object {
               "cargoType": Object {
-                "category": "FOO_CATEGORY",
+                "category": "GROUP_CARGO_TYPE_CATEGORY",
               },
+              "groupAlias": "GROUP_ALIAS",
               "items": Array [
                 Object {
-                  "chargeable_weight": 80,
-                  "dimension_x": 90,
-                  "dimension_y": 100,
-                  "dimension_z": 120,
+                  "cargo_item_type_id": "foo",
+                  "chargeable_weight": 250,
+                  "dangerous_goods": false,
+                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 10,
+                  "dimension_y": 60,
+                  "dimension_z": 40,
                   "gross_weight": 76,
-                  "payload_in_kg": 56,
+                  "hs_codes": Array [
+                    4,
+                  ],
+                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                  "id": 1,
+                  "key": "FOO_CARGO_ITEM_KEY",
+                  "payload_in_kg": 200,
+                  "quantity": 5,
+                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
                   "tare_weight": 20,
+                  "weight": 220,
+                },
+                Object {
+                  "cargo_item_type_id": "bar",
+                  "chargeable_weight": 150,
+                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 100,
+                  "dimension_y": 50,
+                  "dimension_z": 70,
+                  "hs_codes": Array [],
+                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+                  "id": 2,
+                  "key": "BAR_CARGO_ITEM_KEY",
+                  "payload_in_kg": 100,
+                  "quantity": 7,
+                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 17,
+                  "weight": 140,
                 },
               ],
-              "quantity": "FOO_QUANTITY",
-              "size_class": "dry_goods",
-              "volume": 5,
+              "payload_in_kg": 177,
+              "size_class": "lcl",
+              "weight": 180,
             }
           }
           t={[Function]}
@@ -1393,7 +1907,7 @@ exports[`shallow rendering weight chargeable value 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_15"
+        key="UUID_MOCK_KEY_27"
       >
         <div
           className="flex-5 layout-row layout-align-center-center"
@@ -1415,13 +1929,13 @@ exports[`shallow rendering weight chargeable value 1`] = `
           <img
             alt="length"
             border="0"
-            data-for="RANDOM_KEY_14"
+            data-for="UUID_MOCK_KEY_26"
             data-tip="Length"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_14"
+            id="UUID_MOCK_KEY_26"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -1430,7 +1944,7 @@ exports[`shallow rendering weight chargeable value 1`] = `
             className="flex-none"
           >
             <span>
-              90
+              10
             </span>
              
             cm
@@ -1442,13 +1956,13 @@ exports[`shallow rendering weight chargeable value 1`] = `
           <img
             alt="height"
             border="0"
-            data-for="RANDOM_KEY_14"
+            data-for="UUID_MOCK_KEY_26"
             data-tip="Height"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_14"
+            id="UUID_MOCK_KEY_26"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -1457,7 +1971,7 @@ exports[`shallow rendering weight chargeable value 1`] = `
             className="flex-none"
           >
             <span>
-              120
+              40
             </span>
              
             cm
@@ -1469,13 +1983,13 @@ exports[`shallow rendering weight chargeable value 1`] = `
           <img
             alt="width"
             border="0"
-            data-for="RANDOM_KEY_14"
+            data-for="UUID_MOCK_KEY_26"
             data-tip="Width"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_14"
+            id="UUID_MOCK_KEY_26"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -1484,7 +1998,7 @@ exports[`shallow rendering weight chargeable value 1`] = `
             className="flex-none"
           >
             <span>
-              100
+              60
             </span>
              
             cm
@@ -1500,7 +2014,7 @@ exports[`shallow rendering weight chargeable value 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                56.00
+                200.00
               </span>
                kg
             </p>
@@ -1521,7 +2035,589 @@ exports[`shallow rendering weight chargeable value 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                1.08
+                0.02
+              </span>
+               
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Volume
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shipment.load_type is cargo_item 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-center-center height_box height_box"
+  >
+    <div
+      className="flex-5 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center cargo_unit"
+      >
+        GROUP_ALIAS
+      </p>
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        x 2
+      </p>
+      <div
+        className="icon_cargo_item"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <div
+        className=""
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          >
+            GROUP_CARGO_TYPE_CATEGORY
+          </span>
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Cargo type
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex-55 layout-row"
+    >
+      <div
+        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+      >
+        <CargoItemGroupAggregated
+          group={
+            Object {
+              "cargoType": Object {
+                "category": "GROUP_CARGO_TYPE_CATEGORY",
+              },
+              "groupAlias": "GROUP_ALIAS",
+              "items": Array [
+                Object {
+                  "cargo_item_type_id": "foo",
+                  "chargeable_weight": 250,
+                  "dangerous_goods": false,
+                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 10,
+                  "dimension_y": 60,
+                  "dimension_z": 40,
+                  "gross_weight": 76,
+                  "hs_codes": Array [
+                    4,
+                  ],
+                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                  "id": 1,
+                  "key": "FOO_CARGO_ITEM_KEY",
+                  "payload_in_kg": 200,
+                  "quantity": 5,
+                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 20,
+                  "weight": 220,
+                },
+                Object {
+                  "cargo_item_type_id": "bar",
+                  "chargeable_weight": 150,
+                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 100,
+                  "dimension_y": 50,
+                  "dimension_z": 70,
+                  "hs_codes": Array [],
+                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+                  "id": 2,
+                  "key": "BAR_CARGO_ITEM_KEY",
+                  "payload_in_kg": 100,
+                  "quantity": 7,
+                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 17,
+                  "weight": 140,
+                },
+              ],
+              "payload_in_kg": 177,
+              "size_class": "lcl",
+              "weight": 180,
+            }
+          }
+          t={[Function]}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-5 layout-row layout-align-center-center"
+      onChange={[Function]}
+      onClick={[Function]}
+    >
+      <i
+        className="collapsed fa fa-chevron-down clip pointy"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="unit_viewer "
+  >
+    <div
+      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    >
+      <div
+        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+        key="UUID_MOCK_KEY_7"
+      >
+        <div
+          className="flex-5 layout-row layout-align-center-center"
+        >
+          <p
+            className="flex-none"
+            style={
+              Object {
+                "fontSize": "10px",
+              }
+            }
+          >
+            Single Item
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="length"
+            border="0"
+            data-for="UUID_MOCK_KEY_6"
+            data-tip="Length"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="UUID_MOCK_KEY_6"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              10
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="height"
+            border="0"
+            data-for="UUID_MOCK_KEY_6"
+            data-tip="Height"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="UUID_MOCK_KEY_6"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              40
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="width"
+            border="0"
+            data-for="UUID_MOCK_KEY_6"
+            data-tip="Width"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="UUID_MOCK_KEY_6"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              60
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                200.00
+              </span>
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Gross Weight
+            </p>
+          </div>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                0.02
+              </span>
+               
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Volume
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`state.collapsed is true 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-center-center height_box height_box"
+  >
+    <div
+      className="flex-5 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center cargo_unit"
+      >
+        GROUP_ALIAS
+      </p>
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        x 2
+      </p>
+      <div
+        className="icon_cargo_item"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <div
+        className=""
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          >
+            GROUP_CARGO_TYPE_CATEGORY
+          </span>
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Cargo type
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex-55 layout-row"
+    >
+      <div
+        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+      >
+        <CargoItemGroupAggregated
+          group={
+            Object {
+              "cargoType": Object {
+                "category": "GROUP_CARGO_TYPE_CATEGORY",
+              },
+              "groupAlias": "GROUP_ALIAS",
+              "items": Array [
+                Object {
+                  "cargo_item_type_id": "foo",
+                  "chargeable_weight": 250,
+                  "dangerous_goods": false,
+                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 10,
+                  "dimension_y": 60,
+                  "dimension_z": 40,
+                  "gross_weight": 76,
+                  "hs_codes": Array [
+                    4,
+                  ],
+                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                  "id": 1,
+                  "key": "FOO_CARGO_ITEM_KEY",
+                  "payload_in_kg": 200,
+                  "quantity": 5,
+                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 20,
+                  "weight": 220,
+                },
+                Object {
+                  "cargo_item_type_id": "bar",
+                  "chargeable_weight": 150,
+                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 100,
+                  "dimension_y": 50,
+                  "dimension_z": 70,
+                  "hs_codes": Array [],
+                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+                  "id": 2,
+                  "key": "BAR_CARGO_ITEM_KEY",
+                  "payload_in_kg": 100,
+                  "quantity": 7,
+                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 17,
+                  "weight": 140,
+                },
+              ],
+              "payload_in_kg": 177,
+              "size_class": "lcl",
+              "weight": 180,
+            }
+          }
+          t={[Function]}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-5 layout-row layout-align-center-center"
+      onChange={[Function]}
+      onClick={[Function]}
+    >
+      <i
+        className="collapsed fa fa-chevron-down clip pointy"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="unit_viewer "
+  >
+    <div
+      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    >
+      <div
+        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+        key="UUID_MOCK_KEY_19"
+      >
+        <div
+          className="flex-5 layout-row layout-align-center-center"
+        >
+          <p
+            className="flex-none"
+            style={
+              Object {
+                "fontSize": "10px",
+              }
+            }
+          >
+            Single Item
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="length"
+            border="0"
+            data-for="UUID_MOCK_KEY_18"
+            data-tip="Length"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="UUID_MOCK_KEY_18"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              10
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="height"
+            border="0"
+            data-for="UUID_MOCK_KEY_18"
+            data-tip="Height"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="UUID_MOCK_KEY_18"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              40
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="width"
+            border="0"
+            data-for="UUID_MOCK_KEY_18"
+            data-tip="Width"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="UUID_MOCK_KEY_18"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              60
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                200.00
+              </span>
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Gross Weight
+            </p>
+          </div>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                0.02
               </span>
                
                m
@@ -1554,7 +2650,9 @@ exports[`state.unitView is true 1`] = `
     >
       <p
         className="flex-none layout-row layout-align-center-center cargo_unit"
-      />
+      >
+        GROUP_ALIAS
+      </p>
     </div>
     <div
       className="flex-20 layout-row layout-align-center-center side_border"
@@ -1562,7 +2660,7 @@ exports[`state.unitView is true 1`] = `
       <p
         className="flex-none layout-row layout-align-center-center"
       >
-        x 1
+        x 2
       </p>
       <div
         className="icon_cargo_item"
@@ -1585,7 +2683,7 @@ exports[`state.unitView is true 1`] = `
           <span
             className="cargo_type"
           >
-            FOO_CATEGORY
+            GROUP_CARGO_TYPE_CATEGORY
           </span>
         </p>
         <p
@@ -1605,22 +2703,54 @@ exports[`state.unitView is true 1`] = `
           group={
             Object {
               "cargoType": Object {
-                "category": "FOO_CATEGORY",
+                "category": "GROUP_CARGO_TYPE_CATEGORY",
               },
+              "groupAlias": "GROUP_ALIAS",
               "items": Array [
                 Object {
-                  "chargeable_weight": 80,
-                  "dimension_x": 90,
-                  "dimension_y": 100,
-                  "dimension_z": 120,
+                  "cargo_item_type_id": "foo",
+                  "chargeable_weight": 250,
+                  "dangerous_goods": false,
+                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 10,
+                  "dimension_y": 60,
+                  "dimension_z": 40,
                   "gross_weight": 76,
-                  "payload_in_kg": 56,
+                  "hs_codes": Array [
+                    4,
+                  ],
+                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                  "id": 1,
+                  "key": "FOO_CARGO_ITEM_KEY",
+                  "payload_in_kg": 200,
+                  "quantity": 5,
+                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
                   "tare_weight": 20,
+                  "weight": 220,
+                },
+                Object {
+                  "cargo_item_type_id": "bar",
+                  "chargeable_weight": 150,
+                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 100,
+                  "dimension_y": 50,
+                  "dimension_z": 70,
+                  "hs_codes": Array [],
+                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+                  "id": 2,
+                  "key": "BAR_CARGO_ITEM_KEY",
+                  "payload_in_kg": 100,
+                  "quantity": 7,
+                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 17,
+                  "weight": 140,
                 },
               ],
-              "quantity": "FOO_QUANTITY",
-              "size_class": "dry_goods",
-              "volume": 5,
+              "payload_in_kg": 177,
+              "size_class": "lcl",
+              "weight": 180,
             }
           }
           t={[Function]}
@@ -1650,7 +2780,7 @@ exports[`state.unitView is true 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_7"
+        key="UUID_MOCK_KEY_15"
       >
         <div
           className="flex-5 layout-row layout-align-center-center"
@@ -1672,13 +2802,13 @@ exports[`state.unitView is true 1`] = `
           <img
             alt="length"
             border="0"
-            data-for="RANDOM_KEY_6"
+            data-for="UUID_MOCK_KEY_14"
             data-tip="Length"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_6"
+            id="UUID_MOCK_KEY_14"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -1687,7 +2817,7 @@ exports[`state.unitView is true 1`] = `
             className="flex-none"
           >
             <span>
-              90
+              10
             </span>
              
             cm
@@ -1699,13 +2829,13 @@ exports[`state.unitView is true 1`] = `
           <img
             alt="height"
             border="0"
-            data-for="RANDOM_KEY_6"
+            data-for="UUID_MOCK_KEY_14"
             data-tip="Height"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_6"
+            id="UUID_MOCK_KEY_14"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -1714,7 +2844,7 @@ exports[`state.unitView is true 1`] = `
             className="flex-none"
           >
             <span>
-              120
+              40
             </span>
              
             cm
@@ -1726,13 +2856,13 @@ exports[`state.unitView is true 1`] = `
           <img
             alt="width"
             border="0"
-            data-for="RANDOM_KEY_6"
+            data-for="UUID_MOCK_KEY_14"
             data-tip="Width"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_6"
+            id="UUID_MOCK_KEY_14"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -1741,7 +2871,7 @@ exports[`state.unitView is true 1`] = `
             className="flex-none"
           >
             <span>
-              100
+              60
             </span>
              
             cm
@@ -1757,7 +2887,7 @@ exports[`state.unitView is true 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                56.00
+                200.00
               </span>
                kg
             </p>
@@ -1778,7 +2908,7 @@ exports[`state.unitView is true 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                1.08
+                0.02
               </span>
                
                m
@@ -1811,7 +2941,9 @@ exports[`state.viewer is true 1`] = `
     >
       <p
         className="flex-none layout-row layout-align-center-center cargo_unit"
-      />
+      >
+        GROUP_ALIAS
+      </p>
     </div>
     <div
       className="flex-20 layout-row layout-align-center-center side_border"
@@ -1819,7 +2951,7 @@ exports[`state.viewer is true 1`] = `
       <p
         className="flex-none layout-row layout-align-center-center"
       >
-        x 1
+        x 2
       </p>
       <div
         className="icon_cargo_item"
@@ -1842,7 +2974,7 @@ exports[`state.viewer is true 1`] = `
           <span
             className="cargo_type"
           >
-            FOO_CATEGORY
+            GROUP_CARGO_TYPE_CATEGORY
           </span>
         </p>
         <p
@@ -1862,22 +2994,54 @@ exports[`state.viewer is true 1`] = `
           group={
             Object {
               "cargoType": Object {
-                "category": "FOO_CATEGORY",
+                "category": "GROUP_CARGO_TYPE_CATEGORY",
               },
+              "groupAlias": "GROUP_ALIAS",
               "items": Array [
                 Object {
-                  "chargeable_weight": 80,
-                  "dimension_x": 90,
-                  "dimension_y": 100,
-                  "dimension_z": 120,
+                  "cargo_item_type_id": "foo",
+                  "chargeable_weight": 250,
+                  "dangerous_goods": false,
+                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 10,
+                  "dimension_y": 60,
+                  "dimension_z": 40,
                   "gross_weight": 76,
-                  "payload_in_kg": 56,
+                  "hs_codes": Array [
+                    4,
+                  ],
+                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                  "id": 1,
+                  "key": "FOO_CARGO_ITEM_KEY",
+                  "payload_in_kg": 200,
+                  "quantity": 5,
+                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
                   "tare_weight": 20,
+                  "weight": 220,
+                },
+                Object {
+                  "cargo_item_type_id": "bar",
+                  "chargeable_weight": 150,
+                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 100,
+                  "dimension_y": 50,
+                  "dimension_z": 70,
+                  "hs_codes": Array [],
+                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+                  "id": 2,
+                  "key": "BAR_CARGO_ITEM_KEY",
+                  "payload_in_kg": 100,
+                  "quantity": 7,
+                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 17,
+                  "weight": 140,
                 },
               ],
-              "quantity": "FOO_QUANTITY",
-              "size_class": "dry_goods",
-              "volume": 5,
+              "payload_in_kg": 177,
+              "size_class": "lcl",
+              "weight": 180,
             }
           }
           t={[Function]}
@@ -1907,7 +3071,7 @@ exports[`state.viewer is true 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_11"
+        key="UUID_MOCK_KEY_23"
       >
         <div
           className="flex-5 layout-row layout-align-center-center"
@@ -1929,13 +3093,13 @@ exports[`state.viewer is true 1`] = `
           <img
             alt="length"
             border="0"
-            data-for="RANDOM_KEY_10"
+            data-for="UUID_MOCK_KEY_22"
             data-tip="Length"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_10"
+            id="UUID_MOCK_KEY_22"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -1944,7 +3108,7 @@ exports[`state.viewer is true 1`] = `
             className="flex-none"
           >
             <span>
-              90
+              10
             </span>
              
             cm
@@ -1956,13 +3120,13 @@ exports[`state.viewer is true 1`] = `
           <img
             alt="height"
             border="0"
-            data-for="RANDOM_KEY_10"
+            data-for="UUID_MOCK_KEY_22"
             data-tip="Height"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_10"
+            id="UUID_MOCK_KEY_22"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -1971,7 +3135,7 @@ exports[`state.viewer is true 1`] = `
             className="flex-none"
           >
             <span>
-              120
+              40
             </span>
              
             cm
@@ -1983,13 +3147,13 @@ exports[`state.viewer is true 1`] = `
           <img
             alt="width"
             border="0"
-            data-for="RANDOM_KEY_10"
+            data-for="UUID_MOCK_KEY_22"
             data-tip="Width"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_10"
+            id="UUID_MOCK_KEY_22"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -1998,7 +3162,7 @@ exports[`state.viewer is true 1`] = `
             className="flex-none"
           >
             <span>
-              100
+              60
             </span>
              
             cm
@@ -2014,7 +3178,7 @@ exports[`state.viewer is true 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                56.00
+                200.00
               </span>
                kg
             </p>
@@ -2035,7 +3199,589 @@ exports[`state.viewer is true 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                1.08
+                0.02
+              </span>
+               
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Volume
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-center-center height_box height_box"
+  >
+    <div
+      className="flex-5 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center cargo_unit"
+      >
+        GROUP_ALIAS
+      </p>
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        x 2
+      </p>
+      <div
+        className="icon_cargo_item"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <div
+        className=""
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          >
+            GROUP_CARGO_TYPE_CATEGORY
+          </span>
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Cargo type
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex-55 layout-row"
+    >
+      <div
+        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+      >
+        <CargoItemGroupAggregated
+          group={
+            Object {
+              "cargoType": Object {
+                "category": "GROUP_CARGO_TYPE_CATEGORY",
+              },
+              "groupAlias": "GROUP_ALIAS",
+              "items": Array [
+                Object {
+                  "cargo_item_type_id": "foo",
+                  "chargeable_weight": 250,
+                  "dangerous_goods": false,
+                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 10,
+                  "dimension_y": 60,
+                  "dimension_z": 40,
+                  "gross_weight": 76,
+                  "hs_codes": Array [
+                    4,
+                  ],
+                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                  "id": 1,
+                  "key": "FOO_CARGO_ITEM_KEY",
+                  "payload_in_kg": 200,
+                  "quantity": 5,
+                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 20,
+                  "weight": 220,
+                },
+                Object {
+                  "cargo_item_type_id": "bar",
+                  "chargeable_weight": 150,
+                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 100,
+                  "dimension_y": 50,
+                  "dimension_z": 70,
+                  "hs_codes": Array [],
+                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+                  "id": 2,
+                  "key": "BAR_CARGO_ITEM_KEY",
+                  "payload_in_kg": 100,
+                  "quantity": 7,
+                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 17,
+                  "weight": 140,
+                },
+              ],
+              "payload_in_kg": 177,
+              "size_class": "lcl",
+              "weight": 180,
+            }
+          }
+          t={[Function]}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-5 layout-row layout-align-center-center"
+      onChange={[Function]}
+      onClick={[Function]}
+    >
+      <i
+        className="collapsed fa fa-chevron-down clip pointy"
+        style={
+          Object {
+            "color": "#E0E0E0",
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="unit_viewer "
+  >
+    <div
+      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    >
+      <div
+        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+        key="UUID_MOCK_KEY_5"
+      >
+        <div
+          className="flex-5 layout-row layout-align-center-center"
+        >
+          <p
+            className="flex-none"
+            style={
+              Object {
+                "fontSize": "10px",
+              }
+            }
+          >
+            Single Item
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="length"
+            border="0"
+            data-for="UUID_MOCK_KEY_4"
+            data-tip="Length"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="UUID_MOCK_KEY_4"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              10
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="height"
+            border="0"
+            data-for="UUID_MOCK_KEY_4"
+            data-tip="Height"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="UUID_MOCK_KEY_4"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              40
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="width"
+            border="0"
+            data-for="UUID_MOCK_KEY_4"
+            data-tip="Width"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="UUID_MOCK_KEY_4"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              60
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                200.00
+              </span>
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Gross Weight
+            </p>
+          </div>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                0.02
+              </span>
+               
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Volume
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`viewHSCodes is true 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-center-center height_box height_box"
+  >
+    <div
+      className="flex-5 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center cargo_unit"
+      >
+        GROUP_ALIAS
+      </p>
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        x 2
+      </p>
+      <div
+        className="icon_cargo_item"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <div
+        className=""
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          >
+            GROUP_CARGO_TYPE_CATEGORY
+          </span>
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Cargo type
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex-55 layout-row"
+    >
+      <div
+        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+      >
+        <CargoItemGroupAggregated
+          group={
+            Object {
+              "cargoType": Object {
+                "category": "GROUP_CARGO_TYPE_CATEGORY",
+              },
+              "groupAlias": "GROUP_ALIAS",
+              "items": Array [
+                Object {
+                  "cargo_item_type_id": "foo",
+                  "chargeable_weight": 250,
+                  "dangerous_goods": false,
+                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 10,
+                  "dimension_y": 60,
+                  "dimension_z": 40,
+                  "gross_weight": 76,
+                  "hs_codes": Array [
+                    4,
+                  ],
+                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                  "id": 1,
+                  "key": "FOO_CARGO_ITEM_KEY",
+                  "payload_in_kg": 200,
+                  "quantity": 5,
+                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 20,
+                  "weight": 220,
+                },
+                Object {
+                  "cargo_item_type_id": "bar",
+                  "chargeable_weight": 150,
+                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
+                  "dimension_x": 100,
+                  "dimension_y": 50,
+                  "dimension_z": 70,
+                  "hs_codes": Array [],
+                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
+                  "id": 2,
+                  "key": "BAR_CARGO_ITEM_KEY",
+                  "payload_in_kg": 100,
+                  "quantity": 7,
+                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
+                  "stackable": false,
+                  "tare_weight": 17,
+                  "weight": 140,
+                },
+              ],
+              "payload_in_kg": 177,
+              "size_class": "lcl",
+              "weight": 180,
+            }
+          }
+          t={[Function]}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-5 layout-row layout-align-center-center"
+      onChange={[Function]}
+      onClick={[Function]}
+    >
+      <i
+        className="collapsed fa fa-chevron-down clip pointy"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="unit_viewer "
+  >
+    <div
+      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    >
+      <div
+        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+        key="UUID_MOCK_KEY_3"
+      >
+        <div
+          className="flex-5 layout-row layout-align-center-center"
+        >
+          <p
+            className="flex-none"
+            style={
+              Object {
+                "fontSize": "10px",
+              }
+            }
+          >
+            Single Item
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="length"
+            border="0"
+            data-for="UUID_MOCK_KEY_2"
+            data-tip="Length"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="UUID_MOCK_KEY_2"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              10
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="height"
+            border="0"
+            data-for="UUID_MOCK_KEY_2"
+            data-tip="Height"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="UUID_MOCK_KEY_2"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              40
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="width"
+            border="0"
+            data-for="UUID_MOCK_KEY_2"
+            data-tip="Width"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="UUID_MOCK_KEY_2"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              60
+            </span>
+             
+            cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                200.00
+              </span>
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Gross Weight
+            </p>
+          </div>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className=""
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                0.02
               </span>
                
                m

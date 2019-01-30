@@ -53,10 +53,37 @@ exports[`shallow rendering 1`] = `
         className="flex-100 layout-row layout-wrap layout-align-space-between-start"
       >
         <RouteOption
-          key="RANDOM_KEY_0"
+          key="UUID_MOCK_KEY_0"
           route={
             Object {
-              "id": 24680,
+              "id": 1,
+              "modesOfTransport": Object {
+                "air": "Air",
+                "ocean": "Ocean",
+              },
+              "name": "FOO_ROUTE",
+            }
+          }
+          routeSelected={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <RouteOption
+          key="UUID_MOCK_KEY_1"
+          route={
+            Object {
+              "id": 2,
+              "modesOfTransport": Object {
+                "air": "Air",
+                "ocean": "Ocean",
+              },
+              "name": "BAR_ROUTE",
             }
           }
           routeSelected={[Function]}

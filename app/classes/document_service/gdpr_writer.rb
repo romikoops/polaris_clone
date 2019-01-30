@@ -6,13 +6,12 @@ module DocumentService
   class GdprWriter
     include AwsConfig
     include WritingTool
-    attr_reader :tenant, :user_contacts, :filename, :directory, :workbook, :worksheet, :user, :user_aliases,
-                :user_shipments, :user_messages, :user_addresses, :user_sheet, :alias_sheet, :contacts_sheet, :shipment_sheet
+    attr_reader :tenant, :user_contacts, :filename, :directory, :workbook, :worksheet, :user,
+                :user_shipments, :user_messages, :user_addresses, :user_sheet, :contacts_sheet, :shipment_sheet
 
     def initialize(options)
       @user = User.find(options[:user_id])
-      @user_contacts = @user.contacts.where(alias: false)
-      @user_aliases = @user.contacts.where(alias: true)
+      @user_contacts = @user.contacts
       @user_shipments = @user.shipments
       @user_messages = @user.conversations
       @user_addresses = @user.user_addresses
@@ -22,14 +21,12 @@ module DocumentService
       header_format = @workbook.add_format
       header_format.set_bold
       @user_sheet = workbook.add_worksheet('Account')
-      @alias_sheet = workbook.add_worksheet('Aliases')
       @contacts_sheet = workbook.add_worksheet('Contacts')
       @shipment_sheet = workbook.add_worksheet('Shipments')
     end
 
     def perform
       write_user_Data
-      write_alias_Data
       write_contacts_Data
       write_shipment_data
       workbook.close
@@ -58,25 +55,6 @@ module DocumentService
       user_keys.each do |k|
         user_sheet.write(row, 0, k.humanize)
         user_sheet.write(row, 1, user[k])
-        row += 1
-      end
-    end
-
-    def write_alias_Data
-      row = 1
-      user_aliases.each do |ua|
-        ua.as_json.each do |k, value|
-          if k.to_s == 'address_id'
-            loc = Address.find(value)
-            loc.set_geocoded_address_from_fields! unless loc.geocoded_address
-            alias_sheet.write(row, 0, k.humanize)
-            alias_sheet.write(row, 1, loc.geocoded_address)
-          else
-            alias_sheet.write(row, 0, k.humanize)
-            alias_sheet.write(row, 1, value)
-          end
-          row += 1
-        end
         row += 1
       end
     end

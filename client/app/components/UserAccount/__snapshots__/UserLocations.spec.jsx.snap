@@ -6,69 +6,67 @@ exports[`shallow render 1`] = `
 >
   <UserLocationsBox
     addresses={
-      Array [
-        Object {
-          "address": Object {
-            "city": "FOO_CITY",
-            "country": "Germany",
-            "geocodedAddress": "FOO_GEOCODED_ADDRESS",
-            "id": 246,
-            "primary": true,
-            "street": "FOO_STREET",
-            "streetNumber": 579,
-            "street_number": 579,
-            "zipCode": "22456",
-            "zip_code": "22456",
-          },
-          "user": Object {
-            "company_name": "FOO_COMPANY",
-            "currency": "EUR",
-            "email": "foo@bar.baz",
-            "first_name": "John",
-            "guest": false,
-            "last_name": "Doe",
-            "phone": "6345789",
-            "primary": false,
-            "role": Object {
-              "name": "shipper",
-            },
-          },
+      Object {
+        "destination": Object {
+          "city": "DESTINATION_ADDRESS_CITY",
+          "country": "DESTINATION_ADDRESS_COUNTRY",
+          "street": "DESTINATION_ADDRESS_STREET",
+          "street_number": "DESTINATION_ADDRESS_STREET_NUMBER",
+          "zip_code": "DESTINATION_ADDRESS_ZIP_CODE",
         },
-        Object {
-          "address": Object {
-            "city": "FOO_CITY",
-            "country": "Germany",
-            "geocodedAddress": "FOO_GEOCODED_ADDRESS",
-            "id": 246,
-            "primary": true,
-            "street": "FOO_STREET",
-            "streetNumber": 579,
-            "street_number": 579,
-            "zipCode": "22456",
-            "zip_code": "22456",
-          },
-          "user": Object {
-            "company_name": "FOO_COMPANY",
-            "currency": "EUR",
-            "email": "foo@bar.baz",
-            "first_name": "John",
-            "guest": false,
-            "last_name": "Doe",
-            "phone": "6345789",
-            "primary": true,
-            "role": Object {
-              "name": "shipper",
-            },
-          },
+        "origin": Object {
+          "city": "ORIGIN_ADDRESS_CITY",
+          "country": "ORIGIN_ADDRESS_COUNTRY",
+          "street": "ORIGIN_ADDRESS_STREET",
+          "street_number": "ORIGIN_ADDRESS_STREET_NUMBER",
+          "zip_code": "ORIGIN_ADDRESS_ZIP_CODE",
         },
-      ]
+      }
     }
-    cols={3}
+    cols={2}
     destroyAddress={[Function]}
     editLocation={[Function]}
     gradient={
       Object {
         "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+      }
+    }
+    makePrimary={[Function]}
+    t={[Function]}
+    toggleActiveView={[Function]}
+  />
+</div>
+`;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="layout-row flex-100 layout-wrap layout-margin"
+>
+  <UserLocationsBox
+    addresses={
+      Object {
+        "destination": Object {
+          "city": "DESTINATION_ADDRESS_CITY",
+          "country": "DESTINATION_ADDRESS_COUNTRY",
+          "street": "DESTINATION_ADDRESS_STREET",
+          "street_number": "DESTINATION_ADDRESS_STREET_NUMBER",
+          "zip_code": "DESTINATION_ADDRESS_ZIP_CODE",
+        },
+        "origin": Object {
+          "city": "ORIGIN_ADDRESS_CITY",
+          "country": "ORIGIN_ADDRESS_COUNTRY",
+          "street": "ORIGIN_ADDRESS_STREET",
+          "street_number": "ORIGIN_ADDRESS_STREET_NUMBER",
+          "zip_code": "ORIGIN_ADDRESS_ZIP_CODE",
+        },
+      }
+    }
+    cols={2}
+    destroyAddress={[Function]}
+    editLocation={[Function]}
+    gradient={
+      Object {
+        "color": "black",
       }
     }
     makePrimary={[Function]}

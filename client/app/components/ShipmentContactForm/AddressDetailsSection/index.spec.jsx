@@ -1,12 +1,12 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { identity, theme, address } from '../../../mocks'
+import { identity, theme, firstAddress } from '../../../mocks'
 
-import AddressDetailsSection from './'
+import AddressDetailsSection from '.'
 
 const propsBase = {
   theme,
-  contactData: { address },
+  contactData: { address: firstAddress },
   handlePlaceChange: identity,
   setContactAttempted: false,
   setContactBtn: React.createElement('div')

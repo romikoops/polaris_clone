@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, shipment, identity } from '../../../mocks'
+import { theme, shipment, identity } from '../../../mock'
 import ShipmentOverviewShowCard from './ShipmentOverviewShowCard'
 
 function empty (x) {

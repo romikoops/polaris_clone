@@ -49,14 +49,16 @@ exports[`shallow render 1`] = `
         <ContactSetterBodyNotifyeeContactsContactCard
           contactData={
             Object {
-              "address": Object {},
-              "contact": Object {
-                "companyName": "FOO_CONTACT_COMPANY",
-                "email": "foo@bar.baz",
-                "firstName": "John",
-                "lastName": "Doe",
-                "phone": "0761452887",
-              },
+              "city": "FOO_NOTIFYEE_ZIP_CODE",
+              "companyName": "FOO_NOTIFYEE_COMPANY_NAME",
+              "country": "FOO_NOTIFYEE_COUNTRY",
+              "email": "FOO_NOTIFYEE_EMAIL",
+              "firstName": "FOO_NOTIFYEE_FIRST_NAME",
+              "lastName": "FOO_NOTIFYEE_LAST_NAME",
+              "number": "FOO_NOTIFYEE_NUMBER",
+              "phone": "FOO_NOTIFYEE_PHONE",
+              "street": "FOO_NOTIFYEE_STREET",
+              "zipCode": "FOO_NOTIFYEE_ZIP_CODE",
             }
           }
           removeFunc={[Function]}
@@ -82,14 +84,16 @@ exports[`shallow render 1`] = `
         <ContactSetterBodyNotifyeeContactsContactCard
           contactData={
             Object {
-              "address": Object {},
-              "contactSecond": Object {
-                "companyName": "BAR_CONTACT_COMPANY",
-                "email": "foo2@bar.baz",
-                "firstName": "Richard",
-                "lastName": "D",
-                "phone": "0721452887",
-              },
+              "city": "BAR_NOTIFYEE_ZIP_CODE",
+              "companyName": "BAR_NOTIFYEE_COMPANY_NAME",
+              "country": "BAR_NOTIFYEE_COUNTRY",
+              "email": "BAR_NOTIFYEE_EMAIL",
+              "firstName": "BAR_NOTIFYEE_FIRST_NAME",
+              "lastName": "BAR_NOTIFYEE_LAST_NAME",
+              "number": "BAR_NOTIFYEE_NUMBER",
+              "phone": "BAR_NOTIFYEE_PHONE",
+              "street": "BAR_NOTIFYEE_STREET",
+              "zipCode": "BAR_NOTIFYEE_ZIP_CODE",
             }
           }
           removeFunc={[Function]}

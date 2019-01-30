@@ -3,6 +3,9 @@ aws:
   secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
   bucket: assets.itsmycargo.com
 
+emails:
+  domain: itsmycargo.tech
+
 fixer:
   api_key: <%= ENV['FIXER_API_KEY'] %>
 

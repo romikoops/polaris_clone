@@ -1,6 +1,7 @@
+import '../../mocks/libraries/moment'
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, client } from '../../mocks'
+import { theme, identity, client } from '../../mock'
 
 import AdminClientCardIndex from './AdminClientCardIndex'
 

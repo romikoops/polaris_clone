@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`props.contactData is falsy 1`] = `""`;
+exports[`contactData is falsy 1`] = `""`;
 
-exports[`props.contactData.address is falsy 1`] = `
+exports[`contactData.address is falsy 1`] = `
 <div
   className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
 >
@@ -14,7 +14,11 @@ exports[`props.contactData.address is falsy 1`] = `
     >
       <i
         className="fa fa-user clip bigProfile"
-        style="#333"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
       />
     </span>
     <div
@@ -23,9 +27,9 @@ exports[`props.contactData.address is falsy 1`] = `
       <h1
         className="flex-none layout-row cli"
       >
-        John
+        FOO_FIRST_NAME
          
-        Doe
+        FOO_LAST_NAME
       </h1>
     </div>
   </div>
@@ -40,7 +44,11 @@ exports[`props.contactData.address is falsy 1`] = `
         >
           <UntranslatedProfileBox
             edit={[Function]}
-            style="#333"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+              }
+            }
             t={[Function]}
             theme={
               Object {
@@ -52,8 +60,11 @@ exports[`props.contactData.address is falsy 1`] = `
             }
             user={
               Object {
-                "first_name": "John",
-                "last_name": "Doe",
+                "company_name": "FOO_COMPANY_NAME",
+                "email": "FOO_EMAIL@mehr.de",
+                "first_name": "FOO_FIRST_NAME",
+                "last_name": "FOO_LAST_NAME",
+                "primary": 2,
               }
             }
           />
@@ -81,9 +92,25 @@ exports[`props.contactData.address is falsy 1`] = `
           "goBack": [Function],
         }
       }
+      handleClick={null}
       hubs={
         Array [
-          Object {},
+          Object {
+            "address": Object {
+              "city": "FOO_ADDRESS_CITY",
+              "country": "FOO_ADDRESS_COUNTRY",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_ADDRESS_STREET",
+              "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+              "user": Object {
+                "primary": true,
+              },
+              "zipCode": "FOO_ADDRESS_ZIP_CODE",
+            },
+            "name": "FOO_HUB_NAME",
+          },
         ]
       }
       limit={5}
@@ -91,168 +118,123 @@ exports[`props.contactData.address is falsy 1`] = `
       shipments={
         Array [
           Object {
-            "clientName": "John Doe",
-            "companyName": "undefined",
-            "schedule_set": Array [
+            "booking_placed_at": "2018-11-01T11:14:33z",
+            "cargo_count": 2,
+            "cargo_items_attributes": Array [],
+            "cargo_notes": "SHIPMENT_CARGO_NOTES",
+            "cargo_units": Array [
               Object {
-                "hub_route_key": "foo-bar",
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
               },
             ],
-          },
-        ]
-      }
-      theme={
-        Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
-        }
-      }
-      title="Related Shipments"
-      userView={true}
-    />
-  </div>
-</div>
-`;
-
-exports[`props.loading is true 1`] = `
-<div
-  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
->
-  <div
-    className="flex-100 layout-row layout-align-start-stretch username_title"
-  >
-    <span
-      className="layout-row flex-none layout-align-start-center card_padding_right"
-    >
-      <i
-        className="fa fa-user clip bigProfile"
-        style="#333"
-      />
-    </span>
-    <div
-      className="layout-align-start-center layout-row flex-70"
-    >
-      <h1
-        className="flex-none layout-row cli"
-      >
-        John
-         
-        Doe
-      </h1>
-    </div>
-  </div>
-  <div
-    className="layout-row flex-100 layout-wrap layout-align-start-center margin_bottom"
-  >
-    <GreyBox
-      borderStyle=""
-      content={
-        <div
-          className="layout-row flex-100"
-        >
-          <UntranslatedProfileBox
-            edit={[Function]}
-            style="#333"
-            t={[Function]}
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
+            "clientName": "FOO_FIRST_NAME FOO_LAST_NAME",
+            "companyName": "FOO_COMPANY_NAME",
+            "containers_attributes": Array [],
+            "delivery_address": "SHIPMENT_DELIVERY_ADDRESS",
+            "destination": Object {
+              "fullAddress": "SHIPMENT_DESTINATION_FULL_ADDRESS",
+            },
+            "destination_hub": Object {
+              "name": "SHIPMENT_DESTINATION_HUB",
+              "startHub": Object {
+                "address": Object {},
+              },
+            },
+            "direction": "import",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "id": 654,
+            "imc_reference": "SHIPMENT_IMC_REFERENCE",
+            "incoterm": "SHIPMENT_INCOTERM",
+            "incoterm_text": "SHIPMENT_INCOTERM_TEXT",
+            "load_type": "cargo_item",
+            "notes": "SHIPMENT_NOTES",
+            "origin": Object {
+              "fullAddress": "SHIPMENT_ORIGIN_FULL_ADDRESS",
+            },
+            "origin_hub": Object {
+              "name": "SHIPMENT_ORIGIN_HUB",
+              "startHub": Object {
+                "address": Object {
+                  "city": "FOO_ADDRESS_CITY",
+                  "country": "FOO_ADDRESS_COUNTRY",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_ADDRESS_STREET",
+                  "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+                  "user": Object {
+                    "primary": true,
+                  },
+                  "zipCode": "FOO_ADDRESS_ZIP_CODE",
                 },
-              }
-            }
-            user={
-              Object {
-                "first_name": "John",
-                "last_name": "Doe",
-              }
-            }
-          />
-        </div>
-      }
-      contentClassName="layout-row flex"
-      flex={0}
-      flexGtLg={0}
-      flexMd={0}
-      fullWidth={false}
-      isBox={false}
-      padding={false}
-      title=""
-      titleAction={false}
-      wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
-    />
-  </div>
-  <div
-    className="layout-row flex-100 layout-wrap layout-align-start-center"
-  >
-    <AdminSearchableShipments
-      dispatches={
-        Object {
-          "getContact": [Function],
-          "goBack": [Function],
-        }
-      }
-      hubs={
-        Array [
-          Object {},
-        ]
-      }
-      limit={5}
-      seeAll={false}
-      shipments={
-        Array [
-          Object {
-            "clientName": "John Doe",
-            "companyName": "undefined",
+              },
+            },
+            "pickup_address": "SHIPMENT_PICKUP_ADDRESS",
+            "planned_eta": "2018-12-01T18:14:33z",
+            "planned_etd": "2018-11-12T12:37:08z",
+            "planned_origin_drop_off_date": "2018-12-01T22:14:33z",
+            "planned_pickup_date": "2018-12-08T04:30:08z",
             "schedule_set": Array [
               Object {
-                "hub_route_key": "foo-bar",
+                "hub_route_key": "SHIPMENT_SCHEDULE_SET_HUB_ROUTE_KEY",
               },
             ],
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "customs": Object {
+                "hasUnknown": false,
+                "val": 12,
+              },
+              "insurance": Object {
+                "val": 5,
+              },
+              "total": Object {
+                "value": 87,
+              },
+            },
+            "service_level": "standard",
+            "status": "finished",
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 150000,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 137550,
+            },
+            "trucking": Object {
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 28,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+            "updated_at": "2018-11-01T18:14:33z",
           },
         ]
       }
-      theme={
-        Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
-        }
-      }
-      title="Related Shipments"
-      userView={true}
-    />
-  </div>
-  <div
-    className="layout-row flex-100 layout-wrap layout-align-start-center"
-  >
-    <div
-      className="flex-100 layout-row layout-align-space-between-center"
-    >
-      <div
-        className="flex-100 layout-align-start-center greyBg"
-      >
-        <span>
-          <b>
-            Locations
-          </b>
-        </span>
-      </div>
-    </div>
-    <AdminAddressTile
-      address={[Function]}
-      client={
-        Object {
-          "first_name": "John",
-          "last_name": "Doe",
-        }
-      }
-      key="RANDOM_KEY_1"
-      showDelete={false}
       t={[Function]}
       theme={
         Object {
@@ -262,6 +244,8 @@ exports[`props.loading is true 1`] = `
           },
         }
       }
+      title="Related Shipments"
+      userView={true}
     />
   </div>
 </div>
@@ -279,7 +263,11 @@ exports[`shallow render 1`] = `
     >
       <i
         className="fa fa-user clip bigProfile"
-        style="#333"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
       />
     </span>
     <div
@@ -288,9 +276,9 @@ exports[`shallow render 1`] = `
       <h1
         className="flex-none layout-row cli"
       >
-        John
+        FOO_FIRST_NAME
          
-        Doe
+        FOO_LAST_NAME
       </h1>
     </div>
   </div>
@@ -305,7 +293,11 @@ exports[`shallow render 1`] = `
         >
           <UntranslatedProfileBox
             edit={[Function]}
-            style="#333"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+              }
+            }
             t={[Function]}
             theme={
               Object {
@@ -317,8 +309,11 @@ exports[`shallow render 1`] = `
             }
             user={
               Object {
-                "first_name": "John",
-                "last_name": "Doe",
+                "company_name": "FOO_COMPANY_NAME",
+                "email": "FOO_EMAIL@mehr.de",
+                "first_name": "FOO_FIRST_NAME",
+                "last_name": "FOO_LAST_NAME",
+                "primary": 2,
               }
             }
           />
@@ -346,9 +341,25 @@ exports[`shallow render 1`] = `
           "goBack": [Function],
         }
       }
+      handleClick={null}
       hubs={
         Array [
-          Object {},
+          Object {
+            "address": Object {
+              "city": "FOO_ADDRESS_CITY",
+              "country": "FOO_ADDRESS_COUNTRY",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_ADDRESS_STREET",
+              "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+              "user": Object {
+                "primary": true,
+              },
+              "zipCode": "FOO_ADDRESS_ZIP_CODE",
+            },
+            "name": "FOO_HUB_NAME",
+          },
         ]
       }
       limit={5}
@@ -356,16 +367,124 @@ exports[`shallow render 1`] = `
       shipments={
         Array [
           Object {
-            "clientName": "John Doe",
-            "companyName": "undefined",
-            "schedule_set": Array [
+            "booking_placed_at": "2018-11-01T11:14:33z",
+            "cargo_count": 2,
+            "cargo_items_attributes": Array [],
+            "cargo_notes": "SHIPMENT_CARGO_NOTES",
+            "cargo_units": Array [
               Object {
-                "hub_route_key": "foo-bar",
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
               },
             ],
+            "clientName": "FOO_FIRST_NAME FOO_LAST_NAME",
+            "companyName": "FOO_COMPANY_NAME",
+            "containers_attributes": Array [],
+            "delivery_address": "SHIPMENT_DELIVERY_ADDRESS",
+            "destination": Object {
+              "fullAddress": "SHIPMENT_DESTINATION_FULL_ADDRESS",
+            },
+            "destination_hub": Object {
+              "name": "SHIPMENT_DESTINATION_HUB",
+              "startHub": Object {
+                "address": Object {},
+              },
+            },
+            "direction": "import",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "id": 654,
+            "imc_reference": "SHIPMENT_IMC_REFERENCE",
+            "incoterm": "SHIPMENT_INCOTERM",
+            "incoterm_text": "SHIPMENT_INCOTERM_TEXT",
+            "load_type": "cargo_item",
+            "notes": "SHIPMENT_NOTES",
+            "origin": Object {
+              "fullAddress": "SHIPMENT_ORIGIN_FULL_ADDRESS",
+            },
+            "origin_hub": Object {
+              "name": "SHIPMENT_ORIGIN_HUB",
+              "startHub": Object {
+                "address": Object {
+                  "city": "FOO_ADDRESS_CITY",
+                  "country": "FOO_ADDRESS_COUNTRY",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_ADDRESS_STREET",
+                  "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+                  "user": Object {
+                    "primary": true,
+                  },
+                  "zipCode": "FOO_ADDRESS_ZIP_CODE",
+                },
+              },
+            },
+            "pickup_address": "SHIPMENT_PICKUP_ADDRESS",
+            "planned_eta": "2018-12-01T18:14:33z",
+            "planned_etd": "2018-11-12T12:37:08z",
+            "planned_origin_drop_off_date": "2018-12-01T22:14:33z",
+            "planned_pickup_date": "2018-12-08T04:30:08z",
+            "schedule_set": Array [
+              Object {
+                "hub_route_key": "SHIPMENT_SCHEDULE_SET_HUB_ROUTE_KEY",
+              },
+            ],
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "customs": Object {
+                "hasUnknown": false,
+                "val": 12,
+              },
+              "insurance": Object {
+                "val": 5,
+              },
+              "total": Object {
+                "value": 87,
+              },
+            },
+            "service_level": "standard",
+            "status": "finished",
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 150000,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 137550,
+            },
+            "trucking": Object {
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 28,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+            "updated_at": "2018-11-01T18:14:33z",
           },
         ]
       }
+      t={[Function]}
       theme={
         Object {
           "colors": Object {
@@ -398,11 +517,14 @@ exports[`shallow render 1`] = `
       address={[Function]}
       client={
         Object {
-          "first_name": "John",
-          "last_name": "Doe",
+          "company_name": "FOO_COMPANY_NAME",
+          "email": "FOO_EMAIL@mehr.de",
+          "first_name": "FOO_FIRST_NAME",
+          "last_name": "FOO_LAST_NAME",
+          "primary": 2,
         }
       }
-      key="RANDOM_KEY_0"
+      key="UUID_MOCK_KEY_0"
       showDelete={false}
       t={[Function]}
       theme={
@@ -430,7 +552,11 @@ exports[`state.editBool is true 1`] = `
     >
       <i
         className="fa fa-user clip bigProfile"
-        style="#333"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
       />
     </span>
     <div
@@ -439,9 +565,9 @@ exports[`state.editBool is true 1`] = `
       <h1
         className="flex-none layout-row cli"
       >
-        John
+        FOO_FIRST_NAME
          
-        Doe
+        FOO_LAST_NAME
       </h1>
     </div>
   </div>
@@ -458,7 +584,11 @@ exports[`state.editBool is true 1`] = `
             close={[Function]}
             handleChange={[Function]}
             onSave={[Function]}
-            style="#333"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+              }
+            }
             t={[Function]}
             theme={
               Object {
@@ -494,9 +624,25 @@ exports[`state.editBool is true 1`] = `
           "goBack": [Function],
         }
       }
+      handleClick={null}
       hubs={
         Array [
-          Object {},
+          Object {
+            "address": Object {
+              "city": "FOO_ADDRESS_CITY",
+              "country": "FOO_ADDRESS_COUNTRY",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_ADDRESS_STREET",
+              "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+              "user": Object {
+                "primary": true,
+              },
+              "zipCode": "FOO_ADDRESS_ZIP_CODE",
+            },
+            "name": "FOO_HUB_NAME",
+          },
         ]
       }
       limit={5}
@@ -504,16 +650,124 @@ exports[`state.editBool is true 1`] = `
       shipments={
         Array [
           Object {
-            "clientName": "John Doe",
-            "companyName": "undefined",
-            "schedule_set": Array [
+            "booking_placed_at": "2018-11-01T11:14:33z",
+            "cargo_count": 2,
+            "cargo_items_attributes": Array [],
+            "cargo_notes": "SHIPMENT_CARGO_NOTES",
+            "cargo_units": Array [
               Object {
-                "hub_route_key": "foo-bar",
+                "dimension_x": 107,
+                "dimension_y": 63,
+                "dimension_z": 67,
+                "quantity": 2,
               },
             ],
+            "clientName": "FOO_FIRST_NAME FOO_LAST_NAME",
+            "companyName": "FOO_COMPANY_NAME",
+            "containers_attributes": Array [],
+            "delivery_address": "SHIPMENT_DELIVERY_ADDRESS",
+            "destination": Object {
+              "fullAddress": "SHIPMENT_DESTINATION_FULL_ADDRESS",
+            },
+            "destination_hub": Object {
+              "name": "SHIPMENT_DESTINATION_HUB",
+              "startHub": Object {
+                "address": Object {},
+              },
+            },
+            "direction": "import",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "id": 654,
+            "imc_reference": "SHIPMENT_IMC_REFERENCE",
+            "incoterm": "SHIPMENT_INCOTERM",
+            "incoterm_text": "SHIPMENT_INCOTERM_TEXT",
+            "load_type": "cargo_item",
+            "notes": "SHIPMENT_NOTES",
+            "origin": Object {
+              "fullAddress": "SHIPMENT_ORIGIN_FULL_ADDRESS",
+            },
+            "origin_hub": Object {
+              "name": "SHIPMENT_ORIGIN_HUB",
+              "startHub": Object {
+                "address": Object {
+                  "city": "FOO_ADDRESS_CITY",
+                  "country": "FOO_ADDRESS_COUNTRY",
+                  "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_ADDRESS_STREET",
+                  "streetNumber": "FOO_ADDRESS_STREET_NUMBER",
+                  "user": Object {
+                    "primary": true,
+                  },
+                  "zipCode": "FOO_ADDRESS_ZIP_CODE",
+                },
+              },
+            },
+            "pickup_address": "SHIPMENT_PICKUP_ADDRESS",
+            "planned_eta": "2018-12-01T18:14:33z",
+            "planned_etd": "2018-11-12T12:37:08z",
+            "planned_origin_drop_off_date": "2018-12-01T22:14:33z",
+            "planned_pickup_date": "2018-12-08T04:30:08z",
+            "schedule_set": Array [
+              Object {
+                "hub_route_key": "SHIPMENT_SCHEDULE_SET_HUB_ROUTE_KEY",
+              },
+            ],
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "customs": Object {
+                "hasUnknown": false,
+                "val": 12,
+              },
+              "insurance": Object {
+                "val": 5,
+              },
+              "total": Object {
+                "value": 87,
+              },
+            },
+            "service_level": "standard",
+            "status": "finished",
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 150000,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 137550,
+            },
+            "trucking": Object {
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 28,
+              },
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+            "updated_at": "2018-11-01T18:14:33z",
           },
         ]
       }
+      t={[Function]}
       theme={
         Object {
           "colors": Object {
@@ -546,11 +800,14 @@ exports[`state.editBool is true 1`] = `
       address={[Function]}
       client={
         Object {
-          "first_name": "John",
-          "last_name": "Doe",
+          "company_name": "FOO_COMPANY_NAME",
+          "email": "FOO_EMAIL@mehr.de",
+          "first_name": "FOO_FIRST_NAME",
+          "last_name": "FOO_LAST_NAME",
+          "primary": 2,
         }
       }
-      key="RANDOM_KEY_3"
+      key="UUID_MOCK_KEY_2"
       showDelete={false}
       t={[Function]}
       theme={

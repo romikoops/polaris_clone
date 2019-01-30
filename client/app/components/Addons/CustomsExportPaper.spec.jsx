@@ -1,18 +1,18 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { tenant } from '../../mocks'
+import { tenant, documents } from '../../mocks'
 
 import CustomsExportPaper from './CustomsExportPaper'
 
 const propsBase = {
-  tenant,
   addon: {
     fees: { total: 100 }
   },
-  toggleCustomAddon: jest.fn(),
-  documents: {},
   deleteDoc: false,
-  fileFn: false
+  documents,
+  fileFn: false,
+  tenant,
+  toggleCustomAddon: jest.fn()
 }
 
 test('shallow render', () => {

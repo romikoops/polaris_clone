@@ -2,17 +2,17 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { identity } from '../../mocks'
 
+import FormsyTextarea from './FormsyTextarea'
+
 jest.mock('formsy-react', () => ({
   withFormsy: x => x
 }))
-// eslint-disable-next-line
-import FormsyTextarea from './FormsyTextarea'
 
 const propsBase = {
-  name: 'FOO_NAME',
-  className: 'FOO_CLASS_NAME',
+  name: 'NAME',
+  className: 'CLASS_NAME',
   disabled: false,
-  type: 'FOO_TYPE',
+  type: 'TYPE',
   isValid: identity,
   getErrorMessage: identity,
   setValue: identity,
@@ -21,11 +21,11 @@ const propsBase = {
   onFocus: identity,
   rows: 3,
   onBlur: identity,
-  placeholder: 'FOO_PLACEHOLDER',
-  id: 'FOO_ID',
+  placeholder: 'PLACEHOLDER',
+  id: 'ID',
   onChange: identity,
   errorMessageStyles: {},
-  wrapperClassName: 'FOO_WRAPPER_CLASS_NAME'
+  wrapperClassName: 'WRAPPER_CLASSNAME'
 }
 
 test('shallow render', () => {
@@ -36,6 +36,14 @@ test('submitAttempted is true', () => {
   const props = {
     ...propsBase,
     submitAttempted: true
+  }
+  expect(shallow(<FormsyTextarea {...props} />)).toMatchSnapshot()
+})
+
+test('rawValue != null', () => {
+  const props = {
+    ...propsBase,
+    getValue: () => 'VALUE'
   }
   expect(shallow(<FormsyTextarea {...props} />)).toMatchSnapshot()
 })

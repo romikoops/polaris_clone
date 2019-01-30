@@ -2,7 +2,7 @@
 
 exports[`shallow render 1`] = `
 Array [
-  <LoginPage />,
+  <Connect(LoginPage) />,
   <hr
     className="toggle_prompt_separator"
   />,
@@ -21,7 +21,3 @@ Array [
   </div>,
 ]
 `;
-
-exports[`translation working on togglePrompt 1`] = `"Register"`;
-
-exports[`translation working on togglePrompt 2`] = `"Log In"`;

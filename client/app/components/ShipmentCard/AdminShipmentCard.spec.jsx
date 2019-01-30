@@ -1,50 +1,68 @@
+import '../../mocks/libraries/moment'
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { shipment, identity, theme, hub } from '../../mocks'
+import {
+  change, shipment, identity, theme
+} from '../../mocks'
 import AdminShipmentCard from './AdminShipmentCard'
-
-jest.mock('uuid', () => {
-  let counter = -1
-  const v4 = () => {
-    counter += 1
-
-    return `RANDOM_KEY_${counter}`
-  }
-
-  return { v4 }
-})
-jest.mock('../../helpers', () => ({
-  gradientGenerator: x => x,
-  splitName: x => x,
-  gradientTextGenerator: x => x,
-  gradientBorderGenerator: x => x,
-  switchIcon: x => x,
-  splitName: x => x,
-  formattedPriceValue: () => 1034,
-  totalPrice: () => ({ currency: 'CNY' }),
-  numberSpacing: x => x,
-  cargoPlurals: x => 'Cargo Item'
-}))
-jest.mock('moment', () => {
-  const format = () => 19
-  const diff = () => 18
-
-  return () => ({
-    format,
-    diff
-  })
-})
-
-shipment.origin_hub = { name: 'FOO_ORIGIN_HUB' }
-shipment.destination_hub = { name: 'FOO_DESTINATION_HUB' }
 
 const propsBase = {
   shipment,
   dispatches: { foo: identity },
   theme,
-  hubs: { foo: hub }
+  hubs: {}
 }
 
 test('shallow rendering', () => {
   expect(shallow(<AdminShipmentCard {...propsBase} />)).toMatchSnapshot()
+})
+
+test('state.confirm is true', () => {
+  const wrapper = shallow(<AdminShipmentCard {...propsBase} />)
+  wrapper.setState({ confirm: true })
+  expect(wrapper).toMatchSnapshot()
+})
+
+test('theme is falsy', () => {
+  const props = {
+    ...propsBase,
+    theme: null
+  }
+  expect(shallow(<AdminShipmentCard {...props} />)).toMatchSnapshot()
+})
+
+test('shipment.has_pre_carriage is true', () => {
+  const props = change(
+    propsBase,
+    'shipment.has_pre_carriage',
+    true
+  )
+  expect(shallow(<AdminShipmentCard {...props} />)).toMatchSnapshot()
+})
+
+test('shipment.has_on_carriage is true', () => {
+  const props = change(
+    propsBase,
+    'shipment.has_on_carriage',
+    true
+  )
+  expect(shallow(<AdminShipmentCard {...props} />)).toMatchSnapshot()
+})
+
+test('shipment.status !== finished', () => {
+  const props = change(
+    propsBase,
+    'shipment.status',
+    'requested'
+  )
+  expect(shallow(<AdminShipmentCard {...props} />)).toMatchSnapshot()
+})
+
+test('shipment.planned_eta is falsy', () => {
+  const props = change(
+    propsBase,
+    'shipment.planned_eta',
+    null
+  )
+  expect(shallow(<AdminShipmentCard {...props} />)).toMatchSnapshot()
 })

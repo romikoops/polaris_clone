@@ -5,14 +5,14 @@ exports[`props.nextStageAttempt is true 1`] = `
   className="wrapper_input"
 >
   <input
-    className="FOO_CLASSNAME"
+    className="CLASSNAME"
     data-hj-whitelist={true}
     disabled={false}
-    min="FOO_MIN"
-    name="FOO_NAME"
+    min="MIN"
+    name="NAME"
     onChange={[Function]}
     onKeyDown={[Function]}
-    placeholder="FOO_PLACEHOLDER"
+    placeholder="PLACEHOLDER"
     style={
       Object {
         "background": "rgba(232, 114, 88, 0.3)",
@@ -23,7 +23,7 @@ exports[`props.nextStageAttempt is true 1`] = `
         "width": "100%",
       }
     }
-    type="FOO_TYPE"
+    type="TYPE"
   />
   <span
     className="error_message"
@@ -37,14 +37,14 @@ exports[`shallow render 1`] = `
   className="wrapper_input"
 >
   <input
-    className="FOO_CLASSNAME"
+    className="CLASSNAME"
     data-hj-whitelist={true}
     disabled={false}
-    min="FOO_MIN"
-    name="FOO_NAME"
+    min="MIN"
+    name="NAME"
     onChange={[Function]}
     onKeyDown={[Function]}
-    placeholder="FOO_PLACEHOLDER"
+    placeholder="PLACEHOLDER"
     style={
       Object {
         "boxSizing": "border-box",
@@ -52,7 +52,7 @@ exports[`shallow render 1`] = `
         "width": "100%",
       }
     }
-    type="FOO_TYPE"
+    type="TYPE"
   />
   <span
     className="error_message"

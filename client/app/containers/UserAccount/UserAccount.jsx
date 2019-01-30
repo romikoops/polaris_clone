@@ -266,7 +266,6 @@ class UserAccount extends Component {
                         theme={theme}
                         user={user}
                         tenant={tenant}
-                        aliases={dashboard.aliases}
                         {...props}
                         addresses={dashboard.addresses}
                         userDispatch={userDispatch}
@@ -282,7 +281,6 @@ class UserAccount extends Component {
                         setCurrentUrl={this.setCurrentUrl}
                         theme={theme}
                         user={user}
-                        aliases={dashboard.aliases}
                         {...props}
                         addresses={dashboard.addresses}
                         userDispatch={userDispatch}

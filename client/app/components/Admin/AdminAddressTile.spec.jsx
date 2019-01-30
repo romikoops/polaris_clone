@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, address } from '../../mocks'
+import { theme, identity, address } from '../../mock'
 
 import AdminAddressTile from './AdminAddressTile'
 

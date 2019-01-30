@@ -1,20 +1,44 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`shallow rendering 1`] = `
+exports[`contactType !== notifyee 1`] = `
 <div
   className="wrapper_form flex-100 layout-row layout-wrap layout-align-center-start"
 >
-  <[object Object]
+  <Formsy
     className="flex-100 layout-row layout-wrap layout-align-start-start"
+    disabled={false}
+    getErrorMessage={[Function]}
+    getErrorMessages={[Function]}
+    getValue={[Function]}
+    hasValue={[Function]}
+    isFormDisabled={[Function]}
+    isFormSubmitted={[Function]}
+    isPristine={[Function]}
+    isRequired={[Function]}
+    isValid={[Function]}
+    isValidValue={[Function]}
     mapping={[Function]}
     name="form"
+    onChange={[Function]}
+    onError={[Function]}
+    onInvalid={[Function]}
     onInvalidSubmit={[Function]}
+    onReset={[Function]}
+    onSubmit={[Function]}
+    onValid={[Function]}
     onValidSubmit={[Function]}
+    preventExternalInvalidation={false}
+    resetValue={[Function]}
+    setValidations={[Function]}
+    setValue={[Function]}
+    showError={[Function]}
+    showRequired={[Function]}
     style={
       Object {
         "padding": "8px 20px",
       }
     }
+    validationErrors={null}
   >
     <div
       className="flex layout-row"
@@ -54,7 +78,7 @@ exports[`shallow rendering 1`] = `
           iconClass=""
           inverse={false}
           size="small"
-          text="Set "
+          text="Set foo"
           theme={
             Object {
               "colors": Object {
@@ -75,6 +99,186 @@ exports[`shallow rendering 1`] = `
         }
       }
     />
-  </[object Object]>
+  </Formsy>
+</div>
+`;
+
+exports[`shallow rendering 1`] = `
+<div
+  className="wrapper_form flex-100 layout-row layout-wrap layout-align-center-start"
+>
+  <Formsy
+    className="flex-100 layout-row layout-wrap layout-align-start-start"
+    disabled={false}
+    getErrorMessage={[Function]}
+    getErrorMessages={[Function]}
+    getValue={[Function]}
+    hasValue={[Function]}
+    isFormDisabled={[Function]}
+    isFormSubmitted={[Function]}
+    isPristine={[Function]}
+    isRequired={[Function]}
+    isValid={[Function]}
+    isValidValue={[Function]}
+    mapping={[Function]}
+    name="form"
+    onChange={[Function]}
+    onError={[Function]}
+    onInvalid={[Function]}
+    onInvalidSubmit={[Function]}
+    onReset={[Function]}
+    onSubmit={[Function]}
+    onValid={[Function]}
+    onValidSubmit={[Function]}
+    preventExternalInvalidation={false}
+    resetValue={[Function]}
+    setValidations={[Function]}
+    setValue={[Function]}
+    showError={[Function]}
+    showRequired={[Function]}
+    style={
+      Object {
+        "padding": "8px 20px",
+      }
+    }
+    validationErrors={null}
+  >
+    <div
+      className="flex-100 layout-row"
+    >
+      <CompanyDetailsSection
+        checkValid={[Function]}
+        contactData={Object {}}
+        handleInputChange={[Function]}
+        setContactAttempted={false}
+        showEdit={false}
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center-center"
+    >
+      <RoundButton
+        active={true}
+        back={false}
+        classNames=""
+        disabled={false}
+        flexContainer="100"
+        handleDisabled={null}
+        handleNext={null}
+        icon=""
+        iconClass=""
+        inverse={false}
+        size="small"
+        text="Add notifyee"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </Formsy>
+</div>
+`;
+
+exports[`showEdit is true 1`] = `
+<div
+  className="wrapper_form flex-100 layout-row layout-wrap layout-align-center-start"
+>
+  <Formsy
+    className="flex-100 layout-row layout-wrap layout-align-start-start"
+    disabled={false}
+    getErrorMessage={[Function]}
+    getErrorMessages={[Function]}
+    getValue={[Function]}
+    hasValue={[Function]}
+    isFormDisabled={[Function]}
+    isFormSubmitted={[Function]}
+    isPristine={[Function]}
+    isRequired={[Function]}
+    isValid={[Function]}
+    isValidValue={[Function]}
+    mapping={[Function]}
+    name="form"
+    onChange={[Function]}
+    onError={[Function]}
+    onInvalid={[Function]}
+    onInvalidSubmit={[Function]}
+    onReset={[Function]}
+    onSubmit={[Function]}
+    onValid={[Function]}
+    onValidSubmit={[Function]}
+    preventExternalInvalidation={false}
+    resetValue={[Function]}
+    setValidations={[Function]}
+    setValue={[Function]}
+    showError={[Function]}
+    showRequired={[Function]}
+    style={
+      Object {
+        "padding": "8px 20px",
+      }
+    }
+    validationErrors={null}
+  >
+    <div
+      className="flex-100 layout-row"
+    >
+      <CompanyDetailsSection
+        checkValid={[Function]}
+        contactData={Object {}}
+        handleInputChange={[Function]}
+        setContactAttempted={false}
+        showEdit={true}
+        t={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center-center"
+    >
+      <RoundButton
+        active={true}
+        back={false}
+        classNames=""
+        disabled={false}
+        flexContainer="100"
+        handleDisabled={null}
+        handleNext={null}
+        icon=""
+        iconClass=""
+        inverse={false}
+        size="small"
+        text="Set notifyee"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </Formsy>
 </div>
 `;

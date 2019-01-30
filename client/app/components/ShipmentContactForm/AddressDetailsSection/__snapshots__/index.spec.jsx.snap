@@ -80,7 +80,7 @@ exports[`shallow rendering 1`] = `
             }
           }
           validations="minLength:2"
-          value="FOO_STREET"
+          value="FOO_ADDRESS_STREET"
           wrapperClassName="wrapper_input flex-75"
         />
         <Formsy(FormsyInput)
@@ -104,7 +104,7 @@ exports[`shallow rendering 1`] = `
             }
           }
           validations={null}
-          value={579}
+          value="FOO_ADDRESS_STREET_NUMBER"
           wrapperClassName="wrapper_input offset-5 flex-15"
         />
       </div>
@@ -133,7 +133,7 @@ exports[`shallow rendering 1`] = `
             }
           }
           validations="minLength:2"
-          value="FOO_CITY"
+          value="FOO_ADDRESS_CITY"
           wrapperClassName="wrapper_input flex-95"
         />
       </div>
@@ -162,7 +162,7 @@ exports[`shallow rendering 1`] = `
             }
           }
           validations="minLength:4"
-          value="22456"
+          value="FOO_ADDRESS_ZIP_CODE"
           wrapperClassName="wrapper_input flex-40"
         />
         <Formsy(FormsyInput)
@@ -187,7 +187,7 @@ exports[`shallow rendering 1`] = `
             }
           }
           validations="minLength:3"
-          value="Germany"
+          value="FOO_ADDRESS_COUNTRY"
           wrapperClassName="wrapper_input offset-5 flex-50"
         />
       </div>

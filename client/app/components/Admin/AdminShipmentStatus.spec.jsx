@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { change } from '../../mocks'
+import { change } from '../../mock'
 import AdminShipmentStatus from './AdminShipmentStatus'
 
 const propsBase = {

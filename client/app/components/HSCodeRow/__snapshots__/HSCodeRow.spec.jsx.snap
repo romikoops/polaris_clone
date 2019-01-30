@@ -79,7 +79,7 @@ exports[`cargoItems is falsy 1`] = `
             <p
               className="flex-100"
             >
-              177
+              200
                kg
             </p>
           </div>
@@ -94,7 +94,7 @@ exports[`cargoItems is falsy 1`] = `
             <p
               className="flex-100"
             >
-              262
+              250
                kg
             </p>
           </div>
@@ -147,79 +147,24 @@ exports[`cargoItems is falsy 1`] = `
           <div
             className="flex-100 layout-row layout-align-start-center"
           >
-            <NamedAsync
-              autoload={false}
-              classes="flex-50"
-              loadOptions={[Function]}
-              multi={true}
-              name={1}
-              onChange={[Function]}
-              value=""
-            />
             <div
-              className="flex-50 layout-row layout-wrap"
-            />
+              className="input_box_full flex-80 layout-row layout-align-center-center"
+            >
+              <textarea
+                cols="30"
+                id=""
+                name="4"
+                onChange={[Function]}
+                rows="10"
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`cont.dangerousGoods is true 1`] = `
-<div
-  className="layout-row flex-100 layout-wrap layout-align-start-center"
->
-  <div
-    className="layout-row flex-none layout-wrap layout-align-start-center"
-  >
-    <div
-      className="layout-row flex-100 layout-wrap layout-align-start-center"
-    >
-      <div
-        className="layout-row flex-100 layout-align-start-center"
-      >
-        <div
-          className="flex-none"
-        >
-          <TextHeading
-            color=""
-            size={2}
-            text="HS Codes"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-          />
-        </div>
-        <Tooltip
-          color=""
-          icon="fa-info-circle"
-          text="hs_code"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-          toolText=""
-        />
-      </div>
-      <div
-        className="layout-row flex-100 layout-wrap"
-      >
         <div
           className="flex-100 layout-row layout-wrap container_row"
           style={
             Object {
-              "zIndex": "200",
+              "zIndex": "199",
             }
           }
         >
@@ -246,7 +191,7 @@ exports[`cont.dangerousGoods is true 1`] = `
             <p
               className="flex-100"
             >
-              177
+              450
                kg
             </p>
           </div>
@@ -261,154 +206,12 @@ exports[`cont.dangerousGoods is true 1`] = `
             <p
               className="flex-100"
             >
-              262
+              457
                kg
             </p>
           </div>
           <div
             className="flex-10 layout-row layout-align-start-center layout-wrap"
-          >
-            <p
-              className="flex-100 cell_header"
-            >
-              Dangerous Goods
-              : 
-            </p>
-            <p
-              className="flex-100"
-            >
-              Yes
-            </p>
-          </div>
-          <div
-            className="flex-15 layout-row layout-align-start-center layout-wrap"
-          >
-            <p
-              className="flex-100 cell_header"
-            >
-              Copy/Paste: 
-            </p>
-            <div
-              className="flex-100 layout-row"
-              style={
-                Object {
-                  "margin": "1em 0",
-                }
-              }
-            >
-              <div
-                className="flex-50 layout-row layout-align-center-center"
-                onClick={[Function]}
-              >
-                <i
-                  className="fa fa-clone clip"
-                  style={
-                    Object {
-                      "background": "-webkit-linear-gradient(left, #333,#fafafa)",
-                    }
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div
-            className="flex-100 layout-row layout-align-start-center"
-          >
-            <NamedAsync
-              autoload={false}
-              classes="flex-50"
-              loadOptions={[Function]}
-              multi={true}
-              name={1}
-              onChange={[Function]}
-              value=""
-            />
-            <div
-              className="flex-50 layout-row layout-wrap"
-            />
-          </div>
-        </div>
-        <div
-          className="flex-100 layout-row layout-wrap container_row"
-          key="0"
-          style={
-            Object {
-              "zIndex": "200",
-            }
-          }
-        >
-          <div
-            className="flex-10 layout-row layout-align-center-center layout-wrap"
-          >
-            <p
-              className="flex-100 cell_header"
-            >
-              Cargo Group
-            </p>
-            <p
-              className="flex-100"
-            >
-              1
-            </p>
-          </div>
-          <div
-            className="flex-15 layout-row layout-align-center-center layout-wrap"
-          >
-            <p
-              className="flex-100 cell_header"
-            >
-              Payload
-            </p>
-            <p
-              className="flex-100"
-            >
-               kg
-            </p>
-          </div>
-          <div
-            className="flex-15 layout-row layout-align-center-center layout-wrap"
-          >
-            <p
-              className="flex-100 cell_header"
-            >
-              Depth
-            </p>
-            <p
-              className="flex-100"
-            >
-               cm
-            </p>
-          </div>
-          <div
-            className="flex-15 layout-row layout-align-center-center layout-wrap"
-          >
-            <p
-              className="flex-100 cell_header"
-            >
-              Width
-            </p>
-            <p
-              className="flex-100"
-            >
-               cm
-            </p>
-          </div>
-          <div
-            className="flex-15 layout-row layout-align-center-center layout-wrap"
-          >
-            <p
-              className="flex-100 cell_header"
-            >
-              Height
-            </p>
-            <p
-              className="flex-100"
-            >
-               cm
-            </p>
-          </div>
-          <div
-            className="flex-15 layout-row layout-align-center-center layout-wrap"
           >
             <p
               className="flex-100 cell_header"
@@ -429,7 +232,6 @@ exports[`cont.dangerousGoods is true 1`] = `
               className="flex-100 cell_header"
             >
               Copy/Paste: 
-               
             </p>
             <div
               className="flex-100 layout-row"
@@ -452,36 +254,22 @@ exports[`cont.dangerousGoods is true 1`] = `
                   }
                 />
               </div>
-              <div
-                className="flex-50 layout-row layout-align-center-center"
-                onClick={[Function]}
-              >
-                <i
-                  className="fa fa-clipboard clip"
-                  style={
-                    Object {
-                      "background": "-webkit-linear-gradient(left, #333,#fafafa)",
-                    }
-                  }
-                />
-              </div>
             </div>
           </div>
           <div
             className="flex-100 layout-row layout-align-start-center"
           >
-            <NamedAsync
-              autoload={false}
-              classes="flex-50"
-              loadOptions={[Function]}
-              multi={true}
-              name={9}
-              onChange={[Function]}
-              value=""
-            />
             <div
-              className="flex-50 layout-row layout-wrap"
-            />
+              className="input_box_full flex-80 layout-row layout-align-center-center"
+            >
+              <textarea
+                cols="30"
+                id=""
+                name="5"
+                onChange={[Function]}
+                rows="10"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -572,6 +360,7 @@ exports[`containers is falsy 1`] = `
             <p
               className="flex-100"
             >
+              200
                kg
             </p>
           </div>
@@ -586,6 +375,7 @@ exports[`containers is falsy 1`] = `
             <p
               className="flex-100"
             >
+              60
                cm
             </p>
           </div>
@@ -600,6 +390,7 @@ exports[`containers is falsy 1`] = `
             <p
               className="flex-100"
             >
+              10
                cm
             </p>
           </div>
@@ -614,6 +405,7 @@ exports[`containers is falsy 1`] = `
             <p
               className="flex-100"
             >
+              40
                cm
             </p>
           </div>
@@ -680,18 +472,342 @@ exports[`containers is falsy 1`] = `
           <div
             className="flex-100 layout-row layout-align-start-center"
           >
-            <NamedAsync
-              autoload={false}
-              classes="flex-50"
-              loadOptions={[Function]}
-              multi={true}
-              name={9}
-              onChange={[Function]}
-              value=""
-            />
             <div
-              className="flex-50 layout-row layout-wrap"
+              className="input_box_full flex-80 layout-row layout-align-center-center"
+            >
+              <textarea
+                cols="30"
+                id=""
+                name="undefined"
+                onChange={[Function]}
+                rows="10"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`dangerousGoods is true 1`] = `
+<div
+  className="layout-row flex-100 layout-wrap layout-align-start-center"
+>
+  <div
+    className="layout-row flex-none layout-wrap layout-align-start-center"
+  >
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-start-center"
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center"
+      >
+        <div
+          className="flex-none"
+        >
+          <TextHeading
+            color=""
+            size={2}
+            text="HS Codes"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+        <Tooltip
+          color=""
+          icon="fa-info-circle"
+          text="hs_code"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          toolText=""
+        />
+      </div>
+      <div
+        className="layout-row flex-100 layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-wrap container_row"
+          style={
+            Object {
+              "zIndex": "200",
+            }
+          }
+        >
+          <div
+            className="flex-15 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+               Container Size
+            </p>
+            <p
+              className="flex-100"
             />
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Net Weight
+            </p>
+            <p
+              className="flex-100"
+            >
+              200
+               kg
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Gross Weight
+            </p>
+            <p
+              className="flex-100"
+            >
+              250
+               kg
+            </p>
+          </div>
+          <div
+            className="flex-10 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Dangerous Goods
+              : 
+            </p>
+            <p
+              className="flex-100"
+            >
+              Yes
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Copy/Paste: 
+            </p>
+            <div
+              className="flex-100 layout-row"
+              style={
+                Object {
+                  "margin": "1em 0",
+                }
+              }
+            >
+              <div
+                className="flex-50 layout-row layout-align-center-center"
+                onClick={[Function]}
+              >
+                <i
+                  className="fa fa-clone clip"
+                  style={
+                    Object {
+                      "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <div
+              className="input_box_full flex-80 layout-row layout-align-center-center"
+            >
+              <textarea
+                cols="30"
+                id=""
+                name="4"
+                onChange={[Function]}
+                rows="10"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap container_row"
+          key="0"
+          style={
+            Object {
+              "zIndex": "200",
+            }
+          }
+        >
+          <div
+            className="flex-10 layout-row layout-align-center-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Cargo Group
+            </p>
+            <p
+              className="flex-100"
+            >
+              1
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-center-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Payload
+            </p>
+            <p
+              className="flex-100"
+            >
+              200
+               kg
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-center-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Depth
+            </p>
+            <p
+              className="flex-100"
+            >
+              60
+               cm
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-center-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Width
+            </p>
+            <p
+              className="flex-100"
+            >
+              10
+               cm
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-center-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Height
+            </p>
+            <p
+              className="flex-100"
+            >
+              40
+               cm
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-center-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Dangerous Goods
+              : 
+            </p>
+            <p
+              className="flex-100"
+            >
+              No
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Copy/Paste: 
+               
+            </p>
+            <div
+              className="flex-100 layout-row"
+              style={
+                Object {
+                  "margin": "1em 0",
+                }
+              }
+            >
+              <div
+                className="flex-50 layout-row layout-align-center-center"
+                onClick={[Function]}
+              >
+                <i
+                  className="fa fa-clone clip"
+                  style={
+                    Object {
+                      "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-50 layout-row layout-align-center-center"
+                onClick={[Function]}
+              >
+                <i
+                  className="fa fa-clipboard clip"
+                  style={
+                    Object {
+                      "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <div
+              className="input_box_full flex-80 layout-row layout-align-center-center"
+            >
+              <textarea
+                cols="30"
+                id=""
+                name="undefined"
+                onChange={[Function]}
+                rows="10"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -779,7 +895,7 @@ exports[`shallow render 1`] = `
             <p
               className="flex-100"
             >
-              177
+              200
                kg
             </p>
           </div>
@@ -794,7 +910,7 @@ exports[`shallow render 1`] = `
             <p
               className="flex-100"
             >
-              262
+              250
                kg
             </p>
           </div>
@@ -847,18 +963,129 @@ exports[`shallow render 1`] = `
           <div
             className="flex-100 layout-row layout-align-start-center"
           >
-            <NamedAsync
-              autoload={false}
-              classes="flex-50"
-              loadOptions={[Function]}
-              multi={true}
-              name={1}
-              onChange={[Function]}
-              value=""
-            />
             <div
-              className="flex-50 layout-row layout-wrap"
+              className="input_box_full flex-80 layout-row layout-align-center-center"
+            >
+              <textarea
+                cols="30"
+                id=""
+                name="4"
+                onChange={[Function]}
+                rows="10"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap container_row"
+          style={
+            Object {
+              "zIndex": "199",
+            }
+          }
+        >
+          <div
+            className="flex-15 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+               Container Size
+            </p>
+            <p
+              className="flex-100"
             />
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Net Weight
+            </p>
+            <p
+              className="flex-100"
+            >
+              450
+               kg
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Gross Weight
+            </p>
+            <p
+              className="flex-100"
+            >
+              457
+               kg
+            </p>
+          </div>
+          <div
+            className="flex-10 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Dangerous Goods
+              : 
+            </p>
+            <p
+              className="flex-100"
+            >
+              No
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Copy/Paste: 
+            </p>
+            <div
+              className="flex-100 layout-row"
+              style={
+                Object {
+                  "margin": "1em 0",
+                }
+              }
+            >
+              <div
+                className="flex-50 layout-row layout-align-center-center"
+                onClick={[Function]}
+              >
+                <i
+                  className="fa fa-clone clip"
+                  style={
+                    Object {
+                      "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <div
+              className="input_box_full flex-80 layout-row layout-align-center-center"
+            >
+              <textarea
+                cols="30"
+                id=""
+                name="5"
+                onChange={[Function]}
+                rows="10"
+              />
+            </div>
           </div>
         </div>
         <div
@@ -895,6 +1122,7 @@ exports[`shallow render 1`] = `
             <p
               className="flex-100"
             >
+              200
                kg
             </p>
           </div>
@@ -909,6 +1137,7 @@ exports[`shallow render 1`] = `
             <p
               className="flex-100"
             >
+              60
                cm
             </p>
           </div>
@@ -923,6 +1152,7 @@ exports[`shallow render 1`] = `
             <p
               className="flex-100"
             >
+              10
                cm
             </p>
           </div>
@@ -937,6 +1167,7 @@ exports[`shallow render 1`] = `
             <p
               className="flex-100"
             >
+              40
                cm
             </p>
           </div>
@@ -1003,18 +1234,17 @@ exports[`shallow render 1`] = `
           <div
             className="flex-100 layout-row layout-align-start-center"
           >
-            <NamedAsync
-              autoload={false}
-              classes="flex-50"
-              loadOptions={[Function]}
-              multi={true}
-              name={9}
-              onChange={[Function]}
-              value=""
-            />
             <div
-              className="flex-50 layout-row layout-wrap"
-            />
+              className="input_box_full flex-80 layout-row layout-align-center-center"
+            >
+              <textarea
+                cols="30"
+                id=""
+                name="undefined"
+                onChange={[Function]}
+                rows="10"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -1102,7 +1332,7 @@ exports[`state.showPaste is true 1`] = `
             <p
               className="flex-100"
             >
-              177
+              200
                kg
             </p>
           </div>
@@ -1117,7 +1347,7 @@ exports[`state.showPaste is true 1`] = `
             <p
               className="flex-100"
             >
-              262
+              250
                kg
             </p>
           </div>
@@ -1133,7 +1363,7 @@ exports[`state.showPaste is true 1`] = `
             <p
               className="flex-100"
             >
-              No
+              Yes
             </p>
           </div>
           <div
@@ -1183,18 +1413,17 @@ exports[`state.showPaste is true 1`] = `
           <div
             className="flex-100 layout-row layout-align-start-center"
           >
-            <NamedAsync
-              autoload={false}
-              classes="flex-50"
-              loadOptions={[Function]}
-              multi={true}
-              name={1}
-              onChange={[Function]}
-              value=""
-            />
             <div
-              className="flex-50 layout-row layout-wrap"
-            />
+              className="input_box_full flex-80 layout-row layout-align-center-center"
+            >
+              <textarea
+                cols="30"
+                id=""
+                name="4"
+                onChange={[Function]}
+                rows="10"
+              />
+            </div>
           </div>
         </div>
         <div
@@ -1231,6 +1460,7 @@ exports[`state.showPaste is true 1`] = `
             <p
               className="flex-100"
             >
+              200
                kg
             </p>
           </div>
@@ -1245,6 +1475,7 @@ exports[`state.showPaste is true 1`] = `
             <p
               className="flex-100"
             >
+              60
                cm
             </p>
           </div>
@@ -1259,6 +1490,7 @@ exports[`state.showPaste is true 1`] = `
             <p
               className="flex-100"
             >
+              10
                cm
             </p>
           </div>
@@ -1273,6 +1505,466 @@ exports[`state.showPaste is true 1`] = `
             <p
               className="flex-100"
             >
+              40
+               cm
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-center-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Dangerous Goods
+              : 
+            </p>
+            <p
+              className="flex-100"
+            >
+              No
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Copy/Paste: 
+               
+            </p>
+            <div
+              className="flex-100 layout-row"
+              style={
+                Object {
+                  "margin": "1em 0",
+                }
+              }
+            >
+              <div
+                className="flex-50 layout-row layout-align-center-center"
+                onClick={[Function]}
+              >
+                <i
+                  className="fa fa-clone clip"
+                  style={
+                    Object {
+                      "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-50 layout-row layout-align-center-center"
+                onClick={[Function]}
+              >
+                <i
+                  className="fa fa-clipboard clip"
+                  style={
+                    Object {
+                      "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <div
+              className="input_box_full flex-80 layout-row layout-align-center-center"
+            >
+              <textarea
+                cols="30"
+                id=""
+                name="undefined"
+                onChange={[Function]}
+                rows="10"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`textInputBool is false 1`] = `
+<div
+  className="layout-row flex-100 layout-wrap layout-align-start-center"
+>
+  <div
+    className="layout-row flex-none layout-wrap layout-align-start-center"
+  >
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-start-center"
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center"
+      >
+        <div
+          className="flex-none"
+        >
+          <TextHeading
+            color=""
+            size={2}
+            text="HS Codes"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+        <Tooltip
+          color=""
+          icon="fa-info-circle"
+          text="hs_code"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          toolText=""
+        />
+      </div>
+      <div
+        className="layout-row flex-100 layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-wrap container_row"
+          style={
+            Object {
+              "zIndex": "200",
+            }
+          }
+        >
+          <div
+            className="flex-15 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+               Container Size
+            </p>
+            <p
+              className="flex-100"
+            />
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Net Weight
+            </p>
+            <p
+              className="flex-100"
+            >
+              200
+               kg
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Gross Weight
+            </p>
+            <p
+              className="flex-100"
+            >
+              250
+               kg
+            </p>
+          </div>
+          <div
+            className="flex-10 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Dangerous Goods
+              : 
+            </p>
+            <p
+              className="flex-100"
+            >
+              No
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Copy/Paste: 
+            </p>
+            <div
+              className="flex-100 layout-row"
+              style={
+                Object {
+                  "margin": "1em 0",
+                }
+              }
+            >
+              <div
+                className="flex-50 layout-row layout-align-center-center"
+                onClick={[Function]}
+              >
+                <i
+                  className="fa fa-clone clip"
+                  style={
+                    Object {
+                      "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <NamedAsync
+              autoload={false}
+              classes="flex-50"
+              loadOptions={[Function]}
+              multi={true}
+              name={4}
+              onChange={[Function]}
+              value=""
+            />
+            <div
+              className="flex-50 layout-row layout-wrap"
+            >
+              <HSCell
+                cargoId={4}
+                code={
+                  Object {
+                    "text": "HSCODE_TEXT_4",
+                    "value": "HSCODE_VALUE_4",
+                  }
+                }
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap container_row"
+          style={
+            Object {
+              "zIndex": "199",
+            }
+          }
+        >
+          <div
+            className="flex-15 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+               Container Size
+            </p>
+            <p
+              className="flex-100"
+            />
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Net Weight
+            </p>
+            <p
+              className="flex-100"
+            >
+              450
+               kg
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Gross Weight
+            </p>
+            <p
+              className="flex-100"
+            >
+              457
+               kg
+            </p>
+          </div>
+          <div
+            className="flex-10 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Dangerous Goods
+              : 
+            </p>
+            <p
+              className="flex-100"
+            >
+              No
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Copy/Paste: 
+            </p>
+            <div
+              className="flex-100 layout-row"
+              style={
+                Object {
+                  "margin": "1em 0",
+                }
+              }
+            >
+              <div
+                className="flex-50 layout-row layout-align-center-center"
+                onClick={[Function]}
+              >
+                <i
+                  className="fa fa-clone clip"
+                  style={
+                    Object {
+                      "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <NamedAsync
+              autoload={false}
+              classes="flex-50"
+              loadOptions={[Function]}
+              multi={true}
+              name={5}
+              onChange={[Function]}
+              value=""
+            />
+            <div
+              className="flex-50 layout-row layout-wrap"
+            >
+              <HSCell
+                cargoId={5}
+                code={
+                  Object {
+                    "text": "HSCODE_TEXT_5",
+                    "value": "HSCODE_VALUE_5",
+                  }
+                }
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap container_row"
+          key="0"
+          style={
+            Object {
+              "zIndex": "200",
+            }
+          }
+        >
+          <div
+            className="flex-10 layout-row layout-align-center-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Cargo Group
+            </p>
+            <p
+              className="flex-100"
+            >
+              1
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-center-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Payload
+            </p>
+            <p
+              className="flex-100"
+            >
+              200
+               kg
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-center-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Depth
+            </p>
+            <p
+              className="flex-100"
+            >
+              60
+               cm
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-center-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Width
+            </p>
+            <p
+              className="flex-100"
+            >
+              10
+               cm
+            </p>
+          </div>
+          <div
+            className="flex-15 layout-row layout-align-center-center layout-wrap"
+          >
+            <p
+              className="flex-100 cell_header"
+            >
+              Height
+            </p>
+            <p
+              className="flex-100"
+            >
+              40
                cm
             </p>
           </div>
@@ -1344,7 +2036,6 @@ exports[`state.showPaste is true 1`] = `
               classes="flex-50"
               loadOptions={[Function]}
               multi={true}
-              name={9}
               onChange={[Function]}
               value=""
             />
@@ -1424,7 +2115,7 @@ exports[`theme is falsy 1`] = `
             <p
               className="flex-100"
             >
-              177
+              200
                kg
             </p>
           </div>
@@ -1439,7 +2130,7 @@ exports[`theme is falsy 1`] = `
             <p
               className="flex-100"
             >
-              262
+              250
                kg
             </p>
           </div>
@@ -1492,235 +2183,24 @@ exports[`theme is falsy 1`] = `
           <div
             className="flex-100 layout-row layout-align-start-center"
           >
-            <NamedAsync
-              autoload={false}
-              classes="flex-50"
-              loadOptions={[Function]}
-              multi={true}
-              name={1}
-              onChange={[Function]}
-              value=""
-            />
             <div
-              className="flex-50 layout-row layout-wrap"
-            />
-          </div>
-        </div>
-        <div
-          className="flex-100 layout-row layout-wrap container_row"
-          key="0"
-          style={
-            Object {
-              "zIndex": "200",
-            }
-          }
-        >
-          <div
-            className="flex-10 layout-row layout-align-center-center layout-wrap"
-          >
-            <p
-              className="flex-100 cell_header"
+              className="input_box_full flex-80 layout-row layout-align-center-center"
             >
-              Cargo Group
-            </p>
-            <p
-              className="flex-100"
-            >
-              1
-            </p>
-          </div>
-          <div
-            className="flex-15 layout-row layout-align-center-center layout-wrap"
-          >
-            <p
-              className="flex-100 cell_header"
-            >
-              Payload
-            </p>
-            <p
-              className="flex-100"
-            >
-               kg
-            </p>
-          </div>
-          <div
-            className="flex-15 layout-row layout-align-center-center layout-wrap"
-          >
-            <p
-              className="flex-100 cell_header"
-            >
-              Depth
-            </p>
-            <p
-              className="flex-100"
-            >
-               cm
-            </p>
-          </div>
-          <div
-            className="flex-15 layout-row layout-align-center-center layout-wrap"
-          >
-            <p
-              className="flex-100 cell_header"
-            >
-              Width
-            </p>
-            <p
-              className="flex-100"
-            >
-               cm
-            </p>
-          </div>
-          <div
-            className="flex-15 layout-row layout-align-center-center layout-wrap"
-          >
-            <p
-              className="flex-100 cell_header"
-            >
-              Height
-            </p>
-            <p
-              className="flex-100"
-            >
-               cm
-            </p>
-          </div>
-          <div
-            className="flex-15 layout-row layout-align-center-center layout-wrap"
-          >
-            <p
-              className="flex-100 cell_header"
-            >
-              Dangerous Goods
-              : 
-            </p>
-            <p
-              className="flex-100"
-            >
-              No
-            </p>
-          </div>
-          <div
-            className="flex-15 layout-row layout-align-start-center layout-wrap"
-          >
-            <p
-              className="flex-100 cell_header"
-            >
-              Copy/Paste: 
-               
-            </p>
-            <div
-              className="flex-100 layout-row"
-              style={
-                Object {
-                  "margin": "1em 0",
-                }
-              }
-            >
-              <div
-                className="flex-50 layout-row layout-align-center-center"
-                onClick={[Function]}
-              >
-                <i
-                  className="fa fa-clone clip"
-                  style={
-                    Object {
-                      "background": "black",
-                    }
-                  }
-                />
-              </div>
-              <div
-                className="flex-50 layout-row layout-align-center-center"
-                onClick={[Function]}
-              >
-                <i
-                  className="fa fa-clipboard clip"
-                  style={
-                    Object {
-                      "background": "black",
-                    }
-                  }
-                />
-              </div>
+              <textarea
+                cols="30"
+                id=""
+                name="4"
+                onChange={[Function]}
+                rows="10"
+              />
             </div>
           </div>
-          <div
-            className="flex-100 layout-row layout-align-start-center"
-          >
-            <NamedAsync
-              autoload={false}
-              classes="flex-50"
-              loadOptions={[Function]}
-              multi={true}
-              name={9}
-              onChange={[Function]}
-              value=""
-            />
-            <div
-              className="flex-50 layout-row layout-wrap"
-            />
-          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`variable textInputBool is true 1`] = `
-<div
-  className="layout-row flex-100 layout-wrap layout-align-start-center"
->
-  <div
-    className="layout-row flex-none layout-wrap layout-align-start-center"
-  >
-    <div
-      className="layout-row flex-100 layout-wrap layout-align-start-center"
-    >
-      <div
-        className="layout-row flex-100 layout-align-start-center"
-      >
-        <div
-          className="flex-none"
-        >
-          <TextHeading
-            color=""
-            size={2}
-            text="HS Codes"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-          />
-        </div>
-        <Tooltip
-          color=""
-          icon="fa-info-circle"
-          text="hs_code"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-          toolText=""
-        />
-      </div>
-      <div
-        className="layout-row flex-100 layout-wrap"
-      >
         <div
           className="flex-100 layout-row layout-wrap container_row"
           style={
             Object {
-              "zIndex": "200",
+              "zIndex": "199",
             }
           }
         >
@@ -1747,7 +2227,7 @@ exports[`variable textInputBool is true 1`] = `
             <p
               className="flex-100"
             >
-              177
+              450
                kg
             </p>
           </div>
@@ -1762,7 +2242,7 @@ exports[`variable textInputBool is true 1`] = `
             <p
               className="flex-100"
             >
-              262
+              457
                kg
             </p>
           </div>
@@ -1805,7 +2285,7 @@ exports[`variable textInputBool is true 1`] = `
                   className="fa fa-clone clip"
                   style={
                     Object {
-                      "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                      "background": "black",
                     }
                   }
                 />
@@ -1821,7 +2301,7 @@ exports[`variable textInputBool is true 1`] = `
               <textarea
                 cols="30"
                 id=""
-                name="1"
+                name="5"
                 onChange={[Function]}
                 rows="10"
               />
@@ -1862,6 +2342,7 @@ exports[`variable textInputBool is true 1`] = `
             <p
               className="flex-100"
             >
+              200
                kg
             </p>
           </div>
@@ -1876,6 +2357,7 @@ exports[`variable textInputBool is true 1`] = `
             <p
               className="flex-100"
             >
+              60
                cm
             </p>
           </div>
@@ -1890,6 +2372,7 @@ exports[`variable textInputBool is true 1`] = `
             <p
               className="flex-100"
             >
+              10
                cm
             </p>
           </div>
@@ -1904,6 +2387,7 @@ exports[`variable textInputBool is true 1`] = `
             <p
               className="flex-100"
             >
+              40
                cm
             </p>
           </div>
@@ -1947,7 +2431,7 @@ exports[`variable textInputBool is true 1`] = `
                   className="fa fa-clone clip"
                   style={
                     Object {
-                      "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                      "background": "black",
                     }
                   }
                 />
@@ -1960,7 +2444,7 @@ exports[`variable textInputBool is true 1`] = `
                   className="fa fa-clipboard clip"
                   style={
                     Object {
-                      "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                      "background": "black",
                     }
                   }
                 />
@@ -1976,7 +2460,7 @@ exports[`variable textInputBool is true 1`] = `
               <textarea
                 cols="30"
                 id=""
-                name="9"
+                name="undefined"
                 onChange={[Function]}
                 rows="10"
               />

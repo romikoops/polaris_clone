@@ -1,6 +1,59 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`shallow render 1`] = `
+exports[`when level is alert 1`] = `
+<GreyBox
+  borderStyle="alert_border_style"
+  content={
+    <div
+      className="note_card flex-none layout-wrap layout-align-center"
+    >
+      <div
+        className="note_route flex-100 layout-row layout-align-start-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <div
+            className="button alert flex-none layout-row layout-align-center-center pointy"
+          >
+            <i
+              className="fa fa-bell flex-none"
+            />
+          </div>
+          <span
+            className="flex-90"
+          >
+            HEADER
+          </span>
+          <i
+            className="fa fa-trash pointy flex-10"
+            onClick={[Function]}
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-95"
+        />
+      </div>
+    </div>
+  }
+  contentClassName=""
+  flex="30"
+  flexGtLg={0}
+  flexMd={0}
+  fullWidth={false}
+  isBox={false}
+  padding={false}
+  title=""
+  titleAction={false}
+  wrapperClassName="margin_bottom"
+/>
+`;
+
+exports[`when level is important 1`] = `
 <GreyBox
   borderStyle="important_border_style"
   content={
@@ -23,7 +76,166 @@ exports[`shallow render 1`] = `
           <span
             className="flex-90"
           >
-            FOO_HEADER
+            HEADER
+          </span>
+          <i
+            className="fa fa-trash pointy flex-10"
+            onClick={[Function]}
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-95"
+        />
+      </div>
+    </div>
+  }
+  contentClassName=""
+  flex="30"
+  flexGtLg={0}
+  flexMd={0}
+  fullWidth={false}
+  isBox={false}
+  padding={false}
+  title=""
+  titleAction={false}
+  wrapperClassName="margin_bottom"
+/>
+`;
+
+exports[`when level is notification 1`] = `
+<GreyBox
+  borderStyle="notification_border_style"
+  content={
+    <div
+      className="note_card flex-none layout-wrap layout-align-center"
+    >
+      <div
+        className="note_route flex-100 layout-row layout-align-start-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <div
+            className="button notification flex-none layout-row layout-align-center-center pointy"
+          >
+            <i
+              className="fa fa-flag flex-none"
+            />
+          </div>
+          <span
+            className="flex-90"
+          >
+            HEADER
+          </span>
+          <i
+            className="fa fa-trash pointy flex-10"
+            onClick={[Function]}
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-95"
+        />
+      </div>
+    </div>
+  }
+  contentClassName=""
+  flex="30"
+  flexGtLg={0}
+  flexMd={0}
+  fullWidth={false}
+  isBox={false}
+  padding={false}
+  title=""
+  titleAction={false}
+  wrapperClassName="margin_bottom"
+/>
+`;
+
+exports[`when level is null 1`] = `
+<GreyBox
+  borderStyle="alert_border_style"
+  content={
+    <div
+      className="note_card flex-none layout-wrap layout-align-center"
+    >
+      <div
+        className="note_route flex-100 layout-row layout-align-start-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <div
+            className="button alert flex-none layout-row layout-align-center-center pointy"
+          >
+            <i
+              className="fa fa-bell flex-none"
+            />
+          </div>
+          <span
+            className="flex-90"
+          >
+            HEADER
+          </span>
+          <i
+            className="fa fa-trash pointy flex-10"
+            onClick={[Function]}
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-95"
+        />
+      </div>
+    </div>
+  }
+  contentClassName=""
+  flex="30"
+  flexGtLg={0}
+  flexMd={0}
+  fullWidth={false}
+  isBox={false}
+  padding={false}
+  title=""
+  titleAction={false}
+  wrapperClassName="margin_bottom"
+/>
+`;
+
+exports[`when level is urgent 1`] = `
+<GreyBox
+  borderStyle="urgent_border_style"
+  content={
+    <div
+      className="note_card flex-none layout-wrap layout-align-center"
+    >
+      <div
+        className="note_route flex-100 layout-row layout-align-start-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <div
+            className="button urgent flex-none layout-row layout-align-center-center pointy"
+          >
+            <i
+              className="fa fa-exclamation-triangle flex-none"
+            />
+          </div>
+          <span
+            className="flex-90"
+          >
+            HEADER
           </span>
           <i
             className="fa fa-trash pointy flex-10"

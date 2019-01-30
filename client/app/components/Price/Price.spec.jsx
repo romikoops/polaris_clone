@@ -12,3 +12,11 @@ const propsBase = {
 test('shallow rendering', () => {
   expect(shallow(<Price {...propsBase} />)).toMatchSnapshot()
 })
+
+test('scale is falsy', () => {
+  const props = {
+    ...propsBase,
+    scale: null
+  }
+  expect(shallow(<Price {...props} />)).toMatchSnapshot()
+})

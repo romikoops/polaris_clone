@@ -10,11 +10,11 @@ exports[`shallow rendering 1`] = `
   }
 >
   <AdminNavItem
-    iconClass="FOO_ICON"
-    key="RANDOM_KEY_0"
+    iconClass="ICON"
+    key="UUID_MOCK_KEY_0"
     navFn={[Function]}
-    target="FOO_TARGET"
-    text="FOO_TEXT"
+    target="TARGET"
+    text="TEXT"
     theme={
       Object {
         "colors": Object {
@@ -23,7 +23,8 @@ exports[`shallow rendering 1`] = `
         },
       }
     }
-    url="FOO_URL"
+    tooltip=""
+    url="URL"
   />
 </div>
 `;

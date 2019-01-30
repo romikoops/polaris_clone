@@ -72,6 +72,13 @@ class SideNav extends Component {
         text: t('account:quotes'),
         url: '/account/shipments',
         target: 'shipments'
+      },
+      {
+        key: v4(),
+        icon: 'fa-user',
+        text: t('account:profile'),
+        url: '/account/profile',
+        target: 'profile'
       }
     ]
     this.adminLinks = [

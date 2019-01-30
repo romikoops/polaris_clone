@@ -1,40 +1,34 @@
 import * as React from 'react'
 import { mount, shallow } from 'enzyme'
-import { theme, user, identity } from '../../mocks'
+import {
+  theme, contact, firstAddress, identity, change
+} from '../../mocks'
 
-jest.mock('uuid', () => {
-  let counter = -1
-  const v4 = () => {
-    counter += 1
-
-    return `RANDOM_KEY_${counter}`
-  }
-
-  return { v4 }
-})
-// eslint-disable-next-line
-import ContactCard from './'
-
-const editedUser = {
-  ...user,
-  firstName: user.first_name,
-  lastName: user.last_name
-}
+import ContactCard from '.'
 
 const propsBase = {
   contactData: {
-    contact: editedUser,
-    address: {}
+    contact,
+    address: firstAddress
   },
   theme,
   select: identity,
-  contactType: '',
+  contactType: 'CONTACT_TYPE',
   removeFunc: null,
   popOutHover: false
 }
 
 test('shallow render', () => {
   expect(shallow(<ContactCard {...propsBase} />)).toMatchSnapshot()
+})
+
+test('contactData.address is falsy', () => {
+  const props = change(
+    propsBase,
+    'contactData.address',
+    {}
+  )
+  expect(shallow(<ContactCard {...props} />)).toMatchSnapshot()
 })
 
 test('select is called upon click', () => {

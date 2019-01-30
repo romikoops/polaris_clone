@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, change } from '../../mocks'
+import { theme, identity, change } from '../../mock'
 
 import AdminPriceEditor from './AdminPriceEditor'
 

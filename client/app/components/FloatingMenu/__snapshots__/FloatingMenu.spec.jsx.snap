@@ -38,6 +38,7 @@ exports[`shallow render 1`] = `
               "role": Object {
                 "name": "shipper",
               },
+              "role_id": 1,
             }
           }
         />
@@ -105,6 +106,7 @@ exports[`theme is falsy 1`] = `
               "role": Object {
                 "name": "shipper",
               },
+              "role_id": 1,
             }
           }
         />
