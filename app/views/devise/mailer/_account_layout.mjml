@@ -1,15 +1,18 @@
 <% primary_color = tenant.theme["colors"]["primary"] %>
-<mj-text>
-  <p style="display: none;max-height: 0px;overflow: hidden;">
-    Hello <%= @user.full_name %>, thank you for registering a new account in the <%=tenant.name%> Shop (powered by ItsMyCargo).
-  </p>
-</mj-text>
-<mj-text>
-  <p style="display: none;max-height: 0px;overflow: hidden;">
-    &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
-  </p>
-</mj-text>
-
+<mj-section padding="20px 5%" background-color="#BDBDBD">
+  <mj-column>
+    <mj-text>
+      <p style="display: none;max-height: 0px;overflow: hidden;">
+        Hello <%= @user.full_name %>, thank you for registering a new account in the <%=tenant.name%> Shop (powered by ItsMyCargo).
+      </p>
+    </mj-text>
+    <mj-text>
+      <p style="display: none;max-height: 0px;overflow: hidden;">
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+      </p>
+    </mj-text>
+  </mj-column>
+</mj-section>
 <mj-section padding="20px 5%" background-color="#BDBDBD">
   <mj-column>
     <mj-text>
