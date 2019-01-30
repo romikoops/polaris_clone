@@ -3,8 +3,8 @@
 exports[`selected || !options is false 1`] = `
 <div
   className="flex-none layout-row upload_btn_wrapper "
-  data-for="RANDOM_KEY_6"
-  data-tip="FOO_TOOLTIP"
+  data-for="UUID_MOCK_KEY_6"
+  data-tip="TOOLTIP"
 >
   <div
     className="flex-100 layout-row layout-align-center-center"
@@ -31,8 +31,8 @@ exports[`selected || !options is false 1`] = `
 exports[`shallow render 1`] = `
 <div
   className="flex-none layout-row upload_btn_wrapper "
-  data-for="RANDOM_KEY_0"
-  data-tip="FOO_TOOLTIP"
+  data-for="UUID_MOCK_KEY_0"
+  data-tip="TOOLTIP"
 >
   <form>
     <RoundButton
@@ -60,13 +60,13 @@ exports[`shallow render 1`] = `
     <ReactTooltip
       className="tooltip"
       effect="solid"
-      id="RANDOM_KEY_0"
+      id="UUID_MOCK_KEY_0"
       insecure={true}
       resizeHide={true}
       wrapper="div"
     />
     <input
-      name="FOO_TYPE"
+      name="TYPE"
       onChange={[Function]}
       type="file"
     />
@@ -77,8 +77,8 @@ exports[`shallow render 1`] = `
 exports[`state.error is true 1`] = `
 <div
   className="flex-none layout-row upload_btn_wrapper "
-  data-for="RANDOM_KEY_4"
-  data-tip="FOO_TOOLTIP"
+  data-for="UUID_MOCK_KEY_4"
+  data-tip="TOOLTIP"
 >
   <form>
     <RoundButton
@@ -106,13 +106,13 @@ exports[`state.error is true 1`] = `
     <ReactTooltip
       className="tooltip"
       effect="solid"
-      id="RANDOM_KEY_4"
+      id="UUID_MOCK_KEY_4"
       insecure={true}
       resizeHide={true}
       wrapper="div"
     />
     <input
-      name="FOO_TYPE"
+      name="TYPE"
       onChange={[Function]}
       type="file"
     />
@@ -123,8 +123,8 @@ exports[`state.error is true 1`] = `
 exports[`state.selected is true 1`] = `
 <div
   className="flex-none layout-row upload_btn_wrapper "
-  data-for="RANDOM_KEY_2"
-  data-tip="FOO_TOOLTIP"
+  data-for="UUID_MOCK_KEY_2"
+  data-tip="TOOLTIP"
 >
   <form>
     <RoundButton
@@ -152,13 +152,13 @@ exports[`state.selected is true 1`] = `
     <ReactTooltip
       className="tooltip"
       effect="solid"
-      id="RANDOM_KEY_2"
+      id="UUID_MOCK_KEY_2"
       insecure={true}
       resizeHide={true}
       wrapper="div"
     />
     <input
-      name="FOO_TYPE"
+      name="TYPE"
       onChange={[Function]}
       type="file"
     />

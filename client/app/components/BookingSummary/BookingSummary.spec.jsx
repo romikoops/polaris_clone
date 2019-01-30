@@ -1,24 +1,10 @@
+import '../../mocks/libraries/react-redux'
+import '../../mocks/libraries/react-router-dom'
+
 import * as React from 'react'
-import { shallow } from 'enzyme'
+import { render } from 'enzyme'
 import { theme } from '../../mocks'
 
-jest.mock('react-redux', () => ({
-  connect: (mapStateToProps, mapDispatchToProps) => Component => Component
-}))
-jest.mock('react-router-dom', () => ({
-  withRouter: x => x
-}))
-jest.mock('uuid', () => {
-  let counter = -1
-  const v4 = () => {
-    counter += 1
-
-    return `RANDOM_KEY_${counter}`
-  }
-
-  return { v4 }
-})
-// eslint-disable-next-line
 import BookingSummary from './BookingSummary'
 
 const propsBase = {
@@ -44,8 +30,8 @@ const propsBase = {
   }
 }
 
-test('shallow render', () => {
-  expect(shallow(<BookingSummary {...propsBase} />)).toMatchSnapshot()
+test('render render', () => {
+  expect(render(<BookingSummary {...propsBase} />)).toMatchSnapshot()
 })
 
 test('theme is falsy', () => {
@@ -53,7 +39,7 @@ test('theme is falsy', () => {
     ...propsBase,
     theme: null
   }
-  expect(shallow(<BookingSummary {...props} />)).toMatchSnapshot()
+  expect(render(<BookingSummary {...props} />)).toMatchSnapshot()
 })
 
 test('modeOfTransport is falsy', () => {
@@ -61,7 +47,7 @@ test('modeOfTransport is falsy', () => {
     ...propsBase,
     modeOfTransport: null
   }
-  expect(shallow(<BookingSummary {...props} />)).toMatchSnapshot()
+  expect(render(<BookingSummary {...props} />)).toMatchSnapshot()
 })
 
 test('trucking.on_carriage is empty object', () => {
@@ -72,7 +58,7 @@ test('trucking.on_carriage is empty object', () => {
       on_carriage: { }
     }
   }
-  expect(shallow(<BookingSummary {...props} />)).toMatchSnapshot()
+  expect(render(<BookingSummary {...props} />)).toMatchSnapshot()
 })
 
 test('trucking.pre_carriage is empty object', () => {
@@ -83,7 +69,7 @@ test('trucking.pre_carriage is empty object', () => {
       pre_carriage: { }
     }
   }
-  expect(shallow(<BookingSummary {...props} />)).toMatchSnapshot()
+  expect(render(<BookingSummary {...props} />)).toMatchSnapshot()
 })
 
 test('loadType is cargo_item', () => {
@@ -91,5 +77,5 @@ test('loadType is cargo_item', () => {
     ...propsBase,
     loadType: 'cargo_item'
   }
-  expect(shallow(<BookingSummary {...props} />)).toMatchSnapshot()
+  expect(render(<BookingSummary {...props} />)).toMatchSnapshot()
 })

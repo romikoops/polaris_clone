@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { schedule, theme, change } from '../../mocks'
+import { schedule, theme, change } from '../../mock'
 
 import AdminScheduleLine from './AdminScheduleLine'
 

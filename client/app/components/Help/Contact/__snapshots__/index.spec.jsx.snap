@@ -64,9 +64,9 @@ exports[`shallow render 1`] = `
               />
               <a
                 className="flex-80 pointy"
-                href="mailto:general@general.com"
+                href="mailto:support@demo.com"
               >
-                general@general.com
+                support@demo.com
               </a>
             </div>
             <div
@@ -83,9 +83,9 @@ exports[`shallow render 1`] = `
               />
               <a
                 className="flex-80 pointy"
-                href="tel:+49 123445567"
+                href="tel:TENANT_SUPPORT_PHONE"
               >
-                +49 123445567
+                TENANT_SUPPORT_PHONE
               </a>
             </div>
           </div>
@@ -100,7 +100,7 @@ exports[`shallow render 1`] = `
               className="flex-none no_m"
             >
               <strong>
-                Foo
+                Air
                 :
               </strong>
             </p>
@@ -119,9 +119,9 @@ exports[`shallow render 1`] = `
             />
             <a
               className="flex-80 pointy"
-              href="mailto:foo@foo.com"
+              href="mailto:imc.air@demo.com"
             >
-              foo@foo.com
+              imc.air@demo.com
             </a>
           </div>
         </div>
@@ -135,7 +135,7 @@ exports[`shallow render 1`] = `
               className="flex-none no_m"
             >
               <strong>
-                Bar
+                Ocean
                 :
               </strong>
             </p>
@@ -154,9 +154,241 @@ exports[`shallow render 1`] = `
             />
             <a
               className="flex-80 pointy"
-              href="mailto:bar@bar.com"
+              href="mailto:imc.sea@demo.com"
             >
-              bar@bar.com
+              imc.sea@demo.com
+            </a>
+          </div>
+        </div>
+        <div
+          className="email_row flex-100 layout-row layout-align-space-between-center"
+        >
+          <div
+            className="flex-30 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none no_m"
+            >
+              <strong>
+                Rail
+                :
+              </strong>
+            </p>
+          </div>
+          <div
+            className="email_box flex-70 layout-row layout-align-start-center"
+          >
+            <i
+              className="fa fa-envelope flex-none"
+              style={
+                Object {
+                  "color": "#333",
+                  "marginRight": "10px",
+                }
+              }
+            />
+            <a
+              className="flex-80 pointy"
+              href="mailto:imc.rail@demo.com"
+            >
+              imc.rail@demo.com
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+  flexOptions=""
+  horizontalPadding="20px"
+  maxWidth="90%"
+  minHeight=""
+  showExit={false}
+  theme={
+    Object {
+      "colors": Object {
+        "primary": "#333",
+        "secondary": "#fafafa",
+      },
+    }
+  }
+  verticalPadding="20px"
+/>
+`;
+
+exports[`tenant.phone.support is falsy 1`] = `
+<Modal
+  classNames=""
+  component={
+    <div
+      className="body_wrapper flex-100 layout-row layout-align-center-center layout-wrap"
+    >
+      <div
+        className="help_header flex-100 layout-row.layout-align-start-center "
+      >
+        <h3
+          className="flex-90 offset-5"
+        >
+          Need help?
+        </h3>
+      </div>
+      <div
+        className="help_content flex-100 layout-row.layout-align-start-center layout-wrap"
+      >
+        <p
+          className="flex-none"
+          style={
+            Object {
+              "marginTop": "18px",
+            }
+          }
+        >
+           Send an email detailing your issues to:
+        </p>
+      </div>
+      <div
+        className="help_content flex-100 layout-row layout-align-start-start layout-wrap"
+      >
+        <div
+          className="email_row flex-100 layout-row layout-align-space-between-center layout-wrap"
+        >
+          <div
+            className="flex-30 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none no_m"
+            >
+              <strong>
+                General Enquiries: 
+              </strong>
+            </p>
+          </div>
+          <div
+            className="email_box flex-70 layout-row layout-align-start-center layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <i
+                className="fa fa-envelope flex-none"
+                style={
+                  Object {
+                    "color": "#333",
+                    "marginRight": "10px",
+                  }
+                }
+              />
+              <a
+                className="flex-80 pointy"
+                href="mailto:support@demo.com"
+              >
+                support@demo.com
+              </a>
+            </div>
+            
+          </div>
+        </div>
+        <div
+          className="email_row flex-100 layout-row layout-align-space-between-center"
+        >
+          <div
+            className="flex-30 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none no_m"
+            >
+              <strong>
+                Air
+                :
+              </strong>
+            </p>
+          </div>
+          <div
+            className="email_box flex-70 layout-row layout-align-start-center"
+          >
+            <i
+              className="fa fa-envelope flex-none"
+              style={
+                Object {
+                  "color": "#333",
+                  "marginRight": "10px",
+                }
+              }
+            />
+            <a
+              className="flex-80 pointy"
+              href="mailto:imc.air@demo.com"
+            >
+              imc.air@demo.com
+            </a>
+          </div>
+        </div>
+        <div
+          className="email_row flex-100 layout-row layout-align-space-between-center"
+        >
+          <div
+            className="flex-30 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none no_m"
+            >
+              <strong>
+                Ocean
+                :
+              </strong>
+            </p>
+          </div>
+          <div
+            className="email_box flex-70 layout-row layout-align-start-center"
+          >
+            <i
+              className="fa fa-envelope flex-none"
+              style={
+                Object {
+                  "color": "#333",
+                  "marginRight": "10px",
+                }
+              }
+            />
+            <a
+              className="flex-80 pointy"
+              href="mailto:imc.sea@demo.com"
+            >
+              imc.sea@demo.com
+            </a>
+          </div>
+        </div>
+        <div
+          className="email_row flex-100 layout-row layout-align-space-between-center"
+        >
+          <div
+            className="flex-30 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none no_m"
+            >
+              <strong>
+                Rail
+                :
+              </strong>
+            </p>
+          </div>
+          <div
+            className="email_box flex-70 layout-row layout-align-start-center"
+          >
+            <i
+              className="fa fa-envelope flex-none"
+              style={
+                Object {
+                  "color": "#333",
+                  "marginRight": "10px",
+                }
+              }
+            />
+            <a
+              className="flex-80 pointy"
+              href="mailto:imc.rail@demo.com"
+            >
+              imc.rail@demo.com
             </a>
           </div>
         </div>

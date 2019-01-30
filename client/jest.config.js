@@ -9,7 +9,7 @@ module.exports = {
   transformIgnorePatterns: ['/node_modules/'],
   unmockedModulePathPatterns: [],
   moduleNameMapper: {
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/app/mocks.js',
+    '\\.(jpe?g|png|gif|eot|svg|ttf|woff)$': '<rootDir>/app/mocks/index.js',
     '\\.s?css$': 'identity-obj-proxy'
   },
   reporters: ['default']

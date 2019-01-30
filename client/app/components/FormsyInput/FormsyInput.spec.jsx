@@ -1,18 +1,17 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import { identity } from '../../mocks'
+import FormsyInput from './FormsyInput'
 
 jest.mock('formsy-react', () => ({
   withFormsy: x => x
 }))
-// eslint-disable-next-line
-import FormsyInput from './FormsyInput'
 
 const propsBase = {
-  name: 'FOO_NAME',
-  className: 'FOO_CLASSNAME',
+  name: 'NAME',
+  className: 'CLASSNAME',
   disabled: false,
-  type: 'FOO_TYPE',
+  type: 'TYPE',
   isValid: identity,
   getErrorMessage: identity,
   setValue: identity,
@@ -20,13 +19,22 @@ const propsBase = {
   submitAttempted: false,
   onFocus: identity,
   onBlur: identity,
-  placeholder: 'FOO_PLACEHOLDER',
-  id: 'FOO_ID',
+  placeholder: 'PLACEHOLDER',
+  id: 'ID',
   onChange: identity,
   errorMessageStyles: {},
-  wrapperClassName: 'FOO_WRAPPER'
+  wrapperClassName: 'WRAPPER_CLASSNAME'
 }
 
 test('shallow render', () => {
   expect(shallow(<FormsyInput {...propsBase} />)).toMatchSnapshot()
+})
+
+test('!errorHidden && !props.isValid()', () => {
+  const props = {
+    ...propsBase,
+    submitAttempted: true,
+    isValid: () => false
+  }
+  expect(shallow(<FormsyInput {...props} />)).toMatchSnapshot()
 })

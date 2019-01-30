@@ -8,13 +8,17 @@ exports[`shallow render 1`] = `
     allowedCargoTypes={Object {}}
     code=""
     handleClick={[Function]}
-    img="FOO_IMG1"
-    key="FOO_NAME1"
-    options={Object {}}
-    path="FOO_URL1"
-    selectedType="FOO_SELECTED_TYPE"
+    img="FOO_IMG"
+    key="FOO_NAME"
+    options={
+      Object {
+        "name": "FOO_OPTIONS_NAME",
+      }
+    }
+    path="FOO_URL"
+    selectedType="SELECTED_TYPE"
     t={[Function]}
-    text="FOO_NAME1"
+    text="FOO_NAME"
     theme={
       Object {
         "colors": Object {
@@ -28,13 +32,17 @@ exports[`shallow render 1`] = `
     allowedCargoTypes={Object {}}
     code=""
     handleClick={[Function]}
-    img="FOO_IMG2"
-    key="FOO_NAME2"
-    options={Object {}}
-    path="FOO_URL2"
-    selectedType="FOO_SELECTED_TYPE"
+    img="BAR_IMG"
+    key="BAR_NAME"
+    options={
+      Object {
+        "name": "BAR_OPTIONS_NAME",
+      }
+    }
+    path="BAR_URL"
+    selectedType="SELECTED_TYPE"
     t={[Function]}
-    text="FOO_NAME2"
+    text="BAR_NAME"
     theme={
       Object {
         "colors": Object {

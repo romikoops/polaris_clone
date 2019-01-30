@@ -29,10 +29,7 @@ exports[`shallow render 1`] = `
       className="main_icon fa fa-user"
       style={
         Object {
-          "0": "#",
-          "1": "3",
-          "2": "3",
-          "3": "3",
+          "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
         }
       }
     />
@@ -51,7 +48,7 @@ exports[`shallow render 1`] = `
           lines={1}
           trimWhitespace={false}
         >
-          FOO_CONTACT_COMPANY
+          CONTACT_COMPANY_NAME
            
         </Truncate>
       </span>
@@ -67,10 +64,7 @@ exports[`shallow render 1`] = `
         className="main_icon fa fa-map-marker flex-none"
         style={
           Object {
-            "0": "#",
-            "1": "3",
-            "2": "3",
-            "3": "3",
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
           }
         }
       />
@@ -104,10 +98,7 @@ exports[`shallow render 1`] = `
         className="fa fa-envelope flex-none"
         style={
           Object {
-            "0": "#",
-            "1": "3",
-            "2": "3",
-            "3": "3",
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
           }
         }
       />
@@ -132,10 +123,7 @@ exports[`shallow render 1`] = `
         className="fa fa-phone flex-none"
         style={
           Object {
-            "0": "#",
-            "1": "3",
-            "2": "3",
-            "3": "3",
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
           }
         }
       />

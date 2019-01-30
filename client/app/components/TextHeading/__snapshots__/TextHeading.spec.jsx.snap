@@ -9,12 +9,12 @@ exports[`size is 1 1`] = `
     style={
       Object {
         "color": Object {
-          "color": "#449",
+          "color": "COLOR",
         },
       }
     }
   >
-    FOO_TEXT
+    TEXT
      
     <Component />
   </h1>
@@ -30,12 +30,12 @@ exports[`size is 2 1`] = `
     style={
       Object {
         "color": Object {
-          "color": "#449",
+          "color": "COLOR",
         },
       }
     }
   >
-    FOO_TEXT
+    TEXT
      
     <Component />
   </h2>
@@ -51,12 +51,12 @@ exports[`size is 3 1`] = `
     style={
       Object {
         "color": Object {
-          "color": "#449",
+          "color": "COLOR",
         },
       }
     }
   >
-    FOO_TEXT
+    TEXT
      
     <Component />
   </h3>
@@ -72,12 +72,12 @@ exports[`size is 4 1`] = `
     style={
       Object {
         "color": Object {
-          "color": "#449",
+          "color": "COLOR",
         },
       }
     }
   >
-    FOO_TEXT
+    TEXT
      
     <Component />
   </h4>

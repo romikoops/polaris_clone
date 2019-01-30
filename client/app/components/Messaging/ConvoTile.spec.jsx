@@ -2,19 +2,12 @@ import * as React from 'react'
 import { mount, shallow } from 'enzyme'
 import { theme, shipment, identity } from '../../mocks'
 
-/**
- * ISSUE
- * `theme && theme.colors` is redundant safeguard
- * because lines before `theme.colors` is used without safeguard
- */
-
-// eslint-disable-next-line
 import ConvoTile from './ConvoTile'
 
 const propsBase = {
   theme,
   viewConvo: identity,
-  convoKey: 'FOO_KEY',
+  convoKey: 'CONVO_KEY',
   conversation: {
     messages: ['FOO_MESSAGE', 'BAR_MESSAGE']
   },

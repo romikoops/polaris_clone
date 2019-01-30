@@ -2,30 +2,16 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme, identity } from '../../../mocks'
 
-jest.mock('.././../../helpers', () => ({
-  authHeader: x => x
-}))
-jest.mock('uuid', () => {
-  let counter = -1
-  const v4 = () => {
-    counter += 1
-
-    return `RANDOM_KEY_${counter}`
-  }
-
-  return { v4 }
-})
-// eslint-disable-next-line
-import DocumentsSelector from './'
+import DocumentsSelector from '.'
 
 const propsBase = {
-  url: 'FOO_URL',
-  type: 'FOO_TYPE',
-  theme,
   dispatchFn: identity,
+  options: [],
+  theme,
+  tooltip: 'TOOLTIP',
+  type: 'TYPE',
   uploadFn: identity,
-  tooltip: 'FOO_TOOLTIP',
-  options: []
+  url: 'URL'
 }
 
 test('shallow render', () => {

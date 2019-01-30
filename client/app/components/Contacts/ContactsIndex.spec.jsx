@@ -1,33 +1,45 @@
+import '../../mocks/libraries/react-redux'
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import ContactsIndex from './ContactsIndex'
-import { theme, user, users, tenant } from '../../mocks'
+import {
+  change, contacts, theme, identity
+} from '../../mocks'
 
-jest.mock('react-redux', () => ({
-  connect: (x, y) => Component => Component
-}))
+const contactsData = {
+  contacts,
+  numContactPages: 1,
+  page: 1
+}
 
 const propsBase = {
-  handleClick: jest.fn(),
-  seeAll: jest.fn(),
+  handleClick: identity,
+  seeAll: identity,
   theme,
   showTooltip: false,
   store: {
-    getState: jest.fn(),
-    subscribe: jest.fn()
+    getState: identity,
+    subscribe: identity
   },
   userDispatch: {
-    getContacts: jest.fn()
+    getContacts: identity
   },
-  appDispatch: jest.fn(),
-  storeDispatch: jest.fn(),
+  appDispatch: identity,
+  storeDispatch: identity,
   loggedIn: true,
-  authentication: jest.fn(),
-  contactsData: users,
-  user,
-  tenant
+  authentication: identity,
+  contactsData
 }
 
 test('shallow render', () => {
   expect(shallow(<ContactsIndex {...propsBase} />)).toMatchSnapshot()
+})
+
+test('page > 1', () => {
+  const props = change(
+    propsBase,
+    'contactsData.page',
+    2
+  )
+  expect(shallow(<ContactsIndex {...props} />)).toMatchSnapshot()
 })

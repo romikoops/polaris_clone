@@ -112,7 +112,7 @@ exports[`shallow render 1`] = `
         className="flex-5"
       />
       <b>
-        FOO_KEY
+        CONVO_KEY
       </b>
     </div>
     <div
@@ -188,7 +188,7 @@ exports[`shipment.status === confirmed 1`] = `
         className="flex-5"
       />
       <b>
-        FOO_KEY
+        CONVO_KEY
       </b>
     </div>
     <div
@@ -264,7 +264,7 @@ exports[`shipment.status === requested 1`] = `
         className="flex-5"
       />
       <b>
-        FOO_KEY
+        CONVO_KEY
       </b>
     </div>
     <div

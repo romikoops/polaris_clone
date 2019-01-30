@@ -3,7 +3,7 @@
 exports[`shallow render 1`] = `
 <div
   className="layout-row contact_card"
-  key="RANDOM_KEY_0"
+  key="UUID_MOCK_KEY_0"
 >
   <div
     className="flex layout-row icons"
@@ -49,7 +49,7 @@ exports[`shallow render 1`] = `
           lines={1}
           trimWhitespace={false}
         >
-          FOO_CONTACT_COMPANY
+          CONTACT_COMPANY_NAME
            
         </Truncate>
       </span>

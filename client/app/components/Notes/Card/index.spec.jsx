@@ -2,18 +2,26 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme } from '../../../mocks'
 
-// eslint-disable-next-line
-import NotesCard from './'
+import NotesCard from '.'
 
-const propsBase = {
-  note: {
-    level: 'important',
-    header: 'FOO_HEADER',
-    itineraryTitle: 'FOO_TITLE'
-  },
-  theme
-}
+const levels = [
+  null,
+  'urgent',
+  'important',
+  'notification',
+  'alert'
+]
 
-test('shallow render', () => {
-  expect(shallow(<NotesCard {...propsBase} />)).toMatchSnapshot()
+levels.forEach((level) => {
+  test(`when level is ${level}`, () => {
+    const props = {
+      note: {
+        header: 'HEADER',
+        itineraryTitle: 'TITLE',
+        level
+      },
+      theme
+    }
+    expect(shallow(<NotesCard {...props} />)).toMatchSnapshot()
+  })
 })

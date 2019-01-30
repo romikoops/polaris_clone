@@ -41,8 +41,39 @@ exports[`incoterm_info_level is simple 1`] = `
         className="select"
         name="incoterms"
         onChange={[Function]}
-        options={Array []}
-        value="FOO_INCOTERM"
+        options={
+          Array [
+            Object {
+              "direction": "export",
+              "label": "Door to Destination Port",
+              "onCarriage": false,
+              "preCarriage": true,
+              "value": "DTP",
+            },
+            Object {
+              "direction": "export",
+              "label": "Door to Door",
+              "onCarriage": true,
+              "preCarriage": true,
+              "value": "DTD",
+            },
+            Object {
+              "direction": "export",
+              "label": "Origin Port to Door",
+              "onCarriage": true,
+              "preCarriage": true,
+              "value": "PTD",
+            },
+            Object {
+              "direction": "export",
+              "label": "Origin Port to Destination Port",
+              "onCarriage": false,
+              "preCarriage": false,
+              "value": "PTP",
+            },
+          ]
+        }
+        value="INCOTERM"
       />
       <span />
     </div>
@@ -146,7 +177,7 @@ exports[`incoterm_info_level render is full 1`] = `
             },
           ]
         }
-        value="FOO_INCOTERM"
+        value="INCOTERM"
       />
       <span />
     </div>
@@ -216,6 +247,255 @@ exports[`incoterm_info_level render is text 1`] = `
 </div>
 `;
 
+exports[`onCarriage is true 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start  incoterm_wrapper"
+>
+  <div
+    className="flex-100 layout-row layout-align-end-center layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-end-center"
+    >
+      <div
+        className="flex-none"
+      >
+        <TextHeading
+          color=""
+          size={3}
+          text="Select Incoterm:"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-80"
+      name="incoterms"
+      style={
+        Object {
+          "position": "relative",
+        }
+      }
+    >
+      <Styled(Select)
+        className="select"
+        name="incoterms"
+        onChange={[Function]}
+        options={
+          Array [
+            Object {
+              "direction": "export",
+              "label": "Door to Destination Port",
+              "onCarriage": false,
+              "preCarriage": true,
+              "value": "DTP",
+            },
+            Object {
+              "direction": "export",
+              "label": "Door to Door",
+              "onCarriage": true,
+              "preCarriage": true,
+              "value": "DTD",
+            },
+            Object {
+              "direction": "export",
+              "label": "Origin Port to Door",
+              "onCarriage": true,
+              "preCarriage": true,
+              "value": "PTD",
+            },
+            Object {
+              "direction": "export",
+              "label": "Origin Port to Destination Port",
+              "onCarriage": false,
+              "preCarriage": false,
+              "value": "PTP",
+            },
+          ]
+        }
+        value="INCOTERM"
+      />
+      <span />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`preCarriage is true 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start  incoterm_wrapper"
+>
+  <div
+    className="flex-100 layout-row layout-align-end-center layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-end-center"
+    >
+      <div
+        className="flex-none"
+      >
+        <TextHeading
+          color=""
+          size={3}
+          text="Select Incoterm:"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-80"
+      name="incoterms"
+      style={
+        Object {
+          "position": "relative",
+        }
+      }
+    >
+      <Styled(Select)
+        className="select"
+        name="incoterms"
+        onChange={[Function]}
+        options={
+          Array [
+            Object {
+              "direction": "export",
+              "label": "Door to Destination Port",
+              "onCarriage": false,
+              "preCarriage": true,
+              "value": "DTP",
+            },
+            Object {
+              "direction": "export",
+              "label": "Door to Door",
+              "onCarriage": true,
+              "preCarriage": true,
+              "value": "DTD",
+            },
+            Object {
+              "direction": "export",
+              "label": "Origin Port to Door",
+              "onCarriage": true,
+              "preCarriage": true,
+              "value": "PTD",
+            },
+            Object {
+              "direction": "export",
+              "label": "Origin Port to Destination Port",
+              "onCarriage": false,
+              "preCarriage": false,
+              "value": "PTP",
+            },
+          ]
+        }
+        value="INCOTERM"
+      />
+      <span />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`preCarriage&&onCarriage is true 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start  incoterm_wrapper"
+>
+  <div
+    className="flex-100 layout-row layout-align-end-center layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-end-center"
+    >
+      <div
+        className="flex-none"
+      >
+        <TextHeading
+          color=""
+          size={3}
+          text="Select Incoterm:"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-80"
+      name="incoterms"
+      style={
+        Object {
+          "position": "relative",
+        }
+      }
+    >
+      <Styled(Select)
+        className="select"
+        name="incoterms"
+        onChange={[Function]}
+        options={
+          Array [
+            Object {
+              "direction": "export",
+              "label": "Door to Destination Port",
+              "onCarriage": false,
+              "preCarriage": true,
+              "value": "DTP",
+            },
+            Object {
+              "direction": "export",
+              "label": "Door to Door",
+              "onCarriage": true,
+              "preCarriage": true,
+              "value": "DTD",
+            },
+            Object {
+              "direction": "export",
+              "label": "Origin Port to Door",
+              "onCarriage": true,
+              "preCarriage": true,
+              "value": "PTD",
+            },
+            Object {
+              "direction": "export",
+              "label": "Origin Port to Destination Port",
+              "onCarriage": false,
+              "preCarriage": false,
+              "value": "PTP",
+            },
+          ]
+        }
+        value="INCOTERM"
+      />
+      <span />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`tenantScope is empty object 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start  incoterm_wrapper"
+/>
+`;
+
 exports[`theme is falsy 1`] = `
 <div
   className="flex-100 layout-row layout-align-start-start  incoterm_wrapper"
@@ -250,8 +530,39 @@ exports[`theme is falsy 1`] = `
         className="select"
         name="incoterms"
         onChange={[Function]}
-        options={Array []}
-        value="FOO_INCOTERM"
+        options={
+          Array [
+            Object {
+              "direction": "export",
+              "label": "Door to Destination Port",
+              "onCarriage": false,
+              "preCarriage": true,
+              "value": "DTP",
+            },
+            Object {
+              "direction": "export",
+              "label": "Door to Door",
+              "onCarriage": true,
+              "preCarriage": true,
+              "value": "DTD",
+            },
+            Object {
+              "direction": "export",
+              "label": "Origin Port to Door",
+              "onCarriage": true,
+              "preCarriage": true,
+              "value": "PTD",
+            },
+            Object {
+              "direction": "export",
+              "label": "Origin Port to Destination Port",
+              "onCarriage": false,
+              "preCarriage": false,
+              "value": "PTP",
+            },
+          ]
+        }
+        value="INCOTERM"
       />
       <span />
     </div>

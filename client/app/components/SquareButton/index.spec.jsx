@@ -2,67 +2,70 @@ import * as React from 'react'
 import { mount, shallow } from 'enzyme'
 import { identity, theme } from '../../mocks'
 
-import SquareButton from './'
+import SquareButton from '.'
 
 const propsBase = {
   active: false,
   back: false,
-  theme,
-  icon: 'FOO_ICON',
-  text: 'FOO_TEXT',
-  iconClass: 'FOO_ICON_CLASS',
-  size: 'small',
-  handleNext: identity,
+  disabled: false,
   handleDisabled: identity,
-  disabled: false
+  handleNext: identity,
+  icon: 'ICON',
+  iconClass: 'ICON_CLASS',
+  size: 'small',
+  text: 'TEXT',
+  theme
 }
 
-const createWrapper = propsInput => mount(<SquareButton {...propsInput} />)
-const createShallow = propsInput => shallow(<SquareButton {...propsInput} />)
+test('shallow render', () => {
+  expect(shallow(<SquareButton {...propsBase} />)).toMatchSnapshot()
+})
 
-test('button click calls props.handleNext', () => {
+test('size is large', () => {
+  const props = {
+    ...propsBase,
+    size: 'large'
+  }
+  expect(shallow(<SquareButton {...props} />)).toMatchSnapshot()
+})
+
+test('size is full', () => {
+  const props = {
+    ...propsBase,
+    size: 'full'
+  }
+  expect(shallow(<SquareButton {...props} />)).toMatchSnapshot()
+})
+
+test('active is true', () => {
+  const props = {
+    ...propsBase,
+    active: true
+  }
+  expect(shallow(<SquareButton {...props} />)).toMatchSnapshot()
+})
+
+test('handleNext is called', () => {
   const props = {
     ...propsBase,
     handleNext: jest.fn()
   }
-  const dom = createWrapper(props)
-  const button = dom.find('button').first()
+  const wrapper = shallow(<SquareButton {...props} />)
+  const button = wrapper.find('button').first()
 
   button.simulate('click')
   expect(props.handleNext).toHaveBeenCalled()
 })
 
-test('button click calls props.handleDisabled', () => {
+test('handleDisabled is called', () => {
   const props = {
     ...propsBase,
     disabled: true,
     handleDisabled: jest.fn()
   }
-  const dom = createWrapper(props)
-  const button = dom.find('button').first()
+  const wrapper = shallow(<SquareButton {...props} />)
+  const button = wrapper.find('button').first()
 
   button.simulate('click')
   expect(props.handleDisabled).toHaveBeenCalled()
-})
-
-test('shallow rendering when props.size is small', () => {
-  expect(createShallow(propsBase)).toMatchSnapshot()
-})
-
-test('shallow rendering when props.size is large', () => {
-  const props = {
-    ...propsBase,
-    size: 'large'
-  }
-
-  expect(createShallow(props)).toMatchSnapshot()
-})
-
-test('shallow rendering when props.size is full', () => {
-  const props = {
-    ...propsBase,
-    size: 'full'
-  }
-
-  expect(createShallow(props)).toMatchSnapshot()
 })

@@ -1,0 +1,393 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow rendering 1`] = `
+<div
+  className="layout-row flex-100 layout-wrap layout-align-center-center "
+>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-center-start slbox"
+  >
+    <div
+      className="map_container layout-row flex-none layout-align-start-start"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-center-start input_box "
+      >
+        <div
+          className="flex-45 layout-row layout-wrap layout-align-start-start mc"
+        >
+          <div
+            className="flex-45 layout-row layout-align-start layout-wrap toggle_box "
+          >
+            <label
+              htmlFor="pre-carriage"
+              style={
+                Object {
+                  "marginLeft": "15px",
+                }
+              }
+            >
+              Pick-up
+            </label>
+          </div>
+          <div
+            className="flex-55 layout-row layout-wrap search_box"
+          >
+            <div
+              className="flex-100 layout-row layout-wrap"
+              style={
+                Object {
+                  "position": "relative",
+                }
+              }
+            >
+              <Styled(Select)
+                className="select"
+                disabled={false}
+                name="origin-hub"
+                nextStageAttempt={false}
+                onChange={[Function]}
+                options={Array []}
+                placeholder="Origin"
+                value={Object {}}
+              />
+              <span
+                className="error_message"
+                style={
+                  Object {
+                    "color": "white",
+                  }
+                }
+              />
+            </div>
+            <div
+              className="flex-100 layout-row layout-wrap address_form_wrapper "
+            >
+              <div
+                className="flex-100 layout-row layout-align-center-center btn_address_form hidden"
+                onClick={[Function]}
+              >
+                <i
+                  className="down flex-none fa fa-angle-double-down"
+                />
+                <i
+                  className="up flex-none fa fa-angle-double-up ccb_origin_expand"
+                />
+              </div>
+              <div
+                className="address_form flex-100 layout-row layout-wrap layout-align-center ccb_pre_address_form"
+              >
+                <div
+                  className="flex-100 layout-row layout-wrap layout-align-center"
+                >
+                  <div
+                    className="address_form_title flex-100 layout-row layout-align-start-center"
+                  >
+                    <p
+                      className="flex-none"
+                    >
+                      Enter Pick-up Address
+                    </p>
+                  </div>
+                  <input
+                    autoComplete="off"
+                    className="flex-90 input "
+                    data-hj-whitelist={true}
+                    disabled={true}
+                    name="origin-street"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onFocus={[Function]}
+                    placeholder="Street"
+                    type="string"
+                    value=""
+                  />
+                  <input
+                    autoComplete="off"
+                    className="flex-90 input "
+                    data-hj-whitelist={true}
+                    disabled={true}
+                    id="not-auto"
+                    name="origin-number"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onFocus={[Function]}
+                    placeholder="Number"
+                    type="string"
+                    value={5}
+                  />
+                  <input
+                    autoComplete="off"
+                    className="flex-90 input "
+                    data-hj-whitelist={true}
+                    disabled={true}
+                    name="origin-zipCode"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onFocus={[Function]}
+                    placeholder="Postal Code"
+                    type="string"
+                    value=""
+                  />
+                  <input
+                    autoComplete="off"
+                    className="flex-90 input "
+                    data-hj-whitelist={true}
+                    disabled={true}
+                    name="origin-city"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onFocus={[Function]}
+                    placeholder="City"
+                    type="string"
+                    value=""
+                  />
+                  <input
+                    autoComplete="off"
+                    className="flex-90 input "
+                    data-hj-whitelist={true}
+                    disabled={true}
+                    name="origin-country"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onFocus={[Function]}
+                    placeholder="Country"
+                    type="string"
+                    value=""
+                  />
+                  <div
+                    className="flex-100 layout-row layout-align-start-center"
+                  >
+                    <div
+                      className="clear_sec flex-none layout-row layout-align-end-center"
+                      onClick={[Function]}
+                    >
+                      <i
+                        className="fa fa-times flex-none"
+                      />
+                      <p
+                        className="offset-5 flex-none"
+                        style={
+                          Object {
+                            "paddingRight": "10px",
+                          }
+                        }
+                      >
+                        Clear
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-5 layout-row layout-align-center-center"
+          style={
+            Object {
+              "height": "60px",
+            }
+          }
+        />
+        <div
+          className="flex-45 layout-row layout-wrap layout-align-end-start"
+        >
+          <div
+            className="flex-45 layout-row layout-align-start layout-wrap toggle_box "
+          >
+            <label
+              htmlFor="on-carriage"
+              style={
+                Object {
+                  "marginRight": "15px",
+                }
+              }
+            >
+              Delivery
+            </label>
+          </div>
+          <div
+            className="flex-55 layout-row layout-wrap search_box"
+          >
+            <div
+              className="flex-100 layout-row layout-wrap"
+              style={
+                Object {
+                  "position": "relative",
+                }
+              }
+            >
+              <Styled(Select)
+                backgroundColor={[Function]}
+                className="select"
+                disabled={false}
+                name="destination-hub"
+                nextStageAttempt={false}
+                onChange={[Function]}
+                options={Array []}
+                placeholder="Destination"
+                value={Object {}}
+              />
+              <span
+                className="error_message"
+                style={
+                  Object {
+                    "color": "white",
+                  }
+                }
+              />
+            </div>
+            <div
+              className="flex-100 layout-row layout-wrap address_form_wrapper "
+            >
+              <div
+                className="flex-100 layout-row layout-align-center-center btn_address_form hidden"
+                onClick={[Function]}
+              >
+                <i
+                  className="down flex-none fa fa-angle-double-down"
+                />
+                <i
+                  className="up flex-none fa fa-angle-double-up ccb_destination_expand"
+                />
+              </div>
+              <div
+                className="address_form  flex-100 layout-row layout-wrap layout-align-center ccb_on_address_form"
+              >
+                <div
+                  className="flex-100 layout-row layout-wrap layout-align-center"
+                >
+                  <div
+                    className="address_form_title flex-100 layout-row layout-align-start-center"
+                  >
+                    <p
+                      className="flex-none"
+                    >
+                      Enter Delivery Address
+                    </p>
+                  </div>
+                  <input
+                    autoComplete="off"
+                    className="flex-90 input "
+                    data-hj-whitelist={true}
+                    disabled={true}
+                    name="destination-street"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onFocus={[Function]}
+                    placeholder="Street"
+                    value=""
+                  />
+                  <input
+                    autoComplete="off"
+                    className="flex-90 input "
+                    data-hj-whitelist={true}
+                    disabled={true}
+                    name="destination-number"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onFocus={[Function]}
+                    placeholder="Number"
+                    type="string"
+                    value={2}
+                  />
+                  <input
+                    autoComplete="off"
+                    className="flex-90 zipCode input"
+                    data-hj-whitelist={true}
+                    disabled={true}
+                    name="destination-zipCode"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onFocus={[Function]}
+                    placeholder="Postal Code"
+                    value=""
+                  />
+                  <input
+                    autoComplete="off"
+                    className="flex-90 input "
+                    data-hj-whitelist={true}
+                    disabled={true}
+                    name="destination-city"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onFocus={[Function]}
+                    placeholder="City"
+                    value=""
+                  />
+                  <input
+                    autoComplete="off"
+                    className="flex-90 input "
+                    data-hj-whitelist={true}
+                    disabled={true}
+                    name="destination-country"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onFocus={[Function]}
+                    placeholder="Country"
+                    value=""
+                  />
+                  <div
+                    className="flex-100 layout-row layout-align-start-center"
+                  >
+                    <div
+                      className="clear_sec flex-none layout-row layout-align-end-center"
+                      onClick={[Function]}
+                    >
+                      <i
+                        className="fa fa-times flex-none"
+                      />
+                      <p
+                        className="offset-5 flex-none"
+                        style={
+                          Object {
+                            "paddingRight": "10px",
+                          }
+                        }
+                      >
+                        Clear
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-center-start relative"
+      >
+        <Connect(OfferError)
+          componentName="ShipmentLocationBox"
+          t={[Function]}
+        />
+        <div
+          id="map"
+          style={
+            Object {
+              "borderRadius": "3px",
+              "boxShadow": "1px 1px 2px 2px rgba(0,1,2,0.25)",
+              "height": "600px",
+              "width": "100%",
+            }
+          }
+        />
+      </div>
+    </div>
+    <style>
+      
+      .react-toggle--checked .react-toggle-track {
+        background: linear-gradient(
+          90deg,
+          undefined 0%,
+          undefined 100%
+        );
+        border: 0.5px solid rgba(0, 0, 0, 0);
+      }
+    
+    </style>
+  </div>
+</div>
+`;

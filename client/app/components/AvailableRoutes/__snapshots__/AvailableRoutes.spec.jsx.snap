@@ -5,8 +5,22 @@ exports[`shallow render 1`] = `
   routeSelected={[Function]}
   routes={
     Array [
-      "foo",
-      "bar",
+      Object {
+        "id": 1,
+        "modesOfTransport": Object {
+          "air": "Air",
+          "ocean": "Ocean",
+        },
+        "name": "FOO_ROUTE",
+      },
+      Object {
+        "id": 2,
+        "modesOfTransport": Object {
+          "air": "Air",
+          "ocean": "Ocean",
+        },
+        "name": "BAR_ROUTE",
+      },
     ]
   }
   t={[Function]}
@@ -30,6 +44,7 @@ exports[`shallow render 1`] = `
       "role": Object {
         "name": "shipper",
       },
+      "role_id": 1,
     }
   }
 />

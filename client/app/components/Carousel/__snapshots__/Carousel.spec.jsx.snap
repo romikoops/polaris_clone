@@ -1,5 +1,85 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`noSlides is falsy 1`] = `
+<styled.div
+  className="flex-100 layout-row slider_container "
+>
+  <Slider
+    arrows={false}
+    autoplay={true}
+    dots={true}
+    infinite={true}
+    slidesToShow={4}
+    speed={2000}
+  >
+    <div
+      className="slick_slide flex-none layout-row layout-align-center-center"
+      key="UUID_MOCK_KEY_4"
+    >
+      <div
+        className="inner_wrapper flex-100 layout-row layout-align-center-center"
+        style={
+          Object {
+            "backgroundImage": "url(FOO_IMAGE1)",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-column layout-align-center-center slick_content"
+        >
+          <h2
+            className="slick_city flex-none"
+          >
+             
+            FOO_HEADER1
+             
+          </h2>
+          <h5
+            className="slick_country flex-none"
+          >
+             
+            FOO_SUBHEADER1
+             
+          </h5>
+        </div>
+      </div>
+    </div>
+    <div
+      className="slick_slide flex-none layout-row layout-align-center-center"
+      key="UUID_MOCK_KEY_5"
+    >
+      <div
+        className="inner_wrapper flex-100 layout-row layout-align-center-center"
+        style={
+          Object {
+            "backgroundImage": "url(FOO_IMAGE2)",
+          }
+        }
+      >
+        <div
+          className="flex-none layout-column layout-align-center-center slick_content"
+        >
+          <h2
+            className="slick_city flex-none"
+          >
+             
+            FOO_HEADER2
+             
+          </h2>
+          <h5
+            className="slick_country flex-none"
+          >
+             
+            FOO_SUBHEADER2
+             
+          </h5>
+        </div>
+      </div>
+    </div>
+  </Slider>
+</styled.div>
+`;
+
 exports[`props.fade is true 1`] = `
 <styled.div
   className="flex-100 layout-row slider_container one_slide"
@@ -14,7 +94,7 @@ exports[`props.fade is true 1`] = `
   >
     <div
       className="slick_slide flex-none layout-row layout-align-center-center"
-      key="RANDOM_KEY_2"
+      key="UUID_MOCK_KEY_2"
     >
       <div
         className="inner_wrapper flex-100 layout-row layout-align-center-center"
@@ -49,7 +129,7 @@ exports[`props.fade is true 1`] = `
     </div>
     <div
       className="slick_slide flex-none layout-row layout-align-center-center"
-      key="RANDOM_KEY_3"
+      key="UUID_MOCK_KEY_3"
     >
       <div
         className="inner_wrapper flex-100 layout-row layout-align-center-center"
@@ -100,7 +180,7 @@ exports[`shallow render 1`] = `
   >
     <div
       className="slick_slide flex-none layout-row layout-align-center-center"
-      key="RANDOM_KEY_0"
+      key="UUID_MOCK_KEY_0"
     >
       <div
         className="inner_wrapper flex-100 layout-row layout-align-center-center"
@@ -132,7 +212,7 @@ exports[`shallow render 1`] = `
     </div>
     <div
       className="slick_slide flex-none layout-row layout-align-center-center"
-      key="RANDOM_KEY_1"
+      key="UUID_MOCK_KEY_1"
     >
       <div
         className="inner_wrapper flex-100 layout-row layout-align-center-center"

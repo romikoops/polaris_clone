@@ -1,148 +1,22 @@
+import '../../mocks/libraries/moment'
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
   theme,
   shipmentData,
   identity,
-  tenant,
-  match
+  change,
+  match,
+  tenant
 } from '../../mocks'
 
-jest.mock('uuid', () => {
-  let counter = -1
-  const v4 = () => {
-    counter += 1
-
-    return `RANDOM_KEY_${counter}`
-  }
-
-  return { v4 }
-})
-jest.mock('../../helpers', () => ({
-  gradientTextGenerator: x => x,
-  numberSpacing: x => `${x}.00`,
-  totalPrice: () => ({
-    currency: 'CHF'
-  }),
-  totalPriceString: () => 'Viel zu mehr MKD',
-  capitalize: x => x
-}))
-jest.mock('../../constants', () => {
-  const format = () => 19
-  const subtract = () => ({ format })
-  const add = () => ({ format })
-
-  const moment = () => ({
-    format,
-    subtract,
-    add
-  })
-  const shipmentStatii = {
-    booking_process_started: 'Booking Process Started',
-    finished: 'Finished',
-    open: 'Open',
-    requested: 'Requested',
-    rejected: 'Rejected'
-  }
-  const documentTypes = {
-    packing_sheet: 'Packing List',
-    commercial_invoice: 'Commercial Invoice',
-    customs_declaration: 'Customs Declaration',
-    customs_value_declaration: 'Customs Value Declaration',
-    eori: 'EORI',
-    certificate_of_origin: 'Certificate Of Origin',
-    dangerous_goods: 'Dangerous Goods',
-    bill_of_lading: 'Bill of Lading',
-    invoice: 'Invoice',
-    miscellaneous: 'Miscellaneous'
-  }
-
-  return { moment, shipmentStatii, documentTypes }
-})
-// eslint-disable-next-line
-import { BookingConfirmation }   from './BookingConfirmation'
-
-const cargoItemTypes = { foo: 'FOO_TYPE', bar: 'BAR_TYPE' }
-
-const editedTenant = {
-  ...tenant,
-  scope: {
-    terms: ['FOO_TERM', 'BAR_TERM']
-  }
-}
-
-const fooContainer = {
-  customs_text: 'FOO_TEXT',
-  hs_codes: [],
-  id: 1,
-  size_class: 'FOO_SIZE_CLASS',
-  quantity: 5,
-  gross_weight: 130,
-  tare_weight: 50,
-  payload_in_kg: 200
-}
-
-const barContainer = {
-  customs_text: 'BAR_TEXT',
-  hs_codes: [],
-  id: 2,
-  size_class: 'BAR_SIZE_CLASS',
-  quantity: 7,
-  gross_weight: 10,
-  tare_weight: 7,
-  payload_in_kg: 4
-}
-
-const containers = [fooContainer, barContainer, fooContainer]
-
-const fooCargoItem = {
-  dimension_x: 10,
-  dimension_y: 60,
-  dimension_z: 40,
-  hs_codes: [],
-  hs_text: 'FOO_HS_TEXT',
-  id: 1,
-  payload_in_kg: 200,
-  chargeable_weight: 250,
-  quantity: 5,
-  cargo_item_type_id: 'foo',
-  size_class: 'FOO_SIZE_CLASS'
-}
-
-const barCargoItem = {
-  dimension_x: 100,
-  dimension_y: 50,
-  dimension_z: 70,
-  hs_codes: [],
-  hs_text: 'BAR_HS_TEXT',
-  id: 2,
-  payload_in_kg: 100,
-  chargeable_weight: 150,
-  quantity: 7,
-  cargo_item_type_id: 'bar',
-  size_class: 'BAR_SIZE_CLASS'
-}
-const cargoItems = [fooCargoItem, barCargoItem, fooCargoItem]
-const shipment = {
-  ...shipmentData.shipment,
-  selected_offer: {
-    customs: { val: 12 },
-    insurance: { val: 5 },
-    total: { value: 87 }
-  }
-}
-const editedShipmentData = {
-  ...shipmentData,
-  cargoItemTypes,
-  schedule: { hub_route_key: 'FOO_HUB_ROUTE_KEY' },
-  shipment
-}
+import { BookingConfirmation } from './BookingConfirmation'
 
 const propsBase = {
   theme,
   setStage: identity,
-  shipmentData: editedShipmentData,
-  tenant: editedTenant,
+  shipmentData,
+  tenant,
   shipmentDispatch: {
     toDashboard: identity
   },
@@ -165,108 +39,107 @@ test('shallow render', () => {
   expect(shallow(<BookingConfirmation {...propsBase} />)).toMatchSnapshot()
 })
 
-test('with containers', () => {
+test('state.acceptTerms is true', () => {
+  const wrapper = shallow(<BookingConfirmation {...propsBase} />)
+  wrapper.setState({ acceptTerms: true })
+  expect(wrapper).toMatchSnapshot()
+})
+
+test('shipmentData is falsy', () => {
+  const props = {
+    ...propsBase,
+    shipmentData: null
+  }
+  expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
+})
+
+test('theme is falsy', () => {
+  const props = {
+    ...propsBase,
+    theme: null
+  }
+  expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
+})
+
+test('shipmentData.shipment is falsy', () => {
   const props = {
     ...propsBase,
     shipmentData: {
-      ...editedShipmentData,
-      containers
+      ...shipmentData,
+      shipment: null
     }
   }
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test('with cargo items', () => {
-  const props = {
-    ...propsBase,
-    shipmentData: {
-      ...editedShipmentData,
-      cargoItems
-    }
-  }
+test('tenant.scope.terms.length is 0', () => {
+  const props = change(
+    propsBase,
+    'tenant.scope.terms',
+    []
+  )
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test('props.shipmentData is falsy', () => {
-  const props = {
-    ...propsBase,
-    shipmentData: false
-  }
+test('feeHash.customs.hasUnknown is true', () => {
+  const props = change(
+    propsBase,
+    'shipmentData.shipment.selected_offer.customs.hasUnknown',
+    true
+  )
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test('props.shipmentData.cargoItemTypes is falsy', () => {
-  const props = {
-    ...propsBase,
-    shipmentData
-  }
+test('shipment.cargo_notes is falsy', () => {
+  const props = change(
+    propsBase,
+    'shipmentData.shipment.cargo_notes',
+    null
+  )
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test('props.shipmentData.aggregatedCargo is truthy', () => {
-  const props = {
-    ...propsBase,
-    shipmentData: {
-      ...editedShipmentData,
-      aggregatedCargo: { foo: 1 }
-    }
-  }
+test('shipment.eori is falsy', () => {
+  const props = change(
+    propsBase,
+    'shipmentData.shipment.eori',
+    null
+  )
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test('props.shipmentData.documents is truthy', () => {
-  const props = {
-    ...propsBase,
-    shipmentData: {
-      ...editedShipmentData,
-      documents: [
-        { id: 0, doc_type: 'FOO_DOC_TYPE' },
-        { id: 1, doc_type: 'BAR_DOC_TYPE' }
-      ]
-    }
-  }
+test('shipment.total_goods_value is falsy', () => {
+  const props = change(
+    propsBase,
+    'shipmentData.shipment.total_goods_value',
+    null
+  )
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test('props.shipmentData.notifyees is truthy', () => {
-  const props = {
-    ...propsBase,
-    shipmentData: {
-      ...editedShipmentData,
-      notifyees: [
-        { first_name: 'John', last_name: 'Doe' },
-        { first_name: 'Robert', last_name: 'Plant' },
-        { first_name: 'Starling', last_name: 'Archer' }
-      ]
-    }
-  }
+test('shipment.notes is falsy', () => {
+  const props = change(
+    propsBase,
+    'shipmentData.shipment.notes',
+    null
+  )
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test('props.shipmentData.shipment.has_pre_carriage is true', () => {
-  const props = {
-    ...propsBase,
-    shipmentData: {
-      ...editedShipmentData,
-      shipment: {
-        ...shipment,
-        has_pre_carriage: true
-      }
-    }
-  }
+test('shipment.incoterm_text is falsy', () => {
+  const props = change(
+    propsBase,
+    'shipmentData.shipment.incoterm_text',
+    null
+  )
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test('props.shipmentData.shipment.has_on_carriage is true', () => {
-  const props = {
-    ...propsBase,
-    shipmentData: {
-      ...editedShipmentData,
-      shipment: {
-        ...shipment,
-        has_on_carriage: true
-      }
-    }
-  }
+test('shipmentData.notifyees is falsy', () => {
+  const props = change(
+    propsBase,
+    'shipmentData.notifyees',
+    null
+  )
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })

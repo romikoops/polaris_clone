@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`shallow rendering when props.size is full 1`] = `
+exports[`active is true 1`] = `
 <div
-  className="flex-none layout-row layout-align-center-center layout-align-lg-start-center full hide_border full_wrapper"
+  className="flex-none layout-row layout-align-center-center layout-align-lg-start-center small hide_border small_wrapper"
   style={
     Object {
       "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
@@ -10,9 +10,13 @@ exports[`shallow rendering when props.size is full 1`] = `
   }
 >
   <button
-    className="square_btn neutral full clickable "
+    className="square_btn active small clickable "
     onClick={[Function]}
-    style={Object {}}
+    style={
+      Object {
+        "background": "white",
+      }
+    }
     type="button"
   >
     <div
@@ -27,54 +31,17 @@ exports[`shallow rendering when props.size is full 1`] = `
           <img
             alt=""
             className="flex-none icon"
-            src="FOO_ICON"
+            src="ICON"
           />
         </span>
-        FOO_TEXT
+        TEXT
       </p>
     </div>
   </button>
 </div>
 `;
 
-exports[`shallow rendering when props.size is large 1`] = `
-<div
-  className="flex-none layout-row layout-align-center-center layout-align-lg-start-center large hide_border large_wrapper"
-  style={
-    Object {
-      "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-    }
-  }
->
-  <button
-    className="square_btn neutral large clickable "
-    onClick={[Function]}
-    style={Object {}}
-    type="button"
-  >
-    <div
-      className="layout-fill layout-row layout-align-space-around-center"
-    >
-      <p
-        className="content"
-      >
-        <span
-          className="icon"
-        >
-          <img
-            alt=""
-            className="flex-none icon"
-            src="FOO_ICON"
-          />
-        </span>
-        FOO_TEXT
-      </p>
-    </div>
-  </button>
-</div>
-`;
-
-exports[`shallow rendering when props.size is small 1`] = `
+exports[`shallow render 1`] = `
 <div
   className="flex-none layout-row layout-align-center-center layout-align-lg-start-center small hide_border small_wrapper"
   style={
@@ -101,10 +68,84 @@ exports[`shallow rendering when props.size is small 1`] = `
           <img
             alt=""
             className="flex-none icon"
-            src="FOO_ICON"
+            src="ICON"
           />
         </span>
-        FOO_TEXT
+        TEXT
+      </p>
+    </div>
+  </button>
+</div>
+`;
+
+exports[`size is full 1`] = `
+<div
+  className="flex-none layout-row layout-align-center-center layout-align-lg-start-center full hide_border full_wrapper"
+  style={
+    Object {
+      "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+    }
+  }
+>
+  <button
+    className="square_btn neutral full clickable "
+    onClick={[Function]}
+    style={Object {}}
+    type="button"
+  >
+    <div
+      className="layout-fill layout-row layout-align-space-around-center"
+    >
+      <p
+        className="content"
+      >
+        <span
+          className="icon"
+        >
+          <img
+            alt=""
+            className="flex-none icon"
+            src="ICON"
+          />
+        </span>
+        TEXT
+      </p>
+    </div>
+  </button>
+</div>
+`;
+
+exports[`size is large 1`] = `
+<div
+  className="flex-none layout-row layout-align-center-center layout-align-lg-start-center large hide_border large_wrapper"
+  style={
+    Object {
+      "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+    }
+  }
+>
+  <button
+    className="square_btn neutral large clickable "
+    onClick={[Function]}
+    style={Object {}}
+    type="button"
+  >
+    <div
+      className="layout-fill layout-row layout-align-space-around-center"
+    >
+      <p
+        className="content"
+      >
+        <span
+          className="icon"
+        >
+          <img
+            alt=""
+            className="flex-none icon"
+            src="ICON"
+          />
+        </span>
+        TEXT
       </p>
     </div>
   </button>

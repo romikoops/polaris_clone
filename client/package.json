@@ -139,6 +139,7 @@
     "jest-enzyme": "^7.0.1",
     "jest-junit": "^5.1.0",
     "jest-tobetype": "^1.1.0",
+    "moment-timezone": "^0.5.23",
     "progress-bar-webpack-plugin": "^1.11.0",
     "react-addons-test-utils": "^15.0.2",
     "react-json-tree": "^0.11.0",

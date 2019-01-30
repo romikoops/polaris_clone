@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import { identity } from '../../../mocks'
-// eslint-disable-next-line
-import ContactSetterNewContactWrapper from './'
+
+import ContactSetterNewContactWrapper from '.'
 
 const propsBase = {
   contactType: 'FOO',

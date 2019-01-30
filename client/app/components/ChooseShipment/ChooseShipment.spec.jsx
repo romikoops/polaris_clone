@@ -2,13 +2,6 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme, identity } from '../../mocks'
 
-jest.mock('../../helpers', () => ({
-  capitalize: x => x,
-  gradientTextGenerator: x => x,
-  hexToRGB: x => x,
-  humanizedMotAndLoadType: x => x
-}))
-// eslint-disable-next-line
 import ChooseShipment from './ChooseShipment'
 
 const propsBase = {
@@ -40,10 +33,21 @@ test('messages.length === 0', () => {
   expect(shallow(<ChooseShipment {...props} />)).toMatchSnapshot()
 })
 
+test('state.showCargoTypes is true', () => {
+  const wrapper = shallow(<ChooseShipment {...propsBase} />)
+  wrapper.setState({ showCargoTypes: true })
+  expect(wrapper).toMatchSnapshot()
+})
+
+test('showCargoTypes and direction are truthy', () => {
+  const wrapper = shallow(<ChooseShipment {...propsBase} />)
+  wrapper.setState({ showCargoTypes: true, direction: 'export' })
+  expect(wrapper).toMatchSnapshot()
+})
+
 test('state.direction === export', () => {
   const wrapper = shallow(<ChooseShipment {...propsBase} />)
   wrapper.setState({ direction: 'export' })
-
   expect(wrapper).toMatchSnapshot()
 })
 

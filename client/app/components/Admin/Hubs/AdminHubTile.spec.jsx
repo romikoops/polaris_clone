@@ -2,7 +2,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
   change, theme, identity, hub
-} from '../../../mocks'
+} from '../../../mock'
 
 import AdminHubTile from './AdminHubTile'
 

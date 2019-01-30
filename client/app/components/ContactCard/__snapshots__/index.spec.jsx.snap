@@ -1,5 +1,144 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`contactData.address is falsy 1`] = `
+<div
+  className="flex-100 layout-row contact_card"
+  onClick={[Function]}
+>
+  <div
+    className="overlay"
+  />
+  <div
+    className="flex layout-row layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-start layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row alyout-align-start-center"
+      >
+        <i
+          className="fa fa-user-circle-o flex-none clip"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+              "padding": "3px 0",
+              "width": "28px",
+            }
+          }
+        />
+        <p
+          className="flex contact_header"
+        >
+          John
+           
+          Doe
+        </p>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-start-center"
+      >
+        <i
+          className="fa fa-building-o flex-none clip"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+              "padding": "3px 0",
+              "width": "28px",
+            }
+          }
+        />
+        <p
+          className="flex-80 contact_header"
+        >
+          <Truncate
+            ellipsis="…"
+            lines={1}
+            trimWhitespace={true}
+          >
+             
+            CONTACT_COMPANY_NAME
+             
+          </Truncate>
+        </p>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap info_wrapper"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <i
+            className="fa fa-envelope flex-none clip"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                "padding": "3px 0",
+                "width": "28px",
+              }
+            }
+          />
+          <div
+            className="flex-none"
+          >
+             
+            foo@bar.baz
+             
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <i
+            className="fa fa-phone flex-none clip"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                "padding": "3px 0",
+                "width": "28px",
+              }
+            }
+          />
+          <div
+            className="flex-none"
+          >
+             
+            0761452887
+             
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <i
+        className="fa fa-globe flex-none clip"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            "padding": "3px 0",
+            "width": "28px",
+          }
+        }
+      />
+      <p
+        className="flex-100"
+      >
+        <p
+          className="flex-100"
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`shallow render 1`] = `
 <div
   className="flex-100 layout-row contact_card"
@@ -57,6 +196,7 @@ exports[`shallow render 1`] = `
             trimWhitespace={true}
           >
              
+            CONTACT_COMPANY_NAME
              
           </Truncate>
         </p>
@@ -102,7 +242,7 @@ exports[`shallow render 1`] = `
             className="flex-none"
           >
              
-            6345789
+            0761452887
              
           </div>
         </div>
@@ -124,14 +264,7 @@ exports[`shallow render 1`] = `
       <p
         className="flex-100"
       >
-        <p
-          className="flex-100"
-          style={
-            Object {
-              "margin": 0,
-            }
-          }
-        />
+        FOO_GEOCODED_ADDRESS
       </p>
     </div>
   </div>

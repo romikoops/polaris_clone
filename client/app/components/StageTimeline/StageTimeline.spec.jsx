@@ -2,25 +2,6 @@ import * as React from 'react'
 import { shallow, mount } from 'enzyme'
 import { identity, theme } from '../../mocks'
 
-jest.mock('uuid', () => {
-  let counter = -1
-  const v4 = () => {
-    counter += 1
-
-    return `RANDOM_KEY_${counter}`
-  }
-
-  return { v4 }
-})
-jest.mock('../Tooltip/Tooltip', () => ({
-  // eslint-disable-next-line react/prop-types
-  Tooltip: ({ children }) => <span>{children}</span>
-}))
-jest.mock('../../helpers', () => ({
-  gradientGenerator: x => x,
-  gradientTextGenerator: x => x
-}))
-// eslint-disable-next-line import/first
 import StageTimeline from './StageTimeline'
 
 const createWrapper = propsInput => mount(<StageTimeline {...propsInput} />)
@@ -36,7 +17,7 @@ test('shallow rendering', () => {
   expect(shallow(<StageTimeline {...propsBase} />)).toMatchSnapshot()
 })
 
-test('props.setStage is called', () => {
+test('setStage is called', () => {
   const props = {
     ...propsBase,
     setStage: jest.fn()

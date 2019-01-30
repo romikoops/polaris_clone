@@ -1,17 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`pickup is false 1`] = `
+exports[`availableMotKeys is empty object 1`] = `
 <div
   className="filterbox"
 >
   <div
     className="pickup_date"
   >
-    <div>
+    <div
+      classNmae="flex-100 layout-row"
+    >
       <TextHeading
         color=""
         size={4}
-        text="Closing Date"
+        text="Cargo Ready Date"
         theme={
           Object {
             "colors": Object {
@@ -46,10 +48,10 @@ exports[`pickup is false 1`] = `
         dayPickerProps={
           Object {
             "disabledDays": Object {
-              "after": 2017-06-13T01:41:20.000Z,
-              "before": 2017-06-13T01:41:20.000Z,
+              "after": 2017-07-26T03:41:20.000Z,
+              "before": 2017-07-26T03:41:20.000Z,
             },
-            "month": 2017-06-13T01:41:20.000Z,
+            "month": 2017-07-26T03:41:20.000Z,
             "name": "dayPicker",
           }
         }
@@ -63,18 +65,96 @@ exports[`pickup is false 1`] = `
         parseDate={[Function]}
         placeholder="DD/MM/YYYY"
         showOverlay={false}
-        value={19}
+        value="11/07/2017"
       />
     </div>
   </div>
   <div
-    className="haulage"
+    className="layout-row flex-100 layout-wrap layout-align-start-center cargos_recap"
   >
-    <div>
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <div>
+        x
+        5
+      </div>
+      <div
+        className="cargo_img"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <div>
+        x
+        7
+      </div>
+      <div
+        className="cargo_img"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+    </div>
+  </div>
+  <div>
+    <p
+      style={
+        Object {
+          "fontSize": "10px",
+          "marginTop": "0",
+        }
+      }
+    >
+      * Transit time (T/T) not guaranteed
+    </p>
+    <p
+      style={
+        Object {
+          "fontSize": "10px",
+          "marginTop": "0",
+        }
+      }
+    >
+      ** You will be invoiced in local currency based on the exchange rate valid at the time
+    </p>
+    <p
+      style={
+        Object {
+          "fontSize": "10px",
+          "marginTop": "0",
+        }
+      }
+    >
+      ***
+      Pick-Up of Cargo will usually occur within the first 48 hours of this date.
+    </p>
+  </div>
+</div>
+`;
+
+exports[`pickup is false 1`] = `
+<div
+  className="filterbox"
+>
+  <div
+    className="pickup_date"
+  >
+    <div
+      classNmae="flex-100 layout-row"
+    >
       <TextHeading
         color=""
         size={4}
-        text="Haulage"
+        text="Available at appointed terminal"
         theme={
           Object {
             "colors": Object {
@@ -86,40 +166,48 @@ exports[`pickup is false 1`] = `
       />
     </div>
     <div
-      className="haulage_option layout-row layout-wrap flex-none"
+      className="flex-none layout-row dpb"
     >
       <div
-        className="flex-100 layout-row layout-align-space-between-center"
+        className="flex-none layout-row layout-align-center-center dpb_icon"
       >
-        <p
-          className="flex-none five_m"
-        >
-          Pickup
-        </p>
-        <p
-          className="flex-none five_m"
-        >
-          No
-        </p>
+        <i
+          className="flex-none fa fa-calendar"
+        />
       </div>
-    </div>
-    <div
-      className="haulage_option layout-row layout-wrap flex-none"
-    >
-      <div
-        className="flex-100 layout-row layout-align-space-between-center"
-      >
-        <p
-          className="flex-none five_m"
-        >
-          Delivery
-        </p>
-        <p
-          className="flex-none five_m"
-        >
-          No
-        </p>
-      </div>
+      <DayPickerInput
+        className="dpb_picker"
+        classNames={
+          Object {
+            "container": "DayPickerInput",
+            "overlay": "DayPickerInput-Overlay",
+            "overlayWrapper": "DayPickerInput-OverlayWrapper",
+          }
+        }
+        clickUnselectsDay={false}
+        component="input"
+        dayPickerProps={
+          Object {
+            "disabledDays": Object {
+              "after": 2017-07-11T19:41:20.000Z,
+              "before": 2017-07-11T19:41:20.000Z,
+            },
+            "month": 2017-07-11T19:41:20.000Z,
+            "name": "dayPicker",
+          }
+        }
+        format="DD/MM/YYYY"
+        formatDate={[Function]}
+        hideOnDayClick={true}
+        inputProps={Object {}}
+        keepFocus={true}
+        onDayChange={[Function]}
+        overlayComponent={[Function]}
+        parseDate={[Function]}
+        placeholder="DD/MM/YYYY"
+        showOverlay={false}
+        value="27/06/2017"
+      />
     </div>
   </div>
   <div
@@ -129,13 +217,121 @@ exports[`pickup is false 1`] = `
       <TextHeading
         color=""
         size={4}
-        text="Mode of transport"
+        text="Mode of Transport"
         theme={
           Object {
             "colors": Object {
               "primary": "#333",
               "secondary": "#fafafa",
             },
+          }
+        }
+      />
+    </div>
+    <div
+      className="radio layout-row layout-align-none-center"
+      style={
+        Object {
+          "margin": "2px 0",
+        }
+      }
+    >
+      <Checkbox
+        checked={false}
+        className=""
+        disabled={false}
+        id="foo"
+        onChange={[Function]}
+        onClick={null}
+        size={null}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+      <label
+        className="flex-none pointy"
+        htmlFor="foo"
+      >
+        <i
+          className="fa fa-anchor  "
+          style={Object {}}
+        />
+        Foo
+      </label>
+    </div>
+    <div
+      className="radio layout-row layout-align-none-center"
+      style={
+        Object {
+          "margin": "2px 0",
+        }
+      }
+    >
+      <Checkbox
+        checked={false}
+        className=""
+        disabled={false}
+        id="bar"
+        onChange={[Function]}
+        onClick={null}
+        size={null}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+      <label
+        className="flex-none pointy"
+        htmlFor="bar"
+      >
+        <i
+          className="fa fa-anchor  "
+          style={Object {}}
+        />
+        Bar
+      </label>
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center cargos_recap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <div>
+        x
+        5
+      </div>
+      <div
+        className="cargo_img"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <div>
+        x
+        7
+      </div>
+      <div
+        className="cargo_img"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
@@ -173,11 +369,13 @@ exports[`shallow rendering 1`] = `
   <div
     className="pickup_date"
   >
-    <div>
+    <div
+      classNmae="flex-100 layout-row"
+    >
       <TextHeading
         color=""
         size={4}
-        text="Pickup Date"
+        text="Cargo Ready Date"
         theme={
           Object {
             "colors": Object {
@@ -212,10 +410,10 @@ exports[`shallow rendering 1`] = `
         dayPickerProps={
           Object {
             "disabledDays": Object {
-              "after": 2017-06-13T01:41:20.000Z,
-              "before": 2017-06-13T01:41:20.000Z,
+              "after": 2017-06-27T11:41:20.000Z,
+              "before": 2017-06-27T11:41:20.000Z,
             },
-            "month": 2017-06-13T01:41:20.000Z,
+            "month": 2017-06-27T11:41:20.000Z,
             "name": "dayPicker",
           }
         }
@@ -229,18 +427,18 @@ exports[`shallow rendering 1`] = `
         parseDate={[Function]}
         placeholder="DD/MM/YYYY"
         showOverlay={false}
-        value={19}
+        value="13/06/2017"
       />
     </div>
   </div>
   <div
-    className="haulage"
+    className="mode_of_transport"
   >
     <div>
       <TextHeading
         color=""
         size={4}
-        text="Haulage"
+        text="Mode of Transport"
         theme={
           Object {
             "colors": Object {
@@ -252,56 +450,109 @@ exports[`shallow rendering 1`] = `
       />
     </div>
     <div
-      className="haulage_option layout-row layout-wrap flex-none"
+      className="radio layout-row layout-align-none-center"
+      style={
+        Object {
+          "margin": "2px 0",
+        }
+      }
     >
-      <div
-        className="flex-100 layout-row layout-align-space-between-center"
-      >
-        <p
-          className="flex-none five_m"
-        >
-          Pickup
-        </p>
-        <p
-          className="flex-none five_m"
-        >
-          No
-        </p>
-      </div>
-    </div>
-    <div
-      className="haulage_option layout-row layout-wrap flex-none"
-    >
-      <div
-        className="flex-100 layout-row layout-align-space-between-center"
-      >
-        <p
-          className="flex-none five_m"
-        >
-          Delivery
-        </p>
-        <p
-          className="flex-none five_m"
-        >
-          No
-        </p>
-      </div>
-    </div>
-  </div>
-  <div
-    className="mode_of_transport"
-  >
-    <div>
-      <TextHeading
-        color=""
-        size={4}
-        text="Mode of transport"
+      <Checkbox
+        checked={false}
+        className=""
+        disabled={false}
+        id="foo"
+        onChange={[Function]}
+        onClick={null}
+        size={null}
         theme={
           Object {
             "colors": Object {
               "primary": "#333",
               "secondary": "#fafafa",
             },
+          }
+        }
+      />
+      <label
+        className="flex-none pointy"
+        htmlFor="foo"
+      >
+        <i
+          className="fa fa-anchor  "
+          style={Object {}}
+        />
+        Foo
+      </label>
+    </div>
+    <div
+      className="radio layout-row layout-align-none-center"
+      style={
+        Object {
+          "margin": "2px 0",
+        }
+      }
+    >
+      <Checkbox
+        checked={false}
+        className=""
+        disabled={false}
+        id="bar"
+        onChange={[Function]}
+        onClick={null}
+        size={null}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+      <label
+        className="flex-none pointy"
+        htmlFor="bar"
+      >
+        <i
+          className="fa fa-anchor  "
+          style={Object {}}
+        />
+        Bar
+      </label>
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center cargos_recap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <div>
+        x
+        5
+      </div>
+      <div
+        className="cargo_img"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <div>
+        x
+        7
+      </div>
+      <div
+        className="cargo_img"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
@@ -327,6 +578,17 @@ exports[`shallow rendering 1`] = `
       }
     >
       ** You will be invoiced in local currency based on the exchange rate valid at the time
+    </p>
+    <p
+      style={
+        Object {
+          "fontSize": "10px",
+          "marginTop": "0",
+        }
+      }
+    >
+      ***
+      Pick-Up of Cargo will usually occur within the first 48 hours of this date.
     </p>
   </div>
 </div>

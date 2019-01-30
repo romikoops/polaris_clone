@@ -2,18 +2,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme } from '../../../../mocks'
 
-jest.mock('uuid', () => {
-  let counter = -1
-  const v4 = () => {
-    counter += 1
-
-    return `RANDOM_KEY_${counter}`
-  }
-
-  return { v4 }
-})
-// eslint-disable-next-line
-import CargoContainerGroup from './'
+import CargoContainerGroup from '.'
 
 const group = {
   quantity: 'FOO_QUANTITY',

@@ -1,83 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`props.viewHSCodes is true 1`] = `
-<div
-  className=" info layout-row flex-100 layout-wrap layout-align-center"
->
-  <div
-    className="flex-100 layout-row"
-  >
-    <h4>
-      Unit
-       
-      4
-    </h4>
-  </div>
-  <hr
-    className="flex-100"
-  />
-  <div
-    className="flex-100 layout-row layout-align-space-between"
-  >
-    <p>
-      Gross Weight
-    </p>
-    <p>
-      134
-       kg
-    </p>
-  </div>
-  <hr
-    className="flex-100"
-  />
-  <div
-    className="flex-100 layout-row layout-align-space-between"
-  >
-    <p>
-      Container Class
-    </p>
-    <p>
-       
-    </p>
-  </div>
-  <hr
-    className="flex-100"
-  />
-  <div
-    className="flex-100 layout-row layout-align-space-between"
-  >
-    <p>
-      No. of Containers
-    </p>
-    <p>
-      5
-       
-    </p>
-  </div>
-  <hr
-    className="flex-100"
-  />
-  <div
-    className="flex-100 layout-row layout-wrap"
-    onClick={[Function]}
-  >
-    <i
-      className="fa fa-eye clip flex-none"
-      style={
-        Object {
-          "background": "-webkit-linear-gradient(left, #333,#fafafa)",
-        }
-      }
-    />
-    <p
-      className="offset-5 flex-none"
-    >
-      View Hs Codes
-    </p>
-  </div>
-</div>
-`;
-
 exports[`shallow render 1`] = `
 <div
   className=" info layout-row flex-100 layout-wrap layout-align-center"
@@ -101,7 +23,7 @@ exports[`shallow render 1`] = `
       Gross Weight
     </p>
     <p>
-      134
+      200
        kg
     </p>
   </div>
@@ -161,7 +83,7 @@ exports[`state.viewer is true 1`] = `
       Gross Weight
     </p>
     <p>
-      134
+      200
        kg
     </p>
   </div>
@@ -200,9 +122,26 @@ exports[`state.viewer is true 1`] = `
     hsCodes={Array []}
     item={
       Object {
-        "payload_in_kg": 134,
+        "cargo_item_type_id": "foo",
+        "chargeable_weight": 250,
+        "dangerous_goods": false,
+        "description": "FOO_CARGO_ITEM_DESCRIPTION",
+        "dimension_x": 10,
+        "dimension_y": 60,
+        "dimension_z": 40,
+        "gross_weight": 76,
+        "hs_codes": Array [
+          4,
+        ],
+        "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+        "id": 1,
+        "key": "FOO_CARGO_ITEM_KEY",
+        "payload_in_kg": 200,
         "quantity": 5,
-        "size_class": "FOO_SIZE_CLASS",
+        "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
+        "stackable": false,
+        "tare_weight": 20,
+        "weight": 220,
       }
     }
     t={[Function]}
@@ -215,5 +154,83 @@ exports[`state.viewer is true 1`] = `
       }
     }
   />
+</div>
+`;
+
+exports[`viewHSCodes is true 1`] = `
+<div
+  className=" info layout-row flex-100 layout-wrap layout-align-center"
+>
+  <div
+    className="flex-100 layout-row"
+  >
+    <h4>
+      Unit
+       
+      4
+    </h4>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Gross Weight
+    </p>
+    <p>
+      200
+       kg
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Container Class
+    </p>
+    <p>
+       
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      No. of Containers
+    </p>
+    <p>
+      5
+       
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-wrap"
+    onClick={[Function]}
+  >
+    <i
+      className="fa fa-eye clip flex-none"
+      style={
+        Object {
+          "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+        }
+      }
+    />
+    <p
+      className="offset-5 flex-none"
+    >
+      View Hs Codes
+    </p>
+  </div>
 </div>
 `;

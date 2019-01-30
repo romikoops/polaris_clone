@@ -1,5 +1,33 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`notes.length is 0 1`] = `
+<div
+  className="layout-row flex-100 layout-wrap layout-align-start-center notes_wrapper"
+>
+  <div
+    className="flex-100 layout-row layout-start-center sec_header"
+  >
+    <p
+      className="sec_header_text flex-none"
+    >
+      Notes
+    </p>
+    <div
+      className="flex-10 layout-row alyout-align-center-center pointy"
+      onClick={null}
+    >
+      <i
+        className="fa fa-plus clip pointy plus"
+        style={Object {}}
+      />
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row card_margin_right layout-wrap"
+  />
+</div>
+`;
+
 exports[`shallow render 1`] = `
 <div
   className="layout-row flex-100 layout-wrap layout-align-start-center notes_wrapper"
@@ -30,8 +58,8 @@ exports[`shallow render 1`] = `
       itinerary={Object {}}
       note={
         Object {
-          "header": "FOO_HEADER",
-          "itineraryTitle": "FOO_TITLE",
+          "header": "HEADER",
+          "itineraryTitle": "TITLE",
           "level": "important",
         }
       }

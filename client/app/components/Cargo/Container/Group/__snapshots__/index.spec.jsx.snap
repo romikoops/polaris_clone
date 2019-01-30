@@ -100,7 +100,7 @@ exports[`props.viewHSCodes is true 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_1"
+        key="UUID_MOCK_KEY_1"
       >
         <div
           className="flex-10 layout-row layout-align-center-center"
@@ -305,7 +305,7 @@ exports[`shallow render 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_0"
+        key="UUID_MOCK_KEY_0"
       >
         <div
           className="flex-10 layout-row layout-align-center-center"
@@ -510,7 +510,7 @@ exports[`state.unitView is true 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_3"
+        key="UUID_MOCK_KEY_3"
       >
         <div
           className="flex-10 layout-row layout-align-center-center"
@@ -715,7 +715,7 @@ exports[`state.viewer is true 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_5"
+        key="UUID_MOCK_KEY_5"
       >
         <div
           className="flex-10 layout-row layout-align-center-center"

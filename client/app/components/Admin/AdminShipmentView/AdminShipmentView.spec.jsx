@@ -2,7 +2,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
   shipmentData, theme, identity, change
-} from '../../../mocks'
+} from '../../../mock'
 import AdminShipmentView from './AdminShipmentView'
 
 jest.mock('moment', () => {

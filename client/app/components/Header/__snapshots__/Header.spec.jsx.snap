@@ -1,5 +1,186 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`error && error[currentStage] 1`] = `
+<div
+  className="header layout-row flex-100 layout-wrap layout-align-center   "
+  style={
+    Object {
+      "color": "black",
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row"
+    style={
+      Object {
+        "padding": "0 15px",
+      }
+    }
+  >
+    <div
+      className="layout-row flex layout-align-start-center pointy"
+    >
+      <img
+        alt=""
+        className="undefined"
+        onClick={[Function]}
+        src=""
+        style={
+          Object {
+            "display": "block",
+          }
+        }
+      />
+    </div>
+    <div>
+      FooComponent
+    </div>
+    <div
+      className="flex layout-row layout-align-end-center"
+    >
+      <div
+        className="layout-row layout-align-space-around-center"
+      >
+        <NavDropdown
+          dropDownText="John Doe"
+          invert={false}
+          isLanding={false}
+          linkOptions={
+            Array [
+              Object {
+                "fontAwesomeIcon": "fa-cog",
+                "key": "settings",
+                "text": "Account",
+                "url": "/account",
+              },
+              Object {
+                "fontAwesomeIcon": "fa-sign-out",
+                "key": "signOut",
+                "text": "Sign out",
+                "url": "/signout",
+              },
+            ]
+          }
+          loginText="Log In / Register"
+          toggleShowLogin={[Function]}
+          user={
+            Object {
+              "company_name": "FOO_COMPANY",
+              "currency": "EUR",
+              "email": "foo@bar.baz",
+              "first_name": "John",
+              "guest": false,
+              "last_name": "Doe",
+              "phone": "6345789",
+              "role": Object {
+                "name": "shipper",
+              },
+              "role_id": 1,
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-none layout-row error_messages"
+  >
+    <FlashMessages
+      messages={
+        Array [
+          Object {},
+        ]
+      }
+    />
+  </div>
+</div>
+`;
+
+exports[`invert is true 1`] = `
+<div
+  className="header layout-row flex-100 layout-wrap layout-align-center inverted  "
+  style={
+    Object {
+      "color": "white",
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row"
+    style={
+      Object {
+        "padding": "0 15px",
+      }
+    }
+  >
+    <div
+      className="layout-row flex layout-align-start-center pointy"
+    >
+      <img
+        alt=""
+        className="undefined"
+        onClick={[Function]}
+        src=""
+        style={
+          Object {
+            "display": "none",
+          }
+        }
+      />
+    </div>
+    <div>
+      FooComponent
+    </div>
+    <div
+      className="flex layout-row layout-align-end-center"
+    >
+      <div
+        className="layout-row layout-align-space-around-center"
+      >
+        <NavDropdown
+          dropDownText="John Doe"
+          invert={true}
+          isLanding={false}
+          linkOptions={
+            Array [
+              Object {
+                "fontAwesomeIcon": "fa-cog",
+                "key": "settings",
+                "text": "Account",
+                "url": "/account",
+              },
+              Object {
+                "fontAwesomeIcon": "fa-sign-out",
+                "key": "signOut",
+                "text": "Sign out",
+                "url": "/signout",
+              },
+            ]
+          }
+          loginText="Log In / Register"
+          toggleShowLogin={[Function]}
+          user={
+            Object {
+              "company_name": "FOO_COMPANY",
+              "currency": "EUR",
+              "email": "foo@bar.baz",
+              "first_name": "John",
+              "guest": false,
+              "last_name": "Doe",
+              "phone": "6345789",
+              "role": Object {
+                "name": "shipper",
+              },
+              "role_id": 1,
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`noMessages is true 1`] = `
 <div
   className="header layout-row flex-100 layout-wrap layout-align-center   "
@@ -75,6 +256,92 @@ exports[`noMessages is true 1`] = `
               "role": Object {
                 "name": "shipper",
               },
+              "role_id": 1,
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`scrollable is true 1`] = `
+<div
+  className="header layout-row flex-100 layout-wrap layout-align-center  scrollable "
+  style={
+    Object {
+      "color": "black",
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row"
+    style={
+      Object {
+        "padding": "0 15px",
+      }
+    }
+  >
+    <div
+      className="layout-row flex layout-align-start-center pointy"
+    >
+      <img
+        alt=""
+        className="undefined"
+        onClick={[Function]}
+        src=""
+        style={
+          Object {
+            "display": "block",
+          }
+        }
+      />
+    </div>
+    <div>
+      FooComponent
+    </div>
+    <div
+      className="flex layout-row layout-align-end-center"
+    >
+      <div
+        className="layout-row layout-align-space-around-center"
+      >
+        <NavDropdown
+          dropDownText="John Doe"
+          invert={false}
+          isLanding={false}
+          linkOptions={
+            Array [
+              Object {
+                "fontAwesomeIcon": "fa-cog",
+                "key": "settings",
+                "text": "Account",
+                "url": "/account",
+              },
+              Object {
+                "fontAwesomeIcon": "fa-sign-out",
+                "key": "signOut",
+                "text": "Sign out",
+                "url": "/signout",
+              },
+            ]
+          }
+          loginText="Log In / Register"
+          toggleShowLogin={[Function]}
+          user={
+            Object {
+              "company_name": "FOO_COMPANY",
+              "currency": "EUR",
+              "email": "foo@bar.baz",
+              "first_name": "John",
+              "guest": false,
+              "last_name": "Doe",
+              "phone": "6345789",
+              "role": Object {
+                "name": "shipper",
+              },
+              "role_id": 1,
             }
           }
         />
@@ -159,6 +426,7 @@ exports[`shallow render 1`] = `
               "role": Object {
                 "name": "shipper",
               },
+              "role_id": 1,
             }
           }
         />
@@ -243,10 +511,132 @@ exports[`showModal is true 1`] = `
               "role": Object {
                 "name": "shipper",
               },
+              "role_id": 1,
             }
           }
         />
       </div>
+      <Modal
+        classNames="ccb_login_modal"
+        component={
+          <LoginRegistrationWrapper
+            LoginPageProps={
+              Object {
+                "req": null,
+                "theme": Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                },
+              }
+            }
+            RegistrationPageProps={
+              Object {
+                "req": null,
+                "tenant": Object {
+                  "emails": Object {
+                    "sales": Object {
+                      "air": "sales@demo.com",
+                      "general": "sales@demo.com",
+                      "ocean": "sales@demo.com",
+                      "rail": "sales@demo.com",
+                    },
+                    "support": Object {
+                      "air": "imc.air@demo.com",
+                      "general": "support@demo.com",
+                      "ocean": "imc.sea@demo.com",
+                      "rail": "imc.rail@demo.com",
+                    },
+                  },
+                  "id": 123,
+                  "name": "TENANT_NAME",
+                  "phones": Object {
+                    "support": "TENANT_SUPPORT_PHONE",
+                  },
+                  "scope": Object {
+                    "cargo_info_level": "text",
+                    "carriage_options": Object {
+                      "on_carriage": Object {
+                        "export": "mandatory",
+                        "import": "mandatory",
+                      },
+                      "pre_carriage": Object {
+                        "export": "optional",
+                        "import": "optional",
+                      },
+                    },
+                    "closed_quotation_tool": true,
+                    "customs_export_paper": false,
+                    "detailed_billing": true,
+                    "has_customs": true,
+                    "has_insurance": true,
+                    "hide_grand_total": true,
+                    "mandatory_form_fields": Object {
+                      "description_of_goods": "MANDATORY_FIELDS_DESCRIPTION",
+                      "total_goods_value": 3370,
+                    },
+                    "modes_of_transport": Object {
+                      "air": Object {
+                        "AIR_LOAD_TYPE": 0,
+                      },
+                      "ocean": Object {
+                        "OCEAN_LOAD_TYPE": 2,
+                      },
+                      "rail": Object {
+                        "RAIL_LOAD_TYPE": 0,
+                      },
+                      "truck": Object {
+                        "TRUCK_LOAD_TYPE": 0,
+                      },
+                    },
+                    "terms": Array [
+                      "FOO_TERM",
+                      "BAR_TERM",
+                    ],
+                  },
+                  "subdomain": "TENANT_SUBDOMAIN",
+                  "theme": Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  },
+                },
+                "theme": Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                },
+                "user": Object {
+                  "company_name": "FOO_COMPANY",
+                  "currency": "EUR",
+                  "email": "foo@bar.baz",
+                  "first_name": "John",
+                  "guest": false,
+                  "last_name": "Doe",
+                  "phone": "6345789",
+                  "role": Object {
+                    "name": "shipper",
+                  },
+                  "role_id": 1,
+                },
+              }
+            }
+            initialCompName="LoginPage"
+            t={[Function]}
+            updateDimensions={null}
+          />
+        }
+        flexOptions=""
+        horizontalPadding="40px"
+        maxWidth="90%"
+        minHeight=""
+        parentToggle={[Function]}
+        showExit={false}
+        verticalPadding="30px"
+      />
     </div>
   </div>
 </div>
@@ -327,6 +717,262 @@ exports[`showRegistration is true 1`] = `
               "role": Object {
                 "name": "shipper",
               },
+              "role_id": 1,
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`tenant is falsy 1`] = `
+<div
+  className="header layout-row flex-100 layout-wrap layout-align-center   "
+  style={
+    Object {
+      "color": "black",
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row"
+    style={
+      Object {
+        "padding": "0 15px",
+      }
+    }
+  >
+    <div
+      className="layout-row flex layout-align-start-center pointy"
+    >
+      <img
+        alt=""
+        className="undefined"
+        onClick={[Function]}
+        src=""
+        style={
+          Object {
+            "display": "block",
+          }
+        }
+      />
+    </div>
+    <div>
+      FooComponent
+    </div>
+    <div
+      className="flex layout-row layout-align-end-center"
+    >
+      <div
+        className="layout-row layout-align-space-around-center"
+      >
+        <NavDropdown
+          dropDownText="John Doe"
+          invert={false}
+          isLanding={false}
+          linkOptions={
+            Array [
+              Object {
+                "fontAwesomeIcon": "fa-cog",
+                "key": "settings",
+                "text": "Account",
+                "url": "/account",
+              },
+              Object {
+                "fontAwesomeIcon": "fa-sign-out",
+                "key": "signOut",
+                "text": "Sign out",
+                "url": "/signout",
+              },
+            ]
+          }
+          loginText="Log In / Register"
+          toggleShowLogin={[Function]}
+          user={
+            Object {
+              "company_name": "FOO_COMPANY",
+              "currency": "EUR",
+              "email": "foo@bar.baz",
+              "first_name": "John",
+              "guest": false,
+              "last_name": "Doe",
+              "phone": "6345789",
+              "role": Object {
+                "name": "shipper",
+              },
+              "role_id": 1,
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`theme has logoLarge 1`] = `
+<div
+  className="header layout-row flex-100 layout-wrap layout-align-center   "
+  style={
+    Object {
+      "color": "black",
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row"
+    style={
+      Object {
+        "padding": "0 15px",
+      }
+    }
+  >
+    <div
+      className="layout-row flex layout-align-start-center pointy"
+    >
+      <img
+        alt=""
+        className="logo"
+        onClick={[Function]}
+        src="LOGO_LARGE"
+        style={
+          Object {
+            "display": "block",
+          }
+        }
+      />
+    </div>
+    <div>
+      FooComponent
+    </div>
+    <div
+      className="flex layout-row layout-align-end-center"
+    >
+      <div
+        className="layout-row layout-align-space-around-center"
+      >
+        <NavDropdown
+          dropDownText="John Doe"
+          invert={false}
+          isLanding={false}
+          linkOptions={
+            Array [
+              Object {
+                "fontAwesomeIcon": "fa-cog",
+                "key": "settings",
+                "text": "Account",
+                "url": "/account",
+              },
+              Object {
+                "fontAwesomeIcon": "fa-sign-out",
+                "key": "signOut",
+                "text": "Sign out",
+                "url": "/signout",
+              },
+            ]
+          }
+          loginText="Log In / Register"
+          toggleShowLogin={[Function]}
+          user={
+            Object {
+              "company_name": "FOO_COMPANY",
+              "currency": "EUR",
+              "email": "foo@bar.baz",
+              "first_name": "John",
+              "guest": false,
+              "last_name": "Doe",
+              "phone": "6345789",
+              "role": Object {
+                "name": "shipper",
+              },
+              "role_id": 1,
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`theme has logoWide 1`] = `
+<div
+  className="header layout-row flex-100 layout-wrap layout-align-center   "
+  style={
+    Object {
+      "color": "black",
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row"
+    style={
+      Object {
+        "padding": "0 15px",
+      }
+    }
+  >
+    <div
+      className="layout-row flex layout-align-start-center pointy"
+    >
+      <img
+        alt=""
+        className="wide_logo"
+        onClick={[Function]}
+        src="LOGO_WIDE"
+        style={
+          Object {
+            "display": "block",
+          }
+        }
+      />
+    </div>
+    <div>
+      FooComponent
+    </div>
+    <div
+      className="flex layout-row layout-align-end-center"
+    >
+      <div
+        className="layout-row layout-align-space-around-center"
+      >
+        <NavDropdown
+          dropDownText="John Doe"
+          invert={false}
+          isLanding={false}
+          linkOptions={
+            Array [
+              Object {
+                "fontAwesomeIcon": "fa-cog",
+                "key": "settings",
+                "text": "Account",
+                "url": "/account",
+              },
+              Object {
+                "fontAwesomeIcon": "fa-sign-out",
+                "key": "signOut",
+                "text": "Sign out",
+                "url": "/signout",
+              },
+            ]
+          }
+          loginText="Log In / Register"
+          toggleShowLogin={[Function]}
+          user={
+            Object {
+              "company_name": "FOO_COMPANY",
+              "currency": "EUR",
+              "email": "foo@bar.baz",
+              "first_name": "John",
+              "guest": false,
+              "last_name": "Doe",
+              "phone": "6345789",
+              "role": Object {
+                "name": "shipper",
+              },
+              "role_id": 1,
             }
           }
         />
@@ -411,6 +1057,92 @@ exports[`unread > 0 1`] = `
               "role": Object {
                 "name": "shipper",
               },
+              "role_id": 1,
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`user && user.role && user.role.name.includes(admin) 1`] = `
+<div
+  className="header layout-row flex-100 layout-wrap layout-align-center   "
+  style={
+    Object {
+      "color": "black",
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row"
+    style={
+      Object {
+        "padding": "0 15px",
+      }
+    }
+  >
+    <div
+      className="layout-row flex layout-align-start-center pointy"
+    >
+      <img
+        alt=""
+        className="undefined"
+        onClick={[Function]}
+        src=""
+        style={
+          Object {
+            "display": "block",
+          }
+        }
+      />
+    </div>
+    <div>
+      FooComponent
+    </div>
+    <div
+      className="flex layout-row layout-align-end-center"
+    >
+      <div
+        className="layout-row layout-align-space-around-center"
+      >
+        <NavDropdown
+          dropDownText="John Doe"
+          invert={false}
+          isLanding={false}
+          linkOptions={
+            Array [
+              Object {
+                "fontAwesomeIcon": "fa-cog",
+                "key": "settings",
+                "text": "Account",
+                "url": "/admin/dashboard",
+              },
+              Object {
+                "fontAwesomeIcon": "fa-sign-out",
+                "key": "signOut",
+                "text": "Sign out",
+                "url": "/signout",
+              },
+            ]
+          }
+          loginText="Log In / Register"
+          toggleShowLogin={[Function]}
+          user={
+            Object {
+              "company_name": "FOO_COMPANY",
+              "currency": "EUR",
+              "email": "foo@bar.baz",
+              "first_name": "John",
+              "guest": false,
+              "last_name": "Doe",
+              "phone": "6345789",
+              "role": Object {
+                "name": "admin",
+              },
+              "role_id": 1,
             }
           }
         />

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { mount } from 'enzyme'
-import { theme, identity } from '../../../mocks'
+import { theme, identity } from '../../../mock'
 // eslint-disable-next-line no-named-as-default
 import TruckingZipSetter from './TruckingZipSetter'
 
@@ -15,6 +15,6 @@ const propsBase = {
   addNewCell: identity
 }
 
-test('shallow render', () => {
+test.skip('shallow render', () => {
   expect(mount(<TruckingZipSetter {...propsBase} />)).toMatchSnapshot()
 })

@@ -16,32 +16,32 @@ exports[`shallow render 1`] = `
         <ShipmentContactsBoxMainContacts
           consignee={
             Object {
-              "city": "Hamburg",
-              "companyName": "FOO_COMPANY_NAME",
-              "country": "Germany",
-              "email": "FOO_EMAIL",
-              "firstName": "FOO_FIRST_NAME",
-              "lastName": "FOO_LAST_NAME",
-              "number": "9",
-              "phone": "FOO_PHONE",
-              "street": "FOO_STREET",
-              "zipCode": "21785",
+              "city": "CONSIGNEE_CITY",
+              "companyName": "CONSIGNEE_COMPANY_NAME",
+              "country": "CONSIGNEE_COUNTRY",
+              "email": "CONSIGNEE_EMAIL",
+              "firstName": "CONSIGNEE_FIRST_NAME",
+              "lastName": "CONSIGNEE_LAST_NAME",
+              "number": "CONSIGNEE_NUMBER",
+              "phone": "CONSIGNEE_PHONE",
+              "street": "CONSIGNEE_STREET",
+              "zipCode": "CONSIGNEE_ZIP_CODE",
             }
           }
-          direction="FOO_DIRECTION"
+          direction="export"
           handleClick={null}
           shipper={
             Object {
-              "city": "Berlin",
-              "companyName": "FOO_SHIPPER_COMPANY_NAME",
-              "country": "Germany",
-              "email": "FOO_SHIPPER_EMAIL",
-              "firstName": "FOO_SHIPPER_FIRST_NAME",
-              "lastName": "FOO_SHIPPER_LAST_NAME",
-              "number": "17",
-              "phone": "FOO_SHIPPER_PHONE",
-              "street": "FOO_SHIPPER_STREET",
-              "zipCode": "27785",
+              "city": "SHIPPER_CITY",
+              "companyName": "SHIPPER_COMPANY_NAME",
+              "country": "SHIPPER_COUNTRY",
+              "email": "SHIPPER_EMAIL",
+              "firstName": "SHIPPER_FIRST_NAME",
+              "lastName": "SHIPPER_LAST_NAME",
+              "number": "SHIPPER_NUMBER",
+              "phone": "SHIPPER_PHONE",
+              "street": "SHIPPER_STREET",
+              "zipCode": "SHIPPER_ZIP_CODE",
             }
           }
           showAddressBook={[Function]}
@@ -63,16 +63,28 @@ exports[`shallow render 1`] = `
           notifyees={
             Array [
               Object {
-                "city": "Bremen",
+                "city": "FOO_NOTIFYEE_ZIP_CODE",
                 "companyName": "FOO_NOTIFYEE_COMPANY_NAME",
-                "country": "Germany",
+                "country": "FOO_NOTIFYEE_COUNTRY",
                 "email": "FOO_NOTIFYEE_EMAIL",
                 "firstName": "FOO_NOTIFYEE_FIRST_NAME",
                 "lastName": "FOO_NOTIFYEE_LAST_NAME",
-                "number": "5",
+                "number": "FOO_NOTIFYEE_NUMBER",
                 "phone": "FOO_NOTIFYEE_PHONE",
                 "street": "FOO_NOTIFYEE_STREET",
-                "zipCode": "23785",
+                "zipCode": "FOO_NOTIFYEE_ZIP_CODE",
+              },
+              Object {
+                "city": "BAR_NOTIFYEE_ZIP_CODE",
+                "companyName": "BAR_NOTIFYEE_COMPANY_NAME",
+                "country": "BAR_NOTIFYEE_COUNTRY",
+                "email": "BAR_NOTIFYEE_EMAIL",
+                "firstName": "BAR_NOTIFYEE_FIRST_NAME",
+                "lastName": "BAR_NOTIFYEE_LAST_NAME",
+                "number": "BAR_NOTIFYEE_NUMBER",
+                "phone": "BAR_NOTIFYEE_PHONE",
+                "street": "BAR_NOTIFYEE_STREET",
+                "zipCode": "BAR_NOTIFYEE_ZIP_CODE",
               },
             ]
           }

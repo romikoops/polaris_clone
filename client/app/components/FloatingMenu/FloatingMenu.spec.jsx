@@ -5,13 +5,10 @@ import { theme, user } from '../../mocks'
 import FloatingMenu from './FloatingMenu'
 
 const propsBase = {
-  // eslint-disable-next-line react/prop-types
   Comp: ({ children }) => <div>{children}</div>,
   theme,
   user
 }
-
-const createWrapper = propsInput => mount(<FloatingMenu {...propsInput} />)
 
 test('shallow render', () => {
   expect(shallow(<FloatingMenu {...propsBase} />)).toMatchSnapshot()
@@ -26,7 +23,7 @@ test('theme is falsy', () => {
 })
 
 test('click changes state.expand', () => {
-  const wrapper = createWrapper(propsBase)
+  const wrapper = mount(<FloatingMenu {...propsBase} />)
   const clickableDiv = wrapper.find('.collapse_prompt').first()
 
   expect(wrapper.state().expand).toBeFalsy()

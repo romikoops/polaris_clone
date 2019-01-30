@@ -2,7 +2,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
   change, theme, identity, client, hub, location
-} from '../../mocks'
+} from '../../mock'
 
 import AdminClientView from './AdminClientView'
 

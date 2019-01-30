@@ -4,9 +4,24 @@ exports[`shallow rendering 1`] = `
 <div
   className="flex-100 layout-row layout-wrap"
 >
-  <Connect(Header)
+  <Header
+    component={null}
+    currentStage="stage1"
+    error={null}
+    invert={false}
+    isLanding={false}
+    loggingIn={false}
+    loginAttempt={false}
+    messages={null}
     noMessages={true}
+    noRedirect={false}
+    registering={false}
+    req={null}
+    scrollable={false}
+    showModal={false}
+    showRegistration={false}
     t={[Function]}
+    tenant={null}
     theme={
       Object {
         "colors": Object {
@@ -27,6 +42,7 @@ exports[`shallow rendering 1`] = `
         "role": Object {
           "name": "shipper",
         },
+        "role_id": 1,
       }
     }
   />
@@ -196,9 +212,24 @@ exports[`state.focus.password_confirmation is truthy 1`] = `
 <div
   className="flex-100 layout-row layout-wrap"
 >
-  <Connect(Header)
+  <Header
+    component={null}
+    currentStage="stage1"
+    error={null}
+    invert={false}
+    isLanding={false}
+    loggingIn={false}
+    loginAttempt={false}
+    messages={null}
     noMessages={true}
+    noRedirect={false}
+    registering={false}
+    req={null}
+    scrollable={false}
+    showModal={false}
+    showRegistration={false}
     t={[Function]}
+    tenant={null}
     theme={
       Object {
         "colors": Object {
@@ -219,6 +250,7 @@ exports[`state.focus.password_confirmation is truthy 1`] = `
         "role": Object {
           "name": "shipper",
         },
+        "role_id": 1,
       }
     }
   />
@@ -402,9 +434,24 @@ exports[`state.settingPassword is true 1`] = `
 <div
   className="flex-100 layout-row layout-wrap"
 >
-  <Connect(Header)
+  <Header
+    component={null}
+    currentStage="stage1"
+    error={null}
+    invert={false}
+    isLanding={false}
+    loggingIn={false}
+    loginAttempt={false}
+    messages={null}
     noMessages={true}
+    noRedirect={false}
+    registering={false}
+    req={null}
+    scrollable={false}
+    showModal={false}
+    showRegistration={false}
     t={[Function]}
+    tenant={null}
     theme={
       Object {
         "colors": Object {
@@ -425,6 +472,7 @@ exports[`state.settingPassword is true 1`] = `
         "role": Object {
           "name": "shipper",
         },
+        "role_id": 1,
       }
     }
   />
@@ -598,9 +646,24 @@ exports[`theme is falsy 1`] = `
 <div
   className="flex-100 layout-row layout-wrap"
 >
-  <Connect(Header)
+  <Header
+    component={null}
+    currentStage="stage1"
+    error={null}
+    invert={false}
+    isLanding={false}
+    loggingIn={false}
+    loginAttempt={false}
+    messages={null}
     noMessages={true}
+    noRedirect={false}
+    registering={false}
+    req={null}
+    scrollable={false}
+    showModal={false}
+    showRegistration={false}
     t={[Function]}
+    tenant={null}
     theme={null}
     user={
       Object {
@@ -614,6 +677,7 @@ exports[`theme is falsy 1`] = `
         "role": Object {
           "name": "shipper",
         },
+        "role_id": 1,
       }
     }
   />

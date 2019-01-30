@@ -2,26 +2,24 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 
 import {
-  theme,
+  change,
+  currencies,
+  identity,
   shipment,
   shipmentData,
-  identity,
   tenant,
-  user,
-  match
+  match,
+  theme,
+  user
 } from '../../mocks'
 
 import BookingDetails from './BookingDetails'
 
-const editedShipmentData = {
-  ...shipmentData,
-  hubs: {}
-}
-
 const propsBase = {
   theme,
   tenant,
-  shipmentData: editedShipmentData,
+  shipmentData,
+  bookingHasCompleted: identity,
   nextStage: identity,
   prevRequest: {
     shipment
@@ -31,13 +29,9 @@ const propsBase = {
   shipmentDispatch: {
     toDashboard: identity
   },
-  currencies: [{
-    key: 'USD',
-    rate: 1.05
-  }],
-  user,
   match,
-  bookingHasCompleted: () => false
+  currencies,
+  user
 }
 
 test('shallow render', () => {
@@ -53,13 +47,11 @@ test('shipmentData is falsy', () => {
 })
 
 test('shipmentData.shipment is falsy', () => {
-  const props = {
-    ...propsBase,
-    shipmentData: {
-      ...editedShipmentData,
-      shipment: null
-    }
-  }
+  const props = change(
+    propsBase,
+    'shipmentData.shipment',
+    null
+  )
   expect(shallow(<BookingDetails {...props} />)).toMatchSnapshot()
 })
 

@@ -1,39 +1,21 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, tenant, shipment } from '../../../mocks'
+import {
+  change, feeHash, theme, tenant, shipment
+} from '../../../mocks'
 
-jest.mock('../../../helpers', () => ({
-  gradientTextGenerator: (x, y) =>
-    ({ background: `-webkit-linear-gradient(left, ${x},${y})` }),
-  determineSpecialism: x => x,
-  switchIcon: x => x,
-  numberSpacing: x => x,
-  capitalize: x => x
-}))
-// MOCKING IS STUPID - REMOVE ALL
-// eslint-disable-next-line
-import IncotermRow from './'
+import IncotermRow from '.'
 
-const editedTenant = {
-  ...tenant,
-  scope: {
-    detailed_billing: true
-  }
-}
 const propsBase = {
   theme,
-  feeHash: {
-    cargo: { total: { value: 199, currency: 'USD' } },
-    export: { value: 20, currency: 'EUR' },
-    import: { value: 9, currency: 'EUR' },
-    trucking_on: { value: 3, currency: 'EUR' }
-  },
+  feeHash,
   onCarriage: false,
   preCarriage: false,
   originFees: false,
   destinationFees: false,
-  tenant: editedTenant,
+  tenant,
   shipment,
+  mot: 'ocean',
   firstStep: false
 }
 
@@ -41,11 +23,56 @@ test('shallow render', () => {
   expect(shallow(<IncotermRow {...propsBase} />)).toMatchSnapshot()
 })
 
+test('originFees && destinationFees are true', () => {
+  const props = {
+    ...propsBase,
+    originFees: true,
+    destinationFees: true
+  }
+  expect(shallow(<IncotermRow {...props} />)).toMatchSnapshot()
+})
+
 test('feeHash is empty object', () => {
   const props = {
     ...propsBase,
     feeHash: {}
   }
+  expect(shallow(<IncotermRow {...props} />)).toMatchSnapshot()
+})
+
+test('feeHash.trucking_on is empty object', () => {
+  const props = change(
+    propsBase,
+    'feeHash.trucking_on',
+    {}
+  )
+  expect(shallow(<IncotermRow {...props} />)).toMatchSnapshot()
+})
+
+test('feeHash.trucking_pre is empty object', () => {
+  const props = change(
+    propsBase,
+    'feeHash.trucking_pre',
+    {}
+  )
+  expect(shallow(<IncotermRow {...props} />)).toMatchSnapshot()
+})
+
+test('feeHash.import is empty object', () => {
+  const props = change(
+    propsBase,
+    'feeHash.import',
+    {}
+  )
+  expect(shallow(<IncotermRow {...props} />)).toMatchSnapshot()
+})
+
+test('feeHash.export is empty object', () => {
+  const props = change(
+    propsBase,
+    'feeHash.export',
+    {}
+  )
   expect(shallow(<IncotermRow {...props} />)).toMatchSnapshot()
 })
 
@@ -77,6 +104,14 @@ test('firstStep is true', () => {
   const props = {
     ...propsBase,
     firstStep: true
+  }
+  expect(shallow(<IncotermRow {...props} />)).toMatchSnapshot()
+})
+
+test('theme is falsy', () => {
+  const props = {
+    ...propsBase,
+    theme: null
   }
   expect(shallow(<IncotermRow {...props} />)).toMatchSnapshot()
 })

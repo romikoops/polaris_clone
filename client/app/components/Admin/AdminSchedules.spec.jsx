@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
-  schedule, theme, location, identity, change, user, internalUser
+  theme, identity, user, internalUser
 } from '../../mocks'
 
 import AdminSchedules from './AdminSchedules'
@@ -15,7 +15,6 @@ jest.mock('react-redux', () => ({
 }))
 
 const hub = {
-  location,
   data: {
     name: 'FOO_NAME',
     hub_code: 'FOO_HUB_CODE'
@@ -23,7 +22,6 @@ const hub = {
   name: 'FOO_HUB_NAME'
 }
 const secondHub = {
-  location,
   data: {
     name: 'BAR_NAME',
     hub_code: 'BAR_HUB_CODE'
@@ -33,7 +31,8 @@ const secondHub = {
 const propsBase = {
   theme,
   schedule: {
-    ...schedule,
+    id: 555777,
+    eta: '2018-12-01T12:14:08+01:00',
     hub_route_key: '0-1'
   },
   hubs: [hub, secondHub],

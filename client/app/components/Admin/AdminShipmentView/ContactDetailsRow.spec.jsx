@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { user, address } from '../../../mocks'
+import { user, address } from '../../../mock'
 import ContactDetailsRow from './ContactDetailsRow'
 
 const contactBase = {

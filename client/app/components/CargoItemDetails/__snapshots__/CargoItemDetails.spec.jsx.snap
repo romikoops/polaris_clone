@@ -1,229 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`props.theme.colors is falsy 1`] = `
-<div
-  className="info layout-row flex-100 layout-wrap layout-align-center"
->
-  <div
-    className="flex-100"
-  >
-    <h4>
-      Unit 
-      2
-    </h4>
-  </div>
-  <hr />
-  <div
-    className="flex-100 layout-row layout-align-space-between"
-  >
-    <p>
-      Gross Weight
-    </p>
-    <p>
-      56
-       kg
-    </p>
-  </div>
-  <hr
-    className="flex-100"
-  />
-  <div
-    className="flex-100 layout-row layout-align-space-between"
-  >
-    <p>
-      Length
-    </p>
-    <p>
-      37
-       cm
-    </p>
-  </div>
-  <hr
-    className="flex-100"
-  />
-  <div
-    className="flex-100 layout-row layout-align-space-between"
-  >
-    <p>
-      Width
-    </p>
-    <p>
-      111
-       cm
-    </p>
-  </div>
-  <hr
-    className="flex-100"
-  />
-  <div
-    className="flex-100 layout-row layout-align-space-between"
-  >
-    <p>
-      Height
-    </p>
-    <p>
-      70
-       cm
-    </p>
-  </div>
-  <hr
-    className="flex-100"
-  />
-  <div
-    className="flex-100 layout-row layout-align-space-between"
-  >
-    <p>
-      Volume
-    </p>
-    <p>
-      0.15
-       m
-      <sup>
-        3
-      </sup>
-    </p>
-  </div>
-  <hr
-    className="flex-100"
-  />
-  <div
-    className="flex-100 layout-row layout-align-space-between"
-  >
-    <p>
-      Chargeable Weight
-    </p>
-    <p>
-      60.00
-       kg
-    </p>
-  </div>
-  <hr
-    className="flex-100"
-  />
-</div>
-`;
-
-exports[`props.viewHSCodes is true 1`] = `
-<div
-  className="info layout-row flex-100 layout-wrap layout-align-center"
->
-  <div
-    className="flex-100"
-  >
-    <h4>
-      Unit 
-      2
-    </h4>
-  </div>
-  <hr />
-  <div
-    className="flex-100 layout-row layout-align-space-between"
-  >
-    <p>
-      Gross Weight
-    </p>
-    <p>
-      56
-       kg
-    </p>
-  </div>
-  <hr
-    className="flex-100"
-  />
-  <div
-    className="flex-100 layout-row layout-align-space-between"
-  >
-    <p>
-      Length
-    </p>
-    <p>
-      37
-       cm
-    </p>
-  </div>
-  <hr
-    className="flex-100"
-  />
-  <div
-    className="flex-100 layout-row layout-align-space-between"
-  >
-    <p>
-      Width
-    </p>
-    <p>
-      111
-       cm
-    </p>
-  </div>
-  <hr
-    className="flex-100"
-  />
-  <div
-    className="flex-100 layout-row layout-align-space-between"
-  >
-    <p>
-      Height
-    </p>
-    <p>
-      70
-       cm
-    </p>
-  </div>
-  <hr
-    className="flex-100"
-  />
-  <div
-    className="flex-100 layout-row layout-align-space-between"
-  >
-    <p>
-      Volume
-    </p>
-    <p>
-      0.15
-       m
-      <sup>
-        3
-      </sup>
-    </p>
-  </div>
-  <hr
-    className="flex-100"
-  />
-  <div
-    className="flex-100 layout-row layout-align-space-between"
-  >
-    <p>
-      Chargeable Weight
-    </p>
-    <p>
-      60.00
-       kg
-    </p>
-  </div>
-  <hr
-    className="flex-100"
-  />
-  <div
-    className="flex-100 layout-row layout-wrap"
-    onClick={[Function]}
-  >
-    <i
-      className="fa fa-eye clip flex-none"
-      style={
-        Object {
-          "background": "-webkit-linear-gradient(left, #333,#fafafa)",
-        }
-      }
-    />
-    <p
-      className="offset-5 flex-none"
-    >
-      View Hs Codes
-    </p>
-  </div>
-</div>
-`;
-
 exports[`shallow render 1`] = `
 <div
   className="info layout-row flex-100 layout-wrap layout-align-center"
@@ -244,7 +20,7 @@ exports[`shallow render 1`] = `
       Gross Weight
     </p>
     <p>
-      56
+      200
        kg
     </p>
   </div>
@@ -258,7 +34,7 @@ exports[`shallow render 1`] = `
       Length
     </p>
     <p>
-      37
+      60
        cm
     </p>
   </div>
@@ -272,7 +48,7 @@ exports[`shallow render 1`] = `
       Width
     </p>
     <p>
-      111
+      10
        cm
     </p>
   </div>
@@ -286,7 +62,7 @@ exports[`shallow render 1`] = `
       Height
     </p>
     <p>
-      70
+      40
        cm
     </p>
   </div>
@@ -300,7 +76,7 @@ exports[`shallow render 1`] = `
       Volume
     </p>
     <p>
-      0.15
+      0.04
        m
       <sup>
         3
@@ -317,7 +93,7 @@ exports[`shallow render 1`] = `
       Chargeable Weight
     </p>
     <p>
-      60.00
+      250.00
        kg
     </p>
   </div>
@@ -347,7 +123,7 @@ exports[`state.viewer is true 1`] = `
       Gross Weight
     </p>
     <p>
-      56
+      200
        kg
     </p>
   </div>
@@ -361,7 +137,7 @@ exports[`state.viewer is true 1`] = `
       Length
     </p>
     <p>
-      37
+      60
        cm
     </p>
   </div>
@@ -375,7 +151,7 @@ exports[`state.viewer is true 1`] = `
       Width
     </p>
     <p>
-      111
+      10
        cm
     </p>
   </div>
@@ -389,7 +165,7 @@ exports[`state.viewer is true 1`] = `
       Height
     </p>
     <p>
-      70
+      40
        cm
     </p>
   </div>
@@ -403,7 +179,7 @@ exports[`state.viewer is true 1`] = `
       Volume
     </p>
     <p>
-      0.15
+      0.04
        m
       <sup>
         3
@@ -420,7 +196,7 @@ exports[`state.viewer is true 1`] = `
       Chargeable Weight
     </p>
     <p>
-      60.00
+      250.00
        kg
     </p>
   </div>
@@ -432,12 +208,26 @@ exports[`state.viewer is true 1`] = `
     hsCodes={Array []}
     item={
       Object {
-        "chargeable_weight": 60,
-        "dimension_x": 111,
-        "dimension_y": 37,
-        "dimension_z": 70,
-        "hs_codes": Array [],
-        "payload_in_kg": 56,
+        "cargo_item_type_id": "foo",
+        "chargeable_weight": 250,
+        "dangerous_goods": false,
+        "description": "FOO_CARGO_ITEM_DESCRIPTION",
+        "dimension_x": 10,
+        "dimension_y": 60,
+        "dimension_z": 40,
+        "gross_weight": 76,
+        "hs_codes": Array [
+          4,
+        ],
+        "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+        "id": 1,
+        "key": "FOO_CARGO_ITEM_KEY",
+        "payload_in_kg": 200,
+        "quantity": 5,
+        "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
+        "stackable": false,
+        "tare_weight": 20,
+        "weight": 220,
       }
     }
     t={[Function]}
@@ -450,5 +240,229 @@ exports[`state.viewer is true 1`] = `
       }
     }
   />
+</div>
+`;
+
+exports[`theme.colors is falsy 1`] = `
+<div
+  className="info layout-row flex-100 layout-wrap layout-align-center"
+>
+  <div
+    className="flex-100"
+  >
+    <h4>
+      Unit 
+      2
+    </h4>
+  </div>
+  <hr />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Gross Weight
+    </p>
+    <p>
+      200
+       kg
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Length
+    </p>
+    <p>
+      60
+       cm
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Width
+    </p>
+    <p>
+      10
+       cm
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Height
+    </p>
+    <p>
+      40
+       cm
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Volume
+    </p>
+    <p>
+      0.04
+       m
+      <sup>
+        3
+      </sup>
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Chargeable Weight
+    </p>
+    <p>
+      250.00
+       kg
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+</div>
+`;
+
+exports[`viewHSCodes is true 1`] = `
+<div
+  className="info layout-row flex-100 layout-wrap layout-align-center"
+>
+  <div
+    className="flex-100"
+  >
+    <h4>
+      Unit 
+      2
+    </h4>
+  </div>
+  <hr />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Gross Weight
+    </p>
+    <p>
+      200
+       kg
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Length
+    </p>
+    <p>
+      60
+       cm
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Width
+    </p>
+    <p>
+      10
+       cm
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Height
+    </p>
+    <p>
+      40
+       cm
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Volume
+    </p>
+    <p>
+      0.04
+       m
+      <sup>
+        3
+      </sup>
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Chargeable Weight
+    </p>
+    <p>
+      250.00
+       kg
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-wrap"
+    onClick={[Function]}
+  >
+    <i
+      className="fa fa-eye clip flex-none"
+      style={
+        Object {
+          "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+        }
+      }
+    />
+    <p
+      className="offset-5 flex-none"
+    >
+      View Hs Codes
+    </p>
+  </div>
 </div>
 `;

@@ -46,7 +46,7 @@ exports[`shallow rendering 1`] = `
           }
         }
         validations="minLength:2"
-        value="FOO_COMPANY_NAME"
+        value="CONTACT_COMPANY_NAME"
         wrapperClassName="wrapper_input flex"
       />
     </div>
@@ -93,7 +93,7 @@ exports[`shallow rendering 1`] = `
             }
           }
           validations="minLength:2"
-          value="FOO_FIRST_NAME"
+          value="John"
           wrapperClassName="wrapper_input flex-100"
         />
         <Formsy(FormsyInput)
@@ -118,7 +118,7 @@ exports[`shallow rendering 1`] = `
             }
           }
           validations="minLength:2"
-          value="FOO_LAST_NAME"
+          value="Doe"
           wrapperClassName="wrapper_input flex-100"
         />
       </div>
@@ -168,7 +168,7 @@ exports[`shallow rendering 1`] = `
             "matchRegexp": /\\^\\(\\[\\^@\\\\s\\]\\+\\)@\\(\\(\\?:\\[-a-z0-9\\]\\+\\\\\\.\\)\\+\\[a-z\\]\\{2,\\}\\)\\$/i,
           }
         }
-        value="foo@bar.com"
+        value="foo@bar.baz"
         wrapperClassName="wrapper_input flex-95"
       />
     </div>
@@ -208,7 +208,7 @@ exports[`shallow rendering 1`] = `
           }
         }
         validations="minLength:4"
-        value="0789323143"
+        value="0761452887"
         wrapperClassName="wrapper_input flex-95"
       />
     </div>

@@ -1,19 +1,11 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme } from '../../mocks'
+import { theme, firstCargoItem } from '../../mocks'
 
-// eslint-disable-next-line
 import CargoItemDetails from './CargoItemDetails'
 
 const propsBase = {
-  item: {
-    payload_in_kg: 56,
-    chargeable_weight: 60,
-    dimension_x: 111,
-    dimension_y: 37,
-    dimension_z: 70,
-    hs_codes: []
-  },
+  item: firstCargoItem,
   index: 1,
   viewHSCodes: false,
   theme,
@@ -24,7 +16,7 @@ test('shallow render', () => {
   expect(shallow(<CargoItemDetails {...propsBase} />)).toMatchSnapshot()
 })
 
-test('props.viewHSCodes is true', () => {
+test('viewHSCodes is true', () => {
   const props = {
     ...propsBase,
     viewHSCodes: true
@@ -32,10 +24,10 @@ test('props.viewHSCodes is true', () => {
   expect(shallow(<CargoItemDetails {...props} />)).toMatchSnapshot()
 })
 
-test('props.theme.colors is falsy', () => {
+test('theme.colors is falsy', () => {
   const props = {
     ...propsBase,
-    theme: {}
+    theme: null
   }
   expect(shallow(<CargoItemDetails {...props} />)).toMatchSnapshot()
 })
@@ -43,6 +35,5 @@ test('props.theme.colors is falsy', () => {
 test('state.viewer is true', () => {
   const wrapper = shallow(<CargoItemDetails {...propsBase} />)
   wrapper.setState({ viewer: true })
-
   expect(wrapper).toMatchSnapshot()
 })

@@ -13,6 +13,14 @@ test('shallow render', () => {
   expect(shallow(<AlertModalBody {...propsBase} />)).toMatchSnapshot()
 })
 
+test('maxWidth if falsy', () => {
+  const props = {
+    ...propsBase,
+    maxWidth: null
+  }
+  expect(shallow(<AlertModalBody {...props} />)).toMatchSnapshot()
+})
+
 test('click on icon calls props.toggleAlertModal', () => {
   const props = {
     ...propsBase,

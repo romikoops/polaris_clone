@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { hub, theme, identity } from '../../mocks'
+import { hub, theme, identity } from '../../mock'
 
 import AdminTruckingView from './AdminTruckingView'
 

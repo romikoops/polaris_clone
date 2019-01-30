@@ -1,21 +1,46 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`shallow render 1`] = `
+exports[`rawValue != null 1`] = `
 <div
-  className="FOO_WRAPPER_CLASS_NAME wrapper_input"
+  className="WRAPPER_CLASSNAME wrapper_input"
 >
   <textarea
-    className="FOO_CLASS_NAME"
+    className="CLASS_NAME"
     disabled={false}
-    id="FOO_ID"
-    name="FOO_NAME"
+    id="ID"
+    name="NAME"
     onBlur={[Function]}
     onChange={[Function]}
     onFocus={[Function]}
-    placeholder="FOO_PLACEHOLDER"
+    placeholder="PLACEHOLDER"
     rows={3}
     style={Object {}}
-    type="FOO_TYPE"
+    type="TYPE"
+    value="VALUE"
+  />
+  <span
+    className="error_message"
+    style={Object {}}
+  />
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="WRAPPER_CLASSNAME wrapper_input"
+>
+  <textarea
+    className="CLASS_NAME"
+    disabled={false}
+    id="ID"
+    name="NAME"
+    onBlur={[Function]}
+    onChange={[Function]}
+    onFocus={[Function]}
+    placeholder="PLACEHOLDER"
+    rows={3}
+    style={Object {}}
+    type="TYPE"
     value=""
   />
   <span
@@ -27,17 +52,17 @@ exports[`shallow render 1`] = `
 
 exports[`submitAttempted is true 1`] = `
 <div
-  className="FOO_WRAPPER_CLASS_NAME wrapper_input"
+  className="WRAPPER_CLASSNAME wrapper_input"
 >
   <textarea
-    className="FOO_CLASS_NAME"
+    className="CLASS_NAME"
     disabled={false}
-    id="FOO_ID"
-    name="FOO_NAME"
+    id="ID"
+    name="NAME"
     onBlur={[Function]}
     onChange={[Function]}
     onFocus={[Function]}
-    placeholder="FOO_PLACEHOLDER"
+    placeholder="PLACEHOLDER"
     rows={3}
     style={
       Object {
@@ -46,7 +71,7 @@ exports[`submitAttempted is true 1`] = `
         "color": "rgba(211, 104, 80, 1)",
       }
     }
-    type="FOO_TYPE"
+    type="TYPE"
     value=""
   />
   <span
