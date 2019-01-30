@@ -16,12 +16,14 @@ import { getTotalShipmentErrors } from './CargoSection/getErrors'
 class ShipmentDetails extends React.PureComponent {
   constructor (props) {
     super(props)
-    this.state = { totalShipmentErrors: {} }
+    this.state = { totalShipmentErrors: {}, getOffersDisabled: false }
 
     this.toggleModal = this.toggleModal.bind(this)
     this.getVisibleModal = this.getVisibleModal.bind(this)
     this.getOffers = this.getOffers.bind(this)
     this.handleInvalidGetOffersAttempt = this.handleInvalidGetOffersAttempt.bind(this)
+    this.enableGetOffers = this.enableGetOffers.bind(this)
+    this.disableGetOffers = this.disableGetOffers.bind(this)
 
     this.modalsElements = getModals(
       props,
@@ -105,8 +107,16 @@ class ShipmentDetails extends React.PureComponent {
     bookingProcessDispatch.updateModals(name)
   }
 
+  enableGetOffers () {
+    this.setState({ getOffersDisabled: false })
+  }
+
+  disableGetOffers () {
+    this.setState({ getOffersDisabled: true })
+  }
+
   render () {
-    const { totalShipmentErrors } = this.state
+    const { totalShipmentErrors, getOffersDisabled } = this.state
 
     return (
       <div
@@ -118,12 +128,14 @@ class ShipmentDetails extends React.PureComponent {
         <Formsy
           onValidSubmit={this.getOffers}
           onInvalidSubmit={this.handleInvalidGetOffersAttempt}
+          onValid={this.enableGetOffers}
+          onInvalid={this.disableGetOffers}
           className="flex-100 layout-row layout-wrap"
         >
           <RouteSection />
           <DayPickerSection />
           <CargoSection toggleModal={this.toggleModal} totalShipmentErrors={totalShipmentErrors}/>
-          <GetOffersSection totalShipmentErrors={totalShipmentErrors} />
+          <GetOffersSection totalShipmentErrors={totalShipmentErrors} getOffersDisabled={getOffersDisabled} />
         </Formsy>
       </div>
     )

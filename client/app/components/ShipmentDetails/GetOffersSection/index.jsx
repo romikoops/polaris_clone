@@ -37,7 +37,9 @@ class GetOffersSection extends React.PureComponent {
   }
 
   getOffersBtnIsActive () {
-    return this.noDangerousGoodsCondition() && this.stackableGoodsCondition()
+    const { getOffersDisabled } = this.props
+
+    return !getOffersDisabled && this.noDangerousGoodsCondition() && this.stackableGoodsCondition()
   }
 
   cargoContainsDangerousGoods () {
