@@ -1,20 +1,15 @@
 import React from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import { withNamespaces } from 'react-i18next'
+import { get } from 'lodash'
 import styles from './index.scss'
 import CargoUnitNumberInput from '../CargoUnit/NumberInput'
 import calcMaxDimensionsToApply from '../../../../../helpers/calcMaxDimensionsToApply'
 
 function CargoItemAggregated ({
-  cargoItem, t, ShipmentDetails, maxDimensions, toggleModal, onChangeCargoUnitInput
+  cargoItem, t, maxDimensions, toggleModal, onChangeCargoUnitInput
 }) {
-  const maxDimensionsToApply = calcMaxDimensionsToApply(
-    ShipmentDetails.availableMots,
-    maxDimensions
-  )
-  // TODO Max dimensions
-  const getMaxDimension = prop => Number(
-    maxDimensionsToApply[prop]
-  )
   const getSharedProps = prop => ({
     cargoItem,
     className: 'flex-100',
@@ -39,6 +34,7 @@ function CargoItemAggregated ({
             </div>
             <CargoUnitNumberInput
               maxDimensionsErrorText={t('errors:maxVolume')}
+              maxDimension={+maxDimensions.volume || 35}
               {...getSharedProps('totalVolume')}
             />
             <div className="flex-10 layout-row layout-align-center-center">
@@ -52,6 +48,7 @@ function CargoItemAggregated ({
             </div>
             <CargoUnitNumberInput
               maxDimensionsErrorText={t('errors:maxWeight')}
+              maxDimension={+maxDimensions.payloadInKg || 35000}
               {...getSharedProps('totalWeight')}
             />
             <div className="flex-10 layout-row layout-align-center-center">
@@ -64,4 +61,16 @@ function CargoItemAggregated ({
   )
 }
 
-export default withNamespaces(['common', 'errors'])(CargoItemAggregated)
+function mapStateToProps (state) {
+  const { bookingProcess, bookingData } = state
+  const { ShipmentDetails } = bookingProcess
+  const { availableMots } = ShipmentDetails
+
+  const { maxAggregateDimensions } = get(bookingData, 'response.stage1', {})
+
+  const maxDimensions = calcMaxDimensionsToApply(availableMots, maxAggregateDimensions)
+
+  return { maxDimensions }
+}
+
+export default withNamespaces(['common', 'errors'])(connect(mapStateToProps)(CargoItemAggregated))
