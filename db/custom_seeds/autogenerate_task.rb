@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-genObj = {
+gen_obj = {
   normanglobal: {
     container: [
       { origin: 'DALIAN', destination:	'FELIXSTOWE', departure:	'THURSDAY', transit_time:	38 },
@@ -21,7 +21,37 @@ genObj = {
       { origin: 'HONG KONG', destination:	'FELIXSTOWE', departure:	'SUNDAY', transit_time:	27 },
       { origin: 'HONG KONG', destination:	'SOUTHAMPTON', departure:	'MONDAY', transit_time:	27 },
       { origin: 'SHENZHEN', destination:	'FELIXSTOWE', departure:	'FRIDAY', transit_time:	27 },
-      { origin: 'SHENZHEN', destination:	'SOUTHAMPTON', departure:	'MONDAY', transit_time:	27 }
+      { origin: 'SHENZHEN', destination:	'SOUTHAMPTON', departure:	'MONDAY', transit_time:	27 },
+      { origin: 'DALIAN', destination:	'GOTHENBURG', departure:	'TUESDAY',	transit_time: 42 },
+      { origin: 'DALIAN', destination:	'HELSINGBORG', departure:	'TUESDAY',	transit_time: 47 },
+      { origin: 'DALIAN', destination:	'STOCKHOLM', departure:	'TUESDAY',	transit_time: 50 },
+      { origin: 'XINGANG', destination:	'GOTHENBURG', departure:	'MONDAY',	transit_time: 43 },
+      { origin: 'XINGANG', destination:	'HELSINGBORG', departure:	'MONDAY',	transit_time: 43 },
+      { origin: 'XINGANG', destination:	'STOCKHOLM', departure:	'MONDAY',	transit_time: 51 },
+      { origin: 'TIANJIN', destination:	'GOTHENBURG', departure:	'MONDAY',	transit_time: 43 },
+      { origin: 'TIANJIN', destination:	'HELSINGBORG', departure:	'MONDAY',	transit_time: 43 },
+      { origin: 'TIANJIN', destination:	'STOCKHOLM', departure:	'MONDAY',	transit_time: 51 },
+      { origin: 'QINGDAO', destination:	'GOTHENBURG', departure:	'FRIDAY',	transit_time: 39 },
+      { origin: 'QINGDAO', destination:	'HELSINGBORG', departure:	'FRIDAY',	transit_time: 44 },
+      { origin: 'QINGDAO', destination:	'STOCKHOLM', departure:	'MONDAY',	transit_time: 44 },
+      { origin: 'SHANGHAI', destination:	'GOTHENBURG', departure:	'SUNDAY',	transit_time: 37 },
+      { origin: 'SHANGHAI', destination:	'HELSINGBORG', departure:	'MONDAY',	transit_time: 37 },
+      { origin: 'SHANGHAI', destination:	'STOCKHOLM', departure:	'SATURDAY',	transit_time: 40 },
+      { origin: 'NINGBO', destination:	'GOTHENBURG', departure:	'SATURDAY',	transit_time: 39 },
+      { origin: 'NINGBO', destination:	'HELSINGBORG', departure:	'SATURDAY',	transit_time: 38 },
+      { origin: 'NINGBO', destination:	'STOCKHOLM', departure:	'THURSDAY',	transit_time: 41 },
+      { origin: 'XIAMEN', destination:	'GOTHENBURG', departure:	'SATURDAY',	transit_time: 39 },
+      { origin: 'XIAMEN', destination:	'HELSINGBORG', departure:	'SATURDAY',	transit_time: 39 },
+      { origin: 'XIAMEN', destination:	'STOCKHOLM', departure:	'SATURDAY',	transit_time: 40 },
+      { origin: 'HONG KONG', destination:	'GOTHENBURG', departure:	'FRIDAY',	transit_time: 38 },
+      { origin: 'HONG KONG', destination:	'HELSINGBORG', departure:	'FRIDAY',	transit_time: 36 },
+      { origin: 'HONG KONG', destination:	'STOCKHOLM', departure:	'FRIDAY',	transit_time: 40 },
+      { origin: 'SHENZHEN', destination:	'GOTHENBURG', departure:	'TUESDAY',	transit_time: 38 },
+      { origin: 'SHENZHEN', destination:	'HELSINGBORG', departure:	'TUESDAY',	transit_time: 37 },
+      { origin: 'SHENZHEN', destination:	'STOCKHOLM', departure:	'WEDNESDAY',	transit_time: 34 },
+      { origin: 'YANTIAN', destination:	'GOTHENBURG', departure:	'WEDNESDAY',	transit_time: 34 },
+      { origin: 'YANTIAN', destination:	'HELSINGBORG', departure:	'WEDNESDAY',	transit_time: 34 },
+      { origin: 'YANTIAN', destination:	'STOCKHOLM', departure:	'WEDNESDAY',	transit_time: 36 }
     ],
     cargo_item: [
       { origin: 'DALIAN', destination: 'SOUTHAMPTON', departure: 'THURSDAY',	transit_time: 35 },
@@ -40,12 +70,22 @@ genObj = {
       { origin: 'HONG KONG', destination: 'FELIXSTOWE', departure: 'SUNDAY',	transit_time: 27 },
       { origin: 'HONG KONG', destination: 'SOUTHAMPTON', departure: 'FRIDAY',	transit_time: 27 },
       { origin: 'SHENZHEN', destination: 'FELIXSTOWE', departure: 'MONDAY',	transit_time: 24 },
-      { origin: 'SHENZHEN', destination: 'SOUTHAMPTON', departure: 'WEDNESDAY',	transit_time: 24 }
+      { origin: 'SHENZHEN', destination: 'SOUTHAMPTON', departure: 'WEDNESDAY',	transit_time: 24 },
+      { origin: 'DALIAN', destination:	'GOTHENBURG', departure:	'TUESDAY', transit_time:	42 },
+      { origin: 'XINGANG', destination:	'GOTHENBURG', departure:	'MONDAY', transit_time:	43 },
+      { origin: 'TIANJIN', destination:	'GOTHENBURG', departure:	'MONDAY', transit_time:	43 },
+      { origin: 'QINGDAO', destination:	'GOTHENBURG', departure:	'FRIDAY', transit_time:	39 },
+      { origin: 'SHANGHAI', destination:	'GOTHENBURG', departure:	'SUNDAY', transit_time:	37 },
+      { origin: 'NINGBO', destination:	'GOTHENBURG', departure:	'SATURDAY', transit_time:	39 },
+      { origin: 'XIAMEN', destination:	'GOTHENBURG', departure:	'SATURDAY', transit_time:	39 },
+      { origin: 'HONG KONG', destination:	'GOTHENBURG', departure:	'FRIDAY', transit_time:	38 },
+      { origin: 'SHENZHEN', destination:	'GOTHENBURG', departure:	'TUESDAY', transit_time:	38 },
+      { origin: 'YANTIAN', destination:	'GOTHENBURG', departure:	'WEDNESDAY', transit_time:	34 }
     ]
   }
 }
 
-ordinalLookup = {
+ordinal_lookup = {
   "MONDAY": 1,
   "TUESDAY": 2,
   "WEDNESDAY": 3,
@@ -55,7 +95,7 @@ ordinalLookup = {
   "SUNDAY": 0
 
 }
-genObj.each do |subdomain, cargo_class_routes|
+gen_obj.each do |subdomain, cargo_class_routes|
   cargo_class_routes.each do |cargo_class, routes|
     tenant = Tenant.find_by_subdomain(subdomain)
     routes.each do |genData|
@@ -73,7 +113,7 @@ genObj.each do |subdomain, cargo_class_routes|
           [genData[:transit_time]],
           DateTime.now,
           finish_date,
-          [ordinalLookup[genData[:departure].to_sym]],
+          [ordinal_lookup[genData[:departure].to_sym]],
           tv_id,
           4,
           cargo_class.to_s
