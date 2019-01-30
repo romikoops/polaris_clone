@@ -93,39 +93,6 @@ class ContactsController < ApplicationController
     response_handler({})
   end
 
-  def new_alias
-    contact_data = JSON.parse(params[:new_contact])
-    ncd = {}
-    ncl = {}
-    ncd[:first_name] = contact_data['firstName']
-    ncd[:last_name] = contact_data['lastName']
-    ncd[:company_name] = contact_data['companyName']
-    ncd[:phone] = contact_data['phone']
-    ncd[:email] = contact_data['email']
-    ncd[:alias] = true
-
-    ncl[:street_number] = contact_data['number']
-    ncl[:street] = contact_data['street']
-    ncl[:city] = contact_data['city']
-    ncl[:zip_code] = contact_data['zipCode']
-    ncl[:country] = Country.geo_find_by_name(contact_data['country'])
-
-    new_loc = Address.create!(ncl)
-    ncd[:address_id] = new_loc.id
-    contact = current_user.contacts.create!(ncd)
-    response_handler(contact)
-  end
-
-  def delete_alias
-    contact = Contact.find(params[:id])
-    if contact.user_id == current_user.id
-      contact.destroy
-      response_handler(params[:id])
-    else
-      response_handler(false)
-    end
-  end
-
   def create
     contact_data = JSON.parse(params[:new_contact])
     ncd = {}

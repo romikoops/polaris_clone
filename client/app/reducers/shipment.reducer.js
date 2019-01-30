@@ -487,7 +487,6 @@ export default function shipment (state = {}, action) {
           userId: contactData.user_id,
           id: contactData.id,
           email: contactData.email,
-          alias: contactData.alias,
           phone: contactData.phone,
           addressId: contactData.address_id
         },

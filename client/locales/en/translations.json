@@ -320,7 +320,6 @@
       "chooseManager": "Choose manager",
       "deleteAllData": "This will delete {{firstName} {{lastName}} and all related data",
       "areYouSure": " Are you sure",
-      "deleteAlias": " Delete Alias?",
       "createNewClient": "Create New Client",
       "dedicated": "Dedicated",
       "password": "Password *",
@@ -815,7 +814,6 @@
     "pickupTakesTwoDays": "Pick-Up of Cargo will usually occur within the first 48 hours of this date."
   },
   "user": {
-    "newAlias": "New Alias",
     "companyName": "Company Name",
     "firstName": "First Name",
     "lastName": "Last Name",
@@ -828,8 +826,6 @@
     "postalCode": "Postal Code",
     "city": "City",
     "country": "Country",
-    "aliases": "Aliases",
-    "addAlias": "Add Alias",
     "savedLocations": "Saved Locations",
     "userPassword": "User Password",
     "addLocation": "Add location",

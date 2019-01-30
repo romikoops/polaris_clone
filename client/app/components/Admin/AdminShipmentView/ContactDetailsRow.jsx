@@ -24,7 +24,11 @@ function ContactDetailsRow ({
           <div className="flex">
             <div className={`${styles.info_row} flex-100 layout-row`}>
               <i className={`${adminStyles.icon} fa fa-user flex-none`} style={style} />
-              <h4>{n.contact.first_name} {n.contact.last_name}</h4>
+              <h4>
+                {n.contact.first_name}
+                {' '}
+                {n.contact.last_name}
+              </h4>
             </div>
             <div className={`${styles.info_row} flex-100 layout-row`}>
               <i className={`${adminStyles.icon} fa fa-building flex-none`} style={style} />
@@ -37,7 +41,7 @@ function ContactDetailsRow ({
         }
       }
       if (n.type === 'shipper') {
-        if (n.contact.user_id === accountId && n.contact.alias && n.contact.email === user.email) {
+        if (n.contact.user_id === accountId && n.contact.email === user.email) {
           isAccountHolder = 'shipper'
         }
         shipperContact = (
@@ -46,7 +50,11 @@ function ContactDetailsRow ({
             <div className="layout-row flex-100 layout-wrap">
               <div className={`${styles.info_row} flex-100 layout-row`}>
                 <i className={`${adminStyles.icon} fa fa-user flex-none`} style={style} />
-                <h4>{n.contact.first_name} {n.contact.last_name}</h4>
+                <h4>
+                  {n.contact.first_name}
+                  {' '}
+                  {n.contact.last_name}
+                </h4>
               </div>
               <div className={`${styles.info_row} ${styles.padding_bottom_contact} flex-100 layout-row`}>
                 <i className={`${adminStyles.icon} fa fa-building flex-none`} style={style} />
@@ -68,8 +76,18 @@ function ContactDetailsRow ({
               style={{ display: n.address.street && n.address.street_number && n.address.zip_code && n.address.city ? 'block' : 'none' }}
             >
               <i className={`${adminStyles.icon} fa fa-map flex-none`} style={style} />
-              <p>{n.address.street ? `${n.address.street}` : '' }{ n.address.street_number ? `${n.address.street_number}` : ''} <br />
-                <strong>{n.address.zip_code ? `${n.address.zip_code}` : ''} {n.address.city ? `${n.address.city}` : ''}</strong> <br />
+              <p>
+                {n.address.street ? `${n.address.street}` : '' }
+                { n.address.street_number ? `${n.address.street_number}` : ''}
+                {' '}
+                <br />
+                <strong>
+                  {n.address.zip_code ? `${n.address.zip_code}` : ''}
+                  {' '}
+                  {n.address.city ? `${n.address.city}` : ''}
+                </strong>
+                {' '}
+                <br />
               </p>
             </div>
 
@@ -77,7 +95,7 @@ function ContactDetailsRow ({
         )
       }
       if (n.type === 'consignee') {
-        if (n.contact.user_id === accountId && n.contact.alias && n.contact.email === user.email) {
+        if (n.contact.user_id === accountId && n.contact.email === user.email) {
           isAccountHolder = 'consignee'
         }
         consigneeContact = (
@@ -85,7 +103,11 @@ function ContactDetailsRow ({
             <div className="layout-row flex-100 layout-wrap">
               <div className={`${styles.info_row} flex-100 layout-row`}>
                 <i className={`${adminStyles.icon} fa fa-user flex-none layout-align-center-center`} style={style} />
-                <h4>{n.contact.first_name} {n.contact.last_name}</h4>
+                <h4>
+                  {n.contact.first_name}
+                  {' '}
+                  {n.contact.last_name}
+                </h4>
               </div>
               <div className={`${styles.info_row} ${styles.padding_bottom_contact} flex-100 layout-row`}>
                 <i className={`${adminStyles.icon} fa fa-building flex-none`} style={style} />
@@ -107,8 +129,17 @@ function ContactDetailsRow ({
               style={{ display: n.address.street && n.address.street_number && n.address.zip_code && n.address.city ? 'block' : 'none' }}
             >
               <i className={`${adminStyles.icon} fa fa-map flex-none`} style={style} />
-              <p>{n.address.street ? `${n.address.street}` : '' }{ n.address.street_number ? `${n.address.street_number}` : ''}<br />
-                <strong>{n.address.zip_code ? `${n.address.zip_code}` : ''} {n.address.city ? `${n.address.city}` : ''}</strong> <br />
+              <p>
+                {n.address.street ? `${n.address.street}` : '' }
+                { n.address.street_number ? `${n.address.street_number}` : ''}
+                <br />
+                <strong>
+                  {n.address.zip_code ? `${n.address.zip_code}` : ''}
+                  {' '}
+                  {n.address.city ? `${n.address.city}` : ''}
+                </strong>
+                {' '}
+                <br />
               </p>
             </div>
           </div>
@@ -116,16 +147,22 @@ function ContactDetailsRow ({
       }
     })
   }
-  const actionButton = (<div className={`flex-none layout-row layout-align-center-center ${styles.account_holder}`}>
-    <p className="flex-none">{t('account:accountHolder')}</p>
-  </div>)
+  const actionButton = (
+    <div className={`flex-none layout-row layout-align-center-center ${styles.account_holder}`}>
+      <p className="flex-none">{t('account:accountHolder')}</p>
+    </div>
+  )
   const accountContact = (
     <div className={`${styles.contact_box} flex-100 layout-wrap layout-column`}>
       <div className="layout-column layout-sm-row flex-sm-100">
         <div className="layout-sm-column flex-sm-30">
           <div className={`${styles.info_row} flex-100 layout-row`}>
             <i className={`${adminStyles.icon} fa fa-user flex-none layout-align-center-center`} style={style} />
-            <h4>{user.first_name} {user.last_name}</h4>
+            <h4>
+              {user.first_name}
+              {' '}
+              {user.last_name}
+            </h4>
           </div>
           <div className={`${styles.info_row} ${styles.padding_bottom_contact} flex-100 layout-row`}>
             <i className={`${adminStyles.icon} fa fa-building flex-none`} style={style} />
@@ -170,15 +207,17 @@ function ContactDetailsRow ({
           showTitle
         />
       </div>
-      {isAccountHolder === '' ? <div className={`flex-100 ${flexSize} layout-row layout-align-center card_padding_right margin_bottom`}>
-        <GreyBox
-          title={t('account:accountHolder')}
-          wrapperClassName="layout-row flex-100 layout-align-start-start"
-          contentClassName="layout-row layout-wrap flex-100"
-          content={accountContact}
-          showTitle
-        />
-      </div> : '' }
+      {isAccountHolder === '' ? (
+        <div className={`flex-100 ${flexSize} layout-row layout-align-center card_padding_right margin_bottom`}>
+          <GreyBox
+            title={t('account:accountHolder')}
+            wrapperClassName="layout-row flex-100 layout-align-start-start"
+            contentClassName="layout-row layout-wrap flex-100"
+            content={accountContact}
+            showTitle
+          />
+        </div>
+      ) : '' }
       {nArray.length > 0 ? (
         <div className="flex-100 flex-gt-sm-20 layout-row layout-align-center margin_bottom">
           <GreyBox
