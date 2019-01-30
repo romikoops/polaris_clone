@@ -877,6 +877,7 @@
     "maxWeight": "Maximum weight is",
     "maxHeight": "Maximum height is",
     "maxLength": "Maximum length is",
+    "maxVolume": "Maximum volume is",
     "noRoutesFrom": "No routes found from {{origin}}",
     "noRoutesTo": "No routes found to {{destination}}",
     "noSchedulesForRoute": "There are no schedules available for this route.",
