@@ -10,4 +10,9 @@ class ShipmentMailerPreview < ActionMailer::Preview
     @shipment = Tenant.normanglobal.shipments.requested.last
     ShipmentMailer.shipper_notification(@shipment.user, @shipment)
   end
+
+  def shipper_confirmation
+    @shipment = Shipment.open.last
+    ShipmentMailer.shipper_confirmation(@shipment.user, @shipment)
+  end
 end

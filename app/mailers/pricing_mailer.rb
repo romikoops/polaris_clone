@@ -12,9 +12,11 @@ class PricingMailer < ApplicationMailer
     @tenant = Tenant.find(tenant_id)
     @theme = @tenant.theme
 
-    @mot_icon = File.read("#{Rails.root}/client/app/assets/images/icons/mail/mail_#{@itinerary.mode_of_transport}.png")
+    @mot_icon = URI.open(
+      "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipment.mode_of_transport}.png"
+    ).read
 
-    attachments.inline['logo.png'] = File.read("#{Rails.root}/client/app/assets/images/logos/emails/#{@tenant.subdomain}_white.png")
+    attachments.inline['logo.png'] = URI.try(:open, @tenant.theme['logoLarge']).try(:read)
     attachments.inline['icon.png'] = @mot_icon
     email = @tenant.emails.dig('sales', 'general')
 

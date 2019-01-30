@@ -7,7 +7,7 @@ class ShipmentMailer < ApplicationMailer
 
   TESTING_EMAIL = 'angelica@itsmycargo.com'
 
-  def tenant_notification(user, shipment) # rubocop:disable Metrics/AbcSize
+  def tenant_notification(user, shipment) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     @user = user
     tenant = user.tenant
     @shipment = shipment
@@ -29,9 +29,8 @@ class ShipmentMailer < ApplicationMailer
     ).read
 
     create_pdf_attachment(@shipment)
-    attachments.inline['logo.png'] = URI.open(
-      "https://assets.itsmycargo.com/assets/logos/emails/#{tenant.subdomain}_white.png"
-    ).read
+  
+    attachments.inline['logo.png'] = URI.try(:open, tenant.theme['logoLarge']).try(:read)
     attachments.inline['icon.png'] = @mot_icon
     mail_options = {
       from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
@@ -50,18 +49,15 @@ class ShipmentMailer < ApplicationMailer
     @shipment = shipment
     @scope = @user.tenant.scope
 
-    @shipment_page =
-      "https://#{tenant.subdomain}.itsmycargo.com/account/shipments/view/#{shipment.id}"
+    base_url = Rails.env.production? ? "https://#{tenant.subdomain}.itsmycargo.com" : "http://localhost:8080"
+    @shipment_page = "#{base_url}/account/shipments/view/#{shipment.id}"
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipment.mode_of_transport}.png"
     ).read
 
     create_pdf_attachment(@shipment)
-    attachments.inline['logo.png'] = URI.open(
-      "https://assets.itsmycargo.com/assets/logos/emails/#{tenant.subdomain}_white.png"
-    ).read
-    attachments.inline['logo_small.png'] = URI.try(:open, tenant.theme['logoSmall'])
-                                              .try(:read)
+    attachments.inline['logo.png'] = URI.try(:open, tenant.theme['logoLarge']).try(:read)
+    attachments.inline['logo_small.png'] = URI.try(:open, tenant.theme['logoSmall']).try(:read)
     attachments.inline['icon.png'] = @mot_icon
     mail_options = {
       from: Mail::Address.new("no-reply@#{tenant.subdomain}.#{Settings.emails.domain}")
@@ -78,18 +74,16 @@ class ShipmentMailer < ApplicationMailer
   def shipper_confirmation(user, shipment) # rubocop:disable Metrics/AbcSize
     @user = user
     @shipment = shipment
+    tenant = shipment.tenant
     @scope = tenant.scope
-
-    @shipment_page =
-      "https://#{tenant.subdomain}.itsmycargo.com/account/shipments/view/#{shipment.id}"
+    base_url = Rails.env.production? ? "https://#{tenant.subdomain}.itsmycargo.com" : "http://localhost:8080"
+    @shipment_page = "#{base_url}/account/shipments/view/#{shipment.id}"
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipment.mode_of_transport}.png"
     ).read
 
     create_pdf_attachment(@shipment)
-    attachments.inline['logo.png'] = File.read(
-      "#{Rails.root}/client/app/assets/images/logos/emails/#{tenant.subdomain}_white.png"
-    )
+    attachments.inline['logo.png'] = URI.try(:open, tenant.theme['logoLarge']).try(:read)
     attachments.inline['logo_small.png'] = try(:open, tenant.theme['logoSmall']).try(:read)
     attachments.inline['icon.png'] = @mot_icon
     mail_options = {

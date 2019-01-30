@@ -12,9 +12,7 @@ class WelcomeMailer < ApplicationMailer
     @theme = @tenant.theme
     @content = Content.get_component('WelcomeMail', @tenant.id)
 
-    attachments.inline['logo.png'] = URI.open(
-      "https://assets.itsmycargo.com/assets/logos/emails/#{@tenant.subdomain}_white.png"
-    ).read
+    attachments.inline['logo.png'] = URI.try(:open, @theme['logoLarge']).try(:read)
 
     attachments.inline['ngl_welcome_image.jpg'] = URI.open(
       'https://assets.itsmycargo.com/assets/tenants/normanglobal/ngl_welcome_image.jpg'

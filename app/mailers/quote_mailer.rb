@@ -32,9 +32,7 @@ class QuoteMailer < ApplicationMailer
       }
     )
     pdf_name = "quotation_#{@shipment.imc_reference}.pdf"
-    attachments.inline['logo.png'] = URI.open(
-      "https://assets.itsmycargo.com/assets/logos/emails/#{@user.tenant.subdomain}_white.png"
-    ).read
+    attachments.inline['logo.png'] = URI.try(:open, @theme['logoLarge']).try(:read)
     attachments.inline['icon.png'] = @mot_icon
     attachments.inline[pdf_name] = quotation
 
