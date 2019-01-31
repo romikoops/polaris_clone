@@ -606,7 +606,9 @@ export class AdminShipmentContent extends Component {
               </div>
             </div>
             {remarkBody ? (
-              <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}>
+              <div className={`${adminStyles.border_box} ${adminStyles.remark_box}
+                              margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}
+              >
                 <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
                   <div className="layout-column flex-100">
                     <h3

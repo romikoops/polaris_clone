@@ -1058,7 +1058,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -2417,7 +2417,7 @@ exports[`shallow render 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -3760,7 +3760,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -5103,7 +5103,7 @@ exports[`shipment.eori is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -6446,7 +6446,7 @@ exports[`shipment.incoterm_text is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -7789,7 +7789,7 @@ exports[`shipment.notes is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -9126,7 +9126,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -10353,7 +10353,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -11718,7 +11718,7 @@ exports[`state.acceptTerms is true 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -13071,7 +13071,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -14401,7 +14401,7 @@ exports[`theme is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:

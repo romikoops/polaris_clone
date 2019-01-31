@@ -991,6 +991,9 @@
    .border_box {
      border: 5px solid #E0E0E0;
    }
+   .remark_box {
+    white-space: pre-wrap;
+   }
    .margin_box_right {
      > * {
        &:last-child {
