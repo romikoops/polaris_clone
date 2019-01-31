@@ -1,7 +1,6 @@
 import React from 'react'
 import { withNamespaces } from 'react-i18next'
 import styles from '../CargoItemGroup.scss'
-import PropTypes from '../../../../../prop-types'
 import { numberSpacing } from '../../../../../helpers'
 
 function CargoItemGroupAggregated ({ group, t, hideUnits }) {
@@ -24,7 +23,7 @@ function CargoItemGroupAggregated ({ group, t, hideUnits }) {
               &nbsp;kg
               {' '}
             </p>
-            <p className="flex-none layout-row layout-align-center-center">{t('common:grossWeight')}</p>
+            <p className="flex-none layout-row layout-align-center-center">{t('common:totalGrossWeight')}</p>
           </div>
         </div>
 
@@ -38,7 +37,7 @@ function CargoItemGroupAggregated ({ group, t, hideUnits }) {
               &nbsp;m
               <sup>3</sup>
             </p>
-            <p className="flex-none layout-row layout-align-center-center">{t('common:volume')}</p>
+            <p className="flex-none layout-row layout-align-center-center">{t('common:totalVolume')}</p>
           </div>
         </div>
         { hideUnits ? '' : (
@@ -46,22 +45,17 @@ function CargoItemGroupAggregated ({ group, t, hideUnits }) {
             <div className="layout-column">
               <p className="flex-none layout-row layout-align-center-center">
                 <span className={styles.cargo_type}>
-                  {!group.size_class ? numberSpacing(group.chargeable_weight, 2) : ''}
+                  { numberSpacing(group.chargeable_weight, 2) }
                 </span>
               &nbsp;kg
               </p>
-              <p className="flex-none layout-row layout-align-center-center">{t('common:chargeableWeight')}</p>
+              <p className="flex-none layout-row layout-align-center-center">{t('common:totalChargeableWeight')}</p>
             </div>
           </div>
         ) }
       </div>
     </div>
   )
-}
-
-CargoItemGroupAggregated.propTypes = {
-  group: PropTypes.objectOf(PropTypes.any),
-  t: PropTypes.func.isRequired
 }
 
 CargoItemGroupAggregated.defaultProps = {

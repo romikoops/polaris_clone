@@ -21,6 +21,8 @@ import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
 import Contact from '../Contact/Contact'
 import IncotermRow from '../Incoterm/Row'
 import IncotermExtras from '../Incoterm/Extras'
+import CargoItemSummary from '../Cargo/Item/Summary'
+import CargoContainerSummary from '../Cargo/Container/Summary'
 
 import {
   ALIGN_AROUND_CENTER,
@@ -218,6 +220,13 @@ export class BookingConfirmation extends Component {
         {_remark.body}
       </li>
     )) : ''
+    const showCargoSummary = !aggregatedCargo
+    let cargoSummary
+    if (showCargoSummary && cargoItems.length) {
+      cargoSummary = <CargoItemSummary items={cargoItems} t={t} />
+    } else if (showCargoSummary && containers.length) {
+      cargoSummary = <CargoContainerSummary items={containers} t={t} />
+    }
 
     const acceptedBtn = (
       <div className={BUTTON}>
@@ -413,8 +422,10 @@ export class BookingConfirmation extends Component {
         parentClass={styles.shipment_card_border}
         showArrow
       >
+      {showCargoSummary ? cargoSummary : '' }
         <div className={INNER_WRAPPER}>
           <div className={LAYOUT_WRAP}>
+            
             {cargoView}
           </div>
         </div>

@@ -4,9 +4,7 @@
     color: #4F4F4F;
     font-size: 16px;
     line-height: 18px;
-    // padding: 2px 18px 18px 18px;
     background: white;
-    // border-radius: 2px;
     border-bottom: 2px solid #E0E0E0;
     i {
       transition: all 0.4s ease;
@@ -50,7 +48,6 @@
   .detailed_row {
     border-top: 1px solid #E0E0E0;
     padding: 5px 15px;
-    // margin-top: 5px;
     span {
       font-weight: bold;
       font-size: 21px;
@@ -215,5 +212,14 @@
     position: absolute;
     top: 20px;
     right: -10px;
+  .summary_panel {
+    border-bottom: 1px solid lightgrey;
+  }
+  .summary_header {
+    background: lightgrey;
+    h3 {
+      margin: 5px 10px;
+      font-size: 14px;
+    }
   }
 }

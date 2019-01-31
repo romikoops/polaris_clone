@@ -1,0 +1,247 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`group.payload_in_kg is falsy 1`] = `
+<div
+  className="panel open_panel flex-100 layout-row layout-wrap layout-align-start-center"
+>
+  <div
+    className="detailed_row_aggregated flex-100 layout-row layout-wrap layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-space-around"
+    >
+      <div
+        className="layout-column"
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          >
+            180.00
+          </span>
+           
+           kg
+           
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Gross Weight
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex layout-row layout-align-space-around"
+    >
+      <div
+        className="layout-column"
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          />
+           
+           m
+          <sup>
+            3
+          </sup>
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Volume
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex layout-row layout-align-space-around"
+    >
+      <div
+        className="layout-column"
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          />
+           kg
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Chargeable Weight
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="panel open_panel flex-100 layout-row layout-wrap layout-align-start-center"
+>
+  <div
+    className="detailed_row_aggregated flex-100 layout-row layout-wrap layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-space-around"
+    >
+      <div
+        className="layout-column"
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          >
+            177.00
+          </span>
+           
+           kg
+           
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Gross Weight
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex layout-row layout-align-space-around"
+    >
+      <div
+        className="layout-column"
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          />
+           
+           m
+          <sup>
+            3
+          </sup>
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Volume
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex layout-row layout-align-space-around"
+    >
+      <div
+        className="layout-column"
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          />
+           kg
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Chargeable Weight
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`size_class is falsy 1`] = `
+<div
+  className="panel open_panel flex-100 layout-row layout-wrap layout-align-start-center"
+>
+  <div
+    className="detailed_row_aggregated flex-100 layout-row layout-wrap layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-space-around"
+    >
+      <div
+        className="layout-column"
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          >
+            177.00
+          </span>
+           
+           kg
+           
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Gross Weight
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex layout-row layout-align-space-around"
+    >
+      <div
+        className="layout-column"
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          />
+           
+           m
+          <sup>
+            3
+          </sup>
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Volume
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex layout-row layout-align-space-around"
+    >
+      <div
+        className="layout-column"
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          />
+           kg
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Chargeable Weight
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
