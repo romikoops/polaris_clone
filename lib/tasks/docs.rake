@@ -18,7 +18,7 @@ if Rails.env.development? || Rails.env.test?
 
         Dir.chdir(engine) do
           Bundler.with_clean_env do
-            sh('bundle exec rspec spec/acceptance --format RspecApiDocumentation::ApiFormatter --order defined')
+            sh('SKIP_COVERAGE=1 bundle exec rspec spec/acceptance --format RspecApiDocumentation::ApiFormatter --order defined')
           end
         end
 

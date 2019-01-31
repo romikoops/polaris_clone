@@ -7,11 +7,4 @@ ApiAuth::Engine.routes.draw do
   end
 
   delete 'oauth/signout', to: 'auth#destroy'
-
-  resource :me, controller: :users do
-    collection do
-      get 'reset_password/request', to: 'users#request_reset_password'
-      get 'reset_password/:code', to: 'users#reset_password'
-    end
-  end
 end

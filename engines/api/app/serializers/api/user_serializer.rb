@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ApiAuth
+module Api
   class UserSerializer < ActiveModel::Serializer
     attributes :id, :email, :state
 

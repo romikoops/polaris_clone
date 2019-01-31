@@ -16,15 +16,19 @@ Gem::Specification.new do |s|
 
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
+  s.add_dependency 'api_auth'
   s.add_dependency 'core'
 
   s.add_dependency 'active_model_serializers', '~> 0.10', '>= 0.10.8'
+
+  s.add_development_dependency 'api_docs'
 
   s.add_development_dependency 'factory_bot_rails'
   s.add_development_dependency 'ffaker'
   s.add_development_dependency 'fuubar'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rspec-rails'
+  s.add_development_dependency 'rspec_api_documentation', '5.1.0'
   s.add_development_dependency 'rspec_junit_formatter'
   s.add_development_dependency 'simplecov'
   s.add_development_dependency 'simplecov-cobertura'

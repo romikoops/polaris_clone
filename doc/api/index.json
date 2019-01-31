@@ -42,7 +42,7 @@
           "description": "Returns information of current user",
           "link": "users/returns_information_of_current_user.json",
           "groups": "all",
-          "route": "/me",
+          "route": "/v1/me",
           "method": "get"
         }
       ]

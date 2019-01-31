@@ -53,12 +53,12 @@
       "request_content_type": "application/json",
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\n  \"access_token\": \"d9ad2de177d7bafd1c6d8f28f056f633b1469de6ca26855b14f76421c2d9ac89\",\n  \"token_type\": \"Bearer\",\n  \"expires_in\": 7200,\n  \"scope\": \"public\",\n  \"created_at\": 1548939398\n}",
+      "response_body": "{\n  \"access_token\": \"b97c571f161cdf6b6784636f1a42b24f9fbec6e0611c5d32e4ad17801c5d9d53\",\n  \"token_type\": \"Bearer\",\n  \"expires_in\": 7200,\n  \"scope\": \"public\",\n  \"created_at\": 1548946129\n}",
       "response_headers": {
         "Content-Type": "application/json; charset=utf-8"
       },
       "response_content_type": "application/json; charset=utf-8",
-      "curl": "curl \"https://api.itsmycargo.com/v1/oauth/token\" -d '{\"grant_type\":\"password\",\"email\":\"test1@itsmycargo.test\",\"password\":\"averysecurehorse\"}' -X POST \\\n\t-H \"Accept: application/json\" \\\n\t-H \"Content-Type: application/json\" \\\n\t-H \"Host: example.org\""
+      "curl": "curl \"https://api.itsmycargo.com/oauth/token\" -d '{\"grant_type\":\"password\",\"email\":\"test1@itsmycargo.test\",\"password\":\"averysecurehorse\"}' -X POST \\\n\t-H \"Accept: application/json\" \\\n\t-H \"Content-Type: application/json\" \\\n\t-H \"Host: example.org\""
     }
   ]
 }

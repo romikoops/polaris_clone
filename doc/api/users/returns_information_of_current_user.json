@@ -2,7 +2,7 @@
   "resource": "Users",
   "resource_explanation": null,
   "http_method": "GET",
-  "route": "/me",
+  "route": "/v1/me",
   "description": "Returns information of current user",
   "explanation": "        Use this endpoint to fetch information of currently signed in user.\n",
   "parameters": [
@@ -28,7 +28,7 @@
   "requests": [
     {
       "request_method": "GET",
-      "request_path": "/me",
+      "request_path": "/v1/me",
       "request_body": null,
       "request_headers": {
         "Content-Type": "application/json"
@@ -38,7 +38,7 @@
       "request_content_type": "application/json",
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\n  \"id\": \"d37b16a1-8bac-4c64-b2c6-0038f7ff59b2\",\n  \"email\": \"test@example.com\",\n  \"state\": \"active\"\n}",
+      "response_body": "{\n  \"data\": {\n    \"id\": \"786dbc08-fe45-4e2f-83a9-be45400e6486\",\n    \"type\": \"tenants-users\",\n    \"attributes\": {\n      \"email\": \"test@example.com\",\n      \"state\": \"active\"\n    }\n  }\n}",
       "response_headers": {
         "Content-Type": "application/json; charset=utf-8"
       },

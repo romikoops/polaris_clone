@@ -14,7 +14,7 @@ RSpec.resource 'Users' do
   let(:access_token) { Doorkeeper::AccessToken.create(resource_owner_id: user.id, scopes: 'public') }
   let(:token_header) { "Bearer #{access_token.token}" }
 
-  get '/me' do
+  get '/v1/me' do
     response_field :id, 'Unique identifier', Type: :UUID
     response_field :email, 'Registetred email address', Type: :String
     response_field :state, <<-DOC, Type: :String

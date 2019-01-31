@@ -4,7 +4,7 @@ require 'factory_bot_rails'
 require 'simplecov'
 
 SimpleCov.start 'rails' do
-  minimum_coverage 98
+  minimum_coverage 98 unless ENV['SKIP_COVERAGE']
 
   if ENV['COVERAGE_DIR']
     command_name 'engines/admiralty'

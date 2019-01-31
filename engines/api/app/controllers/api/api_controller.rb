@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_dependency 'api_auth/application_controller'
+require_dependency 'api/application_controller'
 
-module ApiAuth
+module Api
   class ApiController < ApplicationController
     before_action :doorkeeper_authorize!
     helper_method :current_user

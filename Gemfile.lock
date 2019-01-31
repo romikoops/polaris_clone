@@ -85,6 +85,7 @@ PATH
   specs:
     api (9999.1.0.0)
       active_model_serializers (~> 0.10, >= 0.10.8)
+      api_auth
       core
 
 PATH

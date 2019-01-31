@@ -3,13 +3,11 @@
 Rails.application.routes.draw do
   mount Easymon::Engine, at: '/up'
 
-  mount Admiralty::Engine, at: '/admiralty'
+  mount ApiAuth::Engine, at: '/'
+  mount Api::Engine, at: '/'
+  mount ApiDocs::Engine, at: '/'
 
-  scope :v1 do
-    mount Api::Engine, at: '/'
-    mount ApiAuth::Engine, at: '/'
-    mount ApiDocs::Engine, at: '/'
-  end
+  mount Admiralty::Engine, at: '/admiralty'
 
   get '/health_check', to: 'server_checks#health_check'
   get '/', to: 'server_checks#health_check'

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'api_auth'
 require 'core'
 
 require 'active_model_serializers'
