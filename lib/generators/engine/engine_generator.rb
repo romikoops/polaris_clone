@@ -39,7 +39,11 @@ class EngineGenerator < Rails::Generators::NamedBase
     end
 
     source_paths.unshift(template_dir)
+
     directory 'engine', engine
+    inside engine do
+      Dir['bin/*'].each { |bin| chmod bin, 0o0755, verbose: false }
+    end
   ensure
     remove_dir template_dir, verbose: false
   end

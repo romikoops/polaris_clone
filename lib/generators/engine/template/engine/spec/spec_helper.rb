@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'factory_bot'
+require 'factory_bot_rails'
 require 'simplecov'
 
 SimpleCov.start 'rails' do
   minimum_coverage 98
 
   if ENV['COVERAGE_DIR']
-    command_name 'engine_template'
+    command_name 'engines/engine_template'
     coverage_dir(ENV['COVERAGE_DIR'])
     merge_timeout 3600
   end
