@@ -26,6 +26,7 @@ FactoryBot.define do
         },
         logoLarge: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
         logoSmall: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
+        emailLogo: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
         logoWide: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png',
         logoWhite: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png',
         background: 'https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg'
