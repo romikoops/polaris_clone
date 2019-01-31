@@ -359,7 +359,7 @@ class RouteSection extends React.PureComponent {
                         theme={theme}
                         checked={preCarriage}
                         onChange={this.handleCarriageChange}
-                        labelOnly={this.specialty === 'truck'}
+                        labelOnly={this.specialty === 'truck' || truckTypes.origin.length === 0}
                       />
                       <TruckingDetails
                         carriageType="pre"
@@ -391,7 +391,7 @@ class RouteSection extends React.PureComponent {
                         theme={theme}
                         checked={onCarriage}
                         onChange={this.handleCarriageChange}
-                        labelOnly={this.specialty === 'truck'}
+                        labelOnly={this.specialty === 'truck' || truckTypes.destination.length === 0}
                       />
                       <TruckingDetails
                         carriageType="on"
