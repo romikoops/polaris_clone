@@ -5,6 +5,7 @@ require_dependency 'admiralty_auth/application_controller'
 module AdmiraltyAuth
   class AuthorizedController < ApplicationController
     before_action :authenticate_user!
+    skip_after_action :register_last_activity_time_to_db
 
     def current_user
       @current_user ||= if cookies.signed[:admiralty_user_id]

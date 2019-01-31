@@ -874,6 +874,42 @@ ActiveRecord::Schema.define(version: 2019_03_27_134233) do
     t.jsonb "email_links"
   end
 
+  create_table "tenants_tenants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "subdomain"
+    t.integer "legacy_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tenants_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "email", null: false
+    t.string "crypted_password"
+    t.string "salt"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "activation_state"
+    t.string "activation_token"
+    t.datetime "activation_token_expires_at"
+    t.string "reset_password_token"
+    t.datetime "reset_password_token_expires_at"
+    t.datetime "reset_password_email_sent_at"
+    t.integer "access_count_to_reset_password_page"
+    t.datetime "last_login_at"
+    t.datetime "last_logout_at"
+    t.datetime "last_activity_at"
+    t.string "last_login_from_ip_address"
+    t.integer "failed_logins_count", default: 0
+    t.datetime "lock_expires_at"
+    t.string "unlock_token"
+    t.integer "legacy_id"
+    t.uuid "tenant_id"
+    t.index ["activation_token"], name: "index_tenants_users_on_activation_token"
+    t.index ["email", "tenant_id"], name: "index_tenants_users_on_email_and_tenant_id", unique: true
+    t.index ["last_logout_at", "last_activity_at"], name: "index_tenants_users_on_last_logout_at_and_last_activity_at"
+    t.index ["reset_password_token"], name: "index_tenants_users_on_reset_password_token"
+    t.index ["unlock_token"], name: "index_tenants_users_on_unlock_token"
+  end
+
   create_table "transport_categories", force: :cascade do |t|
     t.integer "vehicle_id"
     t.string "mode_of_transport"
@@ -1111,6 +1147,10 @@ ActiveRecord::Schema.define(version: 2019_03_27_134233) do
     t.string "google_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "last_login_at"
+    t.datetime "last_logout_at"
+    t.datetime "last_activity_at"
+    t.string "last_login_from_ip_address"
   end
 
   create_table "vehicles", force: :cascade do |t|

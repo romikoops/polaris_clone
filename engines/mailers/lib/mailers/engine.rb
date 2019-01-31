@@ -26,6 +26,10 @@ module Mailers
       end
     end
 
+    # initializer :append_mailer_preview do
+    #   config.action_mailer.preview_path = File.expand_path('../../spec/mailers/previews', __dir__)
+    # end
+
     if defined?(FactoryBot)
       initializer 'model_core.factories', after: 'factory_bot.set_factory_paths' do
         FactoryBot.definition_file_paths << Pathname.new(File.expand_path('../../spec/factories', __dir__))

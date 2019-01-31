@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'core'
+require 'legacy'
+require 'mailers'
+
 require 'sorcery'
 
 module Tenants
@@ -20,6 +24,13 @@ module Tenants
       g.model_specs         false
       g.stylesheets         false
       g.view_specs          false
+    end
+
+    initializer :append_legacy_sync do
+      config.to_prepare do
+        ::Tenant.send(:include, Tenants::LegacySync)
+        ::User.send(:include, Tenants::LegacySync)
+      end
     end
 
     initializer :append_migrations do |app|

@@ -17,6 +17,8 @@ Gem::Specification.new do |s|
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   s.add_dependency 'core'
+  s.add_dependency 'legacy'
+  s.add_dependency 'mailers'
 
   s.add_dependency 'sorcery', '~> 0.13.0'
 
