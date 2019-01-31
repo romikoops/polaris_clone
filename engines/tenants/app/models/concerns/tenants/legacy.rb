@@ -11,9 +11,9 @@ module Tenants
 
       def __legacy_params(model)
         case model
-        when ::User
+        when ::Legacy::User
           __legacy_user_params(model)
-        when ::Tenant
+        when ::Legacy::Tenant
           __legacy_tenant_params(model)
         end
       end
@@ -24,7 +24,7 @@ module Tenants
           crypted_password: user.encrypted_password,
           salt: nil,
           legacy_id: user.id,
-          tenant_id: Tenants::Tenant.find_by(legacy_id: user.tenant_id).id,
+          tenant_id: Tenants::Tenant.find_by(legacy_id: user.tenant_id)&.id,
           activation_state: 'active',
           skip_activation_needed_email: true
         }

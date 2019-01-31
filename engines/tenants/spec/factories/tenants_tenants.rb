@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :tenants_tenant, class: 'Tenants::Tenant' do
-    subdomain { "MyString" }
-    legacy_id { "" }
+    subdomain { 'test' }
   end
 end

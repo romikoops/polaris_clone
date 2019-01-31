@@ -13,7 +13,7 @@
   #   #   User.find_by_id(session[:user_id]) || redirect_to(new_user_session_url)
   # end
   resource_owner_from_credentials do
-    Tenants::User.authenticate(params[:email], params[:password])
+    ::Tenants::User.authenticate(params[:email], params[:password])
   end
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
   # file then you need to declare this block in order to restrict access to the web interface for
@@ -40,7 +40,7 @@
   # Enforce token request content type to application/x-www-form-urlencoded.
   # It is not enabled by default to not break prior versions of the gem.
   #
-  enforce_content_type
+  # enforce_content_type
 
   # Authorization Code expiration time (default 10 minutes).
   #

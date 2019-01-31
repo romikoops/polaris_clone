@@ -1,0 +1,49 @@
+{
+  "resource": "Users",
+  "resource_explanation": null,
+  "http_method": "GET",
+  "route": "/me",
+  "description": "Returns information of current user",
+  "explanation": "        Use this endpoint to fetch information of currently signed in user.\n",
+  "parameters": [
+
+  ],
+  "response_fields": [
+    {
+      "Type": "UUID",
+      "name": "id",
+      "description": "Unique identifier"
+    },
+    {
+      "Type": "String",
+      "name": "email",
+      "description": "Registetred email address"
+    },
+    {
+      "Type": "String",
+      "name": "state",
+      "description": "      Current status of the user:\n\n      <dl>\n      <dt>pending</dt><dd>User account is pending for email verification</dd>\n      <dt>active</dt><dd>User account is active</dd>\n      <dt>inactive</dt><dd>User account is inactive and not valid for signin or usage</dd>\n      </dl>\n"
+    }
+  ],
+  "requests": [
+    {
+      "request_method": "GET",
+      "request_path": "/me",
+      "request_body": null,
+      "request_headers": {
+        "Content-Type": "application/json"
+      },
+      "request_query_parameters": {
+      },
+      "request_content_type": "application/json",
+      "response_status": 200,
+      "response_status_text": "OK",
+      "response_body": "{\n  \"id\": \"d37b16a1-8bac-4c64-b2c6-0038f7ff59b2\",\n  \"email\": \"test@example.com\",\n  \"state\": \"active\"\n}",
+      "response_headers": {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      "response_content_type": "application/json; charset=utf-8",
+      "curl": "curl -g \"https://api.itsmycargo.com/v1/me\" -X GET \\\n\t-H \"Accept: application/json\" \\\n\t-H \"Content-Type: application/json\" \\\n\t-H \"Host: example.org\""
+    }
+  ]
+}

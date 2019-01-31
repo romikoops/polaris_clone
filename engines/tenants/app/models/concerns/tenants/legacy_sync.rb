@@ -26,9 +26,9 @@ module Tenants
 
     def __legacy__target
       case self
-      when ::User
+      when ::Legacy::User
         ::Tenants::User
-      when ::Tenant
+      when ::Legacy::Tenant
         ::Tenants::Tenant
       end
     end

@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'core'
+
+require 'active_model_serializers'
+
 module Api
   class Engine < ::Rails::Engine
     isolate_namespace Api
@@ -18,6 +22,10 @@ module Api
       g.model_specs         false
       g.stylesheets         false
       g.view_specs          false
+    end
+
+    initializer 'json_api', after: 'active_model_serializers.set_configs' do
+      ActiveModelSerializers.config.adapter = :json_api
     end
 
     initializer :append_migrations do |app|

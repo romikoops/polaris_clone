@@ -2,9 +2,9 @@
 
 module Tenants
   class Tenant < ApplicationRecord
-    include Legacy
+    include ::Tenants::Legacy
 
-    belongs_to :legacy, class_name: '::Tenant'
+    belongs_to :legacy, class_name: '::Tenant', optional: true
     has_many :users
 
     validates :subdomain, presence: true, uniqueness: true

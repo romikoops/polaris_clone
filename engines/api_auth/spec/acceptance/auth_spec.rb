@@ -10,7 +10,7 @@ RSpec.resource 'Authentication' do
   let(:email) { user.email }
   let(:password) { 'averysecurehorse' }
   let(:activate) { true }
-  let(:user) { FactoryGirl.create(:tenants_user, activate: activate, password: password) }
+  let(:user) { FactoryBot.create(:tenants_user, activate: activate, password: password) }
 
   post '/oauth/token' do
     parameter :grant_type, 'OAuth Grant type to use, always `password`', required: true
@@ -46,23 +46,13 @@ RSpec.resource 'Authentication' do
         DOC
 
         expect(status).to eq 401
-        expect(JSON.parse(response_body)['error']).to eq 'no_user'
+        expect(JSON.parse(response_body)['error']).to eq 'invalid_grant'
       end
 
       example 'FAIL - Invalid password', document: false do
         do_request password: 'secret'
         expect(status).to eq 401
         expect(JSON.parse(response_body)['error']).to eq 'invalid_grant'
-      end
-
-      context 'Unactivated user' do
-        let(:activate) { false }
-
-        example 'FAIL - Unvalidated user', document: false do
-          do_request
-          expect(status).to eq 401
-          expect(JSON.parse(response_body)['error']).to eq 'pending_validation'
-        end
       end
     end
   end
@@ -75,10 +65,10 @@ RSpec.resource 'Authentication' do
 
       no_doc do
         client.post '/oauth/token', grant_type: grant_type, email: user.email, password: password
-        @token = response_headers['X-Access-Token']
+        @token = JSON.parse(response_body)['access_token']
       end
 
-      header 'Cookie', "token=#{@token}"
+      header 'Authorization', "Bearer #{@token}"
       do_request
       expect(status).to eq 200
     end
@@ -90,10 +80,10 @@ RSpec.resource 'Authentication' do
 
       no_doc do
         client.post '/oauth/token', grant_type: grant_type, email: user.email, password: password
-        @token = response_headers['X-Access-Token']
+        @token = JSON.parse(response_body)['access_token']
       end
 
-      header 'Cookie', "token=#{@token}"
+      header 'Authorization', "Bearer #{@token}"
       do_request
       expect(status).to eq 204
 

@@ -2,10 +2,10 @@
 
 module Tenants
   class User < ApplicationRecord
-    include Legacy
+    include ::Tenants::Legacy
 
-    belongs_to :legacy, class_name: '::User'
-    belongs_to :tenant
+    belongs_to :legacy, class_name: '::User', optional: true
+    belongs_to :tenant, optional: true
 
     validates :email, presence: true, uniqueness: { scope: :tenant_id }
     authenticates_with_sorcery!

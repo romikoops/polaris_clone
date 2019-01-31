@@ -9,12 +9,8 @@ module ApiAuth
 
     private
 
-    def current_token
-      doorkeeper_token&.token
-    end
-
     def current_user
-      @current_user ||= ::Users::User.find_by(id: doorkeeper_token.resource_owner_id) if doorkeeper_token
+      @current_user ||= ::Tenants::User.find_by(id: doorkeeper_token.resource_owner_id) if doorkeeper_token
     end
   end
 end

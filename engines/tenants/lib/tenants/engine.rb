@@ -28,8 +28,8 @@ module Tenants
 
     initializer :append_legacy_sync do
       config.to_prepare do
-        ::Tenant.send(:include, Tenants::LegacySync)
-        ::User.send(:include, Tenants::LegacySync)
+        ::Legacy::Tenant.send(:include, Tenants::LegacySync)
+        ::Legacy::User.send(:include, Tenants::LegacySync)
       end
     end
 

@@ -18,6 +18,8 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'core'
 
+  s.add_dependency 'active_model_serializers', '~> 0.10', '>= 0.10.8'
+
   s.add_development_dependency 'factory_bot_rails'
   s.add_development_dependency 'ffaker'
   s.add_development_dependency 'fuubar'
