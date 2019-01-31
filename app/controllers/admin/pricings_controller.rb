@@ -27,9 +27,9 @@ class Admin::PricingsController < Admin::AdminBaseController
       last_updated = @itineraries.first ? @itineraries.first.updated_at : DateTime.now
       {
         detailedItineraries: detailed_itineraries,
-        numItineraryPages:   mot_page_counts,
+        numItineraryPages: mot_page_counts,
         transportCategories: @transports,
-        lastUpdate:          last_updated
+        lastUpdate: last_updated
       }
     end
     response_handler(response)
@@ -55,23 +55,21 @@ class Admin::PricingsController < Admin::AdminBaseController
     last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
     response_handler(
       detailedItineraries: detailed_itineraries.map(&:as_pricing_json),
-      numItineraryPages:   detailed_itineraries.total_pages,
+      numItineraryPages: detailed_itineraries.total_pages,
       transportCategories: @transports,
-      lastUpdate:          last_updated,
-      mode_of_transport:   params[:mot]
+      lastUpdate: last_updated,
+      mode_of_transport: params[:mot]
     )
   end
 
   def route
     itinerary = Itinerary.find(params[:id])
     pricings = itinerary.pricings
-    unless current_user.internal
-      pricings = pricings.reject{|pricing| pricing&.user&.internal}
-    end
+    pricings = pricings.reject { |pricing| pricing&.user&.internal } unless current_user.internal
     response_handler(
-      pricings:             pricings.map(&:for_table_json),
-      itinerary:            itinerary,
-      stops:                itinerary.stops.map(&:as_options_json)
+      pricings: pricings.map(&:for_table_json),
+      itinerary: itinerary,
+      stops: itinerary.stops.map(&:as_options_json)
     )
   end
 
@@ -96,12 +94,12 @@ class Admin::PricingsController < Admin::AdminBaseController
         currency = pricing_detail_data.delete('currency')
         pricing_detail_params = pricing_detail_data.merge(
           shipping_type: shipping_type,
-          tenant:        current_user.tenant
+          tenant: current_user.tenant
         )
         range = pricing_detail_params.delete('range')
         pricing_detail = pricing_to_update.pricing_details.find_or_create_by(
           shipping_type: shipping_type,
-          tenant:        current_user.tenant
+          tenant: current_user.tenant
         )
         pricing_detail.update!(pricing_detail_params)
         pricing_detail.update!(range: range, currency_name: currency)
@@ -125,9 +123,9 @@ class Admin::PricingsController < Admin::AdminBaseController
       end
 
       {
-        pricing:            pricing_to_update.as_json,
+        pricing: pricing_to_update.as_json,
         transport_category: pricing_to_update.transport_category,
-        user_id:            client_id.to_i
+        user_id: client_id.to_i
       }
     end
     response_handler(new_pricings)
@@ -143,7 +141,7 @@ class Admin::PricingsController < Admin::AdminBaseController
     update_pricing_exception_data(pricing_to_update)
 
     response_handler(
-      pricing:            pricing_to_update.as_json,
+      pricing: pricing_to_update.as_json,
       transport_category: pricing_to_update.transport_category
     )
   end
@@ -229,9 +227,9 @@ class Admin::PricingsController < Admin::AdminBaseController
 
   def user_pricing(itinerary)
     itinerary.pricings.where.not(user_id: nil).map do |pricing|
-      { pricing:            pricing,
+      { pricing: pricing,
         transport_category: pricing.transport_category,
-        user_id:            pricing.user_id }
+        user_id: pricing.user_id }
     end
   end
 

@@ -912,40 +912,35 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
         theme={null}
       >
         <div
-          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
         >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
-          >
-            <CargoItemGroupAggregated
-              group={
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "volume": 12,
-                  "weight": 220,
-                }
+          <CargoItemGroupAggregated
+            group={
+              Object {
+                "cargo_item_type_id": "foo",
+                "chargeable_weight": 250,
+                "dangerous_goods": false,
+                "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                "dimension_x": 10,
+                "dimension_y": 60,
+                "dimension_z": 40,
+                "gross_weight": 76,
+                "hs_codes": Array [
+                  4,
+                ],
+                "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                "id": 1,
+                "key": "FOO_CARGO_ITEM_KEY",
+                "payload_in_kg": 200,
+                "quantity": 5,
+                "stackable": true,
+                "tare_weight": 20,
+                "volume": 12,
+                "weight": 220,
               }
-              t={[Function]}
-            />
-          </div>
+            }
+            t={[Function]}
+          />
         </div>
       </CollapsingBar>
     </div>
@@ -1059,7 +1054,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -2272,40 +2267,35 @@ exports[`shallow render 1`] = `
         theme={null}
       >
         <div
-          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
         >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
-          >
-            <CargoItemGroupAggregated
-              group={
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "volume": 12,
-                  "weight": 220,
-                }
+          <CargoItemGroupAggregated
+            group={
+              Object {
+                "cargo_item_type_id": "foo",
+                "chargeable_weight": 250,
+                "dangerous_goods": false,
+                "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                "dimension_x": 10,
+                "dimension_y": 60,
+                "dimension_z": 40,
+                "gross_weight": 76,
+                "hs_codes": Array [
+                  4,
+                ],
+                "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                "id": 1,
+                "key": "FOO_CARGO_ITEM_KEY",
+                "payload_in_kg": 200,
+                "quantity": 5,
+                "stackable": true,
+                "tare_weight": 20,
+                "volume": 12,
+                "weight": 220,
               }
-              t={[Function]}
-            />
-          </div>
+            }
+            t={[Function]}
+          />
         </div>
       </CollapsingBar>
     </div>
@@ -2419,7 +2409,7 @@ exports[`shallow render 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -3632,40 +3622,35 @@ exports[`shipment.cargo_notes is falsy 1`] = `
         theme={null}
       >
         <div
-          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
         >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
-          >
-            <CargoItemGroupAggregated
-              group={
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "volume": 12,
-                  "weight": 220,
-                }
+          <CargoItemGroupAggregated
+            group={
+              Object {
+                "cargo_item_type_id": "foo",
+                "chargeable_weight": 250,
+                "dangerous_goods": false,
+                "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                "dimension_x": 10,
+                "dimension_y": 60,
+                "dimension_z": 40,
+                "gross_weight": 76,
+                "hs_codes": Array [
+                  4,
+                ],
+                "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                "id": 1,
+                "key": "FOO_CARGO_ITEM_KEY",
+                "payload_in_kg": 200,
+                "quantity": 5,
+                "stackable": true,
+                "tare_weight": 20,
+                "volume": 12,
+                "weight": 220,
               }
-              t={[Function]}
-            />
-          </div>
+            }
+            t={[Function]}
+          />
         </div>
       </CollapsingBar>
     </div>
@@ -3763,7 +3748,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -4976,40 +4961,35 @@ exports[`shipment.eori is falsy 1`] = `
         theme={null}
       >
         <div
-          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
         >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
-          >
-            <CargoItemGroupAggregated
-              group={
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "volume": 12,
-                  "weight": 220,
-                }
+          <CargoItemGroupAggregated
+            group={
+              Object {
+                "cargo_item_type_id": "foo",
+                "chargeable_weight": 250,
+                "dangerous_goods": false,
+                "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                "dimension_x": 10,
+                "dimension_y": 60,
+                "dimension_z": 40,
+                "gross_weight": 76,
+                "hs_codes": Array [
+                  4,
+                ],
+                "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                "id": 1,
+                "key": "FOO_CARGO_ITEM_KEY",
+                "payload_in_kg": 200,
+                "quantity": 5,
+                "stackable": true,
+                "tare_weight": 20,
+                "volume": 12,
+                "weight": 220,
               }
-              t={[Function]}
-            />
-          </div>
+            }
+            t={[Function]}
+          />
         </div>
       </CollapsingBar>
     </div>
@@ -5107,7 +5087,7 @@ exports[`shipment.eori is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -6320,40 +6300,35 @@ exports[`shipment.incoterm_text is falsy 1`] = `
         theme={null}
       >
         <div
-          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
         >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
-          >
-            <CargoItemGroupAggregated
-              group={
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "volume": 12,
-                  "weight": 220,
-                }
+          <CargoItemGroupAggregated
+            group={
+              Object {
+                "cargo_item_type_id": "foo",
+                "chargeable_weight": 250,
+                "dangerous_goods": false,
+                "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                "dimension_x": 10,
+                "dimension_y": 60,
+                "dimension_z": 40,
+                "gross_weight": 76,
+                "hs_codes": Array [
+                  4,
+                ],
+                "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                "id": 1,
+                "key": "FOO_CARGO_ITEM_KEY",
+                "payload_in_kg": 200,
+                "quantity": 5,
+                "stackable": true,
+                "tare_weight": 20,
+                "volume": 12,
+                "weight": 220,
               }
-              t={[Function]}
-            />
-          </div>
+            }
+            t={[Function]}
+          />
         </div>
       </CollapsingBar>
     </div>
@@ -6451,7 +6426,7 @@ exports[`shipment.incoterm_text is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -7664,40 +7639,35 @@ exports[`shipment.notes is falsy 1`] = `
         theme={null}
       >
         <div
-          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
         >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
-          >
-            <CargoItemGroupAggregated
-              group={
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "volume": 12,
-                  "weight": 220,
-                }
+          <CargoItemGroupAggregated
+            group={
+              Object {
+                "cargo_item_type_id": "foo",
+                "chargeable_weight": 250,
+                "dangerous_goods": false,
+                "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                "dimension_x": 10,
+                "dimension_y": 60,
+                "dimension_z": 40,
+                "gross_weight": 76,
+                "hs_codes": Array [
+                  4,
+                ],
+                "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                "id": 1,
+                "key": "FOO_CARGO_ITEM_KEY",
+                "payload_in_kg": 200,
+                "quantity": 5,
+                "stackable": true,
+                "tare_weight": 20,
+                "volume": 12,
+                "weight": 220,
               }
-              t={[Function]}
-            />
-          </div>
+            }
+            t={[Function]}
+          />
         </div>
       </CollapsingBar>
     </div>
@@ -7795,7 +7765,7 @@ exports[`shipment.notes is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -9002,40 +8972,35 @@ exports[`shipment.total_goods_value is falsy 1`] = `
         theme={null}
       >
         <div
-          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
         >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
-          >
-            <CargoItemGroupAggregated
-              group={
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "volume": 12,
-                  "weight": 220,
-                }
+          <CargoItemGroupAggregated
+            group={
+              Object {
+                "cargo_item_type_id": "foo",
+                "chargeable_weight": 250,
+                "dangerous_goods": false,
+                "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                "dimension_x": 10,
+                "dimension_y": 60,
+                "dimension_z": 40,
+                "gross_weight": 76,
+                "hs_codes": Array [
+                  4,
+                ],
+                "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                "id": 1,
+                "key": "FOO_CARGO_ITEM_KEY",
+                "payload_in_kg": 200,
+                "quantity": 5,
+                "stackable": true,
+                "tare_weight": 20,
+                "volume": 12,
+                "weight": 220,
               }
-              t={[Function]}
-            />
-          </div>
+            }
+            t={[Function]}
+          />
         </div>
       </CollapsingBar>
     </div>
@@ -9133,7 +9098,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -10214,40 +10179,35 @@ exports[`shipmentData.notifyees is falsy 1`] = `
         theme={null}
       >
         <div
-          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
         >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
-          >
-            <CargoItemGroupAggregated
-              group={
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "volume": 12,
-                  "weight": 220,
-                }
+          <CargoItemGroupAggregated
+            group={
+              Object {
+                "cargo_item_type_id": "foo",
+                "chargeable_weight": 250,
+                "dangerous_goods": false,
+                "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                "dimension_x": 10,
+                "dimension_y": 60,
+                "dimension_z": 40,
+                "gross_weight": 76,
+                "hs_codes": Array [
+                  4,
+                ],
+                "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                "id": 1,
+                "key": "FOO_CARGO_ITEM_KEY",
+                "payload_in_kg": 200,
+                "quantity": 5,
+                "stackable": true,
+                "tare_weight": 20,
+                "volume": 12,
+                "weight": 220,
               }
-              t={[Function]}
-            />
-          </div>
+            }
+            t={[Function]}
+          />
         </div>
       </CollapsingBar>
     </div>
@@ -10361,7 +10321,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -11580,40 +11540,35 @@ exports[`state.acceptTerms is true 1`] = `
         theme={null}
       >
         <div
-          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
         >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
-          >
-            <CargoItemGroupAggregated
-              group={
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "volume": 12,
-                  "weight": 220,
-                }
+          <CargoItemGroupAggregated
+            group={
+              Object {
+                "cargo_item_type_id": "foo",
+                "chargeable_weight": 250,
+                "dangerous_goods": false,
+                "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                "dimension_x": 10,
+                "dimension_y": 60,
+                "dimension_z": 40,
+                "gross_weight": 76,
+                "hs_codes": Array [
+                  4,
+                ],
+                "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                "id": 1,
+                "key": "FOO_CARGO_ITEM_KEY",
+                "payload_in_kg": 200,
+                "quantity": 5,
+                "stackable": true,
+                "tare_weight": 20,
+                "volume": 12,
+                "weight": 220,
               }
-              t={[Function]}
-            />
-          </div>
+            }
+            t={[Function]}
+          />
         </div>
       </CollapsingBar>
     </div>
@@ -11727,7 +11682,7 @@ exports[`state.acceptTerms is true 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -12934,40 +12889,35 @@ exports[`tenant.scope.terms.length is 0 1`] = `
         theme={null}
       >
         <div
-          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
         >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
-          >
-            <CargoItemGroupAggregated
-              group={
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "volume": 12,
-                  "weight": 220,
-                }
+          <CargoItemGroupAggregated
+            group={
+              Object {
+                "cargo_item_type_id": "foo",
+                "chargeable_weight": 250,
+                "dangerous_goods": false,
+                "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                "dimension_x": 10,
+                "dimension_y": 60,
+                "dimension_z": 40,
+                "gross_weight": 76,
+                "hs_codes": Array [
+                  4,
+                ],
+                "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                "id": 1,
+                "key": "FOO_CARGO_ITEM_KEY",
+                "payload_in_kg": 200,
+                "quantity": 5,
+                "stackable": true,
+                "tare_weight": 20,
+                "volume": 12,
+                "weight": 220,
               }
-              t={[Function]}
-            />
-          </div>
+            }
+            t={[Function]}
+          />
         </div>
       </CollapsingBar>
     </div>
@@ -13081,7 +13031,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:
@@ -14265,40 +14215,35 @@ exports[`theme is falsy 1`] = `
         theme={null}
       >
         <div
-          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
         >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
-          >
-            <CargoItemGroupAggregated
-              group={
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "volume": 12,
-                  "weight": 220,
-                }
+          <CargoItemGroupAggregated
+            group={
+              Object {
+                "cargo_item_type_id": "foo",
+                "chargeable_weight": 250,
+                "dangerous_goods": false,
+                "description": "FOO_CARGO_ITEM_DESCRIPTION",
+                "dimension_x": 10,
+                "dimension_y": 60,
+                "dimension_z": 40,
+                "gross_weight": 76,
+                "hs_codes": Array [
+                  4,
+                ],
+                "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
+                "id": 1,
+                "key": "FOO_CARGO_ITEM_KEY",
+                "payload_in_kg": 200,
+                "quantity": 5,
+                "stackable": true,
+                "tare_weight": 20,
+                "volume": 12,
+                "weight": 220,
               }
-              t={[Function]}
-            />
-          </div>
+            }
+            t={[Function]}
+          />
         </div>
       </CollapsingBar>
     </div>
@@ -14412,7 +14357,7 @@ exports[`theme is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
             >
               <h4>
                 Remarks:

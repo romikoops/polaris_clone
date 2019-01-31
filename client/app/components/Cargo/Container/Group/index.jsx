@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import { v4 } from 'uuid'
 import '../../../../styles/react-toggle.scss'
-import styles from './CargoContainerGroup.scss'
+import styles from '../../Item/Group/CargoItemGroup.scss'
 import PropTypes from '../../../../prop-types'
 import CargoContainerGroupAggregated from './Aggregated'
 import { LOAD_TYPES, cargoGlossary } from '../../../../constants'
-import { gradientTextGenerator } from '../../../../helpers'
+import { gradientTextGenerator, numberSpacing } from '../../../../helpers'
 
 class CargoContainerGroup extends Component {
   constructor (props) {
@@ -45,116 +45,80 @@ class CargoContainerGroup extends Component {
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: '#E0E0E0' }
     const { unitView, collapsed } = this.state
-    const unitArr = (
-      <div
-        key={v4()}
-        className={`${
-          styles.detailed_row
-        } flex-100 layout-row layout-wrap layout-align-none-center`}
-      >
-        <div className="flex-10 layout-row layout-align-center-center">
-          <p className="flex-none" style={{ fontSize: '10px' }}>{t('cargo:singleItem')}</p>
-        </div>
-
-        <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
-          <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center">
-              <span>{group.items[0].weight_class}</span>
-            </p>
-            <p className="flex-none layout-row layout-align-center-center">{t('cargo:weightClass')}</p>
-          </div>
-        </div>
-        <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
-          <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center">
-              <span>{group.items[0].payload_in_kg}</span>
-&nbsp;kg
-            </p>
-            <p className="flex-none layout-row layout-align-center-center">{t('cargo:cargoGrossWeight')}</p>
-          </div>
-        </div>
-
-        <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
-          <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center">
-              <span>
-                {(group.items[0].gross_weight)}
-              </span>
-              {' '}
-&nbsp;kg
-            </p>
-            <p className="flex-none layout-row layout-align-center-center">{t('cargo:grossWeight')}</p>
-          </div>
-        </div>
-        <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
-          <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center">
-              <span>{parseFloat(group.items[0].tare_weight)}</span>
-              {' '}
-&nbsp;kg
-            </p>
-            <p className="flex-none layout-row layout-align-center-center">{t('cargo:tareWeight')}</p>
-          </div>
-        </div>
-      </div>
-    )
-    const aggStyle = unitView ? styles.closed_panel : styles.open_panel
+    const unitArr = [
+      (<tr className={styles.data_table_row}>
+        <td className={styles.table_title}>
+          <p className={`flex layout-row layout-align-start-center ${styles.dims}`}>{t('common:quantity')}</p>
+        </td>
+        <td className={styles.table_value}>
+          <p className="flex layout-row layout-align-end-center">
+            <span>{ group.quantity }</span>
+          </p>
+        </td>
+      </tr>),
+       
+       (<tr className={styles.data_table_row}>
+        <td className={styles.table_title}>
+          <p className={`flex layout-row layout-align-start-center ${styles.dims}`}>{t('cargo:totalPayloadWeight')}</p>
+        </td>
+        <td className={styles.table_value}>
+          <p className="flex layout-row layout-align-end-center">
+            <span>{ numberSpacing(group.payload_in_kg, 2) }</span>
+            &nbsp;kg
+          </p>
+        </td>
+      </tr>),
+       (<tr className={styles.data_table_row}>
+        <td className={styles.table_title}>
+          <p className={`flex layout-row layout-align-start-center ${styles.dims}`}>{t('cargo:totalTareWeight')}</p>
+        </td>
+        <td className={styles.table_value}>
+          <p className="flex layout-row layout-align-end-center">
+            <span>{ numberSpacing(group.tare_weight, 2) }</span>
+            &nbsp;kg
+          </p>
+        </td>
+      </tr>),
+       (<tr className={styles.data_table_row}>
+        <td className={styles.table_title}>
+          <p className={`flex layout-row layout-align-start-center ${styles.dims}`}>{t('cargo:totalGrossWeight')}</p>
+        </td>
+        <td className={styles.table_value}>
+          <p className="flex layout-row layout-align-end-center">
+            <span>{ numberSpacing(group.gross_weight, 2) }</span>
+            &nbsp;kg
+          </p>
+        </td>
+      </tr>),
+      
+    ]
 
     const imgFCL = { backgroundImage: `url(${LOAD_TYPES[1].img})` }
-    const aggViewer = (
-      <div
-        className={`${aggStyle} ${
-          styles.panel
-        } flex-100 layout-row layout-wrap layout-align-none-center layout-wrap`}
-      >
-        <CargoContainerGroupAggregated group={group} />
-      </div>
-    )
-
+  
     const cargoCategory = group.cargoType ? group.cargoType.category : cargoGlossary[group.size_class]
 
     return (
       <div className={`${styles.info}`}>
-        <div className={`flex-100 layout-row layout-align-center-center ${styles.height_box} ${collapsed ? styles.height_box : styles.height_box}`}>
-          <div className={`flex-5 layout-row layout-align-center-center ${styles.side_border}`}>
-            <p className={`flex-none layout-row layout-align-center-center ${styles.cargo_unit}`}>{group.groupAlias}</p>
-          </div>
-          <div className={`flex-20 layout-row layout-align-center-center ${styles.side_border}`}>
-            <p className="flex-none layout-row layout-align-center-center">{`x ${group.items.length}`}</p>
-            <div className={styles.icon_cargo_item} style={imgFCL} />
-          </div>
-          <div className={`flex-20 layout-row layout-align-center-center ${styles.side_border}`}>
-            <div className="layout-column">
-              <p className="flex-none layout-row layout-align-center-center"><span className={styles.cargo_type}>{cargoCategory}</span></p>
-              <p className="flex-none layout-row layout-align-center-center">{t('cargo:type')}</p>
-            </div>
-          </div>
-          <div className="flex-55 layout-row">
-            {aggViewer}
-          </div>
-          <div
-            className="flex-5 layout-row layout-align-center-center"
-            onClick={this.handleCollapser}
-            onChange={e => this.handleViewToggle(e)}
-          >
-            <i className={`${collapsed ? styles.collapsed : ''} fa fa-chevron-down clip pointy`} style={gradientTextStyle} />
+        <div className={`flex-100 layout-row layout-align-start-center  ${styles.title_bar}`}>
+          <div className="flex layout-row layout-align-start-center">
+            <div className={styles.icon_cargo_item_small} style={imgFCL} />
+            <p className="flex-none layout-row layout-align-center-center">
+              {`${group.quantity} x ${cargoCategory}`}
+            </p>
+
           </div>
         </div>
-
-        <div className={`${styles.unit_viewer} ${collapsed ? '' : styles.closed_panel}`}>
-          <div className="flex-100 layout-row layout-align-none-start layout-wrap">
-            {unitArr}
-          </div>
+        <div className="flex-100 layout-row layout-align-end-start layout-wrap">
+          <table className={`flex-100 ${styles.data_table}`}>
+            <tbody>
+              {unitArr}
+            </tbody>
+          </table>
+          
         </div>
       </div>
     )
   }
-}
-CargoContainerGroup.propTypes = {
-  group: PropTypes.objectOf(PropTypes.any).isRequired,
-  t: PropTypes.func.isRequired,
-  shipment: PropTypes.objectOf(PropTypes.any),
-  theme: PropTypes.theme
 }
 
 CargoContainerGroup.defaultProps = {

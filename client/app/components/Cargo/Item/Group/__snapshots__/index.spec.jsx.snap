@@ -5,286 +5,194 @@ exports[`group.cargoType is falsy 1`] = `
   className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-center-center height_box height_box"
+    className="flex-100 layout-row layout-align-start-center  title_bar"
   >
     <div
-      className="flex-5 layout-row layout-align-center-center side_border"
+      className="flex layout-row layout-align-start-center"
     >
-      <p
-        className="flex-none layout-row layout-align-center-center cargo_unit"
-      >
-        GROUP_ALIAS
-      </p>
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <p
-        className="flex-none layout-row layout-align-center-center"
-      >
-        x 2
-      </p>
       <div
-        className="icon_cargo_item"
+        className="icon_cargo_item_small"
         style={
           Object {
             "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <div
-        className=""
+      <p
+        className="flex-none layout-row layout-align-center-center"
       >
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          <span
-            className="cargo_type"
-          >
-            LCL
-          </span>
-        </p>
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          Cargo type
-        </p>
-      </div>
-    </div>
-    <div
-      className="flex-55 layout-row"
-    >
-      <div
-        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
-      >
-        <CargoItemGroupAggregated
-          group={
-            Object {
-              "cargoType": null,
-              "groupAlias": "GROUP_ALIAS",
-              "items": Array [
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "weight": 220,
-                },
-                Object {
-                  "cargo_item_type_id": "bar",
-                  "chargeable_weight": 150,
-                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 100,
-                  "dimension_y": 50,
-                  "dimension_z": 70,
-                  "hs_codes": Array [],
-                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
-                  "id": 2,
-                  "key": "BAR_CARGO_ITEM_KEY",
-                  "payload_in_kg": 100,
-                  "quantity": 7,
-                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 17,
-                  "weight": 140,
-                },
-              ],
-              "payload_in_kg": 177,
-              "size_class": "lcl",
-              "weight": 180,
-            }
-          }
-          t={[Function]}
-        />
-      </div>
-    </div>
-    <div
-      className="flex-5 layout-row layout-align-center-center"
-      onChange={[Function]}
-      onClick={[Function]}
-    >
-      <i
-        className="collapsed fa fa-chevron-down clip pointy"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      />
+        1 x 
+      </p>
     </div>
   </div>
   <div
-    className="unit_viewer "
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="UUID_MOCK_KEY_11"
-      >
-        <div
-          className="flex-5 layout-row layout-align-center-center"
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none"
-            style={
-              Object {
-                "fontSize": "10px",
-              }
-            }
-          >
-            Single Item
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="length"
-            border="0"
-            data-for="UUID_MOCK_KEY_10"
-            data-tip="Length"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_10"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              10
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="height"
-            border="0"
-            data-for="UUID_MOCK_KEY_10"
-            data-tip="Height"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_10"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              40
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="width"
-            border="0"
-            data-for="UUID_MOCK_KEY_10"
-            data-tip="Width"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_10"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              60
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
+          <td
+            className="table_title"
           >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                200.00
+                0.120
               </span>
-               kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Gross Weight
-            </p>
-          </div>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
-          >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span>
-                0.02
-              </span>
-               
                m
               <sup>
                 3
               </sup>
             </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
             >
-              Volume
+              Quantity
             </p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1
+              </span>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                200.00
+              </span>
+               
+              kg
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
+              }
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -294,309 +202,194 @@ exports[`group.size_class is falsy 1`] = `
   className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-center-center height_box height_box"
+    className="flex-100 layout-row layout-align-start-center  title_bar"
   >
     <div
-      className="flex-5 layout-row layout-align-center-center side_border"
+      className="flex layout-row layout-align-start-center"
     >
-      <p
-        className="flex-none layout-row layout-align-center-center cargo_unit"
-      >
-        GROUP_ALIAS
-      </p>
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <p
-        className="flex-none layout-row layout-align-center-center"
-      >
-        x 2
-      </p>
       <div
-        className="icon_cargo_item"
+        className="icon_cargo_item_small"
         style={
           Object {
             "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <div
-        className=""
+      <p
+        className="flex-none layout-row layout-align-center-center"
       >
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          <span
-            className="cargo_type"
-          >
-            GROUP_CARGO_TYPE_CATEGORY
-          </span>
-        </p>
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          Cargo type
-        </p>
-      </div>
-    </div>
-    <div
-      className="flex-55 layout-row"
-    >
-      <div
-        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
-      >
-        <CargoItemGroupAggregated
-          group={
-            Object {
-              "cargoType": Object {
-                "category": "GROUP_CARGO_TYPE_CATEGORY",
-              },
-              "groupAlias": "GROUP_ALIAS",
-              "items": Array [
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "weight": 220,
-                },
-                Object {
-                  "cargo_item_type_id": "bar",
-                  "chargeable_weight": 150,
-                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 100,
-                  "dimension_y": 50,
-                  "dimension_z": 70,
-                  "hs_codes": Array [],
-                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
-                  "id": 2,
-                  "key": "BAR_CARGO_ITEM_KEY",
-                  "payload_in_kg": 100,
-                  "quantity": 7,
-                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 17,
-                  "weight": 140,
-                },
-              ],
-              "payload_in_kg": 177,
-              "size_class": null,
-              "weight": 180,
-            }
-          }
-          t={[Function]}
-        />
-      </div>
-    </div>
-    <div
-      className="flex-5 layout-row layout-align-center-center"
-      onChange={[Function]}
-      onClick={[Function]}
-    >
-      <i
-        className="collapsed fa fa-chevron-down clip pointy"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      />
+        1 x FOO_TYPE
+      </p>
     </div>
   </div>
   <div
-    className="unit_viewer "
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="UUID_MOCK_KEY_9"
-      >
-        <div
-          className="flex-5 layout-row layout-align-center-center"
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none"
-            style={
-              Object {
-                "fontSize": "10px",
-              }
-            }
-          >
-            Single Item
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="length"
-            border="0"
-            data-for="UUID_MOCK_KEY_8"
-            data-tip="Length"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_8"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              10
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="height"
-            border="0"
-            data-for="UUID_MOCK_KEY_8"
-            data-tip="Height"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_8"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              40
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="width"
-            border="0"
-            data-for="UUID_MOCK_KEY_8"
-            data-tip="Width"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_8"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              60
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
+          <td
+            className="table_title"
           >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                200.00
+                0.120
               </span>
-               kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Gross Weight
-            </p>
-          </div>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
-          >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span>
-                0.02
-              </span>
-               
                m
               <sup>
                 3
               </sup>
             </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Volume
-            </p>
-          </div>
-        </div>
-        <div
-          className="unit_data_cell flex-20 layout-row layout-align-center-center"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          <div
-            className=""
+          <td
+            className="table_title"
           >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Quantity
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1
+              </span>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                200.00
+              </span>
+               
+              kg
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
               dangerouslySetInnerHTML={
                 Object {
                   "__html": "<span></span> t | m<sup>3</sup>",
                 }
               }
             />
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Chargeable Weight | Volume
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -606,288 +399,194 @@ exports[`shallow render 1`] = `
   className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-center-center height_box height_box"
+    className="flex-100 layout-row layout-align-start-center  title_bar"
   >
     <div
-      className="flex-5 layout-row layout-align-center-center side_border"
+      className="flex layout-row layout-align-start-center"
     >
-      <p
-        className="flex-none layout-row layout-align-center-center cargo_unit"
-      >
-        GROUP_ALIAS
-      </p>
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <p
-        className="flex-none layout-row layout-align-center-center"
-      >
-        x 2
-      </p>
       <div
-        className="icon_cargo_item"
+        className="icon_cargo_item_small"
         style={
           Object {
             "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <div
-        className=""
+      <p
+        className="flex-none layout-row layout-align-center-center"
       >
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          <span
-            className="cargo_type"
-          >
-            GROUP_CARGO_TYPE_CATEGORY
-          </span>
-        </p>
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          Cargo type
-        </p>
-      </div>
-    </div>
-    <div
-      className="flex-55 layout-row"
-    >
-      <div
-        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
-      >
-        <CargoItemGroupAggregated
-          group={
-            Object {
-              "cargoType": Object {
-                "category": "GROUP_CARGO_TYPE_CATEGORY",
-              },
-              "groupAlias": "GROUP_ALIAS",
-              "items": Array [
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "weight": 220,
-                },
-                Object {
-                  "cargo_item_type_id": "bar",
-                  "chargeable_weight": 150,
-                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 100,
-                  "dimension_y": 50,
-                  "dimension_z": 70,
-                  "hs_codes": Array [],
-                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
-                  "id": 2,
-                  "key": "BAR_CARGO_ITEM_KEY",
-                  "payload_in_kg": 100,
-                  "quantity": 7,
-                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 17,
-                  "weight": 140,
-                },
-              ],
-              "payload_in_kg": 177,
-              "size_class": "lcl",
-              "weight": 180,
-            }
-          }
-          t={[Function]}
-        />
-      </div>
-    </div>
-    <div
-      className="flex-5 layout-row layout-align-center-center"
-      onChange={[Function]}
-      onClick={[Function]}
-    >
-      <i
-        className="collapsed fa fa-chevron-down clip pointy"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      />
+        1 x FOO_TYPE
+      </p>
     </div>
   </div>
   <div
-    className="unit_viewer "
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="UUID_MOCK_KEY_1"
-      >
-        <div
-          className="flex-5 layout-row layout-align-center-center"
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none"
-            style={
-              Object {
-                "fontSize": "10px",
-              }
-            }
-          >
-            Single Item
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="length"
-            border="0"
-            data-for="UUID_MOCK_KEY_0"
-            data-tip="Length"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_0"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              10
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="height"
-            border="0"
-            data-for="UUID_MOCK_KEY_0"
-            data-tip="Height"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_0"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              40
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="width"
-            border="0"
-            data-for="UUID_MOCK_KEY_0"
-            data-tip="Width"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_0"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              60
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
+          <td
+            className="table_title"
           >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                200.00
+                0.120
               </span>
-               kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Gross Weight
-            </p>
-          </div>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
-          >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span>
-                0.02
-              </span>
-               
                m
               <sup>
                 3
               </sup>
             </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
             >
-              Volume
+              Quantity
             </p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1
+              </span>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                200.00
+              </span>
+               
+              kg
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
+              }
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -897,288 +596,194 @@ exports[`shallow rendering both chargeable value 1`] = `
   className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-center-center height_box height_box"
+    className="flex-100 layout-row layout-align-start-center  title_bar"
   >
     <div
-      className="flex-5 layout-row layout-align-center-center side_border"
+      className="flex layout-row layout-align-start-center"
     >
-      <p
-        className="flex-none layout-row layout-align-center-center cargo_unit"
-      >
-        GROUP_ALIAS
-      </p>
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <p
-        className="flex-none layout-row layout-align-center-center"
-      >
-        x 2
-      </p>
       <div
-        className="icon_cargo_item"
+        className="icon_cargo_item_small"
         style={
           Object {
             "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <div
-        className=""
+      <p
+        className="flex-none layout-row layout-align-center-center"
       >
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          <span
-            className="cargo_type"
-          >
-            GROUP_CARGO_TYPE_CATEGORY
-          </span>
-        </p>
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          Cargo type
-        </p>
-      </div>
-    </div>
-    <div
-      className="flex-55 layout-row"
-    >
-      <div
-        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
-      >
-        <CargoItemGroupAggregated
-          group={
-            Object {
-              "cargoType": Object {
-                "category": "GROUP_CARGO_TYPE_CATEGORY",
-              },
-              "groupAlias": "GROUP_ALIAS",
-              "items": Array [
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "weight": 220,
-                },
-                Object {
-                  "cargo_item_type_id": "bar",
-                  "chargeable_weight": 150,
-                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 100,
-                  "dimension_y": 50,
-                  "dimension_z": 70,
-                  "hs_codes": Array [],
-                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
-                  "id": 2,
-                  "key": "BAR_CARGO_ITEM_KEY",
-                  "payload_in_kg": 100,
-                  "quantity": 7,
-                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 17,
-                  "weight": 140,
-                },
-              ],
-              "payload_in_kg": 177,
-              "size_class": "lcl",
-              "weight": 180,
-            }
-          }
-          t={[Function]}
-        />
-      </div>
-    </div>
-    <div
-      className="flex-5 layout-row layout-align-center-center"
-      onChange={[Function]}
-      onClick={[Function]}
-    >
-      <i
-        className="collapsed fa fa-chevron-down clip pointy"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      />
+        1 x FOO_TYPE
+      </p>
     </div>
   </div>
   <div
-    className="unit_viewer "
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="UUID_MOCK_KEY_31"
-      >
-        <div
-          className="flex-5 layout-row layout-align-center-center"
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none"
-            style={
-              Object {
-                "fontSize": "10px",
-              }
-            }
-          >
-            Single Item
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="length"
-            border="0"
-            data-for="UUID_MOCK_KEY_30"
-            data-tip="Length"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_30"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              10
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="height"
-            border="0"
-            data-for="UUID_MOCK_KEY_30"
-            data-tip="Height"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_30"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              40
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="width"
-            border="0"
-            data-for="UUID_MOCK_KEY_30"
-            data-tip="Width"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_30"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              60
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
+          <td
+            className="table_title"
           >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                200.00
+                0.120
               </span>
-               kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Gross Weight
-            </p>
-          </div>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
-          >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span>
-                0.02
-              </span>
-               
                m
               <sup>
                 3
               </sup>
             </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
             >
-              Volume
+              Quantity
             </p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1
+              </span>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                200.00
+              </span>
+               
+              kg
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
+              }
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -1188,288 +793,194 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
   className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-center-center height_box height_box"
+    className="flex-100 layout-row layout-align-start-center  title_bar"
   >
     <div
-      className="flex-5 layout-row layout-align-center-center side_border"
+      className="flex layout-row layout-align-start-center"
     >
-      <p
-        className="flex-none layout-row layout-align-center-center cargo_unit"
-      >
-        GROUP_ALIAS
-      </p>
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <p
-        className="flex-none layout-row layout-align-center-center"
-      >
-        x 2
-      </p>
       <div
-        className="icon_cargo_item"
+        className="icon_cargo_item_small"
         style={
           Object {
             "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <div
-        className=""
+      <p
+        className="flex-none layout-row layout-align-center-center"
       >
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          <span
-            className="cargo_type"
-          >
-            GROUP_CARGO_TYPE_CATEGORY
-          </span>
-        </p>
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          Cargo type
-        </p>
-      </div>
-    </div>
-    <div
-      className="flex-55 layout-row"
-    >
-      <div
-        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
-      >
-        <CargoItemGroupAggregated
-          group={
-            Object {
-              "cargoType": Object {
-                "category": "GROUP_CARGO_TYPE_CATEGORY",
-              },
-              "groupAlias": "GROUP_ALIAS",
-              "items": Array [
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "weight": 220,
-                },
-                Object {
-                  "cargo_item_type_id": "bar",
-                  "chargeable_weight": 150,
-                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 100,
-                  "dimension_y": 50,
-                  "dimension_z": 70,
-                  "hs_codes": Array [],
-                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
-                  "id": 2,
-                  "key": "BAR_CARGO_ITEM_KEY",
-                  "payload_in_kg": 100,
-                  "quantity": 7,
-                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 17,
-                  "weight": 140,
-                },
-              ],
-              "payload_in_kg": 177,
-              "size_class": "lcl",
-              "weight": 180,
-            }
-          }
-          t={[Function]}
-        />
-      </div>
-    </div>
-    <div
-      className="flex-5 layout-row layout-align-center-center"
-      onChange={[Function]}
-      onClick={[Function]}
-    >
-      <i
-        className="collapsed fa fa-chevron-down clip pointy"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      />
+        1 x FOO_TYPE
+      </p>
     </div>
   </div>
   <div
-    className="unit_viewer "
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="UUID_MOCK_KEY_25"
-      >
-        <div
-          className="flex-5 layout-row layout-align-center-center"
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none"
-            style={
-              Object {
-                "fontSize": "10px",
-              }
-            }
-          >
-            Single Item
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="length"
-            border="0"
-            data-for="UUID_MOCK_KEY_24"
-            data-tip="Length"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_24"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              10
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="height"
-            border="0"
-            data-for="UUID_MOCK_KEY_24"
-            data-tip="Height"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_24"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              40
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="width"
-            border="0"
-            data-for="UUID_MOCK_KEY_24"
-            data-tip="Width"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_24"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              60
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
+          <td
+            className="table_title"
           >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                200.00
+                0.120
               </span>
-               kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Gross Weight
-            </p>
-          </div>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
-          >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span>
-                0.02
-              </span>
-               
                m
               <sup>
                 3
               </sup>
             </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
             >
-              Volume
+              Quantity
             </p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1
+              </span>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                200.00
+              </span>
+               
+              kg
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> kg",
+                }
+              }
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -1479,288 +990,194 @@ exports[`shallow rendering volume chargeable value 1`] = `
   className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-center-center height_box height_box"
+    className="flex-100 layout-row layout-align-start-center  title_bar"
   >
     <div
-      className="flex-5 layout-row layout-align-center-center side_border"
+      className="flex layout-row layout-align-start-center"
     >
-      <p
-        className="flex-none layout-row layout-align-center-center cargo_unit"
-      >
-        GROUP_ALIAS
-      </p>
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <p
-        className="flex-none layout-row layout-align-center-center"
-      >
-        x 2
-      </p>
       <div
-        className="icon_cargo_item"
+        className="icon_cargo_item_small"
         style={
           Object {
             "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <div
-        className=""
+      <p
+        className="flex-none layout-row layout-align-center-center"
       >
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          <span
-            className="cargo_type"
-          >
-            GROUP_CARGO_TYPE_CATEGORY
-          </span>
-        </p>
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          Cargo type
-        </p>
-      </div>
-    </div>
-    <div
-      className="flex-55 layout-row"
-    >
-      <div
-        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
-      >
-        <CargoItemGroupAggregated
-          group={
-            Object {
-              "cargoType": Object {
-                "category": "GROUP_CARGO_TYPE_CATEGORY",
-              },
-              "groupAlias": "GROUP_ALIAS",
-              "items": Array [
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "weight": 220,
-                },
-                Object {
-                  "cargo_item_type_id": "bar",
-                  "chargeable_weight": 150,
-                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 100,
-                  "dimension_y": 50,
-                  "dimension_z": 70,
-                  "hs_codes": Array [],
-                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
-                  "id": 2,
-                  "key": "BAR_CARGO_ITEM_KEY",
-                  "payload_in_kg": 100,
-                  "quantity": 7,
-                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 17,
-                  "weight": 140,
-                },
-              ],
-              "payload_in_kg": 177,
-              "size_class": "lcl",
-              "weight": 180,
-            }
-          }
-          t={[Function]}
-        />
-      </div>
-    </div>
-    <div
-      className="flex-5 layout-row layout-align-center-center"
-      onChange={[Function]}
-      onClick={[Function]}
-    >
-      <i
-        className="collapsed fa fa-chevron-down clip pointy"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      />
+        1 x FOO_TYPE
+      </p>
     </div>
   </div>
   <div
-    className="unit_viewer "
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="UUID_MOCK_KEY_29"
-      >
-        <div
-          className="flex-5 layout-row layout-align-center-center"
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none"
-            style={
-              Object {
-                "fontSize": "10px",
-              }
-            }
-          >
-            Single Item
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="length"
-            border="0"
-            data-for="UUID_MOCK_KEY_28"
-            data-tip="Length"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_28"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              10
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="height"
-            border="0"
-            data-for="UUID_MOCK_KEY_28"
-            data-tip="Height"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_28"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              40
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="width"
-            border="0"
-            data-for="UUID_MOCK_KEY_28"
-            data-tip="Width"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_28"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              60
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
+          <td
+            className="table_title"
           >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                200.00
+                0.120
               </span>
-               kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Gross Weight
-            </p>
-          </div>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
-          >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span>
-                0.02
-              </span>
-               
                m
               <sup>
                 3
               </sup>
             </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
             >
-              Volume
+              Quantity
             </p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1
+              </span>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                200.00
+              </span>
+               
+              kg
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> m<sup>3</sup>",
+                }
+              }
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -1770,288 +1187,194 @@ exports[`shallow rendering weight chargeable value 1`] = `
   className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-center-center height_box height_box"
+    className="flex-100 layout-row layout-align-start-center  title_bar"
   >
     <div
-      className="flex-5 layout-row layout-align-center-center side_border"
+      className="flex layout-row layout-align-start-center"
     >
-      <p
-        className="flex-none layout-row layout-align-center-center cargo_unit"
-      >
-        GROUP_ALIAS
-      </p>
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <p
-        className="flex-none layout-row layout-align-center-center"
-      >
-        x 2
-      </p>
       <div
-        className="icon_cargo_item"
+        className="icon_cargo_item_small"
         style={
           Object {
             "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <div
-        className=""
+      <p
+        className="flex-none layout-row layout-align-center-center"
       >
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          <span
-            className="cargo_type"
-          >
-            GROUP_CARGO_TYPE_CATEGORY
-          </span>
-        </p>
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          Cargo type
-        </p>
-      </div>
-    </div>
-    <div
-      className="flex-55 layout-row"
-    >
-      <div
-        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
-      >
-        <CargoItemGroupAggregated
-          group={
-            Object {
-              "cargoType": Object {
-                "category": "GROUP_CARGO_TYPE_CATEGORY",
-              },
-              "groupAlias": "GROUP_ALIAS",
-              "items": Array [
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "weight": 220,
-                },
-                Object {
-                  "cargo_item_type_id": "bar",
-                  "chargeable_weight": 150,
-                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 100,
-                  "dimension_y": 50,
-                  "dimension_z": 70,
-                  "hs_codes": Array [],
-                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
-                  "id": 2,
-                  "key": "BAR_CARGO_ITEM_KEY",
-                  "payload_in_kg": 100,
-                  "quantity": 7,
-                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 17,
-                  "weight": 140,
-                },
-              ],
-              "payload_in_kg": 177,
-              "size_class": "lcl",
-              "weight": 180,
-            }
-          }
-          t={[Function]}
-        />
-      </div>
-    </div>
-    <div
-      className="flex-5 layout-row layout-align-center-center"
-      onChange={[Function]}
-      onClick={[Function]}
-    >
-      <i
-        className="collapsed fa fa-chevron-down clip pointy"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      />
+        1 x FOO_TYPE
+      </p>
     </div>
   </div>
   <div
-    className="unit_viewer "
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="UUID_MOCK_KEY_27"
-      >
-        <div
-          className="flex-5 layout-row layout-align-center-center"
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none"
-            style={
-              Object {
-                "fontSize": "10px",
-              }
-            }
-          >
-            Single Item
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="length"
-            border="0"
-            data-for="UUID_MOCK_KEY_26"
-            data-tip="Length"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_26"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              10
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="height"
-            border="0"
-            data-for="UUID_MOCK_KEY_26"
-            data-tip="Height"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_26"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              40
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="width"
-            border="0"
-            data-for="UUID_MOCK_KEY_26"
-            data-tip="Width"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_26"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              60
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
+          <td
+            className="table_title"
           >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                200.00
+                0.120
               </span>
-               kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Gross Weight
-            </p>
-          </div>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
-          >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span>
-                0.02
-              </span>
-               
                m
               <sup>
                 3
               </sup>
             </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
             >
-              Volume
+              Quantity
             </p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1
+              </span>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                200.00
+              </span>
+               
+              kg
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> kg",
+                }
+              }
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -2061,288 +1384,194 @@ exports[`shipment.load_type is cargo_item 1`] = `
   className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-center-center height_box height_box"
+    className="flex-100 layout-row layout-align-start-center  title_bar"
   >
     <div
-      className="flex-5 layout-row layout-align-center-center side_border"
+      className="flex layout-row layout-align-start-center"
     >
-      <p
-        className="flex-none layout-row layout-align-center-center cargo_unit"
-      >
-        GROUP_ALIAS
-      </p>
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <p
-        className="flex-none layout-row layout-align-center-center"
-      >
-        x 2
-      </p>
       <div
-        className="icon_cargo_item"
+        className="icon_cargo_item_small"
         style={
           Object {
             "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <div
-        className=""
+      <p
+        className="flex-none layout-row layout-align-center-center"
       >
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          <span
-            className="cargo_type"
-          >
-            GROUP_CARGO_TYPE_CATEGORY
-          </span>
-        </p>
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          Cargo type
-        </p>
-      </div>
-    </div>
-    <div
-      className="flex-55 layout-row"
-    >
-      <div
-        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
-      >
-        <CargoItemGroupAggregated
-          group={
-            Object {
-              "cargoType": Object {
-                "category": "GROUP_CARGO_TYPE_CATEGORY",
-              },
-              "groupAlias": "GROUP_ALIAS",
-              "items": Array [
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "weight": 220,
-                },
-                Object {
-                  "cargo_item_type_id": "bar",
-                  "chargeable_weight": 150,
-                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 100,
-                  "dimension_y": 50,
-                  "dimension_z": 70,
-                  "hs_codes": Array [],
-                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
-                  "id": 2,
-                  "key": "BAR_CARGO_ITEM_KEY",
-                  "payload_in_kg": 100,
-                  "quantity": 7,
-                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 17,
-                  "weight": 140,
-                },
-              ],
-              "payload_in_kg": 177,
-              "size_class": "lcl",
-              "weight": 180,
-            }
-          }
-          t={[Function]}
-        />
-      </div>
-    </div>
-    <div
-      className="flex-5 layout-row layout-align-center-center"
-      onChange={[Function]}
-      onClick={[Function]}
-    >
-      <i
-        className="collapsed fa fa-chevron-down clip pointy"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      />
+        1 x FOO_TYPE
+      </p>
     </div>
   </div>
   <div
-    className="unit_viewer "
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="UUID_MOCK_KEY_7"
-      >
-        <div
-          className="flex-5 layout-row layout-align-center-center"
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none"
-            style={
-              Object {
-                "fontSize": "10px",
-              }
-            }
-          >
-            Single Item
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="length"
-            border="0"
-            data-for="UUID_MOCK_KEY_6"
-            data-tip="Length"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_6"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              10
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="height"
-            border="0"
-            data-for="UUID_MOCK_KEY_6"
-            data-tip="Height"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_6"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              40
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="width"
-            border="0"
-            data-for="UUID_MOCK_KEY_6"
-            data-tip="Width"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_6"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              60
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
+          <td
+            className="table_title"
           >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                200.00
+                0.120
               </span>
-               kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Gross Weight
-            </p>
-          </div>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
-          >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span>
-                0.02
-              </span>
-               
                m
               <sup>
                 3
               </sup>
             </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
             >
-              Volume
+              Quantity
             </p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1
+              </span>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                200.00
+              </span>
+               
+              kg
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
+              }
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -2352,288 +1581,194 @@ exports[`state.collapsed is true 1`] = `
   className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-center-center height_box height_box"
+    className="flex-100 layout-row layout-align-start-center  title_bar"
   >
     <div
-      className="flex-5 layout-row layout-align-center-center side_border"
+      className="flex layout-row layout-align-start-center"
     >
-      <p
-        className="flex-none layout-row layout-align-center-center cargo_unit"
-      >
-        GROUP_ALIAS
-      </p>
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <p
-        className="flex-none layout-row layout-align-center-center"
-      >
-        x 2
-      </p>
       <div
-        className="icon_cargo_item"
+        className="icon_cargo_item_small"
         style={
           Object {
             "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <div
-        className=""
+      <p
+        className="flex-none layout-row layout-align-center-center"
       >
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          <span
-            className="cargo_type"
-          >
-            GROUP_CARGO_TYPE_CATEGORY
-          </span>
-        </p>
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          Cargo type
-        </p>
-      </div>
-    </div>
-    <div
-      className="flex-55 layout-row"
-    >
-      <div
-        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
-      >
-        <CargoItemGroupAggregated
-          group={
-            Object {
-              "cargoType": Object {
-                "category": "GROUP_CARGO_TYPE_CATEGORY",
-              },
-              "groupAlias": "GROUP_ALIAS",
-              "items": Array [
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "weight": 220,
-                },
-                Object {
-                  "cargo_item_type_id": "bar",
-                  "chargeable_weight": 150,
-                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 100,
-                  "dimension_y": 50,
-                  "dimension_z": 70,
-                  "hs_codes": Array [],
-                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
-                  "id": 2,
-                  "key": "BAR_CARGO_ITEM_KEY",
-                  "payload_in_kg": 100,
-                  "quantity": 7,
-                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 17,
-                  "weight": 140,
-                },
-              ],
-              "payload_in_kg": 177,
-              "size_class": "lcl",
-              "weight": 180,
-            }
-          }
-          t={[Function]}
-        />
-      </div>
-    </div>
-    <div
-      className="flex-5 layout-row layout-align-center-center"
-      onChange={[Function]}
-      onClick={[Function]}
-    >
-      <i
-        className="collapsed fa fa-chevron-down clip pointy"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      />
+        1 x FOO_TYPE
+      </p>
     </div>
   </div>
   <div
-    className="unit_viewer "
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="UUID_MOCK_KEY_19"
-      >
-        <div
-          className="flex-5 layout-row layout-align-center-center"
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none"
-            style={
-              Object {
-                "fontSize": "10px",
-              }
-            }
-          >
-            Single Item
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="length"
-            border="0"
-            data-for="UUID_MOCK_KEY_18"
-            data-tip="Length"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_18"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              10
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="height"
-            border="0"
-            data-for="UUID_MOCK_KEY_18"
-            data-tip="Height"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_18"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              40
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="width"
-            border="0"
-            data-for="UUID_MOCK_KEY_18"
-            data-tip="Width"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_18"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              60
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
+          <td
+            className="table_title"
           >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                200.00
+                0.120
               </span>
-               kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Gross Weight
-            </p>
-          </div>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
-          >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span>
-                0.02
-              </span>
-               
                m
               <sup>
                 3
               </sup>
             </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
             >
-              Volume
+              Quantity
             </p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1
+              </span>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                200.00
+              </span>
+               
+              kg
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
+              }
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -2643,288 +1778,194 @@ exports[`state.unitView is true 1`] = `
   className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-center-center height_box height_box"
+    className="flex-100 layout-row layout-align-start-center  title_bar"
   >
     <div
-      className="flex-5 layout-row layout-align-center-center side_border"
+      className="flex layout-row layout-align-start-center"
     >
-      <p
-        className="flex-none layout-row layout-align-center-center cargo_unit"
-      >
-        GROUP_ALIAS
-      </p>
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <p
-        className="flex-none layout-row layout-align-center-center"
-      >
-        x 2
-      </p>
       <div
-        className="icon_cargo_item"
+        className="icon_cargo_item_small"
         style={
           Object {
             "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <div
-        className=""
+      <p
+        className="flex-none layout-row layout-align-center-center"
       >
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          <span
-            className="cargo_type"
-          >
-            GROUP_CARGO_TYPE_CATEGORY
-          </span>
-        </p>
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          Cargo type
-        </p>
-      </div>
-    </div>
-    <div
-      className="flex-55 layout-row"
-    >
-      <div
-        className="closed_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
-      >
-        <CargoItemGroupAggregated
-          group={
-            Object {
-              "cargoType": Object {
-                "category": "GROUP_CARGO_TYPE_CATEGORY",
-              },
-              "groupAlias": "GROUP_ALIAS",
-              "items": Array [
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "weight": 220,
-                },
-                Object {
-                  "cargo_item_type_id": "bar",
-                  "chargeable_weight": 150,
-                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 100,
-                  "dimension_y": 50,
-                  "dimension_z": 70,
-                  "hs_codes": Array [],
-                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
-                  "id": 2,
-                  "key": "BAR_CARGO_ITEM_KEY",
-                  "payload_in_kg": 100,
-                  "quantity": 7,
-                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 17,
-                  "weight": 140,
-                },
-              ],
-              "payload_in_kg": 177,
-              "size_class": "lcl",
-              "weight": 180,
-            }
-          }
-          t={[Function]}
-        />
-      </div>
-    </div>
-    <div
-      className="flex-5 layout-row layout-align-center-center"
-      onChange={[Function]}
-      onClick={[Function]}
-    >
-      <i
-        className="collapsed fa fa-chevron-down clip pointy"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      />
+        1 x FOO_TYPE
+      </p>
     </div>
   </div>
   <div
-    className="unit_viewer "
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="UUID_MOCK_KEY_15"
-      >
-        <div
-          className="flex-5 layout-row layout-align-center-center"
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none"
-            style={
-              Object {
-                "fontSize": "10px",
-              }
-            }
-          >
-            Single Item
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="length"
-            border="0"
-            data-for="UUID_MOCK_KEY_14"
-            data-tip="Length"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_14"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              10
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="height"
-            border="0"
-            data-for="UUID_MOCK_KEY_14"
-            data-tip="Height"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_14"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              40
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="width"
-            border="0"
-            data-for="UUID_MOCK_KEY_14"
-            data-tip="Width"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_14"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              60
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
+          <td
+            className="table_title"
           >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                200.00
+                0.120
               </span>
-               kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Gross Weight
-            </p>
-          </div>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
-          >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span>
-                0.02
-              </span>
-               
                m
               <sup>
                 3
               </sup>
             </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
             >
-              Volume
+              Quantity
             </p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1
+              </span>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                200.00
+              </span>
+               
+              kg
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
+              }
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -2934,288 +1975,194 @@ exports[`state.viewer is true 1`] = `
   className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-center-center height_box height_box"
+    className="flex-100 layout-row layout-align-start-center  title_bar"
   >
     <div
-      className="flex-5 layout-row layout-align-center-center side_border"
+      className="flex layout-row layout-align-start-center"
     >
-      <p
-        className="flex-none layout-row layout-align-center-center cargo_unit"
-      >
-        GROUP_ALIAS
-      </p>
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <p
-        className="flex-none layout-row layout-align-center-center"
-      >
-        x 2
-      </p>
       <div
-        className="icon_cargo_item"
+        className="icon_cargo_item_small"
         style={
           Object {
             "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <div
-        className=""
+      <p
+        className="flex-none layout-row layout-align-center-center"
       >
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          <span
-            className="cargo_type"
-          >
-            GROUP_CARGO_TYPE_CATEGORY
-          </span>
-        </p>
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          Cargo type
-        </p>
-      </div>
-    </div>
-    <div
-      className="flex-55 layout-row"
-    >
-      <div
-        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
-      >
-        <CargoItemGroupAggregated
-          group={
-            Object {
-              "cargoType": Object {
-                "category": "GROUP_CARGO_TYPE_CATEGORY",
-              },
-              "groupAlias": "GROUP_ALIAS",
-              "items": Array [
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "weight": 220,
-                },
-                Object {
-                  "cargo_item_type_id": "bar",
-                  "chargeable_weight": 150,
-                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 100,
-                  "dimension_y": 50,
-                  "dimension_z": 70,
-                  "hs_codes": Array [],
-                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
-                  "id": 2,
-                  "key": "BAR_CARGO_ITEM_KEY",
-                  "payload_in_kg": 100,
-                  "quantity": 7,
-                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 17,
-                  "weight": 140,
-                },
-              ],
-              "payload_in_kg": 177,
-              "size_class": "lcl",
-              "weight": 180,
-            }
-          }
-          t={[Function]}
-        />
-      </div>
-    </div>
-    <div
-      className="flex-5 layout-row layout-align-center-center"
-      onChange={[Function]}
-      onClick={[Function]}
-    >
-      <i
-        className="collapsed fa fa-chevron-down clip pointy"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      />
+        1 x FOO_TYPE
+      </p>
     </div>
   </div>
   <div
-    className="unit_viewer "
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="UUID_MOCK_KEY_23"
-      >
-        <div
-          className="flex-5 layout-row layout-align-center-center"
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none"
-            style={
-              Object {
-                "fontSize": "10px",
-              }
-            }
-          >
-            Single Item
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="length"
-            border="0"
-            data-for="UUID_MOCK_KEY_22"
-            data-tip="Length"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_22"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              10
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="height"
-            border="0"
-            data-for="UUID_MOCK_KEY_22"
-            data-tip="Height"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_22"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              40
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="width"
-            border="0"
-            data-for="UUID_MOCK_KEY_22"
-            data-tip="Width"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_22"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              60
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
+          <td
+            className="table_title"
           >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                200.00
+                0.120
               </span>
-               kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Gross Weight
-            </p>
-          </div>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
-          >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span>
-                0.02
-              </span>
-               
                m
               <sup>
                 3
               </sup>
             </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
             >
-              Volume
+              Quantity
             </p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1
+              </span>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                200.00
+              </span>
+               
+              kg
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
+              }
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -3225,288 +2172,194 @@ exports[`theme is falsy 1`] = `
   className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-center-center height_box height_box"
+    className="flex-100 layout-row layout-align-start-center  title_bar"
   >
     <div
-      className="flex-5 layout-row layout-align-center-center side_border"
+      className="flex layout-row layout-align-start-center"
     >
-      <p
-        className="flex-none layout-row layout-align-center-center cargo_unit"
-      >
-        GROUP_ALIAS
-      </p>
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <p
-        className="flex-none layout-row layout-align-center-center"
-      >
-        x 2
-      </p>
       <div
-        className="icon_cargo_item"
+        className="icon_cargo_item_small"
         style={
           Object {
             "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <div
-        className=""
+      <p
+        className="flex-none layout-row layout-align-center-center"
       >
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          <span
-            className="cargo_type"
-          >
-            GROUP_CARGO_TYPE_CATEGORY
-          </span>
-        </p>
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          Cargo type
-        </p>
-      </div>
-    </div>
-    <div
-      className="flex-55 layout-row"
-    >
-      <div
-        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
-      >
-        <CargoItemGroupAggregated
-          group={
-            Object {
-              "cargoType": Object {
-                "category": "GROUP_CARGO_TYPE_CATEGORY",
-              },
-              "groupAlias": "GROUP_ALIAS",
-              "items": Array [
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "weight": 220,
-                },
-                Object {
-                  "cargo_item_type_id": "bar",
-                  "chargeable_weight": 150,
-                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 100,
-                  "dimension_y": 50,
-                  "dimension_z": 70,
-                  "hs_codes": Array [],
-                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
-                  "id": 2,
-                  "key": "BAR_CARGO_ITEM_KEY",
-                  "payload_in_kg": 100,
-                  "quantity": 7,
-                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 17,
-                  "weight": 140,
-                },
-              ],
-              "payload_in_kg": 177,
-              "size_class": "lcl",
-              "weight": 180,
-            }
-          }
-          t={[Function]}
-        />
-      </div>
-    </div>
-    <div
-      className="flex-5 layout-row layout-align-center-center"
-      onChange={[Function]}
-      onClick={[Function]}
-    >
-      <i
-        className="collapsed fa fa-chevron-down clip pointy"
-        style={
-          Object {
-            "color": "#E0E0E0",
-          }
-        }
-      />
+        1 x FOO_TYPE
+      </p>
     </div>
   </div>
   <div
-    className="unit_viewer "
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="UUID_MOCK_KEY_5"
-      >
-        <div
-          className="flex-5 layout-row layout-align-center-center"
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none"
-            style={
-              Object {
-                "fontSize": "10px",
-              }
-            }
-          >
-            Single Item
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="length"
-            border="0"
-            data-for="UUID_MOCK_KEY_4"
-            data-tip="Length"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_4"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              10
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="height"
-            border="0"
-            data-for="UUID_MOCK_KEY_4"
-            data-tip="Height"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_4"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              40
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="width"
-            border="0"
-            data-for="UUID_MOCK_KEY_4"
-            data-tip="Width"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_4"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              60
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
+          <td
+            className="table_title"
           >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                200.00
+                0.120
               </span>
-               kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Gross Weight
-            </p>
-          </div>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
-          >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span>
-                0.02
-              </span>
-               
                m
               <sup>
                 3
               </sup>
             </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
             >
-              Volume
+              Quantity
             </p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1
+              </span>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                200.00
+              </span>
+               
+              kg
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
+              }
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -3516,288 +2369,194 @@ exports[`viewHSCodes is true 1`] = `
   className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-center-center height_box height_box"
+    className="flex-100 layout-row layout-align-start-center  title_bar"
   >
     <div
-      className="flex-5 layout-row layout-align-center-center side_border"
+      className="flex layout-row layout-align-start-center"
     >
-      <p
-        className="flex-none layout-row layout-align-center-center cargo_unit"
-      >
-        GROUP_ALIAS
-      </p>
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <p
-        className="flex-none layout-row layout-align-center-center"
-      >
-        x 2
-      </p>
       <div
-        className="icon_cargo_item"
+        className="icon_cargo_item_small"
         style={
           Object {
             "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/cargo_item.svg)",
           }
         }
       />
-    </div>
-    <div
-      className="flex-20 layout-row layout-align-center-center side_border"
-    >
-      <div
-        className=""
+      <p
+        className="flex-none layout-row layout-align-center-center"
       >
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          <span
-            className="cargo_type"
-          >
-            GROUP_CARGO_TYPE_CATEGORY
-          </span>
-        </p>
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          Cargo type
-        </p>
-      </div>
-    </div>
-    <div
-      className="flex-55 layout-row"
-    >
-      <div
-        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
-      >
-        <CargoItemGroupAggregated
-          group={
-            Object {
-              "cargoType": Object {
-                "category": "GROUP_CARGO_TYPE_CATEGORY",
-              },
-              "groupAlias": "GROUP_ALIAS",
-              "items": Array [
-                Object {
-                  "cargo_item_type_id": "foo",
-                  "chargeable_weight": 250,
-                  "dangerous_goods": false,
-                  "description": "FOO_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 10,
-                  "dimension_y": 60,
-                  "dimension_z": 40,
-                  "gross_weight": 76,
-                  "hs_codes": Array [
-                    4,
-                  ],
-                  "hs_text": "FOO_CARGO_ITEM_HS_TEXT",
-                  "id": 1,
-                  "key": "FOO_CARGO_ITEM_KEY",
-                  "payload_in_kg": 200,
-                  "quantity": 5,
-                  "size_class": "FOO_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 20,
-                  "weight": 220,
-                },
-                Object {
-                  "cargo_item_type_id": "bar",
-                  "chargeable_weight": 150,
-                  "description": "BAR_CARGO_ITEM_DESCRIPTION",
-                  "dimension_x": 100,
-                  "dimension_y": 50,
-                  "dimension_z": 70,
-                  "hs_codes": Array [],
-                  "hs_text": "BAR_CARGO_ITEM_HS_TEXT",
-                  "id": 2,
-                  "key": "BAR_CARGO_ITEM_KEY",
-                  "payload_in_kg": 100,
-                  "quantity": 7,
-                  "size_class": "BAR_CARGO_ITEM_SIZE_CLASS",
-                  "stackable": false,
-                  "tare_weight": 17,
-                  "weight": 140,
-                },
-              ],
-              "payload_in_kg": 177,
-              "size_class": "lcl",
-              "weight": 180,
-            }
-          }
-          t={[Function]}
-        />
-      </div>
-    </div>
-    <div
-      className="flex-5 layout-row layout-align-center-center"
-      onChange={[Function]}
-      onClick={[Function]}
-    >
-      <i
-        className="collapsed fa fa-chevron-down clip pointy"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
-      />
+        1 x FOO_TYPE
+      </p>
     </div>
   </div>
   <div
-    className="unit_viewer "
+    className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="UUID_MOCK_KEY_3"
-      >
-        <div
-          className="flex-5 layout-row layout-align-center-center"
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none"
-            style={
-              Object {
-                "fontSize": "10px",
-              }
-            }
-          >
-            Single Item
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="length"
-            border="0"
-            data-for="UUID_MOCK_KEY_2"
-            data-tip="Length"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_2"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              10
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="height"
-            border="0"
-            data-for="UUID_MOCK_KEY_2"
-            data-tip="Height"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_2"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              40
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
-        >
-          <img
-            alt="width"
-            border="0"
-            data-for="UUID_MOCK_KEY_2"
-            data-tip="Width"
-          />
-          <ReactTooltip
-            className="tooltip"
-            effect="solid"
-            id="UUID_MOCK_KEY_2"
-            insecure={true}
-            resizeHide={true}
-            wrapper="div"
-          />
-          <p
-            className="flex-none"
-          >
-            <span>
-              60
-            </span>
-             
-            cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
+          <td
+            className="table_title"
           >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                200.00
+                0.120
               </span>
-               kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Gross Weight
-            </p>
-          </div>
-        </div>
-        <div
-          className="unit_data_cell flex-15 layout-row layout-align-center-center"
-        >
-          <div
-            className=""
-          >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span>
-                0.02
-              </span>
-               
                m
               <sup>
                 3
               </sup>
             </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
             <p
-              className="flex-none layout-row layout-align-center-center"
+              className="flex layout-row layout-align-start-center dims"
             >
-              Volume
+              Quantity
             </p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1
+              </span>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                200.00
+              </span>
+               
+              kg
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
+        >
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
+              }
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;

@@ -32,6 +32,10 @@ module OfferCalculatorService
       end
     end
 
+    def update_updated_at
+      @shipment.touch
+    end
+
     def update_cargo_units
       destroy_previous_cargo_units
       if aggregated_cargo_shipment?

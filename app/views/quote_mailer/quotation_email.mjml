@@ -1,17 +1,50 @@
-<mj-wrapper border="1px solid #f3f3f3" border-top="none" padding-top="60px">
+<% primary_color = @user.tenant.theme["colors"]["primary"] %>
+<mj-wrapper >
+  <mj-section>
+    <mj-column>
+      <mj-text>
+        <p style="display: none;max-height: 0px;overflow: hidden;">
+          Hello <%= @email %>, <%= @user.full_name %> from <%= @shipment.tenant.name %>
+                prepared for you a document with the best quotations for the itinerary: 
+        </p>
+      </mj-text>
+      <mj-text>
+        <p style="display: none;max-height: 0px;overflow: hidden;">
+          &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+        </p>
+      </mj-text>
+    </mj-column>
+  </mj-section>
+</mj-wrapper>
+<mj-wrapper border="1px solid #f3f3f3" border-top="none">
+  <mj-section padding="20px 5%" background-color="#BDBDBD">
+    <mj-column>
+      <mj-text>
+        <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.subdomain}", style: "width: 150px; max-height: 150px;" %>
+      </mj-text>
+    </mj-column>
+    <mj-column>
+      <mj-navbar base-url="" hamburger="hamburger" ico-color="black">
+        <% unless @user.tenant.scope.dig('links', 'about').blank? %>
+          <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
+        <% end %>
+        <% unless @user.tenant.scope.dig('links', 'support').blank? %>
+          <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'support')%>" color="white">help</mj-navbar-link>
+        <% end %>
+      </mj-navbar>
+    </mj-column>
+  </mj-section>
+</mj-wrapper>
 
+<mj-wrapper border="1px solid #f3f3f3" border-top="none">
   <mj-section padding="0px">
     <mj-column padding="0 2.5%">
       <mj-text line-height="24px" font-size="27px" padding-left="34px">
         <p>
           Hello
-          <%= @email %>
+          <%= @email %>,
         </p>
       </mj-text>
-    </mj-column>
-    <mj-column>
-      <mj-image width="200px" src="<%= @shipment.tenant.theme[" logoLarge"] %>" />
-      <mj-spacer height="25px" />
     </mj-column>
   </mj-section>
 
@@ -20,7 +53,7 @@
       <mj-text line-height="24px">
         <p>
           <%= @user.full_name %> from <strong>
-            <%= @shipment.tenant.name %></strong> <br>
+            <%= @shipment.tenant.name %></strong>
           prepared for you a document with the best quotations for the itinerary:
         </p>
       </mj-text>
@@ -29,25 +62,18 @@
 
   <mj-section full-width="full-width" background-color="#f3f3f3">
     <mj-group>
-      <mj-column width="130px">
-        <% if @shipments.first.mode_of_transport == "ocean" %>
-        <% mot_link = "https://assets.itsmycargo.com/assets/icons/anchor-solid-1.png" %>
-        <% end %>
-        <% if @shipments.first.mode_of_transport == "air" %>
-        <% mot_link = "https://assets.itsmycargo.com/assets/icons/plane-solid-1.png" %>
-        <% end %>
-        <mj-image padding-top="20px" padding-bottom="20px" padding-left="0" padding-right="0" width="30px" src="<%= mot_link %>"></mj-image>
+      <mj-column width="16%">
+        <mj-text padding="20px 0" padding-left="38%">
+          <%= image_tag attachments['icon.png'].url, alt: "#{@shipment.mode_of_transport}", style: "width: 30px" %>
+        </mj-text>
       </mj-column>
-      <mj-column>
+      <mj-column width="84%">
         <mj-text line-height="16px" padding="0" font-size="18px">
           <p>From: <strong>
               <%= @shipments.first.origin_hub.name %></strong></p>
           <p>To: <strong>
               <%= @shipments.first.destination_hub.name %></strong> </p>
         </mj-text>
-      </mj-column>
-      <mj-column>
-        <mj-image width="30px" src=""></mj-image>
       </mj-column>
     </mj-group>
   </mj-section>
@@ -64,32 +90,9 @@
 </mj-wrapper>
 
 
-
+<%= render "closing_lines", user: @user %>
 <mj-wrapper full-width="full-width" padding="0px">
-  <% if defined? closing_text %>
-  <mj-section full-width="full-width" padding="0px">
-    <mj-column width="100%" padding="0 2.5%">
-      <mj-text line-height="24px">
-        <p>
-          <%= closing_text %>
-        </p>
-      </mj-text>
-    </mj-column>
-  </mj-section>
-  <% end %>
-  <mj-section full-width="full-width" padding="0px">
-    <mj-column width="100%" padding="0 2.5%">
-      <mj-text>
-        <% if @user.tenant.emails.dig('support', 'general') %>
-          <p>For further information regarding the quotations please contact <%= @user.tenant.emails.dig('support', 'general')%>,</p>
-        <% end %>
-        <p>Thank you for your interest and best regards,</p>
-        <p></p>
-
-      </mj-text>
-
-    </mj-column>
-  </mj-section>
+ 
   <mj-section full-width="full-width" padding="0px">
     <mj-column width="100%">
       <mj-text font-size="8px">
@@ -102,3 +105,4 @@
     </mj-column>
   </mj-section>
 </mj-wrapper>
+

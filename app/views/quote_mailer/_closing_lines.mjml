@@ -1,0 +1,33 @@
+<mj-wrapper full-width="full-width" padding="0px">
+    <mj-section full-width="full-width" padding="0px">
+      <mj-column width="100%" padding="0 2.5%">
+        <mj-text>
+          <p>
+            <p>Thank you for your using <%= user.tenant.name %> Shop and best regards,</p>
+          </p>
+        </mj-text>
+
+      </mj-column>
+    </mj-section>
+    <mj-section full-width="full-width" padding="0px">
+      <mj-column width="100%" padding="0 2.5%">
+        <mj-text line-height="24px">
+          <p>
+            <span class="bold"><%= user.tenant.name %></span><br>
+            <% user.tenant.addresses["components"].each do |address_line| %>
+              <%= address_line %> <br>
+                <% end %>
+        </mj-text>
+
+      </mj-column>
+    </mj-section>
+    <mj-section full-width="full-width" padding="0px">
+      <mj-column width="100%" padding="0 2.5%">
+        <mj-text>
+          <p style="font-size: 12px;text-align: center;font-weight: bolder; font-size: 10px;color: #BDBDBD;letter-spacing: 0.2px;line-height: 17px">
+            This is an auto-generated mail. Please reply to this email with any inquiries.
+          <p>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-wrapper>

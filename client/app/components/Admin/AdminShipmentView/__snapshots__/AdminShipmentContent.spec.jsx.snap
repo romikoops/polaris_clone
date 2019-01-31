@@ -576,6 +576,24 @@ exports[`feeHash.trucking_pre is falsy 1`] = `
     >
       <GreyBox
         borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName="layout-column flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="layout-row flex-100 no_margin_bottom"
+      />
+      <GreyBox
+        borderStyle=""
         content="cargoView"
         contentClassName="layout-column flex"
         flex={0}
@@ -1428,6 +1446,24 @@ exports[`loadType === cargo_item && cargoCount === 1 1`] = `
     <div
       className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
     >
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName="layout-column flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="layout-row flex-100 no_margin_bottom"
+      />
       <GreyBox
         borderStyle=""
         content="cargoView"
@@ -2284,6 +2320,24 @@ exports[`loadType === cargo_item && cargoCount > 1 1`] = `
     >
       <GreyBox
         borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName="layout-column flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="layout-row flex-100 no_margin_bottom"
+      />
+      <GreyBox
+        borderStyle=""
         content="cargoView"
         contentClassName="layout-column flex"
         flex={0}
@@ -3136,6 +3190,24 @@ exports[`loadType === container && cargoCount === 1 1`] = `
     <div
       className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
     >
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName="layout-column flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="layout-row flex-100 no_margin_bottom"
+      />
       <GreyBox
         borderStyle=""
         content="cargoView"
@@ -3992,6 +4064,24 @@ exports[`loadType === container && cargoCount > 1 1`] = `
     >
       <GreyBox
         borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName="layout-column flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="layout-row flex-100 no_margin_bottom"
+      />
+      <GreyBox
+        borderStyle=""
         content="cargoView"
         contentClassName="layout-column flex"
         flex={0}
@@ -4844,6 +4934,24 @@ exports[`shallow render 1`] = `
     <div
       className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
     >
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName="layout-column flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="layout-row flex-100 no_margin_bottom"
+      />
       <GreyBox
         borderStyle=""
         content="cargoView"
@@ -5700,6 +5808,24 @@ exports[`shipment.has_on_carriage is true 1`] = `
     >
       <GreyBox
         borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName="layout-column flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="layout-row flex-100 no_margin_bottom"
+      />
+      <GreyBox
+        borderStyle=""
         content="cargoView"
         contentClassName="layout-column flex"
         flex={0}
@@ -6552,6 +6678,24 @@ exports[`shipment.has_pre_carriage is true 1`] = `
     <div
       className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
     >
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName="layout-column flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="layout-row flex-100 no_margin_bottom"
+      />
       <GreyBox
         borderStyle=""
         content="cargoView"
@@ -7423,6 +7567,24 @@ exports[`shipment.selected_offer.trucking_pre is true 1`] = `
     <div
       className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
     >
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName="layout-column flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
+        titleAction={false}
+        wrapperClassName="layout-row flex-100 no_margin_bottom"
+      />
       <GreyBox
         borderStyle=""
         content="cargoView"

@@ -62,7 +62,7 @@
     "html-webpack-plugin": "^3.2.0",
     "i18next": "^11.3.6",
     "i18next-browser-languagedetector": "^2.2.2",
-    "image-webpack-loader": "^4.5.0",
+    "image-webpack-loader": "^4.6.0",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.4",
     "mailcheck": "^1.1.1",
@@ -109,7 +109,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "resolve-url-loader": "^2.1.1",
-    "roadhog": "^2.4.5",
+    "roadhog": "^2.4.9",
     "sass-loader": "^7.1.0",
     "slick-carousel": "^1.8.1",
     "style-it": "^2.0.0",
@@ -145,6 +145,6 @@
     "react-json-tree": "^0.11.0",
     "react-test-renderer": "^16.6.3",
     "typescript": "^3.1.4",
-    "webpack-dev-server": "^3.1.10"
+    "webpack-dev-server": "^3.1.14"
   }
 }

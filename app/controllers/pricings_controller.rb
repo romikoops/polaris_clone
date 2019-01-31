@@ -41,6 +41,7 @@ class PricingsController < ApplicationController
   def request_dedicated_pricing
     new_pricing_request = pricing_request_params.to_h.symbolize_keys
     PricingMailer.request_email(new_pricing_request).deliver_later
+    
     new_pricing_request[:status] = 'requested'
     @pricing_request = PricingRequest.create!(new_pricing_request)
 

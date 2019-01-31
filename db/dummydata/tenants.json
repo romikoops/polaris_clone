@@ -72,6 +72,7 @@
     "links": {
       "home": "https://freightservices.greencarrier.com/",
       "about": "https://freightservices.greencarrier.com/about-us/",
+      "contact": "https://freightservices.greencarrier.com/contact/",
       "legal": "https://freightservices.greencarrier.com/contact/"
     },
     "social_links": {
@@ -188,6 +189,7 @@
     "links": {
       "home": "https://www.itsmycargo.com/",
       "about": "https://www.itsmycargo.com/",
+      "contact": "https://www.itsmycargo.com/",
       "legal": ""
     },
     "social_links": {
@@ -975,6 +977,7 @@
     },
     "logoLarge": "https://assets.itsmycargo.com/assets/tenants/fivestar/fivestar_logo.png",
     "logoSmall": "https://assets.itsmycargo.com/assets/tenants/fivestar/fivestar_logo.png",
+    "logoWhite": "https://assets.itsmycargo.com/assets/logos/fivestar/fivestar_white.png",
     "background": "https://assets.itsmycargo.com/assets/backgrounds/bg_fivestar.jpg"
   },
   "addresses": {

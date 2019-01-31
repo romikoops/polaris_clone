@@ -56,7 +56,7 @@ wrap.pipeline(timeout: 90) {
                       npm \
                       postgresql-dev \
                       tzdata
-                    npm install -g 'mjml@4.2.0'
+                    npm install -g 'mjml@4.3.1'
                   """
                   sh 'scripts/prepare'
                 }

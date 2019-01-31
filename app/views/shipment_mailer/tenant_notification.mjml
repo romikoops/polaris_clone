@@ -1,44 +1,42 @@
 <% primary_color = @user.tenant.theme["colors"]["primary"] %>
-<mj-section full-width="full-width">
-      <mj-column>
-        <mj-image width="300px" src="<%= @user.tenant.theme["logoLarge"] %>" />
-      </mj-column>
-    </mj-section>
-    <mj-section full-width="full-width">
-      <mj-column>
-        <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
-      </mj-column>
-    </mj-section>
 
- <mj-section full-width="full-width" padding="0px">
+<mj-section padding="20px 5%" background-color="#BDBDBD">
+  <mj-column>
+    <mj-text>
+      <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.subdomain}", style: "width: 150px; max-height: 150px;" %>
+    </mj-text>
+  </mj-column>
+  <mj-column>
+    <mj-navbar base-url="" hamburger="hamburger" ico-color="white">
+      <% unless @user.tenant.scope.dig('links', 'about').blank? %>
+        <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
+      <% end %>
+      <% unless @user.tenant.scope.dig('links', 'support').blank? %>
+        <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'support')%>" color="white">help</mj-navbar-link>
+      <% end %>
+    </mj-navbar>
+  </mj-column>
+</mj-section>
+
+ <mj-section full-width="full-width" padding="0px" padding-top="20px">
     <mj-column width="100%">
         <mj-text line-height="24px">
-          <p>A new booking was received from <span class="bold"><%= @user.company_name %></span> on <span class="bold"><%= formatted_datetime(@shipment.updated_at) %></span>.</p>
+          <p>Hello <%= @user.first_name %> <%= @user.last_name %>,</p>
+          <p>A new booking was received from <span class="bold"><%= @user.company_name %></span>.</p>
         </mj-text>
     </mj-column>
+  </mj-section>
     
 </mj-section>
 <%= render "details_body.mjml" %>
-<mj-section full-width="full-width" padding="0px">
-    <mj-column width="40%">
-      <mj-button href="<%= @redirects_base_url %>accept" width="90%" background-color="#04CC36">
-        Accept
-      </mj-button>
-    </mj-column>
-    <mj-column width="40%">
-      <mj-button href="<%= @redirects_base_url %>edit" width="90%" background-color="#FACA0A">
-        Edit
-      </mj-button>
-    </mj-column>
-</mj-section>
 
 <mj-section full-width="full-width" padding="0px">
   <mj-column width="100%">
     <mj-text>
       <p>If you have questions about the ItsMyCargo Shop System or are experiencing problems with this mail or shipment – do not hesitate to ask us:</p>
       <p><span class="bold text-center">Support:</span></p>
-      <p><span class="bold text-center">By email: <%= mail_to("support@itsmycargo.com") %></span></p>
-      <p><span class="bold text-center">By phone: +49 151 59085855</span></p>
+      <p><span class="bold text-center">By email: <%= mail_to("#{@user.tenant.emails['support']['general']}") %></span></p>
+      <p><span class="bold text-center">By phone: <%= @user.tenant.phones['support'] %></span></p>
    </mj-text>
   </mj-column>
 </mj-section>
@@ -55,7 +53,9 @@
 <mj-section full-width="full-width" padding="0px">
   <mj-column width="100%">
     <mj-text>
-      <p class="bold text-center" style="font-size: 12px;">This is an auto-generated mail. Please respond to our support mail with any inquiries.<br>ItsMyCargo ApS – Brooktorkai 7, 20457 Hamburg, GERMANY.</p>
+      <p style="font-size: 12px;text-align: center;font-weight: bolder;font-size: 10px;color: #BDBDBD;letter-spacing: 0.2px;line-height: 17px">
+      This is an auto-generated mail. Please respond to our support mail with any inquiries.<br>
+      ItsMyCargo ApS – Brooktorkai 7, 20457 Hamburg, GERMANY.</p>
    </mj-text>
   </mj-column>
 </mj-section>

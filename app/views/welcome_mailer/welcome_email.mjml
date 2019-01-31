@@ -1,22 +1,42 @@
 <% primary_color = @user.tenant.theme["colors"]["primary"] %>
 <% secondary_color = @user.tenant.theme["colors"]["secondary"] %>
+<mj-section>
+  <mj-column>
+    <mj-text>
+      <p style="display: none;max-height: 0px;overflow: hidden;">
+        Hello <%= @user.full_name %> and welcome to the <%= @user.tenant.name %> online shop: 
+      </p>
+    </mj-text>
+    <mj-text>
+      <p style="display: none;max-height: 0px;overflow: hidden;">
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+      </p>
+    </mj-text>
+  </mj-column>
+</mj-section>
+<mj-section padding="20px 5%" background-color="#BDBDBD">
+  <mj-column>
+    <mj-text>
+      <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.subdomain}", style: "width: 150px" %>
+    </mj-text>
+  </mj-column>
+  <mj-column>
+    <mj-navbar base-url="" hamburger="hamburger" ico-color="white">
+      <% unless @user.tenant.scope.dig('links', 'about').blank? %>
+        <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
+      <% end %>
+      <% unless @user.tenant.scope.dig('links', 'support').blank? %>
+        <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'support')%>" color="white">help</mj-navbar-link>
+      <% end %>
+    </mj-navbar>
+  </mj-column>
+</mj-section>
+
 <mj-wrapper full-width="full-width" padding="0px">
-  <mj-section full-width="full-width">
-    <mj-column>
-      <mj-image width="300px" src="<%= @user.tenant.theme["logoLarge"] %>" />
-    </mj-column>
-  </mj-section>
-  <mj-section full-width="full-width">
-    <mj-column>
-      <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
-    </mj-column>
-  </mj-section>
-</mj-wrapper>
-<mj-wrapper full-width="full-width" padding="0px">
-  <mj-section full-width="full-width" padding="0px">
+  <mj-section full-width="full-width" padding="0px" padding-top="20px">
     <mj-column width="100%" padding="0 2.5%">
       <mj-text>
-        <p>Dear <span><%= @user.full_name %>,</span></p>
+        <p>Hello <span><%= @user.full_name %>,</span></p>
       </mj-text>
     </mj-column>
     <mj-column width="100%" padding="0 2.5%">
@@ -25,7 +45,9 @@
           <%== section['text'] %>
         </mj-text>
         <% if section['image_url'] %>
-          <mj-image  src="<%= section['image_url'] %>" />
+          <mj-text line-height="24px">
+            <%= image_tag attachments['ngl_welcome_image.jpg'].url, alt: 'Welcome', style: "width: 100%" %>
+          </mj-text>
         <% end %>
         <mj-divider border-width="1px" border-style="dashed" border-color="lightgrey" />
       <% end %>
@@ -40,7 +62,7 @@
 <mj-wrapper full-width="full-width" padding="0px">
   <mj-section full-width="full-width">
     <mj-column width="100%" padding="0 2.5%">
-      <% @content['social'].each do |section| %>
+      <% @content['social'].each do |section|%>
           <%== section['text'] %>
       <% end %>
     </mj-column>
@@ -64,8 +86,8 @@
         <mj-text line-height="24px" >
           <%== section['text'] %>
         </mj-text>
-        <% if section['image_url']%>
-          <mj-image src="<%= section['image_url'] %>" />
+        <% if section['image_url'] %>
+          <%= image_tag attachments['ngl_welcome_image.jpg'].url, alt: 'Welcome', style: "width: 100%" %>
         <% end %>
       <% end %>
     </mj-column>

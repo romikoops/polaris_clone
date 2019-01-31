@@ -17,6 +17,8 @@ import GreyBox from '../../GreyBox/GreyBox'
 import { NamedSelect } from '../../NamedSelect/NamedSelect'
 import FileUploader from '../../FileUploader/FileUploader'
 import ShipmentNotes from '../../ShipmentNotes'
+import CargoItemSummary from '../../Cargo/Item/Summary'
+import CargoContainerSummary from '../../Cargo/Container/Summary'
 
 export class AdminShipmentContent extends Component {
   static checkSelectedOffer (service) {
@@ -92,7 +94,10 @@ export class AdminShipmentContent extends Component {
       contacts,
       shipment,
       documents,
-      accountHolder
+      accountHolder,
+      containers,
+      cargoItems,
+      aggregatedCargo
     } = shipmentData
 
     const {
@@ -102,6 +107,13 @@ export class AdminShipmentContent extends Component {
     const docChecker = {
       packing_sheet: false,
       commercial_invoice: false
+    }
+    const showCargoSummary = !aggregatedCargo
+    let cargoSummary
+    if (showCargoSummary && cargoItems.length) {
+      cargoSummary = <CargoItemSummary items={cargoItems} t={t} mot={shipment.mode_of_transport} scope={scope} />
+    } else if (showCargoSummary && containers.length) {
+      cargoSummary = <CargoContainerSummary items={containers} t={t} />
     }
 
     const docView = []
@@ -606,7 +618,9 @@ export class AdminShipmentContent extends Component {
               </div>
             </div>
             {remarkBody ? (
-              <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}>
+              <div className={`${adminStyles.border_box} ${adminStyles.remark_box}
+                              margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}
+              >
                 <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
                   <div className="layout-column flex-100">
                     <h3
@@ -641,6 +655,11 @@ export class AdminShipmentContent extends Component {
           theme={theme}
         >
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
+            {showCargoSummary ? <GreyBox
+              wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_bottom}`}
+              contentClassName="layout-column flex"
+              content={cargoSummary}
+            /> : '' }
             <GreyBox
 
               wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_bottom}`}
