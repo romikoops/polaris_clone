@@ -107,7 +107,7 @@ class ShipmentMailer < ApplicationMailer
 
   def create_pdf_attachment(shipment)
     pdf = ShippingTools.generate_shipment_pdf(shipment: shipment)
-    attachments.inline["shipment_#{shipment.imc_reference}.pdf"] = pdf
+    attachments["shipment_#{shipment.imc_reference}.pdf"] = pdf
   end
 
   def base_server_url
