@@ -375,7 +375,14 @@ exports[`happy path 1`] = `
   <div
     className="cargo_item_info flex-100'"
   >
-    <ChargableProperties
+    <ChargeableProperties
+      allMots={
+        Array [
+          "air",
+          "rail",
+          "ocean",
+        ]
+      }
       availableMots={
         Array [
           "ocean",

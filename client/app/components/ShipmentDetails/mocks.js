@@ -24,6 +24,7 @@ export const ShipmentDetailsAvailableRoutes = [{
   }
 }]
 
+export const allMots = ['ocean', 'air', 'rail']
 export const availableMots = ['ocean', 'air']
 
 export const ShipmentDetails = {

@@ -1,22 +1,23 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import ChargableProperties from '.'
+import ChargeableProperties from '.'
 import {
-  t, scope, availableMots, cargoItem, maxDimensionsToApply
+  t, scope, availableMots, allMots, cargoItem, maxDimensionsToApply
 } from '../../../../mocks'
 
 const propsBase = {
   t,
   cargoItem,
   availableMots,
+  allMots,
   scope,
   maxDimensions: maxDimensionsToApply
 }
 
 test('with empty props', () => {
-  expect(() => shallow(<ChargableProperties />)).toThrow()
+  expect(() => shallow(<ChargeableProperties />)).toThrow()
 })
 
 test('happy path', () => {
-  expect(shallow(<ChargableProperties {...propsBase} />)).toMatchSnapshot()
+  expect(shallow(<ChargeableProperties {...propsBase} />)).toMatchSnapshot()
 })

@@ -14,7 +14,7 @@ import height from '../../../../../assets/images/cargo/height.png'
 import calcMaxDimensionsToApply from '../../../../../helpers/calcMaxDimensionsToApply'
 
 import CheckboxWrapper from './checkboxWrapper'
-import ChargableProperties from './ChargableProperties'
+import ChargeableProperties from './ChargeableProperties'
 
 const imageSources = {
   length,
@@ -53,6 +53,12 @@ class CargoItem extends React.PureComponent {
     this.getSharedProps = this.getSharedProps.bind(this)
     this.getImage = this.getImage.bind(this)
     this.getMaxDimensionsToApply = this.getMaxDimensionsToApply.bind(this)
+
+    const { scope } = props
+
+    this.allMots = Object.keys(scope.modes_of_transport).filter(mot => (
+      scope.modes_of_transport[mot].cargo_item
+    ))
   }
 
   getMaxDimensionsToApply () {
@@ -264,8 +270,9 @@ class CargoItem extends React.PureComponent {
           </div>
         </div>
         <div className={`${styles.cargo_item_info} flex-100'`}>
-          <ChargableProperties
+          <ChargeableProperties
             availableMots={ShipmentDetails.availableMots}
+            allMots={this.allMots}
             cargoItem={cargoItem}
             maxDimensions={this.getMaxDimensionsToApply()}
             scope={scope}
