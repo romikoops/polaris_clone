@@ -296,109 +296,105 @@
       </div>
 
       <% shipment.cargo_items.each_with_index do |cargo, i| %>
-
-        <div class="first-cargo-row display-flex-center text-center border-bottom">
-          <div class="cargo-index cargo-section">
-            <p class="cargo-value"><%= i + 1 %></p>
-          </div>
-          <div class="cargo-items cargo-section">
-            <p class="cargo-subtitle"><strong><%= cargo.quantity %> x</strong> <%= load_type %></p>
-          </div>
-          <div class="cargo-section">
-            <p class="cargo-value"><span class="cargo_type"><%= cargo.cargo_item_type.description %></span></p>
-            <p class="cargo-subtitle">Cargo type</p>
-          </div>
-          <div class="cargo-section">
-            <p class="cargo-value">
-              <span class="cargo-type">
-                <% if tenant.scope.dig('consolidation', 'cargo') %>
-                  <%= format('%.2f', (cargo.payload_in_kg || cargo.weight) * cargo.quantity) %>
-                <% else %>
-                  <%= format('%.2f', (cargo.payload_in_kg || cargo.weight)) %>
+            <div class="no_page_break">
+              <div class="title_row">
+                <p class=""><strong><%= cargo.quantity %>&nbsp;x</strong> <%= cargo.cargo_item_type.description %></p>
+              </div>
+              <table class="data-table">
+                <tr>
+                  <td class="table-title">
+                    <p >
+                      <%= 
+                        [cargo.dimension_x, cargo.dimension_y, cargo.dimension_z]
+                          .map{|v| "#{format('%.2f',v)} cm"}.join(' x ')
+                      %>
+                    </p>
+                  </td>
+                  <td class="table-value"><span><%= '%.3f' % cargo.volume %>&nbsp;m<sup>3</span></sup></td>
+                </tr>
+                <% unless scope['cargo_overview_only'] %>
+                  <tr>
+                    <td class="table-title"><p>Gross&nbsp;Weight&nbsp;per&nbsp;Item</p></td>
+                    <td class="table-value"><span><%= '%.2f' % (cargo.payload_in_kg) %>&nbsp;kg</span> </td>
+                  </tr>
                 <% end %>
-              </span> &nbsp;kg </p>
-            <p class="cargo-subtitle">Gross Weight</p>
-          </div>
-
-          <div class="cargo-section">
-            <p class="cargo-value">
-              <span class="cargo-type">
-                <% if tenant.scope.dig('consolidation', 'cargo') %>
-                  <%= format('%.3f', cargo.volume * cargo.quantity) %>
-                <% else %>
-                  <%= format('%.3f', cargo.volume) %>
+                <tr>
+                  <td class="table-title"><p>Quantity</p></td>
+                  <td class="table-value"><span><%= cargo.quantity %></span></td>
+                </tr>
+                <tr>
+                  <td class="table-title"><p>Total Volume</p></td>
+                  <td class="table-value"><span><%= '%.3f' % (cargo.volume * cargo.quantity) %>&nbsp;m<sup>3</span></sup></td>
+                </tr>
+                <tr>
+                  <td class="table-title"><p>Total&nbsp;Gross&nbsp;Weight</p></td>
+                  <td class="table-value">
+                    <span><%= '%.2f' % (cargo.payload_in_kg * cargo.quantity) %>&nbsp;kg</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="table-title"><p><%= cargo_data[:chargeable_weight][shipment.id][cargo.id.to_s][:total_title] %></p></td>
+                  <td class="table-value"><span><%= cargo_data[:chargeable_weight][shipment.id][cargo.id.to_s][:total_value] %></span></td>
+                </tr>
+              </table>
+            </div>
+             
+          <% end %>
+          <% shipment.containers.each_with_index do |container, i| %>
+            <div class="no_page_break">
+              <div class="title_row">
+                <p class=""><strong><%= container.quantity %>&nbsp;x</strong> <%= load_type %></p>
+              </div>
+              <table class="data-table">
+                <tr>
+                  <td class="table-title"><p>Quantity</p></td>
+                  <td class="table-value"><span><%= container.quantity %></span></td>
+                </tr>
+               
+                <tr>
+                  <td class="table-title"><p>Cargo Type</p></td>
+                  <td class="table-value"><span><%= container.size_class.upcase %></span></sup></td>
+                </tr>
+                <% unless scope['cargo_overview_only'] %>
+                  <tr>
+                    <td class="table-title"><p>Gross&nbsp;Weight&nbsp;per&nbsp;Container</p></td>
+                    <td class="table-value"><span><%= '%.2f' % (container.gross_weight) %>&nbsp;kg</span> </td>
+                  </tr>
                 <% end %>
-              </span> &nbsp;m<sup>3</sup>
-            </p>
-            <p class="cargo-subtitle">Volume</p>
-          </div>
-          <div class="cargo-section cargo-section-last">
-            <% unless tenant.scope.dig('consolidation', 'cargo') %>
-              <p class="cargo-value">
-                <span class="cargo-type">
-                 <%= cargo_data[:chargeable_weight][shipment.id][cargo.id.to_s][:value] %>
-                </span>
-              </p>
-              <p class="cargo-subtitle">
-                <%= cargo_data[:chargeable_weight][shipment.id][cargo.id.to_s][:title] %>
-              </p>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
+                <tr>
+                  <td class="table-title"><p>Total&nbsp;Gross&nbsp;Weight</p></td>
+                  <td class="table-value">
+                    <span><%= '%.2f' % (container.gross_weight * container.quantity) %>&nbsp;kg</span>
+                  </td>
+                </tr>
+              </table>
+            </div>
 
-      <% shipment.containers.each_with_index do |container, i| %>
-        <div class="first-cargo-row display-flex-center text-center border-bottom">
-          <div class="cargo-index cargo-section">
-            <p class="cargo-value"><%= i + 1 %></p>
-          </div>
-          <div class="cargo-items cargo-section">
-            <p class="cargo-subtitle"><strong><%= container.quantity %> x</strong> <%= load_type %></p>
-          </div>
-          <div class="cargo-section">
-            <p class="cargo-value"><span class="cargo_type"><%= container.size_class.upcase %></span></p>
-            <p class="cargo-subtitle">Cargo type</p>
-          </div>
-          <div class="cargo-section">
-            <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % container.gross_weight %></span> &nbsp;kg </p>
-            <p class="cargo-subtitle">Gross Weight</p>
-          </div>
-        </div>
-      <% end %>
+          <% end %>
+          <% if  shipment.aggregated_cargo %>
+            <div class="no_page_break">
+              <div class="title_row">
+                <p class="">"><strong>Aggregated Cargo</strong></p>
+              </div>
+              <table class="data-table">
+                <tr>
+                  <td class="table-title"><p>Total&nbsp;Gross&nbsp;Weight</p></td>
+                  <td class="table-value">
+                    <span><%= '%.2f' % (shipment.aggregated_cargo.weight) %>&nbsp;kg</span>
+                  </td>
+                </tr>
+                 <tr>
+                  <td class="table-title"><p>Total Volume</p></td>
+                  <td class="table-value"><span><%= '%.3f' % (shipment.aggregated_cargo.volume) %>&nbsp;m<sup>3</span></sup></td>
+                </tr>
+                 <tr>
+                  <td class="table-title"><p>Chargeable Weight</p></td>
+                  <td class="table-value"><span><%= '%.2f' % shipment.aggregated_cargo.chargeable_weight %></span></td>
+                </tr>
+              </table>
+            </div>
 
-      <% if  shipment.aggregated_cargo %>
-        <div class="first-cargo-row display-flex-center text-center border-bottom">
-          <div class="cargo-index cargo-section">
-            <p class="cargo-value">1</p>
-          </div>
-          <div class="cargo-items cargo-section">
-            <p class="cargo-subtitle"><strong>Aggregated Cargo</strong></p>
-          </div>
-          <div class="cargo-section">
-            <p class="cargo-value"><span class="cargo-type"><%= '%.2f' % shipment.aggregated_cargo.weight %></span> &nbsp;kg </p>
-            <p class="cargo-subtitle">Gross Weight</p>
-          </div>
-
-          <div class="cargo-section">
-            <p class="cargo-value">
-              <span class="cargo-type">
-                <%= '%.2f' % shipment.aggregated_cargo.volume %>
-              </span> &nbsp;m<sup>3</sup>
-            </p>
-            <p class="cargo-subtitle">Volume</p>
-          </div>
-          <div class="cargo-section cargo-section-last">
-            <p class="cargo-value">
-              <span class="cargo-type">
-                <%= '%.2f' % shipment.aggregated_cargo.chargeable_weight %>
-              </span>
-              &nbsp;kg
-            </p>
-            <p class="cargo-subtitle">Chargeable Weight</p>
-          </div>
-        </div>
-
-      <% end %>
+          <% end %>
 
       <div class="notes-row">
         <div class="column-info display-flex border-bottom notes-upper">

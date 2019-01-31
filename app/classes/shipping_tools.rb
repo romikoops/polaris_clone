@@ -9,17 +9,16 @@ module ShippingTools
   extend PricingTools
   extend NotificationTools
 
-  def self.create_shipments_from_quotation(shipment, results)
+  def self.create_shipments_from_quotation(shipment, results) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/LineLength, Metrics/MethodLength
     existing_quote = Quotation.find_by(user_id: shipment.user_id, original_shipment_id: shipment.id)
     return existing_quote if existing_quote && shipment.updated_at < existing_quote.updated_at
 
     main_quote = Quotation.create(user_id: shipment.user_id, original_shipment_id: shipment.id)
-    results.each do |result|
+    results.each do |result| # rubocop:disable Metrics/BlockLength
       schedule = result['schedules'].first
       trip = Trip.find(schedule['trip_id'])
-      on_carriage_hash = (shipment.trucking['on_carriage'] if !!result['quote']['trucking_on'])
-      pre_carriage_hash = (shipment.trucking['pre_carriage'] if !!result['quote']['trucking_pre'])
-
+      on_carriage_hash = (shipment.trucking['on_carriage'] if result['quote']['trucking_on'])
+      pre_carriage_hash = (shipment.trucking['pre_carriage'] if result['quote']['trucking_pre'])
       new_shipment = main_quote.shipments.create!(
         status: 'quoted',
         user_id: shipment.user_id,
@@ -42,24 +41,40 @@ module ShippingTools
         itinerary_id: trip.itinerary_id,
         desired_start_date: shipment.desired_start_date
       )
-      new_shipment.cargo_units = shipment.cargo_units.map(&:dup)
+      charge_category_map = {}
+      shipment.cargo_units.each do |unit|
+        new_unit = unit.dup
+        new_unit.shipment_id = new_shipment.id
+        new_unit.save!
+        charge_category_map[unit.id] = new_unit.id
+      end
       if new_shipment.lcl? && !new_shipment.aggregated_cargo.nil?
         new_shipment.aggregated_cargo.set_chargeable_weight!
       elsif new_shipment.lcl? && new_shipment.aggregated_cargo.nil?
         new_shipment.cargo_units.map(&:set_chargeable_weight!)
       end
-      shipment.charge_breakdowns.each do |charge_breakdown|
+
+      shipment.charge_breakdowns.where(trip: trip).each do |charge_breakdown|
         new_charge_breakdown = charge_breakdown.dup
         new_charge_breakdown.update(shipment: new_shipment)
-
         new_charge_breakdown.dup_charges(charge_breakdown: charge_breakdown)
+        new_charge_breakdown.charge('cargo').children.each do |new_charge|
+          old_charge_category = new_charge&.children_charge_category
+          next if old_charge_category&.cargo_unit_id.nil?
+
+          new_charge_category = old_charge_category.dup
+          new_charge_category.cargo_unit_id = charge_category_map[old_charge_category.cargo_unit_id]
+          new_charge_category.save!
+          new_charge.children_charge_category = new_charge_category
+          new_charge.save!
+        end
       end
       new_shipment.save!
     end
     main_quote
   end
 
-  def self.create_shipment(details, current_user)
+  def self.create_shipment(details, current_user) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     tenant = current_user.tenant
     load_type = details['loadType'].underscore
     direction = details['direction']
@@ -648,7 +663,6 @@ module ShippingTools
   def self.save_pdf_quotes(shipment, tenant, schedules)
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
     @quotes = main_quote.shipments.map(&:selected_offer)
-
     logo = Base64.encode64(Net::HTTP.get(URI(tenant.theme['logoLarge'])))
     if tenant.scope['send_email_on_quote_download']
       QuoteMailer.quotation_admin_email(shipment, main_quote.shipments.to_a, main_quote).deliver_later

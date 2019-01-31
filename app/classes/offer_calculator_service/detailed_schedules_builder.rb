@@ -140,8 +140,15 @@ module OfferCalculatorService
             }
 
             other_pricings.each do |other_pricing|
-              if other_pricing.effective_date < obj[:schedules].first.etd &&
-                 other_pricing.expiration_date > obj[:schedules].last.etd
+              if other_pricing.effective_date < dates[:start_date] &&
+                 other_pricing.expiration_date > dates[:end_date]
+                obj[:pricing_ids][other_pricing.transport_category.cargo_class.to_s] =
+                  other_pricing.id
+              end
+              if dates[:start_date] && dates[:end_date] &&
+                 obj[:pricing_ids][other_pricing.transport_category.cargo_class.to_s].nil? &&
+                 other_pricing.effective_date < dates[:start_date] &&
+                 other_pricing.expiration_date > dates[:end_date]
                 obj[:pricing_ids][other_pricing.transport_category.cargo_class.to_s] =
                   other_pricing.id
               end
