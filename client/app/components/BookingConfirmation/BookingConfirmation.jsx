@@ -467,7 +467,7 @@ export class BookingConfirmation extends Component {
               )}
             </div>
             {remarkBody ? (
-              <div className={`${WRAP_ROW(45)} ${ALIGN_START} padding_top`}>
+              <div className={`${WRAP_ROW(45)} ${ALIGN_START} ${styles.remark_box} padding_top`}>
                 <h4>{`${t('shipment:remarks')}:`}</h4>
                 <ul>
                   {remarkBody}

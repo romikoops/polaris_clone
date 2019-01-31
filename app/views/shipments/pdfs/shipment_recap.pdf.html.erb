@@ -448,7 +448,7 @@
               <li class="note-header"> <%= note.header %></li>
               <li> 
                 <p class="hyphens">
-                  <%= note.body %>
+                  <%= simple_format(note.body) %>
                 </p>  
               </li>
               <% end %>
@@ -464,7 +464,7 @@
                     <% unless remark.body.empty? %>
                     <li>
                       <p class="hyphens">
-                        <%= remark.body %>
+                        <%= simple_format(remark.body) %>
                       </p>
                     </li>
                     <% end %>
