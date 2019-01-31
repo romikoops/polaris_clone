@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import {
   change,
   scope,
-  group,
+  cargoItemGroup,
   shipment,
   theme,
   turnFalsy
@@ -13,7 +13,7 @@ import CargoItemGroup from '.'
 
 const propsBase = {
   theme,
-  group,
+  group: cargoItemGroup,
   scope,
   shipment,
   viewHSCodes: false,

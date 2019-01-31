@@ -13,8 +13,7 @@ export const firstCargoItem = {
   key: 'FOO_CARGO_ITEM_KEY',
   payload_in_kg: 200,
   quantity: 5,
-  size_class: 'FOO_CARGO_ITEM_SIZE_CLASS',
-  stackable: false,
+  stackable: true,
   tare_weight: 20,
   weight: 220
 }
@@ -32,11 +31,29 @@ export const secondCargoItem = {
   key: 'BAR_CARGO_ITEM_KEY',
   payload_in_kg: 100,
   quantity: 7,
-  size_class: 'BAR_CARGO_ITEM_SIZE_CLASS',
-  stackable: false,
-  tare_weight: 17,
-  weight: 140
+  stackable: false
 }
 
 export const cargoItems = [firstCargoItem, secondCargoItem]
-export const cargoItemTypes = { foo: 'FOO_TYPE', bar: 'BAR_TYPE' }
+export const cargoItemTypes = { foo: { description: 'FOO_TYPE' }, bar: { description: 'BAR_TYPE' } }
+
+export const cargoItemGroup = {
+  dimension_y: parseFloat(firstCargoItem.dimension_y) * parseInt(firstCargoItem.quantity, 10),
+  dimension_z: parseFloat(firstCargoItem.dimension_z) * parseInt(firstCargoItem.quantity, 10),
+  dimension_x: parseFloat(firstCargoItem.dimension_x) * parseInt(firstCargoItem.quantity, 10),
+  payload_in_kg: parseFloat(firstCargoItem.payload_in_kg) * parseInt(firstCargoItem.quantity, 10),
+  quantity: 1,
+  groupAlias: 1,
+  cargo_group_id: firstCargoItem.id,
+  chargeable_weight: parseFloat(firstCargoItem.chargeable_weight) * parseInt(firstCargoItem.quantity, 10),
+  hsCodes: firstCargoItem.hs_codes,
+  hsText: firstCargoItem.hs_text,
+  cargoType: { description: 'FOO_TYPE' },
+  volume:
+    parseFloat(firstCargoItem.dimension_y) *
+    parseFloat(firstCargoItem.dimension_x) *
+    parseFloat(firstCargoItem.dimension_z) /
+    1000000 *
+    parseInt(firstCargoItem.quantity, 10),
+  items: [firstCargoItem]
+}

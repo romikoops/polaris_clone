@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import { withNamespaces } from 'react-i18next'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
+import { get } from 'lodash'
 import '../../../../styles/react-toggle.scss'
 import styles from './CargoItemGroup.scss'
-import CargoItemGroupAggregated from './Aggregated'
 import length from '../../../../assets/images/cargo/length.png'
 import height from '../../../../assets/images/cargo/height.png'
 import width from '../../../../assets/images/cargo/width.png'
-import { LOAD_TYPES, cargoGlossary } from '../../../../constants'
-import { gradientTextGenerator, numberSpacing, singleItemChargeableObject } from '../../../../helpers'
+import { LOAD_TYPES } from '../../../../constants'
+import { numberSpacing, singleItemChargeableObject } from '../../../../helpers'
 
 class CargoItemGroup extends Component {
   constructor (props) {
@@ -62,7 +62,6 @@ class CargoItemGroup extends Component {
           styles.detailed_row
         } flex-100 layout-row layout-wrap layout-align-none-center`}
       >
-
         <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
           <div className="">
             <div className="layout-row">
@@ -249,7 +248,9 @@ cm
         <div className={`flex-100 layout-row layout-align-start-center  ${styles.title_bar}`}>
           <div className="flex layout-row layout-align-start-center">
             <div className={styles.icon_cargo_item_small} style={imgLCL} />
-            <p className="flex-none layout-row layout-align-center-center">{`${group.items.length} x ${group.cargoType.description}`}</p>
+            <p className="flex-none layout-row layout-align-center-center">
+              {`${group.items.length} x ${get(group, ['cargoType', 'description'], '')}`}
+            </p>
 
           </div>
         </div>

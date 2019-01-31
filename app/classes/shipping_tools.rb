@@ -9,7 +9,7 @@ module ShippingTools
   extend PricingTools
   extend NotificationTools
 
-  def self.create_shipments_from_quotation(shipment, results) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/LineLength, Metrics/MethodLength
+  def self.create_shipments_from_quotation(shipment, results) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/LineLength, Metrics/MethodLength
     existing_quote = Quotation.find_by(user_id: shipment.user_id, original_shipment_id: shipment.id)
     return existing_quote if existing_quote && shipment.updated_at < existing_quote.updated_at
 
@@ -17,8 +17,8 @@ module ShippingTools
     results.each do |result| # rubocop:disable Metrics/BlockLength
       schedule = result['schedules'].first
       trip = Trip.find(schedule['trip_id'])
-      on_carriage_hash = (shipment.trucking['on_carriage'] if !!result['quote']['trucking_on'])
-      pre_carriage_hash = (shipment.trucking['pre_carriage'] if !!result['quote']['trucking_pre'])
+      on_carriage_hash = (shipment.trucking['on_carriage'] if result['quote']['trucking_on'])
+      pre_carriage_hash = (shipment.trucking['pre_carriage'] if result['quote']['trucking_pre'])
       new_shipment = main_quote.shipments.create!(
         status: 'quoted',
         user_id: shipment.user_id,
@@ -74,7 +74,7 @@ module ShippingTools
     main_quote
   end
 
-  def self.create_shipment(details, current_user) #rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def self.create_shipment(details, current_user) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     tenant = current_user.tenant
     load_type = details['loadType'].underscore
     direction = details['direction']
