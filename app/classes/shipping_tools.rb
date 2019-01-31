@@ -650,8 +650,9 @@ module ShippingTools
     @quotes = main_quote.shipments.map(&:selected_offer)
 
     logo = Base64.encode64(Net::HTTP.get(URI(tenant.theme['logoLarge'])))
-    QuoteMailer.quotation_admin_email(shipment, main_quote.shipments.to_a, main_quote).deliver_later
-
+    if tenant.scope['send_email_on_quote_download']
+      QuoteMailer.quotation_admin_email(shipment, main_quote.shipments.to_a, main_quote).deliver_later
+    end
     quotation = PdfHandler.new(
       layout: 'pdfs/simple.pdf.html.erb',
       template: 'shipments/pdfs/quotations.pdf.erb',
