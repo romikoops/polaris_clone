@@ -19,7 +19,7 @@ RUN npm install -g 'mjml@4.3.1'
 
 WORKDIR /app
 
-COPY tmp/docker/ ./
+COPY .build/ ./
 COPY Gemfile Gemfile.lock ./
 RUN bundle config --global frozen 1 \
     && bundle install -j4 --retry 3 \
@@ -54,13 +54,14 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 
 RUN npm install -g 'mjml@4.3.1'
 
-# # Add user
+# Add user
 RUN addgroup -S app && adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G app app
-USER app
 
 # Copy app with gems from former build stage
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
 COPY --from=builder --chown=app:app /app /app
+
+USER app
 
 # Set Rails env
 ENV RAILS_LOG_TO_STDOUT true

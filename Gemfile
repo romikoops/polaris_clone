@@ -137,21 +137,41 @@ group :development, :test do
   gem 'rails-erd'
   gem 'rspec-rails'
   gem 'rspec_junit_formatter'
-  gem 'rubocop'
-  gem 'rubocop-rspec'
 
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i(mri mingw x64_mingw)
   # Better debugging
   gem 'debase'
   gem 'ruby-debug-ide'
+
+  # Code Style
+  gem 'danger'
+  gem 'danger-auto_label'
+  gem 'danger-jira'
+  gem 'danger-reviewer', '>= 0.0.3'
+
+  # gem 'pronto'
+  gem 'pronto', git: 'https://github.com/mikian/pronto.git', branch: 'gh_status'
+  gem 'pronto-brakeman'
+  gem 'pronto-eslint_npm'
+  gem 'pronto-fasterer'
+  gem 'pronto-flay'
+  gem 'pronto-rails_schema'
+  gem 'pronto-rubocop'
+  gem 'pronto-undercover'
+
+  gem 'rubocop'
+  gem 'rubocop-checkstyle_formatter'
+  gem 'rubocop-rspec'
 end
 
 group :test do
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
   gem 'simplecov-cobertura', require: false
+  gem 'simplecov-lcov', require: false
   gem 'timecop'
+  gem 'undercover'
   gem 'vcr', '~>2.8.0'
   gem 'webmock'
 end
