@@ -7,30 +7,24 @@ class ShipmentMailer < ApplicationMailer
 
   TESTING_EMAIL = 'angelica@itsmycargo.com'
 
-  def tenant_notification(user, shipment) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def tenant_notification(user, shipment) # rubocop:disable Metrics/AbcSize
     @user = user
     tenant = user.tenant
     @shipment = shipment
     @scope = tenant.scope
-    base_url =
-      case Rails.env
-      when 'production'  then "https://#{@shipment.tenant.subdomain}.itsmycargo.com/"
-      when 'review'      then ENV['REVIEW_URL']
-      when 'development' then 'http://localhost:8080/'
-      when 'test'        then 'http://localhost:8080/'
-      end
+    base_url = base_url(tenant)
 
     @redirects_base_url = base_url + "redirects/shipments/#{@shipment.id}?action="
 
     @shipment_page =
-      "https://#{tenant.subdomain}.itsmycargo.com/account/shipments/view/#{shipment.id}"
+      "#{@redirects_base_url}edit"
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipment.mode_of_transport}.png"
     ).read
 
     create_pdf_attachment(@shipment)
 
-    attachments.inline['logo.png'] = URI.try(:open, tenant.theme['logoLarge']).try(:read)
+    attachments.inline['logo.png'] = URI.try(:open, tenant.theme['emailLogo']).try(:read)
     attachments.inline['icon.png'] = @mot_icon
     mail_options = {
       from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
@@ -49,14 +43,13 @@ class ShipmentMailer < ApplicationMailer
     @shipment = shipment
     @scope = @user.tenant.scope
 
-    base_url = Rails.env.production? ? "https://#{tenant.subdomain}.itsmycargo.com" : 'http://localhost:8080'
-    @shipment_page = "#{base_url}/account/shipments/view/#{shipment.id}"
+    @shipment_page = "#{base_url(tenant)}account/shipments/view/#{shipment.id}"
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipment.mode_of_transport}.png"
     ).read
 
     create_pdf_attachment(@shipment)
-    attachments.inline['logo.png'] = URI.try(:open, tenant.theme['logoLarge']).try(:read)
+    attachments.inline['logo.png'] = URI.try(:open, tenant.theme['emailLogo']).try(:read)
     attachments.inline['logo_small.png'] = URI.try(:open, tenant.theme['logoSmall']).try(:read)
     attachments.inline['icon.png'] = @mot_icon
     mail_options = {
@@ -76,14 +69,13 @@ class ShipmentMailer < ApplicationMailer
     @shipment = shipment
     tenant = shipment.tenant
     @scope = tenant.scope
-    base_url = Rails.env.production? ? "https://#{tenant.subdomain}.itsmycargo.com" : 'http://localhost:8080'
-    @shipment_page = "#{base_url}/account/shipments/view/#{shipment.id}"
+    @shipment_page = "#{base_url(tenant)}account/shipments/view/#{shipment.id}"
     @mot_icon = URI.open(
       "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipment.mode_of_transport}.png"
     ).read
 
     create_pdf_attachment(@shipment)
-    attachments.inline['logo.png'] = URI.try(:open, tenant.theme['logoLarge']).try(:read)
+    attachments.inline['logo.png'] = URI.try(:open, tenant.theme['emailLogo']).try(:read)
     attachments.inline['logo_small.png'] = try(:open, tenant.theme['logoSmall']).try(:read)
     attachments.inline['icon.png'] = @mot_icon
     mail_options = {
@@ -116,5 +108,23 @@ class ShipmentMailer < ApplicationMailer
   def create_pdf_attachment(shipment)
     pdf = ShippingTools.generate_shipment_pdf(shipment: shipment)
     attachments.inline["shipment_#{shipment.imc_reference}.pdf"] = pdf
+  end
+
+  def base_server_url
+    case Rails.env
+    when 'production'  then 'https://api.itsmycargo.com/'
+    when 'review'      then ENV['REVIEW_URL']
+    when 'development' then 'http://localhost:3000/'
+    when 'test'        then 'http://localhost:3000/'
+    end
+  end
+
+  def base_url(tenant)
+    case Rails.env
+    when 'production'  then "https://#{tenant.subdomain}.itsmycargo.com/"
+    when 'review'      then ENV['REVIEW_URL']
+    when 'development' then 'http://localhost:8080/'
+    when 'test'        then 'http://localhost:8080/'
+    end
   end
 end

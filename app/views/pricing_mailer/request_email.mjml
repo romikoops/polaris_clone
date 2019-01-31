@@ -4,8 +4,7 @@
   <mj-column>
     <mj-text>
       <p style="display: none;max-height: 0px;overflow: hidden;">
-        Hello! <%= @user.full_name %> from <%= @user.company_name %>
-              has requested a dedicated rate for the following route 
+        Hello! <%= @user.full_name %> from <%= @user.company_name %> has requested a dedicated rate for the following route 
       </p>
     </mj-text>
     <mj-text>
@@ -20,7 +19,7 @@
   <mj-section padding="20px 5%" background-color="#BDBDBD">
     <mj-column>
       <mj-text>
-        <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.subdomain}", style: "width: 150px" %>
+        <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.subdomain}", style: "width: 150px; max-height: 150px;" %>
       </mj-text>
     </mj-column>
     <mj-column>
@@ -50,8 +49,7 @@
       
       <mj-text line-height="24px">
         <p>
-          <%= @user.full_name %> from <strong><%= @user.company_name %></strong> <br>
-          has requested a dedicated rate for the following route:
+          <%= @user.full_name %> from <strong><%= @user.company_name %></strong> has requested a dedicated rate for the following route:
         </p> 
       </mj-text>
     </mj-column>

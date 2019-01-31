@@ -6,14 +6,14 @@ class AccountMailer < Devise::Mailer
   helper :application
   include Devise::Controllers::UrlHelpers
 
-  def confirmation_instructions(record, token, opts = {})
+  def confirmation_instructions(record, token, opts = {}) # rubocop:disable Metrics/AbcSize
     tenant = record.tenant
     @primary_color = tenant.theme.dig('colors', 'primary')
 
     opts[:from] = Mail::Address.new("no-reply@#{tenant.subdomain}.#{Settings.emails.domain}")
                                .tap { |a| a.display_name = tenant.name }.format
     opts[:reply_to] = tenant.emails.dig('support', 'general')
-    attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
+    attachments.inline['logo.png'] = URI.open(tenant.theme['emailLogo']).read
     opts[:subject] = "#{tenant.name} Account Confirmation Email"
     @confirmation_url = "#{base_url(tenant)}account/confirmation/#{token}"
 
@@ -26,7 +26,7 @@ class AccountMailer < Devise::Mailer
   def reset_password_instructions(record, token, opts = {})
     tenant = record.tenant
     @primary_color = tenant.theme.dig('colors', 'primary')
-    attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
+    attachments.inline['logo.png'] = URI.open(tenant.theme['emailLogo']).read
     opts[:from] = Mail::Address.new("no-reply@#{tenant.subdomain}.#{Settings.emails.domain}")
                                .tap { |a| a.display_name = tenant.name }.format
     opts[:reply_to] = tenant.emails.dig('support', 'general')
