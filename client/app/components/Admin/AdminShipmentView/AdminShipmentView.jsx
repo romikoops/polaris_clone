@@ -203,7 +203,7 @@ class AdminShipmentView extends Component {
           dimension_z: parseFloat(c.dimension_z) * parseInt(c.quantity, 10),
           dimension_x: parseFloat(c.dimension_x) * parseInt(c.quantity, 10),
           payload_in_kg: parseFloat(c.payload_in_kg) * parseInt(c.quantity, 10),
-          quantity: 1,
+          quantity: c.quantity,
           groupAlias: groupCount,
           cargo_group_id: c.id,
           chargeable_weight: parseFloat(c.chargeable_weight) * parseInt(c.quantity, 10),

@@ -21,6 +21,8 @@ import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
 import Contact from '../Contact/Contact'
 import IncotermRow from '../Incoterm/Row'
 import IncotermExtras from '../Incoterm/Extras'
+import CargoItemSummary from '../Cargo/Item/Summary'
+import CargoContainerSummary from '../Cargo/Container/Summary'
 
 import {
   ALIGN_AROUND_CENTER,
@@ -218,6 +220,13 @@ export class BookingConfirmation extends Component {
         {_remark.body}
       </li>
     )) : ''
+    const showCargoSummary = !aggregatedCargo
+    let cargoSummary
+    if (showCargoSummary && cargoItems.length) {
+      cargoSummary = <CargoItemSummary items={cargoItems} t={t} mot={shipment.mode_of_transport} scope={tenant.scope}/>
+    } else if (showCargoSummary && containers.length) {
+      cargoSummary = <CargoContainerSummary items={containers} t={t} />
+    }
 
     const acceptedBtn = (
       <div className={BUTTON}>
@@ -413,11 +422,13 @@ export class BookingConfirmation extends Component {
         parentClass={styles.shipment_card_border}
         showArrow
       >
-        <div className={INNER_WRAPPER}>
+      
+        {/* <div className={INNER_WRAPPER}> */}
           <div className={LAYOUT_WRAP}>
-            {cargoView}
+          {showCargoSummary ? cargoSummary : '' }
+          {cargoView}
           </div>
-        </div>
+        {/* </div> */}
       </CollapsingBar>
 
     )
@@ -634,7 +645,11 @@ function prepCargoItemGroups (cargos, props) {
 
     const volume = (parsedY * parsedX * parsedZ / 1000000 * parsedQuantity)
     const cargoType = cargoItemTypes[singleCargo.cargo_item_type_id]
-    const items = Array(parsedQuantity).fill(singleCargo)
+    const singleCargoWithVolume = {
+      ...singleCargo,
+      volume: volume / parsedQuantity
+    }
+    const items = Array(parsedQuantity).fill(singleCargoWithVolume)
 
     const group = {
       cargoType,

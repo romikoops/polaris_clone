@@ -14,8 +14,6 @@ module Admiralty
     describe 'GET #index' do
       it 'renders page' do
         get :index
-
-        # require 'pry'; binding.pry
         expect(response).to be_successful
       end
     end
