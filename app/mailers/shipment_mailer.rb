@@ -5,23 +5,27 @@ class ShipmentMailer < ApplicationMailer
   layout 'mailer'
   add_template_helper(ApplicationHelper)
 
+  TESTING_EMAIL = 'angelica@itsmycargo.com'
+
   def tenant_notification(user, shipment) # rubocop:disable Metrics/AbcSize
     @user = user
     tenant = user.tenant
     @shipment = shipment
     @scope = tenant.scope
-    base_url =
-      case Rails.env
-      when 'production'  then "https://#{@shipment.tenant.subdomain}.itsmycargo.com/"
-      when 'review'      then ENV['REVIEW_URL']
-      when 'development' then 'http://localhost:8080/'
-      when 'test'        then 'http://localhost:8080/'
-      end
+    base_url = base_url(tenant)
 
     @redirects_base_url = base_url + "redirects/shipments/#{@shipment.id}?action="
 
+    @shipment_page =
+      "#{@redirects_base_url}edit"
+    @mot_icon = URI.open(
+      "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipment.mode_of_transport}.png"
+    ).read
+
     create_pdf_attachment(@shipment)
-    attachments.inline['logo.png'] = URI.open(tenant.theme['logoLarge']).read
+
+    attachments.inline['logo.png'] = URI.try(:open, tenant.theme['emailLogo']).try(:read)
+    attachments.inline['icon.png'] = @mot_icon
     mail_options = {
       from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
                          .tap { |a| a.display_name = 'ItsMyCargo Bookings' }.format,
@@ -35,19 +39,26 @@ class ShipmentMailer < ApplicationMailer
 
   def shipper_notification(user, shipment) # rubocop:disable Metrics/AbcSize
     @user = user
+    tenant = user.tenant
     @shipment = shipment
     @scope = @user.tenant.scope
 
+    @shipment_page = "#{base_url(tenant)}account/shipments/view/#{shipment.id}"
+    @mot_icon = URI.open(
+      "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipment.mode_of_transport}.png"
+    ).read
+
     create_pdf_attachment(@shipment)
-    attachments.inline['logo.png']       = URI.open(@user.tenant.theme['logoLarge']).read
-    attachments.inline['logo_small.png'] = URI.try(:open, @user.tenant.theme['logoSmall']).try(:read)
+    attachments.inline['logo.png'] = URI.try(:open, tenant.theme['emailLogo']).try(:read)
+    attachments.inline['logo_small.png'] = URI.try(:open, tenant.theme['logoSmall']).try(:read)
+    attachments.inline['icon.png'] = @mot_icon
     mail_options = {
-      from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
-                         .tap { |a| a.display_name = @user.tenant.name }.format,
-      reply_to: @user.tenant.emails.dig('support', 'general'),
+      from: Mail::Address.new("no-reply@#{tenant.subdomain}.#{Settings.emails.domain}")
+                         .tap { |a| a.display_name = tenant.name }.format,
+      reply_to: tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, @user.email.blank? ? 'itsmycargodev@gmail.com' : @user.email),
       bcc: [Settings.emails.booking],
-      subject: "Your booking through #{@user.tenant.name}"
+      subject: "Your booking through #{tenant.name}"
     }
 
     mail(mail_options, &:html)
@@ -56,10 +67,17 @@ class ShipmentMailer < ApplicationMailer
   def shipper_confirmation(user, shipment) # rubocop:disable Metrics/AbcSize
     @user = user
     @shipment = shipment
-    @scope = @user.tenant.scope
+    tenant = shipment.tenant
+    @scope = tenant.scope
+    @shipment_page = "#{base_url(tenant)}account/shipments/view/#{shipment.id}"
+    @mot_icon = URI.open(
+      "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipment.mode_of_transport}.png"
+    ).read
+
     create_pdf_attachment(@shipment)
-    attachments.inline['logo.png']       = URI.open(@user.tenant.theme['logoLarge']).read
-    attachments.inline['logo_small.png'] = try(:open, @user.tenant.theme['logoSmall']).try(:read)
+    attachments.inline['logo.png'] = URI.try(:open, tenant.theme['emailLogo']).try(:read)
+    attachments.inline['logo_small.png'] = try(:open, tenant.theme['logoSmall']).try(:read)
+    attachments.inline['icon.png'] = @mot_icon
     mail_options = {
       from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
                          .tap { |a| a.display_name = @user.tenant.name }.format,
@@ -90,5 +108,23 @@ class ShipmentMailer < ApplicationMailer
   def create_pdf_attachment(shipment)
     pdf = ShippingTools.generate_shipment_pdf(shipment: shipment)
     attachments.inline["shipment_#{shipment.imc_reference}.pdf"] = pdf
+  end
+
+  def base_server_url
+    case Rails.env
+    when 'production'  then 'https://api.itsmycargo.com/'
+    when 'review'      then ENV['REVIEW_URL']
+    when 'development' then 'http://localhost:3000/'
+    when 'test'        then 'http://localhost:3000/'
+    end
+  end
+
+  def base_url(tenant)
+    case Rails.env
+    when 'production'  then "https://#{tenant.subdomain}.itsmycargo.com/"
+    when 'review'      then ENV['REVIEW_URL']
+    when 'development' then 'http://localhost:8080/'
+    when 'test'        then 'http://localhost:8080/'
+    end
   end
 end

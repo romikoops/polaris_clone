@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { LoginPage } from '../../containers/LoginPage/LoginPage'
-import { Modal } from '../../components/Modal/Modal'
+import { Modal } from "../Modal/Modal"
 import { adminActions, authenticationActions } from '../../actions'
 import PropTypes from '../../prop-types'
 
@@ -13,6 +13,7 @@ class AdminShipmentAction extends Component {
     this.handleAction = this.handleAction.bind(this)
     this.toggleShowLogin = this.toggleShowLogin.bind(this)
   }
+
   componentDidMount () {
     const { user, loggedIn, adminDispatch } = this.props
     if (!user || !loggedIn || user.guest) {
@@ -23,16 +24,19 @@ class AdminShipmentAction extends Component {
       this.handleAction()
     }
   }
+
   componentDidUpdate () {
     const { user, loggedIn } = this.props
     if (user && loggedIn && user.role && user.role.name === 'admin') {
       this.handleAction()
     }
   }
+
   handleAction () {
-    const { match, address, adminDispatch } = this.props
+    const { match, adminDispatch } = this.props
     const { uuid } = match.params
-    const query = new window.URLSearchParams(address.search)
+    const queryParams = window.location.search
+    const query = new window.URLSearchParams(queryParams)
     const action = query.get('action')
     if (action === 'edit') {
       adminDispatch.getShipment(uuid, true)
@@ -40,6 +44,7 @@ class AdminShipmentAction extends Component {
       adminDispatch.confirmShipment(uuid, action, true)
     }
   }
+
   toggleShowLogin () {
     const { showModal, authenticationDispatch } = this.props
     if (showModal) {
@@ -48,6 +53,7 @@ class AdminShipmentAction extends Component {
       authenticationDispatch.showLogin({ noRedirect: true })
     }
   }
+
   render () {
     const { theme, loading } = this.props
     const loginModal = (
@@ -88,7 +94,7 @@ function mapStateToProps (state) {
   const { authentication, app } = state
   const { tenant } = app
   const { user, loggedIn, showModal } = authentication
-  
+
   return {
     user,
     tenant,

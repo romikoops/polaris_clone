@@ -3,7 +3,7 @@
       <mj-column width="100%" padding="0 2.5%">
         <mj-text>
           <p>
-            <p>Thank you for your using <%= user.tenant.name %> and best regards,</p>
+            <p>Thank you for your using <%= user.tenant.name %> Shop and best regards,</p>
           </p>
         </mj-text>
 

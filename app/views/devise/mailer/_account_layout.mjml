@@ -1,20 +1,40 @@
 <% primary_color = tenant.theme["colors"]["primary"] %>
-
-<mj-section full-width="full-width">
+<mj-section padding="20px 5%" background-color="#BDBDBD">
   <mj-column>
-    <mj-image width="300px" src="<%= tenant.theme["logoLarge"] %>" />
+    <mj-text>
+      <p style="display: none;max-height: 0px;overflow: hidden;">
+        Hello <%= @user.full_name %>, thank you for registering a new account in the <%=tenant.name%> Shop (powered by ItsMyCargo).
+      </p>
+    </mj-text>
+    <mj-text>
+      <p style="display: none;max-height: 0px;overflow: hidden;">
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+      </p>
+    </mj-text>
   </mj-column>
 </mj-section>
-<mj-section full-width="full-width">
+<mj-section padding="20px 5%" background-color="#BDBDBD">
   <mj-column>
-    <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
+    <mj-text>
+      <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.subdomain}", style: "width: 150px; max-height: 150px;" %>
+    </mj-text>
+  </mj-column>
+  <mj-column>
+    <mj-navbar base-url="" hamburger="hamburger" ico-color="white">
+      <% unless @user.tenant.scope.dig('links', 'about').blank? %>
+        <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
+      <% end %>
+      <% unless @user.tenant.scope.dig('links', 'support').blank? %>
+        <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'support')%>" color="white">help</mj-navbar-link>
+      <% end %>
+    </mj-navbar>
   </mj-column>
 </mj-section>
 
 <mj-section full-width="full-width" padding="0px">
   <mj-column width="100%" padding="0 2.5%">
     <mj-text line-height="24px">
-       <p>Dear <span><%= @user.full_name %>,</span></p>
+       <p style="margin-bottom: 0;">Hello <span><%= @user.full_name %>,</span></p>
     </mj-text>
   </mj-column>
 </mj-section>
@@ -25,20 +45,20 @@
   <mj-column width="100%" padding="0 2.5%">
     <mj-text line-height="24px">
       <p>If you have questions about the <b> <%= tenant.name %> </b> Online Shop or are experiencing problems with this mail or shipment – do not hesitate to ask us:</p>
-    </mj-text>
-    
+    </mj-text>   
   </mj-column>
+
   <mj-column width="100%" padding="0 2.5%">
     <mj-text line-height="24px">
       <p>
         Support: <%= mail_to(tenant.emails.dig('support', 'general') || 'support@itsmycargo.com') %> | <%= tenant.phones.dig('support') || '+49 151 59085855' %>
       </p>
-    </mj-text>
-    
+    </mj-text>    
   </mj-column>
+
   <mj-column width="100%" padding="0 2.5%">
     <mj-text line-height="24px">
-      <p class="bold text-center" style="font-size: 12px;">
+      <p style="font-size: 12px;text-align: center;font-weight: bolder; font-size: 10px;color: #BDBDBD;letter-spacing: 0.2px;line-height:4px;">
         This is an auto-generated mail. Please respond to our support mail with any inquiries.<br>
         <br>
         <%= tenant.addresses.dig('main') %>

@@ -1,16 +1,48 @@
+
+<mj-section>
+  <mj-column>
+    <mj-text>
+      <p style="display: none;max-height: 0px;overflow: hidden;">
+        Hello <%= @email %>, <%= @user.full_name %> from <%= @user.agency.name %>
+              has generated a quote using the ItsMyCargo Quotation Tool: 
+      </p>
+    </mj-text>
+    <mj-text>
+      <p style="display: none;max-height: 0px;overflow: hidden;">
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+      </p>
+    </mj-text>
+  </mj-column>
+</mj-section>
+
+<mj-wrapper border="1px solid #f3f3f3" border-top="none">
+  <mj-section padding="20px 5%" background-color="#BDBDBD">
+    <mj-column>
+      <mj-text>
+        <%= image_tag attachments['logo.png'].url, alt: "#{@user.tenant.subdomain}", style: "width: 150px" %>
+      </mj-text>
+    </mj-column>
+    <mj-column>
+      <mj-navbar base-url="" hamburger="hamburger" ico-color="black">
+        <% unless @user.tenant.scope.dig('links', 'about').blank? %>
+          <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'about')%>" color="white">about us</mj-navbar-link>
+        <% end %>
+        <% unless @user.tenant.scope.dig('links', 'support').blank? %>
+          <mj-navbar-link href="<%= @user.tenant.scope.dig('links', 'support')%>" color="white">help</mj-navbar-link>
+        <% end %>
+      </mj-navbar>
+    </mj-column>
+  </mj-section>
+</mj-wrapper>
 <mj-wrapper border="1px solid #f3f3f3" border-top="none" padding-top="60px">
 
   <mj-section padding="0px">
     <mj-column padding="0 2.5%">
       <mj-text line-height="24px" font-size="27px" padding-left="34px">
-        <p>
+        <p width="100%">
           <%= @shipment.tenant.name %>
         </p>
       </mj-text>
-    </mj-column>
-    <mj-column>
-      <mj-image width="200px" src="<%= @shipment.tenant.theme[" logoLarge"] %>" />
-      <mj-spacer height="25px" />
     </mj-column>
   </mj-section>
 
@@ -19,7 +51,7 @@
       <mj-text line-height="24px">
         <p>
           <%= @user.full_name %> from <strong>
-            <%= @user.agency.name %></strong> <br>
+            <%= @user.agency.name %></strong>
           generated a quote through your ItsMyCargo Quotation Tool:
         </p>
       </mj-text>

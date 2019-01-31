@@ -15,6 +15,9 @@ class QuoteMailer < ApplicationMailer
     @email = email[/[^@]+/]
     @content = Content.get_component('QuotePdf', @user.tenant.id)
 
+    @mot_icon = URI.open(
+      "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipment.mode_of_transport}.png"
+    ).read
     quotation = generate_and_upload_quotation(@quotes)
     @document = Document.create!(
       shipment: shipment,
@@ -29,7 +32,8 @@ class QuoteMailer < ApplicationMailer
       }
     )
     pdf_name = "quotation_#{@shipment.imc_reference}.pdf"
-    attachments.inline['logo.png'] = URI.open(@theme['logoLarge']).read
+    attachments.inline['logo.png'] = URI.try(:open, @theme['logoLarge']).try(:read)
+    attachments.inline['icon.png'] = @mot_icon
     attachments.inline[pdf_name] = quotation
 
     mail(
