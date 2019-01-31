@@ -23,6 +23,8 @@ import ContactDetailsRow from '../Admin/AdminShipmentView/ContactDetailsRow'
 import GreyBox from '../GreyBox/GreyBox'
 import FileUploader from '../FileUploader/FileUploader'
 import ShipmentNotes from '../ShipmentNotes'
+import CargoItemSummary from '../Cargo/Item/Summary'
+import CargoContainerSummary from '../Cargo/Container/Summary'
 
 class UserShipmentContent extends Component {
   constructor (props) {
@@ -85,10 +87,21 @@ class UserShipmentContent extends Component {
     const {
       contacts,
       shipment,
-      documents
+      documents,
+      containers,
+      cargoItems,
+      aggregatedCargo
     } = shipmentData
 
     const documentUrl = `/shipments/${shipment.id}/upload/${fileType.value}`
+
+    const showCargoSummary = !aggregatedCargo
+    let cargoSummary
+    if (showCargoSummary && cargoItems.length) {
+      cargoSummary = <CargoItemSummary items={cargoItems} t={t} mot={shipment.mode_of_transport} scope={scope} />
+    } else if (showCargoSummary && containers.length) {
+      cargoSummary = <CargoContainerSummary items={containers} t={t} />
+    }
 
     const originDropOffDate = (
       <p className={`flex-none letter_3 ${styles.date}`}>
@@ -506,6 +519,11 @@ class UserShipmentContent extends Component {
           theme={theme}
         >
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
+            {showCargoSummary ? <GreyBox
+                wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_bottom}`}
+                contentClassName="layout-column flex"
+                content={cargoSummary}
+              /> : '' }
             <GreyBox
               wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_bottom}`}
               contentClassName="layout-column flex"

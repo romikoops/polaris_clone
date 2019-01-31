@@ -223,7 +223,7 @@ export class BookingConfirmation extends Component {
     const showCargoSummary = !aggregatedCargo
     let cargoSummary
     if (showCargoSummary && cargoItems.length) {
-      cargoSummary = <CargoItemSummary items={cargoItems} t={t} />
+      cargoSummary = <CargoItemSummary items={cargoItems} t={t} mot={shipment.mode_of_transport} scope={tenant.scope}/>
     } else if (showCargoSummary && containers.length) {
       cargoSummary = <CargoContainerSummary items={containers} t={t} />
     }
@@ -422,13 +422,13 @@ export class BookingConfirmation extends Component {
         parentClass={styles.shipment_card_border}
         showArrow
       >
-      {showCargoSummary ? cargoSummary : '' }
-        <div className={INNER_WRAPPER}>
+      
+        {/* <div className={INNER_WRAPPER}> */}
           <div className={LAYOUT_WRAP}>
-            
-            {cargoView}
+          {showCargoSummary ? cargoSummary : '' }
+          {cargoView}
           </div>
-        </div>
+        {/* </div> */}
       </CollapsingBar>
 
     )
@@ -645,7 +645,11 @@ function prepCargoItemGroups (cargos, props) {
 
     const volume = (parsedY * parsedX * parsedZ / 1000000 * parsedQuantity)
     const cargoType = cargoItemTypes[singleCargo.cargo_item_type_id]
-    const items = Array(parsedQuantity).fill(singleCargo)
+    const singleCargoWithVolume = {
+      ...singleCargo,
+      volume: volume / parsedQuantity
+    }
+    const items = Array(parsedQuantity).fill(singleCargoWithVolume)
 
     const group = {
       cargoType,

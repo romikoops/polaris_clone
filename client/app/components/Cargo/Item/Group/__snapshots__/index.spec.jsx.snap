@@ -28,375 +28,171 @@ exports[`group.cargoType is falsy 1`] = `
   <div
     className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_16"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="length"
-              border="0"
-              data-for="UUID_MOCK_KEY_15"
-              data-tip="Length"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_15"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                10
+                0.120
               </span>
-               
-              cm
+               m
+              <sup>
+                3
+              </sup>
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Length
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="width"
-              border="0"
-              data-for="UUID_MOCK_KEY_15"
-              data-tip="Width"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_15"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Quantity
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                1
               </span>
-               
-              cm
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Width
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="height"
-              border="0"
-              data-for="UUID_MOCK_KEY_15"
-              data-tip="Height"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_15"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                200.00
               </span>
                
-              cm
+              kg
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Height
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              0.024
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              0.120
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Volume
-          </p>
-        </div>
-      </div>
-    </div>
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_17"
-    >
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              200.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Item Gross Weight
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              1,000.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Gross Weight
-          </p>
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
               }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Chargeable Weight | Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
-              }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Chargeable
-          </p>
-        </div>
-      </div>
-    </div>
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -429,375 +225,171 @@ exports[`group.size_class is falsy 1`] = `
   <div
     className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_13"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="length"
-              border="0"
-              data-for="UUID_MOCK_KEY_12"
-              data-tip="Length"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_12"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                10
+                0.120
               </span>
-               
-              cm
+               m
+              <sup>
+                3
+              </sup>
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Length
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="width"
-              border="0"
-              data-for="UUID_MOCK_KEY_12"
-              data-tip="Width"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_12"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Quantity
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                1
               </span>
-               
-              cm
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Width
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="height"
-              border="0"
-              data-for="UUID_MOCK_KEY_12"
-              data-tip="Height"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_12"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                200.00
               </span>
                
-              cm
+              kg
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Height
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              0.024
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              0.120
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Volume
-          </p>
-        </div>
-      </div>
-    </div>
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_14"
-    >
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              200.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Item Gross Weight
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              1,000.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Gross Weight
-          </p>
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
               }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Chargeable Weight | Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
-              }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Chargeable
-          </p>
-        </div>
-      </div>
-    </div>
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -830,375 +422,171 @@ exports[`shallow render 1`] = `
   <div
     className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_1"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="length"
-              border="0"
-              data-for="UUID_MOCK_KEY_0"
-              data-tip="Length"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_0"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                10
+                0.120
               </span>
-               
-              cm
+               m
+              <sup>
+                3
+              </sup>
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Length
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="width"
-              border="0"
-              data-for="UUID_MOCK_KEY_0"
-              data-tip="Width"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_0"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Quantity
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                1
               </span>
-               
-              cm
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Width
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="height"
-              border="0"
-              data-for="UUID_MOCK_KEY_0"
-              data-tip="Height"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_0"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                200.00
               </span>
                
-              cm
+              kg
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Height
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              0.024
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              0.120
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Volume
-          </p>
-        </div>
-      </div>
-    </div>
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_2"
-    >
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              200.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Item Gross Weight
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              1,000.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Gross Weight
-          </p>
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
               }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Chargeable Weight | Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
-              }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Chargeable
-          </p>
-        </div>
-      </div>
-    </div>
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -1231,375 +619,171 @@ exports[`shallow rendering both chargeable value 1`] = `
   <div
     className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_46"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="length"
-              border="0"
-              data-for="UUID_MOCK_KEY_45"
-              data-tip="Length"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_45"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                10
+                0.120
               </span>
-               
-              cm
+               m
+              <sup>
+                3
+              </sup>
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Length
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="width"
-              border="0"
-              data-for="UUID_MOCK_KEY_45"
-              data-tip="Width"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_45"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Quantity
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                1
               </span>
-               
-              cm
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Width
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="height"
-              border="0"
-              data-for="UUID_MOCK_KEY_45"
-              data-tip="Height"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_45"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                200.00
               </span>
                
-              cm
+              kg
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Height
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              0.024
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              0.120
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Volume
-          </p>
-        </div>
-      </div>
-    </div>
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_47"
-    >
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              200.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Item Gross Weight
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              1,000.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Gross Weight
-          </p>
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
               }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Chargeable Weight | Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
-              }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Chargeable
-          </p>
-        </div>
-      </div>
-    </div>
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -1632,375 +816,171 @@ exports[`shallow rendering dynamic chargeable value 1`] = `
   <div
     className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_37"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="length"
-              border="0"
-              data-for="UUID_MOCK_KEY_36"
-              data-tip="Length"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_36"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                10
+                0.120
               </span>
-               
-              cm
+               m
+              <sup>
+                3
+              </sup>
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Length
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="width"
-              border="0"
-              data-for="UUID_MOCK_KEY_36"
-              data-tip="Width"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_36"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Quantity
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                1
               </span>
-               
-              cm
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Width
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="height"
-              border="0"
-              data-for="UUID_MOCK_KEY_36"
-              data-tip="Height"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_36"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                200.00
               </span>
                
-              cm
+              kg
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Height
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              0.024
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              0.120
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Volume
-          </p>
-        </div>
-      </div>
-    </div>
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_38"
-    >
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              200.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Item Gross Weight
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              1,000.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Gross Weight
-          </p>
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> kg",
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> kg",
+                }
               }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Chargeable Weight
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> kg",
-              }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Chargeable Weight
-          </p>
-        </div>
-      </div>
-    </div>
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -2033,375 +1013,171 @@ exports[`shallow rendering volume chargeable value 1`] = `
   <div
     className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_43"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="length"
-              border="0"
-              data-for="UUID_MOCK_KEY_42"
-              data-tip="Length"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_42"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                10
+                0.120
               </span>
-               
-              cm
+               m
+              <sup>
+                3
+              </sup>
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Length
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="width"
-              border="0"
-              data-for="UUID_MOCK_KEY_42"
-              data-tip="Width"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_42"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Quantity
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                1
               </span>
-               
-              cm
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Width
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="height"
-              border="0"
-              data-for="UUID_MOCK_KEY_42"
-              data-tip="Height"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_42"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                200.00
               </span>
                
-              cm
+              kg
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Height
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              0.024
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              0.120
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Volume
-          </p>
-        </div>
-      </div>
-    </div>
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_44"
-    >
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              200.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Item Gross Weight
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              1,000.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Gross Weight
-          </p>
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> m<sup>3</sup>",
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> m<sup>3</sup>",
+                }
               }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Chargeable Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> m<sup>3</sup>",
-              }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Chargeable Volume
-          </p>
-        </div>
-      </div>
-    </div>
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -2434,375 +1210,171 @@ exports[`shallow rendering weight chargeable value 1`] = `
   <div
     className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_40"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="length"
-              border="0"
-              data-for="UUID_MOCK_KEY_39"
-              data-tip="Length"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_39"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                10
+                0.120
               </span>
-               
-              cm
+               m
+              <sup>
+                3
+              </sup>
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Length
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="width"
-              border="0"
-              data-for="UUID_MOCK_KEY_39"
-              data-tip="Width"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_39"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Quantity
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                1
               </span>
-               
-              cm
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Width
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="height"
-              border="0"
-              data-for="UUID_MOCK_KEY_39"
-              data-tip="Height"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_39"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                200.00
               </span>
                
-              cm
+              kg
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Height
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              0.024
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              0.120
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Volume
-          </p>
-        </div>
-      </div>
-    </div>
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_41"
-    >
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              200.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Item Gross Weight
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              1,000.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Gross Weight
-          </p>
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> kg",
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> kg",
+                }
               }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Chargeable Weight
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> kg",
-              }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Chargeable Weight
-          </p>
-        </div>
-      </div>
-    </div>
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -2835,375 +1407,171 @@ exports[`shipment.load_type is cargo_item 1`] = `
   <div
     className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_10"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="length"
-              border="0"
-              data-for="UUID_MOCK_KEY_9"
-              data-tip="Length"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_9"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                10
+                0.120
               </span>
-               
-              cm
+               m
+              <sup>
+                3
+              </sup>
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Length
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="width"
-              border="0"
-              data-for="UUID_MOCK_KEY_9"
-              data-tip="Width"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_9"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Quantity
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                1
               </span>
-               
-              cm
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Width
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="height"
-              border="0"
-              data-for="UUID_MOCK_KEY_9"
-              data-tip="Height"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_9"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                200.00
               </span>
                
-              cm
+              kg
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Height
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              0.024
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              0.120
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Volume
-          </p>
-        </div>
-      </div>
-    </div>
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_11"
-    >
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              200.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Item Gross Weight
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              1,000.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Gross Weight
-          </p>
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
               }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Chargeable Weight | Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
-              }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Chargeable
-          </p>
-        </div>
-      </div>
-    </div>
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -3236,375 +1604,171 @@ exports[`state.collapsed is true 1`] = `
   <div
     className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_28"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="length"
-              border="0"
-              data-for="UUID_MOCK_KEY_27"
-              data-tip="Length"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_27"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                10
+                0.120
               </span>
-               
-              cm
+               m
+              <sup>
+                3
+              </sup>
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Length
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="width"
-              border="0"
-              data-for="UUID_MOCK_KEY_27"
-              data-tip="Width"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_27"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Quantity
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                1
               </span>
-               
-              cm
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Width
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="height"
-              border="0"
-              data-for="UUID_MOCK_KEY_27"
-              data-tip="Height"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_27"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                200.00
               </span>
                
-              cm
+              kg
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Height
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              0.024
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              0.120
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Volume
-          </p>
-        </div>
-      </div>
-    </div>
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_29"
-    >
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              200.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Item Gross Weight
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              1,000.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Gross Weight
-          </p>
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
               }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Chargeable Weight | Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
-              }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Chargeable
-          </p>
-        </div>
-      </div>
-    </div>
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -3637,375 +1801,171 @@ exports[`state.unitView is true 1`] = `
   <div
     className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_22"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="length"
-              border="0"
-              data-for="UUID_MOCK_KEY_21"
-              data-tip="Length"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_21"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                10
+                0.120
               </span>
-               
-              cm
+               m
+              <sup>
+                3
+              </sup>
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Length
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="width"
-              border="0"
-              data-for="UUID_MOCK_KEY_21"
-              data-tip="Width"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_21"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Quantity
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                1
               </span>
-               
-              cm
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Width
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="height"
-              border="0"
-              data-for="UUID_MOCK_KEY_21"
-              data-tip="Height"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_21"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                200.00
               </span>
                
-              cm
+              kg
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Height
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              0.024
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              0.120
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Volume
-          </p>
-        </div>
-      </div>
-    </div>
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_23"
-    >
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              200.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Item Gross Weight
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              1,000.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Gross Weight
-          </p>
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
               }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Chargeable Weight | Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
-              }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Chargeable
-          </p>
-        </div>
-      </div>
-    </div>
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -4038,375 +1998,171 @@ exports[`state.viewer is true 1`] = `
   <div
     className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_34"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="length"
-              border="0"
-              data-for="UUID_MOCK_KEY_33"
-              data-tip="Length"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_33"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                10
+                0.120
               </span>
-               
-              cm
+               m
+              <sup>
+                3
+              </sup>
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Length
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="width"
-              border="0"
-              data-for="UUID_MOCK_KEY_33"
-              data-tip="Width"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_33"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Quantity
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                1
               </span>
-               
-              cm
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Width
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="height"
-              border="0"
-              data-for="UUID_MOCK_KEY_33"
-              data-tip="Height"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_33"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                200.00
               </span>
                
-              cm
+              kg
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Height
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              0.024
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              0.120
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Volume
-          </p>
-        </div>
-      </div>
-    </div>
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_35"
-    >
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              200.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Item Gross Weight
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              1,000.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Gross Weight
-          </p>
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
               }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Chargeable Weight | Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
-              }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Chargeable
-          </p>
-        </div>
-      </div>
-    </div>
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -4439,375 +2195,171 @@ exports[`theme is falsy 1`] = `
   <div
     className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_7"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="length"
-              border="0"
-              data-for="UUID_MOCK_KEY_6"
-              data-tip="Length"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_6"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                10
+                0.120
               </span>
-               
-              cm
+               m
+              <sup>
+                3
+              </sup>
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Length
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="width"
-              border="0"
-              data-for="UUID_MOCK_KEY_6"
-              data-tip="Width"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_6"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Quantity
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                1
               </span>
-               
-              cm
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Width
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="height"
-              border="0"
-              data-for="UUID_MOCK_KEY_6"
-              data-tip="Height"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_6"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                200.00
               </span>
                
-              cm
+              kg
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Height
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              0.024
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              0.120
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Volume
-          </p>
-        </div>
-      </div>
-    </div>
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_8"
-    >
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              200.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Item Gross Weight
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              1,000.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Gross Weight
-          </p>
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
               }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Chargeable Weight | Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
-              }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Chargeable
-          </p>
-        </div>
-      </div>
-    </div>
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;
@@ -4840,375 +2392,171 @@ exports[`viewHSCodes is true 1`] = `
   <div
     className="flex-100 layout-row layout-align-end-start layout-wrap"
   >
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_4"
+    <table
+      className="flex-100 data_table"
     >
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+      <tbody>
+        <tr
+          className="data_table_row"
         >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="length"
-              border="0"
-              data-for="UUID_MOCK_KEY_3"
-              data-tip="Length"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_3"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              10cm x 60cm x 60cm
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                10
+                0.120
               </span>
-               
-              cm
+               m
+              <sup>
+                3
+              </sup>
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Length
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="width"
-              border="0"
-              data-for="UUID_MOCK_KEY_3"
-              data-tip="Width"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_3"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Quantity
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                1
               </span>
-               
-              cm
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Width
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <div
-            className="layout-row"
+          <td
+            className="table_title"
           >
-            <img
-              alt="height"
-              border="0"
-              data-for="UUID_MOCK_KEY_3"
-              data-tip="Height"
-            />
-            <ReactTooltip
-              className="tooltip"
-              effect="solid"
-              id="UUID_MOCK_KEY_3"
-              insecure={true}
-              resizeHide={true}
-              wrapper="div"
-            />
             <p
-              className="flex-none"
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Gross Weight per item
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
             >
               <span>
-                60
+                200.00
               </span>
                
-              cm
+              kg
             </p>
-          </div>
-          <p
-            className="flex-none layout-row layout-align-center-center dims"
-          >
-            Height
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
+          <td
+            className="table_title"
+          >
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Volume
+            </p>
+          </td>
+          <td
+            className="table_value"
+          >
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                0.120
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              0.024
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center dims"
+            >
+              Total Gross Weight
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
+            <p
+              className="flex layout-row layout-align-end-center"
+            >
+              <span>
+                1,000.00
+              </span>
+               m
+              <sup>
+                3
+              </sup>
+            </p>
+          </td>
+        </tr>
+        <tr
+          className="data_table_row"
         >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-15 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
+          <td
+            className="table_title"
           >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex layout-row layout-align-start-center"
+            >
+              Total Chargeable
+            </p>
+          </td>
+          <td
+            className="table_value"
           >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              0.120
-            </span>
-             
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Volume
-          </p>
-        </div>
-      </div>
-    </div>
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      key="UUID_MOCK_KEY_5"
-    >
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              200.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Item Gross Weight
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell side_border flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              1,000.00
-            </span>
-             kg
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Gross Weight
-          </p>
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex-20 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
+            <p
+              className="flex layout-row layout-align-end-center"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<span></span> t | m<sup>3</sup>",
+                }
               }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Chargeable Weight | Volume
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          x
-        </div>
-      </div>
-      <div
-        className="unit_data_cell  flex-10 layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <span>
-              5
-            </span>
-          </p>
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Quantity
-          </p>
-        </div>
-        <div
-          className="flex-none operand"
-        >
-          =
-        </div>
-      </div>
-      <div
-        className="unit_data_cell flex layout-row layout-align-center-center"
-      >
-        <div
-          className=""
-        >
-          <p
-            className="flex-none layout-row layout-align-center-center"
-            dangerouslySetInnerHTML={
-              Object {
-                "__html": "<span></span> t | m<sup>3</sup>",
-              }
-            }
-          />
-          <p
-            className="flex-none layout-row layout-align-center-center"
-          >
-            Total Chargeable
-          </p>
-        </div>
-      </div>
-    </div>
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 `;

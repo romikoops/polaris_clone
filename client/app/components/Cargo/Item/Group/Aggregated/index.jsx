@@ -10,6 +10,9 @@ function CargoItemGroupAggregated ({ group, t, hideUnits }) {
       'layout-row layout-wrap layout-align-start-center'
     }
     >
+      <div className={`flex-100 layout-row layout-align-start-center ${styles.summary_header}`}>
+        <p className="flex-none">{t('cargo:cargoSummary')}</p>
+      </div>
       <div className={
         `${styles.detailed_row_aggregated} flex-100 ` +
         'layout-row layout-wrap layout-align-none-center'
@@ -23,7 +26,7 @@ function CargoItemGroupAggregated ({ group, t, hideUnits }) {
               &nbsp;kg
               {' '}
             </p>
-            <p className="flex-none layout-row layout-align-center-center">{t('common:totalGrossWeight')}</p>
+            <p className="flex-none layout-row layout-align-center-center">{t('cargo:totalGrossWeight')}</p>
           </div>
         </div>
 
@@ -37,7 +40,7 @@ function CargoItemGroupAggregated ({ group, t, hideUnits }) {
               &nbsp;m
               <sup>3</sup>
             </p>
-            <p className="flex-none layout-row layout-align-center-center">{t('common:totalVolume')}</p>
+            <p className="flex-none layout-row layout-align-center-center">{t('cargo:totalVolume')}</p>
           </div>
         </div>
         { hideUnits ? '' : (
@@ -49,7 +52,7 @@ function CargoItemGroupAggregated ({ group, t, hideUnits }) {
                 </span>
               &nbsp;kg
               </p>
-              <p className="flex-none layout-row layout-align-center-center">{t('common:totalChargeableWeight')}</p>
+              <p className="flex-none layout-row layout-align-center-center">{t('cargo:totalChargeableWeight')}</p>
             </div>
           </div>
         ) }

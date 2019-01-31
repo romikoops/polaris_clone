@@ -111,7 +111,7 @@ export class AdminShipmentContent extends Component {
     const showCargoSummary = !aggregatedCargo
     let cargoSummary
     if (showCargoSummary && cargoItems.length) {
-      cargoSummary = <CargoItemSummary items={cargoItems} t={t} />
+      cargoSummary = <CargoItemSummary items={cargoItems} t={t} mot={shipment.mode_of_transport} scope={scope} />
     } else if (showCargoSummary && containers.length) {
       cargoSummary = <CargoContainerSummary items={containers} t={t} />
     }

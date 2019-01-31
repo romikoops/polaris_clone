@@ -212,14 +212,24 @@
     position: absolute;
     top: 20px;
     right: -10px;
+  }
   .summary_panel {
     border-bottom: 1px solid lightgrey;
   }
   .summary_header {
     background: lightgrey;
-    h3 {
+    p {
       margin: 5px 10px;
       font-size: 14px;
+    }
+  }
+  .data_table {
+    border: 1px solid lightgrey;
+    .data_table_row {
+      p {
+        padding: 5px;
+        border-bottom: 1px solid lightgrey;
+      }
     }
   }
 }
