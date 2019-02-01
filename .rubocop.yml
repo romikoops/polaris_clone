@@ -23,6 +23,7 @@ Metrics/BlockLength:
 
 Metrics/LineLength:
   Max: 120
+  IgnoreCopDirectives: true
   Exclude:
     - engines/*/spec/**/*_spec.rb
     - qa/features/**/*.feature

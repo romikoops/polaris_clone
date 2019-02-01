@@ -236,8 +236,6 @@
                 <% if scope['show_chargeable_weight'] && !['import', 'export'].include?(charge_key) %>
                   <%= cargo_data[:chargeable_weight][s.id][charge_key.to_sym] %>
                  <% end %>
-
-                 
             </h4>
              <% if charge_key == 'cargo'
                 no_custom_fees = charge
