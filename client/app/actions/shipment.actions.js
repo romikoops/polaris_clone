@@ -512,12 +512,6 @@ function getLastAvailableDate (params) {
     shipmentService.getLastAvailableDate(params).then(
       (response) => {
         dispatch(success(response.data.lastAvailableDate))
-        if (response.data.lastAvailableDate == null) {
-          dispatch(failure({
-            type: 'error',
-            text: 'There are no schedules available for this route.'
-          }))
-        }
       },
       (error) => {
         dispatch(failure(error))
