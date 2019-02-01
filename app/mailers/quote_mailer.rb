@@ -16,7 +16,7 @@ class QuoteMailer < ApplicationMailer
     @content = Content.get_component('QuotePdf', @user.tenant.id)
 
     @mot_icon = URI.open(
-      "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipment.mode_of_transport}.png"
+      "https://assets.itsmycargo.com/assets/icons/mail/mail_#{@shipments.first.mode_of_transport}.png"
     ).read
     quotation = generate_and_upload_quotation(@quotes)
     @document = Document.create!(
