@@ -4,6 +4,8 @@ import { camelCase } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { asyncComponent } from 'react-async-component'
+import { Promise } from 'es6-promise-promise'
 import styles from './index.scss'
 import listenerTools from '../../../../helpers/listeners'
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner'
@@ -438,6 +440,26 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default withNamespaces(['common', 'errors'])(
+const SyncAutocomplete = withNamespaces(['common', 'errors'])(
   connect(null, mapDispatchToProps)(Autocomplete)
 )
+
+// For specs
+export { SyncAutocomplete }
+
+
+const AsyncAutocomplete = asyncComponent({
+  resolve: () => new Promise((resolve) => {
+    function resolveIfGoogleDefined () {
+      if (window.google) {
+        resolve(SyncAutocomplete)
+        clearInterval(interval)
+      }
+    }
+
+    const interval = setInterval(resolveIfGoogleDefined, 100)
+    resolveIfGoogleDefined()
+  })
+})
+
+export default AsyncAutocomplete

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import Autocomplete from '.'
+import { SyncAutocomplete } from '.'
 import {
   scope,
   theme
@@ -17,9 +17,9 @@ const propsBase = {
 }
 
 test('with empty props', () => {
-  expect(() => shallow(<Autocomplete />)).toThrow()
+  expect(() => shallow(<SyncAutocomplete />)).toThrow()
 })
 
 test('happy path', () => {
-  expect(shallow(<Autocomplete {...propsBase} />)).toMatchSnapshot()
+  expect(shallow(<SyncAutocomplete {...propsBase} />)).toMatchSnapshot()
 })
