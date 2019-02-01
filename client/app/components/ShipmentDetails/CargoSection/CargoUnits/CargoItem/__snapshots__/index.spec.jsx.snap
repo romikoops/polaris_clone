@@ -227,14 +227,16 @@ exports[`happy path 1`] = `
             }
           }
         >
-          <NamedSelect
+          <Formsy(FormsySelect)
             className="select_100"
+            innerRef={[Function]}
             inputProps={
               Object {
                 "name": "0-colliType",
               }
             }
             name="0-colliType"
+            onChange={[Function]}
             options={
               Array [
                 Object {
@@ -288,6 +290,14 @@ exports[`happy path 1`] = `
               ]
             }
             placeholder="Select your colli type"
+            required={true}
+            validationError=""
+            validationErrors={
+              Object {
+                "isDefaultRequiredValue": "Must not be blank",
+              }
+            }
+            validations={null}
             value={
               Object {
                 "label": "Crate",

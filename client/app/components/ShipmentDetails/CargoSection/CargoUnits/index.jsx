@@ -12,13 +12,8 @@ function CargoUnits ({
   scope,
   ...sharedProps
 }) {
-  const onSelectColliType = (e) => {
-    const [i] = e.name.split('-')
-    onUpdateCargoUnit({
-      index: Number(i),
-      newValue: e.key,
-      prop: 'cargoItemTypeId'
-    })
+  const onSelectColliType = (newValue, index) => {
+    onUpdateCargoUnit({ newValue, index, prop: 'cargoItemTypeId' })
   }
   const toggleStackable = (checked, e) => {
     const [i, prop] = e.target.name.split('-')

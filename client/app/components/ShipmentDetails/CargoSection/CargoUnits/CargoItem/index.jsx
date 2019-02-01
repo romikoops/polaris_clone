@@ -6,7 +6,7 @@ import CargoUnitBox from '../CargoUnit/Box'
 import styles from './index.scss'
 import CargoUnitNumberInput from '../CargoUnit/NumberInput'
 import Tooltip from '../../../../Tooltip/Tooltip'
-import { NamedSelect } from '../../../../NamedSelect/NamedSelect'
+import FormsySelect from '../../../../Formsy/Select'
 import kg from '../../../../../assets/images/cargo/kg.png'
 import length from '../../../../../assets/images/cargo/length.png'
 import width from '../../../../../assets/images/cargo/width.png'
@@ -239,14 +239,16 @@ class CargoItem extends React.PureComponent {
           >
             <div className="layout-row flex-40 layout-wrap layout-align-start-center colli_type">
               <div style={{ width: '95%' }}>
-                <NamedSelect
+                <FormsySelect
                   placeholder={t('common:selectColliType')}
                   className={styles.select_100}
                   inputProps={{ name: `${i}-colliType` }}
                   name={`${i}-colliType`}
                   value={selectedColliType}
                   options={availableCargoItemTypes}
-                  onChange={onSelectColliType}
+                  onChange={(option) => { onSelectColliType(get(option, 'key'), i) }}
+                  validationErrors={{ isDefaultRequiredValue: t('common:noBlank') }}
+                  required
                 />
               </div>
             </div>
