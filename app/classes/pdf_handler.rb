@@ -137,8 +137,7 @@ class PdfHandler
           }
         end
       when 'dynamic'
-        show_volume = vol > kg
-
+        show_volume = vol > (kg / 1000)
         chargeable_weight_cargo = show_volume ? chargeable_value / 1000 : chargeable_value
         cargo_string = if show_volume
                          " (Chargeable&nbsp;Volume: #{chargeable_weight_cargo} m<sup>3</sup>)"
