@@ -3,6 +3,8 @@ import { get } from 'lodash'
 import { shipmentConstants } from '../constants'
 
 export default function shipment (state = {}, action) {
+  let error
+
   switch (action.type) {
     case shipmentConstants.CLEAR_LOADING:
       return {
@@ -440,14 +442,26 @@ export default function shipment (state = {}, action) {
         }
       }
 
-    case shipmentConstants.SHIPMENT_GET_LAST_AVAILABLE_DATE_REQUEST:
-      return state
+    case shipmentConstants.SHIPMENT_GET_LAST_AVAILABLE_DATE_REQUEST: {
+      error = { ...state.error }
+      if (get(error, 'stage2', []).length > 0) {
+        error.stage2 = error.stage2.filter(errorObj => (
+          errorObj.id !== 'NO_SCHEDULES_FOR_ROUTE'
+        ))
+      }
+
+      return {
+        ...state,
+        error
+      }
+    }
     case shipmentConstants.SHIPMENT_GET_LAST_AVAILABLE_DATE_SUCCESS: {
-      const error = { ...state.error }
+      error = { ...state.error }
       if (action.payload == null) {
         error.stage2 = [{
           type: 'error',
-          text: i18next.t('errors:noSchedulesForRoute')
+          text: i18next.t('errors:noSchedulesForRoute'),
+          id: 'NO_SCHEDULES_FOR_ROUTE'
         }]
       }
 
@@ -471,7 +485,6 @@ export default function shipment (state = {}, action) {
           stage2: [action.error]
         }
       }
-
     case shipmentConstants.SHIPMENT_UPDATE_CONTACT_REQUEST:
       return state
     case shipmentConstants.SHIPMENT_UPDATE_CONTACT_SUCCESS: {
