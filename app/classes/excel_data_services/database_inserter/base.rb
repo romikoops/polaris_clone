@@ -45,8 +45,7 @@ module ExcelDataServices
         %i(itineraries
            stops
            pricings
-           pricing_details
-           charge_categories)
+           pricing_details)
       end
 
       def add_stats(descriptor, data_record)
