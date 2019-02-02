@@ -8,7 +8,6 @@ module ExcelDataServices
 
         def restructure_data(data)
           chunked_raw_data_per_sheet = data.values.map do |per_sheet_values|
-            binding.pry
             expanded_values = expand_fcl_to_all_sizes(per_sheet_values[:rows_data])
             rows_chunked_by_identifier = expanded_values.group_by { |row| row_identifier(row) }.values
             rows_chunked_by_identifier.map do |rows|

@@ -38,7 +38,7 @@ module ExcelDataServices
 
         @sheets_data = restructure_data(@sheets_data)
         @errors = ExcelDataServices::FileParser::DataValidator::Pricing.validate_data(@sheets_data, @tenant)
-        return { has_errors: true, errors: @errors } unless @errors.empty?
+        return { errors: @errors } unless @errors.empty?
 
         @sheets_data
       end

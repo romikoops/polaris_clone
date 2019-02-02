@@ -156,24 +156,14 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     mot = upload_params[:mot]
     load_type = upload_params[:load_type]
     new_load_type = load_type_renamed(load_type)
-
     klass_identifier = "#{mot.capitalize}#{new_load_type.capitalize}"
 
-    klass = ExcelDataServices::FileParser.const_get(klass_identifier)
-    options = { tenant: current_tenant, file_or_path: file }
-    sheets_data = klass.new(options).perform
+    uploader = ExcelDataServices::Uploader.new(tenant: current_tenant,
+                                               klass_identifier: klass_identifier,
+                                               file_or_path: file)
+    result = uploader.perform
 
-    if sheets_data[:has_errors]
-      response_handler(sheets_data)
-    else
-      klass = ExcelDataServices::DatabaseInserter.const_get(klass_identifier)
-      options = { tenant: current_tenant,
-                  data: sheets_data,
-                  options: { should_generate_trips: false } }
-      insertion_stats = klass.new(options).perform
-
-      response_handler(insertion_stats)
-    end
+    response_handler(result)
   end
 
   def download
