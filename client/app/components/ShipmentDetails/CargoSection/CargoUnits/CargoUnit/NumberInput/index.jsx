@@ -2,19 +2,11 @@ import React from 'react'
 import { withNamespaces } from 'react-i18next'
 import FormsyInput from '../../../../../Formsy/Input'
 import styles from './index.scss'
-import { chargeableWeight } from '../../../../../../helpers'
-
-const errorStyles = {
-  whiteSpace: 'normal',
-  maxWidth: '200px',
-  fontSize: '10px',
-  top: '32px'
-}
 
 function CargoUnitNumberInput ({
   value, name, onChange, onBlur, onExcessDimensionsRequest,
   maxDimension, maxDimensionsErrorText, labelText, validations,
-  className, unit, image, tooltip, t
+  className, unit, image, tooltip, errorMessageStyles, t
 }) {
   return (
     <div className={`layout-row layout-wrap layout-align-start-center ${styles.cargo_unit_number_input} ${className}`}>
@@ -31,7 +23,7 @@ function CargoUnitNumberInput ({
           placeholder="0"
           onBlur={onBlur}
           onChange={onChange}
-          errorStyles={errorStyles}
+          errorMessageStyles={errorMessageStyles}
           validations={{
             nonNegative: (values, _value) => Number(_value) > 0,
             maxDimension: (values, _value) => Number(_value) <= +maxDimension,
@@ -66,6 +58,9 @@ CargoUnitNumberInput.defaultProps = {
   maxDimension: 1000,
   onChange: () => {},
   onBlur: () => {},
-  tooltip: ''
+  tooltip: '',
+  errorMessageStyles: {
+    top: '32px'
+  }
 }
 export default withNamespaces('common')(CargoUnitNumberInput)
