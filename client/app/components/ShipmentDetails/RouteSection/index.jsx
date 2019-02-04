@@ -256,7 +256,7 @@ class RouteSection extends React.PureComponent {
         } else {
           bookingProcessDispatch.updateShipment(target, { ...address, hubIds })
 
-          setMarker(target, { lat: address.latitude, lng: address.longitude }, address.fullAddress)
+          setMarker(target, { lat: address.latitude, lng: address.longitude, geojson: address.geojson })
         }
       }
     )

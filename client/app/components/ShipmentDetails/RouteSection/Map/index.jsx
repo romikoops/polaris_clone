@@ -17,10 +17,11 @@ class RouteSectionMapContent extends React.PureComponent {
       boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
     }
 
-    this.state = { markers: {} }
+    this.state = { markers: { origin: null, destination: null }, geoJsons: { origin: null, destination: null } }
 
     this.getIcon = this.getIcon.bind(this)
     this.setMarker = this.setMarker.bind(this)
+    this.setArea = this.setArea.bind(this)
     this.initMap = this.initMap.bind(this)
     this.adjustMapBounds = this.adjustMapBounds.bind(this)
   }
@@ -88,6 +89,40 @@ class RouteSectionMapContent extends React.PureComponent {
         if (withDrivingDirections) this.setDrivingDirections()
       }
     )
+
+    if (address.geojson) {
+      this.setArea(target, address.geojson)
+    }
+  }
+
+  setArea (target, geojson) {
+    this.setState((prevState) => {
+      const { geoJsons } = prevState
+      const { gMaps } = this.props
+
+      // Clear previous geoJson features
+      if (geoJsons[target]) {
+        geoJsons[target].forEach((feature) => {
+          this.map.data.remove(feature)
+        })
+      }
+
+      const features = this.map.data.addGeoJson(geojson)
+      const bounds = new gMaps.LatLngBounds()
+
+      features.forEach((feature) => {
+        feature.getGeometry().forEachLatLng((latlng) => {
+          bounds.extend(latlng)
+        })
+      })
+
+      return {
+        geoJsons: {
+          ...geoJsons,
+          [target]: features
+        }
+      }
+    })
   }
 
   setDrivingDirections () {

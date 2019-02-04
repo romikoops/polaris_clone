@@ -11,6 +11,7 @@ import listenerTools from '../../../../helpers/listeners'
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner'
 import { moment } from '../../../../constants'
 import addressFromPlace from './addressFromPlace'
+import addressFromLocation from './addressFromLocation'
 import { errorActions } from '../../../../actions'
 
 // WIP - Should be refactored out of this file
@@ -293,11 +294,12 @@ class Autocomplete extends PureComponent {
     this.setState({ hideResults: true, listenerSet: false })
   }
 
-  handleArea (result) {
+  handleArea (location) {
     listenerTools.removeHandler(document, 'keydown', this.handleKeyEvent)
 
     const { target, onAutocompleteTrigger } = this.props
-    onAutocompleteTrigger(target, result)
+
+    onAutocompleteTrigger(target, addressFromLocation(location))
 
     this.setState({ hideResults: true, listenerSet: false })
   }
