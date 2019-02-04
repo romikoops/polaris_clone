@@ -1,50 +1,59 @@
 import React from 'react'
 import { withNamespaces } from 'react-i18next'
+import { get } from 'lodash'
 import CargoUnitBox from '../CargoUnit/Box'
 import styles from './index.scss'
-import Tooltip from '../../../../Tooltip/Tooltip'
-import { NamedSelect } from '../../../../NamedSelect/NamedSelect'
-import Checkbox from '../../../../Checkbox/Checkbox'
+import FormsySelect from '../../../../Formsy/Select'
 import CargoUnitNumberInput from '../CargoUnit/NumberInput'
 import CheckboxWrapper from '../../../GetOffersSection/Checkboxes/CheckboxWrapper'
-
-const availableContainerTypes = [
-  '20\' Dry Container',
-  '40\' Dry Container',
-  '40\' High Cube'
-]
-
-const selectOptions = [
-  { label: availableContainerTypes[0], value: 'smallDryContainer' },
-  { label: availableContainerTypes[1], value: 'largeDryContainer' },
-  { label: availableContainerTypes[2], value: 'highCube' }
-]
+import { getTareWeight, getSizeClassOptions } from '../../../../../helpers'
 
 function Container ({
   container, i, onChangeCargoUnitSelect, onDeleteUnit, theme, scope, t, onChangeCargoUnitCheckbox, onChangeCargoUnitInput, toggleModal
 }) {
-  const showColliTypeErrors = false
+  // TODO: implement dynamic maxPayloadInKg for each Tenant
+  const tareWeight = getTareWeight(container) || 2370
+  const maxPayloadInKg = 35000 - tareWeight
 
   return (
     <CargoUnitBox onChangeCargoUnitInput={onChangeCargoUnitInput} cargoUnit={container} i={i} onDeleteUnit={onDeleteUnit}>
       <div style={{ position: 'relative' }}>
+        <div className="layout-row flex-55">
+          <CargoUnitNumberInput
+            className={styles.padding_section}
+            labelText={t('cargo:cargoGrossWeight')}
+            name={`${i}-payloadInKg`}
+            onChange={onChangeCargoUnitInput}
+            unit="kg"
+            onExcessDimensionsRequest={() => toggleModal('maxDimensions')}
+            maxDimension={maxPayloadInKg}
+            maxDimensionsErrorText={t('errors:maxWeight')}
+            errorMessageStyles={{
+              top: '3px',
+              left: '235px'
+            }}
+            value={container.payloadInKg}
+          />
+        </div>
         <div className="flex-100 layout-row" />
         <div
           className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.padding_section}`}
           style={{ margin: '20px 0' }}
         >
 
-          <div className="layout-row flex-40 layout-wrap layout-align-start-center colli_type">
+          <div className="layout-row flex-60 layout-wrap layout-align-start-center ccb_size_class">
             <div style={{ width: '95%' }}>
-              <NamedSelect
+              <FormsySelect
                 className={styles.select_100}
                 inputProps={{ name: `${i}-sizeClass` }}
                 name={`${i}-sizeClass`}
-                onChange={onChangeCargoUnitSelect}
-                options={selectOptions}
+                options={getSizeClassOptions()}
                 placeholder={t('common:containerSize')}
                 showErrors={showColliTypeErrors}
                 value={container.sizeClass}
+                onChange={(option) => { onChangeCargoUnitSelect(i, 'sizeClass', get(option, 'value')) }}
+                validationErrors={{ isDefaultRequiredValue: t('common:noBlank') }}
+                required
               />
             </div>
           </div>

@@ -9,6 +9,108 @@ import AddUnitButton from './AddUnitButton'
 import { getTotalShipmentErrors } from './getErrors'
 
 class CargoSection extends React.PureComponent {
+  constructor (props) {
+    super(props)
+
+    this.handleAddUnit = this.handleAddUnit.bind(this)
+    this.handleToggleAggregated = this.handleToggleAggregated.bind(this)
+    this.handleDeleteUnit = this.handleDeleteUnit.bind(this)
+    this.handleChangeCargoUnitSelect = this.handleChangeCargoUnitSelect.bind(this)
+    this.handleChangeCargoUnitInput = this.handleChangeCargoUnitInput.bind(this)
+    this.handleChangeCargoUnitCheckbox = this.handleChangeCargoUnitCheckbox.bind(this)
+
+    this.cargoItem = {
+      payloadInKg: 0,
+      totalVolume: 0,
+      totalWeight: 0,
+      dimensionX: 0,
+      dimensionY: 0,
+      dimensionZ: 0,
+      quantity: 1,
+      cargoItemTypeId: '',
+      dangerousGoods: false,
+      stackable: true
+    }
+    this.container = {
+      sizeClass: undefined,
+      quantity: 1,
+      payloadInKg: 0,
+      dangerousGoods: false
+    }
+    if (props.shipment.cargoUnits.length === 0) this.handleAddUnit()
+  }
+
+  getNewUnit () {
+    const { loadType } = this.props.shipment
+
+    return loadType === 'cargo_item' ? { ...this.cargoItem } : { ...this.container }
+  }
+
+  handleDeleteUnit (cargoUnit, i) {
+    const { bookingProcessDispatch } = this.props
+    bookingProcessDispatch.deleteCargoUnit(i)
+  }
+
+  handleAddUnit (cargoUnit) {
+    const { bookingProcessDispatch } = this.props
+    bookingProcessDispatch.addCargoUnit(this.getNewUnit())
+  }
+
+  handleChangeCollectiveWeight (index, newValue) {
+    const { shipment } = this.props
+    const { cargoUnits } = shipment
+    const { quantity } = cargoUnits[index]
+
+    const { bookingProcessDispatch } = this.props
+    bookingProcessDispatch.updateCargoUnit({
+      index: Number(index),
+      prop: 'payloadInKg',
+      newValue: newValue / quantity
+    })
+  }
+
+  handleChangeCargoUnitInput (e) {
+    const [index, prop] = e.target.name.split('-')
+    const newValue = Number(e.target.value)
+
+    if (prop === 'collectiveWeight') {
+      this.handleChangeCollectiveWeight(index, newValue)
+
+      return
+    }
+
+    const { bookingProcessDispatch } = this.props
+    bookingProcessDispatch.updateCargoUnit({
+      index: Number(index),
+      prop,
+      newValue
+    })
+  }
+
+  handleChangeCargoUnitCheckbox (checked, e) {
+    const [index, prop] = e.target.name.split('-')
+
+    const { bookingProcessDispatch } = this.props
+    bookingProcessDispatch.updateCargoUnit({
+      index: Number(index),
+      prop,
+      newValue: checked
+    })
+  }
+
+  handleChangeCargoUnitSelect (index, prop, newValue) {
+    const { bookingProcessDispatch } = this.props
+    bookingProcessDispatch.updateCargoUnit({ index, prop, newValue })
+  }
+
+  handleToggleAggregated () {
+    const { bookingProcessDispatch, shipment } = this.props
+    bookingProcessDispatch.updateShipment(
+      'aggregatedCargo',
+      !shipment.aggregatedCargo
+    )
+  }
+
   render () {
     const {
       theme, scope, cargoItemTypes, maxDimensions, shipment, ShipmentDetails, toggleModal, totalShipmentErrors
@@ -29,7 +131,6 @@ class CargoSection extends React.PureComponent {
             onChangeCargoUnitInput={this.handleChangeCargoUnitInput}
             onChangeCargoUnitSelect={this.handleChangeCargoUnitSelect}
             onDeleteUnit={this.handleDeleteUnit}
-            onUpdateCargoUnit={this.handleUpdateCargoUnit}
             scope={scope}
             theme={theme}
             totalShipmentErrors={totalShipmentErrors}

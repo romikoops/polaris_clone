@@ -112,7 +112,7 @@ class CargoItem extends React.PureComponent {
       onChangeCargoUnitCheckbox,
       onChangeCargoUnitInput,
       onDeleteUnit,
-      onSelectColliType,
+      onChangeCargoUnitSelect,
       scope,
       t,
       theme,
@@ -231,7 +231,7 @@ class CargoItem extends React.PureComponent {
             className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.padding_section}`}
             style={{ margin: '20px 0' }}
           >
-            <div className="layout-row flex-40 layout-wrap layout-align-start-center colli_type">
+            <div className="layout-row flex-40 layout-wrap layout-align-start-center ccb_colli_type">
               <div style={{ width: '95%' }}>
                 <NamedSelect
                   placeholder={t('common:selectColliType')}
@@ -240,7 +240,9 @@ class CargoItem extends React.PureComponent {
                   name={`${i}-colliType`}
                   value={selectedColliType}
                   options={availableCargoItemTypes}
-                  onChange={onSelectColliType}
+                  onChange={(option) => { onChangeCargoUnitSelect(i, 'cargoItemTypeId', get(option, 'key'), i) }}
+                  validationErrors={{ isDefaultRequiredValue: t('common:noBlank') }}
+                  required
                 />
               </div>
             </div>
@@ -255,7 +257,7 @@ class CargoItem extends React.PureComponent {
             />
             <CheckboxWrapper
               disabled={!scope.non_stackable_goods}
-              onChange={toggleStackable}
+              onChange={(checked, e) => onChangeCargoUnitCheckbox(!checked, e)}
               prop="stackable"
               labelText={t('common:nonStackable')}
               checkedTransform={x => !x}
