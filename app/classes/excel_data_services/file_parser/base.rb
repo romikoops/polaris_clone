@@ -3,7 +3,6 @@
 module ExcelDataServices
   module FileParser
     class Base
-      ParsingError = Class.new(StandardError)
       HubNotFoundError = Class.new(StandardError)
       InvalidHeadersError = Class.new(ParsingError)
       UnknownSheetNameError = Class.new(ParsingError)
@@ -38,6 +37,9 @@ module ExcelDataServices
         end
 
         @sheets_data = restructure_data(@sheets_data)
+        @errors = ExcelDataServices::FileParser::DataValidator::Pricing.validate_data(@sheets_data, @tenant)
+        return { has_errors: true, errors: @errors } unless @errors.empty?
+
         @sheets_data
       end
 

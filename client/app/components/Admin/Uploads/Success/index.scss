@@ -23,19 +23,49 @@
   }
   .results_box {
     width: 650px;
-    // min-width: 800px;
-    // max-width: 95%;
-    height: 700px;
+    max-height: 600px;
     z-index: 52;
     padding: 25px;
     border-radius: 10px;
     position: relative;
     background: #FFFFFF;
     box-shadow: 3px 3px 4px rgba(0,0,0,0.45);
-    // overflow-y: scroll;
   }
   .stat_row {
     padding: 10px 5px;
     font-size: 14px;
+  }
+  .error_box {
+    table {
+      max-height: 400px;
+      overflow-y: scroll;
+      width: 100%;
+      thead {
+        width: 100%;
+        tr {
+          width: 100%;
+        }
+      }
+      tbody {
+        width: 100%;
+        tr {
+          width: 100%;
+          .error_reason {
+            width: 45%;
+            text-align: start;
+          }
+          .error_row {
+            width: 45%;
+            text-align: end;
+          }
+          td {
+              font-size: 12px;
+              color: darkred;
+              margin: 5px;
+          }
+        }
+      }
+    }
+   
   }
 }

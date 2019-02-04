@@ -1,15 +1,17 @@
 # frozen_string_literal: true
 
-class Admin::LocalChargesController < ApplicationController
+class Admin::LocalChargesController < ApplicationController # rubocop:disable Style/ClassAndModuleChildren
   include ExcelTools
 
-  def hub_charges
+  def hub_charges # rubocop:disable Metrics/AbcSize
     hub = Hub.find(params[:id])
     charges = hub.local_charges
     service_levels = charges.map(&:tenant_vehicle).uniq.map(&:with_carrier).map do |tenant_vehicle|
-      carrier_name = tenant_vehicle['carrier'] ?
-      "#{tenant_vehicle['carrier']['name']} - #{tenant_vehicle['name']}" :
-      tenant_vehicle['name']
+      carrier_name = if tenant_vehicle['carrier']
+                       "#{tenant_vehicle['carrier']['name']} - #{tenant_vehicle['name']}"
+                     else
+                       tenant_vehicle['name']
+                     end
       { label: carrier_name.capitalize.to_s, value: tenant_vehicle['id'] }
     end
 
@@ -46,14 +48,15 @@ class Admin::LocalChargesController < ApplicationController
 
   def upload
     file = upload_params[:file].tempfile
-
     options = { tenant: current_tenant, file_or_path: file }
-    sheets_data = ExcelDataServices::FileParser::LocalCharges.new(options).perform
-
-    options = { tenant: current_tenant, data: sheets_data }
-    insertion_stats = ExcelDataServices::DatabaseInserter::LocalCharges.new(options).perform
-
-    response_handler(insertion_stats)
+    begin
+      sheets_data = ExcelDataServices::FileParser::LocalCharges.new(options).perform
+      options = { tenant: current_tenant, data: sheets_data }
+      insertion_stats = ExcelDataServices::DatabaseInserter::LocalCharges.new(options).perform
+      response_handler(insertion_stats)
+    rescue ExcelDataServices::FileParser::DataRestructurer::LocalCharges::MissingValuesForRateBasisError => e
+      response_handler(has_errors: true, errors: e.object)
+    end
   end
 
   def download

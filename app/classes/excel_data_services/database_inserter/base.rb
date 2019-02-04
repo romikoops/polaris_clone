@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module DatabaseInserter
-    class Base
+    class Base # rubocop:disable Metrics/ClassLength
       InsertionError = Class.new(StandardError)
       HubNotFoundError = Class.new(InsertionError)
       InvalidDataExtractionMethodError = Class.new(InsertionError)
@@ -102,7 +102,7 @@ module ExcelDataServices
       end
 
       def find_or_create_carrier(row)
-        Carrier.find_or_create_by(name: row[:carrier])
+        Carrier.find_or_create_by(name: row[:carrier]) unless row[:carrier].nil?
       end
 
       def service_level(row)
@@ -141,7 +141,7 @@ module ExcelDataServices
         )
       end
 
-      def pricing_detail_params_by_one_col_fee_and_ranges(row)
+      def pricing_detail_params_by_one_col_fee_and_ranges(row) # rubocop:disable Metrics/AbcSize
         fee_code = row[:fee_code].upcase
         ChargeCategory.find_or_create_by!(code: fee_code,
                                           name: row[:fee_name] || fee_code,
@@ -176,9 +176,9 @@ module ExcelDataServices
                                                               cargo_class: cargo_class.downcase)
       end
 
-      def create_pricing_with_pricing_details(row, tenant_vehicle, itinerary, data_extraction_method = nil)
+      def create_pricing_with_pricing_details(row, tenant_vehicle, itinerary, data_extraction_method = nil) # rubocop:disable Metrics/AbcSize
         pricing_params = {
-          # TODO: what is called 'load_type' in the excel file is actually a cargo_class!
+          uuid: row[:uuid],
           transport_category: find_transport_category(tenant_vehicle, row[:load_type]),
           tenant_vehicle: tenant_vehicle,
           tenant: tenant,
@@ -188,7 +188,7 @@ module ExcelDataServices
           expiration_date: Date.parse(row[:expiration_date].to_s)
         }
 
-        pricing_to_update = itinerary.pricings.find_or_initialize_by(pricing_params)
+        pricing_to_update = itinerary.pricings.find_by(uuid: row[:uuid]) || itinerary.pricings.find_or_initialize_by(pricing_params)
         add_stats(:pricings, pricing_to_update)
         pricing_to_update.save!
 

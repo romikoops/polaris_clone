@@ -351,6 +351,7 @@ class CardPricingIndex extends Component {
                 </div>
               )}
             />
+            <p className={`flex-100 ${styles.tip}`}>{t('admin:pricingsTip')}</p>
           </div>
         </div>
       </div>

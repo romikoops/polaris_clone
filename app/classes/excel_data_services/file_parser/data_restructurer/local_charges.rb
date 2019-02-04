@@ -3,7 +3,7 @@
 module ExcelDataServices
   module FileParser
     module DataRestructurer
-      module LocalCharges
+      module LocalCharges # rubocop:disable Metrics/ModuleLength
         MissingValuesForRateBasisError = Class.new(ExcelDataServices::FileParser::Base::ParsingError)
 
         private
@@ -20,7 +20,7 @@ module ExcelDataServices
 
           charges_data = build_charges_data(chunked_raw_data_per_sheet)
 
-          raise MissingValuesForRateBasisError, @missing_value_errors.join("\n") unless @missing_value_errors.empty?
+          raise MissingValuesForRateBasisError.new('Missing Values', @missing_value_errors) unless @missing_value_errors.empty? # rubocop:disable Metrics/LineLength
 
           create_missing_charge_categories(charges_data)
           assign_correct_hubs(charges_data)
@@ -120,8 +120,10 @@ module ExcelDataServices
         end
 
         def cache_errors(rate_basis, data)
-          @missing_value_errors <<
-            "Missing value for #{rate_basis} in row ##{data[:row_nr]}! Did you enter the value in the correct column?"
+          @missing_value_errors << {
+            row_no: data[:row_nr],
+            reason: "Missing value for #{rate_basis}"
+          }
         end
 
         def create_missing_charge_categories(charges_data)

@@ -5,6 +5,7 @@ module ExcelDataServices
     private
 
     DYNAMIC_FEE_COLS_NO_RANGES_HEADERS = %i(
+      uuid
       effective_date
       expiration_date
       customer_email
@@ -22,6 +23,7 @@ module ExcelDataServices
     ).freeze
 
     ONE_COL_FEE_AND_RANGES_HEADERS = %i(
+      uuid
       effective_date
       expiration_date
       customer_email
@@ -44,6 +46,7 @@ module ExcelDataServices
     ).freeze
 
     STATIC_HEADERS_ATTRIBUTES_LOOKUP = {
+      uuid: :uuid,
       effective_date: :effective_date,
       expiration_date: :expiration_date,
       customer_email: :customer_email,

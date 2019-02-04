@@ -82,11 +82,18 @@ module ExcelDataServices
       end
 
       def header_format
-        return @header_format if @header_format
+        @header_format ||= xlsx.add_format(locked: 0, bold: 1)
+      end
 
-        @header_format = xlsx.add_format
-        @header_format.set_bold
-        @header_format
+      def uuid_format
+        return @uuid_format if @uuid_format
+        @uuid_format = xlsx.add_format
+        @uuid_format.set_locked
+        @uuid_format
+      end
+
+      def cell_format
+        @cell_format ||= xlsx.add_format(locked: 0)
       end
 
       def write_headers(worksheet, headers)
@@ -94,27 +101,24 @@ module ExcelDataServices
       end
 
       def setup_worksheet(worksheet, col_count)
-        worksheet.set_column(0, col_count - 1, 17) # set all columns to width 17
+        worksheet.set_column('A:A', 17, uuid_format) # set all columns to width 17
+        worksheet.set_column('B:XFD', 17, cell_format) # set all columns to width 17
         worksheet.freeze_panes(1, 0) # freeze first row
+        worksheet.protect # enable protections
       end
 
       def date_dd_mm_yyyy_format
-        return @date_dd_mm_yyyy_format if @date_dd_mm_yyyy_format
-
-        @date_dd_mm_yyyy_format = xlsx.add_format
-        @date_dd_mm_yyyy_format.set_num_format('dd.mm.yyyy')
-        @date_dd_mm_yyyy_format
+        @date_dd_mm_yyyy_format ||= xlsx.add_format(num_format: 'dd.mm.yyyy', locked: 0)
       end
 
       def format_and_write_row(worksheet, start_row_idx, start_col_idx, raw_headers, row_data)
         raw_headers.each_with_index do |header, i|
           cell_content = row_data[header]
-
           if cell_content.is_a?(ActiveSupport::TimeWithZone)
             cell_content = cell_content.to_datetime.iso8601(3).remove(/\+.+$/)
             worksheet.write_date_time(start_row_idx, start_col_idx + i, cell_content, date_dd_mm_yyyy_format)
           else
-            worksheet.write(start_row_idx, start_col_idx + i, cell_content)
+            worksheet.write(start_row_idx, start_col_idx + i, cell_content, (header == :uuid ? uuid_format : cell_format))
           end
         end
       end

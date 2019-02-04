@@ -32,7 +32,7 @@ export class AdminUploadsSuccess extends Component {
       t, theme, data, closeDialog
     } = this.props
     const stats = data
-    const statView = stats ? Object.keys(stats)
+    const statView = stats ? Object.keys(stats).filter(k => !['has_errors', 'errors'].includes(k))
       .map(statKey => (
         <div className={`${styles.stat_row} flex-100 layout-row layout-align-space-between-center`}>
           <div className="flex-33 layout-row layout-align-start-center">
@@ -48,6 +48,16 @@ export class AdminUploadsSuccess extends Component {
           </div>
         </div>
       )) : ''
+    const errorView = stats.has_errors ? stats.errors.map(error => (
+      <tr className="flex-100 layout-row">
+        <td className={`flex-50 ${styles.error_reason}`}>
+          {error.reason}
+        </td>
+        <td className={`flex-50 ${styles.error_row}`}>
+          {error.row_no}
+        </td>
+      </tr>
+    )) : ''
 
     return (
       <div
@@ -67,10 +77,28 @@ export class AdminUploadsSuccess extends Component {
           }`}
         >
           <div className="flex-100 layout-row layout-align-start-center">
-            <TextHeading theme={theme} text={t('admin:uploadSuccessful')} size={3} />
+            { stats.has_errors
+              ? <TextHeading theme={theme} text={t('admin:uploadFailed')} size={3} />
+              : <TextHeading theme={theme} text={t('admin:uploadSuccessful')} size={3} /> }
           </div>
           <div className="flex-100 layout-row layout-align-start-center layout-wrap">
             {statView}
+          </div>
+          <div className={`flex-100 layout-row layout-align-start-center layout-wrap ${styles.error_box}`}>
+            <table className="flex-100 layout-row layout-align-start-start">
+              <tbody className="flex-100 layout-row layout-wrap">
+                <thead className="flex-100 layout-row">
+                  <tr className="flex-100 layout-row">
+                    <th className={`flex-50 ${styles.error_reason}`}>{t('admin:reason')}</th>
+                    <th className={`flex-50 ${styles.error_row}`}>{t('admin:rowNo')}</th>
+                  </tr>
+                </thead>
+                {errorView}
+              </tbody>
+            </table>
+          </div>
+          <div className="flex-100 layout-row layout-align-center-center layout-wrap layout-padding">
+            {stats.has_errors ? <p className="flex">{t('admin:errorTip')}</p> : ''}
           </div>
           <div className="flex-100 layout-row layout-align-end-center layout-wrap">
             <RoundButton
@@ -99,4 +127,4 @@ AdminUploadsSuccess.defaultProps = {
   data: {}
 }
 
-export default withNamespaces('admin')(AdminUploadsSuccess)
+export default withNamespaces(['admin', 'common'])(AdminUploadsSuccess)
