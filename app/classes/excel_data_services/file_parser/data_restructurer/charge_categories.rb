@@ -6,8 +6,6 @@ module ExcelDataServices
       module ChargeCategories
         MissingValuesForRateBasisError = Class.new(ExcelDataServices::FileParser::Base::ParsingError)
 
-        private
-
         def build_charge_params(data)
           all_charge_params = []
           data.values.each do |per_sheet_values|

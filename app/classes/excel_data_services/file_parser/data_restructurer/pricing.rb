@@ -4,7 +4,6 @@ module ExcelDataServices
   module FileParser
     module DataRestructurer
       module Pricing
-        private
 
         def restructure_data(data)
           data.inject({}) do |memo, (k_sheet_name, values)|

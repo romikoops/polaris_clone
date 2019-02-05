@@ -95,6 +95,39 @@ exports[`shallow render 1`] = `
       </div>
     </div>
     <div
+      className="flex-100 layout-row layout-align-start-center layout-wrap error_box"
+    >
+      <table
+        className="flex-100 layout-row layout-align-start-start"
+      >
+        <tbody
+          className="flex-100 layout-row layout-wrap"
+        >
+          <thead
+            className="flex-100 layout-row"
+          >
+            <tr
+              className="flex-100 layout-row"
+            >
+              <th
+                className="flex-50 error_reason"
+              >
+                Reason
+              </th>
+              <th
+                className="flex-50 error_row"
+              >
+                Row Number
+              </th>
+            </tr>
+          </thead>
+        </tbody>
+      </table>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center-center layout-wrap layout-padding"
+    />
+    <div
       className="flex-100 layout-row layout-align-end-center layout-wrap"
     >
       <RoundButton
