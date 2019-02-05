@@ -265,7 +265,6 @@ export class BookingConfirmation extends Component {
       <CollapsingBar
         text={t('common:overview')}
         parentClass={styles.shipment_card_border}
-        showArrow
         hideIcon
       >
         <div className={INNER_WRAPPER}>
@@ -298,7 +297,6 @@ export class BookingConfirmation extends Component {
       <CollapsingBar
         text={t('common:itinerary')}
         parentClass={styles.shipment_card_border}
-        showArrow
       >
         <div className={INNER_WRAPPER}>
           <RouteHubBox shipment={shipment} theme={theme} />
@@ -310,7 +308,6 @@ export class BookingConfirmation extends Component {
       <CollapsingBar
         text={t('common:faresFees')}
         parentClass={styles.shipment_card_border}
-        showArrow
       >
         <div className={INNER_WRAPPER}>
           <div className={`${WRAP_ROW(100)} ${ALIGN_CENTER}`}>
@@ -400,7 +397,6 @@ export class BookingConfirmation extends Component {
       <CollapsingBar
         text={t('bookconf:contact')}
         parentClass={styles.shipment_card_border}
-        showArrow
       >
         <div className={INNER_WRAPPER}>
           <div className={SUMM_TOP}>
@@ -422,13 +418,10 @@ export class BookingConfirmation extends Component {
         parentClass={styles.shipment_card_border}
         showArrow
       >
-      
-        {/* <div className={INNER_WRAPPER}> */}
-          <div className={LAYOUT_WRAP}>
+        <div className={LAYOUT_WRAP}>
           {showCargoSummary ? cargoSummary : '' }
           {cargoView}
-          </div>
-        {/* </div> */}
+        </div>
       </CollapsingBar>
 
     )
@@ -437,7 +430,6 @@ export class BookingConfirmation extends Component {
       <CollapsingBar
         text={t('common:additional')}
         parentClass={styles.shipment_card_border}
-        showArrow
       >
         <div className={INNER_WRAPPER}>
           <div className={LAYOUT_WRAP}>
@@ -456,7 +448,7 @@ export class BookingConfirmation extends Component {
                 ''
               )}
               {shipment.route_notes || shipment.notes ? (
-                <div className={`${WRAP_ROW(45)} ${ALIGN_START} padding_top`}>
+                <div className={`${WRAP_ROW(45)} ${ALIGN_START} padding_top ${styles.cargo_texts}`}>
                   <p className="flex-100">
                     <b>{`${t('common:notes')}:`}</b>
                   </p>
@@ -467,7 +459,7 @@ export class BookingConfirmation extends Component {
                 ''
               )}
               {shipment.incoterm_text ? (
-                <div className={`${WRAP_ROW(45)} ${ALIGN_START} padding_top`}>
+                <div className={`${WRAP_ROW(45)} ${ALIGN_START} padding_top ${styles.cargo_texts}`}>
                   <p className="flex-100">
                     <b>{`${t('common:incoterm')}:`}</b>
                   </p>
@@ -478,7 +470,7 @@ export class BookingConfirmation extends Component {
               )}
             </div>
             {remarkBody ? (
-              <div className={`${WRAP_ROW(45)} ${ALIGN_START} ${styles.remark_box} padding_top`}>
+              <div className={`${WRAP_ROW(100)} ${ALIGN_START} ${styles.remark_box} padding_top ${styles.cargo_texts}`}>
                 <h4>{`${t('shipment:remarks')}:`}</h4>
                 <ul>
                   {remarkBody}
@@ -495,7 +487,6 @@ export class BookingConfirmation extends Component {
       <CollapsingBar
         text={t('common:documents')}
         parentClass={styles.shipment_card_border}
-        showArrow
       >
         <div className={INNER_WRAPPER}>
           <div className="flex-100 layout-row layout-wrap layout-align-start-start">
@@ -513,7 +504,6 @@ export class BookingConfirmation extends Component {
       <CollapsingBar
         text={t('common:agree')}
         parentClass={styles.shipment_card_border}
-        showArrow
         hideIcon
       >
         <div className="layout-row layout-align-space-between-start layout-wrap flex-100">

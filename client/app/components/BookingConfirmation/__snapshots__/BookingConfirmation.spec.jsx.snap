@@ -21,7 +21,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Overview"
         theme={null}
@@ -93,7 +93,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Itinerary"
         theme={null}
@@ -246,7 +246,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Fares & Fees"
         theme={null}
@@ -713,7 +713,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Contact Details"
         theme={null}
@@ -958,7 +958,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Additional Information"
         theme={null}
@@ -1021,7 +1021,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -1037,7 +1037,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -1054,7 +1054,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
+              className="flex-100 layout-row layout-wrap layout-align-start-start remark_box padding_top cargo_texts"
             >
               <h4>
                 Remarks:
@@ -1082,7 +1082,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Documents"
         theme={null}
@@ -1203,7 +1203,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Agree and Submit"
         theme={null}
@@ -1390,7 +1390,7 @@ exports[`shallow render 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Overview"
         theme={null}
@@ -1462,7 +1462,7 @@ exports[`shallow render 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Itinerary"
         theme={null}
@@ -1615,7 +1615,7 @@ exports[`shallow render 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Fares & Fees"
         theme={null}
@@ -2068,7 +2068,7 @@ exports[`shallow render 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Contact Details"
         theme={null}
@@ -2313,7 +2313,7 @@ exports[`shallow render 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Additional Information"
         theme={null}
@@ -2376,7 +2376,7 @@ exports[`shallow render 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -2392,7 +2392,7 @@ exports[`shallow render 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -2409,7 +2409,7 @@ exports[`shallow render 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
+              className="flex-100 layout-row layout-wrap layout-align-start-start remark_box padding_top cargo_texts"
             >
               <h4>
                 Remarks:
@@ -2437,7 +2437,7 @@ exports[`shallow render 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Documents"
         theme={null}
@@ -2558,7 +2558,7 @@ exports[`shallow render 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Agree and Submit"
         theme={null}
@@ -2745,7 +2745,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Overview"
         theme={null}
@@ -2817,7 +2817,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Itinerary"
         theme={null}
@@ -2970,7 +2970,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Fares & Fees"
         theme={null}
@@ -3423,7 +3423,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Contact Details"
         theme={null}
@@ -3668,7 +3668,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Additional Information"
         theme={null}
@@ -3715,7 +3715,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -3731,7 +3731,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -3748,7 +3748,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
+              className="flex-100 layout-row layout-wrap layout-align-start-start remark_box padding_top cargo_texts"
             >
               <h4>
                 Remarks:
@@ -3776,7 +3776,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Documents"
         theme={null}
@@ -3897,7 +3897,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Agree and Submit"
         theme={null}
@@ -4084,7 +4084,7 @@ exports[`shipment.eori is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Overview"
         theme={null}
@@ -4156,7 +4156,7 @@ exports[`shipment.eori is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Itinerary"
         theme={null}
@@ -4309,7 +4309,7 @@ exports[`shipment.eori is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Fares & Fees"
         theme={null}
@@ -4762,7 +4762,7 @@ exports[`shipment.eori is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Contact Details"
         theme={null}
@@ -5007,7 +5007,7 @@ exports[`shipment.eori is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Additional Information"
         theme={null}
@@ -5054,7 +5054,7 @@ exports[`shipment.eori is falsy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -5070,7 +5070,7 @@ exports[`shipment.eori is falsy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -5087,7 +5087,7 @@ exports[`shipment.eori is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
+              className="flex-100 layout-row layout-wrap layout-align-start-start remark_box padding_top cargo_texts"
             >
               <h4>
                 Remarks:
@@ -5115,7 +5115,7 @@ exports[`shipment.eori is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Documents"
         theme={null}
@@ -5236,7 +5236,7 @@ exports[`shipment.eori is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Agree and Submit"
         theme={null}
@@ -5423,7 +5423,7 @@ exports[`shipment.incoterm_text is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Overview"
         theme={null}
@@ -5495,7 +5495,7 @@ exports[`shipment.incoterm_text is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Itinerary"
         theme={null}
@@ -5648,7 +5648,7 @@ exports[`shipment.incoterm_text is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Fares & Fees"
         theme={null}
@@ -6101,7 +6101,7 @@ exports[`shipment.incoterm_text is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Contact Details"
         theme={null}
@@ -6346,7 +6346,7 @@ exports[`shipment.incoterm_text is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Additional Information"
         theme={null}
@@ -6409,7 +6409,7 @@ exports[`shipment.incoterm_text is falsy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -6426,7 +6426,7 @@ exports[`shipment.incoterm_text is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
+              className="flex-100 layout-row layout-wrap layout-align-start-start remark_box padding_top cargo_texts"
             >
               <h4>
                 Remarks:
@@ -6454,7 +6454,7 @@ exports[`shipment.incoterm_text is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Documents"
         theme={null}
@@ -6575,7 +6575,7 @@ exports[`shipment.incoterm_text is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Agree and Submit"
         theme={null}
@@ -6762,7 +6762,7 @@ exports[`shipment.notes is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Overview"
         theme={null}
@@ -6834,7 +6834,7 @@ exports[`shipment.notes is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Itinerary"
         theme={null}
@@ -6987,7 +6987,7 @@ exports[`shipment.notes is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Fares & Fees"
         theme={null}
@@ -7440,7 +7440,7 @@ exports[`shipment.notes is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Contact Details"
         theme={null}
@@ -7685,7 +7685,7 @@ exports[`shipment.notes is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Additional Information"
         theme={null}
@@ -7748,7 +7748,7 @@ exports[`shipment.notes is falsy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -7765,7 +7765,7 @@ exports[`shipment.notes is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
+              className="flex-100 layout-row layout-wrap layout-align-start-start remark_box padding_top cargo_texts"
             >
               <h4>
                 Remarks:
@@ -7793,7 +7793,7 @@ exports[`shipment.notes is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Documents"
         theme={null}
@@ -7914,7 +7914,7 @@ exports[`shipment.notes is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Agree and Submit"
         theme={null}
@@ -8101,7 +8101,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Overview"
         theme={null}
@@ -8173,7 +8173,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Itinerary"
         theme={null}
@@ -8323,7 +8323,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Fares & Fees"
         theme={null}
@@ -8773,7 +8773,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Contact Details"
         theme={null}
@@ -9018,7 +9018,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Additional Information"
         theme={null}
@@ -9065,7 +9065,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -9081,7 +9081,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -9098,7 +9098,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
+              className="flex-100 layout-row layout-wrap layout-align-start-start remark_box padding_top cargo_texts"
             >
               <h4>
                 Remarks:
@@ -9126,7 +9126,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Documents"
         theme={null}
@@ -9247,7 +9247,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Agree and Submit"
         theme={null}
@@ -9440,7 +9440,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Overview"
         theme={null}
@@ -9512,7 +9512,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Itinerary"
         theme={null}
@@ -9665,7 +9665,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Fares & Fees"
         theme={null}
@@ -10118,7 +10118,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Contact Details"
         theme={null}
@@ -10225,7 +10225,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Additional Information"
         theme={null}
@@ -10288,7 +10288,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -10304,7 +10304,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -10321,7 +10321,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
+              className="flex-100 layout-row layout-wrap layout-align-start-start remark_box padding_top cargo_texts"
             >
               <h4>
                 Remarks:
@@ -10349,7 +10349,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Documents"
         theme={null}
@@ -10470,7 +10470,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Agree and Submit"
         theme={null}
@@ -10663,7 +10663,7 @@ exports[`state.acceptTerms is true 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Overview"
         theme={null}
@@ -10735,7 +10735,7 @@ exports[`state.acceptTerms is true 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Itinerary"
         theme={null}
@@ -10888,7 +10888,7 @@ exports[`state.acceptTerms is true 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Fares & Fees"
         theme={null}
@@ -11341,7 +11341,7 @@ exports[`state.acceptTerms is true 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Contact Details"
         theme={null}
@@ -11586,7 +11586,7 @@ exports[`state.acceptTerms is true 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Additional Information"
         theme={null}
@@ -11649,7 +11649,7 @@ exports[`state.acceptTerms is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -11665,7 +11665,7 @@ exports[`state.acceptTerms is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -11682,7 +11682,7 @@ exports[`state.acceptTerms is true 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
+              className="flex-100 layout-row layout-wrap layout-align-start-start remark_box padding_top cargo_texts"
             >
               <h4>
                 Remarks:
@@ -11710,7 +11710,7 @@ exports[`state.acceptTerms is true 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Documents"
         theme={null}
@@ -11831,7 +11831,7 @@ exports[`state.acceptTerms is true 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Agree and Submit"
         theme={null}
@@ -12018,7 +12018,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Overview"
         theme={null}
@@ -12090,7 +12090,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Itinerary"
         theme={null}
@@ -12243,7 +12243,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Fares & Fees"
         theme={null}
@@ -12690,7 +12690,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Contact Details"
         theme={null}
@@ -12935,7 +12935,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Additional Information"
         theme={null}
@@ -12998,7 +12998,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -13014,7 +13014,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -13031,7 +13031,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
+              className="flex-100 layout-row layout-wrap layout-align-start-start remark_box padding_top cargo_texts"
             >
               <h4>
                 Remarks:
@@ -13059,7 +13059,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Documents"
         theme={null}
@@ -13180,7 +13180,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Agree and Submit"
         theme={null}
@@ -13373,7 +13373,7 @@ exports[`theme is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Overview"
         theme={null}
@@ -13445,7 +13445,7 @@ exports[`theme is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Itinerary"
         theme={null}
@@ -13591,7 +13591,7 @@ exports[`theme is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Fares & Fees"
         theme={null}
@@ -14016,7 +14016,7 @@ exports[`theme is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Contact Details"
         theme={null}
@@ -14261,7 +14261,7 @@ exports[`theme is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Additional Information"
         theme={null}
@@ -14324,7 +14324,7 @@ exports[`theme is falsy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -14340,7 +14340,7 @@ exports[`theme is falsy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top"
+                className="flex-45 layout-row layout-wrap layout-align-start-start padding_top cargo_texts"
               >
                 <p
                   className="flex-100"
@@ -14357,7 +14357,7 @@ exports[`theme is falsy 1`] = `
               </div>
             </div>
             <div
-              className="flex-45 layout-row layout-wrap layout-align-start-start remark_box padding_top"
+              className="flex-100 layout-row layout-wrap layout-align-start-start remark_box padding_top cargo_texts"
             >
               <h4>
                 Remarks:
@@ -14385,7 +14385,7 @@ exports[`theme is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Documents"
         theme={null}
@@ -14506,7 +14506,7 @@ exports[`theme is falsy 1`] = `
         mainWrapperStyle={Object {}}
         minHeight=""
         parentClass="shipment_card_border"
-        showArrow={true}
+        showArrow={false}
         startCollapsed={false}
         text="Agree and Submit"
         theme={null}
