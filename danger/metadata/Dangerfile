@@ -1,5 +1,0 @@
-# frozen_string_literal: true
-
-if gitlab.branch_for_base != 'dev'
-  warn 'Most of the time, merge requests should target `dev`.'
-end

@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
-labels = gitlab.mr_labels
+LABEL_COLOUR = {
+  'migrations' => 'fbca04',
+  'translations' => 'fbca04',
+  'draft' => 'cc317c'
+}.freeze
+
+labels = github.pr_json[:labels].map { |l| l[:name] }
 new_labels = []
 
 all_files = git.added_files + git.modified_files
@@ -15,10 +21,17 @@ rails_translations = all_files.include? 'config/locales/*'
 js_translations = all_files.include? 'client/i18n/**/*'
 new_labels << 'translations' if rails_translations || js_translations
 
-unless (new_labels - labels).empty?
-  gitlab.api.update_merge_request(
-    gitlab.mr_json['project_id'],
-    gitlab.mr_json['iid'],
-    labels: (new_labels + labels).uniq.join(',')
-  )
+## Drafts
+if git.commits.any? { |c| c.message.split("\n").first =~ /wip/i }
+  new_labels << 'draft'
+end
+
+### Set new labels
+(new_labels - labels).uniq.each do |label|
+  auto_label.set(github.pr_json['number'], label, LABEL_COLOUR[label])
+end
+
+# Request Reviews
+if (labels + new_labels).none? { |l| l == 'draft' }
+  reviewer.assign('developers')
 end

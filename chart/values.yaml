@@ -4,9 +4,12 @@
 
 replicaCount: 1
 
+meta:
+  pullRequestId:
+
 backend:
   image:
-    repository: eu.gcr.io/itsmycargo-main/ci/imc-api
+    repository: eu.gcr.io/itsmycargo-main/apps/api
     tag: latest
     pullPolicy: Always
   resources:
@@ -16,7 +19,7 @@ backend:
 
 frontend:
   image:
-    repository: eu.gcr.io/itsmycargo-main/ci/imc-client
+    repository: eu.gcr.io/itsmycargo-main/apps/client
     tag: latest
     pullPolicy: Always
   resources:

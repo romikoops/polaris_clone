@@ -15,6 +15,7 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Max: 25
   Exclude:
+    - '**/*.gemspec'
     - config/**/*.rb
     - db/migrate/*.rb
     - engines/*/db/migrate/*.rb

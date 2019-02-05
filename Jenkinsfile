@@ -1,253 +1,189 @@
 #!groovy
 
-def label = "${UUID.randomUUID().toString()}"
-
 wrap.pipeline(timeout: 90) {
-  wrap.stage('Code Style') {
-    codestyle(targetBranch: 'dev', eslint: 'client/')
-  }
-
-  podTemplate(label: label, inheritFrom: 'default',
+  inPod(
     containers: [
       containerTemplate(name: 'api', image: 'ruby:2.5-alpine3.8', ttyEnabled: true, command: 'cat',
-        resourceRequestCpu: '1000m',
-        resourceLimitCpu: '1500m',
-        resourceRequestMemory: '1000Mi',
-        resourceLimitMemory: '1500Mi',
+        resourceRequestCpu: '1000m', resourceLimitCpu: '1500m',
+        resourceRequestMemory: '1000Mi', resourceLimitMemory: '1500Mi',
         envVars: [
           envVar(key: 'POSTGRES_DB', value: 'imcr_test'),
           envVar(key: 'DATABASE_URL', value: 'postgis://postgres:@localhost/imcr_test')
         ]
       ),
       containerTemplate(name: 'client', image: 'node:10-alpine', ttyEnabled: true, command: 'cat',
-        resourceRequestCpu: '1000m',
-        resourceLimitCpu: '1200m',
-        resourceRequestMemory: '1000Mi',
-        resourceLimitMemory: '1200Mi',
+        resourceRequestCpu: '1000m', resourceLimitCpu: '1200m',
+        resourceRequestMemory: '1000Mi', resourceLimitMemory: '1200Mi',
       ),
       containerTemplate(name: 'postgis', image: 'mdillon/postgis',
-        resourceRequestCpu: '250m',
-        resourceLimitCpu: '500m',
-        resourceRequestMemory: '400Mi',
-        resourceLimitMemory: '500Mi',
+        resourceRequestCpu: '250m', resourceLimitCpu: '500m',
+        resourceRequestMemory: '400Mi', resourceLimitMemory: '500Mi',
       )
     ]
-  ) {
+  ) { label ->
     wrap.node(label) {
       wrap.stage('Checkout') { checkoutScm() }
 
-      gitlabCommitStatus(name: 'Test', builds: [[projectId: env.gitLabProjectId, revisionHash: env.GIT_COMMIT]]) {
-        stage('Prepare') {
-          milestone()
+      stage('Prepare') {
+        milestone()
 
-          def jobs = [:]
+        def jobs = [:]
 
-          jobs['api'] = {
-            container('api') {
-              timeout(10) {
-                withEnv(["BUNDLE_GITLAB__COM=gitlab-ci-token:${GITLAB_TOKEN}"]) {
-                  sh """
-                    apk add --no-cache --update \
-                      build-base \
-                      cmake \
-                      git \
-                      linux-headers \
-                      nodejs \
-                      npm \
-                      postgresql-dev \
-                      tzdata
-                    npm install -g 'mjml@4.3.1'
-                  """
-                  sh 'scripts/prepare'
-                }
-              }
-            }
-          }
-
-          jobs['client'] = {
-            container('client') {
-              timeout(10) {
+        jobs['api'] = {
+          container('api') {
+            timeout(10) {
+              withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}"]) {
                 sh """
                   apk add --no-cache --update \
-                    autoconf automake bash build-base gifsicle lcms2-dev libjpeg-turbo-utils libpng-dev libtool \
-                    libwebp-tools nasm optipng pngquant
+                    build-base \
+                    cmake \
+                    dropbear-ssh \
+                    git \
+                    linux-headers \
+                    nodejs \
+                    npm \
+                    postgresql-dev \
+                    tzdata
+                  npm install -g 'mjml@4.3.1'
                 """
-
-                dir('client') {
-                  sh "npm install --no-progress"
-                }
+                sh 'scripts/prepare'
               }
             }
           }
-
-          parallel(jobs)
         }
 
-        stage('Test') {
-          milestone()
+        jobs['client'] = {
+          container('client') {
+            timeout(10) {
+              sh """
+                apk add --no-cache --update \
+                  autoconf automake bash build-base gifsicle lcms2-dev libjpeg-turbo-utils libpng-dev libtool \
+                  libwebp-tools nasm optipng pngquant
+              """
 
-          def jobs = [:]
-
-          jobs['api'] = {
-            container('api') {
-              timeout(10) {
-                withEnv(["BUNDLE_GITLAB__COM=gitlab-ci-token:${GITLAB_TOKEN}"]) {
-                  try {
-                    sh "scripts/test"
-                  } catch (err) {
-                    throw err
-                  } finally {
-                    junit allowEmptyResults: true, testResults: '**/rspec.xml'
-                    publishCoverage adapters: [istanbulCoberturaAdapter('**/coverage.xml')]
-                  }
-                }
+              dir('client') {
+                sh "npm install --no-progress"
               }
             }
           }
+        }
 
-          jobs['client'] = {
-            container('client') {
-              timeout(10) {
+        parallel(jobs)
+      }
+
+      stage('Test') {
+        milestone()
+
+        def jobs = [:]
+
+        jobs['api'] = {
+          container('api') {
+            timeout(10) {
+              withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}"]) {
                 try {
-                  dir('client') {
-                    sh "npm run test:ci"
-                  }
+                  sh "scripts/test"
                 } catch (err) {
                   throw err
                 } finally {
-                  junit allowEmptyResults: true, testResults: '**/junit.xml'
-                  publishCoverage adapters: [istanbulCoberturaAdapter('**/cobertura-coverage.xml')]
+                  junit allowEmptyResults: true, testResults: '**/rspec.xml'
+                  publishCoverage adapters: [istanbulCoberturaAdapter('**/coverage.xml')]
                 }
               }
             }
           }
-
-          parallel(jobs)
-        }
-      }
-    }
-  }
-
-  if (env.gitlabMergeRequestIid) {
-    gitlabCommitStatus(name: 'QA', builds: [[projectId: env.gitLabProjectId, revisionHash: env.GIT_COMMIT]]) {
-      lock(label: "${env.GIT_BRANCH}", inversePrecedence: true) {
-        wrap.stage('Prepare Deploy') {
-          milestone()
-          prepareDeploy()
         }
 
-        wrap.stage('Review') {
-          milestone()
-          deployReview()
-        }
-
-        stage('QA') {
-          milestone()
-
-          def jobs = [:]
-
-          jobs << knapsack(2, 'Cucumber') { cucumberTests() }
-
-          parallel jobs
-        }
-
-        milestone()
-      }
-    }
-  }
-}
-
-void prepareDeploy() {
-  def label = "${UUID.randomUUID().toString()}"
-
-  podTemplate(label: "${label}", inheritFrom: 'default',
-    envVars: [
-      envVar(key: 'GOOGLE_APPLICATION_CREDENTIALS', value: '/etc/secrets/service-account/credentials.json'),
-      envVar(key: 'DOCKER_DRIVER', value: 'overlay2'),
-      envVar(key: 'DOCKER_HOST', value: 'tcp://localhost:2375/'),
-
-    ],
-    containers: [
-      containerTemplate(name: 'docker', image: 'docker:dind', privileged: true, ttyEnabled: true,
-        resourceRequestCpu: '1000m',
-        resourceLimitCpu: '1200m',
-        resourceRequestMemory: '4000Mi',
-        resourceLimitMemory: '4500Mi',
-      )
-    ],
-    volumes: [
-      emptyDirVolume(memory: false, mountPath: '/var/lib/docker'),
-      secretVolume(mountPath: '/etc/secrets/service-account', secretName: 'jenkins-worker-credentials'),
-    ]
-  ) {
-    wrap.node("${label}") {
-      checkoutScm()
-
-      def jobs = [:]
-
-      jobs['database'] = {
-        build(
-          job: 'Tasks/Production/review/dbreset',
-          parameters: [string(name: 'database', value: "mr-${env.gitlabMergeRequestIid}")]
-        )
-      }
-
-      jobs['api'] = {
-        retry(2) {
-          container('docker') {
-            timeout(15) {
-              sh """
-                rm -rf tmp/docker
-                mkdir -p tmp/docker
-                find . -depth -type f -name '*.gemspec' | cpio -d -v -p tmp/docker/
-              """
-
-              sh """
-                docker build \
-                  --build-arg RELEASE=${env.gitlabMergeRequestLastCommit} \
-                  --tag eu.gcr.io/itsmycargo-main/ci/imc-api:${env.gitlabMergeRequestLastCommit} \
-                  .
-              """
-
-              sh "docker login -u _json_key --password-stdin eu.gcr.io/itsmycargo-main <\$GOOGLE_APPLICATION_CREDENTIALS"
-              sh "docker push eu.gcr.io/itsmycargo-main/ci/imc-api:${env.gitlabMergeRequestLastCommit}"
-            }
-          }
-        }
-      }
-
-      jobs['client'] = {
-        retry(2) {
-          container('docker') {
-            timeout(15) {
-              dir('client') {
-                sh """
-                docker build \
-                  --build-arg RELEASE=${env.gitlabMergeRequestLastCommit} \
-                  --build-arg SENTRY_AUTH_TOKEN=099b9abd2844497db3dace7307576c12fadc7d47bd68416584cdb4b90709de95 \
-                  --tag eu.gcr.io/itsmycargo-main/ci/imc-client:${env.gitlabMergeRequestLastCommit} \
-                  .
-                """
-
-                sh "docker login -u _json_key --password-stdin eu.gcr.io/itsmycargo-main <\$GOOGLE_APPLICATION_CREDENTIALS"
-                sh "docker push eu.gcr.io/itsmycargo-main/ci/imc-client:${env.gitlabMergeRequestLastCommit}"
+        jobs['client'] = {
+          container('client') {
+            timeout(10) {
+              try {
+                dir('client') {
+                  sh "npm run test:ci"
+                }
+              } catch (err) {
+                throw err
+              } finally {
+                junit allowEmptyResults: true, testResults: '**/junit.xml'
+                publishCoverage adapters: [istanbulCoberturaAdapter('**/cobertura-coverage.xml')]
               }
             }
           }
         }
+
+        parallel(jobs)
       }
 
-      jobs.failFast = true
-      parallel jobs
+      stage('Codestyle') {
+        def jobs = [:]
+        jobs['analyse'] = { container('api') { codestyle.analyse(eslint: 'client') } }
+        if (env.CHANGE_ID) {
+          jobs['danger'] = { container('api') { codestyle.danger() } }
+          jobs['pronto'] = { container('api') { codestyle.pronto() } }
+        }
+
+        parallel(jobs)
+      }
+    }
+  }
+
+  if (env.CHANGE_ID) {
+    wrap.stage('Prepare Deploy') {
+      lock(label: "${env.GIT_BRANCH}", inversePrecedence: true) {
+        inPod { label ->
+          wrap.node(label) {
+            milestone()
+
+            checkoutScm()
+
+            parallel(
+              'database': {
+                build(
+                  job: 'Tasks/Production/review/dbreset',
+                  parameters: [string(name: 'database', value: env.CI_COMMIT_REF_SLUG)]
+                )
+                },
+              'images': {
+                sh """
+                  rm -rf .build
+                  mkdir -p .build
+                  find . -depth -type f -name '*.gemspec' | cpio -d -v -p .build/
+                """
+                googleCloudBuild(
+                  credentialsId: 'itsmycargo-main',
+                  request: file('cloudbuild.yaml'),
+                  source: local('.'),
+                  substitutions: [
+                    BRANCH_NAME: env.BRANCH_NAME,
+                    COMMIT_SHA: env.GIT_COMMIT,
+                    _SENTRY_AUTH_TOKEN: '099b9abd2844497db3dace7307576c12fadc7d47bd68416584cdb4b90709de95'
+                  ]
+                )
+              }
+            )
+          }
+        }
+      }
+
+      wrap.stage('Review') {
+        milestone()
+        deployReview()
+      }
+
+      stage('QA') {
+        milestone()
+
+        parallel(knapsack(2, 'Cucumber') { cucumberTests() })
+      }
+
+      milestone()
     }
   }
 }
 
 void deployReview() {
-  def label = "${UUID.randomUUID().toString()}"
-  env.REVIEW_NAME = "mr-${env.gitlabMergeRequestIid}"
+  env.REVIEW_NAME = env.CI_COMMIT_REF_SLUG
 
-  podTemplate(label: "${label}", inheritFrom: 'default',
+  inPod(
     containers: [
       containerTemplate(name: 'deploy', image: 'eu.gcr.io/itsmycargo-main/deploy:latest', ttyEnabled: true, command: 'cat',
         resourceRequestCpu: '100m',
@@ -262,7 +198,7 @@ void deployReview() {
         ]
       )
     ]
-  ) {
+  ) { label ->
     wrap.node("${label}") {
       checkoutScm()
 
@@ -277,8 +213,10 @@ void deployReview() {
           helm upgrade --install \
             --wait \
             --timeout 600 \
-            --set backend.image.tag="${env.gitlabMergeRequestLastCommit}" \
-            --set frontend.image.tag="${env.gitlabMergeRequestLastCommit}" \
+            --set meta.changeId="${env.CHANGE_ID}" \
+            --set meta.changeRepo="${jobName()}" \
+            --set backend.image.tag="${env.GIT_COMMIT}" \
+            --set frontend.image.tag="${env.GIT_COMMIT}" \
             --set ingress.domain="itsmycargo.tech" \
             --set masterKey=\$REVIEW_MASTER_KEY \
             --set postgres.host=\$DATABASE_HOST \
@@ -312,9 +250,7 @@ def knapsack(Integer ciNodeTotal, String label = 'slice', Closure body) {
 }
 
 void cucumberTests() {
-  def label = "${UUID.randomUUID().toString()}"
-
-  podTemplate(label: label, inheritFrom: 'default',
+  inPod(
     containers: [
       containerTemplate(name: 'cucumber', image: "ruby:2.5.1-alpine", ttyEnabled: true, command: 'cat',
         resourceRequestCpu: '250m', resourceLimitCpu: '400m',
@@ -331,7 +267,7 @@ void cucumberTests() {
       )
     ],
     volumes: [hostPathVolume(hostPath: '/dev/shm', mountPath: '/dev/shm')]
-  ) {
+  ) { label ->
     retryOrAbort(2) {
       wrap.node(label) {
         checkoutScm()
@@ -341,7 +277,7 @@ void cucumberTests() {
             withEnv([
               'BROWSERNAME=chrome',
               'DRIVER=remote',
-              "TARGET_URL=https://mr-${env.gitlabMergeRequestIid}.itsmycargo.tech"
+              "TARGET_URL=https://${env.REVIEW_NAME}.itsmycargo.tech"
             ]) {
               dir('qa/') {
                 // Prepare

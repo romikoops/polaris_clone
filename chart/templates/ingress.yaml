@@ -6,6 +6,8 @@ metadata:
     chart: {{ template "app.chart" . }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
+    changeId: {{ .Values.meta.changeId | quote }}
+    changeRepo: {{ .Values.meta.changeRepo | quote }}
   name: {{ template "app.fullname" . }}-frontend
   annotations:
     kubernetes.io/ingress.class: "nginx"

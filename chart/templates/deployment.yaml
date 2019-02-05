@@ -9,6 +9,8 @@ metadata:
     chart: {{ include "app.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+    changeId: {{ .Values.meta.changeId | quote }}
+    changeRepo: {{ .Values.meta.changeRepo | quote }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:

@@ -1,4 +1,4 @@
-# ItsMyCargo [![pipeline status](https://gitlab.com/itsmycargo/imc-react-api/badges/dev/pipeline.svg)](https://gitlab.com/itsmycargo/imc-react-api/commits/dev) [![coverage report](https://gitlab.com/itsmycargo/imc-react-api/badges/dev/coverage.svg)](https://gitlab.com/itsmycargo/imc-react-api/commits/dev)
+# ItsMyCargo
 
 ## :ship: Deployments
 

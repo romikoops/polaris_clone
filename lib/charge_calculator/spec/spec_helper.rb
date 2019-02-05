@@ -14,7 +14,13 @@ SimpleCov.start do
 
   if ENV['CI']
     require 'simplecov-cobertura'
-    formatter SimpleCov::Formatter::CoberturaFormatter
+    require 'simplecov-lcov'
+
+    SimpleCov::Formatter::LcovFormatter.config.report_with_single_file = true
+    formatter SimpleCov::Formatter::MultiFormatter.new([
+                                                         SimpleCov::Formatter::CoberturaFormatter,
+                                                         SimpleCov::Formatter::LcovFormatter
+                                                       ])
   end
 end
 
