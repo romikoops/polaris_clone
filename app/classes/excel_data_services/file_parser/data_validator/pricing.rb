@@ -70,9 +70,7 @@ module ExcelDataServices
         end
 
         def user(row_data)
-          return User.find_by(tenant: @tenant, email: row_data[:customer_email]) unless row_data[:customer_email].blank?
-
-          nil
+          User.find_by(tenant: @tenant, email: row_data[:customer_email]) if row_data[:customer_email].present?
         end
       end
     end
