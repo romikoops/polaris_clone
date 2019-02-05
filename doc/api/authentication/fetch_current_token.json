@@ -24,7 +24,7 @@
       "request_content_type": "application/json",
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\n  \"access_token\": \"a7561f84e3b09f742aea7712172742cf8eb0041a791b06504004574309b7c480\",\n  \"token_type\": \"Bearer\",\n  \"expires_in\": 7200,\n  \"scope\": \"public\",\n  \"created_at\": 1548946129\n}",
+      "response_body": "{\n  \"access_token\": \"6a1c5de14929d680365d46abfbbcf7af0112af3726756673673ccc2d563532ab\",\n  \"token_type\": \"Bearer\",\n  \"expires_in\": 7200,\n  \"refresh_token\": \"a3c3c341fd3e6cc2bc8b2a210204193064756169f4723b05440e7b22aa2759fe\",\n  \"scope\": \"public\",\n  \"created_at\": 1549380574\n}",
       "response_headers": {
         "Content-Type": "application/json; charset=utf-8"
       },

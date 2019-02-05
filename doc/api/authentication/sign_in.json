@@ -53,7 +53,7 @@
       "request_content_type": "application/json",
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\n  \"access_token\": \"b97c571f161cdf6b6784636f1a42b24f9fbec6e0611c5d32e4ad17801c5d9d53\",\n  \"token_type\": \"Bearer\",\n  \"expires_in\": 7200,\n  \"scope\": \"public\",\n  \"created_at\": 1548946129\n}",
+      "response_body": "{\n  \"access_token\": \"22fec9d272e536234ccf1ea5e789c1b3a6374813a9c9f50ab7645eaf5638a63b\",\n  \"token_type\": \"Bearer\",\n  \"expires_in\": 7200,\n  \"refresh_token\": \"5a21f2f5cdf9053e505af987d0c7a246a1d2c84d39c158563ebd3bddee850a1a\",\n  \"scope\": \"public\",\n  \"created_at\": 1549380574\n}",
       "response_headers": {
         "Content-Type": "application/json; charset=utf-8"
       },
