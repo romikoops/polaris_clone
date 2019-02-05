@@ -148,7 +148,7 @@ group :development, :test do
   gem 'danger'
   gem 'danger-auto_label'
   gem 'danger-jira'
-  gem 'danger-reviewer', '>= 0.0.3'
+  gem 'danger-reviewer', '~> 0.0.5'
 
   # gem 'pronto'
   gem 'pronto', git: 'https://github.com/mikian/pronto.git', branch: 'gh_status'

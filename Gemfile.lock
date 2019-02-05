@@ -195,7 +195,7 @@ GEM
       danger-plugin-api (~> 1.0)
     danger-plugin-api (1.0.0)
       danger (> 2.0)
-    danger-reviewer (0.0.4)
+    danger-reviewer (0.0.5)
       danger-plugin-api (~> 1.0)
       graphql-client (~> 0.12)
     debase (0.2.2)
@@ -687,7 +687,7 @@ DEPENDENCIES
   danger
   danger-auto_label
   danger-jira
-  danger-reviewer (>= 0.0.3)
+  danger-reviewer (~> 0.0.5)
   debase
   devise_token_auth (~> 0.1.43)
   dotenv-rails
