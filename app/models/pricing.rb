@@ -11,6 +11,8 @@ class Pricing < ApplicationRecord
   has_many :pricing_exceptions, dependent: :destroy
   has_many :pricing_requests, dependent: :destroy
 
+  validates_uniqueness_of :uuid
+
   delegate :load_type, to: :transport_category
   delegate :cargo_class, to: :transport_category
   scope :for_mode_of_transport, ->(mot) { joins(:itinerary).where(itineraries: { mode_of_transport: mot }) }

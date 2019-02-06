@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module FileParser
-    class DataValidator
+    module DataValidator
       class Pricing
 
         def validate_data(data, tenant)

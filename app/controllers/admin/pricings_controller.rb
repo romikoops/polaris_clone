@@ -163,6 +163,8 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
                                                file_or_path: file)
     result = uploader.perform
 
+    binding.pry
+
     response_handler(result)
   end
 
