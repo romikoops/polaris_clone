@@ -161,11 +161,7 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     uploader = ExcelDataServices::Uploader.new(tenant: current_tenant,
                                                klass_identifier: klass_identifier,
                                                file_or_path: file)
-    result = uploader.perform
-
-    binding.pry
-
-    response_handler(result)
+    response_handler(uploader.perform)
   end
 
   def download

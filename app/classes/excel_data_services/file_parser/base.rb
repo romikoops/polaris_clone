@@ -7,8 +7,6 @@ module ExcelDataServices
       InvalidHeadersError = Class.new(ParsingError)
       UnknownSheetNameError = Class.new(ParsingError)
 
-      attr_reader :tenant, :xlsx, :sheets_data
-
       def initialize(tenant:, file_or_path:)
         @tenant = tenant
         @xlsx = open_spreadsheet_file(file_or_path)
@@ -37,13 +35,15 @@ module ExcelDataServices
         end
 
         @sheets_data = restructure_data(@sheets_data)
-        @errors = ExcelDataServices::FileParser::DataValidator::Pricing.validate_data(@sheets_data, @tenant)
-        return { errors: @errors } unless @errors.empty?
+        @errors = ExcelDataServices::FileParser::DataValidator::Pricing.validate_data(sheets_data, @tenant)
+        return { has_errors: true, errors: @errors } unless @errors.empty?
 
-        @sheets_data
+        sheets_data
       end
 
       private
+
+      attr_reader :tenant, :xlsx, :sheets_data
 
       def open_spreadsheet_file(file_or_path)
         file_or_path = Pathname(file_or_path).to_s
