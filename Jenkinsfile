@@ -22,7 +22,7 @@ wrap.pipeline(timeout: 90) {
     ]
   ) { label ->
     wrap.node(label) {
-      wrap.stage('Checkout') { checkoutScm() }
+      stage('Checkout') { checkoutScm() }
 
       stage('Prepare') {
         milestone()
@@ -71,57 +71,65 @@ wrap.pipeline(timeout: 90) {
         parallel(jobs)
       }
 
+      def error = null
+
       stage('Test') {
         milestone()
-
-        def jobs = [:]
-
-        jobs['api'] = {
-          container('api') {
-            timeout(10) {
-              withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}"]) {
-                try {
-                  sh "scripts/test"
-                } catch (err) {
-                  throw err
-                } finally {
-                  junit allowEmptyResults: true, testResults: '**/rspec.xml'
-                  publishCoverage adapters: [istanbulCoberturaAdapter('**/coverage.xml')]
+        try {
+          parallel(
+            api: {
+              container('api') {
+                timeout(10) {
+                  withEnv(["BUNDLE_GITHUB__COM=pierbot:${env.GITHUB_TOKEN}"]) {
+                    try {
+                      sh "scripts/test"
+                    } catch (err) {
+                      throw err
+                    } finally {
+                      junit allowEmptyResults: true, testResults: '**/rspec.xml'
+                      publishCoverage adapters: [istanbulCoberturaAdapter('**/coverage.xml')]
+                    }
+                  }
                 }
               }
-            }
-          }
-        }
+            },
 
-        jobs['client'] = {
-          container('client') {
-            timeout(10) {
-              try {
-                dir('client') {
-                  sh "npm run test:ci"
+            client: {
+              container('client') {
+                timeout(10) {
+                  try {
+                    dir('client') { sh 'npm run test:ci' }
+                  } catch (err) {
+                    throw err
+                  } finally {
+                    junit allowEmptyResults: true, testResults: '**/junit.xml'
+                    publishCoverage adapters: [istanbulCoberturaAdapter('**/cobertura-coverage.xml')]
+                  }
                 }
-              } catch (err) {
-                throw err
-              } finally {
-                junit allowEmptyResults: true, testResults: '**/junit.xml'
-                publishCoverage adapters: [istanbulCoberturaAdapter('**/cobertura-coverage.xml')]
               }
-            }
-          }
+            },
+
+            analyse: { container('api') { codestyle.analyse(eslint: 'client', rubocop: true) } }
+          )
+        } catch (err) {
+          error = err
         }
 
-        parallel(jobs)
+        if (env.CHANGE_ID) {
+          try {
+            parallel(
+              danger: { container('api') { codestyle.danger() } },
+              pronto: { container('api') { codestyle.pronto() } }
+            )
+          } catch (err) {
+            error = err
+          }
+        }
       }
 
-      stage('Codestyle') {
-        def jobs = [:]
-        jobs['analyse'] = { container('api') { codestyle.analyse(eslint: 'client') } }
-        if (env.CHANGE_ID) {
-          jobs['danger'] = { container('api') { codestyle.danger() } }
-          jobs['pronto'] = { container('api') { codestyle.pronto() } }
-        }
-
-        parallel(jobs)
+      if (error) {
+        currentBuild.result = 'FAILURE'
+        throw error
       }
     }
   }

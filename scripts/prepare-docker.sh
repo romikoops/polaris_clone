@@ -1,5 +1,5 @@
 #!/bin/sh -e
 
-rm -rf tmp/docker
-mkdir -p tmp/docker
+rm -rf .build
+mkdir -p .build
 find . -depth -type f -name '*.gemspec' | cpio -d -v -p .build/
