@@ -158,10 +158,13 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     new_load_type = load_type_renamed(load_type)
     klass_identifier = "#{mot.capitalize}#{new_load_type.capitalize}"
 
-    uploader = ExcelDataServices::Uploader.new(tenant: current_tenant,
-                                               klass_identifier: klass_identifier,
-                                               file_or_path: file)
-    response_handler(uploader.perform)
+    options = { tenant: current_tenant,
+                klass_identifier: klass_identifier,
+                file_or_path: file }
+    uploader = ExcelDataServices::Uploader.new(options)
+
+    insertion_stats_or_errors = uploader.perform
+    response_handler(insertion_stats_or_errors)
   end
 
   def download

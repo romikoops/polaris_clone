@@ -7,6 +7,10 @@ module ExcelDataServices
       InvalidHeadersError = Class.new(ParsingError)
       UnknownSheetNameError = Class.new(ParsingError)
 
+      def self.parse(options)
+        new(options).perform
+      end
+
       def initialize(tenant:, file_or_path:)
         @tenant = tenant
         @xlsx = open_spreadsheet_file(file_or_path)
@@ -33,10 +37,6 @@ module ExcelDataServices
 
           @sheets_data[sheet_name][:rows_data] = rows_data
         end
-
-        @sheets_data = restructure_data(@sheets_data)
-        @errors = ExcelDataServices::FileParser::DataValidator::Pricing.validate_data(sheets_data, @tenant)
-        return { has_errors: true, errors: @errors } unless @errors.empty?
 
         sheets_data
       end
@@ -100,10 +100,6 @@ module ExcelDataServices
       def build_row_obj(headers, row)
         row_data = headers.zip(row).to_h
         sanitize_row_data(row_data)
-      end
-
-      def restructure_data(_data)
-        raise NotImplementedError, "This method must be implemented in #{self.class.name}."
       end
 
       def append_hub_suffix(name, mot)

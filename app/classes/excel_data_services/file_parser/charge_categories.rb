@@ -4,7 +4,6 @@ module ExcelDataServices
   module FileParser
     class ChargeCategories < Base
       include ExcelDataServices::ChargeCategoryTool
-      include DataRestructurer::ChargeCategories
 
       private
 

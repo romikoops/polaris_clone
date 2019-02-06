@@ -54,8 +54,8 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
     options = { tenant: current_tenant, data: sheets_data }
     insertion_stats = ExcelDataServices::DatabaseInserter::LocalCharges.new(options).perform
     response_handler(insertion_stats)
-    rescue ExcelDataServices::FileParser::DataRestructurer::LocalCharges::MissingValuesForRateBasisError => e
-      response_handler(has_errors: true, errors: e.object)
+  rescue ExcelDataServices::DataRestructurer::LocalCharges::MissingValuesForRateBasisError => e
+    response_handler(has_errors: true, errors: e.object)
   end
 
   def download

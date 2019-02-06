@@ -4,7 +4,6 @@ module ExcelDataServices
   module FileParser
     class AirLcl < Base
       include ExcelDataServices::PricingTool
-      include DataRestructurer::Pricing
 
       private
 

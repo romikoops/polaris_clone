@@ -11,15 +11,13 @@ module ExcelDataServices
 
           ChargeCategory.from_code(fee_code, tenant.id)
 
-          {
-            range: nil,
+          { range: nil,
             rate_basis: row[:rate_basis],
             rate: fee_value,
             min: fee_value,
             shipping_type: fee_code.upcase,
             currency_name: row[:currency].upcase,
-            tenant_id: @tenant.id
-          }
+            tenant_id: @tenant.id }
         end
 
         params.compact

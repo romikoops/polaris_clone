@@ -4,7 +4,6 @@ module ExcelDataServices
   module FileParser
     class LocalCharges < Base
       include ExcelDataServices::LocalChargesTool
-      include DataRestructurer::LocalCharges
 
       def initialize(tenant:, file_or_path:)
         super

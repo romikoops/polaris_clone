@@ -7,6 +7,10 @@ module ExcelDataServices
       HubNotFoundError = Class.new(InsertionError)
       InvalidDataExtractionMethodError = Class.new(InsertionError)
 
+      def self.insert(options)
+        new(options).perform
+      end
+
       def initialize(tenant:, data:, options: {})
         @tenant = tenant
         @data = data
