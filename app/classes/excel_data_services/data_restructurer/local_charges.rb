@@ -2,10 +2,10 @@
 
 module ExcelDataServices
   module DataRestructurer
-    module LocalCharges # rubocop:disable Metrics/ModuleLength
-      MissingValuesForRateBasisError = Class.new(ExcelDataServices::FileParser::Base::ParsingError)
+    class LocalCharges < Base
+      HubNotFoundError = Class.new(WillBeRefactoredRestructuringError)
 
-      def restructure_data(data)
+      def self.restructure_data(data, tenant)
         chunked_raw_data_per_sheet = data.values.map do |per_sheet_values|
           expanded_values = expand_fcl_to_all_sizes(per_sheet_values[:rows_data])
           rows_chunked_by_identifier = expanded_values.group_by { |row| row_identifier(row) }.values
@@ -16,14 +16,11 @@ module ExcelDataServices
         end
 
         charges_data = build_charges_data(chunked_raw_data_per_sheet)
-
-        raise MissingValuesForRateBasisError.new('Missing Values', @missing_value_errors) unless @missing_value_errors.empty? # rubocop:disable Metrics/LineLength
-
-        create_missing_charge_categories(charges_data)
-        assign_correct_hubs(charges_data)
+        create_missing_charge_categories(charges_data, tenant)
+        assign_correct_hubs(charges_data, tenant)
       end
 
-      def expand_fcl_to_all_sizes(data)
+      def self.expand_fcl_to_all_sizes(data)
         plain_fcl_local_charges_params = data.select { |params| params[:load_type] == 'fcl' }
         expanded_local_charges_params = %w(fcl_20 fcl_40 fcl_40_hq).reduce([]) do |memo, fcl_size|
           memo + plain_fcl_local_charges_params.map do |params|
@@ -36,7 +33,7 @@ module ExcelDataServices
         data + expanded_local_charges_params
       end
 
-      def row_identifier(row)
+      def self.row_identifier(row)
         row.slice(:hub,
                   :country,
                   :counterpart_hub,
@@ -49,15 +46,15 @@ module ExcelDataServices
                   :dangerous)
       end
 
-      def range_identifier(row)
+      def self.range_identifier(row)
         { rate_basis: row[:rate_basis].upcase, fee_code: row[:fee_code].upcase }
       end
 
-      def sort_chunks_by_range_min(chunked_data)
+      def self.sort_chunks_by_range_min(chunked_data)
         chunked_data.map { |range_chunks| range_chunks.sort_by { |row| row[:range_min] } }
       end
 
-      def build_charges_data(chunked_raw_data_per_sheet)
+      def self.build_charges_data(chunked_raw_data_per_sheet)
         chunked_raw_data_per_sheet.flat_map do |data_per_sheet|
           data_per_sheet.map do |data_per_identifier|
             data_without_fees = row_identifier(data_per_identifier.to_a.dig(0, 0))
@@ -80,7 +77,7 @@ module ExcelDataServices
         end
       end
 
-      def reduce_ranges_into_one_obj(data_per_ranges)
+      def self.reduce_ranges_into_one_obj(data_per_ranges)
         ranges_obj = data_per_ranges.map do |single_data|
           next unless includes_range?(single_data)
 
@@ -93,11 +90,11 @@ module ExcelDataServices
         ranges_obj.compact.empty? ? nil : ranges_obj
       end
 
-      def includes_range?(row)
+      def self.includes_range?(row)
         row[:range_min] && row[:range_max]
       end
 
-      def standard_charge_params(data)
+      def self.standard_charge_params(data)
         rate_basis = data[:rate_basis].upcase
 
         { currency: data[:currency],
@@ -110,20 +107,33 @@ module ExcelDataServices
           rate_basis: rate_basis }
       end
 
-      def specific_charge_params_for_reading(rate_basis, data)
-        result = super
-        cache_errors(rate_basis, data) unless result.values.all?
-        result
+      def self.specific_charge_params_for_reading(rate_basis, data)
+        rate_basis = RateBasis.get_internal_key(rate_basis.upcase)
+        case rate_basis
+        when 'PER_SHIPMENT' then { value: data[:shipment] }
+        when 'PER_CONTAINER' then { value: data[:container] }
+        when 'PER_BILL' then { value: data[:bill] }
+        when 'PER_CBM' then { value: data[:cbm] }
+        when 'PER_KG' then { value: data[:kg] }
+        when 'PER_TON' then { ton: data[:ton] }
+        when 'PER_WM' then { value: data[:wm] }
+        when 'PER_ITEM' then { value: data[:item] }
+        when 'PER_CBM_TON' then { ton: data[:ton], cbm: data[:cbm] }
+        when 'PER_SHIPMENT_CONTAINER' then { shipment: data[:shipment], container: data[:container] }
+        when 'PER_BILL_CONTAINER' then { container: data[:container], bill: data[:bill] }
+        when 'PER_CBM_KG' then { kg: data[:kg], cbm: data[:cbm] }
+        when 'PER_KG_RANGE' then { range_min: data[:range_min], range_max: data[:range_max], kg: data[:kg] }
+        when 'PER_WM_RANGE' then { range_min: data[:range_min], range_max: data[:range_max], wm: data[:wm] }
+        when 'PER_X_KG_FLAT' then { value: data[:kg], base: data[:base] }
+        when 'PER_UNIT_TON_CBM_RANGE'
+          { cbm: data[:cbm],
+            ton: data[:ton],
+            range_min: data[:range_min],
+            range_max: data[:range_max] }
+        end
       end
 
-      def cache_errors(rate_basis, data)
-        @missing_value_errors << {
-          row_no: data[:row_nr],
-          reason: "Missing value for #{rate_basis}"
-        }
-      end
-
-      def create_missing_charge_categories(charges_data)
+      def self.create_missing_charge_categories(charges_data, tenant)
         keys_and_names = charges_data.flat_map do |single_data|
           single_data[:fees].values.map { |fee| fee.slice(:key, :name) }
         end
@@ -133,13 +143,13 @@ module ExcelDataServices
         end
       end
 
-      def assign_correct_hubs(data)
+      def self.assign_correct_hubs(data, tenant)
         data.map do |params|
           mot = params[:mot]
 
           begin
             hub_name = append_hub_suffix(params[:hub], mot)
-            hub_id = @tenant.hubs.find_by(name: hub_name, hub_type: mot).id
+            hub_id = tenant.hubs.find_by(name: hub_name, hub_type: mot).id
           rescue HubNotFoundError
             raise "Hub \"#{hub_name}\" not found!"
           end
@@ -151,7 +161,7 @@ module ExcelDataServices
                 nil
               else
                 counterpart_hub_name = append_hub_suffix(params[:counterpart_hub], mot)
-                counterpart_hub = @tenant.hubs.find_by(name: counterpart_hub_name, hub_type: mot)
+                counterpart_hub = tenant.hubs.find_by(name: counterpart_hub_name, hub_type: mot)
                 unless counterpart_hub
                   raise HubNotFoundError, "Counterpart Hub with name \"#{counterpart_hub_name}\" not found!"
                 end

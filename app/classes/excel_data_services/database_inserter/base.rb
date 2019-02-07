@@ -4,7 +4,6 @@ module ExcelDataServices
   module DatabaseInserter
     class Base # rubocop:disable Metrics/ClassLength
       InsertionError = Class.new(StandardError)
-      HubNotFoundError = Class.new(InsertionError)
       InvalidDataExtractionMethodError = Class.new(InsertionError)
 
       def self.insert(options)

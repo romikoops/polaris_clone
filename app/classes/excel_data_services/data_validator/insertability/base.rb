@@ -19,7 +19,7 @@ module ExcelDataServices
         def perform
           data.each do |_sheet_name, sheet_data|
             sheet_data[:rows_data].each_with_index do |row_data, i|
-              row = ExcelDataServices::Row.new(row_data: row_data, tenant: tenant)
+              row = ExcelDataServices::Row::Base.new(row_data: row_data, tenant: tenant)
 
               begin
                 if block_given?
@@ -29,8 +29,8 @@ module ExcelDataServices
                                              ", or doesn't provide a block to its superclass method."
                 end
               rescue InsertabilityError => exception
-                @errors << { row_nr: i + 1,
-                             reason: exception.message }
+                # TODO: i + 1 is most likely not the correct row number...
+                add_to_errors(row_nr: i + 1, reason: exception.message)
               end
             end
           end
@@ -41,6 +41,11 @@ module ExcelDataServices
         private
 
         attr_reader :data, :tenant, :errors
+
+        def add_to_errors(row_nr:, reason:)
+          @errors << { row_nr: row_nr,
+                       reason: reason }
+        end
       end
     end
   end

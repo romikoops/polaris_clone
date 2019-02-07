@@ -2,8 +2,7 @@
 
 module ExcelDataServices
   module Row
-    def self.get(klass_identifier)
-      const_get(klass_identifier)
+    class LocalCharges < Base
     end
   end
 end

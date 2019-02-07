@@ -4,6 +4,7 @@ module ExcelDataServices
   module FileWriter
     class Base
       WritingError = Class.new(StandardError)
+      UnknownSheetNameError = Class.new(WritingError)
 
       # Expected data structure:
       # {

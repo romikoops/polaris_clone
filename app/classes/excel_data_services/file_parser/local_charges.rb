@@ -3,19 +3,7 @@
 module ExcelDataServices
   module FileParser
     class LocalCharges < Base
-      include ExcelDataServices::LocalChargesTool
-
-      def initialize(tenant:, file_or_path:)
-        super
-
-        @missing_value_errors = []
-      end
-
       private
-
-      def build_valid_headers(_data_extraction_method)
-        VALID_STATIC_HEADERS
-      end
 
       def correct_capitalization(row_data)
         col_names_to_capitalize = %i(hub

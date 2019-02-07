@@ -6,13 +6,13 @@ module ExcelDataServices
       class Pricing < Base
         def perform
           super do |row|
-            overlapping_effective_period(row)
+            check_overlapping_effective_period(row)
           end
         end
 
         private
 
-        def overlapping_effective_period(row)
+        def check_overlapping_effective_period(row)
           return if row.itinerary.nil?
 
           row.cargo_classes.each do |cargo_class|

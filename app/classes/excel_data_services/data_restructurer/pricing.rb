@@ -2,8 +2,8 @@
 
 module ExcelDataServices
   module DataRestructurer
-    class Pricing
-      def self.restructure_data(data)
+    class Pricing < Base
+      def self.restructure_data(data, _tenant)
         data.inject({}) do |memo, (k_sheet_name, values)|
           data_extraction_method = values[:data_extraction_method]
           restructured_rows_data = values[:rows_data].map { |row_data| row_data.except(:row_nr) }
