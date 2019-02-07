@@ -31,64 +31,87 @@ module PricingTools
     )
   end
 
-  def find_local_charge(schedule, load_type, direction, user)
+  def find_local_charge(schedule, cargos, direction, user)
     hub = direction == 'export' ? schedule.origin_hub : schedule.destination_hub
     date = direction == 'export' ? schedule.etd : schedule.eta
+    date = Date.today if date.nil?
     counterpart_hub_id = direction == 'export' ? schedule.destination_hub.id : schedule.origin_hub.id
     effective_local_charges = hub.local_charges.for_dates(date, date)
-
-    [user.id, nil].each do |user_id|
-      charge = effective_local_charges.find_by(
-        direction: direction,
-        load_type: load_type,
-        user_id: user_id,
-        mode_of_transport: schedule.mode_of_transport,
-        tenant_vehicle_id: schedule.trip.tenant_vehicle_id,
-        counterpart_hub_id: counterpart_hub_id)
-      charge ||= effective_local_charges.find_by(
-        direction: direction,
-        load_type: load_type,
-        user_id: user_id,
-        mode_of_transport: schedule.mode_of_transport,
-        tenant_vehicle_id: schedule.trip.tenant_vehicle_id,
-        counterpart_hub_id: nil)
-      return charge if charge
+    charges_for_filtering = []
+    cargos.each do |cargo|
+      load_type = cargo.is_a?(Container) ? cargo.size_class : 'lcl'
+      [user.id, nil].each do |user_id|
+        charge = effective_local_charges.find_by(
+          direction: direction,
+          load_type: load_type,
+          user_id: user_id,
+          mode_of_transport: schedule.mode_of_transport,
+          tenant_vehicle_id: schedule.trip.tenant_vehicle_id,
+          counterpart_hub_id: counterpart_hub_id
+        )
+        charge ||= effective_local_charges.find_by(
+          direction: direction,
+          load_type: load_type,
+          user_id: user_id,
+          mode_of_transport: schedule.mode_of_transport,
+          tenant_vehicle_id: schedule.trip.tenant_vehicle_id,
+          counterpart_hub_id: nil
+        )
+        charges_for_filtering << charge.as_json
+      end
     end
-
-    nil
+    shipment_charges = {
+      load_type: 'shipment',
+      fees: {}
+    }.as_json
+    charges_for_filtering.compact.each do |filter_charge|
+      filter_charge['fees'].each do |fk, fee|
+        if %w(PER_SHIPMENT PER_BILL).include?(fee['rate_basis'])
+          shipment_charges['fees'][fk] = filter_charge['fees'].delete(fk)
+        end
+      end
+    end
+    charges_for_filtering << shipment_charges
+    charges_for_filtering.compact
   end
 
-  def determine_local_charges(schedule, load_type, cargos, direction, user)
+  def determine_local_charges(schedule, cargos, direction, user)
+    charges_array = find_local_charge(schedule, cargos, direction, user)
+    return {} if charges_array.empty?
 
-    cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
-      weight =
-        if cargo_unit.is_a?(CargoItem)
-          cargo_unit.payload_in_kg * (cargo_unit.try(:quantity) || 1)
-        elsif cargo_unit.is_a?(AggregatedCargo)
-          cargo_unit.weight * (cargo_unit.try(:quantity) || 1)
-        else
-          cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
-        end
+    charge_results = charges_array.map do |charge_object|
+      relevant_cargos = if %w(lcl shipment).include?(charge_object['load_type'])
+                          cargos
+                        else
+                          cargos.select { |c| c.size_class == charge_object['load_type'] }
+                        end
+      cargo_hash = relevant_cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
+        weight =
+          if cargo_unit.is_a?(CargoItem)
+            cargo_unit.payload_in_kg * (cargo_unit.try(:quantity) || 1)
+          elsif cargo_unit.is_a?(AggregatedCargo)
+            cargo_unit.weight * (cargo_unit.try(:quantity) || 1)
+          else
+            cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
+          end
 
-      return_h[:quantity] += cargo_unit.quantity unless cargo_unit.try(:quantity).nil?
-      return_h[:volume]   += (cargo_unit.try(:volume) || 1) * (cargo_unit.try(:quantity) || 1) || 0
+        return_h[:quantity] += cargo_unit.quantity unless cargo_unit.try(:quantity).nil?
+        return_h[:volume]   += (cargo_unit.try(:volume) || 1) * (cargo_unit.try(:quantity) || 1) || 0
 
-      return_h[:weight]   += (cargo_unit.try(:weight) || weight)
+        return_h[:weight]   += (cargo_unit.try(:weight) || weight)
+      end
+      totals = { 'total' => {}, 'key' => charge_object['load_type'] }
+
+      charge_object.dig('fees')&.each do |k, fee|
+        totals[k]             ||= { 'value' => 0, 'currency' => fee['currency'] }
+        totals[k]['currency'] ||= fee['currency']
+        totals[k]['value'] += fee_value(fee, cargo_hash, user.tenant.scope)
+      end
+      converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
+      totals['total'] = { value: converted, currency: user.currency }
+
+      totals
     end
-    charge = find_local_charge(schedule, load_type, direction, user)
-    return {} if charge.nil?
-
-    totals = { 'total' => {} }
-
-    charge&.fees&.each do |k, fee|
-      totals[k]             ||= { 'value' => 0, 'currency' => fee['currency'] }
-      totals[k]['currency'] ||= fee['currency']
-      totals[k]['value'] += fee_value(fee, cargo_hash, user.tenant.scope)
-    end
-    converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
-    totals['total'] = { value: converted, currency: user.currency }
-
-    totals
   end
 
   def calc_customs_fees(charge, cargos, _load_type, user, mot)

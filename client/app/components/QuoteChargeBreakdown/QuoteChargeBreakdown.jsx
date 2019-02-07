@@ -260,7 +260,7 @@ class QuoteChargeBreakdown extends Component {
 
     return unitSections.map((unitArray) => {
       const cargo = this.fetchCargoData(unitArray[0])
-      
+
       const contentSections = Object.entries(unitArray[1])
         .map(array => array.filter(value => !this.unbreakableKeys.includes(value)))
         .filter(value => value.length !== 1)
@@ -322,13 +322,14 @@ class QuoteChargeBreakdown extends Component {
 
         </div>
       ))
-      const description = CONTAINER_DESCRIPTIONS[cargo.size_class] || get(cargo, ['cargo_item_type', 'description'], '')
-      
+
       return (
         <div className="flex-100 layout-row layout-wrap">
+
           <div className={`flex-100 layout-row layout-align-start-center ${styles.cargo_title}`}>
-            {`${description} x ${cargo.quantity}`}
+            {`${capitalize(unitArray[0])}`}
           </div>
+
           {sections}
         </div>
       )
@@ -373,7 +374,7 @@ class QuoteChargeBreakdown extends Component {
         if (meta) {
           return `(${fixedWeightChargeableString(cargo, get(meta, ['ocean_chargeable_weight'], 0), t, scope)})`
         }
-        
+
         value = cargo.reduce((acc, c) => (acc + +c.chargeable_weight * +c.quantity), 0)
         break
       default:
@@ -417,9 +418,7 @@ class QuoteChargeBreakdown extends Component {
                       <span
                         className={styles.chargeable_weight}
                         dangerouslySetInnerHTML={{ __html: this.renderChargeableWeight(key) }}
-                      >
-                      
-                      </span>
+                      />
                     ) : ''
                 }
               </div>

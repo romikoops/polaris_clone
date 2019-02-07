@@ -512,51 +512,6 @@ ActiveRecord::Schema.define(version: 2019_02_07_082256) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "oauth_access_grants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "resource_owner_id", null: false
-    t.uuid "application_id", null: false
-    t.string "token", null: false
-    t.integer "expires_in", null: false
-    t.text "redirect_uri", null: false
-    t.datetime "created_at", null: false
-    t.datetime "revoked_at"
-    t.string "scopes"
-    t.index ["application_id"], name: "index_oauth_access_grants_on_application_id"
-    t.index ["resource_owner_id"], name: "index_oauth_access_grants_on_resource_owner_id"
-    t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
-  end
-
-  create_table "oauth_access_tokens", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "resource_owner_id"
-    t.uuid "application_id"
-    t.string "token", null: false
-    t.string "refresh_token"
-    t.integer "expires_in"
-    t.datetime "revoked_at"
-    t.datetime "created_at", null: false
-    t.string "scopes"
-    t.string "previous_refresh_token", default: "", null: false
-    t.index ["application_id"], name: "index_oauth_access_tokens_on_application_id"
-    t.index ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true
-    t.index ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id"
-    t.index ["token"], name: "index_oauth_access_tokens_on_token", unique: true
-  end
-
-  create_table "oauth_applications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name", null: false
-    t.string "uid", null: false
-    t.string "secret", null: false
-    t.text "redirect_uri", null: false
-    t.string "scopes", default: "", null: false
-    t.boolean "confidential", default: true, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.uuid "owner_id"
-    t.string "owner_type"
-    t.index ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type"
-    t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
-  end
-
   create_table "optin_statuses", force: :cascade do |t|
     t.boolean "cookies"
     t.boolean "tenant"
@@ -640,7 +595,6 @@ ActiveRecord::Schema.define(version: 2019_02_07_082256) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "tenant_vehicle_id"
-    t.uuid "uuid", default: -> { "gen_random_uuid()" }
     t.index ["itinerary_id"], name: "index_pricings_on_itinerary_id"
     t.index ["tenant_id"], name: "index_pricings_on_tenant_id"
     t.index ["transport_category_id"], name: "index_pricings_on_transport_category_id"
@@ -801,42 +755,6 @@ ActiveRecord::Schema.define(version: 2019_02_07_082256) do
     t.jsonb "email_links"
   end
 
-  create_table "tenants_tenants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "subdomain"
-    t.integer "legacy_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "tenants_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "email", null: false
-    t.string "crypted_password"
-    t.string "salt"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "activation_state"
-    t.string "activation_token"
-    t.datetime "activation_token_expires_at"
-    t.string "reset_password_token"
-    t.datetime "reset_password_token_expires_at"
-    t.datetime "reset_password_email_sent_at"
-    t.integer "access_count_to_reset_password_page"
-    t.datetime "last_login_at"
-    t.datetime "last_logout_at"
-    t.datetime "last_activity_at"
-    t.string "last_login_from_ip_address"
-    t.integer "failed_logins_count", default: 0
-    t.datetime "lock_expires_at"
-    t.string "unlock_token"
-    t.integer "legacy_id"
-    t.uuid "tenant_id"
-    t.index ["activation_token"], name: "index_tenants_users_on_activation_token"
-    t.index ["email", "tenant_id"], name: "index_tenants_users_on_email_and_tenant_id", unique: true
-    t.index ["last_logout_at", "last_activity_at"], name: "index_tenants_users_on_last_logout_at_and_last_activity_at"
-    t.index ["reset_password_token"], name: "index_tenants_users_on_reset_password_token"
-    t.index ["unlock_token"], name: "index_tenants_users_on_unlock_token"
-  end
-
   create_table "transport_categories", force: :cascade do |t|
     t.integer "vehicle_id"
     t.string "mode_of_transport"
@@ -976,10 +894,6 @@ ActiveRecord::Schema.define(version: 2019_02_07_082256) do
     t.string "google_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "last_login_at"
-    t.datetime "last_logout_at"
-    t.datetime "last_activity_at"
-    t.string "last_login_from_ip_address"
   end
 
   create_table "vehicles", force: :cascade do |t|
@@ -1000,8 +914,6 @@ ActiveRecord::Schema.define(version: 2019_02_07_082256) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
-  add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
-  add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "remarks", "tenants"
   add_foreign_key "shipments", "transport_categories"
   add_foreign_key "tenant_cargo_item_types", "cargo_item_types"

@@ -40,7 +40,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       prepare_response
       response_hash = {
         shipment: shipment_as_json,
-        cargoItems: @cargo_items,
+        cargoItems: @cargo_items.map(&:with_cargo_type),
         containers: @containers,
         aggregatedCargo: @shipment.aggregated_cargo,
         contacts:        contacts,

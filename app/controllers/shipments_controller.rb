@@ -129,7 +129,7 @@ class ShipmentsController < ApplicationController
 
     response_handler(
       shipment: shipment_as_json,
-      cargoItems: shipment.cargo_items,
+      cargoItems: shipment.cargo_items.map(&:with_cargo_type),
       containers: shipment.containers,
       aggregatedCargo: shipment.aggregated_cargo,
       contacts: contacts,

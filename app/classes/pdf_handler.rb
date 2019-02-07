@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class PdfHandler
+  include ApplicationHelper
   BreezyError = Class.new(StandardError)
 
   attr_reader :name, :full_name, :pdf, :url, :path
@@ -23,6 +24,7 @@ class PdfHandler
     @hide_cargo_sub_totals = false
     @content               = {}
     @hide_grand_total = {}
+    @has_legacy_charges = {}
     @scope = @shipment.tenant.scope
 
     @cargo_data = {
@@ -220,7 +222,8 @@ class PdfHandler
         notes: @shipment.route_notes,
         hide_cargo_sub_totals: @hide_cargo_sub_totals,
         content: @content,
-        hide_grand_total: @hide_grand_total
+        hide_grand_total: @hide_grand_total,
+        has_legacy_charges: @has_legacy_charges
       }
     )
     response = BreezyPDFLite::RenderRequest.new(

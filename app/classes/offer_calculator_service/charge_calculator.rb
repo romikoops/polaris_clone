@@ -57,26 +57,30 @@ module OfferCalculatorService
 
         charge_category = ChargeCategory.from_code(direction, @user.tenant_id)
         parent_charge = create_parent_charge(charge_category)
-        cargo_units.each do |cargo_unit|
-          cargo_class = cargo_unit.is_a?(Container) ? cargo_unit.size_class : 'lcl'
-          local_charges_data = determine_local_charges(
-            @schedule,
-            cargo_class,
-            cargo_units,
-            direction,
-            @user
-          )
 
-          next if local_charges_data.except('total').empty?
-          cargo_unit_model = cargo_unit.class.to_s == 'Hash' || is_agg_cargo ? 'CargoItem' : cargo_unit.class.to_s
+        local_charges_data = determine_local_charges(
+          @schedule,
+          cargo_units,
+          direction,
+          @user
+        )
+       
+        local_charges_data.each do |charge|
+          next if charge.except('total').empty?
+          cargo_unit_model = if charge['key'] == 'lcl' 
+                               'CargoItem'
+                              elsif charge['key'] == 'shipment'
+                                'Shipment'
+                              else
+                                'Container'
+                              end
 
           children_charge_category = ChargeCategory.find_or_create_by(
             name: cargo_unit_model.humanize,
             code: cargo_unit_model.underscore.downcase,
-            cargo_unit_id: cargo_unit[:id]
+            cargo_unit_id: charge['key']
           )
-          
-          create_charges_from_fees_data!(local_charges_data, children_charge_category, charge_category, parent_charge)
+          create_charges_from_fees_data!(charge.except('key'), children_charge_category, charge_category, parent_charge)
         end
 
         return nil if parent_charge.children.empty?
