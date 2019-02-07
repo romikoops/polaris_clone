@@ -174,7 +174,12 @@ wrap.pipeline(timeout: 90) {
 
       wrap.stage('Review') {
         milestone()
-        deployReview()
+
+        env.REVIEW_NAME = env.CI_COMMIT_REF_SLUG
+
+        githubDeploy(environment: env.REVIEW_NAME, url: "https://${env.REVIEW_NAME}.itsmycargo.tech") {
+          deployReview(env.REVIEW_NAME)
+        }
       }
 
       stage('QA') {
@@ -188,9 +193,7 @@ wrap.pipeline(timeout: 90) {
   }
 }
 
-void deployReview() {
-  env.REVIEW_NAME = env.CI_COMMIT_REF_SLUG
-
+void deployReview(String reviewName) {
   inPod(
     containers: [
       containerTemplate(name: 'deploy', image: 'eu.gcr.io/itsmycargo-main/deploy:latest', ttyEnabled: true, command: 'cat',
@@ -212,8 +215,8 @@ void deployReview() {
 
       container('deploy') {
         sh """
-          if [[ -n "\$(helm ls --failed -q "^${env.REVIEW_NAME}\$")" ]]; then
-            helm delete --purge "${env.REVIEW_NAME}" || true
+          if [[ -n "\$(helm ls --failed -q "^${reviewName}\$")" ]]; then
+            helm delete --purge "${reviewName}" || true
           fi
         """
 
@@ -230,9 +233,9 @@ void deployReview() {
             --set postgres.host=\$DATABASE_HOST \
             --set postgres.user=\$DATABASE_USER \
             --set postgres.password=\$DATABASE_PASSWORD \
-            --set postgres.database=${env.REVIEW_NAME} \
+            --set postgres.database=${reviewName} \
             --namespace=review \
-            "${env.REVIEW_NAME}" \
+            "${reviewName}" \
             chart/
         """
 
