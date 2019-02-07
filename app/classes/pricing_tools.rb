@@ -31,7 +31,35 @@ module PricingTools
     )
   end
 
-  def determine_local_charges(hub, load_type, cargos, direction, mot, tenant_vehicle_id, counterpart_hub_id, user)
+  def find_local_charge(schedule, load_type, direction, user)
+    hub = direction == 'export' ? schedule.origin_hub : schedule.destination_hub
+    date = direction == 'export' ? schedule.etd : schedule.eta
+    counterpart_hub_id = direction == 'export' ? schedule.destination_hub.id : schedule.origin_hub.id
+    effective_local_charges = hub.local_charges.for_dates(date, date)
+
+    [user.id, nil].each do |user_id|
+      charge = effective_local_charges.find_by(
+        direction: direction,
+        load_type: load_type,
+        user_id: user_id,
+        mode_of_transport: schedule.mode_of_transport,
+        tenant_vehicle_id: schedule.trip.tenant_vehicle_id,
+        counterpart_hub_id: counterpart_hub_id)
+      charge ||= effective_local_charges.find_by(
+        direction: direction,
+        load_type: load_type,
+        user_id: user_id,
+        mode_of_transport: schedule.mode_of_transport,
+        tenant_vehicle_id: schedule.trip.tenant_vehicle_id,
+        counterpart_hub_id: nil)
+      return charge if charge
+    end
+
+    nil
+  end
+
+  def determine_local_charges(schedule, load_type, cargos, direction, user)
+
     cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
       weight =
         if cargo_unit.is_a?(CargoItem)
@@ -47,11 +75,7 @@ module PricingTools
 
       return_h[:weight]   += (cargo_unit.try(:weight) || weight)
     end
-
-    lt = ['cargo_item', 'lcl'].include?(load_type) ? 'lcl' : cargos[0].size_class
-    charge = hub.local_charges.find_by(direction: direction, load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id, counterpart_hub_id: counterpart_hub_id)
-    charge ||= hub.local_charges.find_by(direction: direction, load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id, counterpart_hub_id: nil)
-
+    charge = find_local_charge(schedule, load_type, direction, user)
     return {} if charge.nil?
 
     totals = { 'total' => {} }

@@ -40,49 +40,53 @@ module OfferCalculatorService
     def calc_local_charges
       cargo_units =
         if @shipment.aggregated_cargo
+          is_agg_cargo = true
           [@shipment.aggregated_cargo]
         else
           @shipment.cargo_units
         end
+        pre_carriage = nil
+        on_carriage = nil
+      %w(import export).each do |direction|
 
-      if @shipment.has_pre_carriage || @schedule.origin_hub.mandatory_charge.export_charges
-        local_charges_data = determine_local_charges(
-          @schedule.origin_hub,
-          @shipment.load_type,
-          cargo_units,
-          'export',
-          @schedule.mode_of_transport,
-          @schedule.trip.tenant_vehicle.id,
-          @schedule.destination_hub_id,
-          @user
-        )
+        if direction == 'export' 
+          next unless @shipment.has_pre_carriage || @schedule.origin_hub.mandatory_charge.export_charges
+        else
+          next unless @shipment.has_on_carriage || @schedule.destination_hub.mandatory_charge.export_charges
+        end
 
-        return nil if local_charges_data.except('total').empty?
+        charge_category = ChargeCategory.from_code(direction, @user.tenant_id)
+        parent_charge = create_parent_charge(charge_category)
+        cargo_units.each do |cargo_unit|
+          cargo_class = cargo_unit.is_a?(Container) ? cargo_unit.size_class : 'lcl'
+          local_charges_data = determine_local_charges(
+            @schedule,
+            cargo_class,
+            cargo_units,
+            direction,
+            @user
+          )
 
-        pre_carriage = create_charges_from_fees_data!(
-          local_charges_data,
-          ChargeCategory.from_code('export', @user.tenant_id)
-        )
-      end
+          next if local_charges_data.except('total').empty?
+          cargo_unit_model = cargo_unit.class.to_s == 'Hash' || is_agg_cargo ? 'CargoItem' : cargo_unit.class.to_s
 
-      if @shipment.has_on_carriage || @schedule.destination_hub.mandatory_charge.import_charges
-        local_charges_data = determine_local_charges(
-          @schedule.destination_hub,
-          @shipment.load_type,
-          cargo_units,
-          'import',
-          @schedule.mode_of_transport,
-          @schedule.trip.tenant_vehicle.id,
-          @schedule.origin_hub_id,
-          @user
-        )
+          children_charge_category = ChargeCategory.find_or_create_by(
+            name: cargo_unit_model.humanize,
+            code: cargo_unit_model.underscore.downcase,
+            cargo_unit_id: cargo_unit[:id]
+          )
+          
+          create_charges_from_fees_data!(local_charges_data, children_charge_category, charge_category, parent_charge)
+        end
 
-        return nil if local_charges_data.except('total').empty?
+        return nil if parent_charge.children.empty?
 
-        on_carriage = create_charges_from_fees_data!(
-          local_charges_data,
-          ChargeCategory.from_code('import', @user.tenant_id)
-        )
+        parent_charge.update_price!
+        if direction == 'export'
+          pre_carriage = parent_charge
+        else
+          on_carriage = parent_charge
+        end
       end
 
       { pre_carriage: pre_carriage, on_carriage: on_carriage }

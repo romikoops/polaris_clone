@@ -126,4 +126,5 @@ end
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  tenant_vehicle_id     :integer
+#  uuid                  :uuid
 #

@@ -75,12 +75,18 @@ module ShippingTools
     offer_calculator.perform
 
     offer_calculator.shipment.save!
+    cargo_units = if offer_calculator.shipment.lcl? && !offer_calculator.shipment.aggregated_cargo
+                    offer_calculator.shipment.cargo_units.map(&:with_cargo_type)
+                  else
+                    offer_calculator.shipment.cargo_units
+                  end
+
     {
       shipment: offer_calculator.shipment,
       results: offer_calculator.detailed_schedules,
       originHubs: offer_calculator.hubs[:origin],
       destinationHubs: offer_calculator.hubs[:destination],
-      cargoUnits: offer_calculator.shipment.cargo_units,
+      cargoUnits: cargo_units,
       aggregatedCargo: offer_calculator.shipment.aggregated_cargo
     }
   end

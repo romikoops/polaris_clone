@@ -3,8 +3,9 @@ import { withNamespaces } from 'react-i18next'
 import { get } from 'lodash'
 import styles from './QuoteChargeBreakdown.scss'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
+import { CONTAINER_DESCRIPTIONS } from '../../constants'
 import {
-  numberSpacing, capitalize, formattedPriceValue, nameToDisplay, humanizeSnakeCaseUp, fixedWeightChargeableString
+  numberSpacing, capitalize, formattedPriceValue, humanizeSnakeCaseUp, fixedWeightChargeableString
 } from '../../helpers'
 
 class QuoteChargeBreakdown extends Component {
@@ -245,6 +246,7 @@ class QuoteChargeBreakdown extends Component {
   determineContentToGenerate (key) {
     const { scope } = this.props
     if (key === 'cargo' && scope.fine_fee_detail) return this.generateUnitContent(key)
+    if (['import', 'export'].includes(key)) return this.generateUnitContent(key)
 
     return this.generateContent(key)
   }
@@ -258,7 +260,7 @@ class QuoteChargeBreakdown extends Component {
 
     return unitSections.map((unitArray) => {
       const cargo = this.fetchCargoData(unitArray[0])
-
+      
       const contentSections = Object.entries(unitArray[1])
         .map(array => array.filter(value => !this.unbreakableKeys.includes(value)))
         .filter(value => value.length !== 1)
@@ -320,9 +322,13 @@ class QuoteChargeBreakdown extends Component {
 
         </div>
       ))
-
+      const description = CONTAINER_DESCRIPTIONS[cargo.size_class] || get(cargo, ['cargo_item_type', 'description'], '')
+      
       return (
         <div className="flex-100 layout-row layout-wrap">
+          <div className={`flex-100 layout-row layout-align-start-center ${styles.cargo_title}`}>
+            {`${description} x ${cargo.quantity}`}
+          </div>
           {sections}
         </div>
       )
