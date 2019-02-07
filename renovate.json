@@ -1,0 +1,17 @@
+{
+  "rebaseStalePrs": true,
+  "packageRules": [
+    {
+      "packagePatterns": [ "babel" ],
+      "groupName": "babel"
+    },
+    {
+      "packagePatterns": [ "eslint" ],
+      "groupName": "eslint"
+    },
+    {
+      "packagePatterns": [ "react" ],
+      "groupName": "react"
+    }
+  ]
+}
