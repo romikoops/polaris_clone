@@ -3,9 +3,10 @@
 module ExcelDataServices
   module FileParser
     class Base
-      HubNotFoundError = Class.new(StandardError)
+      ParsingError = Class.new(StandardError)
       InvalidHeadersError = Class.new(ParsingError)
       UnknownSheetNameError = Class.new(ParsingError)
+      HubNotFoundError = Class.new(StandardError)
 
       def self.parse(options)
         new(options).perform
