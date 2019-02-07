@@ -15,7 +15,7 @@ module ExcelDataServices
                                    else
                                      # Default for all
                                      restructure_with_one_col_fee_and_ranges(restructured_rows_data)
-                                    end
+                                   end
           memo.merge(k_sheet_name => { data_extraction_method: data_extraction_method, rows_data: restructured_rows_data })
         end
       end
@@ -81,11 +81,9 @@ module ExcelDataServices
       def self.row_connected_by_range?(next_row_data, current_row_identifier_values)
         return false if next_row_data.nil?
 
-        next_row_data_identifier_values = row_identifier_values(next_row_data)
-
         # Next row should have range values, and contain the same identifier values
         (next_row_data[:range_min] && next_row_data[:range_max]) &&
-          next_row_data_identifier_values == current_row_identifier_values
+          row_identifier_values(next_row_data) == current_row_identifier_values
       end
 
       def self.extract_range_values(row_data)

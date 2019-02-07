@@ -124,7 +124,7 @@ module ExcelDataServices
         tenant_vehicle || Vehicle.create_from_name(service_level,
                                                    row[:mot],
                                                    tenant.id,
-                                                   carrier.name) # returns a `TenantVehicle`!
+                                                   carrier&.name) # returns a `TenantVehicle`!
       end
 
       def should_generate_trips?

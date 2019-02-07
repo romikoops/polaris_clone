@@ -11,7 +11,12 @@ class Pricing < ApplicationRecord
   has_many :pricing_exceptions, dependent: :destroy
   has_many :pricing_requests, dependent: :destroy
 
+  before_validation -> { self.uuid ||= SecureRandom.uuid }, on: :create
+
   validates_uniqueness_of :uuid
+  validates :transport_category, uniqueness: {
+    scope: %i(itinerary_id tenant_id user_id tenant_vehicle_id effective_date expiration_date)
+  }
 
   delegate :load_type, to: :transport_category
   delegate :cargo_class, to: :transport_category
@@ -25,10 +30,6 @@ class Pricing < ApplicationRecord
             Arel::Nodes::SqlLiteral.new("(DATE '#{start_date}', DATE '#{end_date}')")
           ))
   end)
-
-  validates :transport_category, uniqueness: {
-    scope: %i(itinerary_id tenant_id user_id tenant_vehicle_id effective_date expiration_date)
-  }
 
   self.per_page = 12
 

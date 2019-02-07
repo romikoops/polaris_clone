@@ -8,7 +8,7 @@ module ExcelDataServices
     end
 
     def itinerary
-      Itinerary.find_by(name: itinerary_name(row_data), tenant: tenant)
+      Itinerary.find_by(name: itinerary_name, tenant: tenant)
     end
 
     def itinerary_name
