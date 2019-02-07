@@ -54,7 +54,7 @@
     "d3-geo": "^1.10.0",
     "dotenv-webpack": "^1.5.7",
     "es6-promise-promise": "^1.0.0",
-    "file-loader": "^2.0.0",
+    "file-loader": "^3.0.0",
     "formsy-react": "^1.1.1",
     "fuse.js": "^3.2.0",
     "history": "^4.7.2",
