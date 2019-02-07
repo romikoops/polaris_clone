@@ -60,7 +60,7 @@
     "history": "^4.7.2",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
-    "i18next": "^11.3.6",
+    "i18next": "^14.0.0",
     "i18next-browser-languagedetector": "^2.2.2",
     "image-webpack-loader": "^4.6.0",
     "isomorphic-fetch": "^2.2.1",
