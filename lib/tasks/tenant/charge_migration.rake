@@ -1,12 +1,12 @@
 # frozen_string_literal: true
-
-namespace :tenant do # rubocop:disable Metrics/BlockLength
-  task charge_migration: :environment do # rubocop:disable Metrics/BlockLength
-    Tenant.find_each do |tenant| # rubocop:disable Metrics/BlockLength
+# rubocop:disable Metrics/BlockLength
+namespace :tenant do
+  task charge_migration: :environment do
+    Tenant.find_each do |tenant|
       shipment_association = tenant.quotation_tool? ? tenant.shipments.where.not(quotation_id: nil) : tenant.shipments
-      shipment_association.each do |shipment| # rubocop:disable Metrics/BlockLength
-        shipment.charge_breakdowns.each do |charge_breakdown| # rubocop:disable Metrics/BlockLength
-          %w(import export).each do |direction| # rubocop:disable Metrics/BlockLength
+      shipment_association.each do |shipment|
+        shipment.charge_breakdowns.each do |charge_breakdown|
+          %w(import export).each do |direction|
             local_charge = charge_breakdown.charge(direction)
             next if local_charge.nil?
 
@@ -44,7 +44,4 @@ namespace :tenant do # rubocop:disable Metrics/BlockLength
     end
   end
 end
-
-Rake::Task['db:migrate'].enhance do
-  Rake::Task['tenant:charge_migration'].invoke
-end
+# rubocop:enable Metrics/BlockLength
