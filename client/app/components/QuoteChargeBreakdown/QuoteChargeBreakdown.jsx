@@ -323,13 +323,13 @@ class QuoteChargeBreakdown extends Component {
         </div>
       ))
 
+      const description = cargo ? CONTAINER_DESCRIPTIONS[cargo.size_class] || get(cargo, ['cargo_item_type', 'description']) : capitalize(unitArray[0])
+
       return (
-        <div className="flex-100 layout-row layout-wrap">
-
+        <div className={`flex layout-row layout-wrap ${styles.cargo_price_section}`}>
           <div className={`flex-100 layout-row layout-align-start-center ${styles.cargo_title}`}>
-            {`${capitalize(unitArray[0])}`}
+            {cargo ? `${cargo.quantity} x ${description}` : `${description}`}
           </div>
-
           {sections}
         </div>
       )

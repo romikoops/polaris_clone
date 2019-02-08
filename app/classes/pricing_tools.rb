@@ -36,25 +36,26 @@ module PricingTools
     date = direction == 'export' ? schedule.etd : schedule.eta
     date = Date.today if date.nil?
     counterpart_hub_id = direction == 'export' ? schedule.destination_hub.id : schedule.origin_hub.id
-    effective_local_charges = hub.local_charges.for_dates(date, date)
+    effective_local_charges = hub
+                              .local_charges
+                              .where(
+                                direction: direction,
+                                mode_of_transport: schedule.mode_of_transport,
+                                tenant_vehicle_id: schedule.trip.tenant_vehicle_id
+                              )
+                              .for_dates(date, date)
     charges_for_filtering = []
     cargos.each do |cargo|
       load_type = cargo.is_a?(Container) ? cargo.size_class : 'lcl'
       [user.id, nil].each do |user_id|
         charge = effective_local_charges.find_by(
-          direction: direction,
-          load_type: load_type,
           user_id: user_id,
-          mode_of_transport: schedule.mode_of_transport,
-          tenant_vehicle_id: schedule.trip.tenant_vehicle_id,
+          load_type: load_type,
           counterpart_hub_id: counterpart_hub_id
         )
         charge ||= effective_local_charges.find_by(
-          direction: direction,
-          load_type: load_type,
           user_id: user_id,
-          mode_of_transport: schedule.mode_of_transport,
-          tenant_vehicle_id: schedule.trip.tenant_vehicle_id,
+          load_type: load_type,
           counterpart_hub_id: nil
         )
         charges_for_filtering << charge.as_json
@@ -64,28 +65,21 @@ module PricingTools
       load_type: 'shipment',
       fees: {}
     }.as_json
-    charges_for_filtering.compact.each do |filter_charge|
+    filtered_charges = charges_for_filtering.compact.map do |filter_charge|
       filter_charge['fees'].each do |fk, fee|
-        if %w(PER_SHIPMENT PER_BILL).include?(fee['rate_basis'])
+        if %w(PER_SHIPMENT PER_BILL).include?(RateBasis.get_internal_key(fee['rate_basis']))
           shipment_charges['fees'][fk] = filter_charge['fees'].delete(fk)
         end
       end
+      filter_charge
     end
-    charges_for_filtering << shipment_charges
-    charges_for_filtering.compact
+
+    [filtered_charges.compact.uniq, shipment_charges]
   end
 
-  def determine_local_charges(schedule, cargos, direction, user)
-    charges_array = find_local_charge(schedule, cargos, direction, user)
-    return {} if charges_array.empty?
-
-    charge_results = charges_array.map do |charge_object|
-      relevant_cargos = if %w(lcl shipment).include?(charge_object['load_type'])
-                          cargos
-                        else
-                          cargos.select { |c| c.size_class == charge_object['load_type'] }
-                        end
-      cargo_hash = relevant_cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
+  def cargo_hash_for_local_charges(cargos, tenant)
+    if tenant&.scope.dig('consolidation', 'cargo', 'backend')
+      cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
         weight =
           if cargo_unit.is_a?(CargoItem)
             cargo_unit.payload_in_kg * (cargo_unit.try(:quantity) || 1)
@@ -100,18 +94,63 @@ module PricingTools
 
         return_h[:weight]   += (cargo_unit.try(:weight) || weight)
       end
-      totals = { 'total' => {}, 'key' => charge_object['load_type'] }
+      [cargo_hash]
+    else
+      cargos.map do |cargo_unit|
+        return_h = {}
+        weight =
+          if cargo_unit.is_a?(CargoItem)
+            cargo_unit.payload_in_kg * (cargo_unit.try(:quantity) || 1)
+          elsif cargo_unit.is_a?(AggregatedCargo)
+            cargo_unit.weight * (cargo_unit.try(:quantity) || 1)
+          else
+            cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
+          end
 
-      charge_object.dig('fees')&.each do |k, fee|
-        totals[k]             ||= { 'value' => 0, 'currency' => fee['currency'] }
-        totals[k]['currency'] ||= fee['currency']
-        totals[k]['value'] += fee_value(fee, cargo_hash, user.tenant.scope)
+        return_h[:quantity] = cargo_unit.quantity unless cargo_unit.try(:quantity).nil?
+        return_h[:volume]   = (cargo_unit.try(:volume) || 1) * (cargo_unit.try(:quantity) || 1) || 0
+
+        return_h[:weight]   = (cargo_unit.try(:weight) || weight)
+        return_h[:id]       = cargo_unit.id
+        return_h
       end
-      converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
-      totals['total'] = { value: converted, currency: user.currency }
-
-      totals
     end
+  end
+
+  def local_charge_calculation_block(charge_object, cargo_hash, user)
+    totals = { 'total' => {} }
+
+    charge_object.dig('fees')&.each do |k, fee|
+      totals[k]             ||= { 'value' => 0, 'currency' => fee['currency'] }
+      totals[k]['currency'] ||= fee['currency']
+      totals[k]['value'] += fee_value(fee, cargo_hash, user.tenant.scope)
+    end
+
+    converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
+    totals['total'] = { value: converted, currency: user.currency }
+    totals['key'] = cargo_hash[:id] || charge_object['load_type']
+
+    totals
+  end
+
+  def determine_local_charges(schedule, cargos, direction, user)
+    unit_charges_array, shipment_charges = find_local_charge(schedule, cargos, direction, user)
+    return {} if unit_charges_array.empty?
+
+    null_cargo_hash = { weight: 0, volume: 0, quantity: 0 }
+    charge_results = unit_charges_array.map do |charge_object|
+      relevant_cargos = if %w(lcl shipment).include?(charge_object['load_type'])
+                          cargos
+                        else
+                          cargos.select { |c| c.size_class == charge_object['load_type'] }
+                        end
+      cargo_hash_for_local_charges(relevant_cargos, user.tenant).map do |cargo_hash|
+        totals = local_charge_calculation_block(charge_object, cargo_hash, user)
+      end
+    end
+
+    charge_results << local_charge_calculation_block(shipment_charges, null_cargo_hash, user)
+    charge_results.flatten
   end
 
   def calc_customs_fees(charge, cargos, _load_type, user, mot)

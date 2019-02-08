@@ -206,6 +206,7 @@ class PdfHandler
     @cargo_data[:kg][shipment.id] = kg
   end
 
+
   def generate
     doc_erb = ErbTemplate.new(
       layout: @layout,

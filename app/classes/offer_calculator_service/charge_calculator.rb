@@ -74,7 +74,6 @@ module OfferCalculatorService
                               else
                                 'Container'
                               end
-
           children_charge_category = ChargeCategory.find_or_create_by(
             name: cargo_unit_model.humanize,
             code: cargo_unit_model.underscore.downcase,

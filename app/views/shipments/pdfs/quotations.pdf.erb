@@ -254,32 +254,42 @@
           <div class="subtotal-price-group">
             <% if charge != "Grand Total" %>
               <%
-                sorted_charges_by_unit = if (charge_key == 'cargo' && scope['fine_fee_detail']) || ['export', 'import'].include?(charge_key)
+                sorted_charges_by_unit = if (charge_key == 'cargo' && !scope['fine_fee_detail'])
+                   charge
+                      .except("total", "edited_total", "name")
+                      .keys.map{|k| obj = charge[k]; obj['key'] = k; obj}
+                      .group_by{|c| c['item_id']}
+                      .inject({}) do |memo, (k, g)|
+                          memo[k] = g.group_by{|c| c['currency']}
+                          memo
+                      end
+                  else
                     charge.except("total", "edited_total", "name").keys
                       .map{|k| obj = charge[k];  obj['item_id'] = k; obj.except("total", "edited_total", "name")}
                       .map{|obj| item_id = obj.delete('item_id'); obj.keys.map{|k| sub_charge = obj[k]; sub_charge['key'] = k; sub_charge['item_id'] = item_id; sub_charge}}
                       .flatten
-                      .group_by{|c| c['item_id']}.map{|k,g| {k => g.group_by{|c| c['currency']}} unless g.empty? }
-                  else
-                    charge
-                      .except("total", "edited_total", "name")
-                      .keys.map{|k| obj = charge[k]; obj['key'] = k; obj}
-                      .group_by{|c| c['item_id']}.map{|k,g| {k => g.group_by{|c| c['total']['currency']}} unless g.empty? }
+                      .group_by{|c| c['item_id']}
+                      .inject({}) do |memo, (k, g)|
+                          memo[k] = g.group_by{|c| c['currency']}
+                          memo
+                      end
                   end
                 %>
               <% sorted_charges_by_unit.each do |unit_and_sorted_charges| %>
                 <% 
-                  unit_id = unit_and_sorted_charges.first.first
-                  sorted_charges = unit_and_sorted_charges.first.second
+                  unit_id = unit_and_sorted_charges.first
+                  sorted_charges = unit_and_sorted_charges.second
                   if unit_id.present? && unit_id.is_number?
-                    unit = s.cargo_units.find_by(unit_id.to_i)
+                    unit = s.cargo_units.find_by(id: unit_id.to_i)
                     desc = s.lcl? ? unit&.cargo_item_type&.description : unit.size_class.humanize.upcase
+                  elsif unit_id == 'shipment'
+                    desc = 'Shipment Fees'
                   end
                 %>
                 <% if desc && ['import', 'export'].include?(charge_key) %>
                   <div class="cargo_title">
                     <%= unit ? "#{desc} x #{unit.quantity}" : "#{desc}" %>
-                  </div> 
+                  </div>
                 <% end %>
                 <% sorted_charges.each do |currency_key, sub_charges| %>
                   <% if (charge_key != 'cargo' || (charge_key == 'cargo' && !hide_cargo_sub_totals)) &&
@@ -290,12 +300,10 @@
                         <%=
                           if scope['hide_sub_totals'] && charge_key.include?('unknown')
                             "#{s.mode_of_transport} Freight: "
-                          elsif ['export', 'import'].include?(charge_key)
-                            "#{'%.2f' % sub_charges.sum{|c| c['value']}}&nbsp;#{currency_key}"
-                          elsif charge_key == 'cargo' && scope['fine_fee_detail']
-                            "#{'%.2f' % sub_charges.sum{|c| c['value']}}&nbsp;#{currency_key}"
-                          else
+                          elsif charge_key == 'cargo' && !scope['fine_fee_detail']
                             "#{'%.2f' % sub_charges.sum{|c| c['total']['value']}}&nbsp;#{currency_key}"
+                          else
+                            "#{'%.2f' % sub_charges.sum{|c| c['value']}}&nbsp;#{currency_key}"
                           end
                           %>
                       </h3>

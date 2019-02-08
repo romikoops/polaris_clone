@@ -81,58 +81,224 @@ Array [
     content={
       Array [
         <div
-          className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+          className="flex layout-row layout-wrap cargo_price_section"
         >
-          
           <div
-            className="flex-100 layout-row layout-align-space-between-center currency_header"
+            className="flex-100 layout-row layout-align-start-center cargo_title"
           >
+            Ams
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+          >
+            
             <div
-              className="flex-70 layout-row layout-align-start-center"
+              className="flex-100 layout-row layout-align-space-between-center currency_header"
             >
-              <span
-                className="flex-none bold"
+              <div
+                className="flex-45 layout-row layout-align-start-center"
               >
-                 
-                Sub Total in {{currency}}
-              </span>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-end-center"
-            >
-              <p
-                className="flex-none bold"
+                <span
+                  className="flex-none bold"
+                >
+                   
+                  Sub Total in {{currency}}
+                </span>
+              </div>
+              <div
+                className="flex-45 layout-row layout-align-end-center"
               >
-                975.00 CNY
-              </p>
+                <p
+                  className="flex-none bold"
+                >
+                  0.00 undefined
+                </p>
+              </div>
             </div>
           </div>
         </div>,
         <div
-          className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+          className="flex layout-row layout-wrap cargo_price_section"
         >
-          
           <div
-            className="flex-100 layout-row layout-align-space-between-center currency_header"
+            className="flex-100 layout-row layout-align-start-center cargo_title"
           >
+            Bkn
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+          >
+            
             <div
-              className="flex-70 layout-row layout-align-start-center"
+              className="flex-100 layout-row layout-align-space-between-center currency_header"
             >
-              <span
-                className="flex-none bold"
+              <div
+                className="flex-45 layout-row layout-align-start-center"
               >
-                 
-                Sub Total in {{currency}}
-              </span>
+                <span
+                  className="flex-none bold"
+                >
+                   
+                  Sub Total in {{currency}}
+                </span>
+              </div>
+              <div
+                className="flex-45 layout-row layout-align-end-center"
+              >
+                <p
+                  className="flex-none bold"
+                >
+                  0.00 undefined
+                </p>
+              </div>
             </div>
+          </div>
+        </div>,
+        <div
+          className="flex layout-row layout-wrap cargo_price_section"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center cargo_title"
+          >
+            Doc
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+          >
+            
             <div
-              className="flex-25 layout-row layout-align-end-center"
+              className="flex-100 layout-row layout-align-space-between-center currency_header"
             >
-              <p
-                className="flex-none bold"
+              <div
+                className="flex-45 layout-row layout-align-start-center"
               >
-                105.00 GBP
-              </p>
+                <span
+                  className="flex-none bold"
+                >
+                   
+                  Sub Total in {{currency}}
+                </span>
+              </div>
+              <div
+                className="flex-45 layout-row layout-align-end-center"
+              >
+                <p
+                  className="flex-none bold"
+                >
+                  0.00 undefined
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>,
+        <div
+          className="flex layout-row layout-wrap cargo_price_section"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center cargo_title"
+          >
+            Tel
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+          >
+            
+            <div
+              className="flex-100 layout-row layout-align-space-between-center currency_header"
+            >
+              <div
+                className="flex-45 layout-row layout-align-start-center"
+              >
+                <span
+                  className="flex-none bold"
+                >
+                   
+                  Sub Total in {{currency}}
+                </span>
+              </div>
+              <div
+                className="flex-45 layout-row layout-align-end-center"
+              >
+                <p
+                  className="flex-none bold"
+                >
+                  0.00 undefined
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>,
+        <div
+          className="flex layout-row layout-wrap cargo_price_section"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center cargo_title"
+          >
+            Vgm
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+          >
+            
+            <div
+              className="flex-100 layout-row layout-align-space-between-center currency_header"
+            >
+              <div
+                className="flex-45 layout-row layout-align-start-center"
+              >
+                <span
+                  className="flex-none bold"
+                >
+                   
+                  Sub Total in {{currency}}
+                </span>
+              </div>
+              <div
+                className="flex-45 layout-row layout-align-end-center"
+              >
+                <p
+                  className="flex-none bold"
+                >
+                  0.00 undefined
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>,
+        <div
+          className="flex layout-row layout-wrap cargo_price_section"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center cargo_title"
+          >
+            Test
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+          >
+            
+            <div
+              className="flex-100 layout-row layout-align-space-between-center currency_header"
+            >
+              <div
+                className="flex-45 layout-row layout-align-start-center"
+              >
+                <span
+                  className="flex-none bold"
+                >
+                   
+                  Sub Total in {{currency}}
+                </span>
+              </div>
+              <div
+                className="flex-45 layout-row layout-align-end-center"
+              >
+                <p
+                  className="flex-none bold"
+                >
+                  0.00 undefined
+                </p>
+              </div>
             </div>
           </div>
         </div>,
@@ -254,7 +420,47 @@ Array [
   />,
   <CollapsingBar
     collapsed={true}
-    content={Array []}
+    content={
+      Array [
+        <div
+          className="flex layout-row layout-wrap cargo_price_section"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center cargo_title"
+          >
+            Imp
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+          >
+            
+            <div
+              className="flex-100 layout-row layout-align-space-between-center currency_header"
+            >
+              <div
+                className="flex-45 layout-row layout-align-start-center"
+              >
+                <span
+                  className="flex-none bold"
+                >
+                   
+                  Sub Total in {{currency}}
+                </span>
+              </div>
+              <div
+                className="flex-45 layout-row layout-align-end-center"
+              >
+                <p
+                  className="flex-none bold"
+                >
+                  0.00 undefined
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>,
+      ]
+    }
     contentHeader={
       <div
         className="flex-100 layout-row layout-align-start-center

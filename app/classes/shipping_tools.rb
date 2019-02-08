@@ -10,19 +10,28 @@ module ShippingTools
   extend NotificationTools
 
   def self.create_shipments_from_quotation(shipment, results)
-    existing_quote = Quotation.find_by(user_id: shipment.user_id, original_shipment_id: shipment.id)
-    return existing_quote if existing_quote && shipment.updated_at < existing_quote.updated_at
+    main_quote = ShippingTools.handle_existing_quote(shipment, results)
+    results.each do |result|
+      next unless main_quote.shipments.where(trip_id: result['meta']['charge_trip_id']).empty?
+      ShippingTools.create_shipment_from_result(main_quote: main_quote, original_shipment: shipment, result: result)
+    end
+    main_quote.shipments.map(&:reload)
+    main_quote
+  end
 
-    if existing_quote && shipment.updated_at > existing_quote.updated_at
+  def self.handle_existing_quote(shipment, results)
+    existing_quote = Quotation.find_by(user_id: shipment.user_id, original_shipment_id: shipment.id)
+    trip_ids = results.map{|r| r['meta']['charge_trip_id'] }
+    if existing_quote && shipment.updated_at < existing_quote.updated_at
+      main_quote = existing_quote
+      main_quote.shipments.where.not(trip_id: trip_ids).destroy_all
+    elsif existing_quote && shipment.updated_at > existing_quote.updated_at
       main_quote = existing_quote
       main_quote.shipments.destroy_all
     elsif !existing_quote
       main_quote = Quotation.create(user_id: shipment.user_id, original_shipment_id: shipment.id)
     end
-    results.each do |result|
-      ShippingTools.create_shipment_from_result(main_quote: main_quote, original_shipment: shipment, result: result)
-    end
-    main_quote.shipments.map(&:reload)
+
     main_quote
   end
 
@@ -730,15 +739,18 @@ module ShippingTools
       new_charge_breakdown = charge_breakdown.dup
       new_charge_breakdown.update(shipment: new_shipment)
       new_charge_breakdown.dup_charges(charge_breakdown: charge_breakdown)
-      new_charge_breakdown.charge('cargo').children.each do |new_charge|
-        old_charge_category = new_charge&.children_charge_category
-        next if old_charge_category&.cargo_unit_id.nil?
+      %w(import export cargo).each do |charge_key|
+        next if new_charge_breakdown.charge(charge_key).nil?
+        new_charge_breakdown.charge(charge_key).children.each do |new_charge|
+          old_charge_category = new_charge&.children_charge_category
+          next if old_charge_category&.cargo_unit_id.nil?
 
-        new_charge_category = old_charge_category.dup
-        new_charge_category.cargo_unit_id = charge_category_map[old_charge_category.cargo_unit_id]
-        new_charge_category.save!
-        new_charge.children_charge_category = new_charge_category
-        new_charge.save!
+          new_charge_category = old_charge_category.dup
+          new_charge_category.cargo_unit_id = charge_category_map[old_charge_category.cargo_unit_id]
+          new_charge_category.save!
+          new_charge.children_charge_category = new_charge_category
+          new_charge.save!
+        end
       end
     end
     new_shipment.save!

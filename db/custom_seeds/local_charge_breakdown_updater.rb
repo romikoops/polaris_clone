@@ -1,14 +1,16 @@
 Tenant.find_each do |tenant|
 # Tenant.where(subdomain: 'gateway').each do |tenant|
+  next if tenant.subdomain == 'gateway'
   shipment_association = tenant.quotation_tool? ? tenant.shipments.where.not(quotation_id: nil) : tenant.shipments
   shipment_association.each do |shipment|
     shipment.charge_breakdowns.each do |charge_breakdown|
       export = charge_breakdown.charge('export')
       next if export.nil?
+
       children_charge_category = ChargeCategory.find_or_create_by(
-        name: 'Cargo Item',
-        code: 'cargo_item',
-        cargo_unit_id: 'cargo_item'
+        name: shipment.fcl? ? 'Container' : 'Cargo Item',
+        code: shipment.fcl? ? 'container' : 'cargo_item',
+        cargo_unit_id: shipment.fcl? ? 'container' : 'cargo_item'
       )
       parent_charge = Charge.create(
         children_charge_category: children_charge_category,
