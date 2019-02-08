@@ -6,12 +6,10 @@ module ExcelDataServices
       WillBeRefactoredRestructuringError = Class.new(StandardError)
 
       def self.append_hub_suffix(name, mot)
-        name + ' ' + case mot
-                     when 'ocean' then 'Port'
-                     when 'air'   then 'Airport'
-                     when 'rail'  then 'Railyard'
-                     when 'truck' then 'Depot'
-                     end
+        name + ' ' + { 'ocean' => 'Port',
+                       'air' => 'Airport',
+                       'rail' => 'Railyard',
+                       'truck' => 'Depot' }[mot]
       end
     end
   end

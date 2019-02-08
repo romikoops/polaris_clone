@@ -2,6 +2,8 @@
 
 module ExcelDataServices
   module DataValidator
+    ValidationError = Class.new(StandardError)
+
     def self.get(flavor, klass_identifier)
       const_get(flavor).const_get(klass_identifier)
     end
@@ -9,8 +11,6 @@ module ExcelDataServices
     def self.included(base)
       base.extend ClassMethods
     end
-
-    ValidationError = Class.new(StandardError)
 
     module ClassMethods
       def validate(options)

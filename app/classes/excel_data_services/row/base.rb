@@ -65,21 +65,36 @@ module ExcelDataServices
         rate_basis_retrieved = RateBasis.get_internal_key(rate_basis.upcase)
         @specific_charge_params_for_reading ||=
           case rate_basis_retrieved
-          when 'PER_SHIPMENT' then { value: data[:shipment] }
-          when 'PER_CONTAINER' then { value: data[:container] }
-          when 'PER_BILL' then { value: data[:bill] }
-          when 'PER_CBM' then { value: data[:cbm] }
-          when 'PER_KG' then { value: data[:kg] }
-          when 'PER_TON' then { ton: data[:ton] }
-          when 'PER_WM' then { value: data[:wm] }
-          when 'PER_ITEM' then { value: data[:item] }
-          when 'PER_CBM_TON' then { ton: data[:ton], cbm: data[:cbm] }
-          when 'PER_SHIPMENT_CONTAINER' then { shipment: data[:shipment], container: data[:container] }
-          when 'PER_BILL_CONTAINER' then { container: data[:container], bill: data[:bill] }
-          when 'PER_CBM_KG' then { kg: data[:kg], cbm: data[:cbm] }
-          when 'PER_KG_RANGE' then { range_min: data[:range_min], range_max: data[:range_max], kg: data[:kg] }
-          when 'PER_WM_RANGE' then { range_min: data[:range_min], range_max: data[:range_max], wm: data[:wm] }
-          when 'PER_X_KG_FLAT' then { value: data[:kg], base: data[:base] }
+          when 'PER_SHIPMENT'
+            { value: data[:shipment] }
+          when 'PER_CONTAINER'
+            { value: data[:container] }
+          when 'PER_BILL'
+            { value: data[:bill] }
+          when 'PER_CBM'
+            { value: data[:cbm] }
+          when 'PER_KG'
+            { value: data[:kg] }
+          when 'PER_TON'
+            { ton: data[:ton] }
+          when 'PER_WM'
+            { value: data[:wm] }
+          when 'PER_ITEM'
+            { value: data[:item] }
+          when 'PER_CBM_TON'
+            { ton: data[:ton], cbm: data[:cbm] }
+          when 'PER_SHIPMENT_CONTAINER'
+            { shipment: data[:shipment], container: data[:container] }
+          when 'PER_BILL_CONTAINER'
+            { container: data[:container], bill: data[:bill] }
+          when 'PER_CBM_KG'
+            { kg: data[:kg], cbm: data[:cbm] }
+          when 'PER_KG_RANGE'
+            { range_min: data[:range_min], range_max: data[:range_max], kg: data[:kg] }
+          when 'PER_WM_RANGE'
+            { range_min: data[:range_min], range_max: data[:range_max], wm: data[:wm] }
+          when 'PER_X_KG_FLAT'
+            { value: data[:kg], base: data[:base] }
           when 'PER_UNIT_TON_CBM_RANGE'
             { cbm: data[:cbm],
               ton: data[:ton],

@@ -98,7 +98,7 @@ module ExcelDataServices
         worksheet.write_row(0, 0, headers, header_format)
       end
 
-      def setup_worksheet(worksheet, col_count)
+      def setup_worksheet(worksheet, _col_count)
         worksheet.set_column('A:A', 17, uuid_format) # set first column to width 17 and lock
         worksheet.set_column('B:XFD', 17, cell_format) # set all other columns to width 17 and unlocked
         worksheet.freeze_panes(1, 0) # freeze first row
@@ -128,12 +128,11 @@ module ExcelDataServices
       end
 
       def remove_hub_suffix(name, mot)
-        str_to_remove = case mot
-                        when 'ocean' then 'Port'
-                        when 'air'   then 'Airport'
-                        when 'rail'  then 'Railyard'
-                        when 'truck' then 'Depot'
-                        end
+        str_to_remove = { 'ocean' => 'Port',
+                          'air' => 'Airport',
+                          'rail' => 'Railyard',
+                          'truck' => 'Depot' }[mot]
+
         name.remove(/ #{str_to_remove}$/)
       end
     end
