@@ -16,8 +16,8 @@ module ExcelDataServices
       raw_sheets_data = file_parser.parse(options)
 
       # Syntax Validator
-      syntax_validator = ExcelDataServices::DataValidator::Syntax.get(broad_klass_identifier)
-      options = { data: raw_sheets_data, tenant: tenant }
+      syntax_validator = ExcelDataServices::DataValidator.get('Syntax', broad_klass_identifier)
+      options = { data: raw_sheets_data, tenant: tenant, klass_identifier: broad_klass_identifier }
       errors = syntax_validator.validate(options)
       return { has_errors: true, errors: errors } unless errors.empty?
 
@@ -26,8 +26,8 @@ module ExcelDataServices
       restructured_sheets_data = restructurer.restructure_data(raw_sheets_data, tenant)
 
       # Insertability Validator
-      insertability_validator = ExcelDataServices::DataValidator::Insertability.get(broad_klass_identifier)
-      options = { data: restructured_sheets_data, tenant: tenant }
+      insertability_validator = ExcelDataServices::DataValidator.get('Insertability', broad_klass_identifier)
+      options = { data: restructured_sheets_data, tenant: tenant, klass_identifier: broad_klass_identifier }
       errors = insertability_validator.validate(options)
       return { has_errors: true, errors: errors } unless errors.empty?
 
@@ -51,7 +51,7 @@ module ExcelDataServices
 
     def determine_broad_klass_identifier(specific_klass_identifier)
       case specific_klass_identifier
-      when /Ocean.*|Air.*/
+      when /(Ocean|Air).*/
         'Pricing'
       when /LocalCharges.*/
         'LocalCharges'

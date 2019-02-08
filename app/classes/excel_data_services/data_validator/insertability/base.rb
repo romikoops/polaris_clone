@@ -4,35 +4,13 @@ module ExcelDataServices
   module DataValidator
     module Insertability
       class Base
-        InsertabilityError = Class.new(StandardError)
+        include ExcelDataServices::DataValidator
 
-        def self.validate(options)
-          new(options).perform
-        end
-
-        def initialize(data:, tenant:)
-          @data = data
-          @tenant = tenant
-          @errors = []
-        end
+        InsertabilityError = Class.new(ValidationError)
 
         def perform
-          data.each do |_sheet_name, sheet_data|
-            sheet_data[:rows_data].each_with_index do |row_data, i|
-              row = ExcelDataServices::Row::Base.new(row_data: row_data, tenant: tenant)
-
-              begin
-                if block_given?
-                  yield(row)
-                else
-                  raise NotImplementedError, "This method is either not implemented in #{self.class.name}" \
-                                             ", or doesn't provide a block to its superclass method."
-                end
-              rescue InsertabilityError => exception
-                # TODO: i + 1 is most likely not the correct row number...
-                add_to_errors(row_nr: i + 1, reason: exception.message)
-              end
-            end
+          data.each do |restructured_row_data|
+            check_data(restructured_row_data)
           end
 
           errors
@@ -40,11 +18,8 @@ module ExcelDataServices
 
         private
 
-        attr_reader :data, :tenant, :errors
-
-        def add_to_errors(row_nr:, reason:)
-          @errors << { row_nr: row_nr,
-                       reason: reason }
+        def check_data(single_data)
+          raise NotImplementedError, "This method must be implemented in #{self.class.name}."
         end
       end
     end

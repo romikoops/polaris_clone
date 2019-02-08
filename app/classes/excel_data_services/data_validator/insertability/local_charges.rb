@@ -4,10 +4,10 @@ module ExcelDataServices
   module DataValidator
     module Insertability
       class LocalCharges < Base
-        def perform
-          super do |row|
-            raise NotImplementedError
-          end
+        private
+
+        def check_data(single_data)
+          raise NotImplementedError
         end
       end
     end

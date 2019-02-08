@@ -4,41 +4,17 @@ module ExcelDataServices
   module DataValidator
     module Syntax
       class Base
-        SyntaxError = Class.new(StandardError)
-        InvalidHeadersError = Class.new(SyntaxError)
+        include ExcelDataServices::DataValidator
 
-        def self.validate(options)
-          new(options).perform
-        end
-
-        def initialize(data:, tenant:)
-          @data = data
-          @tenant = tenant
-          @errors = []
-        end
+        StructureError = Class.new(ValidationError)
+        InvalidHeadersError = Class.new(StructureError)
 
         def perform
           data.each do |sheet_name, sheet_data|
-            headers = get_headers(sheet_data)
-            begin
-              validate_headers(headers, sheet_name, sheet_data[:data_extraction_method])
-            rescue InvalidHeadersError => exception
-              add_to_errors(row_nr: 1, reason: exception.message)
-            end
+            check_sheet(sheet_name, sheet_data)
 
             sheet_data[:rows_data].each do |row_data|
-              row = ExcelDataServices::Row::Base.new(row_data: row_data, tenant: tenant)
-
-              begin
-                if block_given?
-                  yield(row)
-                else
-                  raise NotImplementedError, "This method is either not implemented in #{self.class.name}" \
-                                             ", or doesn't provide a block to its superclass method."
-                end
-              rescue SyntaxError => exception
-                add_to_errors(row_nr: row.nr, reason: exception.message)
-              end
+              check_row(row_data)
             end
           end
 
@@ -47,19 +23,21 @@ module ExcelDataServices
 
         private
 
-        attr_reader :data, :tenant, :errors
+        def check_sheet(sheet_name, sheet_data)
+          check_headers(sheet_name, sheet_data)
+        end
 
-        def add_to_errors(row_nr:, reason:)
-          @errors << { row_nr: row_nr,
-                       reason: reason }
+        def check_headers(sheet_name, sheet_data)
+          headers = get_headers(sheet_data)
+          begin
+            validate_headers(headers, sheet_name, sheet_data[:data_extraction_method])
+          rescue InvalidHeadersError => exception
+            add_to_errors(row_nr: 1, reason: exception.message)
+          end
         end
 
         def get_headers(sheet_data)
           sheet_data[:rows_data].first.keys
-        end
-
-        def build_valid_headers
-          raise NotImplementedError, "This method must be implemented in #{self.class.name}."
         end
 
         def validate_headers(headers, sheet_name, data_extraction_method)
@@ -78,6 +56,22 @@ module ExcelDataServices
           end
 
           true
+        end
+
+        def build_valid_headers
+          raise NotImplementedError, "This method must be implemented in #{self.class.name}."
+        end
+
+        def check_row(row_data)
+          unless block_given?
+            raise ArgumentError, "This method (#{__method__}) in #{self.class.name}" \
+                                       " doesn't provide a block to itself's definition in the superclass."
+          end
+
+          row = ExcelDataServices::Row.get(klass_identifier).new(row_data: row_data, tenant: tenant)
+          yield(row)
+        rescue ValidationError => exception
+          add_to_errors(row_nr: row.nr, reason: exception.message)
         end
       end
     end

@@ -4,8 +4,8 @@ module ExcelDataServices
   module DataValidator
     module Syntax
       class LocalCharges < Base
-        UnknownRateBasisError = Class.new(SyntaxError)
-        MissingValuesForRateBasisError = Class.new(SyntaxError)
+        UnknownRateBasisError = Class.new(StructureError)
+        MissingValuesForRateBasisError = Class.new(StructureError)
 
         VALID_STATIC_HEADERS = %i(
           hub
@@ -58,14 +58,14 @@ module ExcelDataServices
           PER_UNIT_TON_CBM_RANGE
         ).freeze
 
-        def perform
+        private
+
+        def check_row(_row_data)
           super do |row|
             check_rate_basis(row)
             check_missing_values_for_rate_basis(row)
           end
         end
-
-        private
 
         def build_valid_headers(_data_extraction_method)
           VALID_STATIC_HEADERS

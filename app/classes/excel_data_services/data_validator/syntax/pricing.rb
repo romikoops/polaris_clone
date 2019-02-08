@@ -6,7 +6,7 @@ module ExcelDataServices
       class Pricing < Base
         include ExcelDataServices::PricingTool
 
-        def perform
+        def check_row(_row_data)
           super do |row|
             # raise NotImplementedError
           end
