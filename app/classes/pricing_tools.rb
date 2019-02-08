@@ -2,7 +2,9 @@
 
 require 'bigdecimal'
 
-module PricingTools
+module PricingTools # rubocop:disable Mertics/ModuleLength
+  module_function
+
   include CurrencyTools
   DEFAULT_MAX = Float::INFINITY
   def get_user_price(pricing_id, shipment_date)
@@ -10,7 +12,9 @@ module PricingTools
 
     return if pricing.nil?
 
-    pricing_exceptions = pricing.pricing_exceptions.where('effective_date <= ? AND expiration_date >= ?', shipment_date, shipment_date)
+    pricing_exceptions = pricing
+                         .pricing_exceptions
+                         .where('effective_date <= ? AND expiration_date >= ?', shipment_date, shipment_date)
     pricing_details =
       if pricing_exceptions.any?
         pricing_exceptions.first.pricing_details
@@ -31,7 +35,7 @@ module PricingTools
     )
   end
 
-  def find_local_charge(schedule, cargos, direction, user)
+  def find_local_charge(schedule, cargos, direction, user) # rubocop:disable Mertics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
     hub = direction == 'export' ? schedule.origin_hub : schedule.destination_hub
     date = direction == 'export' ? schedule.etd : schedule.eta
     date = Date.today if date.nil?
@@ -45,6 +49,7 @@ module PricingTools
                               )
                               .for_dates(date, date)
     charges_for_filtering = []
+
     cargos.each do |cargo|
       load_type = cargo.is_a?(Container) ? cargo.size_class : 'lcl'
       [user.id, nil].each do |user_id|
@@ -77,8 +82,8 @@ module PricingTools
     [filtered_charges.compact.uniq, shipment_charges]
   end
 
-  def cargo_hash_for_local_charges(cargos, tenant)
-    if tenant&.scope.dig('consolidation', 'cargo', 'backend')
+  def cargo_hash_for_local_charges(cargos, tenant) # rubocop:disable Mertics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    if tenant.scope.dig('consolidation', 'cargo', 'backend')
       cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
         weight =
           if cargo_unit.is_a?(CargoItem)

@@ -3,7 +3,7 @@
 require 'bigdecimal'
 require 'net/http'
 
-module ShippingTools
+module ShippingTools # rubocop:disable Metrics/ModuleLength
   include PricingTools
   include NotificationTools
   extend PricingTools
@@ -13,6 +13,7 @@ module ShippingTools
     main_quote = ShippingTools.handle_existing_quote(shipment, results)
     results.each do |result|
       next unless main_quote.shipments.where(trip_id: result['meta']['charge_trip_id']).empty?
+
       ShippingTools.create_shipment_from_result(main_quote: main_quote, original_shipment: shipment, result: result)
     end
     main_quote.shipments.map(&:reload)
@@ -21,7 +22,7 @@ module ShippingTools
 
   def self.handle_existing_quote(shipment, results)
     existing_quote = Quotation.find_by(user_id: shipment.user_id, original_shipment_id: shipment.id)
-    trip_ids = results.map{|r| r['meta']['charge_trip_id'] }
+    trip_ids = results.map { |r| r['meta']['charge_trip_id'] }
     if existing_quote && shipment.updated_at < existing_quote.updated_at
       main_quote = existing_quote
       main_quote.shipments.where.not(trip_id: trip_ids).destroy_all
@@ -741,6 +742,7 @@ module ShippingTools
       new_charge_breakdown.dup_charges(charge_breakdown: charge_breakdown)
       %w(import export cargo).each do |charge_key|
         next if new_charge_breakdown.charge(charge_key).nil?
+
         new_charge_breakdown.charge(charge_key).children.each do |new_charge|
           old_charge_category = new_charge&.children_charge_category
           next if old_charge_category&.cargo_unit_id.nil?
