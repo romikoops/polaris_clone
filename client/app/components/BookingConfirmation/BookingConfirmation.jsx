@@ -42,6 +42,7 @@ import {
 } from '../../classNames'
 import CargoContainerGroup from '../Cargo/Container/Group'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
+import GreyBox from '../GreyBox/GreyBox';
 
 const AFTER_CONTAINER =
   `${WRAP_ROW('NONE')} ${ALIGN_CENTER_START} content_width_booking`
@@ -262,10 +263,8 @@ export class BookingConfirmation extends Component {
 
     const ShipmentCard = (
 
-      <CollapsingBar
-        text={t('common:overview')}
-        parentClass={styles.shipment_card_border}
-        hideIcon
+      <GreyBox
+        title={t('common:overview')}
       >
         <div className={INNER_WRAPPER}>
 
@@ -290,24 +289,22 @@ export class BookingConfirmation extends Component {
             </p>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     )
 
     const Itinerary = (
-      <CollapsingBar
-        text={t('common:itinerary')}
-        parentClass={styles.shipment_card_border}
+      <GreyBox
+        title={t('common:itinerary')}
       >
         <div className={INNER_WRAPPER}>
           <RouteHubBox shipment={shipment} theme={theme} />
         </div>
-      </CollapsingBar>
+      </GreyBox>
     )
 
     const FaresAndFees = (
-      <CollapsingBar
-        text={t('common:faresFees')}
-        parentClass={styles.shipment_card_border}
+      <GreyBox
+        title={t('common:faresFees')}
       >
         <div className={INNER_WRAPPER}>
           <div className={`${WRAP_ROW(100)} ${ALIGN_CENTER}`}>
@@ -389,14 +386,13 @@ export class BookingConfirmation extends Component {
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
 
     )
 
     const ContactDetails = (
-      <CollapsingBar
-        text={t('bookconf:contact')}
-        parentClass={styles.shipment_card_border}
+      <GreyBox
+        title={t('bookconf:contact')}
       >
         <div className={INNER_WRAPPER}>
           <div className={SUMM_TOP}>
@@ -408,7 +404,7 @@ export class BookingConfirmation extends Component {
             {' '}
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
 
     )
 
@@ -427,9 +423,8 @@ export class BookingConfirmation extends Component {
     )
 
     const AdditionalInformation = (
-      <CollapsingBar
-        text={t('common:additional')}
-        parentClass={styles.shipment_card_border}
+      <GreyBox
+        title={t('common:additional')}
       >
         <div className={INNER_WRAPPER}>
           <div className={LAYOUT_WRAP}>
@@ -479,14 +474,13 @@ export class BookingConfirmation extends Component {
             ) : ''}
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
 
     )
 
     const Documents = (
-      <CollapsingBar
-        text={t('common:documents')}
-        parentClass={styles.shipment_card_border}
+      <GreyBox
+        title={t('common:documents')}
       >
         <div className={INNER_WRAPPER}>
           <div className="flex-100 layout-row layout-wrap layout-align-start-start">
@@ -496,15 +490,13 @@ export class BookingConfirmation extends Component {
             {missingDocs}
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
 
     )
 
     const AgreeAndSubmit = (
-      <CollapsingBar
-        text={t('common:agree')}
-        parentClass={styles.shipment_card_border}
-        hideIcon
+      <GreyBox
+        title={t('common:agree')}
       >
         <div className="layout-row layout-align-space-between-start layout-wrap flex-100">
           <div className="layout-row layout-align-start-start flex-100">
@@ -526,7 +518,7 @@ export class BookingConfirmation extends Component {
             {acceptTerms ? acceptedBtn : nonAcceptedBtn}
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     )
     const compArray = [
       ShipmentCard,

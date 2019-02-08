@@ -10,21 +10,23 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Overview"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Overview"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -77,26 +79,28 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
             </p>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Itinerary"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Itinerary"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -230,26 +234,28 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
             }
           />
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Fares & Fees"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Fares & Fees"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -697,26 +703,28 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Contact Details"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Contact Details"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -890,7 +898,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
              
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
@@ -947,21 +955,23 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Additional Information"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Additional Information"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -1066,26 +1076,28 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Documents"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Documents"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -1187,26 +1199,28 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Agree and Submit"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Agree and Submit"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="layout-row layout-align-space-between-start layout-wrap flex-100"
@@ -1330,7 +1344,7 @@ exports[`feeHash.customs.hasUnknown is true 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <hr
       className="sec_break flex-100"
@@ -1379,21 +1393,23 @@ exports[`shallow render 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Overview"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Overview"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -1446,26 +1462,28 @@ exports[`shallow render 1`] = `
             </p>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Itinerary"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Itinerary"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -1599,26 +1617,28 @@ exports[`shallow render 1`] = `
             }
           />
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Fares & Fees"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Fares & Fees"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -2052,26 +2072,28 @@ exports[`shallow render 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Contact Details"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Contact Details"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -2245,7 +2267,7 @@ exports[`shallow render 1`] = `
              
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
@@ -2302,21 +2324,23 @@ exports[`shallow render 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Additional Information"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Additional Information"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -2421,26 +2445,28 @@ exports[`shallow render 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Documents"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Documents"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -2542,26 +2568,28 @@ exports[`shallow render 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Agree and Submit"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Agree and Submit"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="layout-row layout-align-space-between-start layout-wrap flex-100"
@@ -2685,7 +2713,7 @@ exports[`shallow render 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <hr
       className="sec_break flex-100"
@@ -2734,21 +2762,23 @@ exports[`shipment.cargo_notes is falsy 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Overview"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Overview"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -2801,26 +2831,28 @@ exports[`shipment.cargo_notes is falsy 1`] = `
             </p>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Itinerary"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Itinerary"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -2954,26 +2986,28 @@ exports[`shipment.cargo_notes is falsy 1`] = `
             }
           />
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Fares & Fees"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Fares & Fees"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -3407,26 +3441,28 @@ exports[`shipment.cargo_notes is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Contact Details"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Contact Details"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -3600,7 +3636,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
              
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
@@ -3657,21 +3693,23 @@ exports[`shipment.cargo_notes is falsy 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Additional Information"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Additional Information"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -3760,26 +3798,28 @@ exports[`shipment.cargo_notes is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Documents"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Documents"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -3881,26 +3921,28 @@ exports[`shipment.cargo_notes is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Agree and Submit"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Agree and Submit"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="layout-row layout-align-space-between-start layout-wrap flex-100"
@@ -4024,7 +4066,7 @@ exports[`shipment.cargo_notes is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <hr
       className="sec_break flex-100"
@@ -4073,21 +4115,23 @@ exports[`shipment.eori is falsy 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Overview"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Overview"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -4140,26 +4184,28 @@ exports[`shipment.eori is falsy 1`] = `
             </p>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Itinerary"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Itinerary"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -4293,26 +4339,28 @@ exports[`shipment.eori is falsy 1`] = `
             }
           />
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Fares & Fees"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Fares & Fees"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -4746,26 +4794,28 @@ exports[`shipment.eori is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Contact Details"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Contact Details"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -4939,7 +4989,7 @@ exports[`shipment.eori is falsy 1`] = `
              
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
@@ -4996,21 +5046,23 @@ exports[`shipment.eori is falsy 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Additional Information"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Additional Information"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -5099,26 +5151,28 @@ exports[`shipment.eori is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Documents"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Documents"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -5220,26 +5274,28 @@ exports[`shipment.eori is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Agree and Submit"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Agree and Submit"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="layout-row layout-align-space-between-start layout-wrap flex-100"
@@ -5363,7 +5419,7 @@ exports[`shipment.eori is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <hr
       className="sec_break flex-100"
@@ -5412,21 +5468,23 @@ exports[`shipment.incoterm_text is falsy 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Overview"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Overview"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -5479,26 +5537,28 @@ exports[`shipment.incoterm_text is falsy 1`] = `
             </p>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Itinerary"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Itinerary"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -5632,26 +5692,28 @@ exports[`shipment.incoterm_text is falsy 1`] = `
             }
           />
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Fares & Fees"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Fares & Fees"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -6085,26 +6147,28 @@ exports[`shipment.incoterm_text is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Contact Details"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Contact Details"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -6278,7 +6342,7 @@ exports[`shipment.incoterm_text is falsy 1`] = `
              
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
@@ -6335,21 +6399,23 @@ exports[`shipment.incoterm_text is falsy 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Additional Information"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Additional Information"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -6438,26 +6504,28 @@ exports[`shipment.incoterm_text is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Documents"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Documents"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -6559,26 +6627,28 @@ exports[`shipment.incoterm_text is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Agree and Submit"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Agree and Submit"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="layout-row layout-align-space-between-start layout-wrap flex-100"
@@ -6702,7 +6772,7 @@ exports[`shipment.incoterm_text is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <hr
       className="sec_break flex-100"
@@ -6751,21 +6821,23 @@ exports[`shipment.notes is falsy 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Overview"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Overview"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -6818,26 +6890,28 @@ exports[`shipment.notes is falsy 1`] = `
             </p>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Itinerary"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Itinerary"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -6971,26 +7045,28 @@ exports[`shipment.notes is falsy 1`] = `
             }
           />
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Fares & Fees"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Fares & Fees"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -7424,26 +7500,28 @@ exports[`shipment.notes is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Contact Details"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Contact Details"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -7617,7 +7695,7 @@ exports[`shipment.notes is falsy 1`] = `
              
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
@@ -7674,21 +7752,23 @@ exports[`shipment.notes is falsy 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Additional Information"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Additional Information"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -7777,26 +7857,28 @@ exports[`shipment.notes is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Documents"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Documents"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -7898,26 +7980,28 @@ exports[`shipment.notes is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Agree and Submit"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Agree and Submit"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="layout-row layout-align-space-between-start layout-wrap flex-100"
@@ -8041,7 +8125,7 @@ exports[`shipment.notes is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <hr
       className="sec_break flex-100"
@@ -8090,21 +8174,23 @@ exports[`shipment.total_goods_value is falsy 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Overview"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Overview"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -8157,26 +8243,28 @@ exports[`shipment.total_goods_value is falsy 1`] = `
             </p>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Itinerary"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Itinerary"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -8307,26 +8395,28 @@ exports[`shipment.total_goods_value is falsy 1`] = `
             }
           />
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Fares & Fees"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Fares & Fees"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -8757,26 +8847,28 @@ exports[`shipment.total_goods_value is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Contact Details"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Contact Details"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -8950,7 +9042,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
              
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
@@ -9007,21 +9099,23 @@ exports[`shipment.total_goods_value is falsy 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Additional Information"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Additional Information"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -9110,26 +9204,28 @@ exports[`shipment.total_goods_value is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Documents"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Documents"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -9231,26 +9327,28 @@ exports[`shipment.total_goods_value is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Agree and Submit"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Agree and Submit"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="layout-row layout-align-space-between-start layout-wrap flex-100"
@@ -9374,7 +9472,7 @@ exports[`shipment.total_goods_value is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <hr
       className="sec_break flex-100"
@@ -9429,21 +9527,23 @@ exports[`shipmentData.notifyees is falsy 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Overview"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Overview"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -9496,26 +9596,28 @@ exports[`shipmentData.notifyees is falsy 1`] = `
             </p>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Itinerary"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Itinerary"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -9649,26 +9751,28 @@ exports[`shipmentData.notifyees is falsy 1`] = `
             }
           />
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Fares & Fees"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Fares & Fees"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -10102,26 +10206,28 @@ exports[`shipmentData.notifyees is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Contact Details"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Contact Details"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -10157,7 +10263,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
              
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
@@ -10214,21 +10320,23 @@ exports[`shipmentData.notifyees is falsy 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Additional Information"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Additional Information"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -10333,26 +10441,28 @@ exports[`shipmentData.notifyees is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Documents"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Documents"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -10454,26 +10564,28 @@ exports[`shipmentData.notifyees is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Agree and Submit"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Agree and Submit"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="layout-row layout-align-space-between-start layout-wrap flex-100"
@@ -10597,7 +10709,7 @@ exports[`shipmentData.notifyees is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <hr
       className="sec_break flex-100"
@@ -10652,21 +10764,23 @@ exports[`state.acceptTerms is true 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Overview"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Overview"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -10719,26 +10833,28 @@ exports[`state.acceptTerms is true 1`] = `
             </p>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Itinerary"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Itinerary"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -10872,26 +10988,28 @@ exports[`state.acceptTerms is true 1`] = `
             }
           />
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Fares & Fees"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Fares & Fees"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -11325,26 +11443,28 @@ exports[`state.acceptTerms is true 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Contact Details"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Contact Details"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -11518,7 +11638,7 @@ exports[`state.acceptTerms is true 1`] = `
              
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
@@ -11575,21 +11695,23 @@ exports[`state.acceptTerms is true 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Additional Information"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Additional Information"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -11694,26 +11816,28 @@ exports[`state.acceptTerms is true 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Documents"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Documents"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -11815,26 +11939,28 @@ exports[`state.acceptTerms is true 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Agree and Submit"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Agree and Submit"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="layout-row layout-align-space-between-start layout-wrap flex-100"
@@ -11958,7 +12084,7 @@ exports[`state.acceptTerms is true 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <hr
       className="sec_break flex-100"
@@ -12007,21 +12133,23 @@ exports[`tenant.scope.terms.length is 0 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Overview"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Overview"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -12074,26 +12202,28 @@ exports[`tenant.scope.terms.length is 0 1`] = `
             </p>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Itinerary"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Itinerary"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -12227,26 +12357,28 @@ exports[`tenant.scope.terms.length is 0 1`] = `
             }
           />
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Fares & Fees"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Fares & Fees"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -12674,26 +12806,28 @@ exports[`tenant.scope.terms.length is 0 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Contact Details"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Contact Details"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -12867,7 +13001,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
              
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
@@ -12924,21 +13058,23 @@ exports[`tenant.scope.terms.length is 0 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Additional Information"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Additional Information"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -13043,26 +13179,28 @@ exports[`tenant.scope.terms.length is 0 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Documents"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Documents"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -13164,26 +13302,28 @@ exports[`tenant.scope.terms.length is 0 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Agree and Submit"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Agree and Submit"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="layout-row layout-align-space-between-start layout-wrap flex-100"
@@ -13313,7 +13453,7 @@ exports[`tenant.scope.terms.length is 0 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <hr
       className="sec_break flex-100"
@@ -13362,21 +13502,23 @@ exports[`theme is falsy 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Overview"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Overview"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -13429,26 +13571,28 @@ exports[`theme is falsy 1`] = `
             </p>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Itinerary"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Itinerary"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -13575,26 +13719,28 @@ exports[`theme is falsy 1`] = `
             theme={null}
           />
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Fares & Fees"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Fares & Fees"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -14000,26 +14146,28 @@ exports[`theme is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Contact Details"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Contact Details"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -14193,7 +14341,7 @@ exports[`theme is falsy 1`] = `
              
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
@@ -14250,21 +14398,23 @@ exports[`theme is falsy 1`] = `
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Additional Information"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Additional Information"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -14369,26 +14519,28 @@ exports[`theme is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={false}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Documents"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Documents"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
@@ -14490,26 +14642,28 @@ exports[`theme is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <div
       className="flex-100 layout-row layout-align-center-center padding_top"
     >
-      <CollapsingBar
-        collapsed={null}
-        content=""
-        contentHeader=""
-        faClass=""
-        handleCollapser={null}
-        headerWrapClasses=""
-        hideIcon={true}
-        mainWrapperStyle={Object {}}
-        minHeight=""
-        parentClass="shipment_card_border"
-        showArrow={false}
-        startCollapsed={false}
-        text="Agree and Submit"
-        theme={null}
+      <GreyBox
+        borderStyle=""
+        content={
+          Array [
+            "",
+          ]
+        }
+        contentClassName=""
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title="Agree and Submit"
+        titleAction={false}
+        wrapperClassName=""
       >
         <div
           className="layout-row layout-align-space-between-start layout-wrap flex-100"
@@ -14612,7 +14766,7 @@ exports[`theme is falsy 1`] = `
             </div>
           </div>
         </div>
-      </CollapsingBar>
+      </GreyBox>
     </div>
     <hr
       className="sec_break flex-100"
