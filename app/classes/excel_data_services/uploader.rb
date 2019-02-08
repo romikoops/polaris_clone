@@ -19,11 +19,14 @@ module ExcelDataServices
       syntax_validator = ExcelDataServices::DataValidator.get('Syntax', broad_klass_identifier)
       options = { data: raw_sheets_data, tenant: tenant, klass_identifier: broad_klass_identifier }
       errors = syntax_validator.validate(options)
-      return { has_errors: true, errors: errors } unless errors.empty?
+      # return { has_errors: true, errors: errors } unless errors.empty?
 
       # Data Restructurer
       restructurer = ExcelDataServices::DataRestructurer.get(broad_klass_identifier)
-      restructured_sheets_data = restructurer.restructure_data(raw_sheets_data, tenant)
+      options = { data: raw_sheets_data, tenant: tenant }
+      restructured_sheets_data = restructurer.restructure_data(options)
+
+      binding.pry
 
       # Insertability Validator
       insertability_validator = ExcelDataServices::DataValidator.get('Insertability', broad_klass_identifier)

@@ -3,7 +3,7 @@
 module ExcelDataServices
   module DataRestructurer
     class Pricing < Base
-      def self.restructure_data(data, _tenant)
+      def perform
         data.inject({}) do |memo, (k_sheet_name, values)|
           data_extraction_method = values[:data_extraction_method]
           restructured_rows_data = values[:rows_data].map { |row_data| row_data.except(:row_nr) }
@@ -20,7 +20,7 @@ module ExcelDataServices
         end
       end
 
-      def self.restructure_with_dynamic_fee_cols_no_ranges(rows_data)
+      def restructure_with_dynamic_fee_cols_no_ranges(rows_data)
         # Put fees one level deeper under :fees key
         rows_data.map do |row_data|
           standard_keys, fee_keys = row_data.keys.slice_after(:currency).to_a
@@ -31,7 +31,7 @@ module ExcelDataServices
         end
       end
 
-      def self.restructure_with_one_col_fee_and_ranges(rows_data)
+      def restructure_with_one_col_fee_and_ranges(rows_data)
         current_row_identifier_values = []
         row_index_to_skip_to = 0
 
@@ -62,7 +62,7 @@ module ExcelDataServices
         restructured_rows_data.compact
       end
 
-      def self.row_identifier_values(row_data)
+      def row_identifier_values(row_data)
         row_data.values_at(:effective_date,
                            :expiration_date,
                            :customer_email,
@@ -78,7 +78,7 @@ module ExcelDataServices
                            :currency)
       end
 
-      def self.row_connected_by_range?(next_row_data, current_row_identifier_values)
+      def row_connected_by_range?(next_row_data, current_row_identifier_values)
         return false if next_row_data.nil?
 
         # Next row should have range values, and contain the same identifier values
@@ -86,7 +86,7 @@ module ExcelDataServices
           row_identifier_values(next_row_data) == current_row_identifier_values
       end
 
-      def self.extract_range_values(row_data)
+      def extract_range_values(row_data)
         { 'max' => row_data[:range_max], 'min' => row_data[:range_min], 'rate' => row_data[:fee] }
       end
     end
