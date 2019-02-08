@@ -7,14 +7,6 @@ module ExcelDataServices
 
       private
 
-      def determine_data_extraction_method(headers)
-        if headers.include?(:fee_code)
-          'one_col_fee_and_ranges'
-        else
-          'dynamic_fee_cols_no_ranges'
-        end
-      end
-
       def build_valid_headers(data_extraction_method)
         case data_extraction_method
         when 'dynamic_fee_cols_no_ranges'

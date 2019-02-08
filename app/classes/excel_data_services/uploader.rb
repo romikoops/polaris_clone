@@ -26,13 +26,13 @@ module ExcelDataServices
       options = { data: raw_sheets_data, tenant: tenant }
       restructured_sheets_data = restructurer.restructure_data(options)
 
-      binding.pry
-
       # Insertability Validator
       insertability_validator = ExcelDataServices::DataValidator.get('Insertability', broad_klass_identifier)
       options = { data: restructured_sheets_data, tenant: tenant, klass_identifier: broad_klass_identifier }
       errors = insertability_validator.validate(options)
       return { has_errors: true, errors: errors } unless errors.empty?
+      
+      binding.pry
 
       # Smart Assumptions Validator
       # TODO...

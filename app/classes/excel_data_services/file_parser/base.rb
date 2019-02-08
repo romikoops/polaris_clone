@@ -46,7 +46,12 @@ module ExcelDataServices
         Roo::Spreadsheet.open(file_or_path)
       end
 
-      def determine_data_extraction_method(_headers)
+      def determine_data_extraction_method(headers)
+        if headers.include?(:fee_code)
+          'one_col_fee_and_ranges'
+        else
+          'dynamic_fee_cols_no_ranges'
+        end
       end
 
       def parse_headers(header_row)

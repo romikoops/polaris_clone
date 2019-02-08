@@ -9,8 +9,9 @@ module ExcelDataServices
         InsertabilityError = Class.new(ValidationError)
 
         def perform
-          data.each do |restructured_row_data|
-            check_data(restructured_row_data)
+          data.each do |single_data|
+            binding.pry
+            check_data(single_data)
           end
 
           errors
@@ -18,7 +19,7 @@ module ExcelDataServices
 
         private
 
-        def check_data(single_data)
+        def check_data(_single_data)
           raise NotImplementedError, "This method must be implemented in #{self.class.name}."
         end
       end
