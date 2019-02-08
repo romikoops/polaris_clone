@@ -38,7 +38,7 @@ class CargoItem < ApplicationRecord
   end
 
   def with_cargo_type
-    as_json({
+    as_json(
       include: [
         {
           cargo_item_type: {
@@ -46,7 +46,7 @@ class CargoItem < ApplicationRecord
           }
         }
       ]
-    })
+    )
   end
 
   def payload_in_tons

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PdfHandler
+class PdfHandler # rubocop:disable Metrics/ClassLength
   include ApplicationHelper
   BreezyError = Class.new(StandardError)
 
@@ -205,7 +205,6 @@ class PdfHandler
     end
     @cargo_data[:kg][shipment.id] = kg
   end
-
 
   def generate
     doc_erb = ErbTemplate.new(

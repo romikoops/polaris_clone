@@ -37,19 +37,17 @@ module OfferCalculatorService
 
     private
 
-    def calc_local_charges
+    def calc_local_charges # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
       cargo_units =
         if @shipment.aggregated_cargo
-          is_agg_cargo = true
           [@shipment.aggregated_cargo]
         else
           @shipment.cargo_units
         end
-        pre_carriage = nil
-        on_carriage = nil
-      %w(import export).each do |direction|
-
-        if direction == 'export' 
+      pre_carriage = nil
+      on_carriage = nil
+      %w(import export).each do |direction| # rubocop:disable Metrics/BlockLength
+        if direction == 'export'
           next unless @shipment.has_pre_carriage || @schedule.origin_hub.mandatory_charge.export_charges
         else
           next unless @shipment.has_on_carriage || @schedule.destination_hub.mandatory_charge.export_charges
@@ -64,16 +62,17 @@ module OfferCalculatorService
           direction,
           @user
         )
-       
+
         local_charges_data.each do |charge|
           next if charge.except('total').empty?
-          cargo_unit_model = if charge['key'] == 'lcl' 
+
+          cargo_unit_model = if charge['key'] == 'lcl'
                                'CargoItem'
-                              elsif charge['key'] == 'shipment'
-                                'Shipment'
-                              else
-                                'Container'
-                              end
+                             elsif charge['key'] == 'shipment'
+                               'Shipment'
+                             else
+                               'Container'
+                             end
           children_charge_category = ChargeCategory.find_or_create_by(
             name: cargo_unit_model.humanize,
             code: cargo_unit_model.underscore.downcase,
@@ -115,7 +114,7 @@ module OfferCalculatorService
       end
     end
 
-    def calc_cargo_charges
+    def calc_cargo_charges # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
       total_units = @shipment.cargo_units.reduce(0) do |sum, cargo_unit|
         sum + cargo_unit.try(:quantity).to_i
       end

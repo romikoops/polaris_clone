@@ -67,9 +67,9 @@ module PricingTools # rubocop:disable Mertics/ModuleLength
       end
     end
     shipment_charges = {
-      load_type: 'shipment',
-      fees: {}
-    }.as_json
+      'load_type' => 'shipment',
+      'fees' => {}
+    }
     filtered_charges = charges_for_filtering.compact.map do |filter_charge|
       filter_charge['fees'].each do |fk, fee|
         if %w(PER_SHIPMENT PER_BILL).include?(RateBasis.get_internal_key(fee['rate_basis']))
@@ -82,17 +82,20 @@ module PricingTools # rubocop:disable Mertics/ModuleLength
     [filtered_charges.compact.uniq, shipment_charges]
   end
 
+  def get_cargo_weight(cargo_unit)
+    if cargo_unit.is_a?(CargoItem)
+      cargo_unit.payload_in_kg * (cargo_unit.try(:quantity) || 1)
+    elsif cargo_unit.is_a?(AggregatedCargo)
+      cargo_unit.weight * (cargo_unit.try(:quantity) || 1)
+    else
+      cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
+    end
+  end
+
   def cargo_hash_for_local_charges(cargos, tenant) # rubocop:disable Mertics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     if tenant.scope.dig('consolidation', 'cargo', 'backend')
       cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
-        weight =
-          if cargo_unit.is_a?(CargoItem)
-            cargo_unit.payload_in_kg * (cargo_unit.try(:quantity) || 1)
-          elsif cargo_unit.is_a?(AggregatedCargo)
-            cargo_unit.weight * (cargo_unit.try(:quantity) || 1)
-          else
-            cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
-          end
+        weight = get_cargo_weight(cargo_unit)
 
         return_h[:quantity] += cargo_unit.quantity unless cargo_unit.try(:quantity).nil?
         return_h[:volume]   += (cargo_unit.try(:volume) || 1) * (cargo_unit.try(:quantity) || 1) || 0
@@ -103,14 +106,7 @@ module PricingTools # rubocop:disable Mertics/ModuleLength
     else
       cargos.map do |cargo_unit|
         return_h = {}
-        weight =
-          if cargo_unit.is_a?(CargoItem)
-            cargo_unit.payload_in_kg * (cargo_unit.try(:quantity) || 1)
-          elsif cargo_unit.is_a?(AggregatedCargo)
-            cargo_unit.weight * (cargo_unit.try(:quantity) || 1)
-          else
-            cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
-          end
+        weight = get_cargo_weight(cargo_unit)
 
         return_h[:quantity] = cargo_unit.quantity unless cargo_unit.try(:quantity).nil?
         return_h[:volume]   = (cargo_unit.try(:volume) || 1) * (cargo_unit.try(:quantity) || 1) || 0
@@ -150,7 +146,7 @@ module PricingTools # rubocop:disable Mertics/ModuleLength
                           cargos.select { |c| c.size_class == charge_object['load_type'] }
                         end
       cargo_hash_for_local_charges(relevant_cargos, user.tenant).map do |cargo_hash|
-        totals = local_charge_calculation_block(charge_object, cargo_hash, user)
+        local_charge_calculation_block(charge_object, cargo_hash, user)
       end
     end
 

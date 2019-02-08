@@ -150,6 +150,7 @@ RSpec.describe PricingTools do
       expect(local_charges_data.length).to eq(2)
       expect(local_charges_data.first.length).to eq(3)
     end
+
     it 'returns the correct number of charges for single cargo classes (LCL)' do
       lcl = create(:cargo_item, shipment_id: shipment.id)
       local_charges_data = described_class.find_local_charge(lcl_schedules.first, [lcl], 'export', user)
@@ -157,24 +158,36 @@ RSpec.describe PricingTools do
       expect(local_charges_data.first.length).to eq(1)
     end
   end
+
   describe '.cargo_hash_for_local_charges' do
-    it 'returns the correct number of objects for consolidation scope = true' do
-      tenant.scope['consolidation']['cargo'] = {'backend' => true }
-      fcl_20 = create(:container, shipment_id: shipment.id, size_class: 'fcl_20', cargo_class: 'fcl_20')
-      fcl_40 = create(:container, shipment_id: shipment.id, size_class: 'fcl_40', cargo_class: 'fcl_40')
-      fcl_40_hq = create(:container, shipment_id: shipment.id, size_class: 'fcl_40_hq', cargo_class: 'fcl_40_hq')
-      cargos = [fcl_20, fcl_40, fcl_40_hq]
-      cargo_objects = described_class.cargo_hash_for_local_charges(cargos, tenant)
-      expect(cargo_objects.length).to eq(1)
+    context 'with backend consolidation' do
+      before do
+        tenant.scope['consolidation']['cargo'] = { 'backend' => true }
+      end
+
+      it 'returns the correct number of objects for consolidation scope' do
+        fcl_20 = create(:container, shipment_id: shipment.id, size_class: 'fcl_20', cargo_class: 'fcl_20')
+        fcl_40 = create(:container, shipment_id: shipment.id, size_class: 'fcl_40', cargo_class: 'fcl_40')
+        fcl_40_hq = create(:container, shipment_id: shipment.id, size_class: 'fcl_40_hq', cargo_class: 'fcl_40_hq')
+        cargos = [fcl_20, fcl_40, fcl_40_hq]
+        cargo_objects = described_class.cargo_hash_for_local_charges(cargos, tenant)
+        expect(cargo_objects.length).to eq(1)
+      end
     end
-    it 'returns the correct number of objects for consolidation scope = false' do
-      tenant.scope['consolidation']['cargo'] = {'backend' => false }
-      fcl_20 = create(:container, shipment_id: shipment.id, size_class: 'fcl_20', cargo_class: 'fcl_20')
-      fcl_40 = create(:container, shipment_id: shipment.id, size_class: 'fcl_40', cargo_class: 'fcl_40')
-      fcl_40_hq = create(:container, shipment_id: shipment.id, size_class: 'fcl_40_hq', cargo_class: 'fcl_40_hq')
-      cargos = [fcl_20, fcl_40, fcl_40_hq]
-      cargo_objects = described_class.cargo_hash_for_local_charges(cargos, tenant)
-      expect(cargo_objects.length).to eq(3)
+
+    context 'without backend consolidation' do
+      before do
+        tenant.scope['consolidation']['cargo'] = { 'backend' => false }
+      end
+
+      it 'returns the correct number of objects for consolidation scope = false' do
+        fcl_20 = create(:container, shipment_id: shipment.id, size_class: 'fcl_20', cargo_class: 'fcl_20')
+        fcl_40 = create(:container, shipment_id: shipment.id, size_class: 'fcl_40', cargo_class: 'fcl_40')
+        fcl_40_hq = create(:container, shipment_id: shipment.id, size_class: 'fcl_40_hq', cargo_class: 'fcl_40_hq')
+        cargos = [fcl_20, fcl_40, fcl_40_hq]
+        cargo_objects = described_class.cargo_hash_for_local_charges(cargos, tenant)
+        expect(cargo_objects.length).to eq(3)
+      end
     end
   end
 end
