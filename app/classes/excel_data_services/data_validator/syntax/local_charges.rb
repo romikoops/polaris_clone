@@ -60,11 +60,9 @@ module ExcelDataServices
 
         private
 
-        def check_row(_row_data)
-          super do |row|
-            check_rate_basis(row)
-            check_missing_values_for_rate_basis(row)
-          end
+        def check_row(row)
+          check_rate_basis(row)
+          check_missing_values_for_rate_basis(row)
         end
 
         def build_valid_headers(_data_extraction_method)

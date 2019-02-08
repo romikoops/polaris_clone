@@ -14,7 +14,12 @@ module ExcelDataServices
             check_sheet(sheet_name, sheet_data)
 
             sheet_data[:rows_data].each do |row_data|
-              check_row(row_data)
+              row = ExcelDataServices::Row.get(klass_identifier).new(row_data: row_data, tenant: tenant)
+              begin
+                check_row(row)
+              rescue ValidationError => exception
+                add_to_errors(row_nr: row.nr, reason: exception.message)
+              end
             end
           end
 
@@ -63,15 +68,7 @@ module ExcelDataServices
         end
 
         def check_row(row_data)
-          unless block_given?
-            raise ArgumentError, "This method (#{__method__}) in #{self.class.name}" \
-                                       " doesn't provide a block to itself's definition in the superclass."
-          end
-
-          row = ExcelDataServices::Row.get(klass_identifier).new(row_data: row_data, tenant: tenant)
-          yield(row)
-        rescue ValidationError => exception
-          add_to_errors(row_nr: row.nr, reason: exception.message)
+          raise NotImplementedError, "This method must be implemented in #{self.class.name}."
         end
       end
     end
