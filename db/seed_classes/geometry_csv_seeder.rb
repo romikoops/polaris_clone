@@ -67,9 +67,7 @@ class GeometryCsvSeeder
         )
         locations << location
         names << name
-        # binding.pry
-    # AB -> bounds
-       
+
       end
       Locations::Location.import(locations)
       Locations::Name.import(names)

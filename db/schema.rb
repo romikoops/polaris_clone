@@ -13,9 +13,12 @@
 ActiveRecord::Schema.define(version: 2019_02_13_141635) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "fuzzystrmatch"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "postgis"
+  enable_extension "postgis_tiger_geocoder"
+  enable_extension "postgis_topology"
   enable_extension "unaccent"
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -730,10 +733,10 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
-    t.integer "origin_nexus_id"
-    t.integer "destination_nexus_id"
     t.datetime "closing_date"
     t.string "incoterm_text"
+    t.integer "origin_nexus_id"
+    t.integer "destination_nexus_id"
     t.datetime "planned_origin_drop_off_date"
     t.integer "quotation_id"
     t.datetime "planned_delivery_date"
@@ -922,6 +925,7 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.string "currency", default: "EUR"
     t.string "vat_number"
     t.boolean "allow_password_change", default: false, null: false
+    t.jsonb "optin_status", default: {}
     t.integer "optin_status_id"
     t.string "external_id"
     t.integer "agency_id"

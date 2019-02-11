@@ -4,9 +4,12 @@ require 'csv'
 
 class LocationCsvSeeder
   TMP_PATH = 'tmp/tmp_csv.gz'
+  DOWNLOADS_PATH = '/Users/warwickbeamish/Downloads/drydock_europe.csv.gz'
   def self.perform
+    # load_map_data('data/location_data/europe.csv.gz')
+    load_name_data('data/location_data/germany_osm_1.csv.gz')
     # load_map_data('data/location_data/asia.csv.gz')
-    load_name_data('data/location_data/china_osm_2.csv.gz')
+    # load_name_data('data/location_data/china_osm_2.csv.gz')
     # load_map_data('data/location_data/europe.csv.gz')
     # load_name_data('data/location_data/germany_osm_1.csv.gz')
     
@@ -26,9 +29,10 @@ class LocationCsvSeeder
           locations << {
             name: row['name'],
             bounds: row['way'],
+            # osm_id: row['abs'].to_i.abs,
             osm_id: row['osm_id'].to_i.abs,
             admin_level: row['admin_level'],
-            country_code: 'cn'
+            country_code: ''
           }
         end
         if locations.length > 100
