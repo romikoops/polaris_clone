@@ -15,6 +15,6 @@ class QuoteMailerPreview < ActionMailer::Preview
     quotation = Quotation.where(original_shipment_id: ids).last
     @shipments = Shipment.where(quotation_id: quotation.id)
     @shipment = @shipments.first
-    QuoteMailer.quotation_admin_email(@shipment, @shipments, quotation)
+    QuoteMailer.quotation_admin_email(quotation)
   end
 end
