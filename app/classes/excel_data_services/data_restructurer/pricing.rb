@@ -7,32 +7,45 @@ module ExcelDataServices
         data.flat_map do |k_sheet_name, values|
           data_extraction_method = values[:data_extraction_method]
           restructured_rows_data = values[:rows_data].map do |row_data|
-            row_data.merge(
-              sheet_name: k_sheet_name,
-              data_extraction_method: data_extraction_method
-            )
+            { sheet_name: k_sheet_name,
+              data_extraction_method: data_extraction_method }.merge(row_data)
           end
 
-          case data_extraction_method
-          when 'dynamic_fee_cols_no_ranges'
-            restructure_with_dynamic_fee_cols_no_ranges(restructured_rows_data)
-          when 'one_col_fee_and_ranges'
-            restructure_with_one_col_fee_and_ranges(restructured_rows_data)
-          else
-            # Default for all
-            restructure_with_one_col_fee_and_ranges(restructured_rows_data)
-          end
+          restructured_rows_data =
+            case data_extraction_method
+            when 'dynamic_fee_cols_no_ranges'
+              restructure_with_dynamic_fee_cols_no_ranges(restructured_rows_data)
+            when 'one_col_fee_and_ranges'
+              restructure_with_one_col_fee_and_ranges(restructured_rows_data)
+            end
+
+          restructured_rows_data = expand_fcl_to_all_sizes(restructured_rows_data)
+          restructured_rows_data = remove_when_no_fee_value(restructured_rows_data)
+
+          # Necessary until we get rid of strucuture "one pricing<->many pricing_details"
+          group_by_pricing_params(restructured_rows_data)
         end
       end
 
       def restructure_with_dynamic_fee_cols_no_ranges(rows_data)
-        # Put fees one level deeper under :fees key
-        rows_data.map do |row_data|
+        rows_data.flat_map do |row_data|
+          row_nr = row_data.delete(:row_nr)
           standard_keys, fee_keys = row_data.keys.slice_after(:currency).to_a
           standard_part = row_data.slice(*standard_keys)
           fee_part = row_data.slice(*fee_keys)
 
-          standard_part.merge(fees: fee_part)
+          expand_dynamic_fee_cols_no_ranges(standard_part, fee_part, row_nr)
+        end
+      end
+
+      def expand_dynamic_fee_cols_no_ranges(standard_part, fee_part, row_nr)
+        fee_part.map do |fee_key, fee_value|
+          standard_part.merge(
+            fee_code: fee_key.to_s.upcase,
+            fee_name: fee_key.to_s.capitalize,
+            fee: fee_value,
+            fee_min: fee_value
+          ).merge(row_nr: row_nr)
         end
       end
 
@@ -67,20 +80,25 @@ module ExcelDataServices
         restructured_rows_data.compact
       end
 
+      def row_identifier_keys
+        %i(uuid
+           effective_date
+           expiration_date
+           customer_email
+           origin
+           country_origin
+           destination
+           country_destination
+           mot
+           carrier
+           service_level
+           load_type
+           rate_basis
+           currency)
+      end
+
       def row_identifier_values(row_data)
-        row_data.values_at(:effective_date,
-                           :expiration_date,
-                           :customer_email,
-                           :origin,
-                           :country_origin,
-                           :destination,
-                           :country_destination,
-                           :mot,
-                           :carrier,
-                           :service_level,
-                           :load_type,
-                           :rate_basis,
-                           :currency)
+        row_data.values_at(*row_identifier_keys)
       end
 
       def row_connected_by_range?(next_row_data, current_row_identifier_values)
@@ -93,6 +111,18 @@ module ExcelDataServices
 
       def extract_range_values(row_data)
         { 'max' => row_data[:range_max], 'min' => row_data[:range_min], 'rate' => row_data[:fee] }
+      end
+
+      def remove_when_no_fee_value(rows_data)
+        rows_data.reject { |row_data| row_data[:fee].blank? }
+      end
+
+      def group_by_pricing_params(rows_data)
+        grouped_data = rows_data.group_by do |row|
+          row.slice(*row_identifier_keys)
+        end
+
+        grouped_data.values
       end
     end
   end

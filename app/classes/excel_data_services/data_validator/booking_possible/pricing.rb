@@ -3,7 +3,7 @@
 module ExcelDataServices
   module DataValidator
     module BookingPossible
-      class Pricing
+      class Pricing < Base
       end
     end
   end

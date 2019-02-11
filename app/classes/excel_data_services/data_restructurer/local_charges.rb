@@ -16,24 +16,13 @@ module ExcelDataServices
         end
 
         charges_data = build_charges_data(chunked_raw_data_per_sheet)
+        # TODO: This Method shold not be in the DataRestructurer Module
         create_missing_charge_categories(charges_data)
+        # TODO: This Method shold not be in the DataRestructurer Module
         assign_correct_hubs(charges_data)
       end
 
       private
-
-      def expand_fcl_to_all_sizes(rows_data)
-        plain_fcl_local_charges_params = rows_data.select { |params| params[:load_type] == 'fcl' }
-        expanded_local_charges_params = %w(fcl_20 fcl_40 fcl_40_hq).reduce([]) do |memo, fcl_size|
-          memo + plain_fcl_local_charges_params.map do |params|
-            params.dup.tap do |param|
-              param[:load_type] = fcl_size
-            end
-          end
-        end
-        rows_data = rows_data.reject { |params| params[:load_type] == 'fcl' }
-        rows_data + expanded_local_charges_params
-      end
 
       def row_identifier(row)
         row.slice(:hub,
@@ -151,6 +140,7 @@ module ExcelDataServices
         end
       end
 
+      # TODO: This Method shold not be in the DataRestructurer Module
       def create_missing_charge_categories(charges_data)
         keys_and_names = charges_data.flat_map do |single_data|
           single_data[:fees].values.map { |fee| fee.slice(:key, :name) }
@@ -161,6 +151,7 @@ module ExcelDataServices
         end
       end
 
+      # TODO: This Method shold not be in the DataRestructurer Module
       def assign_correct_hubs(charges_data)
         charges_data.map do |params|
           mot = params[:mot]

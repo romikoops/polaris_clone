@@ -4,27 +4,25 @@ module ExcelDataServices
   module DatabaseInserter
     class Pricing < Base
       def perform
-        data.each do |single_data|
-          row = ExcelDataServices::Row.get(klass_identifier).new(row_data: single_data, tenant: tenant)
+        data.each do |group_of_row_data|
+          row = ExcelDataServices::Row.get(klass_identifier).new(row_data: group_of_row_data.first, tenant: tenant)
+
           itinerary = find_or_initialize_itinerary(row)
           add_stats(:itineraries, itinerary)
+
           stops = find_or_initialize_stops(row.stop_names, itinerary)
           itinerary.stops << stops
           itinerary.save!
 
           tenant_vehicle = find_or_create_tenant_vehicle(row)
-          generate_trips(itinerary, row, tenant_vehicle) if should_generate_trips?
-          create_pricing_with_pricing_details(row, tenant_vehicle, itinerary)
+
+          create_pricing_with_pricing_details(group_of_row_data, row, tenant_vehicle, itinerary)
         end
 
         stats
       end
 
       private
-
-      def should_generate_trips?
-        @should_generate_trips ||= options[:should_generate_trips] || false
-      end
 
       def find_or_initialize_itinerary(row)
         Itinerary.find_or_initialize_by(
@@ -68,20 +66,7 @@ module ExcelDataServices
         ) # returns a `TenantVehicle`!
       end
 
-      def generate_trips(itinerary, row, tenant_vehicle)
-        transit_time = row.transit_time ? row.transit_time.to_i : 30
-        itinerary.generate_weekly_schedules(
-          itinerary.stops.order(:index),
-          [transit_time],
-          DateTime.now,
-          DateTime.now + 1.week,
-          [2, 5],
-          tenant_vehicle.id,
-          4
-        )
-      end
-
-      def create_pricing_with_pricing_details(row, tenant_vehicle, itinerary) # rubocop:disable Metrics/AbcSize
+      def create_pricing_with_pricing_details(group_of_row_data, row, tenant_vehicle, itinerary)
         pricing_params =
           { uuid: row.uuid,
             transport_category: find_transport_category(tenant_vehicle, row.load_type),
@@ -93,11 +78,12 @@ module ExcelDataServices
             expiration_date: Date.parse(row.expiration_date.to_s) }
 
         pricing_to_update =
-          itinerary.pricings.find_by(uuid: row.uuid) || itinerary.pricings.find_or_initialize_by(pricing_params)
+          itinerary.pricings.find_by(uuid: row.uuid) ||
+          itinerary.pricings.find_or_initialize_by(pricing_params)
         add_stats(:pricings, pricing_to_update)
         pricing_to_update.save!
 
-        pricing_detail_params_arr = build_pricing_detail_params_for_pricing(row)
+        pricing_detail_params_arr = build_pricing_detail_params_for_pricing(group_of_row_data)
 
         existing_pricing_details_ids = pricing_to_update.pricing_details.pluck(:id)
         new_pricing_details_ids = []
@@ -114,68 +100,45 @@ module ExcelDataServices
 
       def find_transport_category(tenant_vehicle, cargo_class)
         # TODO: what is called 'load_type' in the excel file is actually a cargo_class!
-        @transport_category =
-          tenant_vehicle.vehicle.transport_categories.find_by(
-            name: 'any',
-            cargo_class: cargo_class.downcase
-          )
-      end
-
-      def build_pricing_detail_params_for_pricing(row)
-        case row.data_extraction_method
-        when 'dynamic_fee_cols_no_ranges'
-          pricing_detail_params_by_dynamic_fee_cols_no_ranges(row)
-        when 'one_col_fee_and_ranges'
-          pricing_detail_params_by_one_col_fee_and_ranges(row)
-        end
-      end
-
-      def pricing_detail_params_by_dynamic_fee_cols_no_ranges(row)
-        params = row[:fees].map do |fee_code, fee_value|
-          next unless fee_value
-
-          ChargeCategory.from_code(fee_code, tenant.id)
-
-          { range: nil,
-            rate_basis: row.rate_basis,
-            rate: fee_value,
-            min: fee_value,
-            shipping_type: fee_code.upcase,
-            currency_name: row.currency.upcase,
-            tenant_id: tenant.id }
-        end
-
-        params.compact
-      end
-
-      def pricing_detail_params_by_one_col_fee_and_ranges(row) # rubocop:disable Metrics/AbcSize
-        fee_code = row.fee_code.upcase
-
-        ChargeCategory.find_or_create_by!(
-          code: fee_code,
-          name: row.fee_name || fee_code,
-          tenant_id: tenant.id
+        tenant_vehicle.vehicle.transport_categories.find_by(
+          name: 'any',
+          cargo_class: cargo_class.downcase
         )
+      end
 
-        pricing_detail_params =
-          { rate_basis: row.rate_basis,
-            shipping_type: fee_code,
-            currency_name: row.currency.upcase,
-            tenant_id: tenant.id }
+      def build_pricing_detail_params_for_pricing(group_of_row_data)
+        group_of_row_data.map do |row_data|
+          row = ExcelDataServices::Row.get(klass_identifier).new(row_data: row_data, tenant: tenant)
 
-        if row.range
-          min_rate_in_range = row.range.map { |r| r['rate'] }.min
-          min_rate = row.fee_min.blank? ? min_rate_in_range : row.fee_min
-          pricing_detail_params.merge!(
-            rate: min_rate_in_range,
-            min: min_rate,
-            range: row.range.blank? ? nil : row.range
+          fee_code = row.fee_code.upcase
+
+          ChargeCategory.find_or_create_by!(
+            code: fee_code,
+            name: row.fee_name || fee_code,
+            tenant_id: tenant.id
           )
-        else
-          pricing_detail_params[:rate] = row.fee
-          pricing_detail_params[:min] = row.fee_min.blank? ? row.fee : row.fee_min
+
+          pricing_detail_params =
+            { tenant_id: tenant.id,
+              rate_basis: row.rate_basis,
+              shipping_type: fee_code,
+              currency_name: row.currency.upcase }
+
+          if row.range.blank?
+            pricing_detail_params[:rate] = row.fee
+            pricing_detail_params[:min] = row.fee_min.blank? ? row.fee : row.fee_min
+          else
+            min_rate_in_range = row.range.map { |r| r['rate'] }.min
+            min_rate = row.fee_min.blank? ? min_rate_in_range : row.fee_min
+            pricing_detail_params.merge!(
+              rate: min_rate_in_range,
+              min: min_rate,
+              range: row.range
+            )
+          end
+
+          pricing_detail_params
         end
-        [pricing_detail_params]
       end
     end
   end

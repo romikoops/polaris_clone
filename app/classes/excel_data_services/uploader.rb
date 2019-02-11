@@ -43,9 +43,9 @@ module ExcelDataServices
                   data: restructured_sheets_data,
                   klass_identifier: klass_identifier,
                   options: { should_generate_trips: false } }
-      inserter.insert(options)
+      insertion_stats = inserter.insert(options)
 
-      binding.pry
+      insertion_stats
 
       # Booking Possible Validator
       # TODO...
