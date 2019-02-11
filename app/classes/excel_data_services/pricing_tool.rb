@@ -2,8 +2,6 @@
 
 module ExcelDataServices
   module PricingTool
-    private
-
     DYNAMIC_FEE_COLS_NO_RANGES_HEADERS = %i(
       uuid
       effective_date

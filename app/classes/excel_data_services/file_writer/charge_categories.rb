@@ -5,19 +5,14 @@ module ExcelDataServices
     class ChargeCategories < Base
       include ExcelDataServices::ChargeCategoryTool
 
-      def initialize(tenant:, file_name:)
-        super(tenant: tenant, file_name: file_name)
-      end
-
       private
 
       attr_reader :mode_of_transport
 
       def load_and_prepare_data
-        rows_data = []
         charge_categories = ChargeCategory.where(tenant_id: tenant.id)
-        charge_categories&.each do |charge_category|
-          rows_data << build_row_data(charge_category)
+        rows_data = charge_categories&.map do |charge_category|
+          build_row_data(charge_category)
         end
 
         sort!(rows_data)
@@ -35,7 +30,7 @@ module ExcelDataServices
 
       def sort!(data)
         data.sort_by! do |h|
-          h[:fee_code]
+          h[:fee_code] || ''
         end
       end
 

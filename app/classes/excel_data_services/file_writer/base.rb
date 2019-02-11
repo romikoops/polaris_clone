@@ -99,9 +99,9 @@ module ExcelDataServices
       end
 
       def setup_worksheet(worksheet, _col_count)
+        worksheet.freeze_panes(1, 0) # freeze first row
         worksheet.set_column('A:A', 17, uuid_format) # set first column to width 17 and lock
         worksheet.set_column('B:XFD', 17, cell_format) # set all other columns to width 17 and unlocked
-        worksheet.freeze_panes(1, 0) # freeze first row
         worksheet.protect # enable protections
       end
 

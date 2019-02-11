@@ -13,11 +13,12 @@ module ExcelDataServices
       end
 
       def cargo_classes
-        @cargo_classes ||= if data[:load_type].casecmp('fcl').zero?
-                             %w(fcl_20 fcl_40 fcl_40_hq)
-                           else
-                             [data[:load_type].downcase]
-                           end
+        @cargo_classes ||=
+          if data[:load_type].casecmp('fcl').zero?
+            %w(fcl_20 fcl_40 fcl_40_hq)
+          else
+            [data[:load_type].downcase]
+          end
       end
 
       def carrier

@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module FileParser
-    class OceanFcl < Base
+    class Pricing < Base
       include ExcelDataServices::PricingTool
 
       private

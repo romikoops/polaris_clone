@@ -2,10 +2,9 @@
 
 module ExcelDataServices
   class Uploader
-    def initialize(tenant:, klass_identifier:, file_or_path:)
+    def initialize(tenant:, specific_identifier:, file_or_path:)
       @tenant = tenant
-      @klass_identifier = klass_identifier
-      @broad_klass_identifier = determine_broad_klass_identifier(klass_identifier)
+      @klass_identifier = determine_broad_klass_identifier(specific_identifier)
       @file_or_path = file_or_path
     end
 
@@ -16,26 +15,29 @@ module ExcelDataServices
       raw_sheets_data = file_parser.parse(options)
 
       # Syntax Validator
-      syntax_validator = ExcelDataServices::DataValidator.get('Syntax', broad_klass_identifier)
-      options = { data: raw_sheets_data, tenant: tenant, klass_identifier: broad_klass_identifier }
+      syntax_validator = ExcelDataServices::DataValidator.get('Syntax', klass_identifier)
+      options = { data: raw_sheets_data, tenant: tenant, klass_identifier: klass_identifier }
       errors = syntax_validator.validate(options)
-      # return { has_errors: true, errors: errors } unless errors.empty?
+      return { has_errors: true, errors: errors } unless errors.empty?
 
       # Data Restructurer
-      restructurer = ExcelDataServices::DataRestructurer.get(broad_klass_identifier)
+      restructurer = ExcelDataServices::DataRestructurer.get(klass_identifier)
       options = { data: raw_sheets_data, tenant: tenant }
       restructured_sheets_data = restructurer.restructure_data(options)
 
       # Insertability Validator
-      insertability_validator = ExcelDataServices::DataValidator.get('Insertability', broad_klass_identifier)
-      options = { data: restructured_sheets_data, tenant: tenant, klass_identifier: broad_klass_identifier }
+      insertability_validator = ExcelDataServices::DataValidator.get('Insertability', klass_identifier)
+      options = { data: restructured_sheets_data, tenant: tenant, klass_identifier: klass_identifier }
       errors = insertability_validator.validate(options)
       return { has_errors: true, errors: errors } unless errors.empty?
       
-      binding.pry
-
       # Smart Assumptions Validator
-      # TODO...
+      smart_assumptions_validator = ExcelDataServices::DataValidator.get('Smart Assumptions', klass_identifier)
+      options = { data: restructured_sheets_data, tenant: tenant, klass_identifier: klass_identifier }
+      errors = smart_assumptions_validator.validate(options)
+      return { has_errors: true, errors: errors } unless errors.empty?
+
+      binding.pry
 
       # Database Inserter
       inserter = ExcelDataServices::DatabaseInserter.get(klass_identifier)
