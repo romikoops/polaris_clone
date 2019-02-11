@@ -40,7 +40,7 @@ After do |scenario|
   cbt_score(@suite_passed ? 'fail' : 'pass')
 
   if scenario.failed?
-    take_screenshot
     print_console_log
+    take_screenshot
   end
 end

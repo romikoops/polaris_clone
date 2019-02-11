@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -xe
+
+OUTPUT_DIR=$1
+
+if [ -z "$OUTPUT_DIR" ];
+then
+  echo "Usage: $0 [OUTPUT_DIR]"
+  exit 1
+fi
+
+args="--retry 2 --fail-fast --tags 'not @wip' --format junit --out $OUTPUT_DIR --format pretty"
+
+if [ "$CI_NODE_TOTAL" ];
+then
+  cmd="bundle exec knapsack cucumber"
+else
+  cmd="bundle exec cucumber"
+fi
+
+eval "$cmd $args"

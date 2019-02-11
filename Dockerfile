@@ -49,6 +49,11 @@ COPY . ./
 ARG RELEASE=""
 RUN echo "$RELEASE" > ./REVISION
 
+# Add user
+RUN groupadd -r app && useradd -r -d /app/tmp -s /sbin/nologin -g app app
+RUN chown -R app:app /app/
+USER app
+
 RUN RAILS_ENV=production bin/rails assets:precompile
 
 FROM ruby:2.6 AS app
@@ -86,6 +91,7 @@ RUN groupadd -r app && useradd -r -d /app/tmp -s /sbin/nologin -g app app
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
 COPY --from=builder --chown=app:app /app /app
 
+RUN chown -R app:app /app/
 USER app
 
 # Set Rails env
