@@ -4,19 +4,24 @@ module ExcelDataServices
   module DataRestructurer
     class Pricing < Base
       def perform
-        data.inject({}) do |memo, (k_sheet_name, values)|
+        data.flat_map do |k_sheet_name, values|
           data_extraction_method = values[:data_extraction_method]
-          restructured_rows_data = values[:rows_data].map { |row_data| row_data.except(:row_nr) }
-          restructured_rows_data = case data_extraction_method
-                                   when 'dynamic_fee_cols_no_ranges'
-                                     restructure_with_dynamic_fee_cols_no_ranges(restructured_rows_data)
-                                   when 'one_col_fee_and_ranges'
-                                     restructure_with_one_col_fee_and_ranges(restructured_rows_data)
-                                   else
-                                     # Default for all
-                                     restructure_with_one_col_fee_and_ranges(restructured_rows_data)
-                                   end
-          memo.merge(k_sheet_name => { data_extraction_method: data_extraction_method, rows_data: restructured_rows_data })
+          restructured_rows_data = values[:rows_data].map do |row_data|
+            row_data.merge(
+              sheet_name: k_sheet_name,
+              data_extraction_method: data_extraction_method
+            )
+          end
+
+          case data_extraction_method
+          when 'dynamic_fee_cols_no_ranges'
+            restructure_with_dynamic_fee_cols_no_ranges(restructured_rows_data)
+          when 'one_col_fee_and_ranges'
+            restructure_with_one_col_fee_and_ranges(restructured_rows_data)
+          else
+            # Default for all
+            restructure_with_one_col_fee_and_ranges(restructured_rows_data)
+          end
         end
       end
 

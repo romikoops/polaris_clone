@@ -12,29 +12,12 @@ module ExcelDataServices
         @nr ||= data[:row_nr]
       end
 
-      def itinerary
-        @itinerary ||= Itinerary.find_by(name: itinerary_name, tenant: tenant)
-      end
-
-      def itinerary_name
-        @itinerary_name ||= [data[:origin], data[:destination]].join(' - ')
-      end
-
       def cargo_classes
         @cargo_classes ||= if data[:load_type].casecmp('fcl').zero?
                              %w(fcl_20 fcl_40 fcl_40_hq)
                            else
                              [data[:load_type].downcase]
                            end
-      end
-
-      def tenant_vehicle
-        @tenant_vehicle ||= TenantVehicle.find_by(
-          tenant: tenant,
-          name: data[:service_level],
-          carrier: carrier,
-          mode_of_transport: data[:mot]
-        )
       end
 
       def carrier

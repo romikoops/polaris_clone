@@ -4,16 +4,13 @@ module ExcelDataServices
   module DataValidator
     module Insertability
       class Pricing < Base
-        def check_data(single_data)
-          check_overlapping_effective_period(single_data)
+        def check_data(row)
+          check_overlapping_effective_period(row)
         end
 
         private
 
-        def check_overlapping_effective_period(single_data)
-          ###
-          row = single_data 
-          ###
+        def check_overlapping_effective_period(row)
           return if row.itinerary.nil?
 
           row.cargo_classes.each do |cargo_class|

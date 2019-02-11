@@ -10,8 +10,12 @@ module ExcelDataServices
 
         def perform
           data.each do |single_data|
-            binding.pry
-            check_data(single_data)
+            row = ExcelDataServices::Row.get(klass_identifier).new(row_data: single_data, tenant: tenant)
+            begin
+              check_data(row)
+            rescue ValidationError => exception
+              add_to_errors(row_nr: row.nr, reason: exception.message)
+            end
           end
 
           errors
