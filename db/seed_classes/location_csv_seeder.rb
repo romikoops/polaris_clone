@@ -6,7 +6,7 @@ class LocationCsvSeeder
   TMP_PATH = 'tmp/tmp_csv.gz'
   DOWNLOADS_PATH = '/Users/warwickbeamish/Downloads/drydock_europe.csv.gz'
   def self.perform
-    # load_map_data('data/location_data/europe.csv.gz')
+    load_map_data('data/location_data/europe.csv.gz')
     load_name_data('data/location_data/germany_osm_1.csv.gz')
     # load_map_data('data/location_data/asia.csv.gz')
     # load_name_data('data/location_data/china_osm_2.csv.gz')
@@ -16,9 +16,9 @@ class LocationCsvSeeder
   end
 
   def self.load_map_data(url)
-    LocationCsvSeeder.get_s3_file(url)
+    # LocationCsvSeeder.get_s3_file(url)
 
-    Zlib::GzipReader.open(TMP_PATH) do |gz|
+    Zlib::GzipReader.open(DOWNLOADS_PATH) do |gz|
       csv = CSV.new(gz, headers: true)
       puts
       puts 'Preparing Geometries attributes...'

@@ -445,6 +445,7 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.string "country_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["osm_id"], name: "index_locations_locations_on_osm_id"
   end
 
   create_table "locations_names", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -479,6 +480,7 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.index "to_tsvector('english'::regconfig, (osm_id)::text)", name: "locations_names_to_tsvector_idx4", using: :gin
     t.index "to_tsvector('english'::regconfig, (postal_code)::text)", name: "locations_names_to_tsvector_idx9", using: :gin
     t.index ["language", "osm_id", "street", "country", "country_code", "display_name", "name", "postal_code"], name: "uniq_index_1", unique: true
+    t.index ["osm_id"], name: "index_locations_names_on_osm_id"
     t.index ["osm_type"], name: "index_locations_names_on_osm_type"
   end
 
