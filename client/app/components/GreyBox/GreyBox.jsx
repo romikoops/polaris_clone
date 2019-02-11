@@ -15,7 +15,8 @@ function GreyBox ({
   flexMd,
   padding,
   fullWidth,
-  borderStyle
+  borderStyle,
+  children
 }) {
   return (
     <div className={`${borderStyle || adminStyles.border_box} ${wrapperClassName} 
@@ -37,6 +38,7 @@ function GreyBox ({
           ''
         )}
         {content}
+        {children}
       </div>
     </div>
   )
