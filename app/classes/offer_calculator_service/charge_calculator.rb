@@ -73,7 +73,6 @@ module OfferCalculatorService
                              else
                                'Container'
                              end
-                             binding.pry
           children_charge_category = ChargeCategory.find_or_create_by(
             name: cargo_unit_model.humanize,
             code: cargo_unit_model.underscore.downcase,
@@ -81,7 +80,6 @@ module OfferCalculatorService
           )
           create_charges_from_fees_data!(charge.except('key'), children_charge_category, charge_category, parent_charge)
         end
-        binding.pry
         return nil if parent_charge.children.empty?
 
         parent_charge.update_price!
