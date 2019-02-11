@@ -37,52 +37,57 @@ module OfferCalculatorService
 
     private
 
-    def calc_local_charges
+    def calc_local_charges # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
       cargo_units =
         if @shipment.aggregated_cargo
           [@shipment.aggregated_cargo]
         else
           @shipment.cargo_units
         end
+      pre_carriage = nil
+      on_carriage = nil
+      %w(import export).each do |direction| # rubocop:disable Metrics/BlockLength
+        if direction == 'export'
+          next unless @shipment.has_pre_carriage || @schedule.origin_hub.mandatory_charge.export_charges
+        else
+          next unless @shipment.has_on_carriage || @schedule.destination_hub.mandatory_charge.export_charges
+        end
 
-      if @shipment.has_pre_carriage || @schedule.origin_hub.mandatory_charge.export_charges
+        charge_category = ChargeCategory.from_code(direction, @user.tenant_id)
+        parent_charge = create_parent_charge(charge_category)
+
         local_charges_data = determine_local_charges(
-          @schedule.origin_hub,
-          @shipment.load_type,
+          @schedule,
           cargo_units,
-          'export',
-          @schedule.mode_of_transport,
-          @schedule.trip.tenant_vehicle.id,
-          @schedule.destination_hub_id,
+          direction,
           @user
         )
 
-        return nil if local_charges_data.except('total').empty?
+        local_charges_data.each do |charge|
+          next if charge.except('total').empty?
 
-        pre_carriage = create_charges_from_fees_data!(
-          local_charges_data,
-          ChargeCategory.from_code('export', @user.tenant_id)
-        )
-      end
+          cargo_unit_model = if charge['key'] == 'shipment'
+                               'Shipment'
+                             elsif @shipment.lcl?
+                               'CargoItem'
+                             else
+                               'Container'
+                             end
+          children_charge_category = ChargeCategory.find_or_create_by(
+            name: cargo_unit_model.humanize,
+            code: cargo_unit_model.underscore.downcase,
+            cargo_unit_id: charge['key']
+          )
+          create_charges_from_fees_data!(charge.except('key'), children_charge_category, charge_category, parent_charge)
+        end
+        return nil if parent_charge.children.empty?
 
-      if @shipment.has_on_carriage || @schedule.destination_hub.mandatory_charge.import_charges
-        local_charges_data = determine_local_charges(
-          @schedule.destination_hub,
-          @shipment.load_type,
-          cargo_units,
-          'import',
-          @schedule.mode_of_transport,
-          @schedule.trip.tenant_vehicle.id,
-          @schedule.origin_hub_id,
-          @user
-        )
-
-        return nil if local_charges_data.except('total').empty?
-
-        on_carriage = create_charges_from_fees_data!(
-          local_charges_data,
-          ChargeCategory.from_code('import', @user.tenant_id)
-        )
+        parent_charge.update_price!
+        if direction == 'export'
+          pre_carriage = parent_charge
+        else
+          on_carriage = parent_charge
+        end
       end
 
       { pre_carriage: pre_carriage, on_carriage: on_carriage }
@@ -108,7 +113,7 @@ module OfferCalculatorService
       end
     end
 
-    def calc_cargo_charges
+    def calc_cargo_charges # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
       total_units = @shipment.cargo_units.reduce(0) do |sum, cargo_unit|
         sum + cargo_unit.try(:quantity).to_i
       end

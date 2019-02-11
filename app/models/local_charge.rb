@@ -7,7 +7,15 @@ class LocalCharge < ApplicationRecord
   belongs_to :tenant_vehicle, optional: true
   belongs_to :counterpart_hub, class_name: 'Hub', optional: true
 
+  scope :for_load_type, ->(load_type) { where(load_type: load_type) }
   scope :for_mode_of_transport, ->(mot) { where(mode_of_transport: mot) }
+  scope :for_dates, (lambda do |start_date, end_date|
+    where(Arel::Nodes::InfixOperation.new(
+            'OVERLAPS',
+            Arel::Nodes::SqlLiteral.new("(#{arel_table[:effective_date].name}, #{arel_table[:expiration_date].name})"),
+            Arel::Nodes::SqlLiteral.new("(DATE '#{start_date}', DATE '#{end_date}')")
+          ))
+  end)
 end
 
 # == Schema Information
@@ -26,4 +34,8 @@ end
 #  direction          :string
 #  fees               :jsonb
 #  dangerous          :boolean          default(FALSE)
+#  effective_date     :datetime
+#  expiration_date    :datetime
+#  user_id            :integer
+#  uuid               :uuid
 #

@@ -2,7 +2,9 @@
 
 require 'bigdecimal'
 
-module PricingTools
+module PricingTools # rubocop:disable Metrics/ModuleLength
+  module_function
+
   include CurrencyTools
   DEFAULT_MAX = Float::INFINITY
   def get_user_price(pricing_id, shipment_date)
@@ -10,7 +12,9 @@ module PricingTools
 
     return if pricing.nil?
 
-    pricing_exceptions = pricing.pricing_exceptions.where('effective_date <= ? AND expiration_date >= ?', shipment_date, shipment_date)
+    pricing_exceptions = pricing
+                         .pricing_exceptions
+                         .where('effective_date <= ? AND expiration_date >= ?', shipment_date, shipment_date)
     pricing_details =
       if pricing_exceptions.any?
         pricing_exceptions.first.pricing_details
@@ -31,40 +35,123 @@ module PricingTools
     )
   end
 
-  def determine_local_charges(hub, load_type, cargos, direction, mot, tenant_vehicle_id, counterpart_hub_id, user)
-    cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
-      weight =
-        if cargo_unit.is_a?(CargoItem)
-          cargo_unit.payload_in_kg * (cargo_unit.try(:quantity) || 1)
-        elsif cargo_unit.is_a?(AggregatedCargo)
-          cargo_unit.weight * (cargo_unit.try(:quantity) || 1)
-        else
-          cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
-        end
-
-      return_h[:quantity] += cargo_unit.quantity unless cargo_unit.try(:quantity).nil?
-      return_h[:volume]   += (cargo_unit.try(:volume) || 1) * (cargo_unit.try(:quantity) || 1) || 0
-
-      return_h[:weight]   += (cargo_unit.try(:weight) || weight)
+  def find_local_charge(schedule, cargos, direction, user) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+    hub = direction == 'export' ? schedule.origin_hub : schedule.destination_hub
+    date = direction == 'export' ? schedule.etd : schedule.eta
+    date = Date.today if date.nil?
+    counterpart_hub_id = direction == 'export' ? schedule.destination_hub.id : schedule.origin_hub.id
+    effective_local_charges = hub
+                              .local_charges
+                              .where(
+                                direction: direction,
+                                mode_of_transport: schedule.mode_of_transport,
+                                tenant_vehicle_id: schedule.trip.tenant_vehicle_id
+                              )
+                              .for_dates(date, date)
+    charges_for_filtering = []
+    cargos.each do |cargo|
+      load_type = cargo.is_a?(Container) ? cargo.size_class : 'lcl'
+      [user.id, nil].each do |user_id|
+        charge = effective_local_charges.find_by(
+          user_id: user_id,
+          load_type: load_type,
+          counterpart_hub_id: counterpart_hub_id
+        )
+        charge ||= effective_local_charges.find_by(
+          user_id: user_id,
+          load_type: load_type,
+          counterpart_hub_id: nil
+        )
+        charges_for_filtering << charge.as_json
+      end
     end
+    shipment_charges = {
+      'load_type' => 'shipment',
+      'fees' => {}
+    }
+    filtered_charges = charges_for_filtering.compact.map do |filter_charge|
+      next if filter_charge['fees'].empty?
 
-    lt = ['cargo_item', 'lcl'].include?(load_type) ? 'lcl' : cargos[0].size_class
-    charge = hub.local_charges.find_by(direction: direction, load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id, counterpart_hub_id: counterpart_hub_id)
-    charge ||= hub.local_charges.find_by(direction: direction, load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id, counterpart_hub_id: nil)
+      filter_charge['fees'].each do |fk, fee|
+        if %w(PER_SHIPMENT PER_BILL).include?(RateBasis.get_internal_key(fee['rate_basis']))
+          shipment_charges['fees'][fk] = filter_charge['fees'].delete(fk)
+        end
+      end
+      filter_charge
+    end
+    [filtered_charges.compact.uniq, shipment_charges]
+  end
 
-    return {} if charge.nil?
+  def get_cargo_weight(cargo_unit)
+    if cargo_unit.is_a?(CargoItem)
+      cargo_unit.payload_in_kg * (cargo_unit.try(:quantity) || 1)
+    elsif cargo_unit.is_a?(AggregatedCargo)
+      cargo_unit.weight * (cargo_unit.try(:quantity) || 1)
+    else
+      cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
+    end
+  end
 
+  def cargo_hash_for_local_charges(cargos, tenant) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    if tenant.scope.dig('consolidation', 'cargo', 'backend')
+      cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
+        weight = get_cargo_weight(cargo_unit)
+
+        return_h[:quantity] += cargo_unit.quantity unless cargo_unit.try(:quantity).nil?
+        return_h[:volume]   += (cargo_unit.try(:volume) || 1) * (cargo_unit.try(:quantity) || 1) || 0
+
+        return_h[:weight]   += (cargo_unit.try(:weight) || weight)
+      end
+      [cargo_hash]
+    else
+      cargos.map do |cargo_unit|
+        return_h = {}
+        weight = get_cargo_weight(cargo_unit)
+
+        return_h[:quantity] = cargo_unit.quantity unless cargo_unit.try(:quantity).nil?
+        return_h[:volume]   = (cargo_unit.try(:volume) || 1) * (cargo_unit.try(:quantity) || 1) || 0
+
+        return_h[:weight]   = (cargo_unit.try(:weight) || weight)
+        return_h[:id]       = cargo_unit.id
+        return_h
+      end
+    end
+  end
+
+  def local_charge_calculation_block(charge_object, cargo_hash, user)
     totals = { 'total' => {} }
 
-    charge&.fees&.each do |k, fee|
+    charge_object.dig('fees')&.each do |k, fee|
       totals[k]             ||= { 'value' => 0, 'currency' => fee['currency'] }
       totals[k]['currency'] ||= fee['currency']
       totals[k]['value'] += fee_value(fee, cargo_hash, user.tenant.scope)
     end
+
     converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
     totals['total'] = { value: converted, currency: user.currency }
+    totals['key'] = cargo_hash[:id] || charge_object['load_type']
 
     totals
+  end
+
+  def determine_local_charges(schedule, cargos, direction, user)
+    unit_charges_array, shipment_charges = find_local_charge(schedule, cargos, direction, user)
+    return {} if unit_charges_array.empty?
+
+    null_cargo_hash = { weight: 0, volume: 0, quantity: 0 }
+    charge_results = unit_charges_array.map do |charge_object|
+      relevant_cargos = if %w(lcl shipment).include?(charge_object['load_type'])
+                          cargos
+                        else
+                          cargos.select { |c| c.size_class == charge_object['load_type'] }
+                        end
+      cargo_hash_for_local_charges(relevant_cargos, user.tenant).map do |cargo_hash|
+        local_charge_calculation_block(charge_object, cargo_hash, user)
+      end
+    end
+
+    charge_results << local_charge_calculation_block(shipment_charges, null_cargo_hash, user)
+    charge_results.flatten
   end
 
   def calc_customs_fees(charge, cargos, _load_type, user, mot)

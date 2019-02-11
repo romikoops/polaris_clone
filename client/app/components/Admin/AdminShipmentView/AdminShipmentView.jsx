@@ -750,13 +750,14 @@ class AdminShipmentView extends Component {
       </p>
     )
     const dnrEditKeys = ['in_process', 'finished', 'confirmed']
+    const cargoToRender = cargoItems.length > 0 ? cargoItems : containers
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start header_buffer">
         <div className={`${adminStyles.margin_box_right} layout-row flex-100 layout-wrap layout-align-center-stretch margin_bottom`}>
           <div className={`layout-row flex flex-sm-100 layout-align-space-between-center ${adminStyles.title_shipment_grey}`}>
             <p className="layout-align-start-center layout-row">
-Ref:&nbsp;
+              Ref:&nbsp;
               {' '}
               <span>{shipment.imc_reference}</span>
             </p>
@@ -818,7 +819,7 @@ Ref:&nbsp;
               selectedStyle={selectedStyle}
               deselectedStyle={deselectedStyle}
               feeHash={feeHash}
-              cargo={cargoItems || containers}
+              cargo={cargoToRender}
               cargoView={cargoView}
               remarkDispatch={remarkDispatch}
             />

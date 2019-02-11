@@ -3,6 +3,9 @@
 FactoryBot.define do
   factory :local_charge do
     association :hub
+    association :tenant_vehicle
+    direction { 'export' }
+    load_type { 'lcl' }
   end
 end
 
@@ -22,4 +25,8 @@ end
 #  direction          :string
 #  fees               :jsonb
 #  dangerous          :boolean          default(FALSE)
+#  effective_date     :datetime
+#  expiration_date    :datetime
+#  user_id            :integer
+#  uuid               :uuid
 #

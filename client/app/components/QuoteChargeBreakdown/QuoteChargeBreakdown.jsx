@@ -3,8 +3,9 @@ import { withNamespaces } from 'react-i18next'
 import { get } from 'lodash'
 import styles from './QuoteChargeBreakdown.scss'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
+import { CONTAINER_DESCRIPTIONS } from '../../constants'
 import {
-  numberSpacing, capitalize, formattedPriceValue, nameToDisplay, humanizeSnakeCaseUp, fixedWeightChargeableString
+  numberSpacing, capitalize, formattedPriceValue, humanizeSnakeCaseUp, fixedWeightChargeableString
 } from '../../helpers'
 
 class QuoteChargeBreakdown extends Component {
@@ -245,6 +246,7 @@ class QuoteChargeBreakdown extends Component {
   determineContentToGenerate (key) {
     const { scope } = this.props
     if (key === 'cargo' && scope.fine_fee_detail) return this.generateUnitContent(key)
+    if (['import', 'export'].includes(key)) return this.generateUnitContent(key)
 
     return this.generateContent(key)
   }
@@ -321,8 +323,13 @@ class QuoteChargeBreakdown extends Component {
         </div>
       ))
 
+      const description = cargo ? CONTAINER_DESCRIPTIONS[cargo.size_class] || get(cargo, ['cargo_item_type', 'description']) : capitalize(unitArray[0])
+
       return (
-        <div className="flex-100 layout-row layout-wrap">
+        <div className={`flex layout-row layout-wrap ${styles.cargo_price_section}`}>
+          <div className={`flex-100 layout-row layout-align-start-center ${styles.cargo_title}`}>
+            {cargo ? `${cargo.quantity} x ${description}` : `${description}`}
+          </div>
           {sections}
         </div>
       )
@@ -367,7 +374,7 @@ class QuoteChargeBreakdown extends Component {
         if (meta) {
           return `(${fixedWeightChargeableString(cargo, get(meta, ['ocean_chargeable_weight'], 0), t, scope)})`
         }
-        
+
         value = cargo.reduce((acc, c) => (acc + +c.chargeable_weight * +c.quantity), 0)
         break
       default:
@@ -411,9 +418,7 @@ class QuoteChargeBreakdown extends Component {
                       <span
                         className={styles.chargeable_weight}
                         dangerouslySetInnerHTML={{ __html: this.renderChargeableWeight(key) }}
-                      >
-                      
-                      </span>
+                      />
                     ) : ''
                 }
               </div>

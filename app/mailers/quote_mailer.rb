@@ -21,17 +21,17 @@ class QuoteMailer < ApplicationMailer
     quotation = generate_and_upload_quotation(@quotes)
     @document = Document.create!(
       shipment: shipment,
-      text: "quotation_#{shipment.imc_reference}",
+      text: "quotation_#{@shipments.pluck(:imc_reference).join(',')}",
       doc_type: 'quotation',
       user: @user,
       tenant: @user.tenant,
       file: {
         io: StringIO.new(quotation),
-        filename: "quotation_#{shipment.imc_reference}.pdf",
+        filename: "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf",
         content_type: 'application/pdf'
       }
     )
-    pdf_name = "quotation_#{@shipment.imc_reference}.pdf"
+    pdf_name = "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf"
     attachments.inline['logo.png'] = URI.try(:open, @theme['logoLarge']).try(:read)
     attachments.inline['icon.png'] = @mot_icon
     attachments[pdf_name] = quotation
@@ -41,7 +41,7 @@ class QuoteMailer < ApplicationMailer
                          .tap { |a| a.display_name = @user.tenant.name }.format,
       reply_to: @user.tenant.emails.dig('support', 'general'),
       to: mail_target_interceptor(@user, email),
-      subject: "Quotation for #{@shipment.imc_reference}"
+      subject: "Quotation for #{@shipments.pluck(:imc_reference).join(',')}"
     ) do |format|
       format.html
       format.mjml
@@ -60,17 +60,17 @@ class QuoteMailer < ApplicationMailer
     quotation = generate_and_upload_quotation(@quotes)
     @document = Document.create!(
       shipment: shipment,
-      text: "quotation_#{shipment.imc_reference}",
+      text: "quotation_#{@shipments.pluck(:imc_reference).join(',')}",
       doc_type: 'quotation',
       user: @user,
       tenant: @user.tenant,
       file: {
         io: StringIO.new(quotation),
-        filename: "quotation_#{shipment.imc_reference}.pdf",
+        filename: "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf",
         content_type: 'application/pdf'
       }
     )
-    pdf_name = "quotation_#{@shipment.imc_reference}.pdf"
+    pdf_name = "quotation_#{@shipments.pluck(:imc_reference).join(',')}.pdf"
     attachments.inline['logo.png'] = URI.open(@theme['logoLarge']).read
     attachments[pdf_name] = quotation
 
@@ -79,7 +79,7 @@ class QuoteMailer < ApplicationMailer
                          .tap { |a| a.display_name = 'ItsMyCargo Quotation Tool' }.format,
       reply_to: Settings.emails.support,
       to: mail_target_interceptor(@user, @user.tenant.email_for(:sales, shipment.mode_of_transport)),
-      subject: "Quotation for #{@shipment.imc_reference}"
+      subject: "Quotation for #{@shipments.pluck(:imc_reference).join(',')}"
     ) do |format|
       format.html
       format.mjml

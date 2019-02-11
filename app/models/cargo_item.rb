@@ -37,6 +37,18 @@ class CargoItem < ApplicationRecord
     dimension_x * dimension_y * dimension_z / 1_000_000
   end
 
+  def with_cargo_type
+    as_json(
+      include: [
+        {
+          cargo_item_type: {
+            only: %i(description)
+          }
+        }
+      ]
+    )
+  end
+
   def payload_in_tons
     payload_in_kg / 1000
   end
