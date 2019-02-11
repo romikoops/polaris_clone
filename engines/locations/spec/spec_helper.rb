@@ -85,6 +85,20 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = :random
 
+  config.before(:suite) do
+    # reindex models
+    Locations::Name.search_index.delete
+    Locations::Name.reindex
+
+    # and disable callbacks
+    Searchkick.disable_callbacks
+  end
+
+  config.around(:each, search: true) do |example|
+    Searchkick.callbacks(true) do
+      example.run
+    end
+  end
   # Seed global randomization in this process using the `--seed` CLI option.
   # Setting this allows you to use `--seed` to deterministically reproduce
   # test failures related to randomization by passing the same `--seed` value

@@ -10,13 +10,13 @@ module Locations
       [
         FactoryBot.create(:locations_name,
                           location: location,
-                          locality_8: 'Baoshun',
+                          city: 'Baoshun',
                           name: 'Shanghai',
                           postal_code: 220011,
                           language: 'en'),
         FactoryBot.create(:locations_name,
                           location: location,
-                          locality_8: '宝山城市工业园区',
+                          city: '宝山城市工业园区',
                           name: '宝山区',
                           postal_code: 220011,
                           language: 'zh', country: '中国')

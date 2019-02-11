@@ -27,11 +27,13 @@ module Locations
                           country_code: 'cn',
                           language: 'en'),
         FactoryBot.create(:locations_name,
+                          :reindex,
                           osm_id: 334,
                           city: '宝山城市工业园区',
                           name: '宝山区',
                           country_code: 'cn',
-                          language: 'zh', country: '中国')
+                          language: 'zh',
+                          country: '中国')
       ]
     end
     let(:target_result_en) { location_names.first }

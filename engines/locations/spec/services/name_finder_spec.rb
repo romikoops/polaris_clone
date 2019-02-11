@@ -11,35 +11,41 @@ RSpec.describe Locations::NameFinder do
     let!(:location_names) do
       [
         FactoryBot.create(:locations_name,
+          :reindex,
           osm_id: 1,
           city: 'Shanghai',
           name: 'Baoshun',
           alternative_names: '宝山城市工业园区', place_rank: 50),
         FactoryBot.create(:locations_name,
+          :reindex,
           osm_id: 2,
           city: 'Taicung',
           name: 'Baoshun',
           place_rank:  80),
         FactoryBot.create(:locations_name,
+          :reindex,
           osm_id: 3,
           city: 'Qingdao',
           name: 'Baoshun',
           place_rank: 60 ),
         FactoryBot.create(:locations_name,
+          :reindex,
           osm_id: 4,
           county: 'Shanghai',
           name: 'Baoshun',
           place_rank: 60 ),
         FactoryBot.create(:locations_name,
+          :reindex,
           osm_id: 7,
           city: '',
           name: 'AB10',
           place_rank: 80 ),
         FactoryBot.create(:locations_name,
+          :reindex,
           osm_id: 6,
           city: '',
           name: 'AB',
-          place_rank: 60 )
+          place_rank: 60)
       ]
     end
 

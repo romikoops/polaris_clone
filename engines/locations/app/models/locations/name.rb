@@ -2,21 +2,9 @@
 
 module Locations
   class Name < ApplicationRecord
-    include PgSearch
+    searchkick word_middle: %i(name display_name postal_code)
     belongs_to :location, optional: true
     # validates :osm_id, presence: true
-
-    pg_search_scope :autocomplete,
-                    against: %i(
-                      display_name
-                      alternative_names
-                      name
-                      postal_code
-                    ),
-                    ignoring: :accents,
-                    using: {
-                      tsearch: { prefix: true, dictionary: 'simple' }
-                    }
 
     def names
       [

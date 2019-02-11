@@ -13,5 +13,11 @@ FactoryBot.define do
     osm_type nil
     state nil
     county nil
+
+    trait :reindex do
+      after(:create) do |name, _evaluator|
+        name.reindex(refresh: true)
+      end
+    end
   end
 end

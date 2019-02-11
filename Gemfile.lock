@@ -86,8 +86,8 @@ PATH
   specs:
     locations (0.0.1)
       core
-      pg_search
       rgeo-geojson
+      searchkick
 
 PATH
   remote: engines/users
@@ -291,6 +291,14 @@ GEM
       redis
     erubi (1.8.0)
     erubis (2.7.0)
+    elasticsearch (6.1.0)
+      elasticsearch-api (= 6.1.0)
+      elasticsearch-transport (= 6.1.0)
+    elasticsearch-api (6.1.0)
+      multi_json
+    elasticsearch-transport (6.1.0)
+      faraday
+      multi_json
     execjs (2.7.0)
     factory_bot (4.11.1)
       activesupport (>= 3.0.0)
@@ -612,10 +620,22 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+<<<<<<< HEAD
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
+<<<<<<< HEAD
     sentry-raven (2.9.0)
+=======
+    sentry-raven (2.8.0)
+=======
+    searchkick (3.1.2)
+      activemodel (>= 4.2)
+      elasticsearch (>= 5)
+      hashie
+    sentry-raven (2.7.4)
+>>>>>>> 64699993b... IMC-1136 - serachkick stage 1
+>>>>>>> c71d2a67b... IMC-1136 - serachkick stage 1
       faraday (>= 0.7.6, < 1.0)
     sexp_processor (4.11.0)
     shoryuken (3.2.3)

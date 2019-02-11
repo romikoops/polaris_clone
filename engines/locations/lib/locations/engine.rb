@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'pg_search'
+require 'searchkick'
 require 'rgeo-geojson'
 
 module Locations

@@ -16,6 +16,7 @@ module Locations
                           postal_code: 220011,
                           language: 'en'),
         FactoryBot.create(:locations_name,
+                          :reindex,
                           name: '',
                           city: '宝山城市工业园区',
                           county: '宝山区',

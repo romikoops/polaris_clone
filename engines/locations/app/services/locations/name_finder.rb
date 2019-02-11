@@ -11,7 +11,8 @@ module Locations
         # direct_match =
         #   Locations::Name.where("name ILIKE ? OR alternative_names ILIKE ?", "%#{text}%", "%#{text}%")
         # search_match | direct_match
-        Locations::Name.autocomplete(text)
+        require 'pry'; binding.pry
+        Locations::Name.search text, fields: [:name, :display_name, :postal_code], match: :text_middle
       end
       filtered_results = all_results
                           .reject(&:empty?)
