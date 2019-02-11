@@ -30,21 +30,22 @@ module ExcelDataServices
       options = { data: restructured_sheets_data, tenant: tenant, klass_identifier: klass_identifier }
       errors = insertability_validator.validate(options)
       return { has_errors: true, errors: errors } unless errors.empty?
-      
+
       # Smart Assumptions Validator
       smart_assumptions_validator = ExcelDataServices::DataValidator.get('Smart Assumptions', klass_identifier)
       options = { data: restructured_sheets_data, tenant: tenant, klass_identifier: klass_identifier }
       errors = smart_assumptions_validator.validate(options)
       return { has_errors: true, errors: errors } unless errors.empty?
 
-      binding.pry
-
       # Database Inserter
       inserter = ExcelDataServices::DatabaseInserter.get(klass_identifier)
       options = { tenant: tenant,
                   data: restructured_sheets_data,
+                  klass_identifier: klass_identifier,
                   options: { should_generate_trips: false } }
       inserter.insert(options)
+
+      binding.pry
 
       # Booking Possible Validator
       # TODO...

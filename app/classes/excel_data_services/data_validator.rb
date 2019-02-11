@@ -5,7 +5,7 @@ module ExcelDataServices
     ValidationError = Class.new(StandardError)
 
     def self.get(flavor, klass_identifier)
-      "ExcelDataServices::DataValidator::#{flavor.titleize.delete(' ')}::#{klass_identifier}".constantize
+      "#{name}::#{flavor.titleize.delete(' ')}::#{klass_identifier}".constantize
     end
 
     def self.included(base)

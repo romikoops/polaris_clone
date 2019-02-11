@@ -67,7 +67,7 @@ module ExcelDataServices
           raise NotImplementedError, "This method must be implemented in #{self.class.name}."
         end
 
-        def check_row(row_data)
+        def check_row(_row_data)
           raise NotImplementedError, "This method must be implemented in #{self.class.name}."
         end
       end

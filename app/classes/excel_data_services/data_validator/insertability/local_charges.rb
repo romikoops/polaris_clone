@@ -6,7 +6,7 @@ module ExcelDataServices
       class LocalCharges < Base
         private
 
-        def check_data(single_data)
+        def check_data(_single_data)
           raise NotImplementedError
         end
       end

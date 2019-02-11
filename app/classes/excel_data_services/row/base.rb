@@ -12,25 +12,29 @@ module ExcelDataServices
         @nr ||= data[:row_nr]
       end
 
+      def currency
+        @currency ||= data[:currency]
+      end
+
+      def customer_email
+        @customer_email ||= data[:customer_email]
+      end
+
+      def data_extraction_method
+        @data_extraction_method ||= data[:data_extraction_method]
+      end
+
       def cargo_classes
         @cargo_classes ||=
-          if data[:load_type].casecmp('fcl').zero?
+          if load_type&.casecmp('fcl')&.zero?
             %w(fcl_20 fcl_40 fcl_40_hq)
           else
-            [data[:load_type].downcase]
+            [load_type.downcase]
           end
       end
 
       def carrier
-        @carrier ||= Carrier.find_by_name(data[:carrier]) unless data[:carrier].blank?
-      end
-
-      def user
-        @user ||= User.find_by(tenant: tenant, email: data[:customer_email]) if data[:customer_email].present?
-      end
-
-      def uuid
-        @uuid ||= data[:uuid]
+        @carrier ||= data[:carrier]
       end
 
       def effective_date
@@ -41,8 +45,44 @@ module ExcelDataServices
         @expiration_date ||= data[:expiration_date]
       end
 
+      def fee_code
+        @fee_code ||= data[:fee_code]
+      end
+
+      def fee_name
+        @fee_name ||= data[:fee_name]
+      end
+
+      def fee
+        @fee ||= data[:fee]
+      end
+
+      def fee_min
+        @fee_min ||= data[:fee_min]
+      end
+
+      def load_type
+        @load_type ||= data[:load_type]
+      end
+
+      def mot
+        @mot ||= data[:mot]
+      end
+
+      def range
+        @range ||= data[:range]
+      end
+
       def rate_basis
         @rate_basis ||= data[:rate_basis]
+      end
+
+      def service_level
+        @service_level ||= data[:service_level] || 'standard'
+      end
+
+      def uuid
+        @uuid ||= data[:uuid]
       end
 
       def specific_charge_params_for_reading

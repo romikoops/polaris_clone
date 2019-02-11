@@ -10,9 +10,10 @@ module ExcelDataServices
         new(options).perform
       end
 
-      def initialize(tenant:, data:, options: {})
+      def initialize(tenant:, data:, klass_identifier:, options: {})
         @tenant = tenant
         @data = data
+        @klass_identifier = klass_identifier
         @options = options
         @stats = stat_descriptors.each_with_object({}) do |descriptor, hsh|
           hsh[descriptor] = {
@@ -24,7 +25,7 @@ module ExcelDataServices
 
       private
 
-      attr_reader :tenant, :data, :options, :stats
+      attr_reader :tenant, :data, :klass_identifier, :options, :stats
 
       def stat_descriptors
         %i(itineraries
@@ -39,6 +40,13 @@ module ExcelDataServices
         else
           @stats[descriptor][:number_updated] += 1
         end
+      end
+
+      def append_hub_suffix(name, mot)
+        name + ' ' + { 'ocean' => 'Port',
+                       'air' => 'Airport',
+                       'rail' => 'Railyard',
+                       'truck' => 'Depot' }[mot]
       end
     end
   end

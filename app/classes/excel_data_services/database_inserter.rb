@@ -3,7 +3,7 @@
 module ExcelDataServices
   module DatabaseInserter
     def self.get(klass_identifier)
-      const_get(klass_identifier)
+      "#{name}::#{klass_identifier}".constantize
     end
   end
 end
