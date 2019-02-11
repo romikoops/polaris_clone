@@ -2,7 +2,7 @@
 
 require 'bigdecimal'
 
-module PricingTools # rubocop:disable Mertics/ModuleLength
+module PricingTools # rubocop:disable Metrics/ModuleLength
   module_function
 
   include CurrencyTools
@@ -35,7 +35,7 @@ module PricingTools # rubocop:disable Mertics/ModuleLength
     )
   end
 
-  def find_local_charge(schedule, cargos, direction, user) # rubocop:disable Mertics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+  def find_local_charge(schedule, cargos, direction, user) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
     hub = direction == 'export' ? schedule.origin_hub : schedule.destination_hub
     date = direction == 'export' ? schedule.etd : schedule.eta
     date = Date.today if date.nil?
@@ -49,7 +49,7 @@ module PricingTools # rubocop:disable Mertics/ModuleLength
                               )
                               .for_dates(date, date)
     charges_for_filtering = []
-
+                                binding.pry
     cargos.each do |cargo|
       load_type = cargo.is_a?(Container) ? cargo.size_class : 'lcl'
       [user.id, nil].each do |user_id|
@@ -71,14 +71,16 @@ module PricingTools # rubocop:disable Mertics/ModuleLength
       'fees' => {}
     }
     filtered_charges = charges_for_filtering.compact.map do |filter_charge|
-      filter_charge['fees'].each do |fk, fee|
-        if %w(PER_SHIPMENT PER_BILL).include?(RateBasis.get_internal_key(fee['rate_basis']))
-          shipment_charges['fees'][fk] = filter_charge['fees'].delete(fk)
+      unless filter_charge['fees'].empty?
+        filter_charge['fees'].each do |fk, fee|
+          if %w(PER_SHIPMENT PER_BILL).include?(RateBasis.get_internal_key(fee['rate_basis']))
+            shipment_charges['fees'][fk] = filter_charge['fees'].delete(fk)
+          end
         end
+        filter_charge
       end
-      filter_charge
     end
-
+    binding.pry
     [filtered_charges.compact.uniq, shipment_charges]
   end
 
@@ -92,7 +94,7 @@ module PricingTools # rubocop:disable Mertics/ModuleLength
     end
   end
 
-  def cargo_hash_for_local_charges(cargos, tenant) # rubocop:disable Mertics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def cargo_hash_for_local_charges(cargos, tenant) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     if tenant.scope.dig('consolidation', 'cargo', 'backend')
       cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
         weight = get_cargo_weight(cargo_unit)
