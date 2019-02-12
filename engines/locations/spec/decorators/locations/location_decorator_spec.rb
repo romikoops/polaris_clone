@@ -29,28 +29,6 @@ module Locations
       it 'returns a geoJson object' do
         expect(LocationDecorator.new(location).geojson).to eq(example_bounds)
       end
-      it 'returns the description in the English' do
-        expect(LocationDecorator.new(location).description(lang: 'en')).to eq(english_string)
-      end
-      it 'returns the description in the Chinese' do
-        expect(LocationDecorator.new(location).description(lang: 'zh')).to eq(chinese_string)
-      end
-      it 'returns the city in the English' do
-        expect(LocationDecorator.new(location).city(lang: 'en')).to eq('Baoshun')
-      end
-      it 'returns the city in the Chinese' do
-        expect(LocationDecorator.new(location).city(lang: 'zh')).to eq('宝山城市工业园区')
-      end
-      it 'returns the country in the English' do
-        expect(LocationDecorator.new(location).country(lang: 'en')).to eq('China')
-      end
-      it 'returns the country in the Chinese' do
-        expect(LocationDecorator.new(location).country(lang: 'zh')).to eq('中国')
-      end
-      it 'returns the postal_code' do
-        expect(LocationDecorator.new(location).postal_code(lang: 'en')).to eq('220011')
-      end
-     
     end
   end
 end
