@@ -343,14 +343,14 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
       end
       value = 0 if fee_range.nil?
       unless fee_range.nil?
-        value = if fee['range'].index(fee_range).zero?
-                  fee_range['rate'] * weight_kg / 1000
-                else
-                  fee_range['rate'] * volume
+        value = if fee_range['ton']
+                  fee_range['ton'] * weight_kg / 1000
+                elsif fee_range['cbm']
+                  fee_range['cbm'] * volume
                 end
       end
-      res = [value, min].max
 
+      res = [value, min].max
     when 'PER_CONTAINER_RANGE'
       value = 0 if fee_range.nil?
       unless fee_range.nil?
@@ -359,8 +359,8 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
         end
         value = fee_range['rate']
       end
-      res = [value, min].max
 
+      res = [value, min].max
     when 'PER_UNIT_RANGE'
       value = 0 if fee_range.nil?
       unless fee_range.nil?

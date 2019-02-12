@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2019_02_07_082256) do
-=======
-ActiveRecord::Schema.define(version: 2019_02_06_111149) do
->>>>>>> c96e36d98... IMC-1207 Setup uuid correctly with uniqueness validation
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"

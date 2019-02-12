@@ -45,8 +45,8 @@ module ExcelDataServices
       end
 
       def find_or_create_tenant_vehicles(params, carrier)
-        service_level = service_level(params)
-        if service_level(params) == 'all'
+        service_level = params[:service_level]
+        if service_level == 'all'
           return TenantVehicle.where(
             carrier: carrier,
             tenant: @tenant,
@@ -76,16 +76,20 @@ module ExcelDataServices
         params[:mode_of_transport] = params[:mot]
         params[:tenant_vehicle_id] = tenant_vehicle.id
 
-        local_charge_params = params.slice(
-          :load_type,
-          :direction,
-          :dangerous,
-          :fees,
-          :hub_id,
-          :counterpart_hub_id,
-          :mode_of_transport,
-          :tenant_vehicle_id
-        )
+        local_charge_params =
+          params.slice(
+            :load_type,
+            :direction,
+            :dangerous,
+            :fees,
+            :hub_id,
+            :counterpart_hub_id,
+            :mode_of_transport,
+            :tenant_vehicle_id
+          ).merge(
+            effective_date: Date.parse(params[:effective_date]),
+            expiration_date: Date.parse(params[:expiration_date])
+          )
 
         local_charge = @tenant.local_charges.find_or_initialize_by(local_charge_params)
         add_stats(:local_charges, local_charge)

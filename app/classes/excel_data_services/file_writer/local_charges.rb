@@ -3,6 +3,7 @@
 module ExcelDataServices
   module FileWriter
     class LocalCharges < Base
+      PerUnitTonCbmRangeError = Class.new(WritingError)
       UnknownRateBasisError = Class.new(WritingError)
 
       def initialize(tenant:, file_name:, mode_of_transport: nil)
@@ -14,26 +15,6 @@ module ExcelDataServices
 
       attr_reader :mode_of_transport
 
-      CHARGE_PARAMS_LOOKUP =
-        { 'PER_SHIPMENT' => { shipment: data[:value] },
-          'PER_CONTAINER' => { container: data[:value] },
-          'PER_BILL' => { bill: data[:value] },
-          'PER_CBM' => { cbm: data[:value] },
-          'PER_KG' => { kg: data[:value] },
-          'PER_TON' => { ton: data[:ton] },
-          'PER_WM' => { wm: data[:value] },
-          'PER_ITEM' => { item: data[:value] },
-          'PER_CBM_TON' => { ton: data[:ton], cbm: data[:cbm] },
-          'PER_SHIPMENT_CONTAINER' => { shipment: data[:shipment], container: data[:container] },
-          'PER_BILL_CONTAINER' => { container: data[:container], bill: data[:bill] },
-          'PER_CBM_KG' => { kg: data[:kg], cbm: data[:cbm] },
-          'PER_KG_RANGE' => { range_min: data[:range_min], range_max: data[:range_max], kg: data[:kg] },
-          'PER_WM_RANGE' => { range_min: data[:range_min], range_max: data[:range_max], kg: data[:wm] },
-          'PER_X_KG_FLAT' => { kg: data[:value], base: data[:base] },
-          'PER_UNIT_TON_CBM_RANGE' => { cbm: data[:cbm], ton: data[:ton],
-                                        range_min: data[:range_min],
-                                        range_max: data[:range_max] } }.freeze
-
       def load_and_prepare_data
         rows_data = []
         local_charges = if mode_of_transport.nil? || mode_of_transport == 'all'
@@ -43,7 +24,11 @@ module ExcelDataServices
                         end
         local_charges&.each do |local_charge|
           local_charge[:fees].values.each do |fee_values_h|
-            rows_data << build_row_data(local_charge, fee_values_h)
+            ranges = ranges_in_fee_values(fee_values_h)
+
+            ranges.each do |range|
+              rows_data << build_row_data(local_charge, fee_values_h, range)
+            end
           end
         end
 
@@ -52,14 +37,17 @@ module ExcelDataServices
         { 'Sheet1' => rows_data }
       end
 
-      def build_row_data(local_charge, fee)
-        binding.pry
+      def ranges_in_fee_values(fee_values_h)
+        fee_values_h.with_indifferent_access[:range] || [nil]
+      end
+
+      def build_row_data(local_charge, fee, range)
         fee.deep_symbolize_keys!
         hub = tenant.hubs.find(local_charge.hub_id)
         hub_name = remove_hub_suffix(hub.name, hub.hub_type)
         country_name = hub.address.country.name
-        effective_date = Date.parse(fee[:effective_date].to_s) if fee[:effective_date]
-        expiration_date = Date.parse(fee[:expiration_date].to_s) if fee[:expiration_date]
+        effective_date = Date.parse(local_charge.effective_date.to_s) if local_charge.effective_date
+        expiration_date = Date.parse(local_charge.expiration_date.to_s) if local_charge.expiration_date
         counterpart_hub = tenant.hubs.find_by(id: local_charge.counterpart_hub_id) # find_by returns nil if `id` not available
         counterpart_hub_name = remove_hub_suffix(counterpart_hub.name, counterpart_hub.hub_type) if counterpart_hub
         counterpart_country_name = counterpart_hub.address.country.name if counterpart_hub
@@ -67,10 +55,12 @@ module ExcelDataServices
         service_level = tenant_vehicle.name
         carrier = tenant_vehicle&.carrier&.name
         rate_basis = fee[:rate_basis].upcase
-        charge_params = specific_charge_params_for_writing(rate_basis, fee)
+        unless range.nil?
+          range_min = range[:min]
+          range_max = range[:max]
+        end
 
-        {
-          hub: hub_name,
+        { hub: hub_name,
           country: country_name,
           effective_date: effective_date,
           expiration_date: expiration_date,
@@ -87,19 +77,49 @@ module ExcelDataServices
           rate_basis: fee[:rate_basis],
           minimum: fee[:min],
           maximum: fee[:max],
-          **charge_params,
-          dangerous: local_charge.dangerous
-        }
+          **specific_charge_params_for_writing(rate_basis, fee, range),
+          range_min: range_min,
+          range_max: range_max,
+          dangerous: local_charge.dangerous }
       end
 
-      def specific_charge_params_for_writing(rate_basis, _data)
+      def specific_charge_params_for_writing(rate_basis, data, range)
+        range = {} if range.nil?
         rate_basis = RateBasis.get_internal_key(rate_basis.upcase)
 
-        unless CHARGE_PARAMS_LOOKUP.has_key?(rate_basis)
-          raise UnknownRateBasisError, "RATE_BASIS \"#{rate_basis}\" not found!"
+        lookup =
+          { 'PER_SHIPMENT' => { shipment: data[:value] },
+            'PER_CONTAINER' => { container: data[:value] },
+            'PER_BILL' => { bill: data[:value] },
+            'PER_CBM' => { cbm: data[:value] },
+            'PER_KG' => { kg: data[:value]  },
+            'PER_TON' => { ton: data[:ton]  },
+            'PER_WM' => { wm: data[:value]  },
+            'PER_ITEM' => { item: data[:value]  },
+            'PER_CBM_TON' => { ton: data[:ton], cbm: data[:cbm] },
+            'PER_SHIPMENT_CONTAINER' => { shipment: data[:shipment], container: data[:container] },
+            'PER_BILL_CONTAINER' => { container: data[:container], bill: data[:bill] },
+            'PER_CBM_KG' => { kg: data[:kg], cbm: data[:cbm] },
+            'PER_KG_RANGE' => { kg: range[:kg]  },
+            'PER_WM_RANGE' => { wm: range[:wm]  },
+            'PER_X_KG_FLAT' => { kg: data[:value], base: data[:base] },
+            'PER_UNIT_TON_CBM_RANGE' => per_unit_ton_cbm_range_value(range) }
+
+        raise UnknownRateBasisError, "RATE_BASIS \"#{rate_basis}\" not found!" unless lookup.has_key?(rate_basis)
+
+        lookup[rate_basis]
+      end
+
+      def per_unit_ton_cbm_range_value(range)
+        if range[:cbm] && range[:ton]
+          raise PerUnitTonCbmRangeError, "There should only be one value for rate_basis 'PER_UNIT_TON_CBM_RANGE'."
         end
 
-        CHARGE_PARAMS_LOOKUP[rate_basis]
+        if range[:cbm]
+          { cbm: range[:cbm] }
+        elsif range[:ton]
+          { ton: range[:ton] }
+        end
       end
 
       def sort!(data)
@@ -130,7 +150,7 @@ module ExcelDataServices
       end
 
       def build_raw_headers(_sheet_name, _rows_data)
-        VALID_STATIC_HEADERS
+        ExcelDataServices::DataValidator::Syntax::LocalCharges::VALID_STATIC_HEADERS
       end
     end
   end

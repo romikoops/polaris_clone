@@ -48,14 +48,15 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
 
   def upload
     file = upload_params[:file].tempfile
-    options = { tenant: current_tenant, file_or_path: file }
+    identifier = 'LocalCharges'
 
-    sheets_data = ExcelDataServices::FileParser::LocalCharges.new(options).perform
-    options = { tenant: current_tenant, data: sheets_data }
-    insertion_stats = ExcelDataServices::DatabaseInserter::LocalCharges.new(options).perform
-    response_handler(insertion_stats)
-  rescue ExcelDataServices::DataRestructurer::LocalCharges::MissingValuesForRateBasisError => e
-    response_handler(has_errors: true, errors: e.object)
+    options = { tenant: current_tenant,
+                specific_identifier: identifier,
+                file_or_path: file }
+    uploader = ExcelDataServices::Uploader.new(options)
+
+    insertion_stats_or_errors = uploader.perform
+    response_handler(insertion_stats_or_errors)
   end
 
   def download

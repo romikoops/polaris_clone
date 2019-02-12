@@ -4,6 +4,8 @@ module ExcelDataServices
   module DataValidator
     module Syntax
       class LocalCharges < Base
+        include ExcelDataServices::LocalChargesTool
+
         UnknownRateBasisError = Class.new(StructureError)
         MissingValuesForRateBasisError = Class.new(StructureError)
 
@@ -80,7 +82,8 @@ module ExcelDataServices
         end
 
         def check_missing_values_for_rate_basis(row)
-          charge_params_for_rate_basis = row.specific_charge_params_for_reading
+          charge_params_for_rate_basis =
+            specific_charge_params_for_reading(row.rate_basis, row)
 
           unless charge_params_for_rate_basis.values.all?
             raise MissingValuesForRateBasisError, "Missing value for #{row.rate_basis}."

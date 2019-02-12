@@ -3,6 +3,8 @@
 module ExcelDataServices
   module DataRestructurer
     class LocalCharges < Base
+      include ExcelDataServices::LocalChargesTool
+
       HubNotFoundError = Class.new(WillBeRefactoredRestructuringError)
 
       def perform
@@ -16,6 +18,7 @@ module ExcelDataServices
         end
 
         charges_data = build_charges_data(chunked_raw_data_per_sheet)
+
         # TODO: This Method shold not be in the DataRestructurer Module
         create_missing_charge_categories(charges_data)
         # TODO: This Method shold not be in the DataRestructurer Module
@@ -27,6 +30,8 @@ module ExcelDataServices
       def row_identifier(row)
         row.slice(:hub,
                   :country,
+                  :effective_date,
+                  :expiration_date,
                   :counterpart_hub,
                   :counterpart_country,
                   :service_level,
@@ -54,11 +59,15 @@ module ExcelDataServices
             data_per_identifier.each do |data_per_ranges|
               ranges_obj = { range: reduce_ranges_into_one_obj(data_per_ranges) }
               charge_data = data_per_ranges.first
-              fees_obj = { charge_data[:fee_code] => standard_charge_params(charge_data) }
+              fee_code = charge_data[:fee_code]
+              fees_obj = { fee_code => standard_charge_params(charge_data) }
+
               if ranges_obj[:range]
-                fees_obj[data[:fee_code]].merge!(ranges_obj)
+                fees_obj[fee_code].merge!(ranges_obj)
               else
-                fees_obj[charge_data[:fee_code]].merge!(specific_charge_params_for_reading(charge_data[:rate_basis], charge_data))
+                fees_obj[fee_code].merge!(
+                  specific_charge_params_for_reading(charge_data[:rate_basis], charge_data)
+                )
               end
 
               data_with_fees[:fees].merge!(fees_obj)
@@ -89,55 +98,11 @@ module ExcelDataServices
         rate_basis = charge_data[:rate_basis].upcase
 
         { currency: charge_data[:currency],
-          expiration_date: charge_data[:expiration_date],
-          effective_date: charge_data[:effective_date],
           key: charge_data[:fee_code],
           min: charge_data[:minimum],
           max: charge_data[:maximum],
           name: charge_data[:fee],
           rate_basis: rate_basis }
-      end
-
-      def specific_charge_params_for_reading(rate_basis, single_data)
-        rate_basis = RateBasis.get_internal_key(rate_basis.upcase)
-
-        case rate_basis
-        when 'PER_SHIPMENT'
-          { value: single_data[:shipment] }
-        when 'PER_CONTAINER'
-          { value: single_data[:container] }
-        when 'PER_BILL'
-          { value: single_data[:bill] }
-        when 'PER_CBM'
-          { value: single_data[:cbm] }
-        when 'PER_KG'
-          { value: single_data[:kg] }
-        when 'PER_TON'
-          { ton: single_data[:ton] }
-        when 'PER_WM'
-          { value: single_data[:wm] }
-        when 'PER_ITEM'
-          { value: single_data[:item] }
-        when 'PER_CBM_TON'
-          { ton: single_data[:ton], cbm: single_data[:cbm] }
-        when 'PER_SHIPMENT_CONTAINER'
-          { shipment: single_data[:shipment], container: single_data[:container] }
-        when 'PER_BILL_CONTAINER'
-          { container: single_data[:container], bill: single_data[:bill] }
-        when 'PER_CBM_KG'
-          { kg: single_data[:kg], cbm: single_data[:cbm] }
-        when 'PER_KG_RANGE'
-          { range_min: single_data[:range_min], range_max: single_data[:range_max], kg: single_data[:kg] }
-        when 'PER_WM_RANGE'
-          { range_min: single_data[:range_min], range_max: single_data[:range_max], wm: single_data[:wm] }
-        when 'PER_X_KG_FLAT'
-          { value: single_data[:kg], base: single_data[:base] }
-        when 'PER_UNIT_TON_CBM_RANGE'
-          { cbm: single_data[:cbm],
-            ton: single_data[:ton],
-            range_min: single_data[:range_min],
-            range_max: single_data[:range_max] }
-        end
       end
 
       # TODO: This Method shold not be in the DataRestructurer Module
