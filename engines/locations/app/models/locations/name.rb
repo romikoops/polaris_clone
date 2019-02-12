@@ -2,7 +2,7 @@
 
 module Locations
   class Name < ApplicationRecord
-    searchkick word_middle: %i(name display_name postal_code)
+    searchkick word_middle: %i(name display_name city postal_code), settings: {blocks: {read_only: false}}
     belongs_to :location, optional: true
     # validates :osm_id, presence: true
 

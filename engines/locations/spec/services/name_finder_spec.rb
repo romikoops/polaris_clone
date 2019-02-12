@@ -60,7 +60,7 @@ RSpec.describe Locations::NameFinder do
           :reindex,
           osm_id: 17,
           city: '',
-          name: 'Altenberg Bårenfeld',
+          name: 'Altenberg Bårenfels',
           place_rank: 80 ),
         FactoryBot.create(:locations_name,
           :reindex,
@@ -101,7 +101,7 @@ RSpec.describe Locations::NameFinder do
     end
 
     it 'finds the correct location name with umlauts' do
-      result = Locations::NameFinder.seeding('baerenfeld', 'altenberg')
+      result = Locations::NameFinder.seeding('ALTENBERG BAERENFELS')
       expect(result).to eq(de_target_location_name)
     end
 
@@ -110,11 +110,5 @@ RSpec.describe Locations::NameFinder do
       expect(result).to eq(de_location_names.last)
     end
 
-    # it 'raises an error when multiple matches are found' do
-    #   FactoryBot.create(:locations_name, location: location_2, locality_4: 'Shanghai', locality_8: 'Baoshun', locality_5: 'test')
-    #   expect do
-    #     Locations::NameFinder.find_highest_admin_level('Baoshun')
-    #   end.to raise_error(Locations::NameFinder::MultipleResultsFound)
-    # end
   end
 end

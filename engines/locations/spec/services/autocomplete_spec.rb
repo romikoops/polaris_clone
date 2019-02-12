@@ -11,8 +11,8 @@ module Locations
         FactoryBot.create(:locations_name,
                           :reindex,
                           osm_id: 331,
-                          city: 'Baoshun',
-                          name: 'Shanghai',
+                          name: 'Baoshun',
+                          city: 'Shanghai',
                           country_code: 'cn',
                           language: 'en'),
         FactoryBot.create(:locations_name,
@@ -47,8 +47,8 @@ module Locations
     context '.search' do
       it 'returns results including the desired object (en)' do
         results = Autocomplete.search(term: 'Baoshun', country_codes: ['cn'], lang: 'en')
-        expect(results.first.city).to eq('Baoshun')
-        expect(results.first.name).to eq('Shanghai')
+        expect(results.first.name).to eq('Baoshun')
+        expect(results.first.city).to eq('Shanghai')
         expect(results.first.geojson).to eq(example_bounds)
         expect(results.first.lat_lng).to eq({lat: 31.2699895, lng: 121.9318879})
         expect(results.first.class).to eq(Locations::NameDecorator)
