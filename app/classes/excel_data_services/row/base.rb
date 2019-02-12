@@ -24,15 +24,6 @@ module ExcelDataServices
         @data_extraction_method ||= data[:data_extraction_method]
       end
 
-      def cargo_classes
-        @cargo_classes ||=
-          if load_type&.casecmp('fcl')&.zero?
-            %w(fcl_20 fcl_40 fcl_40_hq)
-          else
-            [load_type.downcase]
-          end
-      end
-
       def carrier
         @carrier ||= data[:carrier]
       end

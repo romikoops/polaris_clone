@@ -41,8 +41,7 @@ module ExcelDataServices
       inserter = ExcelDataServices::DatabaseInserter.get(klass_identifier)
       options = { tenant: tenant,
                   data: restructured_sheets_data,
-                  klass_identifier: klass_identifier,
-                  options: { should_generate_trips: false } }
+                  klass_identifier: klass_identifier }
       insertion_stats = inserter.insert(options)
 
       insertion_stats

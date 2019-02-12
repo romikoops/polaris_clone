@@ -17,7 +17,7 @@ module ExcelDataServices
         @options = options
         @stats = stat_descriptors.each_with_object({}) do |descriptor, hsh|
           hsh[descriptor] = {
-            number_updated: 0,
+            number_found_or_updated: 0,
             number_created: 0
           }
         end
@@ -38,7 +38,7 @@ module ExcelDataServices
         if data_record.new_record?
           @stats[descriptor][:number_created] += 1
         else
-          @stats[descriptor][:number_updated] += 1
+          @stats[descriptor][:number_found_or_updated] += 1
         end
       end
 

@@ -3,7 +3,7 @@
 module ExcelDataServices
   module FileWriter
     class LocalCharges < Base
-      include ExcelDataServices::LocalChargesTool
+      UnknownRateBasisError = Class.new(WritingError)
 
       def initialize(tenant:, file_name:, mode_of_transport: nil)
         super(tenant: tenant, file_name: file_name)
@@ -13,6 +13,26 @@ module ExcelDataServices
       private
 
       attr_reader :mode_of_transport
+
+      CHARGE_PARAMS_LOOKUP =
+        { 'PER_SHIPMENT' => { shipment: data[:value] },
+          'PER_CONTAINER' => { container: data[:value] },
+          'PER_BILL' => { bill: data[:value] },
+          'PER_CBM' => { cbm: data[:value] },
+          'PER_KG' => { kg: data[:value] },
+          'PER_TON' => { ton: data[:ton] },
+          'PER_WM' => { wm: data[:value] },
+          'PER_ITEM' => { item: data[:value] },
+          'PER_CBM_TON' => { ton: data[:ton], cbm: data[:cbm] },
+          'PER_SHIPMENT_CONTAINER' => { shipment: data[:shipment], container: data[:container] },
+          'PER_BILL_CONTAINER' => { container: data[:container], bill: data[:bill] },
+          'PER_CBM_KG' => { kg: data[:kg], cbm: data[:cbm] },
+          'PER_KG_RANGE' => { range_min: data[:range_min], range_max: data[:range_max], kg: data[:kg] },
+          'PER_WM_RANGE' => { range_min: data[:range_min], range_max: data[:range_max], kg: data[:wm] },
+          'PER_X_KG_FLAT' => { kg: data[:value], base: data[:base] },
+          'PER_UNIT_TON_CBM_RANGE' => { cbm: data[:cbm], ton: data[:ton],
+                                        range_min: data[:range_min],
+                                        range_max: data[:range_max] } }.freeze
 
       def load_and_prepare_data
         rows_data = []
@@ -33,6 +53,7 @@ module ExcelDataServices
       end
 
       def build_row_data(local_charge, fee)
+        binding.pry
         fee.deep_symbolize_keys!
         hub = tenant.hubs.find(local_charge.hub_id)
         hub_name = remove_hub_suffix(hub.name, hub.hub_type)
@@ -69,6 +90,16 @@ module ExcelDataServices
           **charge_params,
           dangerous: local_charge.dangerous
         }
+      end
+
+      def specific_charge_params_for_writing(rate_basis, _data)
+        rate_basis = RateBasis.get_internal_key(rate_basis.upcase)
+
+        unless CHARGE_PARAMS_LOOKUP.has_key?(rate_basis)
+          raise UnknownRateBasisError, "RATE_BASIS \"#{rate_basis}\" not found!"
+        end
+
+        CHARGE_PARAMS_LOOKUP[rate_basis]
       end
 
       def sort!(data)
