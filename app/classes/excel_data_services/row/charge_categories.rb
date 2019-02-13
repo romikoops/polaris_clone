@@ -2,8 +2,7 @@
 
 module ExcelDataServices
   module Row
-    def self.get(klass_identifier)
-      "#{name}::#{klass_identifier}".constantize
+    class ChargeCategories < Base
     end
   end
 end

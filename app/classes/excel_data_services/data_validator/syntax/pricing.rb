@@ -6,11 +6,11 @@ module ExcelDataServices
       class Pricing < Base
         include ExcelDataServices::PricingTool
 
+        private
+
         def check_row(row)
           # raise NotImplementedError
         end
-
-        private
 
         def build_valid_headers(data_extraction_method)
           case data_extraction_method

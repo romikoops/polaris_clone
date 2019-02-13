@@ -16,8 +16,6 @@ module ExcelDataServices
           itinerary = Itinerary.find_by(name: row.itinerary_name, tenant: tenant)
           return if itinerary.nil?
 
-          user = User.find_by(tenant: tenant, email: row.customer_email) if row.customer_email.present?
-
           pricings = itinerary.pricings
                               .where(user: user, tenant_vehicle: find_tenant_vehicle(row))
                               .for_cargo_class(row.load_type)
@@ -34,7 +32,8 @@ module ExcelDataServices
         end
 
         def check_customer_email(row, user)
-          raise InsertabilityError, "There exists no user with email: #{row.customer_email}." if row.customer_email.present? && user.nil?
+          unknown_customer = row.customer_email.present? && user.nil?
+          raise InsertabilityError, "There exists no user with email: #{row.customer_email}." if unknown_customer
         end
 
         def find_tenant_vehicle(row)

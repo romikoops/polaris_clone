@@ -3,14 +3,15 @@
 class Admin::ChargeCategoriesController < Admin::AdminBaseController # rubocop:disable # Style/ClassAndModuleChildren
   def upload
     file = upload_params[:file].tempfile
+    identifier = 'ChargeCategories'
 
-    options = { tenant: current_tenant, file_or_path: file }
-    sheets_data = ExcelDataServices::FileParser::ChargeCategories.new(options).perform
+    options = { tenant: current_tenant,
+                specific_identifier: identifier,
+                file_or_path: file }
+    uploader = ExcelDataServices::Loader::Uploader.new(options)
 
-    options = { tenant: current_tenant, data: sheets_data }
-    insertion_stats = ExcelDataServices::DatabaseInserter::ChargeCategories.new(options).perform
-
-    response_handler(insertion_stats)
+    insertion_stats_or_errors = uploader.perform
+    response_handler(insertion_stats_or_errors)
   end
 
   def download

@@ -53,7 +53,7 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
     options = { tenant: current_tenant,
                 specific_identifier: identifier,
                 file_or_path: file }
-    uploader = ExcelDataServices::Uploader.new(options)
+    uploader = ExcelDataServices::Loader::Uploader.new(options)
 
     insertion_stats_or_errors = uploader.perform
     response_handler(insertion_stats_or_errors)
@@ -66,7 +66,7 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
     file_name = "#{current_tenant.subdomain.downcase}__local_charges_#{mot}"
 
     options = { tenant: current_tenant, specific_identifier: klass_identifier, file_name: file_name }
-    downloader = ExcelDataServices::Downloader.new(options)
+    downloader = ExcelDataServices::Loader::Downloader.new(options)
 
     document = downloader.perform
 
