@@ -41,7 +41,7 @@ module ExcelDataServices
       end
 
       def all_carriers_of_tenant
-        @all_carriers_of_tenant ||= Carrier.where(id: @tenant.tenant_vehicles.pluck(:carrier_id).compact.uniq)
+        @all_carriers_of_tenant ||= Carrier.where(id: tenant.tenant_vehicles.pluck(:carrier_id).compact.uniq)
       end
 
       def find_or_create_tenant_vehicles(params, carrier)
@@ -49,7 +49,7 @@ module ExcelDataServices
         if service_level == 'all'
           return TenantVehicle.where(
             carrier: carrier,
-            tenant: @tenant,
+            tenant: tenant,
             mode_of_transport: params[:mot]
           )
         end
@@ -57,7 +57,7 @@ module ExcelDataServices
         tenant_vehicle = TenantVehicle.find_by(
           name: service_level,
           mode_of_transport: params[:mot],
-          tenant_id: @tenant.id,
+          tenant_id: tenant.id,
           carrier: carrier
         )
 
@@ -65,7 +65,7 @@ module ExcelDataServices
         tenant_vehicle ||= Vehicle.create_from_name(
           service_level,
           params[:mot],
-          @tenant.id,
+          tenant.id,
           carrier.name
         ) # returns a `TenantVehicle`!
 
@@ -78,6 +78,7 @@ module ExcelDataServices
 
         local_charge_params =
           params.slice(
+            :uuid,
             :load_type,
             :direction,
             :dangerous,
@@ -91,7 +92,9 @@ module ExcelDataServices
             expiration_date: Date.parse(params[:expiration_date])
           )
 
-        local_charge = @tenant.local_charges.find_or_initialize_by(local_charge_params)
+        local_charge =
+          tenant.local_charges.find_by(uuid: params[:uuid]) ||
+          tenant.local_charges.find_or_initialize_by(local_charge_params)
         add_stats(:local_charges, local_charge)
         local_charge.tap(&:save!)
       end

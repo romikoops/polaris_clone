@@ -4,34 +4,37 @@ module ExcelDataServices
   module DataValidator
     module Insertability
       class Pricing < Base
-        def check_data(single_data)
-          check_overlapping_effective_period(single_data)
-        end
-
         private
 
-        def check_overlapping_effective_period(single_data)
-          single_data.each do |row_data|
-            row = ExcelDataServices::Row.get(klass_identifier).new(row_data: row_data, tenant: tenant)
+        def check_single_row(row)
+          user = get_user(row)
+          check_customer_email(row, user)
+          check_overlapping_effective_period(row, user)
+        end
 
-            itinerary = Itinerary.find_by(name: row.itinerary_name, tenant: tenant)
-            next if itinerary.nil?
+        def check_overlapping_effective_period(row, user)
+          itinerary = Itinerary.find_by(name: row.itinerary_name, tenant: tenant)
+          return if itinerary.nil?
 
-            user = User.find_by(tenant: tenant, email: row.customer_email) if row.customer_email.present?
+          user = User.find_by(tenant: tenant, email: row.customer_email) if row.customer_email.present?
 
-            pricings = itinerary.pricings
-                                .where(user: user, tenant_vehicle: find_tenant_vehicle(row))
-                                .for_cargo_class(row.load_type)
-                                .for_dates(row.effective_date, row.expiration_date)
+          pricings = itinerary.pricings
+                              .where(user: user, tenant_vehicle: find_tenant_vehicle(row))
+                              .for_cargo_class(row.load_type)
+                              .for_dates(row.effective_date, row.expiration_date)
 
-            if pricings_have_differing_uuids?(pricings, row.uuid)
-              raise InsertabilityError, "Overlapping effective period. (UUID: #{row.uuid})"
-            end
+          if items_have_differing_uuids?(pricings, row.uuid)
+            raise InsertabilityError,
+                  "Overlapping effective period. (UUID: #{row.uuid})"
           end
         end
 
-        def pricings_have_differing_uuids?(pricings, row_uuid)
-          pricings.where.not(uuid: row_uuid).any?
+        def get_user(row)
+          User.find_by(tenant: tenant, email: row.customer_email)
+        end
+
+        def check_customer_email(row, user)
+          raise InsertabilityError, "There exists no user with email: #{row.customer_email}." if row.customer_email.present? && user.nil?
         end
 
         def find_tenant_vehicle(row)

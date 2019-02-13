@@ -60,7 +60,8 @@ module ExcelDataServices
           range_max = range[:max]
         end
 
-        { hub: hub_name,
+        { uuid: local_charge.uuid,
+          hub: hub_name,
           country: country_name,
           effective_date: effective_date,
           expiration_date: expiration_date,

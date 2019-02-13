@@ -28,18 +28,21 @@ module ExcelDataServices
       private
 
       def row_identifier(row)
-        row.slice(:hub,
-                  :country,
-                  :effective_date,
-                  :expiration_date,
-                  :counterpart_hub,
-                  :counterpart_country,
-                  :service_level,
-                  :carrier,
-                  :mot,
-                  :load_type,
-                  :direction,
-                  :dangerous)
+        row.slice(
+          :uuid,
+          :hub,
+          :country,
+          :effective_date,
+          :expiration_date,
+          :counterpart_hub,
+          :counterpart_country,
+          :service_level,
+          :carrier,
+          :mot,
+          :load_type,
+          :direction,
+          :dangerous
+        )
       end
 
       def range_identifier(row)

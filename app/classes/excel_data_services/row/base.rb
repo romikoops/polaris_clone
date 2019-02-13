@@ -9,7 +9,8 @@ module ExcelDataServices
       end
 
       def [](key)
-        data[key.to_sym]
+        key = key.to_sym
+        respond_to?(key) ? send(key) : data[key]
       end
 
       def nr

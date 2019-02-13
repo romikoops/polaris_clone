@@ -10,6 +10,7 @@ module ExcelDataServices
         MissingValuesForRateBasisError = Class.new(StructureError)
 
         VALID_STATIC_HEADERS = %i(
+          uuid
           hub
           country
           effective_date
