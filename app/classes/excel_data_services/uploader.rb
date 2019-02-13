@@ -52,7 +52,7 @@ module ExcelDataServices
 
     private
 
-    attr_reader :tenant, :klass_identifier, :broad_klass_identifier, :file_or_path
+    attr_reader :tenant, :klass_identifier, :file_or_path
 
     def determine_broad_klass_identifier(specific_klass_identifier)
       case specific_klass_identifier

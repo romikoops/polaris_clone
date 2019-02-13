@@ -60,13 +60,18 @@ class Admin::LocalChargesController < ApplicationController # rubocop:disable St
   end
 
   def download
-    mot = download_params[:mot].downcase
+    mot = download_params[:mot]
+    key = 'local_charges'
+    klass_identifier = 'LocalCharges'
     file_name = "#{current_tenant.subdomain.downcase}__local_charges_#{mot}"
 
-    options = { tenant: current_tenant, file_name: file_name, mode_of_transport: mot }
-    document = ExcelDataServices::FileWriter::LocalCharges.new(options).perform
+    options = { tenant: current_tenant, specific_identifier: klass_identifier, file_name: file_name }
+    downloader = ExcelDataServices::Downloader.new(options)
 
-    response_handler(key: 'local_charges', url: rails_blob_url(document.file, disposition: 'attachment'))
+    document = downloader.perform
+
+    # TODO: When timing out, file will not be downloaded!!!
+    response_handler(key: key, url: rails_blob_url(document.file, disposition: 'attachment'))
   end
 
   private

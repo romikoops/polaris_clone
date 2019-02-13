@@ -25,7 +25,9 @@ module ExcelDataServices
       #   ]
       # }
 
-      attr_reader :tenant, :file_name, :xlsx
+      def self.write_document(options)
+        new(options).perform
+      end
 
       def initialize(tenant:, file_name:)
         @tenant = tenant
@@ -69,6 +71,8 @@ module ExcelDataServices
       end
 
       private
+
+      attr_reader :tenant, :file_name, :xlsx
 
       def load_and_prepare_data
         raise NotImplementedError, "This method must be implemented in #{self.class.name}."

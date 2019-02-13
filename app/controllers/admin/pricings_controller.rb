@@ -172,14 +172,13 @@ class Admin::PricingsController < Admin::AdminBaseController # rubocop:disable M
     load_type = download_params[:load_type]
     key = "pricing_#{load_type}"
     new_load_type = load_type_renamed(load_type)
+    klass_identifier = "#{mot.capitalize}#{new_load_type.capitalize}"
     file_name = "#{current_tenant.subdomain.downcase}__pricing_#{mot.downcase}_#{new_load_type.downcase}"
 
-    klass_identifier = "#{mot.capitalize}#{new_load_type.capitalize}"
+    options = { tenant: current_tenant, specific_identifier: klass_identifier, file_name: file_name }
+    downloader = ExcelDataServices::Downloader.new(options)
 
-    klass = ExcelDataServices::FileWriter.const_get(klass_identifier)
-    options = { tenant: current_tenant, file_name: file_name }
-
-    document = klass.new(options).perform
+    document = downloader.perform
 
     # TODO: When timing out, file will not be downloaded!!!
     response_handler(key: key, url: rails_blob_url(document.file, disposition: 'attachment'))
