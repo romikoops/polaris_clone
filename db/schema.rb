@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_07_082256) do
+ActiveRecord::Schema.define(version: 2019_02_13_094455) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -416,6 +416,7 @@ ActiveRecord::Schema.define(version: 2019_02_07_082256) do
     t.datetime "expiration_date"
     t.integer "user_id"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }
+    t.index ["uuid"], name: "index_local_charges_on_uuid", unique: true
   end
 
   create_table "locations", force: :cascade do |t|
