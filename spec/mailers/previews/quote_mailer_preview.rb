@@ -2,7 +2,7 @@
 
 class QuoteMailerPreview < ActionMailer::Preview
   def quotation_email
-    ids = Tenant.saco.shipments.ids
+    ids = Tenant.gateway.shipments.ids
     quotation = Quotation.where(original_shipment_id: ids).last
     @shipments = Shipment.where(quotation_id: quotation.id)
     @shipment = @shipments.first
