@@ -16,11 +16,15 @@ class Admin::ChargeCategoriesController < Admin::AdminBaseController # rubocop:d
 
   def download
     file_name = "#{current_tenant.subdomain.downcase}__charge_categories"
+    klass_identifier = 'ChargeCategories'
+    key = 'charge_categories'
 
-    options = { tenant: current_tenant, file_name: file_name }
-    document = ExcelDataServices::FileWriter::ChargeCategories.new(options).perform
+    options = { tenant: current_tenant, specific_identifier: klass_identifier, file_name: file_name }
+    downloader = ExcelDataServices::Loader::Downloader.new(options)
+    document = downloader.perform
 
-    response_handler(key: 'charge_categories', url: rails_blob_url(document.file, disposition: 'attachment'))
+    # TODO: When timing out, file will not be downloaded!!!
+    response_handler(key: key, url: rails_blob_url(document.file, disposition: 'attachment'))
   end
 
   private

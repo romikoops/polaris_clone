@@ -16,7 +16,7 @@ module ExcelDataServices
 
         data = restructure_data(data) if should_execute?(:restructure_data)
 
-        errors = validator_insertability(data) if should_execute?(:validator_insertability)
+        errors = validate_insertability(data) if should_execute?(:validate_insertability)
         return { has_errors: true, errors: errors } unless errors.blank?
 
         errors = validate_smart_assumptions(data) if should_execute?(:validate_smart_assumptions)
@@ -39,7 +39,7 @@ module ExcelDataServices
         method_names =
           %i(validate_syntax
              restructure_data
-             validator_insertability
+             validate_insertability
              validate_smart_assumptions
              validate_booking_possible)
 
@@ -75,7 +75,7 @@ module ExcelDataServices
         restructurer.restructure_data(options)
       end
 
-      def validator_insertability(restructured_sheets_data)
+      def validate_insertability(restructured_sheets_data)
         insertability_validator = ExcelDataServices::DataValidator.get('Insertability', klass_identifier)
         options = { data: restructured_sheets_data, tenant: tenant, klass_identifier: klass_identifier }
         insertability_validator.validate(options)
