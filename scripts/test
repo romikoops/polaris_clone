@@ -64,8 +64,9 @@ def run(*args, message:)
   system!(*args)
 end
 
-ENGINES = Dir[APP_ROOT.join('engines', '*')].select { |d| File.directory?(d) }.collect { |d| File.basename(d) }
-LIBRARIES = Dir[APP_ROOT.join('lib', '*', '*.gemspec')].collect { |d| File.basename(File.dirname(d)) }
+COMPONENTS = Dir
+             .glob(APP_ROOT.join('{engines,lib}', '*', '*.gemspec'))
+             .collect { |d| Pathname.new(d).relative_path_from(APP_ROOT).dirname.to_s }
 
 # Set up test suite
 @results = {}
@@ -93,15 +94,10 @@ end
 puts yellow('*** Running Engine tests ***')
 
 # Run tests for each engine, in random order
-ENGINES.shuffle.each do |engine|
-  runner(dir: APP_ROOT.join('engines', engine), name: engine)
+COMPONENTS.shuffle.each do |component|
+  runner(dir: APP_ROOT.join(component), name: component)
 end
-
-LIBRARIES.shuffle.each do |engine|
-  runner(dir: APP_ROOT.join('lib', engine), name: engine)
-end
-
-runner(dir: APP_ROOT, name: 'api')
+runner(dir: APP_ROOT, name: 'app')
 
 # Load Simplecov
 @simplecov = begin
@@ -112,7 +108,7 @@ runner(dir: APP_ROOT, name: 'api')
                {}
              end
 
-field_length = (ENGINES + LIBRARIES + %w(api)).map(&:length).max
+field_length = (COMPONENTS + %w(api)).map(&:length).max
 
 puts '=' * (field_length + 45)
 @results.each do |name, result|
