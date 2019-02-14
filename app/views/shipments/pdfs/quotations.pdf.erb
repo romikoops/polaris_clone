@@ -219,6 +219,20 @@
                 end
               end
               charge['name'] = original_charge['name']
+          elsif %w(import export).include?(charge_key) && scope['condense_local_fees_pdf']
+            tmp_charge = s.selected_offer[charge_key]
+            next unless tmp_charge
+            charge = tmp_charge.slice('name', 'total', 'edited_total')
+
+            dummy_key = s.lcl? ? 'cargo_item' : 'container'
+            charge[dummy_key] = { "total" => { "currency" => '', "value" => 0.00}}
+            tmp_charge.except('name', 'total', 'edited_total').keys.each do |k|
+              tmp_charge[k].except('name', 'total', 'edited_total').keys.each do |fk|
+                charge[dummy_key][fk] = tmp_charge[k][fk]
+                charge[dummy_key]['total']['value'] += tmp_charge.dig(k, 'total', 'value') || 0.00
+                charge[dummy_key]['total']['currency'] = tmp_charge.dig(k, 'total', 'currency') || tmp_charge.dig('total', 'currency')
+              end
+            end
           else
             charge = s.selected_offer[charge_key]
           end %>
@@ -279,11 +293,15 @@
                 <% 
                   unit_id = unit_and_sorted_charges.first
                   sorted_charges = unit_and_sorted_charges.second
-                  if unit_id.present? && unit_id.is_number?
+                  if scope['condense_local_fees_pdf']
+                    desc = false
+                  elsif unit_id.present? && unit_id.is_number?
                     unit = s.cargo_units.find_by(id: unit_id.to_i)
                     desc = s.lcl? ? unit&.cargo_item_type&.description : unit.size_class.humanize.upcase
                   elsif unit_id == 'shipment'
                     desc = 'Shipment Fees'
+                  elsif %w(cargo_item container).include?(unit_id)
+                    desc = "#{unit_id.titleize} Fees"
                   end
                 %>
                 <% if desc && ['import', 'export'].include?(charge_key) %>
