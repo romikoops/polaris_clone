@@ -1,6 +1,6 @@
 # # frozen_string_literal: false
 
-# include ExcelTools
+include ExcelTools
 # include ShippingTools
 # # subdomains = %w(demo greencarrier easyshipping hartrodt)
 # subdomains = %w(normanglobal)
@@ -28,9 +28,9 @@
 #   # req = { 'key' => hubs }
 #   # ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
 
-#   # public_pricings = 'data/schryver/schryver__freight_rates.xlsx'
-#   # req = { 'key' => public_pricings }
-#   # ExcelTool::FreightRatesOverwriter.new(params: req, _user: shipper, generate: true).perform
+  raw_data = 'data/schryver/schryver_raw_trucking_data.xlsx'
+  req = { 'key' => raw_data }
+  ExcelTool::RawIgs.new(params: req).perform
 
 #   # # # # # #   # # # # # Overwrite public pricings from excel sheet
 
@@ -108,4 +108,4 @@
 #   #   direction: 'import'
 #   # ).perform
 # end
-Locations::Location.where(admin_level: nil).destroy_all
+# Locations::Location.where(admin_level: nil).destroy_all

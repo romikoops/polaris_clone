@@ -8,10 +8,10 @@ module Locations
       Locations::Name.search(terms, fields: [:name, :display_name, :postal_code], limit: 1, match: :word_middle, operator: 'or').results.first
     end
 
-    def self.seeding_with_postal_code(postal_code:, country_code:, terms:)
-      postal_bounds = Locations::Location.find_by(name: postal_code, country_code: country_code)&.bounds
+    def self.find_in_postal_code(postal_bounds:, terms:)
       return nil unless postal_bounds
-      Locations::Name.search(terms, where: {location: {geo_polygon: {points: postal_bounds.coordinates.first.first}}}, limit: 1).results.first
+
+      Locations::Name.search(terms, where: { location: {geo_polygon: {points: postal_bounds.coordinates.first.first}}}, limit: 1).results.first
     end
   end
 end

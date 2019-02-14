@@ -584,19 +584,19 @@ module ExcelTool
                    Locations::Name.find_by(postal_code: idents_and_country[:ident].upcase, country_code: idents_and_country[:country])&.location
                  elsif @identifier_modifier == 'postal_city'
                   begin
-                    binding.pry
+                    # binding.pry
                     postal_code, name = idents_and_country[:ident].split('-').map{|string| string.strip.upcase }
-                    Locations::NameFinder.seeding_with_postal_code(postal_code: postal_code, country_code: idents_and_country[:country].downcase, terms: name)&.location
+                    Locations::LocationSeeder.seeding_with_postal_code(postal_code: postal_code, country_code: idents_and_country[:country].downcase, terms: name)
                   rescue => e
                     binding.pry 
                     end
                   else
                   begin
                   p [idents_and_country[:sub_ident], idents_and_country[:ident]]
-                   Locations::NameFinder.seeding(
+                   Locations::LocationSeeder.seeding(
                      idents_and_country[:sub_ident],
                      idents_and_country[:ident]
-                   )&.location
+                   )
                    rescue => e
                   binding.pry 
                   end

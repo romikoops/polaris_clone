@@ -8,6 +8,10 @@ module Locations
       where(arel_table[:bounds].st_contains("POINT(#{lon} #{lat})"))
     end
 
+    def self.smallest_contains(lat:, lon:)
+      where(arel_table[:bounds].st_contains("POINT(#{lon} #{lat})")).order(arel_table[:bounds].st_area)
+    end
+
     def geojson
       RGeo::GeoJSON.encode(RGeo::GeoJSON::Feature.new(bounds))
     end
