@@ -2,14 +2,6 @@
 
 module ExcelDataServices
   module DataValidator
-    class ValidationError < StandardError
-      attr_reader :errors_ary
-
-      def initialize(errors_ary = [])
-        @errors_ary = errors_ary
-      end
-    end
-
     def self.get(flavor, klass_identifier)
       "#{name}::#{flavor.titleize.delete(' ')}::#{klass_identifier}".constantize
     end

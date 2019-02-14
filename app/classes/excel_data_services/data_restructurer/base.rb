@@ -3,8 +3,6 @@
 module ExcelDataServices
   module DataRestructurer
     class Base
-      WillBeRefactoredRestructuringError = Class.new(StandardError)
-
       def self.restructure_data(options)
         new(options).perform
       end
@@ -16,7 +14,7 @@ module ExcelDataServices
       end
 
       def perform
-        raise NotImplementedError, "This method must be implemented in #{self.class.name}."
+        data
       end
 
       private

@@ -6,16 +6,12 @@ module ExcelDataServices
       class Base
         include ExcelDataServices::DataValidator
 
-        SmartAssumptionsError = Class.new(ValidationError)
-
         def perform
           data.each do |single_data|
             row = ExcelDataServices::Row.get(klass_identifier).new(row_data: single_data, tenant: tenant)
-            begin
-              check_data(row)
-            rescue ValidationError => exception
-              add_to_errors(row_nr: row.nr, reason: exception.message)
-            end
+            check_data(row)
+          rescue ExcelDataServices::DataValidator::ValidationError::Base => exception
+            add_to_errors(row_nr: row.nr, reason: exception.message)
           end
 
           errors

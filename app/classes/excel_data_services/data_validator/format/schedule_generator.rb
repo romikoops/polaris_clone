@@ -2,8 +2,8 @@
 
 module ExcelDataServices
   module DataValidator
-    module Syntax
-      class ChargeCategories < Base
+    module Format
+      class ScheduleGenerator < Base
         private
 
         def check_row(row)
@@ -11,9 +11,11 @@ module ExcelDataServices
         end
 
         def build_valid_headers(_data_extraction_method)
-          %i(internal_code
-             fee_code
-             fee_name)
+          %i(origin
+            destination
+            etd_days
+            transit_time
+            cargo_class)
         end
       end
     end

@@ -6,15 +6,13 @@ module ExcelDataServices
       class Base
         include ExcelDataServices::DataValidator
 
-        InsertabilityError = Class.new(ValidationError)
-
         alias chunked_data data
 
         def perform
           chunked_data.flatten.each do |single_data|
             row = ExcelDataServices::Row.get(klass_identifier).new(row_data: single_data, tenant: tenant)
             check_single_row(row)
-          rescue ValidationError => exception
+          rescue ExcelDataServices::DataValidator::ValidationError::Base => exception
             add_to_errors(row_nr: row.nr, reason: exception.message)
           end
 

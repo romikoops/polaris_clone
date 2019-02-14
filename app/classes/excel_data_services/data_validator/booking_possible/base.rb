@@ -6,8 +6,6 @@ module ExcelDataServices
       class Base
         include ExcelDataServices::DataValidator
 
-        BookingPossibleError = Class.new(ValidationError)
-
         def perform
         end
       end

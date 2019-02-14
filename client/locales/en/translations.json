@@ -188,6 +188,7 @@
   "admin": {
       "savePricings": "Save Pricings",
       "editHub": "Edit Hub",
+      "generatorSheet": "Generator Sheet",
       "updateShopEmails": "Update Shop Emails",
       "updateQuotationPDFRemarks": "Update PDF Remarks",
       "addRemark": "Add Remark",

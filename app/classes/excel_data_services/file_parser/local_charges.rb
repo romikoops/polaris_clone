@@ -37,7 +37,7 @@ module ExcelDataServices
 
       def replace_nil_equivalents_with_nil(row_data)
         row_data.each do |k, v|
-          row_data[k] = nil if v.is_a?(String) && ['n/a', '-', ''].include?(v.downcase)
+          row_data[k] = nil if v.to_s =~ %r{^n/a$|^-$|^$}i # 'n/a', '-', ''
         end
 
         row_data

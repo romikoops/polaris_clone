@@ -101,16 +101,6 @@ class Itinerary < ApplicationRecord
       layovers: [],
       trips: []
     }
-    stats = {
-      layovers: {
-        number_created: 0,
-        number_updated: 0
-      },
-      trips: {
-        number_created: 0,
-        number_updated: 0
-      }
-    }
 
     tmp_date = start_date.is_a?(Date)      ? start_date : DateTime.parse(start_date)
     end_date_parsed = end_date.is_a?(Date) ? end_date   : DateTime.parse(end_date)
@@ -138,7 +128,6 @@ class Itinerary < ApplicationRecord
         end
 
         results[:trips] << trip
-        stats[:trips][:number_created] += 1
 
         stops_in_order.each do |stop|
           if stop.index.zero?
@@ -159,18 +148,19 @@ class Itinerary < ApplicationRecord
               stop_index: stop.index,
               itinerary_id: stop.itinerary_id,
               stop_id: stop.id,
-              trip_id: trip.id
+              trip_id: trip.id,
+              closing_date: nil
             }
           end
-          stats[:layovers][:number_created] += 1
         end
       end
 
       tmp_date += 1.day
     end
 
-    Layover.create!(stop_data)
-    { results: results, stats: stats }
+    Layover.import(stop_data)
+
+    results[:trips]
   end
 
   def prep_schedules(limit)

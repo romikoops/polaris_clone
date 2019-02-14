@@ -21,9 +21,9 @@ module ExcelDataServices
                               .for_cargo_class(row.load_type)
                               .for_dates(row.effective_date, row.expiration_date)
 
-          if items_have_differing_uuids?(pricings, row.uuid)
-            raise InsertabilityError,
-                  "Overlapping effective period. (UUID: #{row.uuid})"
+          if items_have_differing_uuids?(pricings, row.uuid) # rubocop:disable Style/GuardClause
+            raise ExcelDataServices::DataValidator::ValidationError::Insertability,
+                  "Overlapping effective period. (UUID: #{row.uuid || 'empty'})"
           end
         end
 
@@ -33,7 +33,10 @@ module ExcelDataServices
 
         def check_customer_email(row, user)
           unknown_customer = row.customer_email.present? && user.nil?
-          raise InsertabilityError, "There exists no user with email: #{row.customer_email}." if unknown_customer
+          if unknown_customer # rubocop:disable Style/GuardClause
+            raise ExcelDataServices::DataValidator::ValidationError::Insertability,
+                  "There exists no user with email: #{row.customer_email}."
+          end
         end
 
         def find_tenant_vehicle(row)

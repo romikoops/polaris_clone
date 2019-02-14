@@ -5,8 +5,6 @@ module ExcelDataServices
     class LocalCharges < Base
       include ExcelDataServices::LocalChargesTool
 
-      HubNotFoundError = Class.new(WillBeRefactoredRestructuringError)
-
       def perform
         chunked_raw_data_per_sheet = data.values.map do |per_sheet_values|
           expanded_values = expand_fcl_to_all_sizes(per_sheet_values[:rows_data])
@@ -18,11 +16,9 @@ module ExcelDataServices
         end
 
         charges_data = build_charges_data(chunked_raw_data_per_sheet)
+        add_hub_names(charges_data)
 
-        # TODO: This Method shold not be in the DataRestructurer Module
-        create_missing_charge_categories(charges_data)
-        # TODO: This Method shold not be in the DataRestructurer Module
-        assign_correct_hubs(charges_data)
+        charges_data
       end
 
       private
@@ -108,47 +104,12 @@ module ExcelDataServices
           rate_basis: rate_basis }
       end
 
-      # TODO: This Method shold not be in the DataRestructurer Module
-      def create_missing_charge_categories(charges_data)
-        keys_and_names = charges_data.flat_map do |single_data|
-          single_data[:fees].values.map { |fee| fee.slice(:key, :name) }
-        end
-
-        keys_and_names.uniq { |pair| pair[:key] }.each do |pair|
-          ChargeCategory.from_code(pair[:key], tenant.id, pair[:name])
-        end
-      end
-
-      # TODO: This Method shold not be in the DataRestructurer Module
-      def assign_correct_hubs(charges_data)
-        charges_data.map do |params|
-          mot = params[:mot]
-
-          begin
-            hub_name = append_hub_suffix(params[:hub], mot)
-            hub_id = tenant.hubs.find_by(name: hub_name, hub_type: mot).id
-          rescue HubNotFoundError
-            raise "Hub \"#{hub_name}\" not found!"
-          end
-
-          params[:hub_id] = hub_id
-          if params[:counterpart_hub]
-            counterpart_hub_id =
-              if params[:counterpart_hub] == 'all'
-                nil
-              else
-                counterpart_hub_name = append_hub_suffix(params[:counterpart_hub], mot)
-                counterpart_hub = tenant.hubs.find_by(name: counterpart_hub_name, hub_type: mot)
-                unless counterpart_hub
-                  raise HubNotFoundError, "Counterpart Hub with name \"#{counterpart_hub_name}\" not found!"
-                end
-
-                counterpart_hub.id
-              end
-          end
-
-          params[:counterpart_hub_id] = counterpart_hub_id
-          params
+      def add_hub_names(charges_data)
+        charges_data.each do |params|
+          hub_name = append_hub_suffix(params[:hub], params[:mot])
+          counterpart_hub_name = append_hub_suffix(params[:counterpart_hub], params[:mot]) if params[:counterpart_hub]
+          params[:hub_name] = hub_name
+          params[:counterpart_hub_name] = counterpart_hub_name
         end
       end
     end

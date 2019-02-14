@@ -15,10 +15,6 @@ module ExcelDataServices
 
       private
 
-      def stat_descriptors
-        %i(charge_categories)
-      end
-
       def update_or_create_charge_category(params)
         correct_charge = ChargeCategory.find_or_create_by(
           tenant_id: @tenant.id,

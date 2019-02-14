@@ -114,7 +114,7 @@ module ExcelDataServices
       end
 
       def remove_when_no_fee_value(rows_data)
-        rows_data.reject { |row_data| row_data[:fee].blank? }
+        rows_data.reject { |row_data| row_data[:fee].blank? && row_data[:range].blank? }
       end
 
       def group_by_pricing_params(rows_data)

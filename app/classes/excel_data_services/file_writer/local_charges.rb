@@ -151,7 +151,7 @@ module ExcelDataServices
       end
 
       def build_raw_headers(_sheet_name, _rows_data)
-        ExcelDataServices::DataValidator::Syntax::LocalCharges::VALID_STATIC_HEADERS
+        ExcelDataServices::DataValidator::Format::LocalCharges::VALID_STATIC_HEADERS
       end
     end
   end

@@ -22,6 +22,8 @@ module ExcelDataServices
           'LocalCharges'
         when /ChargeCategories.*/
           'ChargeCategories'
+        when /ScheduleGenerator.*/
+          'ScheduleGenerator'
         end
       end
     end

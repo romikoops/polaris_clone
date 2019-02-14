@@ -2,17 +2,12 @@
 
 module ExcelDataServices
   module DatabaseInserter
-    class LocalCharges < Base
+    class LocalCharges < Base # rubocop:disable Metrics/ClassLength
       def perform
-        data.each do |params|
-          params[:fees].each do |fee_code, values|
-            ChargeCategory.find_or_create_by!(
-              code: fee_code.downcase,
-              name: values[:name],
-              tenant_id: tenant.id
-            )
-          end
+        create_missing_charge_categories(data)
+        assign_correct_hubs(data)
 
+        data.each do |params|
           carriers(params).each do |carrier|
             tenant_vehicles = find_or_create_tenant_vehicles(params, carrier)
             tenant_vehicles.each do |tenant_vehicle|
@@ -26,8 +21,44 @@ module ExcelDataServices
 
       private
 
-      def stat_descriptors
-        %i(local_charges)
+      def create_missing_charge_categories(charges_data)
+        keys_and_names = charges_data.flat_map do |single_data|
+          single_data[:fees].values.map { |fee| fee.slice(:key, :name) }
+        end
+
+        keys_and_names.uniq { |pair| pair[:key] }.each do |pair|
+          ChargeCategory.from_code(pair[:key], tenant.id, pair[:name])
+        end
+      end
+
+      def assign_correct_hubs(charges_data)
+        charges_data.each do |params|
+          mot = params[:mot]
+
+          hub = Hub.find_by(tenant: tenant, name: params[:hub_name], hub_type: mot)
+          unless hub
+            raise ExcelDataServices::DataValidator::ValidationError::Insertability::HubsNotFound,
+                  "Hub \"#{params[:hub_name]}\" not found!"
+          end
+          params[:hub_id] = hub.id
+
+          if params[:counterpart_hub]
+            counterpart_hub_id =
+              if params[:counterpart_hub] == 'all'
+                nil
+              else
+                counterpart_hub = tenant.hubs.find_by(name: params[:counterpart_hub_name], hub_type: mot)
+                unless counterpart_hub
+                  raise ExcelDataServices::DataValidator::ValidationError::Insertability::HubsNotFound,
+                        "Counterpart Hub with name \"#{params[:counterpart_hub_name]}\" not found!"
+                end
+
+                counterpart_hub.id
+              end
+          end
+
+          params[:counterpart_hub_id] = counterpart_hub_id
+        end
       end
 
       def carriers(params)
@@ -88,8 +119,8 @@ module ExcelDataServices
             :mode_of_transport,
             :tenant_vehicle_id
           ).merge(
-            effective_date: Date.parse(params[:effective_date]),
-            expiration_date: Date.parse(params[:expiration_date])
+            effective_date: Date.parse(params[:effective_date].to_s),
+            expiration_date: Date.parse(params[:expiration_date].to_s)
           )
 
         local_charge =

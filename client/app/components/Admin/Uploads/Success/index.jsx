@@ -54,7 +54,7 @@ export class AdminUploadsSuccess extends Component {
           {error.reason}
         </td>
         <td className={`flex-50 ${styles.error_row}`}>
-          {error.row_no}
+          {error.row_nr}
         </td>
       </tr>
     )) : ''
@@ -84,19 +84,21 @@ export class AdminUploadsSuccess extends Component {
           <div className="flex-100 layout-row layout-align-start-center layout-wrap">
             {statView}
           </div>
-          <div className={`flex-100 layout-row layout-align-start-center layout-wrap ${styles.error_box}`}>
-            <table className="flex-100 layout-row layout-align-start-start">
-              <tbody className="flex-100 layout-row layout-wrap">
-                <thead className="flex-100 layout-row">
-                  <tr className="flex-100 layout-row">
-                    <th className={`flex-50 ${styles.error_reason}`}>{t('admin:reason')}</th>
-                    <th className={`flex-50 ${styles.error_row}`}>{t('admin:rowNo')}</th>
-                  </tr>
-                </thead>
-                {errorView}
-              </tbody>
-            </table>
-          </div>
+          {stats.has_errors ? (
+            <div className={`flex-100 layout-row layout-align-start-center layout-wrap ${styles.error_box}`}>
+              <table className="flex-100 layout-row layout-align-start-start">
+                <tbody className="flex-100 layout-row layout-wrap">
+                  <thead className="flex-100 layout-row">
+                    <tr className="flex-100 layout-row">
+                      <th className={`flex-50 ${styles.error_reason}`}>{t('admin:reason')}</th>
+                      <th className={`flex-50 ${styles.error_row}`}>{t('admin:rowNo')}</th>
+                    </tr>
+                  </thead>
+                  {errorView}
+                </tbody>
+              </table>
+            </div>
+          ) : '' }
           <div className="flex-100 layout-row layout-align-center-center layout-wrap layout-padding">
             {stats.has_errors ? <p className="flex">{t('admin:errorTip')}</p> : ''}
           </div>

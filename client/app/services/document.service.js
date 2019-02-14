@@ -110,6 +110,18 @@ function downloadLocalCharges (options) {
   return fetch(`${getTenantApiUrl()}/admin/local_charges/download`, requestOptions).then(handleResponse)
 }
 
+function uploadGeneratorSheet (file) {
+  const formData = new FormData()
+  formData.append('file', file)
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader() },
+    body: formData
+  }
+
+  return fetch(`${getTenantApiUrl()}/admin/schedules/auto_generate_sheet`, requestOptions).then(handleResponse)
+}
+
 function downloadQuotations (options) {
   const requestOptions = {
     method: 'POST',
@@ -191,7 +203,8 @@ export const documentService = {
   downloadShipment,
   downloadQuotations,
   downloadChargeCategories,
-  uploadChargeCategories
+  uploadChargeCategories,
+  uploadGeneratorSheet
 }
 
 export default documentService

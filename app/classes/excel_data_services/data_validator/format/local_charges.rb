@@ -2,12 +2,9 @@
 
 module ExcelDataServices
   module DataValidator
-    module Syntax
+    module Format
       class LocalCharges < Base
         include ExcelDataServices::LocalChargesTool
-
-        UnknownRateBasisError = Class.new(StructureError)
-        MissingValuesForRateBasisError = Class.new(StructureError)
 
         VALID_STATIC_HEADERS = %i(
           uuid
@@ -76,7 +73,8 @@ module ExcelDataServices
           rate_basis = RateBasis.get_internal_key(row.rate_basis.upcase)
 
           unless VALID_RATE_BASISES.include?(rate_basis)
-            raise UnknownRateBasisError, "RATE_BASIS \"#{rate_basis}\" not found!"
+            raise ExcelDataServices::DataValidator::ValidationError::Format::UnknownRateBasis,
+                  "RATE_BASIS \"#{rate_basis}\" not found!"
           end
 
           true
@@ -87,7 +85,8 @@ module ExcelDataServices
             specific_charge_params_for_reading(row.rate_basis, row)
 
           unless charge_params_for_rate_basis.values.all?
-            raise MissingValuesForRateBasisError, "Missing value for #{row.rate_basis}."
+            raise ExcelDataServices::DataValidator::ValidationError::Format::MissingValuesForRateBasis,
+                  "Missing value for #{row.rate_basis}."
           end
 
           true

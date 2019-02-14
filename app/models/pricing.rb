@@ -20,9 +20,9 @@ class Pricing < ApplicationRecord
 
   delegate :load_type, to: :transport_category
   delegate :cargo_class, to: :transport_category
-  scope :for_mode_of_transport, ->(mot) { joins(:itinerary).where(itineraries: { mode_of_transport: mot }) }
-  scope :for_load_type, ->(load_type) { joins(:transport_category).where(transport_categories: { load_type: load_type }) }
-  scope :for_cargo_class, ->(cargo_class) { joins(:transport_category).where(transport_categories: { cargo_class: cargo_class }) }
+  scope :for_mode_of_transport, ->(mot) { joins(:itinerary).where(itineraries: { mode_of_transport: mot.downcase }) }
+  scope :for_load_type, ->(load_type) { joins(:transport_category).where(transport_categories: { load_type: load_type.downcase }) }
+  scope :for_cargo_class, ->(cargo_class_or_classes) { joins(:transport_category).where(transport_categories: { cargo_class: [cargo_class_or_classes].flatten.map(&:downcase) }) }
   scope :for_dates, (lambda do |start_date, end_date|
     where(Arel::Nodes::InfixOperation.new(
             'OVERLAPS',

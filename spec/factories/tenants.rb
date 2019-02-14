@@ -71,7 +71,7 @@ FactoryBot.define do
         terms: [
           'You verify that all the information provided above is true',
           'You agree to the presented terms and conditions.',
-          'Greencarrier is to discuss the validity of the presented prices with the product owners.'
+          'Demo is to discuss the validity of the presented prices with the product owners.'
         ],
         carriage_options: {
           on_carriage: {

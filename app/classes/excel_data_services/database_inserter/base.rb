@@ -15,26 +15,23 @@ module ExcelDataServices
         @data = data
         @klass_identifier = klass_identifier
         @options = options
-        @stats = stat_descriptors.each_with_object({}) do |descriptor, hsh|
-          hsh[descriptor] = {
-            number_updated: 0,
-            number_created: 0
-          }
-        end
+        @stats = {}
+      end
+
+      def perform
+        raise NotImplementedError, "This method must be implemented in #{self.class.name}."
       end
 
       private
 
       attr_reader :tenant, :data, :klass_identifier, :options, :stats
 
-      def stat_descriptors
-        %i(itineraries
-           stops
-           pricings
-           pricing_details)
-      end
-
       def add_stats(descriptor, data_record)
+        @stats[descriptor] ||= {
+          number_updated: 0,
+          number_created: 0
+        }
+
         if data_record.new_record?
           @stats[descriptor][:number_created] += 1
         else

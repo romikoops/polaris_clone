@@ -3,8 +3,6 @@
 module ExcelDataServices
   module FileParser
     class Base
-      ParsingError = Class.new(StandardError)
-
       def self.parse(options)
         new(options).perform
       end
@@ -68,7 +66,7 @@ module ExcelDataServices
 
       def strip_whitespaces(row_data)
         row_data.each_with_object({}) do |(k, v), hsh|
-          hsh[k] = v.is_a?(String) ? v.strip : v
+          hsh[k] = v.respond_to?(:strip) ? v.strip : v
         end
       end
 

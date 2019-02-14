@@ -2,12 +2,9 @@
 
 module ExcelDataServices
   module DataValidator
-    module Syntax
+    module Format
       class Base
         include ExcelDataServices::DataValidator
-
-        StructureError = Class.new(ValidationError)
-        InvalidHeadersError = Class.new(StructureError)
 
         def perform
           data.each do |sheet_name, sheet_data|
@@ -15,11 +12,9 @@ module ExcelDataServices
 
             sheet_data[:rows_data].each do |row_data|
               row = ExcelDataServices::Row.get(klass_identifier).new(row_data: row_data, tenant: tenant)
-              begin
-                check_row(row)
-              rescue ValidationError => exception
-                add_to_errors(row_nr: row.nr, reason: exception.message)
-              end
+              check_row(row)
+            rescue ExcelDataServices::DataValidator::ValidationError::Base => exception
+              add_to_errors(row_nr: row.nr, reason: exception.message)
             end
           end
 
@@ -36,7 +31,7 @@ module ExcelDataServices
           headers = get_headers(sheet_data)
           begin
             validate_headers(headers, sheet_name, sheet_data[:data_extraction_method])
-          rescue InvalidHeadersError => exception
+          rescue ExcelDataServices::DataValidator::ValidationError::Format::InvalidHeaders => exception
             add_to_errors(row_nr: 1, reason: exception.message)
           end
         end
@@ -55,9 +50,10 @@ module ExcelDataServices
           failing_headers_sould_be = valid_headers - passing_headers
 
           unless failing_headers.blank?
-            raise InvalidHeadersError, "The following headers of sheet \"#{sheet_name}\" are not valid:\n" \
-                                       "IS       : \"#{failing_headers.map(&:upcase).join(', ')}\",\n" \
-                                       "SHOULD BE: \"#{failing_headers_sould_be.map(&:upcase).join(', ')}\""
+            raise ExcelDataServices::DataValidator::ValidationError::Format::InvalidHeaders,
+                  "The following headers of sheet \"#{sheet_name}\" are not valid:\n" \
+                  "IS       : \"#{failing_headers.map(&:upcase).join(', ')}\",\n" \
+                  "SHOULD BE: \"#{failing_headers_sould_be.map(&:upcase).join(', ')}\""
           end
 
           true

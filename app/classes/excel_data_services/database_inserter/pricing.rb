@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module DatabaseInserter
-    class Pricing < Base
+    class Pricing < Base # rubocop:disable Metrics/ClassLength
       def perform
         data.each do |group_of_row_data|
           row = ExcelDataServices::Row.get(klass_identifier).new(row_data: group_of_row_data.first, tenant: tenant)
@@ -36,8 +36,12 @@ module ExcelDataServices
         mot = itinerary.mode_of_transport
         stops_as_hubs_names = stop_names.map { |stop_name| append_hub_suffix(stop_name, mot) }
         stops_as_hubs_names.map.with_index do |hub_name, i|
-          hub = tenant.hubs.find_by(name: hub_name)
-          raise HubNotFoundError, "Stop (Hub) with name \"#{hub_name}\" not found!" unless hub
+          hub = Hub.find_by(tenant: tenant, name: hub_name)
+
+          unless hub
+            raise ExcelDataServices::DataValidator::ValidationError::Insertability::HubsNotFound,
+                  "Stop (Hub) with name \"#{hub_name}\" not found!"
+          end
 
           stop = itinerary.stops.find_by(hub_id: hub.id, index: i)
           stop ||= Stop.new(hub_id: hub.id, index: i)

@@ -2,7 +2,7 @@
 
 module ExcelDataServices
   module DataValidator
-    module Syntax
+    module Format
       class Pricing < Base
         include ExcelDataServices::PricingTool
 

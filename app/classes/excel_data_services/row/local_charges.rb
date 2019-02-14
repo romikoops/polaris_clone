@@ -3,12 +3,12 @@
 module ExcelDataServices
   module Row
     class LocalCharges < Base
-      def hub_id
-        @hub_id ||= data[:hub_id]
+      def hub_name
+        @hub_name ||= data[:hub_name]
       end
 
-      def counterpart_hub_id
-        @counterpart_hub_id ||= data[:counterpart_hub_id]
+      def counterpart_hub_name
+        @counterpart_hub_name ||= data[:counterpart_hub_name]
       end
     end
   end
