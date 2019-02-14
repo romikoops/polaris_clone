@@ -19,7 +19,7 @@
     </div>
   </div>
   <hr class="hr-shipment" style="border-color: <%= primary_color %>">
-  <div class="refrow"> 
+  <div class="refrow">
     <p class="ref">Placed on&nbsp;<span><%= shipment.updated_at.strftime("%d/%m/%Y") %></span></p>
     <p class="ref text-right"><b>Price valid until:</b> <%= shipment.valid_until&.strftime('%d.%m.%Y') %></p>
   </div>
@@ -304,7 +304,7 @@
                 <tr>
                   <td class="table-title">
                     <p >
-                      <%= 
+                      <%=
                         [cargo.dimension_x, cargo.dimension_y, cargo.dimension_z]
                           .map{|v| "#{format('%.2f',v)} cm"}.join(' x ')
                       %>
@@ -338,7 +338,7 @@
                 </tr>
               </table>
             </div>
-             
+
           <% end %>
           <% shipment.containers.each_with_index do |container, i| %>
             <div class="no_page_break">
@@ -350,7 +350,7 @@
                   <td class="table-title"><p>Quantity</p></td>
                   <td class="table-value"><span><%= container.quantity %></span></td>
                 </tr>
-               
+
                 <tr>
                   <td class="table-title"><p>Cargo Type</p></td>
                   <td class="table-value"><span><%= container.size_class.humanize.upcase %></span></sup></td>
@@ -446,10 +446,10 @@
             <h4>Notes: </h4>
             <ul> <% notes.each do |note| %>
               <li class="note-header"> <%= note.header %></li>
-              <li> 
+              <li>
                 <p class="hyphens">
                   <%= simple_format(note.body) %>
-                </p>  
+                </p>
               </li>
               <% end %>
             </ul>
