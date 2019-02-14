@@ -9,9 +9,10 @@ module ExcelDataServices
         new(options).perform
       end
 
-      def initialize(data:, tenant:)
-        @data = data
+      def initialize(tenant:, data:, klass_identifier:)
         @tenant = tenant
+        @data = data
+        @klass_identifier = klass_identifier
       end
 
       def perform

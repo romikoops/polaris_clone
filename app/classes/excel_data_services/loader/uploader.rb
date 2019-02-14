@@ -3,100 +3,97 @@
 module ExcelDataServices
   module Loader
     class Uploader < Base
+      POTENTIALLY_PERFORMING_METHODS = %i(
+        validate_syntax
+        restructure_data!
+        validate_insertability
+        validate_smart_assumptions
+        validate_booking_possible
+      ).freeze
+
       def initialize(tenant:, specific_identifier:, file_or_path:)
         super(tenant: tenant, specific_identifier: specific_identifier)
         @file_or_path = file_or_path
+        @data = nil
       end
 
-      def perform # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-        data = parse_and_sanitize
+      def perform
+        parse_and_sanitize_data!
 
-        errors = validate_syntax(data) if should_execute?(:validate_syntax)
-        return { has_errors: true, errors: errors } unless errors.blank?
+<<<<<<< HEAD
+        OPTIONALLY_PERFORMING_METHOD_NAMES.each do |method_name|
+          optionally_execute(method_name)
+        rescue ExcelDataServices::DataValidator::ValidationError => exception
+=======
+        performing_methods(klass_identifier).each do |method_name|
+          send(method_name)
+        rescue ExcelDataServices::DataValidator::ValidationError::ErrorLog => exception
+>>>>>>> 9ef40f8ed... IMC-1207 simplify uploader
+          return { has_errors: true, errors: exception.errors_ary }
+        end
 
-        data = restructure_data(data) if should_execute?(:restructure_data)
-
-        errors = validate_insertability(data) if should_execute?(:validate_insertability)
-        return { has_errors: true, errors: errors } unless errors.blank?
-
-        errors = validate_smart_assumptions(data) if should_execute?(:validate_smart_assumptions)
-        return { has_errors: true, errors: errors } unless errors.blank?
-
-        insertion_stats = insert_into_database(data)
-
-        validate_booking_possible(data) if should_execute?(:validate_booking_possible)
-
+        insertion_stats = insert_into_database
         insertion_stats
       end
 
       private
 
-      attr_reader :tenant, :klass_identifier, :file_or_path, :should_execute_map
+      attr_reader :tenant, :klass_identifier, :file_or_path, :data
 
-      def should_execute?(method_name)
-        return should_execute_map[method_name] if should_execute_map
-
-        method_names =
-          %i(validate_syntax
-             restructure_data
-             validate_insertability
-             validate_smart_assumptions
-             validate_booking_possible)
-
-        flags =
+      def performing_methods(klass_identifier)
+        do_not_execute_methods =
           case klass_identifier
           when 'Pricing'
-            [true, true, true, true, true]
+            %i(validate_booking_possible)
           when 'LocalCharges'
-            [true, true, true, true, true]
+            %i(validate_booking_possible)
           when 'ChargeCategories'
-            [true, true, true, false, false]
+            %i(validate_smart_assumptions
+               validate_booking_possible)
           end
 
-        @should_execute_map = method_names.zip(flags).to_h
-        should_execute_map[method_name]
+        POTENTIALLY_PERFORMING_METHODS - do_not_execute_methods
       end
 
-      def parse_and_sanitize
+      def options
+        @options ||= { tenant: tenant, data: data, klass_identifier: klass_identifier }
+      end
+
+      def parse_and_sanitize_data!
         file_parser = ExcelDataServices::FileParser.get(klass_identifier)
-        options = { tenant: tenant, file_or_path: file_or_path }
-        file_parser.parse(options)
+        @data = file_parser.parse(tenant: tenant, file_or_path: file_or_path)
       end
 
-      def validate_syntax(raw_sheets_data)
-        syntax_validator = ExcelDataServices::DataValidator.get('Syntax', klass_identifier)
-        options = { data: raw_sheets_data, tenant: tenant, klass_identifier: klass_identifier }
-        syntax_validator.validate(options)
+      def validate_syntax
+        validate('Syntax')
       end
 
-      def restructure_data(raw_sheets_data)
+      def restructure_data!
         restructurer = ExcelDataServices::DataRestructurer.get(klass_identifier)
-        options = { data: raw_sheets_data, tenant: tenant }
-        restructurer.restructure_data(options)
+        @data = restructurer.restructure_data(options)
       end
 
-      def validate_insertability(restructured_sheets_data)
-        insertability_validator = ExcelDataServices::DataValidator.get('Insertability', klass_identifier)
-        options = { data: restructured_sheets_data, tenant: tenant, klass_identifier: klass_identifier }
-        insertability_validator.validate(options)
+      def validate_insertability
+        validate('Insertability')
       end
 
-      def validate_smart_assumptions(restructured_sheets_data)
-        smart_assumptions_validator = ExcelDataServices::DataValidator.get('Smart Assumptions', klass_identifier)
-        options = { data: restructured_sheets_data, tenant: tenant, klass_identifier: klass_identifier }
-        smart_assumptions_validator.validate(options)
+      def validate_smart_assumptions
+        validate('Smart Assumptions')
       end
 
-      def insert_into_database(restructured_sheets_data)
+      def validate_booking_possible
+        validate('Booking Possible')
+      end
+
+      def validate(flavor)
+        validator = ExcelDataServices::DataValidator.get(flavor, klass_identifier)
+        errors = validator.validate(options)
+        raise ValidationError.new(errors), "#{validator.class} caught #{errors.count} error(s)." unless errors.empty?
+      end
+
+      def insert_into_database
         inserter = ExcelDataServices::DatabaseInserter.get(klass_identifier)
-        options = { tenant: tenant,
-                    data: restructured_sheets_data,
-                    klass_identifier: klass_identifier }
         inserter.insert(options)
-      end
-
-      def validate_booking_possible(_data)
-        # TODO
       end
     end
   end
