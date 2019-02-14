@@ -48,9 +48,9 @@ class QuoteMailer < ApplicationMailer
     end
   end
 
-  def quotation_admin_email(shipment, shipments, quotation) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    @shipments = shipments
-    @shipment = shipment
+  def quotation_admin_email(quotation) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    @shipments = quotation.shipments
+    @shipment = Shipment.find(quotation.original_shipment_id)
     @quotation = quotation
     @quotes = @shipments.map(&:selected_offer)
     @user = @shipment.user
@@ -59,7 +59,7 @@ class QuoteMailer < ApplicationMailer
 
     quotation = generate_and_upload_quotation(@quotes)
     @document = Document.create!(
-      shipment: shipment,
+      shipment: @shipment,
       text: "quotation_#{@shipments.pluck(:imc_reference).join(',')}",
       doc_type: 'quotation',
       user: @user,
@@ -78,7 +78,7 @@ class QuoteMailer < ApplicationMailer
       from: Mail::Address.new("no-reply@#{@user.tenant.subdomain}.#{Settings.emails.domain}")
                          .tap { |a| a.display_name = 'ItsMyCargo Quotation Tool' }.format,
       reply_to: Settings.emails.support,
-      to: mail_target_interceptor(@user, @user.tenant.email_for(:sales, shipment.mode_of_transport)),
+      to: mail_target_interceptor(@user, @user.tenant.email_for(:sales, @shipment.mode_of_transport)),
       subject: "Quotation for #{@shipments.pluck(:imc_reference).join(',')}"
     ) do |format|
       format.html

@@ -91,6 +91,10 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
                     offer_calculator.shipment.cargo_units
                   end
 
+    if current_user.tenant.quotation_tool? && current_user.tenant.scope['email_all_quotes']
+      quote = ShippingTools.create_shipments_from_quotation(offer_calculator.shipment, offer_calculator.detailed_schedules.map(&:deep_stringify_keys!))
+      QuoteMailer.quotation_admin_email(quote).deliver_later
+    end
     {
       shipment: offer_calculator.shipment,
       results: offer_calculator.detailed_schedules,
@@ -632,9 +636,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
     @quotes = main_quote.shipments.map(&:selected_offer)
     logo = Base64.encode64(Net::HTTP.get(URI(tenant.theme['logoLarge'])))
-    if tenant.scope['send_email_on_quote_download']
-      QuoteMailer.quotation_admin_email(shipment, main_quote.shipments.to_a, main_quote).deliver_later
-    end
+    QuoteMailer.quotation_admin_email(main_quote).deliver_later if tenant.scope['send_email_on_quote_download']
     quotation = PdfHandler.new(
       layout: 'pdfs/simple.pdf.html.erb',
       template: 'shipments/pdfs/quotations.pdf.erb',
@@ -653,7 +655,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
   def self.save_and_send_quotes(shipment, schedules, email)
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
     QuoteMailer.quotation_email(shipment, main_quote.shipments.to_a, email, main_quote).deliver_later
-    QuoteMailer.quotation_admin_email(shipment, main_quote.shipments.to_a, main_quote).deliver_later
+    QuoteMailer.quotation_admin_email(main_quote).deliver_later if tenant.scope['send_email_on_quote_email']
   end
 
   def self.tenant_notification_email(user, shipment)
