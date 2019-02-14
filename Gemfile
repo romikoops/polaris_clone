@@ -17,6 +17,9 @@ gem 'activerecord-import'
 # Strong Migrations - Prevent Non Zero-Down time Migrations
 gem 'strong_migrations'
 
+# i18n support
+gem 'rails-i18n'
+
 # Easy Monitoring
 gem 'easymon'
 

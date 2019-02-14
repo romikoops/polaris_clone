@@ -558,6 +558,8 @@ module ExcelTool
         'location_id'
       elsif identifier_type == 'POSTAL_CODE'
         %w(location_id postal_code)
+      elsif identifier_type == 'POSTAL_CITY'
+        %w(location_id postal_city)
       elsif identifier_type.include?('_')
         identifier_type.split('_').map(&:downcase)
       elsif identifier_type.include?(' ')
@@ -578,11 +580,17 @@ module ExcelTool
     end
 
     def find_geometry(idents_and_country)
-      
       geometry = if @identifier_modifier == 'postal_code'
                    Locations::Name.find_by(postal_code: idents_and_country[:ident].upcase, country_code: idents_and_country[:country])&.location
-                 else
-                  
+                 elsif @identifier_modifier == 'postal_city'
+                  begin
+                    binding.pry
+                    postal_code, name = idents_and_country[:ident].split('-').map{|string| string.strip.upcase }
+                    Locations::NameFinder.seeding_with_postal_code(postal_code: postal_code, country_code: idents_and_country[:country].downcase, terms: name)&.location
+                  rescue => e
+                    binding.pry 
+                    end
+                  else
                   begin
                   p [idents_and_country[:sub_ident], idents_and_country[:ident]]
                    Locations::NameFinder.seeding(
@@ -594,14 +602,13 @@ module ExcelTool
                   end
                  end
                 
-      if geometry.nil?
+      # if geometry.nil?
         
-        geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
-        return nil if geocoder_results.first.nil?
-
-        coordinates = geocoder_results.first.geometry['location']
-        geometry = Locations::Location.contains(lat: coordinates['lat'], lon: coordinates['lng']).first
-      end
+      #   geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
+      #   return nil if geocoder_results.first.nil?
+      #   coordinates = geocoder_results.first.geometry['location']
+      #   geometry = Locations::Location.contains(lat: coordinates['lat'], lon: coordinates['lng']).first
+      # end
 
       geometry
     end
