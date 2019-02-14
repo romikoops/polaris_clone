@@ -29,8 +29,8 @@ module Locations
     end
 
     if defined?(FactoryBot)
-      initializer 'model_core.factories', after: 'factory_girl.set_factory_paths' do
-        FactoryBot.definition_file_paths << File.expand_path('../../spec/factories', __dir__)
+      initializer 'model_core.factories', after: 'factory_bot.set_factory_paths' do
+        FactoryBot.definition_file_paths << Pathname.new(File.expand_path('../../spec/factories', __dir__))
       end
     end
   end

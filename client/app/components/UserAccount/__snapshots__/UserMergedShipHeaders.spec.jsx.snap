@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-center"
+>
+  <div
+    className="flex-40 layout-row layout-align-start-center"
+  >
+    <h3
+      className="flex-none"
+      style={
+        Object {
+          "paddingRight": "10px",
+        }
+      }
+    >
+      FOO
+    </h3>
+    <h3
+      className="flex-none"
+    >
+      (
+      100
+      )
+    </h3>
+  </div>
+  <div
+    className="flex-15 layout-row layout-align-start-center"
+  >
+    <h3
+      className="flex-none"
+    >
+      Reference
+    </h3>
+  </div>
+  <div
+    className="flex-15 layout-row layout-align-start-center"
+  >
+    <h3
+      className="flex-none"
+    >
+      Status
+    </h3>
+  </div>
+  <div
+    className="flex-15 layout-row layout-align-start-center"
+  />
+  <div
+    className="flex-15 layout-row layout-align-start-center"
+  >
+    <h3
+      className="flex-none"
+    >
+      Requires Action
+    </h3>
+  </div>
+</div>
+`;

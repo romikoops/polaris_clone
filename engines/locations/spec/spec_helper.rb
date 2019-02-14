@@ -7,9 +7,20 @@ SimpleCov.start 'rails' do
   minimum_coverage 98
 
   if ENV['COVERAGE_DIR']
-    command_name 'locations/rspec'
+    command_name 'engines/locations'
     coverage_dir(ENV['COVERAGE_DIR'])
     merge_timeout 3600
+  end
+
+  if ENV['CI']
+    require 'simplecov-cobertura'
+    require 'simplecov-lcov'
+
+    SimpleCov::Formatter::LcovFormatter.config.report_with_single_file = true
+    formatter SimpleCov::Formatter::MultiFormatter.new([
+                                                         SimpleCov::Formatter::CoberturaFormatter,
+                                                         SimpleCov::Formatter::LcovFormatter
+                                                       ])
   end
 end
 
@@ -99,6 +110,7 @@ RSpec.configure do |config|
       example.run
     end
   end
+  
   # Seed global randomization in this process using the `--seed` CLI option.
   # Setting this allows you to use `--seed` to deterministically reproduce
   # test failures related to randomization by passing the same `--seed` value
