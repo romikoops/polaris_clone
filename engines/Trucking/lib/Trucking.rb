@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'Trucking/engine'
+require 'trucking/engine'
 
 module Trucking
 end

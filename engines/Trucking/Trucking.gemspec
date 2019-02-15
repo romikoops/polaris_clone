@@ -4,7 +4,7 @@ $LOAD_PATH.push File.expand_path('lib', __dir__)
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = 'Trucking'
+  s.name        = 'trucking'
   s.version     = '9999.1.0.0'
   s.license     = 'PROPRIETARY'
   s.authors     = ['Warwick Beamish']
