@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'activerecord-postgis-adapter', '5.2.2'
   s.add_dependency 'config', '~> 1.7.1'
+  s.add_dependency 'paper_trail', '~> 10.1', '>= 10.1.0'
   s.add_dependency 'pg', '>= 0.18', '< 2.0'
   s.add_dependency 'rails', '5.2.2'
   s.add_dependency 'strong_migrations', '0.3.1'
