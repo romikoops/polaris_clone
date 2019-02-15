@@ -4,10 +4,12 @@ class EngineGenerator < Rails::Generators::NamedBase
   source_root File.expand_path('template', __dir__)
 
   def create_engine # rubocop:disable Metrics/CyclomaticComplexity,Metrics/AbcSize
-    # Define engine destination
-    engine = "engines/#{name}"
+    engine_name = name.downcase
 
-    raise 'Invalid Engine Name' unless name[/\A[a-zA-Z_]+\z/]
+    # Define engine destination
+    engine = "engines/#{engine_name}"
+
+    raise 'Invalid Engine Name' unless engine_name[/\A[a-zA-Z_]+\z/]
 
     # Create engine template
     template_dir = Rails.root.join('tmp', '._template')
@@ -23,8 +25,8 @@ class EngineGenerator < Rails::Generators::NamedBase
 
         gsub_file item, /(engine_template|EngineTemplate|GITUSER_NAME|GITUSER_EMAIL)/, verbose: false do |m|
           case m
-          when 'engine_template' then name
-          when 'EngineTemplate'  then name.camelize
+          when 'engine_template' then engine_name
+          when 'EngineTemplate'  then engine_name.camelize
           when 'GITUSER_NAME'    then `git config user.name`.strip
           when 'GITUSER_EMAIL'   then `git config user.email`.strip
           end
@@ -32,7 +34,7 @@ class EngineGenerator < Rails::Generators::NamedBase
       end
 
       Dir['**/*engine_template*'].each do |item|
-        run "mv #{Shellwords.escape(item)} #{Shellwords.escape(item.gsub(/engine_template/, name))}", verbose: false
+        run "mv #{Shellwords.escape(item)} #{Shellwords.escape(item.gsub(/engine_template/, engine_name))}", verbose: false
       end
 
       Dir['bin/*'].each { |bin| chmod bin, 0o0755, verbose: false }
