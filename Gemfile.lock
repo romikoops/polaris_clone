@@ -68,6 +68,12 @@ PATH
       strong_migrations (= 0.3.1)
 
 PATH
+  remote: engines/legacy
+  specs:
+    legacy (9999.1.0.0)
+      core
+
+PATH
   remote: engines/users
   specs:
     users (9999.1.0.0)
@@ -714,6 +720,7 @@ DEPENDENCIES
   google-cloud-translate
   googleauth
   holidays
+  legacy!
   letter_opener (~> 1.6)
   listen (>= 3.0.5, < 3.2)
   lograge
