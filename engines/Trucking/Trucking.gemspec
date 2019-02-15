@@ -4,12 +4,12 @@ $LOAD_PATH.push File.expand_path('lib', __dir__)
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = 'locations'
+  s.name        = 'Trucking'
   s.version     = '9999.1.0.0'
   s.license     = 'PROPRIETARY'
   s.authors     = ['Warwick Beamish']
   s.email       = ['wkbeamish@gmail.com']
-  s.summary     = 'Summary of Locations.'
+  s.summary     = 'Summary of Trucking.'
 
   # Uncomment line below to mark this component to be directly required by app.
   # s.metadata = { 'type' => 'direct' }
@@ -17,9 +17,6 @@ Gem::Specification.new do |s|
   s.files = Dir['{app,config,db,lib}/**/*', 'Rakefile']
 
   s.add_dependency 'core'
-
-  s.add_dependency 'rgeo-geojson'
-  s.add_dependency 'searchkick'
 
   s.add_development_dependency 'factory_bot_rails'
   s.add_development_dependency 'ffaker'

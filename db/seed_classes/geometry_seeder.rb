@@ -88,7 +88,7 @@ class GeometrySeeder
     new_completion_percentage = 0
     puts 'PROGRESS BAR'
     puts '_' * 100
-
+    binding.pry
     geometries_data = geometries.map.with_index do |geo, i|
       # Progress bar
 

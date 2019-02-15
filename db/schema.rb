@@ -844,7 +844,7 @@ ActiveRecord::Schema.define(version: 2019_02_13_141635) do
     t.integer "distance"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "location_id"
+    t.integer "location_id"
     t.index ["city_name"], name: "index_trucking_destinations_on_city_name"
     t.index ["country_code"], name: "index_trucking_destinations_on_country_code"
     t.index ["distance"], name: "index_trucking_destinations_on_distance"

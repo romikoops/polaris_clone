@@ -29,13 +29,13 @@ module ExcelTool
       start_time = DateTime.now
       load_zones
       load_ident_values_and_countries
-      load_fees_and_charges
-      overwrite_zonal_trucking_rates_by_hub
-      import_locations
-      end_time = DateTime.now
-      diff = (end_time - start_time) / 86_400
+      # load_fees_and_charges
+      # overwrite_zonal_trucking_rates_by_hub
+      # import_locations
+      # end_time = DateTime.now
+      # diff = (end_time - start_time) / 86_400
       puts @missing_locations
-      puts "Time elapsed: #{diff}"
+      # puts "Time elapsed: #{diff}"
       { results: results, stats: stats }
     end
 
@@ -581,34 +581,25 @@ module ExcelTool
 
     def find_geometry(idents_and_country)
       geometry = if @identifier_modifier == 'postal_code'
-                   Locations::Name.find_by(postal_code: idents_and_country[:ident].upcase, country_code: idents_and_country[:country])&.location
+                   Locations::Location.find_by(postal_code: idents_and_country[:ident].upcase, country_code: idents_and_country[:country])
                  elsif @identifier_modifier == 'postal_city'
-                  begin
-                    # binding.pry
-                    postal_code, name = idents_and_country[:ident].split('-').map{|string| string.strip.upcase }
-                    Locations::LocationSeeder.seeding_with_postal_code(postal_code: postal_code, country_code: idents_and_country[:country].downcase, terms: name)
-                  rescue => e
-                    binding.pry 
-                    end
-                  else
-                  begin
-                  p [idents_and_country[:sub_ident], idents_and_country[:ident]]
+                   postal_code, name = idents_and_country[:ident].split('-').map{|string| string.strip.upcase }
+                   Locations::LocationSeeder.seeding_with_postal_code(postal_code: postal_code, country_code: idents_and_country[:country].downcase, terms: name)
+                  
+                 else
                    Locations::LocationSeeder.seeding(
                      idents_and_country[:sub_ident],
                      idents_and_country[:ident]
                    )
-                   rescue => e
-                  binding.pry 
-                  end
                  end
-                
-      # if geometry.nil?
-        
-      #   geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
-      #   return nil if geocoder_results.first.nil?
-      #   coordinates = geocoder_results.first.geometry['location']
-      #   geometry = Locations::Location.contains(lat: coordinates['lat'], lon: coordinates['lng']).first
-      # end
+
+      if geometry.nil?
+
+        geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
+        return nil if geocoder_results.first.nil?
+        coordinates = geocoder_results.first.geometry['location']
+        geometry = Locations::Location.smallest_contains(lat: coordinates['lat'], lon: coordinates['lng']).first
+      end
 
       geometry
     end
