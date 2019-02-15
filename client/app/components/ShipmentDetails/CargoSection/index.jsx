@@ -6,6 +6,7 @@ import { bookingProcessActions } from '../../../actions'
 import CargoUnits from './CargoUnits'
 import CargoUnitToggleMode from './CargoUnits/CargoUnit/ToggleMode'
 import AddUnitButton from './AddUnitButton'
+import { debounce } from '../../../helpers'
 import { getTotalShipmentErrors } from './getErrors'
 
 class CargoSection extends React.PureComponent {
@@ -13,11 +14,16 @@ class CargoSection extends React.PureComponent {
     super(props)
 
     this.handleAddUnit = this.handleAddUnit.bind(this)
-    this.handleToggleAggregated = this.handleToggleAggregated.bind(this)
+    this.handleToggleAggregated = debounce(this.handleToggleAggregated.bind(this), 200)
     this.handleDeleteUnit = this.handleDeleteUnit.bind(this)
     this.handleChangeCargoUnitSelect = this.handleChangeCargoUnitSelect.bind(this)
-    this.handleChangeCargoUnitInput = this.handleChangeCargoUnitInput.bind(this)
-    this.handleChangeCargoUnitCheckbox = this.handleChangeCargoUnitCheckbox.bind(this)
+
+    this.handleChangeCargoUnitInput = debounce(this.handleChangeCargoUnitInput.bind(this), 500, e => e.persist())
+    this.handleChangeCargoUnitCheckbox = debounce(
+      this.handleChangeCargoUnitCheckbox.bind(this),
+      200,
+      (_, e) => e.persist()
+    )
 
     this.cargoItem = {
       payloadInKg: 0,
@@ -70,8 +76,11 @@ class CargoSection extends React.PureComponent {
   }
 
   handleChangeCargoUnitInput (e) {
-    const [index, prop] = e.target.name.split('-')
-    const newValue = Number(e.target.value)
+    const { target } = e
+    const { name, value } = target
+
+    const [index, prop] = name.split('-')
+    const newValue = Number(value)
 
     if (prop === 'collectiveWeight') {
       this.handleChangeCollectiveWeight(index, newValue)
