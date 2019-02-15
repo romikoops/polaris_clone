@@ -21,7 +21,7 @@ class LocationCsvSeeder
             province: row['landkreis']
           }
          location = Location.find_by(country: 'Germany', postal_code: row['plz'])
-         if !location 
+         if !location
           binding.pry
          else
           location.update(data)
@@ -32,7 +32,7 @@ class LocationCsvSeeder
 
     puts 'Germany Locations updated...'
 
-    
+
   end
 
   def self.get_s3_file(key)

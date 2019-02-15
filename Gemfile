@@ -132,7 +132,7 @@ gem 'mobility', '~> 0.8.6'
 group :development, :test do
   gem 'annotate'
   gem 'dotenv-rails', require: 'dotenv/rails-now'
-  gem 'factory_bot_rails'
+  gem 'factory_bot_rails', '~> 4.0', '< 5'
   gem 'fuubar'
   gem 'rails-erd'
   gem 'rspec-rails'
@@ -145,7 +145,7 @@ group :development, :test do
   gem 'binding_of_caller'
   gem 'debase'
   gem 'ruby-debug-ide'
-  
+
   # Code Style
   gem 'danger'
   gem 'danger-auto_label'
@@ -158,9 +158,8 @@ group :development, :test do
   gem 'pronto-eslint_npm'
   gem 'pronto-fasterer'
   gem 'pronto-flay'
-  gem 'pronto-rails_schema'
   gem 'pronto-rubocop'
-  gem 'pronto-undercover'
+  gem 'pronto-undercover', git: 'https://github.com/mikian/pronto-undercover.git', branch: 'master'
 
   gem 'rubocop'
   gem 'rubocop-checkstyle_formatter'
