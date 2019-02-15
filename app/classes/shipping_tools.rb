@@ -655,7 +655,7 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
   def self.save_and_send_quotes(shipment, schedules, email)
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
     QuoteMailer.quotation_email(shipment, main_quote.shipments.to_a, email, main_quote).deliver_later
-    QuoteMailer.quotation_admin_email(main_quote).deliver_later if tenant.scope['send_email_on_quote_email']
+    QuoteMailer.quotation_admin_email(main_quote).deliver_later if shipment.tenant.scope['send_email_on_quote_email']
   end
 
   def self.tenant_notification_email(user, shipment)
