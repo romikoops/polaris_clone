@@ -12,35 +12,8 @@ import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner'
 import { moment } from '../../../../constants'
 import addressFromPlace from './addressFromPlace'
 import addressFromLocation from './addressFromLocation'
+import searchLocations from './searchLocations'
 import { errorActions } from '../../../../actions'
-
-// WIP - Should be refactored out of this file
-import { getTenantApiUrl } from '../../../../constants/api.constants'
-import { authHeader } from '../../../../helpers'
-
-const { fetch } = window
-function searchLocations (input, countries, timestamp, callback) {
-  fetch(
-    `${getTenantApiUrl()}/locations?query=${input}&countries=${countries}`,
-    {
-      method: 'GET',
-      headers: authHeader()
-    }
-  ).then((promise) => {
-    promise.json().then((response) => {
-      if (response.data) {
-        const {
-          results
-        } = response.data
-        callback(results, timestamp)
-      } else {
-        callback([])
-      }
-    })
-  })
-}
-
-// /////////////////////////
 
 class Autocomplete extends PureComponent {
   static filterResults (results, options) {
