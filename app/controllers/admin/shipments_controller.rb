@@ -6,7 +6,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   include NotificationTools
 
   def index
-    current_user.tenant.quotation_tool ? get_quote_index : get_booking_index
+    current_user.tenant.quotation_tool? ? get_quote_index : get_booking_index
   end
 
   def delta_page_handler

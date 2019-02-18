@@ -6,7 +6,7 @@ class ShipmentsController < ApplicationController
   skip_before_action :require_non_guest_authentication!
 
   def index
-    current_user.tenant.quotation_tool ? get_quote_index : get_booking_index
+    current_user.tenant.quotation_tool? ? get_quote_index : get_booking_index
   end
 
   def delta_page_handler
