@@ -38,7 +38,7 @@ class Admin::DashboardController < Admin::AdminBaseController
   end
 
   def shipments_hash
-    current_user.tenant.quotation_tool ?
+    current_user.tenant.quotation_tool? ?
     {
       quoted:   @quoted_shipments
     } : {

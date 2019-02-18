@@ -63,9 +63,16 @@ PATH
       activerecord-postgis-adapter (= 5.2.2)
       config (~> 1.7.1)
       dry-logic (>= 0.4.2, < 0.5.0)
+      paper_trail (~> 10.1, >= 10.1.0)
       pg (>= 0.18, < 2.0)
       rails (= 5.2.2)
       strong_migrations (= 0.3.1)
+
+PATH
+  remote: engines/legacy
+  specs:
+    legacy (9999.1.0.0)
+      core
 
 PATH
   remote: engines/users
@@ -714,6 +721,7 @@ DEPENDENCIES
   google-cloud-translate
   googleauth
   holidays
+  legacy!
   letter_opener (~> 1.6)
   listen (>= 3.0.5, < 3.2)
   lograge
@@ -725,7 +733,7 @@ DEPENDENCIES
   nokogiri
   omniauth
   os
-  paper_trail
+  paper_trail (~> 10.1, >= 10.1.0)
   pg (>= 0.18, < 2.0)
   pg_search
   pronto!
