@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-class Tenant < ApplicationRecord
+class Tenant < Legacy::Tenant
   include ImageTools
   include DataValidator
-
-  has_paper_trail
 
   has_many :shipments, dependent: :destroy
   has_many :hubs, dependent: :destroy

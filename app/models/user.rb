@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class User < ApplicationRecord
+class User < Legacy::User
   # Include default devise modules.
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
@@ -16,7 +16,6 @@ class User < ApplicationRecord
     scope: :tenant_id,
     message: ->(obj, _) { "'#{obj.email}' taken for Tenant '#{obj.tenant.subdomain}'" }
   }
-  has_paper_trail
 
   # Basic associations
   belongs_to :tenant
