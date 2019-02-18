@@ -1,10 +1,13 @@
 # frozen_string_literal: true
+require 'geocoder'
+require 'paper_trail'
 
 module Trucking
   class Engine < ::Rails::Engine
     isolate_namespace Trucking
 
     config.autoload_paths << File.expand_path('../../app', __dir__)
+    config.autoload_paths << File.expand_path('../../app/services/excel', __dir__)
 
     config.active_record.primary_key = :uuid
 

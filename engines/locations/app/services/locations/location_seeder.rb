@@ -5,7 +5,7 @@ module Locations
     MultipleResultsFound = Class.new(StandardError)
 
     def self.seeding(*terms)
-      name = Locations::NameFinder.seeding(terms, fields: %i(name display_name postal_code), limit: 1, match: :word_middle, operator: 'or').results.first
+      name = Locations::NameFinder.seeding(terms, fields: %i(name display_name postal_code), limit: 1, match: :word_middle, operator: 'or')
       return nil unless name
 
       return name.location if name.location

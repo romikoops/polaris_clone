@@ -17,7 +17,8 @@ module Locations
     end
 
     def transliterated_name
-      I18n.with_locale(country_code) do
+      locale = I18n.available_locales.find { |l| l[/#{country_code}/i] }
+      I18n.with_locale(locale) do
         ActiveSupport::Inflector.transliterate(name)
       end
     end

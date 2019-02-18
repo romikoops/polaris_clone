@@ -1,0 +1,474 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow rendering 1`] = `
+<div
+  className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start"
+  style={
+    Object {
+      "minHeight": "1800px",
+    }
+  }
+>
+  <FlashMessages
+    messages={
+      Array [
+        "FOO_MESSAGE",
+        "BAR_MESSAGE",
+      ]
+    }
+  />
+  <div
+    className="layout-row flex-100 layout-wrap map_cont"
+  >
+    <GmapsLoader
+      component={[Function]}
+      filteredRouteIndexes={Array []}
+      handleAddressChange={[Function]}
+      handleCarriageChange={[Function]}
+      handleSelectLocation={[Function]}
+      handleTruckingDetailsChange={[Function]}
+      has_on_carriage={true}
+      has_pre_carriage={false}
+      nextStageAttempts={0}
+      prevRequest={
+        Object {
+          "shipment": Object {
+            "cargo_items_attributes": Array [],
+            "clientName": "FOO_CLIENT_NAME",
+            "containers_attributes": Array [],
+            "destination_hub": Object {
+              "name": "FOO_DESTINATION_HUB",
+            },
+            "destination_id": 12,
+            "destination_user_input": "destination_user_input",
+            "direction": "FOO_DIRECTION",
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "id": 654,
+            "imc_reference": "FOO_IMC_REFERENCE",
+            "incoterm": "incoterm",
+            "load_type": "cargo_item",
+            "origin_hub": Object {
+              "name": "FOO_ORIGIN_HUB",
+            },
+            "origin_id": 1,
+            "origin_user_input": "origin_user_input",
+            "planned_etd": 789,
+            "planned_pickup_date": "planned_pickup_date",
+            "schedule_set": Array [],
+            "status": "FOO_STATUS",
+            "trucking": Object {
+              "on_carriage": Object {},
+              "pre_carriage": Object {},
+            },
+          },
+        }
+      }
+      reusedShipment={null}
+      routeIds={Array []}
+      scope={
+        Object {
+          "carriage_options": Object {
+            "on_carriage": Object {
+              "FOO_DIRECTION": "mandatory",
+            },
+            "pre_carriage": Object {
+              "FOO_DIRECTION": "optional",
+            },
+          },
+        }
+      }
+      selectedTrucking={
+        Object {
+          "on_carriage": Object {
+            "truck_type": "default",
+          },
+          "pre_carriage": Object {},
+        }
+      }
+      setNotesIds={[Function]}
+      setTargetAddress={[Function]}
+      shipmentData={
+        Object {
+          "cargoItemTypes": Object {},
+          "shipment": Object {
+            "cargo_items_attributes": Array [],
+            "clientName": "FOO_CLIENT_NAME",
+            "containers_attributes": Array [],
+            "destination_hub": Object {
+              "name": "FOO_DESTINATION_HUB",
+            },
+            "destination_id": 12,
+            "destination_user_input": "destination_user_input",
+            "direction": "FOO_DIRECTION",
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "id": 654,
+            "imc_reference": "FOO_IMC_REFERENCE",
+            "incoterm": "incoterm",
+            "load_type": "cargo_item",
+            "origin_hub": Object {
+              "name": "FOO_ORIGIN_HUB",
+            },
+            "origin_id": 1,
+            "origin_user_input": "origin_user_input",
+            "planned_etd": 789,
+            "planned_pickup_date": "planned_pickup_date",
+            "schedule_set": Array [],
+            "status": "FOO_STATUS",
+            "trucking": Object {
+              "on_carriage": Object {},
+              "pre_carriage": Object {},
+            },
+          },
+        }
+      }
+      shipmentDispatch={
+        Object {
+          "getDashboard": [Function],
+          "goTo": [Function],
+        }
+      }
+      theme={null}
+      updateFilteredRouteIndexes={[Function]}
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-center-center closed_notes note_box"
+  >
+    <div
+      className="flex-none content_width_booking layout-row layout-align-start-center"
+    >
+      <NotesRow
+        notes={Array []}
+        theme={Object {}}
+      />
+    </div>
+  </div>
+  <div
+    className="date_sec layout-row flex-100 layout-wrap layout-align-center-center"
+  >
+    <div
+      className="content_width layout-row flex-none layout-align-start-center"
+    >
+      <div
+        className="layout-row flex-50 layout-align-start-center layout-wrap"
+      >
+        <div
+          className="bottom_margin flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex-none letter_2 layout-align-space-between-end"
+          >
+            <TextHeading
+              color=""
+              size={3}
+              text="Available at appointed terminal"
+            />
+          </div>
+          <Tooltip
+            color=""
+            icon="fa-info-circle"
+            text="planned_dropoff_date"
+            theme={Object {}}
+            toolText=""
+            wrapperClassName=""
+          />
+        </div>
+        <div
+          className="flex-none layout-row dpb "
+          name="dayPicker"
+        >
+          <div
+            className="flex-none layout-row layout-align-center-center dpb_icon"
+          >
+            <i
+              className="flex-none fa fa-calendar"
+            />
+          </div>
+          <DayPickerInput
+            classNames={
+              Object {
+                "container": "DayPickerInput",
+                "overlay": "DayPickerInput-Overlay",
+                "overlayWrapper": "DayPickerInput-OverlayWrapper",
+              }
+            }
+            clickUnselectsDay={false}
+            component="input"
+            dayPickerProps={
+              Object {
+                "disabledDays": Object {
+                  "before": 2017-06-13T01:41:20.000Z,
+                },
+                "month": 2017-06-13T01:41:20.000Z,
+                "name": "dayPicker",
+              }
+            }
+            format="DD/MM/YYYY"
+            formatDate={[Function]}
+            hideOnDayClick={true}
+            inputProps={Object {}}
+            keepFocus={true}
+            name="dayPicker"
+            onDayChange={[Function]}
+            overlayComponent={[Function]}
+            parseDate={[Function]}
+            placeholder="DD/MM/YYYY"
+            showOverlay={false}
+            value=""
+          />
+          <span
+            className="error_message"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-50 layout-row layout-wrap layout-align-end-center"
+      >
+        <IncotermBox
+          direction="FOO_DIRECTION"
+          errorStyles={null}
+          firstStep={true}
+          incoterm="incoterm"
+          nextStageAttempt={false}
+          onCarriage={true}
+          preCarriage={false}
+          setIncoTerm={[Function]}
+          showIncotermError={false}
+          tenantScope={
+            Object {
+              "carriage_options": Object {
+                "on_carriage": Object {
+                  "FOO_DIRECTION": "mandatory",
+                },
+                "pre_carriage": Object {
+                  "FOO_DIRECTION": "optional",
+                },
+              },
+            }
+          }
+          theme={null}
+          value={false}
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-center-center"
+  >
+    <div
+      className="flex-none content_width_booking layout-row layout-align-center-center"
+    >
+      <IncotermRow
+        destinationFees={true}
+        feeHash={Object {}}
+        onCarriage={true}
+        originFees={false}
+        preCarriage={false}
+        tenant={
+          Object {
+            "data": Object {
+              "scope": Object {
+                "carriage_options": Object {
+                  "on_carriage": Object {
+                    "FOO_DIRECTION": "mandatory",
+                  },
+                  "pre_carriage": Object {
+                    "FOO_DIRECTION": "optional",
+                  },
+                },
+              },
+            },
+          }
+        }
+        theme={null}
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-center cargo_sec"
+  >
+    <div
+      className="content_width_booking layout-row layout-wrap layout-align-center"
+    >
+      <div
+        className="toggle_aggregated_sec flex-50 layout-row layout-align-space-around-center"
+      >
+        <h3
+          className=""
+          onClick={[Function]}
+          style={
+            Object {
+              "opacity": 1,
+            }
+          }
+        >
+          Cargo Units
+        </h3>
+        <Toggle
+          checked={false}
+          className="flex-none aggregated_cargo"
+          icons={
+            Object {
+              "checked": <Unknown />,
+              "unchecked": <Unknown />,
+            }
+          }
+          id="aggregated_cargo"
+          name="aggregated_cargo"
+          onChange={[Function]}
+        />
+        <h3
+          className="pointy"
+          onClick={[Function]}
+          style={
+            Object {
+              "opacity": 0.4,
+            }
+          }
+        >
+          Total Dimensions
+        </h3>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center-center"
+    >
+      <ShipmentCargoItems
+        addCargoItem={[Function]}
+        availableCargoItemTypes={Array []}
+        availableMotsForRoute={Array []}
+        cargoItems={Array []}
+        deleteItem={[Function]}
+        handleDelta={[Function]}
+        nextStageAttempt={false}
+        scope={
+          Object {
+            "carriage_options": Object {
+              "on_carriage": Object {
+                "FOO_DIRECTION": "mandatory",
+              },
+              "pre_carriage": Object {
+                "FOO_DIRECTION": "optional",
+              },
+            },
+          }
+        }
+        theme={null}
+        toggleModal={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="border_divider layout-row flex-100 layout-wrap layout-align-center-center"
+  >
+    <div
+      className="btn_sec content_width layout-row flex-none layout-wrap layout-align-start-start"
+    >
+      <div
+        className="flex-60 layout-row layout-wrap layout-align-start-center"
+      >
+        <div
+          className=" flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex-10 layout-row layout-align-start-start"
+          >
+            <Checkbox
+              checked={false}
+              className=""
+              disabled={false}
+              name="no_dangerous_goods_confirmation"
+              onChange={[Function]}
+              onClick={null}
+              size="30px"
+              theme={null}
+            />
+          </div>
+          <div
+            className="flex"
+          >
+            <p
+              style={
+                Object {
+                  "fontSize": "14px",
+                  "margin": 0,
+                }
+              }
+            >
+              I hereby confirm that none of the specified cargo units contain
+               
+              <span
+                className="emulate_link blue_link"
+                onClick={[Function]}
+              >
+                dangerous goods
+              </span>
+              .
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex layout-row layout-wrap layout-align-end"
+      >
+        <div
+          className="flex-100 layout-row layout-align-end"
+        >
+          <RoundButton
+            active={false}
+            back={false}
+            disabled={true}
+            handleDisabled={[Function]}
+            handleNext={[Function]}
+            icon=""
+            iconClass=""
+            inverse={false}
+            size=""
+            text="Get Offers"
+            theme={null}
+          />
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-end"
+        >
+          <p
+            style={
+              Object {
+                "fontSize": "14px",
+                "width": "317px",
+              }
+            }
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="border_divider layout-row flex-100 layout-wrap layout-align-center-center"
+  >
+    <div
+      className="btn_sec content_width layout-row flex-none layout-wrap layout-align-start-start"
+    >
+      <div
+        className="btn_sec content_width layout-row flex-none layout-wrap layout-align-start-start"
+      >
+        <RoundButton
+          active={false}
+          back={true}
+          disabled={false}
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-angle-left"
+          inverse={false}
+          size=""
+          text="Back to Dashboard"
+          theme={null}
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

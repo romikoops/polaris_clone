@@ -55,7 +55,7 @@ module Queries
             AND (
               SELECT ST_Contains(
                 (
-                  SELECT bounds::geometry FROM locations_locations
+                  SELECT bounds::geometry FROM locations
                   WHERE id = trucking_destinations.location_id
                 ),
                 (SELECT ST_Point(:longitude, :latitude)::geometry)

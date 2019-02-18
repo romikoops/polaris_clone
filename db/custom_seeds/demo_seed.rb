@@ -28,16 +28,20 @@ include ExcelTools
 #   # req = { 'key' => hubs }
 #   # ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
 
-  raw_data = 'data/schryver/schryver_raw_trucking_data.xlsx'
-  req = { 'key' => raw_data }
-  ExcelTool::RawIgs.new(params: req).perform
+  # raw_data = 'data/schryver/schryver_raw_trucking_data.xlsx'
+  # req = { 'key' => raw_data }
+  # ExcelTool::RawIgs.new(params: req).perform
 
 #   # # # # # #   # # # # # Overwrite public pricings from excel sheet
 
-#   # # puts "# Overwrite Local Charges From Sheet"
-#   # local_charges = 'data/schryver/schryver__local_charges.xlsx'
-#   # req = { 'key' => local_charges }
-#   # ExcelTool::OverwriteLocalCharges.new(params: req, user: shipper).perform
+  # puts "# Overwrite Local Charges From Sheet"
+  tenant = Tenant.demo
+  shipper = tenant.users.shipper.first
+  hub = tenant.hubs.find_by_name('Shanghai Port')
+  trucking = 'data/demo/demo__trucking_ltl__shanghai_port.xlsx'
+  req = { 'key' => trucking }
+
+  Trucking::Excel::Inserter.new(params: req, user: shipper, hub_id: hub.id).perform
 #   # # #   # # # # # # Overwrite trucking data from excel sheet
 
 #   # path = 'data/schryver/ftl_rates.xlsx'

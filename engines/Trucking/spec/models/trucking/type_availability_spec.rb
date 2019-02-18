@@ -1,0 +1,7 @@
+require 'rails_helper'
+
+module Trucking
+  RSpec.describe TypeAvailability, type: :model do
+    pending "add some examples to (or delete) #{__FILE__}"
+  end
+end

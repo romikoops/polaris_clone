@@ -32,11 +32,11 @@ module Queries
           FROM (
             SELECT
               tp_id AS trucking_pricing_id,
-              MIN(sub_query_lvl_2.country_code) AS country_code,
+              MIN(country_code) AS country_code,
               ident_type,
               CASE
                 WHEN ident_type = 'city'
-                  THEN MIN(locations.name) || '*' || MIN(locations.country_code)
+                  THEN MIN(locations.city) || '*' || MIN(locations.country)
                 ELSE
                   MIN(ident_value)::text      || '*' || MAX(ident_value)::text
               END AS ident_values
@@ -56,9 +56,9 @@ module Queries
                     ELSE 'city'
                   END AS ident_type,
                   CASE
-                    WHEN trucking_destinations.zipcode  IS NOT NULL THEN trucking_destinations.zipcode::text
-                    WHEN trucking_destinations.distance IS NOT NULL THEN trucking_destinations.distance::text
-                    ELSE trucking_destinations.location_id::text
+                    WHEN trucking_destinations.zipcode  IS NOT NULL THEN trucking_destinations.zipcode::integer
+                    WHEN trucking_destinations.distance IS NOT NULL THEN trucking_destinations.distance::integer
+                    ELSE trucking_destinations.location_id
                   END AS ident_value
                 FROM trucking_pricings
                 JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
@@ -66,7 +66,7 @@ module Queries
                 WHERE hub_truckings.hub_id IN (:hub_ids)
               ) AS sub_query_lvl_3
             ) AS sub_query_lvl_2
-            LEFT OUTER JOIN locations_locations AS locations ON sub_query_lvl_2.ident_value = locations.id::text
+            LEFT OUTER JOIN locations ON sub_query_lvl_2.ident_value = locations.id
             GROUP BY tp_id, ident_type, range
             ORDER BY MAX(ident_value)
           ) AS sub_query_lvl_1

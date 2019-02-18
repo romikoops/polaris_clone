@@ -22,20 +22,17 @@ module ExcelTool
       @all_ident_values_and_countries = {}
       @charges = {}
       @locations = []
-      @missing_locations = []
     end
 
     def perform
       start_time = DateTime.now
       load_zones
       load_ident_values_and_countries
-      # load_fees_and_charges
-      # overwrite_zonal_trucking_rates_by_hub
-      # import_locations
-      # end_time = DateTime.now
-      # diff = (end_time - start_time) / 86_400
-      puts @missing_locations
-      # puts "Time elapsed: #{diff}"
+      load_fees_and_charges
+      overwrite_zonal_trucking_rates_by_hub
+      import_locations
+      end_time = DateTime.now
+      diff = (end_time - start_time) / 86_400
       { results: results, stats: stats }
     end
 
@@ -102,7 +99,6 @@ module ExcelTool
           row_key = "#{row_zone_name}_#{row_truck_type}"
           single_ident_values_and_country = all_ident_values_and_countries[row_zone_name]
           next if single_ident_values_and_country.nil? || single_ident_values_and_country.first.nil?
-          binding.pry if single_ident_values_and_country.length > 30
 
           single_ident_values = single_ident_values_and_country.map { |h| h[:ident] }
           trucking_pricing = create_trucking_pricing(meta)
@@ -214,12 +210,7 @@ module ExcelTool
             end
           elsif identifier_type == 'location_id'
             geometry = find_geometry(idents_and_country)
-
-            if geometry.nil?
-            
-              @missing_locations << idents_and_country.values.join(', ')
-              next
-            end
+            next if geometry.nil?
             stats[:trucking_destinations][:number_created] += 1
 
             { ident: geometry&.id, country: idents_and_country[:country] }
@@ -490,7 +481,7 @@ module ExcelTool
       case identifier_type
       when 'distance', 'location_id'
         single_ident_values_and_country.map do |h|
-          "('#{h[:ident]}', '#{h[:country]}', current_timestamp, current_timestamp)"
+          "(#{h[:ident]}, '#{h[:country]}', current_timestamp, current_timestamp)"
         end
       else
         single_ident_values_and_country.map do |h|
@@ -504,7 +495,6 @@ module ExcelTool
     end
 
     def build_td_query(single_ident_values, single_ident_values_and_country)
-      identifier_cast = identifier_type == 'location_id' ? '::uuid' : ''
       <<-SQL
         WITH
           existing_identifiers AS (
@@ -515,7 +505,7 @@ module ExcelTool
           inserted_td_ids AS (
             INSERT INTO trucking_destinations(#{identifier_type}, country_code, created_at, updated_at)
               -- insert non-existent trucking_destinations
-              SELECT ident_value#{identifier_cast}, country_code::text, cr_at, up_at
+              SELECT ident_value, country_code::text, cr_at, up_at
               FROM (VALUES #{identity_country(single_ident_values_and_country)})
                 AS t(ident_value, country_code, cr_at, up_at)
               WHERE ident_value::text NOT IN (
@@ -558,8 +548,6 @@ module ExcelTool
         'location_id'
       elsif identifier_type == 'POSTAL_CODE'
         %w(location_id postal_code)
-      elsif identifier_type == 'POSTAL_CITY'
-        %w(location_id postal_city)
       elsif identifier_type.include?('_')
         identifier_type.split('_').map(&:downcase)
       elsif identifier_type.include?(' ')
@@ -581,24 +569,19 @@ module ExcelTool
 
     def find_geometry(idents_and_country)
       geometry = if @identifier_modifier == 'postal_code'
-                   Locations::Location.find_by(postal_code: idents_and_country[:ident].upcase, country_code: idents_and_country[:country])
-                 elsif @identifier_modifier == 'postal_city'
-                   postal_code, name = idents_and_country[:ident].split('-').map{|string| string.strip.upcase }
-                   Locations::LocationSeeder.seeding_with_postal_code(postal_code: postal_code, country_code: idents_and_country[:country].downcase, terms: name)
-                  
+                   Location.find_by_postal_code(idents_and_country[:ident].upcase)
                  else
-                   Locations::LocationSeeder.seeding(
+                   Location.cascading_find_by_names(
                      idents_and_country[:sub_ident],
                      idents_and_country[:ident]
                    )
                  end
 
       if geometry.nil?
-
         geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
         return nil if geocoder_results.first.nil?
         coordinates = geocoder_results.first.geometry['location']
-        geometry = Locations::Location.smallest_contains(lat: coordinates['lat'], lon: coordinates['lng']).first
+        geometry = Location.find_by_coordinates(coordinates['lat'], coordinates['lng'])
       end
 
       geometry

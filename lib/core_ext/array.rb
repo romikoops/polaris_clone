@@ -9,6 +9,10 @@ class Array
     "(#{join(', ')})"
   end
 
+  def string_sql_format
+    "(#{map{|x| "'#{x}'"}.join(', ')})"
+  end
+
   def each_with_times(arg)
     num_times =
       case arg

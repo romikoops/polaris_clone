@@ -7,18 +7,18 @@ class LocationCsvSeeder
   DOWNLOADS_PATH = '/Users/warwickbeamish/Downloads/drydock_europe.csv.gz'
   def self.perform
     # load_map_data('data/location_data/europe.csv.gz')
-    load_name_data('data/location_data/germany_osm_1.csv.gz')
+    # load_name_data('data/location_data/germany_osm_1.csv.gz')
     # load_map_data('data/location_data/asia.csv.gz')
-    # load_name_data('data/location_data/china_osm_2.csv.gz')
+    load_name_data('data/location_data/china_osm_2.csv.gz')
     # load_map_data('data/location_data/europe.csv.gz')
     # load_name_data('data/location_data/germany_osm_1.csv.gz')
     
   end
 
   def self.load_map_data(url)
-    # LocationCsvSeeder.get_s3_file(url)
+    LocationCsvSeeder.get_s3_file(url)
 
-    Zlib::GzipReader.open(DOWNLOADS_PATH) do |gz|
+    Zlib::GzipReader.open(TMP_PATH) do |gz|
       csv = CSV.new(gz, headers: true)
       puts 'Preparing Geometries attributes...'
 
@@ -28,8 +28,8 @@ class LocationCsvSeeder
           locations << {
             name: row.fetch('name'),
             bounds: row.fetch('way'),
-            osm_id: row.fetch('abs').to_i.abs,
-            # osm_id: row.fetch('osm_id').to_i.abs,
+            # osm_id: row.fetch('abs').to_i.abs,
+            osm_id: row.fetch('osm_id').to_i.abs,
             admin_level: row.fetch('admin_level'),
             country_code: ''
           }
@@ -77,7 +77,7 @@ class LocationCsvSeeder
         obj = {
           language: 'en'
         }
-        next unless %w(node relation).include?(row[keys.index(osm_type)])
+        # next unless %w(node relation).include?(row[keys.index(:osm_type)])
         keys.each_with_index do |k, i|
           if k == :coord
             obj[:point] = row[i]

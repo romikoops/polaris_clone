@@ -90,6 +90,14 @@ PATH
       searchkick
 
 PATH
+  remote: engines/trucking
+  specs:
+    trucking (9999.1.0.0)
+      core
+      geocoder
+      paper_trail
+
+PATH
   remote: engines/users
   specs:
     users (9999.1.0.0)
@@ -819,6 +827,7 @@ DEPENDENCIES
   table_print
   timecop
   traceroute
+  trucking!
   tzinfo-data
   undercover
   users!
