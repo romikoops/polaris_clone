@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Trucking
   class Location < ApplicationRecord
     validates given_attribute_names.first.to_sym,
-            uniqueness: {
-              scope: given_attribute_names[1..-1],
-              message: 'is a duplicate (all attributes match an existing record in the DB)'
-            }
+              uniqueness: {
+                scope: given_attribute_names[1..-1],
+                message: 'is a duplicate (all attributes match an existing record in the DB)'
+              }
 
     belongs_to :location, optional: true, class_name: 'Locations::Location'
     has_many :truckings, class_name: 'Trucking::Trucking'

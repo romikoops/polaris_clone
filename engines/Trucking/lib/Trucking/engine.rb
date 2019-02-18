@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 require 'geocoder'
+require 'legacy'
+require 'locations'
 require 'paper_trail'
 
 module Trucking

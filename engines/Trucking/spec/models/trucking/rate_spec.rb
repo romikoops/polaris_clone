@@ -4,8 +4,8 @@ module Trucking
   RSpec.describe Rate, type: :model do
     context 'class methods' do
       describe '.find_by_filter' do
-        let(:tenant) { Tenant.new }
-        let(:hub) { FactoryBot.create(:hub, :with_lat_lng, tenant: tenant) }
+        let(:tenant) { FactoryBot.create(:legacy_tenant) }
+        let(:hub) { FactoryBot.create(:legacy_hub, :with_lat_lng, tenant: tenant) }
   
         let(:trucking_location_zipcode) { FactoryBot.create(:trucking_location, :zipcode) }
         let(:trucking_location_geometry)  { FactoryBot.create(:trucking_location, :with_location) }
@@ -20,8 +20,8 @@ module Trucking
         let(:carriage)     { 'pre' }
         let(:country_code) { 'SE' }
   
-        let(:address) do
-          FactoryBot.create(:address, zip_code: zipcode, latitude: latitude, longitude: longitude)
+        let(:legacy_address) do
+          FactoryBot.create(:legacy_address, zip_code: zipcode, latitude: latitude, longitude: longitude)
         end
   
         context 'basic tests' do
@@ -207,10 +207,10 @@ module Trucking
       end
   
       describe '.find_by_hub_id' do
-        let(:tenant) { FactoryBot.create(:tenant) }
-        let(:hub)    { FactoryBot.create(:hub, :with_lat_lng, tenant: tenant) }
+        let(:tenant) { FactoryBot.create(:legacy_tenant) }
+        let(:hub)    { FactoryBot.create(:legacy_hub, :with_lat_lng, tenant: tenant) }
   
-        let(:courier)          { FactoryBot.create(:courier) }
+        let(:courier)          { FactoryBot.create(:trucking_courier) }
         let(:trucking_rate) { FactoryBot.create(:trucking_rate, tenant: tenant) }
   
         context 'basic tests' do

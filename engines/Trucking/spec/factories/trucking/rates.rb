@@ -119,13 +119,13 @@ FEES = {
 LOAD_METERAGE = { 'ratio' => 1850.0, 'height_limit' => 130 }.freeze
 
 FactoryBot.define do
-  factory :trucking_rate, class: 'Rate' do
-    association :trucking_scope
+  factory :trucking_rate, class: 'Trucking::Rate' do
+    association :scope, factory: :trucking_scope
     cbm_ratio { 460 }
     modifier { 'kg' }
     load_meterage { LOAD_METERAGE }
     rates { RATES }
     fees { FEES }
-    association :tenant
+    association :tenant, factory: :legacy_tenant
   end
 end

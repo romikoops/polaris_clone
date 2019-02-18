@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Nexus < ApplicationRecord
+class Nexus < Legacy::Nexus
   has_many :hubs
   has_many :shipments
   belongs_to :tenant

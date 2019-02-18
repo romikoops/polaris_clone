@@ -41,5 +41,6 @@ class TruckingAvailabilityController < ApplicationController
       hub_ids: params[:hub_ids].split(',').map(&:to_i),
       carriage: params[:carriage]
     )
+
   end
 end

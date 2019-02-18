@@ -2,12 +2,12 @@ module Trucking
   class Rate < ApplicationRecord
     has_paper_trail
     has_many :shipments
-    belongs_to :scope, class_name: 'Trucking::Scope'
+    belongs_to :scope, class_name: '::Trucking::Scope'
     delegate :courier, to: :scope
-    belongs_to :tenant
-    has_many :truckings, dependent: :destroy, class_name: 'Trucking::Trucking'
-    has_many :hubs, through: :truckings
-    has_many :locations, class_name: 'Trucking::Location', through: :truckings
+    belongs_to :tenant, class_name: 'Legacy::Tenant'
+    has_many :truckings, dependent: :destroy, class_name: '::Trucking::Trucking'
+    has_many :hubs, class_name: 'Legacy::Hub', through: :truckings
+    has_many :locations, class_name: '::Trucking::Location', through: :truckings
 
     SCOPING_ATTRIBUTE_NAMES = %i(load_type cargo_class carriage courier_id truck_type).freeze
 

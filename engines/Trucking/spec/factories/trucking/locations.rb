@@ -5,7 +5,7 @@ FactoryBot.define do
     end
 
     trait :with_location do
-      association :locations_location
+      association :location, factory: :locations_location
     end
 
     trait :distance do
