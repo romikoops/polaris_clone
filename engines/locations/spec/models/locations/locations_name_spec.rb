@@ -14,12 +14,5 @@ RSpec.describe Locations::Name, type: :model do
     # end
   end
 
-  context 'retrieving data' do 
-    let(:example_string) { 'Baoshun, China' }
-    let(:location_name) { FactoryBot.create(:locations_name, city: 'Baoshun', country: 'China')}
-    it 'returns the names in order as a string' do
-      expect(location_name.description).to eq(example_string)
-    end
-  end
 end
 

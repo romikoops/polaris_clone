@@ -3,6 +3,8 @@ require 'geocoder'
 require 'legacy'
 require 'locations'
 require 'paper_trail'
+require 'roo'
+require 'roo-xls'
 
 module Trucking
   class Engine < ::Rails::Engine

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 module Locations
   RSpec.describe Autocomplete do
-    let!(:location) { FactoryBot.create(:locations_location, osm_id: 331) }
+    let!(:location) { FactoryBot.create(:locations_location, :in_china, osm_id: 331) }
     let!(:example_bounds) { RGeo::GeoJSON.encode(RGeo::GeoJSON::Feature.new(location.bounds)) }
     let!(:location_names) do
       [

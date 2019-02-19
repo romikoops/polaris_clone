@@ -18,7 +18,7 @@ module Locations
     end
 
     context 'finding' do
-      let!(:location) { FactoryBot.create(:locations_location) }
+      let!(:location) { FactoryBot.create(:locations_location, :in_china) }
       let(:lat) { 31.310542 }
       let(:lon) { 121.3496233 }
       it 'finds the correct Location by lat lng pair' do

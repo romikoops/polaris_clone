@@ -12,7 +12,6 @@ module Trucking
 
       def perform
         sanitized_query = ApplicationRecord.public_sanitize_sql([raw_query, binds])
-
         @result = ApplicationRecord.connection.exec_query(sanitized_query).to_a
       end
 
@@ -59,8 +58,8 @@ module Trucking
                     ELSE trucking_locations.location_id::text
                   END AS ident_value
                 FROM trucking_rates
-                JOIN  trucking_truckings         ON trucking_truckings.trucking_rate_id     = trucking_rates.id
-                JOIN  trucking_locations ON trucking_truckings.trucking_location_id = trucking_locations.id
+                JOIN  trucking_truckings         ON trucking_truckings.rate_id     = trucking_rates.id
+                JOIN  trucking_locations ON trucking_truckings.location_id = trucking_locations.id
                 WHERE trucking_truckings.hub_id IN (:hub_ids)
               ) AS sub_query_lvl_3
             ) AS sub_query_lvl_2

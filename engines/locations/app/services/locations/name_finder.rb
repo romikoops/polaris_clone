@@ -5,13 +5,20 @@ module Locations
     MultipleResultsFound = Class.new(StandardError)
 
     def self.seeding(*terms)
-      Locations::Name.search(terms, fields: [:name, :display_name, :postal_code], limit: 1, match: :word_middle, operator: 'or').results.first
+      Locations::Name.search(terms, fields: [:name, :display_name, :alternative_names, :city, :postal_code], limit: 1, match: :word_middle, operator: 'or').results.first
     end
 
     def self.find_in_postal_code(postal_bounds:, terms:)
       return nil unless postal_bounds
-
-      Locations::Name.search(terms, where: { location: {geo_polygon: {points: postal_bounds.coordinates.first.first}}}, limit: 1).results.first
+      postal_coords = if postal_bounds.geometry_type == RGeo::Feature::MultiPolygon
+                        postal_bounds.coordinates.map {|coords| coords.first}
+                      else
+                        [postal_bounds.coordinates.first]
+                      end
+      postal_coords.each do |coords|
+        result = Locations::Name.search(terms, where: { location: {geo_polygon: {points: coords}}}, limit: 1).results.first
+        return result if result
+      end
     end
   end
 end

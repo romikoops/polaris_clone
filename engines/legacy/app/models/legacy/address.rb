@@ -4,7 +4,7 @@ module Legacy
     has_one :legacy_hub
     belongs_to :country, class_name: 'Legacy::Country', optional: true
     geocoded_by :geocoded_address
-    # before_validation :sanitize_zip_code!
+    before_validation :sanitize_zip_code!
 
     reverse_geocoded_by :latitude, :longitude do |address, results|
       if geo = results.first
@@ -24,5 +24,26 @@ module Legacy
   
       address
     end
+
+    def self.cascading_find_by_name(raw_name)
+      name = raw_name.split.map(&:capitalize).join(' ')
+  
+      sanitize_zip_code!
+      zip_code
+    end
+
+    def get_zip_code
+      reverse_geocode if zip_code.nil?
+  
+      sanitize_zip_code!
+      zip_code
+    end
+
+    def sanitize_zip_code!
+      return if zip_code.nil?
+  
+      self.zip_code = zip_code.gsub(/[^a-zA-z\d]/, '')
+    end
+
   end
 end

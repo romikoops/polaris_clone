@@ -6,6 +6,8 @@ module Locations
 
     def self.seeding(*terms)
       name = Locations::NameFinder.seeding(terms, fields: %i(name display_name postal_code), limit: 1, match: :word_middle, operator: 'or')
+      require 'pry';
+      binding.pry
       return nil unless name
 
       return name.location if name.location

@@ -1,7 +1,7 @@
 module Trucking
   class Courier < ApplicationRecord
     has_many :rates, class_name: 'Trucking::Rate'
-    belongs_to :tenant
+    belongs_to :tenant, class_name: 'Legacy::Tenant'
   end
 end
 

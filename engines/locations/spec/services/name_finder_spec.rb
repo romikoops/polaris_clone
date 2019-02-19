@@ -5,10 +5,10 @@ require 'rails_helper'
 RSpec.describe Locations::NameFinder do
   context 'searching for location names' do
     describe '.seeding' do
-      let!(:location_1) { FactoryBot.create(:locations_location, osm_id: 1) }
-      let!(:location_2) { FactoryBot.create(:locations_location, osm_id: 6, name: 'AB') }
-      let!(:location_3) { FactoryBot.create(:locations_location, osm_id: 7, name: 'AB10') }
-      let!(:location_4) { FactoryBot.create(:locations_location, osm_id: 2, bounds: "010300000001000000050000000831E1E1874F5E40B5B05D90E3493F400831E1E1874F5E40E9E390C3167D3F40D4FDADAE545C5E40E9E390C3167D3F40D4FDADAE545C5E40B5B05D90E3493F400831E1E1874F5E40B5B05D90E3493F50") }
+      let!(:location_1) { FactoryBot.create(:chinese_location, osm_id: 1) }
+      let!(:location_2) { FactoryBot.create(:chinese_location, osm_id: 6, name: 'AB') }
+      let!(:location_3) { FactoryBot.create(:chinese_location, osm_id: 7, name: 'AB10') }
+      let!(:location_4) { FactoryBot.create(:german_location, osm_id: 2) }
       let!(:cn_location_names) do
         [
           FactoryBot.create(:locations_name,
@@ -28,12 +28,6 @@ RSpec.describe Locations::NameFinder do
             :reindex,
             osm_id: 3,
             city: 'Qingdao',
-            name: 'Baoshun',
-            place_rank: 60 ),
-          FactoryBot.create(:locations_name,
-            :reindex,
-            osm_id: 4,
-            county: 'Shanghai',
             name: 'Baoshun',
             place_rank: 60 )
           ]
@@ -89,17 +83,19 @@ RSpec.describe Locations::NameFinder do
             place_rank: 40)
         ]
       end
-
-      let(:cn_target_location_name) { cn_location_names.first }
-      let(:uk_target_location_name) { uk_location_names.last }
-      let(:de_target_location_name) { de_location_names.first }
+      before(:each) do 
+        Locations::Name.search_index.delete
+        Locations::Name.reindex
+      end
 
       it 'finds the correct location name through autocomplete search' do
+        cn_target_location_name = cn_location_names.first 
         result = Locations::NameFinder.seeding('Baoshun', 'Shanghai')
         expect(result).to eq(cn_target_location_name)
       end
 
       it 'finds the correct location name through autocomplete search' do
+        uk_target_location_name = uk_location_names.last
         result = Locations::NameFinder.seeding('AB')
         expect(result).to eq(uk_target_location_name)
       end
@@ -107,28 +103,31 @@ RSpec.describe Locations::NameFinder do
       ## Other character sets slow down the process too much for now
 
       it 'finds the correct location name through autocomplete search in Chinese' do
+        cn_target_location_name = cn_location_names.first 
         result = Locations::NameFinder.seeding('宝山城市工业园区', 'Shanghai')
         expect(result).to eq(cn_target_location_name)
       end
 
       it 'finds the correct location name with umlauts' do
+        de_target_location_name = de_location_names.first
         result = Locations::NameFinder.seeding('ALTENBERG', 'BAERENFELS')
         expect(result).to eq(de_target_location_name)
       end
 
       it 'finds the correct location name with nested areas' do
+        de_target_location_name = de_location_names.first
         result = Locations::NameFinder.seeding('innere altstadt', 'dresden')
         expect(result).to eq(de_location_names.last)
       end
     end
 
     describe '.seeding_with_postal_code' do 
-      let!(:location_1) { FactoryBot.create(:locations_location, osm_id: 1, name: '10001', country_code: 'de') }
-      let!(:location_name_1) { FactoryBot.create(:locations_name, :reindex, osm_id: 16, city: 'Dresden', name: 'Innere Altstadt', point: location_1.bounds.centroid, place_rank: 40)}
-      let!(:location_name_2) { FactoryBot.create(:locations_name, :reindex, osm_id: 16, city: 'Dresden', name: 'Innere Altstadt',  place_rank: 40)}
+      let!(:location_1) { FactoryBot.create(:german_postal_location) }
 
       it 'finds the correct name for the postal code' do
-        result = Locations::NameFinder.seeding_with_postal_code(postal_code: '10001', country_code: 'de', terms: 'Innere Altstadt')
+        location_name_1 = FactoryBot.create(:locations_name, :reindex, osm_id: 16, city: 'Dresden', name: 'Innere Altstadt', point: location_1.bounds.centroid, place_rank: 40)
+        location_name_2 = FactoryBot.create(:locations_name, :reindex, osm_id: 16, city: 'Dresden', name: 'Innere Altstadt',  place_rank: 40)
+        result = Locations::NameFinder.find_in_postal_code(postal_bounds: location_1.bounds, terms: 'Innere Altstadt')
         expect(result).to eq(location_name_1)
       end
     end

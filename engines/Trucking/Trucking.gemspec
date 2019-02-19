@@ -22,6 +22,8 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'geocoder'
   s.add_dependency 'paper_trail'
+  s.add_dependency 'roo'
+  s.add_dependency 'roo-xls'
 
   s.add_development_dependency 'factory_bot_rails'
   s.add_development_dependency 'ffaker'

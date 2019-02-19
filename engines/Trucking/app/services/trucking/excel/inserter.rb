@@ -9,7 +9,9 @@ module Trucking
                   :fees_sheet, :num_rows, :zip_char_length, :identifier_type, :identifier_modifier, :zones,
                   :all_ident_values_and_countries, :charges, :locations
 
-      def post_initialize(_args)
+      def initialize(_args)
+        super
+
         @defaults = {}
         @trucking_rate_by_zone = {}
         @tenant = @hub.tenant
@@ -603,7 +605,8 @@ module Trucking
                   end
 
         if geometry.nil?
-
+          require 'pry';
+          binding.pry
           geocoder_results = Geocoder.search(idents_and_country.values.join(' '))
           return nil if geocoder_results.first.nil?
           coordinates = geocoder_results.first.geometry['location']
