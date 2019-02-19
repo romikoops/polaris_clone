@@ -189,6 +189,10 @@ class ChooseOffer extends Component {
     shipmentDispatch.sendQuotes({ shipment, quotes, email })
   }
 
+  toggleModal () {
+    this.setState(prevState => ({ showModal: !prevState.showModal }))
+  }
+
   getRoutes () {
     const { shipmentData } = this.props
     if (!shipmentData) return []
@@ -289,7 +293,7 @@ class ChooseOffer extends Component {
             )}
             verticalPadding="30px"
             horizontalPadding="40px"
-            parentToggle={this.toggleNewHub}
+            parentToggle={() => this.toggleModal()}
           />
         ) : ''}
         <div className="flex-none content_width_booking layout-row">
