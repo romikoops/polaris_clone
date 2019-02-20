@@ -10,12 +10,12 @@ class Admin::TruckingController < Admin::AdminBaseController
 
   def show
     hub = Hub.find(params[:id])
-    results = TruckingPricing.find_by_hub_id(params[:id])
+    results = Trucking::Rate.find_by_hub_id(params[:id])
     response_handler(hub: hub, truckingPricings: results)
   end
 
   def edit
-    tp = TruckingPricing.find(params[:id])
+    tp = Trucking::Rate.find(params[:id])
     ntp = params[:pricing].as_json
     tp.update_attributes(ntp.except('id', 'cargo_class', 'load_type', 'courier_id', 'truck_type', 'carriage'))
     response_handler(tp)
@@ -28,10 +28,9 @@ class Admin::TruckingController < Admin::AdminBaseController
 
   def overwrite_zonal_trucking_by_hub
     if params[:file]
-      req = { 'xlsx' => params[:file] }
-      resp = ExcelTool::OverrideTruckingRateByHub.new(
+      req = { "xlsx" => params[:file] }
+      resp = Trucking::Excel::Inserter.new(
         params: req,
-        _user: current_user,
         hub_id: params[:id]
       ).perform
       response_handler(resp)

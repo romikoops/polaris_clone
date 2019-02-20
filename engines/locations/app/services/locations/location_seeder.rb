@@ -18,7 +18,7 @@ module Locations
       return nil unless postal_location
 
       return postal_location unless terms.present?
-
+      
       name = Locations::NameFinder.find_in_postal_code(postal_bounds: postal_location.bounds, terms: terms)
 
       return name.location if name.present? && name.location

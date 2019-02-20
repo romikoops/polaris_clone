@@ -12,8 +12,7 @@ module Locations
 
       it 'is unique' do
         location_1 = FactoryBot.create(:locations_location)
-
-        expect(FactoryBot.build(:locations_location, name: location_1.name)).not_to be_valid
+        expect(FactoryBot.build(:locations_location, osm_id: location_1.osm_id)).not_to be_valid
       end
     end
 

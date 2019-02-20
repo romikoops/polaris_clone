@@ -10,23 +10,23 @@ RSpec.describe Locations::LocationSeeder do
       let!(:location_names) do
         [
           FactoryBot.create(:locations_name,
-            :reindex,
-            location: location_2,
-            point: location_2.bounds.centroid,
-            city: 'Gothenburg',
-            name: 'Vastra Volunda',
-            place_rank: 50),
+                            :reindex,
+                            location: location_2,
+                            point: location_2.bounds.centroid,
+                            city: 'Gothenburg',
+                            name: 'Vastra Volunda',
+                            place_rank: 50),
           FactoryBot.create(:locations_name,
-            :reindex,
-            osm_id: 2,
-            point: location_1.bounds.centroid,
-            city: 'Gothenburg',
-            name: 'Port 4',
-            place_rank:  80)
-          ]
+                            :reindex,
+                            osm_id: 2,
+                            point: location_1.bounds.centroid,
+                            city: 'Gothenburg',
+                            name: 'Port 4',
+                            place_rank: 80)
+        ]
       end
-      
-      before(:each) do 
+
+      before(:each) do
         Locations::Name.reindex
       end
 
@@ -41,29 +41,39 @@ RSpec.describe Locations::LocationSeeder do
       end
     end
 
-    describe '.seeding_with_postal_code' do 
-      let!(:location_1) { FactoryBot.create(:german_postal_location) }
+    describe '.seeding_with_postal_code' do
+      let!(:location_3) { FactoryBot.create(:german_postal_location) }
 
-      it 'finds the correct location for the postal code' do
-        location_name_1 = FactoryBot.create(:locations_name, :reindex, osm_id: 16, city: 'Dresden', name: 'Innere Altstadt', point: location_1.bounds.centroid, place_rank: 40)
-        location_name_2 = FactoryBot.create(:locations_name, :reindex, osm_id: 16, city: 'Dresden', name: 'Innere Altstadt',  place_rank: 40)
+      it 'finds the correct location for the postal code polygon' do
+        FactoryBot.create(:locations_name, :reindex, osm_id: 16, city: 'Dresden', name: 'Innere Altstadt', point: location_3.bounds.centroid, place_rank: 40)
+        FactoryBot.create(:locations_name, :reindex, osm_id: 16, city: 'Dresden', name: 'Innere Altstadt', place_rank: 40)
         Locations::Name.reindex
         result = Locations::LocationSeeder.seeding_with_postal_code(postal_code: '10001', country_code: 'de', terms: 'Innere Altstadt')
-        expect(result).to eq(location_1)
+        expect(result).to eq(location_3)
+      end
+
+      let!(:location_4) { FactoryBot.create(:swedish_postal_location) }
+
+      it 'finds the correct location for the postal code multi polygon' do
+        FactoryBot.create(:locations_name, :reindex, osm_id: 18, city: 'Gothenburg', name: 'Vastra Folunda', point: location_4.bounds.centroid, place_rank: 40)
+        FactoryBot.create(:locations_name, :reindex, osm_id: 19, city: 'Gothenburg', name: 'Port 4', place_rank: 40)
+        Locations::Name.reindex
+        result = Locations::LocationSeeder.seeding_with_postal_code(postal_code: '22222', country_code: 'se', terms: 'Vastra Folunda')
+        expect(result).to eq(location_4)
       end
     end
 
-    describe '.find_in_city' do 
+    describe '.find_in_city' do
       let!(:location_1) { FactoryBot.create(:german_postal_location, admin_level: 6) }
 
       it 'finds the correct within city bounds' do
-        location_name_1 = FactoryBot.create(:locations_name, :reindex, osm_id: 16, city: 'Dresden', name: 'Innere Altstadt', point: location_1.bounds.centroid, place_rank: 40)
-        location_name_2 = FactoryBot.create(:locations_name, :reindex, osm_id: 16, city: 'Dresden', name: 'Altstadt',  place_rank: 40)
+        FactoryBot.create(:locations_name, :reindex, osm_id: 16, city: 'Dresden', name: 'Innere Altstadt', point: location_1.bounds.centroid, place_rank: 40)
+        FactoryBot.create(:locations_name, :reindex, osm_id: 16, city: 'Dresden', name: 'Altstadt', place_rank: 40)
         Locations::Name.reindex
+
         result = Locations::LocationSeeder.find_in_city(point: location_1.bounds.centroid, terms: 'Innere Altstadt', country_code: 'de')
         expect(result).to eq(location_1)
       end
     end
-
   end
 end

@@ -50,34 +50,39 @@ module Trucking
       
             context 'zipcode identifier' do
               it 'finds the correct pricing and destinations' do
-                FactoryBot.create_list(:trucking_location, 100, :zipcode_sequence).each do |trucking_location|
+                start_zip = 20000
+                for i in (1..100).to_a do
+                  trucking_location = FactoryBot.create(:trucking_location, zipcode: start_zip + i)
                   FactoryBot.create(:trucking_trucking,
-                         hub: hub,
-                         location: trucking_location,
-                         rate: trucking_rate)
+                    hub: hub,
+                    location: trucking_location,
+                    rate: trucking_rate)
                 end
       
                 query = described_class.new(hub_ids: [hub.id], klass: Rate)
                 query.perform
                 trucking_rates = query.deserialized_result
       
-                expect(trucking_rates.first).to include('zipcode' => [%w(15000 15099)], 'countryCode' => 'SE')
+                expect(trucking_rates.first).to include('zipcode' => [%w(20001 20100)], 'countryCode' => 'SE')
                 expect(trucking_rates.first['truckingPricing']).to include(trucking_rate.as_options_json.except('FactoryBot.created_at', 'updated_at'))
               end
       
               it 'finds the correct pricing and destinations for multiple range groups per zone' do
                 Timecop.freeze(Time.now) do
-                 FactoryBot.create_list(:trucking_location, 100, :zipcode_broken_sequence).each do |trucking_location|
-                    FactoryBot.create(:trucking_trucking,
-                           hub: hub,
-                           location: trucking_location,
-                           rate: trucking_rate)
+                  [15000, 18000].each do |start_zip|
+                    for i in (1..100).to_a do
+                      trucking_location = FactoryBot.create(:trucking_location, zipcode: start_zip + i)
+                      FactoryBot.create(:trucking_trucking,
+                        hub: hub,
+                        location: trucking_location,
+                        rate: trucking_rate)
+                    end
                   end
                   query = described_class.new(hub_ids: [hub.id], klass: Rate)
                   query.perform
                   trucking_rates = query.deserialized_result
 
-                  expect(trucking_rates.first['zipcode'].length).to eq(3)
+                  expect(trucking_rates.first['zipcode']).to eq([["15001", "15100"], ["18001", "18100"]])
                   expect(trucking_rates.first['countryCode']).to eq('SE')
                   expect(trucking_rates.first['truckingPricing']).to include(trucking_rate.as_options_json.except('FactoryBot.created_at', 'updated_at'))
                 end

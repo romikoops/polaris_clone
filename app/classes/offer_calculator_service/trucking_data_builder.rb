@@ -50,11 +50,15 @@ module OfferCalculatorService
 
         trucking_charge_data[key] = trucking_charges
       end
-    rescue TruckingDataBuilder::MissingTruckingData
+    rescue TruckingDataBuilder::MissingTruckingData => e
+      require 'pry';
+      binding.pry
       raise ApplicationError::MissingTruckingData
     rescue TruckingTools::LoadMeterageExceeded
       raise ApplicationError::LoadMeterageExceeded
-    rescue StandardError
+    rescue StandardError => e
+      require 'pry';
+      binding.pry
       raise ApplicationError::MissingTruckingData
     end
 

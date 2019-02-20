@@ -231,31 +231,36 @@ module Trucking
   
         context 'zipcode identifier' do
           it 'finds the correct pricing and destinations' do
-            FactoryBot.create_list(:trucking_location, 100, :zipcode_sequence).each do |trucking_location|
+            start_zip = 30000
+            for i in (1..100).to_a do
+              trucking_location = FactoryBot.create(:trucking_location, zipcode: start_zip + i)
               FactoryBot.create(:trucking_trucking,
-                     hub: hub,
-                     location: trucking_location,
-                     rate: trucking_rate)
+                hub: hub,
+                location: trucking_location,
+                rate: trucking_rate)
             end
   
             trucking_rates = described_class.find_by_hub_id(hub.id)
   
-            expect(trucking_rates.first).to include('zipcode' => [%w(15100 15199)], 'countryCode' => 'SE')
+            expect(trucking_rates.first).to include('zipcode' => [%w(30001 30100)], 'countryCode' => 'SE')
             expect(trucking_rates.first['truckingPricing']).to include(trucking_rate.as_options_json.except('FactoryBot.created_at', 'updated_at'))
           end
   
           it 'finds the correct pricing and destinations for multiple range groups per zone' do
             Timecop.freeze(Time.now) do
-              FactoryBot.create_list(:trucking_location, 100, :zipcode_broken_sequence).each do |trucking_location|
-                FactoryBot.create(:trucking_trucking,
-                       hub: hub,
-                       location: trucking_location,
-                       rate: trucking_rate)
+              [15000, 18000].each do |start_zip|
+                for i in (1..100).to_a do
+                  trucking_location = FactoryBot.create(:trucking_location, zipcode: start_zip + i)
+                  FactoryBot.create(:trucking_trucking,
+                    hub: hub,
+                    location: trucking_location,
+                    rate: trucking_rate)
+                end
               end
   
               trucking_rates = described_class.find_by_hub_id(hub.id)
   
-              expect(trucking_rates.first['zipcode'].length).to be > 2
+              expect(trucking_rates.first['zipcode']).to eq([["15001", "15100"], ["18001", "18100"]])
               expect(trucking_rates.first['countryCode']).to eq('SE')
               expect(trucking_rates.first['truckingPricing']).to include(trucking_rate.as_options_json.except('FactoryBot.created_at', 'updated_at'))
             end
@@ -276,6 +281,44 @@ module Trucking
               expect(trucking_rates.first['truckingPricing']).to include(trucking_rate.as_options_json.except('FactoryBot.created_at', 'updated_at'))
             end
           end
+        end
+      end
+
+      describe '.delete_existing_truckings' do 
+        let(:hub) { FactoryBot.create(:legacy_hub) }
+        let!(:truckings) { FactoryBot.create_list(:trucking_trucking, 10, hub: hub, location: FactoryBot.create(:trucking_location, :zipcode_sequence)) }
+        it 'destroys all trucking_rates and truckings for a specific hub' do 
+          described_class.delete_existing_truckings(hub)
+          expect(hub.truckings).to be_empty
+          expect(hub.rates).to be_empty
+        end
+      end
+      
+      describe '.nexus_id' do 
+        let(:hub) { FactoryBot.create(:legacy_hub) }
+        let!(:trucking) { FactoryBot.create(:trucking_trucking, hub: hub) }
+        it 'destroys all trucking_rates and truckings for a specific hub' do 
+          described_class.delete_existing_truckings(hub)
+          expect(hub.truckings).to be_empty
+          expect(hub.rates).to be_empty
+        end
+      end
+    end
+
+    context 'instance methods' do
+      describe '.nexus_id' do 
+        let(:hub) { FactoryBot.create(:legacy_hub) }
+        let!(:trucking) { FactoryBot.create(:trucking_trucking, hub: hub) }
+        it 'it finds the correct Nexus id for the Trucking Rate' do 
+          expect(trucking.rate.nexus_id).to eq(hub.nexus_id)
+        end
+      end
+
+      describe '.hub_id' do 
+        let(:hub) { FactoryBot.create(:legacy_hub) }
+        let!(:trucking) { FactoryBot.create(:trucking_trucking, hub: hub) }
+        it 'it finds the correct Hub id for the Trucking Rate' do 
+          expect(trucking.rate.hub_id).to eq(hub.id)
         end
       end
     end

@@ -514,7 +514,15 @@ module Trucking
       end
 
       def build_td_query(single_ident_values, single_ident_values_and_country)
-        identifier_cast = identifier_type == 'location_id' ? '::uuid' : ''
+        identifier_cast = case identifier_type 
+                          when'location_id'
+                            '::uuid'
+                          when 'distance'
+                            '::integer'
+                          else
+                            ''
+                          end
+
         <<-SQL
           WITH
             existing_identifiers AS (

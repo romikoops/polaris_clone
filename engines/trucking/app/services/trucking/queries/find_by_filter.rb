@@ -104,9 +104,9 @@ module Trucking
       # Argument Errors
 
       def argument_errors(args)
+        raise_if_no_valid_filter_error(args)
         raise_if_mandatory_arg_error(args)
         raise_if_country_code_error(args)
-        raise_if_no_valid_filter_error(args)
       end
 
       def raise_if_mandatory_arg_error(args)

@@ -56,6 +56,14 @@ module Trucking
                 ).perform
               end.to raise_error(ArgumentError)
             end
+
+            it 'raises an ArgumentError if incorrect keys are provided' do
+              expect do
+                trucking_rates = described_class.new(
+                  klass: Rate, tenant_id: tenant.id
+                ).perform
+              end.to raise_error(ArgumentError)
+            end
           end
 
           context 'zipcode identifier' do

@@ -20,8 +20,8 @@ module Trucking
     # Class methods
 
     def self.delete_existing_truckings(hub)
-      hub.trucking_rates.delete_all
-      hub.hub_truckings.delete_all
+      hub.rates.delete_all
+      hub.truckings.delete_all
     end
 
     def self.find_by_filter(args = {})
@@ -41,13 +41,13 @@ module Trucking
     # Instance Methods
     def nexus_id
       ActiveRecord::Base.connection.execute("
-        SELECT addresses.id FROM addresses
-        JOIN hubs ON hubs.nexus_id = addresses.id
+        SELECT nexuses.id FROM nexuses
+        JOIN hubs ON hubs.nexus_id = nexuses.id
         JOIN trucking_truckings ON trucking_truckings.hub_id = hubs.id
         JOIN trucking_rates ON trucking_truckings.rate_id = trucking_rates.id
-        WHERE trucking_rates.id = #{id}
+        WHERE trucking_rates.id = '#{id}'
         LIMIT 1
-      ").values.first.try(:first)
+      ").values.flatten.first
     end
 
     def hub_id
@@ -55,9 +55,9 @@ module Trucking
         SELECT hubs.id FROM hubs
         JOIN trucking_truckings ON trucking_truckings.hub_id = hubs.id
         JOIN trucking_rates ON trucking_truckings.rate_id = trucking_rates.id
-        WHERE trucking_rates.id = #{id}
+        WHERE trucking_rates.id = '#{id}'
         LIMIT 1
-      ").values.first.try(:first)
+      ").values.flatten.first
     end
 
     def as_options_json(options = {})
