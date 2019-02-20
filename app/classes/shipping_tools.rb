@@ -87,6 +87,8 @@ module ShippingTools # rubocop:disable Metrics/ModuleLength
     offer_calculator.shipment.save!
     cargo_units = if offer_calculator.shipment.lcl? && !offer_calculator.shipment.aggregated_cargo
                     offer_calculator.shipment.cargo_units.map(&:with_cargo_type)
+                  elsif offer_calculator.shipment.lcl? && offer_calculator.shipment.aggregated_cargo
+                    [offer_calculator.shipment.aggregated_cargo]
                   else
                     offer_calculator.shipment.cargo_units
                   end
