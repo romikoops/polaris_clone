@@ -27,6 +27,7 @@ module OfferCalculatorService
       local_charge_result = calc_local_charges
       create_trucking_charges
       cargo_result = calc_cargo_charges
+
       return nil if cargo_result.nil? || local_charge_result.nil?
 
       @grand_total_charge.update_price!
@@ -50,7 +51,7 @@ module OfferCalculatorService
         if direction == 'export'
           next unless @shipment.has_pre_carriage || @schedule.origin_hub.mandatory_charge.export_charges
         else
-          next unless @shipment.has_on_carriage || @schedule.destination_hub.mandatory_charge.export_charges
+          next unless @shipment.has_on_carriage || @schedule.destination_hub.mandatory_charge.import_charges
         end
 
         charge_category = ChargeCategory.from_code(direction, @user.tenant_id)
