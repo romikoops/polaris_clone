@@ -2768,6 +2768,7 @@ exports[`state.showModal is true 1`] = `
     horizontalPadding="40px"
     maxWidth="90%"
     minHeight=""
+    parentToggle={[Function]}
     showExit={false}
     verticalPadding="30px"
   />

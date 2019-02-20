@@ -1,11 +1,10 @@
 import React from 'react'
 import { withNamespaces } from 'react-i18next'
-import PropTypes from 'prop-types'
 import styles from './index.scss'
 import { capitalize } from '../../../helpers'
 import { Modal } from '../../Modal/Modal'
 
-const HelpContact = ({ tenant, t }) => {
+const HelpContact = ({ tenant, t, parentToggle }) => {
   const { theme, emails, phones } = tenant
   const iconStyle = { color: theme.colors.primary, marginRight: '10px' }
   const emailsToRender = Object.keys(emails.support)
@@ -63,13 +62,9 @@ const HelpContact = ({ tenant, t }) => {
     </div>
   )
 
-  return <Modal component={componentToRender} theme={theme} />
+  return <Modal component={componentToRender} theme={theme} parentToggle={parentToggle}/>
 }
 
-HelpContact.propTypes = {
-  tenant: PropTypes.tenant,
-  t: PropTypes.func.isRequired
-}
 
 HelpContact.defaultProps = {
   tenant: {}
