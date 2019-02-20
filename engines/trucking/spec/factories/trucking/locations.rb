@@ -19,9 +19,10 @@ FactoryBot.define do
     end
 
     trait :zipcode_broken_sequence do
+      gap = 0
       sequence(:zipcode) do |n|
-        gap = n > 40 ? 10 : 0
-        (15_000 + n - 1 + gap).to_s
+        gap += n % 40 == 0 ? 100 : 0
+        (15_000 + (n - 1 + gap)).to_s
       end
     end
 

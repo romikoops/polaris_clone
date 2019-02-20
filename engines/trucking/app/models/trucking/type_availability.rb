@@ -6,13 +6,13 @@ module Trucking
     validates :truck_type,
               uniqueness: {
                 scope: %i(carriage load_type),
-                message: lambda { |obj|
-                  "#{obj.truck_type} taken for '#{carriage}-carriage', #{load_type}"
+                message: lambda { |obj, msg|
+                  "#{obj.truck_type} taken for '#{obj.carriage}-carriage', #{obj.load_type}"
                 }
               }
 
     def self.create_all!
-      ::Shipment::LOAD_TYPES.each do |load_type|
+      Legacy::Shipment::LOAD_TYPES.each do |load_type|
         %w(pre on).each do |carriage|
           TRUCK_TYPES.each do |truck_type|
             find_or_create_by(

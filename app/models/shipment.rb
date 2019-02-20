@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Shipment < ApplicationRecord
+class Shipment < Legacy::Shipment
   extend ShippingTools
 
   STATUSES = %w(
@@ -15,7 +15,7 @@ class Shipment < ApplicationRecord
     quoted
     archived
   ).freeze
-  LOAD_TYPES = TransportCategory::LOAD_TYPES
+  LOAD_TYPES = %w(cargo_item container).freeze
   DIRECTIONS = %w(import export).freeze
 
   # Validations
