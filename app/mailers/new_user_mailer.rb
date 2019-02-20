@@ -11,7 +11,7 @@ class NewUserMailer < ApplicationMailer
     @theme = @tenant.theme
 
     @mot_icon = URI.open(
-      "https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png"
+      'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png'
     ).read
 
     attachments.inline['logo.png'] = URI.try(:open, @tenant.theme['emailLogo']).try(:read)
@@ -25,7 +25,7 @@ class NewUserMailer < ApplicationMailer
                          .tap { |a| a.display_name = 'ItsMyCargo Service Request' }.format,
       reply_to: 'support@itsmycargo.com',
       to: mail_target_interceptor(@user, email),
-      subject: "A New User Has Registered!"
+      subject: 'A New User Has Registered!'
     ) do |format|
       format.html
       format.mjml
