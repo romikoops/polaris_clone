@@ -173,7 +173,6 @@ group :test do
   gem 'simplecov-lcov', require: false
   gem 'timecop'
   gem 'undercover'
-  gem 'vcr', '~>2.8.0'
   gem 'webmock'
 end
 

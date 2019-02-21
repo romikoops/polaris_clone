@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Hub, type: :model do
+RSpec.describe Hub, type: :model do
   context 'instance methods' do
     context '.truck_type_availability' do
       TruckTypeAvailability.create_all!

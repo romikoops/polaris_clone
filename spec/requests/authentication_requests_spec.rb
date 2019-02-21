@@ -3,7 +3,8 @@
 require 'rails_helper'
 require "#{Rails.root}/app/classes/application_error"
 
-describe 'Authentication by token', type: :request do
+RSpec.describe 'Authentication by token', type: :request do
+  let(:tenant) { create(:tenant) }
   let(:user) { create(:user, tenant: tenant) }
 
   context 'user logged out' do

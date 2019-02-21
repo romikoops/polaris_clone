@@ -51,6 +51,10 @@ Naming/FileName:
 Naming/VariableNumber:
   EnforcedStyle: snake_case
 
+Style/BlockDelimiters:
+  Exclude:
+    - spec/**/*_spec.rb
+
 # Disable Time over DateTime for legacy specs
 Style/DateTime:
   Exclude:

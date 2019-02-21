@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Pricing, type: :model do
+RSpec.describe Pricing, type: :model do
   subject { create(:pricing) }
 
   context 'validations' do

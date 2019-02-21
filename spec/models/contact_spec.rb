@@ -2,24 +2,24 @@
 
 require 'rails_helper'
 
-describe Contact, type: :model do
+RSpec.describe Contact, type: :model do
   context 'validations' do
     let(:user) { build(:user) }
 
-    let!(:contact_one) { create(:contact, user: user) }
-    let(:contact_two) { build(:contact, user: user) }
+    let!(:contact_one) { create(:contact, user: user, first_name: 'John', last_name: 'Doe', company_name: 'ACME', email: 'john@example.com', phone: '123456') }
+    let(:contact_two) { build(:contact, user: user, first_name: 'John', last_name: 'Doe', company_name: 'ACME', email: 'john@example.com', phone: '123456') }
     let(:contact_three) { build(:contact, user: user, first_name: 'Johnny') }
 
     context 'Different first names' do
       it 'is validate the uniqueness' do
-        contact_one.should be_valid
-        contact_three.should be_valid
+        expect(contact_one).to be_valid
+        expect(contact_three).to be_valid
       end
     end
 
     context 'Same information' do
       it 'does not validate because they are not unique' do
-        contact_two.should be_invalid
+        expect(contact_two).to be_invalid
       end
     end
   end

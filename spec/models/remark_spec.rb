@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Remark, type: :model do
+RSpec.describe Remark, type: :model do
   context 'Quotation' do
     let(:tenant) { build(:tenant) }
 

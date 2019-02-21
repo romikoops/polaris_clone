@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe OfferCalculatorService::ChargeCalculator do
-  describe '#perform', :vcr do
+  describe '#perform' do
     include SetupHelper
     # json_test = test_cases_from_excel("#{Rails.root}/spec/test_sheets/spec_sheet.xlsx", "Sheet1")
     json_test = test_cases_from_json("#{Rails.root}/spec/test_sheets/spec_sheet.json")

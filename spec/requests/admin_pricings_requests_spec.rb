@@ -6,7 +6,8 @@ Dir["#{Rails.root}/spec/support/auxiliary_constants/shipments/*.rb"].each do |fi
   require file_path
 end
 
-describe 'Pricing requests', type: :request do
+RSpec.describe 'Pricing requests', type: :request do
+  let(:tenant) { create(:tenant) }
   let(:role) { create(:role, name: 'admin') }
   let(:user) { create(:user, tenant: tenant, role: role) }
 

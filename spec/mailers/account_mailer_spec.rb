@@ -5,6 +5,12 @@ require 'rails_helper'
 RSpec.describe AccountMailer, type: :mailer do
   let(:user) { create(:user) }
 
+  before do
+    stub_request(:get, 'https://assets.itsmycargo.com/assets/icons/mail/mail_ocean.png').to_return(status: 200, body: '', headers: {})
+    stub_request(:get, 'https://assets.itsmycargo.com/assets/logos/logo_box.png').to_return(status: 200, body: '', headers: {})
+    stub_request(:post, 'https://breezypdf.itsmycargo.tech/render/html').to_return(status: 201, body: '', headers: {})
+  end
+
   describe 'confirmation_instructions' do
     let(:mail) do
       described_class.confirmation_instructions(user, user.send_confirmation_instructions)

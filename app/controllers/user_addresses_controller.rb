@@ -6,7 +6,10 @@ class UserAddressesController < ApplicationController
 
   def index
     user = User.find(params[:user_id])
-    resp = Address.all_with_primary_for(user)
+    resp = user.addresses.map do |loc|
+      prim = { primary: loc.primary_for?(user) }
+      loc.to_custom_hash.merge(prim)
+    end
 
     response_handler(resp)
   end

@@ -2,12 +2,7 @@
 
 require 'rails_helper'
 
-describe Tenant, type: :model do
-  # context 'validations' do
-  #   describe '#example_method' do
-  #   end
-  # end
-
+RSpec.describe Tenant, type: :model do
   context 'instance methods' do
     describe '.email_for' do
       let(:default_imc_email) { 'itsmycargodev@gmail.com' }

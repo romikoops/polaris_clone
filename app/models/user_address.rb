@@ -15,7 +15,7 @@ class UserAddress < ApplicationRecord
   private
 
   def set_primary
-    self.primary = true if user.user_addresses.pluck(:primary).none?
+    self.primary = user.user_addresses.pluck(:primary).none?
   end
 end
 

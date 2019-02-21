@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe TruckingDestination, type: :model do
+RSpec.describe TruckingDestination, type: :model do
   context 'class methods' do
     describe '.find_via_distance_to_hub' do
       let(:tenant) { create(:tenant) }
@@ -14,27 +14,27 @@ describe TruckingDestination, type: :model do
 
       context 'basic tests' do
         it 'raises an ArgumentError if no hub is provided' do
-          expect do
+          expect {
             described_class.find_via_distance_to_hub(
               latitude: latitude, longitude: longitude
             )
-          end.to raise_error(ArgumentError)
+          }.to raise_error(ArgumentError)
         end
 
         it 'raises an ArgumentError if no latitude is provided' do
-          expect do
+          expect {
             described_class.find_via_distance_to_hub(
               hub: hub, longitude: longitude
             )
-          end.to raise_error(ArgumentError)
+          }.to raise_error(ArgumentError)
         end
 
         it 'raises an ArgumentError if no longitude is provided' do
-          expect do
+          expect {
             described_class.find_via_distance_to_hub(
               hub: hub, latitude: latitude
             )
-          end.to raise_error(ArgumentError)
+          }.to raise_error(ArgumentError)
         end
       end
 

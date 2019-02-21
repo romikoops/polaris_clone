@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Vehicle, type: :model do
+RSpec.describe Vehicle, type: :model do
   context 'validations' do
     describe '#name' do
       it { is_expected.to validate_presence_of(:name) }

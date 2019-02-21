@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Country, type: :model do
+RSpec.describe Country, type: :model do
   before(:all) do
     Geocoder.configure(lookup: :test)
     Geocoder::Lookup::Test.add_stub(
