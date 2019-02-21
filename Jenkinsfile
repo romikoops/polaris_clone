@@ -163,6 +163,7 @@ wrap.pipeline(timeout: 90) {
                   substitutions: [
                     BRANCH_NAME: env.BRANCH_NAME,
                     COMMIT_SHA: env.GIT_COMMIT,
+                    _PREVIOUS_COMMIT_SHA: env.GIT_PREVIOUS_SUCCESSFUL_COMMIT,
                     _SENTRY_AUTH_TOKEN: '099b9abd2844497db3dace7307576c12fadc7d47bd68416584cdb4b90709de95'
                   ]
                 )

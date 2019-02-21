@@ -1,37 +1,98 @@
 ---
 steps:
-- name: gcr.io/cloud-builders/docker
-  args:
-  - build
-  - --build-arg=RELEASE=$COMMIT_SHA
-  - --tag=eu.gcr.io/itsmycargo-main/apps/api:$BRANCH_NAME
-  - --tag=eu.gcr.io/itsmycargo-main/apps/api:$COMMIT_SHA
-  - /workspace/
-  waitFor:
-  - '-'
-- name: gcr.io/cloud-builders/docker
-  args:
-  - build
-  - --build-arg=RELEASE=$COMMIT_SHA
-  - --build-arg=SENTRY_AUTH_TOKEN=$_SENTRY_AUTH_TOKEN
-  - --tag=eu.gcr.io/itsmycargo-main/apps/client:$BRANCH_NAME
-  - --tag=eu.gcr.io/itsmycargo-main/apps/client:$COMMIT_SHA
-  - /workspace/client/
-  waitFor:
-  - '-'
-- name: gcr.io/cloud-builders/docker
-  args:
-  - build
-  - --tag=eu.gcr.io/itsmycargo-main/qa/api:$BRANCH_NAME
-  - --tag=eu.gcr.io/itsmycargo-main/qa/api:$COMMIT_SHA
-  - /workspace/qa/
-  waitFor:
-  - '-'
+  # Pull Caches
+  - id: cache
+    name: gcr.io/cloud-builders/docker
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        docker pull eu.gcr.io/itsmycargo-main/cache/api/builder:$_PREVIOUS_COMMIT_SHA || exit 0
+        docker pull eu.gcr.io/itsmycargo-main/apps/api:$_PREVIOUS_COMMIT_SHA || exit 0
+        docker pull eu.gcr.io/itsmycargo-main/apps/api:master || exit 0
+
+        docker pull eu.gcr.io/itsmycargo-main/apps/client:$_PREVIOUS_COMMIT_SHA || exit 0
+        docker pull eu.gcr.io/itsmycargo-main/apps/client:master || exit 0
+
+        docker pull eu.gcr.io/itsmycargo-main/qa/api:$_PREVIOUS_COMMIT_SHA || exit 0
+        docker pull eu.gcr.io/itsmycargo-main/qa/api:master || exit 0
+    waitFor:
+    - '-'
+
+  # Build Images
+  - id: api/builder
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --target=builder
+      - --cache-from=eu.gcr.io/itsmycargo-main/cache/api/builder:$_PREVIOUS_COMMIT_SHA
+      - --build-arg=RELEASE=$COMMIT_SHA
+      - --tag=eu.gcr.io/itsmycargo-main/cache/api/builder:$COMMIT_SHA
+      - /workspace/
+    waitFor:
+      - cache
+
+  - id: api
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --cache-from=eu.gcr.io/itsmycargo-main/cache/api/builder:$COMMIT_SHA
+      - --cache-from=eu.gcr.io/itsmycargo-main/apps/api:$_PREVIOUS_COMMIT_SHA
+      - --cache-from=eu.gcr.io/itsmycargo-main/apps/api:master
+      - --build-arg=RELEASE=$COMMIT_SHA
+      - --tag=eu.gcr.io/itsmycargo-main/apps/api:$BRANCH_NAME
+      - --tag=eu.gcr.io/itsmycargo-main/apps/api:$COMMIT_SHA
+      - /workspace/
+    waitFor:
+      - api/builder
+
+  - id: client/builder
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --target=builder
+      - --cache-from=eu.gcr.io/itsmycargo-main/cache/client/builder:$_PREVIOUS_COMMIT_SHA
+      - --build-arg=RELEASE=$COMMIT_SHA
+      - --build-arg=SENTRY_AUTH_TOKEN=$_SENTRY_AUTH_TOKEN
+      - --tag=eu.gcr.io/itsmycargo-main/cache/client/builder:$COMMIT_SHA
+      - /workspace/client/
+    waitFor:
+    - cache
+
+  - id: client
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --cache-from=eu.gcr.io/itsmycargo-main/cache/client/builder:$COMMIT_SHA
+      - --cache-from=eu.gcr.io/itsmycargo-main/apps/client:$_PREVIOUS_COMMIT_SHA
+      - --cache-from=eu.gcr.io/itsmycargo-main/apps/client:master
+      - --build-arg=RELEASE=$COMMIT_SHA
+      - --build-arg=SENTRY_AUTH_TOKEN=$_SENTRY_AUTH_TOKEN
+      - --tag=eu.gcr.io/itsmycargo-main/apps/client:$BRANCH_NAME
+      - --tag=eu.gcr.io/itsmycargo-main/apps/client:$COMMIT_SHA
+      - /workspace/client/
+    waitFor:
+    - client/builder
+
+  - id: qa
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --cache-from=eu.gcr.io/itsmycargo-main/qa/api:$_PREVIOUS_COMMIT_SHA
+      - --cache-from=eu.gcr.io/itsmycargo-main/qa/api:master
+      - --tag=eu.gcr.io/itsmycargo-main/qa/api:$BRANCH_NAME
+      - --tag=eu.gcr.io/itsmycargo-main/qa/api:$COMMIT_SHA
+      - /workspace/qa/
+    waitFor:
+    - cache
+
 timeout: 1800s
 images:
-- eu.gcr.io/itsmycargo-main/apps/api:$BRANCH_NAME
-- eu.gcr.io/itsmycargo-main/apps/api:$COMMIT_SHA
-- eu.gcr.io/itsmycargo-main/apps/client:$BRANCH_NAME
-- eu.gcr.io/itsmycargo-main/apps/client:$COMMIT_SHA
-- eu.gcr.io/itsmycargo-main/qa/api:$BRANCH_NAME
-- eu.gcr.io/itsmycargo-main/qa/api:$COMMIT_SHA
+  - eu.gcr.io/itsmycargo-main/apps/api:$COMMIT_SHA
+  - eu.gcr.io/itsmycargo-main/apps/client:$COMMIT_SHA
+  - eu.gcr.io/itsmycargo-main/qa/api:$COMMIT_SHA
+  - eu.gcr.io/itsmycargo-main/apps/client:$BRANCH_NAME
+  - eu.gcr.io/itsmycargo-main/apps/api:$BRANCH_NAME
+  - eu.gcr.io/itsmycargo-main/qa/api:$BRANCH_NAME
+  - eu.gcr.io/itsmycargo-main/cache/api/builder:$COMMIT_SHA
+  - eu.gcr.io/itsmycargo-main/cache/client/builder:$COMMIT_SHA
