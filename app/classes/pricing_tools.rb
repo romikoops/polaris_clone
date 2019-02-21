@@ -65,6 +65,7 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
         charges_for_filtering << charge.as_json
       end
     end
+
     shipment_charges = {
       'load_type' => 'shipment',
       'fees' => {}
@@ -79,6 +80,7 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
       end
       filter_charge
     end
+
     [filtered_charges.compact.uniq, shipment_charges]
   end
 
@@ -140,6 +142,7 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
 
     null_cargo_hash = { weight: 0, volume: 0, quantity: 0 }
     charge_results = unit_charges_array.map do |charge_object|
+      next if charge_object['fees'].empty?
       relevant_cargos = if %w(lcl shipment).include?(charge_object['load_type'])
                           cargos
                         else
@@ -151,7 +154,7 @@ module PricingTools # rubocop:disable Metrics/ModuleLength
     end
 
     charge_results << local_charge_calculation_block(shipment_charges, null_cargo_hash, user)
-    charge_results.flatten
+    charge_results.flatten.compact
   end
 
   def calc_customs_fees(charge, cargos, _load_type, user, mot)
